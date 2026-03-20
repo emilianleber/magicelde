@@ -9,7 +9,7 @@ const UeberMichSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className={`relative ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="rounded-2xl overflow-hidden shadow-[0_16px_64px_hsla(0,0%,0%,0.12)]">
+            <div className="rounded-3xl overflow-hidden">
               <img
                 src={portraitImg}
                 alt="Emilian Leber — MagicEL"
@@ -17,11 +17,10 @@ const UeberMichSection = () => {
                 loading="lazy"
               />
             </div>
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-primary/10 -z-10" />
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-            <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase text-primary mb-4">Über mich</p>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-6">
+            <span className="badge-blue mb-5 inline-flex">Über mich</span>
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-foreground leading-tight mb-6">
               Hi, ich bin Emilian.
             </h2>
             <div className="space-y-4 font-sans text-base text-muted-foreground leading-relaxed max-w-lg">
