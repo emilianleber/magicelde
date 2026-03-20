@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import logoImg from "@/assets/logo-clean.webp";
 
 const navItems = [
   { label: "Showkonzepte", href: "/#showkonzepte" },
@@ -22,44 +23,39 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const showDark = scrolled || !isHome;
-
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-background/80 backdrop-blur-xl shadow-[0_1px_0_hsl(var(--border))] py-3"
-          : "py-5"
+          ? "bg-white/80 backdrop-blur-xl shadow-[0_1px_0_hsl(var(--border))] py-3"
+          : "bg-white/0 py-5"
       }`}
     >
       <div className="container flex items-center justify-between px-6">
-        <Link to="/" className="font-display text-2xl italic" style={{ color: showDark ? "hsl(var(--foreground))" : "white" }}>
-          Magic<span className="text-primary">EL</span>
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logoImg} alt="MagicEL" className="h-8 w-auto" />
         </Link>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => {
             const isAnchor = item.href.startsWith("/#");
+            const className = `font-sans text-[13px] font-medium tracking-wide transition-colors duration-200 hover:text-foreground ${
+              scrolled ? "text-muted-foreground" : "text-foreground/60"
+            }`;
             if (isAnchor) {
               return (
                 <a
                   key={item.href}
                   href={isHome ? item.href.replace("/", "") : item.href}
-                  className="font-sans text-[13px] font-medium tracking-wide transition-colors duration-200 hover:text-primary"
-                  style={{ color: showDark ? "hsl(var(--muted-foreground))" : "hsla(0,0%,100%,0.8)" }}
+                  className={className}
                 >
                   {item.label}
                 </a>
               );
             }
             return (
-              <Link
-                key={item.href}
-                to={item.href}
-                className="font-sans text-[13px] font-medium tracking-wide transition-colors duration-200 hover:text-primary"
-                style={{ color: showDark ? "hsl(var(--muted-foreground))" : "hsla(0,0%,100%,0.8)" }}
-              >
+              <Link key={item.href} to={item.href} className={className}>
                 {item.label}
               </Link>
             );
@@ -75,8 +71,7 @@ const Navigation = () => {
         {/* Mobile toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2"
-          style={{ color: showDark ? "hsl(var(--foreground))" : "white" }}
+          className="md:hidden p-2 text-foreground"
           aria-label="Menü"
         >
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -85,7 +80,7 @@ const Navigation = () => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-background border-t border-border mt-2 mx-4 rounded-2xl shadow-[0_8px_32px_hsla(0,0%,0%,0.08)] p-6 flex flex-col gap-4 animate-fade-up">
+        <div className="md:hidden bg-white border-t border-border mt-2 mx-4 rounded-2xl shadow-[0_8px_32px_hsla(0,0%,0%,0.08)] p-6 flex flex-col gap-4 animate-fade-up">
           {navItems.map((item) => {
             const isAnchor = item.href.startsWith("/#");
             if (isAnchor) {

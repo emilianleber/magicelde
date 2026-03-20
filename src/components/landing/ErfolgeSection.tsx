@@ -30,20 +30,20 @@ const ErfolgeSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="referenzen" className="py-24 md:py-32 section-alt" ref={ref}>
+    <section id="referenzen" className="py-28 md:py-36 section-alt" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Erfolge & Referenzen</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Erfolge & Referenzen</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Zahlen, die überzeugen
           </h2>
         </div>
 
         {/* Stats */}
-        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-6 mb-24 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
           {stats.map((stat) => (
-            <div key={stat.label} className="text-center p-6 rounded-2xl bg-background border border-border">
-              <stat.icon className="w-5 h-5 text-accent mx-auto mb-3" />
+            <div key={stat.label} className="text-center p-8 rounded-3xl bg-white shadow-[0_2px_12px_hsla(0,0%,0%,0.04)]">
+              <stat.icon className="w-5 h-5 text-accent mx-auto mb-4" />
               <p className="font-display text-3xl md:text-4xl italic text-foreground tabular-nums">{stat.value}</p>
               <p className="font-sans text-sm text-muted-foreground mt-1">{stat.label}</p>
             </div>
@@ -55,12 +55,12 @@ const ErfolgeSection = () => {
           {testimonials.map((t, i) => (
             <blockquote
               key={i}
-              className={`rounded-2xl border border-border bg-background p-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`rounded-3xl bg-white p-8 shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.25 + i * 0.1}s` }}
             >
               <div className="flex gap-1 mb-5">
                 {[...Array(5)].map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-primary/80 text-primary/80" />
+                  <Star key={j} className="w-4 h-4 fill-primary/70 text-primary/70" />
                 ))}
               </div>
               <p className="font-sans text-base text-foreground leading-relaxed mb-6">„{t.quote}"</p>

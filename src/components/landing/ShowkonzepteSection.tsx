@@ -28,10 +28,10 @@ const ShowkonzepteSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="showkonzepte" className="py-24 md:py-32 section-alt" ref={ref}>
+    <section id="showkonzepte" className="py-28 md:py-36 section-alt" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Showkonzepte</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Showkonzepte</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Drei Formate, ein Versprechen
           </h2>
@@ -40,7 +40,7 @@ const ShowkonzepteSection = () => {
           {shows.map((show, i) => (
             <div
               key={show.title}
-              className={`group bg-background rounded-2xl overflow-hidden border border-border hover:shadow-[0_12px_48px_hsla(0,0%,0%,0.08)] transition-all duration-500 ${
+              className={`group bg-white rounded-3xl overflow-hidden shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] hover:shadow-[0_16px_56px_hsla(0,0%,0%,0.08)] transition-all duration-500 ${
                 isVisible ? "animate-fade-up" : "opacity-0"
               }`}
               style={{ animationDelay: `${0.15 + i * 0.12}s` }}
@@ -53,12 +53,12 @@ const ShowkonzepteSection = () => {
                   loading="lazy"
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="badge-primary">
+                  <span className="badge-gradient text-[11px]">
                     {show.tag}
                   </span>
                 </div>
               </div>
-              <div className="p-7">
+              <div className="p-8">
                 <h3 className="font-display text-2xl italic text-foreground mb-3">
                   {show.title}
                 </h3>

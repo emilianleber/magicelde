@@ -12,37 +12,39 @@ import { Users, MessageCircle, TrendingUp, X, Check, Star, Building2, Award, Pre
 
 /* ─── Hero ─── */
 const HeroCorporate = () => (
-  <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-    <div className="absolute inset-0">
-      <img src={corporateImg} alt="Zauberer auf einer Firmenfeier" className="w-full h-full object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-    </div>
-    <div className="relative z-10 container text-center px-6 pt-32 pb-24">
-      <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-        <span className="badge-blue mb-8 inline-flex">Entertainment für Unternehmen</span>
+  <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+    <div className="container px-6">
+      <div className="max-w-3xl mx-auto text-center mb-12">
+        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.2s" }}>
+          <span className="badge-gradient mb-6 inline-flex">Entertainment für Unternehmen</span>
+        </div>
+        <h1
+          className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic leading-[1.05] mb-6 opacity-0 animate-fade-up text-foreground"
+          style={{ animationDelay: "0.4s" }}
+        >
+          Magie für Firmenfeiern,
+          <br />
+          <AnimatedWords words={["die im Kopf bleiben.", "die verbinden.", "die beeindrucken.", "die wirken."]} />
+        </h1>
+        <p
+          className="font-sans text-lg md:text-xl max-w-2xl mx-auto mb-10 opacity-0 animate-fade-up text-muted-foreground font-light"
+          style={{ animationDelay: "0.6s" }}
+        >
+          Professionelles Entertainment, das Ihre Gäste verbindet, Gespräche entfacht
+          und Ihr Event auf ein neues Level hebt.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.8s" }}>
+          <a href="#kontakt" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-200 hover:bg-foreground/85 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.15)] active:scale-[0.97]">
+            Event anfragen →
+          </a>
+          <a href="#showkonzepte" className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border font-sans text-sm font-medium text-foreground transition-all duration-200 hover:bg-muted active:scale-[0.97]">
+            Konzepte ansehen →
+          </a>
+        </div>
       </div>
-      <h1
-        className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic leading-[1.05] mb-8 opacity-0 animate-fade-up text-white"
-        style={{ animationDelay: "0.4s" }}
-      >
-        Magie für Firmenfeiern,
-        <br />
-        <AnimatedWords words={["die im Kopf bleiben.", "die verbinden.", "die beeindrucken.", "die wirken."]} />
-      </h1>
-      <p
-        className="font-sans text-lg md:text-xl max-w-2xl mx-auto mb-12 opacity-0 animate-fade-up text-white/75 font-light"
-        style={{ animationDelay: "0.6s" }}
-      >
-        Professionelles Entertainment, das Ihre Gäste verbindet, Gespräche entfacht
-        und Ihr Event auf ein neues Level hebt.
-      </p>
-      <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.8s" }}>
-        <a href="#kontakt" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white font-sans text-sm font-medium text-foreground transition-all duration-200 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.15)] active:scale-[0.97]">
-          Event anfragen
-        </a>
-        <a href="#showkonzepte" className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-white/30 font-sans text-sm font-medium text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.97]">
-          Konzepte ansehen
-        </a>
+      <div className="relative rounded-3xl overflow-hidden max-w-5xl mx-auto opacity-0 animate-fade-up shadow-[0_24px_80px_hsla(0,0%,0%,0.1)]" style={{ animationDelay: "1s" }}>
+        <img src={corporateImg} alt="Zauberer auf einer Firmenfeier" className="w-full h-[400px] md:h-[520px] object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
       </div>
     </div>
   </section>
@@ -59,10 +61,10 @@ const WarumCorporate = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32" ref={ref}>
+    <section className="py-28 md:py-36" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Warum Magie?</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Warum Magie?</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Warum Zauberei Ihr Firmenevent aufwertet
           </h2>
@@ -71,10 +73,10 @@ const WarumCorporate = () => {
           {reasons.map((r, i) => (
             <div
               key={r.title}
-              className={`flex items-start gap-5 rounded-2xl border border-border p-7 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.05)] transition-all duration-300 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`flex items-start gap-5 rounded-3xl bg-muted/50 p-8 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.06)] transition-all duration-500 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.1 + i * 0.08}s` }}
             >
-              <div className="w-11 h-11 shrink-0 rounded-xl bg-blue-light flex items-center justify-center">
+              <div className="w-11 h-11 shrink-0 rounded-2xl bg-white flex items-center justify-center shadow-[0_2px_8px_hsla(0,0%,0%,0.06)]">
                 <r.icon className="w-5 h-5 text-accent" />
               </div>
               <div>
@@ -108,16 +110,16 @@ const VergleichCorporate = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32 section-alt" ref={ref}>
+    <section className="py-28 md:py-36 section-alt" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Der Unterschied</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Der Unterschied</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Nicht irgendein Zauberer
           </h2>
         </div>
         <div className={`grid md:grid-cols-2 gap-6 max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-          <div className="rounded-2xl border border-border bg-background p-8">
+          <div className="rounded-3xl bg-white p-8 shadow-[0_2px_12px_hsla(0,0%,0%,0.04)]">
             <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-6">Andere Zauberer</p>
             <ul className="space-y-4">
               {andere.map((item) => (
@@ -128,7 +130,7 @@ const VergleichCorporate = () => {
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border-2 border-primary/20 bg-background p-8 shadow-[0_8px_32px_hsla(0,97%,27%,0.04)]">
+          <div className="rounded-3xl bg-white p-8 shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] ring-2 ring-primary/10">
             <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-6">MagicEL</p>
             <ul className="space-y-4">
               {magicel.map((item) => (
@@ -157,28 +159,26 @@ const EinsatzSection = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32" ref={ref}>
+    <section className="py-28 md:py-36" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Einsatzbereiche</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Einsatzbereiche</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Vielseitig einsetzbar, immer wirkungsvoll
           </h2>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {einsaetze.map((item, i) => (
             <div
               key={item.title}
-              className={`group flex items-start gap-5 rounded-2xl border border-border p-6 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.05)] transition-all duration-300 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`group rounded-3xl bg-muted/50 p-8 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.06)] transition-all duration-500 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.1 + i * 0.08}s` }}
             >
-              <div className="w-11 h-11 shrink-0 rounded-xl bg-blue-light flex items-center justify-center group-hover:scale-[1.05] transition-transform">
+              <div className="w-11 h-11 shrink-0 rounded-2xl bg-white flex items-center justify-center shadow-[0_2px_8px_hsla(0,0%,0%,0.06)] mb-5 group-hover:scale-[1.05] transition-transform">
                 <item.icon className="w-5 h-5 text-accent" />
               </div>
-              <div>
-                <h3 className="font-display text-lg italic text-foreground mb-1">{item.title}</h3>
-                <p className="font-sans text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-              </div>
+              <h3 className="font-display text-lg italic text-foreground mb-2">{item.title}</h3>
+              <p className="font-sans text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -215,10 +215,10 @@ const ShowkonzepteCorporate = () => {
   ];
 
   return (
-    <section id="showkonzepte" className="py-24 md:py-32 section-alt" ref={ref}>
+    <section id="showkonzepte" className="py-28 md:py-36 section-alt" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Showkonzepte</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Showkonzepte</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Das richtige Format für Ihr Event
           </h2>
@@ -227,10 +227,10 @@ const ShowkonzepteCorporate = () => {
           {konzepte.map((k, i) => (
             <div
               key={k.title}
-              className={`rounded-2xl bg-background border border-border p-8 flex flex-col hover:shadow-[0_12px_48px_hsla(0,0%,0%,0.06)] transition-all duration-300 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`rounded-3xl bg-white p-8 flex flex-col shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] hover:shadow-[0_12px_48px_hsla(0,0%,0%,0.08)] transition-all duration-500 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.1 + i * 0.1}s` }}
             >
-              <div className="w-12 h-12 rounded-xl bg-blue-light flex items-center justify-center mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-muted/60 flex items-center justify-center mb-5">
                 <k.icon className="w-6 h-6 text-accent" />
               </div>
               <h3 className="font-display text-xl italic text-foreground mb-1">{k.title}</h3>
@@ -263,10 +263,10 @@ const MehrwertSection = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32" ref={ref}>
+    <section className="py-28 md:py-36" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Ihr Vorteil</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Ihr Vorteil</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Mehr als Unterhaltung
           </h2>
@@ -275,10 +275,10 @@ const MehrwertSection = () => {
           {benefits.map((b, i) => (
             <div
               key={b.title}
-              className={`rounded-2xl bg-background border border-border p-7 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.05)] transition-all duration-300 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`rounded-3xl bg-muted/50 p-8 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.06)] transition-all duration-500 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.1 + i * 0.08}s` }}
             >
-              <div className="w-11 h-11 rounded-xl bg-blue-light flex items-center justify-center mb-4">
+              <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center mb-5 shadow-[0_2px_8px_hsla(0,0%,0%,0.06)]">
                 <b.icon className="w-5 h-5 text-accent" />
               </div>
               <h3 className="font-display text-lg italic text-foreground mb-2">{b.title}</h3>
@@ -295,20 +295,20 @@ const MehrwertSection = () => {
 const UeberMichBusiness = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="py-24 md:py-32 section-alt" ref={ref}>
+    <section className="py-28 md:py-36 section-alt" ref={ref}>
       <div className="container px-6">
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`relative ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="rounded-3xl overflow-hidden">
+            <div className="rounded-3xl overflow-hidden shadow-[0_16px_64px_hsla(0,0%,0%,0.08)]">
               <img src={portraitImg} alt="Emilian Leber — MagicEL" className="w-full h-auto object-cover" loading="lazy" />
             </div>
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-            <span className="badge-blue mb-5 inline-flex">Ihr Performer</span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-foreground leading-tight mb-6">
+            <span className="badge-gradient mb-6 inline-flex">Ihr Performer</span>
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-foreground leading-tight mb-8">
               Professionell, modern, souverän.
             </h2>
-            <div className="space-y-4 font-sans text-base text-muted-foreground leading-relaxed max-w-lg">
+            <div className="space-y-5 font-sans text-base text-muted-foreground leading-relaxed max-w-lg">
               <p>
                 Als Finalist bei <span className="font-semibold text-foreground">Talents of Magic</span> und
                 mit Erfahrung auf hunderten Business-Events weiß ich, worauf es ankommt:
@@ -342,10 +342,10 @@ const ReferenzenCorporate = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32" ref={ref}>
+    <section className="py-28 md:py-36" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Referenzen</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Referenzen</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Was Firmenkunden sagen
           </h2>
@@ -354,12 +354,12 @@ const ReferenzenCorporate = () => {
           {testimonials.map((t, i) => (
             <blockquote
               key={i}
-              className={`rounded-2xl border border-border bg-background p-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`rounded-3xl bg-white p-8 shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.15 + i * 0.1}s` }}
             >
               <div className="flex gap-1 mb-5">
                 {[...Array(5)].map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-primary/80 text-primary/80" />
+                  <Star key={j} className="w-4 h-4 fill-primary/70 text-primary/70" />
                 ))}
               </div>
               <p className="font-sans text-base text-foreground leading-relaxed mb-6">„{t.quote}"</p>
@@ -387,17 +387,17 @@ const GalerieCorporate = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32 section-alt" ref={ref}>
+    <section className="py-28 md:py-36 section-alt" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Eindrücke</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Eindrücke</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Business-Events mit Wow-Effekt
           </h2>
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[200px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
           {images.map((img, i) => (
-            <div key={i} className={`${img.className} rounded-2xl overflow-hidden`}>
+            <div key={i} className={`${img.className} rounded-3xl overflow-hidden`}>
               <img src={img.src} alt={img.alt} className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
             </div>
           ))}
@@ -411,26 +411,22 @@ const GalerieCorporate = () => {
 const CTACorporate = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section id="kontakt" className="relative py-32 md:py-40 overflow-hidden" ref={ref}>
-      <div className="absolute inset-0">
-        <img src={corporateImg} alt="" className="w-full h-full object-cover" aria-hidden="true" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-black/40" />
-      </div>
-      <div className="relative z-10 container px-6 text-center">
-        <div className={`max-w-2xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-6 inline-flex">Jetzt starten</span>
-          <h2 className="font-display text-3xl md:text-5xl lg:text-6xl italic leading-tight mb-6 text-white">
+    <section id="kontakt" className="py-28 md:py-36" ref={ref}>
+      <div className="container px-6">
+        <div className={`max-w-3xl mx-auto text-center rounded-[2rem] bg-muted/60 px-8 py-20 md:px-16 md:py-28 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Jetzt starten</span>
+          <h2 className="font-display text-3xl md:text-5xl lg:text-6xl italic leading-tight mb-6 text-foreground">
             Machen Sie Ihr Event unvergesslich.
           </h2>
-          <p className="font-sans text-lg md:text-xl mb-4 text-white/65 font-light">
+          <p className="font-sans text-lg md:text-xl mb-4 text-muted-foreground font-light">
             Individuelle Konzepte, professionelle Umsetzung — lassen Sie uns über Ihr Event sprechen.
           </p>
-          <p className="font-sans text-sm mb-10 text-white/45">
+          <p className="font-sans text-sm mb-10 text-muted-foreground/60">
             Unverbindlich & kostenlos. Ich melde mich innerhalb von 24 Stunden.
           </p>
           <a
             href="mailto:kontakt@magicel.de"
-            className="inline-flex items-center justify-center px-10 py-5 rounded-full bg-white font-sans text-base font-medium text-foreground transition-all duration-200 hover:shadow-[0_12px_48px_hsla(0,0%,100%,0.2)] active:scale-[0.97]"
+            className="inline-flex items-center justify-center px-10 py-5 rounded-full bg-foreground font-sans text-base font-medium text-background transition-all duration-200 hover:bg-foreground/85 hover:shadow-[0_12px_48px_hsla(0,0%,0%,0.15)] active:scale-[0.97]"
           >
             Jetzt unverbindlich anfragen
           </a>

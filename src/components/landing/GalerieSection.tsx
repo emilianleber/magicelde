@@ -17,17 +17,17 @@ const GalerieSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section className="py-24 md:py-32" ref={ref}>
+    <section className="py-28 md:py-36" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-blue mb-5 inline-flex">Eindrücke</span>
+        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-gradient mb-6 inline-flex">Eindrücke</span>
           <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Momente, die bleiben
           </h2>
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[200px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
           {images.map((img, i) => (
-            <div key={i} className={`${img.className} rounded-2xl overflow-hidden`}>
+            <div key={i} className={`${img.className} rounded-3xl overflow-hidden`}>
               <img
                 src={img.src}
                 alt={img.alt}

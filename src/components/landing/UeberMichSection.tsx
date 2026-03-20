@@ -5,11 +5,11 @@ const UeberMichSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="ueber-mich" className="py-24 md:py-32" ref={ref}>
+    <section id="ueber-mich" className="py-28 md:py-36" ref={ref}>
       <div className="container px-6">
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`relative ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="rounded-3xl overflow-hidden">
+            <div className="rounded-3xl overflow-hidden shadow-[0_16px_64px_hsla(0,0%,0%,0.08)]">
               <img
                 src={portraitImg}
                 alt="Emilian Leber — MagicEL"
@@ -19,11 +19,11 @@ const UeberMichSection = () => {
             </div>
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-            <span className="badge-blue mb-5 inline-flex">Über mich</span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-foreground leading-tight mb-6">
+            <span className="badge-gradient mb-6 inline-flex">Über mich</span>
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-foreground leading-tight mb-8">
               Hi, ich bin Emilian.
             </h2>
-            <div className="space-y-4 font-sans text-base text-muted-foreground leading-relaxed max-w-lg">
+            <div className="space-y-5 font-sans text-base text-muted-foreground leading-relaxed max-w-lg">
               <p>
                 Seit über zehn Jahren stehe ich auf Bühnen, bewege mich durch Events und
                 bringe Menschen zum Staunen. Nicht mit dem klassischen Zylinder-und-Kaninchen-Klischee,

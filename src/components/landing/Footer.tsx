@@ -1,21 +1,22 @@
 import { Instagram, Youtube, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import logoImg from "@/assets/logo-clean.webp";
 
 const Footer = () => {
   return (
-    <footer className="bg-background border-t border-border py-16">
+    <footer className="border-t border-border py-20">
       <div className="container px-6">
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
+        <div className="grid md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-1">
-            <Link to="/" className="font-display text-2xl italic text-foreground">
-              Magic<span className="text-primary">EL</span>
+            <Link to="/" className="inline-block mb-4">
+              <img src={logoImg} alt="MagicEL" className="h-8 w-auto" />
             </Link>
-            <p className="font-sans text-sm text-muted-foreground leading-relaxed mt-4">
+            <p className="font-sans text-sm text-muted-foreground leading-relaxed">
               Emilian Leber — Moderner Zauberer für Events, Firmenfeiern, Hochzeiten und mehr.
             </p>
           </div>
           <div>
-            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-foreground mb-4">
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-foreground mb-5">
               Seiten
             </p>
             <div className="space-y-3">
@@ -26,7 +27,7 @@ const Footer = () => {
             </div>
           </div>
           <div>
-            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-foreground mb-4">
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-foreground mb-5">
               Kontakt
             </p>
             <div className="space-y-3">
@@ -39,14 +40,14 @@ const Footer = () => {
             </div>
           </div>
           <div>
-            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-foreground mb-4">
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-foreground mb-5">
               Social Media
             </p>
             <div className="flex gap-3">
-              <a href="https://instagram.com/magicel" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-muted-foreground/10 transition-colors" aria-label="Instagram">
+              <a href="https://instagram.com/magicel" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-foreground/5 transition-colors" aria-label="Instagram">
                 <Instagram className="w-4 h-4 text-foreground" />
               </a>
-              <a href="https://youtube.com/@magicel" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-muted-foreground/10 transition-colors" aria-label="YouTube">
+              <a href="https://youtube.com/@magicel" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-foreground/5 transition-colors" aria-label="YouTube">
                 <Youtube className="w-4 h-4 text-foreground" />
               </a>
             </div>
