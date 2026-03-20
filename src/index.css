@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,43 +7,40 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 6%;
+    --foreground: 0 0% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 6%;
+    --card-foreground: 0 0% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 6%;
+    --popover-foreground: 0 0% 11%;
 
     --primary: 0 97% 27%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 12%;
+    --secondary: 210 20% 97%;
+    --secondary-foreground: 0 0% 11%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 210 12% 95%;
+    --muted-foreground: 0 0% 44%;
 
-    --accent: 0 97% 27%;
+    --accent: 216 80% 52%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 97% 27%;
+    --border: 210 14% 92%;
+    --input: 210 14% 92%;
+    --ring: 216 80% 52%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --glass-bg: 0 0% 100% / 0.08;
-    --glass-border: 0 0% 100% / 0.15;
-    --glass-bg-light: 0 0% 100% / 0.7;
-    --glass-border-light: 0 0% 100% / 0.3;
-    --section-dark: 0 0% 4%;
-    --section-dark-foreground: 0 0% 96%;
-    --gold: 40 80% 55%;
+    --blue: 216 80% 52%;
+    --blue-light: 216 80% 96%;
+    --gold: 40 70% 50%;
+    --section-alt: 210 20% 98%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -81,29 +78,26 @@
 }
 
 @layer utilities {
-  .glass {
-    background: hsla(var(--glass-bg));
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsla(var(--glass-border));
+  .badge-blue {
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-xs font-sans font-semibold tracking-wide;
+    background: hsl(var(--blue-light));
+    color: hsl(var(--blue));
   }
 
-  .glass-light {
-    background: hsla(var(--glass-bg-light));
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid hsla(var(--glass-border-light));
+  .badge-primary {
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-xs font-sans font-semibold tracking-wide;
+    background: hsla(0, 97%, 27%, 0.06);
+    color: hsl(var(--primary));
   }
 
-  .section-dark {
-    background-color: hsl(var(--section-dark));
-    color: hsl(var(--section-dark-foreground));
+  .section-alt {
+    background-color: hsl(var(--section-alt));
   }
 
-  .text-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--gold)) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .underline-primary {
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--primary));
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
   }
 }
