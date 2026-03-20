@@ -12,11 +12,11 @@ const USPSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section className="py-24 md:py-32 bg-secondary" ref={ref}>
+    <section className="py-24 md:py-32" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase text-primary mb-4">Warum MagicEL</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          <span className="badge-blue mb-5 inline-flex">Warum MagicEL</span>
+          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Magie auf einem neuen Level
           </h2>
         </div>
@@ -24,15 +24,15 @@ const USPSection = () => {
           {usps.map((usp, i) => (
             <div
               key={usp.title}
-              className={`group rounded-xl bg-card p-8 shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.08)] transition-all duration-300 ${
+              className={`group rounded-2xl bg-background border border-border p-8 hover:shadow-[0_8px_40px_hsla(0,0%,0%,0.06)] transition-all duration-300 ${
                 isVisible ? "animate-fade-up" : "opacity-0"
               }`}
               style={{ animationDelay: `${0.15 + i * 0.1}s` }}
             >
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors duration-300">
-                <usp.icon className="w-6 h-6 text-primary" />
+              <div className="w-11 h-11 rounded-xl bg-blue-light flex items-center justify-center mb-5 group-hover:scale-[1.05] transition-transform duration-300">
+                <usp.icon className="w-5 h-5 text-accent" />
               </div>
-              <h3 className="font-display text-xl font-semibold text-foreground mb-2">{usp.title}</h3>
+              <h3 className="font-display text-xl italic text-foreground mb-2">{usp.title}</h3>
               <p className="font-sans text-sm text-muted-foreground leading-relaxed">{usp.desc}</p>
             </div>
           ))}

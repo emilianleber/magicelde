@@ -7,49 +7,40 @@ import stageImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Heart, Sparkles, Users, MessageCircle, X, Check, Clock, Star, Mic, HandMetal } from "lucide-react";
+import AnimatedWords from "@/components/landing/AnimatedWords";
+import { Heart, Sparkles, Users, MessageCircle, X, Check, Clock, Star, Mic } from "lucide-react";
 
 /* ─── Hero ─── */
 const HeroWedding = () => (
   <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
     <div className="absolute inset-0">
       <img src={weddingImg} alt="Zauberer auf einer Hochzeit" className="w-full h-full object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/60 to-foreground/30" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
     </div>
     <div className="relative z-10 container text-center px-6 pt-32 pb-24">
-      <p
-        className="text-sm font-sans font-medium tracking-[0.3em] uppercase mb-6 opacity-0 animate-fade-up"
-        style={{ color: "hsl(var(--gold))", animationDelay: "0.2s" }}
-      >
-        Zauberer für eure Hochzeit
-      </p>
+      <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.2s" }}>
+        <span className="badge-blue mb-8 inline-flex">Zauberer für eure Hochzeit</span>
+      </div>
       <h1
-        className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] mb-8 opacity-0 animate-fade-up"
-        style={{ color: "hsl(var(--primary-foreground))", animationDelay: "0.4s" }}
+        className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic leading-[1.05] mb-8 opacity-0 animate-fade-up text-white"
+        style={{ animationDelay: "0.4s" }}
       >
         Magie für eure Hochzeit —
         <br />
-        Momente, die bleiben.
+        <AnimatedWords words={["Momente, die bleiben.", "Gäste, die staunen.", "Liebe, die verbindet."]} />
       </h1>
       <p
-        className="font-sans text-lg md:text-xl max-w-2xl mx-auto mb-12 opacity-0 animate-fade-up"
-        style={{ color: "hsl(var(--section-dark-foreground))", animationDelay: "0.6s" }}
+        className="font-sans text-lg md:text-xl max-w-2xl mx-auto mb-12 opacity-0 animate-fade-up text-white/75 font-light"
+        style={{ animationDelay: "0.6s" }}
       >
         Unvergessliches Entertainment, das eure Gäste verbindet, zum Staunen bringt
         und euren großen Tag noch besonderer macht.
       </p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.8s" }}>
-        <a
-          href="#kontakt"
-          className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-primary font-sans font-semibold text-primary-foreground transition-all duration-200 hover:shadow-[0_8px_32px_hsla(0,97%,27%,0.4)] active:scale-[0.97]"
-        >
+        <a href="#kontakt" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white font-sans text-sm font-medium text-foreground transition-all duration-200 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.15)] active:scale-[0.97]">
           Termin anfragen
         </a>
-        <a
-          href="#pakete"
-          className="inline-flex items-center justify-center px-8 py-4 rounded-lg glass font-sans font-semibold transition-all duration-200 hover:bg-[hsla(0,0%,100%,0.15)] active:scale-[0.97]"
-          style={{ color: "hsl(var(--section-dark-foreground))" }}
-        >
+        <a href="#pakete" className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-white/30 font-sans text-sm font-medium text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.97]">
           Pakete ansehen
         </a>
       </div>
@@ -71,8 +62,8 @@ const WarumSection = () => {
     <section className="py-24 md:py-32" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase text-primary mb-4">Warum Zauberei?</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          <span className="badge-blue mb-5 inline-flex">Warum Zauberei?</span>
+          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Warum Magie perfekt zu eurer Hochzeit passt
           </h2>
         </div>
@@ -80,14 +71,14 @@ const WarumSection = () => {
           {reasons.map((r, i) => (
             <div
               key={r.title}
-              className={`flex items-start gap-5 rounded-xl border border-border p-7 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.06)] transition-all duration-300 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`flex items-start gap-5 rounded-2xl border border-border p-7 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.05)] transition-all duration-300 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.1 + i * 0.08}s` }}
             >
-              <div className="w-11 h-11 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
-                <r.icon className="w-5 h-5 text-primary" />
+              <div className="w-11 h-11 shrink-0 rounded-xl bg-blue-light flex items-center justify-center">
+                <r.icon className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-1">{r.title}</h3>
+                <h3 className="font-display text-lg italic text-foreground mb-1">{r.title}</h3>
                 <p className="font-sans text-sm text-muted-foreground leading-relaxed">{r.desc}</p>
               </div>
             </div>
@@ -117,30 +108,28 @@ const VergleichSection = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-secondary" ref={ref}>
+    <section className="py-24 md:py-32 section-alt" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase text-primary mb-4">Der Unterschied</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          <span className="badge-blue mb-5 inline-flex">Der Unterschied</span>
+          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Nicht irgendein Zauberer
           </h2>
         </div>
         <div className={`grid md:grid-cols-2 gap-6 max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-          {/* Andere */}
-          <div className="rounded-2xl border border-border bg-card p-8">
-            <p className="font-sans text-sm font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-6">Andere Zauberer</p>
+          <div className="rounded-2xl border border-border bg-background p-8">
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-6">Andere Zauberer</p>
             <ul className="space-y-4">
               {andere.map((item) => (
                 <li key={item} className="flex items-start gap-3">
-                  <X className="w-5 h-5 text-muted-foreground/50 shrink-0 mt-0.5" />
+                  <X className="w-5 h-5 text-muted-foreground/40 shrink-0 mt-0.5" />
                   <span className="font-sans text-sm text-muted-foreground">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
-          {/* MagicEL */}
-          <div className="rounded-2xl border-2 border-primary bg-card p-8 shadow-[0_8px_32px_hsla(0,97%,27%,0.08)]">
-            <p className="font-sans text-sm font-semibold uppercase tracking-[0.15em] text-primary mb-6">MagicEL</p>
+          <div className="rounded-2xl border-2 border-primary/20 bg-background p-8 shadow-[0_8px_32px_hsla(0,97%,27%,0.04)]">
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-6">MagicEL</p>
             <ul className="space-y-4">
               {magicel.map((item) => (
                 <li key={item} className="flex items-start gap-3">
@@ -191,8 +180,8 @@ const PaketeSection = () => {
     <section id="pakete" className="py-24 md:py-32" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase text-primary mb-4">Showkonzepte</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          <span className="badge-blue mb-5 inline-flex">Showkonzepte</span>
+          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Drei Pakete für eure Hochzeit
           </h2>
           <p className="font-sans text-base text-muted-foreground mt-4 max-w-lg mx-auto">
@@ -203,18 +192,18 @@ const PaketeSection = () => {
           {pakete.map((p, i) => (
             <div
               key={p.name}
-              className={`relative rounded-2xl border ${p.popular ? "border-primary shadow-[0_8px_40px_hsla(0,97%,27%,0.1)]" : "border-border"} bg-card p-8 flex flex-col ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`relative rounded-2xl border ${p.popular ? "border-primary/20 shadow-[0_8px_40px_hsla(0,97%,27%,0.06)]" : "border-border"} bg-background p-8 flex flex-col ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.1 + i * 0.1}s` }}
             >
               {p.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-primary-foreground font-sans text-xs font-semibold">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 badge-primary">
                   Am beliebtesten
                 </span>
               )}
-              <p className="font-sans text-sm font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">{p.name}</p>
+              <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">{p.name}</p>
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="font-sans text-xs text-muted-foreground">ab</span>
-                <span className="font-display text-4xl font-bold text-foreground tabular-nums">{p.price}€</span>
+                <span className="font-display text-4xl italic text-foreground tabular-nums">{p.price}€</span>
               </div>
               <p className="font-sans text-xs text-muted-foreground mb-4">{p.duration} · {p.type}</p>
               <p className="font-sans text-sm text-muted-foreground leading-relaxed mb-6">{p.desc}</p>
@@ -228,10 +217,10 @@ const PaketeSection = () => {
               </ul>
               <a
                 href="#kontakt"
-                className={`inline-flex items-center justify-center px-6 py-3 rounded-lg font-sans text-sm font-semibold transition-all duration-200 active:scale-[0.97] ${
+                className={`inline-flex items-center justify-center px-6 py-3 rounded-full font-sans text-sm font-medium transition-all duration-200 active:scale-[0.97] ${
                   p.popular
-                    ? "bg-primary text-primary-foreground hover:shadow-[0_4px_16px_hsla(0,97%,27%,0.35)]"
-                    : "border border-border text-foreground hover:bg-secondary"
+                    ? "bg-foreground text-background hover:bg-foreground/85"
+                    : "border border-border text-foreground hover:bg-muted"
                 }`}
               >
                 Jetzt anfragen
@@ -254,11 +243,11 @@ const AblaufSection = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32 section-dark" ref={ref}>
+    <section className="py-24 md:py-32 section-alt" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase mb-4" style={{ color: "hsl(var(--gold))" }}>Ablauf</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight" style={{ color: "hsl(var(--section-dark-foreground))" }}>
+          <span className="badge-blue mb-5 inline-flex">Ablauf</span>
+          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             So fügt sich Magie in euren Tag
           </h2>
         </div>
@@ -269,12 +258,12 @@ const AblaufSection = () => {
               className={`text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.1 + i * 0.1}s` }}
             >
-              <div className="w-14 h-14 rounded-2xl glass flex items-center justify-center mx-auto mb-5">
-                <s.icon className="w-6 h-6 text-primary" />
+              <div className="w-14 h-14 rounded-2xl bg-blue-light flex items-center justify-center mx-auto mb-5">
+                <s.icon className="w-6 h-6 text-accent" />
               </div>
-              <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] mb-2" style={{ color: "hsl(var(--gold))" }}>{s.time}</p>
-              <h3 className="font-display text-xl font-semibold mb-3" style={{ color: "hsl(var(--section-dark-foreground))" }}>{s.title}</h3>
-              <p className="font-sans text-sm leading-relaxed" style={{ color: "hsla(0,0%,100%,0.6)" }}>{s.desc}</p>
+              <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-accent mb-2">{s.time}</p>
+              <h3 className="font-display text-xl italic text-foreground mb-3">{s.title}</h3>
+              <p className="font-sans text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -291,14 +280,13 @@ const UeberMichKurz = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className={`relative ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="rounded-2xl overflow-hidden shadow-[0_16px_64px_hsla(0,0%,0%,0.12)]">
+            <div className="rounded-3xl overflow-hidden">
               <img src={portraitImg} alt="Emilian Leber — MagicEL" className="w-full h-auto object-cover" loading="lazy" />
             </div>
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-primary/10 -z-10" />
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-            <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase text-primary mb-4">Euer Zauberer</p>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-6">
+            <span className="badge-blue mb-5 inline-flex">Euer Zauberer</span>
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-foreground leading-tight mb-6">
               Hi, ich bin Emilian.
             </h2>
             <div className="space-y-4 font-sans text-base text-muted-foreground leading-relaxed max-w-lg">
@@ -313,7 +301,7 @@ const UeberMichKurz = () => {
             </div>
             <a
               href="#kontakt"
-              className="inline-flex items-center justify-center mt-8 px-7 py-3.5 rounded-lg bg-primary font-sans text-sm font-semibold text-primary-foreground transition-all duration-200 hover:shadow-[0_4px_16px_hsla(0,97%,27%,0.35)] active:scale-[0.97]"
+              className="inline-flex items-center justify-center mt-8 px-7 py-3.5 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-200 hover:bg-foreground/85 active:scale-[0.97]"
             >
               Kennenlernen
             </a>
@@ -334,11 +322,11 @@ const TestimonialsWedding = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-secondary" ref={ref}>
+    <section className="py-24 md:py-32 section-alt" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase text-primary mb-4">Stimmen</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          <span className="badge-blue mb-5 inline-flex">Stimmen</span>
+          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Was Brautpaare sagen
           </h2>
         </div>
@@ -346,12 +334,12 @@ const TestimonialsWedding = () => {
           {testimonials.map((t, i) => (
             <blockquote
               key={i}
-              className={`rounded-xl border border-border bg-card p-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`rounded-2xl border border-border bg-background p-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.15 + i * 0.1}s` }}
             >
-              <div className="flex gap-1 mb-4">
+              <div className="flex gap-1 mb-5">
                 {[...Array(5)].map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-primary text-primary" />
+                  <Star key={j} className="w-4 h-4 fill-primary/80 text-primary/80" />
                 ))}
               </div>
               <p className="font-sans text-base text-foreground leading-relaxed mb-6">„{t.quote}"</p>
@@ -382,14 +370,14 @@ const GalerieWedding = () => {
     <section className="py-24 md:py-32" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase text-primary mb-4">Eindrücke</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          <span className="badge-blue mb-5 inline-flex">Eindrücke</span>
+          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Momente von echten Hochzeiten
           </h2>
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[200px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
           {images.map((img, i) => (
-            <div key={i} className={`${img.className} rounded-xl overflow-hidden`}>
+            <div key={i} className={`${img.className} rounded-2xl overflow-hidden`}>
               <img src={img.src} alt={img.alt} className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
             </div>
           ))}
@@ -406,22 +394,23 @@ const CTAWedding = () => {
     <section id="kontakt" className="relative py-32 md:py-40 overflow-hidden" ref={ref}>
       <div className="absolute inset-0">
         <img src={weddingImg} alt="" className="w-full h-full object-cover" aria-hidden="true" />
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/80 to-foreground/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-black/40" />
       </div>
       <div className="relative z-10 container px-6 text-center">
         <div className={`max-w-2xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ color: "hsl(var(--section-dark-foreground))" }}>
+          <span className="badge-blue mb-6 inline-flex">Jetzt sichern</span>
+          <h2 className="font-display text-3xl md:text-5xl lg:text-6xl italic leading-tight mb-6 text-white">
             Sichert euch euren Hochzeitstermin.
           </h2>
-          <p className="font-sans text-lg md:text-xl mb-4" style={{ color: "hsla(0,0%,100%,0.7)" }}>
+          <p className="font-sans text-lg md:text-xl mb-4 text-white/65 font-light">
             Termine sind begrenzt — frühzeitig anfragen lohnt sich.
           </p>
-          <p className="font-sans text-sm mb-10" style={{ color: "hsla(0,0%,100%,0.5)" }}>
+          <p className="font-sans text-sm mb-10 text-white/45">
             Unverbindlich & kostenlos. Ich melde mich innerhalb von 24 Stunden.
           </p>
           <a
             href="mailto:kontakt@magicel.de"
-            className="inline-flex items-center justify-center px-10 py-5 rounded-xl bg-primary font-sans text-lg font-semibold text-primary-foreground transition-all duration-200 hover:shadow-[0_12px_48px_hsla(0,97%,27%,0.5)] active:scale-[0.97]"
+            className="inline-flex items-center justify-center px-10 py-5 rounded-full bg-white font-sans text-base font-medium text-foreground transition-all duration-200 hover:shadow-[0_12px_48px_hsla(0,0%,100%,0.2)] active:scale-[0.97]"
           >
             Jetzt unverbindlich anfragen
           </a>

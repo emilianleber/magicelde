@@ -28,13 +28,11 @@ const ShowkonzepteSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="showkonzepte" className="py-24 md:py-32 section-dark" ref={ref}>
+    <section id="showkonzepte" className="py-24 md:py-32 section-alt" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase mb-4" style={{ color: "hsl(var(--gold))" }}>
-            Showkonzepte
-          </p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight" style={{ color: "hsl(var(--section-dark-foreground))" }}>
+          <span className="badge-blue mb-5 inline-flex">Showkonzepte</span>
+          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Drei Formate, ein Versprechen
           </h2>
         </div>
@@ -42,7 +40,7 @@ const ShowkonzepteSection = () => {
           {shows.map((show, i) => (
             <div
               key={show.title}
-              className={`group glass rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_12px_48px_hsla(0,97%,27%,0.15)] ${
+              className={`group bg-background rounded-2xl overflow-hidden border border-border hover:shadow-[0_12px_48px_hsla(0,0%,0%,0.08)] transition-all duration-500 ${
                 isVisible ? "animate-fade-up" : "opacity-0"
               }`}
               style={{ animationDelay: `${0.15 + i * 0.12}s` }}
@@ -55,16 +53,16 @@ const ShowkonzepteSection = () => {
                   loading="lazy"
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="inline-block px-3 py-1 rounded-full text-xs font-sans font-semibold glass" style={{ color: "hsl(var(--section-dark-foreground))" }}>
+                  <span className="badge-primary">
                     {show.tag}
                   </span>
                 </div>
               </div>
               <div className="p-7">
-                <h3 className="font-display text-2xl font-semibold mb-3" style={{ color: "hsl(var(--section-dark-foreground))" }}>
+                <h3 className="font-display text-2xl italic text-foreground mb-3">
                   {show.title}
                 </h3>
-                <p className="font-sans text-sm leading-relaxed" style={{ color: "hsla(0,0%,100%,0.65)" }}>
+                <p className="font-sans text-sm text-muted-foreground leading-relaxed">
                   {show.desc}
                 </p>
               </div>

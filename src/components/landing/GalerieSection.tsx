@@ -20,14 +20,14 @@ const GalerieSection = () => {
     <section className="py-24 md:py-32" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-sm font-sans font-medium tracking-[0.2em] uppercase text-primary mb-4">Eindrücke</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          <span className="badge-blue mb-5 inline-flex">Eindrücke</span>
+          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
             Momente, die bleiben
           </h2>
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[200px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
           {images.map((img, i) => (
-            <div key={i} className={`${img.className} rounded-xl overflow-hidden`}>
+            <div key={i} className={`${img.className} rounded-2xl overflow-hidden`}>
               <img
                 src={img.src}
                 alt={img.alt}
