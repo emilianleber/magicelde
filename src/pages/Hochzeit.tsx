@@ -1,5 +1,6 @@
 import Navigation from "@/components/landing/Navigation";
 import Footer from "@/components/landing/Footer";
+import { Link } from "react-router-dom";
 import weddingImg from "@/assets/wedding-magic.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import closeupImg from "@/assets/closeup-magic.jpg";
