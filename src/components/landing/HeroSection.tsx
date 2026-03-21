@@ -3,71 +3,69 @@ import AnimatedWords from "./AnimatedWords";
 
 const HeroSection = () => {
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
-      <div className="container px-6">
-        {/* Text content */}
-        <div className="max-w-3xl mx-auto text-center mb-12">
-          <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            <span className="badge-gradient mb-6 inline-flex">Emilian Leber — MagicEL</span>
+    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+      <div className="container px-6 pt-28 pb-16 md:pt-32 md:pb-20">
+        {/* Centered text — Apple-style minimal */}
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.15s" }}>
+            <span className="badge-muted mb-8 inline-flex">Emilian Leber — MagicEL</span>
           </div>
+
           <h1
-            className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] italic leading-[1.05] mb-6 opacity-0 animate-fade-up text-foreground"
-            style={{ animationDelay: "0.4s" }}
+            className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground"
+            style={{ animationDelay: "0.35s" }}
           >
             Magie, die{" "}
             <AnimatedWords
-              words={["im Kopf bleibt.", "verbindet.", "begeistert.", "überrascht."]}
+              words={["bleibt.", "verbindet.", "begeistert.", "überrascht."]}
             />
           </h1>
+
           <p
-            className="font-sans text-lg md:text-xl max-w-xl mx-auto mb-10 opacity-0 animate-fade-up text-muted-foreground font-light"
-            style={{ animationDelay: "0.6s" }}
+            className="text-body max-w-lg mx-auto mb-12 opacity-0 animate-fade-up"
+            style={{ animationDelay: "0.55s" }}
           >
-            Modern, interaktiv, unvergesslich — Entertainment, das deine Gäste noch
-            Wochen später besprechen.
+            Erlebnisse, die deine Gäste noch Wochen später besprechen.
           </p>
+
           <div
             className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up"
-            style={{ animationDelay: "0.8s" }}
+            style={{ animationDelay: "0.7s" }}
           >
             <a
               href="#kontakt"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-200 hover:bg-foreground/85 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.15)] active:scale-[0.97]"
+              className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-300 hover:bg-foreground/85 hover:shadow-[0_8px_30px_hsla(0,0%,0%,0.12)] active:scale-[0.97]"
             >
-              Kostenlos Anfragen →
+              Kostenlos anfragen
             </a>
             <a
               href="#showkonzepte"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border font-sans text-sm font-medium text-foreground transition-all duration-200 hover:bg-muted active:scale-[0.97]"
+              className="inline-flex items-center justify-center px-8 py-4 rounded-full font-sans text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground active:scale-[0.97]"
             >
-              Anlässe →
+              Mehr erfahren ↓
             </a>
           </div>
         </div>
 
-        {/* Hero image in rounded container (Apple-style) */}
+        {/* Hero image — large rounded, no dark overlay */}
         <div
-          className="relative rounded-3xl overflow-hidden max-w-5xl mx-auto opacity-0 animate-fade-up shadow-[0_24px_80px_hsla(0,0%,0%,0.1)]"
-          style={{ animationDelay: "1s" }}
+          className="relative rounded-[2rem] overflow-hidden max-w-5xl mx-auto mt-16 opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.9s" }}
         >
           <img
             src={heroImg}
             alt="MagicEL bei einer Live-Performance"
-            className="w-full h-[400px] md:h-[520px] object-cover"
+            className="w-full h-[420px] md:h-[560px] object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-          <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
-            <div>
-              <p className="font-sans text-xs text-white/70 font-medium">Zauberer für Ihr Event buchen</p>
-              <p className="font-sans text-xs text-white/50">Begeisterte Kunden seit über 10 Jahren.</p>
-            </div>
-          </div>
         </div>
 
-        {/* Trust badges */}
-        <div className="flex flex-wrap justify-center gap-6 mt-12 opacity-0 animate-fade-up" style={{ animationDelay: "1.2s" }}>
+        {/* Trust — minimal text */}
+        <div
+          className="flex flex-wrap justify-center gap-8 mt-14 opacity-0 animate-fade-up"
+          style={{ animationDelay: "1.1s" }}
+        >
           {["500+ Events", "10+ Jahre Erfahrung", "Bekannt aus TV"].map((badge) => (
-            <span key={badge} className="font-sans text-xs font-medium text-muted-foreground tracking-wide">
+            <span key={badge} className="font-sans text-xs font-medium text-muted-foreground/60 tracking-wide uppercase">
               {badge}
             </span>
           ))}

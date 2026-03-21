@@ -5,11 +5,11 @@ const UeberMichSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="ueber-mich" className="py-28 md:py-36" ref={ref}>
+    <section id="ueber-mich" className="section-large" ref={ref}>
       <div className="container px-6">
-        <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
-          <div className={`relative ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="rounded-3xl overflow-hidden shadow-[0_16px_64px_hsla(0,0%,0%,0.08)]">
+        <div className="grid md:grid-cols-2 gap-16 lg:gap-28 items-center">
+          <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
+            <div className="rounded-[2rem] overflow-hidden">
               <img
                 src={portraitImg}
                 alt="Emilian Leber — MagicEL"
@@ -19,23 +19,21 @@ const UeberMichSection = () => {
             </div>
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-            <span className="badge-gradient mb-6 inline-flex">Über mich</span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-foreground leading-tight mb-8">
+            <span className="badge-muted mb-8 inline-flex">Über mich</span>
+            <h2 className="headline-section text-foreground mb-8">
               Hi, ich bin Emilian.
             </h2>
-            <div className="space-y-5 font-sans text-base text-muted-foreground leading-relaxed max-w-lg">
+            <div className="space-y-6 text-detail max-w-lg">
               <p>
-                Seit über zehn Jahren stehe ich auf Bühnen, bewege mich durch Events und
-                bringe Menschen zum Staunen. Nicht mit dem klassischen Zylinder-und-Kaninchen-Klischee,
-                sondern mit moderner, interaktiver Magie, die man so nicht erwartet.
+                Seit über zehn Jahren stehe ich auf Bühnen und bringe Menschen zum Staunen.
+                Nicht mit Zylinder und Kaninchen — sondern mit moderner, interaktiver Magie.
               </p>
               <p>
-                Für mich ist Zauberei Kunst — eine Mischung aus Psychologie, Kreativität und
-                Performance. Jeder Auftritt ist eine persönliche Erfahrung, kein Programm aus dem Katalog.
+                Für mich ist Zauberei Kunst — eine Mischung aus Psychologie, Kreativität
+                und Performance. Jeder Auftritt ist persönlich.
               </p>
-              <p>
-                Als Finalist bei <span className="font-semibold text-foreground">Talents of Magic</span> und
-                mit Auftritten vor tausenden Zuschauern verbinde ich Leidenschaft mit Professionalität.
+              <p className="text-foreground font-medium">
+                Finalist bei Talents of Magic. Hunderte Auftritte. Über 10 Jahre Erfahrung.
               </p>
             </div>
           </div>

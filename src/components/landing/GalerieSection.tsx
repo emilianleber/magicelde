@@ -6,28 +6,30 @@ import portraitImg from "@/assets/magician-portrait.jpg";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const images = [
-  { src: heroImg, alt: "Close-Up Performance bei einem Event", className: "col-span-2 row-span-2" },
-  { src: audienceImg, alt: "Begeistertes Publikum", className: "col-span-1 row-span-1" },
-  { src: stageImg, alt: "Bühnenshow mit dramatischer Beleuchtung", className: "col-span-1 row-span-1" },
-  { src: closeupImg, alt: "Kartenmagie hautnah", className: "col-span-1 row-span-1" },
-  { src: portraitImg, alt: "Emilian Leber Portrait", className: "col-span-1 row-span-1" },
+  { src: heroImg, alt: "Close-Up Performance", className: "col-span-2 row-span-2" },
+  { src: audienceImg, alt: "Begeistertes Publikum", className: "" },
+  { src: stageImg, alt: "Bühnenshow", className: "" },
+  { src: closeupImg, alt: "Kartenmagie hautnah", className: "" },
+  { src: portraitImg, alt: "Emilian Leber", className: "" },
 ];
 
 const GalerieSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section className="py-28 md:py-36" ref={ref}>
+    <section className="section-large" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Eindrücke</span>
-          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
-            Momente, die bleiben
+        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <h2 className="headline-section text-foreground">
+            Eindrücke.
           </h2>
         </div>
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[200px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+        <div
+          className={`grid grid-cols-2 md:grid-cols-4 gap-2 auto-rows-[180px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`}
+          style={{ animationDelay: "0.15s" }}
+        >
           {images.map((img, i) => (
-            <div key={i} className={`${img.className} rounded-3xl overflow-hidden`}>
+            <div key={i} className={`${img.className} rounded-2xl overflow-hidden`}>
               <img
                 src={img.src}
                 alt={img.alt}

@@ -8,7 +8,6 @@ const navItems = [
   { label: "Hochzeiten", href: "/hochzeit" },
   { label: "Firmenfeiern", href: "/firmenfeiern" },
   { label: "Über mich", href: "/#ueber-mich" },
-  { label: "Referenzen", href: "/#referenzen" },
 ];
 
 const Navigation = () => {
@@ -18,7 +17,7 @@ const Navigation = () => {
   const isHome = location.pathname === "/";
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -27,35 +26,29 @@ const Navigation = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-white/80 backdrop-blur-xl shadow-[0_1px_0_hsl(var(--border))] py-3"
-          : "bg-white/0 py-5"
+          ? "bg-white/80 backdrop-blur-2xl border-b border-border/50 py-3"
+          : "bg-transparent py-5"
       }`}
     >
       <div className="container flex items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logoImg} alt="MagicEL" className="h-8 w-auto" />
+        <Link to="/" className="flex items-center">
+          <img src={logoImg} alt="MagicEL" className="h-7 w-auto" />
         </Link>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => {
             const isAnchor = item.href.startsWith("/#");
-            const className = `font-sans text-[13px] font-medium tracking-wide transition-colors duration-200 hover:text-foreground ${
-              scrolled ? "text-muted-foreground" : "text-foreground/60"
-            }`;
+            const cls = "font-sans text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors duration-200";
             if (isAnchor) {
               return (
-                <a
-                  key={item.href}
-                  href={isHome ? item.href.replace("/", "") : item.href}
-                  className={className}
-                >
+                <a key={item.href} href={isHome ? item.href.replace("/", "") : item.href} className={cls}>
                   {item.label}
                 </a>
               );
             }
             return (
-              <Link key={item.href} to={item.href} className={className}>
+              <Link key={item.href} to={item.href} className={cls}>
                 {item.label}
               </Link>
             );
@@ -74,34 +67,24 @@ const Navigation = () => {
           className="md:hidden p-2 text-foreground"
           aria-label="Menü"
         >
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-border mt-2 mx-4 rounded-2xl shadow-[0_8px_32px_hsla(0,0%,0%,0.08)] p-6 flex flex-col gap-4 animate-fade-up">
+        <div className="md:hidden bg-white/95 backdrop-blur-2xl border-t border-border/50 mt-1 mx-4 rounded-2xl p-6 flex flex-col gap-4 animate-fade-up">
           {navItems.map((item) => {
             const isAnchor = item.href.startsWith("/#");
             if (isAnchor) {
               return (
-                <a
-                  key={item.href}
-                  href={isHome ? item.href.replace("/", "") : item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="font-sans text-sm font-medium text-foreground"
-                >
+                <a key={item.href} href={isHome ? item.href.replace("/", "") : item.href} onClick={() => setMobileOpen(false)} className="font-sans text-sm text-foreground">
                   {item.label}
                 </a>
               );
             }
             return (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setMobileOpen(false)}
-                className="font-sans text-sm font-medium text-foreground"
-              >
+              <Link key={item.href} to={item.href} onClick={() => setMobileOpen(false)} className="font-sans text-sm text-foreground">
                 {item.label}
               </Link>
             );
