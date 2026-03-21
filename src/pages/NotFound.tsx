@@ -1,23 +1,30 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
+import PageLayout from "@/components/landing/PageLayout";
 
 const NotFound = () => {
   const location = useLocation();
-
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
-        <a href="/" className="text-primary underline hover:text-primary/90">
-          Return to Home
-        </a>
-      </div>
-    </div>
+    <PageLayout>
+      <section className="min-h-screen flex flex-col justify-center">
+        <div className="container px-6 pt-28 pb-16">
+          <div className="max-w-2xl mx-auto text-center">
+            <span className="font-display text-8xl font-bold text-accent/20">404</span>
+            <h1 className="headline-section text-foreground mt-4 mb-6">Seite nicht gefunden.</h1>
+            <p className="text-body max-w-md mx-auto mb-10">
+              Die Seite, die du suchst, existiert leider nicht. Vielleicht ist sie umgezogen — oder sie war nie hier.
+            </p>
+            <Link to="/" className="btn-primary">
+              Zurück zur Startseite
+            </Link>
+          </div>
+        </div>
+      </section>
+    </PageLayout>
   );
 };
 

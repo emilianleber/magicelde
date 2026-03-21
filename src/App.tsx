@@ -17,6 +17,7 @@ import Presse from "./pages/Presse.tsx";
 import Kontakt from "./pages/Kontakt.tsx";
 import Buchung from "./pages/Buchung.tsx";
 import Danke from "./pages/Danke.tsx";
+import Blog from "./pages/Blog.tsx";
 import StadtSeite from "./pages/StadtSeite.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/kontakt" element={<Kontakt />} />
           <Route path="/buchung" element={<Buchung />} />
           <Route path="/danke" element={<Danke />} />
+          <Route path="/blog" element={<Blog />} />
           <Route path="/zauberer/:stadt" element={<StadtSeite />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

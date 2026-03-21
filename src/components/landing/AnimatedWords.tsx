@@ -22,7 +22,7 @@ const AnimatedWords = ({ words, className = "" }: AnimatedWordsProps) => {
         style={{ transform: `translateY(-${currentIndex * 100}%)` }}
       >
         {words.map((word, i) => (
-          <span key={i} className="h-[1.1em] flex items-end underline-primary">
+          <span key={i} className="h-[1.1em] flex items-end text-accent">
             {word}
           </span>
         ))}
