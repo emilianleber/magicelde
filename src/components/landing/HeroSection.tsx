@@ -1,5 +1,6 @@
 import heroImg from "@/assets/hero-magic.jpg";
 import AnimatedWords from "./AnimatedWords";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
