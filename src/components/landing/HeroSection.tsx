@@ -1,74 +1,76 @@
 import heroImg from "@/assets/hero-magic.jpg";
 import AnimatedWords from "./AnimatedWords";
 import { Link } from "react-router-dom";
+import { ArrowRight, Play } from "lucide-react";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
-      <div className="container px-6 pt-28 pb-16 md:pt-32 md:pb-20">
-        {/* Centered text — Apple-style minimal */}
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.15s" }}>
-            <span className="badge-muted mb-8 inline-flex">Emilian Leber — MagicEL</span>
+      <div className="container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+            <span className="badge-accent mb-8 inline-flex">Comedy-Zauberer · Showkünstler · Performer</span>
           </div>
 
           <h1
             className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground"
-            style={{ animationDelay: "0.35s" }}
+            style={{ animationDelay: "0.3s" }}
           >
-            Magie, die{" "}
-            <AnimatedWords
-              words={["bleibt.", "verbindet.", "begeistert.", "überrascht."]}
-            />
+            Staunen. Lachen.{" "}
+            <AnimatedWords words={["Erinnern.", "Verbinden.", "Begeistern.", "Erleben."]} />
           </h1>
 
           <p
-            className="text-body max-w-lg mx-auto mb-12 opacity-0 animate-fade-up"
-            style={{ animationDelay: "0.55s" }}
+            className="text-body max-w-2xl mx-auto mb-12 opacity-0 animate-fade-up"
+            style={{ animationDelay: "0.5s" }}
           >
-            Erlebnisse, die deine Gäste noch Wochen später besprechen.
+            Ich bin Emilian Leber — moderner Comedy-Zauberer und Showkünstler.
+            Meine Shows verbinden Staunen mit Humor und schaffen Erlebnisse,
+            über die deine Gäste noch Wochen später sprechen.
           </p>
 
           <div
             className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up"
-            style={{ animationDelay: "0.7s" }}
+            style={{ animationDelay: "0.65s" }}
           >
-            <Link
-              to="/buchung"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-300 hover:bg-foreground/85 hover:shadow-[0_8px_30px_hsla(0,0%,0%,0.12)] active:scale-[0.97]"
-            >
+            <Link to="/buchung" className="btn-primary btn-large group">
               Kostenlos anfragen
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <a
-              href="#showkonzepte"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-full font-sans text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground active:scale-[0.97]"
-            >
-              Mehr erfahren ↓
+            <a href="#showkonzepte" className="btn-secondary btn-large group">
+              <Play className="w-4 h-4 mr-2" />
+              Entdecken
             </a>
           </div>
         </div>
 
-        {/* Hero image — large rounded, no dark overlay */}
+        {/* Hero image */}
         <div
-          className="relative rounded-[2rem] overflow-hidden max-w-5xl mx-auto mt-16 opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.9s" }}
+          className="relative rounded-[2rem] overflow-hidden max-w-5xl mx-auto mt-20 opacity-0 animate-scale-up"
+          style={{ animationDelay: "0.85s" }}
         >
           <img
             src={heroImg}
-            alt="MagicEL bei einer Live-Performance"
-            className="w-full h-[420px] md:h-[560px] object-cover"
+            alt="MagicEL — Comedy-Zauberer Emilian Leber bei einer Live-Performance"
+            className="w-full h-[400px] md:h-[560px] object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/10 via-transparent to-transparent" />
         </div>
 
-        {/* Trust — minimal text */}
+        {/* Trust badges */}
         <div
-          className="flex flex-wrap justify-center gap-8 mt-14 opacity-0 animate-fade-up"
+          className="flex flex-wrap justify-center gap-x-10 gap-y-4 mt-16 opacity-0 animate-fade-up"
           style={{ animationDelay: "1.1s" }}
         >
-          {["500+ Events", "10+ Jahre Erfahrung", "Bekannt aus TV"].map((badge) => (
-            <span key={badge} className="font-sans text-xs font-medium text-muted-foreground/60 tracking-wide uppercase">
-              {badge}
-            </span>
+          {[
+            { value: "500+", label: "Events" },
+            { value: "10+", label: "Jahre Erfahrung" },
+            { value: "Bekannt aus", label: "TV & Medien" },
+          ].map((badge) => (
+            <div key={badge.label} className="text-center">
+              <p className="font-display text-lg font-bold text-foreground">{badge.value}</p>
+              <p className="font-sans text-[11px] font-medium text-muted-foreground/50 uppercase tracking-wider">{badge.label}</p>
+            </div>
           ))}
         </div>
       </div>

@@ -1,68 +1,83 @@
 import { Link } from "react-router-dom";
 import { staedte } from "@/data/staedte";
+import logoImg from "@/assets/logo-clean.webp";
 
-const Footer = () => {
-  return (
-    <footer className="border-t border-border/50 py-16">
-      <div className="container px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-12">
-          <div className="col-span-2 md:col-span-1">
-            <p className="font-display text-lg italic text-foreground mb-2">MagicEL</p>
-            <p className="text-detail">
-              Emilian Leber — Moderner Zauberer für unvergessliche Events.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <p className="font-sans text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/50 mb-4">Anlässe</p>
-            <Link to="/hochzeit" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Hochzeiten</Link>
-            <Link to="/firmenfeiern" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Firmenfeiern</Link>
-            <Link to="/geburtstage" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Geburtstage</Link>
-          </div>
-
-          <div className="space-y-3">
-            <p className="font-sans text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/50 mb-4">Konzepte</p>
-            <Link to="/buehnenshow" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Bühnenshow</Link>
-            <Link to="/close-up" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Close-Up</Link>
-            <Link to="/magic-dinner" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Magic Dinner</Link>
-          </div>
-
-          <div className="space-y-3">
-            <p className="font-sans text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/50 mb-4">Mehr</p>
-            <Link to="/ueber-mich" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Über mich</Link>
-            <Link to="/referenzen" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Referenzen</Link>
-            <Link to="/faq" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">FAQ</Link>
-            <Link to="/presse" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Presse</Link>
-            <Link to="/kontakt" className="block font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">Kontakt</Link>
-          </div>
-        </div>
-
-        {/* SEO city links */}
-        <div className="border-t border-border/50 pt-8 mb-8">
-          <p className="font-sans text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/50 mb-4">Zauberer in deiner Stadt</p>
-          <div className="flex flex-wrap gap-x-4 gap-y-1">
-            {staedte.slice(0, 12).map((s) => (
-              <Link key={s.slug} to={`/zauberer/${s.slug}`} className="font-sans text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
-                {s.name}
-              </Link>
+const Footer = () => (
+  <footer className="border-t border-border/50 pt-20 pb-12">
+    <div className="container px-6">
+      {/* Top: Brand + Newsletter hint */}
+      <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
+        <div className="max-w-sm">
+          <Link to="/" className="flex items-center gap-2 mb-4">
+            <img src={logoImg} alt="MagicEL" className="h-6 w-auto" />
+            <span className="font-display font-bold text-foreground text-lg">MagicEL</span>
+          </Link>
+          <p className="text-detail mb-6">
+            Moderner Comedy-Zauberer für Firmenfeiern, Hochzeiten, Galas und private Events.
+            Staunen. Lachen. Erinnern.
+          </p>
+          <div className="flex gap-4">
+            {[
+              { href: "https://instagram.com/magicel", label: "Instagram" },
+              { href: "https://youtube.com/@magicel", label: "YouTube" },
+              { href: "https://tiktok.com/@magicel", label: "TikTok" },
+            ].map((s) => (
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="font-sans text-xs font-medium text-muted-foreground hover:text-accent transition-colors">
+                {s.label}
+              </a>
             ))}
           </div>
         </div>
 
-        <div className="border-t border-border/50 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="font-sans text-xs text-muted-foreground/60">
-            © {new Date().getFullYear()} MagicEL — Emilian Leber
-          </p>
-          <div className="flex gap-6">
-            <a href="https://instagram.com/magicel" target="_blank" rel="noopener noreferrer" className="font-sans text-xs text-muted-foreground/60 hover:text-foreground transition-colors">Instagram</a>
-            <a href="https://youtube.com/@magicel" target="_blank" rel="noopener noreferrer" className="font-sans text-xs text-muted-foreground/60 hover:text-foreground transition-colors">YouTube</a>
-            <a href="#" className="font-sans text-xs text-muted-foreground/60 hover:text-foreground transition-colors">Impressum</a>
-            <a href="#" className="font-sans text-xs text-muted-foreground/60 hover:text-foreground transition-colors">Datenschutz</a>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-12">
+          <div className="space-y-3">
+            <p className="font-display text-sm font-bold text-foreground mb-4">Anlässe</p>
+            <Link to="/hochzeit" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Hochzeiten</Link>
+            <Link to="/firmenfeiern" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Firmenfeiern</Link>
+            <Link to="/geburtstage" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Geburtstage</Link>
+          </div>
+          <div className="space-y-3">
+            <p className="font-display text-sm font-bold text-foreground mb-4">Konzepte</p>
+            <Link to="/buehnenshow" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Bühnenshow</Link>
+            <Link to="/close-up" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Close-Up</Link>
+            <Link to="/magic-dinner" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Magic Dinner</Link>
+          </div>
+          <div className="space-y-3">
+            <p className="font-display text-sm font-bold text-foreground mb-4">Mehr</p>
+            <Link to="/ueber-mich" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Über mich</Link>
+            <Link to="/referenzen" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Referenzen</Link>
+            <Link to="/blog" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Magazin</Link>
+            <Link to="/faq" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">FAQ</Link>
+            <Link to="/presse" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Presse</Link>
+            <Link to="/kontakt" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Kontakt</Link>
           </div>
         </div>
       </div>
-    </footer>
-  );
-};
+
+      {/* City links */}
+      <div className="border-t border-border/50 pt-8 mb-8">
+        <p className="font-display text-xs font-bold text-muted-foreground/40 uppercase tracking-widest mb-4">Zauberer in deiner Stadt</p>
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+          {staedte.slice(0, 14).map((s) => (
+            <Link key={s.slug} to={`/zauberer/${s.slug}`} className="text-xs text-muted-foreground/50 hover:text-accent transition-colors">
+              {s.name}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom */}
+      <div className="border-t border-border/50 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <p className="text-xs text-muted-foreground/50">
+          © {new Date().getFullYear()} MagicEL — Emilian Leber. Alle Rechte vorbehalten.
+        </p>
+        <div className="flex gap-6">
+          <a href="#" className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">Impressum</a>
+          <a href="#" className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">Datenschutz</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+);
 
 export default Footer;
