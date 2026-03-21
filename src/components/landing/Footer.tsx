@@ -5,7 +5,6 @@ import logoImg from "@/assets/logo-clean.webp";
 const Footer = () => (
   <footer className="border-t border-border/50 pt-20 pb-12">
     <div className="container px-6">
-      {/* Top: Brand + Newsletter hint */}
       <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
         <div className="max-w-sm">
           <Link to="/" className="flex items-center gap-2 mb-4">
@@ -29,7 +28,7 @@ const Footer = () => (
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-12">
           <div className="space-y-3">
             <p className="font-display text-sm font-bold text-foreground mb-4">Anlässe</p>
             <Link to="/hochzeit" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Hochzeiten</Link>
@@ -47,9 +46,14 @@ const Footer = () => (
             <Link to="/ueber-mich" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Über mich</Link>
             <Link to="/referenzen" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Referenzen</Link>
             <Link to="/blog" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Magazin</Link>
+            <Link to="/tickets" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Tickets</Link>
             <Link to="/faq" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">FAQ</Link>
-            <Link to="/presse" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Presse</Link>
+          </div>
+          <div className="space-y-3">
+            <p className="font-display text-sm font-bold text-foreground mb-4">Kontakt</p>
             <Link to="/kontakt" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Kontakt</Link>
+            <Link to="/buchung" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Anfragen</Link>
+            <Link to="/presse" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Presse</Link>
           </div>
         </div>
       </div>
@@ -72,8 +76,9 @@ const Footer = () => (
           © {new Date().getFullYear()} MagicEL — Emilian Leber. Alle Rechte vorbehalten.
         </p>
         <div className="flex gap-6">
-          <a href="#" className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">Impressum</a>
-          <a href="#" className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">Datenschutz</a>
+          <Link to="/impressum" className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">Impressum</Link>
+          <Link to="/datenschutz" className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">Datenschutz</Link>
+          <Link to="/agb" className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">AGB</Link>
         </div>
       </div>
     </div>

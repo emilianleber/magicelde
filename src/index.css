@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,24 +7,24 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 220 25% 10%;
+    --foreground: 220 20% 12%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card: 220 20% 97%;
+    --card-foreground: 220 20% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover-foreground: 220 20% 12%;
 
-    --primary: 4 80% 42%;
+    --primary: 225 80% 56%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 220 14% 96%;
-    --secondary-foreground: 220 25% 10%;
+    --secondary-foreground: 220 20% 12%;
 
     --muted: 220 14% 96%;
     --muted-foreground: 220 10% 46%;
 
-    --accent: 225 85% 55%;
+    --accent: 225 80% 56%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -32,7 +32,7 @@
 
     --border: 220 9% 91%;
     --input: 220 9% 91%;
-    --ring: 225 85% 55%;
+    --ring: 225 80% 56%;
 
     --radius: 1rem;
 
@@ -83,7 +83,7 @@
 
   .badge-gradient {
     @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase text-white;
-    background: linear-gradient(135deg, hsl(225, 85%, 55%), hsl(260, 70%, 55%));
+    background: linear-gradient(135deg, hsl(225, 80%, 56%), hsl(260, 70%, 55%));
   }
 
   .badge-muted {
@@ -115,15 +115,15 @@
 
   /* ─── Typography ─── */
   .headline-hero {
-    @apply font-display text-[2.75rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold leading-[0.95] tracking-tight;
+    @apply font-display text-[2.75rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-black leading-[0.92] tracking-[-0.03em];
   }
 
   .headline-section {
-    @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.05] tracking-tight;
+    @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.05] tracking-[-0.02em];
   }
 
   .headline-sub {
-    @apply font-display text-2xl md:text-3xl lg:text-4xl font-bold leading-[1.1];
+    @apply font-display text-2xl md:text-3xl lg:text-4xl font-bold leading-[1.1] tracking-[-0.01em];
   }
 
   .text-body {
@@ -144,7 +144,7 @@
 
   /* ─── Button styles ─── */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-300 hover:bg-foreground/85 hover:shadow-[0_8px_30px_hsla(220,25%,10%,0.15)] active:scale-[0.97];
+    @apply inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-300 hover:bg-foreground/85 hover:shadow-[0_8px_30px_hsla(220,20%,12%,0.15)] active:scale-[0.97];
   }
 
   .btn-secondary {
@@ -152,10 +152,19 @@
   }
 
   .btn-accent {
-    @apply inline-flex items-center justify-center px-8 py-4 rounded-full bg-accent font-sans text-sm font-medium text-accent-foreground transition-all duration-300 hover:bg-accent/90 hover:shadow-[0_8px_30px_hsla(225,85%,55%,0.25)] active:scale-[0.97];
+    @apply inline-flex items-center justify-center px-8 py-4 rounded-full bg-accent font-sans text-sm font-medium text-accent-foreground transition-all duration-300 hover:bg-accent/90 hover:shadow-[0_8px_30px_hsla(225,80%,56%,0.25)] active:scale-[0.97];
   }
 
   .btn-large {
     @apply px-10 py-5 text-base;
+  }
+
+  /* ─── Video Hero ─── */
+  .video-hero {
+    @apply relative w-full overflow-hidden;
+  }
+
+  .video-hero video {
+    @apply w-full h-full object-cover;
   }
 }

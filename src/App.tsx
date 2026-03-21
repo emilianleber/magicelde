@@ -18,6 +18,11 @@ import Kontakt from "./pages/Kontakt.tsx";
 import Buchung from "./pages/Buchung.tsx";
 import Danke from "./pages/Danke.tsx";
 import Blog from "./pages/Blog.tsx";
+import BlogPost from "./pages/BlogPost.tsx";
+import Tickets from "./pages/Tickets.tsx";
+import Datenschutz from "./pages/Datenschutz.tsx";
+import Impressum from "./pages/Impressum.tsx";
+import AGB from "./pages/AGB.tsx";
 import StadtSeite from "./pages/StadtSeite.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
@@ -47,6 +52,11 @@ const App = () => (
           <Route path="/buchung" element={<Buchung />} />
           <Route path="/danke" element={<Danke />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/tickets" element={<Tickets />} />
+          <Route path="/datenschutz" element={<Datenschutz />} />
+          <Route path="/impressum" element={<Impressum />} />
+          <Route path="/agb" element={<AGB />} />
           <Route path="/zauberer/:stadt" element={<StadtSeite />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
