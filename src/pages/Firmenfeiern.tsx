@@ -13,7 +13,7 @@ import closeupImg from "@/assets/closeup-magic.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
-import { Check, X, Star, TrendingUp, Users, Briefcase, Target, ArrowRight, Building2, Shield, Lightbulb, MessageCircle, Award, Zap } from "lucide-react";
+import { Check, X, Star, TrendingUp, Users, Briefcase, Target, ArrowRight, Building2, Shield, Lightbulb, MessageCircle, Award, Zap, Sparkles } from "lucide-react";
 
 /* 1. Hero */
 const HeroCorporate = () => (
