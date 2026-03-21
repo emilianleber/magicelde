@@ -7,22 +7,22 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 8%;
+    --foreground: 0 0% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 8%;
+    --card-foreground: 0 0% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 8%;
+    --popover-foreground: 0 0% 12%;
 
     --primary: 0 97% 27%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 220 14% 96%;
-    --secondary-foreground: 0 0% 8%;
+    --secondary-foreground: 0 0% 12%;
 
     --muted: 220 10% 96%;
-    --muted-foreground: 0 0% 46%;
+    --muted-foreground: 0 0% 45%;
 
     --accent: 216 80% 52%;
     --accent-foreground: 0 0% 100%;
@@ -36,7 +36,6 @@
 
     --radius: 1rem;
 
-    /* Custom tokens */
     --blue: 216 80% 52%;
     --blue-light: 216 80% 96%;
     --section-alt: 220 14% 97%;
@@ -78,20 +77,19 @@
 
 @layer utilities {
   .badge-gradient {
-    @apply inline-flex items-center px-4 py-1.5 rounded-full text-xs font-sans font-semibold tracking-wide text-white;
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase;
     background: linear-gradient(135deg, hsl(216, 80%, 52%), hsl(260, 60%, 50%));
+    color: white;
   }
 
   .badge-blue {
-    @apply inline-flex items-center px-4 py-1.5 rounded-full text-xs font-sans font-semibold tracking-wide;
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase;
     background: hsl(var(--blue-light));
     color: hsl(var(--blue));
   }
 
-  .badge-primary {
-    @apply inline-flex items-center px-4 py-1.5 rounded-full text-xs font-sans font-semibold tracking-wide;
-    background: hsla(0, 97%, 27%, 0.06);
-    color: hsl(var(--primary));
+  .badge-muted {
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-medium tracking-widest uppercase text-muted-foreground bg-muted;
   }
 
   .section-alt {
@@ -101,7 +99,36 @@
   .underline-primary {
     text-decoration: underline;
     text-decoration-color: hsl(var(--primary));
-    text-underline-offset: 4px;
+    text-underline-offset: 6px;
     text-decoration-thickness: 2px;
+  }
+
+  /* Apple-style large section */
+  .section-full {
+    @apply py-32 md:py-44 lg:py-52;
+  }
+
+  .section-large {
+    @apply py-24 md:py-36 lg:py-44;
+  }
+
+  .headline-hero {
+    @apply font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] italic leading-[1.02] tracking-tight;
+  }
+
+  .headline-section {
+    @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic leading-[1.08] tracking-tight;
+  }
+
+  .headline-sub {
+    @apply font-display text-2xl md:text-3xl lg:text-4xl italic leading-[1.12];
+  }
+
+  .text-body {
+    @apply font-sans text-lg md:text-xl font-light leading-relaxed text-muted-foreground;
+  }
+
+  .text-detail {
+    @apply font-sans text-sm md:text-base text-muted-foreground leading-relaxed;
   }
 }

@@ -1,12 +1,5 @@
-import { Trophy, Star, Tv, Users } from "lucide-react";
+import { Star } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-
-const stats = [
-  { icon: Users, value: "500+", label: "Auftritte" },
-  { icon: Trophy, value: "Finalist", label: "Talents of Magic" },
-  { icon: Star, value: "4.9", label: "Kundenbewertung" },
-  { icon: Tv, value: "TV & Bühne", label: "Erfahrung" },
-];
 
 const testimonials = [
   {
@@ -30,37 +23,39 @@ const ErfolgeSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="referenzen" className="py-28 md:py-36 section-alt" ref={ref}>
+    <section id="referenzen" className="section-large section-alt" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Erfolge & Referenzen</span>
-          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
-            Zahlen, die überzeugen
+        {/* Big stat line */}
+        <div className={`max-w-4xl mx-auto text-center mb-28 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-blue mb-8 inline-flex">Referenzen</span>
+          <h2 className="headline-section text-foreground mb-12">
+            Das sagen Kunden.
           </h2>
-        </div>
-
-        {/* Stats */}
-        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-6 mb-24 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-          {stats.map((stat) => (
-            <div key={stat.label} className="text-center p-8 rounded-3xl bg-white shadow-[0_2px_12px_hsla(0,0%,0%,0.04)]">
-              <stat.icon className="w-5 h-5 text-accent mx-auto mb-4" />
-              <p className="font-display text-3xl md:text-4xl italic text-foreground tabular-nums">{stat.value}</p>
-              <p className="font-sans text-sm text-muted-foreground mt-1">{stat.label}</p>
-            </div>
-          ))}
+          <div className="flex flex-wrap justify-center gap-12 md:gap-20">
+            {[
+              { value: "500+", label: "Auftritte" },
+              { value: "4.9 ★", label: "Bewertung" },
+              { value: "10+", label: "Jahre" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="font-display text-4xl md:text-5xl italic text-foreground tabular-nums">{stat.value}</p>
+                <p className="font-sans text-xs uppercase tracking-widest text-muted-foreground mt-2">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Testimonials */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {testimonials.map((t, i) => (
             <blockquote
               key={i}
-              className={`rounded-3xl bg-white p-8 shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`p-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.25 + i * 0.1}s` }}
             >
-              <div className="flex gap-1 mb-5">
+              <div className="flex gap-0.5 mb-5">
                 {[...Array(5)].map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-primary/70 text-primary/70" />
+                  <Star key={j} className="w-3.5 h-3.5 fill-primary/60 text-primary/60" />
                 ))}
               </div>
               <p className="font-sans text-base text-foreground leading-relaxed mb-6">„{t.quote}"</p>

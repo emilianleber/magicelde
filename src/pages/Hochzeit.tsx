@@ -8,81 +8,71 @@ import audienceImg from "@/assets/audience-reactions.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import AnimatedWords from "@/components/landing/AnimatedWords";
-import { Heart, Sparkles, Users, MessageCircle, X, Check, Clock, Star, Mic } from "lucide-react";
+import { Check, X, Star } from "lucide-react";
 
 /* ─── Hero ─── */
 const HeroWedding = () => (
-  <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
-    <div className="container px-6">
-      <div className="max-w-3xl mx-auto text-center mb-12">
-        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-          <span className="badge-gradient mb-6 inline-flex">Zauberer für eure Hochzeit</span>
+  <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+    <div className="container px-6 pt-28 pb-16 md:pt-32 md:pb-20">
+      <div className="max-w-4xl mx-auto text-center">
+        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.15s" }}>
+          <span className="badge-muted mb-8 inline-flex">Zauberer für eure Hochzeit</span>
         </div>
         <h1
-          className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic leading-[1.05] mb-6 opacity-0 animate-fade-up text-foreground"
-          style={{ animationDelay: "0.4s" }}
+          className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground"
+          style={{ animationDelay: "0.35s" }}
         >
-          Magie für eure Hochzeit —
-          <br />
-          <AnimatedWords words={["Momente, die bleiben.", "Gäste, die staunen.", "Liebe, die verbindet."]} />
+          Magie für eure<br />
+          <AnimatedWords words={["Hochzeit.", "Gäste.", "Liebe."]} />
         </h1>
         <p
-          className="font-sans text-lg md:text-xl max-w-2xl mx-auto mb-10 opacity-0 animate-fade-up text-muted-foreground font-light"
-          style={{ animationDelay: "0.6s" }}
+          className="text-body max-w-lg mx-auto mb-12 opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.55s" }}
         >
-          Unvergessliches Entertainment, das eure Gäste verbindet, zum Staunen bringt
-          und euren großen Tag noch besonderer macht.
+          Unvergessliche Momente, die eure Gäste verbinden.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.8s" }}>
-          <a href="#kontakt" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-200 hover:bg-foreground/85 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.15)] active:scale-[0.97]">
-            Termin anfragen →
+        <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.7s" }}>
+          <a href="#kontakt" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-300 hover:bg-foreground/85 active:scale-[0.97]">
+            Termin anfragen
           </a>
-          <a href="#pakete" className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border font-sans text-sm font-medium text-foreground transition-all duration-200 hover:bg-muted active:scale-[0.97]">
-            Pakete ansehen →
+          <a href="#pakete" className="inline-flex items-center justify-center px-8 py-4 rounded-full font-sans text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground active:scale-[0.97]">
+            Pakete ansehen ↓
           </a>
         </div>
       </div>
-      <div className="relative rounded-3xl overflow-hidden max-w-5xl mx-auto opacity-0 animate-fade-up shadow-[0_24px_80px_hsla(0,0%,0%,0.1)]" style={{ animationDelay: "1s" }}>
-        <img src={weddingImg} alt="Zauberer auf einer Hochzeit" className="w-full h-[400px] md:h-[520px] object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+      <div className="relative rounded-[2rem] overflow-hidden max-w-5xl mx-auto mt-16 opacity-0 animate-fade-up" style={{ animationDelay: "0.9s" }}>
+        <img src={weddingImg} alt="Zauberer auf einer Hochzeit" className="w-full h-[420px] md:h-[560px] object-cover" />
       </div>
     </div>
   </section>
 );
 
-/* ─── Warum Zauberei ─── */
+/* ─── Warum ─── */
 const WarumSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const reasons = [
-    { icon: Heart, title: "Verbindet Gäste", desc: "Magie bringt fremde Tischgruppen zusammen — sofort gemeinsame Erlebnisse statt steifem Small Talk." },
-    { icon: Sparkles, title: "Unvergessliche Momente", desc: "Eure Gäste reden noch Wochen später über das, was sie erlebt haben — nicht nur gesehen." },
-    { icon: Users, title: "Lockert die Stimmung", desc: "Perfekt für Wartezeiten beim Empfang oder Fotoshooting — nie Leerlauf, immer Unterhaltung." },
-    { icon: MessageCircle, title: "Gesprächsstoff", desc: "Ein geteiltes Erlebnis schafft Verbindung — Magie ist der beste Icebreaker, den es gibt." },
-  ];
-
   return (
-    <section className="py-28 md:py-36" ref={ref}>
+    <section className="section-large" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Warum Zauberei?</span>
-          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
-            Warum Magie perfekt zu eurer Hochzeit passt
+        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-blue mb-8 inline-flex">Warum Zauberei?</span>
+          <h2 className="headline-section text-foreground mb-8">
+            Der perfekte Eisbrecher.
           </h2>
+          <p className="text-body max-w-xl mx-auto">
+            Magie lockert die Stimmung, verbindet fremde Gäste und schafft gemeinsame
+            Erlebnisse — statt steifem Small Talk.
+          </p>
         </div>
-        <div className="grid sm:grid-cols-2 gap-6">
-          {reasons.map((r, i) => (
-            <div
-              key={r.title}
-              className={`flex items-start gap-5 rounded-3xl bg-muted/50 p-8 hover:shadow-[0_8px_32px_hsla(0,0%,0%,0.06)] transition-all duration-500 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
-              style={{ animationDelay: `${0.1 + i * 0.08}s` }}
-            >
-              <div className="w-11 h-11 shrink-0 rounded-2xl bg-white flex items-center justify-center shadow-[0_2px_8px_hsla(0,0%,0%,0.06)]">
-                <r.icon className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <h3 className="font-display text-lg italic text-foreground mb-1">{r.title}</h3>
-                <p className="font-sans text-sm text-muted-foreground leading-relaxed">{r.desc}</p>
-              </div>
+        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-px mt-24 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+          {[
+            { word: "Verbindet", sub: "Gäste erleben etwas zusammen." },
+            { word: "Unvergesslich", sub: "Wochen später noch Gesprächsthema." },
+            { word: "Locker", sub: "Kein Leerlauf, immer Unterhaltung." },
+            { word: "Persönlich", sub: "Jeder Gast wird einbezogen." },
+          ].map((item) => (
+            <div key={item.word} className="text-center py-12 px-6">
+              <h3 className="font-display text-2xl md:text-3xl italic text-foreground mb-3">{item.word}</h3>
+              <p className="text-detail max-w-[200px] mx-auto">{item.sub}</p>
             </div>
           ))}
         </div>
@@ -91,52 +81,36 @@ const WarumSection = () => {
   );
 };
 
-/* ─── Vergleich ─── */
+/* ─── Vergleich — Apple-style 2 statements ─── */
 const VergleichSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const andere = [
-    "Klischeehaft & altmodisch",
-    "Wenig Interaktion mit Gästen",
-    "Standardprogramm von der Stange",
-    "Fokus auf Tricks statt Erlebnis",
-    "Unpassender Auftritt & Stil",
-  ];
-  const magicel = [
-    "Modern, stilvoll & nie kitschig",
-    "Interaktiv & nah am Publikum",
-    "Individuell auf eure Hochzeit abgestimmt",
-    "Fokus auf Emotionen & gemeinsame Momente",
-    "Eleganter Auftritt, der zur Location passt",
-  ];
-
   return (
-    <section className="py-28 md:py-36 section-alt" ref={ref}>
+    <section className="section-large section-alt" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Der Unterschied</span>
-          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
-            Nicht irgendein Zauberer
+        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <h2 className="headline-section text-foreground">
+            Nicht irgendein Zauberer.
           </h2>
         </div>
-        <div className={`grid md:grid-cols-2 gap-6 max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-          <div className="rounded-3xl bg-white p-8 shadow-[0_2px_12px_hsla(0,0%,0%,0.04)]">
-            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-6">Andere Zauberer</p>
-            <ul className="space-y-4">
-              {andere.map((item) => (
+        <div className={`grid md:grid-cols-2 gap-16 max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          <div>
+            <p className="font-sans text-xs font-semibold uppercase tracking-widest text-muted-foreground/50 mb-8">Andere Zauberer</p>
+            <ul className="space-y-5">
+              {["Klischeehaft & altmodisch", "Wenig Interaktion", "Standardprogramm", "Fokus auf Tricks"].map((item) => (
                 <li key={item} className="flex items-start gap-3">
-                  <X className="w-5 h-5 text-muted-foreground/40 shrink-0 mt-0.5" />
-                  <span className="font-sans text-sm text-muted-foreground">{item}</span>
+                  <X className="w-4 h-4 text-muted-foreground/30 shrink-0 mt-1" />
+                  <span className="text-detail">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="rounded-3xl bg-white p-8 shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] ring-2 ring-primary/10">
-            <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-primary mb-6">MagicEL</p>
-            <ul className="space-y-4">
-              {magicel.map((item) => (
+          <div>
+            <p className="font-sans text-xs font-semibold uppercase tracking-widest text-primary/70 mb-8">MagicEL</p>
+            <ul className="space-y-5">
+              {["Modern & stilvoll", "Interaktiv & nah am Publikum", "Individuell auf eure Hochzeit abgestimmt", "Fokus auf Emotionen & Momente"].map((item) => (
                 <li key={item} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <span className="font-sans text-sm text-foreground font-medium">{item}</span>
+                  <Check className="w-4 h-4 text-primary shrink-0 mt-1" />
+                  <span className="font-sans text-sm md:text-base text-foreground">{item}</span>
                 </li>
               ))}
             </ul>
@@ -147,7 +121,7 @@ const VergleichSection = () => {
   );
 };
 
-/* ─── Pakete ─── */
+/* ─── Pakete — 3 Erlebnis-Level ─── */
 const PaketeSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const pakete = [
@@ -156,63 +130,60 @@ const PaketeSection = () => {
       price: "395",
       duration: "15–20 Min.",
       type: "Bühnenshow",
-      desc: "Ein kompaktes Highlight zwischendurch — perfekt als Überraschung zwischen Dinner und Party.",
-      features: ["15–20 Minuten Bühnenshow", "Professionelle Performance", "Individuelle Absprache"],
+      desc: "Ein kompaktes Highlight — perfekt als Überraschung.",
+      features: ["15–20 Min. Bühnenshow", "Professionelle Performance", "Individuelle Absprache"],
     },
     {
       name: "Klassiker",
       price: "495",
       duration: "30–45 Min.",
-      type: "Bühnenshow oder Close-Up",
-      desc: "Der ideale Begleiter für den Empfang oder das Abendprogramm — flexibel und mitreißend.",
-      features: ["30–45 Minuten Entertainment", "Bühnenshow oder Close-Up Magie", "Individuelle Abstimmung", "Persönliche Vorbesprechung"],
+      type: "Bühne oder Close-Up",
+      desc: "Der ideale Begleiter für Empfang oder Abendprogramm.",
+      features: ["30–45 Min. Entertainment", "Bühnenshow oder Close-Up", "Persönliche Vorbesprechung"],
       popular: true,
     },
     {
-      name: "Premium Erlebnis",
+      name: "Premium",
       price: "749",
       duration: "bis 60 Min.",
-      type: "Bühnenshow + Close-Up",
-      desc: "Das Rundum-Paket: Empfangsmagie und Bühnen-Highlight — maximales Erlebnis für alle Gäste.",
-      features: ["Bis zu 60 Minuten", "Bühnenshow und Close-Up Magie", "Individuelle Konzeption", "Persönliche Vorbesprechung", "Flexibler Einsatz über den Abend"],
+      type: "Bühne + Close-Up",
+      desc: "Das Rundum-Erlebnis für den gesamten Abend.",
+      features: ["Bis zu 60 Minuten", "Bühne und Close-Up kombiniert", "Individuelle Konzeption", "Flexibler Einsatz"],
     },
   ];
 
   return (
-    <section id="pakete" className="py-28 md:py-36" ref={ref}>
+    <section id="pakete" className="section-large" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Showkonzepte</span>
-          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
-            Drei Pakete für eure Hochzeit
+        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-blue mb-8 inline-flex">Erlebnis-Level</span>
+          <h2 className="headline-section text-foreground">
+            Drei Pakete.
           </h2>
-          <p className="font-sans text-base text-muted-foreground mt-4 max-w-lg mx-auto">
-            Jedes Paket wird individuell auf euren Tag abgestimmt — keine Show gleicht der anderen.
-          </p>
         </div>
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {pakete.map((p, i) => (
             <div
               key={p.name}
-              className={`relative rounded-3xl bg-white p-8 flex flex-col shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] hover:shadow-[0_12px_48px_hsla(0,0%,0%,0.08)] transition-all duration-500 ${p.popular ? "ring-2 ring-primary/15" : ""} ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`relative rounded-[2rem] bg-muted/40 p-8 flex flex-col transition-all duration-500 hover:bg-muted/60 ${
+                p.popular ? "ring-1 ring-foreground/10" : ""
+              } ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.1 + i * 0.1}s` }}
             >
               {p.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 badge-gradient text-[11px]">
-                  Am beliebtesten
-                </span>
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 badge-gradient text-[10px]">Beliebteste Wahl</span>
               )}
-              <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">{p.name}</p>
+              <p className="font-sans text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">{p.name}</p>
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="font-sans text-xs text-muted-foreground">ab</span>
                 <span className="font-display text-4xl italic text-foreground tabular-nums">{p.price}€</span>
               </div>
-              <p className="font-sans text-xs text-muted-foreground mb-4">{p.duration} · {p.type}</p>
-              <p className="font-sans text-sm text-muted-foreground leading-relaxed mb-6">{p.desc}</p>
+              <p className="font-sans text-xs text-muted-foreground mb-6">{p.duration} · {p.type}</p>
+              <p className="text-detail mb-8">{p.desc}</p>
               <ul className="space-y-3 mb-8 flex-1">
                 {p.features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-primary/60 shrink-0 mt-0.5" />
                     <span className="font-sans text-sm text-foreground">{f}</span>
                   </li>
                 ))}
@@ -222,7 +193,7 @@ const PaketeSection = () => {
                 className={`inline-flex items-center justify-center px-6 py-3 rounded-full font-sans text-sm font-medium transition-all duration-200 active:scale-[0.97] ${
                   p.popular
                     ? "bg-foreground text-background hover:bg-foreground/85"
-                    : "border border-border text-foreground hover:bg-muted"
+                    : "text-foreground hover:text-foreground/70"
                 }`}
               >
                 Jetzt anfragen
@@ -235,78 +206,33 @@ const PaketeSection = () => {
   );
 };
 
-/* ─── Ablauf ─── */
-const AblaufSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const steps = [
-    { icon: Users, time: "Empfang", title: "Close-Up als Icebreaker", desc: "Während eure Gäste ankommen, sorge ich für Staunen und Gesprächsstoff — der perfekte Start." },
-    { icon: Clock, time: "Dinner / Zwischenprogramm", title: "Entertainment ohne Leerlauf", desc: "Ob zwischen den Gängen oder während des Fotoshootings — eure Gäste sind bestens unterhalten." },
-    { icon: Mic, time: "Abendprogramm", title: "Show als Highlight", desc: "Eine mitreißende Bühnenshow als Höhepunkt des Abends — Staunen, Lachen, Gänsehaut." },
-  ];
-
-  return (
-    <section className="py-28 md:py-36 section-alt" ref={ref}>
-      <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Ablauf</span>
-          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
-            So fügt sich Magie in euren Tag
-          </h2>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          {steps.map((s, i) => (
-            <div
-              key={s.title}
-              className={`text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
-              style={{ animationDelay: `${0.1 + i * 0.1}s` }}
-            >
-              <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center mx-auto mb-5 shadow-[0_2px_8px_hsla(0,0%,0%,0.06)]">
-                <s.icon className="w-6 h-6 text-accent" />
-              </div>
-              <p className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-accent mb-2">{s.time}</p>
-              <h3 className="font-display text-xl italic text-foreground mb-3">{s.title}</h3>
-              <p className="font-sans text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
 /* ─── Über mich (kurz) ─── */
 const UeberMichKurz = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="py-28 md:py-36" ref={ref}>
+    <section className="section-large section-alt" ref={ref}>
       <div className="container px-6">
-        <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
-          <div className={`relative ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="rounded-3xl overflow-hidden shadow-[0_16px_64px_hsla(0,0%,0%,0.08)]">
+        <div className="grid md:grid-cols-2 gap-16 lg:gap-28 items-center">
+          <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
+            <div className="rounded-[2rem] overflow-hidden">
               <img src={portraitImg} alt="Emilian Leber — MagicEL" className="w-full h-auto object-cover" loading="lazy" />
             </div>
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-            <span className="badge-gradient mb-6 inline-flex">Euer Zauberer</span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-foreground leading-tight mb-8">
+            <span className="badge-muted mb-8 inline-flex">Euer Zauberer</span>
+            <h2 className="headline-sub text-foreground mb-8">
               Hi, ich bin Emilian.
             </h2>
-            <div className="space-y-5 font-sans text-base text-muted-foreground leading-relaxed max-w-lg">
+            <div className="space-y-5 text-detail max-w-lg">
               <p>
-                Moderner Zauberkünstler, Finalist bei <span className="font-semibold text-foreground">Talents of Magic</span> und
-                leidenschaftlicher Performer. Ich glaube an Magie, die berührt — nicht an Klischees.
+                Moderner Zauberkünstler, Finalist bei Talents of Magic und
+                leidenschaftlicher Performer. Magie, die berührt — keine Klischees.
               </p>
               <p>
-                Für eure Hochzeit entwickle ich ein individuelles Konzept, das zu euch, eurer Location und
-                euren Gästen passt. Keine Show von der Stange, sondern ein persönliches Erlebnis.
+                Für eure Hochzeit entwickle ich ein Konzept, das zu euch und
+                euren Gästen passt.
               </p>
             </div>
-            <a
-              href="#kontakt"
-              className="inline-flex items-center justify-center mt-8 px-7 py-3.5 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-200 hover:bg-foreground/85 active:scale-[0.97]"
-            >
-              Kennenlernen
-            </a>
           </div>
         </div>
       </div>
@@ -318,30 +244,29 @@ const UeberMichKurz = () => {
 const TestimonialsWedding = () => {
   const { ref, isVisible } = useScrollReveal();
   const testimonials = [
-    { quote: "Unsere Gäste reden heute noch über die Magie beim Empfang. Das war das absolute Highlight!", author: "Lena & Markus", role: "Hochzeit in Heidelberg" },
-    { quote: "Emilian hat die perfekte Balance zwischen Eleganz und Unterhaltung gefunden. Einfach klasse.", author: "Julia & Thomas", role: "Hochzeit am Bodensee" },
-    { quote: "Wir hatten erst überlegt, ob ein Zauberer passt — jetzt können wir es jedem Brautpaar empfehlen!", author: "Anna & Felix", role: "Hochzeit in Stuttgart" },
+    { quote: "Unsere Gäste reden heute noch über die Magie beim Empfang.", author: "Lena & Markus", role: "Hochzeit in Heidelberg" },
+    { quote: "Die perfekte Balance zwischen Eleganz und Unterhaltung.", author: "Julia & Thomas", role: "Hochzeit am Bodensee" },
+    { quote: "Wir können es jedem Brautpaar empfehlen!", author: "Anna & Felix", role: "Hochzeit in Stuttgart" },
   ];
 
   return (
-    <section className="py-28 md:py-36 section-alt" ref={ref}>
+    <section className="section-large" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Stimmen</span>
-          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
-            Was Brautpaare sagen
+        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <h2 className="headline-section text-foreground">
+            Was Brautpaare sagen.
           </h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {testimonials.map((t, i) => (
             <blockquote
               key={i}
-              className={`rounded-3xl bg-white p-8 shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.15 + i * 0.1}s` }}
             >
-              <div className="flex gap-1 mb-5">
+              <div className="flex gap-0.5 mb-5">
                 {[...Array(5)].map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-primary/70 text-primary/70" />
+                  <Star key={j} className="w-3.5 h-3.5 fill-primary/60 text-primary/60" />
                 ))}
               </div>
               <p className="font-sans text-base text-foreground leading-relaxed mb-6">„{t.quote}"</p>
@@ -361,25 +286,19 @@ const TestimonialsWedding = () => {
 const GalerieWedding = () => {
   const { ref, isVisible } = useScrollReveal();
   const images = [
-    { src: weddingImg, alt: "Zauberer auf einer Hochzeit", className: "col-span-2 row-span-2" },
-    { src: audienceImg, alt: "Staunende Gäste", className: "col-span-1 row-span-1" },
-    { src: closeupImg, alt: "Close-Up Magie", className: "col-span-1 row-span-1" },
-    { src: stageImg, alt: "Bühnenshow", className: "col-span-1 row-span-1" },
-    { src: heroImg, alt: "Live-Performance", className: "col-span-1 row-span-1" },
+    { src: weddingImg, alt: "Hochzeitsmagie", className: "col-span-2 row-span-2" },
+    { src: audienceImg, alt: "Staunende Gäste", className: "" },
+    { src: closeupImg, alt: "Close-Up", className: "" },
+    { src: stageImg, alt: "Bühnenshow", className: "" },
+    { src: heroImg, alt: "Performance", className: "" },
   ];
 
   return (
-    <section className="py-28 md:py-36" ref={ref}>
+    <section className="section-large section-alt" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Eindrücke</span>
-          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
-            Momente von echten Hochzeiten
-          </h2>
-        </div>
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[200px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+        <div className={`grid grid-cols-2 md:grid-cols-4 gap-2 auto-rows-[180px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
           {images.map((img, i) => (
-            <div key={i} className={`${img.className} rounded-3xl overflow-hidden`}>
+            <div key={i} className={`${img.className} rounded-2xl overflow-hidden`}>
               <img src={img.src} alt={img.alt} className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
             </div>
           ))}
@@ -393,25 +312,24 @@ const GalerieWedding = () => {
 const CTAWedding = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section id="kontakt" className="py-28 md:py-36" ref={ref}>
+    <section id="kontakt" className="section-full" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center rounded-[2rem] bg-muted/60 px-8 py-20 md:px-16 md:py-28 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Jetzt sichern</span>
-          <h2 className="font-display text-3xl md:text-5xl lg:text-6xl italic leading-tight mb-6 text-foreground">
-            Sichert euch euren Hochzeitstermin.
+        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <h2 className="headline-hero text-foreground mb-8">
+            Sichert euch euren<br />Termin.
           </h2>
-          <p className="font-sans text-lg md:text-xl mb-4 text-muted-foreground font-light">
+          <p className="text-body max-w-md mx-auto mb-12">
             Termine sind begrenzt — frühzeitig anfragen lohnt sich.
-          </p>
-          <p className="font-sans text-sm mb-10 text-muted-foreground/60">
-            Unverbindlich & kostenlos. Ich melde mich innerhalb von 24 Stunden.
           </p>
           <a
             href="mailto:kontakt@magicel.de"
-            className="inline-flex items-center justify-center px-10 py-5 rounded-full bg-foreground font-sans text-base font-medium text-background transition-all duration-200 hover:bg-foreground/85 hover:shadow-[0_12px_48px_hsla(0,0%,0%,0.15)] active:scale-[0.97]"
+            className="inline-flex items-center justify-center px-10 py-5 rounded-full bg-foreground font-sans text-base font-medium text-background transition-all duration-300 hover:bg-foreground/85 hover:shadow-[0_12px_40px_hsla(0,0%,0%,0.12)] active:scale-[0.97]"
           >
             Jetzt unverbindlich anfragen
           </a>
+          <p className="font-sans text-xs text-muted-foreground/50 mt-6">
+            Kostenlos · Unverbindlich · Antwort innerhalb 24h
+          </p>
         </div>
       </div>
     </section>
@@ -428,7 +346,6 @@ const Hochzeit = () => {
         <WarumSection />
         <VergleichSection />
         <PaketeSection />
-        <AblaufSection />
         <UeberMichKurz />
         <TestimonialsWedding />
         <GalerieWedding />

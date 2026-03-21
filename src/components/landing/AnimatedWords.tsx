@@ -11,7 +11,7 @@ const AnimatedWords = ({ words, className = "" }: AnimatedWordsProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % words.length);
-    }, 2500);
+    }, 2800);
     return () => clearInterval(interval);
   }, [words.length]);
 

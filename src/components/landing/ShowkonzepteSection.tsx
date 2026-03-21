@@ -6,21 +6,21 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 const shows = [
   {
     img: closeupImg,
-    title: "Close-Up Magic",
-    desc: "Direkt vor deinen Augen, direkt in deinen Händen. Interaktive Magie, die unter die Haut geht — perfekt für Empfänge, Dinner und kleinere Runden.",
-    tag: "Am beliebtesten",
+    title: "Close-Up",
+    sub: "Direkt vor deinen Augen",
+    desc: "Interaktive Magie in deinen Händen — perfekt für Empfänge und kleinere Runden.",
   },
   {
     img: stageImg,
     title: "Bühnen-Show",
-    desc: "Für den großen Moment: Eine durchkomponierte Show mit Dramaturgie, Humor und Wow-Effekten — ideal für Galas, Firmenfeiern und große Events.",
-    tag: "Für große Events",
+    sub: "Für den großen Moment",
+    desc: "Durchkomponierte Show mit Dramaturgie, Humor und Wow-Effekten.",
   },
   {
     img: heroImg,
     title: "Walking Act",
-    desc: "Ich bewege mich frei durch dein Event und verzaubere Gäste spontan und persönlich — perfektes Icebreaker-Entertainment.",
-    tag: "Flexibel einsetzbar",
+    sub: "Spontan und persönlich",
+    desc: "Frei durch dein Event — der perfekte Icebreaker.",
   },
 ];
 
@@ -28,43 +28,34 @@ const ShowkonzepteSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="showkonzepte" className="py-28 md:py-36 section-alt" ref={ref}>
+    <section id="showkonzepte" className="section-large" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-gradient mb-6 inline-flex">Showkonzepte</span>
-          <h2 className="font-display text-3xl md:text-5xl italic text-foreground leading-tight">
-            Drei Formate, ein Versprechen
+        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-blue mb-8 inline-flex">Showkonzepte</span>
+          <h2 className="headline-section text-foreground">
+            Drei Erlebnisse.
           </h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-6">
+
+        <div className="grid md:grid-cols-3 gap-4">
           {shows.map((show, i) => (
             <div
               key={show.title}
-              className={`group bg-white rounded-3xl overflow-hidden shadow-[0_2px_12px_hsla(0,0%,0%,0.04)] hover:shadow-[0_16px_56px_hsla(0,0%,0%,0.08)] transition-all duration-500 ${
-                isVisible ? "animate-fade-up" : "opacity-0"
-              }`}
+              className={`group relative rounded-[2rem] overflow-hidden aspect-[3/4] ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.15 + i * 0.12}s` }}
             >
-              <div className="relative h-56 overflow-hidden">
-                <img
-                  src={show.img}
-                  alt={show.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="badge-gradient text-[11px]">
-                    {show.tag}
-                  </span>
-                </div>
-              </div>
-              <div className="p-8">
-                <h3 className="font-display text-2xl italic text-foreground mb-3">
-                  {show.title}
-                </h3>
-                <p className="font-sans text-sm text-muted-foreground leading-relaxed">
-                  {show.desc}
-                </p>
+              <img
+                src={show.img}
+                alt={show.title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
+              {/* Light gradient from bottom */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-8">
+                <p className="font-sans text-[11px] font-semibold uppercase tracking-widest text-white/60 mb-2">{show.sub}</p>
+                <h3 className="font-display text-3xl md:text-4xl italic text-white mb-3">{show.title}</h3>
+                <p className="font-sans text-sm text-white/70 leading-relaxed max-w-xs">{show.desc}</p>
               </div>
             </div>
           ))}
