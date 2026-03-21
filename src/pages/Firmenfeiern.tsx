@@ -477,8 +477,6 @@ const UeberMichKurz = () => {
   );
 };
 
-import { Sparkles } from "lucide-react";
-
 const Firmenfeiern = () => (
   <PageLayout>
     <HeroCorporate />
