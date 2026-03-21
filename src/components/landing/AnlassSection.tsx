@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 const anlaesse = [
   { title: "Firmenfeiern", desc: "Professionelles Entertainment, das Ihr Event aufwertet.", link: "/firmenfeiern" },
   { title: "Hochzeiten", desc: "Staunen statt Small Talk — der perfekte Eisbrecher.", link: "/hochzeit" },
-  { title: "Geburtstage", desc: "Ein Highlight, über das alle reden.", link: null },
-  { title: "Galas & Events", desc: "Elegante Magie, die zum Anlass passt.", link: null },
-  { title: "Messen", desc: "Dein Stand wird zum Magneten.", link: null },
+  { title: "Geburtstage", desc: "Ein Highlight, über das alle reden.", link: "/geburtstage" },
+  { title: "Galas & Events", desc: "Elegante Magie, die zum Anlass passt.", link: "/buchung" },
+  { title: "Messen", desc: "Dein Stand wird zum Magneten.", link: "/buchung" },
 ];
 
 const AnlassSection = () => {
@@ -23,8 +23,8 @@ const AnlassSection = () => {
         </div>
 
         <div className={`max-w-3xl mx-auto divide-y divide-border ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-          {anlaesse.map((item) => {
-            const inner = (
+          {anlaesse.map((item) => (
+            <Link key={item.title} to={item.link}>
               <div className="flex items-center justify-between py-7 group cursor-pointer">
                 <div>
                   <h3 className="font-display text-xl md:text-2xl italic text-foreground group-hover:text-foreground/70 transition-colors">{item.title}</h3>
@@ -32,14 +32,8 @@ const AnlassSection = () => {
                 </div>
                 <span className="font-sans text-sm text-muted-foreground/50 group-hover:text-foreground transition-colors">→</span>
               </div>
-            );
-
-            return item.link ? (
-              <Link key={item.title} to={item.link}>{inner}</Link>
-            ) : (
-              <a key={item.title} href="#kontakt">{inner}</a>
-            );
-          })}
+            </Link>
+          ))}
         </div>
       </div>
     </section>

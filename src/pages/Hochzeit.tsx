@@ -1,5 +1,6 @@
 import Navigation from "@/components/landing/Navigation";
 import Footer from "@/components/landing/Footer";
+import { Link } from "react-router-dom";
 import weddingImg from "@/assets/wedding-magic.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import closeupImg from "@/assets/closeup-magic.jpg";
@@ -32,12 +33,12 @@ const HeroWedding = () => (
           Unvergessliche Momente, die eure Gäste verbinden.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.7s" }}>
-          <a href="#kontakt" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-300 hover:bg-foreground/85 active:scale-[0.97]">
-            Termin anfragen
-          </a>
-          <a href="#pakete" className="inline-flex items-center justify-center px-8 py-4 rounded-full font-sans text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground active:scale-[0.97]">
+          <a href="#pakete" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-300 hover:bg-foreground/85 active:scale-[0.97]">
             Pakete ansehen ↓
           </a>
+          <Link to="/buchung" className="inline-flex items-center justify-center px-8 py-4 rounded-full font-sans text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground active:scale-[0.97]">
+            Termin anfragen →
+          </Link>
         </div>
       </div>
       <div className="relative rounded-[2rem] overflow-hidden max-w-5xl mx-auto mt-16 opacity-0 animate-fade-up" style={{ animationDelay: "0.9s" }}>
@@ -188,8 +189,8 @@ const PaketeSection = () => {
                   </li>
                 ))}
               </ul>
-              <a
-                href="#kontakt"
+              <Link
+                to="/buchung"
                 className={`inline-flex items-center justify-center px-6 py-3 rounded-full font-sans text-sm font-medium transition-all duration-200 active:scale-[0.97] ${
                   p.popular
                     ? "bg-foreground text-background hover:bg-foreground/85"
@@ -197,7 +198,7 @@ const PaketeSection = () => {
                 }`}
               >
                 Jetzt anfragen
-              </a>
+              </Link>
             </div>
           ))}
         </div>
@@ -321,12 +322,12 @@ const CTAWedding = () => {
           <p className="text-body max-w-md mx-auto mb-12">
             Termine sind begrenzt — frühzeitig anfragen lohnt sich.
           </p>
-          <a
-            href="mailto:kontakt@magicel.de"
+          <Link
+            to="/buchung"
             className="inline-flex items-center justify-center px-10 py-5 rounded-full bg-foreground font-sans text-base font-medium text-background transition-all duration-300 hover:bg-foreground/85 hover:shadow-[0_12px_40px_hsla(0,0%,0%,0.12)] active:scale-[0.97]"
           >
             Jetzt unverbindlich anfragen
-          </a>
+          </Link>
           <p className="font-sans text-xs text-muted-foreground/50 mt-6">
             Kostenlos · Unverbindlich · Antwort innerhalb 24h
           </p>
