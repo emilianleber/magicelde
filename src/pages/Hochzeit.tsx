@@ -189,8 +189,8 @@ const PaketeSection = () => {
                   </li>
                 ))}
               </ul>
-              <a
-                href="#kontakt"
+              <Link
+                to="/buchung"
                 className={`inline-flex items-center justify-center px-6 py-3 rounded-full font-sans text-sm font-medium transition-all duration-200 active:scale-[0.97] ${
                   p.popular
                     ? "bg-foreground text-background hover:bg-foreground/85"
@@ -198,7 +198,7 @@ const PaketeSection = () => {
                 }`}
               >
                 Jetzt anfragen
-              </a>
+              </Link>
             </div>
           ))}
         </div>
