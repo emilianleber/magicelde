@@ -36,9 +36,9 @@ const HeroWedding = () => (
           <a href="#pakete" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-300 hover:bg-foreground/85 active:scale-[0.97]">
             Pakete ansehen ↓
           </a>
-          <a href="#pakete" className="inline-flex items-center justify-center px-8 py-4 rounded-full font-sans text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground active:scale-[0.97]">
-            Pakete ansehen ↓
-          </a>
+          <Link to="/buchung" className="inline-flex items-center justify-center px-8 py-4 rounded-full font-sans text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground active:scale-[0.97]">
+            Termin anfragen →
+          </Link>
         </div>
       </div>
       <div className="relative rounded-[2rem] overflow-hidden max-w-5xl mx-auto mt-16 opacity-0 animate-fade-up" style={{ animationDelay: "0.9s" }}>
