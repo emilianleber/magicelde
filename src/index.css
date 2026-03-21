@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,38 +7,36 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 12%;
+    --foreground: 220 25% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 12%;
+    --card-foreground: 220 25% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 12%;
+    --popover-foreground: 220 25% 10%;
 
-    --primary: 0 97% 27%;
+    --primary: 4 80% 42%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 220 14% 96%;
-    --secondary-foreground: 0 0% 12%;
+    --secondary-foreground: 220 25% 10%;
 
-    --muted: 220 10% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 46%;
 
-    --accent: 216 80% 52%;
+    --accent: 225 85% 55%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 9% 93%;
-    --input: 220 9% 93%;
-    --ring: 216 80% 52%;
+    --border: 220 9% 91%;
+    --input: 220 9% 91%;
+    --ring: 225 85% 55%;
 
     --radius: 1rem;
 
-    --blue: 216 80% 52%;
-    --blue-light: 216 80% 96%;
-    --section-alt: 220 14% 97%;
+    --section-alt: 220 20% 97.5%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -65,7 +63,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    @apply font-display font-bold;
     text-wrap: balance;
   }
 
@@ -76,52 +74,56 @@
 }
 
 @layer utilities {
-  .badge-gradient {
+  /* ─── Badges ─── */
+  .badge-accent {
     @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase;
-    background: linear-gradient(135deg, hsl(216, 80%, 52%), hsl(260, 60%, 50%));
-    color: white;
+    background: hsl(var(--accent) / 0.08);
+    color: hsl(var(--accent));
   }
 
-  .badge-blue {
-    @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase;
-    background: hsl(var(--blue-light));
-    color: hsl(var(--blue));
+  .badge-gradient {
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase text-white;
+    background: linear-gradient(135deg, hsl(225, 85%, 55%), hsl(260, 70%, 55%));
   }
 
   .badge-muted {
     @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-medium tracking-widest uppercase text-muted-foreground bg-muted;
   }
 
+  .badge-primary {
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase;
+    background: hsl(var(--primary) / 0.08);
+    color: hsl(var(--primary));
+  }
+
+  /* ─── Sections ─── */
   .section-alt {
     background-color: hsl(var(--section-alt));
   }
 
-  .underline-primary {
-    text-decoration: underline;
-    text-decoration-color: hsl(var(--primary));
-    text-underline-offset: 6px;
-    text-decoration-thickness: 2px;
-  }
-
-  /* Apple-style large section */
   .section-full {
     @apply py-32 md:py-44 lg:py-52;
   }
 
   .section-large {
-    @apply py-24 md:py-36 lg:py-44;
+    @apply py-24 md:py-32 lg:py-40;
   }
 
+  .section-medium {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  /* ─── Typography ─── */
   .headline-hero {
-    @apply font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] italic leading-[1.02] tracking-tight;
+    @apply font-display text-[2.75rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold leading-[0.95] tracking-tight;
   }
 
   .headline-section {
-    @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic leading-[1.08] tracking-tight;
+    @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.05] tracking-tight;
   }
 
   .headline-sub {
-    @apply font-display text-2xl md:text-3xl lg:text-4xl italic leading-[1.12];
+    @apply font-display text-2xl md:text-3xl lg:text-4xl font-bold leading-[1.1];
   }
 
   .text-body {
@@ -130,5 +132,30 @@
 
   .text-detail {
     @apply font-sans text-sm md:text-base text-muted-foreground leading-relaxed;
+  }
+
+  /* ─── Accent underline ─── */
+  .underline-accent {
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--primary));
+    text-underline-offset: 6px;
+    text-decoration-thickness: 3px;
+  }
+
+  /* ─── Button styles ─── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 rounded-full bg-foreground font-sans text-sm font-medium text-background transition-all duration-300 hover:bg-foreground/85 hover:shadow-[0_8px_30px_hsla(220,25%,10%,0.15)] active:scale-[0.97];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-4 rounded-full font-sans text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground active:scale-[0.97];
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center px-8 py-4 rounded-full bg-accent font-sans text-sm font-medium text-accent-foreground transition-all duration-300 hover:bg-accent/90 hover:shadow-[0_8px_30px_hsla(225,85%,55%,0.25)] active:scale-[0.97];
+  }
+
+  .btn-large {
+    @apply px-10 py-5 text-base;
   }
 }
