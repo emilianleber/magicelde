@@ -33,7 +33,7 @@ const Navigation = () => {
       <div className="container flex items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-2">
           <img src={logoImg} alt="MagicEL" className="h-7 w-auto" />
-          <span className="font-display font-bold text-foreground text-lg hidden sm:inline">MagicEL</span>
+          <span className="font-display font-black text-foreground text-lg hidden sm:inline tracking-tight">MagicEL</span>
         </Link>
 
         {/* Desktop */}
@@ -92,6 +92,7 @@ const Navigation = () => {
 
           <Link to="/ueber-mich" className={linkCls}>Über mich</Link>
           <Link to="/referenzen" className={linkCls}>Referenzen</Link>
+          <Link to="/tickets" className={linkCls}>Tickets</Link>
           <Link to="/blog" className={linkCls}>Magazin</Link>
 
           <Link to="/buchung" className="btn-primary !px-6 !py-2.5 !text-[13px]">
@@ -123,6 +124,7 @@ const Navigation = () => {
           <div className="border-t border-border/30 my-3" />
           <Link to="/ueber-mich" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Über mich</Link>
           <Link to="/referenzen" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Referenzen</Link>
+          <Link to="/tickets" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Tickets</Link>
           <Link to="/blog" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Magazin</Link>
           <Link to="/faq" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">FAQ</Link>
 
