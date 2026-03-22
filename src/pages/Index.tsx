@@ -10,6 +10,7 @@ import BackgroundHero from "@/components/landing/BackgroundHero";
 import Chatbot from "@/components/landing/Chatbot";
 import WhatsAppButton from "@/components/landing/WhatsAppButton";
 import VideoHero from "@/components/landing/VideoHero";
+import { TrustStrip, ClientLogos } from "@/components/landing/TrustElements";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
