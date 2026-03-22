@@ -14,7 +14,175 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      portal_customers: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          id: string
+          kundennummer: string
+          name: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          kundennummer: string
+          name: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          kundennummer?: string
+          name?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      portal_documents: {
+        Row: {
+          created_at: string
+          customer_id: string
+          event_id: string | null
+          file_url: string | null
+          id: string
+          name: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          event_id?: string | null
+          file_url?: string | null
+          id?: string
+          name: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          event_id?: string | null
+          file_url?: string | null
+          id?: string
+          name?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portal_documents_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "portal_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "portal_documents_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "portal_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portal_events: {
+        Row: {
+          created_at: string
+          customer_id: string
+          event_date: string | null
+          format: string | null
+          guests: number | null
+          id: string
+          location: string | null
+          notes: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          event_date?: string | null
+          format?: string | null
+          guests?: number | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          event_date?: string | null
+          format?: string | null
+          guests?: number | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portal_events_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "portal_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portal_timeline: {
+        Row: {
+          created_at: string
+          done: boolean
+          event_id: string
+          id: string
+          sort_order: number
+          step: string
+          step_date: string | null
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          event_id: string
+          id?: string
+          sort_order?: number
+          step: string
+          step_date?: string | null
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          event_id?: string
+          id?: string
+          sort_order?: number
+          step?: string
+          step_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portal_timeline_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "portal_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
