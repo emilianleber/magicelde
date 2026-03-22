@@ -4,6 +4,7 @@ import ProcessSteps from "@/components/landing/ProcessSteps";
 import AnimatedWords from "@/components/landing/AnimatedWords";
 import VideoHero from "@/components/landing/VideoHero";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
+import BackgroundHero from "@/components/landing/BackgroundHero";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
