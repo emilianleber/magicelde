@@ -17,9 +17,12 @@ const Footer = () => (
           </p>
           <div className="flex gap-4">
             {[
-              { href: "https://instagram.com/magicel", label: "Instagram" },
-              { href: "https://youtube.com/@magicel", label: "YouTube" },
-              { href: "https://tiktok.com/@magicel", label: "TikTok" },
+              [
+  { href: "https://www.instagram.com/_magicel/", label: "Instagram" },
+  { href: "https://www.youtube.com/channel/UCDm5lC0Dq3b8vhJpwRJcXCA", label: "YouTube" },
+  { href: "https://de.linkedin.com/in/emilian-leber-3b3414369", label: "LinkedIn" },
+  { href: "https://www.facebook.com/people/Emilian-Leber-Zauberer-Mentalist/61582946450467/", label: "Facebook" },
+]
             ].map((s) => (
               <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="font-sans text-xs font-medium text-muted-foreground hover:text-accent transition-colors">
                 {s.label}
