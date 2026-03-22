@@ -297,7 +297,14 @@ const FAQBuehne = () => {
 
 const Buehnenshow = () => (
   <PageLayout>
-    <HeroStage />
+    <BackgroundHero
+      imageSrc={stageImg}
+      badge="Showkonzept"
+      headline="Die"
+      animatedWords={["Bühnenshow.", "Performance.", "Inszenierung.", "Experience."]}
+      subline="Eine durchkomponierte Show mit Dramaturgie, Comedy und Momenten, die ein ganzes Publikum gleichzeitig zum Staunen und Lachen bringen."
+      ctaPrimary={{ text: "Bühnenshow anfragen", to: "/buchung" }}
+    />
     <WasIstSection />
     <HighlightsSection />
     <FeaturesSection />

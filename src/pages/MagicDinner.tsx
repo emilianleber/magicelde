@@ -299,7 +299,14 @@ const FAQDinner = () => {
 
 const MagicDinner = () => (
   <PageLayout>
-    <HeroDinner />
+    <BackgroundHero
+      imageSrc={dinnerImg}
+      badge="Spezialgebiet"
+      headline="Das"
+      animatedWords={["Magic Dinner.", "Erlebnis.", "Highlight.", "Gourmet-Event."]}
+      subline="Ein Abend, an dem kulinarischer Genuss und verblüffende Zauberkunst verschmelzen. Zwischen den Gängen wird gezaubert — direkt am Tisch."
+      ctaPrimary={{ text: "Magic Dinner planen", to: "/buchung" }}
+    />
     <KonzeptSection />
     <ErlebnisSection />
     <AblaufSection />

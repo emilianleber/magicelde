@@ -302,7 +302,14 @@ const FAQCloseUp = () => {
 
 const CloseUp = () => (
   <PageLayout>
-    <HeroCloseUp />
+    <BackgroundHero
+      imageSrc={closeupImg}
+      badge="Showkonzept"
+      headline="Magie in deinen"
+      animatedWords={["Händen.", "Augen.", "Momenten.", "Erlebnissen."]}
+      subline="Keine Bühne, keine Distanz — Close-Up Magie passiert direkt vor deinen Augen, in deinen Händen und mitten unter deinen Gästen."
+      ctaPrimary={{ text: "Close-Up anfragen", to: "/buchung" }}
+    />
     <WasIstSection />
     <FeaturesSection />
     <EinsatzSlider />

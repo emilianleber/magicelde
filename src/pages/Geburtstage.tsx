@@ -296,7 +296,14 @@ const UeberMichKurz = () => {
 
 const Geburtstage = () => (
   <PageLayout>
-    <HeroBirthday />
+    <BackgroundHero
+      imageSrc={heroImg}
+      badge="Zauberer für deinen Geburtstag"
+      headline="Ein Geburtstag, der"
+      animatedWords={["bleibt.", "überrascht.", "begeistert.", "verbindet."]}
+      subline="Stell dir vor, das Geburtstagskind steht im Mittelpunkt einer verblüffenden Show — und alle Gäste reden noch Wochen später darüber."
+      ctaPrimary={{ text: "Jetzt anfragen", to: "/buchung" }}
+    />
     <WarumSection />
     <VorteileSection />
     <ErlebnisSection />
