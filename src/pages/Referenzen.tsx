@@ -2,6 +2,7 @@ import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
+import { TrustStrip, ClientLogos, TrustSection } from "@/components/landing/TrustElements";
 import { Star } from "lucide-react";
 import heroImg from "@/assets/hero-magic.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
