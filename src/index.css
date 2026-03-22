@@ -171,4 +171,18 @@
   .video-hero video {
     @apply w-full h-full object-cover;
   }
+
+  /* ─── Gradient Badge ─── */
+  .badge-gradient-subtle {
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase text-white;
+    background: linear-gradient(135deg, hsl(225, 80%, 56%), hsl(260, 70%, 55%), hsl(340, 75%, 50%));
+  }
+
+  /* ─── Hover glow ─── */
+  .hover-glow {
+    @apply transition-all duration-300;
+  }
+  .hover-glow:hover {
+    box-shadow: 0 0 30px hsl(225 80% 56% / 0.15), 0 0 60px hsl(260 70% 55% / 0.08);
+  }
 }

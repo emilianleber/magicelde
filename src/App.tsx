@@ -24,6 +24,8 @@ import Datenschutz from "./pages/Datenschutz.tsx";
 import Impressum from "./pages/Impressum.tsx";
 import AGB from "./pages/AGB.tsx";
 import StadtSeite from "./pages/StadtSeite.tsx";
+import KundenportalLogin from "./pages/KundenportalLogin.tsx";
+import Kundenportal from "./pages/Kundenportal.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 
@@ -58,6 +60,8 @@ const App = () => (
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/agb" element={<AGB />} />
           <Route path="/zauberer/:stadt" element={<StadtSeite />} />
+          <Route path="/kundenportal/login" element={<KundenportalLogin />} />
+          <Route path="/kundenportal" element={<Kundenportal />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
