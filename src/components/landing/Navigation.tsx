@@ -79,6 +79,7 @@ const Navigation = () => {
                     { to: "/buehnenshow", label: "Bühnenshow", sub: "Das große Erlebnis" },
                     { to: "/close-up", label: "Close-Up Magie", sub: "Hautnah & interaktiv" },
                     { to: "/magic-dinner", label: "Magic Dinner", sub: "Genuss trifft Staunen" },
+                    { to: "/moderation", label: "Moderation", sub: "Charme & Bühnenpräsenz" },
                   ].map((item) => (
                     <Link key={item.to} to={item.to} className="block px-4 py-3 rounded-xl hover:bg-muted/60 transition-colors group">
                       <span className="block text-sm font-medium text-foreground group-hover:text-accent transition-colors">{item.label}</span>
