@@ -76,9 +76,9 @@ export const ClientLogos = ({ title = "Vertrauen führender Unternehmen.", class
 
 /* ─── Combined Trust Strip (compact, unter Hero) ─── */
 export const TrustStrip = ({ className = "" }: { className?: string }) => (
-  <div className={`py-10 ${className}`}>
+  <div className={`py-6 ${className}`}>
     <div className="container px-6">
-      <div className="flex flex-col items-center gap-6">
+      <div className="flex flex-col items-center gap-3">
         <RatingBadges />
         <AwardBadges />
       </div>
