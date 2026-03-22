@@ -5,6 +5,7 @@ import AnimatedWords from "@/components/landing/AnimatedWords";
 import VideoHero from "@/components/landing/VideoHero";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import BackgroundHero from "@/components/landing/BackgroundHero";
+import { TrustStrip, ClientLogos, TrustSection } from "@/components/landing/TrustElements";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
@@ -463,6 +464,7 @@ const UeberMichKurz = () => {
 const Firmenfeiern = () => (
   <PageLayout>
     <HeroCorporate />
+    <TrustStrip />
     <WarumSection />
     <ProblemeSection />
     <LoesungSection />
@@ -470,7 +472,9 @@ const Firmenfeiern = () => (
     <ShowkonzepteCorporate />
     <AblaufSection />
     <MehrwertSection />
+    <TrustSection />
     <ReferenzenSlider />
+    <ClientLogos title="Bekannt von Events für führende Unternehmen." />
     <CaseStudies />
     <VergleichCorporate />
     <StatsCorporate />
