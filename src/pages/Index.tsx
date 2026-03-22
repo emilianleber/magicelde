@@ -350,6 +350,8 @@ const Index = () => {
           ctaPrimary={{ text: "Kostenlos anfragen", to: "/buchung" }}
           ctaSecondary={{ text: "Entdecken", href: "#showkonzepte" }}
         />
+        {/* Trust Strip */}
+        <TrustStrip />
         {/* 3. Social Proof / Zahlen */}
         <SocialProofSection />
         {/* 4. USP / Kurzpositionierung */}
@@ -364,6 +366,8 @@ const Index = () => {
         <ErlebnisSection />
         {/* 9. Referenzen Slider */}
         <ReferenzenSlider />
+        {/* Client Logos */}
+        <ClientLogos />
         {/* 10. Galerie */}
         <GalerieSection />
         {/* 11. Ablauf */}

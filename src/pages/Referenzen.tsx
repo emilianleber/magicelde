@@ -120,8 +120,11 @@ const GalerieSection = () => {
 const Referenzen = () => (
   <PageLayout>
     <HeroRef />
+    <TrustStrip />
     <StatsSection />
+    <TrustSection />
     <TestimonialsSection />
+    <ClientLogos />
     <GalerieSection />
     <BookingCTA headline={"Überzeugt?"} subline="Werde Teil der Liste — erzähl mir von deinem Event und lass uns gemeinsam etwas Unvergessliches schaffen." />
   </PageLayout>

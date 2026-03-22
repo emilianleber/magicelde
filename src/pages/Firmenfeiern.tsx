@@ -464,6 +464,7 @@ const UeberMichKurz = () => {
 const Firmenfeiern = () => (
   <PageLayout>
     <HeroCorporate />
+    <TrustStrip />
     <WarumSection />
     <ProblemeSection />
     <LoesungSection />
@@ -471,7 +472,9 @@ const Firmenfeiern = () => (
     <ShowkonzepteCorporate />
     <AblaufSection />
     <MehrwertSection />
+    <TrustSection />
     <ReferenzenSlider />
+    <ClientLogos title="Bekannt von Events für führende Unternehmen." />
     <CaseStudies />
     <VergleichCorporate />
     <StatsCorporate />
