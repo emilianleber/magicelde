@@ -130,7 +130,7 @@ const Navigation = () => {
           <Link to="/tickets" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Tickets</Link>
           <Link to="/blog" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Magazin</Link>
           <Link to="/faq" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">FAQ</Link>
-
+          <Link to="/kundenportal/login" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Kundenportal</Link>
           <Link to="/buchung" className="btn-primary justify-center mt-4">
             Jetzt anfragen
           </Link>

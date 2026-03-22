@@ -55,6 +55,7 @@ const Footer = () => (
             <Link to="/kontakt" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Kontakt</Link>
             <Link to="/buchung" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Anfragen</Link>
             <Link to="/presse" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Presse</Link>
+            <Link to="/kundenportal/login" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Kundenportal</Link>
           </div>
         </div>
       </div>
