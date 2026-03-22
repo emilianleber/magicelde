@@ -38,6 +38,10 @@
 
     --section-alt: 220 20% 97.5%;
 
+    --gradient-start: 225 80% 56%;
+    --gradient-mid: 260 70% 55%;
+    --gradient-end: 340 75% 50%;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
