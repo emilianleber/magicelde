@@ -122,6 +122,7 @@ const Navigation = () => {
           <Link to="/buehnenshow" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Bühnenshow</Link>
           <Link to="/close-up" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Close-Up Magie</Link>
           <Link to="/magic-dinner" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Magic Dinner</Link>
+          <Link to="/moderation" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Moderation</Link>
 
           <div className="border-t border-border/30 my-3" />
           <Link to="/ueber-mich" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Über mich</Link>
