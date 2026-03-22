@@ -10,12 +10,18 @@ const AnimatedWords = ({
   interval = 2200,
 }: AnimatedWordsProps) => {
   const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     if (!words.length) return;
 
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % words.length);
+      setVisible(false);
+
+      setTimeout(() => {
+        setIndex((prev) => (prev + 1) % words.length);
+        setVisible(true);
+      }, 250);
     }, interval);
 
     return () => clearInterval(timer);
@@ -25,7 +31,13 @@ const AnimatedWords = ({
 
   return (
     <span className="block w-full text-center">
-      <span className="inline-block min-w-[6ch]">
+      <span
+        className={`inline-block min-w-[6ch] transition-all duration-300 ease-out ${
+          visible
+            ? "translate-y-0 opacity-100"
+            : "translate-y-3 opacity-0"
+        }`}
+      >
         {words[index]}
       </span>
     </span>
