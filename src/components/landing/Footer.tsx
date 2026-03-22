@@ -18,7 +18,7 @@ const Footer = () => (
           <div className="flex gap-4">
   {[
     { href: "https://www.instagram.com/_magicel/", label: "Instagram" },
-    { href: ""https://www.youtube.com/channel/UCDm5lC0Dq3b8vhJpwRJcXCA"", label: "YouTube" },
+    { href: "https://www.youtube.com/channel/UCDm5lC0Dq3b8vhJpwRJcXCA", label: "YouTube" },
     { href: "https://de.linkedin.com/in/emilian-leber-3b3414369", label: "LinkedIn" },
     { href: "https://www.facebook.com/people/Emilian-Leber-Zauberer-Mentalist/61582946450467/", label: "Facebook" },
   ].map((s) => (
