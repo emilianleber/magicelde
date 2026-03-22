@@ -53,7 +53,7 @@ const Chatbot = () => {
       <button
         onClick={() => setOpen(!open)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95"
-        style={{ background: "linear-gradient(135deg, hsl(225, 80%, 56%), hsl(260, 70%, 55%))" }}
+        style={{ background: "linear-gradient(135deg, hsl(230, 65%, 48%), hsl(280, 55%, 45%), hsl(345, 70%, 42%))" }}
         aria-label="Chat öffnen"
       >
         {open ? <X className="w-6 h-6 text-white" /> : <MessageCircle className="w-6 h-6 text-white" />}
