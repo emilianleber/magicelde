@@ -1,16 +1,15 @@
 import Navigation from "@/components/landing/Navigation";
-import HeroSection from "@/components/landing/HeroSection";
 import USPSection from "@/components/landing/USPSection";
-import ShowkonzepteSection from "@/components/landing/ShowkonzepteSection";
 import AnlassSection from "@/components/landing/AnlassSection";
 import UeberMichSection from "@/components/landing/UeberMichSection";
-import ErfolgeSection from "@/components/landing/ErfolgeSection";
 import GalerieSection from "@/components/landing/GalerieSection";
 import CTASection from "@/components/landing/CTASection";
-import ProcessSteps from "@/components/landing/ProcessSteps";
 import Footer from "@/components/landing/Footer";
-import VideoHero from "@/components/landing/VideoHero";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
+import BackgroundHero from "@/components/landing/BackgroundHero";
+import Chatbot from "@/components/landing/Chatbot";
+import WhatsAppButton from "@/components/landing/WhatsAppButton";
+import VideoHero from "@/components/landing/VideoHero";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
@@ -340,10 +339,16 @@ const Index = () => {
     <>
       <Navigation />
       <main>
-        {/* 1. Hero */}
-        <HeroSection />
-        {/* 2. Video Hero */}
-        {/* Video is embedded in HeroSection already; adding standalone video section */}
+        {/* 1. Background Hero */}
+        <BackgroundHero
+          imageSrc={heroImg}
+          badge="Comedy-Zauberer · Showkünstler · Performer"
+          headline="Staunen. Lachen."
+          animatedWords={["Erinnern.", "Verbinden.", "Begeistern.", "Erleben."]}
+          subline="Ich bin Emilian Leber — moderner Comedy-Zauberer und Showkünstler. Meine Shows verbinden Staunen mit Humor und schaffen Erlebnisse, über die deine Gäste noch Wochen später sprechen."
+          ctaPrimary={{ text: "Kostenlos anfragen", to: "/buchung" }}
+          ctaSecondary={{ text: "Entdecken", href: "#showkonzepte" }}
+        />
         {/* 3. Social Proof / Zahlen */}
         <SocialProofSection />
         {/* 4. USP / Kurzpositionierung */}
@@ -372,6 +377,8 @@ const Index = () => {
         <CTASection />
       </main>
       <Footer />
+      <Chatbot />
+      <WhatsAppButton />
     </>
   );
 };

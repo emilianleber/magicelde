@@ -4,6 +4,7 @@ import ProcessSteps from "@/components/landing/ProcessSteps";
 import AnimatedWords from "@/components/landing/AnimatedWords";
 import VideoHero from "@/components/landing/VideoHero";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
+import BackgroundHero from "@/components/landing/BackgroundHero";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
@@ -17,33 +18,15 @@ import { Check, X, Star, TrendingUp, Users, Briefcase, Target, ArrowRight, Build
 
 /* 1. Hero */
 const HeroCorporate = () => (
-  <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
-    <div className="container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
-      <div className="max-w-5xl mx-auto text-center">
-        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-          <span className="badge-accent mb-8 inline-flex">Business Entertainment</span>
-        </div>
-        <h1 className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground" style={{ animationDelay: "0.3s" }}>
-          Events, die{" "}
-          <AnimatedWords words={["wirken.", "verbinden.", "beeindrucken.", "bleiben."]} />
-        </h1>
-        <p className="text-body max-w-2xl mx-auto mb-12 opacity-0 animate-fade-up" style={{ animationDelay: "0.5s" }}>
-          Professionelles Entertainment, das Ihr Firmenevent auf ein neues Level hebt —
-          modern, interaktiv und mit einem Comedy-Faktor, der Menschen wirklich zusammenbringt.
-          Über 200 Firmenauftritte für DAX-Konzerne, Mittelständler und innovative Startups.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.65s" }}>
-          <Link to="/buchung" className="btn-primary btn-large group">
-            Event anfragen <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <a href="#showkonzepte" className="btn-secondary btn-large">Konzepte ansehen ↓</a>
-        </div>
-      </div>
-      <div className="max-w-5xl mx-auto mt-20 opacity-0 animate-scale-up" style={{ animationDelay: "0.85s" }}>
-        <VideoHero posterSrc={corporateImg} alt="Zauberer auf einer Firmenfeier" />
-      </div>
-    </div>
-  </section>
+  <BackgroundHero
+    imageSrc={corporateImg}
+    badge="Business Entertainment"
+    headline="Events, die"
+    animatedWords={["wirken.", "verbinden.", "beeindrucken.", "bleiben."]}
+    subline="Professionelles Entertainment, das Ihr Firmenevent auf ein neues Level hebt — modern, interaktiv und mit einem Comedy-Faktor, der Menschen wirklich zusammenbringt."
+    ctaPrimary={{ text: "Event anfragen", to: "/buchung" }}
+    ctaSecondary={{ text: "Konzepte ansehen ↓", href: "#showkonzepte" }}
+  />
 );
 
 /* 2. Warum Magie für Firmen */
