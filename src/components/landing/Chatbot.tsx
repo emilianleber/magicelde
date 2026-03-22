@@ -63,7 +63,7 @@ const Chatbot = () => {
       {open && (
         <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] bg-background rounded-3xl shadow-2xl border border-border/50 flex flex-col overflow-hidden animate-fade-up" style={{ animationDuration: "0.3s", height: "480px" }}>
           {/* Header */}
-          <div className="px-5 py-4 border-b border-border/30 flex items-center gap-3" style={{ background: "linear-gradient(135deg, hsl(225, 80%, 56%), hsl(260, 70%, 55%))" }}>
+          <div className="px-5 py-4 border-b border-border/30 flex items-center gap-3" style={{ background: "linear-gradient(135deg, hsl(230, 65%, 48%), hsl(280, 55%, 45%), hsl(345, 70%, 42%))" }}>
             <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
               <Bot className="w-5 h-5 text-white" />
             </div>
