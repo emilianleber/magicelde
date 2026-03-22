@@ -79,6 +79,7 @@ const Navigation = () => {
                     { to: "/buehnenshow", label: "Bühnenshow", sub: "Das große Erlebnis" },
                     { to: "/close-up", label: "Close-Up Magie", sub: "Hautnah & interaktiv" },
                     { to: "/magic-dinner", label: "Magic Dinner", sub: "Genuss trifft Staunen" },
+                    { to: "/moderation", label: "Moderation", sub: "Charme & Bühnenpräsenz" },
                   ].map((item) => (
                     <Link key={item.to} to={item.to} className="block px-4 py-3 rounded-xl hover:bg-muted/60 transition-colors group">
                       <span className="block text-sm font-medium text-foreground group-hover:text-accent transition-colors">{item.label}</span>
@@ -121,6 +122,7 @@ const Navigation = () => {
           <Link to="/buehnenshow" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Bühnenshow</Link>
           <Link to="/close-up" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Close-Up Magie</Link>
           <Link to="/magic-dinner" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Magic Dinner</Link>
+          <Link to="/moderation" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Moderation</Link>
 
           <div className="border-t border-border/30 my-3" />
           <Link to="/ueber-mich" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Über mich</Link>
@@ -128,7 +130,7 @@ const Navigation = () => {
           <Link to="/tickets" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Tickets</Link>
           <Link to="/blog" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Magazin</Link>
           <Link to="/faq" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">FAQ</Link>
-
+          <Link to="/kundenportal/login" className="px-3 py-2.5 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors">Kundenportal</Link>
           <Link to="/buchung" className="btn-primary justify-center mt-4">
             Jetzt anfragen
           </Link>

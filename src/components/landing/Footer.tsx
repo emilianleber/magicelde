@@ -40,6 +40,7 @@ const Footer = () => (
             <Link to="/buehnenshow" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Bühnenshow</Link>
             <Link to="/close-up" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Close-Up</Link>
             <Link to="/magic-dinner" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Magic Dinner</Link>
+            <Link to="/moderation" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Moderation</Link>
           </div>
           <div className="space-y-3">
             <p className="font-display text-sm font-bold text-foreground mb-4">Mehr</p>
@@ -54,6 +55,7 @@ const Footer = () => (
             <Link to="/kontakt" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Kontakt</Link>
             <Link to="/buchung" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Anfragen</Link>
             <Link to="/presse" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Presse</Link>
+            <Link to="/kundenportal/login" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Kundenportal</Link>
           </div>
         </div>
       </div>

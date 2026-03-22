@@ -10,6 +10,7 @@ import Geburtstage from "./pages/Geburtstage.tsx";
 import Buehnenshow from "./pages/Buehnenshow.tsx";
 import CloseUp from "./pages/CloseUp.tsx";
 import MagicDinner from "./pages/MagicDinner.tsx";
+import Moderation from "./pages/Moderation.tsx";
 import UeberMich from "./pages/UeberMich.tsx";
 import Referenzen from "./pages/Referenzen.tsx";
 import FAQPage from "./pages/FAQ.tsx";
@@ -46,6 +47,7 @@ const App = () => (
           <Route path="/buehnenshow" element={<Buehnenshow />} />
           <Route path="/close-up" element={<CloseUp />} />
           <Route path="/magic-dinner" element={<MagicDinner />} />
+          <Route path="/moderation" element={<Moderation />} />
           <Route path="/ueber-mich" element={<UeberMich />} />
           <Route path="/referenzen" element={<Referenzen />} />
           <Route path="/faq" element={<FAQPage />} />
