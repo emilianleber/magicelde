@@ -53,7 +53,9 @@ const FormSection = () => {
     <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <form action="https://formspree.io/f/xwvrdbaw" method="POST" className="space-y-5">
+<input type="hidden" name="_subject" value="Neue Buchungsanfrage über Website" />
+<input type="hidden" name="_replyto" />
             <div className="grid sm:grid-cols-2 gap-5">
               <input type="text" name="name" placeholder="Name *" required className={inputCls} />
               <input type="email" name="email" placeholder="E-Mail *" required className={inputCls} />
