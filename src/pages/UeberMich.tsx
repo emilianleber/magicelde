@@ -3,6 +3,7 @@ import BookingCTA from "@/components/landing/BookingCTA";
 import AnimatedWords from "@/components/landing/AnimatedWords";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
+import { AwardBadges } from "@/components/landing/TrustElements";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
