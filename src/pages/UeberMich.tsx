@@ -207,6 +207,9 @@ const GalerieSection = () => {
 const UeberMich = () => (
   <PageLayout>
     <HeroUeber />
+    <div className="py-10">
+      <AwardBadges className="justify-center" />
+    </div>
     <StorySection />
     <PhilosophieSection />
     <WasAndersSection />
