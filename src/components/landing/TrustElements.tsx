@@ -3,27 +3,20 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 /* ─── Rating Badges (Google, ProvenExpert) ─── */
 export const RatingBadges = ({ className = "" }: { className?: string }) => (
-  <div className={`flex flex-wrap items-center justify-center gap-5 ${className}`}>
+  <div className={`flex items-center justify-center gap-8 ${className}`}>
     {[
-      { platform: "Google", score: "4.9", reviews: "120+ Bewertungen" },
-      { platform: "ProvenExpert", score: "4.8", reviews: "Top Empfehlung" },
+      { platform: "Google", score: "4.9", sub: "120+ Bewertungen" },
+      { platform: "ProvenExpert", score: "4.8", sub: "Top Empfehlung" },
     ].map((r) => (
-      <div
-        key={r.platform}
-        className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-background/80 backdrop-blur-sm border border-border/50 shadow-sm"
-      >
-        <div>
-          <div className="flex items-center gap-1.5 mb-0.5">
-            <span className="font-display text-sm font-bold text-foreground">{r.platform}</span>
-            <span className="font-display text-sm font-bold text-foreground">{r.score}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
-            ))}
-            <span className="text-[10px] text-muted-foreground ml-1">{r.reviews}</span>
-          </div>
+      <div key={r.platform} className="flex items-center gap-2">
+        <span className="font-display text-sm font-bold text-foreground">{r.platform}</span>
+        <div className="flex items-center gap-0.5">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
+          ))}
         </div>
+        <span className="font-display text-sm font-bold text-foreground">{r.score}</span>
+        <span className="text-[10px] text-muted-foreground hidden sm:inline">· {r.sub}</span>
       </div>
     ))}
   </div>
@@ -31,19 +24,19 @@ export const RatingBadges = ({ className = "" }: { className?: string }) => (
 
 /* ─── Award Badges ─── */
 export const AwardBadges = ({ className = "" }: { className?: string }) => (
-  <div className={`flex flex-wrap items-center justify-center gap-4 ${className}`}>
+  <div className={`flex items-center justify-center gap-3 ${className}`}>
     {[
       { icon: Trophy, label: "Kreativpreisträger" },
       { icon: Award, label: "Greatest Talent Finalist" },
       { icon: Star, label: "500+ Events" },
     ].map((a) => (
-      <div
+      <span
         key={a.label}
-        className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-border/50 bg-background/60 backdrop-blur-sm"
+        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-border/50 bg-muted/40 text-[10px] font-semibold tracking-wide uppercase text-muted-foreground"
       >
-        <a.icon className="w-3.5 h-3.5 text-accent" />
-        <span className="font-sans text-[11px] font-semibold tracking-wide uppercase text-foreground/80">{a.label}</span>
-      </div>
+        <a.icon className="w-3 h-3" />
+        {a.label}
+      </span>
     ))}
   </div>
 );
