@@ -94,6 +94,7 @@ const Navigation = () => {
           <Link to="/referenzen" className={linkCls}>Referenzen</Link>
           <Link to="/tickets" className={linkCls}>Tickets</Link>
           <Link to="/blog" className={linkCls}>Magazin</Link>
+          <Link to="/kundenportal/login" className={linkCls}>Kundenportal</Link>
 
           <Link to="/buchung" className="btn-primary !px-6 !py-2.5 !text-[13px]">
             Anfragen

@@ -352,10 +352,16 @@ const Index = () => {
     <>
       <Navigation />
       <main>
-        {/* 1. Hero */}
-        <HeroSection />
-        {/* 2. Video Hero */}
-        {/* Video is embedded in HeroSection already; adding standalone video section */}
+        {/* 1. Background Hero */}
+        <BackgroundHero
+          imageSrc={heroImg}
+          badge="Comedy-Zauberer · Showkünstler · Performer"
+          headline="Staunen. Lachen."
+          animatedWords={["Erinnern.", "Verbinden.", "Begeistern.", "Erleben."]}
+          subline="Ich bin Emilian Leber — moderner Comedy-Zauberer und Showkünstler. Meine Shows verbinden Staunen mit Humor und schaffen Erlebnisse, über die deine Gäste noch Wochen später sprechen."
+          ctaPrimary={{ text: "Kostenlos anfragen", to: "/buchung" }}
+          ctaSecondary={{ text: "Entdecken", href: "#showkonzepte" }}
+        />
         {/* 3. Social Proof / Zahlen */}
         <SocialProofSection />
         {/* 4. USP / Kurzpositionierung */}
@@ -384,6 +390,8 @@ const Index = () => {
         <CTASection />
       </main>
       <Footer />
+      <Chatbot />
+      <WhatsAppButton />
     </>
   );
 };
