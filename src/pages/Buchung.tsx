@@ -39,23 +39,25 @@ const HeroBuchung = () => (
 const FormSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const navigate = useNavigate();
-  const [sending, setSending] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSending(true);
-    setTimeout(() => navigate("/danke"), 800);
-  };
-
+  
+setSending(true);
+setTimeout(() => navigate("/danke"), 800);
+};
   const inputCls = "w-full rounded-2xl bg-muted/50 border-0 px-5 py-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all";
 
   return (
     <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-2xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-        <form action="https://formspree.io/f/xwvrdbaw" method="POST" className="space-y-5">
+        <form 
+  action="https://formspree.io/f/xwvrdbaw" 
+  method="POST" 
+  className="space-y-5"
+>
 <input type="hidden" name="_subject" value="Neue Buchungsanfrage über Website" />
-<input type="hidden" name="_replyto" />
+<input type="hidden" name="_subject" value="Neue Buchungsanfrage über Website" />
+<input type="hidden" name="_replyto" value="email" />
+<input type="hidden" name="_next" value="https://magicel.de/danke" />
             <div className="grid sm:grid-cols-2 gap-5">
               <input type="text" name="name" placeholder="Name *" required className={inputCls} />
               <input type="email" name="email" placeholder="E-Mail *" required className={inputCls} />
