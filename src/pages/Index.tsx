@@ -29,7 +29,7 @@ import {
 
 import heroStartImg from "@/assets/hero-start.jpg";
 import audienceImg from "@/assets/bühne zuschauer.jpg";
-import closeupImg from "@/assets/cards.JPG";
+import closeupImg from "@/assets/cards.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import weddingImg from "@/assets/wedding-magic.jpg";
 import corporateImg from "@/assets/corporate-event.jpg";
