@@ -20,21 +20,39 @@ const KundenportalLogin = () => {
 
     try {
       if (mode === "login") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.auth.signUp({
+        const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin + "/kundenportal" },
         });
         if (error) throw error;
+      } else {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: window.location.origin + "/kundenportal",
+          },
+        });
+
+        if (error) throw error;
+
+        // 🔥 WICHTIG: Kundenprofil direkt anlegen (falls User vorhanden)
+        if (data.user) {
+          await supabase.from("portal_customers").insert({
+            user_id: data.user.id,
+            name: "",
+            kundennummer: "",
+          });
+        }
       }
+
       navigate("/kundenportal");
     } catch (err: any) {
-      setError(err.message === "Invalid login credentials"
-        ? "E-Mail oder Passwort ist falsch."
-        : err.message || "Ein Fehler ist aufgetreten.");
+      setError(
+        err.message === "Invalid login credentials"
+          ? "E-Mail oder Passwort ist falsch."
+          : err.message || "Ein Fehler ist aufgetreten."
+      );
     } finally {
       setLoading(false);
     }
@@ -49,17 +67,23 @@ const KundenportalLogin = () => {
               <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center bg-accent/10">
                 <Lock className="w-8 h-8 text-accent" />
               </div>
-              <h1 className="headline-sub text-foreground mb-3">Kundenportal</h1>
+
+              <h1 className="headline-sub text-foreground mb-3">
+                Kundenportal
+              </h1>
+
               <p className="text-detail">
                 {mode === "login"
-                  ? "Melden Sie sich mit Ihrer E-Mail und Ihrem Passwort an."
-                  : "Erstellen Sie Ihr Konto für das Kundenportal."}
+                  ? "Melden Sie sich an, um Ihre Events, Dokumente und Anfragen zu verwalten."
+                  : "Erstellen Sie ein Konto, um Ihre Anfragen und Events zentral zu verwalten."}
               </p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
-                <label className="block font-sans text-sm font-medium text-foreground mb-2">E-Mail-Adresse</label>
+                <label className="block font-sans text-sm font-medium text-foreground mb-2">
+                  E-Mail-Adresse
+                </label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
@@ -74,7 +98,9 @@ const KundenportalLogin = () => {
               </div>
 
               <div>
-                <label className="block font-sans text-sm font-medium text-foreground mb-2">Passwort</label>
+                <label className="block font-sans text-sm font-medium text-foreground mb-2">
+                  Passwort
+                </label>
                 <div className="relative">
                   <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
@@ -86,34 +112,59 @@ const KundenportalLogin = () => {
                     minLength={6}
                     className="w-full pl-11 pr-12 py-3.5 rounded-xl bg-muted/50 border border-border/50 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/30 transition-all"
                   />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
               </div>
 
               {error && (
-                <p className="text-sm text-destructive bg-destructive/10 px-4 py-2.5 rounded-xl">{error}</p>
+                <p className="text-sm text-destructive bg-destructive/10 px-4 py-2.5 rounded-xl">
+                  {error}
+                </p>
               )}
 
-              <button type="submit" disabled={loading} className="w-full btn-primary justify-center group disabled:opacity-50">
-                {loading ? "Wird geladen…" : mode === "login" ? "Anmelden" : "Registrieren"}
-                {!loading && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full btn-primary justify-center group disabled:opacity-50"
+              >
+                {loading
+                  ? "Wird geladen…"
+                  : mode === "login"
+                  ? "Anmelden"
+                  : "Registrieren"}
+                {!loading && (
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                )}
               </button>
             </form>
 
             <div className="mt-6 text-center">
               <button
-                onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(""); }}
+                onClick={() => {
+                  setMode(mode === "login" ? "signup" : "login");
+                  setError("");
+                }}
                 className="font-sans text-sm text-accent hover:text-accent/80 transition-colors"
               >
-                {mode === "login" ? "Noch kein Konto? Jetzt registrieren" : "Bereits ein Konto? Anmelden"}
+                {mode === "login"
+                  ? "Noch kein Konto? Jetzt registrieren"
+                  : "Bereits ein Konto? Anmelden"}
               </button>
             </div>
 
             <div className="mt-8 p-5 rounded-2xl bg-muted/30 border border-border/30">
               <p className="font-sans text-xs text-muted-foreground leading-relaxed">
-                <strong className="text-foreground">Zugang benötigt?</strong> Ihr Kundenportal-Zugang wird nach der Buchung eingerichtet. Bei Fragen kontaktieren Sie mich gerne direkt.
+                <strong className="text-foreground">Hinweis:</strong> Nach der Registrierung können Ihre Anfragen, Events und Dokumente automatisch Ihrem Konto zugeordnet werden.
               </p>
             </div>
           </div>
