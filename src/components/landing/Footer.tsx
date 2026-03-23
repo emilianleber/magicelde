@@ -9,8 +9,7 @@ const Footer = () => (
         <div className="max-w-sm">
           <Link to="/" className="flex items-center gap-2 mb-4">
             <img src={logoImg} alt="Emilian Leber" className="h-6 w-auto" />
-            <span className="font-display font-bold text-foreground text-lg">MagicEL</span>
-          </Link>
+<span className="font-display font-bold text-foreground text-lg">Emilian Leber</span>          </Link>
           <p className="text-detail mb-6">
             Moderner Comedy-Zauberer für Firmenfeiern, Hochzeiten, Galas und private Events.
             Staunen. Lachen. Erinnern.
@@ -81,7 +80,7 @@ const Footer = () => (
       {/* Bottom */}
       <div className="border-t border-border/50 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
         <p className="text-xs text-muted-foreground/50">
-          © {new Date().getFullYear()} MagicEL — Emilian Leber. Alle Rechte vorbehalten.
+         © {new Date().getFullYear()} Emilian Leber. Alle Rechte vorbehalten.
         </p>
         <div className="flex gap-6">
           <Link to="/impressum" className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">Impressum</Link>
