@@ -27,7 +27,9 @@ const HeroBuchung = () => (
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-2">
               <item.icon className="w-4 h-4 text-accent" />
-              <span className="font-sans text-sm text-muted-foreground">{item.label}</span>
+              <span className="font-sans text-sm text-muted-foreground">
+  {item.label}
+</span>
             </div>
           ))}
         </div>
@@ -39,10 +41,6 @@ const HeroBuchung = () => (
 const FormSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const navigate = useNavigate();
-  
-setSending(true);
-setTimeout(() => navigate("/danke"), 800);
-};
   const inputCls = "w-full rounded-2xl bg-muted/50 border-0 px-5 py-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all";
 
   return (
@@ -53,10 +51,8 @@ setTimeout(() => navigate("/danke"), 800);
   action="https://formspree.io/f/xwvrdbaw" 
   method="POST" 
   className="space-y-5"
->
+<
 <input type="hidden" name="_subject" value="Neue Buchungsanfrage über Website" />
-<input type="hidden" name="_subject" value="Neue Buchungsanfrage über Website" />
-<input type="hidden" name="_replyto" value="email" />
 <input type="hidden" name="_next" value="https://magicel.de/danke" />
             <div className="grid sm:grid-cols-2 gap-5">
               <input type="text" name="name" placeholder="Name *" required className={inputCls} />
@@ -99,13 +95,13 @@ setTimeout(() => navigate("/danke"), 800);
               className={inputCls + " resize-none"}
             />
             <div className="text-center pt-6">
-              <button type="submit" disabled={sending} className="btn-primary btn-large disabled:opacity-50">
-                {sending ? "Wird gesendet…" : "Anfrage absenden"}
-              </button>
-              <p className="font-sans text-xs text-muted-foreground/40 mt-4 tracking-wide">
-                Kostenlos · Unverbindlich · Antwort innerhalb 24h
-              </p>
-            </div>
+  <button type="submit" className="btn-primary btn-large w-full sm:w-auto">
+    Anfrage absenden
+  </button>
+  <p className="font-sans text-xs text-muted-foreground/40 mt-4 tracking-widest uppercase">
+    Kostenlos · Unverbindlich · Antwort innerhalb 24h
+  </p>
+</div>
           </form>
         </div>
       </div>
