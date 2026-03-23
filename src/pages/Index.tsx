@@ -28,13 +28,13 @@ import {
 } from "lucide-react";
 
 import heroStartImg from "@/assets/hero-start.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
-import closeupDscImg from "@/assets/DSC08102.jpg";
+import audienceImg from "@/assets/bühne zuschauer.jpg";
+import closeupImg from "@/assets/cards.JPG";
 import stageImg from "@/assets/stage-show.jpg";
 import weddingImg from "@/assets/wedding-magic.jpg";
 import corporateImg from "@/assets/corporate-event.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
-import closeupImg from "@/assets/closeup.jpg";
+import closeupWalkingImg from "@/assets/closeup.jpg";
 import emotionenImg from "@/assets/emotionen.jpg";
 import magicDinnerBookImg from "@/assets/magicdinner book.jpeg";
 
@@ -88,10 +88,10 @@ const SocialProofSection = () => {
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <StatItem end={500} suffix="+" label="Events" />
+          <StatItem end={200} suffix="+" label="Events" />
           <StatItem end={10} suffix="+" label="Jahre Erfahrung" />
           <StatItem end={100} suffix="%" label="Weiterempfehlung" />
-          <StatItem end={50} suffix="+" label="5-Sterne Bewertungen" />
+          <StatItem end={30} suffix="+" label="Bewertungen" />
         </div>
       </div>
     </section>
@@ -104,7 +104,8 @@ const ShowformateSlider = () => {
 
   const formate = [
     {
-      img: closeupDscImg,
+      img: closeupImg,
+      imgClass: "object-[center_center]",
       title: "Close-Up Magie",
       sub: "Direkt bei deinen Gästen",
       desc: "Interaktive Magie zum Anfassen — perfekt als Eisbreaker bei Empfängen, Networking-Events und Dinner-Begleitung.",
@@ -112,6 +113,7 @@ const ShowformateSlider = () => {
     },
     {
       img: stageImg,
+      imgClass: "object-[center_top]",
       title: "Bühnenshow",
       sub: "Das zentrale Highlight",
       desc: "Eine durchkomponierte Performance mit Dramaturgie, Comedy und Momenten, die ein ganzes Publikum gleichzeitig zum Staunen bringen.",
@@ -119,13 +121,15 @@ const ShowformateSlider = () => {
     },
     {
       img: portraitImg,
+      imgClass: "object-[center_top]",
       title: "Magic Dinner",
       sub: "Kulinarik trifft Magie",
       desc: "Zwischen den Gängen wird gezaubert — direkt am Tisch, persönlich und exklusiv. Jeder Gang wird zum Event.",
       link: "/magic-dinner",
     },
     {
-      img: closeupImg,
+      img: closeupWalkingImg,
+      imgClass: "object-[center_center]",
       title: "Walking Act",
       sub: "Frei & spontan",
       desc: "Magie zwischen den Gästen — locker, witzig und der perfekte Gesprächsstarter für jede Veranstaltung.",
@@ -133,6 +137,7 @@ const ShowformateSlider = () => {
     },
     {
       img: emotionenImg,
+      imgClass: "object-[center_center]",
       title: "Individuelles Konzept",
       sub: "Maßgeschneidert",
       desc: "Angepasst auf eure Marke, eure Botschaft, euer Event — inklusive Einbindung von Firmeninhalten und persönlichen Elementen.",
@@ -167,7 +172,7 @@ const ShowformateSlider = () => {
                   <img
                     src={f.img}
                     alt={f.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className={`absolute inset-0 w-full h-full ${f.imgClass} transition-transform duration-700 group-hover:scale-105`}
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
@@ -205,7 +210,7 @@ const ComedySection = () => {
               Comedy + Magie
             </span>
             <h2 className="headline-section text-foreground mb-6">
-              Warum Comedy-Magie so gut funktioniert.
+              Warum Zauberer mit Comedy so gut funktionieren.
             </h2>
 
             <div className="space-y-5 text-detail max-w-lg">
@@ -215,27 +220,27 @@ const ComedySection = () => {
                 lachen.
               </p>
               <p>
-                Das ist der Unterschied zu klassischen Zauberern — bei mir geht
-                es nicht um den Trick, sondern um das Erlebnis. Um die Reaktion.
-                Um den Moment, in dem ein ganzer Raum gleichzeitig lacht und
-                staunt.
+                Das ist der Unterschied zu klassischen Zauberern — bei Emilian
+                Leber geht es nicht nur um den Trick, sondern um das Erlebnis.
+                Um die Reaktion. Um den Moment, in dem ein ganzer Raum
+                gleichzeitig lacht und staunt.
               </p>
               <p>
-                Comedy-Magie funktioniert bei jedem Publikum, in jeder Situation
-                — weil Humor und Staunen universelle Sprachen sind. Vom CEO bis
-                zum Hochzeitsgast: Alle werden Teil der Show.
+                Diese Art von Zaubershow funktioniert bei jedem Publikum, in
+                jeder Situation — weil Humor und Staunen universelle Sprachen
+                sind. Vom CEO bis zum Hochzeitsgast: Alle werden Teil der Show.
               </p>
               <p>
-                Studien zeigen: Erlebnisse, die Emotionen kombinieren — wie
-                Lachen und Staunen — bleiben bis zu 3x länger im Gedächtnis.
-                Genau das ist mein Ansatz.
+                Erlebnisse, die Emotionen kombinieren — wie Lachen und Staunen —
+                bleiben besonders lange im Gedächtnis. Genau das ist der Ansatz
+                hinter den Shows von Emilian Leber.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-6 mt-10">
               {[
                 { icon: Laugh, label: "Humor" },
-                { icon: Wand2, label: "Magie" },
+                { icon: Wand2, label: "Zauberkunst" },
                 { icon: Zap, label: "Wow-Effekt" },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-2">
@@ -255,7 +260,7 @@ const ComedySection = () => {
             <div className="rounded-3xl overflow-hidden">
               <img
                 src={magicDinnerBookImg}
-                alt="Magic Dinner und Showmaterial"
+                alt="Zaubershow beim Magic Dinner"
                 className="w-full h-[500px] object-cover hover:scale-[1.02] transition-transform duration-700"
                 loading="lazy"
               />
@@ -282,7 +287,7 @@ const ErlebnisSection = () => {
     },
     {
       title: "Der Gesprächsstarter",
-      desc: "‚Hast du das gesehen?!' — Magie bricht das Eis schneller als jeder Small Talk und schafft sofort eine Verbindung.",
+      desc: "‚Hast du das gesehen?!' — Zauberkunst bricht das Eis schneller als jeder Small Talk und schafft sofort eine Verbindung.",
     },
     {
       title: "Die Erinnerung",
@@ -339,33 +344,21 @@ const ReferenzenSlider = () => {
   const testimonials = [
     {
       quote:
-        "Emilian hat unsere Firmenfeier zu einem unvergesslichen Abend gemacht. Die Gäste reden heute noch davon!",
-      author: "Thomas K.",
-      role: "Geschäftsführer, Automobilbranche",
+        "Ich durfte eine Hochzeit planen, bei der Emilian als Zauberer aufgetreten ist – und es war wirklich großartig! Er hat sich auf unsere Idee eingelassen, den Bräutigam zu überraschen, und mit viel Charme und Witz mitgespielt. Es war unterhaltsam, sympathisch und Emilian hat alle Gäste begeistert. Eine tolle Ergänzung für jeden besonderen Anlass!",
+      author: "Katrin Raß",
+      role: "5 Sterne",
     },
     {
       quote:
-        "So eine intime, verblüffende Magie habe ich noch nie erlebt. Perfekt für unseren Empfang.",
-      author: "Sarah M.",
-      role: "Eventmanagerin",
+        "Die Agenturgruppe Wächter aus München bedankt sich vielmals bei Emilian, der rund 200 geladene Gäste eines Bayerischen Versicherungsunternehmens mit einer eigens entwickelten Zaubertrickshow in einem inszenierten Magic Camp begeistert hat - es war einfach Mega!",
+      author: "Jan von Lehmann",
+      role: "Eventmanagement Wächter Agentur · 5 Sterne",
     },
     {
       quote:
-        "Cool, modern, witzig — genau unser Ding. Kein verstaubter Zauberer, sondern echtes Premium-Entertainment.",
-      author: "Marc L.",
-      role: "Marketing Director",
-    },
-    {
-      quote:
-        "Unsere Gäste reden heute noch über die Magie beim Empfang. Es war der perfekte Eisbrecher!",
-      author: "Lena & Markus",
-      role: "Hochzeit in Heidelberg",
-    },
-    {
-      quote:
-        "Standing Ovation von 300 Gästen! Professionell, souverän und absolut unterhaltsam.",
-      author: "Dr. Stefan R.",
-      role: "Geschäftsführer, Technologie",
+        "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt. Abwicklung des Auftrages sehr professionell. Gerne wieder!",
+      author: "Martina Senftl",
+      role: "5 Sterne",
     },
   ];
 
@@ -377,7 +370,7 @@ const ReferenzenSlider = () => {
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <span className="badge-accent mb-8 inline-flex">Stimmen</span>
+          <span className="badge-accent mb-8 inline-flex">Bewertungen</span>
           <h2 className="headline-section text-foreground mb-6">
             Was Kunden sagen.
           </h2>
@@ -501,7 +494,7 @@ const FuerWenSection = () => {
         >
           <span className="badge-accent mb-8 inline-flex">Zielgruppen</span>
           <h2 className="headline-section text-foreground mb-6">
-            Für wen ist MagicEL perfekt?
+            Für wen ist ein Zauberer perfekt?
           </h2>
         </div>
 
