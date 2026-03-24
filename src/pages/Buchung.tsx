@@ -1,7 +1,10 @@
+import { useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
 import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { supabase } from "@/integrations/supabase/client";
 import { Shield, Clock, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const HeroBuchung = () => (
   <section className="relative min-h-[50vh] flex flex-col justify-center overflow-hidden">
@@ -47,9 +50,101 @@ const HeroBuchung = () => (
 
 const FormSection = () => {
   const { ref, isVisible } = useScrollReveal();
+  const navigate = useNavigate();
+
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
   const inputCls =
     "w-full rounded-2xl bg-muted/50 border-0 px-5 py-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all";
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSending(true);
+    setError("");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const name = String(formData.get("name") || "");
+    const email = String(formData.get("email") || "");
+    const phone = String(formData.get("phone") || "");
+    const anlass = String(formData.get("anlass") || "");
+    const datum = String(formData.get("datum") || "");
+    const ort = String(formData.get("ort") || "");
+    const gaesteRaw = String(formData.get("gaeste") || "");
+    const format = String(formData.get("format") || "");
+    const nachricht = String(formData.get("nachricht") || "");
+
+    const gaeste = gaesteRaw ? Number(gaesteRaw) : null;
+
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      let customerId: string | null = null;
+
+      if (user) {
+        const { data: customer, error: customerError } = await supabase
+          .from("portal_customers")
+          .select("id")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (customerError) throw customerError;
+        customerId = customer?.id ?? null;
+      }
+
+      const { error: requestError } = await supabase.from("portal_requests").insert({
+        user_id: user?.id ?? null,
+        customer_id: customerId,
+        name,
+        email,
+        phone: phone || null,
+        anlass: anlass || null,
+        datum: datum || null,
+        ort: ort || null,
+        gaeste,
+        format: format || null,
+        nachricht: nachricht || null,
+        status: "neu",
+      });
+
+      if (requestError) throw requestError;
+
+      const formspreeData = new FormData();
+      formspreeData.append("_subject", "Neue Buchungsanfrage über Website");
+      formspreeData.append("name", name);
+      formspreeData.append("email", email);
+      formspreeData.append("phone", phone);
+      formspreeData.append("anlass", anlass);
+      formspreeData.append("datum", datum);
+      formspreeData.append("ort", ort);
+      formspreeData.append("gaeste", gaesteRaw);
+      formspreeData.append("format", format);
+      formspreeData.append("nachricht", nachricht);
+
+      const formspreeResponse = await fetch("https://formspree.io/f/xwvrdbaw", {
+        method: "POST",
+        body: formspreeData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!formspreeResponse.ok) {
+        throw new Error("Die Anfrage konnte nicht per E-Mail versendet werden.");
+      }
+
+      form.reset();
+      navigate("/danke");
+    } catch (err: any) {
+      setError(err.message || "Beim Absenden ist ein Fehler aufgetreten.");
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <section className="section-large" ref={ref}>
@@ -57,22 +152,7 @@ const FormSection = () => {
         <div
           className={`max-w-2xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
-          <form
-            action="https://formspree.io/f/xwvrdbaw"
-            method="POST"
-            className="space-y-5"
-          >
-            <input
-              type="hidden"
-              name="_subject"
-              value="Neue Buchungsanfrage über Website"
-            />
-            <input
-              type="hidden"
-              name="_next"
-              value="https://magicel.de/danke"
-            />
-
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid sm:grid-cols-2 gap-5">
               <input
                 type="text"
@@ -135,11 +215,7 @@ const FormSection = () => {
                 min="1"
                 className={inputCls}
               />
-              <select
-                name="format"
-                className={inputCls}
-                defaultValue=""
-              >
+              <select name="format" className={inputCls} defaultValue="">
                 <option value="" disabled>
                   Gewünschtes Format
                 </option>
@@ -159,12 +235,19 @@ const FormSection = () => {
               className={inputCls + " resize-none"}
             />
 
+            {error && (
+              <div className="rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
+
             <div className="text-center pt-6">
               <button
                 type="submit"
-                className="btn-primary btn-large w-full sm:w-auto"
+                disabled={sending}
+                className="btn-primary btn-large w-full sm:w-auto disabled:opacity-60"
               >
-                Anfrage absenden
+                {sending ? "Wird gesendet…" : "Anfrage absenden"}
               </button>
               <p className="font-sans text-xs text-muted-foreground/40 mt-4 tracking-widest uppercase">
                 Kostenlos · Unverbindlich · Antwort innerhalb 24h
