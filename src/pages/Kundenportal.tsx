@@ -19,6 +19,19 @@ import {
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
+interface BookingRequest {
+  id: string;
+  name: string;
+  email: string;
+  anlass: string | null;
+  datum: string | null;
+  ort: string | null;
+  gaeste: number | null;
+  format: string | null;
+  nachricht: string | null;
+  created_at: string;
+}
+
 interface PortalEvent {
   id: string;
   title: string;
@@ -52,8 +65,9 @@ const Kundenportal = () => {
   const [events, setEvents] = useState<PortalEvent[]>([]);
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
   const [timeline, setTimeline] = useState<TimelineStep[]>([]);
+  const [requests, setRequests] = useState<BookingRequest[]>([]);
   const [activeTab, setActiveTab] = useState<
-    "dashboard" | "events" | "documents" | "contact"
+    "dashboard" | "events" | "documents" | "requests" | "contact"
   >("dashboard");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -92,7 +106,6 @@ const Kundenportal = () => {
         .eq("user_id", user.id)
         .maybeSingle();
 
-      // Falls nach Registrierung noch kein Kundenprofil existiert, automatisch anlegen
       if (!customer && !customerError) {
         const { data: createdCustomer } = await supabase
           .from("portal_customers")
@@ -123,8 +136,21 @@ const Kundenportal = () => {
           .eq("customer_id", customer.id)
           .order("created_at", { ascending: false });
 
+        let requestsData: BookingRequest[] | null = null;
+
+        if (user.email) {
+          const { data } = await supabase
+            .from("portal_requests")
+            .select("*")
+            .eq("email", user.email)
+            .order("created_at", { ascending: false });
+
+          requestsData = data;
+        }
+
         if (eventsData) setEvents(eventsData);
         if (docsData) setDocuments(docsData);
+        if (requestsData) setRequests(requestsData);
 
         if (eventsData && eventsData.length > 0) {
           const { data: timelineData } = await supabase
@@ -164,6 +190,7 @@ const Kundenportal = () => {
     { id: "dashboard" as const, label: "Dashboard", icon: LayoutDashboard },
     { id: "events" as const, label: "Events", icon: Calendar },
     { id: "documents" as const, label: "Dokumente", icon: FolderOpen },
+    { id: "requests" as const, label: "Anfragen", icon: MessageCircle },
     { id: "contact" as const, label: "Kontakt", icon: Phone },
   ];
 
@@ -215,7 +242,7 @@ const Kundenportal = () => {
 
           {activeTab === "dashboard" && (
             <div className="space-y-8">
-              <div className="grid sm:grid-cols-3 gap-4">
+              <div className="grid sm:grid-cols-4 gap-4">
                 {[
                   {
                     label: "Aktive Events",
@@ -226,6 +253,11 @@ const Kundenportal = () => {
                     label: "Dokumente",
                     value: String(documents.length),
                     icon: FileText,
+                  },
+                  {
+                    label: "Anfragen",
+                    value: String(requests.length),
+                    icon: MessageCircle,
                   },
                   {
                     label: "Nächstes Event",
@@ -403,6 +435,54 @@ const Kundenportal = () => {
             </div>
           )}
 
+          {activeTab === "requests" && (
+            <div className="space-y-4">
+              {requests.length === 0 ? (
+                <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                  <p className="font-sans text-sm text-muted-foreground">
+                    Noch keine Anfragen vorhanden.
+                  </p>
+                </div>
+              ) : (
+                requests.map((request) => (
+                  <div
+                    key={request.id}
+                    className="p-6 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-colors"
+                  >
+                    <div className="flex flex-col gap-3">
+                      <div>
+                        <h3 className="font-display text-lg font-bold text-foreground">
+                          {request.anlass || "Anfrage"}
+                        </h3>
+                        <p className="font-sans text-xs text-muted-foreground mt-1">
+                          Eingegangen am{" "}
+                          {new Date(request.created_at).toLocaleDateString("de-DE")}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-x-6 gap-y-1 font-sans text-sm text-muted-foreground">
+                        {request.datum && (
+                          <span>
+                            📅 {new Date(request.datum).toLocaleDateString("de-DE")}
+                          </span>
+                        )}
+                        {request.ort && <span>📍 {request.ort}</span>}
+                        {request.format && <span>🎭 {request.format}</span>}
+                        {request.gaeste && <span>👥 {request.gaeste} Gäste</span>}
+                      </div>
+
+                      {request.nachricht && (
+                        <p className="font-sans text-sm text-foreground leading-relaxed">
+                          {request.nachricht}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
           {activeTab === "contact" && (
             <div className="max-w-lg">
               <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
@@ -444,7 +524,10 @@ const Kundenportal = () => {
                   </a>
                 </div>
 
-                <Link to="/kontakt" className="btn-primary justify-center mt-6 w-full group">
+                <Link
+                  to="/kontakt"
+                  className="btn-primary justify-center mt-6 w-full group"
+                >
                   Nachricht senden
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
