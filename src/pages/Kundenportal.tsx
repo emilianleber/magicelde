@@ -23,12 +23,14 @@ interface BookingRequest {
   id: string;
   name: string;
   email: string;
+  phone: string | null;
   anlass: string | null;
   datum: string | null;
   ort: string | null;
   gaeste: number | null;
   format: string | null;
   nachricht: string | null;
+  status: string | null;
   created_at: string;
 }
 
@@ -100,14 +102,22 @@ const Kundenportal = () => {
     const fetchData = async () => {
       setLoading(true);
 
-      let { data: customer, error: customerError } = await supabase
+      let customer: any = null;
+
+      const { data: existingCustomer, error: customerError } = await supabase
         .from("portal_customers")
         .select("*")
         .eq("user_id", user.id)
         .maybeSingle();
 
-      if (!customer && !customerError) {
-        const { data: createdCustomer } = await supabase
+      if (customerError) {
+        console.error("Fehler beim Laden des Kunden:", customerError);
+      }
+
+      customer = existingCustomer;
+
+      if (!customer) {
+        const { data: createdCustomer, error: createCustomerError } = await supabase
           .from("portal_customers")
           .insert({
             user_id: user.id,
@@ -117,49 +127,68 @@ const Kundenportal = () => {
           .select("*")
           .single();
 
-        customer = createdCustomer ?? null;
+        if (createCustomerError) {
+          console.error("Fehler beim Erstellen des Kunden:", createCustomerError);
+        } else {
+          customer = createdCustomer;
+        }
       }
 
       if (customer) {
         setCustomerName(customer.name || "");
         setKundennummer(customer.kundennummer || "");
 
-        const { data: eventsData } = await supabase
+        const { data: eventsData, error: eventsError } = await supabase
           .from("portal_events")
           .select("*")
           .eq("customer_id", customer.id)
           .order("event_date", { ascending: true });
 
-        const { data: docsData } = await supabase
+        if (eventsError) {
+          console.error("Fehler beim Laden der Events:", eventsError);
+        }
+
+        const { data: docsData, error: docsError } = await supabase
           .from("portal_documents")
           .select("*")
           .eq("customer_id", customer.id)
           .order("created_at", { ascending: false });
 
-        let requestsData: BookingRequest[] | null = null;
-
-        if (user.email) {
-          const { data } = await supabase
-            .from("portal_requests")
-            .select("*")
-            .eq("email", user.email)
-            .order("created_at", { ascending: false });
-
-          requestsData = data;
+        if (docsError) {
+          console.error("Fehler beim Laden der Dokumente:", docsError);
         }
 
         if (eventsData) setEvents(eventsData);
         if (docsData) setDocuments(docsData);
-        if (requestsData) setRequests(requestsData);
 
         if (eventsData && eventsData.length > 0) {
-          const { data: timelineData } = await supabase
+          const { data: timelineData, error: timelineError } = await supabase
             .from("portal_timeline")
             .select("*")
             .eq("event_id", eventsData[0].id)
             .order("sort_order", { ascending: true });
 
+          if (timelineError) {
+            console.error("Fehler beim Laden der Timeline:", timelineError);
+          }
+
           if (timelineData) setTimeline(timelineData);
+        }
+      }
+
+      if (user.email) {
+        const { data: requestsData, error: requestsError } = await supabase
+          .from("portal_requests")
+          .select("*")
+          .eq("email", user.email)
+          .order("created_at", { ascending: false });
+
+        if (requestsError) {
+          console.error("Fehler beim Laden der Anfragen:", requestsError);
+        }
+
+        if (requestsData) {
+          setRequests(requestsData);
         }
       }
 
@@ -242,7 +271,7 @@ const Kundenportal = () => {
 
           {activeTab === "dashboard" && (
             <div className="space-y-8">
-              <div className="grid sm:grid-cols-4 gap-4">
+              <div className="grid sm:grid-cols-3 gap-4">
                 {[
                   {
                     label: "Aktive Events",
@@ -258,13 +287,6 @@ const Kundenportal = () => {
                     label: "Anfragen",
                     value: String(requests.length),
                     icon: MessageCircle,
-                  },
-                  {
-                    label: "Nächstes Event",
-                    value: events[0]?.event_date
-                      ? new Date(events[0].event_date).toLocaleDateString("de-DE")
-                      : "–",
-                    icon: Clock,
                   },
                 ].map((stat) => (
                   <div
@@ -322,15 +344,15 @@ const Kundenportal = () => {
                 </div>
               )}
 
-              {events.length === 0 && timeline.length === 0 && (
+              {events.length === 0 && requests.length === 0 && (
                 <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
                   <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
                   <h3 className="font-display text-lg font-bold text-foreground mb-2">
-                    Noch keine Events
+                    Noch keine Inhalte vorhanden
                   </h3>
                   <p className="font-sans text-sm text-muted-foreground mb-6">
-                    Nach Ihrer Anfrage oder Buchung werden hier Ihre Events und
-                    der aktuelle Status angezeigt.
+                    Nach Ihrer Anfrage oder Buchung erscheinen hier Ihre Anfragen,
+                    Events und Dokumente.
                   </p>
                   <Link to="/buchung" className="btn-primary inline-flex group">
                     Jetzt anfragen
@@ -451,9 +473,16 @@ const Kundenportal = () => {
                   >
                     <div className="flex flex-col gap-3">
                       <div>
-                        <h3 className="font-display text-lg font-bold text-foreground">
-                          {request.anlass || "Anfrage"}
-                        </h3>
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <h3 className="font-display text-lg font-bold text-foreground">
+                            {request.anlass || "Anfrage"}
+                          </h3>
+                          {request.status && (
+                            <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-muted-foreground bg-muted">
+                              {request.status}
+                            </span>
+                          )}
+                        </div>
                         <p className="font-sans text-xs text-muted-foreground mt-1">
                           Eingegangen am{" "}
                           {new Date(request.created_at).toLocaleDateString("de-DE")}
@@ -469,6 +498,7 @@ const Kundenportal = () => {
                         {request.ort && <span>📍 {request.ort}</span>}
                         {request.format && <span>🎭 {request.format}</span>}
                         {request.gaeste && <span>👥 {request.gaeste} Gäste</span>}
+                        {request.phone && <span>📞 {request.phone}</span>}
                       </div>
 
                       {request.nachricht && (
