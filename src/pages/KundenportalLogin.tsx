@@ -19,7 +19,8 @@ const KundenportalLogin = () => {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: window.location.origin + "/kundenportal",
+          // 🔥 FIX: Immer auf Live-Kundenportal weiterleiten
+          emailRedirectTo: "https://magicel.de/kundenportal",
         },
       });
 
