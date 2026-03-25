@@ -89,20 +89,15 @@ const FormSection = () => {
 
 const { data, error: fnError } = await supabase.functions.invoke(
   "create-portal-request",
-  { body: payload }
+  {
+    body: payload,
+  }
 );
 
 console.log("FUNCTION DONE", data, fnError);
-          headers: session?.access_token
-            ? {
-                Authorization: `Bearer ${session.access_token}`,
-              }
-            : undefined,
-        }
-      );
 
-      if (fnError) throw fnError;
-      if (data?.error) throw new Error(data.error);
+if (fnError) throw fnError;
+if (data?.error) throw new Error(data.error);
 
       const formspreeData = new FormData();
       formspreeData.append("_subject", "Neue Buchungsanfrage über Website");
