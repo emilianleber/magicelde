@@ -2,38 +2,27 @@ import { useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
 import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { supabase } from "@/integrations/supabase/client";
-import { Shield, Clock, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Shield, Clock, Star } from "lucide-react";
 
 const HeroBuchung = () => (
-  <section className="relative min-h-[50vh] flex flex-col justify-center overflow-hidden">
-    <div className="container px-6 pt-28 pb-8 md:pt-36 md:pb-12">
-      <div className="max-w-5xl mx-auto text-center">
-        <span className="badge-accent mb-8 inline-flex">Anfrage</span>
+  <section className="relative min-h-[50vh] flex flex-col justify-center">
+    <div className="container px-6 pt-28 pb-8 text-center">
+      <span className="badge-accent mb-6 inline-flex">Anfrage</span>
+      <h1 className="headline-hero mb-6">Jetzt anfragen.</h1>
+      <p className="max-w-xl mx-auto">
+        Erzähl mir von deinem Event — unverbindlich und kostenlos.
+      </p>
 
-        <h1 className="headline-hero mb-8 text-foreground">
-          Jetzt anfragen.
-        </h1>
-
-        <p className="text-body max-w-2xl mx-auto">
-          Erzähl mir von deinem Event — unverbindlich und kostenlos.
-          Ich melde mich innerhalb von 24 Stunden persönlich bei dir.
-        </p>
-
-        <div className="flex flex-wrap justify-center gap-8 mt-10">
-          {[
-            { icon: Shield, label: "100% unverbindlich" },
-            { icon: Clock, label: "Antwort in 24h" },
-            { icon: Star, label: "Kostenlose Beratung" },
-          ].map((item) => (
-            <div key={item.label} className="flex items-center gap-2">
-              <item.icon className="w-4 h-4 text-accent" />
-              <span className="text-sm text-muted-foreground">
-                {item.label}
-              </span>
-            </div>
-          ))}
+      <div className="flex justify-center gap-6 mt-8">
+        <div className="flex items-center gap-2">
+          <Shield size={16} /> 100% unverbindlich
+        </div>
+        <div className="flex items-center gap-2">
+          <Clock size={16} /> Antwort in 24h
+        </div>
+        <div className="flex items-center gap-2">
+          <Star size={16} /> Kostenlose Beratung
         </div>
       </div>
     </div>
@@ -48,8 +37,7 @@ const FormSection = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const inputCls =
-    "w-full rounded-2xl bg-muted/50 px-5 py-4 text-sm text-foreground";
+  const inputCls = "w-full p-4 rounded-xl border";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,88 +64,61 @@ const FormSection = () => {
     };
 
     try {
-      console.log("FUNCTION START");
+      console.log("SEND REQUEST", payload);
 
-      const { data, error: fnError } =
-        await supabase.functions.invoke("create-portal-request", {
-          body: payload,
+      const res = await fetch(
+        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/create-portal-request",
+        {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
           },
-        });
+          body: JSON.stringify(payload),
+        }
+      );
 
-      console.log("FUNCTION DONE", data, fnError);
+      const data = await res.json();
 
-      if (fnError) throw fnError;
-      if (data?.error) throw new Error(data.error);
+      console.log("RESPONSE:", data);
+
+      if (!res.ok) {
+        throw new Error(data.error || "Fehler bei Anfrage");
+      }
 
       form.reset();
+      setSuccess("Anfrage erfolgreich gesendet!");
 
-      setSuccess("Deine Anfrage wurde erfolgreich gesendet!");
-
-      setTimeout(() => {
-        navigate("/danke");
-      }, 1500);
+      setTimeout(() => navigate("/danke"), 1500);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Fehler beim Absenden");
+      setError(err.message);
     } finally {
       setSending(false);
     }
   };
 
   return (
-    <section className="section-large" ref={ref}>
-      <div className="container px-6">
-        <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid sm:grid-cols-2 gap-5">
-              <input
-                type="text"
-                name="name"
-                placeholder="Name *"
-                required
-                className={inputCls}
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="E-Mail *"
-                required
-                className={inputCls}
-              />
-            </div>
+    <section ref={ref} className="py-16">
+      <div className="container max-w-xl mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input name="name" placeholder="Name" required className={inputCls} />
+          <input name="email" placeholder="E-Mail" required className={inputCls} />
+          <input name="phone" placeholder="Telefon" className={inputCls} />
+          <input name="anlass" placeholder="Anlass" className={inputCls} />
+          <input name="datum" type="date" className={inputCls} />
+          <input name="ort" placeholder="Ort" className={inputCls} />
+          <input name="gaeste" type="number" placeholder="Gäste" className={inputCls} />
+          <input name="format" placeholder="Format" className={inputCls} />
+          <textarea name="nachricht" placeholder="Nachricht" className={inputCls} />
 
-            <div className="grid sm:grid-cols-2 gap-5">
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Telefon"
-                className={inputCls}
-              />
+          {error && <div style={{ color: "red" }}>{error}</div>}
+          {success && <div style={{ color: "green" }}>{success}</div>}
 
-              <select name="anlass" required className={inputCls}>
-                <option value="">Anlass *</option>
-                <option value="hochzeit">Hochzeit</option>
-                <option value="firmenfeier">Firmenfeier</option>
-                <option value="geburtstag">Geburtstag</option>
-              </select>
-            </div>
-
-            <textarea
-              name="nachricht"
-              placeholder="Nachricht"
-              className={inputCls}
-            />
-
-            {error && <div style={{ color: "red" }}>{error}</div>}
-            {success && <div style={{ color: "green" }}>{success}</div>}
-
-            <button type="submit" disabled={sending}>
-              {sending ? "Senden..." : "Anfrage absenden"}
-            </button>
-          </form>
-        </div>
+          <button type="submit" disabled={sending}>
+            {sending ? "Senden..." : "Anfrage senden"}
+          </button>
+        </form>
       </div>
     </section>
   );
