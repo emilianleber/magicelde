@@ -2,9 +2,9 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend";
 
-// 🔥 ENV korrekt verwenden
+// ENV
 const supabase = createClient(
-  Deno.env.get("PROJECT_URL")!, // bleibt so!
+  Deno.env.get("PROJECT_URL")!,
   Deno.env.get("SERVICE_ROLE_KEY")!
 );
 
@@ -22,7 +22,13 @@ serve(async (req) => {
   }
 
   try {
-    const body = await req.json();
+    let body: any = {};
+
+    try {
+      body = await req.json();
+    } catch (err) {
+      console.log("NO BODY RECEIVED", err);
+    }
 
     const {
       name,
@@ -40,7 +46,7 @@ serve(async (req) => {
       throw new Error("Name und Email fehlen");
     }
 
-    // 🔥 1. Anfrage speichern
+    // Anfrage speichern
     const { error: insertError } = await supabase
       .from("portal_requests")
       .insert({
@@ -58,23 +64,22 @@ serve(async (req) => {
         status: "neu",
       });
 
-    if (insertError) {
-      console.log("DB ERROR:", insertError);
-      throw insertError;
-    }
+    if (insertError) throw insertError;
 
-    // 🔥 2. MAIL SENDEN (DEBUG!)
-    const result = await resend.emails.send({
+    // Mail senden
+    const mailResult = await resend.emails.send({
       from: "Emilian Leber <el@magicel.de>",
-      to: "leberemilian@gmail.com", // 🔥 erstmal TEST auf deine Mail
-      subject: "TEST – Anfrage Magicel",
+      to: email,
+      subject: "Deine Anfrage bei Magicel",
       html: `
-        <h2>Test erfolgreich 🎉</h2>
-        <p>Wenn du das siehst, funktioniert dein Mail-System.</p>
+        <h2>Danke für deine Anfrage!</h2>
+        <p>Wir haben deine Anfrage erhalten.</p>
+        <p>👉 Kundenportal:</p>
+        <a href="https://magicel.de/kundenportal">Zum Portal</a>
       `,
     });
 
-    console.log("MAIL RESULT:", result);
+    console.log("MAIL RESULT:", mailResult);
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -82,7 +87,7 @@ serve(async (req) => {
     });
 
   } catch (err: any) {
-    console.log("ERROR:", err);
+    console.error("FUNCTION ERROR:", err);
 
     return new Response(JSON.stringify({ error: err.message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

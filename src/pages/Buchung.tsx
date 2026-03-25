@@ -10,26 +10,18 @@ const HeroBuchung = () => (
   <section className="relative min-h-[50vh] flex flex-col justify-center overflow-hidden">
     <div className="container px-6 pt-28 pb-8 md:pt-36 md:pb-12">
       <div className="max-w-5xl mx-auto text-center">
-        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-          <span className="badge-accent mb-8 inline-flex">Anfrage</span>
-        </div>
-        <h1
-          className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground"
-          style={{ animationDelay: "0.3s" }}
-        >
+        <span className="badge-accent mb-8 inline-flex">Anfrage</span>
+
+        <h1 className="headline-hero mb-8 text-foreground">
           Jetzt anfragen.
         </h1>
-        <p
-          className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.5s" }}
-        >
+
+        <p className="text-body max-w-2xl mx-auto">
           Erzähl mir von deinem Event — unverbindlich und kostenlos.
           Ich melde mich innerhalb von 24 Stunden persönlich bei dir.
         </p>
-        <div
-          className="flex flex-wrap justify-center gap-8 mt-10 opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.65s" }}
-        >
+
+        <div className="flex flex-wrap justify-center gap-8 mt-10">
           {[
             { icon: Shield, label: "100% unverbindlich" },
             { icon: Clock, label: "Antwort in 24h" },
@@ -37,7 +29,7 @@ const HeroBuchung = () => (
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-2">
               <item.icon className="w-4 h-4 text-accent" />
-              <span className="font-sans text-sm text-muted-foreground">
+              <span className="text-sm text-muted-foreground">
                 {item.label}
               </span>
             </div>
@@ -49,7 +41,7 @@ const HeroBuchung = () => (
 );
 
 const FormSection = () => {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref } = useScrollReveal();
   const navigate = useNavigate();
 
   const [sending, setSending] = useState(false);
@@ -57,10 +49,11 @@ const FormSection = () => {
   const [success, setSuccess] = useState("");
 
   const inputCls =
-    "w-full rounded-2xl bg-muted/50 border-0 px-5 py-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all";
+    "w-full rounded-2xl bg-muted/50 px-5 py-4 text-sm text-foreground";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setSending(true);
     setError("");
     setSuccess("");
@@ -75,64 +68,39 @@ const FormSection = () => {
       anlass: String(formData.get("anlass") || ""),
       datum: String(formData.get("datum") || ""),
       ort: String(formData.get("ort") || ""),
-      gaeste: formData.get("gaeste") ? Number(formData.get("gaeste")) : null,
+      gaeste: formData.get("gaeste")
+        ? Number(formData.get("gaeste"))
+        : null,
       format: String(formData.get("format") || ""),
       nachricht: String(formData.get("nachricht") || ""),
     };
 
     try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
       console.log("FUNCTION START");
 
-const { data, error: fnError } = await supabase.functions.invoke(
-  "create-portal-request",
-  {
-    body: payload,
-  }
-);
+      const { data, error: fnError } =
+        await supabase.functions.invoke("create-portal-request", {
+          body: payload,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-console.log("FUNCTION DONE", data, fnError);
+      console.log("FUNCTION DONE", data, fnError);
 
-if (fnError) throw fnError;
-if (data?.error) throw new Error(data.error);
-
-      const formspreeData = new FormData();
-      formspreeData.append("_subject", "Neue Buchungsanfrage über Website");
-      formspreeData.append("name", payload.name);
-      formspreeData.append("email", payload.email);
-      formspreeData.append("phone", payload.phone);
-      formspreeData.append("anlass", payload.anlass);
-      formspreeData.append("datum", payload.datum);
-      formspreeData.append("ort", payload.ort);
-      formspreeData.append("gaeste", payload.gaeste ? String(payload.gaeste) : "");
-      formspreeData.append("format", payload.format);
-      formspreeData.append("nachricht", payload.nachricht);
-
-      const formspreeResponse = await fetch("https://formspree.io/f/xwvrdbaw", {
-        method: "POST",
-        body: formspreeData,
-        headers: {
-          Accept: "application/json",
-        },
-      });
-
-      if (!formspreeResponse.ok) {
-        throw new Error("Die Anfrage konnte nicht per E-Mail versendet werden.");
-      }
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
 
       form.reset();
-      setSuccess(
-        "Deine Anfrage wurde erfolgreich gesendet. Außerdem haben wir dir einen Login-Link für dein Kundenportal per E-Mail geschickt."
-      );
+
+      setSuccess("Deine Anfrage wurde erfolgreich gesendet!");
 
       setTimeout(() => {
         navigate("/danke");
       }, 1500);
     } catch (err: any) {
-      setError(err.message || "Beim Absenden ist ein Fehler aufgetreten.");
+      console.error(err);
+      setError(err.message || "Fehler beim Absenden");
     } finally {
       setSending(false);
     }
@@ -141,9 +109,7 @@ if (data?.error) throw new Error(data.error);
   return (
     <section className="section-large" ref={ref}>
       <div className="container px-6">
-        <div
-          className={`max-w-2xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
-        >
+        <div className="max-w-2xl mx-auto">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid sm:grid-cols-2 gap-5">
               <input
@@ -166,91 +132,30 @@ if (data?.error) throw new Error(data.error);
               <input
                 type="tel"
                 name="phone"
-                placeholder="Telefon (optional)"
+                placeholder="Telefon"
                 className={inputCls}
               />
-              <select
-                name="anlass"
-                required
-                className={inputCls}
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Anlass wählen *
-                </option>
+
+              <select name="anlass" required className={inputCls}>
+                <option value="">Anlass *</option>
                 <option value="hochzeit">Hochzeit</option>
-                <option value="firmenfeier">Firmenfeier / Corporate Event</option>
-                <option value="geburtstag">Geburtstag / Private Feier</option>
-                <option value="gala">Gala / Awards</option>
-                <option value="messe">Messe / Promotion</option>
-                <option value="magic-dinner">Magic Dinner</option>
-                <option value="teamevent">Teamevent / Incentive</option>
-                <option value="sonstiges">Sonstiges</option>
-              </select>
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-5">
-              <input type="date" name="datum" className={inputCls} />
-              <input
-                type="text"
-                name="ort"
-                placeholder="Ort / Location"
-                className={inputCls}
-              />
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-5">
-              <input
-                type="number"
-                name="gaeste"
-                placeholder="Anzahl Gäste (ca.)"
-                min="1"
-                className={inputCls}
-              />
-              <select name="format" className={inputCls} defaultValue="">
-                <option value="" disabled>
-                  Gewünschtes Format
-                </option>
-                <option value="closeup">Close-Up Magie</option>
-                <option value="buehne">Bühnenshow</option>
-                <option value="walking">Walking Act</option>
-                <option value="dinner">Magic Dinner</option>
-                <option value="kombi">Kombination</option>
-                <option value="unsicher">Noch unsicher — berate mich</option>
+                <option value="firmenfeier">Firmenfeier</option>
+                <option value="geburtstag">Geburtstag</option>
               </select>
             </div>
 
             <textarea
               name="nachricht"
-              placeholder="Erzähl mir von deinem Event — was wünscht du dir? Was ist der Anlass? Gibt es besondere Vorstellungen?"
-              rows={5}
-              className={inputCls + " resize-none"}
+              placeholder="Nachricht"
+              className={inputCls}
             />
 
-            {error && (
-              <div className="rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                {error}
-              </div>
-            )}
+            {error && <div style={{ color: "red" }}>{error}</div>}
+            {success && <div style={{ color: "green" }}>{success}</div>}
 
-            {success && (
-              <div className="rounded-2xl bg-green-100 px-4 py-3 text-sm text-green-700">
-                {success}
-              </div>
-            )}
-
-            <div className="text-center pt-6">
-              <button
-                type="submit"
-                disabled={sending}
-                className="btn-primary btn-large w-full sm:w-auto disabled:opacity-60"
-              >
-                {sending ? "Wird gesendet…" : "Anfrage absenden"}
-              </button>
-              <p className="font-sans text-xs text-muted-foreground/40 mt-4 tracking-widest uppercase">
-                Kostenlos · Unverbindlich · Antwort innerhalb 24h
-              </p>
-            </div>
+            <button type="submit" disabled={sending}>
+              {sending ? "Senden..." : "Anfrage absenden"}
+            </button>
           </form>
         </div>
       </div>
