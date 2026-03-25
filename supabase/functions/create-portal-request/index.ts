@@ -2,9 +2,9 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend";
 
-// ENV
+// 🔥 ENV
 const supabase = createClient(
-  Deno.env.get("PROJECT_URL")!,
+  Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SERVICE_ROLE_KEY")!
 );
 
@@ -17,18 +17,22 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // 🔥 CORS
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
+    // 🔥 BODY SAFE PARSE
     let body: any = {};
 
     try {
       body = await req.json();
     } catch (err) {
-      console.log("NO BODY RECEIVED", err);
+      console.log("BODY ERROR:", err);
     }
+
+    console.log("BODY:", body);
 
     const {
       name,
@@ -46,7 +50,7 @@ serve(async (req) => {
       throw new Error("Name und Email fehlen");
     }
 
-    // Anfrage speichern
+    // 🔥 DB INSERT
     const { error: insertError } = await supabase
       .from("portal_requests")
       .insert({
@@ -64,34 +68,41 @@ serve(async (req) => {
         status: "neu",
       });
 
-    if (insertError) throw insertError;
+    if (insertError) {
+      console.log("DB ERROR:", insertError);
+      throw insertError;
+    }
 
-    // Mail senden
-    const mailResult = await resend.emails.send({
+    // 🔥 MAIL SENDEN
+    const mail = await resend.emails.send({
       from: "Emilian Leber <el@magicel.de>",
-      to: email,
-      subject: "Deine Anfrage bei Magicel",
+      to: "el@magicel.de",
+      subject: "Neue Anfrage",
       html: `
-        <h2>Danke für deine Anfrage!</h2>
-        <p>Wir haben deine Anfrage erhalten.</p>
-        <p>👉 Kundenportal:</p>
-        <a href="https://magicel.de/kundenportal">Zum Portal</a>
+        <h2>Neue Anfrage</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Nachricht:</strong> ${nachricht}</p>
       `,
     });
 
-    console.log("MAIL RESULT:", mailResult);
+    console.log("MAIL RESULT:", mail);
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
-
   } catch (err: any) {
-    console.error("FUNCTION ERROR:", err);
+    console.log("ERROR:", err);
 
-    return new Response(JSON.stringify({ error: err.message }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 500,
-    });
+    return new Response(
+      JSON.stringify({
+        error: err.message || "Unbekannter Fehler",
+      }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+      }
+    );
   }
 });

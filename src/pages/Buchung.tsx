@@ -9,18 +9,29 @@ const HeroBuchung = () => (
   <section className="relative min-h-[50vh] flex flex-col justify-center overflow-hidden">
     <div className="container px-6 pt-28 pb-8 md:pt-36 md:pb-12">
       <div className="max-w-5xl mx-auto text-center">
-        <span className="badge-accent mb-8 inline-flex">Anfrage</span>
+        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+          <span className="badge-accent mb-8 inline-flex">Anfrage</span>
+        </div>
 
-        <h1 className="headline-hero mb-8 text-foreground">
+        <h1
+          className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground"
+          style={{ animationDelay: "0.3s" }}
+        >
           Jetzt anfragen.
         </h1>
 
-        <p className="text-body max-w-2xl mx-auto">
+        <p
+          className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.5s" }}
+        >
           Erzähl mir von deinem Event — unverbindlich und kostenlos.
           Ich melde mich innerhalb von 24 Stunden persönlich bei dir.
         </p>
 
-        <div className="flex flex-wrap justify-center gap-8 mt-10">
+        <div
+          className="flex flex-wrap justify-center gap-8 mt-10 opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.65s" }}
+        >
           {[
             { icon: Shield, label: "100% unverbindlich" },
             { icon: Clock, label: "Antwort in 24h" },
@@ -66,23 +77,19 @@ const FormSection = () => {
       anlass: String(formData.get("anlass") || ""),
       datum: String(formData.get("datum") || ""),
       ort: String(formData.get("ort") || ""),
-      gaeste: formData.get("gaeste")
-        ? Number(formData.get("gaeste"))
-        : null,
+      gaeste: formData.get("gaeste") ? Number(formData.get("gaeste")) : null,
       format: String(formData.get("format") || ""),
       nachricht: String(formData.get("nachricht") || ""),
     };
 
     try {
-      console.log("SEND:", payload);
-
       const res = await fetch(
         "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/create-portal-request",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
           },
           body: JSON.stringify(payload),
         }
@@ -90,22 +97,19 @@ const FormSection = () => {
 
       const data = await res.json();
 
-      console.log("RESPONSE:", data);
-
       if (!res.ok) {
         throw new Error(data.error || "Fehler bei Anfrage");
       }
 
       form.reset();
       setSuccess(
-        "Deine Anfrage wurde erfolgreich gesendet. Wir melden uns bei dir."
+        "Deine Anfrage wurde erfolgreich gesendet. Wir haben dir außerdem eine E-Mail geschickt."
       );
 
       setTimeout(() => {
         navigate("/danke");
       }, 1500);
     } catch (err: any) {
-      console.error(err);
       setError(err.message || "Beim Absenden ist ein Fehler aufgetreten.");
     } finally {
       setSending(false);
@@ -122,37 +126,111 @@ const FormSection = () => {
         >
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid sm:grid-cols-2 gap-5">
-              <input name="name" placeholder="Name *" required className={inputCls} />
-              <input name="email" placeholder="E-Mail *" required className={inputCls} />
+              <input
+                type="text"
+                name="name"
+                placeholder="Name *"
+                required
+                className={inputCls}
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="E-Mail *"
+                required
+                className={inputCls}
+              />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-5">
-              <input name="phone" placeholder="Telefon" className={inputCls} />
-              <input name="anlass" placeholder="Anlass" className={inputCls} />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Telefon (optional)"
+                className={inputCls}
+              />
+              <select
+                name="anlass"
+                required
+                className={inputCls}
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Anlass wählen *
+                </option>
+                <option value="hochzeit">Hochzeit</option>
+                <option value="firmenfeier">Firmenfeier / Corporate Event</option>
+                <option value="geburtstag">Geburtstag / Private Feier</option>
+                <option value="gala">Gala / Awards</option>
+                <option value="messe">Messe / Promotion</option>
+                <option value="magic-dinner">Magic Dinner</option>
+                <option value="teamevent">Teamevent / Incentive</option>
+                <option value="sonstiges">Sonstiges</option>
+              </select>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-5">
+              <input type="date" name="datum" className={inputCls} />
+              <input
+                type="text"
+                name="ort"
+                placeholder="Ort / Location"
+                className={inputCls}
+              />
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-5">
+              <input
+                type="number"
+                name="gaeste"
+                placeholder="Anzahl Gäste (ca.)"
+                min="1"
+                className={inputCls}
+              />
+              <select name="format" className={inputCls} defaultValue="">
+                <option value="" disabled>
+                  Gewünschtes Format
+                </option>
+                <option value="closeup">Close-Up Magie</option>
+                <option value="buehne">Bühnenshow</option>
+                <option value="walking">Walking Act</option>
+                <option value="dinner">Magic Dinner</option>
+                <option value="kombi">Kombination</option>
+                <option value="unsicher">Noch unsicher — berate mich</option>
+              </select>
             </div>
 
             <textarea
               name="nachricht"
-              placeholder="Nachricht"
+              placeholder="Erzähl mir von deinem Event — was wünscht du dir? Was ist der Anlass? Gibt es besondere Vorstellungen?"
               rows={5}
               className={inputCls + " resize-none"}
             />
 
             {error && (
-              <div className="text-red-500 text-sm">{error}</div>
+              <div className="rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                {error}
+              </div>
             )}
 
             {success && (
-              <div className="text-green-600 text-sm">{success}</div>
+              <div className="rounded-2xl bg-green-100 px-4 py-3 text-sm text-green-700">
+                {success}
+              </div>
             )}
 
-            <button
-              type="submit"
-              disabled={sending}
-              className="btn-primary w-full"
-            >
-              {sending ? "Wird gesendet…" : "Anfrage absenden"}
-            </button>
+            <div className="text-center pt-6">
+              <button
+                type="submit"
+                disabled={sending}
+                className="btn-primary btn-large w-full sm:w-auto disabled:opacity-60"
+              >
+                {sending ? "Wird gesendet…" : "Anfrage absenden"}
+              </button>
+              <p className="font-sans text-xs text-muted-foreground/40 mt-4 tracking-widest uppercase">
+                Kostenlos · Unverbindlich · Antwort innerhalb 24h
+              </p>
+            </div>
           </form>
         </div>
       </div>
