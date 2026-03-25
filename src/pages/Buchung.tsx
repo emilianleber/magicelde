@@ -54,6 +54,7 @@ const FormSection = () => {
 
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const inputCls =
     "w-full rounded-2xl bg-muted/50 border-0 px-5 py-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all";
@@ -62,68 +63,58 @@ const FormSection = () => {
     e.preventDefault();
     setSending(true);
     setError("");
+    setSuccess("");
 
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    const name = String(formData.get("name") || "");
-    const email = String(formData.get("email") || "");
-    const phone = String(formData.get("phone") || "");
-    const anlass = String(formData.get("anlass") || "");
-    const datum = String(formData.get("datum") || "");
-    const ort = String(formData.get("ort") || "");
-    const gaesteRaw = String(formData.get("gaeste") || "");
-    const format = String(formData.get("format") || "");
-    const nachricht = String(formData.get("nachricht") || "");
-
-    const gaeste = gaesteRaw ? Number(gaesteRaw) : null;
+    const payload = {
+      name: String(formData.get("name") || ""),
+      email: String(formData.get("email") || ""),
+      phone: String(formData.get("phone") || ""),
+      anlass: String(formData.get("anlass") || ""),
+      datum: String(formData.get("datum") || ""),
+      ort: String(formData.get("ort") || ""),
+      gaeste: formData.get("gaeste") ? Number(formData.get("gaeste")) : null,
+      format: String(formData.get("format") || ""),
+      nachricht: String(formData.get("nachricht") || ""),
+    };
 
     try {
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
+        data: { session },
+      } = await supabase.auth.getSession();
 
-      let customerId: string | null = null;
+      console.log("FUNCTION START");
 
-      if (user) {
-        const { data: customer, error: customerError } = await supabase
-          .from("portal_customers")
-          .select("id")
-          .eq("user_id", user.id)
-          .maybeSingle();
+const { data, error: fnError } = await supabase.functions.invoke(
+  "create-portal-request",
+  { body: payload }
+);
 
-        if (customerError) throw customerError;
-        customerId = customer?.id ?? null;
-      }
+console.log("FUNCTION DONE", data, fnError);
+          headers: session?.access_token
+            ? {
+                Authorization: `Bearer ${session.access_token}`,
+              }
+            : undefined,
+        }
+      );
 
-      const { error: requestError } = await supabase.from("portal_requests").insert({
-        user_id: user?.id ?? null,
-        customer_id: customerId,
-        name,
-        email,
-        phone: phone || null,
-        anlass: anlass || null,
-        datum: datum || null,
-        ort: ort || null,
-        gaeste,
-        format: format || null,
-        nachricht: nachricht || null,
-        status: "neu",
-      });
-
-      if (requestError) throw requestError;
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
 
       const formspreeData = new FormData();
       formspreeData.append("_subject", "Neue Buchungsanfrage über Website");
-      formspreeData.append("name", name);
-      formspreeData.append("email", email);
-      formspreeData.append("phone", phone);
-      formspreeData.append("anlass", anlass);
-      formspreeData.append("datum", datum);
-      formspreeData.append("ort", ort);
-      formspreeData.append("gaeste", gaesteRaw);
-      formspreeData.append("format", format);
-      formspreeData.append("nachricht", nachricht);
+      formspreeData.append("name", payload.name);
+      formspreeData.append("email", payload.email);
+      formspreeData.append("phone", payload.phone);
+      formspreeData.append("anlass", payload.anlass);
+      formspreeData.append("datum", payload.datum);
+      formspreeData.append("ort", payload.ort);
+      formspreeData.append("gaeste", payload.gaeste ? String(payload.gaeste) : "");
+      formspreeData.append("format", payload.format);
+      formspreeData.append("nachricht", payload.nachricht);
 
       const formspreeResponse = await fetch("https://formspree.io/f/xwvrdbaw", {
         method: "POST",
@@ -138,7 +129,13 @@ const FormSection = () => {
       }
 
       form.reset();
-      navigate("/danke");
+      setSuccess(
+        "Deine Anfrage wurde erfolgreich gesendet. Außerdem haben wir dir einen Login-Link für dein Kundenportal per E-Mail geschickt."
+      );
+
+      setTimeout(() => {
+        navigate("/danke");
+      }, 1500);
     } catch (err: any) {
       setError(err.message || "Beim Absenden ist ein Fehler aufgetreten.");
     } finally {
@@ -238,6 +235,12 @@ const FormSection = () => {
             {error && (
               <div className="rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
                 {error}
+              </div>
+            )}
+
+            {success && (
+              <div className="rounded-2xl bg-green-100 px-4 py-3 text-sm text-green-700">
+                {success}
               </div>
             )}
 
