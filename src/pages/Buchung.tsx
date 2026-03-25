@@ -83,6 +83,7 @@ const FormSection = () => {
     };
 
     try {
+console.log("PUB KEY:", import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY);
       const res = await fetch(
         "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/create-portal-request",
         {
