@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -36,12 +36,56 @@ interface PortalRequest {
 const statusOptions = [
   { value: "neu", label: "Neu" },
   { value: "in_bearbeitung", label: "In Bearbeitung" },
+  { value: "details_besprechen", label: "Details besprechen" },
   { value: "angebot_gesendet", label: "Angebot gesendet" },
   { value: "warte_auf_kunde", label: "Warte auf Kunde" },
   { value: "bestätigt", label: "Bestätigt" },
   { value: "abgelehnt", label: "Abgelehnt" },
   { value: "archiviert", label: "Archiviert" },
 ];
+
+const formatStatusLabel = (status?: string | null) => {
+  switch (status) {
+    case "neu":
+      return "Neu";
+    case "in_bearbeitung":
+      return "In Bearbeitung";
+    case "details_besprechen":
+      return "Details besprechen";
+    case "angebot_gesendet":
+      return "Angebot gesendet";
+    case "warte_auf_kunde":
+      return "Warte auf Kunde";
+    case "bestätigt":
+      return "Bestätigt";
+    case "abgelehnt":
+      return "Abgelehnt";
+    case "archiviert":
+      return "Archiviert";
+    default:
+      return status || "Offen";
+  }
+};
+
+const formatStatusClasses = (status?: string | null) => {
+  switch (status) {
+    case "neu":
+      return "text-accent bg-accent/10";
+    case "in_bearbeitung":
+    case "details_besprechen":
+    case "angebot_gesendet":
+    case "warte_auf_kunde":
+      return "text-foreground bg-muted";
+    case "bestätigt":
+      return "text-green-700 bg-green-100";
+    case "abgelehnt":
+      return "text-destructive bg-destructive/10";
+    case "archiviert":
+      return "text-muted-foreground bg-muted";
+    default:
+      return "text-muted-foreground bg-muted";
+  }
+};
 
 const AdminRequestDetail = () => {
   const navigate = useNavigate();
@@ -59,14 +103,15 @@ const AdminRequestDetail = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const { data: { subscription } } =
-      supabase.auth.onAuthStateChange((_event, session) => {
-        if (!session) {
-          navigate("/kundenportal/login");
-          return;
-        }
-        setUser(session.user);
-      });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        navigate("/kundenportal/login");
+        return;
+      }
+      setUser(session.user);
+    });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
@@ -99,13 +144,15 @@ const AdminRequestDetail = () => {
 
       setIsAdmin(true);
 
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("portal_requests")
         .select("*")
         .eq("id", id)
         .single();
 
-      if (data) {
+      if (error) {
+        console.error("Fehler beim Laden der Anfrage:", error);
+      } else if (data) {
         setRequest(data);
         setStatus(data.status || "neu");
         setInternalNotes(data.notizen_intern || "");
@@ -115,19 +162,23 @@ const AdminRequestDetail = () => {
     };
 
     loadData();
-  }, [user, id]);
+  }, [user, id, navigate]);
 
   const logout = async () => {
     await supabase.auth.signOut();
     navigate("/kundenportal/login");
   };
 
-  // 🔥 MAIL FUNCTION
   const sendStatusMail = async (recordId: string) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.access_token) return;
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    await fetch(
+    if (!session?.access_token) {
+      throw new Error("Keine Session vorhanden.");
+    }
+
+    const response = await fetch(
       "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail",
       {
         method: "POST",
@@ -142,9 +193,15 @@ const AdminRequestDetail = () => {
         }),
       }
     );
+
+    const data = await response.json().catch(() => null);
+    console.log("REQUEST STATUS MAIL RESPONSE:", response.status, data);
+
+    if (!response.ok) {
+      throw new Error(data?.error || "Mail konnte nicht gesendet werden.");
+    }
   };
 
-  // 💾 SAVE
   const saveChanges = async () => {
     if (!request) return;
 
@@ -162,25 +219,37 @@ const AdminRequestDetail = () => {
       .eq("id", request.id);
 
     if (error) {
+      console.error("Fehler beim Speichern:", error);
       setMessage("Fehler beim Speichern.");
-    } else {
-      setRequest({
-        ...request,
-        status,
-        notizen_intern: internalNotes,
-      });
+      setSaving(false);
+      return;
+    }
 
-      setMessage("Gespeichert.");
+    const updatedRequest = {
+      ...request,
+      status,
+      notizen_intern: internalNotes,
+    };
 
-      if (previousStatus !== status) {
+    setRequest(updatedRequest);
+
+    if (previousStatus !== status) {
+      try {
         await sendStatusMail(request.id);
+        setMessage("Gespeichert und Mail versendet.");
+      } catch (mailErr: any) {
+        console.error("REQUEST STATUS MAIL ERROR:", mailErr);
+        setMessage(
+          `Gespeichert, aber Mail fehlgeschlagen: ${mailErr?.message || "Unbekannter Fehler"}`
+        );
       }
+    } else {
+      setMessage("Gespeichert.");
     }
 
     setSaving(false);
   };
 
-  // 🚀 CONVERT
   const convertToEvent = async () => {
     if (!request) return;
 
@@ -197,7 +266,7 @@ const AdminRequestDetail = () => {
       let customerId = customer?.id;
 
       if (!customerId) {
-        const { data: newCustomer } = await supabase
+        const { data: newCustomer, error: newCustomerError } = await supabase
           .from("portal_customers")
           .insert({
             name: request.name,
@@ -206,25 +275,34 @@ const AdminRequestDetail = () => {
           .select("*")
           .single();
 
+        if (newCustomerError) throw newCustomerError;
         customerId = newCustomer.id;
       }
 
-      const { data: newEvent } = await supabase
+      const safeTitle = request.anlass?.trim() || "Event";
+      const safeEventDate = request.datum?.trim() ? request.datum : null;
+      const safeLocation = request.ort?.trim() || null;
+      const safeFormat = request.format?.trim() || null;
+      const safeGuests = request.gaeste ?? null;
+
+      const { data: newEvent, error: eventError } = await supabase
         .from("portal_events")
         .insert({
           customer_id: customerId,
-          title: request.anlass || "Event",
-          event_date: request.datum,
-          location: request.ort,
-          guests: request.gaeste,
-          format: request.format,
-          status: "in_planung",
           request_id: request.id,
+          title: safeTitle,
+          event_date: safeEventDate,
+          location: safeLocation,
+          status: "in_planung",
+          format: safeFormat,
+          guests: safeGuests,
         })
         .select("*")
         .single();
 
-      await supabase
+      if (eventError) throw eventError;
+
+      const { error: updateRequestError } = await supabase
         .from("portal_requests")
         .update({
           event_id: newEvent.id,
@@ -232,59 +310,303 @@ const AdminRequestDetail = () => {
         })
         .eq("id", request.id);
 
-      setRequest({
+      if (updateRequestError) throw updateRequestError;
+
+      const updatedRequest = {
         ...request,
         event_id: newEvent.id,
         status: "bestätigt",
-      });
+      };
 
-      await sendStatusMail(request.id);
+      setRequest(updatedRequest);
+      setStatus("bestätigt");
 
-      setMessage("Event erstellt 🎉");
-    } catch (err) {
-      console.error(err);
-      setMessage("Fehler beim Konvertieren.");
+      try {
+        await sendStatusMail(request.id);
+        setMessage("Event erstellt und Mail versendet.");
+      } catch (mailErr: any) {
+        console.error("REQUEST STATUS MAIL ERROR AFTER CONVERT:", mailErr);
+        setMessage(
+          `Event erstellt, aber Mail fehlgeschlagen: ${mailErr?.message || "Unbekannter Fehler"}`
+        );
+      }
+    } catch (err: any) {
+      console.error("CONVERT ERROR:", err);
+      setMessage(`Fehler beim Konvertieren: ${err?.message || "Unbekannter Fehler"}`);
     }
 
     setConverting(false);
   };
 
-  if (loading || isAdmin === null) return <div>Loading...</div>;
-  if (!isAdmin) return <div>Kein Zugriff</div>;
+  if (loading) {
+    return (
+      <PageLayout>
+        <section className="min-h-screen pt-28 pb-16 flex items-center justify-center">
+          <div className="animate-pulse text-muted-foreground font-sans">
+            Wird geladen…
+          </div>
+        </section>
+      </PageLayout>
+    );
+  }
+
+  if (isAdmin === false) {
+    return (
+      <PageLayout>
+        <section className="min-h-screen pt-28 pb-16">
+          <div className="container px-6 max-w-3xl mx-auto">
+            <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
+              <h1 className="font-display text-2xl font-bold text-foreground mb-3">
+                Kein Zugriff
+              </h1>
+              <p className="font-sans text-sm text-muted-foreground">
+                Dein Account ist nicht als Admin freigegeben.
+              </p>
+            </div>
+          </div>
+        </section>
+      </PageLayout>
+    );
+  }
+
+  if (!request) {
+    return (
+      <PageLayout>
+        <section className="min-h-screen pt-28 pb-16">
+          <div className="container px-6 max-w-3xl mx-auto">
+            <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
+              <h1 className="font-display text-2xl font-bold text-foreground mb-3">
+                Anfrage nicht gefunden
+              </h1>
+            </div>
+          </div>
+        </section>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout>
-      <div className="p-10 max-w-3xl mx-auto space-y-6">
-        <button onClick={() => navigate(-1)}>← Zurück</button>
+      <section className="min-h-screen pt-28 pb-16">
+        <div className="container px-6 max-w-5xl mx-auto">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+            <div>
+              <Link
+                to="/admin/requests"
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-3"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Zurück zur Übersicht
+              </Link>
 
-        <h1 className="text-2xl font-bold">{request?.anlass}</h1>
+              <p className="font-sans text-xs text-muted-foreground uppercase tracking-widest mb-1">
+                Admin / CRM
+              </p>
+              <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                Anfrage von {request.name}
+              </h1>
+              <p className="font-sans text-sm text-muted-foreground mt-1">
+                Eingegangen am{" "}
+                {new Date(request.created_at).toLocaleDateString("de-DE")}
+              </p>
+            </div>
 
-        <select value={status} onChange={(e) => setStatus(e.target.value)}>
-          {statusOptions.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label}
-            </option>
-          ))}
-        </select>
+            <button
+              onClick={logout}
+              className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <LogOut className="w-4 h-4" /> Abmelden
+            </button>
+          </div>
 
-        <textarea
-          value={internalNotes}
-          onChange={(e) => setInternalNotes(e.target.value)}
-          placeholder="Interne Notizen"
-        />
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
+            <div className="space-y-6">
+              <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+                <h2 className="font-display text-lg font-bold text-foreground mb-5">
+                  Anfrage-Details
+                </h2>
 
-        <button onClick={saveChanges}>
-          <Save /> Speichern
-        </button>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                      Name
+                    </p>
+                    <p className="font-sans text-sm text-foreground font-medium">
+                      {request.name}
+                    </p>
+                  </div>
 
-        {!request?.event_id && (
-          <button onClick={convertToEvent}>
-            <Sparkles /> Zu Event konvertieren
-          </button>
-        )}
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                      E-Mail
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-accent" />
+                      <p className="font-sans text-sm text-foreground">{request.email}</p>
+                    </div>
+                  </div>
 
-        {message && <p>{message}</p>}
-      </div>
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                      Telefon
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-accent" />
+                      <p className="font-sans text-sm text-foreground">
+                        {request.phone || "Nicht angegeben"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                      Anlass
+                    </p>
+                    <p className="font-sans text-sm text-foreground">
+                      {request.anlass || "Nicht angegeben"}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                      Datum
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-accent" />
+                      <p className="font-sans text-sm text-foreground">
+                        {request.datum
+                          ? new Date(request.datum).toLocaleDateString("de-DE")
+                          : "Nicht angegeben"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                      Ort
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-accent" />
+                      <p className="font-sans text-sm text-foreground">
+                        {request.ort || "Nicht angegeben"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                      Gäste
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-accent" />
+                      <p className="font-sans text-sm text-foreground">
+                        {request.gaeste ?? "Nicht angegeben"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                      Format
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Theater className="w-4 h-4 text-accent" />
+                      <p className="font-sans text-sm text-foreground">
+                        {request.format || "Nicht angegeben"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 rounded-xl bg-background/60 border border-border/20 p-4">
+                  <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    Nachricht
+                  </p>
+                  <p className="font-sans text-sm text-foreground leading-relaxed whitespace-pre-line">
+                    {request.nachricht || "Keine zusätzliche Nachricht angegeben."}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+                <h2 className="font-display text-lg font-bold text-foreground mb-5">
+                  Bearbeitung
+                </h2>
+
+                <div className="space-y-5">
+                  <div>
+                    <label className="block font-sans text-sm font-medium text-foreground mb-2">
+                      Status
+                    </label>
+                    <select
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
+                      className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/20"
+                    >
+                      {statusOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+
+                    <div className="mt-3">
+                      <span
+                        className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatStatusClasses(
+                          request.status
+                        )}`}
+                      >
+                        Aktuell: {formatStatusLabel(request.status)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-sans text-sm font-medium text-foreground mb-2">
+                      Interne Notizen
+                    </label>
+                    <textarea
+                      value={internalNotes}
+                      onChange={(e) => setInternalNotes(e.target.value)}
+                      rows={8}
+                      placeholder="Hier kannst du interne Informationen, Rückrufe, Absprachen oder nächste Schritte festhalten …"
+                      className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20 resize-none"
+                    />
+                  </div>
+
+                  {message && (
+                    <div className="rounded-xl bg-accent/10 text-accent px-4 py-3 text-sm">
+                      {message}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={saveChanges}
+                    disabled={saving}
+                    className="btn-primary w-full justify-center disabled:opacity-60"
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    {saving ? "Speichert…" : "Änderungen speichern"}
+                  </button>
+
+                  {!request.event_id && (
+                    <button
+                      onClick={convertToEvent}
+                      disabled={converting}
+                      className="w-full inline-flex items-center justify-center rounded-xl border border-border/30 bg-background/60 px-4 py-3 text-sm font-medium text-foreground hover:bg-muted/40 transition-colors disabled:opacity-50"
+                    >
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      {converting ? "Konvertiert…" : "Zu Event konvertieren"}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </PageLayout>
   );
 };
