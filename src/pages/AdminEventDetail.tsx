@@ -1,53 +1,43 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowLeft,
-  Calendar,
-  LogOut,
-  MapPin,
   Save,
-  Theater,
-  Users,
+  LogOut,
+  Sparkles,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
-interface PortalEvent {
+interface PortalRequest {
   id: string;
-  title: string;
-  event_date: string | null;
-  location: string | null;
+  created_at: string;
   status: string | null;
+  name: string;
+  email: string;
+  phone: string | null;
+  anlass: string | null;
+  datum: string | null;
+  ort: string | null;
+  gaeste: number | null;
   format: string | null;
-  guests: number | null;
-  request_id?: string | null;
-  customer_id?: string | null;
-  details_status?: string | null;
-  contract_status?: string | null;
-  invoice_status?: string | null;
-  notes?: string | null;
-  created_at?: string | null;
+  nachricht: string | null;
+  notizen_intern: string | null;
+  event_id?: string | null;
 }
 
-const eventStatusOptions = [
-  { value: "in_planung", label: "In Planung" },
-  { value: "details_offen", label: "Details offen" },
-  { value: "vertrag_gesendet", label: "Vertrag gesendet" },
-  { value: "vertrag_bestaetigt", label: "Vertrag bestätigt" },
-  { value: "rechnung_gesendet", label: "Rechnung gesendet" },
-  { value: "rechnung_bezahlt", label: "Rechnung bezahlt" },
-  { value: "event_erfolgt", label: "Event erfolgt" },
-  { value: "storniert", label: "Storniert" },
-];
-
-const simpleStatusOptions = [
-  { value: "offen", label: "Offen" },
+const statusOptions = [
+  { value: "neu", label: "Neu" },
   { value: "in_bearbeitung", label: "In Bearbeitung" },
-  { value: "erledigt", label: "Erledigt" },
+  { value: "angebot_gesendet", label: "Angebot gesendet" },
+  { value: "warte_auf_kunde", label: "Warte auf Kunde" },
+  { value: "bestätigt", label: "Bestätigt" },
+  { value: "abgelehnt", label: "Abgelehnt" },
+  { value: "archiviert", label: "Archiviert" },
 ];
 
-const AdminEventDetail = () => {
+const AdminRequestDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -55,25 +45,22 @@ const AdminEventDetail = () => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [converting, setConverting] = useState(false);
 
-  const [event, setEvent] = useState<PortalEvent | null>(null);
-  const [status, setStatus] = useState("in_planung");
-  const [detailsStatus, setDetailsStatus] = useState("offen");
-  const [contractStatus, setContractStatus] = useState("offen");
-  const [invoiceStatus, setInvoiceStatus] = useState("offen");
-    const [notes, setNotes] = useState("");
+  const [request, setRequest] = useState<PortalRequest | null>(null);
+  const [status, setStatus] = useState("neu");
+  const [internalNotes, setInternalNotes] = useState("");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        navigate("/kundenportal/login");
-        return;
-      }
-      setUser(session.user);
-    });
+    const { data: { subscription } } =
+      supabase.auth.onAuthStateChange((_event, session) => {
+        if (!session) {
+          navigate("/kundenportal/login");
+          return;
+        }
+        setUser(session.user);
+      });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
@@ -106,191 +93,219 @@ const AdminEventDetail = () => {
 
       setIsAdmin(true);
 
-      const { data, error } = await supabase
-        .from("portal_events")
+      const { data } = await supabase
+        .from("portal_requests")
         .select("*")
         .eq("id", id)
         .single();
 
-      if (error) {
-        console.error(error);
-      } else {
-        setEvent(data);
-        setStatus(data.status || "in_planung");
-        setDetailsStatus(data.details_status || "offen");
-        setContractStatus(data.contract_status || "offen");
-        setInvoiceStatus(data.invoice_status || "offen");
-        setNotes(data.notes || "");
+      if (data) {
+        setRequest(data);
+        setStatus(data.status || "neu");
+        setInternalNotes(data.notizen_intern || "");
       }
 
       setLoading(false);
     };
 
     loadData();
-  }, [user, id, navigate]);
+  }, [user, id]);
 
   const logout = async () => {
     await supabase.auth.signOut();
     navigate("/kundenportal/login");
   };
 
+  // 🔥 DEBUG MAIL FUNCTION
+  const sendStatusMail = async (recordId: string) => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session?.access_token) {
+      throw new Error("Keine Session vorhanden.");
+    }
+
+    const response = await fetch(
+      "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          type: "request",
+          recordId,
+        }),
+      }
+    );
+
+    const data = await response.json().catch(() => null);
+
+    console.log("MAIL RESPONSE:", response.status, data);
+
+    if (!response.ok) {
+      throw new Error(data?.error || "Mail konnte nicht gesendet werden.");
+    }
+
+    return data;
+  };
+
+  // 💾 SAVE
   const saveChanges = async () => {
-    if (!event) return;
+    if (!request) return;
 
     setSaving(true);
     setMessage("");
 
+    const previousStatus = request.status;
+
     const { error } = await supabase
-      .from("portal_events")
+      .from("portal_requests")
       .update({
         status,
-        details_status: detailsStatus,
-        contract_status: contractStatus,
-        invoice_status: invoiceStatus,
-        notes,
+        notizen_intern: internalNotes,
       })
-      .eq("id", event.id);
+      .eq("id", request.id);
 
     if (error) {
-      console.error(error);
       setMessage("Fehler beim Speichern.");
     } else {
-      setEvent({
-        ...event,
+      setRequest({
+        ...request,
         status,
-        details_status: detailsStatus,
-        contract_status: contractStatus,
-        invoice_status: invoiceStatus,
-        notes,
+        notizen_intern: internalNotes,
       });
-      setMessage("Gespeichert.");
+
+      if (previousStatus !== status) {
+        try {
+          await sendStatusMail(request.id);
+          setMessage("Gespeichert und Mail versendet.");
+        } catch (err: any) {
+          console.error(err);
+          setMessage(
+            `Gespeichert, aber Mail fehlgeschlagen: ${err.message}`
+          );
+        }
+      } else {
+        setMessage("Gespeichert.");
+      }
     }
 
     setSaving(false);
   };
 
-  if (loading) {
-    return (
-      <PageLayout>
-        <section className="min-h-screen pt-28 pb-16 flex items-center justify-center">
-          Wird geladen…
-        </section>
-      </PageLayout>
-    );
-  }
+  // 🚀 CONVERT
+  const convertToEvent = async () => {
+    if (!request) return;
 
-  if (isAdmin === false) {
-    return (
-      <PageLayout>
-        <section className="min-h-screen pt-28 pb-16 text-center">
-          Kein Zugriff
-        </section>
-      </PageLayout>
-    );
-  }
+    setConverting(true);
+    setMessage("");
 
-  if (!event) {
-    return (
-      <PageLayout>
-        <section className="min-h-screen pt-28 pb-16 text-center">
-          Event nicht gefunden
-        </section>
-      </PageLayout>
-    );
-  }
+    try {
+      const { data: customer } = await supabase
+        .from("portal_customers")
+        .select("*")
+        .eq("email", request.email)
+        .maybeSingle();
+
+      let customerId = customer?.id;
+
+      if (!customerId) {
+        const { data: newCustomer } = await supabase
+          .from("portal_customers")
+          .insert({
+            name: request.name,
+            email: request.email,
+          })
+          .select("*")
+          .single();
+
+        customerId = newCustomer.id;
+      }
+
+      const { data: newEvent } = await supabase
+        .from("portal_events")
+        .insert({
+          customer_id: customerId,
+          title: request.anlass || "Event",
+          event_date: request.datum,
+          location: request.ort,
+          guests: request.gaeste,
+          format: request.format,
+          status: "in_planung",
+          request_id: request.id,
+        })
+        .select("*")
+        .single();
+
+      await supabase
+        .from("portal_requests")
+        .update({
+          event_id: newEvent.id,
+          status: "bestätigt",
+        })
+        .eq("id", request.id);
+
+      await sendStatusMail(request.id);
+
+      setRequest({
+        ...request,
+        event_id: newEvent.id,
+        status: "bestätigt",
+      });
+
+      setMessage("Event erstellt und Mail versendet 🎉");
+    } catch (err: any) {
+      console.error(err);
+      setMessage(`Fehler: ${err.message}`);
+    }
+
+    setConverting(false);
+  };
+
+  if (loading || isAdmin === null) return <div>Loading...</div>;
+  if (!isAdmin) return <div>Kein Zugriff</div>;
 
   return (
     <PageLayout>
-      <section className="min-h-screen pt-28 pb-16">
-        <div className="container px-6 max-w-5xl mx-auto">
+      <div className="p-10 max-w-3xl mx-auto space-y-6">
+        <button onClick={() => navigate(-1)}>
+          <ArrowLeft /> Zurück
+        </button>
 
-          <Link to="/admin/events" className="flex items-center gap-2 text-sm mb-6">
-            <ArrowLeft className="w-4 h-4" /> Zurück
-          </Link>
+        <h1 className="text-2xl font-bold">{request?.anlass}</h1>
 
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold">{event.title}</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              {event.event_date
-                ? new Date(event.event_date).toLocaleDateString("de-DE")
-                : "Kein Datum"}{" "}
-              {event.location ? `· ${event.location}` : ""}
-            </p>
-          </div>
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          {statusOptions.map((s) => (
+            <option key={s.value} value={s.value}>
+              {s.label}
+            </option>
+          ))}
+        </select>
 
-          <div className="grid md:grid-cols-2 gap-6">
+        <textarea
+          value={internalNotes}
+          onChange={(e) => setInternalNotes(e.target.value)}
+          placeholder="Interne Notizen"
+        />
 
-            {/* LEFT */}
-            <div className="space-y-4">
-              <p><Calendar className="inline w-4 h-4 mr-2" />{event.event_date || "-"}</p>
-              <p><MapPin className="inline w-4 h-4 mr-2" />{event.location || "-"}</p>
-              <p><Theater className="inline w-4 h-4 mr-2" />{event.format || "-"}</p>
-              <p><Users className="inline w-4 h-4 mr-2" />{event.guests || "-"}</p>
-            </div>
+        <button onClick={saveChanges}>
+          <Save /> Speichern
+        </button>
 
-            {/* RIGHT */}
-            <div className="space-y-4">
+        {!request?.event_id && (
+          <button onClick={convertToEvent}>
+            <Sparkles /> Zu Event konvertieren
+          </button>
+        )}
 
-              <div>
-                <label>Status</label>
-                <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                  {eventStatusOptions.map((s) => (
-                    <option key={s.value} value={s.value}>{s.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label>Details</label>
-                <select value={detailsStatus} onChange={(e) => setDetailsStatus(e.target.value)}>
-                  {simpleStatusOptions.map((s) => (
-                    <option key={s.value} value={s.value}>{s.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label>Vertrag</label>
-                <select value={contractStatus} onChange={(e) => setContractStatus(e.target.value)}>
-                  {simpleStatusOptions.map((s) => (
-                    <option key={s.value} value={s.value}>{s.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label>Rechnung</label>
-                <select value={invoiceStatus} onChange={(e) => setInvoiceStatus(e.target.value)}>
-                  {simpleStatusOptions.map((s) => (
-                    <option key={s.value} value={s.value}>{s.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label>Notizen</label>
-                <textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  rows={5}
-                />
-              </div>
-
-              <button onClick={saveChanges} className="btn-primary">
-                <Save className="w-4 h-4 mr-2" />
-                {saving ? "Speichert…" : "Speichern"}
-              </button>
-
-              {message && <p className="text-sm">{message}</p>}
-
-            </div>
-
-          </div>
-
-        </div>
-      </section>
+        {message && <p>{message}</p>}
+      </div>
     </PageLayout>
   );
 };
 
-export default AdminEventDetail;
+export default AdminRequestDetail;
