@@ -1,10 +1,14 @@
-import AdminRequestDetail from "@/pages/AdminRequestDetail";
+import AdminDashboard from "@/pages/AdminDashboard";
 import AdminRequests from "@/pages/AdminRequests";
+import AdminRequestDetail from "@/pages/AdminRequestDetail";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+
 import Index from "./pages/Index.tsx";
 import Hochzeit from "./pages/Hochzeit.tsx";
 import Firmenfeiern from "./pages/Firmenfeiern.tsx";
@@ -27,8 +31,10 @@ import Datenschutz from "./pages/Datenschutz.tsx";
 import Impressum from "./pages/Impressum.tsx";
 import AGB from "./pages/AGB.tsx";
 import StadtSeite from "./pages/StadtSeite.tsx";
+
 import KundenportalLogin from "./pages/KundenportalLogin.tsx";
 import Kundenportal from "./pages/Kundenportal.tsx";
+
 import NotFound from "./pages/NotFound.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 
@@ -41,7 +47,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+
         <Routes>
+          {/* Website */}
           <Route path="/" element={<Index />} />
           <Route path="/hochzeit" element={<Hochzeit />} />
           <Route path="/firmenfeiern" element={<Firmenfeiern />} />
@@ -64,11 +72,18 @@ const App = () => (
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/agb" element={<AGB />} />
           <Route path="/zauberer/:stadt" element={<StadtSeite />} />
+
+          {/* Kundenportal */}
           <Route path="/kundenportal/login" element={<KundenportalLogin />} />
           <Route path="/kundenportal" element={<Kundenportal />} />
+
+          {/* Admin CRM */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/requests" element={<AdminRequests />} />
+          <Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
+
+          {/* 404 */}
           <Route path="*" element={<NotFound />} />
-<Route path="/admin/requests" element={<AdminRequests />} />
-<Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
