@@ -129,7 +129,7 @@ const formatEventStatusLabel = (status?: string | null) => {
     case "storniert":
       return "Storniert";
     default:
-      return status || "Offen";
+return status || "Offen";
   }
 };
 
@@ -143,7 +143,6 @@ const formatEventStatusClasses = (status?: string | null) => {
     case "rechnung_gesendet":
       return "text-foreground bg-muted";
     case "rechnung_bezahlt":
-       case "rechnung_bezahlt":
     case "event_erfolgt":
       return "text-green-700 bg-green-100";
     case "storniert":
@@ -152,9 +151,8 @@ const formatEventStatusClasses = (status?: string | null) => {
       return "text-muted-foreground bg-muted";
   }
 };
-
-// 🚀 TIMELINE LOGIK
-const buildTimeline = (request: any, event: any) => {
+// 🚀 TIMELINE
+const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null) => {
   const steps = [];
 
   steps.push({
@@ -165,15 +163,15 @@ const buildTimeline = (request: any, event: any) => {
   steps.push({
     label: "In Bearbeitung",
     done:
-      ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde", "gebucht"].includes(
-        request?.status
+      ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"].includes(
+        request?.status || ""
       ) || !!event,
   });
 
   steps.push({
     label: "Angebot erhalten",
     done:
-      ["angebot_gesendet", "warte_auf_kunde", "gebucht"].includes(request?.status) ||
+      ["angebot_gesendet", "warte_auf_kunde"].includes(request?.status || "") ||
       !!event,
   });
 
@@ -214,6 +212,7 @@ const Kundenportal = () => {
   const [events, setEvents] = useState<PortalEvent[]>([]);
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
   const [requests, setRequests] = useState<BookingRequest[]>([]);
+  const [expandedRequestId, setExpandedRequestId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<
     "dashboard" | "events" | "documents" | "requests" | "contact"
   >("dashboard");
@@ -244,16 +243,39 @@ const Kundenportal = () => {
   }, [navigate]);
 
   useEffect(() => {
-    if (!user?.email) return;
+    if (!user || !user.email) return;
 
     const fetchData = async () => {
       setLoading(true);
 
-      const { data: customer } = await supabase
+      let customer: any = null;
+
+      const { data: existingCustomer } = await supabase
         .from("portal_customers")
         .select("*")
-        .eq("email", user.email)
+        .eq("user_id", user.id)
         .maybeSingle();
+
+      customer = existingCustomer;
+
+      if (!customer) {
+        const { data: byEmail } = await supabase
+          .from("portal_customers")
+          .select("*")
+          .eq("email", user.email)
+          .maybeSingle();
+
+        if (byEmail) {
+          const { data: linked } = await supabase
+            .from("portal_customers")
+            .update({ user_id: user.id })
+            .eq("id", byEmail.id)
+            .select("*")
+            .single();
+
+          customer = linked;
+        }
+      }
 
       if (customer) {
         setCustomerName(customer.name || "");
@@ -279,7 +301,12 @@ const Kundenportal = () => {
         .eq("email", user.email)
         .order("created_at", { ascending: false });
 
-      if (requestsData) setRequests(requestsData);
+      if (requestsData) {
+        setRequests(requestsData);
+        if (requestsData.length > 0) {
+          setExpandedRequestId(requestsData[0].id);
+        }
+      }
 
       setLoading(false);
     };
@@ -292,106 +319,22 @@ const Kundenportal = () => {
     navigate("/kundenportal/login");
   };
 
-  if (loading) {
+  if (!user || loading) {
     return (
       <PageLayout>
-        <section className="min-h-screen pt-28 flex items-center justify-center">
-          Wird geladen…
+        <section className="min-h-screen pt-28 pb-16 flex items-center justify-center">
+          <div className="animate-pulse text-muted-foreground font-sans">
+            Wird geladen…
+          </div>
         </section>
       </PageLayout>
     );
   }
 
-  const displayName = customerName || user?.email?.split("@")[0] || "Kunde";
+  const displayName = customerName || user.email?.split("@")[0] || "Kunde";
 
   const currentRequest = requests[0] || null;
-  const currentEvent = events.find(
-    (e) => e.request_id === currentRequest?.id
-  ) || null;
+  const currentEvent =
+    events.find((e) => e.request_id === currentRequest?.id) || null;
 
   const timelineSteps = buildTimeline(currentRequest, currentEvent);
-
-  return (
-    <PageLayout>
-      <section className="min-h-screen pt-28 pb-16">
-        <div className="container px-6">
-
-          {/* HEADER */}
-          <div className="flex justify-between mb-10">
-            <div>
-              <p className="text-xs uppercase text-muted-foreground">
-                Kundenportal
-              </p>
-              <h1 className="text-2xl font-bold">
-                Willkommen, {displayName}
-              </h1>
-            </div>
-
-            <button onClick={logout}>
-              <LogOut />
-            </button>
-          </div>
-
-          {/* TABS */}
-          <div className="flex gap-2 mb-10">
-            {["dashboard","events","documents","requests"].map((tab) => (
-              <button key={tab} onClick={() => setActiveTab(tab as any)}>
-                {tab}
-              </button>
-            ))}
-          </div>
-
-          {/* DASHBOARD */}
-          {activeTab === "dashboard" && (
-            <div className="space-y-8">
-
-              {/* TIMELINE */}
-              {timelineSteps.length > 0 && (
-                <div className="p-6 rounded-xl border">
-                  <h2 className="font-bold mb-4">Nächste Schritte</h2>
-
-                  {timelineSteps.map((step, i) => (
-                    <div key={i} className="flex gap-3 mb-2">
-                      {step.done ? (
-                        <CheckCircle2 className="w-5 h-5 text-accent" />
-                      ) : (
-                        <Circle className="w-5 h-5 opacity-30" />
-                      )}
-                      <span>{step.label}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* LETZTE ANFRAGE */}
-              {currentRequest && (
-                <div className="p-6 border rounded-xl">
-                  <h3 className="font-bold">
-                    {currentRequest.anlass || "Anfrage"}
-                  </h3>
-                  <p>
-                    Status: {formatStatusLabel(currentRequest.status)}
-                  </p>
-                </div>
-              )}
-
-              {/* EVENT */}
-              {currentEvent && (
-                <div className="p-6 border rounded-xl">
-                  <h3 className="font-bold">{currentEvent.title}</h3>
-                  <p>
-                    Status: {formatEventStatusLabel(currentEvent.status)}
-                  </p>
-                </div>
-              )}
-
-            </div>
-          )}
-
-        </div>
-      </section>
-    </PageLayout>
-  );
-};
-
-export default Kundenportal;
