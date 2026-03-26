@@ -2,6 +2,7 @@ import AdminDashboard from "@/pages/AdminDashboard";
 import AdminRequests from "@/pages/AdminRequests";
 import AdminRequestDetail from "@/pages/AdminRequestDetail";
 import AdminEvents from "@/pages/AdminEvents";
+import AdminEventDetail from "@/pages/AdminEventDetail";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -83,6 +84,7 @@ const App = () => (
           <Route path="/admin/requests" element={<AdminRequests />} />
           <Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
 <Route path="/admin/events" element={<AdminEvents />} />
+<Route path="/admin/events/:id" element={<AdminEventDetail />} />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />
