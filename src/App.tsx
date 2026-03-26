@@ -1,3 +1,4 @@
+import AdminRequests from "@/pages/AdminRequests";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -65,6 +66,7 @@ const App = () => (
           <Route path="/kundenportal/login" element={<KundenportalLogin />} />
           <Route path="/kundenportal" element={<Kundenportal />} />
           <Route path="*" element={<NotFound />} />
+<Route path="/admin/requests" element={<AdminRequests />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
