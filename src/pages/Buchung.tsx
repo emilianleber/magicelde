@@ -9,7 +9,10 @@ const HeroBuchung = () => (
   <section className="relative min-h-[50vh] flex flex-col justify-center overflow-hidden">
     <div className="container px-6 pt-28 pb-8 md:pt-36 md:pb-12">
       <div className="max-w-5xl mx-auto text-center">
-        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+        <div
+          className="opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.1s" }}
+        >
           <span className="badge-accent mb-8 inline-flex">Anfrage</span>
         </div>
 
@@ -24,8 +27,8 @@ const HeroBuchung = () => (
           className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up"
           style={{ animationDelay: "0.5s" }}
         >
-          Erzähl mir von deinem Event — unverbindlich und kostenlos.
-          Ich melde mich innerhalb von 24 Stunden persönlich bei dir.
+          Erzähl mir von deinem Event — unverbindlich und kostenlos. Ich melde
+          mich innerhalb von 24 Stunden persönlich bei dir.
         </p>
 
         <div
@@ -71,47 +74,64 @@ const FormSection = () => {
     const formData = new FormData(form);
 
     const payload = {
-      name: String(formData.get("name") || ""),
-      email: String(formData.get("email") || ""),
-      phone: String(formData.get("phone") || ""),
-      anlass: String(formData.get("anlass") || ""),
-      datum: String(formData.get("datum") || ""),
-      ort: String(formData.get("ort") || ""),
+      name: String(formData.get("name") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      anlass: String(formData.get("anlass") || "").trim(),
+      datum: String(formData.get("datum") || "").trim(),
+      ort: String(formData.get("ort") || "").trim(),
       gaeste: formData.get("gaeste") ? Number(formData.get("gaeste")) : null,
-      format: String(formData.get("format") || ""),
-      nachricht: String(formData.get("nachricht") || ""),
+      format: String(formData.get("format") || "").trim(),
+      nachricht: String(formData.get("nachricht") || "").trim(),
     };
 
     try {
-console.log("PUB KEY:", import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY);
+      const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      console.log("SUPABASE KEY VORHANDEN:", !!publishableKey);
+      console.log("REQUEST PAYLOAD:", payload);
+
       const res = await fetch(
         "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/create-portal-request",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            apikey: publishableKey,
+            Authorization: `Bearer ${publishableKey}`,
           },
           body: JSON.stringify(payload),
         }
       );
 
-      const data = await res.json();
+      console.log("RESPONSE STATUS:", res.status);
+      console.log("RESPONSE OK:", res.ok);
+
+      const rawText = await res.text();
+      console.log("RAW RESPONSE:", rawText);
+
+      let data: any = {};
+      try {
+        data = rawText ? JSON.parse(rawText) : {};
+      } catch (parseError) {
+        console.error("JSON PARSE ERROR IM FRONTEND:", parseError);
+      }
 
       if (!res.ok) {
-        throw new Error(data.error || "Fehler bei Anfrage");
+        throw new Error(data?.error || `Fehler bei Anfrage (${res.status})`);
       }
 
       form.reset();
       setSuccess(
-        "Deine Anfrage wurde erfolgreich gesendet. Wir haben dir außerdem eine E-Mail geschickt."
+        "Deine Anfrage wurde erfolgreich gesendet. Du hast außerdem eine Bestätigungs-E-Mail erhalten."
       );
 
       setTimeout(() => {
         navigate("/danke");
       }, 1500);
     } catch (err: any) {
-      setError(err.message || "Beim Absenden ist ein Fehler aufgetreten.");
+      console.error("ABSENDE-FEHLER:", err);
+      setError(err?.message || "Beim Absenden ist ein Fehler aufgetreten.");
     } finally {
       setSending(false);
     }
@@ -160,8 +180,12 @@ console.log("PUB KEY:", import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY);
                   Anlass wählen *
                 </option>
                 <option value="hochzeit">Hochzeit</option>
-                <option value="firmenfeier">Firmenfeier / Corporate Event</option>
-                <option value="geburtstag">Geburtstag / Private Feier</option>
+                <option value="firmenfeier">
+                  Firmenfeier / Corporate Event
+                </option>
+                <option value="geburtstag">
+                  Geburtstag / Private Feier
+                </option>
                 <option value="gala">Gala / Awards</option>
                 <option value="messe">Messe / Promotion</option>
                 <option value="magic-dinner">Magic Dinner</option>
