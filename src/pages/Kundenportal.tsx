@@ -6,7 +6,6 @@ import {
   Calendar,
   FileText,
   MessageCircle,
-  Clock,
   CheckCircle2,
   Circle,
   ArrowRight,
@@ -38,6 +37,7 @@ interface BookingRequest {
   nachricht: string | null;
   status: string | null;
   created_at: string;
+  event_id?: string | null;
 }
 
 interface PortalEvent {
@@ -48,6 +48,7 @@ interface PortalEvent {
   status: string;
   format: string | null;
   guests: number | null;
+  request_id?: string | null;
 }
 
 interface PortalDocument {
@@ -144,24 +145,51 @@ const Kundenportal = () => {
   }, [navigate]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.email) return;
 
     const fetchData = async () => {
       setLoading(true);
 
       let customer: any = null;
 
-      const { data: existingCustomer, error: customerError } = await supabase
+      const { data: byUserId, error: byUserIdError } = await supabase
         .from("portal_customers")
         .select("*")
         .eq("user_id", user.id)
         .maybeSingle();
 
-      if (customerError) {
-        console.error("Fehler beim Laden des Kunden:", customerError);
+      if (byUserIdError) {
+        console.error("Fehler beim Laden des Kunden per user_id:", byUserIdError);
       }
 
-      customer = existingCustomer;
+      customer = byUserId;
+
+      if (!customer) {
+        const { data: byEmail, error: byEmailError } = await supabase
+          .from("portal_customers")
+          .select("*")
+          .eq("email", user.email)
+          .maybeSingle();
+
+        if (byEmailError) {
+          console.error("Fehler beim Laden des Kunden per E-Mail:", byEmailError);
+        }
+
+        if (byEmail) {
+          const { data: linkedCustomer, error: linkError } = await supabase
+            .from("portal_customers")
+            .update({ user_id: user.id })
+            .eq("id", byEmail.id)
+            .select("*")
+            .single();
+
+          if (linkError) {
+            console.error("Fehler beim Verknüpfen des Kunden:", linkError);
+          } else {
+            customer = linkedCustomer;
+          }
+        }
+      }
 
       if (!customer) {
         const { data: createdCustomer, error: createCustomerError } = await supabase
@@ -170,6 +198,7 @@ const Kundenportal = () => {
             user_id: user.id,
             name: "",
             kundennummer: "",
+            email: user.email,
           })
           .select("*")
           .single();
@@ -185,6 +214,21 @@ const Kundenportal = () => {
         setCustomerName(customer.name || "");
         setKundennummer(customer.kundennummer || "");
 
+        const { data: requestsData, error: requestsError } = await supabase
+          .from("portal_requests")
+          .select("*")
+          .eq("email", user.email)
+          .order("created_at", { ascending: false });
+
+        if (requestsError) {
+          console.error("Fehler beim Laden der Anfragen:", requestsError);
+        } else if (requestsData) {
+          setRequests(requestsData);
+          if (requestsData.length > 0) {
+            setExpandedRequestId(requestsData[0].id);
+          }
+        }
+
         const { data: eventsData, error: eventsError } = await supabase
           .from("portal_events")
           .select("*")
@@ -193,6 +237,8 @@ const Kundenportal = () => {
 
         if (eventsError) {
           console.error("Fehler beim Laden der Events:", eventsError);
+        } else if (eventsData) {
+          setEvents(eventsData);
         }
 
         const { data: docsData, error: docsError } = await supabase
@@ -203,10 +249,9 @@ const Kundenportal = () => {
 
         if (docsError) {
           console.error("Fehler beim Laden der Dokumente:", docsError);
+        } else if (docsData) {
+          setDocuments(docsData);
         }
-
-        if (eventsData) setEvents(eventsData);
-        if (docsData) setDocuments(docsData);
 
         if (eventsData && eventsData.length > 0) {
           const { data: timelineData, error: timelineError } = await supabase
@@ -217,27 +262,8 @@ const Kundenportal = () => {
 
           if (timelineError) {
             console.error("Fehler beim Laden der Timeline:", timelineError);
-          }
-
-          if (timelineData) setTimeline(timelineData);
-        }
-      }
-
-      if (user.email) {
-        const { data: requestsData, error: requestsError } = await supabase
-          .from("portal_requests")
-          .select("*")
-          .eq("email", user.email)
-          .order("created_at", { ascending: false });
-
-        if (requestsError) {
-          console.error("Fehler beim Laden der Anfragen:", requestsError);
-        }
-
-        if (requestsData) {
-          setRequests(requestsData);
-          if (requestsData.length > 0) {
-            setExpandedRequestId(requestsData[0].id);
+          } else if (timelineData) {
+            setTimeline(timelineData);
           }
         }
       }
@@ -246,7 +272,7 @@ const Kundenportal = () => {
     };
 
     fetchData();
-  }, [user]);
+  }, [user, navigate]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -303,7 +329,7 @@ const Kundenportal = () => {
           </div>
 
           <div className="flex gap-1 bg-muted/50 rounded-2xl p-1 mb-10 overflow-x-auto">
-            {tabs.map((tab) => (
+                        {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
@@ -398,7 +424,7 @@ const Kundenportal = () => {
                           )}
                         </div>
                         <div className="flex-1">
-                                                    <p
+                          <p
                             className={`font-sans text-sm font-medium ${
                               t.done ? "text-foreground" : "text-muted-foreground"
                             }`}
@@ -441,7 +467,6 @@ const Kundenportal = () => {
             </div>
           )}
 
-          {/* EVENTS */}
           {activeTab === "events" && (
             <div className="space-y-4">
               {events.length === 0 ? (
@@ -454,22 +479,46 @@ const Kundenportal = () => {
                 events.map((event) => (
                   <div
                     key={event.id}
-                    className="p-6 rounded-2xl bg-muted/20 border border-border/30"
+                    className="p-6 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-colors"
                   >
-                    <h3 className="font-display text-lg font-bold text-foreground mb-2">
-                      {event.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {event.event_date &&
-                        new Date(event.event_date).toLocaleDateString("de-DE")}
-                    </p>
+                    <div className="flex flex-col sm:flex-row justify-between gap-4">
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="font-display text-lg font-bold text-foreground">
+                            {event.title}
+                          </h3>
+                          <span
+                            className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${
+                              event.status === "confirmed"
+                                ? "text-accent bg-accent/10"
+                                : "text-muted-foreground bg-muted"
+                            }`}
+                          >
+                            {event.status === "confirmed"
+                              ? "Bestätigt"
+                              : event.status === "completed"
+                              ? "Abgeschlossen"
+                              : "In Planung"}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-x-6 gap-y-1 font-sans text-sm text-muted-foreground">
+                          {event.event_date && (
+                            <span>
+                              📅 {new Date(event.event_date).toLocaleDateString("de-DE")}
+                            </span>
+                          )}
+                          {event.location && <span>📍 {event.location}</span>}
+                          {event.format && <span>🎭 {event.format}</span>}
+                          {event.guests && <span>👥 {event.guests} Gäste</span>}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))
               )}
             </div>
           )}
 
-          {/* DOCUMENTS */}
           {activeTab === "documents" && (
             <div className="space-y-3">
               {documents.length === 0 ? (
@@ -482,20 +531,28 @@ const Kundenportal = () => {
                 documents.map((doc) => (
                   <div
                     key={doc.id}
-                    className="flex items-center justify-between p-5 rounded-2xl bg-muted/20 border border-border/30"
+                    className="flex items-center justify-between p-5 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-colors"
                   >
-                    <div>
-                      <p className="font-sans text-sm text-foreground">
-                        {doc.name}
-                      </p>
+                    <div className="flex items-center gap-4">
+                      <FileText className="w-5 h-5 text-accent" />
+                      <div>
+                        <p className="font-sans text-sm font-medium text-foreground">
+                          {doc.name}
+                        </p>
+                        <p className="font-sans text-xs text-muted-foreground">
+                          {doc.type} ·{" "}
+                          {new Date(doc.created_at).toLocaleDateString("de-DE")}
+                        </p>
+                      </div>
                     </div>
                     {doc.file_url && (
                       <a
                         href={doc.file_url}
                         target="_blank"
-                        className="text-accent text-sm"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 font-sans text-xs text-accent hover:text-accent/80 transition-colors"
                       >
-                        Download
+                        <Download className="w-4 h-4" /> Download
                       </a>
                     )}
                   </div>
@@ -504,48 +561,229 @@ const Kundenportal = () => {
             </div>
           )}
 
-          {/* REQUESTS (DETAILED) */}
           {activeTab === "requests" && (
             <div className="space-y-4">
-              {requests.map((request) => {
-                const isOpen = expandedRequestId === request.id;
+              {requests.length === 0 ? (
+                <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                  <p className="font-sans text-sm text-muted-foreground">
+                    Noch keine Anfragen vorhanden.
+                  </p>
+                </div>
+              ) : (
+                requests.map((request) => {
+                  const isOpen = expandedRequestId === request.id;
 
-                return (
-                  <div key={request.id} className="border rounded-xl">
-                    <button
-                      onClick={() =>
-                        setExpandedRequestId(isOpen ? null : request.id)
-                      }
-                      className="w-full text-left p-4 flex justify-between"
+                  return (
+                    <div
+                      key={request.id}
+                      className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden"
                     >
-                      <span>{request.anlass}</span>
-                      {isOpen ? "▲" : "▼"}
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedRequestId(isOpen ? null : request.id)
+                        }
+                        className="w-full text-left p-6 hover:bg-muted/20 transition-colors"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <div className="flex items-center gap-3 flex-wrap mb-2">
+                              <h3 className="font-display text-lg font-bold text-foreground">
+                                {request.anlass || "Anfrage"}
+                              </h3>
+                              <span
+                                className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatStatusClasses(
+                                  request.status
+                                )}`}
+                              >
+                                {formatStatusLabel(request.status)}
+                              </span>
+                              {request.event_id && (
+                                <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-green-700 bg-green-100">
+                                  Als Event übernommen
+                                </span>
+                              )}
+                            </div>
 
-                    {isOpen && (
-                      <div className="p-4 space-y-2 text-sm">
-                        <p><strong>Name:</strong> {request.name}</p>
-                        <p><strong>Email:</strong> {request.email}</p>
-                        <p><strong>Telefon:</strong> {request.phone}</p>
-                        <p><strong>Datum:</strong> {request.datum}</p>
-                        <p><strong>Ort:</strong> {request.ort}</p>
-                        <p><strong>Gäste:</strong> {request.gaeste}</p>
-                        <p><strong>Format:</strong> {request.format}</p>
-                        <p><strong>Nachricht:</strong> {request.nachricht}</p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                            <p className="font-sans text-xs text-muted-foreground">
+                              Eingegangen am{" "}
+                              {new Date(request.created_at).toLocaleDateString("de-DE")}
+                            </p>
+                          </div>
+
+                          <div className="text-muted-foreground">
+                            {isOpen ? (
+                              <ChevronUp className="w-5 h-5" />
+                            ) : (
+                              <ChevronDown className="w-5 h-5" />
+                            )}
+                          </div>
+                        </div>
+                      </button>
+
+                      {isOpen && (
+                        <div className="px-6 pb-6 border-t border-border/20">
+                          <div className="grid sm:grid-cols-2 gap-4 mt-5">
+                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                                Anfrage von
+                              </p>
+                              <p className="font-sans text-sm text-foreground font-medium">
+                                {request.name}
+                              </p>
+                            </div>
+
+                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                                E-Mail
+                              </p>
+                              <div className="flex items-center gap-2">
+                                <Mail className="w-4 h-4 text-accent" />
+                                <p className="font-sans text-sm text-foreground">
+                                  {request.email}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                                Telefon
+                              </p>
+                              <div className="flex items-center gap-2">
+                                <Phone className="w-4 h-4 text-accent" />
+                                <p className="font-sans text-sm text-foreground">
+                                  {request.phone || "Nicht angegeben"}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                                Gewünschtes Datum
+                              </p>
+                              <div className="flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-accent" />
+                                <p className="font-sans text-sm text-foreground">
+                                  {request.datum
+                                    ? new Date(request.datum).toLocaleDateString("de-DE")
+                                    : "Nicht angegeben"}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                                Ort
+                              </p>
+                              <div className="flex items-center gap-2">
+                                <MapPin className="w-4 h-4 text-accent" />
+                                <p className="font-sans text-sm text-foreground">
+                                  {request.ort || "Nicht angegeben"}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                                Gäste
+                              </p>
+                              <div className="flex items-center gap-2">
+                                <Users className="w-4 h-4 text-accent" />
+                                <p className="font-sans text-sm text-foreground">
+                                  {request.gaeste ?? "Nicht angegeben"}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="rounded-xl bg-background/60 border border-border/20 p-4 sm:col-span-2">
+                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                                Gewünschtes Format
+                              </p>
+                              <div className="flex items-center gap-2">
+                                <Theater className="w-4 h-4 text-accent" />
+                                <p className="font-sans text-sm text-foreground">
+                                  {request.format || "Nicht angegeben"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-4 rounded-xl bg-background/60 border border-border/20 p-4">
+                            <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                              Nachricht
+                            </p>
+                            <p className="font-sans text-sm text-foreground leading-relaxed whitespace-pre-line">
+                              {request.nachricht || "Keine zusätzliche Nachricht angegeben."}
+                            </p>
+                          </div>
+
+                          <div className="mt-4 rounded-xl bg-accent/5 border border-accent/10 p-4">
+                            <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                              Nächster Schritt
+                            </p>
+                            <p className="font-sans text-sm text-foreground leading-relaxed">
+                              Ich prüfe deine Anfrage und melde mich persönlich bei dir. Sobald
+                              es Updates gibt, findest du sie hier im Kundenportal.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
             </div>
           )}
 
-          {/* CONTACT */}
           {activeTab === "contact" && (
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">
-                Kontakt: el@magicel.de
-              </p>
+            <div className="max-w-lg">
+              <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
+                <h2 className="font-display text-lg font-bold text-foreground mb-4">
+                  Ihr Ansprechpartner
+                </h2>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
+                    <User className="w-6 h-6 text-accent" />
+                  </div>
+                  <div>
+                    <p className="font-sans text-sm font-semibold text-foreground">
+                      Emilian Leber
+                    </p>
+                    <p className="font-sans text-xs text-muted-foreground">
+                      Zauberer & Showkünstler
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <a
+                    href="mailto:el@magicel.de"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4 text-accent" />
+                    <span className="font-sans text-sm text-foreground">
+                      el@magicel.de
+                    </span>
+                  </a>
+                  <a
+                    href="tel:+4915563744696"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors"
+                  >
+                    <Phone className="w-4 h-4 text-accent" />
+                    <span className="font-sans text-sm text-foreground">
+                      +49 155 63744696
+                    </span>
+                  </a>
+                </div>
+
+                <Link
+                  to="/kontakt"
+                  className="btn-primary justify-center mt-6 w-full group"
+                >
+                  Nachricht senden
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
             </div>
           )}
         </div>
