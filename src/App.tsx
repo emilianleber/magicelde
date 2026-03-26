@@ -1,3 +1,4 @@
+import AdminRequestDetail from "@/pages/AdminRequestDetail";
 import AdminRequests from "@/pages/AdminRequests";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -67,6 +68,7 @@ const App = () => (
           <Route path="/kundenportal" element={<Kundenportal />} />
           <Route path="*" element={<NotFound />} />
 <Route path="/admin/requests" element={<AdminRequests />} />
+<Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
