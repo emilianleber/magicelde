@@ -10,6 +10,9 @@ import {
   Save,
   Theater,
   Users,
+  Upload,
+  FileText,
+  Download,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
@@ -28,6 +31,16 @@ interface PortalEvent {
   invoice_status?: string | null;
   notes?: string | null;
   created_at?: string | null;
+}
+
+interface PortalDocument {
+  id: string;
+  name: string;
+  type: string | null;
+  file_url: string | null;
+  created_at: string;
+  event_id?: string | null;
+  customer_id?: string | null;
 }
 
 const eventStatusOptions = [
@@ -97,14 +110,18 @@ const AdminEventDetail = () => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const [event, setEvent] = useState<PortalEvent | null>(null);
+  const [documents, setDocuments] = useState<PortalDocument[]>([]);
   const [status, setStatus] = useState("in_planung");
   const [detailsStatus, setDetailsStatus] = useState("offen");
   const [contractStatus, setContractStatus] = useState("offen");
   const [invoiceStatus, setInvoiceStatus] = useState("offen");
   const [notes, setNotes] = useState("");
   const [message, setMessage] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [documentType, setDocumentType] = useState("Dokument");
 
   useEffect(() => {
     const {
@@ -163,6 +180,18 @@ const AdminEventDetail = () => {
         setContractStatus(data.contract_status || "offen");
         setInvoiceStatus(data.invoice_status || "offen");
         setNotes(data.notes || "");
+
+        const { data: docsData, error: docsError } = await supabase
+          .from("portal_documents")
+          .select("*")
+          .eq("event_id", data.id)
+          .order("created_at", { ascending: false });
+
+        if (docsError) {
+          console.error("Fehler beim Laden der Dokumente:", docsError);
+        } else {
+          setDocuments(docsData || []);
+        }
       }
 
       setLoading(false);
@@ -264,6 +293,60 @@ const AdminEventDetail = () => {
     }
 
     setSaving(false);
+  };
+
+  const handleFileUpload = async () => {
+    if (!selectedFile || !event) {
+      setMessage("Bitte zuerst eine Datei auswählen.");
+      return;
+    }
+
+    setUploading(true);
+    setMessage("");
+
+    try {
+      const fileExt = selectedFile.name.split(".").pop();
+      const fileName = `${event.id}/${Date.now()}-${selectedFile.name.replace(/\s+/g, "-")}`;
+      const filePath = fileExt ? fileName : `${fileName}.file`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("portal-documents")
+        .upload(filePath, selectedFile, {
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: signedData, error: signedError } = await supabase.storage
+        .from("portal-documents")
+        .createSignedUrl(filePath, 60 * 60 * 24 * 365);
+
+      if (signedError) throw signedError;
+
+      const { data: insertedDoc, error: insertError } = await supabase
+        .from("portal_documents")
+        .insert({
+          customer_id: event.customer_id || null,
+          event_id: event.id,
+          name: selectedFile.name,
+          type: documentType || "Dokument",
+          file_url: signedData.signedUrl,
+        })
+        .select("*")
+        .single();
+
+      if (insertError) throw insertError;
+
+      setDocuments((prev) => [insertedDoc, ...prev]);
+      setSelectedFile(null);
+      setDocumentType("Dokument");
+      setMessage("Dokument erfolgreich hochgeladen.");
+    } catch (err: any) {
+      console.error("UPLOAD ERROR:", err);
+      setMessage(`Fehler beim Upload: ${err?.message || "Unbekannter Fehler"}`);
+    }
+
+    setUploading(false);
   };
 
   if (loading) {
@@ -440,6 +523,84 @@ const AdminEventDetail = () => {
                     </p>
                   </div>
                 )}
+              </div>
+
+              <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+                <h2 className="font-display text-lg font-bold text-foreground mb-5">
+                  Dokumente
+                </h2>
+
+                <div className="space-y-4">
+                  <div className="grid sm:grid-cols-[1fr_180px] gap-3">
+                    <input
+                      type="file"
+                      onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                      className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground"
+                    />
+
+                    <select
+                      value={documentType}
+                      onChange={(e) => setDocumentType(e.target.value)}
+                      className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/20"
+                    >
+                      <option value="Dokument">Dokument</option>
+                      <option value="Angebot">Angebot</option>
+                      <option value="Vertrag">Vertrag</option>
+                      <option value="Rechnung">Rechnung</option>
+                      <option value="Ablaufplan">Ablaufplan</option>
+                      <option value="Info">Info</option>
+                    </select>
+                  </div>
+
+                  <button
+                    onClick={handleFileUpload}
+                    disabled={uploading || !selectedFile}
+                    className="w-full inline-flex items-center justify-center rounded-xl border border-border/30 bg-background/60 px-4 py-3 text-sm font-medium text-foreground hover:bg-muted/40 transition-colors disabled:opacity-50"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    {uploading ? "Lädt hoch…" : "Dokument hochladen"}
+                  </button>
+
+                  <div className="space-y-3 pt-2">
+                    {documents.length === 0 ? (
+                      <p className="font-sans text-sm text-muted-foreground">
+                        Noch keine Dokumente vorhanden.
+                      </p>
+                    ) : (
+                      documents.map((doc) => (
+                        <div
+                          key={doc.id}
+                          className="flex items-center justify-between p-4 rounded-xl bg-background/60 border border-border/20"
+                        >
+                          <div className="flex items-center gap-3">
+                            <FileText className="w-5 h-5 text-accent" />
+                            <div>
+                              <p className="font-sans text-sm font-medium text-foreground">
+                                {doc.name}
+                              </p>
+                              <p className="font-sans text-xs text-muted-foreground">
+                                {doc.type || "Dokument"} ·{" "}
+                                {new Date(doc.created_at).toLocaleDateString("de-DE")}
+                              </p>
+                            </div>
+                          </div>
+
+                          {doc.file_url && (
+                            <a
+                              href={doc.file_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 font-sans text-xs text-accent hover:text-accent/80 transition-colors"
+                            >
+                              <Download className="w-4 h-4" />
+                              Öffnen
+                            </a>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
 
