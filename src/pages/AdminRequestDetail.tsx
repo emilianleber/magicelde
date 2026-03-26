@@ -247,10 +247,12 @@ const AdminRequestDetail = () => {
       });
       setStatus("bestätigt");
       setMessage("Anfrage erfolgreich zu einem Event konvertiert.");
-    } catch (err) {
-      console.error("Fehler beim Konvertieren:", err);
-      setMessage("Fehler beim Konvertieren der Anfrage.");
-    } finally {
+ } catch (err: any) {
+  console.error("Fehler beim Konvertieren:", err);
+  setMessage(
+    `Fehler beim Konvertieren: ${err?.message || err?.details || JSON.stringify(err)}`
+  );
+} finally {
       setConverting(false);
     }
   };
