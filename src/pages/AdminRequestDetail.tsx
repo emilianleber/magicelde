@@ -214,19 +214,19 @@ const AdminRequestDetail = () => {
       }
 
       const { data: newEvent, error: eventError } = await supabase
-        .from("portal_events")
-        .insert({
-          customer_id: customerId,
-          request_id: request.id,
-          title: request.anlass || "Event",
-          event_date: request.datum,
-          location: request.ort,
-          status: "in_planung",
-          format: request.format,
-          guests: request.gaeste,
-        })
-        .select("*")
-        .single();
+  .from("portal_events")
+  .insert({
+    customer_id: customerId,
+    request_id: request.id,
+    title: request.anlass?.trim() || "Event",
+    event_date: request.datum?.trim() ? request.datum : null,
+    location: request.ort?.trim() || null,
+    status: "in_planung",
+    format: request.format?.trim() || null,
+    guests: request.gaeste ?? null,
+  })
+  .select("*")
+  .single();
 
       if (eventError) throw eventError;
 
