@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
-import { Save, LogOut } from "lucide-react";
+import { Save, LogOut, Building2 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
 const AdminNewRequest = () => {
@@ -15,6 +15,7 @@ const AdminNewRequest = () => {
 
   const [form, setForm] = useState({
     name: "",
+    firma: "",
     email: "",
     phone: "",
     anlass: "",
@@ -88,6 +89,7 @@ const AdminNewRequest = () => {
           },
           body: JSON.stringify({
             name: form.name.trim(),
+            firma: form.firma.trim() || null,
             email: form.email.trim(),
             phone: form.phone.trim() || null,
             anlass: form.anlass.trim() || null,
@@ -154,8 +156,17 @@ const AdminNewRequest = () => {
       <section className="min-h-screen pt-28 pb-16">
         <div className="container px-6 max-w-3xl mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-2xl font-bold">Neue Anfrage</h1>
-            <button onClick={logout} className="text-muted-foreground hover:text-foreground">
+            <div>
+              <p className="font-sans text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">
+                Admin / CRM
+              </p>
+              <h1 className="text-2xl font-bold">Neue Anfrage</h1>
+            </div>
+
+            <button
+              onClick={logout}
+              className="text-muted-foreground hover:text-foreground"
+            >
               <LogOut />
             </button>
           </div>
@@ -168,6 +179,17 @@ const AdminNewRequest = () => {
               onChange={handleChange}
               className="w-full p-3 border rounded"
             />
+
+            <div className="relative">
+              <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                name="firma"
+                placeholder="Firma (optional)"
+                value={form.firma}
+                onChange={handleChange}
+                className="w-full pl-10 p-3 border rounded"
+              />
+            </div>
 
             <input
               name="email"
@@ -248,7 +270,11 @@ const AdminNewRequest = () => {
               <option value="manuell">Manuell</option>
             </select>
 
-            <button onClick={createRequest} className="btn-primary" disabled={loading}>
+            <button
+              onClick={createRequest}
+              className="btn-primary"
+              disabled={loading}
+            >
               <Save className="w-4 h-4 mr-2" />
               {loading ? "Speichert…" : "Anfrage erstellen"}
             </button>
