@@ -13,6 +13,7 @@ import {
   Save,
   LogOut,
   Sparkles,
+  Building2,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
@@ -21,6 +22,7 @@ interface PortalRequest {
   created_at: string;
   status: string | null;
   name: string;
+  firma?: string | null;
   email: string;
   phone: string | null;
   anlass: string | null;
@@ -87,6 +89,9 @@ const formatStatusClasses = (status?: string | null) => {
   }
 };
 
+const inputCls =
+  "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
+
 const AdminRequestDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -98,8 +103,20 @@ const AdminRequestDetail = () => {
   const [converting, setConverting] = useState(false);
 
   const [request, setRequest] = useState<PortalRequest | null>(null);
+
   const [status, setStatus] = useState("neu");
+  const [name, setName] = useState("");
+  const [firma, setFirma] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [anlass, setAnlass] = useState("");
+  const [datum, setDatum] = useState("");
+  const [ort, setOrt] = useState("");
+  const [gaeste, setGaeste] = useState("");
+  const [format, setFormat] = useState("");
+  const [nachricht, setNachricht] = useState("");
   const [internalNotes, setInternalNotes] = useState("");
+  const [sendMail, setSendMail] = useState(true);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -155,6 +172,18 @@ const AdminRequestDetail = () => {
       } else if (data) {
         setRequest(data);
         setStatus(data.status || "neu");
+        setName(data.name || "");
+        setFirma(data.firma || "");
+        setEmail(data.email || "");
+        setPhone(data.phone || "");
+        setAnlass(data.anlass || "");
+        setDatum(data.datum || "");
+        setOrt(data.ort || "");
+        setGaeste(
+          data.gaeste !== null && data.gaeste !== undefined ? String(data.gaeste) : ""
+        );
+        setFormat(data.format || "");
+        setNachricht(data.nachricht || "");
         setInternalNotes(data.notizen_intern || "");
       }
 
@@ -202,6 +231,59 @@ const AdminRequestDetail = () => {
     }
   };
 
+  const syncCustomerFromRequest = async (requestEmail: string) => {
+    const safeEmail = requestEmail.trim().toLowerCase();
+    if (!safeEmail) return;
+
+    const { data: existingCustomer, error: customerLookupError } = await supabase
+      .from("portal_customers")
+      .select("*")
+      .eq("email", safeEmail)
+      .maybeSingle();
+
+    if (customerLookupError) {
+      console.error("CUSTOMER LOOKUP ERROR:", customerLookupError);
+      throw customerLookupError;
+    }
+
+    if (existingCustomer) {
+      const { error: updateCustomerError } = await supabase
+        .from("portal_customers")
+        .update({
+          name: name.trim() || existingCustomer.name || "",
+          firma: firma.trim() || null,
+          email: safeEmail,
+          phone: phone.trim() || null,
+        })
+        .eq("id", existingCustomer.id);
+
+      if (updateCustomerError) {
+        console.error("CUSTOMER UPDATE ERROR:", updateCustomerError);
+        throw updateCustomerError;
+      }
+
+      return existingCustomer.id;
+    }
+
+    const { data: newCustomer, error: createCustomerError } = await supabase
+      .from("portal_customers")
+      .insert({
+        name: name.trim(),
+        firma: firma.trim() || null,
+        email: safeEmail,
+        phone: phone.trim() || null,
+      })
+      .select("*")
+      .single();
+
+    if (createCustomerError) {
+      console.error("CUSTOMER CREATE ERROR:", createCustomerError);
+      throw createCustomerError;
+    }
+
+    return newCustomer.id;
+  };
+
   const saveChanges = async () => {
     if (!request) return;
 
@@ -209,42 +291,80 @@ const AdminRequestDetail = () => {
     setMessage("");
 
     const previousStatus = request.status;
+    const safeEmail = email.trim().toLowerCase();
+    const safeName = name.trim();
 
-    const { error } = await supabase
-      .from("portal_requests")
-      .update({
-        status,
-        notizen_intern: internalNotes,
-      })
-      .eq("id", request.id);
-
-    if (error) {
-      console.error("Fehler beim Speichern:", error);
-      setMessage("Fehler beim Speichern.");
+    if (!safeName || !safeEmail) {
+      setMessage("Name und E-Mail dürfen nicht leer sein.");
       setSaving(false);
       return;
     }
 
-    const updatedRequest = {
-      ...request,
-      status,
-      notizen_intern: internalNotes,
-    };
+    try {
+      const customerId = await syncCustomerFromRequest(safeEmail);
 
-    setRequest(updatedRequest);
+      const { error } = await supabase
+        .from("portal_requests")
+        .update({
+          customer_id: customerId || null,
+          status,
+          name: safeName,
+          firma: firma.trim() || null,
+          email: safeEmail,
+          phone: phone.trim() || null,
+          anlass: anlass.trim() || null,
+          datum: datum.trim() || null,
+          ort: ort.trim() || null,
+          gaeste: gaeste ? Number(gaeste) : null,
+          format: format.trim() || null,
+          nachricht: nachricht.trim() || null,
+          notizen_intern: internalNotes,
+        })
+        .eq("id", request.id);
 
-    if (previousStatus !== status) {
-      try {
-        await sendStatusMail(request.id);
-        setMessage("Gespeichert und Mail versendet.");
-      } catch (mailErr: any) {
-        console.error("REQUEST STATUS MAIL ERROR:", mailErr);
-        setMessage(
-          `Gespeichert, aber Mail fehlgeschlagen: ${mailErr?.message || "Unbekannter Fehler"}`
-        );
+      if (error) {
+        console.error("Fehler beim Speichern:", error);
+        setMessage("Fehler beim Speichern.");
+        setSaving(false);
+        return;
       }
-    } else {
-      setMessage("Gespeichert.");
+
+      const updatedRequest: PortalRequest = {
+        ...request,
+        status,
+        name: safeName,
+        firma: firma.trim() || null,
+        email: safeEmail,
+        phone: phone.trim() || null,
+        anlass: anlass.trim() || null,
+        datum: datum.trim() || null,
+        ort: ort.trim() || null,
+        gaeste: gaeste ? Number(gaeste) : null,
+        format: format.trim() || null,
+        nachricht: nachricht.trim() || null,
+        notizen_intern: internalNotes,
+      };
+
+      setRequest(updatedRequest);
+
+      if (previousStatus !== status && sendMail) {
+        try {
+          await sendStatusMail(request.id);
+          setMessage("Gespeichert und Mail versendet.");
+        } catch (mailErr: any) {
+          console.error("REQUEST STATUS MAIL ERROR:", mailErr);
+          setMessage(
+            `Gespeichert, aber Mail fehlgeschlagen: ${
+              mailErr?.message || "Unbekannter Fehler"
+            }`
+          );
+        }
+      } else {
+        setMessage("Gespeichert.");
+      }
+    } catch (err: any) {
+      console.error("SAVE ERROR:", err);
+      setMessage(err?.message || "Fehler beim Speichern.");
     }
 
     setSaving(false);
@@ -257,33 +377,20 @@ const AdminRequestDetail = () => {
     setMessage("");
 
     try {
-      const { data: customer } = await supabase
-        .from("portal_customers")
-        .select("*")
-        .eq("email", request.email)
-        .maybeSingle();
+      const safeName = name.trim();
+      const safeEmail = email.trim().toLowerCase();
 
-      let customerId = customer?.id;
-
-      if (!customerId) {
-        const { data: newCustomer, error: newCustomerError } = await supabase
-          .from("portal_customers")
-          .insert({
-            name: request.name,
-            email: request.email,
-          })
-          .select("*")
-          .single();
-
-        if (newCustomerError) throw newCustomerError;
-        customerId = newCustomer.id;
+      if (!safeName || !safeEmail) {
+        throw new Error("Name und E-Mail dürfen nicht leer sein.");
       }
 
-      const safeTitle = request.anlass?.trim() || "Event";
-      const safeEventDate = request.datum?.trim() ? request.datum : null;
-      const safeLocation = request.ort?.trim() || null;
-      const safeFormat = request.format?.trim() || null;
-      const safeGuests = request.gaeste ?? null;
+      const customerId = await syncCustomerFromRequest(safeEmail);
+
+      const safeTitle = anlass.trim() || "Event";
+      const safeEventDate = datum.trim() ? datum.trim() : null;
+      const safeLocation = ort.trim() || null;
+      const safeFormat = format.trim() || null;
+      const safeGuests = gaeste ? Number(gaeste) : null;
 
       const { data: newEvent, error: eventError } = await supabase
         .from("portal_events")
@@ -305,6 +412,18 @@ const AdminRequestDetail = () => {
       const { error: updateRequestError } = await supabase
         .from("portal_requests")
         .update({
+          customer_id: customerId,
+          name: safeName,
+          firma: firma.trim() || null,
+          email: safeEmail,
+          phone: phone.trim() || null,
+          anlass: anlass.trim() || null,
+          datum: safeEventDate,
+          ort: safeLocation,
+          gaeste: safeGuests,
+          format: safeFormat,
+          nachricht: nachricht.trim() || null,
+          notizen_intern: internalNotes,
           event_id: newEvent.id,
           status: "bestätigt",
         })
@@ -312,8 +431,19 @@ const AdminRequestDetail = () => {
 
       if (updateRequestError) throw updateRequestError;
 
-      const updatedRequest = {
+      const updatedRequest: PortalRequest = {
         ...request,
+        name: safeName,
+        firma: firma.trim() || null,
+        email: safeEmail,
+        phone: phone.trim() || null,
+        anlass: anlass.trim() || null,
+        datum: safeEventDate,
+        ort: safeLocation,
+        gaeste: safeGuests,
+        format: safeFormat,
+        nachricht: nachricht.trim() || null,
+        notizen_intern: internalNotes,
         event_id: newEvent.id,
         status: "bestätigt",
       };
@@ -321,18 +451,26 @@ const AdminRequestDetail = () => {
       setRequest(updatedRequest);
       setStatus("bestätigt");
 
-      try {
-        await sendStatusMail(request.id);
-        setMessage("Event erstellt und Mail versendet.");
-      } catch (mailErr: any) {
-        console.error("REQUEST STATUS MAIL ERROR AFTER CONVERT:", mailErr);
-        setMessage(
-          `Event erstellt, aber Mail fehlgeschlagen: ${mailErr?.message || "Unbekannter Fehler"}`
-        );
+      if (sendMail) {
+        try {
+          await sendStatusMail(request.id);
+          setMessage("Event erstellt und Mail versendet.");
+        } catch (mailErr: any) {
+          console.error("REQUEST STATUS MAIL ERROR AFTER CONVERT:", mailErr);
+          setMessage(
+            `Event erstellt, aber Mail fehlgeschlagen: ${
+              mailErr?.message || "Unbekannter Fehler"
+            }`
+          );
+        }
+      } else {
+        setMessage("Event erstellt.");
       }
     } catch (err: any) {
       console.error("CONVERT ERROR:", err);
-      setMessage(`Fehler beim Konvertieren: ${err?.message || "Unbekannter Fehler"}`);
+      setMessage(
+        `Fehler beim Konvertieren: ${err?.message || "Unbekannter Fehler"}`
+      );
     }
 
     setConverting(false);
@@ -403,7 +541,7 @@ const AdminRequestDetail = () => {
                 Admin / CRM
               </p>
               <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                Anfrage von {request.name}
+                Anfrage von {name || request.name}
               </h1>
               <p className="font-sans text-sm text-muted-foreground mt-1">
                 Eingegangen am{" "}
@@ -428,103 +566,141 @@ const AdminRequestDetail = () => {
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Name
-                    </p>
-                    <p className="font-sans text-sm text-foreground font-medium">
-                      {request.name}
-                    </p>
+                    </label>
+                    <input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                      Firma
+                    </label>
+                    <div className="relative">
+                      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <input
+                        value={firma}
+                        onChange={(e) => setFirma(e.target.value)}
+                        placeholder="Firma (optional)"
+                        className="w-full rounded-xl bg-background/60 border border-border/30 pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       E-Mail
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <Mail className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">{request.email}</p>
                     </div>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Telefon
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <Phone className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">
-                        {request.phone || "Nicht angegeben"}
-                      </p>
                     </div>
+                    <input
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Anlass
-                    </p>
-                    <p className="font-sans text-sm text-foreground">
-                      {request.anlass || "Nicht angegeben"}
-                    </p>
+                    </label>
+                    <input
+                      value={anlass}
+                      onChange={(e) => setAnlass(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Datum
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <Calendar className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">
-                        {request.datum
-                          ? new Date(request.datum).toLocaleDateString("de-DE")
-                          : "Nicht angegeben"}
-                      </p>
                     </div>
+                    <input
+                      type="date"
+                      value={datum}
+                      onChange={(e) => setDatum(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Ort
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <MapPin className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">
-                        {request.ort || "Nicht angegeben"}
-                      </p>
                     </div>
+                    <input
+                      value={ort}
+                      onChange={(e) => setOrt(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Gäste
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <Users className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">
-                        {request.gaeste ?? "Nicht angegeben"}
-                      </p>
                     </div>
+                    <input
+                      type="number"
+                      min="1"
+                      value={gaeste}
+                      onChange={(e) => setGaeste(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Format
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <Theater className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">
-                        {request.format || "Nicht angegeben"}
-                      </p>
                     </div>
+                    <input
+                      value={format}
+                      onChange={(e) => setFormat(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
                 </div>
 
                 <div className="mt-4 rounded-xl bg-background/60 border border-border/20 p-4">
-                  <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                  <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                     Nachricht
-                  </p>
-                  <p className="font-sans text-sm text-foreground leading-relaxed whitespace-pre-line">
-                    {request.nachricht || "Keine zusätzliche Nachricht angegeben."}
-                  </p>
+                  </label>
+                  <textarea
+                    value={nachricht}
+                    onChange={(e) => setNachricht(e.target.value)}
+                    rows={6}
+                    className={inputCls + " resize-none"}
+                  />
                 </div>
               </div>
             </div>
@@ -575,6 +751,18 @@ const AdminRequestDetail = () => {
                       className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20 resize-none"
                     />
                   </div>
+
+                  <label className="flex items-center gap-3 rounded-xl bg-background/60 border border-border/20 px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={sendMail}
+                      onChange={(e) => setSendMail(e.target.checked)}
+                      className="h-4 w-4 rounded border-border text-accent focus:ring-accent"
+                    />
+                    <span className="font-sans text-sm text-foreground">
+                      Kundenmail bei Statusänderung / Konvertierung senden
+                    </span>
+                  </label>
 
                   {message && (
                     <div className="rounded-xl bg-accent/10 text-accent px-4 py-3 text-sm">
