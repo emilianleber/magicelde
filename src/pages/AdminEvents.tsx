@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Calendar,
@@ -12,6 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
+import AdminLayout from "@/components/admin/AdminLayout";
 
 interface PortalEvent {
   id: string;
@@ -155,199 +155,162 @@ const AdminEvents = () => {
   });
 
   if (loading) {
-    return (
-      <PageLayout>
-        <section className="min-h-screen pt-28 pb-16 flex items-center justify-center">
-          <div className="animate-pulse text-muted-foreground font-sans">
-            Wird geladen…
-          </div>
-        </section>
-      </PageLayout>
-    );
+    return <div className="pt-28 text-center">Wird geladen…</div>;
   }
 
   if (isAdmin === false) {
-    return (
-      <PageLayout>
-        <section className="min-h-screen pt-28 pb-16">
-          <div className="container px-6 max-w-3xl mx-auto">
-            <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
-              <h1 className="font-display text-2xl font-bold text-foreground mb-3">
-                Kein Zugriff
-              </h1>
-              <p className="font-sans text-sm text-muted-foreground">
-                Dein Account ist nicht als Admin freigegeben.
-              </p>
-            </div>
-          </div>
-        </section>
-      </PageLayout>
-    );
+    return <div className="pt-28 text-center">Kein Zugriff</div>;
   }
 
   return (
-    <PageLayout>
-      <section className="min-h-screen pt-28 pb-16">
-        <div className="container px-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
-            <div>
-              <p className="font-sans text-xs text-muted-foreground uppercase tracking-widest mb-1">
-                Admin / CRM
-              </p>
-              <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                Events
-              </h1>
-              <p className="font-sans text-sm text-muted-foreground mt-1">
-                Alle geplanten und gebuchten Events
-              </p>
-            </div>
+    <AdminLayout
+      title="Events"
+      subtitle="Alle geplanten und gebuchten Events"
+      actions={
+        <button
+          onClick={logout}
+          className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <LogOut className="w-4 h-4" /> Abmelden
+        </button>
+      }
+    >
+      <div className="relative mb-8">
+        <Search className="w-4 h-4 text-muted-foreground absolute left-4 top-1/2 -translate-y-1/2" />
+        <input
+          type="text"
+          placeholder="Suche nach Titel, Ort, Format oder Status …"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full rounded-2xl bg-muted/40 border border-border/30 pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
+        />
+      </div>
 
-            <button
-              onClick={logout}
-              className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
+      <div className="grid sm:grid-cols-3 gap-4 mb-8">
+        <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
+          <p className="font-display text-2xl font-bold text-foreground">
+            {events.length}
+          </p>
+          <p className="font-sans text-xs text-muted-foreground mt-1">
+            Alle Events
+          </p>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
+          <p className="font-display text-2xl font-bold text-foreground">
+            {events.filter((e) => e.status === "in_planung").length}
+          </p>
+          <p className="font-sans text-xs text-muted-foreground mt-1">
+            In Planung
+          </p>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
+          <p className="font-display text-2xl font-bold text-foreground">
+            {events.filter((e) => e.status === "rechnung_bezahlt").length}
+          </p>
+          <p className="font-sans text-xs text-muted-foreground mt-1">
+            Bezahlt
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        {filteredEvents.length === 0 ? (
+          <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
+            <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+            <h3 className="font-display text-lg font-bold text-foreground mb-2">
+              Keine Events gefunden
+            </h3>
+            <p className="font-sans text-sm text-muted-foreground">
+              Passe deine Suche an oder konvertiere eine Anfrage zu einem Event.
+            </p>
+          </div>
+        ) : (
+          filteredEvents.map((event) => (
+            <div
+              key={event.id}
+              className="p-6 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-colors"
             >
-              <LogOut className="w-4 h-4" /> Abmelden
-            </button>
-          </div>
+              <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-5">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 flex-wrap mb-2">
+                    <h3 className="font-display text-lg font-bold text-foreground">
+                      {event.title}
+                    </h3>
+                    <span
+                      className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(
+                        event.status
+                      )}`}
+                    >
+                      {formatEventStatusLabel(event.status)}
+                    </span>
+                  </div>
 
-          <div className="relative mb-8">
-            <Search className="w-4 h-4 text-muted-foreground absolute left-4 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Suche nach Titel, Ort, Format oder Status …"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-2xl bg-muted/40 border border-border/30 pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
-            />
-          </div>
+                  <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground">
+                    {event.event_date && (
+                      <span className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-accent" />
+                        {new Date(event.event_date).toLocaleDateString("de-DE")}
+                      </span>
+                    )}
 
-          <div className="grid sm:grid-cols-3 gap-4 mb-8">
-            <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
-              <p className="font-display text-2xl font-bold text-foreground">
-                {events.length}
-              </p>
-              <p className="font-sans text-xs text-muted-foreground mt-1">
-                Alle Events
-              </p>
-            </div>
+                    {event.location && (
+                      <span className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-accent" />
+                        {event.location}
+                      </span>
+                    )}
 
-            <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
-              <p className="font-display text-2xl font-bold text-foreground">
-                {events.filter((e) => e.status === "in_planung").length}
-              </p>
-              <p className="font-sans text-xs text-muted-foreground mt-1">
-                In Planung
-              </p>
-            </div>
+                    {event.format && (
+                      <span className="flex items-center gap-2">
+                        <Theater className="w-4 h-4 text-accent" />
+                        {event.format}
+                      </span>
+                    )}
 
-            <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
-              <p className="font-display text-2xl font-bold text-foreground">
-                {events.filter((e) => e.status === "rechnung_bezahlt").length}
-              </p>
-              <p className="font-sans text-xs text-muted-foreground mt-1">
-                Bezahlt
-              </p>
-            </div>
-          </div>
+                    {event.guests && (
+                      <span className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-accent" />
+                        {event.guests} Gäste
+                      </span>
+                    )}
+                  </div>
 
-          <div className="space-y-4">
-            {filteredEvents.length === 0 ? (
-              <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-                <h3 className="font-display text-lg font-bold text-foreground mb-2">
-                  Keine Events gefunden
-                </h3>
-                <p className="font-sans text-sm text-muted-foreground">
-                  Passe deine Suche an oder konvertiere eine Anfrage zu einem Event.
-                </p>
-              </div>
-            ) : (
-              filteredEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="p-6 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-colors"
-                >
-                  <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-5">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 flex-wrap mb-2">
-                        <h3 className="font-display text-lg font-bold text-foreground">
-                          {event.title}
-                        </h3>
-                        <span
-                          className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(
-                            event.status
-                          )}`}
-                        >
-                          {formatEventStatusLabel(event.status)}
-                        </span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground">
-                        {event.event_date && (
-                          <span className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-accent" />
-                            {new Date(event.event_date).toLocaleDateString("de-DE")}
-                          </span>
-                        )}
-
-                        {event.location && (
-                          <span className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-accent" />
-                            {event.location}
-                          </span>
-                        )}
-
-                        {event.format && (
-                          <span className="flex items-center gap-2">
-                            <Theater className="w-4 h-4 text-accent" />
-                            {event.format}
-                          </span>
-                        )}
-
-                        {event.guests && (
-                          <span className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-accent" />
-                            {event.guests} Gäste
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {event.details_status && (
-                          <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
-                            Details: {event.details_status}
-                          </span>
-                        )}
-                        {event.contract_status && (
-                          <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
-                            Vertrag: {event.contract_status}
-                          </span>
-                        )}
-                        {event.invoice_status && (
-                          <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
-                            Rechnung: {event.invoice_status}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-start xl:items-end gap-3">
-                      <Link
-                        to={`/admin/events/${event.id}`}
-                        className="btn-primary inline-flex group"
-                      >
-                        Details öffnen
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Link>
-                    </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {event.details_status && (
+                      <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
+                        Details: {event.details_status}
+                      </span>
+                    )}
+                    {event.contract_status && (
+                      <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
+                        Vertrag: {event.contract_status}
+                      </span>
+                    )}
+                    {event.invoice_status && (
+                      <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
+                        Rechnung: {event.invoice_status}
+                      </span>
+                    )}
                   </div>
                 </div>
-              ))
-            )}
-          </div>
-        </div>
-      </section>
-    </PageLayout>
+
+                <div className="flex flex-col items-start xl:items-end gap-3">
+                  <Link
+                    to={`/admin/events/${event.id}`}
+                    className="btn-primary inline-flex group"
+                  >
+                    Details öffnen
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </AdminLayout>
   );
 };
 
