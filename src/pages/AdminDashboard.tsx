@@ -1,3 +1,4 @@
+import AdminLayout from "@/components/admin/AdminLayout";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
@@ -157,9 +158,10 @@ const AdminDashboard = () => {
 
   if (isAdmin === false) {
     return (
-      <PageLayout>
-        <section className="min-h-screen pt-28 pb-16">
-          <div className="container px-6 max-w-3xl mx-auto">
+  <AdminLayout
+    title="Anfragen"
+    subtitle="Alle aktuellen Anfragen im Überblick"
+  >
             <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
               <h1 className="font-display text-2xl font-bold text-foreground mb-3">
                 Kein Zugriff
@@ -168,11 +170,9 @@ const AdminDashboard = () => {
                 Dein Account ist nicht als Admin freigegeben.
               </p>
             </div>
-          </div>
-        </section>
-      </PageLayout>
-    );
-  }
+            </AdminLayout>
+);
+   } 
 
   return (
     <PageLayout>
