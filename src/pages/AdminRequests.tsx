@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { Plus } from "lucide-react";
 
 interface PortalRequest {
   id: string;
@@ -176,13 +177,23 @@ const AdminRequests = () => {
       title="Anfragen"
       subtitle="Alle eingegangenen Buchungsanfragen im Überblick"
       actions={
-        <button
-          onClick={logout}
-          className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <LogOut className="w-4 h-4" /> Abmelden
-        </button>
-      }
+  <div className="flex items-center gap-3">
+    <button
+      onClick={logout}
+      className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
+    >
+      Abmelden
+    </button>
+
+    <Link
+      to="/admin/requests/new"
+      className="btn-primary inline-flex items-center gap-2"
+    >
+      <Plus className="w-4 h-4" />
+      Neue Anfrage
+    </Link>
+  </div>
+}
     >
       <div className="grid lg:grid-cols-[1fr_220px] gap-4 mb-8">
         <div className="relative">
