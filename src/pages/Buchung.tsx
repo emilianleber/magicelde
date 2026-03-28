@@ -2,7 +2,7 @@ import { useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
 import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Shield, Clock, Star } from "lucide-react";
+import { Shield, Clock, Star, Building2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const HeroBuchung = () => (
@@ -75,6 +75,7 @@ const FormSection = () => {
 
     const payload = {
       name: String(formData.get("name") || "").trim(),
+      firma: String(formData.get("firma") || "").trim() || null,
       email: String(formData.get("email") || "").trim(),
       phone: String(formData.get("phone") || "").trim(),
       anlass: String(formData.get("anlass") || "").trim(),
@@ -164,12 +165,25 @@ const FormSection = () => {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-5">
+              <div className="relative">
+                <Building2 className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
+                <input
+                  type="text"
+                  name="firma"
+                  placeholder="Firma (optional)"
+                  className="w-full rounded-2xl bg-muted/50 border-0 pl-12 pr-5 py-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all"
+                />
+              </div>
+
               <input
                 type="tel"
                 name="phone"
                 placeholder="Telefon (optional)"
                 className={inputCls}
               />
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-5">
               <select
                 name="anlass"
                 required
@@ -192,19 +206,17 @@ const FormSection = () => {
                 <option value="teamevent">Teamevent / Incentive</option>
                 <option value="sonstiges">Sonstiges</option>
               </select>
+
+              <input type="date" name="datum" className={inputCls} />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-5">
-              <input type="date" name="datum" className={inputCls} />
               <input
                 type="text"
                 name="ort"
                 placeholder="Ort / Location"
                 className={inputCls}
               />
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-5">
               <input
                 type="number"
                 name="gaeste"
@@ -212,6 +224,9 @@ const FormSection = () => {
                 min="1"
                 className={inputCls}
               />
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-5">
               <select name="format" className={inputCls} defaultValue="">
                 <option value="" disabled>
                   Gewünschtes Format
@@ -223,6 +238,8 @@ const FormSection = () => {
                 <option value="kombi">Kombination</option>
                 <option value="unsicher">Noch unsicher — berate mich</option>
               </select>
+
+              <div className="hidden sm:block" />
             </div>
 
             <textarea
