@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -9,6 +9,7 @@ import {
   Theater,
   Users,
   ArrowRight,
+  Trash2,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -27,6 +28,7 @@ interface PortalEvent {
   details_status?: string | null;
   contract_status?: string | null;
   invoice_status?: string | null;
+  deleted_at?: string | null;
 }
 
 const formatEventStatusLabel = (status?: string | null) => {
@@ -79,6 +81,8 @@ const AdminEvents = () => {
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState<PortalEvent[]>([]);
   const [search, setSearch] = useState("");
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const {
@@ -125,6 +129,7 @@ const AdminEvents = () => {
       const { data, error } = await supabase
         .from("portal_events")
         .select("*")
+        .is("deleted_at", null)
         .order("event_date", { ascending: true });
 
       if (error) {
@@ -144,15 +149,60 @@ const AdminEvents = () => {
     navigate("/kundenportal/login");
   };
 
-  const filteredEvents = events.filter((event) => {
+  const filteredEvents = useMemo(() => {
     const q = search.toLowerCase();
-    return (
-      event.title?.toLowerCase().includes(q) ||
-      event.location?.toLowerCase().includes(q) ||
-      event.format?.toLowerCase().includes(q) ||
-      event.status?.toLowerCase().includes(q)
+
+    return events.filter((event) => {
+      return (
+        event.title?.toLowerCase().includes(q) ||
+        event.location?.toLowerCase().includes(q) ||
+        event.format?.toLowerCase().includes(q) ||
+        event.status?.toLowerCase().includes(q)
+      );
+    });
+  }, [events, search]);
+
+  const allVisibleSelected =
+    filteredEvents.length > 0 &&
+    filteredEvents.every((event) => selectedIds.includes(event.id));
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((entry) => entry !== id) : [...prev, id]
     );
-  });
+  };
+
+  const toggleSelectAllVisible = () => {
+    if (allVisibleSelected) {
+      const visibleIds = filteredEvents.map((e) => e.id);
+      setSelectedIds((prev) => prev.filter((id) => !visibleIds.includes(id)));
+      return;
+    }
+
+    const visibleIds = filteredEvents.map((e) => e.id);
+    setSelectedIds((prev) => Array.from(new Set([...prev, ...visibleIds])));
+  };
+
+  const deleteSelected = async () => {
+    if (selectedIds.length === 0) return;
+
+    setDeleting(true);
+
+    const { error } = await supabase
+      .from("portal_events")
+      .update({ deleted_at: new Date().toISOString() })
+      .in("id", selectedIds);
+
+    if (error) {
+      console.error("Fehler beim Löschen der Events:", error);
+      setDeleting(false);
+      return;
+    }
+
+    setEvents((prev) => prev.filter((event) => !selectedIds.includes(event.id)));
+    setSelectedIds([]);
+    setDeleting(false);
+  };
 
   if (loading) {
     return <div className="pt-28 text-center">Wird geladen…</div>;
@@ -167,12 +217,27 @@ const AdminEvents = () => {
       title="Events"
       subtitle="Alle geplanten und gebuchten Events"
       actions={
-        <button
-          onClick={logout}
-          className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <LogOut className="w-4 h-4" /> Abmelden
-        </button>
+        <div className="flex items-center gap-3 flex-wrap">
+          {selectedIds.length > 0 && (
+            <button
+              onClick={deleteSelected}
+              disabled={deleting}
+              className="inline-flex items-center gap-2 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
+            >
+              <Trash2 className="w-4 h-4" />
+              {deleting
+                ? "Löscht…"
+                : `Ausgewählte löschen (${selectedIds.length})`}
+            </button>
+          )}
+
+          <button
+            onClick={logout}
+            className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <LogOut className="w-4 h-4" /> Abmelden
+          </button>
+        </div>
       }
     >
       <div className="relative mb-8">
@@ -186,13 +251,33 @@ const AdminEvents = () => {
         />
       </div>
 
+      <div className="flex items-center gap-3 mb-6">
+        <label className="inline-flex items-center gap-3 rounded-xl bg-muted/30 border border-border/30 px-4 py-3">
+          <input
+            type="checkbox"
+            checked={allVisibleSelected}
+            onChange={toggleSelectAllVisible}
+            className="h-4 w-4 rounded border-border text-accent focus:ring-accent"
+          />
+          <span className="font-sans text-sm text-foreground">
+            Alle sichtbaren auswählen
+          </span>
+        </label>
+
+        {selectedIds.length > 0 && (
+          <span className="font-sans text-sm text-muted-foreground">
+            {selectedIds.length} ausgewählt
+          </span>
+        )}
+      </div>
+
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
         <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
           <p className="font-display text-2xl font-bold text-foreground">
             {events.length}
           </p>
           <p className="font-sans text-xs text-muted-foreground mt-1">
-            Alle Events
+            Aktive Events
           </p>
         </div>
 
@@ -233,66 +318,75 @@ const AdminEvents = () => {
               className="p-6 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-colors"
             >
               <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-5">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 flex-wrap mb-2">
-                    <h3 className="font-display text-lg font-bold text-foreground">
-                      {event.title}
-                    </h3>
-                    <span
-                      className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(
-                        event.status
-                      )}`}
-                    >
-                      {formatEventStatusLabel(event.status)}
-                    </span>
-                  </div>
+                <div className="flex items-start gap-4 flex-1">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.includes(event.id)}
+                    onChange={() => toggleSelect(event.id)}
+                    className="mt-1 h-4 w-4 rounded border-border text-accent focus:ring-accent"
+                  />
 
-                  <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground">
-                    {event.event_date && (
-                      <span className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-accent" />
-                        {new Date(event.event_date).toLocaleDateString("de-DE")}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 flex-wrap mb-2">
+                      <h3 className="font-display text-lg font-bold text-foreground">
+                        {event.title}
+                      </h3>
+                      <span
+                        className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(
+                          event.status
+                        )}`}
+                      >
+                        {formatEventStatusLabel(event.status)}
                       </span>
-                    )}
+                    </div>
 
-                    {event.location && (
-                      <span className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-accent" />
-                        {event.location}
-                      </span>
-                    )}
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground">
+                      {event.event_date && (
+                        <span className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-accent" />
+                          {new Date(event.event_date).toLocaleDateString("de-DE")}
+                        </span>
+                      )}
 
-                    {event.format && (
-                      <span className="flex items-center gap-2">
-                        <Theater className="w-4 h-4 text-accent" />
-                        {event.format}
-                      </span>
-                    )}
+                      {event.location && (
+                        <span className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-accent" />
+                          {event.location}
+                        </span>
+                      )}
 
-                    {event.guests && (
-                      <span className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-accent" />
-                        {event.guests} Gäste
-                      </span>
-                    )}
-                  </div>
+                      {event.format && (
+                        <span className="flex items-center gap-2">
+                          <Theater className="w-4 h-4 text-accent" />
+                          {event.format}
+                        </span>
+                      )}
 
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {event.details_status && (
-                      <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
-                        Details: {event.details_status}
-                      </span>
-                    )}
-                    {event.contract_status && (
-                      <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
-                        Vertrag: {event.contract_status}
-                      </span>
-                    )}
-                    {event.invoice_status && (
-                      <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
-                        Rechnung: {event.invoice_status}
-                      </span>
-                    )}
+                      {event.guests && (
+                        <span className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-accent" />
+                          {event.guests} Gäste
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {event.details_status && (
+                        <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
+                          Details: {event.details_status}
+                        </span>
+                      )}
+                      {event.contract_status && (
+                        <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
+                          Vertrag: {event.contract_status}
+                        </span>
+                      )}
+                      {event.invoice_status && (
+                        <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
+                          Rechnung: {event.invoice_status}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
