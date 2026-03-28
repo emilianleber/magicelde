@@ -102,6 +102,9 @@ const formatEventStatusClasses = (status?: string | null) => {
   }
 };
 
+const inputCls =
+  "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
+
 const AdminEventDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -114,12 +117,20 @@ const AdminEventDetail = () => {
 
   const [event, setEvent] = useState<PortalEvent | null>(null);
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
+
+  const [title, setTitle] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [format, setFormat] = useState("");
+  const [guests, setGuests] = useState("");
   const [status, setStatus] = useState("in_planung");
   const [detailsStatus, setDetailsStatus] = useState("offen");
   const [contractStatus, setContractStatus] = useState("offen");
   const [invoiceStatus, setInvoiceStatus] = useState("offen");
   const [notes, setNotes] = useState("");
+  const [sendMail, setSendMail] = useState(true);
   const [message, setMessage] = useState("");
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [documentType, setDocumentType] = useState("Dokument");
 
@@ -171,10 +182,19 @@ const AdminEventDetail = () => {
         .eq("id", id)
         .single();
 
-      if (error) {
+            if (error) {
         console.error("Fehler beim Laden des Events:", error);
       } else if (data) {
         setEvent(data);
+        setTitle(data.title || "");
+        setEventDate(data.event_date || "");
+        setLocation(data.location || "");
+        setFormat(data.format || "");
+        setGuests(
+          data.guests !== null && data.guests !== undefined
+            ? String(data.guests)
+            : ""
+        );
         setStatus(data.status || "in_planung");
         setDetailsStatus(data.details_status || "offen");
         setContractStatus(data.contract_status || "offen");
@@ -252,6 +272,11 @@ const AdminEventDetail = () => {
     const { error } = await supabase
       .from("portal_events")
       .update({
+        title: title.trim() || "Event",
+        event_date: eventDate.trim() || null,
+        location: location.trim() || null,
+        format: format.trim() || null,
+        guests: guests ? Number(guests) : null,
         status,
         details_status: detailsStatus,
         contract_status: contractStatus,
@@ -267,8 +292,13 @@ const AdminEventDetail = () => {
       return;
     }
 
-    const updatedEvent = {
+    const updatedEvent: PortalEvent = {
       ...event,
+      title: title.trim() || "Event",
+      event_date: eventDate.trim() || null,
+      location: location.trim() || null,
+      format: format.trim() || null,
+      guests: guests ? Number(guests) : null,
       status,
       details_status: detailsStatus,
       contract_status: contractStatus,
@@ -278,14 +308,16 @@ const AdminEventDetail = () => {
 
     setEvent(updatedEvent);
 
-    if (previousStatus !== status) {
+    if (previousStatus !== status && sendMail) {
       try {
         await sendEventStatusMail(event.id);
         setMessage("Gespeichert und Mail versendet.");
       } catch (mailErr: any) {
         console.error("EVENT STATUS MAIL ERROR:", mailErr);
         setMessage(
-          `Gespeichert, aber Mail fehlgeschlagen: ${mailErr?.message || "Unbekannter Fehler"}`
+          `Gespeichert, aber Mail fehlgeschlagen: ${
+            mailErr?.message || "Unbekannter Fehler"
+          }`
         );
       }
     } else {
@@ -306,7 +338,10 @@ const AdminEventDetail = () => {
 
     try {
       const fileExt = selectedFile.name.split(".").pop();
-      const fileName = `${event.id}/${Date.now()}-${selectedFile.name.replace(/\s+/g, "-")}`;
+      const fileName = `${event.id}/${Date.now()}-${selectedFile.name.replace(
+        /\s+/g,
+        "-"
+      )}`;
       const filePath = fileExt ? fileName : `${fileName}.file`;
 
       const { error: uploadError } = await supabase.storage
@@ -414,13 +449,13 @@ const AdminEventDetail = () => {
                 Admin / CRM
               </p>
               <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                {event.title}
+                {title || event.title}
               </h1>
               <p className="font-sans text-sm text-muted-foreground mt-1">
-                {event.event_date
-                  ? new Date(event.event_date).toLocaleDateString("de-DE")
+                {eventDate
+                  ? new Date(eventDate).toLocaleDateString("de-DE")
                   : "Kein Datum"}
-                {event.location ? ` · ${event.location}` : ""}
+                {location ? ` · ${location}` : ""}
               </p>
             </div>
 
@@ -440,76 +475,74 @@ const AdminEventDetail = () => {
                 </h2>
 
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                  <div className="rounded-xl bg-background/60 border border-border/20 p-4 sm:col-span-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Titel
-                    </p>
-                    <p className="font-sans text-sm text-foreground font-medium">
-                      {event.title}
-                    </p>
+                    </label>
+                    <input
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                      Status
-                    </p>
-                    <span
-                      className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(
-                        event.status
-                      )}`}
-                    >
-                      {formatEventStatusLabel(event.status)}
-                    </span>
-                  </div>
-
-                  <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Datum
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <Calendar className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">
-                        {event.event_date
-                          ? new Date(event.event_date).toLocaleDateString("de-DE")
-                          : "Nicht angegeben"}
-                      </p>
                     </div>
+                    <input
+                      type="date"
+                      value={eventDate}
+                      onChange={(e) => setEventDate(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Ort
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <MapPin className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">
-                        {event.location || "Nicht angegeben"}
-                      </p>
                     </div>
+                    <input
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Gäste
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <Users className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">
-                        {event.guests ?? "Nicht angegeben"}
-                      </p>
                     </div>
+                    <input
+                      type="number"
+                      min="1"
+                      value={guests}
+                      onChange={(e) => setGuests(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
 
                   <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                    <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                       Format
-                    </p>
-                    <div className="flex items-center gap-2">
+                    </label>
+                    <div className="flex items-center gap-2 mb-2">
                       <Theater className="w-4 h-4 text-accent" />
-                      <p className="font-sans text-sm text-foreground">
-                        {event.format || "Nicht angegeben"}
-                      </p>
                     </div>
+                    <input
+                      value={format}
+                      onChange={(e) => setFormat(e.target.value)}
+                      className={inputCls}
+                    />
                   </div>
                 </div>
 
@@ -626,6 +659,16 @@ const AdminEventDetail = () => {
                         </option>
                       ))}
                     </select>
+
+                    <div className="mt-3">
+                      <span
+                        className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(
+                          event.status
+                        )}`}
+                      >
+                        Aktuell: {formatEventStatusLabel(event.status)}
+                      </span>
+                    </div>
                   </div>
 
                   <div>
@@ -691,6 +734,18 @@ const AdminEventDetail = () => {
                       className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20 resize-none"
                     />
                   </div>
+
+                  <label className="flex items-center gap-3 rounded-xl bg-background/60 border border-border/20 px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={sendMail}
+                      onChange={(e) => setSendMail(e.target.checked)}
+                      className="h-4 w-4 rounded border-border text-accent focus:ring-accent"
+                    />
+                    <span className="font-sans text-sm text-foreground">
+                      Kundenmail bei Statusänderung senden
+                    </span>
+                  </label>
 
                   {message && (
                     <div className="rounded-xl bg-accent/10 text-accent px-4 py-3 text-sm">
