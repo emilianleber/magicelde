@@ -1,3 +1,4 @@
+import AdminLayout from "@/components/admin/AdminLayout";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
@@ -209,9 +210,10 @@ const AdminRequests = () => {
   }
 
   return (
-    <PageLayout>
-      <section className="min-h-screen pt-28 pb-16">
-        <div className="container px-6">
+  <AdminLayout
+    title="Anfragen"
+    subtitle="Alle eingegangenen Buchungsanfragen im Überblick"
+  >
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
             <div>
               <p className="font-sans text-xs text-muted-foreground uppercase tracking-widest mb-1">
@@ -384,10 +386,8 @@ const AdminRequests = () => {
               ))
             )}
           </div>
-        </div>
-      </section>
-    </PageLayout>
-  );
+          </AdminLayout>
+);
 };
 
 export default AdminRequests;
