@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, Mail, ArrowRight } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff } from "lucide-react";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -26,37 +27,33 @@ const AdminLogin = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
     setLoading(true);
 
-    // Erst prüfen ob E-Mail in portal_admins ist
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    });
+
+    if (signInError || !data.user?.email) {
+      setError("E-Mail oder Passwort falsch.");
+      setLoading(false);
+      return;
+    }
+
     const { data: admin } = await supabase
       .from("portal_admins")
       .select("id")
-      .eq("email", email.trim().toLowerCase())
+      .eq("email", data.user.email)
       .maybeSingle();
 
     if (!admin) {
-      setError("Diese E-Mail ist nicht als Admin hinterlegt.");
+      await supabase.auth.signOut();
+      setError("Kein Admin-Zugriff für dieses Konto.");
       setLoading(false);
       return;
     }
 
-    const { error: otpError } = await supabase.auth.signInWithOtp({
-      email: email.trim().toLowerCase(),
-      options: {
-        emailRedirectTo: "https://magicel.de/admin",
-      },
-    });
-
-    if (otpError) {
-      setError("Fehler beim Senden des Login-Links.");
-      setLoading(false);
-      return;
-    }
-
-    setSuccess("Login-Link gesendet. Bitte prüfe dein Postfach.");
-    setLoading(false);
+    navigate("/admin");
   };
 
   return (
@@ -74,9 +71,7 @@ const AdminLogin = () => {
 
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
-                <label className="block font-sans text-sm font-medium text-foreground mb-2">
-                  E-Mail-Adresse
-                </label>
+                <label className="block font-sans text-sm font-medium text-foreground mb-2">E-Mail</label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
@@ -90,20 +85,38 @@ const AdminLogin = () => {
                 </div>
               </div>
 
+              <div>
+                <label className="block font-sans text-sm font-medium text-foreground mb-2">Passwort</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input
+                    type={showPw ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    className="w-full pl-11 pr-11 py-3.5 rounded-xl bg-muted/50 border border-border/50 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPw(!showPw)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
               {error && (
                 <p className="font-sans text-sm text-destructive bg-destructive/10 px-4 py-2.5 rounded-xl">{error}</p>
-              )}
-              {success && (
-                <p className="font-sans text-sm text-green-700 bg-green-100 px-4 py-2.5 rounded-xl">{success}</p>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full btn-primary justify-center group disabled:opacity-50"
+                className="w-full btn-primary justify-center disabled:opacity-50"
               >
-                {loading ? "Wird geprüft…" : "Login-Link senden"}
-                {!loading && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />}
+                {loading ? "Wird geprüft…" : "Anmelden"}
               </button>
             </form>
 
