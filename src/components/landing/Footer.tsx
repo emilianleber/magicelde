@@ -8,31 +8,26 @@ const Footer = () => (
       <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
         <div className="max-w-sm">
           <Link to="/" className="flex items-center gap-2 mb-4">
-            <img src={logoImg} alt="Emilian Leber" className="h-6 w-auto" />
-<span className="font-display font-bold text-foreground text-lg">Emilian Leber</span>          </Link>
+            <img src={logoImg} alt="MagicEL" className="h-6 w-auto" />
+            <span className="font-display font-bold text-foreground text-lg">MagicEL</span>
+          </Link>
           <p className="text-detail mb-6">
             Moderner Comedy-Zauberer für Firmenfeiern, Hochzeiten, Galas und private Events.
             Staunen. Lachen. Erinnern.
           </p>
           <div className="flex gap-4">
-  {[
-    { href: "https://www.instagram.com/_magicel/", label: "Instagram" },
-    { href: "https://www.youtube.com/channel/UCDm5lC0Dq3b8vhJpwRJcXCA", label: "YouTube" },
-    { href: "https://de.linkedin.com/in/emilian-leber-3b3414369", label: "LinkedIn" },
-    { href: "https://www.facebook.com/people/Emilian-Leber-Zauberer-Mentalist/61582946450467/", label: "Facebook" },
-  ].map((s) => (
-    <a
-      key={s.label}
-      href={s.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-foreground hover:text-blue-500 transition"
-    >
-             {s.label}
-      </a>
-    ))}
-  </div>
-</div>
+            {[
+              { href: "https://instagram.com/magicel", label: "Instagram" },
+              { href: "https://youtube.com/@magicel", label: "YouTube" },
+              { href: "https://tiktok.com/@magicel", label: "TikTok" },
+            ].map((s) => (
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="font-sans text-xs font-medium text-muted-foreground hover:text-accent transition-colors">
+                {s.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-12">
           <div className="space-y-3">
             <p className="font-display text-sm font-bold text-foreground mb-4">Anlässe</p>
@@ -45,7 +40,6 @@ const Footer = () => (
             <Link to="/buehnenshow" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Bühnenshow</Link>
             <Link to="/close-up" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Close-Up</Link>
             <Link to="/magic-dinner" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Magic Dinner</Link>
-            <Link to="/moderation" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Moderation</Link>
           </div>
           <div className="space-y-3">
             <p className="font-display text-sm font-bold text-foreground mb-4">Mehr</p>
@@ -60,7 +54,6 @@ const Footer = () => (
             <Link to="/kontakt" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Kontakt</Link>
             <Link to="/buchung" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Anfragen</Link>
             <Link to="/presse" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Presse</Link>
-            <Link to="/kundenportal/login" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Kundenportal</Link>
           </div>
         </div>
       </div>
@@ -80,7 +73,7 @@ const Footer = () => (
       {/* Bottom */}
       <div className="border-t border-border/50 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
         <p className="text-xs text-muted-foreground/50">
-         © {new Date().getFullYear()} Emilian Leber. Alle Rechte vorbehalten.
+          © {new Date().getFullYear()} MagicEL — Emilian Leber. Alle Rechte vorbehalten.
         </p>
         <div className="flex gap-6">
           <Link to="/impressum" className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">Impressum</Link>

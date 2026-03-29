@@ -10,7 +10,6 @@ import Geburtstage from "./pages/Geburtstage.tsx";
 import Buehnenshow from "./pages/Buehnenshow.tsx";
 import CloseUp from "./pages/CloseUp.tsx";
 import MagicDinner from "./pages/MagicDinner.tsx";
-import Moderation from "./pages/Moderation.tsx";
 import UeberMich from "./pages/UeberMich.tsx";
 import Referenzen from "./pages/Referenzen.tsx";
 import FAQPage from "./pages/FAQ.tsx";
@@ -25,8 +24,6 @@ import Datenschutz from "./pages/Datenschutz.tsx";
 import Impressum from "./pages/Impressum.tsx";
 import AGB from "./pages/AGB.tsx";
 import StadtSeite from "./pages/StadtSeite.tsx";
-import KundenportalLogin from "./pages/KundenportalLogin.tsx";
-import Kundenportal from "./pages/Kundenportal.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 
@@ -47,7 +44,6 @@ const App = () => (
           <Route path="/buehnenshow" element={<Buehnenshow />} />
           <Route path="/close-up" element={<CloseUp />} />
           <Route path="/magic-dinner" element={<MagicDinner />} />
-          <Route path="/moderation" element={<Moderation />} />
           <Route path="/ueber-mich" element={<UeberMich />} />
           <Route path="/referenzen" element={<Referenzen />} />
           <Route path="/faq" element={<FAQPage />} />
@@ -62,8 +58,6 @@ const App = () => (
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/agb" element={<AGB />} />
           <Route path="/zauberer/:stadt" element={<StadtSeite />} />
-          <Route path="/kundenportal/login" element={<KundenportalLogin />} />
-          <Route path="/kundenportal" element={<Kundenportal />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -2,17 +2,44 @@ import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import ProcessSteps from "@/components/landing/ProcessSteps";
 import AnimatedWords from "@/components/landing/AnimatedWords";
-import BackgroundHero from "@/components/landing/BackgroundHero";
 import VideoHero from "@/components/landing/VideoHero";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
-import closeupImg from "@/assets/hero-closeup.jpg";
+import closeupImg from "@/assets/closeup-magic.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import { ArrowRight, Hand, Eye, MessageCircle, Zap, Star, Users, Heart, Sparkles, Clock } from "lucide-react";
+
+const HeroCloseUp = () => (
+  <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+    <div className="container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
+      <div className="max-w-5xl mx-auto text-center">
+        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+          <span className="badge-accent mb-8 inline-flex">Showkonzept</span>
+        </div>
+        <h1 className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground" style={{ animationDelay: "0.3s" }}>
+          Magie in deinen{" "}
+          <AnimatedWords words={["Händen.", "Augen.", "Momenten.", "Erlebnissen."]} />
+        </h1>
+        <p className="text-body max-w-2xl mx-auto mb-12 opacity-0 animate-fade-up" style={{ animationDelay: "0.5s" }}>
+          Keine Bühne, keine Distanz — Close-Up Magie passiert direkt vor deinen Augen,
+          in deinen Händen und mitten unter deinen Gästen. Die intimste und intensivste Form der Zauberkunst.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.65s" }}>
+          <Link to="/buchung" className="btn-primary btn-large group">
+            Close-Up anfragen <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+      </div>
+      <div className="max-w-5xl mx-auto mt-20 opacity-0 animate-scale-up" style={{ animationDelay: "0.85s" }}>
+        <VideoHero posterSrc={closeupImg} alt="Close-Up Magie hautnah" />
+      </div>
+    </div>
+  </section>
+);
 
 const WasIstSection = () => {
   const { ref, isVisible } = useScrollReveal();
@@ -302,14 +329,7 @@ const FAQCloseUp = () => {
 
 const CloseUp = () => (
   <PageLayout>
-    <BackgroundHero
-      imageSrc={closeupImg}
-      badge="Showkonzept"
-      headline="Magie in deinen"
-      animatedWords={["Händen.", "Augen.", "Momenten.", "Erlebnissen."]}
-      subline="Keine Bühne, keine Distanz — Close-Up Magie passiert direkt vor deinen Augen, in deinen Händen und mitten unter deinen Gästen."
-      ctaPrimary={{ text: "Close-Up anfragen", to: "/buchung" }}
-    />
+    <HeroCloseUp />
     <WasIstSection />
     <FeaturesSection />
     <EinsatzSlider />

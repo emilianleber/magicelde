@@ -2,18 +2,45 @@ import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import ProcessSteps from "@/components/landing/ProcessSteps";
 import AnimatedWords from "@/components/landing/AnimatedWords";
-import BackgroundHero from "@/components/landing/BackgroundHero";
 import VideoHero from "@/components/landing/VideoHero";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
-import heroImg from "@/assets/hero-birthday.jpg";
+import heroImg from "@/assets/hero-magic.jpg";
 import closeupImg from "@/assets/closeup-magic.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import { Star, PartyPopper, Gift, Users, Music, ArrowRight, Heart, Sparkles, Check, MessageCircle } from "lucide-react";
+
+const HeroBirthday = () => (
+  <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+    <div className="container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
+      <div className="max-w-5xl mx-auto text-center">
+        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+          <span className="badge-accent mb-8 inline-flex">Zauberer für deinen Geburtstag</span>
+        </div>
+        <h1 className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground" style={{ animationDelay: "0.3s" }}>
+          Ein Geburtstag, der{" "}
+          <AnimatedWords words={["bleibt.", "überrascht.", "begeistert.", "verbindet."]} />
+        </h1>
+        <p className="text-body max-w-2xl mx-auto mb-12 opacity-0 animate-fade-up" style={{ animationDelay: "0.5s" }}>
+          Stell dir vor, das Geburtstagskind steht im Mittelpunkt einer verblüffenden Show —
+          und alle Gäste reden noch Wochen später darüber. Das ist mein Versprechen.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.65s" }}>
+          <Link to="/buchung" className="btn-primary btn-large group">
+            Jetzt anfragen <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+      </div>
+      <div className="max-w-5xl mx-auto mt-20 opacity-0 animate-scale-up" style={{ animationDelay: "0.85s" }}>
+        <VideoHero posterSrc={heroImg} alt="Zauberer auf einer Geburtstagsfeier" />
+      </div>
+    </div>
+  </section>
+);
 
 const WarumSection = () => {
   const { ref, isVisible } = useScrollReveal();
@@ -296,14 +323,7 @@ const UeberMichKurz = () => {
 
 const Geburtstage = () => (
   <PageLayout>
-    <BackgroundHero
-      imageSrc={heroImg}
-      badge="Zauberer für deinen Geburtstag"
-      headline="Ein Geburtstag, der"
-      animatedWords={["bleibt.", "überrascht.", "begeistert.", "verbindet."]}
-      subline="Stell dir vor, das Geburtstagskind steht im Mittelpunkt einer verblüffenden Show — und alle Gäste reden noch Wochen später darüber."
-      ctaPrimary={{ text: "Jetzt anfragen", to: "/buchung" }}
-    />
+    <HeroBirthday />
     <WarumSection />
     <VorteileSection />
     <ErlebnisSection />

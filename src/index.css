@@ -38,10 +38,6 @@
 
     --section-alt: 220 20% 97.5%;
 
-    --gradient-start: 225 80% 56%;
-    --gradient-mid: 260 70% 55%;
-    --gradient-end: 340 75% 50%;
-
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -86,8 +82,8 @@
   }
 
   .badge-gradient {
-    @apply inline-flex items-center px-5 py-2 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase text-white;
-    background: linear-gradient(135deg, hsl(230, 65%, 48%), hsl(280, 55%, 45%), hsl(345, 70%, 42%));
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase text-white;
+    background: linear-gradient(135deg, hsl(225, 80%, 56%), hsl(260, 70%, 55%));
   }
 
   .badge-muted {
@@ -98,11 +94,6 @@
     @apply inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase;
     background: hsl(var(--primary) / 0.08);
     color: hsl(var(--primary));
-  }
-
-  .badge-gradient-subtle {
-    @apply inline-flex items-center px-5 py-2 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase text-white;
-    background: linear-gradient(135deg, hsl(230, 65%, 48%), hsl(280, 55%, 45%), hsl(345, 70%, 42%));
   }
 
   /* ─── Sections ─── */
@@ -164,14 +155,6 @@
     @apply inline-flex items-center justify-center px-8 py-4 rounded-full bg-accent font-sans text-sm font-medium text-accent-foreground transition-all duration-300 hover:bg-accent/90 hover:shadow-[0_8px_30px_hsla(225,80%,56%,0.25)] active:scale-[0.97];
   }
 
-  .btn-gradient {
-    @apply inline-flex items-center justify-center px-8 py-4 rounded-full font-sans text-sm font-medium text-white transition-all duration-300 active:scale-[0.97];
-    background: linear-gradient(135deg, hsl(230, 65%, 48%), hsl(280, 55%, 45%), hsl(345, 70%, 42%));
-  }
-  .btn-gradient:hover {
-    box-shadow: 0 8px 30px hsla(280, 55%, 45%, 0.3);
-  }
-
   .btn-large {
     @apply px-10 py-5 text-base;
   }
@@ -183,13 +166,5 @@
 
   .video-hero video {
     @apply w-full h-full object-cover;
-  }
-
-  /* ─── Hover glow ─── */
-  .hover-glow {
-    @apply transition-all duration-300;
-  }
-  .hover-glow:hover {
-    box-shadow: 0 0 30px hsl(225 80% 56% / 0.15), 0 0 60px hsl(260 70% 55% / 0.08);
   }
 }
