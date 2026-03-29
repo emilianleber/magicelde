@@ -9,6 +9,7 @@ import AdminMails from "@/pages/AdminMails";
 import AdminCustomers from "@/pages/AdminCustomers";
 import AdminCustomerDetail from "@/pages/AdminCustomerDetail";
 import AdminNewCustomer from "@/pages/AdminNewCustomer";
+import AdminSettings from "@/pages/AdminSettings";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -98,6 +99,7 @@ const App = () => (
 <Route path="/admin/customers" element={<AdminCustomers />} />
 <Route path="/admin/customers/:id" element={<AdminCustomerDetail />} />
 <Route path="/admin/customers/new" element={<AdminNewCustomer />} />
+<Route path="/admin/settings" element={<AdminSettings />} />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />

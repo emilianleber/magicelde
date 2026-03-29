@@ -1,17 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
+import RichTextEditor, { PLACEHOLDERS, replacePlaceholders } from "@/components/admin/RichTextEditor";
 import { supabase } from "@/integrations/supabase/client";
 import {
+  ChevronDown,
+  ChevronUp,
+  FileText,
   LogOut,
   Mail,
+  Paperclip,
   Plus,
   Search,
   Send,
-  X,
-  ChevronDown,
-  ChevronUp,
   User,
+  X,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
@@ -37,12 +40,27 @@ interface PortalCustomer {
   firma?: string | null;
 }
 
+interface MailTemplate {
+  id: string;
+  name: string;
+  subject: string | null;
+  body: string;
+}
+
+interface CustomerDocument {
+  id: string;
+  name: string;
+  type: string | null;
+  file_url: string | null;
+}
+
 const inputCls =
   "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
 
+const SUPABASE_URL = "https://rjhvqctjtgfpxzhnrozt.supabase.co";
+
 const AdminMails = () => {
   const navigate = useNavigate();
-
   const [user, setUser] = useState<SupaUser | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
@@ -51,14 +69,20 @@ const AdminMails = () => {
   const [search, setSearch] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // Compose
-  const [showCompose, setShowCompose] = useState(false);
+  const [templates, setTemplates] = useState<MailTemplate[]>([]);
+  const [signature, setSignature] = useState("");
   const [customers, setCustomers] = useState<PortalCustomer[]>([]);
+
+  // Compose state
+  const [showCompose, setShowCompose] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState("");
   const [composeCustomerId, setComposeCustomerId] = useState("");
   const [composeToEmail, setComposeToEmail] = useState("");
   const [composeToName, setComposeToName] = useState("");
   const [composeSubject, setComposeSubject] = useState("");
   const [composeBody, setComposeBody] = useState("");
+  const [customerDocs, setCustomerDocs] = useState<CustomerDocument[]>([]);
+  const [selectedDocIds, setSelectedDocIds] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [sendMsg, setSendMsg] = useState("");
 
@@ -79,26 +103,23 @@ const AdminMails = () => {
 
     const loadData = async () => {
       setLoading(true);
-
       const { data: admin } = await supabase
         .from("portal_admins").select("*").eq("email", user.email!).maybeSingle();
 
       if (!admin) { setIsAdmin(false); setLoading(false); return; }
       setIsAdmin(true);
 
-      const [messagesResult, customersResult] = await Promise.all([
-        supabase
-          .from("portal_messages")
-          .select("*, customer:customer_id(name, email)")
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("portal_customers")
-          .select("id, name, email, firma")
-          .order("name", { ascending: true }),
+      const [messagesRes, templatesRes, signatureRes, customersRes] = await Promise.all([
+        supabase.from("portal_messages").select("*, customer:customer_id(name, email)").order("created_at", { ascending: false }),
+        supabase.from("portal_mail_templates").select("*").order("name"),
+        supabase.from("portal_signature").select("*").limit(1).maybeSingle(),
+        supabase.from("portal_customers").select("id, name, email, firma").order("name"),
       ]);
 
-      if (!messagesResult.error) setMessages(messagesResult.data || []);
-      if (!customersResult.error) setCustomers(customersResult.data || []);
+      if (!messagesRes.error) setMessages(messagesRes.data || []);
+      if (!templatesRes.error) setTemplates(templatesRes.data || []);
+      if (!signatureRes.error && signatureRes.data) setSignature(signatureRes.data.body);
+      if (!customersRes.error) setCustomers(customersRes.data || []);
 
       setLoading(false);
     };
@@ -106,17 +127,66 @@ const AdminMails = () => {
     loadData();
   }, [user]);
 
-  const logout = async () => {
-    await supabase.auth.signOut();
-    navigate("/kundenportal/login");
-  };
-
-  const handleCustomerSelect = (customerId: string) => {
+  const handleCustomerSelect = async (customerId: string) => {
     setComposeCustomerId(customerId);
+    setSelectedDocIds([]);
+    setCustomerDocs([]);
+
     const c = customers.find((c) => c.id === customerId);
     if (c) {
       setComposeToEmail(c.email || "");
       setComposeToName(c.name || "");
+    }
+
+    if (customerId) {
+      const { data } = await supabase
+        .from("portal_documents")
+        .select("id, name, type, file_url")
+        .eq("customer_id", customerId);
+      setCustomerDocs(data || []);
+    }
+
+    // Platzhalter in Body ersetzen wenn Template aktiv
+    if (selectedTemplateId && c) {
+      const tpl = templates.find((t) => t.id === selectedTemplateId);
+      if (tpl) {
+        const replaced = replacePlaceholders(tpl.body, { name: c.name, firma: c.firma, email: c.email });
+        setComposeBody(replaced + (signature ? `<br><br>---<br>${signature}` : ""));
+      }
+    }
+  };
+
+  const handleTemplateSelect = (templateId: string) => {
+    setSelectedTemplateId(templateId);
+    if (!templateId) return;
+
+    const tpl = templates.find((t) => t.id === templateId);
+    if (!tpl) return;
+
+    if (tpl.subject) setComposeSubject(tpl.subject);
+
+    const customer = customers.find((c) => c.id === composeCustomerId);
+    const replaced = replacePlaceholders(tpl.body, {
+      name: customer?.name,
+      firma: customer?.firma,
+      email: customer?.email,
+    });
+
+    setComposeBody(replaced + (signature ? `<br><br>---<br>${signature}` : ""));
+  };
+
+  const toggleDoc = (id: string) => {
+    setSelectedDocIds((prev) =>
+      prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id]
+    );
+  };
+
+  const openCompose = () => {
+    setShowCompose(true);
+    setSendMsg("");
+    // Signatur vorladen wenn noch leer
+    if (!composeBody && signature) {
+      setComposeBody(`<br><br>---<br>${signature}`);
     }
   };
 
@@ -133,8 +203,12 @@ const AdminMails = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.access_token) throw new Error("Keine Session.");
 
+      const attachmentUrls = selectedDocIds
+        .map((id) => customerDocs.find((d) => d.id === id)?.file_url)
+        .filter(Boolean);
+
       const res = await fetch(
-        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/send-customer-mail",
+        `${SUPABASE_URL}/functions/v1/send-customer-mail`,
         {
           method: "POST",
           headers: {
@@ -148,6 +222,7 @@ const AdminMails = () => {
             body: composeBody,
             to_email: composeToEmail,
             to_name: composeToName || null,
+            attachment_urls: attachmentUrls,
           }),
         }
       );
@@ -162,6 +237,9 @@ const AdminMails = () => {
       setComposeToName("");
       setComposeSubject("");
       setComposeBody("");
+      setSelectedTemplateId("");
+      setSelectedDocIds([]);
+      setCustomerDocs([]);
     } catch (err: unknown) {
       setSendMsg(err instanceof Error ? err.message : "Fehler beim Senden.");
     } finally {
@@ -180,17 +258,22 @@ const AdminMails = () => {
     );
   });
 
+  const logout = async () => {
+    await supabase.auth.signOut();
+    navigate("/kundenportal/login");
+  };
+
   if (loading) return <div className="pt-28 text-center">Wird geladen…</div>;
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
 
   return (
     <AdminLayout
       title="Mails"
-      subtitle="Alle gesendeten Nachrichten im Überblick"
+      subtitle="Alle gesendeten Nachrichten"
       actions={
         <div className="flex items-center gap-3">
           <button
-            onClick={() => { setShowCompose(!showCompose); setSendMsg(""); }}
+            onClick={() => { if (showCompose) { setShowCompose(false); } else { openCompose(); } }}
             className="btn-primary inline-flex items-center gap-2"
           >
             {showCompose ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -202,12 +285,22 @@ const AdminMails = () => {
         </div>
       }
     >
-      {/* Compose */}
+      {/* ── Compose ── */}
       {showCompose && (
-        <div className="mb-8 p-6 rounded-2xl bg-muted/20 border border-border/30 space-y-4">
+        <div className="mb-8 p-6 rounded-2xl bg-muted/20 border border-border/30 space-y-5">
           <h2 className="font-display text-base font-bold text-foreground">Neue Mail verfassen</h2>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          {/* Vorlage + Kunde */}
+          <div className="grid sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Vorlage</label>
+              <select value={selectedTemplateId} onChange={(e) => handleTemplateSelect(e.target.value)} className={inputCls}>
+                <option value="">— Vorlage wählen —</option>
+                {templates.map((t) => (
+                  <option key={t.id} value={t.id}>{t.name}</option>
+                ))}
+              </select>
+            </div>
             <div>
               <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Kunde (optional)</label>
               <select value={composeCustomerId} onChange={(e) => handleCustomerSelect(e.target.value)} className={inputCls}>
@@ -223,15 +316,49 @@ const AdminMails = () => {
             </div>
           </div>
 
+          {/* Betreff */}
           <div>
             <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Betreff *</label>
             <input value={composeSubject} onChange={(e) => setComposeSubject(e.target.value)} placeholder="Betreff" className={inputCls} />
           </div>
 
+          {/* Rich Text Editor */}
           <div>
             <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Nachricht *</label>
-            <textarea value={composeBody} onChange={(e) => setComposeBody(e.target.value)} rows={8} className={inputCls} />
+            <RichTextEditor
+              value={composeBody}
+              onChange={setComposeBody}
+              placeholder="Nachricht schreiben…"
+              minHeight="240px"
+            />
           </div>
+
+          {/* Dokument-Anhänge */}
+          {customerDocs.length > 0 && (
+            <div>
+              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                <Paperclip className="w-3.5 h-3.5 inline mr-1" />
+                Anhänge aus Kundenkonto
+              </label>
+              <div className="space-y-2">
+                {customerDocs.map((doc) => (
+                  <label key={doc.id} className="flex items-center gap-3 p-3 rounded-xl bg-background/60 border border-border/20 cursor-pointer hover:border-accent/30 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={selectedDocIds.includes(doc.id)}
+                      onChange={() => toggleDoc(doc.id)}
+                      className="h-4 w-4 rounded border-border text-accent focus:ring-accent"
+                    />
+                    <FileText className="w-4 h-4 text-accent shrink-0" />
+                    <div className="min-w-0">
+                      <p className="font-sans text-sm text-foreground truncate">{doc.name}</p>
+                      {doc.type && <p className="font-sans text-xs text-muted-foreground">{doc.type}</p>}
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
 
           {sendMsg && <p className="font-sans text-sm text-red-500">{sendMsg}</p>}
 
@@ -242,7 +369,7 @@ const AdminMails = () => {
         </div>
       )}
 
-      {/* Suche */}
+      {/* ── Suche ── */}
       <div className="relative mb-6">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <input
@@ -253,7 +380,7 @@ const AdminMails = () => {
         />
       </div>
 
-      {/* Liste */}
+      {/* ── Liste ── */}
       <div className="space-y-3">
         {filtered.length === 0 ? (
           <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
@@ -274,9 +401,7 @@ const AdminMails = () => {
                     <User className="w-4 h-4 text-accent" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-sans text-sm font-semibold text-foreground truncate">
-                      {msg.subject}
-                    </p>
+                    <p className="font-sans text-sm font-semibold text-foreground truncate">{msg.subject}</p>
                     <p className="font-sans text-xs text-muted-foreground mt-0.5">
                       An: {msg.customer?.name || msg.to_email}
                       {msg.customer_id && (
@@ -293,31 +418,33 @@ const AdminMails = () => {
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <span className="font-sans text-xs text-muted-foreground">
-                    {new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                    {new Date(msg.created_at).toLocaleDateString("de-DE", {
+                      day: "2-digit", month: "2-digit", year: "numeric",
+                      hour: "2-digit", minute: "2-digit",
+                    })}
                   </span>
-                  {expandedId === msg.id ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                  {expandedId === msg.id
+                    ? <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                    : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
                 </div>
               </button>
 
               {expandedId === msg.id && (
                 <div className="px-4 pb-4 pt-1 border-t border-border/20">
-                  <div className="flex gap-6 text-xs text-muted-foreground mb-3 font-sans">
+                  <div className="flex gap-6 text-xs text-muted-foreground mb-3 font-sans flex-wrap">
                     <span>Von: {msg.from_email}</span>
                     <span>An: {msg.to_email}</span>
                     {msg.request_id && (
-                      <Link to={`/admin/requests/${msg.request_id}`} className="text-accent hover:text-accent/80">
-                        Zur Anfrage
-                      </Link>
+                      <Link to={`/admin/requests/${msg.request_id}`} className="text-accent hover:text-accent/80">Zur Anfrage</Link>
                     )}
                     {msg.event_id && (
-                      <Link to={`/admin/events/${msg.event_id}`} className="text-accent hover:text-accent/80">
-                        Zum Event
-                      </Link>
+                      <Link to={`/admin/events/${msg.event_id}`} className="text-accent hover:text-accent/80">Zum Event</Link>
                     )}
                   </div>
-                  <p className="font-sans text-sm text-foreground whitespace-pre-wrap leading-relaxed">
-                    {msg.body}
-                  </p>
+                  <div
+                    className="font-sans text-sm text-foreground leading-relaxed [&_strong]:font-bold [&_em]:italic [&_u]:underline [&_ul]:list-disc [&_ul]:pl-5"
+                    dangerouslySetInnerHTML={{ __html: msg.body }}
+                  />
                 </div>
               )}
             </div>

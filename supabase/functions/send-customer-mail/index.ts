@@ -15,7 +15,7 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { customer_id, request_id, event_id, subject, body: mailBody, to_email, to_name } = body;
+    const { customer_id, request_id, event_id, subject, body: mailBody, to_email, to_name, attachment_urls } = body;
 
     if (!to_email || !subject || !mailBody) {
       return new Response(
@@ -44,12 +44,30 @@ serve(async (req) => {
 
     const toAddress = to_name ? `"${to_name}" <${to_email}>` : to_email;
 
+    // Attachments: fetch each URL and encode as base64
+    const attachments: { filename: string; content: string; encoding: string }[] = [];
+    if (Array.isArray(attachment_urls) && attachment_urls.length > 0) {
+      for (const url of attachment_urls) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const buf = await res.arrayBuffer();
+            const base64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+            const filename = url.split("/").pop()?.split("?")[0] || "Anhang";
+            attachments.push({ filename, content: base64, encoding: "base64" });
+          }
+        } catch (_) {
+          // skip failed attachment
+        }
+      }
+    }
+
     await transporter.sendMail({
       from: `"Magicel – Emilian Leber" <${smtpUser}>`,
       to: toAddress,
       subject,
-      text: mailBody,
-      html: `<div style="font-family:sans-serif;font-size:15px;line-height:1.6;color:#111;">${mailBody.replace(/\n/g, "<br>")}</div>`,
+      html: mailBody,
+      ...(attachments.length > 0 ? { attachments } : {}),
     });
 
     // Nachricht in DB speichern
