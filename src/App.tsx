@@ -4,6 +4,7 @@ import AdminRequestDetail from "@/pages/AdminRequestDetail";
 import AdminEvents from "@/pages/AdminEvents";
 import AdminEventDetail from "@/pages/AdminEventDetail";
 import AdminNewRequest from "@/pages/AdminNewRequest";
+import AdminNewEvent from "@/pages/AdminNewEvent";
 import AdminCustomers from "@/pages/AdminCustomers";
 import AdminCustomerDetail from "@/pages/AdminCustomerDetail";
 import AdminNewCustomer from "@/pages/AdminNewCustomer";
@@ -90,6 +91,8 @@ const App = () => (
 <Route path="/admin/events" element={<AdminEvents />} />
 <Route path="/admin/events/:id" element={<AdminEventDetail />} />
 <Route path="/admin/new-request" element={<AdminNewRequest />} />
+<Route path="/admin/requests/new" element={<AdminNewRequest />} />
+<Route path="/admin/events/new" element={<AdminNewEvent />} />
 <Route path="/admin/customers" element={<AdminCustomers />} />
 <Route path="/admin/customers/:id" element={<AdminCustomerDetail />} />
 <Route path="/admin/customers/new" element={<AdminNewCustomer />} />
