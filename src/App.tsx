@@ -14,8 +14,9 @@ import AdminTodos from "@/pages/AdminTodos";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminPasswordReset from "@/pages/AdminPasswordReset";
 
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -49,8 +50,23 @@ import Kundenportal from "./pages/Kundenportal.tsx";
 
 import NotFound from "./pages/NotFound.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
+import { supabase } from "@/integrations/supabase/client";
 
 const queryClient = new QueryClient();
+
+// Catches PASSWORD_RECOVERY event fired from any page (incl. Startseite)
+const AuthEventHandler = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        navigate("/admin/passwort-setzen");
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+  return null;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -59,6 +75,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <AuthEventHandler />
 
         <Routes>
           {/* Website */}
