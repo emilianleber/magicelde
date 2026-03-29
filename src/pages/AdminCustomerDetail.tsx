@@ -8,10 +8,11 @@ import {
   LogOut,
   Mail,
   MapPin,
-  MessageCircle,
   Phone,
+  Save,
   Theater,
   Users,
+  Building2,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -19,6 +20,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 interface PortalCustomer {
   id: string;
   name: string | null;
+  firma?: string | null;
   email: string | null;
   phone?: string | null;
   kundennummer?: string | null;
@@ -34,8 +36,9 @@ interface PortalRequest {
   ort: string | null;
   gaeste: number | null;
   format: string | null;
-  nachricht: string | null;
   email: string;
+  firma?: string | null;
+  deleted_at?: string | null;
 }
 
 interface PortalEvent {
@@ -46,6 +49,7 @@ interface PortalEvent {
   status: string | null;
   format: string | null;
   guests: number | null;
+  deleted_at?: string | null;
 }
 
 interface PortalDocument {
@@ -56,6 +60,32 @@ interface PortalDocument {
   created_at: string;
 }
 
+const inputCls =
+  "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
+
+const formatEventStatusLabel = (status?: string | null) => {
+  switch (status) {
+    case "in_planung":
+      return "In Planung";
+    case "details_offen":
+      return "Details offen";
+    case "vertrag_gesendet":
+      return "Vertrag gesendet";
+    case "vertrag_bestaetigt":
+      return "Vertrag bestätigt";
+    case "rechnung_gesendet":
+      return "Rechnung gesendet";
+    case "rechnung_bezahlt":
+      return "Rechnung bezahlt";
+    case "event_erfolgt":
+      return "Event erfolgt";
+    case "storniert":
+      return "Storniert";
+    default:
+      return status || "Offen";
+  }
+};
+
 const AdminCustomerDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -63,11 +93,19 @@ const AdminCustomerDetail = () => {
   const [user, setUser] = useState<SupaUser | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const [customer, setCustomer] = useState<PortalCustomer | null>(null);
   const [requests, setRequests] = useState<PortalRequest[]>([]);
   const [events, setEvents] = useState<PortalEvent[]>([]);
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
+    const [message, setMessage] = useState("");
+
+  const [name, setName] = useState("");
+  const [firma, setFirma] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [kundennummer, setKundennummer] = useState("");
 
   useEffect(() => {
     const {
@@ -124,12 +162,17 @@ const AdminCustomerDetail = () => {
       }
 
       setCustomer(customerData);
+      setName(customerData.name || "");
+      setFirma(customerData.firma || "");
+      setEmail(customerData.email || "");
+      setPhone(customerData.phone || "");
+      setKundennummer(customerData.kundennummer || "");
 
       const [requestsResult, eventsResult, docsResult] = await Promise.all([
         supabase
           .from("portal_requests")
           .select("*")
-          .eq("email", customerData.email)
+          .eq("customer_id", customerData.id)
           .order("created_at", { ascending: false }),
         supabase
           .from("portal_events")
@@ -163,6 +206,70 @@ const AdminCustomerDetail = () => {
     navigate("/kundenportal/login");
   };
 
+  const saveCustomer = async () => {
+    if (!customer) return;
+
+    setSaving(true);
+    setMessage("");
+
+    const safeEmail = email.trim().toLowerCase();
+    const safeName = name.trim();
+
+    if (!safeName || !safeEmail) {
+      setMessage("Name und E-Mail dürfen nicht leer sein.");
+      setSaving(false);
+      return;
+    }
+
+    const { error: customerError } = await supabase
+      .from("portal_customers")
+      .update({
+        name: safeName,
+        firma: firma.trim() || null,
+        email: safeEmail,
+        phone: phone.trim() || null,
+        kundennummer: kundennummer.trim() || null,
+      })
+      .eq("id", customer.id);
+
+    if (customerError) {
+      console.error("CUSTOMER UPDATE ERROR:", customerError);
+      setMessage("Fehler beim Speichern.");
+      setSaving(false);
+      return;
+    }
+
+    await supabase
+      .from("portal_requests")
+      .update({
+        name: safeName,
+        firma: firma.trim() || null,
+        email: safeEmail,
+        phone: phone.trim() || null,
+      })
+      .eq("customer_id", customer.id);
+
+    setCustomer({
+      ...customer,
+      name: safeName,
+      firma: firma.trim() || null,
+      email: safeEmail,
+      phone: phone.trim() || null,
+      kundennummer: kundennummer.trim() || null,
+    });
+
+    setRequests((prev) =>
+      prev.map((request) => ({
+        ...request,
+        email: safeEmail,
+        firma: firma.trim() || null,
+      }))
+    );
+
+    setMessage("Kundendaten gespeichert.");
+    setSaving(false);
+  };
+
   if (loading) {
     return <div className="pt-28 text-center">Wird geladen…</div>;
   }
@@ -177,7 +284,7 @@ const AdminCustomerDetail = () => {
 
   return (
     <AdminLayout
-      title={customer.name || "Kunde"}
+      title={name || customer.name || "Kunde"}
       subtitle="Alle zugehörigen Daten dieses Kunden im Überblick"
       actions={
         <button
@@ -205,54 +312,86 @@ const AdminCustomerDetail = () => {
           </h2>
 
           <div className="space-y-4">
-            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+            <div>
+              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                 Name
-              </p>
-              <p className="font-sans text-sm text-foreground">
-                {customer.name || "Nicht angegeben"}
-              </p>
+              </label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={inputCls}
+              />
             </div>
 
-            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+            <div>
+              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                Firma
+              </label>
+              <div className="relative">
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <input
+                  value={firma}
+                  onChange={(e) => setFirma(e.target.value)}
+                  className="w-full rounded-xl bg-background/60 border border-border/30 pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                 E-Mail
-              </p>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-accent" />
-                <p className="font-sans text-sm text-foreground">
-                  {customer.email || "Nicht angegeben"}
-                </p>
-              </div>
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={inputCls}
+              />
             </div>
 
-            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+            <div>
+              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                 Telefon
-              </p>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-accent" />
-                <p className="font-sans text-sm text-foreground">
-                  {customer.phone || "Nicht angegeben"}
-                </p>
-              </div>
+              </label>
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className={inputCls}
+              />
             </div>
 
-            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+            <div>
+              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
                 Kundennummer
-              </p>
-              <p className="font-sans text-sm text-foreground">
-                {customer.kundennummer || "Nicht vergeben"}
-              </p>
+              </label>
+              <input
+                value={kundennummer}
+                onChange={(e) => setKundennummer(e.target.value)}
+                className={inputCls}
+              />
             </div>
+
+            {message && (
+              <div className="rounded-xl bg-accent/10 text-accent px-4 py-3 text-sm">
+                {message}
+              </div>
+            )}
+
+            <button
+              onClick={saveCustomer}
+              disabled={saving}
+              className="btn-primary w-full justify-center disabled:opacity-60"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              {saving ? "Speichert…" : "Kundendaten speichern"}
+            </button>
           </div>
         </div>
 
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
             <p className="font-display text-2xl font-bold text-foreground">
-              {requests.length}
+              {requests.filter((r) => !r.deleted_at).length}
             </p>
             <p className="font-sans text-xs text-muted-foreground mt-1">
               Anfragen
@@ -261,7 +400,7 @@ const AdminCustomerDetail = () => {
 
           <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
             <p className="font-display text-2xl font-bold text-foreground">
-              {events.length}
+              {events.filter((e) => !e.deleted_at).length}
             </p>
             <p className="font-sans text-xs text-muted-foreground mt-1">
               Events
@@ -286,56 +425,58 @@ const AdminCustomerDetail = () => {
           </h2>
 
           <div className="space-y-3">
-            {requests.length === 0 ? (
+            {requests.filter((r) => !r.deleted_at).length === 0 ? (
               <p className="font-sans text-sm text-muted-foreground">
                 Keine Anfragen vorhanden.
               </p>
             ) : (
-              requests.map((request) => (
-                <div
-                  key={request.id}
-                  className="p-4 rounded-xl bg-background/60 border border-border/20"
-                >
-                  <div className="flex items-center justify-between gap-4 flex-wrap">
-                    <div>
-                      <p className="font-sans text-sm font-semibold text-foreground">
-                        {request.anlass || "Anfrage"}
-                      </p>
-                      <p className="font-sans text-xs text-muted-foreground mt-1">
-                        {new Date(request.created_at).toLocaleDateString("de-DE")}
-                      </p>
+              requests
+                .filter((r) => !r.deleted_at)
+                .map((request) => (
+                  <div
+                    key={request.id}
+                    className="p-4 rounded-xl bg-background/60 border border-border/20"
+                  >
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <div>
+                        <p className="font-sans text-sm font-semibold text-foreground">
+                          {request.anlass || "Anfrage"}
+                        </p>
+                        <p className="font-sans text-xs text-muted-foreground mt-1">
+                          {new Date(request.created_at).toLocaleDateString("de-DE")}
+                        </p>
+                      </div>
+
+                      <Link
+                        to={`/admin/requests/${request.id}`}
+                        className="text-sm text-accent hover:text-accent/80"
+                      >
+                        Öffnen
+                      </Link>
                     </div>
 
-                    <Link
-                      to={`/admin/requests/${request.id}`}
-                      className="text-sm text-accent hover:text-accent/80"
-                    >
-                      Öffnen
-                    </Link>
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground mt-3">
+                      {request.datum && (
+                        <span className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-accent" />
+                          {new Date(request.datum).toLocaleDateString("de-DE")}
+                        </span>
+                      )}
+                      {request.ort && (
+                        <span className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-accent" />
+                          {request.ort}
+                        </span>
+                      )}
+                      {request.gaeste && (
+                        <span className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-accent" />
+                          {request.gaeste} Gäste
+                        </span>
+                      )}
+                    </div>
                   </div>
-
-                  <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground mt-3">
-                    {request.datum && (
-                      <span className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-accent" />
-                        {new Date(request.datum).toLocaleDateString("de-DE")}
-                      </span>
-                    )}
-                    {request.ort && (
-                      <span className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-accent" />
-                        {request.ort}
-                      </span>
-                    )}
-                    {request.gaeste && (
-                      <span className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-accent" />
-                        {request.gaeste} Gäste
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))
+                ))
             )}
           </div>
         </div>
@@ -346,56 +487,64 @@ const AdminCustomerDetail = () => {
           </h2>
 
           <div className="space-y-3">
-            {events.length === 0 ? (
+            {events.filter((e) => !e.deleted_at).length === 0 ? (
               <p className="font-sans text-sm text-muted-foreground">
                 Keine Events vorhanden.
               </p>
             ) : (
-              events.map((event) => (
-                <div
-                  key={event.id}
-                  className="p-4 rounded-xl bg-background/60 border border-border/20"
-                >
-                  <div className="flex items-center justify-between gap-4 flex-wrap">
-                    <div>
-                      <p className="font-sans text-sm font-semibold text-foreground">
-                        {event.title}
-                      </p>
-                      <p className="font-sans text-xs text-muted-foreground mt-1">
-                        {event.status || "Offen"}
-                      </p>
+              events
+                .filter((e) => !e.deleted_at)
+                .map((event) => (
+                  <div
+                    key={event.id}
+                    className="p-4 rounded-xl bg-background/60 border border-border/20"
+                  >
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <div>
+                        <p className="font-sans text-sm font-semibold text-foreground">
+                          {event.title}
+                        </p>
+                        <p className="font-sans text-xs text-muted-foreground mt-1">
+                          {formatEventStatusLabel(event.status)}
+                        </p>
+                      </div>
+
+                      <Link
+                        to={`/admin/events/${event.id}`}
+                        className="text-sm text-accent hover:text-accent/80"
+                      >
+                        Öffnen
+                      </Link>
                     </div>
 
-                    <Link
-                      to={`/admin/events/${event.id}`}
-                      className="text-sm text-accent hover:text-accent/80"
-                    >
-                      Öffnen
-                    </Link>
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground mt-3">
+                      {event.event_date && (
+                        <span className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-accent" />
+                          {new Date(event.event_date).toLocaleDateString("de-DE")}
+                        </span>
+                      )}
+                      {event.location && (
+                        <span className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-accent" />
+                          {event.location}
+                        </span>
+                      )}
+                      {event.format && (
+                        <span className="flex items-center gap-2">
+                          <Theater className="w-4 h-4 text-accent" />
+                          {event.format}
+                        </span>
+                      )}
+                      {event.guests && (
+                        <span className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-accent" />
+                          {event.guests} Gäste
+                        </span>
+                      )}
+                    </div>
                   </div>
-
-                  <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground mt-3">
-                    {event.event_date && (
-                      <span className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-accent" />
-                        {new Date(event.event_date).toLocaleDateString("de-DE")}
-                      </span>
-                    )}
-                    {event.location && (
-                      <span className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-accent" />
-                        {event.location}
-                      </span>
-                    )}
-                    {event.format && (
-                      <span className="flex items-center gap-2">
-                        <Theater className="w-4 h-4 text-accent" />
-                        {event.format}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))
+                ))
             )}
           </div>
         </div>
