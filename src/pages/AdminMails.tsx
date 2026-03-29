@@ -63,6 +63,7 @@ const AdminMails = () => {
   const [inboxMails, setInboxMails] = useState<InboxMail[]>([]);
   const [sentMails, setSentMails] = useState<PortalMessage[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [loadingBody, setLoadingBody] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [syncing, setSyncing] = useState(false);
   const [syncMsg, setSyncMsg] = useState("");
@@ -156,6 +157,22 @@ const AdminMails = () => {
     if (mail.is_read) return;
     await supabase.from("portal_inbox_mails").update({ is_read: true }).eq("id", mail.id);
     setInboxMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_read: true } : m));
+  };
+
+  const loadBody = async (mail: InboxMail) => {
+    if (mail.body_html || mail.body_text) return;
+    setLoadingBody(mail.id);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/fetch-mail-body`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
+        body: JSON.stringify({ mail_id: mail.id, uid: mail.uid, folder: mail.folder }),
+      });
+      const data = await res.json();
+      if (res.ok) setInboxMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, body_html: data.body_html, body_text: data.body_text } : m));
+    } catch (_) {}
+    setLoadingBody(null);
   };
 
   const handleCustomerSelect = async (customerId: string) => {
@@ -362,7 +379,7 @@ const AdminMails = () => {
                     <button
                       onClick={() => {
                         setExpandedId(isExpanded ? null : id);
-                        if (!isSent) markRead(mail as InboxMail);
+                        if (!isSent) { markRead(mail as InboxMail); if (!isExpanded) loadBody(mail as InboxMail); }
                       }}
                       className="w-full p-4 flex items-center gap-3 text-left hover:bg-muted/30 transition-colors"
                     >
@@ -404,9 +421,13 @@ const AdminMails = () => {
                           <div className="font-sans text-sm text-foreground leading-relaxed [&_strong]:font-bold [&_em]:italic [&_u]:underline [&_ul]:list-disc [&_ul]:pl-5" dangerouslySetInnerHTML={{ __html: mail.body }} />
                         ) : (
                           <div className="font-sans text-sm text-foreground leading-relaxed whitespace-pre-wrap">
-                            {mail.body_html
+                            {loadingBody === id
+                              ? <div className="flex items-center gap-2 text-muted-foreground font-sans text-sm py-4"><svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/></svg>Lade Inhalt…</div>
+                              : mail.body_html
                               ? <div dangerouslySetInnerHTML={{ __html: mail.body_html }} />
-                              : mail.body_text || "(Kein Inhalt)"}
+                              : mail.body_text
+                              ? <pre className="whitespace-pre-wrap font-sans text-sm">{mail.body_text}</pre>
+                              : <p className="text-muted-foreground font-sans text-sm italic">Kein Inhalt</p>}
                           </div>
                         )}
                       </div>

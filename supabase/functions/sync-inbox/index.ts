@@ -2,20 +2,17 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // @ts-ignore
 import { ImapFlow } from "npm:imapflow@1.0.162";
-// @ts-ignore
-import { simpleParser } from "npm:mailparser@3.6.5";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Strato folder name mapping — try multiple variants
 const FOLDER_TARGETS = [
-  { internal: "INBOX",    candidates: ["INBOX"] },
-  { internal: "Sent",     candidates: ["Sent", "Sent Items", "Gesendete Objekte", "Gesendete Elemente", "INBOX.Sent"] },
-  { internal: "Spam",     candidates: ["Spam", "Junk", "Junk E-Mail", "INBOX.Spam", "INBOX.Junk"] },
-  { internal: "Trash",    candidates: ["Trash", "Deleted", "Gelöscht", "Papierkorb", "INBOX.Trash", "INBOX.Deleted Messages"] },
+  { internal: "INBOX", candidates: ["INBOX"] },
+  { internal: "Sent",  candidates: ["Sent", "Sent Items", "Gesendete Objekte", "Gesendete Elemente", "INBOX.Sent"] },
+  { internal: "Spam",  candidates: ["Spam", "Junk", "Junk E-Mail", "INBOX.Spam", "INBOX.Junk"] },
+  { internal: "Trash", candidates: ["Trash", "Deleted", "Gelöscht", "Papierkorb", "INBOX.Trash", "INBOX.Deleted Messages"] },
 ];
 
 serve(async (req) => {
@@ -51,10 +48,9 @@ serve(async (req) => {
     for await (const folder of client.list()) {
       allFolders.push(folder.path);
     }
-    logs.push(`Available folders: ${allFolders.join(", ")}`);
+    logs.push(`Folders: ${allFolders.join(", ")}`);
 
     for (const target of FOLDER_TARGETS) {
-      // Find which folder name actually exists
       const actualFolder = target.candidates.find((c) =>
         allFolders.some((f) => f.toLowerCase() === c.toLowerCase())
       ) || allFolders.find((f) =>
@@ -62,30 +58,28 @@ serve(async (req) => {
       );
 
       if (!actualFolder) {
-        logs.push(`No folder found for ${target.internal}, skipping`);
+        logs.push(`No folder for ${target.internal}`);
         continue;
       }
-
-      logs.push(`Syncing ${target.internal} (actual: ${actualFolder})`);
 
       let lock;
       try {
         lock = await client.getMailboxLock(actualFolder);
       } catch (e: any) {
-        logs.push(`Could not lock ${actualFolder}: ${e.message}`);
+        logs.push(`Lock failed ${actualFolder}: ${e.message}`);
         continue;
       }
 
       try {
         const mailbox = client.mailbox;
         if (!mailbox || mailbox.exists === 0) {
-          logs.push(`${actualFolder} is empty`);
+          logs.push(`${actualFolder} empty`);
           continue;
         }
 
-        // Fetch last 30 messages
+        // Only fetch last 50, headers only (NO source — much faster)
         const count = mailbox.exists;
-        const from = Math.max(1, count - 29);
+        const from = Math.max(1, count - 49);
         const range = `${from}:${count}`;
 
         const mails: any[] = [];
@@ -93,19 +87,14 @@ serve(async (req) => {
         for await (const msg of client.fetch(range, {
           uid: true,
           envelope: true,
-          bodyStructure: true,
-          source: true,
+          flags: true,
+          // No source, no bodyStructure — just headers
         })) {
           try {
             const uid = `${target.internal}:${msg.uid}`;
-            const parsed = await simpleParser(msg.source);
-
-            const fromAddr = parsed.from?.value?.[0];
-            const toAddr = parsed.to
-              ? Array.isArray(parsed.to)
-                ? parsed.to[0]?.value?.[0]
-                : (parsed.to as any).value?.[0]
-              : null;
+            const env = msg.envelope || {};
+            const fromAddr = env.from?.[0];
+            const toAddr = env.to?.[0];
 
             mails.push({
               uid,
@@ -113,16 +102,14 @@ serve(async (req) => {
               from_name: fromAddr?.name || null,
               from_email: fromAddr?.address || null,
               to_email: toAddr?.address || null,
-              subject: parsed.subject || "(Kein Betreff)",
-              body_html: parsed.html || null,
-              body_text: parsed.text?.substring(0, 20000) || null,
-              received_at: parsed.date ? parsed.date.toISOString() : new Date().toISOString(),
-              is_read: false,
-              is_starred: false,
+              subject: env.subject || "(Kein Betreff)",
+              body_html: null,   // loaded on demand
+              body_text: null,   // loaded on demand
+              received_at: env.date ? new Date(env.date).toISOString() : new Date().toISOString(),
+              is_read: msg.flags?.has("\\Seen") ?? false,
+              is_starred: msg.flags?.has("\\Flagged") ?? false,
             });
-          } catch (parseErr: any) {
-            logs.push(`Parse error on msg: ${parseErr.message}`);
-          }
+          } catch (_) {}
         }
 
         if (mails.length > 0) {
@@ -130,14 +117,8 @@ serve(async (req) => {
             .from("portal_inbox_mails")
             .upsert(mails, { onConflict: "uid", ignoreDuplicates: true });
 
-          if (error) {
-            logs.push(`DB error for ${target.internal}: ${error.message}`);
-          } else {
-            logs.push(`Synced ${mails.length} mails from ${target.internal}`);
-            totalSynced += mails.length;
-          }
-        } else {
-          logs.push(`No messages fetched from ${actualFolder}`);
+          if (error) logs.push(`DB error: ${error.message}`);
+          else { logs.push(`Synced ${mails.length} from ${target.internal}`); totalSynced += mails.length; }
         }
       } finally {
         lock.release();
@@ -151,10 +132,10 @@ serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err: any) {
-    console.error("SYNC INBOX ERROR:", err);
+    console.error("SYNC ERROR:", err);
     await client.logout().catch(() => {});
     return new Response(
-      JSON.stringify({ error: err.message || "Sync fehlgeschlagen", logs }),
+      JSON.stringify({ error: err.message, logs }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
