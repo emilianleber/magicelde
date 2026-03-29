@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -8,7 +8,7 @@ import {
   Phone,
   ArrowRight,
   LogOut,
-  User,
+  Building2,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -16,6 +16,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 interface PortalCustomer {
   id: string;
   name: string | null;
+  firma?: string | null;
   email: string | null;
   phone?: string | null;
   kundennummer?: string | null;
@@ -95,14 +96,19 @@ const AdminCustomers = () => {
     navigate("/kundenportal/login");
   };
 
-  const filteredCustomers = customers.filter((customer) => {
+  const filteredCustomers = useMemo(() => {
     const q = search.toLowerCase();
-    return (
-      customer.name?.toLowerCase().includes(q) ||
-      customer.email?.toLowerCase().includes(q) ||
-      customer.kundennummer?.toLowerCase().includes(q)
-    );
-  });
+
+    return customers.filter((customer) => {
+      return (
+        customer.name?.toLowerCase().includes(q) ||
+        customer.firma?.toLowerCase().includes(q) ||
+        customer.email?.toLowerCase().includes(q) ||
+        customer.kundennummer?.toLowerCase().includes(q) ||
+        customer.phone?.toLowerCase().includes(q)
+      );
+    });
+  }, [customers, search]);
 
   if (loading) {
     return <div className="pt-28 text-center">Wird geladen…</div>;
@@ -129,14 +135,14 @@ const AdminCustomers = () => {
         <Search className="w-4 h-4 text-muted-foreground absolute left-4 top-1/2 -translate-y-1/2" />
         <input
           type="text"
-          placeholder="Suche nach Name, E-Mail oder Kundennummer …"
+          placeholder="Suche nach Name, Firma, E-Mail, Telefon oder Kundennummer …"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full rounded-2xl bg-muted/40 border border-border/30 pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
         />
       </div>
 
-      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-8">
+      <div className="grid sm:grid-cols-3 gap-4 mb-8">
         <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
           <p className="font-display text-2xl font-bold text-foreground">
             {customers.length}
@@ -146,21 +152,28 @@ const AdminCustomers = () => {
           </p>
         </div>
 
-        <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
+                <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
           <p className="font-display text-2xl font-bold text-foreground">
-            {customers.filter((c) => !!c.email).length}
+            {customers.filter((c) => c.firma).length}
           </p>
           <p className="font-sans text-xs text-muted-foreground mt-1">
-            Mit E-Mail
+            Mit Firma
           </p>
         </div>
 
         <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
           <p className="font-display text-2xl font-bold text-foreground">
-            {customers.filter((c) => !!c.kundennummer).length}
+            {
+              customers.filter(
+                (c) =>
+                  c.created_at &&
+                  new Date(c.created_at) >
+                    new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)
+              ).length
+            }
           </p>
           <p className="font-sans text-xs text-muted-foreground mt-1">
-            Mit Kundennummer
+            Neue (30 Tage)
           </p>
         </div>
       </div>
@@ -173,7 +186,7 @@ const AdminCustomers = () => {
               Keine Kunden gefunden
             </h3>
             <p className="font-sans text-sm text-muted-foreground">
-              Passe deine Suche an oder lege zuerst Anfragen/Kunden an.
+              Passe deine Suche an.
             </p>
           </div>
         ) : (
@@ -184,13 +197,15 @@ const AdminCustomers = () => {
             >
               <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-5">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 flex-wrap mb-3">
+                  <div className="flex items-center gap-3 flex-wrap mb-2">
                     <h3 className="font-display text-lg font-bold text-foreground">
-                      {customer.name || "Unbenannter Kunde"}
+                      {customer.name || "Unbekannt"}
                     </h3>
-                    {customer.kundennummer && (
-                      <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-muted-foreground bg-muted">
-                        {customer.kundennummer}
+
+                    {customer.firma && (
+                      <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20 text-muted-foreground">
+                        <Building2 className="w-3 h-3" />
+                        {customer.firma}
                       </span>
                     )}
                   </div>
@@ -210,13 +225,19 @@ const AdminCustomers = () => {
                       </span>
                     )}
 
-                    {!customer.phone && !customer.email && (
-                      <span className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-accent" />
-                        Keine Kontaktdaten gepflegt
+                    {customer.kundennummer && (
+                      <span className="text-xs px-2 py-1 rounded-full bg-background/60 border border-border/20">
+                        #{customer.kundennummer}
                       </span>
                     )}
                   </div>
+
+                  {customer.created_at && (
+                    <p className="font-sans text-xs text-muted-foreground mt-3">
+                      Kunde seit{" "}
+                      {new Date(customer.created_at).toLocaleDateString("de-DE")}
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex flex-col items-start xl:items-end gap-3">
