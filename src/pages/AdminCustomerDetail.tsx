@@ -6,13 +6,14 @@ import {
   Calendar,
   FileText,
   LogOut,
-  Mail,
   MapPin,
-  Phone,
+  Plus,
   Save,
+  Search,
   Theater,
   Users,
   Building2,
+  Link2,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -37,6 +38,7 @@ interface PortalRequest {
   gaeste: number | null;
   format: string | null;
   email: string;
+  name?: string | null;
   firma?: string | null;
   deleted_at?: string | null;
 }
@@ -99,13 +101,27 @@ const AdminCustomerDetail = () => {
   const [requests, setRequests] = useState<PortalRequest[]>([]);
   const [events, setEvents] = useState<PortalEvent[]>([]);
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
-    const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   const [name, setName] = useState("");
   const [firma, setFirma] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [kundennummer, setKundennummer] = useState("");
+
+  // Assign request panel
+  const [showAssignRequest, setShowAssignRequest] = useState(false);
+  const [unassignedRequests, setUnassignedRequests] = useState<PortalRequest[]>([]);
+  const [requestSearch, setRequestSearch] = useState("");
+  const [loadingUnassignedRequests, setLoadingUnassignedRequests] = useState(false);
+  const [assigningRequestId, setAssigningRequestId] = useState<string | null>(null);
+
+  // Assign event panel
+  const [showAssignEvent, setShowAssignEvent] = useState(false);
+  const [unassignedEvents, setUnassignedEvents] = useState<PortalEvent[]>([]);
+  const [eventSearch, setEventSearch] = useState("");
+  const [loadingUnassignedEvents, setLoadingUnassignedEvents] = useState(false);
+  const [assigningEventId, setAssigningEventId] = useState<string | null>(null);
 
   useEffect(() => {
     const {
@@ -270,6 +286,122 @@ const AdminCustomerDetail = () => {
     setSaving(false);
   };
 
+  const openAssignRequestPanel = async () => {
+    setShowAssignRequest(true);
+    setRequestSearch("");
+    setLoadingUnassignedRequests(true);
+
+    const { data, error } = await supabase
+      .from("portal_requests")
+      .select("*")
+      .is("customer_id", null)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false });
+
+    if (!error) setUnassignedRequests(data || []);
+    else console.error(error);
+
+    setLoadingUnassignedRequests(false);
+  };
+
+  const assignRequest = async (requestId: string) => {
+    if (!customer) return;
+    setAssigningRequestId(requestId);
+
+    const { error } = await supabase
+      .from("portal_requests")
+      .update({
+        customer_id: customer.id,
+        name: name.trim() || customer.name,
+        firma: firma.trim() || null,
+        email: email.trim().toLowerCase() || customer.email,
+        phone: phone.trim() || null,
+      })
+      .eq("id", requestId);
+
+    if (error) {
+      console.error("ASSIGN REQUEST ERROR:", error);
+      setAssigningRequestId(null);
+      return;
+    }
+
+    const assigned = unassignedRequests.find((r) => r.id === requestId);
+    if (assigned) {
+      setRequests((prev) => [{ ...assigned, customer_id: customer.id } as PortalRequest & { customer_id: string }, ...prev]);
+      setUnassignedRequests((prev) => prev.filter((r) => r.id !== requestId));
+    }
+
+    setAssigningRequestId(null);
+  };
+
+  const openAssignEventPanel = async () => {
+    setShowAssignEvent(true);
+    setEventSearch("");
+    setLoadingUnassignedEvents(true);
+
+    const { data, error } = await supabase
+      .from("portal_events")
+      .select("*")
+      .is("customer_id", null)
+      .is("deleted_at", null)
+      .order("event_date", { ascending: true });
+
+    if (!error) setUnassignedEvents(data || []);
+    else console.error(error);
+
+    setLoadingUnassignedEvents(false);
+  };
+
+  const assignEvent = async (eventId: string) => {
+    if (!customer) return;
+    setAssigningEventId(eventId);
+
+    const { error } = await supabase
+      .from("portal_events")
+      .update({
+        customer_id: customer.id,
+        customer_name: name.trim() || customer.name,
+        firma: firma.trim() || null,
+      })
+      .eq("id", eventId);
+
+    if (error) {
+      console.error("ASSIGN EVENT ERROR:", error);
+      setAssigningEventId(null);
+      return;
+    }
+
+    const assigned = unassignedEvents.find((e) => e.id === eventId);
+    if (assigned) {
+      setEvents((prev) => [...prev, assigned]);
+      setUnassignedEvents((prev) => prev.filter((e) => e.id !== eventId));
+    }
+
+    setAssigningEventId(null);
+  };
+
+  const filteredUnassignedRequests = unassignedRequests.filter((r) => {
+    if (!requestSearch) return true;
+    const q = requestSearch.toLowerCase();
+    return (
+      r.name?.toLowerCase().includes(q) ||
+      r.email?.toLowerCase().includes(q) ||
+      r.firma?.toLowerCase().includes(q) ||
+      r.ort?.toLowerCase().includes(q) ||
+      r.anlass?.toLowerCase().includes(q)
+    );
+  });
+
+  const filteredUnassignedEvents = unassignedEvents.filter((e) => {
+    if (!eventSearch) return true;
+    const q = eventSearch.toLowerCase();
+    return (
+      e.title?.toLowerCase().includes(q) ||
+      e.location?.toLowerCase().includes(q) ||
+      e.format?.toLowerCase().includes(q)
+    );
+  });
+
   if (loading) {
     return <div className="pt-28 text-center">Wird geladen…</div>;
   }
@@ -419,10 +551,90 @@ const AdminCustomerDetail = () => {
       </div>
 
       <div className="space-y-6">
+        {/* Anfragen */}
         <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
-          <h2 className="font-display text-lg font-bold text-foreground mb-5">
-            Anfragen
-          </h2>
+          <div className="flex items-center justify-between gap-4 mb-5 flex-wrap">
+            <h2 className="font-display text-lg font-bold text-foreground">
+              Anfragen
+            </h2>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  if (showAssignRequest) {
+                    setShowAssignRequest(false);
+                  } else {
+                    openAssignRequestPanel();
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 font-sans text-xs text-muted-foreground hover:text-foreground border border-border/40 rounded-lg px-3 py-1.5 transition-colors"
+              >
+                <Link2 className="w-3.5 h-3.5" />
+                Zuordnen
+              </button>
+              <Link
+                to={`/admin/requests/new?customerId=${customer.id}`}
+                className="inline-flex items-center gap-1.5 font-sans text-xs text-accent hover:text-accent/80 border border-accent/30 rounded-lg px-3 py-1.5 transition-colors"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                Anfrage erstellen
+              </Link>
+            </div>
+          </div>
+
+          {/* Assign unlinked request panel */}
+          {showAssignRequest && (
+            <div className="mb-5 p-4 rounded-xl bg-background/40 border border-border/30">
+              <p className="font-sans text-xs text-muted-foreground mb-3">
+                Anfragen ohne Kundenzuordnung
+              </p>
+              <div className="relative mb-3">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                <input
+                  value={requestSearch}
+                  onChange={(e) => setRequestSearch(e.target.value)}
+                  placeholder="Suche nach Name, E-Mail, Ort, Firma…"
+                  className="w-full rounded-lg bg-background/60 border border-border/30 pl-9 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
+                />
+              </div>
+
+              {loadingUnassignedRequests ? (
+                <p className="font-sans text-sm text-muted-foreground py-2">Lädt…</p>
+              ) : filteredUnassignedRequests.length === 0 ? (
+                <p className="font-sans text-sm text-muted-foreground py-2">
+                  {requestSearch ? "Keine Treffer." : "Keine offenen Anfragen ohne Kundenzuordnung."}
+                </p>
+              ) : (
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {filteredUnassignedRequests.map((r) => (
+                    <div
+                      key={r.id}
+                      className="flex items-center justify-between gap-3 p-3 rounded-lg bg-background/60 border border-border/20"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-sans text-sm font-medium text-foreground truncate">
+                          {r.anlass || r.name || "Anfrage"}
+                        </p>
+                        <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                          {r.email}
+                          {r.ort ? ` · ${r.ort}` : ""}
+                          {r.datum
+                            ? ` · ${new Date(r.datum).toLocaleDateString("de-DE")}`
+                            : ""}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => assignRequest(r.id)}
+                        disabled={assigningRequestId === r.id}
+                        className="shrink-0 font-sans text-xs text-accent hover:text-accent/80 border border-accent/30 rounded-lg px-3 py-1.5 disabled:opacity-50 transition-colors"
+                      >
+                        {assigningRequestId === r.id ? "…" : "Zuordnen"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="space-y-3">
             {requests.filter((r) => !r.deleted_at).length === 0 ? (
@@ -481,10 +693,90 @@ const AdminCustomerDetail = () => {
           </div>
         </div>
 
+        {/* Events */}
         <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
-          <h2 className="font-display text-lg font-bold text-foreground mb-5">
-            Events
-          </h2>
+          <div className="flex items-center justify-between gap-4 mb-5 flex-wrap">
+            <h2 className="font-display text-lg font-bold text-foreground">
+              Events
+            </h2>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  if (showAssignEvent) {
+                    setShowAssignEvent(false);
+                  } else {
+                    openAssignEventPanel();
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 font-sans text-xs text-muted-foreground hover:text-foreground border border-border/40 rounded-lg px-3 py-1.5 transition-colors"
+              >
+                <Link2 className="w-3.5 h-3.5" />
+                Zuordnen
+              </button>
+              <Link
+                to={`/admin/events/new?customerId=${customer.id}`}
+                className="inline-flex items-center gap-1.5 font-sans text-xs text-accent hover:text-accent/80 border border-accent/30 rounded-lg px-3 py-1.5 transition-colors"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                Event erstellen
+              </Link>
+            </div>
+          </div>
+
+          {/* Assign unlinked event panel */}
+          {showAssignEvent && (
+            <div className="mb-5 p-4 rounded-xl bg-background/40 border border-border/30">
+              <p className="font-sans text-xs text-muted-foreground mb-3">
+                Events ohne Kundenzuordnung
+              </p>
+              <div className="relative mb-3">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                <input
+                  value={eventSearch}
+                  onChange={(e) => setEventSearch(e.target.value)}
+                  placeholder="Suche nach Titel, Ort, Format…"
+                  className="w-full rounded-lg bg-background/60 border border-border/30 pl-9 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
+                />
+              </div>
+
+              {loadingUnassignedEvents ? (
+                <p className="font-sans text-sm text-muted-foreground py-2">Lädt…</p>
+              ) : filteredUnassignedEvents.length === 0 ? (
+                <p className="font-sans text-sm text-muted-foreground py-2">
+                  {eventSearch ? "Keine Treffer." : "Keine Events ohne Kundenzuordnung."}
+                </p>
+              ) : (
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {filteredUnassignedEvents.map((e) => (
+                    <div
+                      key={e.id}
+                      className="flex items-center justify-between gap-3 p-3 rounded-lg bg-background/60 border border-border/20"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-sans text-sm font-medium text-foreground truncate">
+                          {e.title}
+                        </p>
+                        <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                          {formatEventStatusLabel(e.status)}
+                          {e.event_date
+                            ? ` · ${new Date(e.event_date).toLocaleDateString("de-DE")}`
+                            : ""}
+                          {e.location ? ` · ${e.location}` : ""}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => assignEvent(e.id)}
+                        disabled={assigningEventId === e.id}
+                        className="shrink-0 font-sans text-xs text-accent hover:text-accent/80 border border-accent/30 rounded-lg px-3 py-1.5 disabled:opacity-50 transition-colors"
+                      >
+                        {assigningEventId === e.id ? "…" : "Zuordnen"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="space-y-3">
             {events.filter((e) => !e.deleted_at).length === 0 ? (
@@ -549,6 +841,7 @@ const AdminCustomerDetail = () => {
           </div>
         </div>
 
+        {/* Dokumente */}
         <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
           <h2 className="font-display text-lg font-bold text-foreground mb-5">
             Dokumente
