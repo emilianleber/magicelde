@@ -12,6 +12,7 @@ import AdminNewCustomer from "@/pages/AdminNewCustomer";
 import AdminSettings from "@/pages/AdminSettings";
 import AdminTodos from "@/pages/AdminTodos";
 import AdminLogin from "@/pages/AdminLogin";
+import AdminPasswordReset from "@/pages/AdminPasswordReset";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -104,6 +105,7 @@ const App = () => (
 <Route path="/admin/settings" element={<AdminSettings />} />
 <Route path="/admin/todos" element={<AdminTodos />} />
 <Route path="/admin/login" element={<AdminLogin />} />
+<Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />
