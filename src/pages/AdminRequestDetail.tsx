@@ -1,12 +1,10 @@
-// src/pages/AdminRequestDetail.tsx
-
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowLeft,
   Calendar,
+  Clock3,
   Mail,
   MapPin,
   Phone,
@@ -15,8 +13,10 @@ import {
   Save,
   LogOut,
   Sparkles,
+  Building2,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
+import AdminLayout from "@/components/admin/AdminLayout";
 
 interface PortalRequest {
   id: string;
@@ -36,6 +36,11 @@ interface PortalRequest {
   notizen_intern: string | null;
   event_id?: string | null;
 }
+
+const inputCls =
+  "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
+
+const cardCls = "p-6 rounded-2xl bg-muted/20 border border-border/30";
 
 const AdminRequestDetail = () => {
   const navigate = useNavigate();
@@ -120,6 +125,11 @@ const AdminRequestDetail = () => {
     load();
   }, [user, id]);
 
+  const logout = async () => {
+    await supabase.auth.signOut();
+    navigate("/kundenportal/login");
+  };
+
   const saveChanges = async () => {
     if (!request) return;
 
@@ -183,43 +193,73 @@ const AdminRequestDetail = () => {
     setConverting(false);
   };
 
-  if (loading) return <PageLayout>Wird geladen…</PageLayout>;
-  if (isAdmin === false) return <PageLayout>Kein Zugriff</PageLayout>;
+  if (loading) return <div className="pt-28 text-center">Wird geladen…</div>;
+  if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
 
   return (
-    <PageLayout>
-      <section className="pt-28 pb-16">
-        <div className="container max-w-3xl mx-auto space-y-4">
+    <AdminLayout
+      title={`${anlass || "Anfrage"} · ${firma || name}`}
+      subtitle="Anfrage bearbeiten und verwalten"
+      actions={
+        <button onClick={logout} className="text-sm">
+          <LogOut className="w-4 h-4" /> Abmelden
+        </button>
+      }
+    >
+      <Link to="/admin/requests" className="text-sm mb-4 inline-block">
+        ← Zurück
+      </Link>
 
-          <Link to="/admin/requests" className="text-sm">← Zurück</Link>
+      <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
 
-          <input value={name} onChange={e => setName(e.target.value)} placeholder="Name" className="input"/>
-          <input value={firma} onChange={e => setFirma(e.target.value)} placeholder="Firma" className="input"/>
-          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="input"/>
-          <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Telefon" className="input"/>
-          <input value={anlass} onChange={e => setAnlass(e.target.value)} placeholder="Anlass" className="input"/>
+        {/* LEFT */}
+        <div className="space-y-6">
 
-          <input type="date" value={datum} onChange={e => setDatum(e.target.value)} className="input"/>
+          <div className={cardCls}>
+            <h2 className="font-bold mb-4">Kontaktdaten</h2>
 
-          {/* 🔥 Uhrzeit */}
-          <input type="time" value={uhrzeit} onChange={e => setUhrzeit(e.target.value)} className="input"/>
+            <input value={name} onChange={e => setName(e.target.value)} placeholder="Name" className={inputCls}/>
+            <input value={firma} onChange={e => setFirma(e.target.value)} placeholder="Firma" className={inputCls}/>
+            <input value={email} onChange={e => setEmail(e.target.value)} placeholder="E-Mail" className={inputCls}/>
+            <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Telefon" className={inputCls}/>
+          </div>
 
-          <input value={ort} onChange={e => setOrt(e.target.value)} placeholder="Ort" className="input"/>
+          <div className={cardCls}>
+            <h2 className="font-bold mb-4">Event-Daten</h2>
 
-          <button onClick={saveChanges} className="btn-primary">
-            {saving ? "Speichert…" : "Speichern"}
-          </button>
+            <input value={anlass} onChange={e => setAnlass(e.target.value)} placeholder="Anlass" className={inputCls}/>
+            <input type="date" value={datum} onChange={e => setDatum(e.target.value)} className={inputCls}/>
+            <input type="time" value={uhrzeit} onChange={e => setUhrzeit(e.target.value)} className={inputCls}/>
+            <input value={ort} onChange={e => setOrt(e.target.value)} placeholder="Ort" className={inputCls}/>
+            <input value={gaeste} onChange={e => setGaeste(e.target.value)} placeholder="Gäste" className={inputCls}/>
+          </div>
 
-          {!request?.event_id && (
-            <button onClick={convertToEvent} className="btn-secondary">
-              {converting ? "..." : "Zu Event"}
-            </button>
-          )}
+          <div className={cardCls}>
+            <textarea value={nachricht} onChange={e => setNachricht(e.target.value)} placeholder="Nachricht" className={inputCls}/>
+          </div>
 
-          {message && <p>{message}</p>}
         </div>
-      </section>
-    </PageLayout>
+
+        {/* RIGHT */}
+        <div className="space-y-6">
+
+          <div className={cardCls}>
+            <button onClick={saveChanges} className="btn-primary w-full">
+              <Save className="w-4 h-4 mr-2"/> Speichern
+            </button>
+
+            {!request?.event_id && (
+              <button onClick={convertToEvent} className="btn-secondary w-full mt-3">
+                <Sparkles className="w-4 h-4 mr-2"/> Zu Event konvertieren
+              </button>
+            )}
+
+            {message && <p className="mt-3">{message}</p>}
+          </div>
+
+        </div>
+      </div>
+    </AdminLayout>
   );
 };
 
