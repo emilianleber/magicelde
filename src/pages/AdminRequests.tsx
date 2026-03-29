@@ -34,6 +34,18 @@ interface PortalRequest {
   deleted_at?: string | null;
 }
 
+type ViewFilter = "aktiv" | "abgeschlossen" | "geloescht" | "alle";
+
+const ACTIVE_STATUSES = [
+  "neu",
+  "in_bearbeitung",
+  "details_besprechen",
+  "angebot_gesendet",
+  "warte_auf_kunde",
+];
+
+const DONE_STATUSES = ["bestätigt", "abgelehnt", "archiviert"];
+
 const formatStatusLabel = (status?: string | null) => {
   switch (status) {
     case "neu":
@@ -86,6 +98,7 @@ const AdminRequests = () => {
   const [requests, setRequests] = useState<PortalRequest[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("Alle");
+  const [viewFilter, setViewFilter] = useState<ViewFilter>("aktiv");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleting, setDeleting] = useState(false);
 
@@ -134,7 +147,6 @@ const AdminRequests = () => {
       const { data, error } = await supabase
         .from("portal_requests")
         .select("*")
-        .is("deleted_at", null)
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -147,7 +159,7 @@ const AdminRequests = () => {
     };
 
     loadData();
-  }, [user]);
+  }, [user, navigate]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -169,9 +181,26 @@ const AdminRequests = () => {
       const matchesStatus =
         statusFilter === "Alle" || formatStatusLabel(request.status) === statusFilter;
 
-      return matchesSearch && matchesStatus;
+      const isDeleted = !!request.deleted_at;
+      const isConverted = !!request.event_id;
+      const isActiveStatus = ACTIVE_STATUSES.includes(request.status || "");
+      const isDoneStatus = DONE_STATUSES.includes(request.status || "");
+
+      let matchesView = true;
+
+      if (viewFilter === "aktiv") {
+        matchesView = !isDeleted && !isConverted && isActiveStatus;
+      } else if (viewFilter === "abgeschlossen") {
+        matchesView = !isDeleted && (isConverted || isDoneStatus);
+      } else if (viewFilter === "geloescht") {
+        matchesView = isDeleted;
+      } else if (viewFilter === "alle") {
+        matchesView = true;
+      }
+
+      return matchesSearch && matchesStatus && matchesView;
     });
-  }, [requests, search, statusFilter]);
+  }, [requests, search, statusFilter, viewFilter]);
 
   const allVisibleSelected =
     filteredRequests.length > 0 &&
@@ -210,10 +239,31 @@ const AdminRequests = () => {
       return;
     }
 
-    setRequests((prev) => prev.filter((request) => !selectedIds.includes(request.id)));
+    setRequests((prev) =>
+      prev.map((request) =>
+        selectedIds.includes(request.id)
+          ? { ...request, deleted_at: new Date().toISOString() }
+          : request
+      )
+    );
     setSelectedIds([]);
     setDeleting(false);
   };
+
+  const activeCount = requests.filter(
+    (r) =>
+      !r.deleted_at &&
+      !r.event_id &&
+      ACTIVE_STATUSES.includes(r.status || "")
+  ).length;
+
+  const doneCount = requests.filter(
+    (r) =>
+      !r.deleted_at &&
+      (!!r.event_id || DONE_STATUSES.includes(r.status || ""))
+  ).length;
+
+  const deletedCount = requests.filter((r) => !!r.deleted_at).length;
 
   if (loading) {
     return <div className="pt-28 text-center">Wird geladen…</div>;
@@ -259,6 +309,30 @@ const AdminRequests = () => {
         </div>
       }
     >
+      <div className="flex flex-wrap gap-3 mb-6">
+        {[
+          { key: "aktiv", label: `Aktiv (${activeCount})` },
+          { key: "abgeschlossen", label: `Abgeschlossen (${doneCount})` },
+          { key: "geloescht", label: `Gelöscht (${deletedCount})` },
+          { key: "alle", label: "Alle" },
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => {
+              setViewFilter(tab.key as ViewFilter);
+              setSelectedIds([]);
+            }}
+            className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              viewFilter === tab.key
+                ? "bg-background border border-border/30 text-foreground shadow-sm"
+                : "bg-muted/30 text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       <div className="grid lg:grid-cols-[1fr_220px] gap-4 mb-8">
         <div className="relative">
           <Search className="w-4 h-4 text-muted-foreground absolute left-4 top-1/2 -translate-y-1/2" />
@@ -311,7 +385,7 @@ const AdminRequests = () => {
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
         <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
           <p className="font-display text-2xl font-bold text-foreground">
-            {requests.length}
+            {activeCount}
           </p>
           <p className="font-sans text-xs text-muted-foreground mt-1">
             Aktive Anfragen
@@ -320,19 +394,19 @@ const AdminRequests = () => {
 
         <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
           <p className="font-display text-2xl font-bold text-foreground">
-            {requests.filter((r) => r.status === "neu").length}
+            {doneCount}
           </p>
           <p className="font-sans text-xs text-muted-foreground mt-1">
-            Neue Anfragen
+            Abgeschlossen
           </p>
         </div>
 
         <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
           <p className="font-display text-2xl font-bold text-foreground">
-            {requests.filter((r) => r.status === "bestätigt").length}
+            {deletedCount}
           </p>
           <p className="font-sans text-xs text-muted-foreground mt-1">
-            Bestätigt
+            Gelöscht
           </p>
         </div>
       </div>
@@ -378,6 +452,18 @@ const AdminRequests = () => {
                       >
                         {formatStatusLabel(request.status)}
                       </span>
+
+                      {request.event_id && (
+                        <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-green-700 bg-green-100">
+                          Konvertiert
+                        </span>
+                      )}
+
+                      {request.deleted_at && (
+                        <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-destructive bg-destructive/10">
+                          Gelöscht
+                        </span>
+                      )}
                     </div>
 
                     <p className="font-sans text-base text-foreground mb-3">
