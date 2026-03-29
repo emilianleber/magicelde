@@ -5,6 +5,7 @@ import {
   Calendar,
   LogOut,
   MapPin,
+  Plus,
   Search,
   Theater,
   Users,
@@ -285,6 +286,14 @@ const AdminEvents = () => {
                 : `Ausgewählte löschen (${selectedIds.length})`}
             </button>
           )}
+
+          <Link
+            to="/admin/events/new"
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            Event erstellen
+          </Link>
 
           <button
             onClick={logout}
