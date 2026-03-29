@@ -30,59 +30,62 @@ const BackgroundHero = ({
   }[overlay];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
+    <section className="relative min-h-screen overflow-hidden">
       <div className="absolute inset-0">
         <img
           src={imageSrc}
           alt=""
-          className="w-full h-full object-cover scale-105"
+          className="h-full w-full object-cover scale-105"
           style={{ animation: "slowZoom 20s ease-in-out infinite alternate" }}
         />
         <div className={`absolute inset-0 ${overlayClass}`} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
-        <div className="max-w-5xl mx-auto text-center">
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-6">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center text-center">
           {badge && (
-            <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-              <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-sans font-semibold tracking-widest uppercase text-white/90 bg-white/15 backdrop-blur-sm border border-white/20 mb-8">
-                {badge}
-              </span>
-            </div>
+            <span className="mb-6 inline-flex rounded-full border border-white/20 bg-white/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 backdrop-blur-md md:text-sm">
+              {badge}
+            </span>
           )}
 
-          <h1 className="headline-hero mb-8 opacity-0 animate-fade-up text-white" style={{ animationDelay: "0.3s" }}>
-            {headline}{" "}
-            {animatedWords && <AnimatedWords words={animatedWords} />}
+          <h1 className="max-w-5xl text-center font-bold tracking-tight text-white leading-[0.9] text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
+            <span className="block">{headline}</span>
+            {animatedWords?.length ? (
+              <span className="mt-2 block min-h-[1.1em] text-blue-500">
+                <AnimatedWords words={animatedWords} />
+              </span>
+            ) : null}
           </h1>
 
-          <p className="font-sans text-lg md:text-xl font-light leading-relaxed text-white/80 max-w-2xl mx-auto mb-12 opacity-0 animate-fade-up" style={{ animationDelay: "0.5s" }}>
+          <p className="mt-8 max-w-3xl text-center text-lg leading-relaxed text-white/85 md:text-2xl">
             {subline}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up" style={{ animationDelay: "0.65s" }}>
-            <Link to={ctaPrimary.to} className="inline-flex items-center justify-center px-10 py-5 rounded-full bg-white font-sans text-base font-medium text-foreground transition-all duration-300 hover:bg-white/90 hover:shadow-[0_8px_30px_rgba(255,255,255,0.2)] active:scale-[0.97] group">
-              {ctaPrimary.text}
-              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            {ctaSecondary && (
-              <a href={ctaSecondary.href} className="inline-flex items-center justify-center px-10 py-5 rounded-full font-sans text-base font-medium text-white/80 border border-white/20 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:text-white active:scale-[0.97]">
-                {ctaSecondary.text}
-              </a>
-            )}
-          </div>
+          {(ctaPrimary || ctaSecondary) && (
+            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              {ctaPrimary && (
+                <Link
+                  to={ctaPrimary.to}
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-semibold text-black transition hover:scale-[1.02]"
+                >
+                  {ctaPrimary.text}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
+
+              {ctaSecondary && (
+                <a
+                  href={ctaSecondary.href}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur-md transition hover:bg-white/15"
+                >
+                  {ctaSecondary.text}
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </div>
-
-      <style>{`
-        @keyframes slowZoom {
-          0% { transform: scale(1.05); }
-          100% { transform: scale(1.12); }
-        }
-      `}</style>
     </section>
   );
 };

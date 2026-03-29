@@ -2,6 +2,7 @@ import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
+import { TrustStrip, ClientLogos, TrustSection } from "@/components/landing/TrustElements";
 import { Star } from "lucide-react";
 import heroImg from "@/assets/hero-magic.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
@@ -119,8 +120,11 @@ const GalerieSection = () => {
 const Referenzen = () => (
   <PageLayout>
     <HeroRef />
+    <TrustStrip />
     <StatsSection />
+    <TrustSection />
     <TestimonialsSection />
+    <ClientLogos />
     <GalerieSection />
     <BookingCTA headline={"Überzeugt?"} subline="Werde Teil der Liste — erzähl mir von deinem Event und lass uns gemeinsam etwas Unvergessliches schaffen." />
   </PageLayout>

@@ -1,31 +1,40 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
-import { Lock, Mail, ArrowRight, Shield, Eye, EyeOff } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Lock, Mail, ArrowRight } from "lucide-react";
 
 const KundenportalLogin = () => {
-  const [kundennummer, setKundennummer] = useState("");
   const [email, setEmail] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleMagicLink = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     setLoading(true);
 
-    // Demo login — in production, this would validate against a backend
-    setTimeout(() => {
-      if (kundennummer.trim() && email.trim()) {
-        localStorage.setItem("kundenportal_auth", JSON.stringify({ kundennummer, email, name: "Demo Kunde" }));
-        navigate("/kundenportal");
-      } else {
-        setError("Bitte geben Sie Kundennummer und E-Mail ein.");
-      }
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          // 🔥 FIX: Immer auf Live-Kundenportal weiterleiten
+          emailRedirectTo: "https://magicel.de/kundenportal",
+        },
+      });
+
+      if (error) throw error;
+
+      setSuccess(
+        "Dein Zugangslink wurde per E-Mail verschickt. Bitte prüfe dein Postfach."
+      );
+      setEmail("");
+    } catch (err: any) {
+      setError(err.message || "Ein Fehler ist aufgetreten.");
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
 
   return (
@@ -33,33 +42,24 @@ const KundenportalLogin = () => {
       <section className="min-h-screen flex items-center justify-center pt-24 pb-16">
         <div className="container px-6">
           <div className="max-w-md mx-auto">
-            {/* Header */}
             <div className="text-center mb-10">
-              <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(225, 80%, 56%), hsl(260, 70%, 55%))" }}>
-                <Lock className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center bg-accent/10">
+                <Lock className="w-8 h-8 text-accent" />
               </div>
-              <h1 className="headline-sub text-foreground mb-3">Kundenportal</h1>
-              <p className="text-detail">Melden Sie sich mit Ihrer Kundennummer und E-Mail-Adresse an.</p>
+              <h1 className="headline-sub text-foreground mb-3">
+                Kundenportal
+              </h1>
+              <p className="text-detail">
+                Geben Sie Ihre E-Mail-Adresse ein. Sie erhalten einen sicheren
+                Login-Link für Ihr Kundenportal.
+              </p>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleLogin} className="space-y-5">
+            <form onSubmit={handleMagicLink} className="space-y-5">
               <div>
-                <label className="block font-sans text-sm font-medium text-foreground mb-2">Kundennummer</label>
-                <div className="relative">
-                  <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <input
-                    type="text"
-                    value={kundennummer}
-                    onChange={(e) => setKundennummer(e.target.value)}
-                    placeholder="z.B. KD-2024-001"
-                    className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-muted/50 border border-border/50 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/30 transition-all"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-sans text-sm font-medium text-foreground mb-2">E-Mail-Adresse</label>
+                <label className="block font-sans text-sm font-medium text-foreground mb-2">
+                  E-Mail-Adresse
+                </label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
@@ -67,13 +67,22 @@ const KundenportalLogin = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="ihre@email.de"
+                    required
                     className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-muted/50 border border-border/50 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/30 transition-all"
                   />
                 </div>
               </div>
 
               {error && (
-                <p className="text-sm text-destructive bg-destructive/10 px-4 py-2.5 rounded-xl">{error}</p>
+                <p className="text-sm text-destructive bg-destructive/10 px-4 py-2.5 rounded-xl">
+                  {error}
+                </p>
+              )}
+
+              {success && (
+                <p className="text-sm text-green-700 bg-green-100 px-4 py-2.5 rounded-xl">
+                  {success}
+                </p>
               )}
 
               <button
@@ -81,15 +90,18 @@ const KundenportalLogin = () => {
                 disabled={loading}
                 className="w-full btn-primary justify-center group disabled:opacity-50"
               >
-                {loading ? "Anmelden…" : "Anmelden"}
-                {!loading && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />}
+                {loading ? "Wird gesendet…" : "Login-Link senden"}
+                {!loading && (
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                )}
               </button>
             </form>
 
-            {/* Help */}
             <div className="mt-8 p-5 rounded-2xl bg-muted/30 border border-border/30">
               <p className="font-sans text-xs text-muted-foreground leading-relaxed">
-                <strong className="text-foreground">Kundennummer vergessen?</strong> Sie finden Ihre Kundennummer auf Ihrem Angebot, Vertrag oder in der Bestätigungs-E-Mail. Bei Fragen kontaktieren Sie mich gerne direkt.
+                <strong className="text-foreground">Hinweis:</strong> Über den
+                Zugangslink gelangen Sie direkt in Ihr Kundenportal, um Anfragen,
+                Events und Dokumente zentral einzusehen.
               </p>
             </div>
           </div>
