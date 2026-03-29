@@ -6,6 +6,7 @@ import {
   Calendar,
   FileText,
   MessageCircle,
+  Clock,
   CheckCircle2,
   Circle,
   ArrowRight,
@@ -15,45 +16,17 @@ import {
   LayoutDashboard,
   FolderOpen,
   Phone,
-  ChevronDown,
-  ChevronUp,
-  Mail,
-  MapPin,
-  Users,
-  Theater,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
-
-interface BookingRequest {
-  id: string;
-  name: string;
-  email: string;
-  phone: string | null;
-  anlass: string | null;
-  datum: string | null;
-  ort: string | null;
-  gaeste: number | null;
-  format: string | null;
-  nachricht: string | null;
-  status: string | null;
-  created_at: string;
-  event_id?: string | null;
-}
 
 interface PortalEvent {
   id: string;
   title: string;
   event_date: string | null;
   location: string | null;
-  status: string | null;
+  status: string;
   format: string | null;
   guests: number | null;
-  request_id?: string | null;
-  customer_id?: string | null;
-  details_status?: string | null;
-  contract_status?: string | null;
-  invoice_status?: string | null;
-  notes?: string | null;
 }
 
 interface PortalDocument {
@@ -64,144 +37,13 @@ interface PortalDocument {
   created_at: string;
 }
 
-const formatStatusLabel = (status?: string | null) => {
-  switch (status) {
-    case "neu":
-      return "Neu";
-    case "in_bearbeitung":
-      return "In Bearbeitung";
-    case "details_besprechen":
-      return "Details besprechen";
-    case "angebot_gesendet":
-      return "Angebot gesendet";
-    case "warte_auf_kunde":
-      return "Warte auf Rückmeldung";
-    case "gebucht":
-      return "Gebucht";
-    case "bestätigt":
-      return "Bestätigt";
-    case "abgelehnt":
-      return "Abgelehnt";
-    case "archiviert":
-      return "Archiviert";
-    default:
-      return status || "Offen";
-  }
-};
-
-const formatStatusClasses = (status?: string | null) => {
-  switch (status) {
-    case "neu":
-      return "text-accent bg-accent/10";
-    case "in_bearbeitung":
-    case "details_besprechen":
-    case "angebot_gesendet":
-    case "warte_auf_kunde":
-      return "text-foreground bg-muted";
-    case "gebucht":
-    case "bestätigt":
-      return "text-green-700 bg-green-100";
-    case "abgelehnt":
-      return "text-destructive bg-destructive/10";
-    case "archiviert":
-      return "text-muted-foreground bg-muted";
-    default:
-      return "text-muted-foreground bg-muted";
-  }
-};
-
-const formatEventStatusLabel = (status?: string | null) => {
-  switch (status) {
-    case "in_planung":
-      return "In Planung";
-    case "details_offen":
-      return "Details offen";
-    case "vertrag_gesendet":
-      return "Vertrag gesendet";
-    case "vertrag_bestaetigt":
-      return "Vertrag bestätigt";
-    case "rechnung_gesendet":
-      return "Rechnung gesendet";
-    case "rechnung_bezahlt":
-      return "Rechnung bezahlt";
-    case "event_erfolgt":
-      return "Event erfolgt";
-    case "storniert":
-      return "Storniert";
-    default:
-      return status || "Offen";
-  }
-};
-
-const formatEventStatusClasses = (status?: string | null) => {
-  switch (status) {
-    case "in_planung":
-    case "details_offen":
-      return "text-accent bg-accent/10";
-    case "vertrag_gesendet":
-    case "vertrag_bestaetigt":
-    case "rechnung_gesendet":
-      return "text-foreground bg-muted";
-    case "rechnung_bezahlt":
-    case "event_erfolgt":
-      return "text-green-700 bg-green-100";
-    case "storniert":
-      return "text-destructive bg-destructive/10";
-    default:
-      return "text-muted-foreground bg-muted";
-  }
-};
-
-const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null) => {
-  const steps: { label: string; done: boolean }[] = [];
-
-  steps.push({
-    label: "Anfrage eingegangen",
-    done: !!request,
-  });
-
-  steps.push({
-    label: "In Bearbeitung",
-    done:
-      ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"]
-        .includes(request?.status || "") || !!event,
-  });
-
-  steps.push({
-    label: "Angebot erhalten",
-    done:
-      ["angebot_gesendet", "warte_auf_kunde"].includes(request?.status || "") || !!event,
-  });
-
-  if (event) {
-    steps.push({
-      label: "Event gebucht",
-      done: true,
-    });
-
-    steps.push({
-      label: "Details klären",
-      done: event.details_status === "erledigt",
-    });
-
-    steps.push({
-      label: "Vertrag",
-      done: event.contract_status === "erledigt",
-    });
-
-    steps.push({
-      label: "Rechnung",
-      done: event.invoice_status === "erledigt",
-    });
-
-    steps.push({
-      label: "Event durchgeführt",
-      done: event.status === "event_erfolgt",
-    });
-  }
-
-  return steps;
-};
+interface TimelineStep {
+  id: string;
+  step: string;
+  done: boolean;
+  step_date: string | null;
+  sort_order: number;
+}
 
 const Kundenportal = () => {
   const [user, setUser] = useState<SupaUser | null>(null);
@@ -209,14 +51,11 @@ const Kundenportal = () => {
   const [kundennummer, setKundennummer] = useState("");
   const [events, setEvents] = useState<PortalEvent[]>([]);
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
-  const [requests, setRequests] = useState<BookingRequest[]>([]);
-  const [expandedRequestId, setExpandedRequestId] = useState<string | null>(null);
+  const [timeline, setTimeline] = useState<TimelineStep[]>([]);
   const [activeTab, setActiveTab] = useState<
-    "dashboard" | "events" | "documents" | "requests" | "nachrichten" | "contact"
+    "dashboard" | "events" | "documents" | "contact"
   >("dashboard");
-  const [portalMessages, setPortalMessages] = useState<{ id: string; created_at: string; subject: string; body: string; read_by_customer: boolean }[]>([]);
   const [loading, setLoading] = useState(true);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -242,38 +81,30 @@ const Kundenportal = () => {
   }, [navigate]);
 
   useEffect(() => {
-    if (!user || !user.email) return;
+    if (!user) return;
 
     const fetchData = async () => {
       setLoading(true);
 
-      let customer: any = null;
-
-      const { data: existingCustomer } = await supabase
+      let { data: customer, error: customerError } = await supabase
         .from("portal_customers")
         .select("*")
         .eq("user_id", user.id)
         .maybeSingle();
 
-      customer = existingCustomer;
-
-      if (!customer) {
-        const { data: byEmail } = await supabase
+      // Falls nach Registrierung noch kein Kundenprofil existiert, automatisch anlegen
+      if (!customer && !customerError) {
+        const { data: createdCustomer } = await supabase
           .from("portal_customers")
+          .insert({
+            user_id: user.id,
+            name: "",
+            kundennummer: "",
+          })
           .select("*")
-          .eq("email", user.email)
-          .maybeSingle();
+          .single();
 
-        if (byEmail) {
-          const { data: linked } = await supabase
-            .from("portal_customers")
-            .update({ user_id: user.id })
-            .eq("id", byEmail.id)
-            .select("*")
-            .single();
-
-          customer = linked;
-        }
+        customer = createdCustomer ?? null;
       }
 
       if (customer) {
@@ -283,35 +114,26 @@ const Kundenportal = () => {
         const { data: eventsData } = await supabase
           .from("portal_events")
           .select("*")
-          .eq("customer_id", customer.id);
+          .eq("customer_id", customer.id)
+          .order("event_date", { ascending: true });
 
         const { data: docsData } = await supabase
           .from("portal_documents")
           .select("*")
-          .eq("customer_id", customer.id);
+          .eq("customer_id", customer.id)
+          .order("created_at", { ascending: false });
 
         if (eventsData) setEvents(eventsData);
         if (docsData) setDocuments(docsData);
 
-        const { data: messagesData } = await supabase
-          .from("portal_messages")
-          .select("id, created_at, subject, body, read_by_customer")
-          .eq("customer_id", customer.id)
-          .order("created_at", { ascending: false });
+        if (eventsData && eventsData.length > 0) {
+          const { data: timelineData } = await supabase
+            .from("portal_timeline")
+            .select("*")
+            .eq("event_id", eventsData[0].id)
+            .order("sort_order", { ascending: true });
 
-        if (messagesData) setPortalMessages(messagesData);
-      }
-
-      const { data: requestsData } = await supabase
-        .from("portal_requests")
-        .select("*")
-        .eq("email", user.email)
-        .order("created_at", { ascending: false });
-
-      if (requestsData) {
-        setRequests(requestsData);
-        if (requestsData.length > 0) {
-          setExpandedRequestId(requestsData[0].id);
+          if (timelineData) setTimeline(timelineData);
         }
       }
 
@@ -338,11 +160,14 @@ const Kundenportal = () => {
     );
   }
 
+  const tabs = [
+    { id: "dashboard" as const, label: "Dashboard", icon: LayoutDashboard },
+    { id: "events" as const, label: "Events", icon: Calendar },
+    { id: "documents" as const, label: "Dokumente", icon: FolderOpen },
+    { id: "contact" as const, label: "Kontakt", icon: Phone },
+  ];
+
   const displayName = customerName || user.email?.split("@")[0] || "Kunde";
-  const currentRequest = requests[0] || null;
-  const currentEvent =
-    events.find((e) => e.request_id === currentRequest?.id) || null;
-  const timelineSteps = buildTimeline(currentRequest, currentEvent);
 
   return (
     <PageLayout>
@@ -372,17 +197,10 @@ const Kundenportal = () => {
           </div>
 
           <div className="flex gap-1 bg-muted/50 rounded-2xl p-1 mb-10 overflow-x-auto">
-            {[
-              { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-              { id: "events", label: "Events", icon: Calendar },
-              { id: "documents", label: "Dokumente", icon: FolderOpen },
-              { id: "requests", label: "Anfragen", icon: MessageCircle },
-              { id: "nachrichten", label: "Nachrichten", icon: Mail },
-              { id: "contact", label: "Kontakt", icon: Phone },
-            ].map((tab) => (
+            {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                   activeTab === tab.id
                     ? "bg-background shadow-sm text-foreground"
@@ -399,9 +217,23 @@ const Kundenportal = () => {
             <div className="space-y-8">
               <div className="grid sm:grid-cols-3 gap-4">
                 {[
-                  { label: "Aktive Events", value: String(events.length), icon: Calendar },
-                  { label: "Dokumente", value: String(documents.length), icon: FileText },
-                  { label: "Anfragen", value: String(requests.length), icon: MessageCircle },
+                  {
+                    label: "Aktive Events",
+                    value: String(events.length),
+                    icon: Calendar,
+                  },
+                  {
+                    label: "Dokumente",
+                    value: String(documents.length),
+                    icon: FileText,
+                  },
+                  {
+                    label: "Nächstes Event",
+                    value: events[0]?.event_date
+                      ? new Date(events[0].event_date).toLocaleDateString("de-DE")
+                      : "–",
+                    icon: Clock,
+                  },
                 ].map((stat) => (
                   <div
                     key={stat.label}
@@ -418,133 +250,55 @@ const Kundenportal = () => {
                 ))}
               </div>
 
-              {timelineSteps.length > 0 && (
+              {timeline.length > 0 && (
                 <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
                   <h2 className="font-display text-lg font-bold text-foreground mb-6">
-                    Nächste Schritte
+                    Event-Timeline{events[0] ? `: ${events[0].title}` : ""}
                   </h2>
-
                   <div className="space-y-4">
-                    {timelineSteps.map((step, i) => (
-                      <div key={i} className="flex items-start gap-4">
+                    {timeline.map((t) => (
+                      <div key={t.id} className="flex items-start gap-4">
                         <div className="mt-0.5">
-                          {step.done ? (
+                          {t.done ? (
                             <CheckCircle2 className="w-5 h-5 text-accent" />
                           ) : (
                             <Circle className="w-5 h-5 text-muted-foreground/30" />
                           )}
                         </div>
-
-                        <p
-                          className={`font-sans text-sm ${
-                            step.done ? "text-foreground" : "text-muted-foreground"
-                          }`}
-                        >
-                          {step.label}
-                        </p>
+                        <div className="flex-1">
+                          <p
+                            className={`font-sans text-sm font-medium ${
+                              t.done ? "text-foreground" : "text-muted-foreground"
+                            }`}
+                          >
+                            {t.step}
+                          </p>
+                          {t.step_date && (
+                            <p className="font-sans text-xs text-muted-foreground">
+                              {new Date(t.step_date).toLocaleDateString("de-DE")}
+                            </p>
+                          )}
+                        </div>
+                        {t.done && (
+                          <span className="font-sans text-[10px] uppercase tracking-widest text-accent bg-accent/10 px-2 py-1 rounded-full">
+                            Erledigt
+                          </span>
+                        )}
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {currentRequest && (
-                <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
-                  <h2 className="font-display text-lg font-bold text-foreground mb-4">
-                    Letzte Anfrage
-                  </h2>
-                  <div className="rounded-2xl bg-background/60 border border-border/30 p-5">
-                    <div className="flex items-center justify-between gap-4 flex-wrap">
-                      <div>
-                        <h3 className="font-display text-lg font-bold text-foreground">
-                          {currentRequest.anlass || "Anfrage"}
-                        </h3>
-                        <p className="font-sans text-sm text-muted-foreground mt-1">
-                          Eingegangen am{" "}
-                          {new Date(currentRequest.created_at).toLocaleDateString("de-DE")}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span
-                          className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatStatusClasses(
-                            currentRequest.status
-                          )}`}
-                        >
-                          {formatStatusLabel(currentRequest.status)}
-                        </span>
-                        {currentRequest.event_id && (
-                          <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-green-700 bg-green-100">
-                            Als Event übernommen
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {currentRequest.nachricht && (
-                      <p className="font-sans text-sm text-muted-foreground mt-4 leading-relaxed">
-                        {currentRequest.nachricht}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {currentEvent && (
-                <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
-                  <h2 className="font-display text-lg font-bold text-foreground mb-4">
-                    Aktuelles Event
-                  </h2>
-
-                  <div className="rounded-2xl bg-background/60 border border-border/30 p-5">
-                    <div className="flex items-center justify-between gap-4 flex-wrap mb-4">
-                      <div>
-                        <h3 className="font-display text-lg font-bold text-foreground">
-                          {currentEvent.title}
-                        </h3>
-                        <p className="font-sans text-sm text-muted-foreground mt-1">
-                          {currentEvent.event_date
-                            ? new Date(currentEvent.event_date).toLocaleDateString("de-DE")
-                            : "Datum folgt"}
-                          {currentEvent.location ? ` · ${currentEvent.location}` : ""}
-                        </p>
-                      </div>
-
-                      <span
-                        className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(
-                          currentEvent.status
-                        )}`}
-                      >
-                        {formatEventStatusLabel(currentEvent.status)}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground">
-                      {currentEvent.format && (
-                        <span className="flex items-center gap-2">
-                          <Theater className="w-4 h-4 text-accent" />
-                          {currentEvent.format}
-                        </span>
-                      )}
-                      {currentEvent.guests && (
-                        <span className="flex items-center gap-2">
-                          <Users className="w-4 h-4 text-accent" />
-                          {currentEvent.guests} Gäste
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {events.length === 0 && requests.length === 0 && (
+              {events.length === 0 && timeline.length === 0 && (
                 <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
                   <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
                   <h3 className="font-display text-lg font-bold text-foreground mb-2">
-                    Noch keine Inhalte vorhanden
+                    Noch keine Events
                   </h3>
                   <p className="font-sans text-sm text-muted-foreground mb-6">
-                    Nach Ihrer Anfrage oder Buchung erscheinen hier Ihre Anfragen,
-                    Events und Dokumente.
+                    Nach Ihrer Anfrage oder Buchung werden hier Ihre Events und
+                    der aktuelle Status angezeigt.
                   </p>
                   <Link to="/buchung" className="btn-primary inline-flex group">
                     Jetzt anfragen
@@ -571,21 +325,29 @@ const Kundenportal = () => {
                   >
                     <div className="flex flex-col sm:flex-row justify-between gap-4">
                       <div>
-                        <div className="flex items-center gap-3 mb-2 flex-wrap">
+                        <div className="flex items-center gap-3 mb-2">
                           <h3 className="font-display text-lg font-bold text-foreground">
                             {event.title}
                           </h3>
                           <span
-                            className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(
-                              event.status
-                            )}`}
+                            className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${
+                              event.status === "confirmed"
+                                ? "text-accent bg-accent/10"
+                                : "text-muted-foreground bg-muted"
+                            }`}
                           >
-                            {formatEventStatusLabel(event.status)}
+                            {event.status === "confirmed"
+                              ? "Bestätigt"
+                              : event.status === "completed"
+                              ? "Abgeschlossen"
+                              : "In Planung"}
                           </span>
                         </div>
                         <div className="flex flex-wrap gap-x-6 gap-y-1 font-sans text-sm text-muted-foreground">
                           {event.event_date && (
-                            <span>📅 {new Date(event.event_date).toLocaleDateString("de-DE")}</span>
+                            <span>
+                              📅 {new Date(event.event_date).toLocaleDateString("de-DE")}
+                            </span>
                           )}
                           {event.location && <span>📍 {event.location}</span>}
                           {event.format && <span>🎭 {event.format}</span>}
@@ -641,198 +403,6 @@ const Kundenportal = () => {
             </div>
           )}
 
-          {activeTab === "requests" && (
-            <div className="space-y-4">
-              {requests.length === 0 ? (
-                <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                  <p className="font-sans text-sm text-muted-foreground">
-                    Noch keine Anfragen vorhanden.
-                  </p>
-                </div>
-              ) : (
-                requests.map((request) => {
-                  const isOpen = expandedRequestId === request.id;
-
-                  return (
-                    <div
-                      key={request.id}
-                      className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden"
-                    >
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setExpandedRequestId(isOpen ? null : request.id)
-                        }
-                        className="w-full text-left p-6 hover:bg-muted/20 transition-colors"
-                      >
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <div className="flex items-center gap-3 flex-wrap mb-2">
-                              <h3 className="font-display text-lg font-bold text-foreground">
-                                {request.anlass || "Anfrage"}
-                              </h3>
-                              <span
-                                className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatStatusClasses(
-                                  request.status
-                                )}`}
-                              >
-                                {formatStatusLabel(request.status)}
-                              </span>
-                              {request.event_id && (
-                                <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-green-700 bg-green-100">
-                                  Als Event übernommen
-                                </span>
-                              )}
-                            </div>
-
-                            <p className="font-sans text-xs text-muted-foreground">
-                              Eingegangen am{" "}
-                              {new Date(request.created_at).toLocaleDateString("de-DE")}
-                            </p>
-                          </div>
-
-                          <div className="text-muted-foreground">
-                            {isOpen ? (
-                              <ChevronUp className="w-5 h-5" />
-                            ) : (
-                              <ChevronDown className="w-5 h-5" />
-                            )}
-                          </div>
-                        </div>
-                      </button>
-
-                      {isOpen && (
-                        <div className="px-6 pb-6 border-t border-border/20">
-                          <div className="grid sm:grid-cols-2 gap-4 mt-5">
-                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                                Anfrage von
-                              </p>
-                              <p className="font-sans text-sm text-foreground font-medium">
-                                {request.name}
-                              </p>
-                            </div>
-
-                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                                E-Mail
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <Mail className="w-4 h-4 text-accent" />
-                                <p className="font-sans text-sm text-foreground">
-                                  {request.email}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                                Telefon
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <Phone className="w-4 h-4 text-accent" />
-                                <p className="font-sans text-sm text-foreground">
-                                  {request.phone || "Nicht angegeben"}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                                Gewünschtes Datum
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <Calendar className="w-4 h-4 text-accent" />
-                                <p className="font-sans text-sm text-foreground">
-                                  {request.datum
-                                    ? new Date(request.datum).toLocaleDateString("de-DE")
-                                    : "Nicht angegeben"}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                                Ort
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <MapPin className="w-4 h-4 text-accent" />
-                                <p className="font-sans text-sm text-foreground">
-                                  {request.ort || "Nicht angegeben"}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="rounded-xl bg-background/60 border border-border/20 p-4">
-                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                                Gäste
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <Users className="w-4 h-4 text-accent" />
-                                <p className="font-sans text-sm text-foreground">
-                                  {request.gaeste ?? "Nicht angegeben"}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="rounded-xl bg-background/60 border border-border/20 p-4 sm:col-span-2">
-                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                                Gewünschtes Format
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <Theater className="w-4 h-4 text-accent" />
-                                <p className="font-sans text-sm text-foreground">
-                                  {request.format || "Nicht angegeben"}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="mt-4 rounded-xl bg-background/60 border border-border/20 p-4">
-                            <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                              Nachricht
-                            </p>
-                            <p className="font-sans text-sm text-foreground leading-relaxed whitespace-pre-line">
-                              {request.nachricht || "Keine zusätzliche Nachricht angegeben."}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          )}
-
-          {activeTab === "nachrichten" && (
-            <div className="space-y-4">
-              {portalMessages.length === 0 ? (
-                <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                  <Mail className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                  <p className="font-sans text-sm text-muted-foreground">Noch keine Nachrichten vorhanden.</p>
-                </div>
-              ) : (
-                portalMessages.map((msg) => (
-                  <div key={msg.id} className="p-5 rounded-2xl bg-muted/20 border border-border/30">
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div>
-                        <p className="font-sans text-sm font-semibold text-foreground">{msg.subject}</p>
-                        <p className="font-sans text-xs text-muted-foreground mt-0.5">
-                          {new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                        </p>
-                      </div>
-                      {!msg.read_by_customer && (
-                        <span className="shrink-0 font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full bg-accent/10 text-accent">Neu</span>
-                      )}
-                    </div>
-                    <p className="font-sans text-sm text-foreground/80 whitespace-pre-wrap leading-relaxed">{msg.body}</p>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-
           {activeTab === "contact" && (
             <div className="max-w-lg">
               <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
@@ -874,10 +444,7 @@ const Kundenportal = () => {
                   </a>
                 </div>
 
-                <Link
-                  to="/kontakt"
-                  className="btn-primary justify-center mt-6 w-full group"
-                >
+                <Link to="/kontakt" className="btn-primary justify-center mt-6 w-full group">
                   Nachricht senden
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>

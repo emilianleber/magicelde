@@ -1,36 +1,28 @@
-import { useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
 import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Shield, Clock, Star, Building2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Shield, Clock, Star } from "lucide-react";
 
 const HeroBuchung = () => (
   <section className="relative min-h-[50vh] flex flex-col justify-center overflow-hidden">
     <div className="container px-6 pt-28 pb-8 md:pt-36 md:pb-12">
       <div className="max-w-5xl mx-auto text-center">
-        <div
-          className="opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.1s" }}
-        >
+        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
           <span className="badge-accent mb-8 inline-flex">Anfrage</span>
         </div>
-
         <h1
           className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground"
           style={{ animationDelay: "0.3s" }}
         >
           Jetzt anfragen.
         </h1>
-
         <p
           className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up"
           style={{ animationDelay: "0.5s" }}
         >
-          Erzähl mir von deinem Event — unverbindlich und kostenlos. Ich melde
-          mich innerhalb von 24 Stunden persönlich bei dir.
+          Erzähl mir von deinem Event — unverbindlich und kostenlos.
+          Ich melde mich innerhalb von 24 Stunden persönlich bei dir.
         </p>
-
         <div
           className="flex flex-wrap justify-center gap-8 mt-10 opacity-0 animate-fade-up"
           style={{ animationDelay: "0.65s" }}
@@ -55,98 +47,32 @@ const HeroBuchung = () => (
 
 const FormSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const navigate = useNavigate();
-
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const inputCls =
     "w-full rounded-2xl bg-muted/50 border-0 px-5 py-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all";
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSending(true);
-    setError("");
-    setSuccess("");
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    const payload = {
-      name: String(formData.get("name") || "").trim(),
-      firma: String(formData.get("firma") || "").trim() || null,
-      email: String(formData.get("email") || "").trim(),
-      phone: String(formData.get("phone") || "").trim(),
-      anlass: String(formData.get("anlass") || "").trim(),
-      datum: String(formData.get("datum") || "").trim(),
-      ort: String(formData.get("ort") || "").trim(),
-      gaeste: formData.get("gaeste") ? Number(formData.get("gaeste")) : null,
-      format: String(formData.get("format") || "").trim(),
-      nachricht: String(formData.get("nachricht") || "").trim(),
-    };
-
-    try {
-      const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-      console.log("SUPABASE KEY VORHANDEN:", !!publishableKey);
-      console.log("REQUEST PAYLOAD:", payload);
-
-      const res = await fetch(
-        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/create-portal-request",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: publishableKey,
-            Authorization: `Bearer ${publishableKey}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      console.log("RESPONSE STATUS:", res.status);
-      console.log("RESPONSE OK:", res.ok);
-
-      const rawText = await res.text();
-      console.log("RAW RESPONSE:", rawText);
-
-      let data: any = {};
-      try {
-        data = rawText ? JSON.parse(rawText) : {};
-      } catch (parseError) {
-        console.error("JSON PARSE ERROR IM FRONTEND:", parseError);
-      }
-
-      if (!res.ok) {
-        throw new Error(data?.error || `Fehler bei Anfrage (${res.status})`);
-      }
-
-      form.reset();
-      setSuccess(
-        "Deine Anfrage wurde erfolgreich gesendet. Du hast außerdem eine Bestätigungs-E-Mail erhalten."
-      );
-
-      setTimeout(() => {
-        navigate("/danke");
-      }, 1500);
-    } catch (err: any) {
-      console.error("ABSENDE-FEHLER:", err);
-      setError(err?.message || "Beim Absenden ist ein Fehler aufgetreten.");
-    } finally {
-      setSending(false);
-    }
-  };
 
   return (
     <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div
-          className={`max-w-2xl mx-auto ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
+          className={`max-w-2xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form
+            action="https://formspree.io/f/xwvrdbaw"
+            method="POST"
+            className="space-y-5"
+          >
+            <input
+              type="hidden"
+              name="_subject"
+              value="Neue Buchungsanfrage über Website"
+            />
+            <input
+              type="hidden"
+              name="_next"
+              value="https://magicel.de/danke"
+            />
+
             <div className="grid sm:grid-cols-2 gap-5">
               <input
                 type="text"
@@ -165,25 +91,12 @@ const FormSection = () => {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-5">
-              <div className="relative">
-                <Building2 className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
-                <input
-                  type="text"
-                  name="firma"
-                  placeholder="Firma (optional)"
-                  className="w-full rounded-2xl bg-muted/50 border-0 pl-12 pr-5 py-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all"
-                />
-              </div>
-
               <input
                 type="tel"
                 name="phone"
                 placeholder="Telefon (optional)"
                 className={inputCls}
               />
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-5">
               <select
                 name="anlass"
                 required
@@ -194,29 +107,27 @@ const FormSection = () => {
                   Anlass wählen *
                 </option>
                 <option value="hochzeit">Hochzeit</option>
-                <option value="firmenfeier">
-                  Firmenfeier / Corporate Event
-                </option>
-                <option value="geburtstag">
-                  Geburtstag / Private Feier
-                </option>
+                <option value="firmenfeier">Firmenfeier / Corporate Event</option>
+                <option value="geburtstag">Geburtstag / Private Feier</option>
                 <option value="gala">Gala / Awards</option>
                 <option value="messe">Messe / Promotion</option>
                 <option value="magic-dinner">Magic Dinner</option>
                 <option value="teamevent">Teamevent / Incentive</option>
                 <option value="sonstiges">Sonstiges</option>
               </select>
-
-              <input type="date" name="datum" className={inputCls} />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-5">
+              <input type="date" name="datum" className={inputCls} />
               <input
                 type="text"
                 name="ort"
                 placeholder="Ort / Location"
                 className={inputCls}
               />
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-5">
               <input
                 type="number"
                 name="gaeste"
@@ -224,10 +135,11 @@ const FormSection = () => {
                 min="1"
                 className={inputCls}
               />
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-5">
-              <select name="format" className={inputCls} defaultValue="">
+              <select
+                name="format"
+                className={inputCls}
+                defaultValue=""
+              >
                 <option value="" disabled>
                   Gewünschtes Format
                 </option>
@@ -238,8 +150,6 @@ const FormSection = () => {
                 <option value="kombi">Kombination</option>
                 <option value="unsicher">Noch unsicher — berate mich</option>
               </select>
-
-              <div className="hidden sm:block" />
             </div>
 
             <textarea
@@ -249,25 +159,12 @@ const FormSection = () => {
               className={inputCls + " resize-none"}
             />
 
-            {error && (
-              <div className="rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="rounded-2xl bg-green-100 px-4 py-3 text-sm text-green-700">
-                {success}
-              </div>
-            )}
-
             <div className="text-center pt-6">
               <button
                 type="submit"
-                disabled={sending}
-                className="btn-primary btn-large w-full sm:w-auto disabled:opacity-60"
+                className="btn-primary btn-large w-full sm:w-auto"
               >
-                {sending ? "Wird gesendet…" : "Anfrage absenden"}
+                Anfrage absenden
               </button>
               <p className="font-sans text-xs text-muted-foreground/40 mt-4 tracking-widest uppercase">
                 Kostenlos · Unverbindlich · Antwort innerhalb 24h

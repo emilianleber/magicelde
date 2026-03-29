@@ -1,23 +1,8 @@
-import AdminDashboard from "@/pages/AdminDashboard";
-import AdminRequests from "@/pages/AdminRequests";
-import AdminRequestDetail from "@/pages/AdminRequestDetail";
-import AdminEvents from "@/pages/AdminEvents";
-import AdminEventDetail from "@/pages/AdminEventDetail";
-import AdminNewRequest from "@/pages/AdminNewRequest";
-import AdminNewEvent from "@/pages/AdminNewEvent";
-import AdminMails from "@/pages/AdminMails";
-import AdminCustomers from "@/pages/AdminCustomers";
-import AdminCustomerDetail from "@/pages/AdminCustomerDetail";
-import AdminNewCustomer from "@/pages/AdminNewCustomer";
-import AdminSettings from "@/pages/AdminSettings";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-
 import Index from "./pages/Index.tsx";
 import Hochzeit from "./pages/Hochzeit.tsx";
 import Firmenfeiern from "./pages/Firmenfeiern.tsx";
@@ -40,10 +25,8 @@ import Datenschutz from "./pages/Datenschutz.tsx";
 import Impressum from "./pages/Impressum.tsx";
 import AGB from "./pages/AGB.tsx";
 import StadtSeite from "./pages/StadtSeite.tsx";
-
 import KundenportalLogin from "./pages/KundenportalLogin.tsx";
 import Kundenportal from "./pages/Kundenportal.tsx";
-
 import NotFound from "./pages/NotFound.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 
@@ -56,9 +39,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
-
         <Routes>
-          {/* Website */}
           <Route path="/" element={<Index />} />
           <Route path="/hochzeit" element={<Hochzeit />} />
           <Route path="/firmenfeiern" element={<Firmenfeiern />} />
@@ -81,27 +62,8 @@ const App = () => (
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/agb" element={<AGB />} />
           <Route path="/zauberer/:stadt" element={<StadtSeite />} />
-
-          {/* Kundenportal */}
           <Route path="/kundenportal/login" element={<KundenportalLogin />} />
           <Route path="/kundenportal" element={<Kundenportal />} />
-
-          {/* Admin CRM */}
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/requests" element={<AdminRequests />} />
-          <Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
-<Route path="/admin/events" element={<AdminEvents />} />
-<Route path="/admin/events/:id" element={<AdminEventDetail />} />
-<Route path="/admin/new-request" element={<AdminNewRequest />} />
-<Route path="/admin/requests/new" element={<AdminNewRequest />} />
-<Route path="/admin/events/new" element={<AdminNewEvent />} />
-<Route path="/admin/mails" element={<AdminMails />} />
-<Route path="/admin/customers" element={<AdminCustomers />} />
-<Route path="/admin/customers/:id" element={<AdminCustomerDetail />} />
-<Route path="/admin/customers/new" element={<AdminNewCustomer />} />
-<Route path="/admin/settings" element={<AdminSettings />} />
-
-          {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
