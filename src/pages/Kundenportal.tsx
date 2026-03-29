@@ -212,8 +212,9 @@ const Kundenportal = () => {
   const [requests, setRequests] = useState<BookingRequest[]>([]);
   const [expandedRequestId, setExpandedRequestId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<
-    "dashboard" | "events" | "documents" | "requests" | "contact"
+    "dashboard" | "events" | "documents" | "requests" | "nachrichten" | "contact"
   >("dashboard");
+  const [portalMessages, setPortalMessages] = useState<{ id: string; created_at: string; subject: string; body: string; read_by_customer: boolean }[]>([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -291,6 +292,14 @@ const Kundenportal = () => {
 
         if (eventsData) setEvents(eventsData);
         if (docsData) setDocuments(docsData);
+
+        const { data: messagesData } = await supabase
+          .from("portal_messages")
+          .select("id, created_at, subject, body, read_by_customer")
+          .eq("customer_id", customer.id)
+          .order("created_at", { ascending: false });
+
+        if (messagesData) setPortalMessages(messagesData);
       }
 
       const { data: requestsData } = await supabase
@@ -368,6 +377,7 @@ const Kundenportal = () => {
               { id: "events", label: "Events", icon: Calendar },
               { id: "documents", label: "Dokumente", icon: FolderOpen },
               { id: "requests", label: "Anfragen", icon: MessageCircle },
+              { id: "nachrichten", label: "Nachrichten", icon: Mail },
               { id: "contact", label: "Kontakt", icon: Phone },
             ].map((tab) => (
               <button
@@ -791,6 +801,34 @@ const Kundenportal = () => {
                     </div>
                   );
                 })
+              )}
+            </div>
+          )}
+
+          {activeTab === "nachrichten" && (
+            <div className="space-y-4">
+              {portalMessages.length === 0 ? (
+                <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                  <Mail className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
+                  <p className="font-sans text-sm text-muted-foreground">Noch keine Nachrichten vorhanden.</p>
+                </div>
+              ) : (
+                portalMessages.map((msg) => (
+                  <div key={msg.id} className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div>
+                        <p className="font-sans text-sm font-semibold text-foreground">{msg.subject}</p>
+                        <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                          {new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        </p>
+                      </div>
+                      {!msg.read_by_customer && (
+                        <span className="shrink-0 font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full bg-accent/10 text-accent">Neu</span>
+                      )}
+                    </div>
+                    <p className="font-sans text-sm text-foreground/80 whitespace-pre-wrap leading-relaxed">{msg.body}</p>
+                  </div>
+                ))
               )}
             </div>
           )}

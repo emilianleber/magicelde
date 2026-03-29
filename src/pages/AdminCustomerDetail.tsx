@@ -6,10 +6,12 @@ import {
   Calendar,
   FileText,
   LogOut,
+  Mail,
   MapPin,
   Plus,
   Save,
   Search,
+  Send,
   Theater,
   Users,
   Building2,
@@ -135,6 +137,13 @@ const AdminCustomerDetail = () => {
   const [eventSearch, setEventSearch] = useState("");
   const [loadingUnassignedEvents, setLoadingUnassignedEvents] = useState(false);
   const [assigningEventId, setAssigningEventId] = useState<string | null>(null);
+
+  // Mail compose
+  const [showCompose, setShowCompose] = useState(false);
+  const [composeSubject, setComposeSubject] = useState("");
+  const [composeBody, setComposeBody] = useState("");
+  const [sending, setSending] = useState(false);
+  const [mailMsg, setMailMsg] = useState("");
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -380,6 +389,49 @@ const AdminCustomerDetail = () => {
     const q = eventSearch.toLowerCase();
     return e.title?.toLowerCase().includes(q) || e.location?.toLowerCase().includes(q) || e.format?.toLowerCase().includes(q);
   });
+
+  const sendMail = async () => {
+    if (!customer || !composeSubject || !composeBody) {
+      setMailMsg("Betreff und Nachricht sind Pflichtfelder.");
+      return;
+    }
+    setSending(true);
+    setMailMsg("");
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error("Keine Session.");
+
+      const res = await fetch(
+        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/send-customer-mail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            customer_id: customer.id,
+            subject: composeSubject,
+            body: composeBody,
+            to_email: email.trim().toLowerCase() || customer.email,
+            to_name: name.trim() || customer.name,
+          }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Fehler beim Senden.");
+
+      setMailMsg("Mail gesendet.");
+      setComposeSubject("");
+      setComposeBody("");
+      setShowCompose(false);
+    } catch (err: unknown) {
+      setMailMsg(err instanceof Error ? err.message : "Fehler beim Senden.");
+    } finally {
+      setSending(false);
+    }
+  };
 
   if (loading) return <div className="pt-28 text-center">Wird geladen…</div>;
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
@@ -750,6 +802,46 @@ const AdminCustomerDetail = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Mail schreiben */}
+      <div className="mt-6 p-6 rounded-2xl bg-muted/20 border border-border/30">
+        <div className="flex items-center justify-between gap-4 mb-5">
+          <h2 className="font-display text-lg font-bold text-foreground">Mail schreiben</h2>
+          <button
+            onClick={() => { setShowCompose(!showCompose); setMailMsg(""); }}
+            className={`inline-flex items-center gap-1.5 font-sans text-xs border rounded-lg px-3 py-1.5 transition-colors ${showCompose ? "text-foreground border-border/60 bg-muted/30" : "text-accent border-accent/30 hover:text-accent/80"}`}
+          >
+            {showCompose ? <X className="w-3.5 h-3.5" /> : <Mail className="w-3.5 h-3.5" />}
+            {showCompose ? "Abbrechen" : "Neue Mail"}
+          </button>
+        </div>
+
+        {showCompose ? (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground font-sans">
+              <Mail className="w-4 h-4 text-accent" />
+              An: <span className="text-foreground">{email || customer.email}</span>
+            </div>
+            <div>
+              <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Betreff</label>
+              <input value={composeSubject} onChange={(e) => setComposeSubject(e.target.value)} className={smallInputCls} />
+            </div>
+            <div>
+              <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Nachricht</label>
+              <textarea value={composeBody} onChange={(e) => setComposeBody(e.target.value)} rows={6} className={smallInputCls} />
+            </div>
+            {mailMsg && <p className={`font-sans text-xs ${mailMsg === "Mail gesendet." ? "text-accent" : "text-red-500"}`}>{mailMsg}</p>}
+            <button onClick={sendMail} disabled={sending} className="btn-primary disabled:opacity-60">
+              <Send className="w-3.5 h-3.5 mr-1.5" />
+              {sending ? "Wird gesendet…" : "Mail senden"}
+            </button>
+          </div>
+        ) : (
+          <p className="font-sans text-sm text-muted-foreground">
+            Mail direkt an <span className="text-foreground">{email || customer.email}</span> schreiben.
+          </p>
+        )}
       </div>
     </AdminLayout>
   );

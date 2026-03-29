@@ -7,6 +7,7 @@ import {
   Calendar,
   Users,
   CheckSquare,
+  Mail,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -36,6 +37,11 @@ const navItems = [
     label: "Kunden",
     href: "/admin/customers",
     icon: Users,
+  },
+  {
+    label: "Mails",
+    href: "/admin/mails",
+    icon: Mail,
   },
   {
     label: "Todos",
