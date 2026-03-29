@@ -135,8 +135,8 @@ const AdminMails = () => {
         },
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      setSyncMsg(`${data.synced} Mails synchronisiert.`);
+      if (!res.ok) throw new Error(data.error + (data.logs ? "\n" + data.logs.join("\n") : ""));
+      setSyncMsg(`✓ ${data.synced} Mails synchronisiert.`);
       // Reload inbox
       const { data: fresh } = await supabase.from("portal_inbox_mails").select("*").order("received_at", { ascending: false }).limit(100);
       if (fresh) setInboxMails(fresh);
@@ -196,7 +196,7 @@ const AdminMails = () => {
         body: JSON.stringify({ customer_id: composeCustomerId || null, subject: composeSubject, body: composeBody, to_email: composeToEmail, to_name: composeToName || null, attachment_urls: attachmentUrls }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error + (data.logs ? "\n" + data.logs.join("\n") : ""));
       setSentMails((prev) => [data.message, ...prev]);
       setShowCompose(false);
       setComposeCustomerId(""); setComposeToEmail(""); setComposeToName(""); setComposeSubject(""); setComposeBody("");
