@@ -57,7 +57,7 @@ const AdminDashboard = () => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
-        navigate("/kundenportal/login");
+        navigate("/admin/login");
         return;
       }
       setUser(session.user);
@@ -65,7 +65,7 @@ const AdminDashboard = () => {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
-        navigate("/kundenportal/login");
+        navigate("/admin/login");
         return;
       }
       setUser(session.user);
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
 
   const logout = async () => {
     await supabase.auth.signOut();
-    navigate("/kundenportal/login");
+    navigate("/admin/login");
   };
 
   const openTodos = todos.filter((todo) => todo.status !== "erledigt");

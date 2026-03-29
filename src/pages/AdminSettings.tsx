@@ -43,11 +43,11 @@ const AdminSettings = () => {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) { navigate("/kundenportal/login"); return; }
+      if (!session) { navigate("/admin/login"); return; }
       setUser(session.user);
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) { navigate("/kundenportal/login"); return; }
+      if (!session) { navigate("/admin/login"); return; }
       setUser(session.user);
     });
     return () => subscription.unsubscribe();
@@ -84,7 +84,7 @@ const AdminSettings = () => {
 
   const logout = async () => {
     await supabase.auth.signOut();
-    navigate("/kundenportal/login");
+    navigate("/admin/login");
   };
 
   const startNew = () => {

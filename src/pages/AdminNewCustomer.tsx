@@ -41,7 +41,7 @@ const AdminNewCustomer = () => {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        navigate("/kundenportal/login");
+        navigate("/admin/login");
         return;
       }
 
@@ -62,7 +62,7 @@ const AdminNewCustomer = () => {
 
   const logout = async () => {
     await supabase.auth.signOut();
-    navigate("/kundenportal/login");
+    navigate("/admin/login");
   };
 
   const createCustomer = async () => {

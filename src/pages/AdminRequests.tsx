@@ -108,7 +108,7 @@ const AdminRequests = () => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
-        navigate("/kundenportal/login");
+        navigate("/admin/login");
         return;
       }
       setUser(session.user);
@@ -116,7 +116,7 @@ const AdminRequests = () => {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
-        navigate("/kundenportal/login");
+        navigate("/admin/login");
         return;
       }
       setUser(session.user);
@@ -164,7 +164,7 @@ const AdminRequests = () => {
 
   const logout = async () => {
     await supabase.auth.signOut();
-    navigate("/kundenportal/login");
+    navigate("/admin/login");
   };
 
   const filteredRequests = useMemo(() => {

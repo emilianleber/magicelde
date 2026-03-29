@@ -196,7 +196,7 @@ const AdminRequestDetail = () => {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        navigate("/kundenportal/login");
+        navigate("/admin/login");
         return;
       }
 
@@ -286,7 +286,7 @@ const AdminRequestDetail = () => {
 
   const logout = async () => {
     await supabase.auth.signOut();
-    navigate("/kundenportal/login");
+    navigate("/admin/login");
   };
 
   const startEditing = () => {

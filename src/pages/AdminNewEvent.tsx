@@ -42,7 +42,7 @@ const AdminNewEvent = () => {
   useEffect(() => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { navigate("/kundenportal/login"); return; }
+      if (!session) { navigate("/admin/login"); return; }
       setUser(session.user);
 
       const { data: admin } = await supabase
@@ -117,7 +117,7 @@ const AdminNewEvent = () => {
 
   const logout = async () => {
     await supabase.auth.signOut();
-    navigate("/kundenportal/login");
+    navigate("/admin/login");
   };
 
   if (isAdmin === false) {
