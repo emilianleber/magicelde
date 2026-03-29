@@ -109,7 +109,7 @@ const AdminCustomerDetail = () => {
   // New request form
   const [showNewRequest, setShowNewRequest] = useState(false);
   const [newRequest, setNewRequest] = useState({
-    anlass: "", datum: "", ort: "", gaeste: "", format: "", nachricht: "",
+    anlass: "", datum: "", uhrzeit: "", ort: "", gaeste: "", format: "", nachricht: "",
   });
   const [savingRequest, setSavingRequest] = useState(false);
   const [requestMsg, setRequestMsg] = useState("");
@@ -243,8 +243,9 @@ const AdminCustomerDetail = () => {
         firma: firma.trim() || null,
         email: email.trim().toLowerCase() || customer.email,
         phone: phone.trim() || null,
-        anlass: newRequest.anlass.trim() || null,
+        anlass: newRequest.anlass || null,
         datum: newRequest.datum || null,
+        uhrzeit: newRequest.uhrzeit || null,
         ort: newRequest.ort.trim() || null,
         gaeste: newRequest.gaeste ? Number(newRequest.gaeste) : null,
         format: newRequest.format || null,
@@ -263,7 +264,7 @@ const AdminCustomerDetail = () => {
     }
 
     setRequests((prev) => [data, ...prev]);
-    setNewRequest({ anlass: "", datum: "", ort: "", gaeste: "", format: "", nachricht: "" });
+    setNewRequest({ anlass: "", datum: "", uhrzeit: "", ort: "", gaeste: "", format: "", nachricht: "" });
     setShowNewRequest(false);
     setSavingRequest(false);
   };
@@ -484,12 +485,38 @@ const AdminCustomerDetail = () => {
               </p>
               <div className="grid sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Anlass</label>
-                  <input value={newRequest.anlass} onChange={(e) => setNewRequest((p) => ({ ...p, anlass: e.target.value }))} placeholder="z.B. Firmenfeier" className={smallInputCls} />
+                  <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Veranstaltung</label>
+                  <select value={newRequest.anlass} onChange={(e) => setNewRequest((p) => ({ ...p, anlass: e.target.value }))} className={smallInputCls}>
+                    <option value="">— wählen —</option>
+                    <option value="Hochzeit">Hochzeit</option>
+                    <option value="Firmenfeier">Firmenfeier / Corporate Event</option>
+                    <option value="Geburtstag">Geburtstag / Private Feier</option>
+                    <option value="Gala">Gala / Awards</option>
+                    <option value="Messe">Messe / Promotion</option>
+                    <option value="Magic Dinner">Magic Dinner</option>
+                    <option value="Teamevent">Teamevent / Incentive</option>
+                    <option value="Sonstiges">Sonstiges</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Format</label>
+                  <select value={newRequest.format} onChange={(e) => setNewRequest((p) => ({ ...p, format: e.target.value }))} className={smallInputCls}>
+                    <option value="">— wählen —</option>
+                    <option value="closeup">Close-Up</option>
+                    <option value="buehnenshow">Bühnenshow</option>
+                    <option value="walking_act">Walking Act</option>
+                    <option value="magic_dinner">Magic Dinner</option>
+                    <option value="kombination">Kombination</option>
+                    <option value="beratung">Noch offen / Beratung</option>
+                  </select>
                 </div>
                 <div>
                   <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Datum</label>
                   <input type="date" value={newRequest.datum} onChange={(e) => setNewRequest((p) => ({ ...p, datum: e.target.value }))} className={smallInputCls} />
+                </div>
+                <div>
+                  <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Uhrzeit</label>
+                  <input type="time" value={newRequest.uhrzeit} onChange={(e) => setNewRequest((p) => ({ ...p, uhrzeit: e.target.value }))} className={smallInputCls} />
                 </div>
                 <div>
                   <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Ort</label>
@@ -498,18 +525,6 @@ const AdminCustomerDetail = () => {
                 <div>
                   <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Gäste</label>
                   <input type="number" value={newRequest.gaeste} onChange={(e) => setNewRequest((p) => ({ ...p, gaeste: e.target.value }))} placeholder="Anzahl" className={smallInputCls} />
-                </div>
-                <div>
-                  <label className="block font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Format</label>
-                  <select value={newRequest.format} onChange={(e) => setNewRequest((p) => ({ ...p, format: e.target.value }))} className={smallInputCls}>
-                    <option value="">— wählen —</option>
-                    <option value="closeup">Close-up</option>
-                    <option value="buehnenshow">Bühnenshow</option>
-                    <option value="walking_act">Walking Act</option>
-                    <option value="magic_dinner">Magic Dinner</option>
-                    <option value="kombination">Kombination</option>
-                    <option value="beratung">Beratung</option>
-                  </select>
                 </div>
               </div>
               <div>
