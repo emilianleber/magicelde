@@ -101,6 +101,7 @@ const AdminRequests = () => {
   const [viewFilter, setViewFilter] = useState<ViewFilter>("aktiv");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleting, setDeleting] = useState(false);
+  const [selectMode, setSelectMode] = useState(false);
 
   useEffect(() => {
     const {
@@ -279,18 +280,23 @@ const AdminRequests = () => {
       subtitle="Alle eingegangenen Buchungsanfragen im Überblick"
       actions={
         <div className="flex items-center gap-3 flex-wrap">
-          {selectedIds.length > 0 && (
+          {selectMode && selectedIds.length > 0 && (
             <button
               onClick={deleteSelected}
               disabled={deleting}
               className="inline-flex items-center gap-2 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
             >
               <Trash2 className="w-4 h-4" />
-              {deleting
-                ? "Löscht…"
-                : `Ausgewählte löschen (${selectedIds.length})`}
+              {deleting ? "Löscht…" : `Löschen (${selectedIds.length})`}
             </button>
           )}
+
+          <button
+            onClick={() => { setSelectMode((v) => !v); setSelectedIds([]); }}
+            className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${selectMode ? "border-border/60 bg-muted/40 text-foreground" : "border-border/30 text-muted-foreground hover:text-foreground"}`}
+          >
+            {selectMode ? "Abbrechen" : "Auswählen"}
+          </button>
 
           <button
             onClick={logout}
@@ -362,25 +368,27 @@ const AdminRequests = () => {
         </select>
       </div>
 
-      <div className="flex items-center gap-3 mb-6">
-        <label className="inline-flex items-center gap-3 rounded-xl bg-muted/30 border border-border/30 px-4 py-3">
-          <input
-            type="checkbox"
-            checked={allVisibleSelected}
-            onChange={toggleSelectAllVisible}
-            className="h-4 w-4 rounded border-border text-accent focus:ring-accent"
-          />
-          <span className="font-sans text-sm text-foreground">
-            Alle sichtbaren auswählen
-          </span>
-        </label>
+      {selectMode && (
+        <div className="flex items-center gap-3 mb-6">
+          <label className="inline-flex items-center gap-3 rounded-xl bg-muted/30 border border-border/30 px-4 py-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={allVisibleSelected}
+              onChange={toggleSelectAllVisible}
+              className="h-4 w-4 rounded border-border text-accent focus:ring-accent"
+            />
+            <span className="font-sans text-sm text-foreground">
+              Alle sichtbaren auswählen
+            </span>
+          </label>
 
-        {selectedIds.length > 0 && (
-          <span className="font-sans text-sm text-muted-foreground">
-            {selectedIds.length} ausgewählt
-          </span>
-        )}
-      </div>
+          {selectedIds.length > 0 && (
+            <span className="font-sans text-sm text-muted-foreground">
+              {selectedIds.length} ausgewählt
+            </span>
+          )}
+        </div>
+      )}
 
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
         <div className="p-6 rounded-2xl bg-muted/30 border border-border/30">
@@ -426,12 +434,14 @@ const AdminRequests = () => {
             >
               <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-5">
                 <div className="flex items-start gap-4 flex-1">
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(request.id)}
-                    onChange={() => toggleSelect(request.id)}
-                    className="mt-1 h-4 w-4 rounded border-border text-accent focus:ring-accent"
-                  />
+                  {selectMode && (
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(request.id)}
+                      onChange={() => toggleSelect(request.id)}
+                      className="mt-1 h-4 w-4 rounded border-border text-accent focus:ring-accent"
+                    />
+                  )}
 
                   <div className="flex-1">
                     <div className="flex items-center gap-3 flex-wrap mb-3">
