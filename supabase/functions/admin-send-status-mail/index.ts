@@ -273,14 +273,79 @@ serve(async (req) => {
       });
     }
 
-    const { type, recordId } = await req.json();
+    const body = await req.json();
+const { type, recordId, customerId } = body;
 
-    if (!type || !recordId) {
-      return new Response(JSON.stringify({ error: "type und recordId fehlen" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+if (!type) {
+  return new Response(JSON.stringify({ error: "type fehlt" }), {
+    status: 400,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+if (type !== "new_customer" && !recordId) {
+  return new Response(JSON.stringify({ error: "recordId fehlt" }), {
+    status: 400,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+if (type === "new_customer" && !customerId) {
+  return new Response(JSON.stringify({ error: "customerId fehlt" }), {
+    status: 400,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+if (type === "new_customer") {
+  const { data: customer, error: customerError } = await supabase
+    .from("portal_customers")
+    .select("*")
+    .eq("id", customerId)
+    .single();
+
+  if (customerError || !customer) {
+    return new Response(JSON.stringify({ error: "Kunde nicht gefunden" }), {
+      status: 404,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  if (!customer.email) {
+    return new Response(JSON.stringify({ error: "Kunde hat keine E-Mail" }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  await resend.emails.send({
+    from: "Emilian Leber <el@magicel.de>",
+    to: customer.email,
+    subject: "Willkommen bei Emilian Leber",
+    html: `
+      <div style="font-family:Arial,sans-serif;line-height:1.6;">
+        <h2>Willkommen, ${customer.name || "Kunde"}!</h2>
+        <p>Du wurdest in meinem System als Kunde angelegt.</p>
+        ${
+          customer.firma
+            ? `<p><strong>Firma:</strong> ${customer.firma}</p>`
+            : ""
+        }
+        <p><strong>E-Mail:</strong> ${customer.email}</p>
+        <p>
+          Dein Kundenportal findest du hier:<br>
+          <a href="https://magicel.de/kundenportal">https://magicel.de/kundenportal</a>
+        </p>
+        <p>Viele Grüße<br><strong>Emilian Leber</strong></p>
+      </div>
+    `,
+  });
+
+  return new Response(JSON.stringify({ success: true }), {
+    status: 200,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
 
     if (type === "request") {
       const { data: request, error } = await supabase

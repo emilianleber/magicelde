@@ -106,33 +106,33 @@ const AdminNewCustomer = () => {
         throw error;
       }
 
-      if (sendMail && newCustomer?.email) {
-        try {
-          const {
-            data: { session },
-          } = await supabase.auth.getSession();
+if (sendMail && newCustomer?.email) {
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-          if (session?.access_token) {
-            await fetch(
-              "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-                  Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify({
-                  type: "customer_created",
-                  customerId: newCustomer.id,
-                }),
-              }
-            );
-          }
-        } catch (mailError) {
-          console.error("MAIL ERROR:", mailError);
+    if (session?.access_token) {
+      await fetch(
+        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            type: "new_customer",
+            customerId: newCustomer.id,
+          }),
         }
-      }
+      );
+    }
+  } catch (mailError) {
+    console.error("MAIL ERROR:", mailError);
+  }
+}
 
       navigate(`/admin/customers/${newCustomer.id}`);
     } catch (err) {
