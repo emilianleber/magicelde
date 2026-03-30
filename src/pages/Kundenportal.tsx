@@ -217,6 +217,7 @@ const Kundenportal = () => {
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
   const [requests, setRequests] = useState<BookingRequest[]>([]);
   const [messages, setMessages] = useState<PortalMessage[]>([]);
+  const [imapMails, setImapMails] = useState<any[]>([]);
   const [expandedRequestId, setExpandedRequestId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
   const [loading, setLoading] = useState(true);
@@ -265,14 +266,16 @@ const Kundenportal = () => {
           const { data: cust } = await supabase.from("portal_customers").select("*").eq("id", previewCustomerId).maybeSingle();
           if (cust) {
             setCustomer(cust);
-            const [eventsRes, docsRes, msgsRes] = await Promise.all([
+            const [eventsRes, docsRes, msgsRes, imapRes] = await Promise.all([
               supabase.from("portal_events").select("*").eq("customer_id", cust.id),
               supabase.from("portal_documents").select("*").eq("customer_id", cust.id),
               supabase.from("portal_messages").select("id, created_at, subject, body, read_by_customer").eq("customer_id", cust.id).order("created_at", { ascending: false }),
+              cust.email ? supabase.from("portal_inbox_mails").select("id, uid, subject, received_at, body_text, body_html").eq("from_email", cust.email).eq("is_deleted", false).order("received_at", { ascending: false }).limit(100) : Promise.resolve({ data: [] }),
             ]);
             if (eventsRes.data) setEvents(eventsRes.data);
             if (docsRes.data) setDocuments(docsRes.data);
             if (msgsRes.data) setMessages(msgsRes.data);
+            if (imapRes.data) setImapMails(imapRes.data);
             const { data: requestsData } = await supabase.from("portal_requests").select("*").eq("email", cust.email).order("created_at", { ascending: false });
             if (requestsData) { setRequests(requestsData); if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id); }
           }
@@ -297,14 +300,16 @@ const Kundenportal = () => {
 
       if (cust) {
         setCustomer(cust);
-        const [eventsRes, docsRes, msgsRes] = await Promise.all([
+        const [eventsRes, docsRes, msgsRes, imapRes] = await Promise.all([
           supabase.from("portal_events").select("*").eq("customer_id", cust.id),
           supabase.from("portal_documents").select("*").eq("customer_id", cust.id),
           supabase.from("portal_messages").select("id, created_at, subject, body, read_by_customer").eq("customer_id", cust.id).order("created_at", { ascending: false }),
+          cust.email ? supabase.from("portal_inbox_mails").select("id, uid, subject, received_at, body_text, body_html").eq("from_email", cust.email).eq("is_deleted", false).order("received_at", { ascending: false }).limit(100) : Promise.resolve({ data: [] }),
         ]);
         if (eventsRes.data) setEvents(eventsRes.data);
         if (docsRes.data) setDocuments(docsRes.data);
         if (msgsRes.data) setMessages(msgsRes.data);
+        if (imapRes.data) setImapMails(imapRes.data);
       }
 
       const { data: requestsData } = await supabase
@@ -781,38 +786,58 @@ const Kundenportal = () => {
           )}
 
           {/* ── NACHRICHTEN ── */}
-          {activeTab === "nachrichten" && (
-            <div className="space-y-4">
-              {messages.length === 0 ? (
-                <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                  <Mail className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                  <p className="font-sans text-sm text-muted-foreground">Noch keine Nachrichten vorhanden.</p>
-                </div>
-              ) : (
-                messages.map((msg) => (
-                  <div key={msg.id} className={`rounded-2xl border transition-colors ${msg.read_by_customer ? "bg-muted/20 border-border/30" : "bg-accent/5 border-accent/20"}`}>
-                    <div className="p-5">
-                      <div className="flex items-start justify-between gap-3 mb-4">
-                        <div>
-                          <p className="font-sans text-sm font-semibold text-foreground">{msg.subject}</p>
-                          <p className="font-sans text-xs text-muted-foreground mt-0.5">
-                            {new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                          </p>
-                        </div>
-                        {!msg.read_by_customer && (
-                          <span className="shrink-0 font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full bg-accent/10 text-accent">Neu</span>
-                        )}
-                      </div>
-                      <div
-                        className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none"
-                        dangerouslySetInnerHTML={{ __html: msg.body }}
-                      />
-                    </div>
+          {activeTab === "nachrichten" && (() => {
+            const adminMsgs = messages.map((m) => ({ ...m, _dir: "from_admin" as const, _date: m.created_at }));
+            const sentByCustomer = imapMails.map((m) => ({ ...m, _dir: "from_customer" as const, _date: m.received_at, read_by_customer: true }));
+            const allMails = [...adminMsgs, ...sentByCustomer].sort((a, b) => new Date(b._date).getTime() - new Date(a._date).getTime());
+            return (
+              <div className="space-y-4">
+                {allMails.length === 0 ? (
+                  <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                    <Mail className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
+                    <p className="font-sans text-sm text-muted-foreground">Noch keine Nachrichten vorhanden.</p>
                   </div>
-                ))
-              )}
-            </div>
-          )}
+                ) : (
+                  allMails.map((msg) => {
+                    const isFromAdmin = msg._dir === "from_admin";
+                    return (
+                      <div key={msg.id} className={`rounded-2xl border transition-colors ${!isFromAdmin ? "bg-muted/20 border-border/30" : msg.read_by_customer ? "bg-muted/20 border-border/30" : "bg-accent/5 border-accent/20"}`}>
+                        <div className="p-5">
+                          <div className="flex items-start justify-between gap-3 mb-4">
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className={`font-sans text-[10px] uppercase tracking-widest font-semibold ${isFromAdmin ? "text-accent" : "text-blue-400"}`}>
+                                  {isFromAdmin ? "Von Emilian Leber" : "Von Ihnen"}
+                                </span>
+                              </div>
+                              <p className="font-sans text-sm font-semibold text-foreground">{msg.subject || "(Kein Betreff)"}</p>
+                              <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                                {new Date(msg._date).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                              </p>
+                            </div>
+                            {isFromAdmin && !msg.read_by_customer && (
+                              <span className="shrink-0 font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full bg-accent/10 text-accent">Neu</span>
+                            )}
+                          </div>
+                          {isFromAdmin ? (
+                            <div className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: msg.body }} />
+                          ) : (
+                            msg.body_html ? (
+                              <div className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: msg.body_html }} />
+                            ) : msg.body_text ? (
+                              <pre className="font-sans text-sm text-foreground/80 whitespace-pre-wrap">{msg.body_text}</pre>
+                            ) : (
+                              <p className="font-sans text-sm text-muted-foreground italic">Inhalt wird beim nächsten Öffnen geladen.</p>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            );
+          })()}
 
           {/* ── EINSTELLUNGEN ── */}
           {activeTab === "einstellungen" && (

@@ -146,6 +146,11 @@ const AdminCustomerDetail = () => {
   const [sending, setSending] = useState(false);
   const [mailMsg, setMailMsg] = useState("");
 
+  // Mail thread (IMAP received + portal_messages sent)
+  const [customerMails, setCustomerMails] = useState<any[]>([]);
+  const [expandedMailId, setExpandedMailId] = useState<string | null>(null);
+  const [loadingMailBody, setLoadingMailBody] = useState<string | null>(null);
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) { navigate("/admin/login"); return; }
@@ -186,15 +191,24 @@ const AdminCustomerDetail = () => {
       setPhone(customerData.phone || "");
       setKundennummer(customerData.kundennummer || "");
 
-      const [requestsResult, eventsResult, docsResult] = await Promise.all([
+      const [requestsResult, eventsResult, docsResult, imapResult, sentResult] = await Promise.all([
         supabase.from("portal_requests").select("*").eq("customer_id", customerData.id).order("created_at", { ascending: false }),
         supabase.from("portal_events").select("*").eq("customer_id", customerData.id).order("event_date", { ascending: true }),
         supabase.from("portal_documents").select("*").eq("customer_id", customerData.id).order("created_at", { ascending: false }),
+        customerData.email
+          ? supabase.from("portal_inbox_mails").select("*").eq("from_email", customerData.email).eq("is_deleted", false).order("received_at", { ascending: false }).limit(100)
+          : Promise.resolve({ data: [], error: null }),
+        supabase.from("portal_messages").select("*").eq("customer_id", customerData.id).order("created_at", { ascending: false }),
       ]);
 
       if (!requestsResult.error) setRequests(requestsResult.data || []);
       if (!eventsResult.error) setEvents(eventsResult.data || []);
       if (!docsResult.error) setDocuments(docsResult.data || []);
+
+      const imapMails = (imapResult.data || []).map((m: any) => ({ ...m, _type: "received", _date: m.received_at }));
+      const sentMails = (sentResult.data || []).map((m: any) => ({ ...m, _type: "sent", _date: m.created_at }));
+      const combined = [...imapMails, ...sentMails].sort((a, b) => new Date(b._date).getTime() - new Date(a._date).getTime());
+      setCustomerMails(combined);
 
       setLoading(false);
     };
@@ -390,6 +404,27 @@ const AdminCustomerDetail = () => {
     const q = eventSearch.toLowerCase();
     return e.title?.toLowerCase().includes(q) || e.location?.toLowerCase().includes(q) || e.format?.toLowerCase().includes(q);
   });
+
+  const fetchMailBody = async (mail: any) => {
+    if (mail.body_html || mail.body_text || mail._type === "sent") return;
+    setLoadingMailBody(mail.id);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/fetch-mail-body",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
+          body: JSON.stringify({ mail_id: mail.id, uid: mail.uid }),
+        }
+      );
+      const result = await res.json();
+      if (result.body_html || result.body_text) {
+        setCustomerMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, body_html: result.body_html, body_text: result.body_text } : m));
+      }
+    } catch (_) {}
+    setLoadingMailBody(null);
+  };
 
   const sendMail = async () => {
     if (!customer || !composeSubject || !composeBody) {
@@ -812,6 +847,59 @@ const AdminCustomerDetail = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Mailverkehr */}
+      <div className="mt-6 p-6 rounded-2xl bg-muted/20 border border-border/30">
+        <h2 className="font-display text-lg font-bold text-foreground mb-5">Mailverkehr</h2>
+        {customerMails.length === 0 ? (
+          <p className="font-sans text-sm text-muted-foreground">Kein Mailverkehr mit diesem Kunden.</p>
+        ) : (
+          <div className="space-y-2">
+            {customerMails.map((mail) => {
+              const isExpanded = expandedMailId === mail.id;
+              const date = new Date(mail._date).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+              const isSent = mail._type === "sent";
+              return (
+                <div key={mail.id} className="rounded-xl border border-border/30 overflow-hidden">
+                  <button
+                    className="w-full flex items-center gap-3 px-4 py-3 bg-background/40 hover:bg-background/70 transition-colors text-left"
+                    onClick={() => {
+                      const newId = isExpanded ? null : mail.id;
+                      setExpandedMailId(newId);
+                      if (newId) fetchMailBody(mail);
+                    }}
+                  >
+                    <div className={`shrink-0 w-2 h-2 rounded-full mt-0.5 ${isSent ? "bg-accent" : "bg-blue-400"}`} />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`font-sans text-[10px] uppercase tracking-widest font-semibold ${isSent ? "text-accent" : "text-blue-400"}`}>
+                          {isSent ? "Gesendet" : "Empfangen"}
+                        </span>
+                        <span className="font-sans text-xs text-muted-foreground">{date}</span>
+                      </div>
+                      <p className="font-sans text-sm font-medium text-foreground truncate">{mail.subject || "(Kein Betreff)"}</p>
+                    </div>
+                    <span className="shrink-0 text-muted-foreground font-sans text-xs">{isExpanded ? "▲" : "▼"}</span>
+                  </button>
+                  {isExpanded && (
+                    <div className="px-4 py-4 bg-background/20 border-t border-border/20">
+                      {loadingMailBody === mail.id ? (
+                        <p className="font-sans text-sm text-muted-foreground animate-pulse">Lädt Inhalt…</p>
+                      ) : mail.body_html ? (
+                        <div className="prose prose-sm max-w-none text-foreground" dangerouslySetInnerHTML={{ __html: mail.body_html }} />
+                      ) : mail.body_text || mail.body ? (
+                        <pre className="font-sans text-sm text-foreground whitespace-pre-wrap">{mail.body_text || mail.body}</pre>
+                      ) : (
+                        <p className="font-sans text-sm text-muted-foreground">Kein Inhalt verfügbar.</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Mail schreiben */}
