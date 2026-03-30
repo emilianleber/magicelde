@@ -137,9 +137,9 @@ function decodeTransferEncoding(headers: string, body: string): string {
 
 const FOLDER_MAP: Record<string, string[]> = {
   INBOX: ["INBOX"],
-  Sent:  ["Sent", "Sent Items", "Gesendete Objekte", "INBOX.Sent"],
+  Sent:  ["Sent", "Sent Items", "Gesendet", "Gesendete Objekte", "INBOX.Sent"],
   Spam:  ["Spam", "Junk", "INBOX.Spam", "INBOX.Junk"],
-  Trash: ["Trash", "Deleted", "Gelöscht", "INBOX.Trash"],
+  Trash: ["Trash", "Deleted", "Papierkorb", "INBOX.Trash"],
 };
 
 serve(async (req) => {

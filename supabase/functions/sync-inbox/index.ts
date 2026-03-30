@@ -151,9 +151,9 @@ function parseFrom(from: string): { name: string | null; address: string | null 
 
 const FOLDER_TARGETS = [
   { internal: "INBOX", candidates: ["INBOX"] },
-  { internal: "Sent",  candidates: ["Sent", "Sent Items", "Gesendete Objekte", "Gesendete Elemente", "INBOX.Sent"] },
+  { internal: "Sent",  candidates: ["Sent", "Sent Items", "Gesendet", "Gesendete Objekte", "Gesendete Elemente", "INBOX.Sent"] },
   { internal: "Spam",  candidates: ["Spam", "Junk", "Junk E-Mail", "INBOX.Spam", "INBOX.Junk"] },
-  { internal: "Trash", candidates: ["Trash", "Deleted", "Gelöscht", "Papierkorb", "INBOX.Trash"] },
+  { internal: "Trash", candidates: ["Trash", "Deleted", "Papierkorb", "INBOX.Trash"] },
 ];
 
 serve(async (req) => {
