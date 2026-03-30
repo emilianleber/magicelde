@@ -37,6 +37,13 @@ const Chatbot = () => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
+  // Listen for external open trigger (e.g. from Kundenportal Kontakt tab)
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    document.addEventListener("open-chatbot", handler);
+    return () => document.removeEventListener("open-chatbot", handler);
+  }, []);
+
   const send = () => {
     if (!input.trim()) return;
     const userMsg = input.trim();
