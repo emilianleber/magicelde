@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import PageLayout from "@/components/landing/PageLayout";
+// PageLayout intentionally NOT imported — portal has its own standalone layout
 import { supabase } from "@/integrations/supabase/client";
 import {
   Calendar,
@@ -401,18 +401,16 @@ const Kundenportal = () => {
 
   if (!user || loading) {
     return (
-      <PageLayout>
-        <section className="min-h-screen flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-10 h-10 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
-            <p className="font-sans text-sm text-muted-foreground">Wird geladen…</p>
-          </div>
-        </section>
-      </PageLayout>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
+          <p className="font-sans text-sm text-muted-foreground">Wird geladen…</p>
+        </div>
+      </div>
     );
   }
 
-  const displayName = customer?.name || user.email?.split("@")[0] || "Kunde";
+  const displayName = customer?.name || "Kunde";
   const firstName = displayName.split(" ")[0];
   const kundennummer = customer?.kundennummer || "";
   const currentRequest = requests[0] || null;
@@ -441,7 +439,7 @@ const Kundenportal = () => {
   const desktopTopBarHeight = 64;
 
   return (
-    <PageLayout>
+    <div className="min-h-screen bg-background">
       {/* Admin preview banner */}
       {isAdminPreview && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 text-amber-950 px-4 py-2.5 flex items-center justify-between gap-4 shadow-md" style={{ height: 40 }}>
@@ -1217,7 +1215,7 @@ const Kundenportal = () => {
           })}
         </div>
       </nav>
-    </PageLayout>
+    </div>
   );
 };
 
