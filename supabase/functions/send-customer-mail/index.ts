@@ -64,16 +64,42 @@ serve(async (req) => {
 
     // Wrap plain body in branded HTML shell
     const wrappedHtml = `<!DOCTYPE html>
-<html lang="de"><head><meta charset="UTF-8"><title>${subject}</title></head>
-<body style="margin:0;padding:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
-  <div style="max-width:600px;margin:0 auto;padding:40px 16px;">
-    <div style="background:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);">
-      <div style="background:#0a0a0a;padding:36px 40px 30px;">
-        <p style="margin:0 0 6px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#71717a;font-weight:500;">Zauberer &amp; Showkünstler</p>
-        <p style="margin:0;font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;">Emilian Leber</p>
-        <div style="margin-top:18px;height:2px;width:56px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>${subject}</title>
+  <style>
+    :root { color-scheme: light only; }
+    body { background-color: #ffffff !important; }
+    @media (prefers-color-scheme: dark) {
+      body { background-color: #ffffff !important; }
+      .email-wrapper { background-color: #ffffff !important; }
+      .email-card { background-color: #ffffff !important; }
+      .email-content { background-color: #ffffff !important; color: #0a0a0a !important; }
+      .email-footer { background-color: #f4f4f5 !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;" class="email-wrapper">
+  <div style="max-width:600px;margin:0 auto;padding:32px 16px;background-color:#ffffff;" class="email-wrapper">
+    <div style="background:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);border:1px solid #e4e4e7;" class="email-card">
+      <div style="background:#0a0a0a;padding:28px 36px 24px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+          <tr>
+            <td style="vertical-align:middle;">
+              <img src="https://www.magicel.de/logo-clean.webp" alt="Emilian Leber" width="120" height="auto" style="display:block;height:auto;max-height:48px;object-fit:contain;" />
+            </td>
+            <td style="vertical-align:middle;text-align:right;">
+              <p style="margin:0;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">Zauberer &amp; Showkünstler</p>
+            </td>
+          </tr>
+        </table>
+        <div style="margin-top:16px;height:2px;width:56px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
       </div>
-      <div style="padding:40px 40px 36px;">
+      <div style="padding:36px 36px 32px;background:#ffffff;" class="email-content">
         <div style="font-size:15px;line-height:1.8;color:#52525b;">${mailBody.replace(/\n/g, "<br>")}</div>
         <div style="border-top:1px solid #e4e4e7;padding-top:24px;margin-top:32px;">
           <p style="margin:0 0 2px;font-size:14px;color:#71717a;">Mit magischen Grüßen,</p>
@@ -81,8 +107,8 @@ serve(async (req) => {
           <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa;">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
         </div>
       </div>
-      <div style="background:#f4f4f5;border-top:1px solid #e4e4e7;padding:18px 40px;text-align:center;">
-        <p style="margin:0;font-size:12px;color:#a1a1aa;">&copy; 2025 Emilian Leber &middot; Regensburg &middot; <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:none;">Datenschutz</a></p>
+      <div style="background:#f4f4f5;border-top:1px solid #e4e4e7;padding:16px 36px;text-align:center;" class="email-footer">
+        <p style="margin:0;font-size:12px;color:#a1a1aa;">&copy; 2026 Emilian Leber &middot; Regensburg &middot; <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:none;">Datenschutz</a></p>
       </div>
     </div>
   </div>

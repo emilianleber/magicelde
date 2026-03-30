@@ -15,7 +15,10 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-// ─── Shared Email Shell ───────────────────────────────────────────────────────
+const FONT = `-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif`;
+const LOGO = `https://www.magicel.de/logo-clean.webp`;
+
+// ─── Shared Email Shell (table-based, bgcolor for dark-mode immunity) ─────────
 const getEmailShell = (
   badge: string,
   title: string,
@@ -23,84 +26,129 @@ const getEmailShell = (
   content: string,
   showPortalButton = true
 ) => `<!DOCTYPE html>
-<html lang="de">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title></head>
-<body style="margin:0;padding:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
-  <div style="max-width:600px;margin:0 auto;padding:40px 16px;">
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" style="color-scheme:light;supported-color-schemes:light;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>${title}</title>
+  <style>
+    :root { color-scheme: light !important; supported-color-schemes: light !important; }
+    html, body { background-color: #ffffff !important; margin: 0 !important; padding: 0 !important; }
+    @media (prefers-color-scheme: dark) {
+      html, body { background-color: #ffffff !important; }
+      .ew { background-color: #ffffff !important; }
+      .ec { background-color: #ffffff !important; color: #0a0a0a !important; }
+      .ef { background-color: #f4f4f5 !important; }
+      h1 { color: #0a0a0a !important; }
+    }
+  </style>
+</head>
+<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff;font-family:${FONT};">
 
-    <!-- Card -->
-    <div style="background:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);">
+  <!-- outer wrapper -->
+  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff;" class="ew">
+    <tr>
+      <td align="center" bgcolor="#ffffff" style="padding:32px 16px;background-color:#ffffff;">
 
-      <!-- ── Header ── -->
-      <div style="background:#0a0a0a;padding:36px 40px 30px;">
-        <p style="margin:0 0 6px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#71717a;font-weight:500;">Zauberer &amp; Showkünstler</p>
-        <p style="margin:0;font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;">Emilian Leber</p>
-        <div style="margin-top:18px;height:2px;width:56px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
-      </div>
+        <!-- card -->
+        <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);border-collapse:separate;border:1px solid #e4e4e7;">
 
-      <!-- ── Content ── -->
-      <div style="padding:40px 40px 36px;">
+          <!-- HEADER -->
+          <tr>
+            <td bgcolor="#0a0a0a" style="background-color:#0a0a0a;padding:28px 36px 22px;border-radius:20px 20px 0 0;">
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+                <tr>
+                  <td style="vertical-align:middle;">
+                    <img src="${LOGO}" alt="Emilian Leber" width="110" height="40"
+                         style="display:block;height:40px;width:auto;max-width:110px;object-fit:contain;" />
+                  </td>
+                  <td style="vertical-align:middle;text-align:right;">
+                    <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;font-family:${FONT};">Zauberer &amp; Showkünstler</span>
+                  </td>
+                </tr>
+              </table>
+              <div style="margin-top:16px;height:2px;width:56px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
+            </td>
+          </tr>
 
-        <!-- Badge -->
-        <div style="display:inline-block;background:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:24px;">${badge}</div>
+          <!-- CONTENT -->
+          <tr>
+            <td bgcolor="#ffffff" style="padding:36px 36px 32px;background-color:#ffffff;" class="ec">
 
-        <!-- Title -->
-        <h1 style="margin:0 0 14px;font-size:26px;font-weight:800;color:#0a0a0a;line-height:1.2;letter-spacing:-0.5px;">${title}</h1>
+              <!-- badge -->
+              <div style="display:inline-block;background-color:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:24px;font-family:${FONT};">${badge}</div>
 
-        <!-- Intro -->
-        <p style="margin:0 0 32px;font-size:16px;line-height:1.75;color:#52525b;">${intro}</p>
+              <!-- title -->
+              <h1 style="margin:0 0 14px;font-size:26px;font-weight:800;color:#0a0a0a;line-height:1.2;letter-spacing:-0.5px;font-family:${FONT};">${title}</h1>
 
-        <!-- Dynamic content -->
-        ${content}
+              <!-- intro -->
+              <p style="margin:0 0 28px;font-size:16px;line-height:1.75;color:#52525b;font-family:${FONT};">${intro}</p>
 
-        ${showPortalButton ? `
-        <!-- CTA -->
-        <div style="text-align:center;margin:32px 0 28px;">
-          <a href="https://magicel.de/kundenportal/login"
-             style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:16px 36px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;">
-            Kundenportal öffnen &rarr;
-          </a>
-        </div>` : ""}
+              <!-- dynamic -->
+              ${content}
 
-        <!-- Signature -->
-        <div style="border-top:1px solid #e4e4e7;padding-top:24px;margin-top:8px;">
-          <p style="margin:0 0 2px;font-size:14px;color:#71717a;">Mit magischen Grüßen,</p>
-          <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a;">Emilian Leber</p>
-          <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa;">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
-        </div>
-      </div>
+              ${showPortalButton ? `
+              <div style="text-align:center;margin:28px 0 24px;">
+                <a href="https://magicel.de/kundenportal/login"
+                   style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:15px 34px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;font-family:${FONT};">
+                  Kundenportal öffnen &rarr;
+                </a>
+              </div>` : ""}
 
-      <!-- ── Footer ── -->
-      <div style="background:#f4f4f5;border-top:1px solid #e4e4e7;padding:18px 40px;text-align:center;">
-        <p style="margin:0;font-size:12px;color:#a1a1aa;">
-          &copy; 2025 Emilian Leber &middot; Regensburg, Deutschland &middot;
-          <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:none;">Datenschutz</a>
-        </p>
-      </div>
-    </div>
-  </div>
+              <!-- signature -->
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e4e4e7;margin-top:8px;">
+                <tr><td style="padding-top:22px;">
+                  <p style="margin:0 0 2px;font-size:14px;color:#71717a;font-family:${FONT};">Mit magischen Grüßen,</p>
+                  <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a;font-family:${FONT};">Emilian Leber</p>
+                  <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa;font-family:${FONT};">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td bgcolor="#f4f4f5" style="background-color:#f4f4f5;padding:16px 36px;text-align:center;border-top:1px solid #e4e4e7;border-radius:0 0 20px 20px;" class="ef">
+              <p style="margin:0;font-size:12px;color:#a1a1aa;font-family:${FONT};">
+                &copy; 2026 Emilian Leber &middot; Regensburg &middot;
+                <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:none;">Datenschutz</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
 </body>
 </html>`;
 
 // ─── Info Table ───────────────────────────────────────────────────────────────
 const infoTable = (rows: { icon: string; label: string; value: string }[]) => `
-<div style="background:#f9fafb;border:1px solid #e4e4e7;border-radius:16px;padding:8px 20px;margin-bottom:28px;">
-  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
-    ${rows.map((r, i) => `
-    <tr>
-      <td style="padding:12px 0;${i < rows.length - 1 ? "border-bottom:1px solid #e4e4e7;" : ""}font-size:14px;color:#71717a;width:44%;">
-        ${r.icon}&nbsp; ${r.label}
-      </td>
-      <td style="padding:12px 0;${i < rows.length - 1 ? "border-bottom:1px solid #e4e4e7;" : ""}font-size:14px;color:#0a0a0a;font-weight:600;">
-        ${r.value}
-      </td>
-    </tr>`).join("")}
-  </table>
-</div>`;
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:28px;">
+  <tr>
+    <td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:4px 20px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+        ${rows.map((r, i) => `
+        <tr>
+          <td style="padding:12px 0;${i < rows.length - 1 ? "border-bottom:1px solid #e4e4e7;" : ""}font-size:14px;color:#71717a;width:44%;font-family:${FONT};">
+            ${r.icon}&nbsp;${r.label}
+          </td>
+          <td style="padding:12px 0;${i < rows.length - 1 ? "border-bottom:1px solid #e4e4e7;" : ""}font-size:14px;color:#0a0a0a;font-weight:600;font-family:${FONT};">
+            ${r.value}
+          </td>
+        </tr>`).join("")}
+      </table>
+    </td>
+  </tr>
+</table>`;
 
 // ─── Status Badge ─────────────────────────────────────────────────────────────
 const statusBadge = (text: string, color = "#0a0a0a", bg = "#f4f4f5") => `
-<div style="display:inline-block;background:${bg};color:${color};font-size:12px;font-weight:700;padding:6px 14px;border-radius:999px;margin-bottom:20px;">
+<div style="display:inline-block;background-color:${bg};color:${color};font-size:12px;font-weight:700;padding:6px 14px;border-radius:999px;margin-bottom:20px;font-family:${FONT};">
   ${text}
 </div>`;
 
@@ -120,7 +168,7 @@ const requestMailTemplate = (request: any) => {
         html: getEmailShell(
           "Anfrage",
           "Dein Angebot ist unterwegs.",
-          `Hallo ${request.name}, ich habe alles für deine Anfrage zusammengestellt und mich darum gekümmert. Die nächsten Schritte besprechen wir jetzt gemeinsam.`,
+          `Hallo ${request.name}, ich habe alles für deine Anfrage zusammengestellt. Die nächsten Schritte besprechen wir jetzt gemeinsam.`,
           `${statusBadge("✦ Angebot vorbereitet", "#2563eb", "#eff6ff")}${infoTable(rows)}`
         ),
       };
@@ -134,7 +182,7 @@ const requestMailTemplate = (request: any) => {
           "Dein Event ist gebucht.",
           `Hallo ${request.name}, großartige Neuigkeit – dein Termin ist jetzt offiziell eingeplant. Ich freue mich sehr darauf!`,
           `${statusBadge("✦ Buchung bestätigt", "#15803d", "#f0fdf4")}${infoTable(rows)}
-          <p style="margin:0 0 0;font-size:15px;line-height:1.7;color:#52525b;">
+          <p style="margin:0;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
             Den aktuellen Stand findest du jederzeit im Bereich <strong style="color:#0a0a0a;">Events</strong> in deinem Kundenportal.
           </p>`
         ),
@@ -148,7 +196,7 @@ const requestMailTemplate = (request: any) => {
           "Update zu deiner Anfrage.",
           `Hallo ${request.name}, ich wollte dir kurz persönlich Rückmeldung zu deiner Anfrage geben.`,
           `${infoTable(rows)}
-          <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;">
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
             Leider kann ich deine Anfrage zum aktuellen Zeitpunkt nicht wie gewünscht umsetzen. Vielen Dank für dein Interesse und dein Vertrauen – ich hoffe, wir finden in Zukunft einen passenden Rahmen.
           </p>`,
           false
@@ -230,35 +278,40 @@ const eventMailTemplate = (event: any, customerName: string, email: string) => {
           "Vielen Dank.",
           `Hallo ${customerName}, vielen Dank für das wunderbare Event und dein Vertrauen. Es war mir eine echte Freude!`,
           `${infoTable(rows)}
-          <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:16px;padding:22px 24px;margin-bottom:24px;">
-            <p style="margin:0 0 18px;font-size:15px;line-height:1.7;color:#92400e;">
-              Falls du einen kurzen Moment hast, würde ich mich riesig über eine Bewertung freuen – das hilft anderen, die richtige Entscheidung zu treffen. 🙏
-            </p>
-            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
-              <tr>
-                <td style="padding:0 6px 6px 0;" width="50%">
-                  <a href="https://g.page/r/CfLlgBMpyJ0vEBM/review"
-                     style="display:block;text-align:center;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;">
-                    ⭐ Google Bewertung
-                  </a>
-                </td>
-                <td style="padding:0 0 6px 6px;" width="50%">
-                  <a href="https://www.provenexpert.com/emilian-leber/ep8k/"
-                     style="display:block;text-align:center;background:#1d4ed8;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;">
-                    ✦ ProvenExpert
-                  </a>
-                </td>
-              </tr>
-              ${isWedding ? `<tr>
-                <td colspan="2" style="padding:0;">
-                  <a href="https://www.weddyplace.com/rate/69b909ceb84deb835fe797f2"
-                     style="display:block;text-align:center;background:#be185d;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;">
-                    💍 Weddyplace Bewertung
-                  </a>
-                </td>
-              </tr>` : ""}
-            </table>
-          </div>`,
+          <!-- review section -->
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;">
+            <tr>
+              <td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:22px 24px;">
+                <p style="margin:0 0 18px;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
+                  Falls du einen Moment hast, würde ich mich sehr über eine Bewertung freuen – das hilft anderen bei ihrer Entscheidung. 🙏
+                </p>
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+                  <tr>
+                    <td style="padding:0 5px 0 0;" width="50%">
+                      <a href="https://g.page/r/CfLlgBMpyJ0vEBM/review"
+                         style="display:block;text-align:center;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;font-family:${FONT};">
+                        ⭐ Google Bewertung
+                      </a>
+                    </td>
+                    <td style="padding:0 0 0 5px;" width="50%">
+                      <a href="https://www.provenexpert.com/emilian-leber/ep8k/"
+                         style="display:block;text-align:center;background-color:#1d4ed8;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;font-family:${FONT};">
+                        ✦ ProvenExpert
+                      </a>
+                    </td>
+                  </tr>
+                  ${isWedding ? `<tr>
+                    <td colspan="2" style="padding-top:8px;">
+                      <a href="https://www.weddyplace.com/rate/69b909ceb84deb835fe797f2"
+                         style="display:block;text-align:center;background-color:#be185d;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;font-family:${FONT};">
+                        💍 Weddyplace Bewertung
+                      </a>
+                    </td>
+                  </tr>` : ""}
+                </table>
+              </td>
+            </tr>
+          </table>`,
           false
         ),
       };
@@ -276,14 +329,18 @@ const newCustomerMail = (customer: any) =>
     `Schön, dass du da bist, ${customer.name?.split(" ")[0] || ""}!`,
     "Du wurdest in meinem Kundenportal angelegt. Dort findest du alle Infos zu deinen Anfragen, Events und Dokumenten – jederzeit und überall.",
     `${customer.firma ? `
-    <div style="background:#f9fafb;border:1px solid #e4e4e7;border-radius:16px;padding:16px 20px;margin-bottom:28px;">
-      <p style="margin:0;font-size:14px;color:#71717a;">Firma</p>
-      <p style="margin:4px 0 0;font-size:15px;font-weight:600;color:#0a0a0a;">${customer.firma}</p>
-    </div>` : ""}
-    <div style="background:#f9fafb;border:1px solid #e4e4e7;border-radius:16px;padding:16px 20px;margin-bottom:28px;">
-      <p style="margin:0;font-size:14px;color:#71717a;">Deine Login-E-Mail</p>
-      <p style="margin:4px 0 0;font-size:15px;font-weight:600;color:#0a0a0a;">${customer.email}</p>
-    </div>`
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:16px;">
+      <tr><td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
+        <p style="margin:0;font-size:13px;color:#71717a;font-family:${FONT};">Firma</p>
+        <p style="margin:4px 0 0;font-size:15px;font-weight:600;color:#0a0a0a;font-family:${FONT};">${customer.firma}</p>
+      </td></tr>
+    </table>` : ""}
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:28px;">
+      <tr><td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
+        <p style="margin:0;font-size:13px;color:#71717a;font-family:${FONT};">Deine Login-E-Mail</p>
+        <p style="margin:4px 0 0;font-size:15px;font-weight:600;color:#0a0a0a;font-family:${FONT};">${customer.email}</p>
+      </td></tr>
+    </table>`
   );
 
 // ─── Serve ────────────────────────────────────────────────────────────────────

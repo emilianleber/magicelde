@@ -176,6 +176,7 @@ const AdminRequestDetail = () => {
   const [nachricht, setNachricht] = useState("");
   const [internalNotes, setInternalNotes] = useState("");
   const [message, setMessage] = useState("");
+  const [sendingMail, setSendingMail] = useState(false);
 
   const [draftAnlass, setDraftAnlass] = useState("");
   const [draftDatum, setDraftDatum] = useState("");
@@ -368,6 +369,34 @@ const AdminRequestDetail = () => {
     setIsEditing(false);
     setMessage("Gespeichert.");
     setSaving(false);
+  };
+
+  const sendStatusMail = async () => {
+    if (!request) return;
+    setSendingMail(true);
+    setMessage("");
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+          body: JSON.stringify({ type: "request", recordId: request.id }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Fehler");
+      if (data.skipped) setMessage("Kein Mail für diesen Status vorgesehen.");
+      else setMessage("✓ Mail gesendet.");
+    } catch (err: any) {
+      setMessage("Mail-Fehler: " + (err.message || "Unbekannt"));
+    }
+    setSendingMail(false);
   };
 
   const convertToEvent = async () => {
@@ -935,6 +964,15 @@ const AdminRequestDetail = () => {
               >
                 <Save className="w-4 h-4 mr-2" />
                 {saving ? "Speichert…" : "Status / Notizen speichern"}
+              </button>
+
+              <button
+                onClick={sendStatusMail}
+                disabled={sendingMail}
+                className="w-full inline-flex items-center justify-center rounded-xl border border-accent/40 bg-accent/5 px-4 py-3 text-sm font-medium text-accent hover:bg-accent/10 transition-colors disabled:opacity-50"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                {sendingMail ? "Sendet…" : "Status-Mail an Kunden senden"}
               </button>
 
               {!request?.event_id && (
