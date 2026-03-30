@@ -6,6 +6,20 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+function decodeModifiedUTF7(str: string): string {
+  return str.replace(/&([^-]*)-/g, (_, encoded) => {
+    if (encoded === "") return "&";
+    try {
+      const binary = atob(encoded.replace(/,/g, "/"));
+      let result = "";
+      for (let i = 0; i + 1 < binary.length; i += 2) {
+        result += String.fromCharCode((binary.charCodeAt(i) << 8) | binary.charCodeAt(i + 1));
+      }
+      return result;
+    } catch (_) { return encoded; }
+  });
+}
+
 class SimpleImap {
   private conn!: Deno.TlsConn;
   private buf = "";
@@ -36,7 +50,7 @@ class SimpleImap {
     const folders: string[] = [];
     for (const line of res) {
       const m = line.match(/^\* LIST [^)]*\) (?:"[^"]*"|NIL) "?([^"]+?)"?\s*$/);
-      if (m) folders.push(m[1].trim());
+      if (m) folders.push(decodeModifiedUTF7(m[1].trim()));
     }
     return folders;
   }
@@ -76,7 +90,7 @@ class SimpleImap {
   }
 
   private async readLine(): Promise<string> {
-    const dec = new TextDecoder();
+    const dec = new TextDecoder("utf-8", { fatal: false });
     while (true) {
       const idx = this.buf.indexOf("\r\n");
       if (idx >= 0) {
@@ -84,7 +98,7 @@ class SimpleImap {
         this.buf = this.buf.slice(idx + 2);
         return line;
       }
-      const chunk = new Uint8Array(8192);
+      const chunk = new Uint8Array(32768);
       const n = await this.conn.read(chunk);
       if (n === null) return this.buf;
       this.buf += dec.decode(chunk.slice(0, n));
@@ -92,54 +106,86 @@ class SimpleImap {
   }
 }
 
+function decodeBytes(bytes: Uint8Array, charset: string): string {
+  const cs = charset.toLowerCase().trim();
+  try { return new TextDecoder(cs).decode(bytes); } catch (_) {}
+  try { return new TextDecoder("utf-8", { fatal: false }).decode(bytes); } catch (_) {}
+  return new TextDecoder("latin1").decode(bytes);
+}
+
+function decodeTransferEncoding(headers: string, body: string): string {
+  const enc = (headers.match(/content-transfer-encoding:\s*(\S+)/i)?.[1] || "").toLowerCase().trim();
+  const charset = (headers.match(/charset=["']?([^"'\s;]+)/i)?.[1] || "utf-8");
+
+  if (enc === "base64") {
+    try {
+      const binary = atob(body.replace(/\s+/g, ""));
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      return decodeBytes(bytes, charset);
+    } catch (_) { return body; }
+  }
+  if (enc === "quoted-printable") {
+    const raw = body
+      .replace(/=\r?\n/g, "")
+      .replace(/=([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
+    if (charset.toLowerCase().includes("utf")) {
+      try {
+        const bytes = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+        return decodeBytes(bytes, charset);
+      } catch (_) {}
+    }
+    return raw;
+  }
+  // 8bit or 7bit – body might already be UTF-8 bytes misinterpreted as latin1
+  if (charset.toLowerCase().includes("utf")) {
+    try {
+      const bytes = new Uint8Array(body.length);
+      for (let i = 0; i < body.length; i++) bytes[i] = body.charCodeAt(i);
+      return decodeBytes(bytes, charset);
+    } catch (_) {}
+  }
+  return body;
+}
+
 function extractTextFromRaw(raw: string): { text: string; html: string | null } {
-  // Find boundary if multipart
   const boundaryMatch = raw.match(/boundary="?([^"\r\n;]+)"?/i);
   if (boundaryMatch) {
-    const boundary = boundaryMatch[1];
-    const parts = raw.split(`--${boundary}`);
+    const boundary = boundaryMatch[1].trim();
+    const parts = raw.split(new RegExp(`--${boundary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
     let text = "";
     let html = "";
     for (const part of parts) {
-      if (part.toLowerCase().includes("content-type: text/html")) {
-        const body = part.split("\r\n\r\n").slice(1).join("\r\n\r\n");
-        html = decodeTransferEncoding(part, body);
-      } else if (part.toLowerCase().includes("content-type: text/plain")) {
-        const body = part.split("\r\n\r\n").slice(1).join("\r\n\r\n");
-        text = decodeTransferEncoding(part, body);
+      const lower = part.toLowerCase();
+      if (lower.includes("content-type: text/html")) {
+        const idx = part.indexOf("\r\n\r\n");
+        if (idx >= 0) html = decodeTransferEncoding(part.slice(0, idx), part.slice(idx + 4));
+      } else if (lower.includes("content-type: text/plain")) {
+        const idx = part.indexOf("\r\n\r\n");
+        if (idx >= 0) text = decodeTransferEncoding(part.slice(0, idx), part.slice(idx + 4));
       }
     }
     return { text: text.trim(), html: html.trim() || null };
   }
 
-  // Simple: everything after headers
   const bodyStart = raw.indexOf("\r\n\r\n");
   if (bodyStart >= 0) {
+    const headers = raw.slice(0, bodyStart);
     const body = raw.slice(bodyStart + 4);
-    const decoded = decodeTransferEncoding(raw.slice(0, bodyStart), body);
+    const decoded = decodeTransferEncoding(headers, body);
+    // Check if it looks like HTML
+    if (decoded.trimStart().startsWith("<")) return { text: "", html: decoded.trim() };
     return { text: decoded.trim(), html: null };
   }
   return { text: raw.trim(), html: null };
-}
-
-function decodeTransferEncoding(headers: string, body: string): string {
-  const enc = (headers.match(/content-transfer-encoding:\s*(\S+)/i)?.[1] || "").toLowerCase();
-  if (enc === "base64") {
-    try { return atob(body.replace(/\s+/g, "")); } catch (_) {}
-  }
-  if (enc === "quoted-printable") {
-    return body
-      .replace(/=\r\n/g, "")
-      .replace(/=([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
-  }
-  return body;
 }
 
 const FOLDER_MAP: Record<string, string[]> = {
   INBOX: ["INBOX"],
   Sent:  ["Sent", "Sent Items", "Gesendet", "Gesendete Objekte", "INBOX.Sent"],
   Spam:  ["Spam", "Junk", "INBOX.Spam", "INBOX.Junk"],
-  Trash: ["Trash", "Deleted", "Papierkorb", "INBOX.Trash"],
+  Trash: ["Trash", "Deleted", "Papierkorb", "Gelöscht", "INBOX.Trash"],
 };
 
 serve(async (req) => {
@@ -147,7 +193,6 @@ serve(async (req) => {
 
   try {
     const { mail_id, uid } = await req.json();
-    // uid format: "INBOX:12345"
     const colonIdx = uid.lastIndexOf(":");
     const folderInternal = uid.slice(0, colonIdx);
     const uidNum = parseInt(uid.slice(colonIdx + 1));
@@ -161,7 +206,6 @@ serve(async (req) => {
     await imap.connect(Deno.env.get("IMAP_HOST") || "imap.strato.de", 993);
     await imap.login(Deno.env.get("SMTP_USER")!, Deno.env.get("SMTP_PASS")!);
 
-    // Find actual folder
     const allFolders = await imap.list();
     const candidates = FOLDER_MAP[folderInternal] || [folderInternal];
     const actualFolder = candidates.find((c) =>
@@ -175,15 +219,15 @@ serve(async (req) => {
     await imap.logout();
 
     const { text, html } = extractTextFromRaw(raw);
+    const bodyText = text || raw.slice(0, 20000);
 
-    // Cache in DB
     await supabase
       .from("portal_inbox_mails")
-      .update({ body_html: html, body_text: text || raw.slice(0, 10000) })
+      .update({ body_html: html, body_text: bodyText })
       .eq("id", mail_id);
 
     return new Response(
-      JSON.stringify({ body_html: html, body_text: text || raw.slice(0, 10000) }),
+      JSON.stringify({ body_html: html, body_text: bodyText }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err: any) {

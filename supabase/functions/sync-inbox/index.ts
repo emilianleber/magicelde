@@ -6,7 +6,50 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Simple IMAP client using raw TCP (no npm dependency)
+// Decode IMAP modified UTF-7 (e.g. "Gel&APY-scht" → "Gelöscht")
+function decodeModifiedUTF7(str: string): string {
+  return str.replace(/&([^-]*)-/g, (_, encoded) => {
+    if (encoded === "") return "&";
+    try {
+      const b64 = encoded.replace(/,/g, "/");
+      const binary = atob(b64);
+      let result = "";
+      for (let i = 0; i + 1 < binary.length; i += 2) {
+        result += String.fromCharCode((binary.charCodeAt(i) << 8) | binary.charCodeAt(i + 1));
+      }
+      return result;
+    } catch (_) {
+      return encoded;
+    }
+  });
+}
+
+// Decode RFC2047 encoded words with proper charset support
+function decodeRFC2047(str: string): string {
+  if (!str) return str;
+  return str.replace(/=\?([^?]+)\?([BbQq])\?([^?]*)\?=/g, (_, charset, enc, text) => {
+    try {
+      const cs = charset.toLowerCase().replace("windows-", "windows-");
+      if (enc.toUpperCase() === "B") {
+        const binary = atob(text.replace(/\s/g, ""));
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        try { return new TextDecoder(cs).decode(bytes); } catch (_) { return binary; }
+      }
+      if (enc.toUpperCase() === "Q") {
+        const raw = text.replace(/_/g, " ").replace(/=([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
+        if (cs.includes("utf")) {
+          const bytes = new Uint8Array(raw.length);
+          for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+          try { return new TextDecoder("utf-8").decode(bytes); } catch (_) { return raw; }
+        }
+        return raw;
+      }
+    } catch (_) {}
+    return text;
+  });
+}
+
 class SimpleImap {
   private conn!: Deno.TlsConn;
   private buf = "";
@@ -14,7 +57,7 @@ class SimpleImap {
 
   async connect(host: string, port: number) {
     this.conn = await Deno.connectTls({ hostname: host, port });
-    await this.readLine(); // greeting
+    await this.readLine();
   }
 
   async login(user: string, pass: string) {
@@ -24,17 +67,13 @@ class SimpleImap {
   }
 
   async list(): Promise<string[]> {
-    return (await this.listRaw()).folders;
-  }
-
-  async listRaw(): Promise<{ folders: string[]; raw: string[] }> {
     const res = await this.cmd('LIST "" "*"');
     const folders: string[] = [];
     for (const line of res) {
       const m = line.match(/^\* LIST [^)]*\) (?:"[^"]*"|NIL) "?([^"]+?)"?\s*$/);
-      if (m) folders.push(m[1].trim());
+      if (m) folders.push(decodeModifiedUTF7(m[1].trim()));
     }
-    return { folders, raw: res };
+    return folders;
   }
 
   async select(folder: string): Promise<number> {
@@ -49,11 +88,9 @@ class SimpleImap {
   async fetchHeaders(from: number, to: number): Promise<{ uid: number; headers: Record<string, string> }[]> {
     const res = await this.cmd(`FETCH ${from}:${to} (UID RFC822.HEADER)`);
     const mails: { uid: number; headers: Record<string, string> }[] = [];
-
     let uid = 0;
     let headerLines: string[] = [];
     let inHeaders = false;
-
     for (const line of res) {
       const uidMatch = line.match(/\* \d+ FETCH \(UID (\d+)/);
       if (uidMatch) { uid = parseInt(uidMatch[1]); headerLines = []; inHeaders = true; continue; }
@@ -65,18 +102,6 @@ class SimpleImap {
       if (inHeaders && !line.startsWith("* ")) headerLines.push(line);
     }
     return mails;
-  }
-
-  async fetchBody(uid: number): Promise<string> {
-    const res = await this.cmd(`UID FETCH ${uid} BODY.PEEK[]`);
-    const lines: string[] = [];
-    let inBody = false;
-    for (const line of res) {
-      if (line.match(/\* \d+ FETCH/)) { inBody = true; continue; }
-      if (inBody && line === ")") break;
-      if (inBody) lines.push(line);
-    }
-    return lines.join("\r\n");
   }
 
   async logout() {
@@ -98,7 +123,7 @@ class SimpleImap {
   }
 
   private async readLine(): Promise<string> {
-    const dec = new TextDecoder();
+    const dec = new TextDecoder("utf-8", { fatal: false });
     while (true) {
       const idx = this.buf.indexOf("\r\n");
       if (idx >= 0) {
@@ -106,7 +131,7 @@ class SimpleImap {
         this.buf = this.buf.slice(idx + 2);
         return line;
       }
-      const chunk = new Uint8Array(4096);
+      const chunk = new Uint8Array(32768);
       const n = await this.conn.read(chunk);
       if (n === null) return this.buf;
       this.buf += dec.decode(chunk.slice(0, n));
@@ -131,16 +156,6 @@ function parseHeaders(lines: string[]): Record<string, string> {
   return h;
 }
 
-function decodeRFC2047(str: string): string {
-  return str.replace(/=\?([^?]+)\?([BbQq])\?([^?]*)\?=/g, (_, _charset, enc, text) => {
-    try {
-      if (enc.toUpperCase() === "B") return atob(text);
-      if (enc.toUpperCase() === "Q") return text.replace(/_/g, " ").replace(/=([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
-    } catch (_) {}
-    return text;
-  });
-}
-
 function parseFrom(from: string): { name: string | null; address: string | null } {
   if (!from) return { name: null, address: null };
   const m = from.match(/^"?([^<"]*)"?\s*<?([^>]+@[^>]+)>?/);
@@ -153,8 +168,11 @@ const FOLDER_TARGETS = [
   { internal: "INBOX", candidates: ["INBOX"] },
   { internal: "Sent",  candidates: ["Sent", "Sent Items", "Gesendet", "Gesendete Objekte", "Gesendete Elemente", "INBOX.Sent"] },
   { internal: "Spam",  candidates: ["Spam", "Junk", "Junk E-Mail", "INBOX.Spam", "INBOX.Junk"] },
-  { internal: "Trash", candidates: ["Trash", "Deleted", "Papierkorb", "INBOX.Trash"] },
+  { internal: "Trash", candidates: ["Trash", "Deleted", "Papierkorb", "Gelöscht", "INBOX.Trash"] },
 ];
+
+const BATCH_SIZE = 200;
+const DEADLINE_MS = 50_000; // stop fetching after 50s to leave room for response
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -171,22 +189,21 @@ serve(async (req) => {
   const logs: string[] = [];
   let totalSynced = 0;
   const imap = new SimpleImap();
+  const start = Date.now();
 
   try {
-    console.log("sync-inbox: connecting to", host);
     await imap.connect(host, 993);
     logs.push(`Connected to ${host}`);
-    console.log("sync-inbox: connected, logging in as", user);
 
     await imap.login(user, pass);
     logs.push("Logged in");
-    console.log("sync-inbox: logged in");
 
-    const { folders: allFolders, raw: rawList } = await imap.listRaw();
-    logs.push(`LIST raw: ${JSON.stringify(rawList.slice(0, 5))}`);
+    const allFolders = await imap.list();
     logs.push(`Folders: ${allFolders.join(", ")}`);
 
     for (const target of FOLDER_TARGETS) {
+      if (Date.now() - start > DEADLINE_MS) { logs.push("Time limit reached"); break; }
+
       const actualFolder = target.candidates.find((c) =>
         allFolders.some((f) => f.toLowerCase() === c.toLowerCase())
       ) || allFolders.find((f) =>
@@ -199,47 +216,47 @@ serve(async (req) => {
       logs.push(`${actualFolder}: ${count} messages`);
       if (count === 0) continue;
 
-      const from = Math.max(1, count - 49);
-      const headers = await imap.fetchHeaders(from, count);
-      logs.push(`Fetched ${headers.length} headers from ${actualFolder}`);
+      // Sync ALL messages newest-first in batches
+      let batchSynced = 0;
+      for (let batchEnd = count; batchEnd >= 1 && Date.now() - start < DEADLINE_MS; batchEnd -= BATCH_SIZE) {
+        const batchFrom = Math.max(1, batchEnd - BATCH_SIZE + 1);
+        const headers = await imap.fetchHeaders(batchFrom, batchEnd);
 
-      const mails = headers.map(({ uid, headers: h }) => ({
-        uid: `${target.internal}:${uid}`,
-        folder: target.internal,
-        from_name: parseFrom(h.from || "").name,
-        from_email: parseFrom(h.from || "").address,
-        to_email: parseFrom(h.to || "").address,
-        subject: decodeRFC2047(h.subject || "(Kein Betreff)"),
-        body_html: null,
-        body_text: null,
-        received_at: h.date ? new Date(h.date).toISOString() : new Date().toISOString(),
-        is_read: false,
-        is_starred: false,
-      }));
+        const mails = headers.map(({ uid, headers: h }) => ({
+          uid: `${target.internal}:${uid}`,
+          folder: target.internal,
+          from_name: parseFrom(h.from || "").name,
+          from_email: parseFrom(h.from || "").address,
+          to_email: parseFrom(h.to || "").address,
+          subject: decodeRFC2047(h.subject || "(Kein Betreff)"),
+          body_html: null,
+          body_text: null,
+          received_at: h.date ? new Date(h.date).toISOString() : new Date().toISOString(),
+          is_read: false,
+          is_starred: false,
+        }));
 
-      const { error } = await supabase
-        .from("portal_inbox_mails")
-        .upsert(mails, { onConflict: "uid", ignoreDuplicates: true });
+        const { error } = await supabase
+          .from("portal_inbox_mails")
+          .upsert(mails, { onConflict: "uid", ignoreDuplicates: true });
 
-      if (error) {
-        console.error("sync-inbox: DB error", error.message);
-        logs.push(`DB error: ${error.message}`);
-      } else {
+        if (error) {
+          logs.push(`DB error: ${error.message}`);
+          break;
+        }
+        batchSynced += mails.length;
         totalSynced += mails.length;
-        logs.push(`Saved ${mails.length}`);
-        console.log(`sync-inbox: saved ${mails.length} from ${actualFolder}`);
       }
+      logs.push(`Saved ${batchSynced} from ${actualFolder}`);
     }
 
     await imap.logout();
-    console.log("sync-inbox: done, total synced:", totalSynced);
 
     return new Response(
       JSON.stringify({ success: true, synced: totalSynced, logs }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err: any) {
-    console.error("sync-inbox: ERROR", err.message);
     logs.push(`ERROR: ${err.message}`);
     await imap.logout().catch(() => {});
     return new Response(

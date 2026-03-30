@@ -12,6 +12,10 @@ import {
   ChevronLeft,
   LogOut,
   Loader2,
+  MailOpen,
+  Mail,
+  CheckCheck,
+  X,
 } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 
@@ -50,7 +54,6 @@ const AdminMails = () => {
   const [syncLog, setSyncLog] = useState<string | null>(null);
   const [syncLogs, setSyncLogs] = useState<string[]>([]);
 
-  // Auth check
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       if (!session) navigate("/kundenportal/login");
@@ -70,17 +73,20 @@ const AdminMails = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  // Load mails for folder
+  const loadMails = async (f = folder) => {
+    const { data } = await supabase
+      .from("portal_inbox_mails")
+      .select("*")
+      .eq("folder", f)
+      .eq("is_deleted", false)
+      .order("received_at", { ascending: false });
+    setMails((data as InboxMail[]) || []);
+  };
+
   useEffect(() => {
     if (!isAdmin) return;
     setSelected(null);
-    supabase
-      .from("portal_inbox_mails")
-      .select("*")
-      .eq("folder", folder)
-      .eq("is_deleted", false)
-      .order("received_at", { ascending: false })
-      .then(({ data }) => setMails((data as InboxMail[]) || []));
+    loadMails(folder);
   }, [folder, isAdmin]);
 
   const logout = async () => {
@@ -90,14 +96,10 @@ const AdminMails = () => {
 
   const openMail = async (mail: InboxMail) => {
     setSelected(mail);
-
-    // Mark as read in DB
     if (!mail.is_read) {
       await supabase.from("portal_inbox_mails").update({ is_read: true }).eq("id", mail.id);
       setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_read: true } : m));
     }
-
-    // Fetch body if not cached
     if (!mail.body_html && !mail.body_text) {
       setBodyLoading(true);
       try {
@@ -135,6 +137,30 @@ const AdminMails = () => {
     if (selected?.id === mail.id) setSelected((s) => s ? { ...s, is_starred: next } : s);
   };
 
+  const toggleRead = async (mail: InboxMail, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    const next = !mail.is_read;
+    await supabase.from("portal_inbox_mails").update({ is_read: next }).eq("id", mail.id);
+    setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_read: next } : m));
+    if (selected?.id === mail.id) setSelected((s) => s ? { ...s, is_read: next } : s);
+  };
+
+  const deleteMail = async (mail: InboxMail, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    await supabase.from("portal_inbox_mails").update({ is_deleted: true }).eq("id", mail.id);
+    setMails((prev) => prev.filter((m) => m.id !== mail.id));
+    if (selected?.id === mail.id) setSelected(null);
+  };
+
+  const markAllRead = async () => {
+    await supabase
+      .from("portal_inbox_mails")
+      .update({ is_read: true })
+      .eq("folder", folder)
+      .eq("is_deleted", false);
+    setMails((prev) => prev.map((m) => ({ ...m, is_read: true })));
+  };
+
   const syncInbox = async () => {
     setSyncing(true);
     setSyncLog(null);
@@ -153,14 +179,7 @@ const AdminMails = () => {
       if (!res.ok && !json.error) json.error = `HTTP ${res.status}: ${raw.slice(0, 200)}`;
       setSyncLog(json.success ? `Synchronisiert: ${json.synced} E-Mails` : `Fehler: ${json.error ?? raw.slice(0, 200)}`);
       setSyncLogs(json.logs || []);
-      // Reload mails
-      const { data } = await supabase
-        .from("portal_inbox_mails")
-        .select("*")
-        .eq("folder", folder)
-        .eq("is_deleted", false)
-        .order("received_at", { ascending: false });
-      setMails((data as InboxMail[]) || []);
+      await loadMails();
     } catch (e: any) {
       setSyncLog(`Fehler: ${e.message}`);
       setSyncLogs([]);
@@ -169,7 +188,7 @@ const AdminMails = () => {
     }
   };
 
-  const unreadCount = (f: string) => mails.filter((m) => m.folder === f && !m.is_read).length;
+  const unreadCount = mails.filter((m) => !m.is_read).length;
 
   if (loading) return <div className="pt-28 text-center">Wird geladen…</div>;
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
@@ -186,7 +205,7 @@ const AdminMails = () => {
             className="inline-flex items-center gap-2 rounded-xl border border-border/30 bg-muted/30 px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted/60 transition-colors disabled:opacity-50"
           >
             {syncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-            {syncing ? "Synchronisiert…" : "Postfach sync"}
+            {syncing ? "Synchronisiert…" : "Sync"}
           </button>
           <button
             onClick={logout}
@@ -217,13 +236,13 @@ const AdminMails = () => {
         <div className="rounded-2xl border border-border/30 bg-muted/20 p-3 h-fit">
           <nav className="space-y-1">
             {FOLDERS.map(({ key, label, icon: Icon }) => {
-              const count = mails.filter((m) => m.folder === key && !m.is_read).length;
+              const isActive = folder === key;
               return (
                 <button
                   key={key}
                   onClick={() => setFolder(key)}
                   className={`w-full flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
-                    folder === key
+                    isActive
                       ? "bg-background text-foreground shadow-sm border border-border/20"
                       : "text-muted-foreground hover:text-foreground hover:bg-background/60"
                   }`}
@@ -232,9 +251,9 @@ const AdminMails = () => {
                     <Icon className="w-4 h-4" />
                     <span className="font-medium">{label}</span>
                   </span>
-                  {key === folder && count > 0 && (
+                  {isActive && unreadCount > 0 && (
                     <span className="text-[10px] font-bold rounded-full bg-accent text-accent-foreground px-1.5 py-0.5">
-                      {count}
+                      {unreadCount}
                     </span>
                   )}
                 </button>
@@ -246,9 +265,9 @@ const AdminMails = () => {
         {/* Mail list + detail */}
         <div className="min-w-0">
           {selected ? (
-            // Mail detail view
             <div className="rounded-2xl border border-border/30 bg-muted/20 overflow-hidden">
-              <div className="flex items-center gap-3 px-6 py-4 border-b border-border/20">
+              {/* Detail header */}
+              <div className="flex items-center gap-3 px-5 py-4 border-b border-border/20 flex-wrap">
                 <button
                   onClick={() => setSelected(null)}
                   className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -257,18 +276,39 @@ const AdminMails = () => {
                   Zurück
                 </button>
                 <div className="flex-1 min-w-0">
-                  <h2 className="font-display text-lg font-bold text-foreground truncate">
+                  <h2 className="font-display text-base font-bold text-foreground truncate">
                     {selected.subject || "(Kein Betreff)"}
                   </h2>
                 </div>
-                <button onClick={(e) => toggleStar(selected, e)}>
-                  {selected.is_starred
-                    ? <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    : <StarOff className="w-4 h-4 text-muted-foreground" />}
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => toggleRead(selected, e)}
+                    title={selected.is_read ? "Als ungelesen markieren" : "Als gelesen markieren"}
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                  >
+                    {selected.is_read ? <Mail className="w-4 h-4" /> : <MailOpen className="w-4 h-4" />}
+                  </button>
+                  <button
+                    onClick={(e) => toggleStar(selected, e)}
+                    title="Stern"
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                  >
+                    {selected.is_starred
+                      ? <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                      : <StarOff className="w-4 h-4" />}
+                  </button>
+                  <button
+                    onClick={(e) => deleteMail(selected, e)}
+                    title="Löschen"
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
 
-              <div className="px-6 py-4 border-b border-border/20 space-y-1 text-sm text-muted-foreground">
+              {/* Meta */}
+              <div className="px-5 py-3 border-b border-border/20 space-y-1 text-sm text-muted-foreground">
                 <div>
                   <span className="font-medium text-foreground">Von: </span>
                   {selected.from_name ? `${selected.from_name} <${selected.from_email}>` : selected.from_email}
@@ -281,13 +321,12 @@ const AdminMails = () => {
                 )}
                 <div>
                   <span className="font-medium text-foreground">Datum: </span>
-                  {selected.received_at
-                    ? new Date(selected.received_at).toLocaleString("de-DE")
-                    : "—"}
+                  {selected.received_at ? new Date(selected.received_at).toLocaleString("de-DE") : "—"}
                 </div>
               </div>
 
-              <div className="px-6 py-6">
+              {/* Body */}
+              <div className="px-5 py-5">
                 {bodyLoading ? (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -308,8 +347,23 @@ const AdminMails = () => {
               </div>
             </div>
           ) : (
-            // Mail list
             <div className="rounded-2xl border border-border/30 bg-muted/20 overflow-hidden">
+              {/* Toolbar */}
+              {mails.length > 0 && (
+                <div className="flex items-center gap-3 px-5 py-3 border-b border-border/20">
+                  <span className="text-xs text-muted-foreground">{mails.length} E-Mails</span>
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={markAllRead}
+                      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <CheckCheck className="w-3.5 h-3.5" />
+                      Alle als gelesen markieren
+                    </button>
+                  )}
+                </div>
+              )}
+
               {mails.length === 0 ? (
                 <div className="p-12 text-center">
                   <p className="text-sm text-muted-foreground">Keine E-Mails in diesem Ordner.</p>
@@ -317,36 +371,55 @@ const AdminMails = () => {
               ) : (
                 <div className="divide-y divide-border/20">
                   {mails.map((mail) => (
-                    <button
+                    <div
                       key={mail.id}
                       onClick={() => openMail(mail)}
-                      className="w-full text-left px-5 py-4 hover:bg-background/60 transition-colors flex items-start gap-4"
+                      className="w-full text-left px-5 py-3.5 hover:bg-background/60 transition-colors flex items-start gap-3 cursor-pointer group"
                     >
+                      {/* Unread dot */}
+                      <div className="mt-2 w-2 flex-shrink-0">
+                        {!mail.is_read && <span className="block w-2 h-2 rounded-full bg-accent" />}
+                      </div>
+
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          {!mail.is_read && (
-                            <span className="w-2 h-2 rounded-full bg-accent flex-shrink-0" />
-                          )}
+                        <div className="flex items-center justify-between gap-2 mb-0.5">
                           <span className={`text-sm truncate ${mail.is_read ? "text-muted-foreground" : "font-semibold text-foreground"}`}>
                             {mail.from_name || mail.from_email || "Unbekannt"}
                           </span>
+                          <span className="text-xs text-muted-foreground flex-shrink-0">
+                            {mail.received_at ? new Date(mail.received_at).toLocaleDateString("de-DE") : "—"}
+                          </span>
                         </div>
-                        <p className={`text-sm truncate ${mail.is_read ? "text-muted-foreground" : "text-foreground font-medium"}`}>
+                        <p className={`text-sm truncate ${mail.is_read ? "text-muted-foreground" : "text-foreground"}`}>
                           {mail.subject || "(Kein Betreff)"}
                         </p>
                       </div>
 
-                      <div className="flex-shrink-0 flex flex-col items-end gap-2">
-                        <span className="text-xs text-muted-foreground">
-                          {mail.received_at
-                            ? new Date(mail.received_at).toLocaleDateString("de-DE")
-                            : "—"}
-                        </span>
-                        {mail.is_starred && (
-                          <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
-                        )}
+                      {/* Row actions */}
+                      <div className="flex-shrink-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={(e) => toggleRead(mail, e)}
+                          title={mail.is_read ? "Ungelesen" : "Gelesen"}
+                          className="p-1 rounded text-muted-foreground hover:text-foreground"
+                        >
+                          {mail.is_read ? <Mail className="w-3.5 h-3.5" /> : <MailOpen className="w-3.5 h-3.5" />}
+                        </button>
+                        <button
+                          onClick={(e) => toggleStar(mail, e)}
+                          className="p-1 rounded text-muted-foreground hover:text-yellow-500"
+                        >
+                          {mail.is_starred
+                            ? <Star className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" />
+                            : <StarOff className="w-3.5 h-3.5" />}
+                        </button>
+                        <button
+                          onClick={(e) => deleteMail(mail, e)}
+                          className="p-1 rounded text-muted-foreground hover:text-destructive"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
                       </div>
-                    </button>
+                    </div>
                   ))}
                 </div>
               )}
