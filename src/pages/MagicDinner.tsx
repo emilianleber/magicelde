@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import ProcessSteps from "@/components/landing/ProcessSteps";
@@ -456,7 +457,16 @@ const FAQDinner = () => {
 };
 
 const MagicDinner = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Magic Dinner – Zauberhafte Dinner-Show mit Emilian Leber</title>
+      <meta
+        name="description"
+        content="Das Magic Dinner von Emilian Leber verbindet Hochküche mit interaktiver Magie. Ein unvergessliches Erlebnis für besondere Abende und exklusive Firmenevents."
+      />
+      <link rel="canonical" href="https://www.magicel.de/magic-dinner" />
+    </Helmet>
+    <PageLayout>
     <BackgroundHero
       imageSrc={dinnerImg}
       badge="Spezialgebiet"
@@ -481,6 +491,7 @@ const MagicDinner = () => (
     <ProcessSteps />
     <BookingCTA headline={"Ein Abend zum Staunen."} subline="Plane dein Magic Dinner — ich berate dich persönlich und entwickle ein Konzept, das perfekt zu eurem Anlass passt." />
   </PageLayout>
+  </>
 );
 
 export default MagicDinner;

@@ -7,7 +7,7 @@ export interface Stadt {
 }
 
 export const staedte: Stadt[] = [
-  { slug: "regensburg", name: "Regensburg", region: "Bayern", intro: "Als Zauberer aus Regensburg kenne ich die besten Locations der Domstadt — von historischen Gewölben bis zu modernen Eventspaces.", highlight: "Heimatstadt von MagicEL — kurze Wege, volle Verfügbarkeit." },
+  { slug: "regensburg", name: "Regensburg", region: "Bayern", intro: "Als Zauberer aus Regensburg kenne ich die besten Locations der Domstadt — von historischen Gewölben bis zu modernen Eventspaces.", highlight: "Heimatstadt von Emilian Leber — kurze Wege, volle Verfügbarkeit." },
   { slug: "muenchen", name: "München", region: "Bayern", intro: "München ist eine der aufregendsten Event-Städte Deutschlands. Von Firmenfeiern im BMW-Umfeld bis zu Hochzeiten an der Isar.", highlight: "Regelmäßig auf Münchner Events — vom Firmenabend bis zur Gala." },
   { slug: "nuernberg", name: "Nürnberg", region: "Bayern", intro: "Nürnberg bietet mit seiner Mischung aus Tradition und Moderne den perfekten Rahmen für magische Events.", highlight: "Fränkisches Flair trifft moderne Magie." },
   { slug: "augsburg", name: "Augsburg", region: "Bayern", intro: "In der Fuggerstadt Augsburg sorge ich für Events, die in Erinnerung bleiben — modern, interaktiv und professionell.", highlight: "Schnell erreichbar, perfekt für bayerische Events." },

@@ -222,10 +222,11 @@ serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err: any) {
-    logs.push(`ERROR: ${err.message}`);
+    const msg = err?.message || String(err) || "Unbekannter Fehler";
+    logs.push(`ERROR: ${msg}`);
     await imap.logout().catch(() => {});
     return new Response(
-      JSON.stringify({ error: err.message, logs }),
+      JSON.stringify({ error: msg, logs }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

@@ -28,7 +28,7 @@ const getAnswer = (input: string): string => {
 const Chatbot = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "bot", text: "Hi! 👋 Ich bin der MagicEL Assistent. Wie kann ich dir helfen? Frag mich alles über Shows, Preise oder Buchung!" },
+    { role: "bot", text: "Hi! 👋 Ich bin der Assistent von Emilian Leber. Wie kann ich dir helfen? Frag mich alles über Shows, Preise oder Buchung!" },
   ]);
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -75,7 +75,7 @@ const Chatbot = () => {
               <Bot className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="font-display text-sm font-bold text-white">MagicEL Assistent</p>
+              <p className="font-display text-sm font-bold text-white">Emilian Leber – Assistent</p>
               <p className="font-sans text-[11px] text-white/70">Antwort in Sekunden</p>
             </div>
           </div>

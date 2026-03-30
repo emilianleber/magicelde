@@ -1002,7 +1002,7 @@ const Kundenportal = () => {
                     <MessageCircle className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="font-sans text-sm font-semibold text-foreground">MagicEL Assistent</p>
+                    <p className="font-sans text-sm font-semibold text-foreground">Emilian Leber – Assistent</p>
                     <p className="font-sans text-xs text-muted-foreground">Sofortige Antworten · rund um die Uhr</p>
                   </div>
                 </div>

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -14,7 +15,7 @@ const HeroPresse = () => (
           <span className="badge-accent mb-8 inline-flex">Presse</span>
         </div>
         <h1 className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground" style={{ animationDelay: "0.3s" }}>
-          MagicEL in den Medien.
+          Emilian Leber in den Medien.
         </h1>
         <p className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up" style={{ animationDelay: "0.5s" }}>
           Auftritte, Auszeichnungen, Erwähnungen und Pressematerial.
@@ -73,7 +74,7 @@ const PressekitSection = () => {
             <h2 className="headline-sub text-foreground mb-8">Pressekit.</h2>
             <div className="space-y-4 text-detail max-w-lg">
               <p><strong className="text-foreground font-medium">Name:</strong> Emilian Leber</p>
-              <p><strong className="text-foreground font-medium">Künstlername:</strong> MagicEL</p>
+              <p><strong className="text-foreground font-medium">Künstlername:</strong> Emilian Leber</p>
               <p><strong className="text-foreground font-medium">Genre:</strong> Moderner Comedy-Zauberer, Close-Up & Bühnenmagie</p>
               <p><strong className="text-foreground font-medium">Erfahrung:</strong> 10+ Jahre, 500+ Events, Finalist Talents of Magic</p>
               <p><strong className="text-foreground font-medium">Buchbar:</strong> Deutschlandweit und international</p>
@@ -113,13 +114,23 @@ const FotosSection = () => {
 };
 
 const Presse = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Presse – Zauberer Emilian Leber in den Medien</title>
+      <meta
+        name="description"
+        content="Presseinfos, Medienauftritte und Pressekit von Zauberer Emilian Leber. Für Journalisten und Medienanfragen – Fotos und Infomaterial zum Download."
+      />
+      <link rel="canonical" href="https://www.magicel.de/presse" />
+    </Helmet>
+    <PageLayout>
     <HeroPresse />
     <AufritteSection />
     <PressekitSection />
     <FotosSection />
     <BookingCTA headline={"Presseanfrage?"} subline="Ich freue mich auf Ihre Anfrage — ob Interview, Feature oder Kooperation." buttonText="Kontakt aufnehmen" />
   </PageLayout>
+  </>
 );
 
 export default Presse;

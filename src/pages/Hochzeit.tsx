@@ -775,12 +775,27 @@ const FAQWedding = () => {
 const Hochzeit = () => (
   <>
     <Helmet>
-      <title>Zauberer für Hochzeiten – Emilian Leber</title>
+      <title>Hochzeitszauberer – Emilian Leber | Zauberer für Hochzeiten</title>
       <meta
         name="description"
-        content="Emilian Leber ist Zauberer für Hochzeiten und sorgt mit moderner, interaktiver Zauberkunst für unvergessliche Momente voller Staunen und Humor."
+        content="Emilian Leber ist Hochzeitszauberer und sorgt in München, Berlin, Hamburg und deutschlandweit mit moderner Zauberkunst für unvergessliche Momente auf Ihrer Hochzeit."
       />
       <link rel="canonical" href="https://www.magicel.de/hochzeit" />
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Zauberer für Hochzeiten – Emilian Leber",
+        "url": "https://www.magicel.de/hochzeit",
+        "description": "Hochzeitszauberer Emilian Leber: interaktive Close-Up Magie und Bühnenshow für Hochzeiten – deutschlandweit buchbar.",
+        "serviceType": "Hochzeitszauberer",
+        "areaServed": ["München", "Berlin", "Hamburg", "Frankfurt", "Köln", "Deutschland"],
+        "provider": {
+          "@type": "Person",
+          "name": "Emilian Leber",
+          "jobTitle": "Zauberer & Showkünstler",
+          "url": "https://www.magicel.de"
+        }
+      })}</script>
     </Helmet>
 
     <PageLayout>

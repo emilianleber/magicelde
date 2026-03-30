@@ -1,4 +1,5 @@
 import { useParams, Navigate, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import ProcessSteps from "@/components/landing/ProcessSteps";
@@ -17,6 +18,26 @@ const StadtSeite = () => {
 
   return (
     <PageLayout>
+      <Helmet>
+        <title>Zauberer {data.name} – Emilian Leber | Zaubershow &amp; Magie</title>
+        <meta
+          name="description"
+          content={`Zauberer in ${data.name}: Emilian Leber begeistert mit interaktiver Magie & Comedy auf Hochzeiten, Firmenfeiern und Events. Jetzt unverbindlich anfragen!`}
+        />
+        <link rel="canonical" href={`https://www.magicel.de/zauberer/${data.slug}`} />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "Emilian Leber – Zauberer & Showkünstler",
+          "url": `https://www.magicel.de/zauberer/${data.slug}`,
+          "description": `Zauberer in ${data.name}: Interaktive Magie & Comedy auf Hochzeiten, Firmenfeiern und Events.`,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": data.name,
+            "addressCountry": "DE"
+          }
+        })}</script>
+      </Helmet>
       <HeroStadt name={data.name} intro={data.intro} />
       <HighlightSection name={data.name} highlight={data.highlight} />
       <LeistungenSection name={data.name} />
@@ -105,7 +126,7 @@ const WarumSection = ({ name }: { name: string }) => {
     <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="headline-section text-foreground mb-6">Warum MagicEL für {name}?</h2>
+          <h2 className="headline-section text-foreground mb-6">Warum Emilian Leber in {name}?</h2>
         </div>
         <div className={`grid sm:grid-cols-3 gap-8 max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
           {[

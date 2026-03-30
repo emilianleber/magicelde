@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import Navigation from "@/components/landing/Navigation";
 import USPSection from "@/components/landing/USPSection";
 import AnlassSection from "@/components/landing/AnlassSection";
@@ -619,6 +620,26 @@ const FAQIntegrated = () => {
 const Index = () => {
   return (
     <>
+      <Helmet>
+        <title>Zauberer für Hochzeiten &amp; Events – Emilian Leber</title>
+        <meta
+          name="description"
+          content="Emilian Leber ist Ihr Zauberer für Hochzeiten, Firmenfeiern und Events. Interaktive Magie & Comedy – unvergesslich, professionell, deutschlandweit buchbar."
+        />
+        <link rel="canonical" href="https://www.magicel.de/" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "Emilian Leber – Zauberer & Showkünstler",
+          "url": "https://www.magicel.de",
+          "description": "Zauberer für Hochzeiten, Firmenfeiern und Events. Interaktive Magie & Comedy – deutschlandweit buchbar.",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5.0",
+            "reviewCount": "120"
+          }
+        })}</script>
+      </Helmet>
       <Navigation />
       <main>
         <BackgroundHero

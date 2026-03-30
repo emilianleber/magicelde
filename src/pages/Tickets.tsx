@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -11,7 +12,7 @@ const shows = [
     date: "12. April 2026",
     time: "20:00 Uhr",
     location: "Kolpinghaus Regensburg",
-    desc: "Ein Abend voller Staunen, Lachen und unmöglicher Momente. Die MagicEL Show in ihrer vollen Pracht — 90 Minuten Comedy-Magie, die im Kopf bleibt.",
+    desc: "Ein Abend voller Staunen, Lachen und unmöglicher Momente. Die Zaubershow in ihrer vollen Pracht — 90 Minuten Comedy-Magie, die im Kopf bleibt.",
     img: stageImg,
     available: true,
     ticketUrl: "#",
@@ -42,7 +43,16 @@ const TicketsPage = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Shows &amp; Tickets – Zauberer Emilian Leber live erleben</title>
+        <meta
+          name="description"
+          content="Tickets für die Zaubershow von Emilian Leber. Erlebe 90 Minuten Comedy-Magie live – jetzt Tickets sichern und unvergessliche Abende genießen."
+        />
+        <link rel="canonical" href="https://www.magicel.de/tickets" />
+      </Helmet>
+      <PageLayout>
       {/* Hero */}
       <section className="relative min-h-[60vh] flex flex-col justify-center overflow-hidden">
         <div className="container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
@@ -54,7 +64,7 @@ const TicketsPage = () => {
               Shows & Tickets.
             </h1>
             <p className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up" style={{ animationDelay: "0.5s" }}>
-              Erlebe MagicEL live — Comedy, Magie und Momente, die bleiben.
+              Erlebe Emilian Leber live — Comedy, Magie und Momente, die bleiben.
               Sichere dir jetzt Tickets für die nächsten öffentlichen Shows.
             </p>
           </div>
@@ -138,6 +148,7 @@ const TicketsPage = () => {
 
       <BookingCTA headline={"Dein Event.\nDeine Show."} subline="Lass uns über dein privates Event sprechen — ich entwickle ein maßgeschneidertes Showkonzept für dich." />
     </PageLayout>
+    </>
   );
 };
 

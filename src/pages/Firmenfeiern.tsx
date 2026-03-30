@@ -717,12 +717,27 @@ const UeberMichKurz = () => {
 const Firmenfeiern = () => (
   <>
     <Helmet>
-      <title>Zauberer für Firmenfeier & Firmenevent – Emilian Leber</title>
+      <title>Firmenfeier Zauberer – Emilian Leber | Zauberer für Firmenfeiern &amp; Events</title>
       <meta
         name="description"
-        content="Zauberer für Firmenfeier, Gala, Kundenevent und Weihnachtsfeier: Emilian Leber sorgt mit moderner, interaktiver Zauberkunst für begeisterte Gäste und Events mit bleibender Wirkung."
+        content="Firmenfeier Zauberer Emilian Leber: interaktive Magie für Firmenfeier, Weihnachtsfeier, Gala & Kundenevent. Close-Up, Bühnenshow oder individuelles Konzept – deutschlandweit buchbar."
       />
       <link rel="canonical" href="https://www.magicel.de/firmenfeiern" />
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Zauberer für Firmenfeiern – Emilian Leber",
+        "url": "https://www.magicel.de/firmenfeiern",
+        "description": "Firmenfeier Zauberer Emilian Leber: Close-Up Magie und Bühnenshow für Firmenfeiern, Galas, Weihnachtsfeiern und Kundenevents – deutschlandweit.",
+        "serviceType": "Firmenfeier Zauberer",
+        "areaServed": ["München", "Berlin", "Hamburg", "Frankfurt", "Köln", "Deutschland"],
+        "provider": {
+          "@type": "Person",
+          "name": "Emilian Leber",
+          "jobTitle": "Zauberer & Showkünstler",
+          "url": "https://www.magicel.de"
+        }
+      })}</script>
     </Helmet>
 
     <PageLayout>

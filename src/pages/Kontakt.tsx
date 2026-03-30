@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
@@ -158,10 +159,20 @@ const KontaktInfo = () => {
 };
 
 const Kontakt = () => (
-  <PageLayout>
-    <HeroKontakt />
-    <KontaktInfo />
-  </PageLayout>
+  <>
+    <Helmet>
+      <title>Kontakt &amp; Anfrage – Zauberer Emilian Leber</title>
+      <meta
+        name="description"
+        content="Jetzt Kontakt aufnehmen mit Zauberer Emilian Leber. Unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event – Antwort innerhalb von 24 Stunden."
+      />
+      <link rel="canonical" href="https://www.magicel.de/kontakt" />
+    </Helmet>
+    <PageLayout>
+      <HeroKontakt />
+      <KontaktInfo />
+    </PageLayout>
+  </>
 );
 
 export default Kontakt;

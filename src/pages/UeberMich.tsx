@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import AnimatedWords from "@/components/landing/AnimatedWords";
@@ -19,7 +20,7 @@ const HeroUeber = () => (
         </div>
         <h1 className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground" style={{ animationDelay: "0.3s" }}>
           Hi, ich bin{" "}
-          <AnimatedWords words={["Emilian.", "MagicEL.", "dein Entertainer."]} />
+          <AnimatedWords words={["Emilian.", "Zauberer.", "dein Entertainer."]} />
         </h1>
         <p className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up" style={{ animationDelay: "0.5s" }}>
           Moderner Comedy-Zauberer. Performer. Showkünstler.
@@ -205,7 +206,16 @@ const GalerieSection = () => {
 };
 
 const UeberMich = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Über Emilian Leber – Zauberer &amp; Showkünstler</title>
+      <meta
+        name="description"
+        content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 500+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows."
+      />
+      <link rel="canonical" href="https://www.magicel.de/ueber-mich" />
+    </Helmet>
+    <PageLayout>
     <HeroUeber />
     <div className="py-10">
       <AwardBadges className="justify-center" />
@@ -217,6 +227,7 @@ const UeberMich = () => (
     <GalerieSection />
     <BookingCTA headline={"Lass uns sprechen."} subline="Ich freue mich, von deinem Event zu hören — und dir zu zeigen, wie Comedy-Magie deinen Abend unvergesslich macht." />
   </PageLayout>
+  </>
 );
 
 export default UeberMich;
