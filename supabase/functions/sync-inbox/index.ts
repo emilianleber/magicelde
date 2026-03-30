@@ -164,7 +164,7 @@ serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
 
-  const host = Deno.env.get("IMAP_HOST") || Deno.env.get("SMTP_HOST") || "imap.strato.de";
+  const host = Deno.env.get("IMAP_HOST") || "imap.strato.de";
   const user = Deno.env.get("SMTP_USER")!;
   const pass = Deno.env.get("SMTP_PASS")!;
 
