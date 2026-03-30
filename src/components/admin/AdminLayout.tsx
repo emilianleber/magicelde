@@ -53,7 +53,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
     location.pathname === href || (href !== "/admin" && location.pathname.startsWith(href));
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex overflow-hidden bg-background" style={{ height: "100dvh", paddingTop: "env(safe-area-inset-top)" }}>
 
       {/* ── Desktop Sidebar ── */}
       <aside className="hidden lg:flex w-[240px] shrink-0 flex-col border-r border-border/30 bg-muted/10">

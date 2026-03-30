@@ -21,6 +21,7 @@ import { CSS } from "@dnd-kit/utilities";
 import {
   MessageCircle, Calendar, CheckSquare, Users, ArrowRight, LogOut,
   Clock3, Mail, GripVertical, Pencil, X, Plus, Check, TrendingUp, UserPlus,
+  Maximize2, Minimize2,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -40,21 +41,38 @@ const WIDGET_DEFS: { id: WidgetId; label: string; description: string; span: "fu
 
 const DEFAULT_LAYOUT: WidgetId[] = ["stats","kalender","neue_anfragen","naechste_events","offene_todos","letzte_mails","neue_kunden","conversion"];
 const STORAGE_KEY = "admin_widget_layout_v3";
+const SIZES_KEY   = "admin_widget_sizes_v1";
+const DEFAULT_SIZES: Record<WidgetId, "full" | "half"> = {
+  stats: "full", kalender: "full",
+  neue_anfragen: "half", naechste_events: "half",
+  offene_todos: "half", letzte_mails: "half",
+  neue_kunden: "half", conversion: "half",
+};
 
-const SortableWidget = ({ id, editMode, span, onRemove, children }: {
-  id: string; editMode: boolean; span: "full" | "half"; onRemove: () => void; children: React.ReactNode;
+const SortableWidget = ({ id, editMode, size, onRemove, onToggleSize, children }: {
+  id: string; editMode: boolean; size: "full" | "half"; onRemove: () => void; onToggleSize: () => void; children: React.ReactNode;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   return (
     <div
       ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.5 : 1, gridColumn: span === "full" ? "1 / -1" : undefined }}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+        breakInside: "avoid",
+        marginBottom: "1.5rem",
+        columnSpan: size === "full" ? "all" : undefined,
+      } as React.CSSProperties}
       className="relative"
     >
       {editMode && (
         <>
           <button onClick={onRemove} className="absolute -top-2 -right-2 z-20 w-6 h-6 rounded-full bg-destructive text-white flex items-center justify-center hover:bg-destructive/80 shadow-md">
             <X className="w-3 h-3" />
+          </button>
+          <button onClick={onToggleSize} title={size === "full" ? "Kleiner" : "Größer"} className="absolute -top-2 right-6 z-20 w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center hover:bg-accent/80 shadow-md">
+            {size === "full" ? <Minimize2 className="w-3 h-3" /> : <Maximize2 className="w-3 h-3" />}
           </button>
           <div {...attributes} {...listeners} className="absolute top-3 left-3 z-10 cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-muted-foreground">
             <GripVertical className="w-4 h-4" />
@@ -92,6 +110,15 @@ const AdminDashboard = () => {
   });
   const [editMode, setEditMode] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
+  const [widgetSizes, setWidgetSizes] = useState<Record<WidgetId, "full" | "half">>(() => {
+    try { const s = localStorage.getItem(SIZES_KEY); return s ? { ...DEFAULT_SIZES, ...JSON.parse(s) } : DEFAULT_SIZES; } catch { return DEFAULT_SIZES; }
+  });
+  const saveWidgetSizes = useCallback((sizes: Record<WidgetId, "full" | "half">) => {
+    setWidgetSizes(sizes); localStorage.setItem(SIZES_KEY, JSON.stringify(sizes));
+  }, []);
+  const toggleWidgetSize = useCallback((id: WidgetId) => {
+    saveWidgetSizes({ ...widgetSizes, [id]: widgetSizes[id] === "full" ? "half" : "full" });
+  }, [widgetSizes, saveWidgetSizes]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -379,15 +406,19 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {/* DnD Grid */}
+      {/* DnD Masonry Grid */}
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={layout} strategy={rectSortingStrategy}>
-          <div className="grid xl:grid-cols-2 gap-6 items-start">
+          <div className="xl:columns-2" style={{ columnGap: "1.5rem" }}>
             {layout.map((id) => {
-              const def = WIDGET_DEFS.find((w) => w.id === id);
-              if (!def) return null;
+              if (!WIDGET_DEFS.find((w) => w.id === id)) return null;
+              const size = widgetSizes[id] ?? "half";
               return (
-                <SortableWidget key={id} id={id} editMode={editMode} span={def.span} onRemove={() => saveLayout(layout.filter((w) => w !== id))}>
+                <SortableWidget
+                  key={id} id={id} editMode={editMode} size={size}
+                  onRemove={() => saveLayout(layout.filter((w) => w !== id))}
+                  onToggleSize={() => toggleWidgetSize(id)}
+                >
                   {renderWidget(id)}
                 </SortableWidget>
               );

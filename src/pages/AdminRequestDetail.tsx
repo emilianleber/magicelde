@@ -5,10 +5,12 @@ import {
   ArrowLeft,
   ArrowRight,
   Calendar,
+  Check,
   Clock3,
   FileText,
   Mail,
   MapPin,
+  MessageSquare,
   Pencil,
   Phone,
   Save,
@@ -58,6 +60,18 @@ interface PortalDocument {
   created_at: string;
   customer_id?: string | null;
   request_id?: string | null;
+}
+
+interface PortalChangeRequest {
+  id: string;
+  customer_id: string;
+  request_id: string | null;
+  event_id: string | null;
+  subject: string;
+  message: string;
+  status: string;
+  admin_response: string | null;
+  created_at: string;
 }
 
 const statusOptions = [
@@ -129,6 +143,9 @@ const AdminRequestDetail = () => {
   const [request, setRequest] = useState<PortalRequest | null>(null);
   const [customer, setCustomer] = useState<PortalCustomer | null>(null);
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
+  const [changeRequests, setChangeRequests] = useState<PortalChangeRequest[]>([]);
+  const [crResponseText, setCrResponseText] = useState<Record<string, string>>({});
+  const [crUpdating, setCrUpdating] = useState<Record<string, boolean>>({});
 
   const [status, setStatus] = useState("neu");
   const [anlass, setAnlass] = useState("");
@@ -198,6 +215,8 @@ const AdminRequestDetail = () => {
 
       const { data: docs } = await supabase.from("portal_documents").select("*").eq("request_id", data.id).order("created_at", { ascending: false });
       setDocuments(docs || []);
+      const { data: crs } = await supabase.from("portal_change_requests").select("*").eq("request_id", data.id).order("created_at", { ascending: false });
+      setChangeRequests(crs || []);
       setLoading(false);
     };
     load();
@@ -312,6 +331,22 @@ const AdminRequestDetail = () => {
     setUploading(false);
   };
 
+  const updateChangeRequestStatus = async (crId: string, newStatus: string) => {
+    setCrUpdating((prev) => ({ ...prev, [crId]: true }));
+    const response = crResponseText[crId]?.trim() || null;
+    const { data, error } = await supabase
+      .from("portal_change_requests")
+      .update({ status: newStatus, admin_response: response, updated_at: new Date().toISOString() })
+      .eq("id", crId)
+      .select("*")
+      .single();
+    if (!error && data) {
+      setChangeRequests((prev) => prev.map((cr) => cr.id === crId ? data : cr));
+      setCrResponseText((prev) => ({ ...prev, [crId]: "" }));
+    }
+    setCrUpdating((prev) => ({ ...prev, [crId]: false }));
+  };
+
   if (loading) return <div className="pt-28 text-center">Wird geladen…</div>;
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
   if (!request) return <div className="pt-28 text-center">Anfrage nicht gefunden</div>;
@@ -319,6 +354,7 @@ const AdminRequestDetail = () => {
   const displayCustomerName = customer?.name || request.name || "Unbekannter Kunde";
   const displayFirma = customer?.company || request.firma || "";
   const isError = message.startsWith("Fehler") || message.startsWith("Mail-Fehler");
+  const openCrCount = changeRequests.filter((cr) => cr.status === "offen").length;
 
   return (
     <AdminLayout
@@ -512,6 +548,77 @@ const AdminRequestDetail = () => {
               )}
             </div>
           </div>
+          {/* Change Requests */}
+          {changeRequests.length > 0 && (
+            <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+              <div className="flex items-center gap-2 mb-4">
+                <h2 className="text-sm font-bold text-foreground">Änderungswünsche</h2>
+                {changeRequests.filter((cr) => cr.status === "offen").length > 0 && (
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent text-[10px] font-bold text-white">
+                    {changeRequests.filter((cr) => cr.status === "offen").length}
+                  </span>
+                )}
+              </div>
+              <div className="space-y-4">
+                {changeRequests.map((cr) => (
+                  <div key={cr.id} className="p-4 rounded-xl bg-background/60 border border-border/20 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <MessageSquare className="w-3.5 h-3.5 text-accent shrink-0" />
+                          <p className="text-sm font-semibold text-foreground">{cr.subject}</p>
+                          <span className={`text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border font-medium ${
+                            cr.status === "angenommen"
+                              ? "text-green-700 bg-green-50 border-green-200"
+                              : cr.status === "abgelehnt"
+                              ? "text-destructive bg-destructive/10 border-destructive/20"
+                              : "text-foreground bg-muted border-border/30"
+                          }`}>
+                            {cr.status === "angenommen" ? "Angenommen" : cr.status === "abgelehnt" ? "Abgelehnt" : "Offen"}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mb-2">{new Date(cr.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "short", year: "numeric" })}</p>
+                        <p className="text-sm text-foreground/80 whitespace-pre-line">{cr.message}</p>
+                      </div>
+                    </div>
+                    {cr.admin_response && (
+                      <div className="rounded-xl bg-muted/30 border border-border/20 px-3 py-2">
+                        <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Ihre Antwort</p>
+                        <p className="text-sm text-foreground">{cr.admin_response}</p>
+                      </div>
+                    )}
+                    {cr.status === "offen" && (
+                      <div className="space-y-2 pt-1">
+                        <textarea
+                          value={crResponseText[cr.id] || ""}
+                          onChange={(e) => setCrResponseText((prev) => ({ ...prev, [cr.id]: e.target.value }))}
+                          placeholder="Optionale Antwort an den Kunden …"
+                          rows={2}
+                          className={`${inputCls} resize-none text-xs`}
+                        />
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => updateChangeRequestStatus(cr.id, "angenommen")}
+                            disabled={crUpdating[cr.id]}
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700 hover:bg-green-100 disabled:opacity-50 transition-colors"
+                          >
+                            <Check className="w-3.5 h-3.5" /> Annehmen
+                          </button>
+                          <button
+                            onClick={() => updateChangeRequestStatus(cr.id, "abgelehnt")}
+                            disabled={crUpdating[cr.id]}
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/20 bg-destructive/5 px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50 transition-colors"
+                          >
+                            <X className="w-3.5 h-3.5" /> Ablehnen
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* RIGHT: Status + Notes + Actions */}

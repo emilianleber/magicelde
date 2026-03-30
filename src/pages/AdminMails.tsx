@@ -498,10 +498,31 @@ const AdminMails = () => {
         </div>
       )}
 
+      {/* Mobile folder tabs (horizontal scroll) */}
+      <div className="md:hidden flex gap-2 overflow-x-auto pb-2 mb-3 -mx-4 px-4" style={{ scrollbarWidth: "none" }}>
+        {FOLDERS.map((f) => (
+          <button
+            key={f.id}
+            onClick={() => { setActiveFolder(f.id); setExpandedId(null); setSelectMode(false); setSelectedIds([]); }}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap shrink-0 transition-all ${
+              activeFolder === f.id ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"
+            }`}
+          >
+            <f.icon className="w-3.5 h-3.5 shrink-0" />
+            <span>{f.label}</span>
+            {f.id === "posteingang" && totalUnreadCount > 0 && (
+              <span className="font-sans text-[10px] font-bold bg-accent text-white rounded-full min-w-[18px] h-4 px-1 flex items-center justify-center">
+                {totalUnreadCount > 99 ? "99+" : totalUnreadCount}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
       {/* Layout: folders sidebar + mail list */}
       <div className="flex gap-6">
-        {/* Folder Sidebar */}
-        <div className="w-44 shrink-0 space-y-1">
+        {/* Folder Sidebar — desktop only */}
+        <div className="hidden md:block w-44 shrink-0 space-y-1">
           {FOLDERS.map((f) => (
             <button
               key={f.id}

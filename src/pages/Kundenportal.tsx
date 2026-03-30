@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,6 +26,8 @@ import {
   CalendarPlus,
   ArrowLeft,
   Eye,
+  Sparkles,
+  Clock,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
@@ -90,10 +92,10 @@ interface PortalMessage {
   read_by_customer: boolean;
 }
 
-type Tab = "dashboard" | "events" | "documents" | "requests" | "nachrichten" | "einstellungen" | "contact";
+type Tab = "dashboard" | "events" | "documents" | "requests" | "nachrichten" | "einstellungen";
 
 const inputCls =
-  "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
+  "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all";
 
 const formatStatusLabel = (status?: string | null) => {
   switch (status) {
@@ -112,15 +114,15 @@ const formatStatusLabel = (status?: string | null) => {
 
 const formatStatusClasses = (status?: string | null) => {
   switch (status) {
-    case "neu": return "text-accent bg-accent/10";
+    case "neu": return "text-accent bg-accent/10 border border-accent/20";
     case "in_bearbeitung":
     case "details_besprechen":
     case "angebot_gesendet":
-    case "warte_auf_kunde": return "text-foreground bg-muted";
+    case "warte_auf_kunde": return "text-foreground bg-muted border border-border/30";
     case "gebucht":
-    case "bestätigt": return "text-green-700 bg-green-100";
-    case "abgelehnt": return "text-destructive bg-destructive/10";
-    default: return "text-muted-foreground bg-muted";
+    case "bestätigt": return "text-green-700 bg-green-100 border border-green-200";
+    case "abgelehnt": return "text-destructive bg-destructive/10 border border-destructive/20";
+    default: return "text-muted-foreground bg-muted border border-border/30";
   }
 };
 
@@ -141,24 +143,22 @@ const formatEventStatusLabel = (status?: string | null) => {
 const formatEventStatusClasses = (status?: string | null) => {
   switch (status) {
     case "in_planung":
-    case "details_offen": return "text-accent bg-accent/10";
+    case "details_offen": return "text-accent bg-accent/10 border border-accent/20";
     case "vertrag_gesendet":
     case "vertrag_bestaetigt":
-    case "rechnung_gesendet": return "text-foreground bg-muted";
+    case "rechnung_gesendet": return "text-foreground bg-muted border border-border/30";
     case "rechnung_bezahlt":
-    case "event_erfolgt": return "text-green-700 bg-green-100";
-    case "storniert": return "text-destructive bg-destructive/10";
-    default: return "text-muted-foreground bg-muted";
+    case "event_erfolgt": return "text-green-700 bg-green-100 border border-green-200";
+    case "storniert": return "text-destructive bg-destructive/10 border border-destructive/20";
+    default: return "text-muted-foreground bg-muted border border-border/30";
   }
 };
 
 const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null) => {
   const steps: { label: string; done: boolean; hint?: string }[] = [];
-
   steps.push({ label: "Anfrage eingegangen", done: !!request, hint: request?.created_at ? new Date(request.created_at).toLocaleDateString("de-DE") : undefined });
   steps.push({ label: "In Bearbeitung", done: ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"].includes(request?.status || "") || !!event });
   steps.push({ label: "Angebot erhalten", done: ["angebot_gesendet", "warte_auf_kunde"].includes(request?.status || "") || !!event });
-
   if (event) {
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
     steps.push({ label: "Details geklärt", done: event.details_status === "erledigt" });
@@ -168,7 +168,6 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
   } else {
     steps.push({ label: "Buchung", done: false });
   }
-
   return steps;
 };
 
@@ -178,10 +177,8 @@ const downloadICS = (event: PortalEvent) => {
     const d = new Date(dateStr);
     return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
   };
-
   const dateStart = event.event_date ? formatDate(event.event_date) : formatDate(new Date().toISOString());
   const dateEnd = dateStart;
-
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
@@ -197,10 +194,7 @@ const downloadICS = (event: PortalEvent) => {
     `URL:https://www.magicel.de`,
     "END:VEVENT",
     "END:VCALENDAR",
-  ]
-    .filter(Boolean)
-    .join("\r\n");
-
+  ].filter(Boolean).join("\r\n");
   const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -208,6 +202,23 @@ const downloadICS = (event: PortalEvent) => {
   a.download = `${event.title.replace(/\s+/g, "_")}.ics`;
   a.click();
   URL.revokeObjectURL(url);
+};
+
+const getCountdownDays = (dateStr: string | null): number | null => {
+  if (!dateStr) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const target = new Date(dateStr);
+  target.setHours(0, 0, 0, 0);
+  return Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+};
+
+const getDocTypeIcon = (type: string) => {
+  const t = type?.toLowerCase() || "";
+  if (t.includes("pdf") || t.includes("vertrag") || t.includes("rechnung") || t.includes("angebot")) return "📄";
+  if (t.includes("bild") || t.includes("foto") || t.includes("image")) return "🖼️";
+  if (t.includes("video")) return "🎬";
+  return "📎";
 };
 
 const Kundenportal = () => {
@@ -222,7 +233,6 @@ const Kundenportal = () => {
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
   const [loading, setLoading] = useState(true);
 
-  // Settings form state
   const [settingsDraft, setSettingsDraft] = useState({
     name: "", company: "", phone: "",
     rechnungs_strasse: "", rechnungs_plz: "", rechnungs_ort: "", rechnungs_land: "Deutschland",
@@ -258,7 +268,6 @@ const Kundenportal = () => {
     const fetchData = async () => {
       setLoading(true);
 
-      // Admin preview mode: load customer by ID directly
       if (previewCustomerId) {
         const { data: adminEntry } = await supabase.from("portal_admins").select("id").eq("email", user.email).maybeSingle();
         if (adminEntry) {
@@ -277,7 +286,10 @@ const Kundenportal = () => {
             if (msgsRes.data) setMessages(msgsRes.data);
             if (imapRes.data) setImapMails(imapRes.data);
             const { data: requestsData } = await supabase.from("portal_requests").select("*").eq("email", cust.email).order("created_at", { ascending: false });
-            if (requestsData) { setRequests(requestsData); if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id); }
+            if (requestsData) {
+              setRequests(requestsData);
+              if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id);
+            }
           }
           setLoading(false);
           return;
@@ -324,7 +336,6 @@ const Kundenportal = () => {
     fetchData();
   }, [user, previewCustomerId]);
 
-  // Sync settings draft when customer loads
   useEffect(() => {
     if (customer) {
       setSettingsDraft({
@@ -339,7 +350,6 @@ const Kundenportal = () => {
     }
   }, [customer]);
 
-  // Mark messages as read when nachrichten tab opened
   useEffect(() => {
     if (activeTab === "nachrichten" && customer?.id) {
       const unread = messages.filter((m) => !m.read_by_customer).map((m) => m.id);
@@ -392,451 +402,647 @@ const Kundenportal = () => {
   if (!user || loading) {
     return (
       <PageLayout>
-        <section className="min-h-screen pt-28 pb-16 flex items-center justify-center">
-          <div className="animate-pulse text-muted-foreground font-sans">Wird geladen…</div>
+        <section className="min-h-screen flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-10 h-10 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
+            <p className="font-sans text-sm text-muted-foreground">Wird geladen…</p>
+          </div>
         </section>
       </PageLayout>
     );
   }
 
   const displayName = customer?.name || user.email?.split("@")[0] || "Kunde";
+  const firstName = displayName.split(" ")[0];
   const kundennummer = customer?.kundennummer || "";
   const currentRequest = requests[0] || null;
   const currentEvent = events.find((e) => e.request_id === currentRequest?.id) || events[0] || null;
+  const nextEvent = events.find((e) => {
+    const d = getCountdownDays(e.event_date);
+    return d !== null && d >= 0;
+  }) || null;
+  const countdown = nextEvent ? getCountdownDays(nextEvent.event_date) : null;
   const timelineSteps = buildTimeline(currentRequest, currentEvent);
   const currentStepIndex = timelineSteps.findIndex((s) => !s.done);
   const progress = timelineSteps.length > 0 ? Math.round((timelineSteps.filter((s) => s.done).length / timelineSteps.length) * 100) : 0;
   const unreadCount = messages.filter((m) => !m.read_by_customer).length;
 
-  const tabs: { id: Tab; label: string; icon: any; badge?: number }[] = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "events", label: "Events", icon: Calendar, badge: events.length || undefined },
-    { id: "documents", label: "Dokumente", icon: FolderOpen, badge: documents.length || undefined },
-    { id: "requests", label: "Anfragen", icon: MessageCircle },
+  const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
+    { id: "dashboard", label: "Start", icon: LayoutDashboard },
+    { id: "events", label: "Events", icon: Calendar },
+    { id: "documents", label: "Dokumente", icon: FolderOpen },
+    { id: "requests", label: "Anfragen", icon: Theater },
     { id: "nachrichten", label: "Nachrichten", icon: Mail, badge: unreadCount || undefined },
     { id: "einstellungen", label: "Einstellungen", icon: Settings },
-    { id: "contact", label: "Kontakt", icon: Phone },
   ];
+
+  const adminBannerHeight = isAdminPreview ? 40 : 0;
+  const mobileTopBarHeight = 56;
+  const desktopTopBarHeight = 64;
 
   return (
     <PageLayout>
       {/* Admin preview banner */}
       {isAdminPreview && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 text-amber-950 px-4 py-2 flex items-center justify-between gap-4 shadow-md">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 text-amber-950 px-4 py-2.5 flex items-center justify-between gap-4 shadow-md" style={{ height: 40 }}>
           <div className="flex items-center gap-2 font-sans text-sm font-medium">
             <Eye className="w-4 h-4 shrink-0" />
-            Admin-Vorschau: Kundensicht von <strong>{customer?.name || customer?.email || "Kunde"}</strong>
+            Admin-Vorschau: <strong>{customer?.name || customer?.email || "Kunde"}</strong>
           </div>
           <button
             onClick={() => navigate(`/admin/customers/${previewCustomerId}`)}
             className="flex items-center gap-1.5 font-sans text-sm font-semibold hover:opacity-80 transition-opacity shrink-0"
           >
-            <ArrowLeft className="w-4 h-4" /> Zurück zur Adminansicht
+            <ArrowLeft className="w-4 h-4" /> Zurück
           </button>
         </div>
       )}
-      <section className={`min-h-screen pb-16 ${isAdminPreview ? "pt-36" : "pt-28"}`}>
-        <div className="container px-6">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
-            <div>
-              <p className="font-sans text-xs text-muted-foreground uppercase tracking-widest mb-1">Kundenportal</p>
-              <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                Willkommen, {displayName}
-              </h1>
-              {kundennummer && (
-                <p className="font-sans text-sm text-muted-foreground mt-1">Kundennummer: {kundennummer}</p>
-              )}
+
+      {/* ── Desktop top navigation ── */}
+      <div
+        className="hidden md:flex fixed left-0 right-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border/20"
+        style={{ top: adminBannerHeight }}
+      >
+        <div className="container flex items-center justify-between h-16 px-6">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-accent" />
             </div>
-            {!isAdminPreview && (
-              <button onClick={logout} className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">
-                <LogOut className="w-4 h-4" /> Abmelden
-              </button>
+            <div>
+              <p className="font-sans text-[10px] text-muted-foreground uppercase tracking-widest leading-none">Kundenportal</p>
+              <p className="font-display text-sm font-bold text-foreground leading-tight">{displayName}</p>
+            </div>
+            {kundennummer && (
+              <span className="font-sans text-xs text-muted-foreground border border-border/30 rounded-full px-2.5 py-0.5 ml-1">#{kundennummer}</span>
             )}
           </div>
 
-          {/* Tabs */}
-          <div className="flex gap-1 bg-muted/50 rounded-2xl p-1 mb-10 overflow-x-auto">
+          <nav className="flex items-center gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
-                  activeTab === tab.id ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                  activeTab === tab.id
+                    ? "bg-foreground text-background"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
-                <span className="hidden sm:inline">{tab.label}</span>
+                <span>{tab.label}</span>
                 {tab.badge !== undefined && tab.badge > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-accent text-[10px] font-bold text-white flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-accent text-[9px] font-bold text-white flex items-center justify-center px-1">
                     {tab.badge > 9 ? "9+" : tab.badge}
                   </span>
                 )}
               </button>
             ))}
+          </nav>
+
+          {!isAdminPreview && (
+            <button
+              onClick={logout}
+              className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Abmelden
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ── Mobile top bar ── */}
+      <div
+        className="md:hidden fixed left-0 right-0 z-40 bg-background/90 backdrop-blur-xl border-b border-border/20"
+        style={{ top: adminBannerHeight, paddingTop: "env(safe-area-inset-top)" }}
+      >
+        <div className="flex items-center justify-between px-5 h-14">
+          <div>
+            <p className="font-sans text-[10px] text-muted-foreground uppercase tracking-widest leading-none">Kundenportal</p>
+            <p className="font-display text-base font-bold text-foreground leading-tight">{firstName}</p>
           </div>
+          <div className="flex items-center gap-2">
+            {kundennummer && (
+              <span className="font-sans text-[10px] text-muted-foreground border border-border/30 rounded-full px-2 py-0.5">#{kundennummer}</span>
+            )}
+            {!isAdminPreview && (
+              <button
+                onClick={logout}
+                className="w-9 h-9 rounded-full bg-muted/40 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
 
-          {/* ── DASHBOARD ── */}
-          {activeTab === "dashboard" && (
-            <div className="space-y-8">
-              {/* Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {[
-                  { label: "Events", value: events.length, icon: Calendar, onClick: () => setActiveTab("events") },
-                  { label: "Dokumente", value: documents.length, icon: FileText, onClick: () => setActiveTab("documents") },
-                  { label: "Anfragen", value: requests.length, icon: MessageCircle, onClick: () => setActiveTab("requests") },
-                  { label: "Nachrichten", value: messages.length, icon: Mail, badge: unreadCount, onClick: () => setActiveTab("nachrichten") },
-                ].map((stat) => (
-                  <button
-                    key={stat.label}
-                    onClick={stat.onClick}
-                    className="p-5 rounded-2xl bg-muted/30 border border-border/30 hover:border-accent/20 transition-colors text-left relative"
-                  >
-                    <stat.icon className="w-5 h-5 text-accent mb-3" />
-                    <p className="font-display text-2xl font-bold text-foreground">{stat.value}</p>
-                    <p className="font-sans text-xs text-muted-foreground mt-1">{stat.label}</p>
-                    {stat.badge !== undefined && stat.badge > 0 && (
-                      <span className="absolute top-3 right-3 w-5 h-5 rounded-full bg-accent text-[10px] font-bold text-white flex items-center justify-center">
-                        {stat.badge}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
+      {/* ── Main content ── */}
+      <div
+        className="container px-4 sm:px-6 max-w-4xl mx-auto"
+        style={{
+          paddingTop: `calc(${adminBannerHeight}px + ${mobileTopBarHeight}px + 1.25rem)`,
+          paddingBottom: "calc(72px + env(safe-area-inset-bottom) + 1rem)",
+        }}
+      >
+        {/* Desktop override via inline style override is handled server-side; use a wrapper */}
+        <style>{`
+          @media (min-width: 768px) {
+            .portal-inner {
+              padding-top: calc(${adminBannerHeight}px + ${desktopTopBarHeight}px + 2rem) !important;
+              padding-bottom: 3rem !important;
+            }
+          }
+        `}</style>
+        <div className="portal-inner">
 
-              {/* No request CTA */}
-              {requests.length === 0 && (
-                <div className="p-8 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                  <Theater className="w-10 h-10 text-muted-foreground/30 mx-auto mb-4" />
-                  <h2 className="font-display text-lg font-bold text-foreground mb-2">Noch keine Anfrage</h2>
-                  <p className="font-sans text-sm text-muted-foreground mb-6">
-                    Stellen Sie jetzt Ihre erste Anfrage für eine unvergessliche Zaubershow.
-                  </p>
-                  <button
-                    onClick={() => setActiveTab("requests")}
-                    className="btn-primary inline-flex items-center gap-2"
-                  >
-                    <CalendarPlus className="w-4 h-4" />
-                    Jetzt anfragen
-                  </button>
-                </div>
-              )}
+        {/* ── DASHBOARD ── */}
+        {activeTab === "dashboard" && (
+          <div className="space-y-5">
+            {/* Welcome hero */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-accent/15 via-accent/8 to-transparent border border-accent/20 p-6 sm:p-8">
+              <div className="relative z-10">
+                <p className="font-sans text-xs text-accent/80 uppercase tracking-widest mb-2">Willkommen zurück</p>
+                <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-1">
+                  Guten Tag, {firstName}
+                </h1>
+                {customer?.company && (
+                  <p className="font-sans text-sm text-muted-foreground">{customer.company}</p>
+                )}
 
-              {/* Timeline */}
-              {requests.length > 0 && timelineSteps.length > 0 && (
-                <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
-                  <div className="flex items-center justify-between mb-2">
-                    <h2 className="font-display text-lg font-bold text-foreground">Status Ihrer Anfrage</h2>
-                    <span className="font-sans text-sm text-accent font-semibold">{progress}%</span>
-                  </div>
-
-                  {/* Progress bar */}
-                  <div className="w-full h-1.5 bg-border/30 rounded-full mb-8 overflow-hidden">
-                    <div
-                      className="h-full bg-accent rounded-full transition-all duration-700"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-
-                  <div className="relative">
-                    {/* Vertical line */}
-                    <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-border/30" />
-
-                    <div className="space-y-1">
-                      {timelineSteps.map((step, i) => {
-                        const isCurrent = i === currentStepIndex;
-                        return (
-                          <div key={i} className="relative flex items-start gap-4 py-2">
-                            <div className={`relative z-10 flex items-center justify-center w-8 h-8 rounded-full border-2 shrink-0 transition-all ${
-                              step.done
-                                ? "bg-accent border-accent"
-                                : isCurrent
-                                ? "bg-background border-accent shadow-[0_0_0_4px_rgba(196,164,94,0.15)]"
-                                : "bg-background border-border/30"
-                            }`}>
-                              {step.done ? (
-                                <CheckCircle2 className="w-4 h-4 text-white" />
-                              ) : isCurrent ? (
-                                <Circle className="w-3.5 h-3.5 text-accent fill-accent/30" />
-                              ) : (
-                                <Circle className="w-3.5 h-3.5 text-border/40" />
-                              )}
-                            </div>
-
-                            <div className="pt-1 flex-1">
-                              <p className={`font-sans text-sm ${
-                                step.done ? "text-foreground font-medium" : isCurrent ? "text-foreground font-semibold" : "text-muted-foreground"
-                              }`}>
-                                {step.label}
-                                {isCurrent && (
-                                  <span className="ml-2 font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-accent/10 text-accent">
-                                    Aktuell
-                                  </span>
-                                )}
-                              </p>
-                              {step.hint && (
-                                <p className="font-sans text-xs text-muted-foreground mt-0.5">{step.hint}</p>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
+                {nextEvent && countdown !== null && countdown >= 0 && (
+                  <div className="mt-5 inline-flex items-center gap-3 bg-background/60 backdrop-blur border border-border/30 rounded-2xl px-4 py-3">
+                    <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+                      <Clock className="w-4 h-4 text-accent" />
                     </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Current Request Preview */}
-              {currentRequest && (
-                <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
-                  <h2 className="font-display text-lg font-bold text-foreground mb-4">Aktuelle Anfrage</h2>
-                  <div className="rounded-2xl bg-background/60 border border-border/30 p-5">
-                    <div className="flex items-center justify-between gap-4 flex-wrap">
-                      <div>
-                        <h3 className="font-display text-lg font-bold text-foreground">{currentRequest.anlass || "Anfrage"}</h3>
-                        <p className="font-sans text-sm text-muted-foreground mt-1">
-                          Eingegangen am {new Date(currentRequest.created_at).toLocaleDateString("de-DE")}
-                        </p>
-                      </div>
-                      <span className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatStatusClasses(currentRequest.status)}`}>
-                        {formatStatusLabel(currentRequest.status)}
-                      </span>
-                    </div>
-                    {currentRequest.datum && (
-                      <p className="font-sans text-sm text-muted-foreground mt-3 flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-accent" />
-                        Gewünschtes Datum: {new Date(currentRequest.datum).toLocaleDateString("de-DE")}
+                    <div>
+                      <p className="font-sans text-[11px] text-muted-foreground uppercase tracking-widest">Nächstes Event</p>
+                      <p className="font-sans text-sm font-semibold text-foreground">
+                        {countdown === 0 ? "Heute!" : countdown === 1 ? "Morgen" : `In ${countdown} Tagen`}
+                        {" · "}{nextEvent.title}
                       </p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Current Event Preview */}
-              {currentEvent && (
-                <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
-                  <h2 className="font-display text-lg font-bold text-foreground mb-4">Aktuelles Event</h2>
-                  <div className="rounded-2xl bg-background/60 border border-border/30 p-5">
-                    <div className="flex items-center justify-between gap-4 flex-wrap mb-4">
-                      <div>
-                        <h3 className="font-display text-lg font-bold text-foreground">{currentEvent.title}</h3>
-                        <p className="font-sans text-sm text-muted-foreground mt-1">
-                          {currentEvent.event_date ? new Date(currentEvent.event_date).toLocaleDateString("de-DE") : "Datum folgt"}
-                          {currentEvent.location ? ` · ${currentEvent.location}` : ""}
-                        </p>
-                      </div>
-                      <span className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(currentEvent.status)}`}>
-                        {formatEventStatusLabel(currentEvent.status)}
-                      </span>
                     </div>
-                    <div className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-muted-foreground">
-                      {currentEvent.format && <span className="flex items-center gap-2"><Theater className="w-4 h-4 text-accent" />{currentEvent.format}</span>}
-                      {currentEvent.guests && <span className="flex items-center gap-2"><Users className="w-4 h-4 text-accent" />{currentEvent.guests} Gäste</span>}
-                    </div>
-                    {currentEvent.event_date && (
-                      <button
-                        onClick={() => downloadICS(currentEvent)}
-                        className="mt-4 inline-flex items-center gap-2 font-sans text-xs text-accent hover:text-accent/80 border border-accent/20 rounded-xl px-3 py-2 transition-colors hover:bg-accent/5"
-                      >
-                        <CalendarPlus className="w-4 h-4" /> Zum Kalender hinzufügen
-                      </button>
-                    )}
                   </div>
-                </div>
-              )}
-
-              {events.length === 0 && requests.length === 0 && (
-                <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                  <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-                  <h3 className="font-display text-lg font-bold text-foreground mb-2">Noch keine Inhalte vorhanden</h3>
-                  <p className="font-sans text-sm text-muted-foreground mb-6">
-                    Nach Ihrer Anfrage erscheinen hier Anfragen, Events und Dokumente.
-                  </p>
-                  <Link to="/buchung" className="btn-primary inline-flex group">
-                    Jetzt anfragen
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              )}
+                )}
+              </div>
+              <div className="absolute -right-10 -top-10 w-56 h-56 rounded-full bg-accent/6 blur-3xl pointer-events-none" />
+              <div className="absolute -left-6 -bottom-6 w-32 h-32 rounded-full bg-accent/4 blur-2xl pointer-events-none" />
             </div>
-          )}
 
-          {/* ── EVENTS ── */}
-          {activeTab === "events" && (
-            <div className="space-y-4">
-              {events.length === 0 ? (
-                <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                  <p className="font-sans text-sm text-muted-foreground">Noch keine Events vorhanden.</p>
-                </div>
-              ) : (
-                events.map((event) => (
-                  <div key={event.id} className="p-6 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-colors">
-                    <div className="flex flex-col sm:flex-row justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2 flex-wrap">
-                          <h3 className="font-display text-lg font-bold text-foreground">{event.title}</h3>
-                          <span className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(event.status)}`}>
-                            {formatEventStatusLabel(event.status)}
-                          </span>
-                        </div>
-                        <div className="flex flex-wrap gap-x-6 gap-y-1 font-sans text-sm text-muted-foreground">
-                          {event.event_date && <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />{new Date(event.event_date).toLocaleDateString("de-DE")}</span>}
-                          {event.location && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{event.location}</span>}
-                          {event.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5" />{event.format}</span>}
-                          {event.guests && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5" />{event.guests} Gäste</span>}
-                        </div>
-                      </div>
-                      {event.event_date && (
-                        <button
-                          onClick={() => downloadICS(event)}
-                          className="shrink-0 self-start inline-flex items-center gap-2 font-sans text-xs text-accent hover:text-accent/80 border border-accent/20 rounded-xl px-3 py-2 transition-colors hover:bg-accent/5"
-                        >
-                          <CalendarPlus className="w-4 h-4" /> .ics
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))
-              )}
+            {/* Stats grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { label: "Events", value: events.length, icon: Calendar, tab: "events" as Tab },
+                { label: "Dokumente", value: documents.length, icon: FileText, tab: "documents" as Tab },
+                { label: "Anfragen", value: requests.length, icon: Theater, tab: "requests" as Tab },
+                { label: "Nachrichten", value: messages.length, icon: Mail, tab: "nachrichten" as Tab, badge: unreadCount },
+              ].map((stat) => (
+                <button
+                  key={stat.label}
+                  onClick={() => setActiveTab(stat.tab)}
+                  className="group relative p-4 sm:p-5 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/25 hover:bg-muted/35 transition-all text-left active:scale-95 min-h-[100px]"
+                >
+                  <stat.icon className="w-5 h-5 text-accent mb-3" />
+                  <p className="font-display text-2xl font-bold text-foreground">{stat.value}</p>
+                  <p className="font-sans text-xs text-muted-foreground mt-0.5">{stat.label}</p>
+                  {"badge" in stat && stat.badge !== undefined && stat.badge > 0 && (
+                    <span className="absolute top-3 right-3 min-w-[20px] h-5 rounded-full bg-accent text-[9px] font-bold text-white flex items-center justify-center px-1">
+                      {stat.badge}
+                    </span>
+                  )}
+                  <ArrowRight className="absolute bottom-4 right-4 w-3.5 h-3.5 text-muted-foreground/20 group-hover:text-accent/40 group-hover:translate-x-0.5 transition-all" />
+                </button>
+              ))}
             </div>
-          )}
 
-          {/* ── DOKUMENTE ── */}
-          {activeTab === "documents" && (
-            <div className="space-y-3">
-              {documents.length === 0 ? (
-                <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                  <p className="font-sans text-sm text-muted-foreground">Noch keine Dokumente vorhanden.</p>
+            {/* Empty state CTA */}
+            {requests.length === 0 && (
+              <div className="p-8 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                <div className="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+                  <Sparkles className="w-7 h-7 text-accent" />
                 </div>
-              ) : (
-                documents.map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between p-5 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <FileText className="w-5 h-5 text-accent" />
-                      <div>
-                        <p className="font-sans text-sm font-medium text-foreground">{doc.name}</p>
-                        <p className="font-sans text-xs text-muted-foreground">
-                          {doc.type} · {new Date(doc.created_at).toLocaleDateString("de-DE")}
-                        </p>
-                      </div>
-                    </div>
-                    {doc.file_url && (
-                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 font-sans text-xs text-accent hover:text-accent/80 transition-colors">
-                        <Download className="w-4 h-4" /> Download
-                      </a>
-                    )}
-                  </div>
-                ))
-              )}
-            </div>
-          )}
+                <h2 className="font-display text-lg font-bold text-foreground mb-2">Starten Sie jetzt</h2>
+                <p className="font-sans text-sm text-muted-foreground mb-6 max-w-xs mx-auto">
+                  Stellen Sie Ihre erste Anfrage für eine unvergessliche Zaubershow.
+                </p>
+                <Link to="/buchung" className="btn-primary inline-flex items-center gap-2 group">
+                  <CalendarPlus className="w-4 h-4" />
+                  Jetzt anfragen
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            )}
 
-          {/* ── ANFRAGEN ── */}
-          {activeTab === "requests" && (
-            <div className="space-y-4">
-              {requests.length === 0 ? (
-                <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                  <p className="font-sans text-sm text-muted-foreground">Noch keine Anfragen vorhanden.</p>
+            {/* Status timeline */}
+            {requests.length > 0 && timelineSteps.length > 0 && (
+              <div className="p-6 sm:p-8 rounded-3xl bg-muted/20 border border-border/30">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="font-display text-base sm:text-lg font-bold text-foreground">Status Ihrer Anfrage</h2>
+                  <span className="font-sans text-sm text-accent font-semibold">{progress}%</span>
                 </div>
-              ) : (
-                requests.map((request) => {
-                  const isOpen = expandedRequestId === request.id;
-                  return (
-                    <div key={request.id} className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden">
-                      <button
-                        type="button"
-                        onClick={() => setExpandedRequestId(isOpen ? null : request.id)}
-                        className="w-full text-left p-6 hover:bg-muted/20 transition-colors"
-                      >
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <div className="flex items-center gap-3 flex-wrap mb-2">
-                              <h3 className="font-display text-lg font-bold text-foreground">{request.anlass || "Anfrage"}</h3>
-                              <span className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatStatusClasses(request.status)}`}>
-                                {formatStatusLabel(request.status)}
-                              </span>
-                              {request.event_id && (
-                                <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-green-700 bg-green-100">Als Event übernommen</span>
-                              )}
-                            </div>
-                            <p className="font-sans text-xs text-muted-foreground">
-                              Eingegangen am {new Date(request.created_at).toLocaleDateString("de-DE")}
-                            </p>
-                          </div>
-                          <div className="text-muted-foreground">
-                            {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                          </div>
-                        </div>
-                      </button>
-
-                      {isOpen && (
-                        <div className="px-6 pb-6 border-t border-border/20">
-                          <div className="grid sm:grid-cols-2 gap-4 mt-5">
-                            {[
-                              { label: "Datum", icon: Calendar, value: request.datum ? new Date(request.datum).toLocaleDateString("de-DE") : "Nicht angegeben" },
-                              { label: "Ort", icon: MapPin, value: request.ort || "Nicht angegeben" },
-                              { label: "Gäste", icon: Users, value: request.gaeste != null ? String(request.gaeste) : "Nicht angegeben" },
-                              { label: "Format", icon: Theater, value: request.format || "Nicht angegeben" },
-                              { label: "Telefon", icon: Phone, value: request.phone || "Nicht angegeben" },
-                              { label: "E-Mail", icon: Mail, value: request.email },
-                            ].map((field) => (
-                              <div key={field.label} className="rounded-xl bg-background/60 border border-border/20 p-4">
-                                <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">{field.label}</p>
-                                <p className="font-sans text-sm text-foreground flex items-center gap-2">
-                                  <field.icon className="w-4 h-4 text-accent shrink-0" />{field.value}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                          {request.nachricht && (
-                            <div className="mt-4 rounded-xl bg-background/60 border border-border/20 p-4">
-                              <p className="font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Nachricht</p>
-                              <p className="font-sans text-sm text-foreground leading-relaxed whitespace-pre-line">{request.nachricht}</p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          )}
-
-          {/* ── NACHRICHTEN ── */}
-          {activeTab === "nachrichten" && (() => {
-            const adminMsgs = messages.map((m) => ({ ...m, _dir: "from_admin" as const, _date: m.created_at }));
-            const sentByCustomer = imapMails.map((m) => ({ ...m, _dir: "from_customer" as const, _date: m.received_at, read_by_customer: true }));
-            const allMails = [...adminMsgs, ...sentByCustomer].sort((a, b) => new Date(b._date).getTime() - new Date(a._date).getTime());
-            return (
-              <div className="space-y-4">
-                {allMails.length === 0 ? (
-                  <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
-                    <Mail className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                    <p className="font-sans text-sm text-muted-foreground">Noch keine Nachrichten vorhanden.</p>
-                  </div>
-                ) : (
-                  allMails.map((msg) => {
-                    const isFromAdmin = msg._dir === "from_admin";
-                    return (
-                      <div key={msg.id} className={`rounded-2xl border transition-colors ${!isFromAdmin ? "bg-muted/20 border-border/30" : msg.read_by_customer ? "bg-muted/20 border-border/30" : "bg-accent/5 border-accent/20"}`}>
-                        <div className="p-5">
-                          <div className="flex items-start justify-between gap-3 mb-4">
-                            <div>
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`font-sans text-[10px] uppercase tracking-widest font-semibold ${isFromAdmin ? "text-accent" : "text-blue-400"}`}>
-                                  {isFromAdmin ? "Von Emilian Leber" : "Von Ihnen"}
-                                </span>
-                              </div>
-                              <p className="font-sans text-sm font-semibold text-foreground">{msg.subject || "(Kein Betreff)"}</p>
-                              <p className="font-sans text-xs text-muted-foreground mt-0.5">
-                                {new Date(msg._date).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                              </p>
-                            </div>
-                            {isFromAdmin && !msg.read_by_customer && (
-                              <span className="shrink-0 font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full bg-accent/10 text-accent">Neu</span>
+                <div className="w-full h-1.5 bg-border/20 rounded-full mb-7 overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-accent/70 to-accent rounded-full transition-all duration-700"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <div className="relative">
+                  <div className="absolute left-[15px] top-4 bottom-4 w-px bg-border/20" />
+                  <div className="space-y-1">
+                    {timelineSteps.map((step, i) => {
+                      const isCurrent = i === currentStepIndex;
+                      return (
+                        <div key={i} className="relative flex items-start gap-4 py-2">
+                          <div className={`relative z-10 flex items-center justify-center w-8 h-8 rounded-full border-2 shrink-0 transition-all ${
+                            step.done
+                              ? "bg-accent border-accent"
+                              : isCurrent
+                              ? "bg-background border-accent shadow-[0_0_0_4px_hsl(var(--accent)/0.12)]"
+                              : "bg-background border-border/30"
+                          }`}>
+                            {step.done ? (
+                              <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                            ) : isCurrent ? (
+                              <Circle className="w-3 h-3 text-accent fill-accent/30" />
+                            ) : (
+                              <Circle className="w-3 h-3 text-border/40" />
                             )}
                           </div>
+                          <div className="pt-1 flex-1 min-w-0">
+                            <p className={`font-sans text-sm ${
+                              step.done ? "text-foreground font-medium" : isCurrent ? "text-foreground font-semibold" : "text-muted-foreground"
+                            }`}>
+                              {step.label}
+                              {isCurrent && (
+                                <span className="ml-2 font-sans text-[10px] uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-accent/10 text-accent">Aktuell</span>
+                              )}
+                            </p>
+                            {step.hint && <p className="font-sans text-xs text-muted-foreground mt-0.5">{step.hint}</p>}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Current request card */}
+            {currentRequest && (
+              <div className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden">
+                <div className="px-5 py-4 border-b border-border/20 flex items-center justify-between">
+                  <h2 className="font-display text-sm font-bold text-foreground">Aktuelle Anfrage</h2>
+                  <button onClick={() => setActiveTab("requests")} className="font-sans text-xs text-accent hover:text-accent/70 transition-colors flex items-center gap-1">
+                    Alle <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+                <div className="p-5">
+                  <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <div>
+                      <h3 className="font-display text-base font-bold text-foreground">{currentRequest.anlass || "Anfrage"}</h3>
+                      <p className="font-sans text-xs text-muted-foreground mt-1 flex items-center gap-1.5">
+                        <Clock className="w-3 h-3" />{new Date(currentRequest.created_at).toLocaleDateString("de-DE")}
+                      </p>
+                    </div>
+                    <span className={`font-sans text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full ${formatStatusClasses(currentRequest.status)}`}>
+                      {formatStatusLabel(currentRequest.status)}
+                    </span>
+                  </div>
+                  {currentRequest.datum && (
+                    <p className="font-sans text-sm text-muted-foreground mt-3 flex items-center gap-2">
+                      <Calendar className="w-3.5 h-3.5 text-accent" />
+                      Gewünschtes Datum: {new Date(currentRequest.datum).toLocaleDateString("de-DE")}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Current event card */}
+            {currentEvent && (
+              <div className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden">
+                <div className="px-5 py-4 border-b border-border/20 flex items-center justify-between">
+                  <h2 className="font-display text-sm font-bold text-foreground">Aktuelles Event</h2>
+                  <button onClick={() => setActiveTab("events")} className="font-sans text-xs text-accent hover:text-accent/70 transition-colors flex items-center gap-1">
+                    Alle <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+                <div className="p-5">
+                  <div className="flex items-start justify-between gap-3 flex-wrap mb-3">
+                    <div>
+                      <h3 className="font-display text-base font-bold text-foreground">{currentEvent.title}</h3>
+                      <p className="font-sans text-xs text-muted-foreground mt-1">
+                        {currentEvent.event_date ? new Date(currentEvent.event_date).toLocaleDateString("de-DE") : "Datum folgt"}
+                        {currentEvent.location ? ` · ${currentEvent.location}` : ""}
+                      </p>
+                    </div>
+                    <span className={`font-sans text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full ${formatEventStatusClasses(currentEvent.status)}`}>
+                      {formatEventStatusLabel(currentEvent.status)}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-x-5 gap-y-2 font-sans text-sm text-muted-foreground mb-4">
+                    {currentEvent.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{currentEvent.format}</span>}
+                    {currentEvent.guests && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-accent" />{currentEvent.guests} Gäste</span>}
+                  </div>
+                  {currentEvent.event_date && (
+                    <button
+                      onClick={() => downloadICS(currentEvent)}
+                      className="inline-flex items-center gap-2 font-sans text-xs text-accent border border-accent/20 rounded-xl px-3 py-2 transition-all hover:bg-accent/5 active:scale-95"
+                    >
+                      <CalendarPlus className="w-3.5 h-3.5" /> Zum Kalender hinzufügen
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Contact strip */}
+            <div className="rounded-2xl border border-border/30 bg-muted/10 p-5 flex items-center gap-4">
+              <div className="w-11 h-11 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                <User className="w-5 h-5 text-accent" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-sans text-sm font-semibold text-foreground">Emilian Leber</p>
+                <p className="font-sans text-xs text-muted-foreground">Ihr persönlicher Ansprechpartner</p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <a href="mailto:el@magicel.de" className="w-10 h-10 rounded-xl bg-muted/40 flex items-center justify-center text-muted-foreground hover:text-accent hover:bg-accent/10 transition-all active:scale-95">
+                  <Mail className="w-4 h-4" />
+                </a>
+                <a href="tel:+4915563744696" className="w-10 h-10 rounded-xl bg-muted/40 flex items-center justify-center text-muted-foreground hover:text-accent hover:bg-accent/10 transition-all active:scale-95">
+                  <Phone className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── EVENTS ── */}
+        {activeTab === "events" && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="font-display text-xl font-bold text-foreground">Events</h1>
+              {events.length > 0 && (
+                <span className="font-sans text-xs text-muted-foreground border border-border/30 rounded-full px-2.5 py-1">
+                  {events.length} {events.length === 1 ? "Event" : "Events"}
+                </span>
+              )}
+            </div>
+
+            {events.length === 0 ? (
+              <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                <div className="w-14 h-14 rounded-full bg-muted/40 flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="w-7 h-7 text-muted-foreground/30" />
+                </div>
+                <p className="font-display text-base font-bold text-foreground mb-1">Noch keine Events</p>
+                <p className="font-sans text-sm text-muted-foreground">Ihre gebuchten Events erscheinen hier.</p>
+              </div>
+            ) : (
+              events.map((event) => {
+                const days = getCountdownDays(event.event_date);
+                return (
+                  <div key={event.id} className="rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-all overflow-hidden">
+                    <div className="p-5 pb-4">
+                      <div className="flex items-start justify-between gap-3 flex-wrap mb-3">
+                        <h3 className="font-display text-base font-bold text-foreground">{event.title}</h3>
+                        <span className={`font-sans text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full shrink-0 ${formatEventStatusClasses(event.status)}`}>
+                          {formatEventStatusLabel(event.status)}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-x-5 gap-y-2 font-sans text-sm text-muted-foreground">
+                        {event.event_date && (
+                          <span className="flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5 text-accent" />
+                            {new Date(event.event_date).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric" })}
+                          </span>
+                        )}
+                        {event.location && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-accent" />{event.location}</span>}
+                        {event.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{event.format}</span>}
+                        {event.guests && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-accent" />{event.guests} Gäste</span>}
+                      </div>
+
+                      {days !== null && days >= 0 && (
+                        <div className="inline-flex items-center gap-1.5 bg-accent/10 border border-accent/20 rounded-full px-3 py-1 mt-3">
+                          <Clock className="w-3 h-3 text-accent" />
+                          <span className="font-sans text-xs text-accent font-semibold">
+                            {days === 0 ? "Heute!" : days === 1 ? "Morgen" : `In ${days} Tagen`}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {event.event_date && (
+                      <div className="px-5 pb-5 pt-1">
+                        <button
+                          onClick={() => downloadICS(event)}
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 font-sans text-sm text-accent border border-accent/20 rounded-xl px-4 py-2.5 transition-all hover:bg-accent/5 active:scale-95 min-h-[44px]"
+                        >
+                          <CalendarPlus className="w-4 h-4" />
+                          Zum Kalender hinzufügen (.ics)
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
+
+        {/* ── DOKUMENTE ── */}
+        {activeTab === "documents" && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="font-display text-xl font-bold text-foreground">Dokumente</h1>
+              {documents.length > 0 && (
+                <span className="font-sans text-xs text-muted-foreground border border-border/30 rounded-full px-2.5 py-1">
+                  {documents.length} {documents.length === 1 ? "Datei" : "Dateien"}
+                </span>
+              )}
+            </div>
+
+            {documents.length === 0 ? (
+              <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                <div className="w-14 h-14 rounded-full bg-muted/40 flex items-center justify-center mx-auto mb-4">
+                  <FolderOpen className="w-7 h-7 text-muted-foreground/30" />
+                </div>
+                <p className="font-display text-base font-bold text-foreground mb-1">Noch keine Dokumente</p>
+                <p className="font-sans text-sm text-muted-foreground">Verträge, Rechnungen und Angebote erscheinen hier.</p>
+              </div>
+            ) : (
+              documents.map((doc) => (
+                <div key={doc.id} className="flex items-center gap-4 p-4 sm:p-5 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/20 transition-all">
+                  <div className="w-11 h-11 rounded-xl bg-background/60 border border-border/20 flex items-center justify-center text-xl shrink-0">
+                    {getDocTypeIcon(doc.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-sans text-sm font-semibold text-foreground truncate">{doc.name}</p>
+                    <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                      {doc.type} · {new Date(doc.created_at).toLocaleDateString("de-DE")}
+                    </p>
+                  </div>
+                  {doc.file_url && (
+                    <a
+                      href={doc.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-all active:scale-95 shrink-0 gap-2 px-3"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span className="font-sans text-xs font-medium hidden sm:inline">Download</span>
+                    </a>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* ── ANFRAGEN ── */}
+        {activeTab === "requests" && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="font-display text-xl font-bold text-foreground">Anfragen</h1>
+              {requests.length > 0 && (
+                <span className="font-sans text-xs text-muted-foreground border border-border/30 rounded-full px-2.5 py-1">
+                  {requests.length} {requests.length === 1 ? "Anfrage" : "Anfragen"}
+                </span>
+              )}
+            </div>
+
+            {requests.length === 0 ? (
+              <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                <div className="w-14 h-14 rounded-full bg-muted/40 flex items-center justify-center mx-auto mb-4">
+                  <Theater className="w-7 h-7 text-muted-foreground/30" />
+                </div>
+                <p className="font-display text-base font-bold text-foreground mb-1">Noch keine Anfragen</p>
+                <p className="font-sans text-sm text-muted-foreground mb-6">Starten Sie jetzt Ihre erste Buchungsanfrage.</p>
+                <Link to="/buchung" className="btn-primary inline-flex items-center gap-2 group">
+                  <CalendarPlus className="w-4 h-4" />
+                  Jetzt anfragen
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            ) : (
+              requests.map((request) => {
+                const isOpen = expandedRequestId === request.id;
+                return (
+                  <div key={request.id} className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setExpandedRequestId(isOpen ? null : request.id)}
+                      className="w-full text-left p-5 hover:bg-muted/30 transition-colors min-h-[72px] active:bg-muted/40"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2.5 flex-wrap mb-1.5">
+                            <h3 className="font-display text-base font-bold text-foreground">{request.anlass || "Anfrage"}</h3>
+                            <span className={`font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full ${formatStatusClasses(request.status)}`}>
+                              {formatStatusLabel(request.status)}
+                            </span>
+                            {request.event_id && (
+                              <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full text-green-700 bg-green-100 border border-green-200">Gebucht</span>
+                            )}
+                          </div>
+                          <p className="font-sans text-xs text-muted-foreground flex items-center gap-1.5">
+                            <Clock className="w-3 h-3" />{new Date(request.created_at).toLocaleDateString("de-DE")}
+                          </p>
+                        </div>
+                        <div className="text-muted-foreground shrink-0 mt-0.5">
+                          {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                        </div>
+                      </div>
+                    </button>
+
+                    {isOpen && (
+                      <div className="px-5 pb-5 border-t border-border/20">
+                        <div className="grid sm:grid-cols-2 gap-3 mt-4">
+                          {[
+                            { label: "Datum", icon: Calendar, value: request.datum ? new Date(request.datum).toLocaleDateString("de-DE") : "Nicht angegeben" },
+                            { label: "Ort", icon: MapPin, value: request.ort || "Nicht angegeben" },
+                            { label: "Gäste", icon: Users, value: request.gaeste != null ? String(request.gaeste) : "Nicht angegeben" },
+                            { label: "Format", icon: Theater, value: request.format || "Nicht angegeben" },
+                            { label: "Telefon", icon: Phone, value: request.phone || "Nicht angegeben" },
+                            { label: "E-Mail", icon: Mail, value: request.email },
+                          ].map((field) => (
+                            <div key={field.label} className="rounded-xl bg-background/50 border border-border/20 p-3.5">
+                              <p className="font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">{field.label}</p>
+                              <p className="font-sans text-sm text-foreground flex items-center gap-2">
+                                <field.icon className="w-3.5 h-3.5 text-accent shrink-0" />
+                                <span className="truncate">{field.value}</span>
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                        {request.nachricht && (
+                          <div className="mt-3 rounded-xl bg-background/50 border border-border/20 p-3.5">
+                            <p className="font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Nachricht</p>
+                            <p className="font-sans text-sm text-foreground leading-relaxed whitespace-pre-line">{request.nachricht}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
+
+        {/* ── NACHRICHTEN ── */}
+        {activeTab === "nachrichten" && (() => {
+          const adminMsgs = messages.map((m) => ({ ...m, _dir: "from_admin" as const, _date: m.created_at }));
+          const sentByCustomer = imapMails.map((m) => ({ ...m, _dir: "from_customer" as const, _date: m.received_at, read_by_customer: true }));
+          const allMails = [...adminMsgs, ...sentByCustomer].sort((a, b) => new Date(b._date).getTime() - new Date(a._date).getTime());
+          return (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-2">
+                <h1 className="font-display text-xl font-bold text-foreground">Nachrichten</h1>
+                {unreadCount > 0 && (
+                  <span className="font-sans text-xs text-accent border border-accent/30 bg-accent/10 rounded-full px-2.5 py-1">
+                    {unreadCount} ungelesen
+                  </span>
+                )}
+              </div>
+
+              {allMails.length === 0 ? (
+                <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                  <div className="w-14 h-14 rounded-full bg-muted/40 flex items-center justify-center mx-auto mb-4">
+                    <Mail className="w-7 h-7 text-muted-foreground/30" />
+                  </div>
+                  <p className="font-display text-base font-bold text-foreground mb-1">Noch keine Nachrichten</p>
+                  <p className="font-sans text-sm text-muted-foreground">Kommunikation mit Emilian Leber erscheint hier.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {allMails.map((msg) => {
+                    const isFromAdmin = msg._dir === "from_admin";
+                    const isUnread = isFromAdmin && !msg.read_by_customer;
+                    return (
+                      <div
+                        key={msg.id}
+                        className={`rounded-2xl border overflow-hidden transition-all ${isUnread ? "bg-accent/5 border-accent/20" : "bg-muted/20 border-border/30"}`}
+                      >
+                        <div className={`px-5 py-3.5 border-b flex items-center justify-between gap-3 ${isUnread ? "border-accent/10" : "border-border/10"}`}>
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${isFromAdmin ? "bg-accent/15 text-accent" : "bg-muted/60 text-muted-foreground"}`}>
+                              {isFromAdmin ? "EL" : (customer?.name?.[0]?.toUpperCase() || "K")}
+                            </div>
+                            <div className="min-w-0">
+                              <p className={`font-sans text-[10px] font-semibold uppercase tracking-widest ${isFromAdmin ? "text-accent" : "text-muted-foreground"}`}>
+                                {isFromAdmin ? "Emilian Leber" : "Sie"}
+                              </p>
+                              <p className="font-sans text-sm font-semibold text-foreground truncate">{msg.subject || "(Kein Betreff)"}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            {isUnread && <span className="w-2 h-2 rounded-full bg-accent" />}
+                            <p className="font-sans text-[11px] text-muted-foreground">
+                              {new Date(msg._date).toLocaleDateString("de-DE", { day: "2-digit", month: "short" })}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="px-5 py-4">
                           {isFromAdmin ? (
                             <div className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: msg.body }} />
                           ) : (
@@ -845,182 +1051,172 @@ const Kundenportal = () => {
                             ) : msg.body_text ? (
                               <pre className="font-sans text-sm text-foreground/80 whitespace-pre-wrap">{msg.body_text}</pre>
                             ) : (
-                              <p className="font-sans text-sm text-muted-foreground italic">Inhalt wird beim nächsten Öffnen geladen.</p>
+                              <p className="font-sans text-sm text-muted-foreground italic">Kein Inhalt.</p>
                             )
                           )}
                         </div>
+                        <div className="px-5 pb-3 font-sans text-[11px] text-muted-foreground/50">
+                          {new Date(msg._date).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        </div>
                       </div>
                     );
-                  })
-                )}
+                  })}
+                </div>
+              )}
+
+              <div className="rounded-2xl border border-border/30 bg-muted/10 p-5 flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                  <MessageCircle className="w-5 h-5 text-accent" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-sans text-sm font-semibold text-foreground">Neue Nachricht senden</p>
+                  <p className="font-sans text-xs text-muted-foreground">Kontaktieren Sie Emilian direkt</p>
+                </div>
+                <a
+                  href="mailto:el@magicel.de"
+                  className="shrink-0 inline-flex items-center gap-1.5 font-sans text-sm text-accent border border-accent/20 rounded-xl px-3.5 py-2.5 hover:bg-accent/5 transition-all active:scale-95 min-h-[44px]"
+                >
+                  <Mail className="w-4 h-4" />
+                  E-Mail
+                </a>
               </div>
-            );
-          })()}
+            </div>
+          );
+        })()}
 
-          {/* ── EINSTELLUNGEN ── */}
-          {activeTab === "einstellungen" && (
-            <div className="max-w-2xl space-y-8">
-              {/* Kontaktdaten */}
-              <div className="p-8 rounded-3xl bg-muted/20 border border-border/30 space-y-5">
-                <h2 className="font-display text-lg font-bold text-foreground">Meine Daten</h2>
+        {/* ── EINSTELLUNGEN ── */}
+        {activeTab === "einstellungen" && (
+          <div className="space-y-5 max-w-2xl">
+            <h1 className="font-display text-xl font-bold text-foreground mb-2">Einstellungen</h1>
 
+            <div className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden">
+              <div className="px-5 py-4 border-b border-border/20">
+                <h2 className="font-display text-sm font-bold text-foreground flex items-center gap-2">
+                  <User className="w-4 h-4 text-accent" />
+                  Meine Daten
+                </h2>
+              </div>
+              <div className="p-5 space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Name *</label>
-                    <input
-                      value={settingsDraft.name}
-                      onChange={(e) => setSettingsDraft((d) => ({ ...d, name: e.target.value }))}
-                      placeholder="Ihr Name"
-                      className={inputCls}
-                    />
+                    <input value={settingsDraft.name} onChange={(e) => setSettingsDraft((d) => ({ ...d, name: e.target.value }))} placeholder="Ihr Name" className={inputCls} />
                   </div>
                   <div>
                     <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Firma</label>
-                    <input
-                      value={settingsDraft.company}
-                      onChange={(e) => setSettingsDraft((d) => ({ ...d, company: e.target.value }))}
-                      placeholder="Firmenname (optional)"
-                      className={inputCls}
-                    />
+                    <input value={settingsDraft.company} onChange={(e) => setSettingsDraft((d) => ({ ...d, company: e.target.value }))} placeholder="Firmenname (optional)" className={inputCls} />
                   </div>
                   <div>
                     <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Telefon</label>
-                    <input
-                      value={settingsDraft.phone}
-                      onChange={(e) => setSettingsDraft((d) => ({ ...d, phone: e.target.value }))}
-                      placeholder="+49 ..."
-                      className={inputCls}
-                    />
+                    <input value={settingsDraft.phone} onChange={(e) => setSettingsDraft((d) => ({ ...d, phone: e.target.value }))} placeholder="+49 ..." className={inputCls} />
                   </div>
                   <div>
                     <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">E-Mail</label>
-                    <input
-                      value={customer?.email ?? (isAdminPreview ? "" : (user.email || ""))}
-                      readOnly
-                      className={inputCls + " opacity-50 cursor-not-allowed"}
-                    />
+                    <input value={customer?.email ?? (isAdminPreview ? "" : (user.email || ""))} readOnly className={inputCls + " opacity-50 cursor-not-allowed"} />
                     <p className="font-sans text-[11px] text-muted-foreground mt-1">Kann nicht geändert werden.</p>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Rechnungsadresse */}
-              <div className="p-8 rounded-3xl bg-muted/20 border border-border/30 space-y-5">
-                <h2 className="font-display text-lg font-bold text-foreground">Rechnungsadresse</h2>
-
+            <div className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden">
+              <div className="px-5 py-4 border-b border-border/20">
+                <h2 className="font-display text-sm font-bold text-foreground flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-accent" />
+                  Rechnungsadresse
+                </h2>
+              </div>
+              <div className="p-5 space-y-4">
                 <div>
                   <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Straße & Hausnummer</label>
-                  <input
-                    value={settingsDraft.rechnungs_strasse}
-                    onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_strasse: e.target.value }))}
-                    placeholder="Musterstraße 1"
-                    className={inputCls}
-                  />
+                  <input value={settingsDraft.rechnungs_strasse} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_strasse: e.target.value }))} placeholder="Musterstraße 1" className={inputCls} />
                 </div>
-                <div className="grid sm:grid-cols-3 gap-4">
-                  <div>
+                <div className="grid grid-cols-5 gap-3">
+                  <div className="col-span-2">
                     <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">PLZ</label>
-                    <input
-                      value={settingsDraft.rechnungs_plz}
-                      onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_plz: e.target.value }))}
-                      placeholder="12345"
-                      className={inputCls}
-                    />
+                    <input value={settingsDraft.rechnungs_plz} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_plz: e.target.value }))} placeholder="12345" className={inputCls} />
                   </div>
-                  <div className="sm:col-span-2">
+                  <div className="col-span-3">
                     <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Ort</label>
-                    <input
-                      value={settingsDraft.rechnungs_ort}
-                      onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_ort: e.target.value }))}
-                      placeholder="Musterstadt"
-                      className={inputCls}
-                    />
+                    <input value={settingsDraft.rechnungs_ort} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_ort: e.target.value }))} placeholder="Musterstadt" className={inputCls} />
                   </div>
                 </div>
                 <div>
                   <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Land</label>
-                  <input
-                    value={settingsDraft.rechnungs_land}
-                    onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_land: e.target.value }))}
-                    placeholder="Deutschland"
-                    className={inputCls}
-                  />
+                  <input value={settingsDraft.rechnungs_land} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_land: e.target.value }))} placeholder="Deutschland" className={inputCls} />
                 </div>
               </div>
-
-              {settingsMsg && (
-                <p className={`font-sans text-sm ${settingsMsg.includes("Fehler") ? "text-destructive" : "text-green-600"}`}>
-                  {settingsMsg}
-                </p>
-              )}
-
-              <button
-                onClick={saveSettings}
-                disabled={settingsSaving}
-                className="btn-primary disabled:opacity-60"
-              >
-                <Save className="w-4 h-4 mr-2" />
-                {settingsSaving ? "Speichert…" : "Änderungen speichern"}
-              </button>
             </div>
-          )}
 
-          {/* ── KONTAKT ── */}
-          {activeTab === "contact" && (
-            <div className="grid sm:grid-cols-2 gap-4 max-w-2xl">
-              <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
-                <h2 className="font-display text-lg font-bold text-foreground mb-4">Ihr Ansprechpartner</h2>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
-                    <User className="w-6 h-6 text-accent" />
-                  </div>
-                  <div>
-                    <p className="font-sans text-sm font-semibold text-foreground">Emilian Leber</p>
-                    <p className="font-sans text-xs text-muted-foreground">Zauberer & Showkünstler</p>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <a href="mailto:el@magicel.de" className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors">
-                    <MessageCircle className="w-4 h-4 text-accent" />
-                    <span className="font-sans text-sm text-foreground">el@magicel.de</span>
-                  </a>
-                  <a href="tel:+4915563744696" className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors">
-                    <Phone className="w-4 h-4 text-accent" />
-                    <span className="font-sans text-sm text-foreground">+49 155 63744696</span>
-                  </a>
-                </div>
-                <Link to="/kontakt" className="btn-primary justify-center mt-6 w-full group">
-                  Nachricht senden
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Link>
+            {settingsMsg && (
+              <div className={`rounded-xl px-4 py-3 font-sans text-sm border ${settingsMsg.includes("Fehler") ? "text-destructive bg-destructive/10 border-destructive/20" : "text-green-700 bg-green-50 border-green-200"}`}>
+                {settingsMsg}
               </div>
+            )}
 
-              {/* Chatbot CTA */}
-              <div className="p-8 rounded-3xl border border-border/30 flex flex-col" style={{ background: "linear-gradient(135deg, hsl(230,65%,48%,0.1), hsl(280,55%,45%,0.1))" }}>
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, hsl(230,65%,48%), hsl(280,55%,45%), hsl(345,70%,42%))" }}>
-                    <MessageCircle className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-sans text-sm font-semibold text-foreground">Emilian Leber – Assistent</p>
-                    <p className="font-sans text-xs text-muted-foreground">Sofortige Antworten · rund um die Uhr</p>
-                  </div>
+            <button
+              onClick={saveSettings}
+              disabled={settingsSaving}
+              className="btn-primary w-full sm:w-auto disabled:opacity-60 flex items-center justify-center gap-2 min-h-[48px]"
+            >
+              <Save className="w-4 h-4" />
+              {settingsSaving ? "Speichert…" : "Änderungen speichern"}
+            </button>
+
+            {!isAdminPreview && (
+              <div className="rounded-2xl border border-border/30 p-5 flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-sans text-sm font-semibold text-foreground">Abmelden</p>
+                  <p className="font-sans text-xs text-muted-foreground">Von Ihrem Kundenportal abmelden</p>
                 </div>
-                <p className="font-sans text-sm text-foreground/80 mb-5 flex-1">
-                  Fragen zu Shows, Preisen oder Buchung? Der Assistent antwortet sofort – ohne Wartezeit.
-                </p>
                 <button
-                  onClick={() => document.dispatchEvent(new CustomEvent("open-chatbot"))}
-                  className="w-full py-3 rounded-2xl text-white font-sans text-sm font-semibold transition-opacity hover:opacity-90"
-                  style={{ background: "linear-gradient(135deg, hsl(230,65%,48%), hsl(280,55%,45%), hsl(345,70%,42%))" }}
+                  onClick={logout}
+                  className="flex items-center gap-2 font-sans text-sm text-destructive border border-destructive/20 rounded-xl px-4 py-2.5 hover:bg-destructive/5 transition-all active:scale-95 min-h-[44px]"
                 >
-                  Chat jetzt starten →
+                  <LogOut className="w-4 h-4" />
+                  Abmelden
                 </button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+        )}
+
         </div>
-      </section>
+      </div>
+
+      {/* ── Mobile bottom navigation ── */}
+      <nav
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/92 backdrop-blur-xl border-t border-border/20"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      >
+        <div className="flex items-stretch">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative flex-1 flex flex-col items-center justify-center gap-1 pt-3 pb-2.5 min-h-[56px] transition-all active:scale-95 ${
+                  isActive ? "text-foreground" : "text-muted-foreground"
+                }`}
+              >
+                {isActive && (
+                  <span className="absolute top-1 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-accent" />
+                )}
+                {tab.badge !== undefined && tab.badge > 0 && (
+                  <span className="absolute top-1.5 right-[calc(50%-14px)] min-w-[16px] h-4 rounded-full bg-accent text-[9px] font-bold text-white flex items-center justify-center px-1 z-10">
+                    {tab.badge > 9 ? "9+" : tab.badge}
+                  </span>
+                )}
+                <tab.icon className={`w-5 h-5 transition-all ${isActive ? "text-foreground" : "text-muted-foreground/50"}`} />
+                <span className={`font-sans text-[10px] font-medium leading-none ${isActive ? "text-foreground" : "text-muted-foreground/50"}`}>
+                  {tab.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
     </PageLayout>
   );
 };
