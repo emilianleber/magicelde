@@ -895,7 +895,7 @@ const Kundenportal = () => {
                   <div>
                     <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">E-Mail</label>
                     <input
-                      value={user.email || ""}
+                      value={customer?.email || user.email || ""}
                       readOnly
                       className={inputCls + " opacity-50 cursor-not-allowed"}
                     />
