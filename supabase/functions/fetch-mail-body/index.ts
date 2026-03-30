@@ -35,7 +35,7 @@ class SimpleImap {
     const res = await this.cmd('LIST "" "*"');
     const folders: string[] = [];
     for (const line of res) {
-      const m = line.match(/\) "?" "?([^"]+)"?$/);
+      const m = line.match(/^\* LIST [^)]*\) (?:"[^"]*"|NIL) "?([^"]+?)"?\s*$/);
       if (m) folders.push(m[1].trim());
     }
     return folders;
