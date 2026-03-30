@@ -104,10 +104,10 @@ serve(async (req) => {
       }
 
       if (
-        (!existingCustomer.firma || existingCustomer.firma.trim() === "") &&
+        (!existingCustomer.company || existingCustomer.company.trim() === "") &&
         safeFirma
       ) {
-        updateData.firma = safeFirma;
+        updateData.company = safeFirma;
       }
 
       if (
@@ -133,7 +133,7 @@ serve(async (req) => {
         .from("portal_customers")
         .insert({
           name: safeName,
-          firma: safeFirma,
+          company: safeFirma,
           email: safeEmail,
           phone: safePhone,
         })
@@ -229,7 +229,7 @@ serve(async (req) => {
       </td>
     </tr></table>` : ""}
     <div style="text-align:center;margin-top:24px;">
-      <a href="https://magicel.de/admin/customers" style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:14px;font-weight:700;">Im CRM öffnen &rarr;</a>
+      <a href="https://magicel.de/admin/requests/${insertData.id}" style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:14px;font-weight:700;">Anfrage im CRM öffnen &rarr;</a>
     </div>
   </td></tr>
   <tr><td bgcolor="#f4f4f5" style="background-color:#f4f4f5;border-top:1px solid #e4e4e7;padding:16px 36px;text-align:center;border-radius:0 0 20px 20px;">

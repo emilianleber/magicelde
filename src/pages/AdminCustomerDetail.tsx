@@ -143,6 +143,10 @@ const AdminCustomerDetail = () => {
   const [expandedMailId, setExpandedMailId] = useState<string | null>(null);
   const [loadingMailBody, setLoadingMailBody] = useState<string | null>(null);
 
+  // Billing address request
+  const [requestingBilling, setRequestingBilling] = useState(false);
+  const [billingRequestMsg, setBillingRequestMsg] = useState("");
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       if (!session) { navigate("/admin/login"); return; }
@@ -270,6 +274,34 @@ const AdminCustomerDetail = () => {
     setLoadingMailBody(null);
   };
 
+  const requestBillingAddress = async () => {
+    if (!customer?.email) return;
+    setRequestingBilling(true);
+    setBillingRequestMsg("");
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/request-billing-address",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+          body: JSON.stringify({ customer_id: customer.id, customer_name: customer.name, customer_email: customer.email }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Fehler");
+      setBillingRequestMsg("E-Mail gesendet ✓");
+      setTimeout(() => setBillingRequestMsg(""), 3000);
+    } catch (err: any) {
+      setBillingRequestMsg(err.message || "Fehler beim Senden.");
+    }
+    setRequestingBilling(false);
+  };
+
   if (loading) return <div className="pt-28 text-center">Wird geladen…</div>;
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
   if (!customer) return <div className="pt-28 text-center">Kunde nicht gefunden</div>;
@@ -331,6 +363,37 @@ const AdminCustomerDetail = () => {
                 </div>
                 {customer.created_at && (
                   <p className="text-xs text-muted-foreground/60 mt-1.5">Kunde seit {new Date(customer.created_at).toLocaleDateString("de-DE")}</p>
+                )}
+
+                {/* Billing address display */}
+                {(customer.rechnungs_strasse || customer.rechnungs_ort) && (
+                  <div className="mt-3 pt-3 border-t border-border/20">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Rechnungsadresse</p>
+                    <p className="text-sm text-foreground">
+                      {customer.rechnungs_strasse && <span>{customer.rechnungs_strasse}<br /></span>}
+                      {(customer.rechnungs_plz || customer.rechnungs_ort) && <span>{[customer.rechnungs_plz, customer.rechnungs_ort].filter(Boolean).join(" ")}<br /></span>}
+                      {customer.rechnungs_land && customer.rechnungs_land !== "Deutschland" && <span>{customer.rechnungs_land}</span>}
+                    </p>
+                  </div>
+                )}
+
+                {/* Request billing address button */}
+                {!customer.rechnungs_strasse && !customer.rechnungs_ort && (
+                  <div className="mt-3 pt-3 border-t border-border/20">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Rechnungsadresse</p>
+                    <p className="text-xs text-muted-foreground mb-2">Noch nicht hinterlegt</p>
+                    <button
+                      onClick={requestBillingAddress}
+                      disabled={requestingBilling}
+                      className="inline-flex items-center gap-1.5 text-xs border border-border/30 rounded-xl px-3 py-1.5 text-muted-foreground hover:text-foreground hover:border-accent/20 transition-all disabled:opacity-50"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      {requestingBilling ? "Wird gesendet…" : "Rechnungsadresse anfordern"}
+                    </button>
+                    {billingRequestMsg && (
+                      <p className={`text-xs mt-1 ${billingRequestMsg.includes("✓") ? "text-green-600" : "text-destructive"}`}>{billingRequestMsg}</p>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
