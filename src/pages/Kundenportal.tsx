@@ -967,30 +967,7 @@ const Kundenportal = () => {
 
           {/* ── KONTAKT ── */}
           {activeTab === "contact" && (
-            <div className="max-w-lg space-y-4">
-              {/* Chatbot CTA */}
-              <div className="p-8 rounded-3xl border border-border/30 overflow-hidden relative" style={{ background: "linear-gradient(135deg, hsl(230,65%,48%,0.12), hsl(280,55%,45%,0.12))" }}>
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, hsl(230,65%,48%), hsl(280,55%,45%), hsl(345,70%,42%))" }}>
-                    <MessageCircle className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-sans text-sm font-semibold text-foreground">MagicEL Assistent</p>
-                    <p className="font-sans text-xs text-muted-foreground">Sofortige Antworten · rund um die Uhr</p>
-                  </div>
-                </div>
-                <p className="font-sans text-sm text-foreground/80 mb-5">
-                  Fragen zu Shows, Preisen oder Buchung? Der Assistent antwortet sofort – ohne Wartezeit.
-                </p>
-                <button
-                  onClick={() => document.dispatchEvent(new CustomEvent("open-chatbot"))}
-                  className="w-full py-3 rounded-2xl text-white font-sans text-sm font-semibold transition-opacity hover:opacity-90"
-                  style={{ background: "linear-gradient(135deg, hsl(230,65%,48%), hsl(280,55%,45%), hsl(345,70%,42%))" }}
-                >
-                  Chat jetzt starten →
-                </button>
-              </div>
-
+            <div className="grid sm:grid-cols-2 gap-4 max-w-2xl">
               <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
                 <h2 className="font-display text-lg font-bold text-foreground mb-4">Ihr Ansprechpartner</h2>
                 <div className="flex items-center gap-4 mb-6">
@@ -1016,6 +993,29 @@ const Kundenportal = () => {
                   Nachricht senden
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
+              </div>
+
+              {/* Chatbot CTA */}
+              <div className="p-8 rounded-3xl border border-border/30 flex flex-col" style={{ background: "linear-gradient(135deg, hsl(230,65%,48%,0.1), hsl(280,55%,45%,0.1))" }}>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, hsl(230,65%,48%), hsl(280,55%,45%), hsl(345,70%,42%))" }}>
+                    <MessageCircle className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-sans text-sm font-semibold text-foreground">MagicEL Assistent</p>
+                    <p className="font-sans text-xs text-muted-foreground">Sofortige Antworten · rund um die Uhr</p>
+                  </div>
+                </div>
+                <p className="font-sans text-sm text-foreground/80 mb-5 flex-1">
+                  Fragen zu Shows, Preisen oder Buchung? Der Assistent antwortet sofort – ohne Wartezeit.
+                </p>
+                <button
+                  onClick={() => document.dispatchEvent(new CustomEvent("open-chatbot"))}
+                  className="w-full py-3 rounded-2xl text-white font-sans text-sm font-semibold transition-opacity hover:opacity-90"
+                  style={{ background: "linear-gradient(135deg, hsl(230,65%,48%), hsl(280,55%,45%), hsl(345,70%,42%))" }}
+                >
+                  Chat jetzt starten →
+                </button>
               </div>
             </div>
           )}
