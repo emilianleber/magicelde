@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -24,6 +24,8 @@ import {
   Settings,
   Save,
   CalendarPlus,
+  ArrowLeft,
+  Eye,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
@@ -228,23 +230,58 @@ const Kundenportal = () => {
   const [settingsMsg, setSettingsMsg] = useState("");
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const previewCustomerId = searchParams.get("preview");
+  const [isAdminPreview, setIsAdminPreview] = useState(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) { navigate("/kundenportal/login"); return; }
+      if (!session) {
+        if (!previewCustomerId) navigate("/kundenportal/login");
+        return;
+      }
       setUser(session.user);
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) { navigate("/kundenportal/login"); return; }
+      if (!session) {
+        if (!previewCustomerId) navigate("/kundenportal/login");
+        return;
+      }
       setUser(session.user);
     });
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, previewCustomerId]);
 
   useEffect(() => {
-    if (!user || !user.email) return;
+    if (!user) return;
     const fetchData = async () => {
       setLoading(true);
+
+      // Admin preview mode: load customer by ID directly
+      if (previewCustomerId) {
+        const { data: adminEntry } = await supabase.from("portal_admins").select("id").eq("email", user.email).maybeSingle();
+        if (adminEntry) {
+          setIsAdminPreview(true);
+          const { data: cust } = await supabase.from("portal_customers").select("*").eq("id", previewCustomerId).maybeSingle();
+          if (cust) {
+            setCustomer(cust);
+            const [eventsRes, docsRes, msgsRes] = await Promise.all([
+              supabase.from("portal_events").select("*").eq("customer_id", cust.id),
+              supabase.from("portal_documents").select("*").eq("customer_id", cust.id),
+              supabase.from("portal_messages").select("id, created_at, subject, body, read_by_customer").eq("customer_id", cust.id).order("created_at", { ascending: false }),
+            ]);
+            if (eventsRes.data) setEvents(eventsRes.data);
+            if (docsRes.data) setDocuments(docsRes.data);
+            if (msgsRes.data) setMessages(msgsRes.data);
+            const { data: requestsData } = await supabase.from("portal_requests").select("*").eq("email", cust.email).order("created_at", { ascending: false });
+            if (requestsData) { setRequests(requestsData); if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id); }
+          }
+          setLoading(false);
+          return;
+        }
+      }
+
+      if (!user.email) { setLoading(false); return; }
 
       let cust: any = null;
       const { data: byUserId } = await supabase.from("portal_customers").select("*").eq("user_id", user.id).maybeSingle();
@@ -280,7 +317,7 @@ const Kundenportal = () => {
       setLoading(false);
     };
     fetchData();
-  }, [user]);
+  }, [user, previewCustomerId]);
 
   // Sync settings draft when customer loads
   useEffect(() => {
@@ -378,7 +415,22 @@ const Kundenportal = () => {
 
   return (
     <PageLayout>
-      <section className="min-h-screen pt-28 pb-16">
+      {/* Admin preview banner */}
+      {isAdminPreview && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 text-amber-950 px-4 py-2 flex items-center justify-between gap-4 shadow-md">
+          <div className="flex items-center gap-2 font-sans text-sm font-medium">
+            <Eye className="w-4 h-4 shrink-0" />
+            Admin-Vorschau: Kundensicht von <strong>{customer?.name || customer?.email || "Kunde"}</strong>
+          </div>
+          <button
+            onClick={() => navigate(`/admin/customers/${previewCustomerId}`)}
+            className="flex items-center gap-1.5 font-sans text-sm font-semibold hover:opacity-80 transition-opacity shrink-0"
+          >
+            <ArrowLeft className="w-4 h-4" /> Zurück zur Adminansicht
+          </button>
+        </div>
+      )}
+      <section className={`min-h-screen pb-16 ${isAdminPreview ? "pt-36" : "pt-28"}`}>
         <div className="container px-6">
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
@@ -391,9 +443,11 @@ const Kundenportal = () => {
                 <p className="font-sans text-sm text-muted-foreground mt-1">Kundennummer: {kundennummer}</p>
               )}
             </div>
-            <button onClick={logout} className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <LogOut className="w-4 h-4" /> Abmelden
-            </button>
+            {!isAdminPreview && (
+              <button onClick={logout} className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <LogOut className="w-4 h-4" /> Abmelden
+              </button>
+            )}
           </div>
 
           {/* Tabs */}

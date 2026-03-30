@@ -17,6 +17,7 @@ import {
   Building2,
   Link2,
   X,
+  ExternalLink,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -447,11 +448,20 @@ const AdminCustomerDetail = () => {
         </button>
       }
     >
-      <div className="mb-6">
+      <div className="mb-6 flex items-center justify-between gap-4">
         <Link to="/admin/customers" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="w-4 h-4" />
           Zurück zur Kundenübersicht
         </Link>
+        <a
+          href={`/kundenportal?preview=${customer.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 border border-accent/30 rounded-xl px-4 py-2 transition-colors"
+        >
+          <ExternalLink className="w-4 h-4" />
+          Kundenansicht öffnen
+        </a>
       </div>
 
       {/* Kundendaten + Stats */}
