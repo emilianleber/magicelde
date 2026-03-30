@@ -76,7 +76,7 @@ serve(async (req) => {
       <div style="padding:40px 40px 36px;">
         <div style="font-size:15px;line-height:1.8;color:#52525b;">${mailBody.replace(/\n/g, "<br>")}</div>
         <div style="border-top:1px solid #e4e4e7;padding-top:24px;margin-top:32px;">
-          <p style="margin:0 0 2px;font-size:14px;color:#71717a;">Mit freundlichen Grüßen,</p>
+          <p style="margin:0 0 2px;font-size:14px;color:#71717a;">Mit magischen Grüßen,</p>
           <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a;">Emilian Leber</p>
           <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa;">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
         </div>

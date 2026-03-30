@@ -64,7 +64,7 @@ const getEmailShell = (
 
         <!-- Signature -->
         <div style="border-top:1px solid #e4e4e7;padding-top:24px;margin-top:8px;">
-          <p style="margin:0 0 2px;font-size:14px;color:#71717a;">Mit freundlichen Grüßen,</p>
+          <p style="margin:0 0 2px;font-size:14px;color:#71717a;">Mit magischen Grüßen,</p>
           <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a;">Emilian Leber</p>
           <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa;">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
         </div>
@@ -219,7 +219,9 @@ const eventMailTemplate = (event: any, customerName: string, email: string) => {
         ),
       };
 
-    case "event_erfolgt":
+    case "event_erfolgt": {
+      const isWedding = (event.format || "").toLowerCase().includes("hochzeit") ||
+        (event.title || "").toLowerCase().includes("hochzeit");
       return {
         to: email,
         subject: "Vielen Dank für ein unvergessliches Event! ✨",
@@ -228,14 +230,39 @@ const eventMailTemplate = (event: any, customerName: string, email: string) => {
           "Vielen Dank.",
           `Hallo ${customerName}, vielen Dank für das wunderbare Event und dein Vertrauen. Es war mir eine echte Freude!`,
           `${infoTable(rows)}
-          <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:16px;padding:20px 24px;margin-bottom:24px;">
-            <p style="margin:0;font-size:15px;line-height:1.7;color:#92400e;">
-              Falls du einen Moment Zeit hast, würde ich mich sehr über eine kurze Bewertung freuen – das hilft anderen, die richtige Entscheidung zu treffen. 🙏
+          <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:16px;padding:22px 24px;margin-bottom:24px;">
+            <p style="margin:0 0 18px;font-size:15px;line-height:1.7;color:#92400e;">
+              Falls du einen kurzen Moment hast, würde ich mich riesig über eine Bewertung freuen – das hilft anderen, die richtige Entscheidung zu treffen. 🙏
             </p>
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+              <tr>
+                <td style="padding:0 6px 6px 0;" width="50%">
+                  <a href="https://g.page/r/CfLlgBMpyJ0vEBM/review"
+                     style="display:block;text-align:center;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;">
+                    ⭐ Google Bewertung
+                  </a>
+                </td>
+                <td style="padding:0 0 6px 6px;" width="50%">
+                  <a href="https://www.provenexpert.com/emilian-leber/ep8k/"
+                     style="display:block;text-align:center;background:#1d4ed8;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;">
+                    ✦ ProvenExpert
+                  </a>
+                </td>
+              </tr>
+              ${isWedding ? `<tr>
+                <td colspan="2" style="padding:0;">
+                  <a href="https://www.weddyplace.com/rate/69b909ceb84deb835fe797f2"
+                     style="display:block;text-align:center;background:#be185d;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:12px;font-size:13px;font-weight:700;">
+                    💍 Weddyplace Bewertung
+                  </a>
+                </td>
+              </tr>` : ""}
+            </table>
           </div>`,
           false
         ),
       };
+    }
 
     default:
       return null;
