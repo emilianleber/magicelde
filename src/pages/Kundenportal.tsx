@@ -523,7 +523,7 @@ const Kundenportal = () => {
               )}
 
               {/* Timeline */}
-              {timelineSteps.length > 0 && (
+              {requests.length > 0 && timelineSteps.length > 0 && (
                 <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
                   <div className="flex items-center justify-between mb-2">
                     <h2 className="font-display text-lg font-bold text-foreground">Status Ihrer Anfrage</h2>
