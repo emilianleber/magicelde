@@ -98,6 +98,9 @@ const AdminMails = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkLoading, setBulkLoading] = useState(false);
 
+  // Unread filter
+  const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       if (!session) { navigate("/admin/login"); return; }
@@ -142,15 +145,17 @@ const AdminMails = () => {
     setTotalUnreadCount(count || 0);
   };
 
-  const loadMails = async (folder: Folder = activeFolder, p: number = page) => {
+  const loadMails = async (folder: Folder = activeFolder, p: number = page, unreadOnly: boolean = showUnreadOnly) => {
     const imapFolder = FOLDERS.find((f) => f.id === folder)?.imap || "INBOX";
     const from = p * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
-    const { data, count } = await supabase
+    let query = supabase
       .from("portal_inbox_mails")
       .select("*", { count: "exact" })
       .eq("folder", imapFolder)
-      .eq("is_deleted", false)
+      .eq("is_deleted", false);
+    if (unreadOnly) query = query.eq("is_read", false);
+    const { data, count } = await query
       .order("received_at", { ascending: false })
       .range(from, to);
     setMails((data as InboxMail[]) || []);
@@ -165,13 +170,20 @@ const AdminMails = () => {
     setSearch("");
     setSearchResults([]);
     setSelectedIds([]);
-    loadMails(activeFolder, 0);
+    setShowUnreadOnly(false);
+    loadMails(activeFolder, 0, false);
   }, [activeFolder, isAdmin]);
 
   useEffect(() => {
     if (!isAdmin) return;
     loadMails(activeFolder, page);
   }, [page]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    setPage(0);
+    loadMails(activeFolder, 0, showUnreadOnly);
+  }, [showUnreadOnly]);
 
   // DB search across all pages
   useEffect(() => {
@@ -385,7 +397,7 @@ const AdminMails = () => {
         m.subject?.toLowerCase().includes(q) || m.to_email?.toLowerCase().includes(q) || (m.customer as any)?.name?.toLowerCase().includes(q)
       );
     } else {
-      displayMails = searchResults;
+      displayMails = showUnreadOnly ? searchResults.filter((m) => !m.is_read) : searchResults;
     }
   } else {
     displayMails = isSentFolder ? sentCombined : mails;
@@ -524,6 +536,20 @@ const AdminMails = () => {
               />
               {isSearching && <div className="absolute right-4 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-accent border-t-transparent animate-spin" />}
             </div>
+
+            {/* Unread filter toggle */}
+            {!isSentFolder && (
+              <button
+                onClick={() => setShowUnreadOnly((v) => !v)}
+                className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm transition-colors ${showUnreadOnly ? "border-accent/40 bg-accent/10 text-accent font-semibold" : "border-border/30 text-muted-foreground hover:text-foreground"}`}
+              >
+                <Mail className="w-4 h-4" />
+                Ungelesen
+                {showUnreadOnly && totalUnreadCount > 0 && (
+                  <span className="ml-0.5 text-xs font-bold">{totalUnreadCount}</span>
+                )}
+              </button>
+            )}
 
             {/* Select mode toggle */}
             {!isSentFolder && (

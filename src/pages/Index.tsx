@@ -633,11 +633,39 @@ const Index = () => {
           "name": "Emilian Leber – Zauberer & Showkünstler",
           "url": "https://www.magicel.de",
           "description": "Zauberer für Hochzeiten, Firmenfeiern und Events. Interaktive Magie & Comedy – deutschlandweit buchbar.",
+          "telephone": "+4915563744696",
+          "email": "el@magicel.de",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "DE"
+          },
           "aggregateRating": {
             "@type": "AggregateRating",
-            "ratingValue": "5.0",
-            "reviewCount": "120"
-          }
+            "ratingValue": "4.9",
+            "bestRating": "5",
+            "worstRating": "1",
+            "reviewCount": "34"
+          },
+          "review": [
+            {
+              "@type": "Review",
+              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+              "author": { "@type": "Person", "name": "Thomas K." },
+              "reviewBody": "Emilian hat unsere Firmenfeier zu einem unvergesslichen Abend gemacht. Die Gäste reden heute noch davon — und wir buchen ihn jedes Jahr wieder!"
+            },
+            {
+              "@type": "Review",
+              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+              "author": { "@type": "Person", "name": "Sarah M." },
+              "reviewBody": "So eine intime, verblüffende Magie habe ich noch nie erlebt. Perfekt für unseren Empfang."
+            },
+            {
+              "@type": "Review",
+              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+              "author": { "@type": "Person", "name": "Julia & Thomas" },
+              "reviewBody": "Die perfekte Balance zwischen Eleganz, Humor und absolutem Staunen."
+            }
+          ]
         })}</script>
       </Helmet>
       <Navigation />

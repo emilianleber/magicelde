@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -119,6 +120,37 @@ const GalerieSection = () => {
 
 const Referenzen = () => (
   <PageLayout>
+    <Helmet>
+      <title>Referenzen & Bewertungen – Emilian Leber Zauberer</title>
+      <meta name="description" content="Über 500 Events, 4.9 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
+      <link rel="canonical" href="https://www.magicel.de/referenzen" />
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Emilian Leber – Zauberer & Showkünstler",
+        "url": "https://www.magicel.de",
+        "telephone": "+4915563744696",
+        "email": "el@magicel.de",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "bestRating": "5",
+          "worstRating": "1",
+          "reviewCount": "34"
+        },
+        "review": [
+          { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "author": { "@type": "Person", "name": "Thomas K." }, "reviewBody": "Emilian hat unsere Firmenfeier zu einem unvergesslichen Abend gemacht. Die Gäste reden heute noch davon — und wir buchen ihn jedes Jahr wieder!" },
+          { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "author": { "@type": "Person", "name": "Sarah M." }, "reviewBody": "So eine intime, verblüffende Magie habe ich noch nie erlebt. Perfekt für unseren Empfang." },
+          { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "author": { "@type": "Person", "name": "Marc L." }, "reviewBody": "Cool, modern, witzig — genau unser Ding. Kein verstaubter Zauberer, sondern echtes Premium-Entertainment." },
+          { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "author": { "@type": "Person", "name": "Lena & Markus" }, "reviewBody": "Unsere Gäste reden heute noch über die Magie beim Empfang. Es war der perfekte Eisbrecher!" },
+          { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "author": { "@type": "Person", "name": "Julia & Thomas" }, "reviewBody": "Die perfekte Balance zwischen Eleganz, Humor und absolutem Staunen." },
+          { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "author": { "@type": "Person", "name": "Michael B." }, "reviewBody": "Professionell, zuverlässig, unglaublich unterhaltsam. Die Mitarbeiter fragen Monate vorher, ob er wieder kommt." },
+          { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "author": { "@type": "Person", "name": "Lisa R." }, "reviewBody": "Mein 30. war dank Emilian ein Abend, den keiner vergisst!" },
+          { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "author": { "@type": "Person", "name": "Anna & Felix" }, "reviewBody": "Wir können es jedem Brautpaar empfehlen! Modern, stilvoll und absolut verblüffend." },
+          { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "author": { "@type": "Person", "name": "Dr. Stefan R." }, "reviewBody": "Emilian hat unser Firmenevent auf ein neues Level gehoben. Standing Ovation von 300 Gästen!" }
+        ]
+      })}</script>
+    </Helmet>
     <HeroRef />
     <TrustStrip />
     <StatsSection />

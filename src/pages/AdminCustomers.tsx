@@ -49,6 +49,7 @@ const AdminCustomers = () => {
   const [deleting, setDeleting] = useState(false);
   const [hardDeleting, setHardDeleting] = useState(false);
   const [confirmHardDelete, setConfirmHardDelete] = useState(false);
+  const [hardDeleteError, setHardDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -145,8 +146,11 @@ const AdminCustomers = () => {
   const hardDeleteSelected = async () => {
     if (!selectedIds.length) return;
     setHardDeleting(true);
+    setHardDeleteError(null);
     const { error } = await supabase.from("portal_customers").delete().in("id", selectedIds);
-    if (!error) {
+    if (error) {
+      setHardDeleteError(error.message || "Fehler beim Löschen.");
+    } else {
       setCustomers((prev) => prev.filter((c) => !selectedIds.includes(c.id)));
       setSelectedIds([]);
       setConfirmHardDelete(false);
@@ -228,11 +232,12 @@ const AdminCustomers = () => {
               <p className="text-xs text-muted-foreground mt-1">
                 {selectedIds.length} Kunde(n) werden permanent gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.
               </p>
+              {hardDeleteError && <p className="text-xs text-destructive font-medium mt-2">{hardDeleteError}</p>}
               <div className="flex items-center gap-2 mt-3">
                 <button onClick={hardDeleteSelected} disabled={hardDeleting} className="inline-flex items-center gap-1.5 rounded-xl bg-destructive text-white px-4 py-2 text-sm font-semibold hover:opacity-80 disabled:opacity-50">
                   {hardDeleting ? "Lösche…" : "Ja, endgültig löschen"}
                 </button>
-                <button onClick={() => setConfirmHardDelete(false)} className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-4 py-2 text-sm text-foreground hover:bg-muted/40">
+                <button onClick={() => { setConfirmHardDelete(false); setHardDeleteError(null); }} className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-4 py-2 text-sm text-foreground hover:bg-muted/40">
                   Abbrechen
                 </button>
               </div>
