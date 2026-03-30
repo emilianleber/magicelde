@@ -195,10 +195,8 @@ const AdminMails = () => {
       }
     >
       {syncLog && (
-        <details className="mb-4 rounded-xl border border-border/30 bg-muted/30 overflow-hidden" open={syncLogs.some((l) => l.startsWith("ERROR") || l.startsWith("DB error"))}>
-          <summary className="px-4 py-3 text-sm text-muted-foreground cursor-pointer select-none hover:text-foreground">
-            {syncLog}
-          </summary>
+        <div className="mb-4 rounded-xl border border-border/30 bg-muted/30 overflow-hidden">
+          <p className="px-4 py-3 text-sm text-muted-foreground">{syncLog}</p>
           {syncLogs.length > 0 && (
             <div className="border-t border-border/20 px-4 py-3 space-y-0.5">
               {syncLogs.map((line, i) => (
@@ -208,7 +206,7 @@ const AdminMails = () => {
               ))}
             </div>
           )}
-        </details>
+        </div>
       )}
 
       <div className="grid lg:grid-cols-[200px_minmax(0,1fr)] gap-4">
