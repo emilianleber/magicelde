@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Save, User } from "lucide-react";
+import { ArrowLeft, Plus, Save, Search, User, X } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
 interface LinkedCustomer {
@@ -20,13 +20,17 @@ const inputCls =
 const AdminNewRequest = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const customerId = searchParams.get("customerId");
+  const preselectedId = searchParams.get("customerId");
 
   const [user, setUser] = useState<SupaUser | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  const [allCustomers, setAllCustomers] = useState<LinkedCustomer[]>([]);
+  const [customerSearch, setCustomerSearch] = useState("");
   const [linkedCustomer, setLinkedCustomer] = useState<LinkedCustomer | null>(null);
+  const [showPicker, setShowPicker] = useState(!preselectedId);
 
   const [form, setForm] = useState({
     anlass: "",
@@ -44,63 +48,68 @@ const AdminNewRequest = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate("/admin/login"); return; }
       setUser(session.user);
-      const { data: admin } = await supabase
-        .from("portal_admins").select("id").eq("email", session.user.email!).maybeSingle();
+      const { data: admin } = await supabase.from("portal_admins").select("id").eq("email", session.user.email!).maybeSingle();
       setIsAdmin(!!admin);
     };
     checkUser();
   }, [navigate]);
 
   useEffect(() => {
-    if (!customerId) return;
-    const loadCustomer = async () => {
-      const { data } = await supabase
-        .from("portal_customers").select("*").eq("id", customerId).single();
-      if (data) setLinkedCustomer(data);
-    };
-    loadCustomer();
-  }, [customerId]);
+    if (!user?.email) return;
+    supabase.from("portal_customers").select("id,name,company,email,phone,kundennummer").is("deleted_at", null).order("name").then(({ data }) => {
+      setAllCustomers(data || []);
+    });
+  }, [user]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  useEffect(() => {
+    if (!preselectedId || allCustomers.length === 0) return;
+    const found = allCustomers.find((c) => c.id === preselectedId);
+    if (found) { setLinkedCustomer(found); setShowPicker(false); }
+    else {
+      supabase.from("portal_customers").select("*").eq("id", preselectedId).single().then(({ data }) => {
+        if (data) { setLinkedCustomer(data); setShowPicker(false); }
+      });
+    }
+  }, [preselectedId, allCustomers]);
+
+  const filteredCustomers = allCustomers.filter((c) => {
+    const q = customerSearch.toLowerCase();
+    return !q || c.name?.toLowerCase().includes(q) || c.company?.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q);
+  }).slice(0, 8);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const createRequest = async () => {
-    if (!customerId || !linkedCustomer) {
-      setMessage("Bitte zuerst einen Kunden auswählen.");
-      return;
-    }
+  const selectCustomer = (c: LinkedCustomer) => {
+    setLinkedCustomer(c);
+    setShowPicker(false);
+    setCustomerSearch("");
+  };
 
+  const createRequest = async () => {
+    if (!linkedCustomer) { setMessage("Bitte zuerst einen Kunden auswählen."); return; }
     setLoading(true);
     setMessage("");
-
     try {
-      const { data: reqData, error } = await supabase
-        .from("portal_requests")
-        .insert({
-          customer_id: customerId,
-          name: linkedCustomer.name || "",
-          firma: linkedCustomer.company || null,
-          email: linkedCustomer.email || "",
-          phone: linkedCustomer.phone || null,
-          anlass: form.anlass || null,
-          datum: form.datum || null,
-          uhrzeit: form.uhrzeit || null,
-          ort: form.ort.trim() || null,
-          gaeste: form.gaeste ? Number(form.gaeste) : null,
-          format: form.format || null,
-          nachricht: form.nachricht.trim() || null,
-          source: form.source || "manuell",
-          status: "neu",
-        })
-        .select("id")
-        .single();
-
+      const { error } = await supabase.from("portal_requests").insert({
+        customer_id: linkedCustomer.id,
+        name: linkedCustomer.name || "",
+        firma: linkedCustomer.company || null,
+        email: linkedCustomer.email || "",
+        phone: linkedCustomer.phone || null,
+        anlass: form.anlass || null,
+        datum: form.datum || null,
+        uhrzeit: form.uhrzeit || null,
+        ort: form.ort.trim() || null,
+        gaeste: form.gaeste ? Number(form.gaeste) : null,
+        format: form.format || null,
+        nachricht: form.nachricht.trim() || null,
+        source: form.source || "manuell",
+        status: "neu",
+      });
       if (error) throw error;
-
-      navigate(`/admin/customers/${customerId}`);
+      navigate(`/admin/customers/${linkedCustomer.id}`);
     } catch (err: any) {
       setMessage(err.message || "Fehler beim Speichern.");
     } finally {
@@ -109,150 +118,185 @@ const AdminNewRequest = () => {
   };
 
   if (isAdmin === false) {
-    return (
-      <AdminLayout title="Kein Zugriff" subtitle="">
-        <p className="text-sm text-muted-foreground">Kein Admin-Zugriff.</p>
-      </AdminLayout>
-    );
-  }
-
-  // If no customer selected, redirect to customers to pick one first
-  if (!customerId) {
-    return (
-      <AdminLayout title="Neue Anfrage" subtitle="Zuerst einen Kunden auswählen">
-        <div className="max-w-lg">
-          <div className="p-8 rounded-2xl bg-muted/20 border border-border/30 text-center">
-            <User className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-            <h2 className="text-lg font-bold text-foreground mb-2">Kunde wählen</h2>
-            <p className="text-sm text-muted-foreground mb-5">
-              Jede Anfrage muss einem Kunden zugeordnet sein.<br />
-              Wähle zuerst einen Kunden aus der Kundenliste aus.
-            </p>
-            <Link
-              to="/admin/customers"
-              className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-80 transition-opacity"
-            >
-              Zur Kundenliste
-            </Link>
-          </div>
-        </div>
-      </AdminLayout>
-    );
+    return <AdminLayout title="Kein Zugriff" subtitle=""><p className="text-sm text-muted-foreground">Kein Admin-Zugriff.</p></AdminLayout>;
   }
 
   return (
     <AdminLayout
       title="Neue Anfrage"
-      subtitle={linkedCustomer ? `Für ${linkedCustomer.name || linkedCustomer.email}` : "Lädt…"}
+      subtitle={linkedCustomer ? `Für ${linkedCustomer.name || linkedCustomer.email}` : "Kunden wählen & Anfrage anlegen"}
     >
       <div className="mb-5">
-        <Link
-          to={`/admin/customers/${customerId}`}
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Zurück zum Kunden
+        <Link to="/admin/requests" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="w-4 h-4" /> Zurück zu Anfragen
         </Link>
       </div>
 
       <div className="max-w-2xl space-y-5">
-        {/* Customer banner */}
-        {linkedCustomer && (
-          <div className="flex items-center gap-3 p-4 rounded-2xl bg-foreground/5 border border-border/30">
-            <div className="w-9 h-9 rounded-full bg-foreground flex items-center justify-center shrink-0 text-sm font-bold text-background">
-              {(linkedCustomer.name || "?")[0].toUpperCase()}
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-foreground">
-                {linkedCustomer.name}
-                {linkedCustomer.kundennummer && (
-                  <span className="ml-2 text-xs text-muted-foreground font-normal">#{linkedCustomer.kundennummer}</span>
-                )}
-              </p>
-              <p className="text-xs text-muted-foreground">{linkedCustomer.email}{linkedCustomer.company ? ` · ${linkedCustomer.company}` : ""}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Event details */}
-        <div className="p-6 rounded-2xl bg-muted/20 border border-border/30 space-y-4">
-          <h2 className="text-base font-bold text-foreground">Anfragedetails</h2>
-
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Veranstaltung</label>
-              <select name="anlass" value={form.anlass} onChange={handleChange} className={inputCls}>
-                <option value="">— wählen —</option>
-                <option value="Hochzeit">Hochzeit</option>
-                <option value="Firmenfeier">Firmenfeier / Corporate Event</option>
-                <option value="Geburtstag">Geburtstag / Private Feier</option>
-                <option value="Gala">Gala / Awards</option>
-                <option value="Messe">Messe / Promotion</option>
-                <option value="Magic Dinner">Magic Dinner</option>
-                <option value="Teamevent">Teamevent / Incentive</option>
-                <option value="Sonstiges">Sonstiges</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Format</label>
-              <select name="format" value={form.format} onChange={handleChange} className={inputCls}>
-                <option value="">— wählen —</option>
-                <option value="closeup">Close-Up</option>
-                <option value="buehnenshow">Bühnenshow</option>
-                <option value="walking_act">Walking Act</option>
-                <option value="magic_dinner">Magic Dinner</option>
-                <option value="kombination">Kombination</option>
-                <option value="beratung">Noch offen / Beratung</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Datum</label>
-              <input name="datum" type="date" value={form.datum} onChange={handleChange} className={inputCls} />
-            </div>
-            <div>
-              <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Uhrzeit</label>
-              <input name="uhrzeit" type="time" value={form.uhrzeit} onChange={handleChange} className={inputCls} />
-            </div>
-            <div>
-              <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Ort</label>
-              <input name="ort" value={form.ort} onChange={handleChange} placeholder="Stadt oder Adresse" className={inputCls} />
-            </div>
-            <div>
-              <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Gäste</label>
-              <input name="gaeste" type="number" value={form.gaeste} onChange={handleChange} placeholder="Anzahl" className={inputCls} />
-            </div>
+        {/* Customer picker */}
+        <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-bold text-foreground">Kunde</h2>
+            {linkedCustomer && !showPicker && (
+              <button onClick={() => setShowPicker(true)} className="text-xs text-muted-foreground hover:text-foreground">
+                Ändern
+              </button>
+            )}
           </div>
 
-          <div>
-            <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Notizen / Nachricht</label>
-            <textarea name="nachricht" value={form.nachricht} onChange={handleChange} rows={3} className={inputCls} />
-          </div>
+          {linkedCustomer && !showPicker ? (
+            /* Selected customer banner */
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-foreground flex items-center justify-center shrink-0 text-sm font-bold text-background">
+                {(linkedCustomer.name || "?")[0].toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground">
+                  {linkedCustomer.name}
+                  {linkedCustomer.kundennummer && (
+                    <span className="ml-2 text-xs text-muted-foreground font-normal">#{linkedCustomer.kundennummer}</span>
+                  )}
+                </p>
+                <p className="text-xs text-muted-foreground">{linkedCustomer.email}{linkedCustomer.company ? ` · ${linkedCustomer.company}` : ""}</p>
+              </div>
+              <button onClick={() => { setLinkedCustomer(null); setShowPicker(true); }} className="text-muted-foreground hover:text-foreground">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            /* Customer search */
+            <div className="space-y-3">
+              <div className="relative">
+                <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="Name, E-Mail oder Firma suchen…"
+                  value={customerSearch}
+                  onChange={(e) => setCustomerSearch(e.target.value)}
+                  className="w-full rounded-xl bg-background/60 border border-border/30 pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
+                />
+              </div>
 
-          <div>
-            <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Quelle</label>
-            <select name="source" value={form.source} onChange={handleChange} className={inputCls}>
-              <option value="telefon">Telefon</option>
-              <option value="whatsapp">WhatsApp</option>
-              <option value="email">E-Mail</option>
-              <option value="instagram">Instagram</option>
-              <option value="website">Website</option>
-              <option value="manuell">Manuell</option>
-            </select>
-          </div>
+              {filteredCustomers.length > 0 && (
+                <div className="space-y-1 max-h-48 overflow-y-auto">
+                  {filteredCustomers.map((c) => (
+                    <button
+                      key={c.id}
+                      onClick={() => selectCustomer(c)}
+                      className="w-full text-left flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-background/60 transition-colors"
+                    >
+                      <div className="w-7 h-7 rounded-full bg-foreground/10 flex items-center justify-center shrink-0 text-xs font-bold text-foreground">
+                        {(c.name || "?")[0].toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">{c.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{c.email}{c.company ? ` · ${c.company}` : ""}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {customerSearch && filteredCustomers.length === 0 && (
+                <p className="text-sm text-muted-foreground px-1">Kein Kunde gefunden.</p>
+              )}
+
+              <div className="pt-1 border-t border-border/20">
+                <Link
+                  to="/admin/customers/new"
+                  className="inline-flex items-center gap-1.5 text-sm text-accent hover:text-accent/80"
+                >
+                  <Plus className="w-4 h-4" /> Neuen Kunden anlegen
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
 
-        {message && (
-          <div className="rounded-xl bg-red-500/10 text-red-600 px-4 py-3 text-sm">{message}</div>
-        )}
+        {/* Form fields – only shown when customer is selected */}
+        {linkedCustomer && (
+          <>
+            <div className="p-5 rounded-2xl bg-muted/20 border border-border/30 space-y-4">
+              <h2 className="text-sm font-bold text-foreground">Anfragedetails</h2>
 
-        <button
-          onClick={createRequest}
-          disabled={loading}
-          className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-80 disabled:opacity-40 transition-opacity"
-        >
-          <Save className="w-4 h-4" />
-          {loading ? "Speichert…" : "Anfrage erstellen"}
-        </button>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Veranstaltung</label>
+                  <select name="anlass" value={form.anlass} onChange={handleChange} className={inputCls}>
+                    <option value="">— wählen —</option>
+                    <option value="Hochzeit">Hochzeit</option>
+                    <option value="Firmenfeier">Firmenfeier / Corporate Event</option>
+                    <option value="Geburtstag">Geburtstag / Private Feier</option>
+                    <option value="Gala">Gala / Awards</option>
+                    <option value="Messe">Messe / Promotion</option>
+                    <option value="Magic Dinner">Magic Dinner</option>
+                    <option value="Teamevent">Teamevent / Incentive</option>
+                    <option value="Sonstiges">Sonstiges</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Format</label>
+                  <select name="format" value={form.format} onChange={handleChange} className={inputCls}>
+                    <option value="">— wählen —</option>
+                    <option value="closeup">Close-Up</option>
+                    <option value="buehnenshow">Bühnenshow</option>
+                    <option value="walking_act">Walking Act</option>
+                    <option value="magic_dinner">Magic Dinner</option>
+                    <option value="kombination">Kombination</option>
+                    <option value="beratung">Noch offen / Beratung</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Datum</label>
+                  <input name="datum" type="date" value={form.datum} onChange={handleChange} className={inputCls} />
+                </div>
+                <div>
+                  <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Uhrzeit</label>
+                  <input name="uhrzeit" type="time" value={form.uhrzeit} onChange={handleChange} className={inputCls} />
+                </div>
+                <div>
+                  <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Ort</label>
+                  <input name="ort" value={form.ort} onChange={handleChange} placeholder="Stadt oder Adresse" className={inputCls} />
+                </div>
+                <div>
+                  <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Gäste</label>
+                  <input name="gaeste" type="number" value={form.gaeste} onChange={handleChange} placeholder="Anzahl" className={inputCls} />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Notizen / Nachricht</label>
+                <textarea name="nachricht" value={form.nachricht} onChange={handleChange} rows={3} className={inputCls} />
+              </div>
+
+              <div>
+                <label className="block text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Quelle</label>
+                <select name="source" value={form.source} onChange={handleChange} className={inputCls}>
+                  <option value="telefon">Telefon</option>
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="email">E-Mail</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="website">Website</option>
+                  <option value="manuell">Manuell</option>
+                </select>
+              </div>
+            </div>
+
+            {message && (
+              <div className="rounded-xl bg-red-500/10 text-red-600 px-4 py-3 text-sm">{message}</div>
+            )}
+
+            <button
+              onClick={createRequest}
+              disabled={loading}
+              className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-80 disabled:opacity-40 transition-opacity"
+            >
+              <Save className="w-4 h-4" />
+              {loading ? "Speichert…" : "Anfrage erstellen"}
+            </button>
+          </>
+        )}
       </div>
     </AdminLayout>
   );

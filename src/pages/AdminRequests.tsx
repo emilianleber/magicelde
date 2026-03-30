@@ -12,6 +12,7 @@ import {
   Plus,
   Trash2,
   User,
+  AlertTriangle,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -85,6 +86,8 @@ const AdminRequests = () => {
   const [viewFilter, setViewFilter] = useState<ViewFilter>("aktiv");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleting, setDeleting] = useState(false);
+  const [hardDeleting, setHardDeleting] = useState(false);
+  const [confirmHardDelete, setConfirmHardDelete] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
 
   useEffect(() => {
@@ -177,6 +180,18 @@ const AdminRequests = () => {
     setDeleting(false);
   };
 
+  const hardDeleteSelected = async () => {
+    if (!selectedIds.length) return;
+    setHardDeleting(true);
+    const { error } = await supabase.from("portal_requests").delete().in("id", selectedIds);
+    if (!error) {
+      setRequests((prev) => prev.filter((r) => !selectedIds.includes(r.id)));
+      setSelectedIds([]);
+      setConfirmHardDelete(false);
+    }
+    setHardDeleting(false);
+  };
+
   const activeCount = requests.filter((r) => !r.deleted_at && !r.event_id && ACTIVE_STATUSES.includes(r.status || "")).length;
   const doneCount = requests.filter((r) => !r.deleted_at && (!!r.event_id || DONE_STATUSES.includes(r.status || ""))).length;
   const deletedCount = requests.filter((r) => !!r.deleted_at).length;
@@ -190,7 +205,17 @@ const AdminRequests = () => {
       subtitle={`${activeCount} aktiv`}
       actions={
         <div className="flex items-center gap-2">
-          {selectMode && selectedIds.length > 0 && (
+          {selectMode && selectedIds.length > 0 && viewFilter === "geloescht" && (
+            <button
+              onClick={() => setConfirmHardDelete(true)}
+              disabled={hardDeleting}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 disabled:opacity-50 transition-colors"
+            >
+              <AlertTriangle className="w-4 h-4" />
+              Endgültig ({selectedIds.length})
+            </button>
+          )}
+          {selectMode && selectedIds.length > 0 && viewFilter !== "geloescht" && (
             <button
               onClick={deleteSelected}
               disabled={deleting}
@@ -201,21 +226,41 @@ const AdminRequests = () => {
             </button>
           )}
           <button
-            onClick={() => { setSelectMode((v) => !v); setSelectedIds([]); }}
+            onClick={() => { setSelectMode((v) => !v); setSelectedIds([]); setConfirmHardDelete(false); }}
             className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition-colors ${selectMode ? "border-border/60 bg-muted/40 text-foreground" : "border-border/30 text-muted-foreground hover:text-foreground"}`}
           >
             {selectMode ? "Abbrechen" : "Auswählen"}
           </button>
           <Link
-            to="/admin/customers"
+            to="/admin/requests/new"
             className="inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-semibold hover:opacity-80 transition-opacity"
-            title="Neue Anfrage – zuerst Kunden wählen"
           >
             <Plus className="w-4 h-4" /> Neue Anfrage
           </Link>
         </div>
       }
     >
+      {/* Hard delete confirmation */}
+      {confirmHardDelete && (
+        <div className="mb-5 p-4 rounded-2xl bg-destructive/5 border border-destructive/20">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-destructive">Endgültig löschen?</p>
+              <p className="text-xs text-muted-foreground mt-1">{selectedIds.length} Anfrage(n) werden permanent gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+              <div className="flex items-center gap-2 mt-3">
+                <button onClick={hardDeleteSelected} disabled={hardDeleting} className="inline-flex items-center gap-1.5 rounded-xl bg-destructive text-white px-4 py-2 text-sm font-semibold hover:opacity-80 disabled:opacity-50">
+                  {hardDeleting ? "Lösche…" : "Ja, endgültig löschen"}
+                </button>
+                <button onClick={() => setConfirmHardDelete(false)} className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-4 py-2 text-sm text-foreground hover:bg-muted/40">
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* View Tabs */}
       <div className="flex gap-1 bg-muted/40 rounded-xl p-1 mb-4 w-fit">
         {[

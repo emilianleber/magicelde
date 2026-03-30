@@ -285,7 +285,7 @@ const AdminCustomerDetail = () => {
       actions={
         <div className="flex items-center gap-2">
           <a
-            href={`/kundenportal?preview=${customer.id}`}
+            href={`https://magicel.de/kundenportal?preview=${customer.id}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground border border-border/30 rounded-xl px-3 py-2 transition-colors"

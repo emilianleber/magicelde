@@ -1,12 +1,13 @@
 {
-  "name": "Magicel – Emilian Leber",
-  "short_name": "Magicel",
-  "description": "Zauberer für Events, Firmenfeiern & Hochzeiten",
-  "start_url": "/kundenportal",
+  "name": "MagicEL CRM",
+  "short_name": "CRM",
+  "description": "Emilian Leber – Admin & CRM",
+  "start_url": "/admin/dashboard",
+  "scope": "/admin/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a0a0a",
-  "theme_color": "#c4a45e",
+  "theme_color": "#0a0a0a",
   "icons": [
     {
       "src": "/apple-touch-icon.png",

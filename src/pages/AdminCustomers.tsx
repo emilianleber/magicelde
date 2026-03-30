@@ -12,6 +12,8 @@ import {
   ArrowUpDown,
   MessageCircle,
   Calendar,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -24,15 +26,11 @@ interface PortalCustomer {
   phone?: string | null;
   kundennummer?: string | null;
   created_at?: string | null;
+  deleted_at?: string | null;
 }
 
-type SortOption =
-  | "newest"
-  | "oldest"
-  | "name_asc"
-  | "name_desc"
-  | "company_asc"
-  | "company_desc";
+type SortOption = "newest" | "oldest" | "name_asc" | "name_desc" | "company_asc" | "company_desc";
+type ViewFilter = "aktiv" | "geloescht" | "alle";
 
 const AdminCustomers = () => {
   const navigate = useNavigate();
@@ -45,6 +43,12 @@ const AdminCustomers = () => {
   const [evtCountMap, setEvtCountMap] = useState<Record<string, number>>({});
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
+  const [viewFilter, setViewFilter] = useState<ViewFilter>("aktiv");
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [deleting, setDeleting] = useState(false);
+  const [hardDeleting, setHardDeleting] = useState(false);
+  const [confirmHardDelete, setConfirmHardDelete] = useState(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -62,8 +66,7 @@ const AdminCustomers = () => {
     if (!user?.email) return;
     const loadData = async () => {
       setLoading(true);
-      const { data: adminEntry } = await supabase
-        .from("portal_admins").select("id").eq("email", user.email).maybeSingle();
+      const { data: adminEntry } = await supabase.from("portal_admins").select("id").eq("email", user.email).maybeSingle();
       if (!adminEntry) { setIsAdmin(false); setLoading(false); return; }
       setIsAdmin(true);
 
@@ -76,15 +79,11 @@ const AdminCustomers = () => {
       if (!custRes.error) setCustomers(custRes.data || []);
 
       const rMap: Record<string, number> = {};
-      (reqRes.data || []).forEach((r) => {
-        if (r.customer_id) rMap[r.customer_id] = (rMap[r.customer_id] || 0) + 1;
-      });
+      (reqRes.data || []).forEach((r) => { if (r.customer_id) rMap[r.customer_id] = (rMap[r.customer_id] || 0) + 1; });
       setReqCountMap(rMap);
 
       const eMap: Record<string, number> = {};
-      (evtRes.data || []).forEach((e) => {
-        if (e.customer_id) eMap[e.customer_id] = (eMap[e.customer_id] || 0) + 1;
-      });
+      (evtRes.data || []).forEach((e) => { if (e.customer_id) eMap[e.customer_id] = (eMap[e.customer_id] || 0) + 1; });
       setEvtCountMap(eMap);
 
       setLoading(false);
@@ -94,14 +93,13 @@ const AdminCustomers = () => {
 
   const filteredAndSortedCustomers = useMemo(() => {
     const q = search.toLowerCase().trim();
-    const filtered = customers.filter((c) =>
-      !q ||
-      c.name?.toLowerCase().includes(q) ||
-      c.company?.toLowerCase().includes(q) ||
-      c.email?.toLowerCase().includes(q) ||
-      c.kundennummer?.toLowerCase().includes(q) ||
-      c.phone?.toLowerCase().includes(q)
-    );
+    const filtered = customers.filter((c) => {
+      const matchesSearch = !q || c.name?.toLowerCase().includes(q) || c.company?.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q) || c.kundennummer?.toLowerCase().includes(q) || c.phone?.toLowerCase().includes(q);
+      const isDeleted = !!c.deleted_at;
+      if (viewFilter === "aktiv") return matchesSearch && !isDeleted;
+      if (viewFilter === "geloescht") return matchesSearch && isDeleted;
+      return matchesSearch;
+    });
     return [...filtered].sort((a, b) => {
       const aDate = a.created_at ? new Date(a.created_at).getTime() : 0;
       const bDate = b.created_at ? new Date(b.created_at).getTime() : 0;
@@ -115,13 +113,57 @@ const AdminCustomers = () => {
         default: return bDate - aDate;
       }
     });
-  }, [customers, search, sortBy]);
+  }, [customers, search, sortBy, viewFilter]);
 
-  const customersWithCompany = customers.filter((c) => !!c.company).length;
-  const recentCustomers = customers.filter(
-    (c) => c.created_at && new Date(c.created_at) > new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)
-  ).length;
+  const activeCount = customers.filter((c) => !c.deleted_at).length;
+  const deletedCount = customers.filter((c) => !!c.deleted_at).length;
+  const customersWithCompany = customers.filter((c) => !c.deleted_at && !!c.company).length;
   const totalRequests = Object.values(reqCountMap).reduce((s, v) => s + v, 0);
+  const recentCustomers = customers.filter((c) => !c.deleted_at && c.created_at && new Date(c.created_at) > new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)).length;
+
+  const allVisibleSelected = filteredAndSortedCustomers.length > 0 && filteredAndSortedCustomers.every((c) => selectedIds.includes(c.id));
+
+  const toggleSelect = (id: string) => setSelectedIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+  const toggleSelectAll = () => {
+    const ids = filteredAndSortedCustomers.map((c) => c.id);
+    if (allVisibleSelected) setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
+    else setSelectedIds((prev) => Array.from(new Set([...prev, ...ids])));
+  };
+
+  const softDeleteSelected = async () => {
+    if (!selectedIds.length) return;
+    setDeleting(true);
+    const deletedAt = new Date().toISOString();
+    const { error } = await supabase.from("portal_customers").update({ deleted_at: deletedAt }).in("id", selectedIds);
+    if (!error) {
+      setCustomers((prev) => prev.map((c) => selectedIds.includes(c.id) ? { ...c, deleted_at: deletedAt } : c));
+      setSelectedIds([]);
+    }
+    setDeleting(false);
+  };
+
+  const hardDeleteSelected = async () => {
+    if (!selectedIds.length) return;
+    setHardDeleting(true);
+    const { error } = await supabase.from("portal_customers").delete().in("id", selectedIds);
+    if (!error) {
+      setCustomers((prev) => prev.filter((c) => !selectedIds.includes(c.id)));
+      setSelectedIds([]);
+      setConfirmHardDelete(false);
+    }
+    setHardDeleting(false);
+  };
+
+  const restoreSelected = async () => {
+    if (!selectedIds.length) return;
+    setDeleting(true);
+    const { error } = await supabase.from("portal_customers").update({ deleted_at: null }).in("id", selectedIds);
+    if (!error) {
+      setCustomers((prev) => prev.map((c) => selectedIds.includes(c.id) ? { ...c, deleted_at: null } : c));
+      setSelectedIds([]);
+    }
+    setDeleting(false);
+  };
 
   if (loading) return <div className="pt-28 text-center">Wird geladen…</div>;
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
@@ -129,21 +171,80 @@ const AdminCustomers = () => {
   return (
     <AdminLayout
       title="Kunden"
-      subtitle={`${customers.length} Kunden gesamt`}
+      subtitle={`${activeCount} aktive Kunden`}
       actions={
-        <Link
-          to="/admin/customers/new"
-          className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 transition-opacity"
-        >
-          <Plus className="w-4 h-4" />
-          Neuer Kunde
-        </Link>
+        <div className="flex items-center gap-2">
+          {selectMode && selectedIds.length > 0 && viewFilter === "geloescht" && (
+            <>
+              <button
+                onClick={() => setConfirmHardDelete(true)}
+                disabled={hardDeleting}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 disabled:opacity-50 transition-colors"
+              >
+                <AlertTriangle className="w-4 h-4" />
+                Endgültig löschen ({selectedIds.length})
+              </button>
+              <button
+                onClick={restoreSelected}
+                disabled={deleting}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-3 py-2 text-sm text-foreground hover:bg-muted/40 disabled:opacity-50 transition-colors"
+              >
+                Wiederherstellen
+              </button>
+            </>
+          )}
+          {selectMode && selectedIds.length > 0 && viewFilter !== "geloescht" && (
+            <button
+              onClick={softDeleteSelected}
+              disabled={deleting}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 disabled:opacity-50 transition-colors"
+            >
+              <Trash2 className="w-4 h-4" />
+              {deleting ? "…" : `Löschen (${selectedIds.length})`}
+            </button>
+          )}
+          <button
+            onClick={() => { setSelectMode((v) => !v); setSelectedIds([]); setConfirmHardDelete(false); }}
+            className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition-colors ${selectMode ? "border-border/60 bg-muted/40 text-foreground" : "border-border/30 text-muted-foreground hover:text-foreground"}`}
+          >
+            {selectMode ? "Abbrechen" : "Auswählen"}
+          </button>
+          <Link
+            to="/admin/customers/new"
+            className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 transition-opacity"
+          >
+            <Plus className="w-4 h-4" /> Neuer Kunde
+          </Link>
+        </div>
       }
     >
+      {/* Hard delete confirmation */}
+      {confirmHardDelete && (
+        <div className="mb-5 p-4 rounded-2xl bg-destructive/5 border border-destructive/20">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-destructive">Endgültig löschen?</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {selectedIds.length} Kunde(n) werden permanent gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.
+              </p>
+              <div className="flex items-center gap-2 mt-3">
+                <button onClick={hardDeleteSelected} disabled={hardDeleting} className="inline-flex items-center gap-1.5 rounded-xl bg-destructive text-white px-4 py-2 text-sm font-semibold hover:opacity-80 disabled:opacity-50">
+                  {hardDeleting ? "Lösche…" : "Ja, endgültig löschen"}
+                </button>
+                <button onClick={() => setConfirmHardDelete(false)} className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-4 py-2 text-sm text-foreground hover:bg-muted/40">
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
         {[
-          { label: "Kunden", value: customers.length },
+          { label: "Kunden", value: activeCount },
           { label: "Mit Firma", value: customersWithCompany },
           { label: "Anfragen gesamt", value: totalRequests },
           { label: "Neu (30 Tage)", value: recentCustomers },
@@ -155,8 +256,25 @@ const AdminCustomers = () => {
         ))}
       </div>
 
+      {/* View Tabs */}
+      <div className="flex gap-1 bg-muted/40 rounded-xl p-1 mb-4 w-fit">
+        {[
+          { key: "aktiv", label: `Aktiv (${activeCount})` },
+          { key: "geloescht", label: `Gelöscht (${deletedCount})` },
+          { key: "alle", label: "Alle" },
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => { setViewFilter(tab.key as ViewFilter); setSelectedIds([]); }}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewFilter === tab.key ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       {/* Search + Sort */}
-      <div className="grid lg:grid-cols-[1fr_200px] gap-3 mb-6">
+      <div className="grid lg:grid-cols-[1fr_200px] gap-3 mb-5">
         <div className="relative">
           <Search className="w-4 h-4 text-muted-foreground absolute left-4 top-1/2 -translate-y-1/2" />
           <input
@@ -184,79 +302,90 @@ const AdminCustomers = () => {
         </div>
       </div>
 
+      {selectMode && (
+        <div className="flex items-center gap-3 mb-3">
+          <label className="inline-flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
+            <input type="checkbox" checked={allVisibleSelected} onChange={toggleSelectAll} className="h-4 w-4 rounded border-border text-accent focus:ring-accent" />
+            Alle auswählen
+          </label>
+          {selectedIds.length > 0 && <span className="text-sm text-muted-foreground">{selectedIds.length} ausgewählt</span>}
+        </div>
+      )}
+
       {/* Customer List */}
       <div className="space-y-2">
         {filteredAndSortedCustomers.length === 0 ? (
           <div className="p-12 rounded-2xl bg-muted/20 border border-border/30 text-center">
             <Users className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
             <p className="text-sm text-muted-foreground">
-              {search ? "Keine Kunden gefunden." : "Noch keine Kunden angelegt."}
+              {search ? "Keine Kunden gefunden." : viewFilter === "geloescht" ? "Keine gelöschten Kunden." : "Noch keine Kunden angelegt."}
             </p>
           </div>
         ) : (
           filteredAndSortedCustomers.map((customer) => (
-            <Link
+            <div
               key={customer.id}
-              to={`/admin/customers/${customer.id}`}
-              className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30 hover:border-accent/30 hover:bg-muted/30 transition-all group"
+              className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${selectMode ? "bg-muted/20 border-border/30" : "bg-muted/20 border-border/30 hover:border-accent/30 hover:bg-muted/30"} ${customer.deleted_at ? "opacity-60" : ""}`}
             >
-              {/* Avatar */}
-              <div className="w-9 h-9 rounded-full bg-foreground flex items-center justify-center shrink-0 text-sm font-bold text-background">
-                {(customer.name || "?")[0].toUpperCase()}
-              </div>
+              {selectMode && (
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(customer.id)}
+                  onChange={() => toggleSelect(customer.id)}
+                  className="h-4 w-4 rounded border-border text-accent focus:ring-accent shrink-0"
+                />
+              )}
 
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-semibold text-foreground">
-                    {customer.name || "Unbekannt"}
-                  </span>
-                  {customer.company && (
-                    <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-md bg-background/60 border border-border/20 text-muted-foreground">
-                      <Building2 className="w-3 h-3" />
-                      {customer.company}
-                    </span>
-                  )}
-                  {customer.kundennummer && (
-                    <span className="text-[11px] px-1.5 py-0.5 rounded-md bg-background/60 border border-border/20 text-muted-foreground">
-                      #{customer.kundennummer}
-                    </span>
-                  )}
+              <Link
+                to={`/admin/customers/${customer.id}`}
+                className="flex items-center gap-4 flex-1 min-w-0 group"
+              >
+                {/* Avatar */}
+                <div className="w-9 h-9 rounded-full bg-foreground flex items-center justify-center shrink-0 text-sm font-bold text-background">
+                  {(customer.name || "?")[0].toUpperCase()}
                 </div>
-                <div className="flex items-center gap-4 mt-0.5 text-xs text-muted-foreground flex-wrap">
-                  {customer.email && (
-                    <span className="flex items-center gap-1">
-                      <Mail className="w-3 h-3" />
-                      {customer.email}
-                    </span>
-                  )}
-                  {customer.phone && (
-                    <span className="flex items-center gap-1">
-                      <Phone className="w-3 h-3" />
-                      {customer.phone}
-                    </span>
-                  )}
-                </div>
-              </div>
 
-              {/* Counts */}
-              <div className="hidden sm:flex items-center gap-4 shrink-0">
-                <div className="text-center">
-                  <p className="text-sm font-semibold text-foreground">{reqCountMap[customer.id] || 0}</p>
-                  <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-                    <MessageCircle className="w-3 h-3" /> Anfragen
-                  </p>
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm font-semibold text-foreground">{customer.name || "Unbekannt"}</span>
+                    {customer.company && (
+                      <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-md bg-background/60 border border-border/20 text-muted-foreground">
+                        <Building2 className="w-3 h-3" />{customer.company}
+                      </span>
+                    )}
+                    {customer.kundennummer && (
+                      <span className="text-[11px] px-1.5 py-0.5 rounded-md bg-background/60 border border-border/20 text-muted-foreground">
+                        #{customer.kundennummer}
+                      </span>
+                    )}
+                    {customer.deleted_at && (
+                      <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full text-destructive bg-destructive/10 border border-destructive/20">
+                        Gelöscht
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-4 mt-0.5 text-xs text-muted-foreground flex-wrap">
+                    {customer.email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{customer.email}</span>}
+                    {customer.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{customer.phone}</span>}
+                  </div>
                 </div>
-                <div className="text-center">
-                  <p className="text-sm font-semibold text-foreground">{evtCountMap[customer.id] || 0}</p>
-                  <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-                    <Calendar className="w-3 h-3" /> Events
-                  </p>
-                </div>
-              </div>
 
-              <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all shrink-0" />
-            </Link>
+                {/* Counts */}
+                <div className="hidden sm:flex items-center gap-4 shrink-0">
+                  <div className="text-center">
+                    <p className="text-sm font-semibold text-foreground">{reqCountMap[customer.id] || 0}</p>
+                    <p className="text-[10px] text-muted-foreground flex items-center gap-1"><MessageCircle className="w-3 h-3" /> Anfragen</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-semibold text-foreground">{evtCountMap[customer.id] || 0}</p>
+                    <p className="text-[10px] text-muted-foreground flex items-center gap-1"><Calendar className="w-3 h-3" /> Events</p>
+                  </div>
+                </div>
+
+                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all shrink-0" />
+              </Link>
+            </div>
           ))
         )}
       </div>

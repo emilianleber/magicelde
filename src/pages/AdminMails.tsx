@@ -7,7 +7,7 @@ import {
   ChevronDown, ChevronUp, ChevronLeft, ChevronRight,
   FileText, LogOut, Mail, MailOpen, Paperclip,
   Plus, RefreshCw, Search, Send, User, X, Inbox, SendHorizonal,
-  Trash2, AlertOctagon, Star, StarOff, CheckCheck,
+  Trash2, AlertOctagon, Star, StarOff, CheckCheck, CheckSquare, Square,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
@@ -65,11 +65,14 @@ const AdminMails = () => {
   const [activeFolder, setActiveFolder] = useState<Folder>("posteingang");
   const [mails, setMails] = useState<InboxMail[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [totalUnreadCount, setTotalUnreadCount] = useState(0);
   const [page, setPage] = useState(0);
   const [sentMails, setSentMails] = useState<PortalMessage[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [loadingBody, setLoadingBody] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState<InboxMail[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [syncMsg, setSyncMsg] = useState("");
   const [syncLogs, setSyncLogs] = useState<string[]>([]);
@@ -89,6 +92,11 @@ const AdminMails = () => {
   const [selectedDocIds, setSelectedDocIds] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [sendMsg, setSendMsg] = useState("");
+
+  // Multi-select
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkLoading, setBulkLoading] = useState(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
@@ -124,6 +132,16 @@ const AdminMails = () => {
     load();
   }, [user]);
 
+  const loadUnreadCount = async () => {
+    const { count } = await supabase
+      .from("portal_inbox_mails")
+      .select("*", { count: "exact", head: true })
+      .eq("folder", "INBOX")
+      .eq("is_read", false)
+      .eq("is_deleted", false);
+    setTotalUnreadCount(count || 0);
+  };
+
   const loadMails = async (folder: Folder = activeFolder, p: number = page) => {
     const imapFolder = FOLDERS.find((f) => f.id === folder)?.imap || "INBOX";
     const from = p * PAGE_SIZE;
@@ -137,12 +155,16 @@ const AdminMails = () => {
       .range(from, to);
     setMails((data as InboxMail[]) || []);
     if (count !== null) setTotalCount(count);
+    await loadUnreadCount();
   };
 
   useEffect(() => {
     if (!isAdmin) return;
     setExpandedId(null);
     setPage(0);
+    setSearch("");
+    setSearchResults([]);
+    setSelectedIds([]);
     loadMails(activeFolder, 0);
   }, [activeFolder, isAdmin]);
 
@@ -151,10 +173,35 @@ const AdminMails = () => {
     loadMails(activeFolder, page);
   }, [page]);
 
+  // DB search across all pages
+  useEffect(() => {
+    if (!isAdmin) return;
+    const q = search.trim();
+    if (!q) { setSearchResults([]); return; }
+
+    const doSearch = async () => {
+      setIsSearching(true);
+      const imapFolder = FOLDERS.find((f) => f.id === activeFolder)?.imap || "INBOX";
+
+      // Search by multiple fields — build OR filter
+      const { data } = await supabase
+        .from("portal_inbox_mails")
+        .select("*")
+        .eq("is_deleted", false)
+        .or(`subject.ilike.%${q}%,from_email.ilike.%${q}%,from_name.ilike.%${q}%,to_email.ilike.%${q}%`)
+        .order("received_at", { ascending: false })
+        .limit(200);
+
+      setSearchResults((data as InboxMail[]) || []);
+      setIsSearching(false);
+    };
+
+    const timer = setTimeout(doSearch, 350);
+    return () => clearTimeout(timer);
+  }, [search, activeFolder, isAdmin]);
+
   const syncInbox = async () => {
-    setSyncing(true);
-    setSyncMsg("");
-    setSyncLogs([]);
+    setSyncing(true); setSyncMsg(""); setSyncLogs([]);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(`${SUPABASE_URL}/functions/v1/sync-inbox`, {
@@ -178,34 +225,43 @@ const AdminMails = () => {
     e.stopPropagation();
     const next = !mail.is_starred;
     await supabase.from("portal_inbox_mails").update({ is_starred: next }).eq("id", mail.id);
-    setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_starred: next } : m));
+    const update = (prev: InboxMail[]) => prev.map((m) => m.id === mail.id ? { ...m, is_starred: next } : m);
+    setMails(update); setSearchResults(update);
   };
 
   const toggleRead = async (mail: InboxMail, e: React.MouseEvent) => {
     e.stopPropagation();
     const next = !mail.is_read;
     await supabase.from("portal_inbox_mails").update({ is_read: next }).eq("id", mail.id);
-    setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_read: next } : m));
+    const update = (prev: InboxMail[]) => prev.map((m) => m.id === mail.id ? { ...m, is_read: next } : m);
+    setMails(update); setSearchResults(update);
+    await loadUnreadCount();
   };
 
   const deleteMail = async (mail: InboxMail, e: React.MouseEvent) => {
     e.stopPropagation();
     await supabase.from("portal_inbox_mails").update({ is_deleted: true }).eq("id", mail.id);
     setMails((prev) => prev.filter((m) => m.id !== mail.id));
+    setSearchResults((prev) => prev.filter((m) => m.id !== mail.id));
     setTotalCount((n) => n - 1);
     if (expandedId === mail.id) setExpandedId(null);
+    await loadUnreadCount();
   };
 
   const markAllRead = async () => {
     const imapFolder = FOLDERS.find((f) => f.id === activeFolder)?.imap || "INBOX";
     await supabase.from("portal_inbox_mails").update({ is_read: true }).eq("folder", imapFolder).eq("is_deleted", false);
     setMails((prev) => prev.map((m) => ({ ...m, is_read: true })));
+    setSearchResults((prev) => prev.map((m) => ({ ...m, is_read: true })));
+    setTotalUnreadCount(0);
   };
 
   const markRead = async (mail: InboxMail) => {
     if (mail.is_read) return;
     await supabase.from("portal_inbox_mails").update({ is_read: true }).eq("id", mail.id);
-    setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_read: true } : m));
+    const update = (prev: InboxMail[]) => prev.map((m) => m.id === mail.id ? { ...m, is_read: true } : m);
+    setMails(update); setSearchResults(update);
+    setTotalUnreadCount((n) => Math.max(0, n - 1));
   };
 
   const loadBody = async (mail: InboxMail) => {
@@ -219,15 +275,41 @@ const AdminMails = () => {
         body: JSON.stringify({ mail_id: mail.id, uid: mail.uid }),
       });
       const data = await res.json();
-      if (res.ok) setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, body_html: data.body_html, body_text: data.body_text } : m));
+      if (res.ok) {
+        const update = (prev: InboxMail[]) => prev.map((m) => m.id === mail.id ? { ...m, body_html: data.body_html, body_text: data.body_text } : m);
+        setMails(update); setSearchResults(update);
+      }
     } catch (_) {}
     setLoadingBody(null);
   };
 
+  // Bulk actions
+  const bulkMarkRead = async (read: boolean) => {
+    if (!selectedIds.length) return;
+    setBulkLoading(true);
+    await supabase.from("portal_inbox_mails").update({ is_read: read }).in("id", selectedIds);
+    const update = (prev: InboxMail[]) => prev.map((m) => selectedIds.includes(m.id) ? { ...m, is_read: read } : m);
+    setMails(update); setSearchResults(update);
+    setSelectedIds([]);
+    await loadUnreadCount();
+    setBulkLoading(false);
+  };
+
+  const bulkDelete = async () => {
+    if (!selectedIds.length) return;
+    setBulkLoading(true);
+    await supabase.from("portal_inbox_mails").update({ is_deleted: true }).in("id", selectedIds);
+    setMails((prev) => prev.filter((m) => !selectedIds.includes(m.id)));
+    setSearchResults((prev) => prev.filter((m) => !selectedIds.includes(m.id)));
+    setTotalCount((n) => n - selectedIds.length);
+    setSelectedIds([]);
+    await loadUnreadCount();
+    setBulkLoading(false);
+  };
+
   const handleCustomerSelect = async (customerId: string) => {
     setComposeCustomerId(customerId);
-    setSelectedDocIds([]);
-    setCustomerDocs([]);
+    setSelectedDocIds([]); setCustomerDocs([]);
     const c = customers.find((c) => c.id === customerId);
     if (c) { setComposeToEmail(c.email || ""); setComposeToName(c.name || ""); }
     if (customerId) {
@@ -280,10 +362,10 @@ const AdminMails = () => {
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
 
   const isSentFolder = activeFolder === "gesendet";
-  const unreadCount = mails.filter((m) => !m.is_read).length;
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const isSearchActive = !!search.trim();
 
-  // For gesendet: merge IMAP sent + portal_messages, sorted by date
+  // Build display list
   const sentCombined: any[] = isSentFolder
     ? [
         ...mails.map((m) => ({ ...m, _type: "imap" })),
@@ -295,20 +377,29 @@ const AdminMails = () => {
       })
     : [];
 
-  const displayMails = isSentFolder ? sentCombined : mails;
+  let displayMails: any[];
+  if (isSearchActive) {
+    if (isSentFolder) {
+      const q = search.toLowerCase();
+      displayMails = sentCombined.filter((m: any) =>
+        m.subject?.toLowerCase().includes(q) || m.to_email?.toLowerCase().includes(q) || (m.customer as any)?.name?.toLowerCase().includes(q)
+      );
+    } else {
+      displayMails = searchResults;
+    }
+  } else {
+    displayMails = isSentFolder ? sentCombined : mails;
+  }
 
-  const filteredMails = search
-    ? displayMails.filter((m: any) => {
-        const q = search.toLowerCase();
-        return (
-          m.subject?.toLowerCase().includes(q) ||
-          m.from_email?.toLowerCase().includes(q) ||
-          m.to_email?.toLowerCase().includes(q) ||
-          m.from_name?.toLowerCase().includes(q) ||
-          (m.customer as any)?.name?.toLowerCase().includes(q)
-        );
-      })
-    : displayMails;
+  // For checkboxes – only IMAP mails support selection
+  const selectableMails = displayMails.filter((m: any) => !m._type || m._type === "imap");
+  const allVisible = selectableMails.length > 0 && selectableMails.every((m: any) => selectedIds.includes(m.id));
+
+  const toggleSelectAll = () => {
+    const ids = selectableMails.map((m: any) => m.id);
+    if (allVisible) setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
+    else setSelectedIds((prev) => Array.from(new Set([...prev, ...ids])));
+  };
 
   return (
     <AdminLayout
@@ -402,16 +493,16 @@ const AdminMails = () => {
           {FOLDERS.map((f) => (
             <button
               key={f.id}
-              onClick={() => { setActiveFolder(f.id); setExpandedId(null); }}
+              onClick={() => { setActiveFolder(f.id); setExpandedId(null); setSelectMode(false); setSelectedIds([]); }}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left relative ${
                 activeFolder === f.id ? "bg-background shadow-sm text-foreground border border-border/20" : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
               }`}
             >
               <f.icon className="w-4 h-4 shrink-0" />
               <span>{f.label}</span>
-              {activeFolder === f.id && unreadCount > 0 && !isSentFolder && (
-                <span className="ml-auto font-sans text-[10px] font-bold bg-accent text-white rounded-full w-5 h-5 flex items-center justify-center shrink-0">
-                  {unreadCount > 9 ? "9+" : unreadCount}
+              {f.id === "posteingang" && totalUnreadCount > 0 && (
+                <span className="ml-auto font-sans text-[10px] font-bold bg-accent text-white rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center shrink-0">
+                  {totalUnreadCount > 99 ? "99+" : totalUnreadCount}
                 </span>
               )}
             </button>
@@ -420,48 +511,98 @@ const AdminMails = () => {
 
         {/* Mail List */}
         <div className="flex-1 min-w-0">
-          {/* Toolbar: search + pagination + mark all read */}
-          <div className="flex items-center gap-3 mb-4 flex-wrap">
+          {/* Toolbar */}
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
+            {/* Search */}
             <div className="relative flex-1 min-w-[180px]">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Suche…" className="w-full rounded-2xl bg-muted/40 border border-border/30 pl-11 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Alle Mails durchsuchen…"
+                className="w-full rounded-2xl bg-muted/40 border border-border/30 pl-11 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
+              />
+              {isSearching && <div className="absolute right-4 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-accent border-t-transparent animate-spin" />}
             </div>
-            {unreadCount > 0 && (
+
+            {/* Select mode toggle */}
+            {!isSentFolder && (
+              <button
+                onClick={() => { setSelectMode((v) => !v); setSelectedIds([]); }}
+                className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm transition-colors ${selectMode ? "border-border/60 bg-muted/40 text-foreground" : "border-border/30 text-muted-foreground hover:text-foreground"}`}
+              >
+                <CheckSquare className="w-4 h-4" />
+                {selectMode ? "Abbrechen" : "Auswählen"}
+              </button>
+            )}
+
+            {/* Bulk actions (visible in select mode with items selected) */}
+            {selectMode && selectedIds.length > 0 && (
+              <>
+                <button onClick={() => bulkMarkRead(true)} disabled={bulkLoading} className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-3 py-2 text-sm text-foreground hover:bg-muted/40 disabled:opacity-50">
+                  <MailOpen className="w-4 h-4" /> Gelesen
+                </button>
+                <button onClick={() => bulkMarkRead(false)} disabled={bulkLoading} className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-3 py-2 text-sm text-foreground hover:bg-muted/40 disabled:opacity-50">
+                  <Mail className="w-4 h-4" /> Ungelesen
+                </button>
+                <button onClick={bulkDelete} disabled={bulkLoading} className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 disabled:opacity-50">
+                  <Trash2 className="w-4 h-4" /> Löschen ({selectedIds.length})
+                </button>
+              </>
+            )}
+
+            {/* Mark all read + pagination (only when not searching or in select mode) */}
+            {!isSearchActive && totalUnreadCount > 0 && !isSentFolder && (
               <button onClick={markAllRead} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
                 <CheckCheck className="w-3.5 h-3.5" /> Alle gelesen
               </button>
             )}
-            {totalCount > PAGE_SIZE && (
-              <div className="flex items-center gap-1">
-                <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors">
+            {!isSearchActive && totalCount > PAGE_SIZE && (
+              <div className="flex items-center gap-1 ml-auto">
+                <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground disabled:opacity-30">
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <span className="text-xs text-muted-foreground whitespace-nowrap">{page + 1} / {totalPages}</span>
-                <button onClick={() => setPage((p) => p + 1)} disabled={(page + 1) >= totalPages} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors">
+                <button onClick={() => setPage((p) => p + 1)} disabled={(page + 1) >= totalPages} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground disabled:opacity-30">
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             )}
-            {totalCount > 0 && (
+            {isSearchActive && (
+              <span className="text-xs text-muted-foreground whitespace-nowrap ml-auto">{displayMails.length} Treffer</span>
+            )}
+            {!isSearchActive && totalCount > 0 && !isSentFolder && (
               <span className="text-xs text-muted-foreground whitespace-nowrap">{totalCount} Mails</span>
             )}
           </div>
 
+          {/* Select all row */}
+          {selectMode && !isSentFolder && selectableMails.length > 0 && (
+            <div className="flex items-center gap-3 mb-3 px-1">
+              <label className="inline-flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
+                <input type="checkbox" checked={allVisible} onChange={toggleSelectAll} className="h-4 w-4 rounded border-border text-accent focus:ring-accent" />
+                Alle auf dieser Seite auswählen
+              </label>
+              {selectedIds.length > 0 && <span className="text-sm text-muted-foreground">{selectedIds.length} ausgewählt</span>}
+            </div>
+          )}
+
           <div className="space-y-2">
-            {filteredMails.length === 0 ? (
+            {displayMails.length === 0 ? (
               <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
                 <Mail className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
                 <p className="font-sans text-sm text-muted-foreground">
-                  {activeFolder === "posteingang" ? "Klicke auf Sync um Mails zu laden." : "Keine Mails in diesem Ordner."}
+                  {isSearchActive ? "Keine Mails gefunden." : activeFolder === "posteingang" ? "Klicke auf Sync um Mails zu laden." : "Keine Mails in diesem Ordner."}
                 </p>
               </div>
             ) : (
-              filteredMails.map((mail: any) => {
+              displayMails.map((mail: any) => {
                 const isSent = mail._type === "sent";
                 const isImapMail = !isSent;
                 const id = mail.id;
                 const isExpanded = expandedId === id;
                 const isRead = isSent ? true : mail.is_read;
+                const isSelected = selectedIds.includes(id);
                 const subject = mail.subject || "(Kein Betreff)";
                 const from = isSent
                   ? `An: ${(mail.customer as any)?.name || mail.to_email}`
@@ -470,54 +611,55 @@ const AdminMails = () => {
                   .toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
 
                 return (
-                  <div key={id} className={`rounded-2xl border overflow-hidden transition-colors ${!isRead ? "bg-accent/5 border-accent/20" : "bg-muted/20 border-border/30"}`}>
+                  <div key={id} className={`rounded-2xl border overflow-hidden transition-colors ${!isRead ? "bg-accent/5 border-accent/20" : "bg-muted/20 border-border/30"} ${isSelected ? "ring-2 ring-accent/40" : ""}`}>
                     <div
                       onClick={() => {
+                        if (selectMode && isImapMail) {
+                          setSelectedIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+                          return;
+                        }
                         setExpandedId(isExpanded ? null : id);
                         if (isImapMail) { markRead(mail); if (!isExpanded) loadBody(mail); }
                       }}
                       className="w-full p-4 flex items-center gap-3 text-left hover:bg-muted/30 transition-colors cursor-pointer group"
                     >
-                      <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                        <User className="w-4 h-4 text-accent" />
-                      </div>
+                      {selectMode && isImapMail ? (
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => {}}
+                          className="h-4 w-4 rounded border-border text-accent focus:ring-accent shrink-0"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                          <User className="w-4 h-4 text-accent" />
+                        </div>
+                      )}
                       <div className="flex-1 min-w-0">
                         <p className={`font-sans text-sm truncate ${!isRead ? "font-bold text-foreground" : "font-semibold text-foreground"}`}>{subject}</p>
                         <p className="font-sans text-xs text-muted-foreground mt-0.5 truncate">{from}</p>
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
-                        {/* Action buttons – visible on hover */}
-                        {isImapMail && (
+                        {isImapMail && !selectMode && (
                           <>
-                            <button
-                              onClick={(e) => toggleRead(mail, e)}
-                              title={mail.is_read ? "Als ungelesen markieren" : "Als gelesen markieren"}
-                              className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-all"
-                            >
+                            <button onClick={(e) => toggleRead(mail, e)} title={mail.is_read ? "Als ungelesen markieren" : "Als gelesen markieren"} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-all">
                               {mail.is_read ? <Mail className="w-3.5 h-3.5" /> : <MailOpen className="w-3.5 h-3.5" />}
                             </button>
-                            <button
-                              onClick={(e) => toggleStar(mail, e)}
-                              title="Stern"
-                              className="p-1.5 rounded-lg text-muted-foreground hover:text-yellow-500 opacity-0 group-hover:opacity-100 transition-all"
-                            >
+                            <button onClick={(e) => toggleStar(mail, e)} title="Stern" className="p-1.5 rounded-lg text-muted-foreground hover:text-yellow-500 opacity-0 group-hover:opacity-100 transition-all">
                               {mail.is_starred ? <Star className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" /> : <StarOff className="w-3.5 h-3.5" />}
                             </button>
-                            <button
-                              onClick={(e) => deleteMail(mail, e)}
-                              title="Löschen"
-                              className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-all"
-                            >
+                            <button onClick={(e) => deleteMail(mail, e)} title="Löschen" className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-all">
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
                           </>
                         )}
                         <span className="font-sans text-xs text-muted-foreground ml-1">{date}</span>
-                        {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                        {!selectMode && (isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />)}
                       </div>
                     </div>
 
-                    {isExpanded && (
+                    {isExpanded && !selectMode && (
                       <div className="px-4 pb-4 pt-1 border-t border-border/20">
                         <div className="flex gap-4 text-xs text-muted-foreground mb-3 font-sans flex-wrap">
                           {isSent ? (

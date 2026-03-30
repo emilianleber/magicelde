@@ -25,10 +25,11 @@ import {
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
 
-type WidgetId = "stats" | "neue_anfragen" | "naechste_events" | "offene_todos" | "letzte_mails" | "neue_kunden" | "conversion";
+type WidgetId = "stats" | "neue_anfragen" | "naechste_events" | "offene_todos" | "letzte_mails" | "neue_kunden" | "conversion" | "kalender";
 
 const WIDGET_DEFS: { id: WidgetId; label: string; description: string; span: "full" | "half" }[] = [
   { id: "stats",           label: "Statistiken",     description: "Zahlen auf einen Blick",      span: "full" },
+  { id: "kalender",        label: "Kalender",        description: "Events & Anfragen im Monat",  span: "full" },
   { id: "neue_anfragen",   label: "Neue Anfragen",   description: "Letzte Anfragen",              span: "half" },
   { id: "naechste_events", label: "Nächste Events",  description: "Bevorstehende Events",         span: "half" },
   { id: "offene_todos",    label: "Offene Todos",    description: "Offene Aufgaben",              span: "half" },
@@ -37,8 +38,8 @@ const WIDGET_DEFS: { id: WidgetId; label: string; description: string; span: "fu
   { id: "conversion",      label: "Conversion",      description: "Anfragen → Events Rate",       span: "half" },
 ];
 
-const DEFAULT_LAYOUT: WidgetId[] = ["stats","neue_anfragen","naechste_events","offene_todos","letzte_mails","neue_kunden","conversion"];
-const STORAGE_KEY = "admin_widget_layout_v2";
+const DEFAULT_LAYOUT: WidgetId[] = ["stats","kalender","neue_anfragen","naechste_events","offene_todos","letzte_mails","neue_kunden","conversion"];
+const STORAGE_KEY = "admin_widget_layout_v3";
 
 const SortableWidget = ({ id, editMode, span, onRemove, children }: {
   id: string; editMode: boolean; span: "full" | "half"; onRemove: () => void; children: React.ReactNode;
@@ -65,7 +66,7 @@ const SortableWidget = ({ id, editMode, span, onRemove, children }: {
   );
 };
 
-interface Req { id: string; created_at: string; status: string | null; name: string; anlass: string | null; ort: string | null; }
+interface Req { id: string; created_at: string; status: string | null; name: string; anlass: string | null; ort: string | null; datum: string | null; }
 interface Evt { id: string; title: string; event_date: string | null; location: string | null; status: string | null; }
 interface Todo { id: string; title: string; status: string | null; due_date: string | null; }
 interface Cust { id: string; name: string | null; email: string | null; created_at: string; }
@@ -83,6 +84,8 @@ const AdminDashboard = () => {
   const [customers, setCustomers] = useState<Cust[]>([]);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [customerCount, setCustomerCount] = useState(0);
+
+  const [calMonth, setCalMonth] = useState<Date>(() => { const d = new Date(); d.setDate(1); return d; });
 
   const [layout, setLayout] = useState<WidgetId[]>(() => {
     try { const s = localStorage.getItem(STORAGE_KEY); return s ? JSON.parse(s) : DEFAULT_LAYOUT; } catch { return DEFAULT_LAYOUT; }
@@ -115,7 +118,7 @@ const AdminDashboard = () => {
       if (!adm) { setIsAdmin(false); setLoading(false); return; }
       setIsAdmin(true);
       const [r, e, t, cc, c, m] = await Promise.all([
-        supabase.from("portal_requests").select("id,created_at,status,name,anlass,ort").order("created_at", { ascending: false }),
+        supabase.from("portal_requests").select("id,created_at,status,name,anlass,ort,datum").order("created_at", { ascending: false }),
         supabase.from("portal_events").select("id,title,event_date,location,status").order("event_date", { ascending: true }),
         supabase.from("portal_todos").select("id,title,status,due_date").order("due_date", { ascending: true }),
         supabase.from("portal_customers").select("*", { count: "exact", head: true }),
@@ -229,6 +232,101 @@ const AdminDashboard = () => {
           </div>
         </div>
       );
+      case "kalender": {
+        const year = calMonth.getFullYear();
+        const month = calMonth.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const startPad = (new Date(year, month, 1).getDay() + 6) % 7; // Mon-first
+        const todayStr = new Date().toISOString().slice(0, 10);
+
+        const evtDates: Record<string, { id: string; title: string }[]> = {};
+        const reqDates: Record<string, { id: string; anlass: string | null }[]> = {};
+
+        events.forEach((e) => {
+          if (!e.event_date) return;
+          const d = e.event_date.slice(0, 10);
+          const [y, m] = d.split("-").map(Number);
+          if (y === year && m - 1 === month) {
+            if (!evtDates[d]) evtDates[d] = [];
+            evtDates[d].push({ id: e.id, title: e.title });
+          }
+        });
+
+        requests.forEach((r) => {
+          if (!r.datum) return;
+          const d = r.datum.slice(0, 10);
+          const [y, m] = d.split("-").map(Number);
+          if (y === year && m - 1 === month) {
+            if (!reqDates[d]) reqDates[d] = [];
+            reqDates[d].push({ id: r.id, anlass: r.anlass });
+          }
+        });
+
+        const cells: (number | null)[] = [
+          ...Array(startPad).fill(null),
+          ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+        ];
+        while (cells.length % 7 !== 0) cells.push(null);
+
+        return (
+          <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display text-base font-bold text-foreground">Kalender</h2>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => { const d = new Date(calMonth); d.setMonth(d.getMonth() - 1); setCalMonth(d); }}
+                  className="w-7 h-7 rounded-lg border border-border/30 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors text-sm"
+                >‹</button>
+                <span className="font-sans text-sm font-medium text-foreground min-w-[140px] text-center">
+                  {calMonth.toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
+                </span>
+                <button
+                  onClick={() => { const d = new Date(calMonth); d.setMonth(d.getMonth() + 1); setCalMonth(d); }}
+                  className="w-7 h-7 rounded-lg border border-border/30 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors text-sm"
+                >›</button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-7 gap-1 mb-1">
+              {["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"].map((d) => (
+                <div key={d} className="text-center text-[10px] font-semibold text-muted-foreground uppercase py-1">{d}</div>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-7 gap-1">
+              {cells.map((day, i) => {
+                if (!day) return <div key={i} />;
+                const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                const dayEvts = evtDates[dateStr] || [];
+                const dayReqs = reqDates[dateStr] || [];
+                const isToday = dateStr === todayStr;
+                const hasItems = dayEvts.length > 0 || dayReqs.length > 0;
+                return (
+                  <div
+                    key={i}
+                    className={`relative flex flex-col items-center justify-start pt-1.5 pb-1 rounded-lg min-h-[42px] text-sm transition-colors ${
+                      isToday ? "bg-accent text-accent-foreground font-bold ring-2 ring-accent ring-offset-1 ring-offset-background" : hasItems ? "bg-background/60 border border-border/20 hover:border-accent/30" : "hover:bg-muted/30"
+                    }`}
+                  >
+                    <span className={isToday ? "font-bold" : "text-foreground"}>{day}</span>
+                    {hasItems && (
+                      <div className="flex gap-0.5 mt-0.5">
+                        {dayEvts.length > 0 && <span className="w-1.5 h-1.5 rounded-full bg-blue-500" title={`${dayEvts.length} Event(s)`} />}
+                        {dayReqs.length > 0 && <span className="w-1.5 h-1.5 rounded-full bg-orange-400" title={`${dayReqs.length} Anfrage(n)`} />}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center gap-5 mt-3 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block" /> Events ({events.filter(e => e.event_date?.startsWith(`${year}-${String(month+1).padStart(2,"0")}`)).length})</span>
+              <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-orange-400 inline-block" /> Anfragen ({requests.filter(r => r.datum?.startsWith(`${year}-${String(month+1).padStart(2,"0")}`)).length})</span>
+            </div>
+          </div>
+        );
+      }
       default: return null;
     }
   };
@@ -284,7 +382,7 @@ const AdminDashboard = () => {
       {/* DnD Grid */}
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={layout} strategy={rectSortingStrategy}>
-          <div className="grid xl:grid-cols-2 gap-6">
+          <div className="grid xl:grid-cols-2 gap-6 items-start">
             {layout.map((id) => {
               const def = WIDGET_DEFS.find((w) => w.id === id);
               if (!def) return null;

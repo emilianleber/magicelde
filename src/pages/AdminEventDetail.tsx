@@ -4,11 +4,10 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowLeft,
-  Building2,
+  ArrowRight,
   Calendar,
   Clock3,
   FileText,
-  LogOut,
   Mail,
   MapPin,
   Pencil,
@@ -24,9 +23,6 @@ import type { User as SupaUser } from "@supabase/supabase-js";
 interface PortalEvent {
   id: string;
   title: string | null;
-  event_type?: string | null;
-  customer_name?: string | null;
-  firma?: string | null;
   event_date: string | null;
   start_time?: string | null;
   end_time?: string | null;
@@ -75,12 +71,12 @@ const eventStatusOptions = [
 
 const simpleStatusOptions = [
   { value: "offen", label: "Offen" },
-  { value: "in_bearbeitung", label: "In Bearbeitung" },
+  { value: "in_bearbeitung", label: "In Bearb." },
   { value: "erledigt", label: "Erledigt" },
 ];
 
 const formatOptions = [
-  { value: "", label: "Format wählen" },
+  { value: "", label: "— wählen —" },
   { value: "closeup", label: "Close-Up" },
   { value: "buehnenshow", label: "Bühnenshow" },
   { value: "walking_act", label: "Walking Act" },
@@ -97,55 +93,8 @@ const eventDocumentTypes = [
   { value: "Ablaufplan", label: "Ablaufplan" },
 ];
 
-const formatEventStatusLabel = (status?: string | null) => {
-  switch (status) {
-    case "in_planung":
-      return "In Planung";
-    case "details_offen":
-      return "Details offen";
-    case "vertrag_gesendet":
-      return "Vertrag gesendet";
-    case "vertrag_bestaetigt":
-      return "Vertrag bestätigt";
-    case "rechnung_gesendet":
-      return "Rechnung gesendet";
-    case "rechnung_bezahlt":
-      return "Rechnung bezahlt";
-    case "event_erfolgt":
-      return "Event erfolgt";
-    case "storniert":
-      return "Storniert";
-    default:
-      return status || "Offen";
-  }
-};
-
-const formatEventStatusClasses = (status?: string | null) => {
-  switch (status) {
-    case "in_planung":
-    case "details_offen":
-      return "text-accent bg-accent/10";
-    case "vertrag_gesendet":
-    case "vertrag_bestaetigt":
-    case "rechnung_gesendet":
-      return "text-foreground bg-muted";
-    case "rechnung_bezahlt":
-      return "text-green-700 bg-green-100";
-    case "event_erfolgt":
-      return "text-muted-foreground bg-muted";
-    case "storniert":
-      return "text-destructive bg-destructive/10";
-    default:
-      return "text-muted-foreground bg-muted";
-  }
-};
-
 const inputCls =
-  "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
-
-const cardCls = "p-6 rounded-2xl bg-muted/20 border border-border/30";
-const readOnlyCardCls =
-  "rounded-xl bg-background/60 border border-border/20 p-4";
+  "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
 
 const AdminEventDetail = () => {
   const navigate = useNavigate();
@@ -162,10 +111,6 @@ const AdminEventDetail = () => {
   const [event, setEvent] = useState<PortalEvent | null>(null);
   const [customer, setCustomer] = useState<PortalCustomer | null>(null);
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
-
-  const [eventType, setEventType] = useState("");
-  const [customerName, setCustomerName] = useState("");
-  const [firma, setFirma] = useState("");
 
   const [eventDate, setEventDate] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -189,122 +134,58 @@ const AdminEventDetail = () => {
   const [draftGuests, setDraftGuests] = useState("");
   const [draftNotes, setDraftNotes] = useState("");
 
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [documentType, setDocumentType] = useState("Vertrag");
 
   useEffect(() => {
     const checkUser = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session) {
-        navigate("/admin/login");
-        return;
-      }
-
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { navigate("/admin/login"); return; }
       setUser(session.user);
-
-      const { data: admin } = await supabase
-        .from("portal_admins")
-        .select("*")
-        .eq("email", session.user.email)
-        .maybeSingle();
-
+      const { data: admin } = await supabase.from("portal_admins").select("*").eq("email", session.user.email).maybeSingle();
       setIsAdmin(!!admin);
     };
-
     checkUser();
   }, [navigate]);
 
   useEffect(() => {
     if (!user?.email || !id) return;
-
     const loadEvent = async () => {
       setLoading(true);
-
-      const { data, error } = await supabase
-        .from("portal_events")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      if (error || !data) {
-        console.error("Fehler beim Laden des Events:", error);
-        setLoading(false);
-        return;
-      }
+      const { data, error } = await supabase.from("portal_events").select("*").eq("id", id).single();
+      if (error || !data) { setLoading(false); return; }
 
       setEvent(data);
-
-      setEventType(data.event_type || data.title || "Event");
-      setCustomerName(data.customer_name || "");
-      setFirma(data.firma || "");
-
       setEventDate(data.event_date || "");
       setStartTime(data.start_time || "");
       setEndTime(data.end_time || "");
       setLocation(data.location || "");
       setFormat(data.format || "");
-      setGuests(
-        data.guests !== null && data.guests !== undefined
-          ? String(data.guests)
-          : ""
-      );
+      setGuests(data.guests != null ? String(data.guests) : "");
       setStatus(data.status || "in_planung");
       setDetailsStatus(data.details_status || "offen");
       setContractStatus(data.contract_status || "offen");
       setInvoiceStatus(data.invoice_status || "offen");
       setNotes(data.notes || "");
-
       setDraftEventDate(data.event_date || "");
       setDraftStartTime(data.start_time || "");
       setDraftEndTime(data.end_time || "");
       setDraftLocation(data.location || "");
       setDraftFormat(data.format || "");
-      setDraftGuests(
-        data.guests !== null && data.guests !== undefined
-          ? String(data.guests)
-          : ""
-      );
+      setDraftGuests(data.guests != null ? String(data.guests) : "");
       setDraftNotes(data.notes || "");
 
       if (data.customer_id) {
-        const { data: customerData, error: customerError } = await supabase
-          .from("portal_customers")
-          .select("*")
-          .eq("id", data.customer_id)
-          .maybeSingle();
-
-        if (customerError) {
-          console.error("Fehler beim Laden des Kunden:", customerError);
-        } else {
-          setCustomer(customerData || null);
-        }
+        const { data: cust } = await supabase.from("portal_customers").select("*").eq("id", data.customer_id).maybeSingle();
+        setCustomer(cust || null);
       }
 
-      const { data: docsData, error: docsError } = await supabase
-        .from("portal_documents")
-        .select("*")
-        .eq("event_id", data.id)
-        .order("created_at", { ascending: false });
-
-      if (docsError) {
-        console.error("Fehler beim Laden der Dokumente:", docsError);
-      } else {
-        setDocuments(docsData || []);
-      }
-
+      const { data: docs } = await supabase.from("portal_documents").select("*").eq("event_id", data.id).order("created_at", { ascending: false });
+      setDocuments(docs || []);
       setLoading(false);
     };
-
     loadEvent();
   }, [user, id]);
-
-  const logout = async () => {
-    await supabase.auth.signOut();
-    navigate("/admin/login");
-  };
 
   const startEditing = () => {
     setDraftEventDate(eventDate);
@@ -330,74 +211,11 @@ const AdminEventDetail = () => {
     setMessage("");
   };
 
-  const sendStatusMail = async () => {
-    if (!event) return;
-    setSendingMail(true);
-    setMessage("");
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(
-        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify({ type: "event", recordId: event.id }),
-        }
-      );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Fehler");
-      if (data.skipped) setMessage("Kein Mail für diesen Status vorgesehen.");
-      else setMessage("✓ Mail gesendet.");
-    } catch (err: any) {
-      setMessage("Mail-Fehler: " + (err.message || "Unbekannt"));
-    }
-    setSendingMail(false);
-  };
-
   const saveChanges = async () => {
     if (!event) return;
-
     setSaving(true);
     setMessage("");
-
-    const { error } = await supabase
-      .from("portal_events")
-      .update({
-        event_date: draftEventDate || null,
-        start_time: draftStartTime || null,
-        end_time: draftEndTime || null,
-        location: draftLocation || null,
-        format: draftFormat || null,
-        guests: draftGuests ? Number(draftGuests) : null,
-        status,
-        details_status: detailsStatus,
-        contract_status: contractStatus,
-        invoice_status: invoiceStatus,
-        notes: draftNotes || null,
-      })
-      .eq("id", event.id);
-
-    if (error) {
-      console.error("Fehler beim Speichern:", error);
-      setMessage("Fehler beim Speichern.");
-      setSaving(false);
-      return;
-    }
-
-    setEventDate(draftEventDate);
-    setStartTime(draftStartTime);
-    setEndTime(draftEndTime);
-    setLocation(draftLocation);
-    setFormat(draftFormat);
-    setGuests(draftGuests);
-    setNotes(draftNotes);
-
-    setEvent({
-      ...event,
+    const { error } = await supabase.from("portal_events").update({
       event_date: draftEventDate || null,
       start_time: draftStartTime || null,
       end_time: draftEndTime || null,
@@ -409,444 +227,258 @@ const AdminEventDetail = () => {
       contract_status: contractStatus,
       invoice_status: invoiceStatus,
       notes: draftNotes || null,
-    });
+    }).eq("id", event.id);
 
+    if (error) { setMessage("Fehler beim Speichern."); setSaving(false); return; }
+
+    setEventDate(draftEventDate);
+    setStartTime(draftStartTime);
+    setEndTime(draftEndTime);
+    setLocation(draftLocation);
+    setFormat(draftFormat);
+    setGuests(draftGuests);
+    setNotes(draftNotes);
+    setEvent({ ...event, event_date: draftEventDate || null, start_time: draftStartTime || null, end_time: draftEndTime || null, location: draftLocation || null, format: draftFormat || null, guests: draftGuests ? Number(draftGuests) : null, status, details_status: detailsStatus, contract_status: contractStatus, invoice_status: invoiceStatus, notes: draftNotes || null });
     setIsEditing(false);
     setMessage("Gespeichert.");
     setSaving(false);
   };
 
-  const handleDocumentUpload = async () => {
-    if (!selectedFile || !event) {
-      setMessage("Bitte zuerst eine Datei auswählen.");
-      return;
+  const sendStatusMail = async () => {
+    if (!event) return;
+    setSendingMail(true);
+    setMessage("");
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
+        body: JSON.stringify({ type: "event", recordId: event.id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Fehler");
+      setMessage(data.skipped ? "Kein Mail für diesen Status vorgesehen." : "✓ Mail gesendet.");
+    } catch (err: any) {
+      setMessage("Mail-Fehler: " + (err.message || "Unbekannt"));
     }
+    setSendingMail(false);
+  };
 
+  const handleDocumentUpload = async () => {
+    if (!selectedFile || !event) { setMessage("Bitte zuerst eine Datei auswählen."); return; }
     setUploading(true);
     setMessage("");
-
     try {
-      const filePath = `events/${event.id}/${Date.now()}-${selectedFile.name.replace(
-        /\s+/g,
-        "-"
-      )}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("portal-documents")
-        .upload(filePath, selectedFile, {
-          upsert: false,
-        });
-
+      const filePath = `events/${event.id}/${Date.now()}-${selectedFile.name.replace(/\s+/g, "-")}`;
+      const { error: uploadError } = await supabase.storage.from("portal-documents").upload(filePath, selectedFile, { upsert: false });
       if (uploadError) throw uploadError;
-
-      const { data: signedData, error: signedError } = await supabase.storage
-        .from("portal-documents")
-        .createSignedUrl(filePath, 60 * 60 * 24 * 365);
-
+      const { data: signedData, error: signedError } = await supabase.storage.from("portal-documents").createSignedUrl(filePath, 60 * 60 * 24 * 365);
       if (signedError) throw signedError;
-
-      const { data: insertedDoc, error: insertError } = await supabase
-        .from("portal_documents")
-        .insert({
-          customer_id: event.customer_id || null,
-          event_id: event.id,
-          name: selectedFile.name,
-          type: documentType,
-          file_url: signedData.signedUrl,
-        })
-        .select("*")
-        .single();
-
+      const { data: insertedDoc, error: insertError } = await supabase.from("portal_documents").insert({ customer_id: event.customer_id || null, event_id: event.id, name: selectedFile.name, type: documentType, file_url: signedData.signedUrl }).select("*").single();
       if (insertError) throw insertError;
-
       setDocuments((prev) => [insertedDoc, ...prev]);
       setSelectedFile(null);
       setDocumentType("Vertrag");
       if (fileInputRef.current) fileInputRef.current.value = "";
       setMessage("Dokument hochgeladen.");
     } catch (err) {
-      console.error("Fehler beim Upload:", err);
       setMessage("Fehler beim Upload.");
     }
-
     setUploading(false);
   };
 
-  if (loading) {
-    return <div className="pt-28 text-center">Wird geladen…</div>;
-  }
+  if (loading) return <div className="pt-28 text-center">Wird geladen…</div>;
+  if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
+  if (!event) return <div className="pt-28 text-center">Event nicht gefunden</div>;
 
-  if (isAdmin === false) {
-    return <div className="pt-28 text-center">Kein Zugriff</div>;
-  }
-
-  if (!event) {
-    return <div className="pt-28 text-center">Event nicht gefunden</div>;
-  }
-
-  const displayCustomerName =
-    customer?.name || customerName || "Unbekannter Kunde";
-  const displayFirma = (customer as any)?.company || firma || "";
-  const displayHeaderRight = displayFirma || displayCustomerName;
+  const isError = message.startsWith("Fehler") || message.startsWith("Mail-Fehler");
 
   return (
     <AdminLayout
-      title={`${eventType || "Event"} · ${displayHeaderRight}`}
-      subtitle="Event verwalten, Termin pflegen und Dokumente hochladen"
-      actions={
-        <button
-          onClick={logout}
-          className="flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <LogOut className="w-4 h-4" /> Abmelden
-        </button>
-      }
+      title={event.title || "Event"}
+      subtitle={customer ? `${customer.name || ""}${customer.company ? ` · ${customer.company}` : ""}` : "Event verwalten"}
     >
-      <div className="mb-6">
-        <Link
-          to="/admin/events"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Zurück zur Eventübersicht
+      {/* Back */}
+      <div className="mb-4">
+        <Link to="/admin/events" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="w-4 h-4" /> Zurück zu Events
         </Link>
       </div>
 
-      <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
-        <div className="space-y-6">
-          <div className={cardCls}>
-            <h2 className="font-display text-lg font-bold text-foreground mb-5">
-              Kunde & Verknüpfungen
-            </h2>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Art der Veranstaltung
-                </p>
-                <div className="flex items-center gap-2">
-                  <Theater className="w-4 h-4 text-accent" />
-                  <p className="font-sans text-sm text-foreground font-medium">
-                    {eventType || "Nicht gesetzt"}
-                  </p>
-                </div>
-              </div>
-
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Firma / Name
-                </p>
-                <p className="font-sans text-sm text-foreground font-medium">
-                  {displayFirma ? `${displayFirma} · ${displayCustomerName}` : displayCustomerName}
-                </p>
-              </div>
-
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  E-Mail
-                </p>
-                <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-accent" />
-                  <p className="font-sans text-sm text-foreground">
-                    {customer?.email || "Nicht hinterlegt"}
-                  </p>
-                </div>
-              </div>
-
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Telefon
-                </p>
-                <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-accent" />
-                  <p className="font-sans text-sm text-foreground">
-                    {customer?.phone || "Nicht hinterlegt"}
-                  </p>
-                </div>
-              </div>
+      {/* Customer banner */}
+      {customer && (
+        <div className="flex items-center gap-3 p-4 rounded-2xl bg-foreground/5 border border-border/30 mb-5">
+          <div className="w-9 h-9 rounded-full bg-foreground flex items-center justify-center shrink-0 text-sm font-bold text-background">
+            {(customer.name || "?")[0].toUpperCase()}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-sm font-semibold text-foreground">{customer.name}</p>
+              {customer.company && <span className="text-xs text-muted-foreground">{customer.company}</span>}
             </div>
-
-            <div className="flex flex-wrap gap-3 mt-4">
-              {customer?.id && (
-                <Link
-                  to={`/admin/customers/${customer.id}`}
-                  className="inline-flex items-center gap-2 text-sm text-accent hover:text-accent/80"
-                >
-                  Kundenkonto öffnen
-                </Link>
-              )}
-
-              {event.request_id && (
-                <Link
-                  to={`/admin/requests/${event.request_id}`}
-                  className="inline-flex items-center gap-2 text-sm text-accent hover:text-accent/80"
-                >
-                  Verknüpfte Anfrage öffnen
-                </Link>
-              )}
+            <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5 flex-wrap">
+              {customer.email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{customer.email}</span>}
+              {customer.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{customer.phone}</span>}
             </div>
           </div>
+          <div className="flex items-center gap-3 shrink-0">
+            <Link to={`/admin/customers/${customer.id}`} className="inline-flex items-center gap-1 text-xs text-accent hover:text-accent/80">
+              Kundenkonto <ArrowRight className="w-3 h-3" />
+            </Link>
+            {event.request_id && (
+              <Link to={`/admin/requests/${event.request_id}`} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+                Anfrage <ArrowRight className="w-3 h-3" />
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
 
-          <div className={cardCls}>
-            <div className="flex items-center justify-between gap-3 mb-5">
-              <h2 className="font-display text-lg font-bold text-foreground">
-                Event-Details
-              </h2>
-
+      <div className="grid lg:grid-cols-[3fr_2fr] gap-5 items-start">
+        {/* LEFT: Details + Documents */}
+        <div className="space-y-5">
+          {/* Event Details */}
+          <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-bold text-foreground">Event-Details</h2>
               {!isEditing ? (
-                <button
-                  onClick={startEditing}
-                  className="inline-flex items-center gap-2 rounded-xl border border-border/30 bg-background/60 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted/40 transition-colors"
-                >
-                  <Pencil className="w-4 h-4" />
-                  Bearbeiten
+                <button onClick={startEditing} className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted/40 transition-colors">
+                  <Pencil className="w-3.5 h-3.5" /> Bearbeiten
                 </button>
               ) : (
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={cancelEditing}
-                    className="inline-flex items-center gap-2 rounded-xl border border-border/30 bg-background/60 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted/40 transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                    Abbrechen
+                  <button onClick={cancelEditing} className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted/40">
+                    <X className="w-3.5 h-3.5" /> Abbrechen
                   </button>
-                  <button
-                    onClick={saveChanges}
-                    disabled={saving}
-                    className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 transition-opacity disabled:opacity-60"
-                  >
-                    <Save className="w-4 h-4" />
-                    {saving ? "Speichert…" : "Speichern"}
+                  <button onClick={saveChanges} disabled={saving} className="inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-3 py-1.5 text-xs font-semibold hover:opacity-80 disabled:opacity-50">
+                    <Save className="w-3.5 h-3.5" /> {saving ? "…" : "Speichern"}
                   </button>
                 </div>
               )}
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Datum
-                </p>
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Datum</label>
                 {isEditing ? (
-                  <input
-                    type="date"
-                    value={draftEventDate}
-                    onChange={(e) => setDraftEventDate(e.target.value)}
-                    className={inputCls}
-                  />
+                  <input type="date" value={draftEventDate} onChange={(e) => setDraftEventDate(e.target.value)} className={inputCls} />
                 ) : (
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-accent" />
-                    <p className="font-sans text-sm text-foreground font-medium">
-                      {eventDate
-                        ? new Date(eventDate).toLocaleDateString("de-DE")
-                        : "Nicht angegeben"}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Ort
-                </p>
-                {isEditing ? (
-                  <div className="space-y-2">
-                    <input
-                      value={draftLocation}
-                      onChange={(e) => setDraftLocation(e.target.value)}
-                      placeholder="Ort / Adresse"
-                      className={inputCls}
-                    />
-                    <p className="font-sans text-xs text-muted-foreground">
-                      Adresssuche können wir hier als Nächstes anbinden.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-accent" />
-                    <p className="font-sans text-sm text-foreground font-medium">
-                      {location || "Nicht angegeben"}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Startzeit
-                </p>
-                {isEditing ? (
-                  <input
-                    type="time"
-                    value={draftStartTime}
-                    onChange={(e) => setDraftStartTime(e.target.value)}
-                    className={inputCls}
-                  />
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <Clock3 className="w-4 h-4 text-accent" />
-                    <p className="font-sans text-sm text-foreground font-medium">
-                      {startTime || "Ganztägig"}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Endzeit
-                </p>
-                {isEditing ? (
-                  <input
-                    type="time"
-                    value={draftEndTime}
-                    onChange={(e) => setDraftEndTime(e.target.value)}
-                    className={inputCls}
-                  />
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <Clock3 className="w-4 h-4 text-accent" />
-                    <p className="font-sans text-sm text-foreground font-medium">
-                      {endTime || "Offen"}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Gäste
-                </p>
-                {isEditing ? (
-                  <input
-                    type="number"
-                    min="1"
-                    value={draftGuests}
-                    onChange={(e) => setDraftGuests(e.target.value)}
-                    className={inputCls}
-                  />
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-accent" />
-                    <p className="font-sans text-sm text-foreground font-medium">
-                      {guests || "Nicht angegeben"}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className={readOnlyCardCls}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Format
-                </p>
-                {isEditing ? (
-                  <select
-                    value={draftFormat}
-                    onChange={(e) => setDraftFormat(e.target.value)}
-                    className={inputCls}
-                  >
-                    {formatOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <p className="font-sans text-sm text-foreground font-medium">
-                    {format || "Nicht angegeben"}
+                  <p className="text-sm text-foreground flex items-center gap-1.5 min-h-[2rem]">
+                    <Calendar className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                    {eventDate ? new Date(eventDate).toLocaleDateString("de-DE") : <span className="text-muted-foreground">–</span>}
                   </p>
                 )}
               </div>
 
-              <div className={`${readOnlyCardCls} sm:col-span-2`}>
-                <p className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-                  Weitere Details / Notizen
-                </p>
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Ort</label>
                 {isEditing ? (
-                  <textarea
-                    value={draftNotes}
-                    onChange={(e) => setDraftNotes(e.target.value)}
-                    rows={6}
-                    className={`${inputCls} resize-none`}
-                  />
+                  <input value={draftLocation} onChange={(e) => setDraftLocation(e.target.value)} placeholder="Stadt oder Adresse" className={inputCls} />
                 ) : (
-                  <p className="font-sans text-sm text-foreground whitespace-pre-line">
-                    {notes || "Keine zusätzlichen Notizen vorhanden."}
+                  <p className="text-sm text-foreground flex items-center gap-1.5 min-h-[2rem]">
+                    <MapPin className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                    {location || <span className="text-muted-foreground">–</span>}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Beginn</label>
+                {isEditing ? (
+                  <input type="time" value={draftStartTime} onChange={(e) => setDraftStartTime(e.target.value)} className={inputCls} />
+                ) : (
+                  <p className="text-sm text-foreground flex items-center gap-1.5 min-h-[2rem]">
+                    <Clock3 className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                    {startTime || <span className="text-muted-foreground">–</span>}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Ende</label>
+                {isEditing ? (
+                  <input type="time" value={draftEndTime} onChange={(e) => setDraftEndTime(e.target.value)} className={inputCls} />
+                ) : (
+                  <p className="text-sm text-foreground flex items-center gap-1.5 min-h-[2rem]">
+                    <Clock3 className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                    {endTime || <span className="text-muted-foreground">–</span>}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Gäste</label>
+                {isEditing ? (
+                  <input type="number" min="1" value={draftGuests} onChange={(e) => setDraftGuests(e.target.value)} className={inputCls} />
+                ) : (
+                  <p className="text-sm text-foreground flex items-center gap-1.5 min-h-[2rem]">
+                    <Users className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                    {guests || <span className="text-muted-foreground">–</span>}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Format</label>
+                {isEditing ? (
+                  <select value={draftFormat} onChange={(e) => setDraftFormat(e.target.value)} className={inputCls}>
+                    {formatOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  </select>
+                ) : (
+                  <p className="text-sm text-foreground flex items-center gap-1.5 min-h-[2rem]">
+                    <Theater className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                    {format || <span className="text-muted-foreground">–</span>}
+                  </p>
+                )}
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Notizen</label>
+                {isEditing ? (
+                  <textarea value={draftNotes} onChange={(e) => setDraftNotes(e.target.value)} rows={4} className={`${inputCls} resize-none`} />
+                ) : (
+                  <p className="text-sm text-foreground whitespace-pre-line min-h-[2rem]">
+                    {notes || <span className="text-muted-foreground">–</span>}
                   </p>
                 )}
               </div>
             </div>
           </div>
 
-          <div className={cardCls}>
-            <h2 className="font-display text-lg font-bold text-foreground mb-5">
-              Dokumente
-            </h2>
+          {/* Documents */}
+          <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+            <h2 className="text-sm font-bold text-foreground mb-4">Dokumente</h2>
 
-            <div className="grid sm:grid-cols-[1fr_220px] gap-3 mb-4">
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
               <input
                 ref={fileInputRef}
                 type="file"
                 onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground"
+                className="flex-1 min-w-0 rounded-xl bg-background/60 border border-border/30 px-3 py-2 text-sm text-foreground"
               />
-
-              <select
-                value={documentType}
-                onChange={(e) => setDocumentType(e.target.value)}
-                className={inputCls}
-              >
-                {eventDocumentTypes.map((type) => (
-                  <option key={type.value} value={type.value}>
-                    {type.label}
-                  </option>
-                ))}
+              <select value={documentType} onChange={(e) => setDocumentType(e.target.value)} className="rounded-xl bg-background/60 border border-border/30 px-3 py-2 text-sm text-foreground">
+                {eventDocumentTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
+              <button onClick={handleDocumentUpload} disabled={uploading || !selectedFile} className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 bg-background/60 px-3 py-2 text-sm font-medium hover:bg-muted/40 disabled:opacity-50 shrink-0">
+                <Upload className="w-3.5 h-3.5" /> {uploading ? "…" : "Hochladen"}
+              </button>
             </div>
 
-            <button
-              onClick={handleDocumentUpload}
-              disabled={uploading || !selectedFile}
-              className="w-full inline-flex items-center justify-center rounded-xl border border-border/30 bg-background/60 px-4 py-3 text-sm font-medium text-foreground hover:bg-muted/40 transition-colors disabled:opacity-50"
-            >
-              <Upload className="w-4 h-4 mr-2" />
-              {uploading ? "Lädt hoch…" : "Dokument hochladen"}
-            </button>
-
-            <div className="space-y-3 mt-5">
+            <div className="space-y-2">
               {documents.length === 0 ? (
-                <p className="font-sans text-sm text-muted-foreground">
-                  Noch keine Dokumente vorhanden.
-                </p>
+                <p className="text-sm text-muted-foreground py-2">Noch keine Dokumente.</p>
               ) : (
                 documents.map((doc) => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center justify-between gap-4 p-4 rounded-xl bg-background/60 border border-border/20"
-                  >
-                    <div className="flex items-center gap-3">
-                      <FileText className="w-5 h-5 text-accent" />
-                      <div>
-                        <p className="font-sans text-sm font-semibold text-foreground">
-                          {doc.name}
-                        </p>
-                        <p className="font-sans text-xs text-muted-foreground mt-1">
-                          {doc.type || "Dokument"} ·{" "}
-                          {new Date(doc.created_at).toLocaleDateString("de-DE")}
-                        </p>
+                  <div key={doc.id} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-background/60 border border-border/20">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <FileText className="w-4 h-4 text-accent shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">{doc.name}</p>
+                        <p className="text-xs text-muted-foreground">{doc.type} · {new Date(doc.created_at).toLocaleDateString("de-DE")}</p>
                       </div>
                     </div>
-
                     {doc.file_url && (
-                      <a
-                        href={doc.file_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-accent hover:text-accent/80"
-                      >
-                        Öffnen
-                      </a>
+                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="text-xs text-accent hover:text-accent/80 shrink-0">Öffnen</a>
                     )}
                   </div>
                 ))
@@ -855,116 +487,78 @@ const AdminEventDetail = () => {
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className={cardCls}>
-            <h2 className="font-display text-lg font-bold text-foreground mb-5">
-              Status & Organisation
-            </h2>
+        {/* RIGHT: Status & Organisation */}
+        <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+          <h2 className="text-sm font-bold text-foreground mb-4">Status</h2>
 
-            <div className="space-y-5">
-              <div>
-                <label className="block font-sans text-sm font-medium text-foreground mb-2">
-                  Event-Status
-                </label>
-                <select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className={inputCls}
-                >
-                  {eventStatusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-
-                <div className="mt-3">
-                  <span
-                    className={`font-sans text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${formatEventStatusClasses(
-                      event.status
-                    )}`}
-                  >
-                    Aktuell: {formatEventStatusLabel(event.status)}
-                  </span>
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-sans text-sm font-medium text-foreground mb-2">
-                  Details
-                </label>
-                <select
-                  value={detailsStatus}
-                  onChange={(e) => setDetailsStatus(e.target.value)}
-                  className={inputCls}
-                >
-                  {simpleStatusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block font-sans text-sm font-medium text-foreground mb-2">
-                  Vertrag
-                </label>
-                <select
-                  value={contractStatus}
-                  onChange={(e) => setContractStatus(e.target.value)}
-                  className={inputCls}
-                >
-                  {simpleStatusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block font-sans text-sm font-medium text-foreground mb-2">
-                  Rechnung
-                </label>
-                <select
-                  value={invoiceStatus}
-                  onChange={(e) => setInvoiceStatus(e.target.value)}
-                  className={inputCls}
-                >
-                  {simpleStatusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
+          {/* Status pipeline */}
+          <div className="space-y-1 mb-5">
+            {eventStatusOptions.map((opt, i) => (
               <button
-                onClick={saveChanges}
-                disabled={saving}
-                className="btn-primary w-full justify-center disabled:opacity-60"
+                key={opt.value}
+                onClick={() => setStatus(opt.value)}
+                className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
+                  status === opt.value
+                    ? "bg-foreground text-background font-semibold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                }`}
               >
-                <Save className="w-4 h-4 mr-2" />
-                {saving ? "Speichert…" : "Status / Organisation speichern"}
+                <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold ${status === opt.value ? "bg-background/20 text-background" : "bg-muted/60 text-muted-foreground"}`}>
+                  {i + 1}
+                </span>
+                {opt.label}
               </button>
-
-              <button
-                onClick={sendStatusMail}
-                disabled={sendingMail}
-                className="w-full inline-flex items-center justify-center rounded-xl border border-accent/40 bg-accent/5 px-4 py-3 text-sm font-medium text-accent hover:bg-accent/10 transition-colors disabled:opacity-50"
-              >
-                <Mail className="w-4 h-4 mr-2" />
-                {sendingMail ? "Sendet…" : "Status-Mail an Kunden senden"}
-              </button>
-
-              {message && (
-                <div className="rounded-xl bg-accent/10 text-accent px-4 py-3 text-sm">
-                  {message}
-                </div>
-              )}
-            </div>
+            ))}
           </div>
+
+          {/* Sub-statuses: Details / Vertrag / Rechnung */}
+          <div className="border-t border-border/20 pt-4 mb-5 space-y-3">
+            <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Organisation</p>
+            {[
+              { label: "Details", value: detailsStatus, set: setDetailsStatus },
+              { label: "Vertrag", value: contractStatus, set: setContractStatus },
+              { label: "Rechnung", value: invoiceStatus, set: setInvoiceStatus },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center justify-between gap-2">
+                <span className="text-sm text-foreground">{item.label}</span>
+                <div className="flex gap-1">
+                  {simpleStatusOptions.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => item.set(opt.value)}
+                      className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-colors ${
+                        item.value === opt.value
+                          ? opt.value === "erledigt"
+                            ? "bg-green-500/20 text-green-700"
+                            : opt.value === "in_bearbeitung"
+                            ? "bg-accent/20 text-accent"
+                            : "bg-muted text-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div className="space-y-2">
+            <button onClick={saveChanges} disabled={saving} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 disabled:opacity-50 transition-opacity">
+              <Save className="w-4 h-4" /> {saving ? "Speichert…" : "Speichern"}
+            </button>
+            <button onClick={sendStatusMail} disabled={sendingMail} className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border/30 bg-background/60 px-4 py-2.5 text-sm font-medium hover:bg-muted/40 disabled:opacity-50 transition-colors">
+              <Mail className="w-4 h-4" /> {sendingMail ? "Sendet…" : "Status-Mail senden"}
+            </button>
+          </div>
+
+          {message && (
+            <div className={`mt-3 rounded-xl px-3 py-2 text-sm ${isError ? "bg-destructive/10 text-destructive" : "bg-green-500/10 text-green-700"}`}>
+              {message}
+            </div>
+          )}
         </div>
       </div>
     </AdminLayout>
