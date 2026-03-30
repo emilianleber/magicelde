@@ -45,7 +45,7 @@ interface PortalRequest {
 interface PortalCustomer {
   id: string;
   name: string | null;
-  firma?: string | null;
+  company?: string | null;
   email: string | null;
   phone?: string | null;
   kundennummer?: string | null;
@@ -408,7 +408,7 @@ const AdminRequestDetail = () => {
     try {
       const safeCustomerName =
         customer?.name?.trim() || request.name?.trim() || "Unbekannt";
-      const safeFirma = customer?.firma?.trim() || request.firma?.trim() || null;
+      const safeFirma = customer?.company?.trim() || request.firma?.trim() || null;
       const safeEventType = anlass.trim() || "Event";
 
       const { data: newEvent, error: insertError } = await supabase
@@ -416,9 +416,6 @@ const AdminRequestDetail = () => {
         .insert({
           request_id: request.id,
           customer_id: request.customer_id || null,
-          event_type: safeEventType,
-          customer_name: safeCustomerName,
-          firma: safeFirma,
           title: safeEventType,
           event_date: datum.trim() || null,
           start_time: uhrzeit.trim() || null,
@@ -528,7 +525,7 @@ const AdminRequestDetail = () => {
 
   const displayCustomerName =
     customer?.name || request.name || "Unbekannter Kunde";
-  const displayFirma = customer?.firma || request.firma || "";
+  const displayFirma = customer?.company || request.firma || "";
   const displayHeaderRight = displayFirma || displayCustomerName;
 
   return (

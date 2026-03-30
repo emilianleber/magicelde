@@ -61,8 +61,7 @@ const getEmailShell = (
               <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
                 <tr>
                   <td style="vertical-align:middle;">
-                    <img src="${LOGO}" alt="Emilian Leber" width="110" height="40"
-                         style="display:block;height:40px;width:auto;max-width:110px;object-fit:contain;" />
+                    <p style="margin:0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;font-family:${FONT};">Emilian Leber</p>
                   </td>
                   <td style="vertical-align:middle;text-align:right;">
                     <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;font-family:${FONT};">Zauberer &amp; Showkünstler</span>

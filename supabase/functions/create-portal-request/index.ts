@@ -200,7 +200,7 @@ serve(async (req) => {
 <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);border-collapse:separate;border:1px solid #e4e4e7;">
   <tr><td bgcolor="#0a0a0a" style="background-color:#0a0a0a;padding:28px 36px 22px;border-radius:20px 20px 0 0;">
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;"><tr>
-      <td><img src="https://www.magicel.de/logo-clean.webp" alt="Emilian Leber" width="110" height="40" style="display:block;height:40px;width:auto;max-width:110px;object-fit:contain;" /></td>
+      <td><p style="margin:0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p></td>
       <td style="text-align:right;"><span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">Kundenportal</span></td>
     </tr></table>
     <div style="margin-top:16px;height:2px;width:48px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
@@ -264,7 +264,7 @@ serve(async (req) => {
 <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);border-collapse:separate;border:1px solid #e4e4e7;">
   <tr><td bgcolor="#0a0a0a" style="background-color:#0a0a0a;padding:28px 36px 22px;border-radius:20px 20px 0 0;">
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;"><tr>
-      <td><img src="https://www.magicel.de/logo-clean.webp" alt="Emilian Leber" width="110" height="40" style="display:block;height:40px;width:auto;max-width:110px;object-fit:contain;" /></td>
+      <td><p style="margin:0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p></td>
       <td style="text-align:right;"><span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">Zauberer &amp; Showkünstler</span></td>
     </tr></table>
     <div style="margin-top:16px;height:2px;width:56px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>

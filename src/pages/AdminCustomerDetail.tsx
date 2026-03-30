@@ -25,7 +25,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 interface PortalCustomer {
   id: string;
   name: string | null;
-  firma?: string | null;
+  company?: string | null;
   email: string | null;
   phone?: string | null;
   kundennummer?: string | null;
@@ -186,7 +186,7 @@ const AdminCustomerDetail = () => {
 
       setCustomer(customerData);
       setName(customerData.name || "");
-      setFirma(customerData.firma || "");
+      setFirma(customerData.company || "");
       setEmail(customerData.email || "");
       setPhone(customerData.phone || "");
       setKundennummer(customerData.kundennummer || "");
@@ -237,7 +237,7 @@ const AdminCustomerDetail = () => {
 
     const { error: customerError } = await supabase
       .from("portal_customers")
-      .update({ name: safeName, firma: firma.trim() || null, email: safeEmail, phone: phone.trim() || null, kundennummer: kundennummer.trim() || null })
+      .update({ name: safeName, company: firma.trim() || null, email: safeEmail, phone: phone.trim() || null, kundennummer: kundennummer.trim() || null })
       .eq("id", customer.id);
 
     if (customerError) {
@@ -248,7 +248,7 @@ const AdminCustomerDetail = () => {
 
     await supabase.from("portal_requests").update({ name: safeName, firma: firma.trim() || null, email: safeEmail, phone: phone.trim() || null }).eq("customer_id", customer.id);
 
-    setCustomer({ ...customer, name: safeName, firma: firma.trim() || null, email: safeEmail, phone: phone.trim() || null, kundennummer: kundennummer.trim() || null });
+    setCustomer({ ...customer, name: safeName, company: firma.trim() || null, email: safeEmail, phone: phone.trim() || null, kundennummer: kundennummer.trim() || null });
     setRequests((prev) => prev.map((r) => ({ ...r, email: safeEmail, firma: firma.trim() || null })));
     setMessage("Kundendaten gespeichert.");
     setSaving(false);
@@ -305,8 +305,6 @@ const AdminCustomerDetail = () => {
       .from("portal_events")
       .insert({
         customer_id: customer.id,
-        customer_name: name.trim() || customer.name,
-        firma: firma.trim() || null,
         title: newEvent.title.trim(),
         event_date: newEvent.event_date || null,
         location: newEvent.location.trim() || null,
@@ -380,7 +378,7 @@ const AdminCustomerDetail = () => {
 
     const { error } = await supabase
       .from("portal_events")
-      .update({ customer_id: customer.id, customer_name: name.trim() || customer.name, firma: firma.trim() || null })
+      .update({ customer_id: customer.id })
       .eq("id", eventId);
 
     if (error) { console.error("ASSIGN EVENT ERROR:", error); setAssigningEventId(null); return; }

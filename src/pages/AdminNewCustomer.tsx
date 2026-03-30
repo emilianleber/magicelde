@@ -95,7 +95,7 @@ const AdminNewCustomer = () => {
         .from("portal_customers")
         .insert({
           name: safeName,
-          firma: firma.trim() || null,
+          company: firma.trim() || null,
           email: safeEmail,
           phone: phone.trim() || null,
         })

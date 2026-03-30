@@ -90,7 +90,7 @@ serve(async (req) => {
         <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
           <tr>
             <td style="vertical-align:middle;">
-              <img src="https://www.magicel.de/logo-clean.webp" alt="Emilian Leber" width="120" height="auto" style="display:block;height:auto;max-height:48px;object-fit:contain;" />
+              <p style="margin:0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p>
             </td>
             <td style="vertical-align:middle;text-align:right;">
               <p style="margin:0;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">Zauberer &amp; Showkünstler</p>

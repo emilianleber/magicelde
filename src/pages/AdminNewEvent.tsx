@@ -8,7 +8,7 @@ import type { User as SupaUser } from "@supabase/supabase-js";
 interface LinkedCustomer {
   id: string;
   name: string | null;
-  firma?: string | null;
+  company?: string | null;
   email: string | null;
   phone?: string | null;
   kundennummer?: string | null;
@@ -86,8 +86,6 @@ const AdminNewEvent = () => {
       .from("portal_events")
       .insert({
         customer_id: customerId || null,
-        customer_name: linkedCustomer?.name || null,
-        firma: linkedCustomer?.firma || null,
         title: form.title.trim(),
         event_date: form.event_date || null,
         start_time: form.start_time || null,
@@ -160,8 +158,8 @@ const AdminNewEvent = () => {
                   <span className="ml-2 text-xs text-muted-foreground">{linkedCustomer.kundennummer}</span>
                 )}
               </p>
-              {linkedCustomer.firma && (
-                <p className="font-sans text-xs text-muted-foreground">{linkedCustomer.firma}</p>
+              {linkedCustomer.company && (
+                <p className="font-sans text-xs text-muted-foreground">{linkedCustomer.company}</p>
               )}
             </div>
             <Link to={`/admin/customers/${linkedCustomer.id}`} className="ml-auto text-xs text-accent hover:text-accent/80 shrink-0">

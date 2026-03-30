@@ -46,7 +46,7 @@ interface PortalEvent {
 interface PortalCustomer {
   id: string;
   name: string | null;
-  firma?: string | null;
+  company?: string | null;
   email: string | null;
   phone?: string | null;
   kundennummer?: string | null;
@@ -486,7 +486,7 @@ const AdminEventDetail = () => {
 
   const displayCustomerName =
     customer?.name || customerName || "Unbekannter Kunde";
-  const displayFirma = customer?.firma || firma || "";
+  const displayFirma = (customer as any)?.company || firma || "";
   const displayHeaderRight = displayFirma || displayCustomerName;
 
   return (
