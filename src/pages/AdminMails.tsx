@@ -431,7 +431,7 @@ const AdminMails = () => {
                 <CheckCheck className="w-3.5 h-3.5" /> Alle gelesen
               </button>
             )}
-            {!isSentFolder && totalCount > PAGE_SIZE && (
+            {totalCount > PAGE_SIZE && (
               <div className="flex items-center gap-1">
                 <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors">
                   <ChevronLeft className="w-4 h-4" />
@@ -442,7 +442,7 @@ const AdminMails = () => {
                 </button>
               </div>
             )}
-            {!isSentFolder && totalCount > 0 && (
+            {totalCount > 0 && (
               <span className="text-xs text-muted-foreground whitespace-nowrap">{totalCount} Mails</span>
             )}
           </div>
