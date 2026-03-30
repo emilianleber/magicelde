@@ -147,8 +147,11 @@ const AdminMails = () => {
           headers: { Authorization: `Bearer ${session?.access_token}` },
         }
       );
-      const json = await res.json();
-      setSyncLog(json.success ? `Synchronisiert: ${json.synced} E-Mails` : `Fehler: ${json.error}`);
+      const raw = await res.text();
+      let json: any = {};
+      try { json = JSON.parse(raw); } catch (_) {}
+      if (!res.ok && !json.error) json.error = `HTTP ${res.status}: ${raw.slice(0, 200)}`;
+      setSyncLog(json.success ? `Synchronisiert: ${json.synced} E-Mails` : `Fehler: ${json.error ?? raw.slice(0, 200)}`);
       setSyncLogs(json.logs || []);
       // Reload mails
       const { data } = await supabase
