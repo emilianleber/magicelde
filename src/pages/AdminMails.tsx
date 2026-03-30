@@ -4,13 +4,15 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import RichTextEditor, { PLACEHOLDERS, replacePlaceholders } from "@/components/admin/RichTextEditor";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  ChevronDown, ChevronUp, FileText, LogOut, Mail, Paperclip,
+  ChevronDown, ChevronUp, ChevronLeft, ChevronRight,
+  FileText, LogOut, Mail, MailOpen, Paperclip,
   Plus, RefreshCw, Search, Send, User, X, Inbox, SendHorizonal,
-  Trash2, AlertOctagon, Star, StarOff,
+  Trash2, AlertOctagon, Star, StarOff, CheckCheck,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
 const SUPABASE_URL = "https://rjhvqctjtgfpxzhnrozt.supabase.co";
+const PAGE_SIZE = 50;
 
 type Folder = "posteingang" | "gesendet" | "spam" | "geloescht";
 
@@ -27,6 +29,7 @@ interface InboxMail {
   received_at: string | null;
   is_read: boolean;
   is_starred: boolean;
+  is_deleted: boolean;
 }
 
 interface PortalMessage {
@@ -46,10 +49,10 @@ interface CustomerDoc { id: string; name: string; type: string | null; file_url:
 
 const inputCls = "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
 
-const FOLDERS: { id: Folder; label: string; icon: any; imap?: string }[] = [
+const FOLDERS: { id: Folder; label: string; icon: any; imap: string }[] = [
   { id: "posteingang", label: "Posteingang", icon: Inbox,         imap: "INBOX" },
-  { id: "gesendet",    label: "Gesendet",    icon: SendHorizonal, imap: "Sent" },
-  { id: "spam",        label: "Spam",        icon: AlertOctagon,  imap: "Spam" },
+  { id: "gesendet",    label: "Gesendet",    icon: SendHorizonal, imap: "Sent"  },
+  { id: "spam",        label: "Spam",        icon: AlertOctagon,  imap: "Spam"  },
   { id: "geloescht",   label: "Gelöscht",    icon: Trash2,        imap: "Trash" },
 ];
 
@@ -60,13 +63,16 @@ const AdminMails = () => {
   const [loading, setLoading] = useState(true);
 
   const [activeFolder, setActiveFolder] = useState<Folder>("posteingang");
-  const [inboxMails, setInboxMails] = useState<InboxMail[]>([]);
+  const [mails, setMails] = useState<InboxMail[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(0);
   const [sentMails, setSentMails] = useState<PortalMessage[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [loadingBody, setLoadingBody] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [syncing, setSyncing] = useState(false);
   const [syncMsg, setSyncMsg] = useState("");
+  const [syncLogs, setSyncLogs] = useState<string[]>([]);
 
   const [templates, setTemplates] = useState<MailTemplate[]>([]);
   const [signature, setSignature] = useState("");
@@ -103,60 +109,103 @@ const AdminMails = () => {
       const { data: admin } = await supabase.from("portal_admins").select("id").eq("email", user.email!).maybeSingle();
       if (!admin) { setIsAdmin(false); setLoading(false); return; }
       setIsAdmin(true);
-
-      const [inboxRes, sentRes, tplRes, sigRes, custRes] = await Promise.all([
-        supabase.from("portal_inbox_mails").select("*").order("received_at", { ascending: false }).limit(100),
-        supabase.from("portal_messages").select("id,created_at,customer_id,subject,body,from_email,to_email,customer:customer_id(name)").order("created_at", { ascending: false }),
+      const [tplRes, sigRes, custRes, sentRes] = await Promise.all([
         supabase.from("portal_mail_templates").select("*").order("name"),
         supabase.from("portal_signature").select("*").limit(1).maybeSingle(),
         supabase.from("portal_customers").select("id,name,email,firma").order("name"),
+        supabase.from("portal_messages").select("id,created_at,customer_id,subject,body,from_email,to_email,customer:customer_id(name)").order("created_at", { ascending: false }),
       ]);
-
-      if (!inboxRes.error) setInboxMails(inboxRes.data || []);
-      if (!sentRes.error) setSentMails(sentRes.data || []);
       if (!tplRes.error) setTemplates(tplRes.data || []);
       if (!sigRes.error && sigRes.data) setSignature(sigRes.data.body);
       if (!custRes.error) setCustomers(custRes.data || []);
+      if (!sentRes.error) setSentMails(sentRes.data || []);
       setLoading(false);
     };
     load();
   }, [user]);
 
+  const loadMails = async (folder: Folder = activeFolder, p: number = page) => {
+    const imapFolder = FOLDERS.find((f) => f.id === folder)?.imap || "INBOX";
+    const from = p * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    const { data, count } = await supabase
+      .from("portal_inbox_mails")
+      .select("*", { count: "exact" })
+      .eq("folder", imapFolder)
+      .eq("is_deleted", false)
+      .order("received_at", { ascending: false })
+      .range(from, to);
+    setMails((data as InboxMail[]) || []);
+    if (count !== null) setTotalCount(count);
+  };
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    setExpandedId(null);
+    setPage(0);
+    loadMails(activeFolder, 0);
+  }, [activeFolder, isAdmin]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    loadMails(activeFolder, page);
+  }, [page]);
+
   const syncInbox = async () => {
     setSyncing(true);
     setSyncMsg("");
+    setSyncLogs([]);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(`${SUPABASE_URL}/functions/v1/sync-inbox`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-          Authorization: `Bearer ${session?.access_token}`,
-        },
+        headers: { Authorization: `Bearer ${session?.access_token}` },
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error + (data.logs ? "\n" + data.logs.join("\n") : ""));
-      setSyncMsg(`✓ ${data.synced} Mails synchronisiert.`);
-      // Reload inbox
-      const { data: fresh } = await supabase.from("portal_inbox_mails").select("*").order("received_at", { ascending: false }).limit(100);
-      if (fresh) setInboxMails(fresh);
+      const raw = await res.text();
+      let data: any = {};
+      try { data = JSON.parse(raw); } catch (_) {}
+      if (data.logs) setSyncLogs(data.logs);
+      if (!res.ok || !data.success) throw new Error(data.error || `HTTP ${res.status}`);
+      setSyncMsg(`✓ ${data.synced} Mails synchronisiert`);
+      await loadMails(activeFolder, page);
     } catch (err: any) {
-      setSyncMsg("Sync fehlgeschlagen: " + (err.message || "Unbekannter Fehler"));
+      setSyncMsg("Fehler: " + (err.message || "Unbekannt"));
     }
     setSyncing(false);
-    setTimeout(() => setSyncMsg(""), 5000);
   };
 
-  const toggleStar = async (mail: InboxMail) => {
-    const { data } = await supabase.from("portal_inbox_mails").update({ is_starred: !mail.is_starred }).eq("id", mail.id).select("*").single();
-    if (data) setInboxMails((prev) => prev.map((m) => m.id === mail.id ? data : m));
+  const toggleStar = async (mail: InboxMail, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const next = !mail.is_starred;
+    await supabase.from("portal_inbox_mails").update({ is_starred: next }).eq("id", mail.id);
+    setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_starred: next } : m));
+  };
+
+  const toggleRead = async (mail: InboxMail, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const next = !mail.is_read;
+    await supabase.from("portal_inbox_mails").update({ is_read: next }).eq("id", mail.id);
+    setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_read: next } : m));
+  };
+
+  const deleteMail = async (mail: InboxMail, e: React.MouseEvent) => {
+    e.stopPropagation();
+    await supabase.from("portal_inbox_mails").update({ is_deleted: true }).eq("id", mail.id);
+    setMails((prev) => prev.filter((m) => m.id !== mail.id));
+    setTotalCount((n) => n - 1);
+    if (expandedId === mail.id) setExpandedId(null);
+  };
+
+  const markAllRead = async () => {
+    const imapFolder = FOLDERS.find((f) => f.id === activeFolder)?.imap || "INBOX";
+    await supabase.from("portal_inbox_mails").update({ is_read: true }).eq("folder", imapFolder).eq("is_deleted", false);
+    setMails((prev) => prev.map((m) => ({ ...m, is_read: true })));
   };
 
   const markRead = async (mail: InboxMail) => {
     if (mail.is_read) return;
     await supabase.from("portal_inbox_mails").update({ is_read: true }).eq("id", mail.id);
-    setInboxMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_read: true } : m));
+    setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, is_read: true } : m));
   };
 
   const loadBody = async (mail: InboxMail) => {
@@ -166,11 +215,11 @@ const AdminMails = () => {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(`${SUPABASE_URL}/functions/v1/fetch-mail-body`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
-        body: JSON.stringify({ mail_id: mail.id, uid: mail.uid, folder: mail.folder }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session?.access_token}` },
+        body: JSON.stringify({ mail_id: mail.id, uid: mail.uid }),
       });
       const data = await res.json();
-      if (res.ok) setInboxMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, body_html: data.body_html, body_text: data.body_text } : m));
+      if (res.ok) setMails((prev) => prev.map((m) => m.id === mail.id ? { ...m, body_html: data.body_html, body_text: data.body_text } : m));
     } catch (_) {}
     setLoadingBody(null);
   };
@@ -209,11 +258,11 @@ const AdminMails = () => {
       const attachmentUrls = selectedDocIds.map((id) => customerDocs.find((d) => d.id === id)?.file_url).filter(Boolean);
       const res = await fetch(`${SUPABASE_URL}/functions/v1/send-customer-mail`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session?.access_token}` },
         body: JSON.stringify({ customer_id: composeCustomerId || null, subject: composeSubject, body: composeBody, to_email: composeToEmail, to_name: composeToName || null, attachment_urls: attachmentUrls }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error + (data.logs ? "\n" + data.logs.join("\n") : ""));
+      if (!res.ok) throw new Error(data.error || "Sendefehler");
       setSentMails((prev) => [data.message, ...prev]);
       setShowCompose(false);
       setComposeCustomerId(""); setComposeToEmail(""); setComposeToName(""); setComposeSubject(""); setComposeBody("");
@@ -230,22 +279,36 @@ const AdminMails = () => {
   if (loading) return <div className="pt-28 text-center">Wird geladen…</div>;
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
 
-  // Get mails for current folder
-  const getFolderMails = () => {
-    const q = search.toLowerCase();
-    if (activeFolder === "gesendet") {
-      return sentMails.filter((m) => !q || m.subject?.toLowerCase().includes(q) || m.to_email?.toLowerCase().includes(q) || (m.customer as any)?.name?.toLowerCase().includes(q));
-    }
-    const folderMap: Record<Folder, string> = { posteingang: "INBOX", gesendet: "Sent", spam: "Spam", geloescht: "Trash" };
-    return inboxMails.filter((m) => {
-      const inFolder = m.folder === folderMap[activeFolder];
-      const matchesSearch = !q || m.subject?.toLowerCase().includes(q) || m.from_email?.toLowerCase().includes(q) || m.body_text?.toLowerCase().includes(q);
-      return inFolder && matchesSearch;
-    });
-  };
+  const isSentFolder = activeFolder === "gesendet";
+  const unreadCount = mails.filter((m) => !m.is_read).length;
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
-  const folderMails = getFolderMails();
-  const unreadCount = inboxMails.filter((m) => m.folder === "INBOX" && !m.is_read).length;
+  // For gesendet: merge IMAP sent + portal_messages, sorted by date
+  const sentCombined: any[] = isSentFolder
+    ? [
+        ...mails.map((m) => ({ ...m, _type: "imap" })),
+        ...sentMails.map((m) => ({ ...m, _type: "sent" })),
+      ].sort((a, b) => {
+        const da = new Date(a._type === "imap" ? a.received_at : a.created_at).getTime();
+        const db = new Date(b._type === "imap" ? b.received_at : b.created_at).getTime();
+        return db - da;
+      })
+    : [];
+
+  const displayMails = isSentFolder ? sentCombined : mails;
+
+  const filteredMails = search
+    ? displayMails.filter((m: any) => {
+        const q = search.toLowerCase();
+        return (
+          m.subject?.toLowerCase().includes(q) ||
+          m.from_email?.toLowerCase().includes(q) ||
+          m.to_email?.toLowerCase().includes(q) ||
+          m.from_name?.toLowerCase().includes(q) ||
+          (m.customer as any)?.name?.toLowerCase().includes(q)
+        );
+      })
+    : displayMails;
 
   return (
     <AdminLayout
@@ -267,8 +330,15 @@ const AdminMails = () => {
       }
     >
       {syncMsg && (
-        <div className={`mb-4 px-4 py-2.5 rounded-xl font-sans text-sm ${syncMsg.includes("fehlgeschlagen") ? "bg-destructive/10 text-destructive" : "bg-green-100 text-green-800"}`}>
+        <div className={`mb-2 px-4 py-2.5 rounded-xl font-sans text-sm ${syncMsg.startsWith("Fehler") ? "bg-destructive/10 text-destructive" : "bg-green-100 text-green-800"}`}>
           {syncMsg}
+        </div>
+      )}
+      {syncLogs.length > 0 && (
+        <div className="mb-4 px-4 py-3 rounded-xl bg-muted/30 border border-border/20 space-y-0.5">
+          {syncLogs.map((l, i) => (
+            <p key={i} className={`font-mono text-xs ${l.startsWith("ERROR") || l.startsWith("DB error") ? "text-destructive" : "text-muted-foreground"}`}>{l}</p>
+          ))}
         </div>
       )}
 
@@ -339,7 +409,7 @@ const AdminMails = () => {
             >
               <f.icon className="w-4 h-4 shrink-0" />
               <span>{f.label}</span>
-              {f.id === "posteingang" && unreadCount > 0 && (
+              {activeFolder === f.id && unreadCount > 0 && !isSentFolder && (
                 <span className="ml-auto font-sans text-[10px] font-bold bg-accent text-white rounded-full w-5 h-5 flex items-center justify-center shrink-0">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
@@ -350,14 +420,35 @@ const AdminMails = () => {
 
         {/* Mail List */}
         <div className="flex-1 min-w-0">
-          {/* Search */}
-          <div className="relative mb-4">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Suche…" className="w-full rounded-2xl bg-muted/40 border border-border/30 pl-11 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20" />
+          {/* Toolbar: search + pagination + mark all read */}
+          <div className="flex items-center gap-3 mb-4 flex-wrap">
+            <div className="relative flex-1 min-w-[180px]">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Suche…" className="w-full rounded-2xl bg-muted/40 border border-border/30 pl-11 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20" />
+            </div>
+            {!isSentFolder && unreadCount > 0 && (
+              <button onClick={markAllRead} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
+                <CheckCheck className="w-3.5 h-3.5" /> Alle gelesen
+              </button>
+            )}
+            {!isSentFolder && totalCount > PAGE_SIZE && (
+              <div className="flex items-center gap-1">
+                <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors">
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">{page + 1} / {totalPages}</span>
+                <button onClick={() => setPage((p) => p + 1)} disabled={(page + 1) >= totalPages} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors">
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+            {!isSentFolder && totalCount > 0 && (
+              <span className="text-xs text-muted-foreground whitespace-nowrap">{totalCount} Mails</span>
+            )}
           </div>
 
           <div className="space-y-2">
-            {folderMails.length === 0 ? (
+            {filteredMails.length === 0 ? (
               <div className="p-12 rounded-3xl bg-muted/20 border border-border/30 text-center">
                 <Mail className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
                 <p className="font-sans text-sm text-muted-foreground">
@@ -365,23 +456,27 @@ const AdminMails = () => {
                 </p>
               </div>
             ) : (
-              folderMails.map((mail: any) => {
-                const isSent = activeFolder === "gesendet";
+              filteredMails.map((mail: any) => {
+                const isSent = mail._type === "sent";
+                const isImapMail = !isSent;
                 const id = mail.id;
                 const isExpanded = expandedId === id;
                 const isRead = isSent ? true : mail.is_read;
                 const subject = mail.subject || "(Kein Betreff)";
-                const from = isSent ? `An: ${(mail.customer as any)?.name || mail.to_email}` : `Von: ${mail.from_name || mail.from_email || "Unbekannt"}`;
-                const date = new Date(isSent ? mail.created_at : mail.received_at).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
+                const from = isSent
+                  ? `An: ${(mail.customer as any)?.name || mail.to_email}`
+                  : `Von: ${mail.from_name || mail.from_email || "Unbekannt"}`;
+                const date = new Date(isSent ? mail.created_at : mail.received_at)
+                  .toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
 
                 return (
                   <div key={id} className={`rounded-2xl border overflow-hidden transition-colors ${!isRead ? "bg-accent/5 border-accent/20" : "bg-muted/20 border-border/30"}`}>
-                    <button
+                    <div
                       onClick={() => {
                         setExpandedId(isExpanded ? null : id);
-                        if (!isSent) { markRead(mail as InboxMail); if (!isExpanded) loadBody(mail as InboxMail); }
+                        if (isImapMail) { markRead(mail); if (!isExpanded) loadBody(mail); }
                       }}
-                      className="w-full p-4 flex items-center gap-3 text-left hover:bg-muted/30 transition-colors"
+                      className="w-full p-4 flex items-center gap-3 text-left hover:bg-muted/30 transition-colors cursor-pointer group"
                     >
                       <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
                         <User className="w-4 h-4 text-accent" />
@@ -390,16 +485,37 @@ const AdminMails = () => {
                         <p className={`font-sans text-sm truncate ${!isRead ? "font-bold text-foreground" : "font-semibold text-foreground"}`}>{subject}</p>
                         <p className="font-sans text-xs text-muted-foreground mt-0.5 truncate">{from}</p>
                       </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        {!isSent && (
-                          <button onClick={(e) => { e.stopPropagation(); toggleStar(mail as InboxMail); }} className="text-muted-foreground hover:text-accent transition-colors p-1">
-                            {mail.is_starred ? <Star className="w-4 h-4 fill-accent text-accent" /> : <StarOff className="w-4 h-4" />}
-                          </button>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {/* Action buttons – visible on hover */}
+                        {isImapMail && (
+                          <>
+                            <button
+                              onClick={(e) => toggleRead(mail, e)}
+                              title={mail.is_read ? "Als ungelesen markieren" : "Als gelesen markieren"}
+                              className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              {mail.is_read ? <Mail className="w-3.5 h-3.5" /> : <MailOpen className="w-3.5 h-3.5" />}
+                            </button>
+                            <button
+                              onClick={(e) => toggleStar(mail, e)}
+                              title="Stern"
+                              className="p-1.5 rounded-lg text-muted-foreground hover:text-yellow-500 opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              {mail.is_starred ? <Star className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" /> : <StarOff className="w-3.5 h-3.5" />}
+                            </button>
+                            <button
+                              onClick={(e) => deleteMail(mail, e)}
+                              title="Löschen"
+                              className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </>
                         )}
-                        <span className="font-sans text-xs text-muted-foreground">{date}</span>
+                        <span className="font-sans text-xs text-muted-foreground ml-1">{date}</span>
                         {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
                       </div>
-                    </button>
+                    </div>
 
                     {isExpanded && (
                       <div className="px-4 pb-4 pt-1 border-t border-border/20">
@@ -412,15 +528,15 @@ const AdminMails = () => {
                             </>
                           ) : (
                             <>
-                              <span>Von: {mail.from_email}</span>
-                              <span>An: {mail.to_email}</span>
+                              <span>Von: {mail.from_name ? `${mail.from_name} <${mail.from_email}>` : mail.from_email}</span>
+                              {mail.to_email && <span>An: {mail.to_email}</span>}
                             </>
                           )}
                         </div>
                         {isSent ? (
                           <div className="font-sans text-sm text-foreground leading-relaxed [&_strong]:font-bold [&_em]:italic [&_u]:underline [&_ul]:list-disc [&_ul]:pl-5" dangerouslySetInnerHTML={{ __html: mail.body }} />
                         ) : (
-                          <div className="font-sans text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                          <div className="font-sans text-sm text-foreground leading-relaxed">
                             {loadingBody === id
                               ? <div className="flex items-center gap-2 text-muted-foreground font-sans text-sm py-4"><svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/></svg>Lade Inhalt…</div>
                               : mail.body_html
