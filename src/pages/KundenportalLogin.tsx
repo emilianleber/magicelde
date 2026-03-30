@@ -1,7 +1,9 @@
 import { useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
-import { supabase } from "@/integrations/supabase/client";
 import { Lock, Mail, ArrowRight } from "lucide-react";
+
+const SUPABASE_URL = "https://rjhvqctjtgfpxzhnrozt.supabase.co";
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
 
 const KundenportalLogin = () => {
   const [email, setEmail] = useState("");
@@ -16,19 +18,21 @@ const KundenportalLogin = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          // 🔥 FIX: Immer auf Live-Kundenportal weiterleiten
-          emailRedirectTo: "https://magicel.de/kundenportal",
+      // Call custom Edge Function — generates magic link + sends branded email.
+      // Does NOT trigger Supabase's own English email template.
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/portal-magic-link`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
         },
+        body: JSON.stringify({ email }),
       });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Fehler beim Senden");
 
-      if (error) throw error;
-
-      setSuccess(
-        "Dein Zugangslink wurde per E-Mail verschickt. Bitte prüfe dein Postfach."
-      );
+      setSuccess("Dein Zugangslink wurde per E-Mail verschickt. Bitte prüfe dein Postfach.");
       setEmail("");
     } catch (err: any) {
       setError(err.message || "Ein Fehler ist aufgetreten.");
