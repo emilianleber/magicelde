@@ -169,11 +169,14 @@ serve(async (req) => {
   const imap = new SimpleImap();
 
   try {
+    console.log("sync-inbox: connecting to", host);
     await imap.connect(host, 993);
     logs.push(`Connected to ${host}`);
+    console.log("sync-inbox: connected, logging in as", user);
 
     await imap.login(user, pass);
     logs.push("Logged in");
+    console.log("sync-inbox: logged in");
 
     const allFolders = await imap.list();
     logs.push(`Folders: ${allFolders.join(", ")}`);
@@ -213,17 +216,25 @@ serve(async (req) => {
         .from("portal_inbox_mails")
         .upsert(mails, { onConflict: "uid", ignoreDuplicates: true });
 
-      if (error) logs.push(`DB error: ${error.message}`);
-      else { totalSynced += mails.length; logs.push(`Saved ${mails.length}`); }
+      if (error) {
+        console.error("sync-inbox: DB error", error.message);
+        logs.push(`DB error: ${error.message}`);
+      } else {
+        totalSynced += mails.length;
+        logs.push(`Saved ${mails.length}`);
+        console.log(`sync-inbox: saved ${mails.length} from ${actualFolder}`);
+      }
     }
 
     await imap.logout();
+    console.log("sync-inbox: done, total synced:", totalSynced);
 
     return new Response(
       JSON.stringify({ success: true, synced: totalSynced, logs }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err: any) {
+    console.error("sync-inbox: ERROR", err.message);
     logs.push(`ERROR: ${err.message}`);
     await imap.logout().catch(() => {});
     return new Response(
