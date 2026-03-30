@@ -203,11 +203,11 @@ const AdminCustomers = () => {
         </div>
 
         <div className="relative">
-          <ArrowUpDown className="w-4 h-4 text-muted-foreground absolute left-4 top-1/2 -translate-y-1/2" />
+          <ArrowUpDown className="w-4 h-4 text-muted-foreground absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10" />
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="w-full rounded-2xl bg-muted/40 border border-border/30 pl-11 pr-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/20"
+            className="w-full appearance-none rounded-2xl bg-muted/40 border border-border/30 pl-11 pr-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/20"
           >
             <option value="newest">Neueste zuerst</option>
             <option value="oldest">Älteste zuerst</option>
