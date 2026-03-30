@@ -108,9 +108,10 @@ class SimpleImap {
 
 function decodeBytes(bytes: Uint8Array, charset: string): string {
   const cs = charset.toLowerCase().trim();
-  try { return new TextDecoder(cs).decode(bytes); } catch (_) {}
-  try { return new TextDecoder("utf-8", { fatal: false }).decode(bytes); } catch (_) {}
-  return new TextDecoder("latin1").decode(bytes);
+  for (const enc of [cs, "utf-8", "iso-8859-1"]) {
+    try { return new TextDecoder(enc, { fatal: true }).decode(bytes); } catch (_) {}
+  }
+  return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
 }
 
 function decodeTransferEncoding(headers: string, body: string): string {

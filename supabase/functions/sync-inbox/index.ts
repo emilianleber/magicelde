@@ -24,29 +24,38 @@ function decodeModifiedUTF7(str: string): string {
   });
 }
 
+// Safely decode bytes with charset fallback chain
+function bytesToString(bytes: Uint8Array, charset: string): string {
+  const cs = charset.toLowerCase().trim();
+  for (const enc of [cs, "utf-8", "iso-8859-1"]) {
+    try { return new TextDecoder(enc, { fatal: true }).decode(bytes); } catch (_) {}
+  }
+  return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+}
+
 // Decode RFC2047 encoded words with proper charset support
 function decodeRFC2047(str: string): string {
   if (!str) return str;
-  return str.replace(/=\?([^?]+)\?([BbQq])\?([^?]*)\?=/g, (_, charset, enc, text) => {
-    try {
-      const cs = charset.toLowerCase().replace("windows-", "windows-");
-      if (enc.toUpperCase() === "B") {
-        const binary = atob(text.replace(/\s/g, ""));
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-        try { return new TextDecoder(cs).decode(bytes); } catch (_) { return binary; }
-      }
-      if (enc.toUpperCase() === "Q") {
-        const raw = text.replace(/_/g, " ").replace(/=([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
-        if (cs.includes("utf")) {
+  // Handle adjacent encoded words (e.g. =?utf-8?q?a?= =?utf-8?q?b?=)
+  return str.replace(/=\?([^?]+)\?([BbQq])\?([^?]*)\?=(\s+=\?[^?]+\?[BbQq]\?[^?]*\?=)*/g, (match) => {
+    return match.replace(/=\?([^?]+)\?([BbQq])\?([^?]*)\?=/g, (_, charset, enc, text) => {
+      try {
+        const cs = charset.toLowerCase().trim();
+        if (enc.toUpperCase() === "B") {
+          const binary = atob(text.replace(/\s/g, ""));
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+          return bytesToString(bytes, cs);
+        }
+        if (enc.toUpperCase() === "Q") {
+          const raw = text.replace(/_/g, " ").replace(/=([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
           const bytes = new Uint8Array(raw.length);
           for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
-          try { return new TextDecoder("utf-8").decode(bytes); } catch (_) { return raw; }
+          return bytesToString(bytes, cs);
         }
-        return raw;
-      }
-    } catch (_) {}
-    return text;
+      } catch (_) {}
+      return text;
+    });
   });
 }
 

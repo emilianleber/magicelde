@@ -10,6 +10,7 @@ import {
   Star,
   StarOff,
   ChevronLeft,
+  ChevronRight,
   LogOut,
   Loader2,
   MailOpen,
@@ -53,6 +54,9 @@ const AdminMails = () => {
   const [syncing, setSyncing] = useState(false);
   const [syncLog, setSyncLog] = useState<string | null>(null);
   const [syncLogs, setSyncLogs] = useState<string[]>([]);
+  const [page, setPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const PAGE_SIZE = 50;
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
@@ -73,21 +77,31 @@ const AdminMails = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const loadMails = async (f = folder) => {
-    const { data } = await supabase
+  const loadMails = async (f = folder, p = page) => {
+    const from = p * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    const { data, count } = await supabase
       .from("portal_inbox_mails")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("folder", f)
       .eq("is_deleted", false)
-      .order("received_at", { ascending: false });
+      .order("received_at", { ascending: false })
+      .range(from, to);
     setMails((data as InboxMail[]) || []);
+    if (count !== null) setTotalCount(count);
   };
 
   useEffect(() => {
     if (!isAdmin) return;
     setSelected(null);
-    loadMails(folder);
+    setPage(0);
+    loadMails(folder, 0);
   }, [folder, isAdmin]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    loadMails(folder, page);
+  }, [page]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -179,7 +193,7 @@ const AdminMails = () => {
       if (!res.ok && !json.error) json.error = `HTTP ${res.status}: ${raw.slice(0, 200)}`;
       setSyncLog(json.success ? `Synchronisiert: ${json.synced} E-Mails` : `Fehler: ${json.error ?? raw.slice(0, 200)}`);
       setSyncLogs(json.logs || []);
-      await loadMails();
+      await loadMails(folder, page);
     } catch (e: any) {
       setSyncLog(`Fehler: ${e.message}`);
       setSyncLogs([]);
@@ -349,18 +363,41 @@ const AdminMails = () => {
           ) : (
             <div className="rounded-2xl border border-border/30 bg-muted/20 overflow-hidden">
               {/* Toolbar */}
-              {mails.length > 0 && (
-                <div className="flex items-center gap-3 px-5 py-3 border-b border-border/20">
-                  <span className="text-xs text-muted-foreground">{mails.length} E-Mails</span>
-                  {unreadCount > 0 && (
+              {totalCount > 0 && (
+                <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-border/20 flex-wrap">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-muted-foreground">
+                      {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, totalCount)} von {totalCount}
+                    </span>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={markAllRead}
+                        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <CheckCheck className="w-3.5 h-3.5" />
+                        Alle gelesen
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1">
                     <button
-                      onClick={markAllRead}
-                      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                      onClick={() => setPage((p) => Math.max(0, p - 1))}
+                      disabled={page === 0}
+                      className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 disabled:opacity-30 transition-colors"
                     >
-                      <CheckCheck className="w-3.5 h-3.5" />
-                      Alle als gelesen markieren
+                      <ChevronLeft className="w-4 h-4" />
                     </button>
-                  )}
+                    <span className="text-xs text-muted-foreground px-1">
+                      Seite {page + 1} / {Math.ceil(totalCount / PAGE_SIZE)}
+                    </span>
+                    <button
+                      onClick={() => setPage((p) => p + 1)}
+                      disabled={(page + 1) * PAGE_SIZE >= totalCount}
+                      className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 disabled:opacity-30 transition-colors"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               )}
 
