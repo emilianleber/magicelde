@@ -186,20 +186,46 @@ serve(async (req) => {
       const adminMail = await resend.emails.send({
         from: "Emilian Leber <el@magicel.de>",
         to: "el@magicel.de",
-        subject: "Neue Anfrage über magicel.de",
-        html: `
-          <h2>Neue Anfrage</h2>
-          <p><strong>Name:</strong> ${safeName}</p>
-          ${displayFirmaBlock}
-          <p><strong>E-Mail:</strong> ${safeEmail}</p>
-          <p><strong>Telefon:</strong> ${safePhone || "-"}</p>
-          <p><strong>Anlass:</strong> ${safeAnlass || "-"}</p>
-          <p><strong>Datum:</strong> ${safeDatum || "-"}</p>
-          <p><strong>Ort:</strong> ${safeOrt || "-"}</p>
-          <p><strong>Gäste:</strong> ${safeGaeste ?? "-"}</p>
-          <p><strong>Format:</strong> ${safeFormat || "-"}</p>
-          <p><strong>Nachricht:</strong><br>${(safeNachricht || "-").replace(/\n/g, "<br>")}</p>
-        `,
+        subject: `🎯 Neue Anfrage von ${safeName}`,
+        html: `<!DOCTYPE html>
+<html lang="de"><head><meta charset="UTF-8"><title>Neue Anfrage</title></head>
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;padding:40px 16px;">
+    <div style="background:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);">
+      <div style="background:#0a0a0a;padding:32px 40px 28px;">
+        <p style="margin:0 0 4px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#71717a;">Kundenportal</p>
+        <p style="margin:0;font-size:24px;font-weight:800;color:#ffffff;">Neue Anfrage eingegangen</p>
+        <div style="margin-top:16px;height:2px;width:48px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
+      </div>
+      <div style="padding:36px 40px;">
+        <div style="display:inline-block;background:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:24px;">Anfrage</div>
+        <div style="background:#f9fafb;border:1px solid #e4e4e7;border-radius:16px;padding:8px 20px;margin-bottom:24px;">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;width:40%;">👤 Name</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeName}</td></tr>
+            ${safeFirma ? `<tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">🏢 Firma</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeFirma}</td></tr>` : ""}
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">✉️ E-Mail</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeEmail}</td></tr>
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📞 Telefon</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safePhone || "–"}</td></tr>
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">🎉 Anlass</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeAnlass || "–"}</td></tr>
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📅 Datum</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeDatum || "–"}</td></tr>
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📍 Ort</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeOrt || "–"}</td></tr>
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">👥 Gäste</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeGaeste ?? "–"}</td></tr>
+            <tr><td style="padding:12px 0;font-size:14px;color:#71717a;">🎭 Format</td><td style="padding:12px 0;font-size:14px;font-weight:600;color:#0a0a0a;">${safeFormat || "–"}</td></tr>
+          </table>
+        </div>
+        ${safeNachricht ? `<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:16px;padding:18px 20px;margin-bottom:24px;">
+          <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#92400e;">Nachricht</p>
+          <p style="margin:0;font-size:14px;line-height:1.7;color:#0a0a0a;">${safeNachricht.replace(/\n/g, "<br>")}</p>
+        </div>` : ""}
+        <div style="text-align:center;margin-top:28px;">
+          <a href="https://magicel.de/admin/customers" style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:14px;font-weight:700;">Im CRM öffnen &rarr;</a>
+        </div>
+      </div>
+      <div style="background:#f4f4f5;border-top:1px solid #e4e4e7;padding:16px 40px;text-align:center;">
+        <p style="margin:0;font-size:12px;color:#a1a1aa;">&copy; 2025 Emilian Leber &middot; magicel.de</p>
+      </div>
+    </div>
+  </div>
+</body></html>`,
       });
 
       console.log("ADMIN MAIL OK:", adminMail);
@@ -212,72 +238,64 @@ serve(async (req) => {
       const customerMail = await resend.emails.send({
         from: "Emilian Leber <el@magicel.de>",
         to: safeEmail,
-        subject: "Deine Anfrage bei Emilian Leber ist eingegangen",
-        html: `
-          <div style="margin:0;padding:0;background:#f5f7fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:#111827;">
-            <div style="max-width:640px;margin:0 auto;padding:32px 18px;">
-              <div style="background:#ffffff;border:1px solid #e7ebf3;border-radius:28px;overflow:hidden;box-shadow:0 12px 30px rgba(15,23,42,0.05);">
-                <div style="padding:34px 32px 18px 32px;background:linear-gradient(180deg,#ffffff 0%,#f7f9fd 100%);border-bottom:1px solid #edf1f7;">
-                  <div style="display:inline-block;padding:10px 18px;border-radius:999px;background:#eef2ff;color:#4563d8;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">
-                    Anfrage
-                  </div>
+        subject: "Deine Anfrage ist eingegangen – ich melde mich bald! ✨",
+        html: `<!DOCTYPE html>
+<html lang="de"><head><meta charset="UTF-8"><title>Anfrage eingegangen</title></head>
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;padding:40px 16px;">
+    <div style="background:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);">
 
-                  <h1 style="margin:22px 0 14px 0;font-size:34px;line-height:1.1;font-weight:800;color:#121826;letter-spacing:-1px;">
-                    Danke für deine Anfrage, ${displayGreeting}.
-                  </h1>
+      <!-- Header -->
+      <div style="background:#0a0a0a;padding:36px 40px 30px;">
+        <p style="margin:0 0 6px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#71717a;font-weight:500;">Zauberer &amp; Showkünstler</p>
+        <p style="margin:0;font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;">Emilian Leber</p>
+        <div style="margin-top:18px;height:2px;width:56px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
+      </div>
 
-                  <p style="margin:0;font-size:16px;line-height:1.75;color:#667085;max-width:520px;">
-                    Deine Anfrage ist erfolgreich bei mir eingegangen. Ich melde mich in der Regel innerhalb von 24 Stunden persönlich bei dir.
-                  </p>
-                </div>
+      <!-- Content -->
+      <div style="padding:40px 40px 36px;">
+        <div style="display:inline-block;background:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:24px;">Anfrage</div>
+        <h1 style="margin:0 0 14px;font-size:26px;font-weight:800;color:#0a0a0a;line-height:1.2;letter-spacing:-0.5px;">Danke, ${displayGreeting}! ✨</h1>
+        <p style="margin:0 0 32px;font-size:16px;line-height:1.75;color:#52525b;">Deine Anfrage ist erfolgreich bei mir eingegangen. Ich melde mich persönlich – in der Regel innerhalb von 24 Stunden.</p>
 
-                <div style="padding:28px 32px 32px 32px;">
-                  <div style="margin-bottom:24px;">
-                    <div style="background:#f8fafd;border:1px solid #e8edf5;border-radius:20px;padding:18px 18px;">
-                      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
-                        <tr><td style="padding:8px 0;font-size:15px;color:#667085;width:38%;">Name</td><td style="padding:8px 0;font-size:15px;color:#121826;font-weight:600;">${safeName}</td></tr>
-                        ${
-                          safeFirma
-                            ? `<tr><td style="padding:8px 0;font-size:15px;color:#667085;">Firma</td><td style="padding:8px 0;font-size:15px;color:#121826;font-weight:600;">${safeFirma}</td></tr>`
-                            : ""
-                        }
-                        <tr><td style="padding:8px 0;font-size:15px;color:#667085;">Anlass</td><td style="padding:8px 0;font-size:15px;color:#121826;font-weight:600;">${safeAnlass || "-"}</td></tr>
-                        <tr><td style="padding:8px 0;font-size:15px;color:#667085;">Datum</td><td style="padding:8px 0;font-size:15px;color:#121826;font-weight:600;">${safeDatum || "-"}</td></tr>
-                        <tr><td style="padding:8px 0;font-size:15px;color:#667085;">Ort</td><td style="padding:8px 0;font-size:15px;color:#121826;font-weight:600;">${safeOrt || "-"}</td></tr>
-                        <tr><td style="padding:8px 0;font-size:15px;color:#667085;">Format</td><td style="padding:8px 0;font-size:15px;color:#121826;font-weight:600;">${safeFormat || "-"}</td></tr>
-                      </table>
-                    </div>
-                  </div>
+        <!-- Info table -->
+        <div style="background:#f9fafb;border:1px solid #e4e4e7;border-radius:16px;padding:8px 20px;margin-bottom:28px;">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+            ${safeFirma ? `<tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;width:40%;">🏢 Firma</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeFirma}</td></tr>` : ""}
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;width:40%;">🎉 Anlass</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeAnlass || "–"}</td></tr>
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📅 Datum</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeDatum || "–"}</td></tr>
+            <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📍 Ort</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeOrt || "–"}</td></tr>
+            <tr><td style="padding:12px 0;font-size:14px;color:#71717a;">🎭 Format</td><td style="padding:12px 0;font-size:14px;font-weight:600;color:#0a0a0a;">${safeFormat || "–"}</td></tr>
+          </table>
+        </div>
 
-                  <div style="margin:0 0 24px;padding:18px;border-radius:14px;background:#f8fbff;border:1px solid #dfe8f4;">
-                    <p style="margin:0 0 10px;font-size:14px;font-weight:700;color:#111827;">
-                      Wichtiger Hinweis zum Login
-                    </p>
-                    <p style="margin:0;font-size:14px;line-height:1.7;color:#4b5563;">
-                      Bitte logge dich im Kundenportal mit genau der E-Mail-Adresse ein, mit der du die Anfrage gestellt hast:
-                      <br>
-                      <strong style="color:#111827;">${safeEmail}</strong>
-                    </p>
-                  </div>
+        <!-- Login hint -->
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:16px;padding:18px 20px;margin-bottom:28px;">
+          <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#1d4ed8;">Kundenportal</p>
+          <p style="margin:0 0 8px;font-size:14px;line-height:1.7;color:#1e40af;">Verfolge deine Anfrage jederzeit im Kundenportal – melde dich mit dieser E-Mail-Adresse an:</p>
+          <p style="margin:0;font-size:15px;font-weight:700;color:#0a0a0a;">${safeEmail}</p>
+        </div>
 
-                  <div style="margin:30px 0;text-align:center;">
-                    <a
-                      href="https://magicel.de/kundenportal/login"
-                      style="display:inline-block;padding:14px 26px;background:#111827;color:#ffffff;text-decoration:none;border-radius:14px;font-size:15px;font-weight:700;"
-                    >
-                      Kundenportal öffnen
-                    </a>
-                  </div>
+        <!-- CTA -->
+        <div style="text-align:center;margin:32px 0 28px;">
+          <a href="https://magicel.de/kundenportal/login" style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:16px 36px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;">Kundenportal öffnen &rarr;</a>
+        </div>
 
-                  <p style="margin:24px 0 0;font-size:14px;line-height:1.7;color:#6b7280;">
-                    Viele Grüße<br>
-                    <strong style="color:#111827;">Emilian Leber</strong>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `,
+        <!-- Signature -->
+        <div style="border-top:1px solid #e4e4e7;padding-top:24px;margin-top:8px;">
+          <p style="margin:0 0 2px;font-size:14px;color:#71717a;">Mit freundlichen Grüßen,</p>
+          <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a;">Emilian Leber</p>
+          <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa;">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="background:#f4f4f5;border-top:1px solid #e4e4e7;padding:18px 40px;text-align:center;">
+        <p style="margin:0;font-size:12px;color:#a1a1aa;">&copy; 2025 Emilian Leber &middot; Regensburg &middot; <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:none;">Datenschutz</a></p>
+      </div>
+    </div>
+  </div>
+</body></html>`,
       });
 
       console.log("CUSTOMER MAIL OK:", customerMail);
