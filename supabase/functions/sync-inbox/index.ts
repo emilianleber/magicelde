@@ -24,14 +24,17 @@ class SimpleImap {
   }
 
   async list(): Promise<string[]> {
+    return (await this.listRaw()).folders;
+  }
+
+  async listRaw(): Promise<{ folders: string[]; raw: string[] }> {
     const res = await this.cmd('LIST "" "*"');
     const folders: string[] = [];
     for (const line of res) {
-      // Matches: * LIST (flags) "." "FolderName" or * LIST (flags) "." FolderName
       const m = line.match(/^\* LIST [^)]*\) (?:"[^"]*"|NIL) "?([^"]+?)"?\s*$/);
       if (m) folders.push(m[1].trim());
     }
-    return folders;
+    return { folders, raw: res };
   }
 
   async select(folder: string): Promise<number> {
@@ -179,7 +182,8 @@ serve(async (req) => {
     logs.push("Logged in");
     console.log("sync-inbox: logged in");
 
-    const allFolders = await imap.list();
+    const { folders: allFolders, raw: rawList } = await imap.listRaw();
+    logs.push(`LIST raw: ${JSON.stringify(rawList.slice(0, 5))}`);
     logs.push(`Folders: ${allFolders.join(", ")}`);
 
     for (const target of FOLDER_TARGETS) {
