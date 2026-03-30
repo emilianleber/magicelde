@@ -504,6 +504,24 @@ const Kundenportal = () => {
                 ))}
               </div>
 
+              {/* No request CTA */}
+              {requests.length === 0 && (
+                <div className="p-8 rounded-3xl bg-muted/20 border border-border/30 text-center">
+                  <Theater className="w-10 h-10 text-muted-foreground/30 mx-auto mb-4" />
+                  <h2 className="font-display text-lg font-bold text-foreground mb-2">Noch keine Anfrage</h2>
+                  <p className="font-sans text-sm text-muted-foreground mb-6">
+                    Stellen Sie jetzt Ihre erste Anfrage für eine unvergessliche Zaubershow.
+                  </p>
+                  <button
+                    onClick={() => setActiveTab("requests")}
+                    className="btn-primary inline-flex items-center gap-2"
+                  >
+                    <CalendarPlus className="w-4 h-4" />
+                    Jetzt anfragen
+                  </button>
+                </div>
+              )}
+
               {/* Timeline */}
               {timelineSteps.length > 0 && (
                 <div className="p-8 rounded-3xl bg-muted/20 border border-border/30">
