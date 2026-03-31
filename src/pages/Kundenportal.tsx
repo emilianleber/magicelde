@@ -870,9 +870,11 @@ const Kundenportal = () => {
 
             {/* Contact strip */}
             <div className="rounded-2xl border border-black/[0.06] bg-white/80 shadow-sm p-5 flex items-center gap-4">
-              <div className="w-11 h-11 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                <User className="w-5 h-5 text-accent" />
-              </div>
+              <img
+                src="https://www.magicel.de/assets/hero-magic-D6fUzBvI.jpg"
+                alt="Emilian Leber"
+                className="w-11 h-11 rounded-full object-cover object-top shrink-0 ring-2 ring-accent/20"
+              />
               <div className="flex-1 min-w-0">
                 <p className="font-sans text-sm font-semibold text-foreground">Emilian Leber</p>
                 <p className="font-sans text-xs text-muted-foreground">Ihr persönlicher Ansprechpartner</p>
@@ -1417,9 +1419,13 @@ const Kundenportal = () => {
                       >
                         <div className={`px-5 py-3.5 border-b flex items-center justify-between gap-3 ${isUnread ? "border-accent/10" : "border-black/[0.05]"}`}>
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${isFromAdmin ? "bg-accent/15 text-accent" : "bg-black/[0.04] text-muted-foreground"}`}>
-                              {isFromAdmin ? "EL" : (customer?.name?.[0]?.toUpperCase() || "K")}
-                            </div>
+                            {isFromAdmin ? (
+                              <img src="https://www.magicel.de/assets/hero-magic-D6fUzBvI.jpg" alt="EL" className="w-8 h-8 rounded-full object-cover object-top shrink-0" />
+                            ) : (
+                              <div className="w-8 h-8 rounded-full bg-black/[0.04] text-muted-foreground flex items-center justify-center shrink-0 text-xs font-bold">
+                                {customer?.name?.[0]?.toUpperCase() || "K"}
+                              </div>
+                            )}
                             <div className="min-w-0">
                               <p className={`font-sans text-[10px] font-semibold uppercase tracking-widest ${isFromAdmin ? "text-accent" : "text-muted-foreground"}`}>
                                 {isFromAdmin ? "Emilian Leber" : "Sie"}
