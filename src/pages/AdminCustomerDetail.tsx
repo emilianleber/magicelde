@@ -278,10 +278,20 @@ const AdminCustomerDetail = () => {
     if (!customer?.email) return;
     setRequestingBilling(true);
     setBillingRequestMsg("");
+    const firstName = customer.name ? customer.name.split(" ")[0] : null;
+    const greeting = firstName ? `Hallo ${firstName},` : "Hallo,";
+    const body = `<p>${greeting}</p>
+<p>für die Erstellung Ihrer Rechnung benötige ich noch Ihre <strong>Rechnungsadresse</strong>.</p>
+<p>Bitte hinterlegen Sie diese schnell und einfach in Ihrem Kundenportal unter <strong>Einstellungen → Rechnungsadresse</strong>:</p>
+<p style="margin:24px 0;text-align:center;">
+  <a href="https://magicel.de/kundenportal/login" style="background:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:700;font-size:15px;">Kundenportal öffnen →</a>
+</p>
+<p>Vielen Dank!</p>
+<p>Mit magischen Grüßen,<br><strong>Emilian Leber</strong></p>`;
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(
-        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/request-billing-address",
+        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/send-customer-mail",
         {
           method: "POST",
           headers: {
@@ -289,7 +299,13 @@ const AdminCustomerDetail = () => {
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             Authorization: `Bearer ${session?.access_token}`,
           },
-          body: JSON.stringify({ customer_id: customer.id, customer_name: customer.name, customer_email: customer.email }),
+          body: JSON.stringify({
+            customer_id: customer.id,
+            subject: "Bitte Rechnungsadresse hinterlegen",
+            body,
+            to_email: customer.email,
+            to_name: customer.name,
+          }),
         }
       );
       const data = await res.json();

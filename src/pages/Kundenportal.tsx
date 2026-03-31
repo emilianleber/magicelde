@@ -611,7 +611,7 @@ const Kundenportal = () => {
       </div>
 
       {/* Main content */}
-      <section className="relative min-h-screen pt-8 pb-16">
+      <section className="relative min-h-screen pt-12 pb-20">
         {/* Decorative background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/[0.06] blur-3xl" />
