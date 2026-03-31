@@ -422,6 +422,16 @@ const Kundenportal = () => {
     }
   }, [activeTab]);
 
+  const notifyAdmin = async (subject: string, html: string) => {
+    try {
+      await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/notify-admin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
+        body: JSON.stringify({ subject, html }),
+      });
+    } catch (_) {}
+  };
+
   const logout = async () => {
     await supabase.auth.signOut();
     navigate("/kundenportal/login");
@@ -493,6 +503,13 @@ const Kundenportal = () => {
       setCrMessage((p) => ({ ...p, [linkedId]: "" }));
       setCrFormOpen((p) => ({ ...p, [linkedId]: false }));
       setTimeout(() => setCrSuccess((p) => ({ ...p, [linkedId]: false })), 4000);
+      notifyAdmin(
+        `📋 Änderungswunsch: ${payload.subject}`,
+        `<p><strong>${customer.name || customer.email}</strong> hat einen Änderungswunsch eingereicht:</p>
+        <p><strong>Betreff:</strong> ${payload.subject}</p>
+        <p><strong>Nachricht:</strong> ${payload.message}</p>
+        <p><a href="https://magicel.de/admin/requests${type === "event" ? "/../events" : ""}/${linkedId}" style="background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;">Im CRM öffnen →</a></p>`
+      );
     }
     setCrSubmitting((p) => ({ ...p, [linkedId]: false }));
   };
@@ -1249,6 +1266,7 @@ const Kundenportal = () => {
                                   if (!customer) return;
                                   await supabase.from("portal_change_requests").insert({ customer_id: customer.id, request_id: r.id, subject: "Angebot annehmen", message: "Kunde nimmt das Angebot an.", status: "offen", action: "angebot_annehmen" });
                                   setCrSuccess(p => ({ ...p, [r.id]: true }));
+                                  notifyAdmin(`✅ Angebot angenommen – ${customer.name || customer.email}`, `<p><strong>${customer.name || customer.email}</strong> hat das Angebot für <strong>${r.anlass || "Anfrage"}</strong> angenommen.</p><p><a href="https://magicel.de/admin/requests/${r.id}" style="background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;">Anfrage öffnen →</a></p>`);
                                 }}
                                 className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-foreground text-background text-sm font-semibold hover:opacity-80 transition-all"
                               >
@@ -1265,6 +1283,7 @@ const Kundenportal = () => {
                                   if (!customer) return;
                                   await supabase.from("portal_change_requests").insert({ customer_id: customer.id, request_id: r.id, subject: "Angebot ablehnen", message: "Kunde lehnt das Angebot ab.", status: "offen", action: "angebot_ablehnen" });
                                   setCrSuccess(p => ({ ...p, [r.id]: true }));
+                                  notifyAdmin(`❌ Angebot abgelehnt – ${customer.name || customer.email}`, `<p><strong>${customer.name || customer.email}</strong> hat das Angebot für <strong>${r.anlass || "Anfrage"}</strong> abgelehnt.</p><p><a href="https://magicel.de/admin/requests/${r.id}" style="background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;">Anfrage öffnen →</a></p>`);
                                 }}
                                 className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-destructive/30 text-sm font-medium text-destructive hover:bg-destructive/5 transition-all"
                               >
@@ -1345,6 +1364,7 @@ const Kundenportal = () => {
                                           await supabase.from("portal_change_requests").insert({ customer_id: customer.id, request_id: r.id, subject: "Anfrage zurückziehen", message: "Kunde möchte die Anfrage zurückziehen.", status: "offen", action: "stornierung_anfrage" });
                                           setWithdrawConfirm(p => ({ ...p, [r.id]: false }));
                                           setCrSuccess(p => ({ ...p, [r.id + "_withdraw"]: true }));
+                                          notifyAdmin(`🔙 Anfrage zurückgezogen – ${customer.name || customer.email}`, `<p><strong>${customer.name || customer.email}</strong> möchte die Anfrage <strong>${r.anlass || ""}</strong> zurückziehen.</p><p><a href="https://magicel.de/admin/requests/${r.id}" style="background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;">Anfrage öffnen →</a></p>`);
                                           setTimeout(() => setCrSuccess(p => ({ ...p, [r.id + "_withdraw"]: false })), 4000);
                                         }}
                                         className="font-sans text-xs font-semibold text-destructive border border-destructive/20 rounded-lg px-3 py-1.5 hover:bg-destructive/5 transition-all"
@@ -1681,10 +1701,16 @@ const Kundenportal = () => {
               <button
                 onClick={async () => {
                   if (!customer) return;
-                  await supabase.from("portal_change_requests").insert({ customer_id: customer.id, event_id: eventCancelId, subject: "Event stornieren", message: "Kunde möchte das Event stornieren. Stornierungsbedingungen wurden akzeptiert.", status: "offen", action: "stornierung_event" });
-                  const cr = { id: crypto.randomUUID(), customer_id: customer.id, event_id: eventCancelId, request_id: null, subject: "Event stornieren", message: "Kunde möchte das Event stornieren.", status: "offen", admin_response: null, created_at: new Date().toISOString() } as PortalChangeRequest;
+                  const targetEventId = eventCancelId;
+                  const targetEvent = events.find(ev => ev.id === targetEventId);
+                  await supabase.from("portal_change_requests").insert({ customer_id: customer.id, event_id: targetEventId, subject: "Event stornieren", message: "Kunde möchte das Event stornieren. Stornierungsbedingungen wurden akzeptiert.", status: "offen", action: "stornierung_event" });
+                  const cr = { id: crypto.randomUUID(), customer_id: customer.id, event_id: targetEventId, request_id: null, subject: "Event stornieren", message: "Kunde möchte das Event stornieren.", status: "offen", admin_response: null, created_at: new Date().toISOString() } as PortalChangeRequest;
                   setChangeRequests(prev => [cr, ...prev]);
                   setEventCancelId(null);
+                  await notifyAdmin(
+                    `🚫 Stornierungsanfrage: ${targetEvent?.title || "Event"} – ${customer.name || customer.email}`,
+                    `<p><b>${customer.name || customer.email}</b> möchte das Event <b>${targetEvent?.title || targetEventId}</b> stornieren.</p><p>Die Stornierungsbedingungen wurden vom Kunden akzeptiert.</p>`
+                  );
                 }}
                 className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-destructive text-white text-sm font-semibold hover:opacity-80 transition-all"
               >

@@ -72,6 +72,7 @@ interface PortalChangeRequest {
   status: string;
   admin_response: string | null;
   created_at: string;
+  action?: string | null;
 }
 
 const statusOptions = [
@@ -343,6 +344,19 @@ const AdminRequestDetail = () => {
     if (!error && data) {
       setChangeRequests((prev) => prev.map((cr) => cr.id === crId ? data : cr));
       setCrResponseText((prev) => ({ ...prev, [crId]: "" }));
+
+      // Auto-update the linked request status based on action
+      if (newStatus === "angenommen") {
+        const action = data.action;
+        const linkedRequestId = data.request_id || request?.id; // fall back to current page's request id
+        if (action === "stornierung_anfrage" && linkedRequestId) {
+          await supabase.from("portal_requests").update({ status: "archiviert" }).eq("id", linkedRequestId);
+        } else if (action === "angebot_annehmen" && linkedRequestId) {
+          await supabase.from("portal_requests").update({ status: "bestätigt" }).eq("id", linkedRequestId);
+        } else if (action === "angebot_ablehnen" && linkedRequestId) {
+          await supabase.from("portal_requests").update({ status: "abgelehnt" }).eq("id", linkedRequestId);
+        }
+      }
     }
     setCrUpdating((prev) => ({ ...prev, [crId]: false }));
   };

@@ -69,6 +69,7 @@ interface PortalChangeRequest {
   message: string;
   status: string;
   admin_response: string | null;
+  action?: string | null;
   created_at: string;
 }
 
@@ -318,6 +319,15 @@ const AdminEventDetail = () => {
     if (!error && data) {
       setChangeRequests((prev) => prev.map((cr) => cr.id === crId ? data : cr));
       setCrResponseText((prev) => ({ ...prev, [crId]: "" }));
+
+      // Auto-update event to storniert when a stornierung_event change request is approved
+      if (newStatus === "angenommen" && data.action === "stornierung_event") {
+        const linkedEventId = data.event_id || event?.id;
+        if (linkedEventId) {
+          await supabase.from("portal_events").update({ status: "storniert" }).eq("id", linkedEventId);
+          setEvent((prev) => prev ? { ...prev, status: "storniert" } : prev);
+        }
+      }
     }
     setCrUpdating((prev) => ({ ...prev, [crId]: false }));
   };
