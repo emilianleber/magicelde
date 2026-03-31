@@ -422,12 +422,12 @@ const Kundenportal = () => {
     }
   }, [activeTab]);
 
-  const notifyAdmin = async (subject: string, html: string) => {
+  const notifyAdmin = async (subject: string, body: string) => {
     try {
-      await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/notify-admin", {
+      await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/send-customer-mail", {
         method: "POST",
         headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
-        body: JSON.stringify({ subject, html }),
+        body: JSON.stringify({ to_email: "el@magicel.de", to_name: "Emilian Leber", subject, body }),
       });
     } catch (_) {}
   };
