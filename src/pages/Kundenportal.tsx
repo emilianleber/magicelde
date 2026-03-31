@@ -577,7 +577,7 @@ const Kundenportal = () => {
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => { setActiveTab(tab.id); window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }); }}
                   className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium whitespace-nowrap shrink-0 transition-all ${
                     activeTab === tab.id
                       ? "bg-accent text-white"
@@ -611,7 +611,7 @@ const Kundenportal = () => {
       </div>
 
       {/* Main content */}
-      <section className="relative min-h-screen pt-12 pb-20">
+      <section className="relative min-h-screen pt-16 pb-20">
         {/* Decorative background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/[0.06] blur-3xl" />
@@ -1629,21 +1629,26 @@ const Kundenportal = () => {
               </div>
             </div>
 
-            <div className="p-6 rounded-3xl bg-accent/5 border border-accent/20">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center shrink-0">
-                  <Sparkles className="w-5 h-5 text-accent" />
+            <div
+              className="relative overflow-hidden rounded-3xl p-6"
+              style={{ background: "linear-gradient(135deg, hsl(230,65%,48%), hsl(280,55%,45%), hsl(345,70%,42%))" }}
+            >
+              {/* subtle glow orb */}
+              <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+              <div className="relative flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                  <MessageCircle className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-sans text-sm font-semibold text-foreground mb-1">Chat-Assistent</p>
-                  <p className="font-sans text-sm text-muted-foreground mb-4">
+                  <p className="font-sans text-base font-bold text-white mb-1">Chat-Assistent</p>
+                  <p className="font-sans text-sm text-white/75 mb-5">
                     Schnelle Antworten auf häufige Fragen zu Ihrem Event oder unseren Showkonzepten.
                   </p>
                   <button
-                    onClick={() => window.dispatchEvent(new CustomEvent("open-chatbot"))}
-                    className="btn-primary inline-flex items-center gap-2"
+                    onClick={() => document.dispatchEvent(new CustomEvent("open-chatbot"))}
+                    className="inline-flex items-center gap-2 bg-white text-gray-900 font-semibold text-sm px-5 py-2.5 rounded-2xl hover:bg-white/90 active:scale-95 transition-all shadow-lg"
                   >
-                    <Sparkles className="w-4 h-4" />
+                    <MessageCircle className="w-4 h-4" />
                     Chat öffnen
                   </button>
                 </div>
