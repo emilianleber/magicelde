@@ -466,7 +466,7 @@ const Kundenportal = () => {
     const ext = file.name.split(".").pop();
     const path = `${customer.id}/avatar.${ext}`;
     const { error: upErr } = await supabase.storage.from("customer-avatars").upload(path, file, { upsert: true });
-    if (upErr) { setAvatarError("Upload fehlgeschlagen."); setAvatarUploading(false); return; }
+    if (upErr) { setAvatarError(`Upload fehlgeschlagen: ${upErr.message}`); setAvatarUploading(false); return; }
     const { data: { publicUrl } } = supabase.storage.from("customer-avatars").getPublicUrl(path);
     const { data: updatedCust } = await supabase.from("portal_customers").update({ avatar_url: publicUrl + `?t=${Date.now()}` }).eq("id", customer.id).select("*").single();
     if (updatedCust) setCustomer(updatedCust);
