@@ -188,52 +188,56 @@ serve(async (req) => {
         to: "el@magicel.de",
         subject: `🎯 Neue Anfrage von ${safeName}`,
         html: `<!DOCTYPE html>
-<html lang="de" xmlns="http://www.w3.org/1999/xhtml" style="color-scheme:light;supported-color-schemes:light;">
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" style="color-scheme:light only;supported-color-schemes:light;">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light">
+  <meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light">
   <title>Neue Anfrage</title>
-  <style>:root{color-scheme:light!important;}html,body{background-color:#ffffff!important;margin:0!important;padding:0!important;}</style>
+  <style>
+    :root{color-scheme:light only!important;}
+    html,body{background-color:#ffffff!important;margin:0!important;padding:0!important;}
+    @media(prefers-color-scheme:dark){html,body,.bg-white{background-color:#ffffff!important;color:#0a0a0a!important;}}
+  </style>
 </head>
-<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff;"><tr><td align="center" bgcolor="#ffffff" style="padding:32px 16px;background-color:#ffffff;">
+<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff!important;"><tr><td align="center" bgcolor="#ffffff" style="padding:32px 16px;background-color:#ffffff!important;">
 <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);border-collapse:separate;border:1px solid #e4e4e7;">
-  <tr><td bgcolor="#0a0a0a" style="background-color:#0a0a0a;padding:28px 36px 22px;border-radius:20px 20px 0 0;">
+  <tr><td bgcolor="#0a0a0a" style="background-color:#0a0a0a!important;padding:28px 36px 22px;border-radius:20px 20px 0 0;">
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;"><tr>
-      <td><p style="margin:0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p></td>
-      <td style="text-align:right;"><span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">Kundenportal</span></td>
+      <td bgcolor="#0a0a0a" style="background-color:#0a0a0a!important;"><p style="margin:0;font-size:22px;font-weight:800;color:#ffffff!important;letter-spacing:-0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p></td>
+      <td bgcolor="#0a0a0a" style="text-align:right;background-color:#0a0a0a!important;"><span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">Kundenportal</span></td>
     </tr></table>
     <div style="margin-top:16px;height:2px;width:48px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
   </td></tr>
-  <tr><td bgcolor="#ffffff" style="padding:36px 36px 32px;background-color:#ffffff;">
-    <div style="display:inline-block;background-color:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:24px;">Neue Anfrage</div>
+  <tr><td bgcolor="#ffffff" style="padding:36px 36px 32px;background-color:#ffffff!important;">
+    <div style="display:inline-block;background-color:#eff6ff!important;color:#2563eb!important;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:24px;">Neue Anfrage</div>
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;"><tr>
-      <td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:4px 20px;">
+      <td bgcolor="#f9fafb" style="background-color:#f9fafb!important;border:1px solid #e4e4e7;border-radius:14px;padding:4px 20px;">
         <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;width:40%;">👤 Name</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeName}</td></tr>
-          ${safeFirma ? `<tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">🏢 Firma</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeFirma}</td></tr>` : ""}
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">✉️ E-Mail</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeEmail}</td></tr>
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📞 Telefon</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safePhone || "–"}</td></tr>
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">🎉 Anlass</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeAnlass || "–"}</td></tr>
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📅 Datum</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeDatum || "–"}</td></tr>
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📍 Ort</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeOrt || "–"}</td></tr>
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">👥 Gäste</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeGaeste ?? "–"}</td></tr>
-          <tr><td style="padding:12px 0;font-size:14px;color:#71717a;">🎭 Format</td><td style="padding:12px 0;font-size:14px;font-weight:600;color:#0a0a0a;">${safeFormat || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;width:40%;background-color:#f9fafb!important;">👤 Name</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeName}</td></tr>
+          ${safeFirma ? `<tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">🏢 Firma</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeFirma}</td></tr>` : ""}
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">✉️ E-Mail</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeEmail}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📞 Telefon</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safePhone || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">🎉 Anlass</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeAnlass || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📅 Datum</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeDatum || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📍 Ort</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeOrt || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">👥 Gäste</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeGaeste ?? "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">🎭 Format</td><td bgcolor="#f9fafb" style="padding:12px 0;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeFormat || "–"}</td></tr>
         </table>
       </td>
     </tr></table>
     ${safeNachricht ? `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;"><tr>
-      <td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
-        <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#71717a;">Nachricht</p>
-        <p style="margin:0;font-size:14px;line-height:1.7;color:#0a0a0a;">${safeNachricht.replace(/\n/g, "<br>")}</p>
+      <td bgcolor="#f9fafb" style="background-color:#f9fafb!important;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
+        <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#71717a!important;">Nachricht</p>
+        <p style="margin:0;font-size:14px;line-height:1.7;color:#0a0a0a!important;">${safeNachricht.replace(/\n/g, "<br>")}</p>
       </td>
     </tr></table>` : ""}
     <div style="text-align:center;margin-top:24px;">
-      <a href="https://magicel.de/admin/requests/${insertData.id}" style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:14px;font-weight:700;">Anfrage im CRM öffnen &rarr;</a>
+      <a href="https://magicel.de/admin/requests/${insertData.id}" style="display:inline-block;background-color:#0a0a0a!important;color:#ffffff!important;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:14px;font-weight:700;">Anfrage im CRM öffnen &rarr;</a>
     </div>
   </td></tr>
-  <tr><td bgcolor="#f4f4f5" style="background-color:#f4f4f5;border-top:1px solid #e4e4e7;padding:16px 36px;text-align:center;border-radius:0 0 20px 20px;">
-    <p style="margin:0;font-size:12px;color:#a1a1aa;">&copy; 2026 Emilian Leber &middot; magicel.de</p>
+  <tr><td bgcolor="#f4f4f5" style="background-color:#f4f4f5!important;border-top:1px solid #e4e4e7;padding:16px 36px;text-align:center;border-radius:0 0 20px 20px;">
+    <p style="margin:0;font-size:12px;color:#a1a1aa!important;">&copy; 2026 Emilian Leber &middot; magicel.de</p>
   </td></tr>
 </table>
 </td></tr></table>
@@ -252,59 +256,60 @@ serve(async (req) => {
         to: safeEmail,
         subject: "Deine Anfrage ist eingegangen – ich melde mich bald! ✨",
         html: `<!DOCTYPE html>
-<html lang="de" xmlns="http://www.w3.org/1999/xhtml" style="color-scheme:light;supported-color-schemes:light;">
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" style="color-scheme:light only;supported-color-schemes:light;">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light">
+  <meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light">
   <title>Anfrage eingegangen</title>
-  <style>:root{color-scheme:light!important;}html,body{background-color:#ffffff!important;margin:0!important;padding:0!important;}</style>
+  <style>
+    :root{color-scheme:light only!important;}
+    html,body{background-color:#ffffff!important;margin:0!important;padding:0!important;}
+    @media(prefers-color-scheme:dark){html,body{background-color:#ffffff!important;color:#0a0a0a!important;}}
+  </style>
 </head>
-<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff;"><tr><td align="center" bgcolor="#ffffff" style="padding:32px 16px;background-color:#ffffff;">
+<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff!important;"><tr><td align="center" bgcolor="#ffffff" style="padding:32px 16px;background-color:#ffffff!important;">
 <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);border-collapse:separate;border:1px solid #e4e4e7;">
-  <tr><td bgcolor="#0a0a0a" style="background-color:#0a0a0a;padding:28px 36px 22px;border-radius:20px 20px 0 0;">
+  <tr><td bgcolor="#0a0a0a" style="background-color:#0a0a0a!important;padding:28px 36px 22px;border-radius:20px 20px 0 0;">
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;"><tr>
-      <td><p style="margin:0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p></td>
-      <td style="text-align:right;"><span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">Zauberer &amp; Showkünstler</span></td>
+      <td bgcolor="#0a0a0a" style="background-color:#0a0a0a!important;"><p style="margin:0;font-size:22px;font-weight:800;color:#ffffff!important;letter-spacing:-0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p></td>
+      <td bgcolor="#0a0a0a" style="text-align:right;background-color:#0a0a0a!important;"><span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">Zauberer &amp; Showkünstler</span></td>
     </tr></table>
     <div style="margin-top:16px;height:2px;width:56px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
   </td></tr>
-  <tr><td bgcolor="#ffffff" style="padding:36px 36px 32px;background-color:#ffffff;">
-    <div style="display:inline-block;background-color:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:24px;">Anfrage</div>
-    <h1 style="margin:0 0 14px;font-size:26px;font-weight:800;color:#0a0a0a;line-height:1.2;letter-spacing:-0.5px;">Danke, ${displayGreeting}! ✨</h1>
-    <p style="margin:0 0 28px;font-size:16px;line-height:1.75;color:#52525b;">Deine Anfrage ist erfolgreich bei mir eingegangen. Ich melde mich persönlich – in der Regel innerhalb von 24 Stunden.</p>
-    <!-- info table -->
+  <tr><td bgcolor="#ffffff" style="padding:36px 36px 32px;background-color:#ffffff!important;">
+    <div style="display:inline-block;background-color:#eff6ff!important;color:#2563eb!important;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:24px;">Anfrage</div>
+    <h1 style="margin:0 0 14px;font-size:26px;font-weight:800;color:#0a0a0a!important;line-height:1.2;letter-spacing:-0.5px;">Danke, ${displayGreeting}! ✨</h1>
+    <p style="margin:0 0 28px;font-size:16px;line-height:1.75;color:#52525b!important;">Deine Anfrage ist erfolgreich bei mir eingegangen. Ich melde mich persönlich – in der Regel innerhalb von 24 Stunden.</p>
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;"><tr>
-      <td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:4px 20px;">
+      <td bgcolor="#f9fafb" style="background-color:#f9fafb!important;border:1px solid #e4e4e7;border-radius:14px;padding:4px 20px;">
         <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
-          ${safeFirma ? `<tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;width:40%;">🏢 Firma</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeFirma}</td></tr>` : ""}
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;width:40%;">🎉 Anlass</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeAnlass || "–"}</td></tr>
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📅 Datum</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeDatum || "–"}</td></tr>
-          <tr><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a;">📍 Ort</td><td style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a;">${safeOrt || "–"}</td></tr>
-          <tr><td style="padding:12px 0;font-size:14px;color:#71717a;">🎭 Format</td><td style="padding:12px 0;font-size:14px;font-weight:600;color:#0a0a0a;">${safeFormat || "–"}</td></tr>
+          ${safeFirma ? `<tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;width:40%;background-color:#f9fafb!important;">🏢 Firma</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeFirma}</td></tr>` : ""}
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;width:40%;background-color:#f9fafb!important;">🎉 Anlass</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeAnlass || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📅 Datum</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeDatum || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📍 Ort</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeOrt || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">🎭 Format</td><td bgcolor="#f9fafb" style="padding:12px 0;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeFormat || "–"}</td></tr>
         </table>
       </td>
     </tr></table>
-    <!-- portal hint -->
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;"><tr>
-      <td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
-        <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#71717a;">Kundenportal</p>
-        <p style="margin:0 0 6px;font-size:14px;line-height:1.7;color:#52525b;">Verfolge deine Anfrage jederzeit im Kundenportal – melde dich mit dieser E-Mail-Adresse an:</p>
-        <p style="margin:0;font-size:15px;font-weight:700;color:#0a0a0a;">${safeEmail}</p>
+      <td bgcolor="#f9fafb" style="background-color:#f9fafb!important;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
+        <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#71717a!important;">Kundenportal</p>
+        <p style="margin:0 0 6px;font-size:14px;line-height:1.7;color:#52525b!important;">Verfolge deine Anfrage jederzeit im Kundenportal – melde dich mit dieser E-Mail-Adresse an:</p>
+        <p style="margin:0;font-size:15px;font-weight:700;color:#0a0a0a!important;">${safeEmail}</p>
       </td>
     </tr></table>
     <div style="text-align:center;margin:24px 0 20px;">
-      <a href="https://magicel.de/kundenportal/login" style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:15px 34px;border-radius:14px;font-size:15px;font-weight:700;">Kundenportal öffnen &rarr;</a>
+      <a href="https://magicel.de/kundenportal/login" style="display:inline-block;background-color:#0a0a0a!important;color:#ffffff!important;text-decoration:none;padding:15px 34px;border-radius:14px;font-size:15px;font-weight:700;">Kundenportal öffnen &rarr;</a>
     </div>
-    <!-- signature -->
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e4e4e7;"><tr><td style="padding-top:22px;">
-      <p style="margin:0 0 2px;font-size:14px;color:#71717a;">Mit magischen Grüßen,</p>
-      <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a;">Emilian Leber</p>
-      <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa;">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e4e4e7;"><tr><td bgcolor="#ffffff" style="padding-top:22px;background-color:#ffffff!important;">
+      <p style="margin:0 0 2px;font-size:14px;color:#71717a!important;">Mit magischen Grüßen,</p>
+      <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a!important;">Emilian Leber</p>
+      <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa!important;">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
     </td></tr></table>
   </td></tr>
-  <tr><td bgcolor="#f4f4f5" style="background-color:#f4f4f5;border-top:1px solid #e4e4e7;padding:16px 36px;text-align:center;border-radius:0 0 20px 20px;">
-    <p style="margin:0;font-size:12px;color:#a1a1aa;">&copy; 2026 Emilian Leber &middot; Regensburg &middot; <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:none;">Datenschutz</a></p>
+  <tr><td bgcolor="#f4f4f5" style="background-color:#f4f4f5!important;border-top:1px solid #e4e4e7;padding:16px 36px;text-align:center;border-radius:0 0 20px 20px;">
+    <p style="margin:0;font-size:12px;color:#a1a1aa!important;">&copy; 2026 Emilian Leber &middot; Regensburg &middot; <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:none;">Datenschutz</a></p>
   </td></tr>
 </table>
 </td></tr></table>
