@@ -11,6 +11,7 @@ import AdminCustomerDetail from "@/pages/AdminCustomerDetail";
 import AdminNewCustomer from "@/pages/AdminNewCustomer";
 import AdminSettings from "@/pages/AdminSettings";
 import AdminTodos from "@/pages/AdminTodos";
+import AdminDocuments from "@/pages/AdminDocuments";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminPasswordReset from "@/pages/AdminPasswordReset";
 
@@ -91,6 +92,10 @@ const AdminRoutes = () => (
     <Route path="/admin/customers/new" element={<AdminNewCustomer />} />
     <Route path="/admin/settings" element={<AdminSettings />} />
     <Route path="/admin/todos" element={<AdminTodos />} />
+    <Route path="/admin/documents" element={<AdminDocuments />} />
+    <Route path="/admin/documents/angebote" element={<AdminDocuments />} />
+    <Route path="/admin/documents/rechnungen" element={<AdminDocuments />} />
+    <Route path="/admin/documents/auftragsbestaetigung" element={<AdminDocuments />} />
     <Route path="/admin/login" element={<AdminLogin />} />
     <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
     <Route path="*" element={<Navigate to="/admin/customers" replace />} />
@@ -179,6 +184,10 @@ const App = () => (
             <Route path="/admin/customers/new" element={<AdminNewCustomer />} />
             <Route path="/admin/settings" element={<AdminSettings />} />
             <Route path="/admin/todos" element={<AdminTodos />} />
+            <Route path="/admin/documents" element={<AdminDocuments />} />
+            <Route path="/admin/documents/angebote" element={<AdminDocuments />} />
+            <Route path="/admin/documents/rechnungen" element={<AdminDocuments />} />
+            <Route path="/admin/documents/auftragsbestaetigung" element={<AdminDocuments />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
             <Route path="*" element={<NotFound />} />

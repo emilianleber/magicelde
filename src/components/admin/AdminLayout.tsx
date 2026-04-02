@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +14,7 @@ import {
   Zap,
   Menu,
   X,
+  FileText,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -25,12 +26,20 @@ interface AdminLayoutProps {
 
 const navItems = [
   { label: "Dashboard",     href: "/admin",           icon: LayoutDashboard },
+  { label: "Dokumente",     href: "/admin/documents", icon: FileText },
   { label: "Anfragen",      href: "/admin/requests",  icon: MessageCircle },
   { label: "Events",        href: "/admin/events",    icon: Calendar },
   { label: "Kunden",        href: "/admin/customers", icon: Users },
   { label: "Mails",         href: "/admin/mails",     icon: Mail },
   { label: "Todos",         href: "/admin/todos",     icon: CheckSquare },
   { label: "Einstellungen", href: "/admin/settings",  icon: Settings },
+];
+
+const docSubItems = [
+  { label: "Übersicht", href: "/admin/documents" },
+  { label: "Angebote", href: "/admin/documents/angebote" },
+  { label: "Rechnungen", href: "/admin/documents/rechnungen" },
+  { label: "Auftragsbestätigungen", href: "/admin/documents/auftragsbestaetigung" },
 ];
 
 // Bottom nav shows the first 5 items for mobile
@@ -71,18 +80,39 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
           {navItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
-                isActive(item.href)
-                  ? "bg-foreground text-background font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-              }`}
-            >
-              <item.icon className="w-4 h-4 shrink-0" />
-              <span>{item.label}</span>
-            </Link>
+            <React.Fragment key={item.href}>
+              <Link
+                to={item.href}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
+                  location.pathname === item.href
+                    ? "bg-foreground text-background font-semibold"
+                    : (item.href !== "/admin" && location.pathname.startsWith(item.href))
+                    ? "bg-muted/60 text-foreground font-medium"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                }`}
+              >
+                <item.icon className="w-4 h-4 shrink-0" />
+                <span>{item.label}</span>
+              </Link>
+              {item.href === "/admin/documents" && location.pathname.startsWith("/admin/documents") && (
+                <div className="space-y-0.5 ml-2">
+                  {docSubItems.map((sub) => (
+                    <Link
+                      key={sub.href}
+                      to={sub.href}
+                      className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs transition-all ${
+                        location.pathname === sub.href
+                          ? "bg-foreground text-background font-semibold"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                      }`}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-50 shrink-0" />
+                      {sub.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </React.Fragment>
           ))}
         </nav>
 
@@ -125,19 +155,41 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
             {/* Nav */}
             <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
               {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all ${
-                    isActive(item.href)
-                      ? "bg-foreground text-background font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                  }`}
-                >
-                  <item.icon className="w-4 h-4 shrink-0" />
-                  <span>{item.label}</span>
-                </Link>
+                <React.Fragment key={item.href}>
+                  <Link
+                    to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all ${
+                      location.pathname === item.href
+                        ? "bg-foreground text-background font-semibold"
+                        : (item.href !== "/admin" && location.pathname.startsWith(item.href))
+                        ? "bg-muted/60 text-foreground font-medium"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                    }`}
+                  >
+                    <item.icon className="w-4 h-4 shrink-0" />
+                    <span>{item.label}</span>
+                  </Link>
+                  {item.href === "/admin/documents" && location.pathname.startsWith("/admin/documents") && (
+                    <div className="space-y-0.5 ml-2">
+                      {docSubItems.map((sub) => (
+                        <Link
+                          key={sub.href}
+                          to={sub.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs transition-all ${
+                            location.pathname === sub.href
+                              ? "bg-foreground text-background font-semibold"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                          }`}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-current opacity-50 shrink-0" />
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </React.Fragment>
               ))}
             </nav>
 
@@ -246,18 +298,39 @@ const EmbeddedAdminLayout = ({ title, subtitle, actions, children }: AdminLayout
                       location.pathname === item.href ||
                       (item.href !== "/admin" && location.pathname.startsWith(item.href));
                     return (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition-all ${
-                          isActiveItem
-                            ? "bg-background text-foreground shadow-sm border border-border/20"
-                            : "text-muted-foreground hover:text-foreground hover:bg-background/60"
-                        }`}
-                      >
-                        <item.icon className="w-4 h-4" />
-                        <span className="font-medium">{item.label}</span>
-                      </Link>
+                      <React.Fragment key={item.href}>
+                        <Link
+                          to={item.href}
+                          className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition-all ${
+                            location.pathname === item.href
+                              ? "bg-background text-foreground shadow-sm border border-border/20"
+                              : (item.href !== "/admin" && location.pathname.startsWith(item.href))
+                              ? "bg-background/60 text-foreground border border-border/10"
+                              : "text-muted-foreground hover:text-foreground hover:bg-background/60"
+                          }`}
+                        >
+                          <item.icon className="w-4 h-4" />
+                          <span className="font-medium">{item.label}</span>
+                        </Link>
+                        {item.href === "/admin/documents" && location.pathname.startsWith("/admin/documents") && (
+                          <div className="space-y-0.5 ml-4">
+                            {docSubItems.map((sub) => (
+                              <Link
+                                key={sub.href}
+                                to={sub.href}
+                                className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs transition-all ${
+                                  location.pathname === sub.href
+                                    ? "bg-background text-foreground font-semibold border border-border/20"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-background/60"
+                                }`}
+                              >
+                                <span className="w-1.5 h-1.5 rounded-full bg-current opacity-50 shrink-0" />
+                                {sub.label}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </React.Fragment>
                     );
                   })}
                 </nav>
