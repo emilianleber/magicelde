@@ -15,6 +15,12 @@ import {
   Menu,
   X,
   FileText,
+  Sparkles,
+  Wand2,
+  Package,
+  Video,
+  MapPin,
+  Users2,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -40,6 +46,15 @@ const docSubItems = [
   { label: "Angebote", href: "/admin/documents/angebote" },
   { label: "Rechnungen", href: "/admin/documents/rechnungen" },
   { label: "Auftragsbestätigungen", href: "/admin/documents/auftragsbestaetigung" },
+];
+
+const prodNavItems = [
+  { label: "Effekte",      href: "/admin/effekte",      icon: Wand2 },
+  { label: "Pakete",       href: "/admin/pakete",       icon: Package },
+  { label: "Shows",        href: "/admin/shows",        icon: Video },
+  { label: "Produktionen", href: "/admin/produktionen", icon: Sparkles },
+  { label: "Locations",    href: "/admin/locations",    icon: MapPin },
+  { label: "Partner",      href: "/admin/partner",      icon: Users2 },
 ];
 
 // Bottom nav shows the first 5 items for mobile
@@ -113,6 +128,27 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
                 </div>
               )}
             </React.Fragment>
+          ))}
+
+          {/* Divider + Section label */}
+          <div className="mt-4 mb-2 px-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
+              Eigene Produktionen
+            </p>
+          </div>
+          {prodNavItems.map((item) => (
+            <Link
+              key={item.href}
+              to={item.href}
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
+                isActive(item.href)
+                  ? "bg-foreground text-background font-semibold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+              }`}
+            >
+              <item.icon className="w-4 h-4 shrink-0" />
+              <span>{item.label}</span>
+            </Link>
           ))}
         </nav>
 
@@ -190,6 +226,28 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
                     </div>
                   )}
                 </React.Fragment>
+              ))}
+
+              {/* Divider + Section label */}
+              <div className="mt-4 mb-2 px-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
+                  Eigene Produktionen
+                </p>
+              </div>
+              {prodNavItems.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all ${
+                    isActive(item.href)
+                      ? "bg-foreground text-background font-semibold"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                  }`}
+                >
+                  <item.icon className="w-4 h-4 shrink-0" />
+                  <span>{item.label}</span>
+                </Link>
               ))}
             </nav>
 

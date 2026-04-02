@@ -1,4 +1,5 @@
 import AdminDashboard from "@/pages/AdminDashboard";
+import AdminEffekte from "@/pages/AdminEffekte";
 import AdminRequests from "@/pages/AdminRequests";
 import AdminRequestDetail from "@/pages/AdminRequestDetail";
 import AdminEvents from "@/pages/AdminEvents";
@@ -96,6 +97,7 @@ const AdminRoutes = () => (
     <Route path="/admin/documents/angebote" element={<AdminDocuments />} />
     <Route path="/admin/documents/rechnungen" element={<AdminDocuments />} />
     <Route path="/admin/documents/auftragsbestaetigung" element={<AdminDocuments />} />
+    <Route path="/admin/effekte" element={<AdminEffekte />} />
     <Route path="/admin/login" element={<AdminLogin />} />
     <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
     <Route path="*" element={<Navigate to="/admin/customers" replace />} />
@@ -188,6 +190,7 @@ const App = () => (
             <Route path="/admin/documents/angebote" element={<AdminDocuments />} />
             <Route path="/admin/documents/rechnungen" element={<AdminDocuments />} />
             <Route path="/admin/documents/auftragsbestaetigung" element={<AdminDocuments />} />
+            <Route path="/admin/effekte" element={<AdminEffekte />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
             <Route path="*" element={<NotFound />} />
