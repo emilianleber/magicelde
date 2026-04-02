@@ -129,14 +129,14 @@ const getEmailShell = (
 const infoTable = (rows: { icon: string; label: string; value: string }[]) => `
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:28px;">
   <tr>
-    <td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:4px 20px;">
+    <td bgcolor="#f9fafb" style="background-color:#f9fafb!important;border:1px solid #e4e4e7;border-radius:14px;padding:4px 20px;">
       <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
         ${rows.map((r, i) => `
         <tr>
-          <td style="padding:12px 0;${i < rows.length - 1 ? "border-bottom:1px solid #e4e4e7;" : ""}font-size:14px;color:#71717a;width:44%;font-family:${FONT};">
+          <td bgcolor="#f9fafb" style="padding:12px 0;${i < rows.length - 1 ? "border-bottom:1px solid #e4e4e7;" : ""}font-size:14px;color:#71717a!important;width:44%;font-family:${FONT};background-color:#f9fafb!important;">
             ${r.icon}&nbsp;${r.label}
           </td>
-          <td style="padding:12px 0;${i < rows.length - 1 ? "border-bottom:1px solid #e4e4e7;" : ""}font-size:14px;color:#0a0a0a;font-weight:600;font-family:${FONT};">
+          <td bgcolor="#f9fafb" style="padding:12px 0;${i < rows.length - 1 ? "border-bottom:1px solid #e4e4e7;" : ""}font-size:14px;color:#0a0a0a!important;font-weight:600;font-family:${FONT};background-color:#f9fafb!important;">
             ${r.value}
           </td>
         </tr>`).join("")}
