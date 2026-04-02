@@ -504,11 +504,11 @@ const Kundenportal = () => {
       setCrFormOpen((p) => ({ ...p, [linkedId]: false }));
       setTimeout(() => setCrSuccess((p) => ({ ...p, [linkedId]: false })), 4000);
       notifyAdmin(
-        `📋 Änderungswunsch: ${payload.subject}`,
-        `<p><strong>${customer.name || customer.email}</strong> hat einen Änderungswunsch eingereicht:</p>
+        `📋 Änderungswunsch von ${customer.name || customer.email}: ${payload.subject}`,
+        `<p><strong>${customer.name || customer.email}</strong> hat eine Änderungsanfrage eingereicht:</p>
         <p><strong>Betreff:</strong> ${payload.subject}</p>
         <p><strong>Nachricht:</strong> ${payload.message}</p>
-        <p><a href="https://magicel.de/admin/requests${type === "event" ? "/../events" : ""}/${linkedId}" style="background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;">Im CRM öffnen →</a></p>`
+        <p><a href="https://magicel.de/admin/${type === "event" ? "events" : "requests"}/${linkedId}" style="display:inline-block;background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:bold;">Im CRM öffnen →</a></p>`
       );
     }
     setCrSubmitting((p) => ({ ...p, [linkedId]: false }));

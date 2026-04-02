@@ -13,6 +13,7 @@ import {
   MessageSquare,
   Pencil,
   Phone,
+  Plus,
   Save,
   Sparkles,
   Theater,
@@ -22,6 +23,7 @@ import {
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
+import DocumentCreator, { type DocumentData, type DocumentPosition } from "@/components/admin/DocumentCreator";
 
 interface PortalRequest {
   id: string;
@@ -50,6 +52,10 @@ interface PortalCustomer {
   email: string | null;
   phone?: string | null;
   kundennummer?: string | null;
+  rechnungs_strasse?: string | null;
+  rechnungs_ort?: string | null;
+  rechnungs_plz?: string | null;
+  rechnungs_land?: string | null;
 }
 
 interface PortalDocument {
@@ -147,6 +153,11 @@ const AdminRequestDetail = () => {
   const [changeRequests, setChangeRequests] = useState<PortalChangeRequest[]>([]);
   const [crResponseText, setCrResponseText] = useState<Record<string, string>>({});
   const [crUpdating, setCrUpdating] = useState<Record<string, boolean>>({});
+  const [mailHistory, setMailHistory] = useState<Array<{ id: string; created_at: string; subject: string; to_email: string; status: string }>>([]);
+  const [mailSentAt, setMailSentAt] = useState<string | null>(null);
+  const [crNotifyCustomer, setCrNotifyCustomer] = useState<Record<string, boolean>>({});
+  const [showDocCreator, setShowDocCreator] = useState(false);
+  const [editingDoc, setEditingDoc] = useState<(DocumentData & { positions?: DocumentPosition[] }) | null>(null);
 
   const [status, setStatus] = useState("neu");
   const [anlass, setAnlass] = useState("");
@@ -218,6 +229,13 @@ const AdminRequestDetail = () => {
       setDocuments(docs || []);
       const { data: crs } = await supabase.from("portal_change_requests").select("*").eq("request_id", data.id).order("created_at", { ascending: false });
       setChangeRequests(crs || []);
+      const { data: msgs } = await supabase
+        .from("portal_messages")
+        .select("id, created_at, subject, to_email, status")
+        .eq("request_id", id)
+        .order("created_at", { ascending: false })
+        .limit(10);
+      setMailHistory(msgs || []);
       setLoading(false);
     };
     load();
@@ -273,7 +291,19 @@ const AdminRequestDetail = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Fehler");
-      setMessage(data.skipped ? "Kein Mail für diesen Status vorgesehen." : "✓ Mail gesendet.");
+      if (data.skipped) {
+        setMessage("Kein Mail für diesen Status vorgesehen.");
+      } else {
+        setMessage("");
+        setMailSentAt(new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }));
+        const { data: msgs } = await supabase
+          .from("portal_messages")
+          .select("id, created_at, subject, to_email, status")
+          .eq("request_id", request.id)
+          .order("created_at", { ascending: false })
+          .limit(10);
+        setMailHistory(msgs || []);
+      }
     } catch (err: any) {
       setMessage("Mail-Fehler: " + (err.message || "Unbekannt"));
     }
@@ -346,9 +376,9 @@ const AdminRequestDetail = () => {
       setCrResponseText((prev) => ({ ...prev, [crId]: "" }));
 
       // Auto-update the linked request status based on action
+      const action = data.action;
+      const linkedRequestId = data.request_id || request?.id;
       if (newStatus === "angenommen") {
-        const action = data.action;
-        const linkedRequestId = data.request_id || request?.id; // fall back to current page's request id
         if (action === "stornierung_anfrage" && linkedRequestId) {
           await supabase.from("portal_requests").update({ status: "archiviert" }).eq("id", linkedRequestId);
         } else if (action === "angebot_annehmen" && linkedRequestId) {
@@ -357,6 +387,30 @@ const AdminRequestDetail = () => {
           await supabase.from("portal_requests").update({ status: "abgelehnt" }).eq("id", linkedRequestId);
         }
       }
+
+      // Send email notification to customer (only if checkbox is enabled, default ON)
+      const shouldNotify = crNotifyCustomer[crId] !== false;
+      if (shouldNotify) try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        const apikey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        const headers = { "Content-Type": "application/json", apikey, Authorization: `Bearer ${token}` };
+        const baseUrl = "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1";
+
+        if (newStatus === "angenommen" && linkedRequestId) {
+          // Send status mail for the updated request (covers bestätigt, abgelehnt, archiviert)
+          await fetch(`${baseUrl}/admin-send-status-mail`, {
+            method: "POST", headers,
+            body: JSON.stringify({ type: "request", recordId: linkedRequestId }),
+          });
+        } else {
+          // Send change_request result mail (approved without linked update, or rejected)
+          await fetch(`${baseUrl}/admin-send-status-mail`, {
+            method: "POST", headers,
+            body: JSON.stringify({ type: "change_request", changeRequestId: crId }),
+          });
+        }
+      } catch (_) {}
     }
     setCrUpdating((prev) => ({ ...prev, [crId]: false }));
   };
@@ -371,6 +425,7 @@ const AdminRequestDetail = () => {
   const openCrCount = changeRequests.filter((cr) => cr.status === "offen").length;
 
   return (
+    <>
     <AdminLayout
       title={anlass || "Anfrage"}
       subtitle={displayFirma ? `${displayCustomerName} · ${displayFirma}` : displayCustomerName}
@@ -526,7 +581,15 @@ const AdminRequestDetail = () => {
 
           {/* Documents */}
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
-            <h2 className="text-sm font-bold text-foreground mb-4">Dokumente</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-bold text-foreground">Dokumente</h2>
+              <button
+                onClick={() => { setEditingDoc(null); setShowDocCreator(true); }}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-3 py-1.5 text-xs font-bold hover:bg-foreground/90"
+              >
+                <Plus className="w-3 h-3" /> Erstellen
+              </button>
+            </div>
             <div className="flex items-center gap-2 mb-3 flex-wrap">
               <input
                 ref={fileInputRef}
@@ -610,6 +673,15 @@ const AdminRequestDetail = () => {
                           rows={2}
                           className={`${inputCls} resize-none text-xs`}
                         />
+                        <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={crNotifyCustomer[cr.id] !== false}
+                            onChange={(e) => setCrNotifyCustomer((prev) => ({ ...prev, [cr.id]: e.target.checked }))}
+                            className="rounded border-border/40 accent-foreground"
+                          />
+                          Kunden per Mail benachrichtigen
+                        </label>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => updateChangeRequestStatus(cr.id, "angenommen")}
@@ -628,6 +700,26 @@ const AdminRequestDetail = () => {
                         </div>
                       </div>
                     )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {mailHistory.length > 0 && (
+            <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+              <h2 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+                <Mail className="w-4 h-4 text-muted-foreground" /> Gesendete Mails
+              </h2>
+              <div className="space-y-2">
+                {mailHistory.map((msg) => (
+                  <div key={msg.id} className="flex items-start justify-between gap-3 p-3 rounded-xl bg-background/60 border border-border/20">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium text-foreground truncate">{msg.subject}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">
+                        {msg.to_email} · {new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "short" })} {new Date(msg.created_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
+                      </p>
+                    </div>
+                    <span className="text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-full border border-green-200 bg-green-50 text-green-700 shrink-0">✓</span>
                   </div>
                 ))}
               </div>
@@ -679,9 +771,6 @@ const AdminRequestDetail = () => {
             <button onClick={saveChanges} disabled={saving} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 disabled:opacity-50 transition-opacity">
               <Save className="w-4 h-4" /> {saving ? "Speichert…" : "Speichern"}
             </button>
-            <button onClick={sendStatusMail} disabled={sendingMail} className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border/30 bg-background/60 px-4 py-2.5 text-sm font-medium hover:bg-muted/40 disabled:opacity-50 transition-colors">
-              <Mail className="w-4 h-4" /> {sendingMail ? "Sendet…" : "Status-Mail senden"}
-            </button>
             {!request.event_id ? (
               <button onClick={convertToEvent} disabled={converting} className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-accent/30 bg-accent/5 px-4 py-2.5 text-sm font-medium text-accent hover:bg-accent/10 disabled:opacity-50 transition-colors">
                 <Sparkles className="w-4 h-4" /> {converting ? "Konvertiert…" : "Zu Event konvertieren"}
@@ -693,7 +782,26 @@ const AdminRequestDetail = () => {
             )}
           </div>
 
-          {message && (
+          <div className="border-t border-border/20 pt-4 mt-2">
+            <button
+              onClick={sendStatusMail}
+              disabled={sendingMail}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border/30 bg-background/60 px-4 py-2.5 text-sm font-medium hover:bg-muted/40 disabled:opacity-50 transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              {sendingMail ? "Sendet…" : "Status-Mail an Kunden senden"}
+            </button>
+            {mailSentAt && (
+              <p className="text-xs text-green-700 flex items-center gap-1 mt-2">
+                <Check className="w-3 h-3" /> Gesendet um {mailSentAt}
+              </p>
+            )}
+            {message && !mailSentAt && (
+              <p className={`text-xs mt-2 ${message.startsWith("Mail-Fehler") ? "text-destructive" : "text-muted-foreground"}`}>{message}</p>
+            )}
+          </div>
+
+          {message && !message.startsWith("Mail-Fehler") && !mailSentAt && (
             <div className={`mt-3 rounded-xl px-3 py-2 text-sm ${isError ? "bg-destructive/10 text-destructive" : "bg-green-500/10 text-green-700"}`}>
               {message}
             </div>
@@ -701,6 +809,36 @@ const AdminRequestDetail = () => {
         </div>
       </div>
     </AdminLayout>
+
+    {showDocCreator && request && (
+      <DocumentCreator
+        customerId={request.customer_id || null}
+        eventId={null}
+        requestId={request.id}
+        customer={customer ? {
+          id: customer.id,
+          name: customer.name || "",
+          company: customer.company || undefined,
+          email: customer.email || "",
+          phone: customer.phone || undefined,
+          rechnungs_strasse: customer.rechnungs_strasse || undefined,
+          rechnungs_ort: customer.rechnungs_ort || undefined,
+          rechnungs_plz: customer.rechnungs_plz || undefined,
+          rechnungs_land: customer.rechnungs_land || undefined,
+        } : null}
+        onDocumentSaved={(doc) => {
+          setDocuments((prev) => {
+            const exists = prev.find((d) => d.id === doc.id);
+            if (exists) return prev.map((d) => d.id === doc.id ? { ...d, name: doc.document_number ? `${doc.type} ${doc.document_number}` : d.name, type: doc.type, file_url: doc.file_url || d.file_url } : d);
+            return [{ id: doc.id!, name: `${doc.type} ${doc.document_number}`, type: doc.type, file_url: doc.file_url || null, created_at: new Date().toISOString(), customer_id: request.customer_id, request_id: request.id }, ...prev];
+          });
+          setShowDocCreator(false);
+        }}
+        onClose={() => setShowDocCreator(false)}
+        existingDoc={editingDoc}
+      />
+    )}
+    </>
   );
 };
 

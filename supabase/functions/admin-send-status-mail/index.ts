@@ -1,13 +1,29 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { Resend } from "https://esm.sh/resend";
+// @ts-ignore
+import nodemailer from "npm:nodemailer";
 
 const supabase = createClient(
   Deno.env.get("PROJECT_URL")!,
   Deno.env.get("SERVICE_ROLE_KEY")!
 );
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
+const createTransporter = () => nodemailer.createTransport({
+  host: Deno.env.get("SMTP_HOST") || "smtp.strato.de",
+  port: Number(Deno.env.get("SMTP_PORT") || "465"),
+  secure: true,
+  auth: {
+    user: Deno.env.get("SMTP_USER") || "el@magicel.de",
+    pass: Deno.env.get("SMTP_PASS"),
+  },
+});
+
+const SMTP_FROM = `"Emilian Leber" <${Deno.env.get("SMTP_USER") || "el@magicel.de"}>`;
+
+const sendMail = async (to: string, subject: string, html: string) => {
+  const transporter = createTransporter();
+  await transporter.sendMail({ from: SMTP_FROM, to, subject, html });
+};
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -202,13 +218,30 @@ const requestMailTemplate = (request: any) => {
         ),
       };
 
+    case "archiviert":
+    case "storniert":
+    case "zurückgezogen":
+      return {
+        subject: "Deine Stornierung ist bestätigt – Emilian Leber",
+        html: getEmailShell(
+          "Stornierung",
+          "Stornierung bestätigt.",
+          `Hallo ${request.name}, deine Stornierungsanfrage wurde bearbeitet und ist jetzt abgeschlossen.`,
+          `${statusBadge("✦ Stornierung bestätigt", "#b45309", "#fffbeb")}${infoTable(rows)}
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
+            Falls du in Zukunft eine neue Anfrage stellen möchtest, freue ich mich jederzeit von dir zu hören.
+          </p>`,
+          false
+        ),
+      };
+
     default:
       return null;
   }
 };
 
 // ─── Event Mail Templates ─────────────────────────────────────────────────────
-const eventMailTemplate = (event: any, customerName: string, email: string) => {
+const eventMailTemplate = (event: any, customerName: string, email: string, days?: number) => {
   const rows = [
     { icon: "✨", label: "Event", value: event.title || "–" },
     { icon: "📅", label: "Datum", value: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric" }) : "–" },
@@ -316,6 +349,39 @@ const eventMailTemplate = (event: any, customerName: string, email: string) => {
       };
     }
 
+    case "storniert":
+      return {
+        to: email,
+        subject: "Stornierung deines Events bestätigt – Emilian Leber",
+        html: getEmailShell(
+          "Stornierung",
+          "Dein Event wurde storniert.",
+          `Hallo ${customerName}, die Stornierung deines Events wurde bestätigt und ist jetzt abgeschlossen.`,
+          `${statusBadge("✦ Event storniert", "#b45309", "#fffbeb")}${infoTable(rows)}
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
+            Falls du in Zukunft wieder eine Veranstaltung planen möchtest, freue ich mich jederzeit von dir zu hören.
+          </p>`,
+          false
+        ),
+      };
+
+    case "rechnung_faellig": {
+      const daysText = days === 1 ? "morgen" : `in ${days ?? "wenigen"} Tagen`;
+      return {
+        to: email,
+        subject: `Deine Rechnung ist ${daysText} fällig – Emilian Leber`,
+        html: getEmailShell(
+          "Zahlungserinnerung",
+          "Deine Rechnung ist bald fällig.",
+          `Hallo ${customerName}, kurze freundliche Erinnerung: deine Rechnung ist ${daysText} fällig. Du findest sie jederzeit in deinem Kundenportal zum Download.`,
+          `${statusBadge("✦ Zahlung ausstehend", "#b45309", "#fffbeb")}${infoTable(rows)}
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
+            Bei Fragen zur Rechnung melde dich gerne direkt bei mir.
+          </p>`
+        ),
+      };
+    }
+
     default:
       return null;
   }
@@ -381,7 +447,7 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const { type, recordId, customerId } = body;
+    const { type, recordId, customerId, changeRequestId, days } = body;
 
     if (!type) {
       return new Response(JSON.stringify({ error: "type fehlt" }), {
@@ -390,7 +456,7 @@ serve(async (req) => {
       });
     }
 
-    if (type !== "new_customer" && !recordId) {
+    if (type !== "new_customer" && type !== "change_request" && !recordId) {
       return new Response(JSON.stringify({ error: "recordId fehlt" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -425,12 +491,11 @@ serve(async (req) => {
         });
       }
 
-      await resend.emails.send({
-        from: "Emilian Leber <el@magicel.de>",
-        to: customer.email,
-        subject: `Willkommen im Kundenportal, ${customer.name?.split(" ")[0] || customer.name || ""}!`,
-        html: newCustomerMail(customer),
-      });
+      await sendMail(
+        customer.email,
+        `Willkommen im Kundenportal, ${customer.name?.split(" ")[0] || customer.name || ""}!`,
+        newCustomerMail(customer)
+      );
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
@@ -456,13 +521,18 @@ serve(async (req) => {
         });
       }
 
-      const result = await resend.emails.send({
-        from: "Emilian Leber <el@magicel.de>",
-        to: request.email,
+      await sendMail(request.email, mail.subject, mail.html);
+
+      supabase.from("portal_messages").insert({
+        customer_id: request.customer_id || null,
+        request_id: request.id,
         subject: mail.subject,
-        html: mail.html,
-      });
-      console.log("REQUEST STATUS MAIL RESULT:", result);
+        body: mail.subject,
+        from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
+        to_email: request.email,
+        status: "sent",
+        read_by_customer: false,
+      }).then(() => {}).catch(() => {});
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
@@ -492,7 +562,8 @@ serve(async (req) => {
       const mail = eventMailTemplate(
         event,
         customer.name || customer.email.split("@")[0] || "Kunde",
-        customer.email
+        customer.email,
+        days
       );
 
       if (!mail) {
@@ -502,13 +573,93 @@ serve(async (req) => {
         });
       }
 
-      const result = await resend.emails.send({
-        from: "Emilian Leber <el@magicel.de>",
-        to: mail.to,
+      await sendMail(mail.to, mail.subject, mail.html);
+
+      supabase.from("portal_messages").insert({
+        customer_id: event.customer_id || null,
+        event_id: event.id,
         subject: mail.subject,
-        html: mail.html,
+        body: mail.subject,
+        from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
+        to_email: mail.to,
+        status: "sent",
+        read_by_customer: false,
+      }).then(() => {}).catch(() => {});
+
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-      console.log("EVENT STATUS MAIL RESULT:", result);
+    }
+
+    // ── change_request ──
+    if (type === "change_request") {
+      if (!changeRequestId) {
+        return new Response(JSON.stringify({ error: "changeRequestId fehlt" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const { data: cr, error: crError } = await supabase
+        .from("portal_change_requests")
+        .select("*")
+        .eq("id", changeRequestId)
+        .single();
+
+      if (crError || !cr) throw new Error("Änderungsanfrage nicht gefunden.");
+
+      const { data: customer, error: custError } = await supabase
+        .from("portal_customers")
+        .select("*")
+        .eq("id", cr.customer_id)
+        .single();
+
+      if (custError || !customer?.email) throw new Error("Kunde nicht gefunden.");
+
+      const firstName = customer.name?.split(" ")[0] || customer.name || "Hallo";
+      const isApproved = cr.status === "angenommen";
+
+      const html = getEmailShell(
+        isApproved ? "Angenommen" : "Abgelehnt",
+        isApproved ? "Deine Anfrage wurde angenommen." : "Deine Anfrage wurde abgelehnt.",
+        `Hallo ${firstName}, hier ist meine Rückmeldung zu deiner Anfrage.`,
+        `${statusBadge(isApproved ? "✦ Angenommen" : "✦ Abgelehnt",
+          isApproved ? "#15803d" : "#b91c1c",
+          isApproved ? "#f0fdf4" : "#fef2f2")}
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;">
+          <tr><td bgcolor="#f9fafb" style="background-color:#f9fafb!important;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
+            <p style="margin:0 0 4px;font-size:13px;color:#71717a!important;font-family:${FONT};">Deine Anfrage</p>
+            <p style="margin:0;font-size:15px;font-weight:600;color:#0a0a0a!important;font-family:${FONT};">${cr.subject}</p>
+          </td></tr>
+        </table>
+        ${cr.admin_response ? `
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;">
+          <tr><td bgcolor="#f9fafb" style="background-color:#f9fafb!important;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
+            <p style="margin:0 0 4px;font-size:13px;color:#71717a!important;font-family:${FONT};">Rückmeldung</p>
+            <p style="margin:0;font-size:15px;line-height:1.6;color:#0a0a0a!important;font-family:${FONT};">${cr.admin_response}</p>
+          </td></tr>
+        </table>` : ""}`,
+        isApproved
+      );
+
+      await sendMail(
+        customer.email,
+        isApproved ? `Rückmeldung zu deiner Anfrage: angenommen` : `Rückmeldung zu deiner Anfrage: abgelehnt`,
+        html
+      );
+
+      supabase.from("portal_messages").insert({
+        customer_id: customer.id,
+        request_id: cr.request_id || null,
+        event_id: cr.event_id || null,
+        subject: isApproved ? `Rückmeldung zu deiner Anfrage: angenommen` : `Rückmeldung zu deiner Anfrage: abgelehnt`,
+        body: cr.subject,
+        from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
+        to_email: customer.email,
+        status: "sent",
+        read_by_customer: false,
+      }).then(() => {}).catch(() => {});
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
