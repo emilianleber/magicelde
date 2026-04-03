@@ -504,7 +504,7 @@ function DocumentPreview(props: PreviewProps) {
       {/* Zone B: Absenderzeile + Anschriftfeld + Informationsblock
           DIN 5008: Anschriftzone = 45 mm (≈ 127 px bei 595 px = A4-Breite).
           paddingTop 44px ≈ 15 mm — DIN-konformer Abstand zwischen Header und Anschriftfeld. */}
-      <div style={{ padding: `44px ${M}px 24px`, display: "flex", gap: 14, alignItems: "flex-start" }}>
+      <div style={{ padding: `44px ${M}px 16px`, display: "flex", gap: 40, alignItems: "flex-start" }}>
         {/* Left: Empfänger – Anschriftfeld 45 mm hoch */}
         <div style={{ flex: "0 0 44%", fontSize: 9.5, lineHeight: 1.55, color: "#222", minHeight: 127 }}>
           {/* DIN 5008 Rücksendeangabe (Absenderzeile) */}
@@ -529,8 +529,8 @@ function DocumentPreview(props: PreviewProps) {
         </div>
       </div>
 
-      {/* Leerzeile (DIN 5008 – Zone B → C Übergang, ≈ 12 mm) */}
-      <div style={{ height: 34 }} />
+      {/* Leerzeile (DIN 5008 – Zone B → C Übergang, ≈ 8 mm) */}
+      <div style={{ height: 22 }} />
 
       {/* Zone C: Betreff */}
       <div style={{ padding: `0 ${M}px 6px` }}>
