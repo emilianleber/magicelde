@@ -282,6 +282,8 @@ const Kundenportal = () => {
   const [avatarError, setAvatarError] = useState("");
 
   const [withdrawConfirm, setWithdrawConfirm] = useState<Record<string, boolean>>({});
+  const [offerActionLoading, setOfferActionLoading] = useState<Record<string, boolean>>({});
+  const [offerActionError, setOfferActionError] = useState<Record<string, string>>({});
 
   const [eventCancelId, setEventCancelId] = useState<string | null>(null);
 
@@ -1298,15 +1300,25 @@ const Kundenportal = () => {
                             <p className="font-sans text-xs text-muted-foreground mb-4">Emilian hat Ihnen ein Angebot unterbreitet. Bitte wählen Sie eine Aktion:</p>
                             <div className="flex flex-col sm:flex-row gap-2">
                               <button
+                                disabled={offerActionLoading[r.id]}
                                 onClick={async () => {
                                   if (!customer) return;
-                                  await supabase.from("portal_change_requests").insert({ customer_id: customer.id, request_id: r.id, subject: "Angebot annehmen", message: "Kunde nimmt das Angebot an.", status: "offen", action: "angebot_annehmen" });
-                                  setCrSuccess(p => ({ ...p, [r.id]: true }));
-                                  notifyAdmin(`✅ Angebot angenommen – ${customer.name || customer.email}`, `<p><strong>${customer.name || customer.email}</strong> hat das Angebot für <strong>${r.anlass || "Anfrage"}</strong> angenommen.</p><p><a href="https://magicel.de/admin/requests/${r.id}" style="background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;">Anfrage öffnen →</a></p>`);
+                                  setOfferActionLoading(p => ({ ...p, [r.id]: true }));
+                                  setOfferActionError(p => ({ ...p, [r.id]: "" }));
+                                  const { error } = await supabase.functions.invoke("portal-offer-action", {
+                                    body: { action: "accept", request_id: r.id },
+                                  });
+                                  if (error) {
+                                    setOfferActionError(p => ({ ...p, [r.id]: "Fehler beim Annehmen. Bitte versuche es erneut." }));
+                                  } else {
+                                    setCrSuccess(p => ({ ...p, [r.id]: true }));
+                                    setRequests(prev => prev.map(req => req.id === r.id ? { ...req, status: "gebucht" } : req));
+                                  }
+                                  setOfferActionLoading(p => ({ ...p, [r.id]: false }));
                                 }}
-                                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-foreground text-background text-sm font-semibold hover:opacity-80 transition-all"
+                                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-foreground text-background text-sm font-semibold hover:opacity-80 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                               >
-                                <CheckCircle2 className="w-4 h-4" /> Angebot annehmen
+                                {offerActionLoading[r.id] ? <span className="w-4 h-4 rounded-full border-2 border-background/30 border-t-background animate-spin" /> : <CheckCircle2 className="w-4 h-4" />} Angebot annehmen
                               </button>
                               <button
                                 onClick={() => setCrFormOpen(p => ({ ...p, [r.id]: true }))}
@@ -1315,17 +1327,30 @@ const Kundenportal = () => {
                                 <MessageCircle className="w-4 h-4" /> Rückfrage / Änderung
                               </button>
                               <button
+                                disabled={offerActionLoading[r.id]}
                                 onClick={async () => {
                                   if (!customer) return;
-                                  await supabase.from("portal_change_requests").insert({ customer_id: customer.id, request_id: r.id, subject: "Angebot ablehnen", message: "Kunde lehnt das Angebot ab.", status: "offen", action: "angebot_ablehnen" });
-                                  setCrSuccess(p => ({ ...p, [r.id]: true }));
-                                  notifyAdmin(`❌ Angebot abgelehnt – ${customer.name || customer.email}`, `<p><strong>${customer.name || customer.email}</strong> hat das Angebot für <strong>${r.anlass || "Anfrage"}</strong> abgelehnt.</p><p><a href="https://magicel.de/admin/requests/${r.id}" style="background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;">Anfrage öffnen →</a></p>`);
+                                  setOfferActionLoading(p => ({ ...p, [r.id]: true }));
+                                  setOfferActionError(p => ({ ...p, [r.id]: "" }));
+                                  const { error } = await supabase.functions.invoke("portal-offer-action", {
+                                    body: { action: "reject", request_id: r.id },
+                                  });
+                                  if (error) {
+                                    setOfferActionError(p => ({ ...p, [r.id]: "Fehler beim Ablehnen. Bitte versuche es erneut." }));
+                                  } else {
+                                    setCrSuccess(p => ({ ...p, [r.id]: true }));
+                                    setRequests(prev => prev.map(req => req.id === r.id ? { ...req, status: "abgelehnt" } : req));
+                                  }
+                                  setOfferActionLoading(p => ({ ...p, [r.id]: false }));
                                 }}
-                                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-destructive/30 text-sm font-medium text-destructive hover:bg-destructive/5 transition-all"
+                                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-destructive/30 text-sm font-medium text-destructive hover:bg-destructive/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 <X className="w-4 h-4" /> Ablehnen
                               </button>
                             </div>
+                            {offerActionError[r.id] && (
+                              <p className="font-sans text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2 mt-3">{offerActionError[r.id]}</p>
+                            )}
                           </div>
                         )}
 
