@@ -1562,37 +1562,35 @@ export default function AdminDokumentEditor() {
       </div>
 
       {/* FULL-WIDTH FORM */}
-      <div className="flex-1 overflow-y-auto bg-slate-50">
-        <div className="max-w-6xl mx-auto px-6 pb-16 pt-6 space-y-4">
+      <div className="flex-1 overflow-y-auto bg-white">
+        <div className="max-w-6xl mx-auto px-10 pb-20 pt-8">
+
+          {/* ══ shared helpers ══ */}
+          {/* section title */}
 
           {/* ════ KONTAKT & DOKUMENT ════ */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-6 py-3.5 border-b border-slate-100 flex items-center gap-3">
-              <div className="w-1 h-5 rounded-full bg-blue-500 shrink-0" />
-              <h2 className="text-sm font-semibold text-slate-800">Kontakt &amp; {typLabel}sinformationen</h2>
-            </div>
-            <div className="p-6">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600 mb-4">Empfänger &amp; {typLabel}sdaten</p>
 
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-2 gap-10">
             {/* LEFT: Kunde + Anschrift */}
             <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Kunde</label>
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Kunde</label>
               <div className="relative mb-4">
                 <input
                   placeholder="Person oder Organisation suchen…"
                   value={kontaktSuche}
                   onChange={(e) => searchKontakte(e.target.value)}
-                  className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+                  className="w-full rounded-lg bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
                 />
                 {kontaktSuggestions.length > 0 && (
-                  <div className="absolute z-20 top-full left-0 right-0 bg-background border border-border/30 rounded-xl shadow-lg mt-1 overflow-hidden">
+                  <div className="absolute z-20 top-full left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl mt-1 overflow-hidden">
                     {kontaktSuggestions.map((k) => (
-                      <button key={k.id} onClick={() => selectKontakt(k)} className="w-full text-left px-4 py-2.5 hover:bg-muted/60 text-sm flex items-center justify-between">
+                      <button key={k.id} onClick={() => selectKontakt(k)} className="w-full text-left px-4 py-2.5 hover:bg-slate-50 text-sm flex items-center justify-between border-b border-slate-50 last:border-0">
                         <div>
-                          <p className="font-medium">{k.name}</p>
-                          {k.company && <p className="text-xs text-muted-foreground">{k.company}</p>}
+                          <p className="font-semibold text-slate-800">{k.name}</p>
+                          {k.company && <p className="text-xs text-slate-500">{k.company}</p>}
                         </div>
-                        <span className="text-xs text-muted-foreground">{k.email}</span>
+                        <span className="text-xs text-slate-400">{k.email}</span>
                       </button>
                     ))}
                   </div>
@@ -1625,7 +1623,7 @@ export default function AdminDokumentEditor() {
                 <div>
                   <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Dokumenttyp</label>
                   <select value={typ} onChange={(e) => setTyp(e.target.value)}
-                    className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20">
+                    className="w-full rounded-lg bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300">
                     <option value="angebot">Angebot</option>
                     <option value="rechnung">Rechnung</option>
                     <option value="auftragsbestaetigung">Auftragsbestätigung</option>
@@ -1636,12 +1634,12 @@ export default function AdminDokumentEditor() {
                 <div>
                   <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">{typLabel}nummer</label>
                   <input value={nummer} onChange={(e) => setNummer(e.target.value)} placeholder="Wird vergeben…"
-                    className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+                    className="w-full rounded-lg bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300" />
                 </div>
                 <div>
                   <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">{typLabel}datum</label>
                   <input type="date" value={datum} onChange={(e) => setDatum(e.target.value)}
-                    className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+                    className="w-full rounded-lg bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300" />
                 </div>
               </div>
 
@@ -1674,16 +1672,10 @@ export default function AdminDokumentEditor() {
             </div>
           </div>
 
-            </div>{/* /p-6 */}
-          </div>{/* /Kontakt card */}
+          <hr className="border-slate-100 my-8" />
 
           {/* ════ KOPF-TEXT ════ */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-6 py-3.5 border-b border-slate-100 flex items-center gap-3">
-              <div className="w-1 h-5 rounded-full bg-emerald-500 shrink-0" />
-              <h2 className="text-sm font-semibold text-slate-800">Kopf-Text</h2>
-            </div>
-            <div className="p-6">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600 mb-4">Kopf-Text</p>
           <RichTextEditor
             key={`kopf-${id ?? "new"}`}
             value={kopftext}
@@ -1693,26 +1685,22 @@ export default function AdminDokumentEditor() {
             showPlaceholders={false}
             templates={textvorlagen.filter((v) => v.bereich === "kopf" && (v.typ === typ || v.typ === "alle"))}
           />
-            </div>
-          </div>{/* /Kopf-Text card */}
+
+          <hr className="border-slate-100 my-8" />
 
           {/* ════ PRODUKTE ════ */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-6 py-3.5 border-b border-slate-100 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-1 h-5 rounded-full bg-violet-500 shrink-0" />
-                <h2 className="text-sm font-semibold text-slate-800">Produkte &amp; Leistungen</h2>
-              </div>
-              {/* Brutto / Netto toggle */}
-              <div className="flex rounded-xl border border-slate-200 overflow-hidden shrink-0">
-                <button onClick={() => setBruttoEingabe(true)} className={`px-4 py-1.5 text-xs font-semibold transition-colors ${bruttoEingabe ? "bg-slate-800 text-white" : "bg-white text-slate-500 hover:text-slate-800"}`}>Brutto</button>
-                <button onClick={() => setBruttoEingabe(false)} className={`px-4 py-1.5 text-xs font-semibold transition-colors ${!bruttoEingabe ? "bg-slate-800 text-white" : "bg-white text-slate-500 hover:text-slate-800"}`}>Netto</button>
-              </div>
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600">Produkte &amp; Leistungen</p>
+            {/* Brutto / Netto toggle */}
+            <div className="flex rounded-lg border border-slate-200 overflow-hidden shrink-0 text-xs font-semibold">
+              <button onClick={() => setBruttoEingabe(true)} className={`px-4 py-1.5 transition-colors ${bruttoEingabe ? "bg-slate-800 text-white" : "bg-white text-slate-500 hover:text-slate-700"}`}>Brutto</button>
+              <button onClick={() => setBruttoEingabe(false)} className={`px-4 py-1.5 transition-colors ${!bruttoEingabe ? "bg-slate-800 text-white" : "bg-white text-slate-500 hover:text-slate-700"}`}>Netto</button>
             </div>
-            <div className="px-6 pt-4 pb-5">
+          </div>
+          <div>
 
           {/* Table header */}
-          <div className="grid items-center text-xs font-semibold text-slate-500 pb-2 px-3 py-2.5 bg-slate-50 rounded-xl mb-1"
+          <div className="grid items-center text-[11px] font-semibold uppercase tracking-wider text-slate-400 px-3 py-2.5 bg-slate-50 rounded-lg mb-2"
             style={{ gridTemplateColumns: "24px 1fr 145px 155px 76px 105px 115px 36px" }}>
             <span />
             <span>Produkt oder Service</span>
@@ -1726,7 +1714,7 @@ export default function AdminDokumentEditor() {
 
           {/* Position rows */}
           {positionen.map((pos, idx) => (
-            <div key={pos.id} className="border-b border-dashed border-border/20 last:border-0">
+            <div key={pos.id} className="border-b border-slate-100 last:border-0">
               <div className="grid items-start gap-x-3 py-3 px-3"
                 style={{ gridTemplateColumns: "24px 1fr 145px 155px 76px 105px 115px 36px" }}>
 
@@ -1740,18 +1728,18 @@ export default function AdminDokumentEditor() {
                     value={artikelSuche[pos.id] ?? pos.bezeichnung}
                     onChange={(e) => searchArtikel(pos.id, e.target.value)}
                     onBlur={() => { const q = artikelSuche[pos.id]; if (q !== undefined && q !== pos.bezeichnung) updatePosition(pos.id, { bezeichnung: q }); }}
-                    className="w-full rounded-lg border border-border/20 px-3 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
                   />
                   {(artikelSuggestions[pos.id] || []).length > 0 && (
-                    <div className="absolute z-20 top-full left-0 right-0 bg-background border border-border/30 rounded-xl shadow-lg mt-1 overflow-hidden">
+                    <div className="absolute z-50 top-full left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl mt-1 overflow-hidden">
                       {artikelSuggestions[pos.id].map((a) => (
                         <button key={a.id} onMouseDown={() => selectArtikel(pos.id, a)}
-                          className="w-full text-left px-3 py-2 hover:bg-muted/60 text-sm flex items-center justify-between">
+                          className="w-full text-left px-4 py-3 hover:bg-slate-50 text-sm flex items-start justify-between gap-4 border-b border-slate-50 last:border-0">
                           <div>
-                            <p className="font-medium">{a.bezeichnung}</p>
-                            {a.beschreibung && <p className="text-xs text-muted-foreground">{a.beschreibung}</p>}
+                            <p className="font-semibold text-slate-800">{a.bezeichnung}</p>
+                            {a.beschreibung && <p className="text-xs text-slate-500 mt-0.5">{a.beschreibung}</p>}
                           </div>
-                          <span className="text-sm font-semibold shrink-0 ml-2">{a.preis.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
+                          <span className="text-sm font-bold text-slate-800 shrink-0">{a.preis.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
                         </button>
                       ))}
                     </div>
@@ -1761,74 +1749,74 @@ export default function AdminDokumentEditor() {
                     value={pos.beschreibung}
                     onChange={(e) => updatePosition(pos.id, { beschreibung: e.target.value })}
                     rows={3}
-                    className="mt-1.5 w-full rounded-lg border border-border/10 px-3 py-1.5 text-xs text-muted-foreground bg-background/40 focus:outline-none focus:ring-1 focus:ring-foreground/10 resize-y"
+                    className="mt-1.5 w-full rounded-lg border border-slate-100 px-3 py-1.5 text-xs text-slate-500 bg-slate-50 focus:outline-none focus:border-slate-200 resize-y"
                   />
                   {/* Optional toggle */}
-                  <label className="mt-1.5 flex items-center gap-2 cursor-pointer select-none w-fit">
+                  <label className="mt-2 flex items-center gap-2 cursor-pointer select-none w-fit">
                     <div
                       onClick={() => updatePosition(pos.id, { optional: !pos.optional })}
-                      className={`relative w-8 h-4 rounded-full transition-colors shrink-0 ${pos.optional ? "bg-foreground" : "bg-border/50"}`}
+                      className={`relative w-8 h-4 rounded-full transition-colors shrink-0 ${pos.optional ? "bg-blue-500" : "bg-slate-200"}`}
                     >
-                      <span className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-background shadow transition-transform ${pos.optional ? "translate-x-4" : ""}`} />
+                      <span className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${pos.optional ? "translate-x-4" : ""}`} />
                     </div>
-                    <span className="text-xs font-semibold text-muted-foreground">Optional</span>
+                    <span className="text-xs font-semibold text-slate-500">Optional</span>
                   </label>
                 </div>
 
-                {/* Menge + Einheit — nebeneinander */}
+                {/* Menge + Einheit */}
                 <div className="flex items-center gap-1.5 pt-0.5">
                   <input
                     type="number" value={pos.menge} min={0} step="0.01"
                     onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
-                    className="w-16 text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
+                    className="w-16 text-right rounded-lg border border-slate-200 px-2 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-100"
                   />
                   <select
                     value={pos.einheit}
                     onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
-                    className="flex-1 rounded-lg border border-border/20 px-1.5 py-1.5 text-sm bg-background focus:outline-none"
+                    className="flex-1 rounded-lg border border-slate-200 px-1.5 py-2 text-sm bg-white focus:outline-none"
                   >
                     {["pauschal","Std.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
                   </select>
                 </div>
 
-                {/* Preis — input mit EUR-Suffix */}
-                <div className="flex items-center rounded-lg border border-border/20 bg-background overflow-hidden pt-0.5">
+                {/* Preis mit EUR-Suffix */}
+                <div className="flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden">
                   <input
                     type="number" value={pos.einzelpreis} step="0.01" min={0}
                     onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value) || 0 })}
-                    className="flex-1 text-right px-2 py-1.5 text-sm bg-transparent focus:outline-none min-w-0"
+                    className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0"
                   />
-                  <span className="pr-2.5 text-sm text-muted-foreground shrink-0">EUR</span>
+                  <span className="pr-2.5 text-sm text-slate-400 shrink-0">EUR</span>
                 </div>
 
-                {/* USt. — button-style select */}
+                {/* USt. */}
                 <select
                   value={pos.mwstSatz}
                   onChange={(e) => updatePosition(pos.id, { mwstSatz: parseFloat(e.target.value) })}
-                  className="w-full rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none pt-0.5"
+                  className="w-full rounded-lg border border-slate-200 px-2 py-2 text-sm bg-white focus:outline-none"
                 >
                   {[0, 7, 19].map((r) => <option key={r} value={r}>{r}%</option>)}
                 </select>
 
-                {/* Rabatt — input mit %-Suffix */}
-                <div className="flex items-center rounded-lg border border-border/20 bg-background overflow-hidden pt-0.5">
+                {/* Rabatt mit %-Suffix */}
+                <div className="flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden">
                   <input
                     type="number" value={pos.rabattProzent ?? ""} placeholder="0" min={0} max={100}
                     onChange={(e) => updatePosition(pos.id, { rabattProzent: e.target.value ? parseFloat(e.target.value) : null })}
-                    className="flex-1 text-right px-2 py-1.5 text-sm bg-transparent focus:outline-none min-w-0"
+                    className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0"
                   />
-                  <span className="pr-2.5 text-sm text-muted-foreground shrink-0">%</span>
+                  <span className="pr-2.5 text-sm text-slate-400 shrink-0">%</span>
                 </div>
 
                 {/* Betrag */}
-                <div className="text-right font-semibold text-sm tabular-nums pt-2">
+                <div className="text-right font-semibold text-sm tabular-nums text-slate-800 pt-2">
                   {pos.gesamt.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
                 </div>
 
                 {/* Delete */}
                 <button
                   onClick={() => removePosition(pos.id)}
-                  className="flex items-center justify-center text-muted-foreground/30 hover:text-red-500 transition-colors w-8 h-8 rounded-lg hover:bg-red-50 mt-0.5"
+                  className="flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors w-8 h-8 rounded-lg hover:bg-red-50 mt-0.5"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -1836,29 +1824,17 @@ export default function AdminDokumentEditor() {
             </div>
           ))}
 
-          {/* Bottom action links */}
-          <div className="flex items-center gap-5 pt-4 pb-1 px-3">
-            <button onClick={addPosition} className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-              + Position hinzufügen
-            </button>
-            <button
-              onClick={() => {/* open artikel picker */}}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              + Produkt auswählen
-            </button>
+          {/* Bottom links */}
+          <div className="flex items-center gap-5 pt-4 pb-2 px-3">
+            <button onClick={addPosition} className="text-sm text-blue-600 hover:text-blue-700 font-medium">+ Position hinzufügen</button>
+            <button onClick={() => {}} className="text-sm text-blue-600 hover:text-blue-700 font-medium">+ Produkt auswählen</button>
           </div>
+          </div>{/* /produkte wrapper */}
 
-            </div>{/* /px-6 */}
-          </div>{/* /Produkte card */}
+          <hr className="border-slate-100 my-8" />
 
           {/* ════ FUSS-TEXT ════ */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-6 py-3.5 border-b border-slate-100 flex items-center gap-3">
-              <div className="w-1 h-5 rounded-full bg-orange-400 shrink-0" />
-              <h2 className="text-sm font-semibold text-slate-800">Fuss-Text</h2>
-            </div>
-            <div className="p-6">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600 mb-4">Fuss-Text</p>
           <RichTextEditor
             key={`fuss-${id ?? "new"}`}
             value={fusstext}
@@ -1868,103 +1844,86 @@ export default function AdminDokumentEditor() {
             showPlaceholders={false}
             templates={textvorlagen.filter((v) => v.bereich === "fuss" && (v.typ === typ || v.typ === "alle"))}
           />
-            </div>
-          </div>{/* /Fuss-Text card */}
+
+          <hr className="border-slate-100 my-8" />
 
           {/* ════ MEHR OPTIONEN ════ */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <button
-              onClick={() => setShowMehrOptionen((v) => !v)}
-              className="w-full flex items-center justify-between px-6 py-3.5 border-b border-slate-100 hover:bg-slate-50 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-1 h-5 rounded-full bg-slate-400 shrink-0" />
-                <h2 className="text-sm font-semibold text-slate-800">Mehr Optionen</h2>
-              </div>
-              <span className="text-xs text-blue-600 font-medium">
-                {showMehrOptionen ? "Ausblenden" : "Einblenden"}
-              </span>
-            </button>
-            {showMehrOptionen && (
-              <div className="p-6 grid grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Mehrwertsteuersatz</label>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {[0, 7, 19].map((r) => (
-                      <button key={r} onClick={() => setMwstSatz(r)}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${mwstSatz === r ? "bg-slate-800 text-white border-slate-800" : "border-slate-200 text-slate-500 hover:text-slate-800"}`}>
-                        {r}%
-                      </button>
-                    ))}
-                  </div>
-                  <label className="flex items-center gap-2 mt-3 text-sm cursor-pointer text-slate-500 hover:text-slate-800">
-                    <input type="checkbox" checked={kleinunternehmer} onChange={(e) => setKleinunternehmer(e.target.checked)} className="rounded" />
-                    § 19 UStG – keine Umsatzsteuer ausweisen
-                  </label>
+          <button
+            onClick={() => setShowMehrOptionen((v) => !v)}
+            className="flex items-center justify-between w-full mb-4 group"
+          >
+            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-slate-600 transition-colors">Mehr Optionen</p>
+            <span className="text-xs text-blue-600 font-medium">{showMehrOptionen ? "Ausblenden" : "Einblenden"}</span>
+          </button>
+          {showMehrOptionen && (
+            <div className="grid grid-cols-2 gap-8 mb-8">
+              <div>
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Mehrwertsteuersatz</label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {[0, 7, 19].map((r) => (
+                    <button key={r} onClick={() => setMwstSatz(r)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all ${mwstSatz === r ? "bg-slate-800 text-white border-slate-800" : "border-slate-200 text-slate-500 hover:text-slate-800"}`}>
+                      {r}%
+                    </button>
+                  ))}
                 </div>
-                <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Lieferdatum</label>
-                  <input type="date" value={lieferdatum} onChange={(e) => setLieferdatum(e.target.value)}
-                    className="w-full rounded-xl bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300 mb-4" />
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Gesamtrabatt</label>
-                  <div className="flex items-center gap-2">
-                    <input type="number" value={rabattProzent ?? ""} placeholder="0"
-                      onChange={(e) => setRabattProzent(e.target.value ? parseFloat(e.target.value) : null)}
-                      className="w-24 rounded-xl border border-slate-200 px-3 py-2 text-sm text-right bg-white focus:outline-none focus:ring-2 focus:ring-slate-300" />
-                    <span className="text-sm text-slate-500">%</span>
-                  </div>
+                <label className="flex items-center gap-2 mt-3 text-sm cursor-pointer text-slate-500 hover:text-slate-700">
+                  <input type="checkbox" checked={kleinunternehmer} onChange={(e) => setKleinunternehmer(e.target.checked)} className="rounded" />
+                  § 19 UStG – keine Umsatzsteuer ausweisen
+                </label>
+              </div>
+              <div>
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Lieferdatum</label>
+                <input type="date" value={lieferdatum} onChange={(e) => setLieferdatum(e.target.value)}
+                  className="w-full rounded-lg bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 mb-4" />
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Gesamtrabatt</label>
+                <div className="flex items-center gap-2">
+                  <input type="number" value={rabattProzent ?? ""} placeholder="0"
+                    onChange={(e) => setRabattProzent(e.target.value ? parseFloat(e.target.value) : null)}
+                    className="w-24 rounded-lg border border-slate-200 px-3 py-2 text-sm text-right bg-white focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                  <span className="text-sm text-slate-500">%</span>
                 </div>
               </div>
-            )}
-          </div>{/* /Mehr Optionen card */}
+            </div>
+          )}
 
           {/* ════ SUMMEN ════ */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex justify-end">
+          <hr className="border-slate-100 mb-8" />
+          <div className="flex justify-end">
             <div className="w-96 space-y-2.5 text-sm">
               <div className="flex justify-between text-slate-500">
-                <span>Netto (inkl. Rabatte)</span>
-                <span className="tabular-nums font-medium text-slate-700">
-                  {summen.netto.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
-                </span>
+                <span>Netto</span>
+                <span className="tabular-nums font-medium text-slate-700">{summen.netto.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
               </div>
               {summen.gesamtRabatt > 0 && (
                 <div className="flex justify-between text-slate-500">
                   <span>Rabatt {rabattProzent}%</span>
-                  <span className="tabular-nums text-green-600 font-medium">
-                    −{summen.gesamtRabatt.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
-                  </span>
+                  <span className="tabular-nums text-green-600 font-medium">−{summen.gesamtRabatt.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
                 </div>
               )}
               {kleinunternehmer ? (
                 <div className="flex justify-between text-slate-400 text-xs italic">
-                  <span>Gem. § 19 UStG keine Umsatzsteuer</span>
-                  <span>0,00 EUR</span>
+                  <span>Gem. § 19 UStG keine Umsatzsteuer</span><span>0,00 EUR</span>
                 </div>
-              ) : summen.mwstGruppen && summen.mwstGruppen.length > 0 ? (
+              ) : summen.mwstGruppen?.length > 0 ? (
                 summen.mwstGruppen.map((g) => (
                   <div key={g.satz} className="flex justify-between text-slate-500">
                     <span>Umsatzsteuer {g.satz}%</span>
-                    <span className="tabular-nums font-medium text-slate-700">
-                      {g.steuer.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
-                    </span>
+                    <span className="tabular-nums font-medium text-slate-700">{g.steuer.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
                   </div>
                 ))
               ) : (
                 <div className="flex justify-between text-slate-500">
                   <span>Umsatzsteuer {mwstSatz}%</span>
-                  <span className="tabular-nums font-medium text-slate-700">
-                    {summen.mwstBetrag.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
-                  </span>
+                  <span className="tabular-nums font-medium text-slate-700">{summen.mwstBetrag.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
                 </div>
               )}
               <div className="flex justify-between font-bold text-xl border-t-2 border-slate-200 pt-3 mt-1 text-slate-900">
                 <span>Gesamt</span>
-                <span className="tabular-nums">
-                  {summen.brutto.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
-                </span>
+                <span className="tabular-nums">{summen.brutto.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
               </div>
             </div>
-          </div>{/* /Summen card */}
+          </div>
 
         </div>
       </div>
