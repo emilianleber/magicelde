@@ -677,8 +677,9 @@ function DocumentPreview(props: PreviewProps) {
   const fmtEur = (n: number) =>
     n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " EUR";
 
-  // Summen – erscheint auf JEDER Seite (volle Breite, wie Referenz-PDF)
-  const renderSummen = () => {
+  // Summen – erscheint auf JEDER Seite, nur Positionen dieser Seite
+  const renderSummen = (chunk: LocalPosition[]) => {
+    const s = calcSummen(chunk, mwstSatz, kleinunternehmer, rabattProzent);
     const rowStyle = (bg: boolean): React.CSSProperties => ({
       display: "flex",
       justifyContent: "space-between",
@@ -692,13 +693,13 @@ function DocumentPreview(props: PreviewProps) {
         {/* Netto */}
         <div style={rowStyle(true)}>
           <span style={{ color: "#333" }}>Gesamtbetrag netto</span>
-          <span style={{ color: "#111" }}>{fmtEur(summen.netto)}</span>
+          <span style={{ color: "#111" }}>{fmtEur(s.netto)}</span>
         </div>
         {/* MwSt oder §19 */}
         {!kleinunternehmer && mwstSatz > 0 && (
           <div style={rowStyle(false)}>
             <span style={{ color: "#555" }}>zzgl. {mwstSatz}% MwSt.</span>
-            <span style={{ color: "#111" }}>{fmtEur(summen.mwstBetrag)}</span>
+            <span style={{ color: "#111" }}>{fmtEur(s.mwstBetrag)}</span>
           </div>
         )}
         {kleinunternehmer && (
@@ -709,7 +710,7 @@ function DocumentPreview(props: PreviewProps) {
         {/* Brutto */}
         <div style={{ ...rowStyle(true), fontWeight: 700, fontSize: 10 }}>
           <span>Gesamtbetrag brutto</span>
-          <span>{fmtEur(summen.brutto)}</span>
+          <span>{fmtEur(s.brutto)}</span>
         </div>
       </div>
     );
@@ -735,7 +736,7 @@ function DocumentPreview(props: PreviewProps) {
     <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
       {renderDINTop()}
       {renderPositionsBlock(pageChunks[0], thBg, thColor, 0)}
-      {renderSummen()}
+      {renderSummen(pageChunks[0])}
       {pageChunks.length === 1 ? renderDINBottom(1) : renderDINFooter(1)}
     </div>
   );
@@ -763,7 +764,7 @@ function DocumentPreview(props: PreviewProps) {
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             {renderPositionsBlock(chunk, thBg, thColor, offset)}
-            {renderSummen()}
+            {renderSummen(chunk)}
             {isLast ? renderDINBottom(pageNum) : renderDINFooter(pageNum)}
           </div>
         </div>
@@ -861,7 +862,7 @@ function DocumentPreview(props: PreviewProps) {
                 </div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                   {renderPositionsBlock(chunk, color, "#fff", offset)}
-                  {renderSummen()}
+                  {renderSummen(chunk)}
                   {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
                 </div>
               </div>
@@ -974,7 +975,7 @@ function DocumentPreview(props: PreviewProps) {
                 </div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                   {renderPositionsBlock(chunk, "#111", "#fff", offset)}
-                  {renderSummen()}
+                  {renderSummen(chunk)}
                   {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
                 </div>
               </div>
