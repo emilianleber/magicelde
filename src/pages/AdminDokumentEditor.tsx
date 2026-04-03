@@ -627,6 +627,42 @@ function DocumentPreview(props: PreviewProps) {
 
   const totalPages = pageChunks.length;
 
+  // DIN 5008 Fußzeile – erscheint auf JEDER Seite
+  const renderDINFooter = (pageNum: number) => (
+    <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+      <div style={{ margin: `0 ${M}px 8px`, borderTop: "0.75px solid #c0c0c0", paddingTop: 5, paddingBottom: 6 }}>
+        {totalPages > 1 && (
+          <div style={{ textAlign: "right", fontSize: 7, color: "#999", marginBottom: 4 }}>
+            Seite {pageNum} von {totalPages}
+          </div>
+        )}
+        <div style={{ display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 600 }}>{absenderName}</div>
+            {absenderUntertitel && <div>{absenderUntertitel}</div>}
+            {absenderAdresse && <div>{absenderAdresse}</div>}
+            {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
+            {absenderLand && absenderLand !== "Deutschland" && <div>{absenderLand}</div>}
+          </div>
+          <div style={{ flex: 1 }}>
+            {absenderTel     && <div>Tel.: {absenderTel}</div>}
+            {absenderEmail   && <div>E-Mail: {absenderEmail}</div>}
+            {absenderWebsite && <div>Web: {absenderWebsite}</div>}
+          </div>
+          <div style={{ flex: 1 }}>
+            {absenderSteuernummer && <div>Steuer-Nr.: {absenderSteuernummer}</div>}
+            {absenderInhaber      && <div>Inhaber/-in: {absenderInhaber}</div>}
+          </div>
+          <div style={{ flex: 1 }}>
+            {absenderIban && <div>IBAN: {absenderIban}</div>}
+            {absenderBic  && <div>BIC: {absenderBic}</div>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Summen + Fußtext + Signatur – nur auf der letzten Seite
   const renderDINBottom = (pageNum: number) => (
     <>
       {/* Summen */}
@@ -655,53 +691,20 @@ function DocumentPreview(props: PreviewProps) {
         <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.65 }}
           dangerouslySetInnerHTML={{ __html: textToHtml(fusstext) }} />
       )}
-      {/* Absender-Signatur */}
       <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
         <div style={{ fontWeight: 700 }}>{absenderName}</div>
         {absenderUntertitel && <div style={{ color: "#666", fontSize: 9 }}>{absenderUntertitel}</div>}
       </div>
-      {/* DIN 5008 Fußzeile */}
-      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
-        <div style={{ margin: `0 ${M}px 8px`, borderTop: "0.75px solid #c0c0c0", paddingTop: 5, paddingBottom: 6 }}>
-          {/* Seite X von Y – oben rechts im Footer */}
-          {totalPages > 1 && (
-            <div style={{ textAlign: "right", fontSize: 7, color: "#999", marginBottom: 4 }}>
-              Seite {pageNum} von {totalPages}
-            </div>
-          )}
-          <div style={{ display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 600 }}>{absenderName}</div>
-              {absenderUntertitel && <div>{absenderUntertitel}</div>}
-              {absenderAdresse && <div>{absenderAdresse}</div>}
-              {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
-              {absenderLand && absenderLand !== "Deutschland" && <div>{absenderLand}</div>}
-            </div>
-            <div style={{ flex: 1 }}>
-              {absenderTel     && <div>Tel.: {absenderTel}</div>}
-              {absenderEmail   && <div>E-Mail: {absenderEmail}</div>}
-              {absenderWebsite && <div>Web: {absenderWebsite}</div>}
-            </div>
-            <div style={{ flex: 1 }}>
-              {absenderSteuernummer && <div>Steuer-Nr.: {absenderSteuernummer}</div>}
-              {absenderInhaber      && <div>Inhaber/-in: {absenderInhaber}</div>}
-            </div>
-            <div style={{ flex: 1 }}>
-              {absenderIban && <div>IBAN: {absenderIban}</div>}
-              {absenderBic  && <div>BIC: {absenderBic}</div>}
-            </div>
-          </div>
-        </div>
-      </div>
+      {renderDINFooter(pageNum)}
     </>
   );
 
-  // Page 1 body: DIN top + first chunk + (if single page) bottom
+  // Page 1 body: DIN top + first chunk + summen (last page) + footer (always)
   const renderBody = (thBg: string, thColor: string) => (
     <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
       {renderDINTop()}
       {renderPositionsBlock(pageChunks[0], thBg, thColor, 0)}
-      {pageChunks.length === 1 && renderDINBottom(1)}
+      {pageChunks.length === 1 ? renderDINBottom(1) : renderDINFooter(1)}
     </div>
   );
 
@@ -728,7 +731,7 @@ function DocumentPreview(props: PreviewProps) {
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             {renderPositionsBlock(chunk, thBg, thColor, offset)}
-            {isLast && renderDINBottom(pageNum)}
+            {isLast ? renderDINBottom(pageNum) : renderDINFooter(pageNum)}
           </div>
         </div>
       );
@@ -825,7 +828,7 @@ function DocumentPreview(props: PreviewProps) {
                 </div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                   {renderPositionsBlock(chunk, color, "#fff", offset)}
-                  {isLast && renderDINBottom()}
+                  {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
                 </div>
               </div>
             </div>
@@ -937,7 +940,7 @@ function DocumentPreview(props: PreviewProps) {
                 </div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                   {renderPositionsBlock(chunk, "#111", "#fff", offset)}
-                  {isLast && renderDINBottom()}
+                  {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
                 </div>
               </div>
             </div>
