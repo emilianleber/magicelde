@@ -87,10 +87,17 @@ interface PortalDocument {
   id: string;
   name: string;
   type: string;
+  typ?: string | null;
+  status?: string | null;
+  nummer?: string | null;
   file_url: string | null;
   created_at: string;
   due_date?: string | null;
   amount?: number | null;
+  brutto?: number | null;
+  request_id?: string | null;
+  event_id?: string | null;
+  preview_html?: string | null;
 }
 
 interface PortalMessage {
@@ -586,6 +593,29 @@ const Kundenportal = () => {
   const progress = timelineSteps.length > 0 ? Math.round((timelineSteps.filter((s) => s.done).length / timelineSteps.length) * 100) : 0;
   const unreadCount = messages.filter((m) => !m.read_by_customer).length;
 
+  // Offene Angebote die im Portal veröffentlicht wurden
+  const offeneAngebote = documents.filter(
+    (d) => (d.typ === "angebot" || d.type === "angebot") && d.status === "gesendet"
+  );
+
+  const openAngebotInBrowser = (doc: PortalDocument) => {
+    const html = doc.preview_html;
+    if (!html) return;
+    const scale = ((210 / 25.4) * 96) / 595;
+    const win = window.open("", "_blank");
+    if (!win) return;
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${doc.nummer || "Angebot"}</title><style>
+      *{margin:0;padding:0;box-sizing:border-box}
+      html,body{width:${Math.round(595*scale)}px;background:#fff}
+      body>div{width:595px;height:840px;zoom:${scale.toFixed(6)};overflow:hidden;page-break-after:always}
+      body>div:last-child{page-break-after:auto}
+      @media print{@page{size:A4;margin:0}body{zoom:1}}
+      @media screen{body{padding:16px;background:#f4f4f5;display:flex;flex-direction:column;gap:12px}}
+      @media screen{body>div{box-shadow:0 2px 12px rgba(0,0,0,.12);border-radius:4px}}
+    </style></head><body>${html}</body></html>`);
+    win.document.close();
+  };
+
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
     { id: "dashboard", label: "Start", icon: LayoutDashboard },
     { id: "events", label: "Events", icon: Calendar },
@@ -740,6 +770,164 @@ const Kundenportal = () => {
                 </button>
               ))}
             </div>
+
+            {/* ── OFFENE ANGEBOTE WIDGET ── */}
+            {offeneAngebote.length > 0 && offeneAngebote.map((angebot) => {
+              const reqId = angebot.request_id;
+              const isLoading = reqId ? !!offerActionLoading[reqId] : false;
+              const errMsg = reqId ? offerActionError[reqId] : null;
+              const betrag = angebot.brutto ?? angebot.amount;
+
+              const doAction = async (action: "accept" | "reject") => {
+                if (!reqId) return;
+                setOfferActionLoading(p => ({ ...p, [reqId]: true }));
+                setOfferActionError(p => ({ ...p, [reqId]: "" }));
+                const { error } = await supabase.functions.invoke("portal-offer-action", {
+                  body: { action, request_id: reqId },
+                });
+                if (error) {
+                  setOfferActionError(p => ({ ...p, [reqId]: action === "accept" ? "Fehler beim Annehmen – bitte versuche es erneut." : "Fehler beim Ablehnen." }));
+                } else {
+                  // Optimistic: mark as handled locally
+                  setDocuments(prev => prev.map(d => d.id === angebot.id ? { ...d, status: action === "accept" ? "akzeptiert" : "abgelehnt" } : d));
+                  setRequests(prev => prev.map(r => r.id === reqId ? { ...r, status: action === "accept" ? "gebucht" : "abgelehnt" } : r));
+                }
+                setOfferActionLoading(p => ({ ...p, [reqId]: false }));
+              };
+
+              return (
+                <div key={angebot.id} className="rounded-3xl overflow-hidden border border-amber-200/60 shadow-sm bg-white">
+                  {/* Golden top accent */}
+                  <div className="h-1.5 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400" />
+
+                  <div className="px-6 pt-5 pb-6">
+                    {/* Header */}
+                    <div className="flex items-start justify-between gap-3 mb-4">
+                      <div>
+                        <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-1">
+                          ✦ Offenes Angebot
+                        </p>
+                        <h2 className="font-display text-lg font-bold text-foreground leading-tight">
+                          {angebot.nummer || angebot.name || "Angebot"}
+                        </h2>
+                        <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                          {new Date(angebot.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric" })}
+                        </p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        {betrag != null && (
+                          <p className="font-display text-2xl font-bold text-foreground">
+                            {new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(betrag)}
+                          </p>
+                        )}
+                        {angebot.preview_html && (
+                          <button
+                            onClick={() => openAngebotInBrowser(angebot)}
+                            className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-700 hover:text-amber-900 transition-colors"
+                          >
+                            <Download className="w-3 h-3" /> Angebot öffnen
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="border-t border-black/[0.05] mb-4" />
+
+                    {/* Action prompt */}
+                    <p className="font-sans text-sm text-muted-foreground mb-4">
+                      Bitte entscheide dich: Möchtest du das Angebot annehmen oder hast du noch Fragen?
+                    </p>
+
+                    {/* ANNEHMEN – big green */}
+                    <button
+                      disabled={isLoading || !reqId}
+                      onClick={() => doAction("accept")}
+                      className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-white text-sm font-bold shadow-sm shadow-emerald-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-3"
+                    >
+                      {isLoading
+                        ? <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                        : <CheckCircle2 className="w-4 h-4" />
+                      }
+                      Angebot annehmen
+                    </button>
+
+                    {/* Secondary row: Fragen + Ablehnen */}
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => reqId && setCrFormOpen(p => ({ ...p, [reqId]: true }))}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-black/[0.1] text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-black/[0.03] transition-all"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" /> Frage / Änderung
+                      </button>
+                      <button
+                        disabled={isLoading || !reqId}
+                        onClick={() => doAction("reject")}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-black/[0.08] text-xs font-medium text-muted-foreground/70 hover:text-muted-foreground hover:bg-black/[0.03] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <X className="w-3.5 h-3.5" /> Ablehnen
+                      </button>
+                    </div>
+
+                    {errMsg && (
+                      <p className="font-sans text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2 mt-3">
+                        {errMsg}
+                      </p>
+                    )}
+
+                    {/* Inline Frage-Formular (wenn geöffnet) */}
+                    {reqId && crFormOpen[reqId] && (
+                      <div className="mt-4 pt-4 border-t border-black/[0.05] space-y-2">
+                        <p className="font-sans text-xs font-semibold text-foreground mb-2">Deine Frage oder gewünschte Änderung:</p>
+                        <input
+                          className={inputCls}
+                          placeholder="Betreff"
+                          value={crSubject[reqId] || ""}
+                          onChange={e => setCrSubject(p => ({ ...p, [reqId]: e.target.value }))}
+                        />
+                        <textarea
+                          className={inputCls + " resize-none"}
+                          rows={3}
+                          placeholder="Nachricht…"
+                          value={crMessage[reqId] || ""}
+                          onChange={e => setCrMessage(p => ({ ...p, [reqId]: e.target.value }))}
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            disabled={crSubmitting[reqId]}
+                            onClick={async () => {
+                              if (!customer || !reqId) return;
+                              setCrSubmitting(p => ({ ...p, [reqId]: true }));
+                              await supabase.from("portal_change_requests").insert({
+                                customer_id: customer.id,
+                                request_id: reqId,
+                                subject: crSubject[reqId] || "Rückfrage zum Angebot",
+                                message: crMessage[reqId] || "",
+                              });
+                              setCrSuccess(p => ({ ...p, [reqId]: true }));
+                              setCrFormOpen(p => ({ ...p, [reqId]: false }));
+                              setCrSubmitting(p => ({ ...p, [reqId]: false }));
+                            }}
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-foreground text-background text-xs font-semibold hover:opacity-80 transition-all disabled:opacity-50"
+                          >
+                            <Send className="w-3.5 h-3.5" /> Senden
+                          </button>
+                          <button
+                            onClick={() => setCrFormOpen(p => ({ ...p, [reqId]: false }))}
+                            className="px-4 py-2.5 rounded-xl border border-black/[0.1] text-xs text-muted-foreground hover:bg-black/[0.03] transition-all"
+                          >
+                            Abbrechen
+                          </button>
+                        </div>
+                        {crSuccess[reqId] && (
+                          <p className="text-xs text-emerald-600 font-medium">✓ Nachricht gesendet – wir melden uns bald!</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
 
             {/* Invoice widget */}
             {documents.filter(d => d.type === "Rechnung").length > 0 && (
