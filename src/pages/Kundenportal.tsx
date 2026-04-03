@@ -358,8 +358,9 @@ const Kundenportal = () => {
       if (!cust) {
         const { data: byEmail } = await supabase.from("portal_customers").select("*").eq("email", user.email).maybeSingle();
         if (byEmail) {
+          // user_id verknüpfen – schlägt UPDATE fehl, nehmen wir byEmail (kein Duplikat!)
           const { data: linked } = await supabase.from("portal_customers").update({ user_id: user.id }).eq("id", byEmail.id).select("*").single();
-          cust = linked;
+          cust = linked ?? byEmail;
         }
       }
 
@@ -371,10 +372,11 @@ const Kundenportal = () => {
         if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id);
       }
 
-      // Kein portal_customers Eintrag → aus Anfrage-Daten anlegen
+      const capW = (s?: string | null) => s ? s.replace(/\b\w/g, (c: string) => c.toUpperCase()) : null;
+
+      // Nur wenn wirklich KEIN Eintrag existiert (weder via user_id noch via Email)
       if (!cust && requestsData && requestsData.length > 0) {
         const req = requestsData[0] as any;
-        const capW = (s?: string | null) => s ? s.replace(/\b\w/g, (c: string) => c.toUpperCase()) : null;
         const { data: created } = await supabase.from("portal_customers").insert({
           name: capW(req.name) || user.email!.split("@")[0],
           email: user.email!,
@@ -384,10 +386,9 @@ const Kundenportal = () => {
         if (created) cust = created;
       }
 
-      // Wenn Eintrag gefunden/erstellt: Name befüllen falls leer
+      // Eintrag vorhanden aber Name leer → aus Anfrage befüllen
       if (cust && !cust.name && requestsData && requestsData.length > 0) {
         const req = requestsData[0] as any;
-        const capW = (s?: string | null) => s ? s.replace(/\b\w/g, (c: string) => c.toUpperCase()) : null;
         const newName = capW(req.name);
         if (newName) {
           const { data: updated } = await supabase.from("portal_customers")
