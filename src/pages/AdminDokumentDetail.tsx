@@ -144,6 +144,15 @@ export default function AdminDokumentDetail() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc, searchParams]);
 
+  // Erfolgs-Toast nach Portal-Veröffentlichung (?published=1)
+  const [publishedToast, setPublishedToast] = useState(!!searchParams.get("published"));
+  useEffect(() => {
+    if (!searchParams.get("published")) return;
+    setPublishedToast(true);
+    const t = setTimeout(() => setPublishedToast(false), 5000);
+    return () => clearTimeout(t);
+  }, [searchParams]);
+
   const handleStatusChange = async (status: DokumentStatus) => {
     if (!id) return;
     setStatusChanging(true);
@@ -511,8 +520,8 @@ body > div:last-child {
         }
       }
 
-      await load();
-      setSendMsg({ type: "ok", text: "Im Kundenportal veröffentlicht & Statusmail gesendet ✓" });
+      // Navigate to clean detail view (close send panel) with success toast
+      navigate(`/admin/dokumente/${id}?published=1`);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : (typeof e === "object" ? JSON.stringify(e) : String(e));
       setSendMsg({ type: "err", text: "Fehler: " + msg });
@@ -603,6 +612,17 @@ body > div:last-child {
 
   return (
     <div className="flex flex-col bg-background min-h-screen">
+
+      {/* ── PORTAL-ERFOLG TOAST ── */}
+      {publishedToast && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3 rounded-2xl bg-emerald-600 text-white shadow-xl text-sm font-semibold animate-in fade-in slide-in-from-top-2 duration-300">
+          <CheckCircle className="w-4 h-4 shrink-0" />
+          Im Kundenportal veröffentlicht · Status auf „Gesendet" gesetzt · Statusmail verschickt ✓
+          <button onClick={() => setPublishedToast(false)} className="ml-2 opacity-70 hover:opacity-100">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* ── TOP BAR ── */}
       <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border/20">
