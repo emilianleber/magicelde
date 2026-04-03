@@ -462,13 +462,38 @@ function DocumentPreview(props: PreviewProps) {
 
   // ── Pagination ────────────────────────────────────────────────────────────
   const estimatePosH = (pos: LocalPosition): number => {
-    let h = 24;
+    // Base row height in the PDF (font-size ~8.5, padding 4+4)
+    let h = 20;
     if (pos.beschreibung) {
-      h += (Math.ceil(pos.beschreibung.length / 70) + (pos.beschreibung.match(/\n/g) || []).length) * 9;
+      const stripped = pos.beschreibung.replace(/<[^>]+>/g, " ").trim();
+      const lines = stripped.split("\n").reduce((acc, line) =>
+        acc + Math.max(1, Math.ceil((line.length || 1) / 55)), 0);
+      h += lines * 10;
     }
     return h;
   };
-  // Split positions across pages. Page 1 has limited space due to header + address.
+
+  const stripHtmlLen = (html: string) =>
+    html ? html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().length : 0;
+
+  // Dynamic heights at 595px page width (font-size 8.5-9.5, line-height ~1.5)
+  const PAGE_H     = 842;
+  const HDR_H      = 148; // conservative header height across all layouts
+  const DIN_TOP_H  = 237; // address zone (44+127+16) + gap(22) + betreff(25) + kopftext-fallback
+  const KOPF_H     = kopftext ? Math.max(16, Math.ceil(stripHtmlLen(kopftext) / 75) * 15 + 12) : 0;
+  const TBL_HDR_H  = 22;
+  const SUMMEN_H   = 58;
+  const GRUSS_H    = 55;
+  const DIN_FTR_H  = 72;
+  const FUSS_H     = fusstext ? Math.max(16, Math.ceil(stripHtmlLen(fusstext) / 75) * 15 + 12) : 0;
+  const BOTTOM_H   = SUMMEN_H + FUSS_H + GRUSS_H + DIN_FTR_H;
+
+  const CONT_HDR_H = 44;
+
+  const P1_BUDGET      = Math.max(24, PAGE_H - HDR_H - DIN_TOP_H - KOPF_H - TBL_HDR_H - BOTTOM_H);
+  const PC_LAST_BUDGET = Math.max(24, PAGE_H - CONT_HDR_H - TBL_HDR_H - BOTTOM_H);
+  const PC_BUDGET      = Math.max(24, PAGE_H - CONT_HDR_H - TBL_HDR_H); // not-last: no bottom
+
   const pageChunks: LocalPosition[][] = (() => {
     const rem = [...leistungPos];
     const chunks: LocalPosition[][] = [];
@@ -484,8 +509,12 @@ function DocumentPreview(props: PreviewProps) {
       }
       return chunk;
     };
-    chunks.push(fill(190)); // page 1: less room (header + address zone)
-    while (rem.length > 0) chunks.push(fill(750)); // subsequent pages
+    chunks.push(fill(P1_BUDGET));
+    while (rem.length > 0) {
+      // Is this the last continuation chunk?
+      const testBudget = rem.length <= 30 ? PC_LAST_BUDGET : PC_BUDGET;
+      chunks.push(fill(testBudget));
+    }
     if (chunks.length === 0) chunks.push([]);
     return chunks;
   })();
