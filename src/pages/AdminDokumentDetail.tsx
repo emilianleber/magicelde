@@ -470,54 +470,43 @@ body > div:last-child {
 
     // Nur mit Event- oder Anfragen-Verknüpfung
     if (!doc.eventId && !doc.requestId) {
-      setSendMsg({ type: "err", text: "Dieses Dokument ist keinem Event oder keiner Anfrage zugeordnet und kann nicht im Kundenportal veröffentlicht werden." });
-      return;
-    }
-    if (!doc.previewHtml) {
-      setSendMsg({ type: "err", text: "Kein Preview vorhanden – bitte Dokument im Editor öffnen und einmal speichern." });
+      setSendMsg({ type: "err", text: "Dieses Dokument ist keinem Event oder keiner Anfrage zugeordnet." });
       return;
     }
 
     setSendLoading("portal"); setSendMsg(null);
     try {
-      // 1. PDF aus preview_html generieren
-      const blob = await generatePreviewPdfBlob(doc.previewHtml);
-
-      // 2. In Storage hochladen + file_url speichern
-      await uploadPdfBlob(blob, id);
-
-      // 3. Dokument-Status → gesendet
+      // 1. Dokument-Status → gesendet
       await dokumenteService.setStatus(id, "gesendet");
 
-      // 4. Auth-Token für admin-send-status-mail
+      // 2. Auth-Token für admin-send-status-mail
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
 
-      // 5. Request/Event-Status + Statusmail je nach Dokumenttyp
-      if (doc.requestId && (doc.typ === "angebot" || doc.typ === "auftragsbestaetigung")) {
-        const reqStatus = doc.typ === "angebot" ? "angebot_gesendet" : "gebucht";
-        await supabase.from("portal_requests").update({ status: reqStatus }).eq("id", doc.requestId);
-        await supabase.functions.invoke("admin-send-status-mail", {
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-          body: { type: "request", recordId: doc.requestId, status: reqStatus },
-        });
-      } else if (doc.eventId) {
-        let eventStatus: string | null = null;
-        let mailStatus: string | null = null;
-        if (doc.typ === "auftragsbestaetigung") {
-          eventStatus = "vertrag_gesendet"; mailStatus = "vertrag_gesendet";
-        } else if (doc.typ === "rechnung" || doc.typ === "abschlagsrechnung") {
-          eventStatus = "rechnung_gesendet"; mailStatus = "rechnung_gesendet";
-        } else if (doc.typ === "mahnung") {
-          eventStatus = "rechnung_faellig"; mailStatus = "rechnung_faellig";
-        }
-        if (eventStatus) {
-          await supabase.from("portal_events").update({ status: eventStatus }).eq("id", doc.eventId);
-        }
-        if (mailStatus) {
+      // 3. Request/Event-Status + Statusmail je nach Dokumenttyp
+      if (doc.requestId) {
+        let reqStatus: string | null = null;
+        if (doc.typ === "angebot") reqStatus = "angebot_gesendet";
+        else if (doc.typ === "auftragsbestaetigung") reqStatus = "gebucht";
+
+        if (reqStatus) {
+          await supabase.from("portal_requests").update({ status: reqStatus }).eq("id", doc.requestId);
           await supabase.functions.invoke("admin-send-status-mail", {
             headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-            body: { type: "event", recordId: doc.eventId, status: mailStatus },
+            body: { type: "request", recordId: doc.requestId, status: reqStatus },
+          });
+        }
+      } else if (doc.eventId) {
+        let eventStatus: string | null = null;
+        if (doc.typ === "auftragsbestaetigung") eventStatus = "vertrag_gesendet";
+        else if (doc.typ === "rechnung" || doc.typ === "abschlagsrechnung") eventStatus = "rechnung_gesendet";
+        else if (doc.typ === "mahnung") eventStatus = "rechnung_faellig";
+
+        if (eventStatus) {
+          await supabase.from("portal_events").update({ status: eventStatus }).eq("id", doc.eventId);
+          await supabase.functions.invoke("admin-send-status-mail", {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+            body: { type: "event", recordId: doc.eventId, status: eventStatus },
           });
         }
       }
@@ -525,7 +514,9 @@ body > div:last-child {
       await load();
       setSendMsg({ type: "ok", text: "Im Kundenportal veröffentlicht & Statusmail gesendet ✓" });
     } catch (e: unknown) {
-      setSendMsg({ type: "err", text: "Fehler: " + ((e as any)?.message || String(e)) });
+      const msg = e instanceof Error ? e.message : (typeof e === "object" ? JSON.stringify(e) : String(e));
+      setSendMsg({ type: "err", text: "Fehler: " + msg });
+      console.error("handlePublishPortal error:", e);
     } finally { setSendLoading(null); }
   };
 
@@ -1010,7 +1001,7 @@ body > div:last-child {
                         <p className="text-sm font-semibold">Im Kundenportal veröffentlichen</p>
                         <p className="text-xs text-muted-foreground mt-0.5">
                           {canPublish
-                            ? "PDF hochladen · Status aktualisieren · Statusmail an Kunden"
+                            ? "Status setzen · Anfrage/Event aktualisieren · Statusmail an Kunden"
                             : "Nur für Dokumente mit Event- oder Anfragen-Verknüpfung"}
                         </p>
                       </div>
