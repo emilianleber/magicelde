@@ -625,7 +625,9 @@ function DocumentPreview(props: PreviewProps) {
     </div>
   );
 
-  const renderDINBottom = () => (
+  const totalPages = pageChunks.length;
+
+  const renderDINBottom = (pageNum: number) => (
     <>
       {/* Summen */}
       <div style={{ padding: `5px ${M}px 4px`, display: "flex", justifyContent: "flex-end" }}>
@@ -650,37 +652,45 @@ function DocumentPreview(props: PreviewProps) {
         </div>
       </div>
       {fusstext && (
-        <div style={{ padding: `2px ${M}px 4px`, fontSize: 8.5, color: "#444", lineHeight: 1.55 }}
+        <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.65 }}
           dangerouslySetInnerHTML={{ __html: textToHtml(fusstext) }} />
       )}
-      <div style={{ padding: `7px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
-        Mit magischen Grüßen
-        <div style={{ marginTop: 14 }}>
-          <div style={{ fontWeight: 700 }}>{absenderName}</div>
-          {absenderUntertitel && <div style={{ color: "#666" }}>{absenderUntertitel}</div>}
-        </div>
+      {/* Absender-Signatur */}
+      <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
+        <div style={{ fontWeight: 700 }}>{absenderName}</div>
+        {absenderUntertitel && <div style={{ color: "#666", fontSize: 9 }}>{absenderUntertitel}</div>}
       </div>
       {/* DIN 5008 Fußzeile */}
-      <div style={{ marginTop: "auto", borderTop: "0.75px solid #c0c0c0", margin: `auto ${M}px 8px`, paddingTop: 5, paddingBottom: 6, display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontWeight: 600 }}>{absenderName}</div>
-          {absenderUntertitel && <div>{absenderUntertitel}</div>}
-          {absenderAdresse && <div>{absenderAdresse}</div>}
-          {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
-          {absenderLand && absenderLand !== "Deutschland" && <div>{absenderLand}</div>}
-        </div>
-        <div style={{ flex: 1 }}>
-          {absenderTel     && <div>Tel.: {absenderTel}</div>}
-          {absenderEmail   && <div>E-Mail: {absenderEmail}</div>}
-          {absenderWebsite && <div>Web: {absenderWebsite}</div>}
-        </div>
-        <div style={{ flex: 1 }}>
-          {absenderSteuernummer && <div>Steuer-Nr.: {absenderSteuernummer}</div>}
-          {absenderInhaber      && <div>Inhaber/-in: {absenderInhaber}</div>}
-        </div>
-        <div style={{ flex: 1 }}>
-          {absenderIban && <div>IBAN: {absenderIban}</div>}
-          {absenderBic  && <div>BIC: {absenderBic}</div>}
+      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+        <div style={{ margin: `0 ${M}px 8px`, borderTop: "0.75px solid #c0c0c0", paddingTop: 5, paddingBottom: 6 }}>
+          {/* Seite X von Y – oben rechts im Footer */}
+          {totalPages > 1 && (
+            <div style={{ textAlign: "right", fontSize: 7, color: "#999", marginBottom: 4 }}>
+              Seite {pageNum} von {totalPages}
+            </div>
+          )}
+          <div style={{ display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600 }}>{absenderName}</div>
+              {absenderUntertitel && <div>{absenderUntertitel}</div>}
+              {absenderAdresse && <div>{absenderAdresse}</div>}
+              {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
+              {absenderLand && absenderLand !== "Deutschland" && <div>{absenderLand}</div>}
+            </div>
+            <div style={{ flex: 1 }}>
+              {absenderTel     && <div>Tel.: {absenderTel}</div>}
+              {absenderEmail   && <div>E-Mail: {absenderEmail}</div>}
+              {absenderWebsite && <div>Web: {absenderWebsite}</div>}
+            </div>
+            <div style={{ flex: 1 }}>
+              {absenderSteuernummer && <div>Steuer-Nr.: {absenderSteuernummer}</div>}
+              {absenderInhaber      && <div>Inhaber/-in: {absenderInhaber}</div>}
+            </div>
+            <div style={{ flex: 1 }}>
+              {absenderIban && <div>IBAN: {absenderIban}</div>}
+              {absenderBic  && <div>BIC: {absenderBic}</div>}
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -691,7 +701,7 @@ function DocumentPreview(props: PreviewProps) {
     <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
       {renderDINTop()}
       {renderPositionsBlock(pageChunks[0], thBg, thColor, 0)}
-      {pageChunks.length === 1 && renderDINBottom()}
+      {pageChunks.length === 1 && renderDINBottom(1)}
     </div>
   );
 
@@ -706,17 +716,19 @@ function DocumentPreview(props: PreviewProps) {
     return pageChunks.slice(1).map((chunk, pi) => {
       const isLast = pi === pageChunks.length - 2;
       const offset = globalOffset;
+      const pageNum = pi + 2;
       globalOffset += chunk.length;
       return (
-        <div key={`page-${pi + 2}`} style={{ ...PAGE_STYLE, backgroundColor: bg }}>
-          {/* Thin continuation header */}
-          <div style={{ borderBottom: "0.5px solid #e0e0e0", padding: `10px ${M}px 8px`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontSize: 9, color: "#555" }}>{typLabel}{nummer ? ` – ${nummer}` : ""} · Seite {pi + 2}</span>
-            <LogoImg size={28} />
+        <div key={`page-${pageNum}`} style={{ ...PAGE_STYLE, backgroundColor: bg }}>
+          {/* Continuation header: logo only, like reference PDF */}
+          <div style={{ position: "relative", padding: `20px ${M}px 0`, minHeight: 80 }}>
+            <div style={{ position: "absolute", top: 20, right: M }}>
+              <LogoImg />
+            </div>
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             {renderPositionsBlock(chunk, thBg, thColor, offset)}
-            {isLast && renderDINBottom()}
+            {isLast && renderDINBottom(pageNum)}
           </div>
         </div>
       );
