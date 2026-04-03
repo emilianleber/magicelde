@@ -1496,67 +1496,46 @@ export default function AdminDokumentEditor() {
     } finally { setSaving(false); }
   };
 
-  // Drucken / PDF: jede Seite separat in eigenen A4-Container
+  // Drucken / PDF: @media print auf der aktuellen Seite – identisch mit Vorschau
   const handlePrintPreview = () => {
-    const el = document.getElementById("doc-preview-print");
-    if (!el) return;
-    const win = window.open("", "_blank");
-    if (!win) return;
-
-    // Clone each page, set explicit px dimensions (not 100% / aspect-ratio)
-    const pageEls = Array.from(el.children) as HTMLElement[];
-    const pagesHtml = pageEls.map((pageEl) => {
-      const clone = pageEl.cloneNode(true) as HTMLElement;
-      clone.style.width = "595px";
-      clone.style.height = "842px";
-      clone.style.removeProperty("aspect-ratio");
-      clone.style.overflow = "hidden";
-      clone.style.flexShrink = "0";
-      return `<div class="a4-page">${clone.outerHTML}</div>`;
-    }).join("");
-
-    win.document.write(`<!DOCTYPE html>
-<html><head>
-<meta charset="UTF-8">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=block" rel="stylesheet">
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { margin:0; padding:0; background:#fff; font-family:'Inter',system-ui,sans-serif; }
-  @page { size:A4 portrait; margin:0; }
-  /* Jede Seite: 595×842px, bei Druck per zoom auf A4 skaliert */
-  .a4-page {
-    width: 595px;
-    height: 842px;
-    overflow: hidden;
-    display: block;
-    background: #fff;
-  }
-  @media print {
-    * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
-    /* zoom skaliert Layout-konform: 595px → 210mm (Faktor ≈ 1.3341) */
-    .a4-page {
-      zoom: 1.3341;
-      page-break-after: always;
-      page-break-inside: avoid;
-    }
-  }
-</style>
-</head>
-<body>
-${pagesHtml}
-<script>
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function() {
-      setTimeout(function() { window.print(); }, 300);
-    });
-  } else {
-    setTimeout(function() { window.print(); }, 1500);
-  }
-<\/script>
-</body></html>`);
-    win.document.close();
+    // Inject print CSS: alles verstecken außer der Dokumentvorschau
+    const style = document.createElement("style");
+    style.id = "__docPrintStyle";
+    style.innerHTML = `
+      @media print {
+        @page { size: A4 portrait; margin: 0; }
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        html, body { visibility: hidden !important; background: white !important; }
+        #doc-preview-print,
+        #doc-preview-print * { visibility: visible !important; }
+        #doc-preview-print {
+          position: fixed !important;
+          top: 0 !important; left: 0 !important;
+          width: 595px !important;
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 0 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          background: white !important;
+        }
+        #doc-preview-print > * {
+          width: 595px !important;
+          height: 842px !important;
+          overflow: hidden !important;
+          flex-shrink: 0 !important;
+          page-break-after: always !important;
+          page-break-inside: avoid !important;
+          break-after: page !important;
+          break-inside: avoid !important;
+          zoom: 1.3341 !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    window.print();
+    // Cleanup nach dem Druckdialog
+    setTimeout(() => document.getElementById("__docPrintStyle")?.remove(), 3000);
   };
 
   const typLabel = TYP_LABEL[typ] || typ;
