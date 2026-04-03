@@ -486,36 +486,47 @@ function DocumentPreview(props: PreviewProps) {
   const GRUSS_H    = 55;
   const DIN_FTR_H  = 72;
   const FUSS_H     = fusstext ? Math.max(16, Math.ceil(stripHtmlLen(fusstext) / 75) * 15 + 12) : 0;
-  const BOTTOM_H   = SUMMEN_H + FUSS_H + GRUSS_H + DIN_FTR_H;
+
+  // Summen + DIN footer appear on EVERY page
+  const PER_PAGE_BOTTOM = SUMMEN_H + DIN_FTR_H;
+  // Fusstext + Signatur only on LAST page
+  const LAST_EXTRA      = FUSS_H + GRUSS_H;
 
   const CONT_HDR_H = 44;
 
-  const P1_BUDGET      = Math.max(24, PAGE_H - HDR_H - DIN_TOP_H - KOPF_H - TBL_HDR_H - BOTTOM_H);
-  const PC_LAST_BUDGET = Math.max(24, PAGE_H - CONT_HDR_H - TBL_HDR_H - BOTTOM_H);
-  const PC_BUDGET      = Math.max(24, PAGE_H - CONT_HDR_H - TBL_HDR_H); // not-last: no bottom
+  // Budgets
+  const P1_SINGLE  = Math.max(24, PAGE_H - HDR_H - DIN_TOP_H - KOPF_H - TBL_HDR_H - PER_PAGE_BOTTOM - LAST_EXTRA);
+  const P1_MULTI   = Math.max(24, PAGE_H - HDR_H - DIN_TOP_H - KOPF_H - TBL_HDR_H - PER_PAGE_BOTTOM);
+  const PC_MID     = Math.max(24, PAGE_H - CONT_HDR_H - TBL_HDR_H - PER_PAGE_BOTTOM);
+  const PC_LAST    = Math.max(24, PAGE_H - CONT_HDR_H - TBL_HDR_H - PER_PAGE_BOTTOM - LAST_EXTRA);
 
   const pageChunks: LocalPosition[][] = (() => {
-    const rem = [...leistungPos];
-    const chunks: LocalPosition[][] = [];
-    const fill = (budget: number): LocalPosition[] => {
+    const fill = (items: LocalPosition[], budget: number): LocalPosition[] => {
       const chunk: LocalPosition[] = [];
       let used = 0;
-      while (rem.length > 0) {
-        const h = estimatePosH(rem[0]);
+      while (items.length > 0) {
+        const h = estimatePosH(items[0]);
         if (used + h <= budget || chunk.length === 0) {
-          chunk.push(rem.shift()!);
+          chunk.push(items.shift()!);
           used += h;
         } else break;
       }
       return chunk;
     };
-    chunks.push(fill(P1_BUDGET));
+
+    // Pass 1: try fitting everything on one page (conservative budget incl. fuss/gruss)
+    const try1 = [...leistungPos];
+    const firstChunk = fill(try1, P1_SINGLE);
+    if (try1.length === 0) return firstChunk.length > 0 ? [firstChunk] : [[]];
+
+    // Pass 2: multi-page – page 1 doesn't need fuss/gruss reserved
+    const rem = [...leistungPos];
+    const chunks: LocalPosition[][] = [fill(rem, P1_MULTI)];
     while (rem.length > 0) {
-      // Is this the last continuation chunk?
-      const testBudget = rem.length <= 30 ? PC_LAST_BUDGET : PC_BUDGET;
-      chunks.push(fill(testBudget));
+      // Use PC_LAST for likely-last chunk, PC_MID otherwise
+      const testBudget = rem.length <= 30 ? PC_LAST : PC_MID;
+      chunks.push(fill(rem, testBudget));
     }
-    if (chunks.length === 0) chunks.push([]);
     return chunks;
   })();
 
@@ -662,31 +673,34 @@ function DocumentPreview(props: PreviewProps) {
     </div>
   );
 
-  // Summen + Fußtext + Signatur – nur auf der letzten Seite
-  const renderDINBottom = (pageNum: number) => (
-    <>
-      {/* Summen */}
-      <div style={{ padding: `5px ${M}px 4px`, display: "flex", justifyContent: "flex-end" }}>
-        <div style={{ minWidth: 220, fontSize: 9 }}>
+  // Summen – erscheint auf JEDER Seite
+  const renderSummen = () => (
+    <div style={{ padding: `5px ${M}px 4px`, display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ minWidth: 220, fontSize: 9 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
+          <span>Gesamtbetrag netto</span>
+          <span style={{ color: "#111" }}>{fmt(summen.netto)}</span>
+        </div>
+        {!kleinunternehmer && mwstSatz > 0 && (
           <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
-            <span>Gesamtbetrag netto</span>
-            <span style={{ color: "#111" }}>{fmt(summen.netto)}</span>
+            <span>zzgl. {mwstSatz}% MwSt.</span>
+            <span style={{ color: "#111" }}>{fmt(summen.mwstBetrag)}</span>
           </div>
-          {!kleinunternehmer && mwstSatz > 0 && (
-            <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
-              <span>zzgl. {mwstSatz}% MwSt.</span>
-              <span style={{ color: "#111" }}>{fmt(summen.mwstBetrag)}</span>
-            </div>
-          )}
-          {kleinunternehmer && (
-            <div style={{ fontSize: 7.5, color: "#999", lineHeight: 1.4, marginBottom: 3 }}>Umsatzsteuer nicht erhoben gemäß §19 UStG.</div>
-          )}
-          <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #111", paddingTop: 3, marginTop: 2, fontWeight: 700, fontSize: 10.5 }}>
-            <span>Gesamtbetrag brutto</span>
-            <span style={{ color }}>{fmt(summen.brutto)}</span>
-          </div>
+        )}
+        {kleinunternehmer && (
+          <div style={{ fontSize: 7.5, color: "#999", lineHeight: 1.4, marginBottom: 3 }}>Umsatzsteuer nicht erhoben gemäß §19 UStG.</div>
+        )}
+        <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #111", paddingTop: 3, marginTop: 2, fontWeight: 700, fontSize: 10.5 }}>
+          <span>Gesamtbetrag brutto</span>
+          <span style={{ color }}>{fmt(summen.brutto)}</span>
         </div>
       </div>
+    </div>
+  );
+
+  // Fußtext + Signatur – nur auf der letzten Seite
+  const renderDINBottom = (pageNum: number) => (
+    <>
       {fusstext && (
         <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.65 }}
           dangerouslySetInnerHTML={{ __html: textToHtml(fusstext) }} />
@@ -699,11 +713,12 @@ function DocumentPreview(props: PreviewProps) {
     </>
   );
 
-  // Page 1 body: DIN top + first chunk + summen (last page) + footer (always)
+  // Page 1 body: DIN top + first chunk + summen (always) + fusstext/sig (only last page) + footer
   const renderBody = (thBg: string, thColor: string) => (
     <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
       {renderDINTop()}
       {renderPositionsBlock(pageChunks[0], thBg, thColor, 0)}
+      {renderSummen()}
       {pageChunks.length === 1 ? renderDINBottom(1) : renderDINFooter(1)}
     </div>
   );
@@ -731,6 +746,7 @@ function DocumentPreview(props: PreviewProps) {
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             {renderPositionsBlock(chunk, thBg, thColor, offset)}
+            {renderSummen()}
             {isLast ? renderDINBottom(pageNum) : renderDINFooter(pageNum)}
           </div>
         </div>
@@ -828,6 +844,7 @@ function DocumentPreview(props: PreviewProps) {
                 </div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                   {renderPositionsBlock(chunk, color, "#fff", offset)}
+                  {renderSummen()}
                   {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
                 </div>
               </div>
@@ -940,6 +957,7 @@ function DocumentPreview(props: PreviewProps) {
                 </div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                   {renderPositionsBlock(chunk, "#111", "#fff", offset)}
+                  {renderSummen()}
                   {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
                 </div>
               </div>
