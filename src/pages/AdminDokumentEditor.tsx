@@ -1300,36 +1300,51 @@ export default function AdminDokumentEditor() {
     } finally { setSaving(false); }
   };
 
-  // Drucken / PDF: Preview exakt wie auf dem Bildschirm in neuem Fenster drucken
+  // Drucken / PDF: Preview exakt wie auf dem Bildschirm drucken
   const handlePrintPreview = () => {
     const el = document.getElementById("doc-preview-print");
     if (!el) return;
     const win = window.open("", "_blank");
     if (!win) return;
-    const fontLinks = Array.from(document.querySelectorAll("link[rel='stylesheet']"))
-      .map((l) => (l as HTMLLinkElement).outerHTML)
-      .join("\n");
-    // 595px Preview auf A4 (210mm) skalieren: 210mm / 595px ≈ 1.334
+
+    // Snapshot des Preview-HTML
+    const html = el.innerHTML;
+
     win.document.write(`<!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
-${fontLinks}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=block" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { margin:0; padding:0; background:#fff; }
+  html, body { margin:0; padding:0; background:#fff; font-family:'Inter',system-ui,sans-serif; }
   @page { size:A4 portrait; margin:0; }
-  @media print { * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; } }
-  .page { width:210mm; height:297mm; overflow:hidden; position:relative; }
-  .inner { width:595px; height:842px; transform:scale(1.3341); transform-origin:top left; overflow:hidden; }
+  @media print {
+    * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    html, body { width:210mm; height:297mm; }
+  }
+  /* 595px → 210mm: scale 1.3341 */
+  .a4-page { width:210mm; height:297mm; overflow:hidden; position:relative; }
+  .preview-scale { width:595px; height:842px; transform:scale(1.3341); transform-origin:top left; overflow:hidden; position:relative; }
 </style>
 </head>
 <body>
-<div class="page">
-  <div class="inner">${el.innerHTML}</div>
+<div class="a4-page">
+  <div class="preview-scale">${html}</div>
 </div>
+<script>
+  // Warten bis Inter geladen ist, dann drucken
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function() {
+      setTimeout(function() { window.print(); }, 200);
+    });
+  } else {
+    setTimeout(function() { window.print(); }, 1500);
+  }
+<\/script>
 </body></html>`);
     win.document.close();
-    setTimeout(() => { win.focus(); win.print(); }, 800);
   };
 
   const typLabel = TYP_LABEL[typ] || typ;
