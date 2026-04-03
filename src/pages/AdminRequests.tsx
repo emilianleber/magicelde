@@ -47,6 +47,9 @@ type ViewFilter = "aktiv" | "abgeschlossen" | "geloescht" | "alle";
 const ACTIVE_STATUSES = ["neu", "in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"];
 const DONE_STATUSES = ["bestätigt", "abgelehnt", "archiviert"];
 
+const capWords = (s?: string | null) =>
+  s ? s.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/_/g, " ") : "";
+
 const formatStatusLabel = (status?: string | null) => {
   switch (status) {
     case "neu": return "Neu";
@@ -354,7 +357,7 @@ const AdminRequests = () => {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-sm font-semibold text-foreground">{req.anlass || "Anfrage"}</span>
+                          <span className="text-sm font-semibold text-foreground">{capWords(req.anlass) || "Anfrage"}</span>
                           <span className={`text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border font-medium ${formatStatusClasses(req.status)}`}>
                             {formatStatusLabel(req.status)}
                           </span>
@@ -377,11 +380,11 @@ const AdminRequests = () => {
                             onClick={(e) => e.stopPropagation()}
                           >
                             <User className="w-3 h-3" />
-                            {cust.name || "Kunde"}{cust.company ? ` · ${cust.company}` : ""}
+                            {capWords(cust.name) || "Kunde"}{cust.company ? ` · ${cust.company}` : ""}
                           </Link>
                         ) : (
                           <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
-                            <User className="w-3 h-3" />{req.name}{req.firma ? ` · ${req.firma}` : ""}
+                            <User className="w-3 h-3" />{capWords(req.name)}{req.firma ? ` · ${req.firma}` : ""}
                           </p>
                         )}
                       </div>

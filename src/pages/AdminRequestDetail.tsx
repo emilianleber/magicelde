@@ -119,6 +119,13 @@ const requestDocumentTypes = [
   { value: "Info", label: "Info" },
 ];
 
+// Zeigt gespeicherten Wert als lesbaren Label – berücksichtigt alte Kleinschreibung
+const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
+  if (!val) return "";
+  const match = options.find((o) => o.value.toLowerCase() === val.toLowerCase());
+  return match ? match.label : val.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/_/g, " ");
+};
+
 const formatStatusClasses = (status?: string | null) => {
   switch (status) {
     case "neu": return "text-blue-600 bg-blue-50 border-blue-200";
@@ -419,7 +426,8 @@ const AdminRequestDetail = () => {
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
   if (!request) return <div className="pt-28 text-center">Anfrage nicht gefunden</div>;
 
-  const displayCustomerName = customer?.name || request.name || "Unbekannter Kunde";
+  const capName = (s?: string | null) => s ? s.replace(/\b\w/g, (c) => c.toUpperCase()) : "";
+  const displayCustomerName = capName(customer?.name || request.name) || "Unbekannter Kunde";
   const displayFirma = customer?.company || request.firma || "";
   const isError = message.startsWith("Fehler") || message.startsWith("Mail-Fehler");
   const openCrCount = changeRequests.filter((cr) => cr.status === "offen").length;
@@ -509,7 +517,7 @@ const AdminRequestDetail = () => {
                 ) : (
                   <p className="text-sm text-foreground flex items-center gap-1.5 min-h-[2rem]">
                     <Theater className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                    {anlass || <span className="text-muted-foreground">–</span>}
+                    {getLabelOrCapitalize(anlassOptions, anlass) || <span className="text-muted-foreground">–</span>}
                   </p>
                 )}
               </div>
@@ -522,7 +530,7 @@ const AdminRequestDetail = () => {
                   </select>
                 ) : (
                   <p className="text-sm text-foreground min-h-[2rem]">
-                    {format || <span className="text-muted-foreground">–</span>}
+                    {getLabelOrCapitalize(formatOptions, format) || <span className="text-muted-foreground">–</span>}
                   </p>
                 )}
               </div>

@@ -66,14 +66,18 @@ serve(async (req) => {
       throw new Error("Name und E-Mail fehlen");
     }
 
-    const safeName = String(name).trim();
-    const safeFirma = firma ? String(firma).trim() : null;
-    const safeEmail = String(email).trim().toLowerCase();
-    const safePhone = phone ? String(phone).trim() : null;
-    const safeAnlass = anlass ? String(anlass).trim() : null;
-    const safeDatum = datum ? String(datum).trim() : null;
-    const safeOrt = ort ? String(ort).trim() : null;
-    const safeFormat = format ? String(format).trim() : null;
+    // Hilfsfunktion: ersten Buchstaben jedes Worts großschreiben
+    const capitalize = (s: string) =>
+      s.replace(/\b\w/g, (c) => c.toUpperCase());
+
+    const safeName   = capitalize(String(name).trim());
+    const safeFirma  = firma  ? String(firma).trim()  : null;   // Firmenname unverändert
+    const safeEmail  = String(email).trim().toLowerCase();
+    const safePhone  = phone  ? String(phone).trim()  : null;
+    const safeAnlass = anlass ? capitalize(String(anlass).trim()) : null;
+    const safeDatum  = datum  ? String(datum).trim()  : null;
+    const safeOrt    = ort    ? capitalize(String(ort).trim())    : null;
+    const safeFormat = format ? capitalize(String(format).trim()) : null;
     const safeNachricht = nachricht ? String(nachricht).trim() : null;
     const safeGaeste =
       gaeste !== null && gaeste !== undefined && gaeste !== ""
@@ -97,55 +101,39 @@ serve(async (req) => {
     if (existingCustomer) {
       customerId = existingCustomer.id;
 
-      const updateData: Record<string, any> = {};
+      // Immer alle vom Kunden gemachten Angaben aktualisieren – so bleibt
+      // das Profil konsistent, auch wenn es vorher leer war.
+      const updateData: Record<string, any> = { name: safeName };
+      if (safeFirma)  updateData.company = safeFirma;
+      if (safePhone)  updateData.phone   = safePhone;
 
-      if ((!existingCustomer.name || existingCustomer.name.trim() === "") && safeName) {
-        updateData.name = safeName;
-      }
+      const { error: updateCustomerError } = await supabase
+        .from("portal_customers")
+        .update(updateData)
+        .eq("id", existingCustomer.id);
 
-      if (
-        (!existingCustomer.company || existingCustomer.company.trim() === "") &&
-        safeFirma
-      ) {
-        updateData.company = safeFirma;
-      }
-
-      if (
-        (!existingCustomer.phone || String(existingCustomer.phone).trim() === "") &&
-        safePhone
-      ) {
-        updateData.phone = safePhone;
-      }
-
-      if (Object.keys(updateData).length > 0) {
-        const { error: updateCustomerError } = await supabase
-          .from("portal_customers")
-          .update(updateData)
-          .eq("id", existingCustomer.id);
-
-        if (updateCustomerError) {
-          console.error("CUSTOMER UPDATE ERROR:", updateCustomerError);
-          throw updateCustomerError;
-        }
+      if (updateCustomerError) {
+        console.error("CUSTOMER UPDATE ERROR:", updateCustomerError);
+        // Nicht werfen – Request trotzdem speichern
       }
     } else {
       const { data: createdCustomer, error: createCustomerError } = await supabase
         .from("portal_customers")
         .insert({
           name: safeName,
-          company: safeFirma,
+          ...(safeFirma  ? { company: safeFirma }  : {}),
           email: safeEmail,
-          phone: safePhone,
+          ...(safePhone  ? { phone: safePhone }    : {}),
         })
         .select("*")
-        .single();
+        .maybeSingle();
 
       if (createCustomerError) {
+        // Fehler loggen aber nicht abbrechen – Anfrage trotzdem speichern
         console.error("CUSTOMER CREATE ERROR:", createCustomerError);
-        throw createCustomerError;
+      } else if (createdCustomer) {
+        customerId = createdCustomer.id;
       }
-
-      customerId = createdCustomer.id;
     }
 
     // 2) Anfrage speichern

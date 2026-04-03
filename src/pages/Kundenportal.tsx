@@ -399,17 +399,21 @@ const Kundenportal = () => {
 
   useEffect(() => {
     if (customer) {
+      // Wenn Profilfelder leer sind, aus der neuesten Anfrage auffüllen
+      const latestReq = requests[0] as any;
+      const cap = (s?: string | null) =>
+        s ? s.replace(/\b\w/g, (c) => c.toUpperCase()) : "";
       setSettingsDraft({
-        name: customer.name || "",
-        company: customer.company || "",
-        phone: customer.phone || "",
-        rechnungs_strasse: customer.rechnungs_strasse || "",
-        rechnungs_plz: customer.rechnungs_plz || "",
-        rechnungs_ort: customer.rechnungs_ort || "",
-        rechnungs_land: customer.rechnungs_land || "Deutschland",
+        name:              cap(customer.name)    || cap(latestReq?.name)  || "",
+        company:           customer.company      || latestReq?.firma        || "",
+        phone:             customer.phone        || latestReq?.phone        || "",
+        rechnungs_strasse: (customer as any).rechnungs_strasse || "",
+        rechnungs_plz:     (customer as any).rechnungs_plz     || "",
+        rechnungs_ort:     (customer as any).rechnungs_ort     || "",
+        rechnungs_land:    (customer as any).rechnungs_land    || "Deutschland",
       });
     }
-  }, [customer]);
+  }, [customer, requests]);
 
   useEffect(() => {
     if (activeTab === "nachrichten" && customer?.id) {
@@ -533,7 +537,9 @@ const Kundenportal = () => {
     );
   }
 
-  const displayName = customer?.name || "Kunde";
+  const capWords = (s?: string | null) =>
+    s ? s.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/_/g, " ") : "";
+  const displayName = capWords(customer?.name) || "Kunde";
   const firstName = displayName.split(" ")[0];
   const kundennummer = customer?.kundennummer || "";
   const currentRequest = requests[0] || null;
@@ -828,7 +834,7 @@ const Kundenportal = () => {
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-3 flex-wrap">
                     <div>
-                      <h3 className="font-display text-base font-bold text-foreground">{currentRequest.anlass || "Anfrage"}</h3>
+                      <h3 className="font-display text-base font-bold text-foreground">{capWords(currentRequest.anlass) || "Anfrage"}</h3>
                       <p className="font-sans text-xs text-muted-foreground mt-1 flex items-center gap-1.5">
                         <Clock className="w-3 h-3" />{new Date(currentRequest.created_at).toLocaleDateString("de-DE")}
                       </p>
@@ -1201,7 +1207,7 @@ const Kundenportal = () => {
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2.5 flex-wrap mb-1.5">
-                            <h3 className="font-display text-base font-bold text-foreground">{r.anlass || "Anfrage"}</h3>
+                            <h3 className="font-display text-base font-bold text-foreground">{capWords(r.anlass) || "Anfrage"}</h3>
                             {r.firma && (
                               <span className="font-sans text-xs text-muted-foreground flex items-center gap-1">
                                 <Building2 className="w-3 h-3" />{r.firma}
@@ -1229,9 +1235,9 @@ const Kundenportal = () => {
                         <div className="grid sm:grid-cols-2 gap-3 mt-4">
                           {[
                             { label: "Datum", icon: Calendar, value: r.datum ? new Date(r.datum).toLocaleDateString("de-DE") : "Nicht angegeben" },
-                            { label: "Ort", icon: MapPin, value: r.ort || "Nicht angegeben" },
+                            { label: "Ort", icon: MapPin, value: capWords(r.ort) || "Nicht angegeben" },
                             { label: "Gäste", icon: Users, value: r.gaeste != null ? String(r.gaeste) : "Nicht angegeben" },
-                            { label: "Format", icon: Theater, value: r.format || "Nicht angegeben" },
+                            { label: "Format", icon: Theater, value: capWords(r.format) || "Nicht angegeben" },
                             { label: "Telefon", icon: Phone, value: r.phone || "Nicht angegeben" },
                             { label: "E-Mail", icon: Mail, value: r.email },
                             ...(r.firma ? [{ label: "Firma", icon: Building2, value: r.firma }] : []),
