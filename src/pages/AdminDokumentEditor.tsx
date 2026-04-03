@@ -20,6 +20,7 @@ interface LocalPosition {
   mwstSatz: number;
   rabattProzent: number | null;
   gesamt: number;
+  optional?: boolean;
 }
 
 const newPosition = (): LocalPosition => ({
@@ -33,6 +34,7 @@ const newPosition = (): LocalPosition => ({
   mwstSatz: 0,
   rabattProzent: null,
   gesamt: 0,
+  optional: false,
 });
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -1560,19 +1562,16 @@ export default function AdminDokumentEditor() {
       </div>
 
       {/* FULL-WIDTH FORM */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-6 pb-16">
+      <div className="flex-1 overflow-y-auto bg-slate-50">
+        <div className="max-w-6xl mx-auto px-6 pb-16 pt-6 space-y-4">
 
-          {/* ── SECTION HELPER ── */}
-          {/* Inline section label style: gray badge + dashed line */}
-
-          {/* ════ KONTAKT- UND DOKUMENTINFORMATIONEN ════ */}
-          <div className="flex items-center gap-3 pt-8 pb-4">
-            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded whitespace-nowrap">
-              Kontakt- und {typLabel}sinformationen
-            </span>
-            <div className="flex-1 border-t border-dashed border-border/40" />
-          </div>
+          {/* ════ KONTAKT & DOKUMENT ════ */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="px-6 py-3.5 border-b border-slate-100 flex items-center gap-3">
+              <div className="w-1 h-5 rounded-full bg-blue-500 shrink-0" />
+              <h2 className="text-sm font-semibold text-slate-800">Kontakt &amp; {typLabel}sinformationen</h2>
+            </div>
+            <div className="p-6">
 
           <div className="grid grid-cols-2 gap-8">
             {/* LEFT: Kunde + Anschrift */}
@@ -1675,11 +1674,16 @@ export default function AdminDokumentEditor() {
             </div>
           </div>
 
+            </div>{/* /p-6 */}
+          </div>{/* /Kontakt card */}
+
           {/* ════ KOPF-TEXT ════ */}
-          <div className="flex items-center gap-3 pt-8 pb-3">
-            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Kopf-Text</span>
-            <div className="flex-1 border-t border-dashed border-border/40" />
-          </div>
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="px-6 py-3.5 border-b border-slate-100 flex items-center gap-3">
+              <div className="w-1 h-5 rounded-full bg-emerald-500 shrink-0" />
+              <h2 className="text-sm font-semibold text-slate-800">Kopf-Text</h2>
+            </div>
+            <div className="p-6">
           <RichTextEditor
             key={`kopf-${id ?? "new"}`}
             value={kopftext}
@@ -1689,48 +1693,54 @@ export default function AdminDokumentEditor() {
             showPlaceholders={false}
             templates={textvorlagen.filter((v) => v.bereich === "kopf" && (v.typ === typ || v.typ === "alle"))}
           />
+            </div>
+          </div>{/* /Kopf-Text card */}
 
           {/* ════ PRODUKTE ════ */}
-          <div className="flex items-center gap-3 pt-8 pb-4">
-            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Produkte</span>
-            <div className="flex-1 border-t border-dashed border-border/40" />
-            {/* Brutto / Netto toggle */}
-            <div className="flex rounded-xl border border-border/30 overflow-hidden shrink-0">
-              <button onClick={() => setBruttoEingabe(true)} className={`px-4 py-1.5 text-xs font-semibold transition-colors ${bruttoEingabe ? "bg-foreground text-background" : "bg-background text-muted-foreground hover:text-foreground"}`}>Brutto</button>
-              <button onClick={() => setBruttoEingabe(false)} className={`px-4 py-1.5 text-xs font-semibold transition-colors ${!bruttoEingabe ? "bg-foreground text-background" : "bg-background text-muted-foreground hover:text-foreground"}`}>Netto</button>
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="px-6 py-3.5 border-b border-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-1 h-5 rounded-full bg-violet-500 shrink-0" />
+                <h2 className="text-sm font-semibold text-slate-800">Produkte &amp; Leistungen</h2>
+              </div>
+              {/* Brutto / Netto toggle */}
+              <div className="flex rounded-xl border border-slate-200 overflow-hidden shrink-0">
+                <button onClick={() => setBruttoEingabe(true)} className={`px-4 py-1.5 text-xs font-semibold transition-colors ${bruttoEingabe ? "bg-slate-800 text-white" : "bg-white text-slate-500 hover:text-slate-800"}`}>Brutto</button>
+                <button onClick={() => setBruttoEingabe(false)} className={`px-4 py-1.5 text-xs font-semibold transition-colors ${!bruttoEingabe ? "bg-slate-800 text-white" : "bg-white text-slate-500 hover:text-slate-800"}`}>Netto</button>
+              </div>
             </div>
-          </div>
+            <div className="px-6 pt-4 pb-5">
 
           {/* Table header */}
-          <div className="grid text-[10px] font-semibold uppercase tracking-wider text-muted-foreground pb-2 px-1 border-b border-border/20"
-            style={{ gridTemplateColumns: "24px 1fr 100px 120px 64px 90px 100px 28px" }}>
+          <div className="grid items-center text-xs font-semibold text-slate-500 pb-2 px-3 py-2.5 bg-slate-50 rounded-xl mb-1"
+            style={{ gridTemplateColumns: "24px 1fr 145px 155px 76px 105px 115px 36px" }}>
             <span />
             <span>Produkt oder Service</span>
-            <span className="text-right">Menge</span>
-            <span className="text-right">Preis ({bruttoEingabe ? "Brutto" : "Netto"})</span>
-            <span className="text-right">USt.</span>
-            <span className="text-right">Rabatt</span>
+            <span>Menge</span>
+            <span>Preis <span className="font-normal">({bruttoEingabe ? "brutto" : "netto"})</span></span>
+            <span>USt.</span>
+            <span>Rabatt</span>
             <span className="text-right">Betrag</span>
             <span />
           </div>
 
           {/* Position rows */}
           {positionen.map((pos, idx) => (
-            <div key={pos.id} className="border-b border-border/10 last:border-0">
-              {/* Main row */}
-              <div className="grid items-start gap-2 py-2.5 px-1"
-                style={{ gridTemplateColumns: "24px 1fr 100px 120px 64px 90px 100px 28px" }}>
-                {/* Nr */}
-                <span className="text-xs text-muted-foreground pt-2 text-center">{idx + 1}.</span>
+            <div key={pos.id} className="border-b border-dashed border-border/20 last:border-0">
+              <div className="grid items-start gap-x-3 py-3 px-3"
+                style={{ gridTemplateColumns: "24px 1fr 145px 155px 76px 105px 115px 36px" }}>
 
-                {/* Bezeichnung + Beschreibung */}
+                {/* Nr */}
+                <span className="text-sm text-muted-foreground pt-2 text-center select-none">{idx + 1}.</span>
+
+                {/* Bezeichnung + Beschreibung + Optional */}
                 <div className="relative">
                   <input
                     placeholder="Bezeichnung oder Artikel suchen…"
                     value={artikelSuche[pos.id] ?? pos.bezeichnung}
                     onChange={(e) => searchArtikel(pos.id, e.target.value)}
                     onBlur={() => { const q = artikelSuche[pos.id]; if (q !== undefined && q !== pos.bezeichnung) updatePosition(pos.id, { bezeichnung: q }); }}
-                    className="w-full rounded-lg border border-border/20 px-2.5 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
+                    className="w-full rounded-lg border border-border/20 px-3 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
                   />
                   {(artikelSuggestions[pos.id] || []).length > 0 && (
                     <div className="absolute z-20 top-full left-0 right-0 bg-background border border-border/30 rounded-xl shadow-lg mt-1 overflow-hidden">
@@ -1741,71 +1751,114 @@ export default function AdminDokumentEditor() {
                             <p className="font-medium">{a.bezeichnung}</p>
                             {a.beschreibung && <p className="text-xs text-muted-foreground">{a.beschreibung}</p>}
                           </div>
-                          <span className="text-sm font-semibold shrink-0 ml-2">{a.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
+                          <span className="text-sm font-semibold shrink-0 ml-2">{a.preis.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
                         </button>
                       ))}
                     </div>
                   )}
-                  <input
+                  <textarea
                     placeholder="Beschreibung (optional)…"
                     value={pos.beschreibung}
                     onChange={(e) => updatePosition(pos.id, { beschreibung: e.target.value })}
-                    className="mt-1 w-full rounded-lg border border-border/10 px-2.5 py-1 text-xs text-muted-foreground bg-background/40 focus:outline-none focus:ring-1 focus:ring-foreground/10"
+                    rows={3}
+                    className="mt-1.5 w-full rounded-lg border border-border/10 px-3 py-1.5 text-xs text-muted-foreground bg-background/40 focus:outline-none focus:ring-1 focus:ring-foreground/10 resize-y"
                   />
+                  {/* Optional toggle */}
+                  <label className="mt-1.5 flex items-center gap-2 cursor-pointer select-none w-fit">
+                    <div
+                      onClick={() => updatePosition(pos.id, { optional: !pos.optional })}
+                      className={`relative w-8 h-4 rounded-full transition-colors shrink-0 ${pos.optional ? "bg-foreground" : "bg-border/50"}`}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-background shadow transition-transform ${pos.optional ? "translate-x-4" : ""}`} />
+                    </div>
+                    <span className="text-xs font-semibold text-muted-foreground">Optional</span>
+                  </label>
                 </div>
 
-                {/* Menge + Einheit — vertikal gestapelt */}
-                <div className="flex flex-col gap-1">
-                  <input type="number" value={pos.menge} onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value)||0 })}
-                    className="w-full text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
-                  <select value={pos.einheit} onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
-                    className="w-full rounded-lg border border-border/20 px-1.5 py-1 text-xs bg-background focus:outline-none">
+                {/* Menge + Einheit — nebeneinander */}
+                <div className="flex items-center gap-1.5 pt-0.5">
+                  <input
+                    type="number" value={pos.menge} min={0} step="0.01"
+                    onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
+                    className="w-16 text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
+                  />
+                  <select
+                    value={pos.einheit}
+                    onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
+                    className="flex-1 rounded-lg border border-border/20 px-1.5 py-1.5 text-sm bg-background focus:outline-none"
+                  >
                     {["pauschal","Std.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
                   </select>
                 </div>
 
-                {/* Preis */}
-                <input type="number" value={pos.einzelpreis} step="0.01" onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value)||0 })}
-                  className="w-full text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
+                {/* Preis — input mit EUR-Suffix */}
+                <div className="flex items-center rounded-lg border border-border/20 bg-background overflow-hidden pt-0.5">
+                  <input
+                    type="number" value={pos.einzelpreis} step="0.01" min={0}
+                    onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value) || 0 })}
+                    className="flex-1 text-right px-2 py-1.5 text-sm bg-transparent focus:outline-none min-w-0"
+                  />
+                  <span className="pr-2.5 text-sm text-muted-foreground shrink-0">EUR</span>
+                </div>
 
-                {/* MwSt pro Position */}
-                <select value={pos.mwstSatz} onChange={(e) => updatePosition(pos.id, { mwstSatz: parseFloat(e.target.value) })}
-                  className="w-full rounded-lg border border-border/20 px-1.5 py-1.5 text-xs bg-background focus:outline-none">
-                  {[0,7,19].map((r) => <option key={r} value={r}>{r}%</option>)}
+                {/* USt. — button-style select */}
+                <select
+                  value={pos.mwstSatz}
+                  onChange={(e) => updatePosition(pos.id, { mwstSatz: parseFloat(e.target.value) })}
+                  className="w-full rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none pt-0.5"
+                >
+                  {[0, 7, 19].map((r) => <option key={r} value={r}>{r}%</option>)}
                 </select>
 
-                {/* Rabatt */}
-                <div className="flex items-center gap-0.5">
-                  <input type="number" value={pos.rabattProzent ?? ""} placeholder="0"
+                {/* Rabatt — input mit %-Suffix */}
+                <div className="flex items-center rounded-lg border border-border/20 bg-background overflow-hidden pt-0.5">
+                  <input
+                    type="number" value={pos.rabattProzent ?? ""} placeholder="0" min={0} max={100}
                     onChange={(e) => updatePosition(pos.id, { rabattProzent: e.target.value ? parseFloat(e.target.value) : null })}
-                    className="w-full text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
-                  <span className="text-xs text-muted-foreground shrink-0">%</span>
+                    className="flex-1 text-right px-2 py-1.5 text-sm bg-transparent focus:outline-none min-w-0"
+                  />
+                  <span className="pr-2.5 text-sm text-muted-foreground shrink-0">%</span>
                 </div>
 
                 {/* Betrag */}
-                <div className="text-right font-semibold text-sm tabular-nums pt-1.5">
-                  {pos.gesamt.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+                <div className="text-right font-semibold text-sm tabular-nums pt-2">
+                  {pos.gesamt.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
                 </div>
 
                 {/* Delete */}
-                <button onClick={() => removePosition(pos.id)}
-                  className="flex items-center justify-center text-muted-foreground/40 hover:text-red-500 transition-colors w-7 h-7 rounded-lg hover:bg-red-50 mt-0.5">
-                  <Trash2 className="w-3.5 h-3.5" />
+                <button
+                  onClick={() => removePosition(pos.id)}
+                  className="flex items-center justify-center text-muted-foreground/30 hover:text-red-500 transition-colors w-8 h-8 rounded-lg hover:bg-red-50 mt-0.5"
+                >
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             </div>
           ))}
 
-          {/* Add position links */}
-          <div className="flex items-center gap-4 pt-3 pb-1">
-            <button onClick={addPosition} className="text-sm text-blue-600 hover:text-blue-700 font-medium">+ Position hinzufügen</button>
+          {/* Bottom action links */}
+          <div className="flex items-center gap-5 pt-4 pb-1 px-3">
+            <button onClick={addPosition} className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+              + Position hinzufügen
+            </button>
+            <button
+              onClick={() => {/* open artikel picker */}}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
+              + Produkt auswählen
+            </button>
           </div>
 
+            </div>{/* /px-6 */}
+          </div>{/* /Produkte card */}
+
           {/* ════ FUSS-TEXT ════ */}
-          <div className="flex items-center gap-3 pt-8 pb-3">
-            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Fuss-Text</span>
-            <div className="flex-1 border-t border-dashed border-border/40" />
-          </div>
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="px-6 py-3.5 border-b border-slate-100 flex items-center gap-3">
+              <div className="w-1 h-5 rounded-full bg-orange-400 shrink-0" />
+              <h2 className="text-sm font-semibold text-slate-800">Fuss-Text</h2>
+            </div>
+            <div className="p-6">
           <RichTextEditor
             key={`fuss-${id ?? "new"}`}
             value={fusstext}
@@ -1815,82 +1868,103 @@ export default function AdminDokumentEditor() {
             showPlaceholders={false}
             templates={textvorlagen.filter((v) => v.bereich === "fuss" && (v.typ === typ || v.typ === "alle"))}
           />
+            </div>
+          </div>{/* /Fuss-Text card */}
 
           {/* ════ MEHR OPTIONEN ════ */}
-          <div className="flex items-center gap-3 pt-8 pb-4">
-            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Mehr Optionen</span>
-            <div className="flex-1 border-t border-dashed border-border/40" />
-            <button onClick={() => setShowMehrOptionen((v) => !v)}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium shrink-0">
-              {showMehrOptionen ? "Optionen ausblenden" : "Weitere Optionen einblenden"}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <button
+              onClick={() => setShowMehrOptionen((v) => !v)}
+              className="w-full flex items-center justify-between px-6 py-3.5 border-b border-slate-100 hover:bg-slate-50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-1 h-5 rounded-full bg-slate-400 shrink-0" />
+                <h2 className="text-sm font-semibold text-slate-800">Mehr Optionen</h2>
+              </div>
+              <span className="text-xs text-blue-600 font-medium">
+                {showMehrOptionen ? "Ausblenden" : "Einblenden"}
+              </span>
             </button>
-          </div>
-
-          {showMehrOptionen && (
-            <div className="grid grid-cols-2 gap-6 pb-4">
-              <div>
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Mehrwertsteuersatz</label>
-                <div className="flex items-center gap-2 flex-wrap">
-                  {[0, 7, 19].map((r) => (
-                    <button key={r} onClick={() => setMwstSatz(r)}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${mwstSatz === r ? "bg-foreground text-background border-foreground" : "border-border/30 text-muted-foreground hover:text-foreground"}`}>
-                      {r}%
-                    </button>
-                  ))}
+            {showMehrOptionen && (
+              <div className="p-6 grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Mehrwertsteuersatz</label>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {[0, 7, 19].map((r) => (
+                      <button key={r} onClick={() => setMwstSatz(r)}
+                        className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${mwstSatz === r ? "bg-slate-800 text-white border-slate-800" : "border-slate-200 text-slate-500 hover:text-slate-800"}`}>
+                        {r}%
+                      </button>
+                    ))}
+                  </div>
+                  <label className="flex items-center gap-2 mt-3 text-sm cursor-pointer text-slate-500 hover:text-slate-800">
+                    <input type="checkbox" checked={kleinunternehmer} onChange={(e) => setKleinunternehmer(e.target.checked)} className="rounded" />
+                    § 19 UStG – keine Umsatzsteuer ausweisen
+                  </label>
                 </div>
-                <label className="flex items-center gap-2 mt-3 text-sm cursor-pointer text-muted-foreground hover:text-foreground">
-                  <input type="checkbox" checked={kleinunternehmer} onChange={(e) => setKleinunternehmer(e.target.checked)} className="rounded" />
-                  § 19 UStG – keine Umsatzsteuer ausweisen
-                </label>
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Lieferdatum</label>
-                <input type="date" value={lieferdatum} onChange={(e) => setLieferdatum(e.target.value)}
-                  className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 mb-4" />
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Gesamtrabatt</label>
-                <div className="flex items-center gap-2">
-                  <input type="number" value={rabattProzent ?? ""} placeholder="0"
-                    onChange={(e) => setRabattProzent(e.target.value ? parseFloat(e.target.value) : null)}
-                    className="w-24 rounded-xl border border-border/30 px-3 py-2 text-sm text-right bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
-                  <span className="text-sm text-muted-foreground">%</span>
+                <div>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Lieferdatum</label>
+                  <input type="date" value={lieferdatum} onChange={(e) => setLieferdatum(e.target.value)}
+                    className="w-full rounded-xl bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300 mb-4" />
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Gesamtrabatt</label>
+                  <div className="flex items-center gap-2">
+                    <input type="number" value={rabattProzent ?? ""} placeholder="0"
+                      onChange={(e) => setRabattProzent(e.target.value ? parseFloat(e.target.value) : null)}
+                      className="w-24 rounded-xl border border-slate-200 px-3 py-2 text-sm text-right bg-white focus:outline-none focus:ring-2 focus:ring-slate-300" />
+                    <span className="text-sm text-slate-500">%</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>{/* /Mehr Optionen card */}
 
           {/* ════ SUMMEN ════ */}
-          <div className="flex items-center gap-3 pt-4 pb-4">
-            <div className="flex-1 border-t border-dashed border-border/40" />
-          </div>
-          <div className="flex justify-end pb-10">
-            <div className="w-80 space-y-2 text-sm">
-              <div className="flex justify-between text-muted-foreground">
-                <span>Gesamtsumme Netto (inkl. Rabatte / Aufschläge)</span>
-                <span className="tabular-nums ml-4">{summen.netto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex justify-end">
+            <div className="w-96 space-y-2.5 text-sm">
+              <div className="flex justify-between text-slate-500">
+                <span>Netto (inkl. Rabatte)</span>
+                <span className="tabular-nums font-medium text-slate-700">
+                  {summen.netto.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
+                </span>
               </div>
               {summen.gesamtRabatt > 0 && (
-                <div className="flex justify-between text-muted-foreground">
+                <div className="flex justify-between text-slate-500">
                   <span>Rabatt {rabattProzent}%</span>
-                  <span className="tabular-nums ml-4 text-green-600">−{summen.gesamtRabatt.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
+                  <span className="tabular-nums text-green-600 font-medium">
+                    −{summen.gesamtRabatt.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
+                  </span>
                 </div>
               )}
               {kleinunternehmer ? (
-                <div className="flex justify-between text-muted-foreground text-xs italic">
+                <div className="flex justify-between text-slate-400 text-xs italic">
                   <span>Gem. § 19 UStG keine Umsatzsteuer</span>
                   <span>0,00 EUR</span>
                 </div>
+              ) : summen.mwstGruppen && summen.mwstGruppen.length > 0 ? (
+                summen.mwstGruppen.map((g) => (
+                  <div key={g.satz} className="flex justify-between text-slate-500">
+                    <span>Umsatzsteuer {g.satz}%</span>
+                    <span className="tabular-nums font-medium text-slate-700">
+                      {g.steuer.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
+                    </span>
+                  </div>
+                ))
               ) : (
-                <div className="flex justify-between text-muted-foreground">
+                <div className="flex justify-between text-slate-500">
                   <span>Umsatzsteuer {mwstSatz}%</span>
-                  <span className="tabular-nums ml-4">{summen.mwstBetrag.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
+                  <span className="tabular-nums font-medium text-slate-700">
+                    {summen.mwstBetrag.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
+                  </span>
                 </div>
               )}
-              <div className="flex justify-between font-bold text-lg border-t border-border/30 pt-3 mt-1">
+              <div className="flex justify-between font-bold text-xl border-t-2 border-slate-200 pt-3 mt-1 text-slate-900">
                 <span>Gesamt</span>
-                <span className="tabular-nums ml-4">{summen.brutto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
+                <span className="tabular-nums">
+                  {summen.brutto.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
+                </span>
               </div>
             </div>
-          </div>
+          </div>{/* /Summen card */}
 
         </div>
       </div>
