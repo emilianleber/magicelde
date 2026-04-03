@@ -6,7 +6,7 @@ import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentTyp, DokumentStatus } from "@/types/dokumente";
 import {
   Plus, FileText, TrendingUp, AlertTriangle, CheckCircle,
-  Search, ChevronRight, Trash2, Ban,
+  Search, ChevronRight, Trash2, Ban, ThumbsUp, ThumbsDown, MoreVertical,
 } from "lucide-react";
 
 const STATUS_CONFIG: Record<DokumentStatus, { label: string; cls: string }> = {
@@ -115,6 +115,13 @@ export default function AdminDokumenteListe() {
       (d.empfaenger.firma || "").toLowerCase().includes(q)
     );
   });
+
+  const handleStatusChange = async (e: React.MouseEvent, doc: Dokument, status: DokumentStatus) => {
+    e.stopPropagation();
+    await dokumenteService.setStatus(doc.id, status);
+    setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status } : d));
+    setActionId(null);
+  };
 
   const handleStornieren = async (e: React.MouseEvent, doc: Dokument) => {
     e.stopPropagation();
@@ -253,7 +260,7 @@ export default function AdminDokumenteListe() {
         <div className="rounded-2xl border border-border/20 overflow-hidden bg-background">
           {/* Header */}
           <div className="hidden md:grid text-[10px] text-muted-foreground uppercase font-semibold tracking-wider px-4 py-2.5 bg-muted/10 border-b border-border/10"
-            style={{ gridTemplateColumns: "120px 1fr 120px 100px 100px 110px 110px 80px" }}>
+            style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 100px auto" }}>
             <span>Nummer</span>
             <span>Kontakt</span>
             <span>Typ</span>
@@ -261,7 +268,7 @@ export default function AdminDokumenteListe() {
             <span>Fällig</span>
             <span className="text-right">Betrag</span>
             <span className="text-right">Status</span>
-            <span />
+            <span className="text-right">Aktionen</span>
           </div>
 
           {actionId && <div className="fixed inset-0 z-10" onClick={() => setActionId(null)} />}
@@ -269,89 +276,118 @@ export default function AdminDokumenteListe() {
           {filtered.map((doc) => {
             const isOverdue = doc.faelligAm && doc.faelligAm < today && (doc.status === "offen" || doc.status === "gesendet" || doc.status === "ueberfaellig");
             const contact = doc.empfaenger.firma || doc.empfaenger.name || "—";
-            const showActions = actionId === doc.id;
+            const showMenu = actionId === doc.id;
             const isStorniert = doc.status === "storniert";
+            const canAcceptReject = doc.typ === "angebot" && (doc.status === "entwurf" || doc.status === "gesendet");
 
             return (
-              <div key={doc.id} className="relative">
-                <button
-                  onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
-                  className={`w-full text-left hover:bg-muted/20 transition-colors border-b border-border/10 last:border-0 ${isOverdue ? "bg-red-50/30" : ""} ${isStorniert ? "opacity-50" : ""}`}
-                >
-                  {/* Mobile */}
-                  <div className="md:hidden px-4 py-3.5 flex items-center justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-sm font-semibold font-mono">{doc.nummer}</span>
-                        <span className={`text-[10px] font-medium ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
-                      </div>
-                      <p className="text-sm text-muted-foreground truncate">{contact}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{fmtDate(doc.datum)}</p>
-                    </div>
-                    <div className="shrink-0 text-right">
-                      <p className={`text-sm font-bold tabular-nums ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</p>
-                      <div className="mt-1"><StatusBadge status={doc.status} /></div>
-                    </div>
-                  </div>
+              <div key={doc.id} className={`relative border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 ${isOverdue ? "bg-red-50/30 dark:bg-red-900/10" : ""} ${isStorniert ? "opacity-50" : ""}`}>
 
-                  {/* Desktop */}
-                  <div className="hidden md:grid items-center px-4 py-3 text-sm gap-2"
-                    style={{ gridTemplateColumns: "120px 1fr 120px 100px 100px 110px 110px 80px" }}>
-                    <span className="font-mono text-xs font-semibold text-muted-foreground">{doc.nummer}</span>
-                    <div className="min-w-0">
+                {/* ── Mobile ── */}
+                <div
+                  className="md:hidden px-4 py-3.5 flex items-center gap-3 cursor-pointer"
+                  onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-sm font-semibold font-mono">{doc.nummer}</span>
+                      <span className={`text-[10px] font-medium ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground truncate">{contact}</p>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <p className={`text-sm font-bold tabular-nums ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</p>
+                    <div className="mt-1"><StatusBadge status={doc.status} /></div>
+                  </div>
+                </div>
+
+                {/* ── Desktop: grid mit fester Actions-Spalte ── */}
+                <div className="hidden md:grid items-center px-4 gap-2"
+                  style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 100px auto" }}>
+
+                  {/* Daten-Zellen — klickbar zur Detail-Seite */}
+                  <button
+                    onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
+                    className="contents"
+                  >
+                    <span className="font-mono text-xs font-semibold text-muted-foreground py-3">{doc.nummer}</span>
+                    <div className="min-w-0 py-3">
                       <p className="truncate font-medium text-sm">{contact}</p>
                       {doc.empfaenger.firma && doc.empfaenger.name && (
                         <p className="truncate text-xs text-muted-foreground">{doc.empfaenger.name}</p>
                       )}
                     </div>
-                    <span className={`text-xs font-medium ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
-                    <span className="text-xs text-muted-foreground">{fmtDate(doc.datum)}</span>
-                    <span className={`text-xs ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>
-                      {fmtDate(doc.faelligAm)}
-                    </span>
-                    <span className={`text-right font-semibold tabular-nums text-sm ${isOverdue ? "text-red-600" : ""}`}>
-                      {fmt(doc.brutto)}
-                    </span>
-                    <div className="flex justify-end"><StatusBadge status={doc.status} /></div>
-                    {/* Actions toggle placeholder */}
-                    <div className="w-20" />
-                  </div>
-                </button>
-
-                {/* Inline action buttons (shown on hover / toggle) */}
-                <div className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 items-center gap-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity"
-                  style={{ opacity: showActions ? 1 : undefined }}>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setActionId(showActions ? null : doc.id); }}
-                    className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
-                    title="Aktionen"
-                  >
-                    <span className="text-[10px]">···</span>
+                    <span className={`text-xs font-medium py-3 ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
+                    <span className="text-xs text-muted-foreground py-3">{fmtDate(doc.datum)}</span>
+                    <span className={`text-xs py-3 ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>{fmtDate(doc.faelligAm)}</span>
+                    <span className={`text-right font-semibold tabular-nums text-sm py-3 ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</span>
+                    <div className="flex justify-end py-3"><StatusBadge status={doc.status} /></div>
                   </button>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground/40" />
-                </div>
 
-                {/* Actions popup */}
-                {showActions && (
-                  <div className="absolute right-4 top-full mt-1 z-30 bg-background border border-border/30 rounded-xl shadow-lg overflow-hidden w-44">
-                    {!isStorniert && (
-                      <button
-                        onClick={(e) => handleStornieren(e, doc)}
-                        className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-amber-700 hover:bg-amber-50 transition-colors text-left"
-                      >
-                        <Ban className="w-3.5 h-3.5 shrink-0" />
-                        Stornieren
-                      </button>
+                  {/* ── Actions-Spalte (immer sichtbar) ── */}
+                  <div className="flex items-center justify-end gap-1 py-2 pl-2">
+                    {canAcceptReject && (
+                      <>
+                        <button
+                          onClick={(e) => handleStatusChange(e, doc, "akzeptiert")}
+                          title="Angenommen"
+                          className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-semibold text-green-700 bg-green-50 hover:bg-green-100 transition-colors"
+                        >
+                          <ThumbsUp className="w-3 h-3" />
+                          Ja
+                        </button>
+                        <button
+                          onClick={(e) => handleStatusChange(e, doc, "abgelehnt")}
+                          title="Abgelehnt"
+                          className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
+                        >
+                          <ThumbsDown className="w-3 h-3" />
+                          Nein
+                        </button>
+                      </>
                     )}
+
+                    {/* ··· Menü */}
+                    <div className="relative">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setActionId(showMenu ? null : doc.id); }}
+                        title="Weitere Aktionen"
+                        className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </button>
+
+                      {showMenu && (
+                        <div className="absolute right-0 top-full mt-1 z-30 bg-background border border-border/30 rounded-xl shadow-xl overflow-hidden w-44 py-1">
+                          {!isStorniert && (
+                            <button
+                              onClick={(e) => handleStornieren(e, doc)}
+                              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-amber-700 hover:bg-amber-50 transition-colors text-left"
+                            >
+                              <Ban className="w-3.5 h-3.5 shrink-0" />
+                              Stornieren
+                            </button>
+                          )}
+                          <button
+                            onClick={(e) => handleDelete(e, doc)}
+                            className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-red-600 hover:bg-red-50 transition-colors text-left"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 shrink-0" />
+                            Endgültig löschen
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Pfeil zur Detail-Seite */}
                     <button
-                      onClick={(e) => handleDelete(e, doc)}
-                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-red-600 hover:bg-red-50 transition-colors text-left"
+                      onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
+                      className="p-1.5 rounded-lg text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/40 transition-colors"
                     >
-                      <Trash2 className="w-3.5 h-3.5 shrink-0" />
-                      Endgültig löschen
+                      <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
