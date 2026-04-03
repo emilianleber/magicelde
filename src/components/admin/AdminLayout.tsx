@@ -14,7 +14,6 @@ import {
   Zap,
   Menu,
   X,
-  FileText,
   Sparkles,
   Wand2,
   Package,
@@ -35,7 +34,6 @@ interface AdminLayoutProps {
 
 const navItems = [
   { label: "Dashboard",     href: "/admin",           icon: LayoutDashboard },
-  { label: "Dokumente",     href: "/admin/documents", icon: FileText },
   { label: "Anfragen",      href: "/admin/requests",  icon: MessageCircle },
   { label: "Events",        href: "/admin/events",    icon: Calendar },
   { label: "Kunden",        href: "/admin/customers", icon: Users },

@@ -913,8 +913,8 @@ export default function AdminDokumentEditor() {
       </div>
 
       {/* FULL-WIDTH FORM */}
-      <div className="flex-1 overflow-hidden flex min-h-0">
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6 max-w-3xl mx-auto w-full">
+      <div className="flex-1 overflow-hidden flex min-h-0 relative">
+        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6 max-w-3xl mx-auto w-full pb-24">
 
           {/* EMPFÄNGER */}
           <section>
@@ -1256,6 +1256,31 @@ export default function AdminDokumentEditor() {
           </section>
 
           <div className="h-8" />
+        </div>
+
+        {/* ── FLOATING SUMMEN BAR ── */}
+        <div className="absolute bottom-0 left-0 right-0 z-10 bg-background/95 backdrop-blur-sm border-t border-border/20 px-6 py-3">
+          <div className="max-w-3xl mx-auto flex items-center justify-between gap-6">
+            <div className="flex items-center gap-6 text-sm">
+              <div>
+                <span className="text-xs text-muted-foreground">Netto</span>
+                <p className="font-semibold tabular-nums">{summen.netto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
+              </div>
+              {!kleinunternehmer && mwstSatz > 0 && (
+                <div>
+                  <span className="text-xs text-muted-foreground">MwSt. {mwstSatz}%</span>
+                  <p className="font-semibold tabular-nums">{summen.mwstBetrag.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
+                </div>
+              )}
+              {kleinunternehmer && (
+                <span className="text-xs text-muted-foreground">§ 19 UStG – keine MwSt.</span>
+              )}
+            </div>
+            <div className="text-right">
+              <span className="text-xs text-muted-foreground uppercase tracking-wide">Gesamtbetrag</span>
+              <p className="text-xl font-bold tabular-nums">{summen.brutto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

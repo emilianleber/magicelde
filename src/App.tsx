@@ -110,6 +110,7 @@ const AdminRoutes = () => (
     <Route path="/admin/dokumente/angebote" element={<AdminDokumenteListe />} />
     <Route path="/admin/dokumente/rechnungen" element={<AdminDokumenteListe />} />
     <Route path="/admin/dokumente/auftragsbestaetigung" element={<AdminDokumenteListe />} />
+    <Route path="/admin/dokumente/mahnungen" element={<AdminDokumenteListe />} />
     <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
     <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
     <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
@@ -216,6 +217,7 @@ const App = () => (
             <Route path="/admin/dokumente/angebote" element={<AdminDokumenteListe />} />
             <Route path="/admin/dokumente/rechnungen" element={<AdminDokumenteListe />} />
             <Route path="/admin/dokumente/auftragsbestaetigung" element={<AdminDokumenteListe />} />
+            <Route path="/admin/dokumente/mahnungen" element={<AdminDokumenteListe />} />
             <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
             <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
             <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
