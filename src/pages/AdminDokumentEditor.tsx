@@ -499,7 +499,7 @@ function DocumentPreview(props: PreviewProps) {
 
   // ── Shared DIN 5008 body ──────────────────────────────────────────────────
   const renderBody = (thBg: string, thColor: string) => (
-    <div style={{ flex: 1, minHeight: 0 }}>
+    <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
 
       {/* Zone B: Absenderzeile + Anschriftfeld + Informationsblock */}
       <div style={{ padding: `8px ${M}px 0`, display: "flex", gap: 14, alignItems: "flex-start" }}>
@@ -615,8 +615,8 @@ function DocumentPreview(props: PreviewProps) {
         </div>
       </div>
 
-      {/* DIN 5008 Fußzeile – 4 Spalten */}
-      <div style={{ borderTop: "0.75px solid #c0c0c0", margin: `6px ${M}px 0`, paddingTop: 5, paddingBottom: 8, display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
+      {/* DIN 5008 Fußzeile – 4 Spalten (immer am Seitenende) */}
+      <div style={{ marginTop: "auto", borderTop: "0.75px solid #c0c0c0", margin: `auto ${M}px 0`, paddingTop: 5, paddingBottom: 8, display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 600 }}>{absenderName}</div>
           {absenderUntertitel && <div>{absenderUntertitel}</div>}
