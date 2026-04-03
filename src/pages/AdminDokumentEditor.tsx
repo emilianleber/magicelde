@@ -677,40 +677,35 @@ function DocumentPreview(props: PreviewProps) {
   const fmtEur = (n: number) =>
     n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " EUR";
 
-  // Summen – erscheint auf JEDER Seite, nur Positionen dieser Seite
+  // Summen – erscheint auf JEDER Seite, kumulativ bis inkl. dieser Seite
   const renderSummen = (chunk: LocalPosition[]) => {
     const s = calcSummen(chunk, mwstSatz, kleinunternehmer, rabattProzent);
-    const row = (bg: boolean, bold = false, children: React.ReactNode): React.CSSProperties => ({
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: `7px ${M}px`,
-      backgroundColor: bg ? "#eeeeee" : "transparent",
-      fontSize: bold ? 10 : 9.5,
-      fontWeight: bold ? 700 : 400,
-    });
+    const rowBase: React.CSSProperties = {
+      display: "flex", justifyContent: "space-between", alignItems: "center",
+      padding: "7px 6px", fontSize: 9.5,
+    };
     return (
-      <div style={{ borderTop: "1px solid #d8d8d8", marginTop: 4 }}>
+      <div style={{ marginTop: 4, marginLeft: M, marginRight: M, borderTop: "1px solid #d8d8d8" }}>
         {/* Netto */}
-        <div style={{ ...row(true), borderBottom: "3px solid #fff" }}>
+        <div style={{ ...rowBase, backgroundColor: "#eeeeee", borderBottom: "3px solid #fff" }}>
           <span style={{ color: "#333" }}>Gesamtbetrag netto</span>
           <span style={{ color: "#111" }}>{fmtEur(s.netto)}</span>
         </div>
         {/* MwSt */}
         {!kleinunternehmer && mwstSatz > 0 && (
-          <div style={{ ...row(false), borderBottom: "3px solid #fff" }}>
+          <div style={{ ...rowBase, borderBottom: "3px solid #fff" }}>
             <span style={{ color: "#555" }}>zzgl. {mwstSatz}% MwSt.</span>
             <span style={{ color: "#111" }}>{fmtEur(s.mwstBetrag)}</span>
           </div>
         )}
         {/* §19 */}
         {kleinunternehmer && (
-          <div style={{ padding: `5px ${M}px`, fontSize: 9.5, color: "#555", borderBottom: "3px solid #fff" }}>
+          <div style={{ padding: "5px 6px", fontSize: 9.5, color: "#555", borderBottom: "3px solid #fff" }}>
             Umsatzsteuer nicht erhoben gemäß §19UStG.
           </div>
         )}
         {/* Brutto */}
-        <div style={row(true, true)}>
+        <div style={{ ...rowBase, backgroundColor: "#eeeeee", fontWeight: 700, fontSize: 10 }}>
           <span>Gesamtbetrag brutto</span>
           <span>{fmtEur(s.brutto)}</span>
         </div>
@@ -756,6 +751,8 @@ function DocumentPreview(props: PreviewProps) {
       const offset = globalOffset;
       const pageNum = pi + 2;
       globalOffset += chunk.length;
+      // Kumulativ: alle Positionen bis einschließlich dieser Seite
+      const cumulative = pageChunks.slice(0, pi + 2).flat();
       return (
         <div key={`page-${pageNum}`} style={{ ...PAGE_STYLE, backgroundColor: bg }}>
           {/* Continuation header: logo only, proper flow so positions start below */}
@@ -764,7 +761,7 @@ function DocumentPreview(props: PreviewProps) {
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             {renderPositionsBlock(chunk, thBg, thColor, offset)}
-            {renderSummen(chunk)}
+            {renderSummen(cumulative)}
             {isLast ? renderDINBottom(pageNum) : renderDINFooter(pageNum)}
           </div>
         </div>
@@ -862,7 +859,7 @@ function DocumentPreview(props: PreviewProps) {
                 </div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                   {renderPositionsBlock(chunk, color, "#fff", offset)}
-                  {renderSummen(chunk)}
+                  {renderSummen(pageChunks.slice(0, pi + 2).flat())}
                   {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
                 </div>
               </div>
@@ -975,7 +972,7 @@ function DocumentPreview(props: PreviewProps) {
                 </div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                   {renderPositionsBlock(chunk, "#111", "#fff", offset)}
-                  {renderSummen(chunk)}
+                  {renderSummen(pageChunks.slice(0, pi + 2).flat())}
                   {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
                 </div>
               </div>
