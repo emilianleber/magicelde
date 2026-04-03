@@ -336,6 +336,7 @@ export const dokumenteService = {
     if (data.folgedokumentId !== undefined) { patch.folgedokument_id = data.folgedokumentId; patch.folgedokument_typ = data.folgedokumentTyp || null; }
     if (data.customerId !== undefined) patch.customer_id = data.customerId;
     if (data.eventId !== undefined) patch.event_id = data.eventId;
+    if (data.requestId !== undefined) patch.request_id = data.requestId;
     if (data.showId !== undefined) patch.show_id = data.showId;
     if (data.produktionId !== undefined) patch.produktion_id = data.produktionId;
 

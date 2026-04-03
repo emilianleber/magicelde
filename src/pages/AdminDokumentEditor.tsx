@@ -1094,6 +1094,8 @@ export default function AdminDokumentEditor() {
   const [kontaktSuche, setKontaktSuche] = useState("");
   const [kontaktSuggestions, setKontaktSuggestions] = useState<Record<string, string>[]>([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [empfaengerName, setEmpfaengerName] = useState("");
   const [empfaengerFirma, setEmpfaengerFirma] = useState("");
   const [empfaengerAdresse, setEmpfaengerAdresse] = useState("");
@@ -1200,6 +1202,15 @@ export default function AdminDokumentEditor() {
     });
   }, [authChecked, isNew]);
 
+  // Pre-fill request/event from URL params
+  useEffect(() => {
+    if (!authChecked || !isNew) return;
+    const reqId = searchParams.get("requestId");
+    const evId = searchParams.get("eventId");
+    if (reqId) setSelectedRequestId(reqId);
+    if (evId) setSelectedEventId(evId);
+  }, [authChecked, isNew, searchParams]);
+
   // Pre-fill customer from URL param ?customerId=... when creating a new document
   useEffect(() => {
     if (!authChecked || !isNew) return;
@@ -1256,6 +1267,8 @@ export default function AdminDokumentEditor() {
         gesamt: p.gesamt,
       })));
       setSelectedCustomerId(doc.customerId || null);
+      setSelectedRequestId(doc.requestId || null);
+      setSelectedEventId(doc.eventId || null);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [authChecked, isNew, id, navigate]);
@@ -1411,6 +1424,8 @@ export default function AdminDokumentEditor() {
             fusstext,
             status: "entwurf",
             customerId: selectedCustomerId || undefined,
+            requestId: selectedRequestId || undefined,
+            eventId: selectedEventId || undefined,
             rabattProzent: rabattProzent ?? undefined,
             previewHtml,
           },
@@ -1432,6 +1447,8 @@ export default function AdminDokumentEditor() {
             kopftext,
             fusstext,
             customerId: selectedCustomerId || undefined,
+            requestId: selectedRequestId || undefined,
+            eventId: selectedEventId || undefined,
             rabattProzent: rabattProzent ?? undefined,
             previewHtml,
           },
@@ -1487,6 +1504,7 @@ export default function AdminDokumentEditor() {
           datum, faelligAm: faelligAm || undefined, gueltigBis: gueltigBis || undefined,
           lieferdatum: lieferdatum || undefined, zahlungszielTage, empfaenger, absender,
           kopftext, fusstext, status: "entwurf", customerId: selectedCustomerId || undefined,
+          requestId: selectedRequestId || undefined, eventId: selectedEventId || undefined,
           rabattProzent: rabattProzent ?? undefined, previewHtml,
         }, posForService);
         navigate(`/admin/dokumente/${saved.id}?send=1`);
@@ -1495,6 +1513,7 @@ export default function AdminDokumentEditor() {
           datum, faelligAm: faelligAm || undefined, gueltigBis: gueltigBis || undefined,
           lieferdatum: lieferdatum || undefined, zahlungszielTage, empfaenger, absender,
           kopftext, fusstext, customerId: selectedCustomerId || undefined,
+          requestId: selectedRequestId || undefined, eventId: selectedEventId || undefined,
           rabattProzent: rabattProzent ?? undefined, previewHtml,
         }, posForService);
         navigate(`/admin/dokumente/${id}?send=1`);
