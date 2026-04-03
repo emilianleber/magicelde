@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentStatus, DokumentTyp, Zahlung } from "@/types/dokumente";
 import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 import {
   ArrowLeft, Pencil, Send, CheckCircle, XCircle, ArrowRight,
   Receipt, AlertTriangle, Plus, X, Clock, Trash2, Ban, MoreHorizontal,
@@ -183,7 +184,39 @@ export default function AdminDokumentDetail() {
     }
   };
 
-  // ── PDF-Generierung ──────────────────────────────────────────────────────────
+  // ── PDF-Blob aus gespeichertem preview_html (html2canvas) ────────────────────
+  const generatePreviewPdfBlob = async (html: string): Promise<Blob> => {
+    const container = document.createElement("div");
+    container.style.cssText = "position:fixed;left:-9999px;top:0;width:595px;pointer-events:none;background:white;";
+    container.innerHTML = html;
+    document.body.appendChild(container);
+    try {
+      // Bilder abwarten
+      const imgs = Array.from(container.querySelectorAll("img"));
+      await Promise.all(imgs.map(img =>
+        img.complete ? Promise.resolve() : new Promise<void>(res => { img.onload = () => res(); img.onerror = () => res(); })
+      ));
+      const pages = Array.from(container.children) as HTMLElement[];
+      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
+        page.style.width = "595px";
+        page.style.height = "840px";
+        page.style.overflow = "hidden";
+        const canvas = await html2canvas(page, {
+          scale: 2, useCORS: true, allowTaint: true,
+          backgroundColor: "#ffffff", width: 595, height: 840, logging: false,
+        });
+        if (i > 0) pdf.addPage();
+        pdf.addImage(canvas.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 210, 297);
+      }
+      return pdf.output("blob");
+    } finally {
+      document.body.removeChild(container);
+    }
+  };
+
+  // ── Legacy-PDF (nur noch intern, falls preview_html fehlt) ───────────────────
   const generatePdf = (d: Dokument): jsPDF => {
     const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
     const ML = 20, MR = 20, W = 210;
@@ -434,27 +467,63 @@ body > div:last-child {
 
   const handlePublishPortal = async () => {
     if (!doc || !id) return;
+
+    // Nur mit Event- oder Anfragen-Verknüpfung
+    if (!doc.eventId && !doc.requestId) {
+      setSendMsg({ type: "err", text: "Dieses Dokument ist keinem Event oder keiner Anfrage zugeordnet und kann nicht im Kundenportal veröffentlicht werden." });
+      return;
+    }
+    if (!doc.previewHtml) {
+      setSendMsg({ type: "err", text: "Kein Preview vorhanden – bitte Dokument im Editor öffnen und einmal speichern." });
+      return;
+    }
+
     setSendLoading("portal"); setSendMsg(null);
     try {
-      const pdf = generatePdf(doc);
-      const blob = pdf.output("blob");
-      const signedUrl = await uploadPdfBlob(blob, id);
-      // Auch E-Mail senden wenn Adresse vorhanden
-      if (emailTo) {
-        await supabase.functions.invoke("send-customer-mail", {
-          body: {
-            to_email: emailTo,
-            to_name: doc.empfaenger.firma || doc.empfaenger.name,
-            subject: emailSubject,
-            body: emailBody.replace(/\n/g, "<br>"),
-            attachment_urls: [signedUrl],
-            customer_id: (doc as any).customerId ?? null,
-          },
-        });
-      }
+      // 1. PDF aus preview_html generieren
+      const blob = await generatePreviewPdfBlob(doc.previewHtml);
+
+      // 2. In Storage hochladen + file_url speichern
+      await uploadPdfBlob(blob, id);
+
+      // 3. Dokument-Status → gesendet
       await dokumenteService.setStatus(id, "gesendet");
+
+      // 4. Auth-Token für admin-send-status-mail
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+
+      // 5. Request/Event-Status + Statusmail je nach Dokumenttyp
+      if (doc.requestId && (doc.typ === "angebot" || doc.typ === "auftragsbestaetigung")) {
+        const reqStatus = doc.typ === "angebot" ? "angebot_gesendet" : "gebucht";
+        await supabase.from("portal_requests").update({ status: reqStatus }).eq("id", doc.requestId);
+        await supabase.functions.invoke("admin-send-status-mail", {
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+          body: { type: "request", recordId: doc.requestId, status: reqStatus },
+        });
+      } else if (doc.eventId) {
+        let eventStatus: string | null = null;
+        let mailStatus: string | null = null;
+        if (doc.typ === "auftragsbestaetigung") {
+          eventStatus = "vertrag_gesendet"; mailStatus = "vertrag_gesendet";
+        } else if (doc.typ === "rechnung" || doc.typ === "abschlagsrechnung") {
+          eventStatus = "rechnung_gesendet"; mailStatus = "rechnung_gesendet";
+        } else if (doc.typ === "mahnung") {
+          eventStatus = "rechnung_faellig"; mailStatus = "rechnung_faellig";
+        }
+        if (eventStatus) {
+          await supabase.from("portal_events").update({ status: eventStatus }).eq("id", doc.eventId);
+        }
+        if (mailStatus) {
+          await supabase.functions.invoke("admin-send-status-mail", {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+            body: { type: "event", recordId: doc.eventId, status: mailStatus },
+          });
+        }
+      }
+
       await load();
-      setSendMsg({ type: "ok", text: emailTo ? "Im Portal veröffentlicht & E-Mail gesendet ✓" : "Im Kundenportal veröffentlicht ✓" });
+      setSendMsg({ type: "ok", text: "Im Kundenportal veröffentlicht & Statusmail gesendet ✓" });
     } catch (e: unknown) {
       setSendMsg({ type: "err", text: "Fehler: " + ((e as any)?.message || String(e)) });
     } finally { setSendLoading(null); }
@@ -462,10 +531,13 @@ body > div:last-child {
 
   const handleSendEmail = async () => {
     if (!doc || !id || !emailTo) return;
+    if (!doc.previewHtml) {
+      setSendMsg({ type: "err", text: "Kein Preview vorhanden – bitte Dokument im Editor öffnen und einmal speichern." });
+      return;
+    }
     setSendLoading("email"); setSendMsg(null);
     try {
-      const pdf = generatePdf(doc);
-      const blob = pdf.output("blob");
+      const blob = await generatePreviewPdfBlob(doc.previewHtml);
       const signedUrl = await uploadPdfBlob(blob, id);
       const { error } = await supabase.functions.invoke("send-customer-mail", {
         body: {
@@ -474,7 +546,7 @@ body > div:last-child {
           subject: emailSubject,
           body: emailBody.replace(/\n/g, "<br>"),
           attachment_urls: [signedUrl],
-          customer_id: (doc as any).customerId ?? null,
+          customer_id: doc.customerId ?? null,
         },
       });
       if (error) throw error;
@@ -925,26 +997,35 @@ body > div:last-child {
                 </button>
               </div>
 
-              {/* Option 2: Kundenportal + E-Mail */}
-              <div className="rounded-2xl border border-blue-200 bg-blue-50/30 p-4">
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
-                    <Send className="w-4 h-4 text-blue-600" />
+              {/* Option 2: Kundenportal */}
+              {(() => {
+                const canPublish = !!(doc.eventId || doc.requestId);
+                return (
+                  <div className={`rounded-2xl border p-4 ${canPublish ? "border-blue-200 bg-blue-50/30" : "border-border/20 bg-muted/5 opacity-60"}`}>
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${canPublish ? "bg-blue-100" : "bg-muted/40"}`}>
+                        <Globe className={`w-4 h-4 ${canPublish ? "text-blue-600" : "text-muted-foreground"}`} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">Im Kundenportal veröffentlichen</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {canPublish
+                            ? "PDF hochladen · Status aktualisieren · Statusmail an Kunden"
+                            : "Nur für Dokumente mit Event- oder Anfragen-Verknüpfung"}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handlePublishPortal}
+                      disabled={sendLoading !== null || !canPublish}
+                      className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 ${canPublish ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-muted text-muted-foreground cursor-not-allowed"}`}
+                    >
+                      {sendLoading === "portal" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Globe className="w-3.5 h-3.5" />}
+                      {sendLoading === "portal" ? "Wird veröffentlicht…" : "Im Portal veröffentlichen"}
+                    </button>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold">Versenden</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">PDF im Kundenportal veröffentlichen + E-Mail senden · Status → Gesendet</p>
-                  </div>
-                </div>
-                <button
-                  onClick={handlePublishPortal}
-                  disabled={sendLoading !== null}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
-                >
-                  {sendLoading === "portal" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                  {sendLoading === "portal" ? "Sende…" : "Jetzt versenden"}
-                </button>
-              </div>
+                );
+              })()}
 
               {/* Option 3: E-Mail */}
               <div className="rounded-2xl border border-border/20 bg-muted/5 p-4 space-y-3">
