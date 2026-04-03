@@ -394,6 +394,7 @@ interface PreviewProps {
   absenderSteuernummer: string;
   absenderInhaber: string;
   absenderLand: string;
+  logoUrl: string;
 }
 
 interface SummenResult {
@@ -429,536 +430,367 @@ function DocumentPreview(props: PreviewProps) {
     kopftext, fusstext, positionen, mwstSatz, kleinunternehmer, rabattProzent,
     absenderName, absenderUntertitel, absenderAdresse, absenderPlz, absenderOrt,
     absenderEmail, absenderTel, absenderWebsite, absenderIban, absenderBic, absenderSteuernummer,
-    absenderInhaber, absenderLand,
+    absenderInhaber, absenderLand, logoUrl,
   } = props;
 
   const summen = calcSummen(positionen, mwstSatz, kleinunternehmer, rabattProzent);
   const typLabel = TYP_LABEL[typ] || typ;
   const initials = (absenderName || "E").charAt(0).toUpperCase();
 
-  // A4 preview: 595px wide × 842px tall → use real document proportions
-  // Fonts match ~10pt body text at 72dpi
   const font = layoutId === 4 ? "'Courier New', Courier, monospace"
     : layoutId === 10 ? "Georgia, 'Times New Roman', serif"
     : "Inter, system-ui, -apple-system, sans-serif";
 
-  const PX = {
-    marginH: 52,        // 18mm horizontal margin
-    logoSize: 68,       // logo placeholder
-    logoTop: 22,
-    logoRight: 52,
-    headerH: 115,       // Briefkopf zone height
-    absenderzeileY: 120,
-    anschriftY: 138,
-    betreffY: 295,
-    bodyTextY: 318,
-    tableY: 345,
-    footerH: 82,        // footer zone height at bottom
-    body: 9.5,          // base body font size
-    title: 12,
-    small: 8,
-    caption: 7.5,
-  };
+  // A4 proportions for 595px wide container
+  const M = 52;   // horizontal margin ≈ 18mm
+  const LS = 68;  // logo square size
 
   const metaRows = [
-    { label: `${typLabel}-Nr.`, val: nummer || "—" },
-    { label: "Datum", val: datum || "—" },
-    ...(lieferdatum ? [{ label: "Lieferdatum", val: lieferdatum }] : []),
-    ...(faelligAm   ? [{ label: "Zahlungsziel", val: faelligAm }]   : []),
-    ...(gueltigBis  ? [{ label: "Gültig bis",   val: gueltigBis }]  : []),
-    { label: "Ihre Kundennummer", val: "—" },
-    { label: "Ihr Ansprechpartner", val: absenderName },
+    { label: `${typLabel}-Nr.`,    val: nummer     || "—" },
+    { label: "Datum",              val: datum       || "—" },
+    ...(lieferdatum ? [{ label: "Lieferdatum",    val: lieferdatum }] : []),
+    ...(faelligAm   ? [{ label: "Zahlungsziel",   val: faelligAm }]   : []),
+    ...(gueltigBis  ? [{ label: "Gültig bis",     val: gueltigBis }]  : []),
+    { label: "Ihre Kundennummer",  val: "—" },
+    { label: "Ihr Ansprechpartner",val: absenderName },
   ];
 
   const leistungPos = positionen.filter(p => p.typ === "leistung").slice(0, 8);
 
-  // ── Shared DIN 5008 body (below Briefkopf) ────────────────────────────────
-  const renderBody = (tableHBg: string, tableHColor: string) => (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-
-      {/* Zone B: Absenderzeile + Anschrift + Bezugszeichen */}
-      <div style={{ padding: `8px ${PX.marginH}px 0`, display: "flex", gap: 16, alignItems: "flex-start" }}>
-        {/* Empfängerblock */}
-        <div style={{ flex: "0 0 46%", fontSize: PX.body, lineHeight: 1.6, color: "#222" }}>
-          {/* DIN 5008 Absenderzeile */}
-          <div style={{ fontSize: PX.caption, color: "#999", borderBottom: "0.5px solid #ddd", paddingBottom: 2, marginBottom: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            {absenderName} – {absenderAdresse} – {absenderPlz} {absenderOrt}
-          </div>
-          {empfaengerFirma && <div style={{ fontWeight: 600 }}>{empfaengerFirma}</div>}
-          <div>{empfaengerName || <span style={{ color: "#ccc" }}>Empfänger</span>}</div>
-          {empfaengerAdresse && <div>{empfaengerAdresse}</div>}
-          {(empfaengerPlz || empfaengerOrt) && <div>{empfaengerPlz} {empfaengerOrt}</div>}
-          {empfaengerLand && empfaengerLand !== "Deutschland" && <div>{empfaengerLand}</div>}
-        </div>
-        {/* Informationsblock (Bezugszeichen) */}
-        <div style={{ flex: 1, fontSize: PX.small + 0.5, lineHeight: 1.75 }}>
-          {metaRows.map(r => (
-            <div key={r.label} style={{ display: "flex" }}>
-              <div style={{ color: "#888", minWidth: 100, flexShrink: 0 }}>{r.label}</div>
-              <div style={{ fontWeight: 600, color: "#111" }}>{r.val}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Blank / Bezugszeile space */}
-      <div style={{ height: 22 }} />
-
-      {/* Zone C: Betreff */}
-      <div style={{ padding: `0 ${PX.marginH}px 4px` }}>
-        <div style={{ fontSize: PX.title, fontWeight: 700, color: "#111" }}>
-          {typLabel}{nummer ? ` ${nummer}` : ""}
-        </div>
-      </div>
-
-      {/* Anrede + Kopftext */}
-      <div style={{ padding: `0 ${PX.marginH}px 6px`, fontSize: PX.body, color: "#333", lineHeight: 1.55 }}>
-        {kopftext
-          ? <>{kopftext.substring(0, 200)}{kopftext.length > 200 ? "…" : ""}</>
-          : <>Sehr geehrte Damen und Herren,<br />vielen Dank für Ihre Anfrage. Gerne unterbreite ich Ihnen das gewünschte Angebot:</>
-        }
-      </div>
-
-      {/* Positionen-Tabelle */}
-      <div style={{ padding: `0 ${PX.marginH}px`, flex: 1 }}>
-        {/* Tabellenkopf */}
-        <div style={{ display: "flex", backgroundColor: tableHBg, color: tableHColor, padding: "4px 6px", fontSize: PX.small, fontWeight: 700 }}>
-          <span style={{ width: 28 }}>Pos.</span>
-          <span style={{ flex: 4 }}>Beschreibung</span>
-          <span style={{ width: 52, textAlign: "right" }}>Menge</span>
-          <span style={{ width: 62, textAlign: "right" }}>Einzelpreis</span>
-          <span style={{ width: 68, textAlign: "right" }}>Gesamtpreis</span>
-        </div>
-        {leistungPos.length === 0 ? (
-          <div style={{ padding: "6px 6px", fontSize: PX.small, color: "#ccc", borderBottom: "0.5px solid #eee" }}>
-            Noch keine Positionen
-          </div>
-        ) : leistungPos.map((pos, i) => (
-          <div key={pos.id} style={{ display: "flex", padding: "3.5px 6px", backgroundColor: i % 2 === 0 ? "#f9f9f9" : "#fff", borderBottom: "0.5px solid #ebebeb", fontSize: PX.small + 0.5 }}>
-            <span style={{ width: 28, color: "#999" }}>{i + 1}.</span>
-            <span style={{ flex: 4, color: pos.bezeichnung ? "#111" : "#bbb" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</span>
-            <span style={{ width: 52, textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit?.substring(0, 4)}</span>
-            <span style={{ width: 62, textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
-            <span style={{ width: 68, textAlign: "right", fontWeight: 600, color: "#111" }}>{fmt(pos.gesamt)}</span>
-          </div>
-        ))}
-        <div style={{ borderTop: "0.5px solid #ccc", marginTop: 1 }} />
-      </div>
-
-      {/* Summen */}
-      <div style={{ padding: `4px ${PX.marginH}px`, display: "flex", justifyContent: "flex-end" }}>
-        <div style={{ minWidth: 210, fontSize: PX.body }}>
-          <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
-            <span>Gesamtbetrag netto</span>
-            <span style={{ color: "#111" }}>{fmt(summen.netto)}</span>
-          </div>
-          {!kleinunternehmer && mwstSatz > 0 && (
-            <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
-              <span>zzgl. MwSt. {mwstSatz}%</span>
-              <span style={{ color: "#111" }}>{fmt(summen.mwstBetrag)}</span>
-            </div>
-          )}
-          {kleinunternehmer && (
-            <div style={{ fontSize: PX.small, color: "#999", lineHeight: 1.4, marginBottom: 3 }}>
-              Umsatzsteuer nicht erhoben gemäß §19 UStG.
-            </div>
-          )}
-          <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #111", paddingTop: 3, marginTop: 2, fontWeight: 700, fontSize: PX.body + 1 }}>
-            <span>Gesamtbetrag brutto</span>
-            <span style={{ color }}>{fmt(summen.brutto)}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Fußtext / Zahlungsbedingungen */}
-      {fusstext && (
-        <div style={{ padding: `3px ${PX.marginH}px`, fontSize: PX.small + 0.5, color: "#444", lineHeight: 1.55 }}>
-          {fusstext.substring(0, 200)}{fusstext.length > 200 ? "…" : ""}
-        </div>
-      )}
-
-      {/* Grußformel */}
-      <div style={{ padding: `6px ${PX.marginH}px 4px`, fontSize: PX.body, color: "#333", lineHeight: 1.6 }}>
-        Mit magischen Grüßen
-        <div style={{ marginTop: 12 }}>
-          <div style={{ fontWeight: 600 }}>{absenderName}</div>
-          {absenderUntertitel && <div style={{ color: "#666" }}>{absenderUntertitel}</div>}
-        </div>
-      </div>
-
-      {/* ── DIN 5008 Fußzeile: 4 Spalten ────────────────────────────────── */}
-      <div style={{ borderTop: "0.75px solid #bbb", margin: `4px ${PX.marginH}px 0`, paddingTop: 6, paddingBottom: 8, display: "flex", gap: 0, fontSize: PX.caption + 0.5, color: "#555", lineHeight: 1.65 }}>
-        {/* Spalte 1: Adresse */}
-        <div style={{ flex: 1 }}>
-          <div>{absenderName} {absenderUntertitel}</div>
-          {absenderAdresse && <div>{absenderAdresse}</div>}
-          {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
-          {absenderLand && <div>{absenderLand}</div>}
-        </div>
-        {/* Spalte 2: Kontakt */}
-        <div style={{ flex: 1 }}>
-          {absenderTel     && <div>Tel. {absenderTel}</div>}
-          {absenderEmail   && <div>E-Mail {absenderEmail}</div>}
-          {absenderWebsite && <div>Web {absenderWebsite}</div>}
-        </div>
-        {/* Spalte 3: Steuer */}
-        <div style={{ flex: 1 }}>
-          {absenderSteuernummer && <div>Steuer-Nr. {absenderSteuernummer}</div>}
-          {absenderInhaber      && <div>Inhaber/-in {absenderInhaber}</div>}
-        </div>
-        {/* Spalte 4: Bank */}
-        <div style={{ flex: 1 }}>
-          {absenderIban && <div>IBAN {absenderIban}</div>}
-          {absenderBic  && <div>BIC {absenderBic}</div>}
-        </div>
-      </div>
-    </div>
-  );
-
-  // ── DIN 5008 Body (shared across all layouts) ────────────────────────────────
-  const renderDIN5008Body = (tableHeaderBg = "#111", tableHeaderColor = "#fff", dark = false) => {
-    const metaRows = [
-      { label: `${typLabel}-Nr.`, val: nummer || "—" },
-      { label: "Datum", val: datum || "—" },
-      ...(lieferdatum ? [{ label: "Lieferdatum", val: lieferdatum }] : []),
-      ...(faelligAm ? [{ label: "Zahlungsziel", val: faelligAm }] : []),
-      ...(gueltigBis ? [{ label: "Gültig bis", val: gueltigBis }] : []),
-      { label: "Ansprechpartner", val: absenderName },
-    ];
-    const leistungPos = positionen.filter(p => p.typ === "leistung").slice(0, 7);
-
+  // ── Logo helper ───────────────────────────────────────────────────────────
+  const Logo = ({ dark = false, posStyle = {} }: { dark?: boolean; posStyle?: React.CSSProperties }) => {
+    const base: React.CSSProperties = { position: "absolute", top: 22, right: M, width: LS, height: LS, ...posStyle };
+    if (logoUrl) {
+      return <img src={logoUrl} style={{ ...base, objectFit: "contain", borderRadius: 4 }} alt="Logo" />;
+    }
     return (
-      <>
-        {/* ── DIN 5008 Zone B: Anschriftfeld links + Informationsblock rechts ── */}
-        <div style={{ display: "flex", padding: "4px 14px 0", gap: "8px", alignItems: "flex-start" }}>
-          {/* Empfängerfeld (DIN 5008: 40mm hoch, 85mm breit) */}
-          <div style={{ flex: "0 0 50%", fontSize: "6px", lineHeight: 1.65 }}>
-            {/* Absenderzeile */}
-            <div style={{ fontSize: "5px", color: "#888", borderBottom: "0.5px solid #ddd", paddingBottom: "1.5px", marginBottom: "3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {absenderName} – {absenderAdresse} – {absenderPlz} {absenderOrt}
-            </div>
-            {empfaengerFirma && <div style={{ fontWeight: "bold", color: "#111" }}>{empfaengerFirma}</div>}
-            <div style={{ color: "#111" }}>{empfaengerName || "–"}</div>
-            {empfaengerAdresse && <div style={{ color: "#444" }}>{empfaengerAdresse}</div>}
-            {(empfaengerPlz || empfaengerOrt) && <div style={{ color: "#444" }}>{empfaengerPlz} {empfaengerOrt}</div>}
-            {empfaengerLand && empfaengerLand !== "Deutschland" && <div style={{ color: "#666" }}>{empfaengerLand}</div>}
-          </div>
-          {/* Informationsblock (Bezugszeichen) */}
-          <div style={{ flex: 1, fontSize: "6px" }}>
-            {metaRows.map(r => (
-              <div key={r.label} style={{ display: "flex", lineHeight: 1.65 }}>
-                <div style={{ color: "#888", width: "56px", flexShrink: 0 }}>{r.label}</div>
-                <div style={{ fontWeight: "600", color: "#111", flex: 1 }}>{r.val}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── DIN 5008 Leerraum ── */}
-        <div style={{ height: "6px" }} />
-
-        {/* ── DIN 5008 Zone C: Betreff ── */}
-        <div style={{ padding: "0 14px 3px" }}>
-          <div style={{ fontSize: "7.5px", fontWeight: "700", color: "#111" }}>
-            {typLabel}{nummer ? ` ${nummer}` : ""}
-          </div>
-        </div>
-
-        {/* ── Anrede + Kopftext ── */}
-        {kopftext ? (
-          <div style={{ padding: "1px 14px 3px", fontSize: "6px", color: "#333", lineHeight: 1.5 }}>
-            {kopftext.substring(0, 120)}{kopftext.length > 120 ? "…" : ""}
-          </div>
-        ) : (
-          <div style={{ padding: "1px 14px 3px", fontSize: "6px", color: "#333" }}>
-            Sehr geehrte Damen und Herren,
-          </div>
-        )}
-
-        {/* ── Positionen-Tabelle ── */}
-        <div style={{ padding: "3px 14px 0" }}>
-          {/* Tabellenkopf */}
-          <div style={{ display: "flex", backgroundColor: tableHeaderBg, color: tableHeaderColor, padding: "2px 3px", fontSize: "5.5px", fontWeight: "bold" }}>
-            <span style={{ width: "16px" }}>Pos.</span>
-            <span style={{ flex: 4 }}>Beschreibung</span>
-            <span style={{ width: "32px", textAlign: "right" }}>Menge</span>
-            <span style={{ width: "38px", textAlign: "right" }}>Einzelpr.</span>
-            <span style={{ width: "40px", textAlign: "right" }}>Gesamtpr.</span>
-          </div>
-          {/* Zeilen */}
-          {leistungPos.map((pos, i) => (
-            <div key={pos.id} style={{ display: "flex", padding: "1.5px 3px", backgroundColor: i % 2 === 0 ? "#f9f9f9" : "#fff", borderBottom: "0.5px solid #ececec", fontSize: "5.5px" }}>
-              <span style={{ width: "16px", color: "#888" }}>{i + 1}.</span>
-              <span style={{ flex: 4, color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</span>
-              <span style={{ width: "32px", textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit?.substring(0, 4)}</span>
-              <span style={{ width: "38px", textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
-              <span style={{ width: "40px", textAlign: "right", fontWeight: "600", color: "#111" }}>{fmt(pos.gesamt)}</span>
-            </div>
-          ))}
-          {/* Trennlinie */}
-          <div style={{ borderTop: "0.5px solid #ddd", marginTop: "1px" }} />
-        </div>
-
-        {/* ── Summen (rechts ausgerichtet, DIN 5008) ── */}
-        <div style={{ padding: "3px 14px", display: "flex", justifyContent: "flex-end" }}>
-          <div style={{ minWidth: "140px", fontSize: "6px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.8, color: "#555" }}>
-              <span>Gesamtbetrag netto</span>
-              <span style={{ color: "#111" }}>{fmt(summen.netto)}</span>
-            </div>
-            {!kleinunternehmer && mwstSatz > 0 && (
-              <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.8, color: "#555" }}>
-                <span>zzgl. MwSt. {mwstSatz}%</span>
-                <span style={{ color: "#111" }}>{fmt(summen.mwstBetrag)}</span>
-              </div>
-            )}
-            {kleinunternehmer && (
-              <div style={{ fontSize: "5px", color: "#999", lineHeight: 1.4, marginBottom: "2px" }}>
-                Umsatzsteuer nicht erhoben gemäß §19 UStG.
-              </div>
-            )}
-            <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #111", paddingTop: "2px", marginTop: "1px", fontWeight: "bold", fontSize: "7px" }}>
-              <span>Gesamtbetrag brutto</span>
-              <span style={{ color }}>{fmt(summen.brutto)}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Fußtext / Zahlungsbedingungen ── */}
-        {fusstext && (
-          <div style={{ padding: "2px 14px", fontSize: "5.5px", color: "#555", lineHeight: 1.4 }}>
-            {fusstext.substring(0, 120)}{fusstext.length > 120 ? "…" : ""}
-          </div>
-        )}
-
-        {/* ── Grußformel ── */}
-        <div style={{ padding: "3px 14px 2px", fontSize: "6px", color: "#333" }}>
-          Mit magischen Grüßen
-          <div style={{ marginTop: "4px" }}>
-            <div style={{ fontWeight: "600" }}>{absenderName}</div>
-            {absenderUntertitel && <div style={{ color: "#777" }}>{absenderUntertitel}</div>}
-          </div>
-        </div>
-
-        {/* ── DIN 5008 Fußzeile ── */}
-        <div style={{ borderTop: "0.5px solid #ccc", margin: "2px 14px 0", paddingTop: "2px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "5px", color: "#999" }}>
-            <span>{absenderName} – {absenderAdresse} – {absenderPlz} {absenderOrt}</span>
-            {absenderIban && <span>IBAN: {absenderIban.replace(/(.{4})/g, "$1 ").trim()}</span>}
-            {absenderSteuernummer && <span>St.-Nr.: {absenderSteuernummer}</span>}
-          </div>
-          {(absenderTel || absenderEmail || absenderWebsite) && (
-            <div style={{ display: "flex", gap: "8px", fontSize: "5px", color: "#bbb", marginTop: "1px" }}>
-              {absenderTel && <span>Tel.: {absenderTel}</span>}
-              {absenderEmail && <span>{absenderEmail}</span>}
-              {absenderWebsite && <span>{absenderWebsite}</span>}
-            </div>
-          )}
-        </div>
-      </>
+      <div style={{ ...base, borderRadius: 6, backgroundColor: dark ? "rgba(255,255,255,0.14)" : "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ fontSize: 8, color: dark ? "rgba(255,255,255,0.45)" : "#ccc", fontWeight: 600 }}>LOGO</span>
+      </div>
     );
   };
 
-  // ── Briefkopf-Bausteine ──────────────────────────────────────────────────────
-  const M = PX.marginH;
-  const LS = PX.logoSize;
-
-  // Logo-Platzhalter (oben rechts, wie im DIN 5008 Beispiel)
-  const LogoBox = ({ dark = false }: { dark?: boolean }) => (
-    <div style={{ position: "absolute", top: PX.logoTop, right: M, width: LS, height: LS, borderRadius: 6, backgroundColor: dark ? "rgba(255,255,255,0.12)" : "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 2 }}>
-      <div style={{ fontSize: 9, color: dark ? "rgba(255,255,255,0.35)" : "#ccc", fontWeight: 600, letterSpacing: 0.5 }}>LOGO</div>
-    </div>
-  );
-
-  // Absender-Textblock (oben links)
-  const AbsenderBlock = ({ color: c = "#111", sub = "#666", addr = "#888" }: { color?: string; sub?: string; addr?: string }) => (
+  // ── Sender text blocks ────────────────────────────────────────────────────
+  const AbsBlock = ({ nameC = "#111", subC = "#666", addrC = "#888" }: { nameC?: string; subC?: string; addrC?: string }) => (
     <div>
-      <div style={{ fontSize: 13, fontWeight: 700, color: c, lineHeight: 1.25 }}>{absenderName}</div>
-      {absenderUntertitel && <div style={{ fontSize: 9.5, color: sub, marginTop: 1 }}>{absenderUntertitel}</div>}
-      <div style={{ fontSize: 8.5, color: addr, marginTop: 3, lineHeight: 1.55 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: nameC, lineHeight: 1.25 }}>{absenderName}</div>
+      {absenderUntertitel && <div style={{ fontSize: 9, color: subC, marginTop: 1 }}>{absenderUntertitel}</div>}
+      <div style={{ fontSize: 8.5, color: addrC, marginTop: 3, lineHeight: 1.5 }}>
         {absenderAdresse && <div>{absenderAdresse}</div>}
         {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
       </div>
     </div>
   );
 
-  // Kontakt-Textblock (oben rechts, neben/unter Logo)
-  const KontaktBlock = ({ c = "#666" }: { c?: string }) => (
-    <div style={{ fontSize: 8.5, color: c, lineHeight: 1.65, textAlign: "right" }}>
+  const KontBlock = ({ c = "#888" }: { c?: string }) => (
+    <div style={{ fontSize: 8, color: c, lineHeight: 1.65, textAlign: "right" }}>
       {absenderTel     && <div>{absenderTel}</div>}
       {absenderEmail   && <div>{absenderEmail}</div>}
       {absenderWebsite && <div>{absenderWebsite}</div>}
     </div>
   );
 
-  // Wrapper
-  const wrap = (bg: string, header: React.ReactNode, thBg: string, thColor: string) => (
+  // ── Shared DIN 5008 body ──────────────────────────────────────────────────
+  const renderBody = (thBg: string, thColor: string) => (
+    <div style={{ flex: 1, minHeight: 0 }}>
+
+      {/* Zone B: Absenderzeile + Anschriftfeld + Informationsblock */}
+      <div style={{ padding: `8px ${M}px 0`, display: "flex", gap: 14, alignItems: "flex-start" }}>
+        {/* Left: Empfänger */}
+        <div style={{ flex: "0 0 44%", fontSize: 9.5, lineHeight: 1.55, color: "#222" }}>
+          {/* DIN 5008 Absenderzeile (Rücksendeangabe) */}
+          <div style={{ fontSize: 7.5, color: "#aaa", borderBottom: "0.5px solid #e0e0e0", paddingBottom: 2, marginBottom: 7, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {[absenderName, absenderAdresse, `${absenderPlz} ${absenderOrt}`.trim()].filter(Boolean).join(" – ")}
+          </div>
+          {empfaengerFirma && <div style={{ fontWeight: 600, color: "#111" }}>{empfaengerFirma}</div>}
+          <div style={{ color: "#111" }}>{empfaengerName || <span style={{ color: "#ccc" }}>Empfänger Name</span>}</div>
+          {empfaengerAdresse && <div>{empfaengerAdresse}</div>}
+          {(empfaengerPlz || empfaengerOrt) && <div>{empfaengerPlz} {empfaengerOrt}</div>}
+          {empfaengerLand && empfaengerLand !== "Deutschland" && <div>{empfaengerLand}</div>}
+        </div>
+
+        {/* Right: Bezugszeichen / Informationsblock */}
+        <div style={{ flex: 1, fontSize: 8.5, lineHeight: 1.7 }}>
+          {metaRows.map(r => (
+            <div key={r.label} style={{ display: "flex", gap: 6 }}>
+              <div style={{ color: "#999", minWidth: 110, flexShrink: 0 }}>{r.label}</div>
+              <div style={{ fontWeight: 600, color: "#111" }}>{r.val}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Leerzeile (DIN 5008) */}
+      <div style={{ height: 18 }} />
+
+      {/* Zone C: Betreff */}
+      <div style={{ padding: `0 ${M}px 6px` }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>
+          {typLabel}{nummer ? ` ${nummer}` : ""}
+        </div>
+      </div>
+
+      {/* Kopftext */}
+      <div style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
+        {kopftext
+          ? <div style={{ whiteSpace: "pre-wrap" }}>{kopftext.substring(0, 500)}{kopftext.length > 500 ? "…" : ""}</div>
+          : <div>Sehr geehrte Damen und Herren,<br />vielen Dank für Ihre Anfrage. Gerne unterbreite ich Ihnen das gewünschte freibleibende Angebot:</div>
+        }
+      </div>
+
+      {/* Positionen-Tabelle */}
+      <div style={{ padding: `0 ${M}px` }}>
+        <div style={{ display: "flex", backgroundColor: thBg, color: thColor, padding: "4px 6px", fontSize: 8, fontWeight: 700 }}>
+          <span style={{ width: 28 }}>Pos.</span>
+          <span style={{ flex: 4 }}>Beschreibung</span>
+          <span style={{ width: 56, textAlign: "right" }}>Menge</span>
+          <span style={{ width: 66, textAlign: "right" }}>Einzelpreis</span>
+          <span style={{ width: 72, textAlign: "right" }}>Gesamtpreis</span>
+        </div>
+        {leistungPos.length === 0 ? (
+          <div style={{ padding: "5px 6px", fontSize: 8, color: "#ccc", borderBottom: "0.5px solid #eee" }}>Noch keine Positionen</div>
+        ) : leistungPos.map((pos, i) => (
+          <div key={pos.id}>
+            <div style={{ display: "flex", padding: "4px 6px", backgroundColor: i % 2 === 0 ? "#f8f8f8" : "#fff", fontSize: 8.5 }}>
+              <span style={{ width: 28, color: "#999" }}>{i + 1}.</span>
+              <div style={{ flex: 4 }}>
+                <div style={{ fontWeight: pos.bezeichnung ? 600 : 400, color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</div>
+                {pos.beschreibung && <div style={{ fontSize: 7.5, color: "#777", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>{pos.beschreibung}</div>}
+              </div>
+              <span style={{ width: 56, textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit?.substring(0, 5)}</span>
+              <span style={{ width: 66, textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
+              <span style={{ width: 72, textAlign: "right", fontWeight: 600, color: "#111" }}>{fmt(pos.gesamt)}</span>
+            </div>
+            {i < leistungPos.length - 1 && <div style={{ height: "0.5px", backgroundColor: "#ebebeb", margin: "0 6px" }} />}
+          </div>
+        ))}
+        <div style={{ height: "0.75px", backgroundColor: "#ccc", marginTop: 1 }} />
+      </div>
+
+      {/* Summen */}
+      <div style={{ padding: `5px ${M}px 4px`, display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ minWidth: 220, fontSize: 9 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
+            <span>Gesamtbetrag netto</span>
+            <span style={{ color: "#111" }}>{fmt(summen.netto)}</span>
+          </div>
+          {!kleinunternehmer && mwstSatz > 0 && (
+            <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
+              <span>zzgl. {mwstSatz}% MwSt.</span>
+              <span style={{ color: "#111" }}>{fmt(summen.mwstBetrag)}</span>
+            </div>
+          )}
+          {kleinunternehmer && (
+            <div style={{ fontSize: 7.5, color: "#999", lineHeight: 1.4, marginBottom: 3 }}>
+              Umsatzsteuer nicht erhoben gemäß §19 UStG.
+            </div>
+          )}
+          <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #111", paddingTop: 3, marginTop: 2, fontWeight: 700, fontSize: 10.5 }}>
+            <span>Gesamtbetrag brutto</span>
+            <span style={{ color }}>{fmt(summen.brutto)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Fußtext */}
+      {fusstext && (
+        <div style={{ padding: `2px ${M}px 4px`, fontSize: 8.5, color: "#444", lineHeight: 1.55, whiteSpace: "pre-wrap" }}>
+          {fusstext.substring(0, 500)}{fusstext.length > 500 ? "…" : ""}
+        </div>
+      )}
+
+      {/* Grußformel */}
+      <div style={{ padding: `7px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
+        Mit magischen Grüßen
+        <div style={{ marginTop: 14 }}>
+          <div style={{ fontWeight: 700 }}>{absenderName}</div>
+          {absenderUntertitel && <div style={{ color: "#666" }}>{absenderUntertitel}</div>}
+        </div>
+      </div>
+
+      {/* DIN 5008 Fußzeile – 4 Spalten */}
+      <div style={{ borderTop: "0.75px solid #c0c0c0", margin: `6px ${M}px 0`, paddingTop: 5, paddingBottom: 8, display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: 600 }}>{absenderName}</div>
+          {absenderUntertitel && <div>{absenderUntertitel}</div>}
+          {absenderAdresse && <div>{absenderAdresse}</div>}
+          {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
+          {absenderLand && absenderLand !== "Deutschland" && <div>{absenderLand}</div>}
+        </div>
+        <div style={{ flex: 1 }}>
+          {absenderTel     && <div>Tel.: {absenderTel}</div>}
+          {absenderEmail   && <div>E-Mail: {absenderEmail}</div>}
+          {absenderWebsite && <div>Web: {absenderWebsite}</div>}
+        </div>
+        <div style={{ flex: 1 }}>
+          {absenderSteuernummer && <div>Steuer-Nr.: {absenderSteuernummer}</div>}
+          {absenderInhaber      && <div>Inhaber/-in: {absenderInhaber}</div>}
+        </div>
+        <div style={{ flex: 1 }}>
+          {absenderIban && <div>IBAN: {absenderIban}</div>}
+          {absenderBic  && <div>BIC: {absenderBic}</div>}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── Page wrapper ──────────────────────────────────────────────────────────
+  const page = (bg: string, header: React.ReactNode, thBg: string, thColor: string) => (
     <div style={{ width: "100%", height: "100%", backgroundColor: bg, fontFamily: font, color: "#1a1a1a", overflow: "hidden", display: "flex", flexDirection: "column" }}>
       {header}
       {renderBody(thBg, thColor)}
     </div>
   );
 
-  // ── 15 Layouts ────────────────────────────────────────────────────────────────
+  // ── 15 Layout-Köpfe ───────────────────────────────────────────────────────
   switch (layoutId) {
 
-    // 1 – Klassisch: Voller Farbbalken, Logo rechts weiß
-    case 1: return wrap("#fff",
-      <div style={{ backgroundColor: color, padding: `${PX.logoTop}px ${M}px 18px`, position: "relative", minHeight: PX.headerH }}>
-        <AbsenderBlock color="#fff" sub="rgba(255,255,255,0.8)" addr="rgba(255,255,255,0.65)" />
-        <div style={{ position: "absolute", top: PX.logoTop, right: M, width: LS, height: LS, borderRadius: 6, backgroundColor: "rgba(255,255,255,0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>LOGO</div>
-        </div>
-        <div style={{ position: "absolute", bottom: 18, right: M }}>
-          <KontaktBlock c="rgba(255,255,255,0.7)" />
-        </div>
+    // 1 – Klassisch: Weißes Blatt, Logo oben rechts (wie Emilians Angebote)
+    case 1: return page("#fff",
+      <div style={{ position: "relative", padding: `22px ${M}px 16px`, minHeight: 105, borderBottom: "0.5px solid #e8e8e8" }}>
+        <AbsBlock />
+        <Logo />
+        <div style={{ position: "absolute", bottom: 16, right: M }}><KontBlock c="#999" /></div>
       </div>,
       "#111", "#fff"
     );
 
-    // 2 – Wave Dark
-    case 2: return wrap("#fff",
-      <div style={{ backgroundColor: "#111", padding: `${PX.logoTop}px ${M}px 28px`, position: "relative", minHeight: PX.headerH }}>
-        <div style={{ position: "absolute", top: 8, left: M }}>
-          <div style={{ fontSize: 8, color: color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 }}>{absenderUntertitel}</div>
+    // 2 – Farbstreifen: Dünner Akzentstreifen oben
+    case 2: return page("#fff",
+      <div style={{ position: "relative" }}>
+        <div style={{ height: 4, backgroundColor: color }} />
+        <div style={{ padding: `14px ${M}px 14px`, position: "relative", minHeight: 96 }}>
+          <AbsBlock />
+          <Logo />
+          <div style={{ position: "absolute", bottom: 14, right: M }}><KontBlock c="#999" /></div>
         </div>
-        <div style={{ marginTop: 20 }}>
-          <AbsenderBlock color="#fff" sub="rgba(255,255,255,0.6)" addr="rgba(255,255,255,0.4)" />
-        </div>
-        <LogoBox dark />
-        <div style={{ position: "absolute", bottom: 22, right: M }}><KontaktBlock c="rgba(255,255,255,0.45)" /></div>
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 10, backgroundColor: "#fff", borderRadius: "60% 60% 0 0" }} />
-      </div>,
-      "#111", "#fff"
-    );
-
-    // 3 – Split: Firmenname riesig + Farbverlauf-Linie
-    case 3: return wrap("#fff",
-      <div style={{ padding: `${PX.logoTop}px ${M}px 12px`, position: "relative", minHeight: PX.headerH }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <div>
-            <div style={{ fontSize: 22, fontWeight: 900, color, lineHeight: 1, letterSpacing: -1 }}>{absenderName}</div>
-            {absenderUntertitel && <div style={{ fontSize: 9.5, color: "#aaa", marginTop: 2 }}>{absenderUntertitel}</div>}
-            <div style={{ fontSize: 8.5, color: "#bbb", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <LogoBox />
-            <div style={{ marginTop: 6 }}><KontaktBlock c="#888" /></div>
-          </div>
-        </div>
-        <div style={{ marginTop: 14, height: 2, background: `linear-gradient(to right, ${color}, transparent)`, borderRadius: 1 }} />
+        <div style={{ height: "0.5px", backgroundColor: "#e8e8e8" }} />
       </div>,
       color, "#fff"
     );
 
-    // 4 – Retro: Typewriter, doppelte Linie
-    case 4: return wrap("#fffef8",
-      <div style={{ padding: `${PX.logoTop}px ${M}px 12px` }}>
+    // 3 – Voller Farbkopf
+    case 3: return page("#fff",
+      <div style={{ backgroundColor: color, padding: `22px ${M}px 18px`, position: "relative", minHeight: 110 }}>
+        <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.75)" addrC="rgba(255,255,255,0.55)" />
+        <Logo dark />
+        <div style={{ position: "absolute", bottom: 18, right: M }}><KontBlock c="rgba(255,255,255,0.65)" /></div>
+      </div>,
+      "#111", "#fff"
+    );
+
+    // 4 – Retro: Schreibmaschinen-Stil, doppelte Linie
+    case 4: return page("#fffef8",
+      <div style={{ padding: `20px ${M}px 14px` }}>
         <div style={{ borderTop: "2px solid #111", borderBottom: "2px solid #111", padding: "8px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2 }}>{absenderName}</div>
             {absenderUntertitel && <div style={{ fontSize: 8.5, letterSpacing: 1, color: "#555", marginTop: 1 }}>{absenderUntertitel.toUpperCase()}</div>}
             <div style={{ fontSize: 8, color: "#666", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
           </div>
-          <div style={{ textAlign: "right" }}>
-            <KontaktBlock c="#555" />
-          </div>
+          <KontBlock c="#555" />
         </div>
       </div>,
       "#111", "#fffef8"
     );
 
-    // 5 – Seitenstreifen
+    // 5 – Seitenstreifen: Vertikaler Farbbalken links
     case 5: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", display: "flex" }}>
-        <div style={{ width: 14, backgroundColor: color, flexShrink: 0 }} />
-        <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-          <div style={{ padding: `${PX.logoTop}px ${M - 14}px 12px`, position: "relative", minHeight: PX.headerH, borderBottom: "0.5px solid #e5e5e5" }}>
-            <AbsenderBlock />
-            <LogoBox />
-            <div style={{ position: "absolute", bottom: 12, right: M - 14 }}><KontaktBlock c="#888" /></div>
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, overflow: "hidden", display: "flex" }}>
+        <div style={{ width: 12, backgroundColor: color, flexShrink: 0 }} />
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+          <div style={{ position: "relative", padding: `22px ${M - 12}px 16px`, minHeight: 105, borderBottom: "0.5px solid #e8e8e8" }}>
+            <AbsBlock />
+            {logoUrl
+              ? <img src={logoUrl} style={{ position: "absolute", top: 22, right: M - 12, width: LS, height: LS, objectFit: "contain", borderRadius: 4 }} alt="" />
+              : <div style={{ position: "absolute", top: 22, right: M - 12, width: LS, height: LS, borderRadius: 6, backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 8, color: "#ccc", fontWeight: 600 }}>LOGO</span></div>}
+            <div style={{ position: "absolute", bottom: 16, right: M - 12 }}><KontBlock c="#999" /></div>
           </div>
           {renderBody(color, "#fff")}
         </div>
       </div>
     );
 
-    // 6 – Dark Premium
-    case 6: return wrap("#fff",
-      <div style={{ backgroundColor: "#111", padding: `${PX.logoTop}px ${M}px 18px`, position: "relative", minHeight: PX.headerH }}>
-        <div style={{ width: 28, height: 3, backgroundColor: color, borderRadius: 2, marginBottom: 8 }} />
-        <AbsenderBlock color="#fff" sub="rgba(255,255,255,0.55)" addr="rgba(255,255,255,0.35)" />
-        <LogoBox dark />
-        <div style={{ position: "absolute", bottom: 18, right: M }}><KontaktBlock c="rgba(255,255,255,0.4)" /></div>
+    // 6 – Dark Premium: Dunkler Kopf mit Akzent
+    case 6: return page("#fff",
+      <div style={{ backgroundColor: "#111", padding: `22px ${M}px 18px`, position: "relative", minHeight: 110 }}>
+        <div style={{ width: 24, height: 3, backgroundColor: color, borderRadius: 2, marginBottom: 8 }} />
+        <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.55)" addrC="rgba(255,255,255,0.35)" />
+        <Logo dark />
+        <div style={{ position: "absolute", bottom: 18, right: M }}><KontBlock c="rgba(255,255,255,0.4)" /></div>
       </div>,
       "#222", "#fff"
     );
 
-    // 7 – Corporate: zentriert
-    case 7: return wrap("#fff",
-      <div style={{ padding: `${PX.logoTop}px ${M}px 12px`, textAlign: "center", position: "relative", minHeight: PX.headerH }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 4 }}>
-          <div style={{ width: LS * 0.8, height: LS * 0.55, borderRadius: 5, backgroundColor: "#eee" }} />
+    // 7 – Corporate: Logo + Name zentriert
+    case 7: return page("#fff",
+      <div style={{ padding: `18px ${M}px 14px`, textAlign: "center", minHeight: 105, borderBottom: "0.5px solid #eee" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 5 }}>
+          {logoUrl
+            ? <img src={logoUrl} style={{ width: 50, height: 50, objectFit: "contain", borderRadius: 4 }} alt="" />
+            : <div style={{ width: 50, height: 42, borderRadius: 4, backgroundColor: "#eee" }} />}
           <div style={{ textAlign: "left" }}>
             <div style={{ fontSize: 13, fontWeight: 700 }}>{absenderName}</div>
             {absenderUntertitel && <div style={{ fontSize: 9, color: "#999" }}>{absenderUntertitel}</div>}
           </div>
         </div>
-        <div style={{ fontSize: 8, color: "#bbb" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}{absenderTel ? ` · ${absenderTel}` : ""}{absenderEmail ? ` · ${absenderEmail}` : ""}</div>
+        <div style={{ fontSize: 8, color: "#bbb" }}>
+          {[absenderAdresse, `${absenderPlz} ${absenderOrt}`.trim(), absenderTel, absenderEmail].filter(Boolean).join(" · ")}
+        </div>
         <div style={{ height: 1.5, background: `linear-gradient(to right, transparent, ${color}, transparent)`, marginTop: 10 }} />
       </div>,
       color, "#fff"
     );
 
     // 8 – Kreativ: Diagonal
-    case 8: return wrap("#fff",
-      <div style={{ position: "relative", height: PX.headerH, overflow: "hidden" }}>
+    case 8: return page("#fff",
+      <div style={{ position: "relative", minHeight: 110, overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, backgroundColor: "#f5f5f5" }} />
-        <div style={{ position: "absolute", top: 0, left: 0, width: "62%", height: "100%", backgroundColor: color, clipPath: "polygon(0 0, 90% 0, 72% 100%, 0 100%)" }} />
-        <div style={{ position: "absolute", inset: 0, display: "flex", justifyContent: "space-between", alignItems: "center", padding: `0 ${M}px` }}>
+        <div style={{ position: "absolute", top: 0, left: 0, width: "60%", height: "100%", backgroundColor: color, clipPath: "polygon(0 0, 90% 0, 70% 100%, 0 100%)" }} />
+        <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", padding: `22px ${M}px` }}>
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{absenderName}</div>
             {absenderUntertitel && <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)" }}>{absenderUntertitel}</div>}
-            <div style={{ fontSize: 8, color: "rgba(255,255,255,0.65)", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+            <div style={{ fontSize: 8, color: "rgba(255,255,255,0.65)", marginTop: 3 }}>{absenderAdresse}</div>
           </div>
           <div style={{ textAlign: "right" }}>
-            <div style={{ width: LS * 0.75, height: LS * 0.55, borderRadius: 4, backgroundColor: "rgba(0,0,0,0.08)", marginBottom: 4, marginLeft: "auto" }} />
-            <KontaktBlock c="#777" />
+            {logoUrl
+              ? <img src={logoUrl} style={{ width: 55, height: 50, objectFit: "contain", borderRadius: 4, marginBottom: 4, marginLeft: "auto", display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} alt="" />
+              : <div style={{ width: 55, height: 44, borderRadius: 4, backgroundColor: "rgba(0,0,0,0.1)", marginBottom: 4, marginLeft: "auto" }} />}
+            <KontBlock c="#666" />
           </div>
         </div>
       </div>,
       "#111", "#fff"
     );
 
-    // 9 – Skandinavisch
-    case 9: return wrap("#fff",
-      <div style={{ padding: `${PX.logoTop}px ${M}px 14px`, position: "relative", minHeight: PX.headerH }}>
+    // 9 – Skandinavisch: Minimal
+    case 9: return page("#fff",
+      <div style={{ position: "relative", padding: `22px ${M}px 16px`, minHeight: 105 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-          <div style={{ width: 20, height: 2, backgroundColor: color }} />
+          <div style={{ width: 18, height: 2, backgroundColor: color }} />
           <div style={{ fontSize: 13, fontWeight: 300, letterSpacing: -0.3 }}>{absenderName}</div>
         </div>
-        {absenderUntertitel && <div style={{ fontSize: 8.5, color: "#bbb", marginLeft: 28 }}>{absenderUntertitel}</div>}
-        <div style={{ fontSize: 8, color: "#ccc", marginLeft: 28, marginTop: 2 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-        <LogoBox />
-        <div style={{ position: "absolute", bottom: 14, right: M }}><KontaktBlock c="#ccc" /></div>
-        <div style={{ marginTop: 16, borderBottom: "0.75px solid #e0e0e0" }} />
+        {absenderUntertitel && <div style={{ fontSize: 8.5, color: "#bbb", marginLeft: 26 }}>{absenderUntertitel}</div>}
+        <div style={{ fontSize: 8, color: "#ddd", marginLeft: 26, marginTop: 2 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+        <Logo />
+        <div style={{ position: "absolute", bottom: 16, right: M }}><KontBlock c="#ccc" /></div>
+        <div style={{ marginTop: 14, borderBottom: "0.75px solid #ebebeb" }} />
       </div>,
       "#f2f2f2", "#333"
     );
 
-    // 10 – Luxus: Serif, doppelte Linien
-    case 10: return wrap("#fffdf8",
-      <div style={{ padding: `${PX.logoTop}px ${M}px 14px`, position: "relative", minHeight: PX.headerH }}>
+    // 10 – Luxus: Serif, goldene Linien
+    case 10: return page("#fffdf8",
+      <div style={{ position: "relative", padding: `20px ${M}px 14px`, minHeight: 105 }}>
         <div style={{ height: 0.75, backgroundColor: color, marginBottom: 10 }} />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 700, fontStyle: "italic" }}>{absenderName}</div>
-            {absenderUntertitel && <div style={{ fontSize: 9, color: "#aaa", fontStyle: "italic" }}>{absenderUntertitel}</div>}
-            <div style={{ fontSize: 8, color: "#bbb", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-          </div>
-          <div>
-            <div style={{ width: LS * 0.75, height: LS * 0.55, borderRadius: 4, backgroundColor: "#f0ebe0", marginBottom: 4 }} />
-            <KontaktBlock c="#aaa" />
+          <AbsBlock nameC="#333" subC="#aaa" addrC="#bbb" />
+          <div style={{ textAlign: "right" }}>
+            {logoUrl
+              ? <img src={logoUrl} style={{ width: 55, height: 46, objectFit: "contain", borderRadius: 4, marginBottom: 4, marginLeft: "auto", display: "block" }} alt="" />
+              : <div style={{ width: 55, height: 42, borderRadius: 4, backgroundColor: "#f0ebe0", marginBottom: 4, marginLeft: "auto" }} />}
+            <KontBlock c="#aaa" />
           </div>
         </div>
         <div style={{ height: 0.75, backgroundColor: color, marginTop: 10 }} />
@@ -966,93 +798,96 @@ function DocumentPreview(props: PreviewProps) {
       "#f0e8d8", "#5a4030"
     );
 
-    // 11 – Rahmen
+    // 11 – Rahmen: Vollständiger Rahmen
     case 11: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", padding: 6, display: "flex", flexDirection: "column" }}>
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, overflow: "hidden", padding: 5, display: "flex", flexDirection: "column" }}>
         <div style={{ border: `2px solid ${color}`, flex: 1, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-          <div style={{ backgroundColor: color, padding: `${PX.logoTop * 0.6}px ${M - 6}px 14px`, position: "relative", minHeight: PX.headerH * 0.85 }}>
-            <AbsenderBlock color="#fff" sub="rgba(255,255,255,0.8)" addr="rgba(255,255,255,0.6)" />
-            <div style={{ position: "absolute", top: 12, right: M - 6, width: LS * 0.75, height: LS * 0.55, borderRadius: 4, backgroundColor: "rgba(255,255,255,0.2)" }} />
-            <div style={{ position: "absolute", bottom: 14, right: M - 6 }}><KontaktBlock c="rgba(255,255,255,0.7)" /></div>
+          <div style={{ backgroundColor: color, padding: `18px ${M - 5}px 14px`, position: "relative", minHeight: 100 }}>
+            <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.75)" addrC="rgba(255,255,255,0.55)" />
+            <div style={{ position: "absolute", top: 18, right: M - 5, width: LS, height: LS }}>
+              {logoUrl
+                ? <img src={logoUrl} style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 4, backgroundColor: "rgba(255,255,255,0.1)" }} alt="" />
+                : <div style={{ width: "100%", height: "100%", borderRadius: 4, backgroundColor: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 8, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>LOGO</span></div>}
+            </div>
+            <div style={{ position: "absolute", bottom: 14, right: M - 5 }}><KontBlock c="rgba(255,255,255,0.65)" /></div>
           </div>
           {renderBody("#111", "#fff")}
         </div>
       </div>
     );
 
-    // 12 – Technik: Zweispaltig Header
-    case 12: return wrap("#f8f9fb",
-      <div style={{ display: "flex", borderBottom: `2.5px solid ${color}`, minHeight: PX.headerH }}>
-        <div style={{ flex: "0 0 58%", backgroundColor: color + "13", padding: `${PX.logoTop}px ${M}px 14px`, borderRight: `1px solid ${color}20` }}>
-          <div style={{ fontSize: 8.5, color: color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 6 }}>Absender</div>
-          <AbsenderBlock color="#111" sub="#666" addr="#888" />
+    // 12 – Technik: Zweispaltiger Header
+    case 12: return page("#f8f9fb",
+      <div style={{ display: "flex", borderBottom: `2.5px solid ${color}`, minHeight: 108 }}>
+        <div style={{ flex: "0 0 58%", backgroundColor: color + "12", padding: `18px ${M}px 14px`, borderRight: `1px solid ${color}22` }}>
+          <div style={{ fontSize: 8, color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 5 }}>Absender</div>
+          <AbsBlock nameC="#111" subC="#666" addrC="#888" />
         </div>
-        <div style={{ flex: 1, padding: `${PX.logoTop}px 20px 14px`, position: "relative" }}>
-          <div style={{ fontSize: 8.5, color: color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 6 }}>Kontakt</div>
+        <div style={{ flex: 1, padding: "18px 18px 14px", position: "relative" }}>
+          <div style={{ fontSize: 8, color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 5 }}>Kontakt</div>
           <div style={{ fontSize: 8.5, color: "#555", lineHeight: 1.65 }}>
-            {absenderTel     && <div>{absenderTel}</div>}
-            {absenderEmail   && <div>{absenderEmail}</div>}
+            {absenderTel && <div>{absenderTel}</div>}
+            {absenderEmail && <div>{absenderEmail}</div>}
             {absenderWebsite && <div>{absenderWebsite}</div>}
             {absenderSteuernummer && <div style={{ marginTop: 4, color: "#888" }}>St.-Nr.: {absenderSteuernummer}</div>}
           </div>
-          <div style={{ position: "absolute", top: PX.logoTop, right: 20, width: LS * 0.7, height: LS * 0.5, borderRadius: 4, backgroundColor: "#e8eaed" }} />
+          <div style={{ position: "absolute", top: 18, right: 18, width: 55, height: 46 }}>
+            {logoUrl
+              ? <img src={logoUrl} style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 4 }} alt="" />
+              : <div style={{ width: "100%", height: "100%", borderRadius: 4, backgroundColor: "#e8eaed" }} />}
+          </div>
         </div>
       </div>,
       color, "#fff"
     );
 
-    // 13 – Pfeile
-    case 13: return wrap("#fff",
-      <div style={{ padding: `${PX.logoTop}px ${M}px 12px`, position: "relative", minHeight: PX.headerH }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginBottom: 4 }}>
+    // 13 – Pfeile: Breadcrumb-Stil
+    case 13: return page("#fff",
+      <div style={{ position: "relative", padding: `22px ${M}px 14px`, minHeight: 105 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap", marginBottom: 3 }}>
           <span style={{ fontWeight: 700, fontSize: 13 }}>{absenderName}</span>
-          {absenderUntertitel && <>
-            <span style={{ color: color, fontWeight: 700, fontSize: 14 }}>›</span>
-            <span style={{ color: "#888", fontSize: 9.5 }}>{absenderUntertitel}</span>
-          </>}
-          <span style={{ color: color, fontWeight: 700, fontSize: 14 }}>›</span>
-          <span style={{ color: "#aaa", fontSize: 8.5 }}>{absenderAdresse}</span>
-          <span style={{ color: color, fontWeight: 700, fontSize: 14 }}>›</span>
-          <span style={{ color: "#aaa", fontSize: 8.5 }}>{absenderPlz} {absenderOrt}</span>
+          {absenderUntertitel && <><span style={{ color, fontWeight: 700, fontSize: 14 }}>›</span><span style={{ color: "#888", fontSize: 9 }}>{absenderUntertitel}</span></>}
+          {absenderAdresse && <><span style={{ color, fontWeight: 700, fontSize: 14 }}>›</span><span style={{ color: "#aaa", fontSize: 8.5 }}>{absenderAdresse}</span></>}
+          {(absenderPlz || absenderOrt) && <><span style={{ color, fontWeight: 700, fontSize: 14 }}>›</span><span style={{ color: "#aaa", fontSize: 8.5 }}>{absenderPlz} {absenderOrt}</span></>}
         </div>
-        <div style={{ fontSize: 8, color: "#bbb", display: "flex", gap: 12 }}>
+        <div style={{ fontSize: 8, color: "#bbb", display: "flex", gap: 10 }}>
           {absenderTel && <span>{absenderTel}</span>}
           {absenderEmail && <span>{absenderEmail}</span>}
         </div>
-        <LogoBox />
-        <div style={{ marginTop: 14, height: 1, backgroundColor: color }} />
+        <Logo />
+        <div style={{ marginTop: 12, height: 1, backgroundColor: color }} />
       </div>,
       "#111", "#fff"
     );
 
-    // 14 – Panorama: Farbverlauf
-    case 14: return wrap("#fff",
-      <div style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, padding: `${PX.logoTop}px ${M}px 18px`, position: "relative", minHeight: PX.headerH }}>
-        <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 3 }}>{absenderUntertitel}</div>
-        <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>{absenderName}</div>
-        <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.6)", marginTop: 4 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-        <div style={{ position: "absolute", top: PX.logoTop, right: M, width: LS, height: LS, borderRadius: 6, backgroundColor: "rgba(255,255,255,0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>LOGO</div>
+    // 14 – Panorama: Farbverlauf-Kopf
+    case 14: return page("#fff",
+      <div style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, padding: `22px ${M}px 18px`, position: "relative", minHeight: 110 }}>
+        <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 2 }}>{absenderUntertitel}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>{absenderName}</div>
+        <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.6)", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+        <div style={{ position: "absolute", top: 22, right: M, width: LS, height: LS }}>
+          {logoUrl
+            ? <img src={logoUrl} style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 4, backgroundColor: "rgba(255,255,255,0.1)" }} alt="" />
+            : <div style={{ width: "100%", height: "100%", borderRadius: 6, backgroundColor: "rgba(255,255,255,0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 8, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>LOGO</span></div>}
         </div>
-        <div style={{ position: "absolute", bottom: 18, right: M }}><KontaktBlock c="rgba(255,255,255,0.65)" /></div>
+        <div style={{ position: "absolute", bottom: 18, right: M }}><KontBlock c="rgba(255,255,255,0.65)" /></div>
       </div>,
       "#111", "#fff"
     );
 
-    // 15 – Initialen: Monogramm
-    case 15: return wrap("#fff",
-      <div style={{ padding: `${PX.logoTop}px ${M}px 14px`, display: "flex", alignItems: "center", gap: 14, borderBottom: "1px solid #eee", minHeight: PX.headerH }}>
-        <div style={{ width: LS, height: LS, borderRadius: 14, backgroundColor: color, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 900, fontSize: 26 }}>
-          {initials}
-        </div>
+    // 15 – Initialen / Logo groß links
+    case 15: return page("#fff",
+      <div style={{ padding: `20px ${M}px 14px`, display: "flex", alignItems: "center", gap: 14, borderBottom: "1px solid #eee", minHeight: 105 }}>
+        {logoUrl
+          ? <img src={logoUrl} style={{ width: LS, height: LS, objectFit: "contain", borderRadius: 10, flexShrink: 0 }} alt="" />
+          : <div style={{ width: LS, height: LS, borderRadius: 12, backgroundColor: color, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 900, fontSize: 26 }}>{initials}</div>}
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 13, fontWeight: 700 }}>{absenderName}</div>
-          {absenderUntertitel && <div style={{ fontSize: 9.5, color: "#aaa" }}>{absenderUntertitel}</div>}
+          {absenderUntertitel && <div style={{ fontSize: 9, color: "#aaa" }}>{absenderUntertitel}</div>}
           <div style={{ fontSize: 8.5, color: "#bbb", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
         </div>
-        <div style={{ textAlign: "right" }}>
-          <KontaktBlock c="#999" />
-        </div>
+        <KontBlock c="#999" />
       </div>,
       color, "#fff"
     );
@@ -1136,6 +971,7 @@ export default function AdminDokumentEditor() {
   const [absenderSteuernummer, setAbsenderSteuernummer] = useState("");
   const [absenderInhaber, setAbsenderInhaber] = useState("");
   const [absenderLand, setAbsenderLand] = useState("Deutschland");
+  const [logoUrl, setLogoUrl] = useState("");
 
   // UI
   const [saving, setSaving] = useState(false);
@@ -1151,7 +987,7 @@ export default function AdminDokumentEditor() {
     supabase.from("admin_settings").select("*").limit(1).maybeSingle().then(({ data }) => {
       if (data) {
         setAbsenderName((data.company_name as string) || "Emilian Leber");
-        setAbsenderUntertitel((data.company_subtitle as string) || "Zauberer und Mentalist");
+        setAbsenderUntertitel((data.company_subtitle as string) || "");
         setAbsenderAdresse((data.company_address as string) || "");
         setAbsenderPlz((data.company_zip as string) || "");
         setAbsenderOrt((data.company_city as string) || "");
@@ -1160,12 +996,23 @@ export default function AdminDokumentEditor() {
         setAbsenderWebsite((data.company_website as string) || "");
         setAbsenderIban((data.bank_iban as string) || "");
         setAbsenderBic((data.bank_bic as string) || "");
-        setAbsenderSteuernummer((data.tax_id as string) || "");
+        setAbsenderSteuernummer((data.tax_number as string) || "");
         setAbsenderInhaber((data.company_owner as string) || (data.company_name as string) || "");
         setAbsenderLand((data.company_country as string) || "Deutschland");
+        setLogoUrl((data.company_logo_url as string) || "");
+        // Apply saved defaults only for new documents
+        if (isNew) {
+          if (data.document_template) setSelectedLayout(data.document_template as number);
+          if (data.default_tax_rate !== undefined) setMwstSatz(Number(data.default_tax_rate) || 0);
+          if (data.default_payment_days) {
+            const days = Number(data.default_payment_days) || 14;
+            setZahlungszielTage(days);
+            setFaelligAm(addDays(days));
+          }
+        }
       }
     });
-  }, [authChecked]);
+  }, [authChecked, isNew]);
 
   // Load existing document for edit
   useEffect(() => {
@@ -1435,6 +1282,7 @@ export default function AdminDokumentEditor() {
     absenderSteuernummer,
     absenderInhaber,
     absenderLand,
+    logoUrl,
   };
 
   return (

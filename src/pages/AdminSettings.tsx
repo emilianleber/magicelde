@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { supabase } from "@/integrations/supabase/client";
-import { LogOut, Plus, Save, Trash2, Pencil, X, Check } from "lucide-react";
+import { LogOut, Plus, Save, Trash2, Pencil, X, Check, Upload, Image } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
 interface MailTemplate {
@@ -17,6 +17,7 @@ interface MailTemplate {
 interface AdminSettingsData {
   id: string;
   company_name: string;
+  company_subtitle: string;
   company_owner: string;
   company_address: string;
   company_zip: string;
@@ -34,10 +35,12 @@ interface AdminSettingsData {
   default_payment_days: number;
   default_tax_rate: number;
   document_template: number;
+  company_logo_url: string;
 }
 
 const DEFAULT_SETTINGS: Omit<AdminSettingsData, "id"> = {
   company_name: "Emilian Leber",
+  company_subtitle: "",
   company_owner: "Emilian Leber",
   company_address: "",
   company_zip: "",
@@ -55,19 +58,25 @@ const DEFAULT_SETTINGS: Omit<AdminSettingsData, "id"> = {
   default_payment_days: 14,
   default_tax_rate: 0,
   document_template: 1,
+  company_logo_url: "",
 };
 
-const TEMPLATES = [
-  { id: 1, name: "Schwarz", color: "#0a0a0a" },
-  { id: 2, name: "Marineblau", color: "#1e3a5f" },
-  { id: 3, name: "Waldgrün", color: "#14532d" },
-  { id: 4, name: "Bordeaux", color: "#7f1d1d" },
-  { id: 5, name: "Schiefergrau", color: "#334155" },
-  { id: 6, name: "Violett", color: "#4c1d95" },
-  { id: 7, name: "Bronze", color: "#78350f" },
-  { id: 8, name: "Ozeanblau", color: "#075985" },
-  { id: 9, name: "Anthrazit", color: "#1c1917" },
-  { id: 10, name: "Smaragd", color: "#064e3b" },
+const LAYOUTS_META = [
+  { id: 1,  name: "Klassisch",     desc: "Weißes Blatt, Logo oben rechts" },
+  { id: 2,  name: "Farbstreifen",  desc: "Dünner Akzentstreifen oben" },
+  { id: 3,  name: "Farbkopf",      desc: "Voller Farbblock als Briefkopf" },
+  { id: 4,  name: "Retro",         desc: "Schreibmaschinen-Stil" },
+  { id: 5,  name: "Seitenstreifen",desc: "Vertikaler Farbbalken links" },
+  { id: 6,  name: "Dark Premium",  desc: "Dunkler Kopf mit Akzentlinie" },
+  { id: 7,  name: "Corporate",     desc: "Logo + Name zentriert" },
+  { id: 8,  name: "Kreativ",       desc: "Diagonale Farbfläche" },
+  { id: 9,  name: "Skandinavisch", desc: "Ultra-minimal" },
+  { id: 10, name: "Luxus",         desc: "Doppelte Linien, Serif" },
+  { id: 11, name: "Rahmen",        desc: "Vollständige Rahmung" },
+  { id: 12, name: "Technik",       desc: "Zweispaltiger Header" },
+  { id: 13, name: "Pfeile",        desc: "Breadcrumb-Navigation" },
+  { id: 14, name: "Panorama",      desc: "Farbverlauf-Kopf" },
+  { id: 15, name: "Initialen",     desc: "Großes Logo/Monogramm" },
 ];
 
 const inputCls =
@@ -103,6 +112,11 @@ const AdminSettings = () => {
   const [settings, setSettings] = useState<AdminSettingsData | null>(null);
   const [savingSettings, setSavingSettings] = useState(false);
   const [settingsMsg, setSettingsMsg] = useState("");
+
+  // Logo upload
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [logoMsg, setLogoMsg] = useState("");
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
@@ -247,6 +261,35 @@ const AdminSettings = () => {
 
     setSignatureMsg("Signatur gespeichert.");
     setSavingSignature(false);
+  };
+
+  const uploadLogo = async (file: File) => {
+    if (!settings) return;
+    setUploadingLogo(true);
+    setLogoMsg("");
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "png";
+      const path = `company-logo.${ext}`;
+      const { error: upErr } = await supabase.storage.from("logos").upload(path, file, { upsert: true, contentType: file.type });
+      if (upErr) throw upErr;
+      const { data: urlData } = supabase.storage.from("logos").getPublicUrl(path);
+      const url = urlData.publicUrl + `?t=${Date.now()}`;
+      const { error: dbErr } = await supabase.from("admin_settings").update({ company_logo_url: url }).eq("id", settings.id);
+      if (dbErr) throw dbErr;
+      setSettings(prev => prev ? { ...prev, company_logo_url: url } : prev);
+      setLogoMsg("Logo gespeichert.");
+    } catch (e) {
+      setLogoMsg("Fehler beim Hochladen.");
+    } finally {
+      setUploadingLogo(false);
+      setTimeout(() => setLogoMsg(""), 4000);
+    }
+  };
+
+  const removeLogo = async () => {
+    if (!settings) return;
+    const { error } = await supabase.from("admin_settings").update({ company_logo_url: "" }).eq("id", settings.id);
+    if (!error) setSettings(prev => prev ? { ...prev, company_logo_url: "" } : prev);
   };
 
   const updateSetting = <K extends keyof AdminSettingsData>(key: K, value: AdminSettingsData[K]) => {
@@ -441,25 +484,66 @@ const AdminSettings = () => {
 
       {/* ── Unternehmen ── */}
       {activeTab === "unternehmen" && settings && (
-        <div className="max-w-2xl space-y-6">
+        <div className="max-w-2xl space-y-8">
           <p className="font-sans text-sm text-muted-foreground">
-            Diese Daten werden auf Dokumenten (Angebote, Rechnungen, etc.) verwendet.
+            Diese Daten erscheinen auf allen Dokumenten (Angebote, Rechnungen, etc.).
           </p>
+
+          {/* Logo upload */}
+          <div>
+            <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-3">Firmenlogo</label>
+            <div className="flex items-start gap-4">
+              <div className="w-24 h-24 rounded-xl border-2 border-dashed border-border/40 bg-muted/10 flex items-center justify-center shrink-0 overflow-hidden">
+                {settings.company_logo_url ? (
+                  <img src={settings.company_logo_url} alt="Logo" className="w-full h-full object-contain p-1" />
+                ) : (
+                  <Image className="w-8 h-8 text-muted-foreground/30" />
+                )}
+              </div>
+              <div className="space-y-2">
+                <input
+                  ref={logoInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                  className="hidden"
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadLogo(f); }}
+                />
+                <button
+                  onClick={() => logoInputRef.current?.click()}
+                  disabled={uploadingLogo}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm hover:bg-muted/40 transition-colors disabled:opacity-50"
+                >
+                  <Upload className="w-4 h-4" />
+                  {uploadingLogo ? "Wird hochgeladen…" : "Logo hochladen"}
+                </button>
+                {settings.company_logo_url && (
+                  <button onClick={removeLogo} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-red-600 text-sm hover:bg-red-50 transition-colors">
+                    <X className="w-4 h-4" />
+                    Logo entfernen
+                  </button>
+                )}
+                {logoMsg && <p className={`text-sm font-sans ${logoMsg.includes("Fehler") ? "text-red-500" : "text-green-600"}`}>{logoMsg}</p>}
+                <p className="text-xs text-muted-foreground">PNG, JPG, SVG · max. 2 MB</p>
+              </div>
+            </div>
+          </div>
+
           <div className="grid sm:grid-cols-2 gap-4">
             {([
-              { key: "company_name", label: "Firmenname" },
-              { key: "company_owner", label: "Inhaber" },
-              { key: "company_email", label: "E-Mail" },
-              { key: "company_phone", label: "Telefon" },
-              { key: "company_website", label: "Website" },
-              { key: "company_address", label: "Straße & Hausnummer" },
-              { key: "company_zip", label: "PLZ" },
-              { key: "company_city", label: "Stadt" },
-              { key: "company_country", label: "Land" },
-              { key: "tax_number", label: "Steuernummer" },
-              { key: "vat_id", label: "USt-IdNr." },
+              { key: "company_name",     label: "Firmenname / Name" },
+              { key: "company_subtitle", label: "Untertitel (z.B. Zauberer und Mentalist)" },
+              { key: "company_owner",    label: "Inhaber/-in" },
+              { key: "company_email",    label: "E-Mail" },
+              { key: "company_phone",    label: "Telefon" },
+              { key: "company_website",  label: "Website" },
+              { key: "company_address",  label: "Straße & Hausnummer" },
+              { key: "company_zip",      label: "PLZ" },
+              { key: "company_city",     label: "Stadt" },
+              { key: "company_country",  label: "Land" },
+              { key: "tax_number",       label: "Steuernummer" },
+              { key: "vat_id",           label: "USt-IdNr." },
             ] as { key: keyof AdminSettingsData; label: string }[]).map(({ key, label }) => (
-              <div key={key}>
+              <div key={key} className={key === "company_subtitle" ? "sm:col-span-2" : ""}>
                 <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">{label}</label>
                 <input
                   value={String(settings[key] ?? "")}
@@ -556,44 +640,55 @@ const AdminSettings = () => {
             </div>
           </div>
 
-          {/* Document template selection */}
+          {/* Document template / layout selection */}
           <div>
-            <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-3">
-              Dokumentenvorlage
+            <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-1">
+              Standard-Layout für neue Dokumente
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-              {TEMPLATES.map((tmpl) => (
+            <p className="text-xs text-muted-foreground mb-3">Wird beim Erstellen neuer Dokumente vorausgewählt. Im Editor jederzeit änderbar.</p>
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+              {LAYOUTS_META.map((layout) => (
                 <button
-                  key={tmpl.id}
-                  onClick={() => updateSetting("document_template", tmpl.id)}
-                  className={`relative rounded-xl overflow-hidden border-2 transition-all ${
-                    settings.document_template === tmpl.id
-                      ? "border-foreground ring-2 ring-foreground ring-offset-2"
+                  key={layout.id}
+                  onClick={() => updateSetting("document_template", layout.id)}
+                  title={layout.desc}
+                  className={`relative rounded-xl overflow-hidden border-2 transition-all text-left ${
+                    settings.document_template === layout.id
+                      ? "border-foreground ring-2 ring-foreground ring-offset-1"
                       : "border-border/30 hover:border-border/60"
                   }`}
                 >
-                  {/* Mini document preview */}
-                  <div className="bg-white" style={{ aspectRatio: "1/1.3" }}>
-                    {/* Colored header strip */}
-                    <div style={{ backgroundColor: tmpl.color, height: "28%" }} className="w-full" />
-                    {/* Mini content lines */}
-                    <div className="p-1.5 space-y-1">
-                      <div className="h-0.5 bg-gray-200 rounded w-3/4" />
-                      <div className="h-0.5 bg-gray-200 rounded w-1/2" />
-                      <div className="h-0.5 bg-gray-100 rounded w-full mt-1" />
-                      <div className="h-0.5 bg-gray-100 rounded w-full" />
-                      <div className="h-0.5 bg-gray-100 rounded w-2/3" />
-                    </div>
-                    {/* Template number indicator */}
-                    <div className="absolute top-1 right-1 w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
-                      style={{ backgroundColor: tmpl.color }}>
-                      {tmpl.id}
+                  <div className="bg-white p-2" style={{ aspectRatio: "210/297" }}>
+                    <div className="space-y-1 h-full flex flex-col">
+                      <div className="h-3 bg-gray-200 rounded w-full" />
+                      <div className="flex gap-1 flex-1">
+                        <div className="w-1/2 space-y-0.5">
+                          <div className="h-0.5 bg-gray-100 rounded w-full" />
+                          <div className="h-0.5 bg-gray-100 rounded w-3/4" />
+                        </div>
+                        <div className="flex-1 space-y-0.5">
+                          <div className="h-0.5 bg-gray-100 rounded w-full" />
+                          <div className="h-0.5 bg-gray-100 rounded w-full" />
+                        </div>
+                      </div>
+                      <div className="h-0.5 bg-gray-100 rounded w-1/2" />
+                      <div className="h-1.5 bg-gray-200 rounded w-full" />
+                      <div className="space-y-0.5">
+                        <div className="h-0.5 bg-gray-100 rounded w-full" />
+                        <div className="h-0.5 bg-gray-100 rounded w-full" />
+                        <div className="h-0.5 bg-gray-100 rounded w-2/3" />
+                      </div>
                     </div>
                   </div>
-                  {/* Template name */}
-                  <div className="px-1.5 py-1 bg-muted/30 text-center">
-                    <span className="text-[9px] font-medium text-muted-foreground">{tmpl.name}</span>
+                  <div className="px-1.5 py-1 bg-muted/20 text-center border-t border-border/20">
+                    <div className="text-[8px] font-semibold text-foreground truncate">{layout.name}</div>
+                    <div className="text-[7px] text-muted-foreground truncate">{layout.id}</div>
                   </div>
+                  {settings.document_template === layout.id && (
+                    <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-foreground flex items-center justify-center">
+                      <Check className="w-2.5 h-2.5 text-background" />
+                    </div>
+                  )}
                 </button>
               ))}
             </div>
