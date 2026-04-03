@@ -367,15 +367,69 @@ export default function AdminDokumentDetail() {
     return urlData.signedUrl;
   };
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     if (!doc) return;
-    setSendLoading("download");
-    try {
-      const pdf = generatePdf(doc);
-      pdf.save(`${doc.nummer}.pdf`);
-    } catch (e: unknown) {
-      setSendMsg({ type: "err", text: "PDF-Fehler: " + ((e as any)?.message || String(e)) });
-    } finally { setSendLoading(null); }
+
+    const html = doc.previewHtml;
+    if (!html) {
+      setSendMsg({ type: "err", text: "Kein Preview vorhanden. Bitte Dokument zuerst im Editor speichern." });
+      return;
+    }
+
+    const win = window.open("", "_blank");
+    if (!win) {
+      setSendMsg({ type: "err", text: "Bitte Popups für diese Seite erlauben." });
+      return;
+    }
+
+    // 595px Vorschau → 210mm A4  (210/25.4 * 96 / 595 ≈ 1.3341)
+    const scale = ((210 / 25.4) * 96) / 595;
+
+    win.document.write(`<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>${doc.nummer}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+@page { size: A4 portrait; margin: 0; }
+html, body { margin: 0; padding: 0; }
+body > div {
+  width: 595px !important;
+  height: 842px !important;
+  zoom: ${scale.toFixed(6)} !important;
+  overflow: hidden !important;
+  aspect-ratio: auto !important;
+  page-break-after: always !important;
+  break-after: page !important;
+}
+body > div:last-child {
+  page-break-after: auto !important;
+  break-after: auto !important;
+}
+@media screen {
+  body {
+    background: #444;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  body > div { box-shadow: 0 6px 32px rgba(0,0,0,0.35); }
+}
+</style>
+</head>
+<body>${html}</body>
+</html>`);
+
+    win.document.close();
+    setTimeout(() => { win.focus(); win.print(); }, 900);
   };
 
   const handlePublishPortal = async () => {

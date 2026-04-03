@@ -134,6 +134,7 @@ export interface Dokument {
   notizen?: string
   createdAt: string
   updatedAt: string
+  previewHtml?: string
 }
 
 // ── Artikel-Stamm ───────────────────────────────────────────────────────────

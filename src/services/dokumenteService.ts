@@ -89,6 +89,7 @@ function toDokument(row: Record<string, unknown>, positionen: Dokumentposition[]
     notizen: (row.notizen as string) || undefined,
     createdAt: row.created_at as string,
     updatedAt: (row.updated_at as string) || (row.created_at as string),
+    previewHtml: (row.preview_html as string) || undefined,
   };
 }
 
@@ -277,6 +278,7 @@ export const dokumenteService = {
         offener_betrag: summen.brutto,
         notizen: data.notizen || "",
         name: `${TYP_COLUMN[typ]} ${nummer}`,
+        preview_html: data.previewHtml || "",
       })
       .select("*")
       .single();
@@ -327,6 +329,7 @@ export const dokumenteService = {
     if (data.kopftext !== undefined) { patch.kopftext = data.kopftext; patch.intro_text = data.kopftext; }
     if (data.fusstext !== undefined) { patch.fusstext = data.fusstext; patch.closing_text = data.fusstext; }
     if (data.infoText !== undefined) patch.info_text = data.infoText;
+    if (data.previewHtml !== undefined) patch.preview_html = data.previewHtml;
     if (data.rabattProzent !== undefined) patch.rabatt_prozent = data.rabattProzent;
     if (data.notizen !== undefined) patch.notizen = data.notizen;
     if (data.quelldokumentId !== undefined) { patch.quelldokument_id = data.quelldokumentId; patch.quelldokument_nummer = data.quelldokumentNummer || null; }

@@ -1108,6 +1108,7 @@ export default function AdminDokumentEditor() {
   // Positions
   const [positionen, setPositionen] = useState<LocalPosition[]>([newPosition()]);
   const [activePositionId, setActivePositionId] = useState<string | null>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
 
   // Tax
   const [mwstSatz, setMwstSatz] = useState(0);
@@ -1393,6 +1394,8 @@ export default function AdminDokumentEditor() {
       };
       const dokumentTyp = typMap[typ] || "angebot";
 
+      const previewHtml = document.getElementById("doc-preview-capture")?.innerHTML || "";
+
       if (isNew) {
         const saved = await dokumenteService.create(
           dokumentTyp,
@@ -1409,6 +1412,7 @@ export default function AdminDokumentEditor() {
             status: "entwurf",
             customerId: selectedCustomerId || undefined,
             rabattProzent: rabattProzent ?? undefined,
+            previewHtml,
           },
           posForService,
         );
@@ -1429,6 +1433,7 @@ export default function AdminDokumentEditor() {
             fusstext,
             customerId: selectedCustomerId || undefined,
             rabattProzent: rabattProzent ?? undefined,
+            previewHtml,
           },
           posForService,
         );
@@ -1475,12 +1480,14 @@ export default function AdminDokumentEditor() {
       const typMap: Record<string, DokumentTyp> = { angebot: "angebot", rechnung: "rechnung", auftragsbestaetigung: "auftragsbestaetigung" };
       const dokumentTyp = typMap[typ] || "angebot";
 
+      const previewHtml = document.getElementById("doc-preview-capture")?.innerHTML || "";
+
       if (isNew) {
         const saved = await dokumenteService.create(dokumentTyp, {
           datum, faelligAm: faelligAm || undefined, gueltigBis: gueltigBis || undefined,
           lieferdatum: lieferdatum || undefined, zahlungszielTage, empfaenger, absender,
           kopftext, fusstext, status: "entwurf", customerId: selectedCustomerId || undefined,
-          rabattProzent: rabattProzent ?? undefined,
+          rabattProzent: rabattProzent ?? undefined, previewHtml,
         }, posForService);
         navigate(`/admin/dokumente/${saved.id}?send=1`);
       } else if (id) {
@@ -1488,7 +1495,7 @@ export default function AdminDokumentEditor() {
           datum, faelligAm: faelligAm || undefined, gueltigBis: gueltigBis || undefined,
           lieferdatum: lieferdatum || undefined, zahlungszielTage, empfaenger, absender,
           kopftext, fusstext, customerId: selectedCustomerId || undefined,
-          rabattProzent: rabattProzent ?? undefined,
+          rabattProzent: rabattProzent ?? undefined, previewHtml,
         }, posForService);
         navigate(`/admin/dokumente/${id}?send=1`);
       }
@@ -1498,74 +1505,75 @@ export default function AdminDokumentEditor() {
     } finally { setSaving(false); }
   };
 
-  // Drucken / PDF: Clone im selben Dokument, dann window.print() mit @media print
+  // Drucken / PDF: Neues Fenster mit sauberem A4-Print öffnen
   const handlePrintPreview = () => {
     const el = document.getElementById("doc-preview-print");
     if (!el) return;
 
-    // Alten Print-Container entfernen (falls noch vorhanden)
-    document.getElementById("__printWrap")?.remove();
-    document.getElementById("__printCSS")?.remove();
+    const html = el.innerHTML;
+    const win = window.open("", "_blank");
+    if (!win) {
+      alert("Bitte erlauben Sie Popups für diese Seite, um das PDF zu öffnen.");
+      return;
+    }
 
-    // Print-Container im selben Dokument erstellen
-    const wrap = document.createElement("div");
-    wrap.id = "__printWrap";
+    // 595px Vorschau → 210mm A4-Breite  (210/25.4 * 96 / 595 ≈ 1.3341)
+    const scale = ((210 / 25.4) * 96) / 595;
 
-    Array.from(el.children).forEach((pageEl) => {
-      const clone = pageEl.cloneNode(true) as HTMLElement;
-      // Explizite Pixelmaße setzen, aspect-ratio entfernen
-      clone.style.cssText = clone.style.cssText
-        .replace(/aspect-ratio\s*:[^;]+;?/gi, "")
-        .replace(/width\s*:\s*[^;]+;?/gi, "width:595px;")
-        .replace(/height\s*:\s*[^;]+;?/gi, "");
-      clone.style.width = "595px";
-      clone.style.height = "842px";
-      clone.style.overflow = "hidden";
-      clone.style.display = "flex";
-      clone.style.flexDirection = "column";
-      wrap.appendChild(clone);
-    });
+    win.document.write(`<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>${nummer || "Dokument"}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+@page { size: A4 portrait; margin: 0; }
+html, body { margin: 0; padding: 0; }
+/* Jede Seite = 595×842px, skaliert auf A4 210×297mm */
+body > div {
+  width: 595px !important;
+  height: 842px !important;
+  zoom: ${scale.toFixed(6)} !important;
+  overflow: hidden !important;
+  aspect-ratio: auto !important;
+  page-break-after: always !important;
+  break-after: page !important;
+}
+body > div:last-child {
+  page-break-after: auto !important;
+  break-after: auto !important;
+}
+/* Bildschirm-Ansicht im Print-Fenster */
+@media screen {
+  body {
+    background: #444;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  body > div {
+    box-shadow: 0 6px 32px rgba(0,0,0,0.35);
+  }
+}
+</style>
+</head>
+<body>${html}</body>
+</html>`);
 
-    document.body.appendChild(wrap);
+    win.document.close();
 
-    // Print-CSS injizieren
-    const style = document.createElement("style");
-    style.id = "__printCSS";
-    style.textContent = `
-      @media print {
-        @page { size: A4 portrait; margin: 0; }
-        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-        html, body { visibility: hidden !important; }
-        #__printWrap { visibility: visible !important; }
-        #__printWrap * { visibility: visible !important; }
-        #__printWrap {
-          position: fixed !important;
-          top: 0 !important; left: 0 !important;
-          display: block !important;
-        }
-        #__printWrap > * {
-          display: flex !important;
-          flex-direction: column !important;
-          width: 595px !important;
-          height: 842px !important;
-          overflow: hidden !important;
-          page-break-after: always !important;
-          break-after: page !important;
-          zoom: 1.3341;
-        }
-      }
-      @media screen {
-        #__printWrap { display: none !important; }
-      }
-    `;
-    document.head.appendChild(style);
-
-    window.print();
-
+    // Fonts + Bilder laden lassen, dann drucken
     setTimeout(() => {
-      document.getElementById("__printWrap")?.remove();
-      document.getElementById("__printCSS")?.remove();
-    }, 4000);
+      win.focus();
+      win.print();
+    }, 900);
   };
 
   const typLabel = TYP_LABEL[typ] || typ;
@@ -1622,6 +1630,15 @@ export default function AdminDokumentEditor() {
 
   return (
     <div className="flex flex-col bg-background" style={{ height: "100dvh" }}>
+
+      {/* Versteckter Preview-Container für PDF-Capture beim Speichern */}
+      <div
+        id="doc-preview-capture"
+        aria-hidden="true"
+        style={{ position: "fixed", left: -99999, top: 0, width: 595, visibility: "hidden", pointerEvents: "none" }}
+      >
+        <DocumentPreview {...previewProps} />
+      </div>
 
       {/* ── VORSCHAU OVERLAY ─────────────────────────────────────────────── */}
       {showVorschau && (
