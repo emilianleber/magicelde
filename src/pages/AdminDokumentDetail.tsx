@@ -347,11 +347,23 @@ export default function AdminDokumentDetail() {
   // Upload PDF to storage, get signed URL, update file_url on document
   const uploadPdfBlob = async (blob: Blob, docId: string): Promise<string> => {
     const path = `dokumente/${docId}.pdf`;
-    await supabase.storage.from("portal-documents").upload(path, blob, { contentType: "application/pdf", upsert: true });
-    const { data } = await supabase.storage.from("portal-documents").createSignedUrl(path, 60 * 60 * 24 * 365);
-    const url = data?.signedUrl ?? "";
-    await supabase.from("portal_documents").update({ file_url: url }).eq("id", docId);
-    return url;
+    const { error: upErr } = await supabase.storage
+      .from("portal-documents")
+      .upload(path, blob, { contentType: "application/pdf", upsert: true });
+    if (upErr) throw new Error("Storage-Upload fehlgeschlagen: " + upErr.message);
+
+    const { data: urlData, error: urlErr } = await supabase.storage
+      .from("portal-documents")
+      .createSignedUrl(path, 60 * 60 * 24 * 365);
+    if (urlErr || !urlData?.signedUrl) throw new Error("Signed-URL Fehler: " + (urlErr?.message ?? "leer"));
+
+    const { error: dbErr } = await supabase
+      .from("portal_documents")
+      .update({ file_url: urlData.signedUrl })
+      .eq("id", docId);
+    if (dbErr) throw new Error("DB-Update fehlgeschlagen: " + dbErr.message);
+
+    return urlData.signedUrl;
   };
 
   const handleDownload = async () => {

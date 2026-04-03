@@ -260,7 +260,7 @@ export default function AdminDokumenteListe() {
         <div className="rounded-2xl border border-border/20 overflow-hidden bg-background">
           {/* Header */}
           <div className="hidden md:grid text-[10px] text-muted-foreground uppercase font-semibold tracking-wider px-4 py-2.5 bg-muted/10 border-b border-border/10"
-            style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 100px auto" }}>
+            style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 100px 148px" }}>
             <span>Nummer</span>
             <span>Kontakt</span>
             <span>Typ</span>
@@ -303,7 +303,7 @@ export default function AdminDokumenteListe() {
 
                 {/* ── Desktop: grid mit fester Actions-Spalte ── */}
                 <div className="hidden md:grid items-center px-4 gap-2"
-                  style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 100px auto" }}>
+                  style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 100px 148px" }}>
 
                   {/* Daten-Zellen — klickbar zur Detail-Seite */}
                   <button
@@ -324,27 +324,30 @@ export default function AdminDokumenteListe() {
                     <div className="flex justify-end py-3"><StatusBadge status={doc.status} /></div>
                   </button>
 
-                  {/* ── Actions-Spalte (immer sichtbar) ── */}
-                  <div className="flex items-center justify-end gap-1 py-2 pl-2">
-                    {canAcceptReject && (
+                  {/* ── Actions-Spalte (feste Breite 148px, immer gleich) ── */}
+                  <div className="flex items-center justify-end gap-1 py-2 pl-1 w-[148px] shrink-0">
+                    {canAcceptReject ? (
                       <>
                         <button
                           onClick={(e) => handleStatusChange(e, doc, "akzeptiert")}
                           title="Angenommen"
-                          className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-semibold text-green-700 bg-green-50 hover:bg-green-100 transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold text-green-700 bg-green-50 hover:bg-green-100 transition-colors whitespace-nowrap"
                         >
-                          <ThumbsUp className="w-3 h-3" />
+                          <ThumbsUp className="w-3 h-3 shrink-0" />
                           Ja
                         </button>
                         <button
                           onClick={(e) => handleStatusChange(e, doc, "abgelehnt")}
                           title="Abgelehnt"
-                          className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors whitespace-nowrap"
                         >
-                          <ThumbsDown className="w-3 h-3" />
+                          <ThumbsDown className="w-3 h-3 shrink-0" />
                           Nein
                         </button>
                       </>
+                    ) : (
+                      /* Platzhalter damit alle Zeilen gleich breit sind */
+                      <div className="w-[72px]" />
                     )}
 
                     {/* ··· Menü */}
