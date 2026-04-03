@@ -6,7 +6,7 @@ import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentTyp, DokumentStatus } from "@/types/dokumente";
 import {
   Plus, FileText, TrendingUp, AlertTriangle, CheckCircle,
-  Search, Filter, ChevronRight, Euro,
+  Search, ChevronRight, Trash2, Ban,
 } from "lucide-react";
 
 const STATUS_CONFIG: Record<DokumentStatus, { label: string; cls: string }> = {
@@ -74,6 +74,7 @@ export default function AdminDokumenteListe() {
   const [dokumente, setDokumente] = useState<Dokument[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [actionId, setActionId] = useState<string | null>(null); // which row has actions open
   const [kennzahlen, setKennzahlen] = useState({ offenBetrag: 0, ueberfaelligBetrag: 0, bezahltMonatBetrag: 0, offenAnzahl: 0 });
 
   const activeTab: Tab = (() => {
@@ -114,6 +115,22 @@ export default function AdminDokumenteListe() {
       (d.empfaenger.firma || "").toLowerCase().includes(q)
     );
   });
+
+  const handleStornieren = async (e: React.MouseEvent, doc: Dokument) => {
+    e.stopPropagation();
+    if (!confirm(`${TYP_LABEL[doc.typ]} ${doc.nummer} stornieren?`)) return;
+    await dokumenteService.setStatus(doc.id, "storniert");
+    setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status: "storniert" as DokumentStatus } : d));
+    setActionId(null);
+  };
+
+  const handleDelete = async (e: React.MouseEvent, doc: Dokument) => {
+    e.stopPropagation();
+    if (!confirm(`${TYP_LABEL[doc.typ]} ${doc.nummer} unwiderruflich löschen?`)) return;
+    await dokumenteService.delete(doc.id);
+    setDokumente(prev => prev.filter(d => d.id !== doc.id));
+    setActionId(null);
+  };
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -236,7 +253,7 @@ export default function AdminDokumenteListe() {
         <div className="rounded-2xl border border-border/20 overflow-hidden bg-background">
           {/* Header */}
           <div className="hidden md:grid text-[10px] text-muted-foreground uppercase font-semibold tracking-wider px-4 py-2.5 bg-muted/10 border-b border-border/10"
-            style={{ gridTemplateColumns: "120px 1fr 120px 100px 100px 110px 110px 32px" }}>
+            style={{ gridTemplateColumns: "120px 1fr 120px 100px 100px 110px 110px 80px" }}>
             <span>Nummer</span>
             <span>Kontakt</span>
             <span>Typ</span>
@@ -247,56 +264,95 @@ export default function AdminDokumenteListe() {
             <span />
           </div>
 
-          {filtered.map((doc, i) => {
+          {actionId && <div className="fixed inset-0 z-10" onClick={() => setActionId(null)} />}
+
+          {filtered.map((doc) => {
             const isOverdue = doc.faelligAm && doc.faelligAm < today && (doc.status === "offen" || doc.status === "gesendet" || doc.status === "ueberfaellig");
             const contact = doc.empfaenger.firma || doc.empfaenger.name || "—";
+            const showActions = actionId === doc.id;
+            const isStorniert = doc.status === "storniert";
 
             return (
-              <button
-                key={doc.id}
-                onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
-                className={`w-full text-left hover:bg-muted/20 transition-colors border-b border-border/10 last:border-0 ${isOverdue ? "bg-red-50/30" : ""}`}
-              >
-                {/* Mobile */}
-                <div className="md:hidden px-4 py-3.5 flex items-center justify-between gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-sm font-semibold font-mono">{doc.nummer}</span>
-                      <span className={`text-[10px] font-medium ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
+              <div key={doc.id} className="relative">
+                <button
+                  onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
+                  className={`w-full text-left hover:bg-muted/20 transition-colors border-b border-border/10 last:border-0 ${isOverdue ? "bg-red-50/30" : ""} ${isStorniert ? "opacity-50" : ""}`}
+                >
+                  {/* Mobile */}
+                  <div className="md:hidden px-4 py-3.5 flex items-center justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-sm font-semibold font-mono">{doc.nummer}</span>
+                        <span className={`text-[10px] font-medium ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground truncate">{contact}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{fmtDate(doc.datum)}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground truncate">{contact}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{fmtDate(doc.datum)}</p>
+                    <div className="shrink-0 text-right">
+                      <p className={`text-sm font-bold tabular-nums ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</p>
+                      <div className="mt-1"><StatusBadge status={doc.status} /></div>
+                    </div>
                   </div>
-                  <div className="shrink-0 text-right">
-                    <p className={`text-sm font-bold tabular-nums ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</p>
-                    <div className="mt-1"><StatusBadge status={doc.status} /></div>
+
+                  {/* Desktop */}
+                  <div className="hidden md:grid items-center px-4 py-3 text-sm gap-2"
+                    style={{ gridTemplateColumns: "120px 1fr 120px 100px 100px 110px 110px 80px" }}>
+                    <span className="font-mono text-xs font-semibold text-muted-foreground">{doc.nummer}</span>
+                    <div className="min-w-0">
+                      <p className="truncate font-medium text-sm">{contact}</p>
+                      {doc.empfaenger.firma && doc.empfaenger.name && (
+                        <p className="truncate text-xs text-muted-foreground">{doc.empfaenger.name}</p>
+                      )}
+                    </div>
+                    <span className={`text-xs font-medium ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
+                    <span className="text-xs text-muted-foreground">{fmtDate(doc.datum)}</span>
+                    <span className={`text-xs ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>
+                      {fmtDate(doc.faelligAm)}
+                    </span>
+                    <span className={`text-right font-semibold tabular-nums text-sm ${isOverdue ? "text-red-600" : ""}`}>
+                      {fmt(doc.brutto)}
+                    </span>
+                    <div className="flex justify-end"><StatusBadge status={doc.status} /></div>
+                    {/* Actions toggle placeholder */}
+                    <div className="w-20" />
                   </div>
+                </button>
+
+                {/* Inline action buttons (shown on hover / toggle) */}
+                <div className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 items-center gap-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{ opacity: showActions ? 1 : undefined }}>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setActionId(showActions ? null : doc.id); }}
+                    className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                    title="Aktionen"
+                  >
+                    <span className="text-[10px]">···</span>
+                  </button>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground/40" />
                 </div>
 
-                {/* Desktop */}
-                <div className="hidden md:grid items-center px-4 py-3 text-sm gap-2"
-                  style={{ gridTemplateColumns: "120px 1fr 120px 100px 100px 110px 110px 32px" }}>
-                  <span className="font-mono text-xs font-semibold text-muted-foreground">{doc.nummer}</span>
-                  <div className="min-w-0">
-                    <p className="truncate font-medium text-sm">{contact}</p>
-                    {doc.empfaenger.firma && doc.empfaenger.name && (
-                      <p className="truncate text-xs text-muted-foreground">{doc.empfaenger.name}</p>
+                {/* Actions popup */}
+                {showActions && (
+                  <div className="absolute right-4 top-full mt-1 z-30 bg-background border border-border/30 rounded-xl shadow-lg overflow-hidden w-44">
+                    {!isStorniert && (
+                      <button
+                        onClick={(e) => handleStornieren(e, doc)}
+                        className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-amber-700 hover:bg-amber-50 transition-colors text-left"
+                      >
+                        <Ban className="w-3.5 h-3.5 shrink-0" />
+                        Stornieren
+                      </button>
                     )}
+                    <button
+                      onClick={(e) => handleDelete(e, doc)}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-red-600 hover:bg-red-50 transition-colors text-left"
+                    >
+                      <Trash2 className="w-3.5 h-3.5 shrink-0" />
+                      Endgültig löschen
+                    </button>
                   </div>
-                  <span className={`text-xs font-medium ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
-                  <span className="text-xs text-muted-foreground">{fmtDate(doc.datum)}</span>
-                  <span className={`text-xs ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>
-                    {fmtDate(doc.faelligAm)}
-                  </span>
-                  <span className={`text-right font-semibold tabular-nums text-sm ${isOverdue ? "text-red-600" : ""}`}>
-                    {fmt(doc.brutto)}
-                  </span>
-                  <div className="flex justify-end"><StatusBadge status={doc.status} /></div>
-                  <div className="flex justify-end text-muted-foreground/40 hover:text-muted-foreground">
-                    <ChevronRight className="w-4 h-4" />
-                  </div>
-                </div>
-              </button>
+                )}
+              </div>
             );
           })}
         </div>

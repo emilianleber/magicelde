@@ -5,7 +5,7 @@ import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentStatus, DokumentTyp, Zahlung } from "@/types/dokumente";
 import {
   ArrowLeft, Pencil, Send, CheckCircle, XCircle, ArrowRight,
-  Receipt, AlertTriangle, Plus, X, Download, Clock,
+  Receipt, AlertTriangle, Plus, X, Clock, Trash2, Ban, MoreHorizontal,
 } from "lucide-react";
 
 const STATUS_CFG: Record<DokumentStatus, { label: string; cls: string; dot: string }> = {
@@ -97,6 +97,9 @@ export default function AdminDokumentDetail() {
   const [converting, setConverting] = useState(false);
   const [statusChanging, setStatusChanging] = useState(false);
 
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
   const [zahlungPanel, setZahlungPanel] = useState(false);
   const [zahlungForm, setZahlungForm] = useState({
     datum: new Date().toISOString().split("T")[0],
@@ -138,6 +141,29 @@ export default function AdminDokumentDetail() {
     setConverting(true);
     try { const neu = await dokumenteService.umwandeln(id, zielTyp); navigate(`/admin/dokumente/${neu.id}`); }
     finally { setConverting(false); }
+  };
+
+  const handleStornieren = async () => {
+    if (!id || !doc) return;
+    if (!confirm(`${TYP_LABEL[doc.typ]} ${doc.nummer} stornieren?\n\nDas Dokument bleibt gespeichert, wird aber als "Storniert" markiert.`)) return;
+    setStatusChanging(true);
+    setMoreMenuOpen(false);
+    try { await dokumenteService.setStatus(id, "storniert"); await load(); }
+    finally { setStatusChanging(false); }
+  };
+
+  const handleDelete = async () => {
+    if (!id || !doc) return;
+    if (!confirm(`${TYP_LABEL[doc.typ]} ${doc.nummer} unwiderruflich löschen?\n\nAlle Positionen und Zahlungen werden ebenfalls gelöscht.`)) return;
+    setDeleting(true);
+    setMoreMenuOpen(false);
+    try {
+      await dokumenteService.delete(id);
+      navigate("/admin/dokumente");
+    } catch (e: unknown) {
+      alert("Fehler beim Löschen: " + ((e as any)?.message || String(e)));
+      setDeleting(false);
+    }
   };
 
   const handleZahlungSave = async () => {
@@ -243,6 +269,49 @@ export default function AdminDokumentDetail() {
               <Pencil className="w-3.5 h-3.5" />
               Bearbeiten
             </button>
+
+            {/* ── Mehr-Menü ── */}
+            <div className="relative">
+              <button
+                onClick={() => setMoreMenuOpen((v) => !v)}
+                disabled={deleting || statusChanging}
+                className="flex items-center justify-center w-9 h-9 rounded-xl border border-border/30 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors disabled:opacity-40"
+              >
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
+              {moreMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-30" onClick={() => setMoreMenuOpen(false)} />
+                  <div className="absolute right-0 top-full mt-1.5 z-40 w-52 bg-background border border-border/30 rounded-2xl shadow-xl overflow-hidden">
+                    {/* Stornieren – nur wenn noch nicht storniert */}
+                    {doc.status !== "storniert" && (
+                      <button
+                        onClick={handleStornieren}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-sm text-amber-700 hover:bg-amber-50 transition-colors text-left"
+                      >
+                        <Ban className="w-4 h-4 shrink-0" />
+                        <div>
+                          <p className="font-medium">Stornieren</p>
+                          <p className="text-[10px] text-amber-600/70 mt-0.5">Status → Storniert</p>
+                        </div>
+                      </button>
+                    )}
+                    <div className="border-t border-border/10" />
+                    <button
+                      onClick={handleDelete}
+                      disabled={deleting}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors text-left disabled:opacity-50"
+                    >
+                      <Trash2 className="w-4 h-4 shrink-0" />
+                      <div>
+                        <p className="font-medium">{deleting ? "Löschen…" : "Endgültig löschen"}</p>
+                        <p className="text-[10px] text-red-500/70 mt-0.5">Nicht wiederherstellbar</p>
+                      </div>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
