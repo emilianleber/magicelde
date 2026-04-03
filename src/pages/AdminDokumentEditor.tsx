@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService } from "@/services/dokumenteService";
 import type { DokumentTyp } from "@/types/dokumente";
 import type { Artikel } from "@/types/dokumente";
-import { ArrowLeft, Eye, Save, Send, X } from "lucide-react";
+import { ArrowLeft, Eye, Printer, Save, Send, X } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -1247,6 +1247,41 @@ export default function AdminDokumentEditor() {
     }
   };
 
+  // Speichern + zur Detail-Seite navigieren (für "Versenden"-Button)
+  const handleSaveAndNavigate = async () => {
+    await handleSave();
+    // handleSave navigiert für neue Dokumente bereits – für bestehende hier nachholen
+    if (!isNew && id) navigate(`/admin/dokumente/${id}`);
+  };
+
+  // Drucken / PDF: Preview-HTML in neuem Fenster öffnen und Browser-Druckdialog starten
+  const handlePrintPreview = () => {
+    const el = document.getElementById("doc-preview-print");
+    if (!el) return;
+    const win = window.open("", "_blank", "width=680,height=960");
+    if (!win) return;
+    // Google Fonts laden (Inter)
+    const fontLinks = Array.from(document.querySelectorAll("link[rel='stylesheet']"))
+      .map((l) => (l as HTMLLinkElement).outerHTML)
+      .join("\n");
+    win.document.write(`<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+${fontLinks}
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#fff; font-family:Inter,system-ui,sans-serif; }
+  @page { size:A4 portrait; margin:0; }
+  @media print { * { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+</style>
+</head>
+<body style="width:595px">
+${el.innerHTML}
+</body></html>`);
+    win.document.close();
+    setTimeout(() => { win.focus(); win.print(); }, 600);
+  };
+
   const typLabel = TYP_LABEL[typ] || typ;
   const inputCls = "w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20";
   const labelCls = "text-xs text-muted-foreground mb-1 block";
@@ -1325,7 +1360,18 @@ export default function AdminDokumentEditor() {
                 <Save className="w-4 h-4" />
                 {saving ? "Speichere…" : "Speichern"}
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity">
+              <button
+                onClick={handlePrintPreview}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors"
+              >
+                <Printer className="w-4 h-4" />
+                Drucken / PDF
+              </button>
+              <button
+                onClick={handleSaveAndNavigate}
+                disabled={saving}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
                 <Send className="w-4 h-4" />
                 Versenden
               </button>
@@ -1337,6 +1383,7 @@ export default function AdminDokumentEditor() {
             {/* Document preview (large) */}
             <div className="flex-1 overflow-y-auto flex items-start justify-center p-8 bg-muted/10">
               <div
+                id="doc-preview-print"
                 className="bg-white rounded-xl shadow-2xl overflow-hidden"
                 style={{ width: "min(595px, 100%)", aspectRatio: "210/297" }}
               >
@@ -1431,7 +1478,11 @@ export default function AdminDokumentEditor() {
             <Save className="w-4 h-4" />
             {saving ? "Speichere…" : "Speichern"}
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity">
+          <button
+            onClick={handleSaveAndNavigate}
+            disabled={saving}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+          >
             <Send className="w-4 h-4" />
             Versenden
           </button>

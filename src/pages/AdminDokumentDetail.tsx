@@ -362,10 +362,23 @@ export default function AdminDokumentDetail() {
     try {
       const pdf = generatePdf(doc);
       const blob = pdf.output("blob");
-      await uploadPdfBlob(blob, id);
+      const signedUrl = await uploadPdfBlob(blob, id);
+      // Auch E-Mail senden wenn Adresse vorhanden
+      if (emailTo) {
+        await supabase.functions.invoke("send-customer-mail", {
+          body: {
+            to_email: emailTo,
+            to_name: doc.empfaenger.firma || doc.empfaenger.name,
+            subject: emailSubject,
+            body: emailBody.replace(/\n/g, "<br>"),
+            attachment_urls: [signedUrl],
+            customer_id: (doc as any).customerId ?? null,
+          },
+        });
+      }
       await dokumenteService.setStatus(id, "gesendet");
       await load();
-      setSendMsg({ type: "ok", text: "Im Kundenportal veröffentlicht ✓" });
+      setSendMsg({ type: "ok", text: emailTo ? "Im Portal veröffentlicht & E-Mail gesendet ✓" : "Im Kundenportal veröffentlicht ✓" });
     } catch (e: unknown) {
       setSendMsg({ type: "err", text: "Fehler: " + ((e as any)?.message || String(e)) });
     } finally { setSendLoading(null); }
@@ -836,24 +849,24 @@ export default function AdminDokumentDetail() {
                 </button>
               </div>
 
-              {/* Option 2: Kundenportal */}
-              <div className="rounded-2xl border border-border/20 bg-muted/5 p-4">
+              {/* Option 2: Kundenportal + E-Mail */}
+              <div className="rounded-2xl border border-blue-200 bg-blue-50/30 p-4">
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                    <Globe className="w-4 h-4 text-blue-600" />
+                  <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
+                    <Send className="w-4 h-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">Im Kundenportal veröffentlichen</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">PDF im Portal des Kunden sichtbar machen · Status → Gesendet</p>
+                    <p className="text-sm font-semibold">Versenden</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">PDF im Kundenportal veröffentlichen + E-Mail senden · Status → Gesendet</p>
                   </div>
                 </div>
                 <button
                   onClick={handlePublishPortal}
                   disabled={sendLoading !== null}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
-                  {sendLoading === "portal" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Globe className="w-3.5 h-3.5" />}
-                  {sendLoading === "portal" ? "Veröffentliche…" : "Im Portal veröffentlichen"}
+                  {sendLoading === "portal" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                  {sendLoading === "portal" ? "Sende…" : "Jetzt versenden"}
                 </button>
               </div>
 
