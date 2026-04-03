@@ -19,6 +19,8 @@ import {
   MessageCircle,
   Check,
   ChevronRight,
+  Receipt,
+  FileCheck,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -119,6 +121,9 @@ const AdminCustomerDetail = () => {
   const [requests, setRequests] = useState<PortalRequest[]>([]);
   const [events, setEvents] = useState<PortalEvent[]>([]);
   const [documents, setDocuments] = useState<PortalDocument[]>([]);
+  const [nativeDokumente, setNativeDokumente] = useState<Array<{
+    id: string; nummer: string; typ: string; status: string; brutto: number; datum: string; empfaengerName: string;
+  }>>([]);
   const [customerMails, setCustomerMails] = useState<any[]>([]);
 
   // Edit mode
@@ -180,10 +185,15 @@ const AdminCustomerDetail = () => {
       setPhone(cust.phone || "");
       setKundennummer(cust.kundennummer || "");
 
-      const [reqRes, evtRes, docRes, imapRes, sentRes] = await Promise.all([
+      const [reqRes, evtRes, docRes, nativeDocRes, imapRes, sentRes] = await Promise.all([
         supabase.from("portal_requests").select("*").eq("customer_id", id).order("created_at", { ascending: false }),
         supabase.from("portal_events").select("*").eq("customer_id", id).order("event_date", { ascending: true }),
         supabase.from("portal_documents").select("*").eq("customer_id", id).order("created_at", { ascending: false }),
+        supabase.from("portal_documents")
+          .select("id,document_number,type,status,total,document_date,empfaenger")
+          .eq("customer_id", id)
+          .in("type", ["Angebot","Auftragsbestätigung","Rechnung","Abschlagsrechnung","Mahnung","Gutschrift","Stornorechnung"])
+          .order("created_at", { ascending: false }),
         cust.email
           ? supabase.from("portal_inbox_mails").select("*").eq("from_email", cust.email).eq("is_deleted", false).order("received_at", { ascending: false }).limit(50)
           : Promise.resolve({ data: [], error: null }),
@@ -193,6 +203,17 @@ const AdminCustomerDetail = () => {
       if (!reqRes.error) setRequests(reqRes.data || []);
       if (!evtRes.error) setEvents(evtRes.data || []);
       if (!docRes.error) setDocuments(docRes.data || []);
+      if (!nativeDocRes.error) {
+        setNativeDokumente((nativeDocRes.data || []).map((d: any) => ({
+          id: d.id,
+          nummer: d.document_number || "–",
+          typ: d.type || "Dokument",
+          status: d.status || "entwurf",
+          brutto: d.total || 0,
+          datum: d.document_date || "",
+          empfaengerName: (d.empfaenger as any)?.name || "",
+        })));
+      }
 
       const received = (imapRes.data || []).map((m: any) => ({ ...m, _type: "received", _date: m.received_at }));
       const sent = (sentRes.data || []).map((m: any) => ({ ...m, _type: "sent", _date: m.created_at }));
@@ -468,7 +489,7 @@ const AdminCustomerDetail = () => {
           {[
             { label: "Anfragen", value: activeRequests.length, tab: "anfragen" as Tab, icon: MessageCircle },
             { label: "Events", value: activeEvents.length, tab: "events" as Tab, icon: Calendar },
-            { label: "Dokumente", value: documents.length, tab: "dokumente" as Tab, icon: FileText },
+            { label: "Dokumente", value: nativeDokumente.length + documents.filter((d) => !["Angebot","Auftragsbestätigung","Rechnung","Abschlagsrechnung","Mahnung","Gutschrift","Stornorechnung"].includes(d.type || "")).length, tab: "dokumente" as Tab, icon: FileText },
             { label: "Mails", value: mailCount, tab: "mails" as Tab, icon: Mail },
           ].map((s) => (
             <button
@@ -636,28 +657,107 @@ const AdminCustomerDetail = () => {
 
         {/* DOKUMENTE */}
         {activeTab === "dokumente" && (
-          <div>
-            {documents.length === 0 ? (
+          <div className="space-y-4">
+            {/* Quick actions */}
+            <div className="flex gap-2 flex-wrap">
+              <Link
+                to={`/admin/dokumente/new?typ=angebot&customerId=${customer.id}`}
+                className="inline-flex items-center gap-1.5 text-sm border border-border/30 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground hover:border-accent/20 transition-all"
+              >
+                <FileCheck className="w-4 h-4" /> Angebot erstellen
+              </Link>
+              <Link
+                to={`/admin/dokumente/new?typ=rechnung&customerId=${customer.id}`}
+                className="inline-flex items-center gap-1.5 text-sm border border-border/30 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground hover:border-accent/20 transition-all"
+              >
+                <Receipt className="w-4 h-4" /> Rechnung erstellen
+              </Link>
+            </div>
+
+            {/* Native documents (created in document editor) */}
+            {nativeDokumente.length > 0 && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2 px-1">Angebote & Rechnungen</p>
+                <div className="space-y-2">
+                  {nativeDokumente.map((doc) => {
+                    const statusColors: Record<string, string> = {
+                      entwurf: "bg-gray-100 text-gray-600",
+                      gesendet: "bg-blue-100 text-blue-700",
+                      angenommen: "bg-green-100 text-green-700",
+                      abgelehnt: "bg-red-100 text-red-600",
+                      bezahlt: "bg-emerald-100 text-emerald-700",
+                      ueberfaellig: "bg-orange-100 text-orange-700",
+                      storniert: "bg-gray-100 text-gray-500",
+                    };
+                    const statusLabels: Record<string, string> = {
+                      entwurf: "Entwurf", gesendet: "Gesendet", angenommen: "Angenommen",
+                      abgelehnt: "Abgelehnt", bezahlt: "Bezahlt", ueberfaellig: "Überfällig", storniert: "Storniert",
+                    };
+                    return (
+                      <Link
+                        key={doc.id}
+                        to={`/admin/dokumente/${doc.id}`}
+                        className="flex items-center gap-3 p-3 rounded-xl bg-muted/20 border border-border/30 hover:border-accent/20 hover:bg-muted/30 transition-all group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-foreground/5 flex items-center justify-center shrink-0">
+                          <FileText className="w-4 h-4 text-foreground/50" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="text-sm font-semibold text-foreground">{doc.nummer}</p>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full font-medium bg-muted text-muted-foreground">{doc.typ}</span>
+                          </div>
+                          {doc.datum && <p className="text-xs text-muted-foreground mt-0.5">{new Date(doc.datum).toLocaleDateString("de-DE")}</p>}
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className="text-sm font-semibold text-foreground">{new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(doc.brutto)}</p>
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${statusColors[doc.status] || "bg-gray-100 text-gray-600"}`}>
+                            {statusLabels[doc.status] || doc.status}
+                          </span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Uploaded files */}
+            {documents.filter((d) => !["Angebot","Auftragsbestätigung","Rechnung","Abschlagsrechnung","Mahnung","Gutschrift","Stornorechnung"].includes(d.type || "")).length > 0 && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2 px-1">Hochgeladene Dateien</p>
+                <div className="space-y-2">
+                  {documents
+                    .filter((d) => !["Angebot","Auftragsbestätigung","Rechnung","Abschlagsrechnung","Mahnung","Gutschrift","Stornorechnung"].includes(d.type || ""))
+                    .map((doc) => (
+                      <div key={doc.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30">
+                        <FileText className="w-5 h-5 text-muted-foreground shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-foreground truncate">{doc.name}</p>
+                          <p className="text-xs text-muted-foreground">{doc.type || "Datei"} · {new Date(doc.created_at).toLocaleDateString("de-DE")}</p>
+                        </div>
+                        {doc.file_url && (
+                          <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:text-accent/80 shrink-0">
+                            Öffnen
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+
+            {nativeDokumente.length === 0 && documents.length === 0 && (
               <div className="p-10 rounded-2xl bg-muted/20 border border-border/30 text-center">
                 <FileText className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground">Keine Dokumente vorhanden.</p>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {documents.map((doc) => (
-                  <div key={doc.id} className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30">
-                    <FileText className="w-5 h-5 text-accent shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">{doc.name}</p>
-                      <p className="text-xs text-muted-foreground">{doc.type || "Dokument"} · {new Date(doc.created_at).toLocaleDateString("de-DE")}</p>
-                    </div>
-                    {doc.file_url && (
-                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:text-accent/80 shrink-0">
-                        Öffnen
-                      </a>
-                    )}
-                  </div>
-                ))}
+                <p className="text-sm text-muted-foreground mb-4">Noch keine Dokumente für diesen Kunden.</p>
+                <Link
+                  to={`/admin/dokumente/new?typ=angebot&customerId=${customer.id}`}
+                  className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-semibold hover:opacity-80 transition-opacity"
+                >
+                  <FileCheck className="w-4 h-4" /> Erstes Angebot erstellen
+                </Link>
               </div>
             )}
           </div>

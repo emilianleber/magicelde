@@ -1,11 +1,11 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import {
   LayoutDashboard,
   MessageCircle,
-  Calendar,
+  CalendarDays,
   Users,
   CheckSquare,
   Mail,
@@ -23,6 +23,8 @@ import {
   Receipt,
   FileCheck,
   ShoppingBag,
+  FileText,
+  CalendarRange,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -32,21 +34,24 @@ interface AdminLayoutProps {
   children: ReactNode;
 }
 
-const navItems = [
-  { label: "Dashboard",     href: "/admin",           icon: LayoutDashboard },
-  { label: "Anfragen",      href: "/admin/requests",  icon: MessageCircle },
-  { label: "Events",        href: "/admin/events",    icon: Calendar },
-  { label: "Kunden",        href: "/admin/customers", icon: Users },
-  { label: "Mails",         href: "/admin/mails",     icon: Mail },
-  { label: "Todos",         href: "/admin/todos",     icon: CheckSquare },
-  { label: "Einstellungen", href: "/admin/settings",  icon: Settings },
+// ── Nav structure ────────────────────────────────────────────────────────────
+
+const crmNavItems = [
+  { label: "Dashboard",  href: "/admin",           icon: LayoutDashboard },
+  { label: "Anfragen",   href: "/admin/requests",  icon: MessageCircle,  badge: true },
+  { label: "Events",     href: "/admin/events",    icon: CalendarDays },
+  { label: "Kunden",     href: "/admin/customers", icon: Users },
+  { label: "Kalender",   href: "/admin/kalender",  icon: CalendarRange },
 ];
 
-const docSubItems = [
-  { label: "Übersicht", href: "/admin/documents" },
-  { label: "Angebote", href: "/admin/documents/angebote" },
-  { label: "Rechnungen", href: "/admin/documents/rechnungen" },
-  { label: "Auftragsbestätigungen", href: "/admin/documents/auftragsbestaetigung" },
+const komNavItems = [
+  { label: "Mails",  href: "/admin/mails",  icon: Mail },
+  { label: "Todos",  href: "/admin/todos",  icon: CheckSquare },
+];
+
+const finanzNavItems = [
+  { label: "Dokumente", href: "/admin/dokumente", icon: FileText },
+  { label: "Artikel",   href: "/admin/artikel",   icon: ShoppingBag },
 ];
 
 const prodNavItems = [
@@ -58,22 +63,68 @@ const prodNavItems = [
   { label: "Partner",      href: "/admin/partner",      icon: Users2 },
 ];
 
-const finanzNavItems = [
-  { label: "Angebote",   href: "/admin/dokumente/angebote",   icon: FileCheck },
-  { label: "Rechnungen", href: "/admin/dokumente/rechnungen", icon: Receipt },
-  { label: "Artikel",    href: "/admin/artikel",              icon: ShoppingBag },
+const bottomNavItems = [
+  { label: "Dashboard", href: "/admin",           icon: LayoutDashboard },
+  { label: "Anfragen",  href: "/admin/requests",  icon: MessageCircle,  badge: true },
+  { label: "Events",    href: "/admin/events",    icon: CalendarDays },
+  { label: "Kunden",    href: "/admin/customers", icon: Users },
+  { label: "Finanzen",  href: "/admin/dokumente", icon: FileText },
 ];
-
-// Bottom nav shows the first 5 items for mobile
-const bottomNavItems = navItems.slice(0, 5);
 
 const IS_ADMIN_DOMAIN = window.location.hostname === "admin.magicel.de";
 
-// ── Standalone sidebar (used on admin.magicel.de) ─────────────────────────────
+// ── Reusable NavLink ─────────────────────────────────────────────────────────
+
+interface NavLinkProps {
+  href: string;
+  label: string;
+  icon: React.ElementType;
+  badge?: boolean;
+  badgeCount?: number;
+  isActive: boolean;
+  mobile?: boolean;
+  onClick?: () => void;
+}
+
+const NavLink = ({ href, label, icon: Icon, badge, badgeCount, isActive, mobile, onClick }: NavLinkProps) => (
+  <Link
+    to={href}
+    onClick={onClick}
+    className={`flex items-center gap-3 rounded-xl px-3 ${mobile ? "py-3" : "py-2.5"} text-sm transition-all relative ${
+      isActive
+        ? "bg-foreground text-background font-semibold"
+        : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+    }`}
+  >
+    <Icon className="w-4 h-4 shrink-0" />
+    <span className="flex-1">{label}</span>
+    {badge && badgeCount != null && badgeCount > 0 && (
+      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center leading-none ${
+        isActive ? "bg-background/20 text-background" : "bg-red-500 text-white"
+      }`}>
+        {badgeCount > 99 ? "99+" : badgeCount}
+      </span>
+    )}
+  </Link>
+);
+
+// ── Section header ───────────────────────────────────────────────────────────
+
+const SectionLabel = ({ label }: { label: string }) => (
+  <div className="mt-5 mb-1.5 px-3">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/50">
+      {label}
+    </p>
+  </div>
+);
+
+// ── Standalone sidebar (admin.magicel.de) ────────────────────────────────────
+
 const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [newRequestCount, setNewRequestCount] = useState(0);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -83,11 +134,61 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
   const isActive = (href: string) =>
     location.pathname === href || (href !== "/admin" && location.pathname.startsWith(href));
 
+  // Fetch new request count for badge
+  useEffect(() => {
+    supabase
+      .from("portal_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "neu")
+      .then(({ count }) => setNewRequestCount(count || 0));
+  }, [location.pathname]);
+
+  const renderNav = (mobile = false, onClose?: () => void) => (
+    <nav className={`flex-1 overflow-y-auto px-3 py-4`}>
+      {/* CRM */}
+      {crmNavItems.map((item) => (
+        <NavLink
+          key={item.href}
+          href={item.href}
+          label={item.label}
+          icon={item.icon}
+          badge={item.badge}
+          badgeCount={item.badge ? newRequestCount : undefined}
+          isActive={isActive(item.href)}
+          mobile={mobile}
+          onClick={onClose}
+        />
+      ))}
+
+      {/* Kommunikation */}
+      <SectionLabel label="Kommunikation" />
+      {komNavItems.map((item) => (
+        <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} isActive={isActive(item.href)} mobile={mobile} onClick={onClose} />
+      ))}
+
+      {/* Finanzen */}
+      <SectionLabel label="Finanzen" />
+      {finanzNavItems.map((item) => (
+        <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} isActive={isActive(item.href)} mobile={mobile} onClick={onClose} />
+      ))}
+
+      {/* Produktionen */}
+      <SectionLabel label="Produktionen" />
+      {prodNavItems.map((item) => (
+        <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} isActive={isActive(item.href)} mobile={mobile} onClick={onClose} />
+      ))}
+
+      {/* Einstellungen */}
+      <SectionLabel label="System" />
+      <NavLink href="/admin/settings" label="Einstellungen" icon={Settings} isActive={isActive("/admin/settings")} mobile={mobile} onClick={onClose} />
+    </nav>
+  );
+
   return (
     <div className="flex overflow-hidden bg-background" style={{ height: "100dvh", paddingTop: "env(safe-area-inset-top)" }}>
 
       {/* ── Desktop Sidebar ── */}
-      <aside className="hidden lg:flex w-[240px] shrink-0 flex-col border-r border-border/30 bg-muted/10">
+      <aside className="hidden lg:flex w-[220px] shrink-0 flex-col border-r border-border/30 bg-muted/10">
         {/* Brand */}
         <div className="flex items-center gap-3 px-5 py-5 border-b border-border/20">
           <div className="w-8 h-8 rounded-xl bg-foreground flex items-center justify-center shrink-0">
@@ -99,86 +200,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
           </div>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-          {navItems.map((item) => (
-            <React.Fragment key={item.href}>
-              <Link
-                to={item.href}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
-                  location.pathname === item.href
-                    ? "bg-foreground text-background font-semibold"
-                    : (item.href !== "/admin" && location.pathname.startsWith(item.href))
-                    ? "bg-muted/60 text-foreground font-medium"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                }`}
-              >
-                <item.icon className="w-4 h-4 shrink-0" />
-                <span>{item.label}</span>
-              </Link>
-              {item.href === "/admin/documents" && location.pathname.startsWith("/admin/documents") && (
-                <div className="space-y-0.5 ml-2">
-                  {docSubItems.map((sub) => (
-                    <Link
-                      key={sub.href}
-                      to={sub.href}
-                      className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs transition-all ${
-                        location.pathname === sub.href
-                          ? "bg-foreground text-background font-semibold"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                      }`}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-50 shrink-0" />
-                      {sub.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </React.Fragment>
-          ))}
-
-          {/* Divider + Section label */}
-          <div className="mt-4 mb-2 px-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
-              Eigene Produktionen
-            </p>
-          </div>
-          {prodNavItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
-                isActive(item.href)
-                  ? "bg-foreground text-background font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-              }`}
-            >
-              <item.icon className="w-4 h-4 shrink-0" />
-              <span>{item.label}</span>
-            </Link>
-          ))}
-
-          {/* Finanzen section */}
-          <div className="mt-4 mb-2 px-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
-              Finanzen
-            </p>
-          </div>
-          {finanzNavItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
-                isActive(item.href)
-                  ? "bg-foreground text-background font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-              }`}
-            >
-              <item.icon className="w-4 h-4 shrink-0" />
-              <span>{item.label}</span>
-            </Link>
-          ))}
-        </nav>
+        {renderNav(false)}
 
         {/* Logout */}
         <div className="px-3 py-4 border-t border-border/20">
@@ -195,12 +217,8 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
       {/* ── Mobile Slide-In Menu ── */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
-
-          {/* Drawer */}
           <aside className="relative w-[260px] flex flex-col bg-background border-r border-border/20 h-full z-10">
-            {/* Brand */}
             <div className="flex items-center justify-between px-5 py-5 border-b border-border/20">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-foreground flex items-center justify-center shrink-0">
@@ -215,93 +233,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
                 <X className="w-5 h-5" />
               </button>
             </div>
-
-            {/* Nav */}
-            <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-              {navItems.map((item) => (
-                <React.Fragment key={item.href}>
-                  <Link
-                    to={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all ${
-                      location.pathname === item.href
-                        ? "bg-foreground text-background font-semibold"
-                        : (item.href !== "/admin" && location.pathname.startsWith(item.href))
-                        ? "bg-muted/60 text-foreground font-medium"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                    }`}
-                  >
-                    <item.icon className="w-4 h-4 shrink-0" />
-                    <span>{item.label}</span>
-                  </Link>
-                  {item.href === "/admin/documents" && location.pathname.startsWith("/admin/documents") && (
-                    <div className="space-y-0.5 ml-2">
-                      {docSubItems.map((sub) => (
-                        <Link
-                          key={sub.href}
-                          to={sub.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs transition-all ${
-                            location.pathname === sub.href
-                              ? "bg-foreground text-background font-semibold"
-                              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                          }`}
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-current opacity-50 shrink-0" />
-                          {sub.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </React.Fragment>
-              ))}
-
-              {/* Divider + Section label */}
-              <div className="mt-4 mb-2 px-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
-                  Eigene Produktionen
-                </p>
-              </div>
-              {prodNavItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all ${
-                    isActive(item.href)
-                      ? "bg-foreground text-background font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                  }`}
-                >
-                  <item.icon className="w-4 h-4 shrink-0" />
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-
-              {/* Finanzen section */}
-              <div className="mt-4 mb-2 px-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
-                  Finanzen
-                </p>
-              </div>
-              {finanzNavItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all ${
-                    isActive(item.href)
-                      ? "bg-foreground text-background font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                  }`}
-                >
-                  <item.icon className="w-4 h-4 shrink-0" />
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </nav>
-
-            {/* Logout */}
+            {renderNav(true, () => setMobileMenuOpen(false))}
             <div className="px-3 py-4 border-t border-border/20" style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}>
               <button
                 onClick={handleLogout}
@@ -317,31 +249,23 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
 
       {/* ── Main ── */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-
         {/* Top bar */}
         <header className="shrink-0 flex items-center gap-3 px-4 lg:px-6 py-3 lg:py-4 border-b border-border/20 bg-background/80 backdrop-blur-sm">
-          {/* Mobile menu button */}
           <button
             onClick={() => setMobileMenuOpen(true)}
             className="lg:hidden flex items-center justify-center w-9 h-9 rounded-xl border border-border/30 text-muted-foreground hover:text-foreground transition-colors shrink-0"
           >
             <Menu className="w-4 h-4" />
           </button>
-
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground hidden lg:block">
-              Admin / CRM
-            </p>
+            <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground hidden lg:block">Admin / CRM</p>
             <h1 className="text-base lg:text-xl font-bold text-foreground leading-tight truncate">{title}</h1>
             {subtitle && <p className="text-xs lg:text-sm text-muted-foreground mt-0.5 truncate">{subtitle}</p>}
           </div>
-
-          {actions && (
-            <div className="shrink-0 flex items-center gap-2">{actions}</div>
-          )}
+          {actions && <div className="shrink-0 flex items-center gap-2">{actions}</div>}
         </header>
 
-        {/* Content — with bottom padding to account for mobile bottom nav */}
+        {/* Content */}
         <main
           className="flex-1 overflow-y-auto px-4 lg:px-6 py-4 lg:py-6"
           style={{ paddingBottom: "max(1.5rem, calc(env(safe-area-inset-bottom) + 4.5rem))" }}
@@ -361,19 +285,21 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
             <Link
               key={item.href}
               to={item.href}
-              className={`flex flex-col items-center gap-0.5 px-3 py-2.5 rounded-xl transition-all ${
-                active ? "text-foreground" : "text-muted-foreground"
-              }`}
+              className={`relative flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl transition-all ${active ? "text-foreground" : "text-muted-foreground"}`}
             >
               <item.icon className={`w-5 h-5 ${active ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
               <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>{item.label}</span>
+              {item.badge && newRequestCount > 0 && (
+                <span className="absolute top-1.5 right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+                  {newRequestCount > 9 ? "9+" : newRequestCount}
+                </span>
+              )}
             </Link>
           );
         })}
-        {/* More button (opens drawer with remaining nav items) */}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="flex flex-col items-center gap-0.5 px-3 py-2.5 rounded-xl text-muted-foreground"
+          className="flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl text-muted-foreground"
         >
           <Menu className="w-5 h-5 stroke-[1.5]" />
           <span className="text-[10px] font-medium">Mehr</span>
@@ -383,9 +309,25 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
   );
 };
 
-// ── Legacy layout (used on magicel.de / localhost inside PageLayout) ──────────
+// ── Legacy layout (magicel.de / localhost inside PageLayout) ──────────────────
+
 const EmbeddedAdminLayout = ({ title, subtitle, actions, children }: AdminLayoutProps) => {
   const location = useLocation();
+  const [newRequestCount, setNewRequestCount] = useState(0);
+
+  const isActive = (href: string) =>
+    location.pathname === href || (href !== "/admin" && location.pathname.startsWith(href));
+
+  useEffect(() => {
+    supabase.from("portal_requests").select("*", { count: "exact", head: true }).eq("status", "neu").then(({ count }) => setNewRequestCount(count || 0));
+  }, [location.pathname]);
+
+  const allNavItems = [
+    ...crmNavItems,
+    ...komNavItems,
+    ...finanzNavItems,
+    { label: "Einstellungen", href: "/admin/settings", icon: Settings },
+  ];
 
   return (
     <PageLayout>
@@ -394,92 +336,38 @@ const EmbeddedAdminLayout = ({ title, subtitle, actions, children }: AdminLayout
           <div className="grid lg:grid-cols-[260px_minmax(0,1fr)] gap-6">
             <aside className="lg:sticky lg:top-28 h-fit">
               <div className="rounded-3xl border border-border/30 bg-muted/20 p-4">
-                <div className="px-3 pt-2 pb-4 border-b border-border/20">
-                  <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-2">
-                    Admin / CRM
-                  </p>
-                  <h2 className="font-display text-xl font-bold text-foreground">Übersicht</h2>
-                </div>
-                <nav className="mt-4 space-y-1">
-                  {navItems.map((item) => {
-                    const isActiveItem =
-                      location.pathname === item.href ||
-                      (item.href !== "/admin" && location.pathname.startsWith(item.href));
-                    return (
-                      <React.Fragment key={item.href}>
-                        <Link
-                          to={item.href}
-                          className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition-all ${
-                            location.pathname === item.href
-                              ? "bg-background text-foreground shadow-sm border border-border/20"
-                              : (item.href !== "/admin" && location.pathname.startsWith(item.href))
-                              ? "bg-background/60 text-foreground border border-border/10"
-                              : "text-muted-foreground hover:text-foreground hover:bg-background/60"
-                          }`}
-                        >
-                          <item.icon className="w-4 h-4" />
-                          <span className="font-medium">{item.label}</span>
-                        </Link>
-                        {item.href === "/admin/documents" && location.pathname.startsWith("/admin/documents") && (
-                          <div className="space-y-0.5 ml-4">
-                            {docSubItems.map((sub) => (
-                              <Link
-                                key={sub.href}
-                                to={sub.href}
-                                className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs transition-all ${
-                                  location.pathname === sub.href
-                                    ? "bg-background text-foreground font-semibold border border-border/20"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-background/60"
-                                }`}
-                              >
-                                <span className="w-1.5 h-1.5 rounded-full bg-current opacity-50 shrink-0" />
-                                {sub.label}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </React.Fragment>
-                    );
-                  })}
-
-                  {/* Finanzen section */}
-                  <div className="mt-4 mb-2 px-2">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
-                      Finanzen
-                    </p>
-                  </div>
-                  {finanzNavItems.map((item) => {
-                    const isActiveItem = location.pathname === item.href ||
-                      (item.href !== "/admin" && location.pathname.startsWith(item.href));
+                <nav className="space-y-0.5">
+                  {allNavItems.map((item) => {
+                    const active = isActive(item.href);
                     return (
                       <Link
                         key={item.href}
                         to={item.href}
                         className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition-all ${
-                          isActiveItem
+                          active
                             ? "bg-background text-foreground shadow-sm border border-border/20"
                             : "text-muted-foreground hover:text-foreground hover:bg-background/60"
                         }`}
                       >
                         <item.icon className="w-4 h-4" />
-                        <span className="font-medium">{item.label}</span>
+                        <span className="font-medium flex-1">{item.label}</span>
+                        {"badge" in item && item.badge && newRequestCount > 0 && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-500 text-white min-w-[18px] text-center">
+                            {newRequestCount}
+                          </span>
+                        )}
                       </Link>
                     );
                   })}
                 </nav>
               </div>
             </aside>
-
             <main className="min-w-0">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                 <div>
-                  <p className="font-sans text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">
-                    Admin / CRM
-                  </p>
+                  <p className="font-sans text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">Admin / CRM</p>
                   <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">{title}</h1>
-                  {subtitle && (
-                    <p className="font-sans text-sm text-muted-foreground mt-2">{subtitle}</p>
-                  )}
+                  {subtitle && <p className="font-sans text-sm text-muted-foreground mt-2">{subtitle}</p>}
                 </div>
                 {actions && <div className="w-full sm:w-auto">{actions}</div>}
               </div>
@@ -492,7 +380,7 @@ const EmbeddedAdminLayout = ({ title, subtitle, actions, children }: AdminLayout
   );
 };
 
-// ── Export: auto-selects based on domain ──────────────────────────────────────
+// ── Export ────────────────────────────────────────────────────────────────────
 const AdminLayout = (props: AdminLayoutProps) =>
   IS_ADMIN_DOMAIN ? <StandaloneAdminLayout {...props} /> : <EmbeddedAdminLayout {...props} />;
 

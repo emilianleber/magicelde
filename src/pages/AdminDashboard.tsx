@@ -21,15 +21,18 @@ import { CSS } from "@dnd-kit/utilities";
 import {
   MessageCircle, Calendar, CheckSquare, Users, ArrowRight, LogOut,
   Clock3, Mail, GripVertical, Pencil, X, Plus, Check, TrendingUp, UserPlus,
-  Maximize2, Minimize2,
+  Maximize2, Minimize2, FileText, Euro, AlertCircle, CalendarRange, Receipt,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { dokumenteService } from "@/services/dokumenteService";
 
-type WidgetId = "stats" | "neue_anfragen" | "naechste_events" | "offene_todos" | "letzte_mails" | "neue_kunden" | "conversion" | "kalender";
+type WidgetId = "stats" | "neue_anfragen" | "naechste_events" | "offene_todos" | "letzte_mails" | "neue_kunden" | "conversion" | "kalender" | "finanzen" | "schnellzugriff";
 
 const WIDGET_DEFS: { id: WidgetId; label: string; description: string; span: "full" | "half" }[] = [
   { id: "stats",           label: "Statistiken",     description: "Zahlen auf einen Blick",      span: "full" },
+  { id: "schnellzugriff",  label: "Schnellzugriff",  description: "Häufige Aktionen",            span: "full" },
+  { id: "finanzen",        label: "Finanzen",        description: "Offene Rechnungen & Umsatz",  span: "full" },
   { id: "kalender",        label: "Kalender",        description: "Events & Anfragen im Monat",  span: "full" },
   { id: "neue_anfragen",   label: "Neue Anfragen",   description: "Letzte Anfragen",              span: "half" },
   { id: "naechste_events", label: "Nächste Events",  description: "Bevorstehende Events",         span: "half" },
@@ -39,11 +42,12 @@ const WIDGET_DEFS: { id: WidgetId; label: string; description: string; span: "fu
   { id: "conversion",      label: "Conversion",      description: "Anfragen → Events Rate",       span: "half" },
 ];
 
-const DEFAULT_LAYOUT: WidgetId[] = ["stats","kalender","neue_anfragen","naechste_events","offene_todos","letzte_mails","neue_kunden","conversion"];
-const STORAGE_KEY = "admin_widget_layout_v3";
-const SIZES_KEY   = "admin_widget_sizes_v1";
+const DEFAULT_LAYOUT: WidgetId[] = ["schnellzugriff","stats","finanzen","kalender","neue_anfragen","naechste_events","offene_todos","letzte_mails","neue_kunden","conversion"];
+const STORAGE_KEY = "admin_widget_layout_v4";
+const SIZES_KEY   = "admin_widget_sizes_v2";
 const DEFAULT_SIZES: Record<WidgetId, "full" | "half"> = {
   stats: "full", kalender: "full",
+  schnellzugriff: "full", finanzen: "full",
   neue_anfragen: "half", naechste_events: "half",
   offene_todos: "half", letzte_mails: "half",
   neue_kunden: "half", conversion: "half",
@@ -102,6 +106,9 @@ const AdminDashboard = () => {
   const [customers, setCustomers] = useState<Cust[]>([]);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [customerCount, setCustomerCount] = useState(0);
+  const [finanzenKpis, setFinanzenKpis] = useState<{
+    offenBetrag: number; ueberfaelligBetrag: number; bezahltMonatBetrag: number; offenAnzahl: number;
+  } | null>(null);
 
   const [calMonth, setCalMonth] = useState<Date>(() => { const d = new Date(); d.setDate(1); return d; });
 
@@ -158,6 +165,13 @@ const AdminDashboard = () => {
       if (!cc.error) setCustomerCount(cc.count || 0);
       if (!c.error) setCustomers(c.data || []);
       if (!m.error) setMessages(m.data || []);
+
+      // Load financial KPIs
+      try {
+        const kpis = await dokumenteService.getKennzahlen();
+        setFinanzenKpis(kpis);
+      } catch (_) {}
+
       setLoading(false);
     };
     load();
@@ -354,6 +368,50 @@ const AdminDashboard = () => {
           </div>
         );
       }
+      case "finanzen": {
+        const fmt = (n: number) => new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
+        return (
+          <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display text-base font-bold text-foreground">Finanzen</h2>
+              <Link to="/admin/dokumente" className="text-xs text-accent hover:text-accent/80 flex items-center gap-1">Alle Dokumente <ArrowRight className="w-3 h-3" /></Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { label: "Offen", value: finanzenKpis ? fmt(finanzenKpis.offenBetrag) : "–", sub: finanzenKpis ? `${finanzenKpis.offenAnzahl} Rechnungen` : "", icon: Receipt, color: "text-blue-500 bg-blue-500/10", href: "/admin/dokumente/rechnungen" },
+                { label: "Überfällig", value: finanzenKpis ? fmt(finanzenKpis.ueberfaelligBetrag) : "–", sub: "Überfällig", icon: AlertCircle, color: "text-red-500 bg-red-500/10", href: "/admin/dokumente/rechnungen" },
+                { label: "Bezahlt (Monat)", value: finanzenKpis ? fmt(finanzenKpis.bezahltMonatBetrag) : "–", sub: "Diesen Monat", icon: Euro, color: "text-green-500 bg-green-500/10", href: "/admin/dokumente/rechnungen" },
+                { label: "Dokumente", value: "→", sub: "Angebote & Rechnungen", icon: FileText, color: "text-purple-500 bg-purple-500/10", href: "/admin/dokumente" },
+              ].map((c) => (
+                <Link key={c.label} to={c.href} className="p-4 rounded-xl bg-background/60 border border-border/20 hover:border-accent/20 transition-colors">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center mb-2.5 ${c.color}`}><c.icon className="w-3.5 h-3.5" /></div>
+                  <p className="font-display text-lg font-bold text-foreground leading-tight">{c.value}</p>
+                  <p className="font-sans text-[11px] text-muted-foreground mt-0.5">{c.label}</p>
+                  {c.sub && <p className="font-sans text-[10px] text-muted-foreground/60 mt-0.5">{c.sub}</p>}
+                </Link>
+              ))}
+            </div>
+          </div>
+        );
+      }
+      case "schnellzugriff": return (
+        <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+          <h2 className="font-display text-base font-bold text-foreground mb-4">Schnellzugriff</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: "Neue Anfrage",  href: "/admin/requests/new",           icon: MessageCircle, color: "bg-blue-500/10 text-blue-600 hover:bg-blue-500/20" },
+              { label: "Neues Angebot", href: "/admin/dokumente/new?typ=angebot", icon: FileText,     color: "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20" },
+              { label: "Neues Event",   href: "/admin/events/new",             icon: CalendarRange,  color: "bg-purple-500/10 text-purple-600 hover:bg-purple-500/20" },
+              { label: "Neuer Kunde",   href: "/admin/customers/new",          icon: UserPlus,       color: "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20" },
+            ].map((a) => (
+              <Link key={a.label} to={a.href} className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-border/20 transition-colors text-center ${a.color}`}>
+                <a.icon className="w-5 h-5" />
+                <span className="text-sm font-semibold leading-tight">{a.label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      );
       default: return null;
     }
   };

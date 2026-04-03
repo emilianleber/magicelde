@@ -460,11 +460,20 @@ const AdminRequestDetail = () => {
             <span className="text-muted-foreground/60">Eingegangen: {new Date(request.created_at).toLocaleDateString("de-DE")}</span>
           </div>
         </div>
-        {customer?.id && (
-          <Link to={`/admin/customers/${customer.id}`} className="inline-flex items-center gap-1 text-xs text-accent hover:text-accent/80 shrink-0">
-            Kundenkonto <ArrowRight className="w-3 h-3" />
+        <div className="flex flex-col gap-2 shrink-0">
+          {customer?.id && (
+            <Link to={`/admin/customers/${customer.id}`} className="inline-flex items-center gap-1 text-xs text-accent hover:text-accent/80">
+              Kundenkonto <ArrowRight className="w-3 h-3" />
+            </Link>
+          )}
+          <Link
+            to={`/admin/dokumente/new?typ=angebot${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}`}
+            className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-foreground text-background font-semibold hover:opacity-80 transition-opacity"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            Angebot erstellen
           </Link>
-        )}
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-[3fr_2fr] gap-5 items-start">

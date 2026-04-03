@@ -1004,6 +1004,24 @@ export default function AdminDokumentEditor() {
     });
   }, [authChecked, isNew]);
 
+  // Pre-fill customer from URL param ?customerId=... when creating a new document
+  useEffect(() => {
+    if (!authChecked || !isNew) return;
+    const customerId = searchParams.get("customerId");
+    if (!customerId) return;
+    supabase.from("portal_customers").select("*").eq("id", customerId).maybeSingle().then(({ data }) => {
+      if (!data) return;
+      setSelectedCustomerId(customerId);
+      setKontaktSuche(data.name || "");
+      setEmpfaengerName(data.name || "");
+      setEmpfaengerFirma(data.company || "");
+      if (data.rechnungs_strasse) setEmpfaengerAdresse(data.rechnungs_strasse);
+      if (data.rechnungs_plz) setEmpfaengerPlz(data.rechnungs_plz);
+      if (data.rechnungs_ort) setEmpfaengerOrt(data.rechnungs_ort);
+      if (data.rechnungs_land) setEmpfaengerLand(data.rechnungs_land);
+    });
+  }, [authChecked, isNew, searchParams]);
+
   // Load existing document for edit
   useEffect(() => {
     if (!authChecked || isNew || !id) return;

@@ -1,4 +1,5 @@
 import AdminDashboard from "@/pages/AdminDashboard";
+import AdminKalender from "@/pages/AdminKalender";
 import AdminEffekte from "@/pages/AdminEffekte";
 import AdminPakete from "@/pages/AdminPakete";
 import AdminShows from "@/pages/AdminShows";
@@ -114,6 +115,7 @@ const AdminRoutes = () => (
     <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
     <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
     <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
+    <Route path="/admin/kalender" element={<AdminKalender />} />
     <Route path="/admin/effekte" element={<AdminEffekte />} />
     <Route path="/admin/pakete" element={<AdminPakete />} />
     <Route path="/admin/shows" element={<AdminShows />} />
@@ -221,6 +223,7 @@ const App = () => (
             <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
             <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
             <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
+            <Route path="/admin/kalender" element={<AdminKalender />} />
             <Route path="/admin/effekte" element={<AdminEffekte />} />
             <Route path="/admin/pakete" element={<AdminPakete />} />
             <Route path="/admin/shows" element={<AdminShows />} />
