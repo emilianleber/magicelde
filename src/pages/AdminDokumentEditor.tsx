@@ -1503,11 +1503,17 @@ export default function AdminDokumentEditor() {
     const win = window.open("", "_blank");
     if (!win) return;
 
-    // Jede direkte Kindseite (inkl. ihrer eigenen Styles) separat in A4-Wrapper
-    const pageEls = Array.from(el.children);
-    const pagesHtml = pageEls.map((pageEl) =>
-      `<div class="a4-page"><div class="preview-scale">${pageEl.outerHTML}</div></div>`
-    ).join("");
+    // Clone each page, set explicit px dimensions (not 100% / aspect-ratio)
+    const pageEls = Array.from(el.children) as HTMLElement[];
+    const pagesHtml = pageEls.map((pageEl) => {
+      const clone = pageEl.cloneNode(true) as HTMLElement;
+      clone.style.width = "595px";
+      clone.style.height = "842px";
+      clone.style.removeProperty("aspect-ratio");
+      clone.style.overflow = "hidden";
+      clone.style.flexShrink = "0";
+      return `<div class="a4-page">${clone.outerHTML}</div>`;
+    }).join("");
 
     win.document.write(`<!DOCTYPE html>
 <html><head>
@@ -1519,13 +1525,23 @@ export default function AdminDokumentEditor() {
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { margin:0; padding:0; background:#fff; font-family:'Inter',system-ui,sans-serif; }
   @page { size:A4 portrait; margin:0; }
+  /* Jede Seite: 595×842px, bei Druck per zoom auf A4 skaliert */
+  .a4-page {
+    width: 595px;
+    height: 842px;
+    overflow: hidden;
+    display: block;
+    background: #fff;
+  }
   @media print {
     * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
-    .a4-page { page-break-after:always; page-break-inside:avoid; }
+    /* zoom skaliert Layout-konform: 595px → 210mm (Faktor ≈ 1.3341) */
+    .a4-page {
+      zoom: 1.3341;
+      page-break-after: always;
+      page-break-inside: avoid;
+    }
   }
-  /* 595px → 210mm: scale 1.3341 */
-  .a4-page { width:210mm; height:297mm; overflow:hidden; }
-  .preview-scale { width:595px; height:842px; transform:scale(1.3341); transform-origin:top left; overflow:hidden; }
 </style>
 </head>
 <body>
@@ -1533,7 +1549,7 @@ ${pagesHtml}
 <script>
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function() {
-      setTimeout(function() { window.print(); }, 200);
+      setTimeout(function() { window.print(); }, 300);
     });
   } else {
     setTimeout(function() { window.print(); }, 1500);
