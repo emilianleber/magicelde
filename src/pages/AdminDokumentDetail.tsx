@@ -3,9 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentStatus, DokumentTyp, Zahlung } from "@/types/dokumente";
+import jsPDF from "jspdf";
 import {
   ArrowLeft, Pencil, Send, CheckCircle, XCircle, ArrowRight,
   Receipt, AlertTriangle, Plus, X, Clock, Trash2, Ban, MoreHorizontal,
+  Download, Globe, Mail, Loader2,
 } from "lucide-react";
 
 const STATUS_CFG: Record<DokumentStatus, { label: string; cls: string; dot: string }> = {
@@ -100,6 +102,13 @@ export default function AdminDokumentDetail() {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  const [sendPanel, setSendPanel] = useState(false);
+  const [sendLoading, setSendLoading] = useState<"download" | "portal" | "email" | null>(null);
+  const [emailTo, setEmailTo] = useState("");
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailBody, setEmailBody] = useState("");
+  const [sendMsg, setSendMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
+
   const [zahlungPanel, setZahlungPanel] = useState(false);
   const [zahlungForm, setZahlungForm] = useState({
     datum: new Date().toISOString().split("T")[0],
@@ -164,6 +173,238 @@ export default function AdminDokumentDetail() {
       alert("Fehler beim Löschen: " + ((e as any)?.message || String(e)));
       setDeleting(false);
     }
+  };
+
+  // ── PDF-Generierung ──────────────────────────────────────────────────────────
+  const generatePdf = (d: Dokument): jsPDF => {
+    const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+    const ML = 20, MR = 20, W = 210;
+    const CW = W - ML - MR;
+    const RIGHT = W - MR;
+    let y = 22;
+    const tl = TYP_LABEL[d.typ] ?? d.typ;
+    const fmtDE = (n: number) => n.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
+    const fmtD  = (s?: string) => {
+      if (!s) return "–";
+      try { return new Date(s).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }); }
+      catch { return s; }
+    };
+
+    // Header
+    pdf.setFont("helvetica", "bold"); pdf.setFontSize(15); pdf.setTextColor(17, 17, 17);
+    pdf.text(d.absender.name, ML, y); y += 5;
+    if (d.absender.firma) {
+      pdf.setFont("helvetica", "normal"); pdf.setFontSize(9); pdf.setTextColor(100, 100, 100);
+      pdf.text(d.absender.firma, ML, y); y += 4;
+    }
+    pdf.setFontSize(8.5); pdf.setTextColor(130, 130, 130);
+    if (d.absender.adresse) { pdf.text(d.absender.adresse, ML, y); y += 3.5; }
+    const absCity = `${d.absender.plz} ${d.absender.ort}`.trim();
+    if (absCity) { pdf.text(absCity, ML, y); y += 5; }
+    // Trennlinie
+    pdf.setDrawColor(220, 220, 220); pdf.setLineWidth(0.3); pdf.line(ML, y, RIGHT, y); y += 8;
+
+    // Zone B: Rücksendeangabe
+    const rueck = [d.absender.name, d.absender.adresse, absCity].filter(Boolean).join(" – ");
+    pdf.setFontSize(6.5); pdf.setTextColor(180, 180, 180);
+    pdf.text(rueck, ML, y, { maxWidth: CW * 0.48 });
+    pdf.setDrawColor(230, 230, 230); pdf.setLineWidth(0.2); pdf.line(ML, y + 1.5, ML + CW * 0.48, y + 1.5);
+    y += 5;
+
+    // Empfänger (links)
+    let addrY = y;
+    pdf.setFontSize(9.5);
+    if (d.empfaenger.firma) {
+      pdf.setFont("helvetica", "bold"); pdf.setTextColor(17, 17, 17);
+      pdf.text(d.empfaenger.firma, ML, addrY); addrY += 4.5;
+    }
+    pdf.setFont("helvetica", "normal"); pdf.setTextColor(30, 30, 30);
+    pdf.text(d.empfaenger.name, ML, addrY); addrY += 4.5;
+    if (d.empfaenger.adresse) { pdf.text(d.empfaenger.adresse, ML, addrY); addrY += 4.5; }
+    const empfCity = `${d.empfaenger.plz} ${d.empfaenger.ort}`.trim();
+    if (empfCity) { pdf.text(empfCity, ML, addrY); addrY += 4.5; }
+    if (d.empfaenger.land && d.empfaenger.land !== "Deutschland") { pdf.text(d.empfaenger.land, ML, addrY); addrY += 4.5; }
+
+    // Informationsblock (rechts)
+    const infoX = ML + CW * 0.55;
+    let infoY = y;
+    const metaR = [
+      { label: `${tl}-Nr.`, val: d.nummer },
+      { label: "Datum", val: fmtD(d.datum) },
+      ...(d.faelligAm ? [{ label: "Zahlungsziel", val: fmtD(d.faelligAm) }] : []),
+      ...(d.gueltigBis ? [{ label: "Gültig bis", val: fmtD(d.gueltigBis) }] : []),
+      { label: "Ansprechpartner", val: d.absender.name },
+    ];
+    pdf.setFontSize(8);
+    metaR.forEach(r => {
+      pdf.setFont("helvetica", "normal"); pdf.setTextColor(160, 160, 160); pdf.text(r.label, infoX, infoY);
+      pdf.setFont("helvetica", "bold");  pdf.setTextColor(17, 17, 17);  pdf.text(r.val, RIGHT, infoY, { align: "right" });
+      infoY += 4.2;
+    });
+    y = Math.max(addrY, infoY) + 10;
+
+    // Betreff
+    pdf.setFontSize(12); pdf.setFont("helvetica", "bold"); pdf.setTextColor(17, 17, 17);
+    pdf.text(`${tl} ${d.nummer}`, ML, y); y += 7;
+
+    // Kopftext
+    pdf.setFontSize(9.5); pdf.setFont("helvetica", "normal"); pdf.setTextColor(50, 50, 50);
+    const kopf = d.kopftext || "Sehr geehrte Damen und Herren,\nvielen Dank für Ihre Anfrage. Gerne unterbreite ich Ihnen das gewünschte freibleibende Angebot:";
+    const kopfL = pdf.splitTextToSize(kopf, CW);
+    pdf.text(kopfL, ML, y); y += kopfL.length * 4.5 + 6;
+
+    // Positionen-Tabelle
+    const pos = d.positionen.filter(p => p.typ === "leistung" || p.typ === "produkt");
+    pdf.setFillColor(17, 17, 17); pdf.rect(ML, y, CW, 6, "F");
+    pdf.setTextColor(255, 255, 255); pdf.setFontSize(7.5); pdf.setFont("helvetica", "bold");
+    pdf.text("Pos.", ML + 2, y + 4);
+    pdf.text("Beschreibung", ML + 10, y + 4);
+    pdf.text("Menge", RIGHT - 52, y + 4, { align: "right" });
+    pdf.text("Einzelpreis", RIGHT - 26, y + 4, { align: "right" });
+    pdf.text("Gesamt", RIGHT, y + 4, { align: "right" });
+    y += 6;
+    pos.forEach((p, i) => {
+      const rh = p.beschreibung ? 9 : 6;
+      if (i % 2 === 0) { pdf.setFillColor(248, 248, 248); pdf.rect(ML, y, CW, rh, "F"); }
+      pdf.setTextColor(80, 80, 80); pdf.setFontSize(7.5); pdf.setFont("helvetica", "normal");
+      pdf.text(`${i + 1}.`, ML + 2, y + 4);
+      pdf.setFont("helvetica", p.bezeichnung ? "bold" : "normal");
+      pdf.setTextColor(p.bezeichnung ? 17 : 150, p.bezeichnung ? 17 : 150, p.bezeichnung ? 17 : 150);
+      pdf.text(p.bezeichnung || "(keine Bezeichnung)", ML + 10, y + 4, { maxWidth: CW * 0.53 });
+      if (p.beschreibung) {
+        pdf.setFont("helvetica", "normal"); pdf.setFontSize(6.5); pdf.setTextColor(120, 120, 120);
+        pdf.text(pdf.splitTextToSize(p.beschreibung, CW * 0.53), ML + 10, y + 7.5);
+      }
+      pdf.setFont("helvetica", "normal"); pdf.setFontSize(7.5); pdf.setTextColor(80, 80, 80);
+      pdf.text(`${p.menge} ${p.einheit}`, RIGHT - 52, y + 4, { align: "right" });
+      pdf.text(fmtDE(p.einzelpreis), RIGHT - 26, y + 4, { align: "right" });
+      pdf.setFont("helvetica", "bold"); pdf.setTextColor(17, 17, 17);
+      pdf.text(fmtDE(p.gesamt), RIGHT, y + 4, { align: "right" });
+      pdf.setDrawColor(235, 235, 235); pdf.setLineWidth(0.2); pdf.line(ML, y + rh, RIGHT, y + rh);
+      y += rh;
+    });
+    pdf.setDrawColor(180, 180, 180); pdf.setLineWidth(0.5); pdf.line(ML, y, RIGHT, y); y += 6;
+
+    // Summen
+    const sumX = RIGHT - 70;
+    pdf.setFontSize(8.5);
+    pdf.setFont("helvetica", "normal"); pdf.setTextColor(100, 100, 100);
+    pdf.text("Gesamtbetrag netto", sumX, y); pdf.setTextColor(17, 17, 17); pdf.text(fmtDE(d.netto), RIGHT, y, { align: "right" }); y += 4.5;
+    d.mwstGruppen.filter(g => g.satz > 0).forEach(g => {
+      pdf.setTextColor(100, 100, 100); pdf.text(`zzgl. ${g.satz}% MwSt.`, sumX, y);
+      pdf.setTextColor(17, 17, 17); pdf.text(fmtDE(g.steuer), RIGHT, y, { align: "right" }); y += 4.5;
+    });
+    if (d.absender.kleinunternehmer && d.mwstBetrag === 0) {
+      pdf.setFontSize(7); pdf.setTextColor(130, 130, 130);
+      pdf.text("Umsatzsteuer nicht erhoben gem. §19 UStG.", sumX, y); y += 4;
+    }
+    pdf.setDrawColor(17, 17, 17); pdf.setLineWidth(0.5); pdf.line(sumX, y, RIGHT, y); y += 4;
+    pdf.setFont("helvetica", "bold"); pdf.setFontSize(10); pdf.setTextColor(17, 17, 17);
+    pdf.text("Gesamtbetrag brutto", sumX, y); pdf.text(fmtDE(d.brutto), RIGHT, y, { align: "right" }); y += 10;
+
+    // Fußtext
+    if (d.fusstext) {
+      pdf.setFont("helvetica", "normal"); pdf.setFontSize(8.5); pdf.setTextColor(70, 70, 70);
+      const fl = pdf.splitTextToSize(d.fusstext, CW); pdf.text(fl, ML, y); y += fl.length * 4 + 6;
+    }
+
+    // Grußformel
+    pdf.setFont("helvetica", "normal"); pdf.setFontSize(9.5); pdf.setTextColor(50, 50, 50);
+    pdf.text("Mit magischen Grüßen", ML, y); y += 10;
+    pdf.setFont("helvetica", "bold"); pdf.text(d.absender.name, ML, y); y += 4;
+    if (d.absender.firma) { pdf.setFont("helvetica", "normal"); pdf.setFontSize(8.5); pdf.setTextColor(100, 100, 100); pdf.text(d.absender.firma, ML, y); }
+
+    // Footer
+    const fy0 = 280;
+    pdf.setDrawColor(190, 190, 190); pdf.setLineWidth(0.3); pdf.line(ML, fy0, RIGHT, fy0);
+    const cW4 = CW / 4;
+    pdf.setFontSize(6.5); pdf.setFont("helvetica", "normal"); pdf.setTextColor(100, 100, 100);
+    let fy = fy0 + 4;
+    pdf.setFont("helvetica", "bold"); pdf.text(d.absender.name, ML, fy); fy += 3;
+    pdf.setFont("helvetica", "normal");
+    if (d.absender.adresse) { pdf.text(d.absender.adresse, ML, fy); fy += 3; }
+    if (absCity) pdf.text(absCity, ML, fy);
+    fy = fy0 + 4;
+    if (d.absender.email) { pdf.text(`E-Mail: ${d.absender.email}`, ML + cW4, fy); fy += 3; }
+    if (d.absender.telefon) { pdf.text(`Tel.: ${d.absender.telefon}`, ML + cW4, fy); fy += 3; }
+    if (d.absender.website) pdf.text(`Web: ${d.absender.website}`, ML + cW4, fy);
+    fy = fy0 + 4;
+    if (d.absender.steuernummer) { pdf.text(`Steuer-Nr.: ${d.absender.steuernummer}`, ML + cW4 * 2, fy); }
+    fy = fy0 + 4;
+    if (d.absender.iban) { pdf.text(`IBAN: ${d.absender.iban}`, ML + cW4 * 3, fy); fy += 3; }
+    if (d.absender.bic) pdf.text(`BIC: ${d.absender.bic}`, ML + cW4 * 3, fy);
+
+    return pdf;
+  };
+
+  // Upload PDF to storage, get signed URL, update file_url on document
+  const uploadPdfBlob = async (blob: Blob, docId: string): Promise<string> => {
+    const path = `dokumente/${docId}.pdf`;
+    await supabase.storage.from("portal-documents").upload(path, blob, { contentType: "application/pdf", upsert: true });
+    const { data } = await supabase.storage.from("portal-documents").createSignedUrl(path, 60 * 60 * 24 * 365);
+    const url = data?.signedUrl ?? "";
+    await supabase.from("portal_documents").update({ file_url: url }).eq("id", docId);
+    return url;
+  };
+
+  const handleDownload = async () => {
+    if (!doc) return;
+    setSendLoading("download");
+    try {
+      const pdf = generatePdf(doc);
+      pdf.save(`${doc.nummer}.pdf`);
+    } finally { setSendLoading(null); }
+  };
+
+  const handlePublishPortal = async () => {
+    if (!doc || !id) return;
+    setSendLoading("portal"); setSendMsg(null);
+    try {
+      const pdf = generatePdf(doc);
+      const blob = pdf.output("blob");
+      await uploadPdfBlob(blob, id);
+      await dokumenteService.setStatus(id, "gesendet");
+      await load();
+      setSendMsg({ type: "ok", text: "Im Kundenportal veröffentlicht ✓" });
+    } catch (e: unknown) {
+      setSendMsg({ type: "err", text: "Fehler: " + ((e as any)?.message || String(e)) });
+    } finally { setSendLoading(null); }
+  };
+
+  const handleSendEmail = async () => {
+    if (!doc || !id || !emailTo) return;
+    setSendLoading("email"); setSendMsg(null);
+    try {
+      const pdf = generatePdf(doc);
+      const blob = pdf.output("blob");
+      const signedUrl = await uploadPdfBlob(blob, id);
+      const { error } = await supabase.functions.invoke("send-customer-mail", {
+        body: {
+          to_email: emailTo,
+          to_name: doc.empfaenger.firma || doc.empfaenger.name,
+          subject: emailSubject,
+          body: emailBody.replace(/\n/g, "<br>"),
+          attachment_urls: [signedUrl],
+          customer_id: (doc as any).customerId ?? null,
+        },
+      });
+      if (error) throw error;
+      await dokumenteService.setStatus(id, "gesendet");
+      await load();
+      setSendMsg({ type: "ok", text: `E-Mail an ${emailTo} gesendet ✓` });
+    } catch (e: unknown) {
+      setSendMsg({ type: "err", text: "Fehler: " + ((e as any)?.message || String(e)) });
+    } finally { setSendLoading(null); }
+  };
+
+  const openSendPanel = () => {
+    if (!doc) return;
+    const tl = TYP_LABEL[doc.typ] ?? doc.typ;
+    setEmailTo(doc.empfaenger.email ?? "");
+    setEmailSubject(`${tl} ${doc.nummer}`);
+    setEmailBody(`Sehr geehrte Damen und Herren,\n\nanbei erhalten Sie ${tl} ${doc.nummer} im Anhang.\n\nBei Fragen stehe ich gerne zur Verfügung.\n\nMit magischen Grüßen\n${doc.absender.name}`);
+    setSendMsg(null);
+    setSendPanel(true);
   };
 
   const handleZahlungSave = async () => {
@@ -235,14 +476,14 @@ export default function AdminDokumentDetail() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Status actions */}
-            {doc.status === "entwurf" && (
-              <button onClick={() => handleStatusChange("gesendet")} disabled={statusChanging}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border/30 text-sm hover:bg-muted/60 transition-colors disabled:opacity-50">
-                <Send className="w-3.5 h-3.5" />
-                Als gesendet markieren
-              </button>
-            )}
+            {/* Versenden Button */}
+            <button
+              onClick={openSendPanel}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+            >
+              <Send className="w-3.5 h-3.5" />
+              Versenden
+            </button>
             {doc.typ === "angebot" && (doc.status === "gesendet" || doc.status === "entwurf") && (
               <>
                 <button onClick={() => handleStatusChange("akzeptiert")} disabled={statusChanging}
@@ -548,6 +789,127 @@ export default function AdminDokumentDetail() {
 
         <div className="h-10" />
       </div>
+
+      {/* ── VERSENDEN PANEL ── */}
+      {sendPanel && doc && (
+        <>
+          <div className="fixed inset-0 bg-black/40 z-40 backdrop-blur-sm" onClick={() => setSendPanel(false)} />
+          <div className="fixed right-0 top-0 h-full w-full max-w-md z-50 bg-background border-l border-border/20 shadow-2xl flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border/20 shrink-0">
+              <div>
+                <h2 className="font-semibold text-sm">Versenden</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">{TYP_LABEL[doc.typ]} {doc.nummer}</p>
+              </div>
+              <button onClick={() => setSendPanel(false)} className="p-2 rounded-xl hover:bg-muted/60 text-muted-foreground">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-5 py-5 space-y-3">
+
+              {/* Feedback */}
+              {sendMsg && (
+                <div className={`rounded-xl px-4 py-3 text-sm font-medium ${sendMsg.type === "ok" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}>
+                  {sendMsg.text}
+                </div>
+              )}
+
+              {/* Option 1: Download */}
+              <div className="rounded-2xl border border-border/20 bg-muted/5 p-4">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                    <Download className="w-4 h-4 text-gray-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">PDF herunterladen</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">Direkt auf deinem Gerät speichern</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleDownload}
+                  disabled={sendLoading !== null}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors disabled:opacity-50"
+                >
+                  {sendLoading === "download" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                  {sendLoading === "download" ? "Generiere PDF…" : "PDF herunterladen"}
+                </button>
+              </div>
+
+              {/* Option 2: Kundenportal */}
+              <div className="rounded-2xl border border-border/20 bg-muted/5 p-4">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                    <Globe className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">Im Kundenportal veröffentlichen</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">PDF im Portal des Kunden sichtbar machen · Status → Gesendet</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handlePublishPortal}
+                  disabled={sendLoading !== null}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                >
+                  {sendLoading === "portal" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Globe className="w-3.5 h-3.5" />}
+                  {sendLoading === "portal" ? "Veröffentliche…" : "Im Portal veröffentlichen"}
+                </button>
+              </div>
+
+              {/* Option 3: E-Mail */}
+              <div className="rounded-2xl border border-border/20 bg-muted/5 p-4 space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                    <Mail className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">Per E-Mail senden</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">PDF als Anhang · Status → Gesendet</p>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">An</label>
+                    <input
+                      type="email"
+                      value={emailTo}
+                      onChange={(e) => setEmailTo(e.target.value)}
+                      placeholder="kunde@example.com"
+                      className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Betreff</label>
+                    <input
+                      value={emailSubject}
+                      onChange={(e) => setEmailSubject(e.target.value)}
+                      className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Nachricht</label>
+                    <textarea
+                      value={emailBody}
+                      onChange={(e) => setEmailBody(e.target.value)}
+                      rows={6}
+                      className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={handleSendEmail}
+                  disabled={sendLoading !== null || !emailTo}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition-colors disabled:opacity-50"
+                >
+                  {sendLoading === "email" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Mail className="w-3.5 h-3.5" />}
+                  {sendLoading === "email" ? "Sende E-Mail…" : "E-Mail mit PDF senden"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* ── ZAHLUNG PANEL ── */}
       {zahlungPanel && (
