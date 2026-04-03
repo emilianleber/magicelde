@@ -2002,9 +2002,12 @@ export default function AdminDokumentEditor() {
                       />
                     )}
                     {showOptional && (
-                      <label className="mt-2 flex items-center gap-2 cursor-pointer select-none w-fit">
-                        <div onClick={() => updatePosition(pos.id, { optional: !pos.optional })}
-                          className={`relative w-8 h-4 rounded-full transition-colors shrink-0 ${pos.optional ? "bg-blue-500" : "bg-slate-200"}`}>
+                      <label
+                        className="mt-2 flex items-center gap-2 cursor-pointer select-none w-fit"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => updatePosition(pos.id, { optional: !pos.optional })}
+                      >
+                        <div className={`relative w-8 h-4 rounded-full transition-colors shrink-0 ${pos.optional ? "bg-blue-500" : "bg-slate-200"}`}>
                           <span className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${pos.optional ? "translate-x-4" : ""}`} />
                         </div>
                         <span className="text-sm font-medium text-slate-500">Optional</span>
