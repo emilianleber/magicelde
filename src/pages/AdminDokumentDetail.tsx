@@ -488,11 +488,10 @@ body > div:last-child {
       // 1. Dokument-Status → gesendet
       await dokumenteService.setStatus(id, "gesendet");
 
-      // 2. Auth-Token für admin-send-status-mail
-      const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token;
+      // 2. Request/Event-Status aktualisieren (Kern-Operation, muss klappen)
+      let mailType: string | null = null;
+      let mailRecordId: string | null = null;
 
-      // 3. Request/Event-Status + Statusmail je nach Dokumenttyp
       if (doc.requestId) {
         let reqStatus: string | null = null;
         if (doc.typ === "angebot") reqStatus = "angebot_gesendet";
@@ -500,10 +499,8 @@ body > div:last-child {
 
         if (reqStatus) {
           await supabase.from("portal_requests").update({ status: reqStatus }).eq("id", doc.requestId);
-          await supabase.functions.invoke("admin-send-status-mail", {
-            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-            body: { type: "request", recordId: doc.requestId, status: reqStatus },
-          });
+          mailType = "request";
+          mailRecordId = doc.requestId;
         }
       } else if (doc.eventId) {
         let eventStatus: string | null = null;
@@ -513,14 +510,23 @@ body > div:last-child {
 
         if (eventStatus) {
           await supabase.from("portal_events").update({ status: eventStatus }).eq("id", doc.eventId);
-          await supabase.functions.invoke("admin-send-status-mail", {
-            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-            body: { type: "event", recordId: doc.eventId, status: eventStatus },
-          });
+          mailType = "event";
+          mailRecordId = doc.eventId;
         }
       }
 
-      // Navigate to clean detail view (close send panel) with success toast
+      // 3. Statusmail: fire-and-forget – Fehler hier verhindern NICHT die Navigation
+      if (mailType && mailRecordId) {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          const token = session?.access_token;
+          supabase.functions.invoke("admin-send-status-mail", {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+            body: { type: mailType, recordId: mailRecordId },
+          }).catch(console.error);
+        });
+      }
+
+      // 4. Immer navigieren nach erfolgreichen Kern-Operationen
       navigate(`/admin/dokumente/${id}?published=1`);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : (typeof e === "object" ? JSON.stringify(e) : String(e));

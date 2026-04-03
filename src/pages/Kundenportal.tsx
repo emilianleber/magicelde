@@ -594,8 +594,9 @@ const Kundenportal = () => {
   const unreadCount = messages.filter((m) => !m.read_by_customer).length;
 
   // Offene Angebote die im Portal veröffentlicht wurden
+  // DB column "type" hat Werte wie "Angebot" (Großschreibung)
   const offeneAngebote = documents.filter(
-    (d) => (d.typ === "angebot" || d.type === "angebot") && d.status === "gesendet"
+    (d) => d.type === "Angebot" && d.status === "gesendet"
   );
 
   const openAngebotInBrowser = (doc: PortalDocument) => {
@@ -1368,7 +1369,115 @@ const Kundenportal = () => {
                   {angebote.length > 0 && (
                     <div>
                       <SectionHeader title="Angebote" count={angebote.length} />
-                      <div className="space-y-3">{angebote.map(doc => renderDocRow(doc, false))}</div>
+                      <div className="space-y-3">
+                        {angebote.map(doc => {
+                          const isOffen = doc.status === "gesendet";
+                          const reqId = doc.request_id;
+                          const isLoading = reqId ? !!offerActionLoading[reqId] : false;
+                          const errMsg = reqId ? offerActionError[reqId] : null;
+
+                          if (!isOffen) return renderDocRow(doc, false);
+
+                          const doAction = async (action: "accept" | "reject") => {
+                            if (!reqId) return;
+                            setOfferActionLoading(p => ({ ...p, [reqId]: true }));
+                            setOfferActionError(p => ({ ...p, [reqId]: "" }));
+                            const { error } = await supabase.functions.invoke("portal-offer-action", {
+                              body: { action, request_id: reqId },
+                            });
+                            if (error) {
+                              setOfferActionError(p => ({ ...p, [reqId]: "Fehler – bitte versuche es erneut." }));
+                            } else {
+                              setDocuments(prev => prev.map(d => d.id === doc.id ? { ...d, status: action === "accept" ? "akzeptiert" : "abgelehnt" } : d));
+                              setRequests(prev => prev.map(r => r.id === reqId ? { ...r, status: action === "accept" ? "gebucht" : "abgelehnt" } : r));
+                            }
+                            setOfferActionLoading(p => ({ ...p, [reqId]: false }));
+                          };
+
+                          const betrag = doc.brutto ?? doc.amount;
+
+                          return (
+                            <div key={doc.id} className="rounded-2xl overflow-hidden border border-amber-200/60 bg-white shadow-sm">
+                              <div className="h-1 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400" />
+                              <div className="p-5">
+                                {/* Header row */}
+                                <div className="flex items-start justify-between gap-3 mb-3">
+                                  <div>
+                                    <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-1">✦ Offenes Angebot</span>
+                                    <p className="font-sans text-sm font-semibold text-foreground">{doc.name}</p>
+                                    <p className="font-sans text-xs text-muted-foreground">{new Date(doc.created_at).toLocaleDateString("de-DE")}</p>
+                                  </div>
+                                  <div className="text-right shrink-0">
+                                    {betrag != null && (
+                                      <p className="font-display text-lg font-bold text-foreground">
+                                        {new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(betrag)}
+                                      </p>
+                                    )}
+                                    {doc.preview_html && (
+                                      <button
+                                        onClick={() => openAngebotInBrowser(doc)}
+                                        className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium text-amber-700 hover:text-amber-900"
+                                      >
+                                        <Download className="w-3 h-3" /> Öffnen
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Annehmen */}
+                                <button
+                                  disabled={isLoading || !reqId}
+                                  onClick={() => doAction("accept")}
+                                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold shadow-sm shadow-emerald-200 transition-all active:scale-[0.98] disabled:opacity-50 mb-2"
+                                >
+                                  {isLoading ? <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+                                  Angebot annehmen
+                                </button>
+
+                                {/* Fragen + Ablehnen */}
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => reqId && setCrFormOpen(p => ({ ...p, [reqId]: true }))}
+                                    className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border border-black/[0.1] text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-black/[0.03] transition-all"
+                                  >
+                                    <MessageCircle className="w-3.5 h-3.5" /> Frage stellen
+                                  </button>
+                                  <button
+                                    disabled={isLoading || !reqId}
+                                    onClick={() => doAction("reject")}
+                                    className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border border-black/[0.08] text-xs font-medium text-muted-foreground/70 hover:text-muted-foreground hover:bg-black/[0.03] transition-all disabled:opacity-50"
+                                  >
+                                    <X className="w-3.5 h-3.5" /> Ablehnen
+                                  </button>
+                                </div>
+
+                                {errMsg && <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2 mt-2">{errMsg}</p>}
+
+                                {reqId && crFormOpen[reqId] && (
+                                  <div className="mt-3 pt-3 border-t border-black/[0.05] space-y-2">
+                                    <input className={inputCls} placeholder="Betreff" value={crSubject[reqId] || ""} onChange={e => setCrSubject(p => ({ ...p, [reqId]: e.target.value }))} />
+                                    <textarea className={inputCls + " resize-none"} rows={3} placeholder="Nachricht…" value={crMessage[reqId] || ""} onChange={e => setCrMessage(p => ({ ...p, [reqId]: e.target.value }))} />
+                                    <div className="flex gap-2">
+                                      <button disabled={crSubmitting[reqId]} onClick={async () => {
+                                        if (!customer || !reqId) return;
+                                        setCrSubmitting(p => ({ ...p, [reqId]: true }));
+                                        await supabase.from("portal_change_requests").insert({ customer_id: customer.id, request_id: reqId, subject: crSubject[reqId] || "Rückfrage zum Angebot", message: crMessage[reqId] || "" });
+                                        setCrSuccess(p => ({ ...p, [reqId]: true }));
+                                        setCrFormOpen(p => ({ ...p, [reqId]: false }));
+                                        setCrSubmitting(p => ({ ...p, [reqId]: false }));
+                                      }} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-foreground text-background text-xs font-semibold hover:opacity-80 transition-all disabled:opacity-50">
+                                        <Send className="w-3.5 h-3.5" /> Senden
+                                      </button>
+                                      <button onClick={() => setCrFormOpen(p => ({ ...p, [reqId]: false }))} className="px-4 py-2.5 rounded-xl border border-black/[0.1] text-xs text-muted-foreground hover:bg-black/[0.03] transition-all">Abbrechen</button>
+                                    </div>
+                                    {crSuccess[reqId] && <p className="text-xs text-emerald-600 font-medium">✓ Nachricht gesendet!</p>}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
                   {vertraege.length > 0 && (
