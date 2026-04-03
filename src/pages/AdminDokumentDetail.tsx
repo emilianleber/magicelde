@@ -401,7 +401,7 @@ export default function AdminDokumentDetail() {
 html, body { margin: 0; padding: 0; }
 body > div {
   width: 595px !important;
-  height: 842px !important;
+  height: 840px !important;
   zoom: ${scale.toFixed(6)} !important;
   overflow: hidden !important;
   aspect-ratio: auto !important;

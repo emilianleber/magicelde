@@ -1537,7 +1537,7 @@ html, body { margin: 0; padding: 0; }
 /* Jede Seite = 595×842px, skaliert auf A4 210×297mm */
 body > div {
   width: 595px !important;
-  height: 842px !important;
+  height: 840px !important;
   zoom: ${scale.toFixed(6)} !important;
   overflow: hidden !important;
   aspect-ratio: auto !important;
