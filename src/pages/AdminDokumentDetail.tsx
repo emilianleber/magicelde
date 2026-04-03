@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentStatus, DokumentTyp, Zahlung } from "@/types/dokumente";
@@ -92,6 +92,7 @@ function WorkflowStepper({ currentTyp, folgeTyp }: { currentTyp: DokumentTyp; fo
 export default function AdminDokumentDetail() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
 
   const [authChecked, setAuthChecked] = useState(false);
   const [doc, setDoc] = useState<Dokument | null>(null);
@@ -134,6 +135,12 @@ export default function AdminDokumentDetail() {
   };
 
   useEffect(() => { if (authChecked) load(); }, [authChecked, id]);
+
+  // Send-Panel direkt öffnen wenn ?send=1 in der URL (kommt vom Editor-Versenden-Button)
+  useEffect(() => {
+    if (!doc || !searchParams.get("send")) return;
+    openSendPanel();
+  }, [doc]);
 
   const handleStatusChange = async (status: DokumentStatus) => {
     if (!id) return;

@@ -1247,39 +1247,89 @@ export default function AdminDokumentEditor() {
     }
   };
 
-  // Speichern + zur Detail-Seite navigieren (für "Versenden"-Button)
+  // Speichern + zur Detail-Seite navigieren mit offenem Send-Panel
   const handleSaveAndNavigate = async () => {
-    await handleSave();
-    // handleSave navigiert für neue Dokumente bereits – für bestehende hier nachholen
-    if (!isNew && id) navigate(`/admin/dokumente/${id}`);
+    setSaving(true);
+    setMessage("");
+    try {
+      const { data: settings } = await supabase.from("admin_settings").select("*").limit(1).maybeSingle();
+      const absender = {
+        name: (settings?.company_name as string) || "Emilian Leber",
+        adresse: (settings?.company_address as string) || "",
+        plz: (settings?.company_zip as string) || "",
+        ort: (settings?.company_city as string) || "",
+        land: (settings?.company_country as string) || "Deutschland",
+        email: (settings?.company_email as string) || "el@magicel.de",
+        telefon: (settings?.company_phone as string) || "",
+        website: (settings?.company_website as string) || "",
+        iban: (settings?.bank_iban as string) || "",
+        bic: (settings?.bank_bic as string) || "",
+        bank: (settings?.bank_name as string) || "",
+        kleinunternehmer,
+      };
+      const empfaenger = { name: empfaengerName, firma: empfaengerFirma || undefined, adresse: empfaengerAdresse, plz: empfaengerPlz, ort: empfaengerOrt, land: empfaengerLand };
+      const posForService = positionen.map((p, i) => ({
+        id: p.id, position: i + 1, typ: p.typ as "leistung" | "text" | "zwischensumme",
+        bezeichnung: p.bezeichnung, beschreibung: p.beschreibung || undefined,
+        menge: p.menge, einheit: p.einheit, einzelpreis: p.einzelpreis, gesamt: p.gesamt,
+        mwstSatz: p.mwstSatz || mwstSatz, rabattProzent: p.rabattProzent ?? undefined,
+      }));
+      const typMap: Record<string, DokumentTyp> = { angebot: "angebot", rechnung: "rechnung", auftragsbestaetigung: "auftragsbestaetigung" };
+      const dokumentTyp = typMap[typ] || "angebot";
+
+      if (isNew) {
+        const saved = await dokumenteService.create(dokumentTyp, {
+          datum, faelligAm: faelligAm || undefined, gueltigBis: gueltigBis || undefined,
+          lieferdatum: lieferdatum || undefined, zahlungszielTage, empfaenger, absender,
+          kopftext, fusstext, status: "entwurf", customerId: selectedCustomerId || undefined,
+          rabattProzent: rabattProzent ?? undefined,
+        }, posForService);
+        navigate(`/admin/dokumente/${saved.id}?send=1`);
+      } else if (id) {
+        await dokumenteService.update(id, {
+          datum, faelligAm: faelligAm || undefined, gueltigBis: gueltigBis || undefined,
+          lieferdatum: lieferdatum || undefined, zahlungszielTage, empfaenger, absender,
+          kopftext, fusstext, customerId: selectedCustomerId || undefined,
+          rabattProzent: rabattProzent ?? undefined,
+        }, posForService);
+        navigate(`/admin/dokumente/${id}?send=1`);
+      }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : (e as any)?.message || JSON.stringify(e);
+      setMessage("Fehler: " + msg);
+    } finally { setSaving(false); }
   };
 
-  // Drucken / PDF: Preview-HTML in neuem Fenster öffnen und Browser-Druckdialog starten
+  // Drucken / PDF: Preview exakt wie auf dem Bildschirm in neuem Fenster drucken
   const handlePrintPreview = () => {
     const el = document.getElementById("doc-preview-print");
     if (!el) return;
-    const win = window.open("", "_blank", "width=680,height=960");
+    const win = window.open("", "_blank");
     if (!win) return;
-    // Google Fonts laden (Inter)
     const fontLinks = Array.from(document.querySelectorAll("link[rel='stylesheet']"))
       .map((l) => (l as HTMLLinkElement).outerHTML)
       .join("\n");
+    // 595px Preview auf A4 (210mm) skalieren: 210mm / 595px ≈ 1.334
     win.document.write(`<!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
 ${fontLinks}
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#fff; font-family:Inter,system-ui,sans-serif; }
+  html, body { margin:0; padding:0; background:#fff; }
   @page { size:A4 portrait; margin:0; }
-  @media print { * { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+  @media print { * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; } }
+  .page { width:210mm; height:297mm; overflow:hidden; position:relative; }
+  .inner { width:595px; height:842px; transform:scale(1.3341); transform-origin:top left; overflow:hidden; }
 </style>
 </head>
-<body style="width:595px">
-${el.innerHTML}
+<body>
+<div class="page">
+  <div class="inner">${el.innerHTML}</div>
+</div>
 </body></html>`);
     win.document.close();
-    setTimeout(() => { win.focus(); win.print(); }, 600);
+    setTimeout(() => { win.focus(); win.print(); }, 800);
   };
 
   const typLabel = TYP_LABEL[typ] || typ;
