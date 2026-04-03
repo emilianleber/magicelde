@@ -682,30 +682,30 @@ function DocumentPreview(props: PreviewProps) {
     const s = calcSummen(chunk, mwstSatz, kleinunternehmer, rabattProzent);
     const rowBase: React.CSSProperties = {
       display: "flex", justifyContent: "space-between", alignItems: "center",
-      padding: "7px 6px", fontSize: 9.5,
+      padding: `8px ${M}px`, fontSize: 9.5,
     };
     return (
-      <div style={{ marginTop: 4, marginLeft: M, marginRight: M, borderTop: "1px solid #d8d8d8" }}>
+      <div style={{ marginTop: 6, borderTop: "0.75px solid #d0d0d0" }}>
         {/* Netto */}
-        <div style={{ ...rowBase, backgroundColor: "#eeeeee", borderBottom: "3px solid #fff" }}>
+        <div style={{ ...rowBase, backgroundColor: "#f0f0f0" }}>
           <span style={{ color: "#333" }}>Gesamtbetrag netto</span>
           <span style={{ color: "#111" }}>{fmtEur(s.netto)}</span>
         </div>
         {/* MwSt */}
         {!kleinunternehmer && mwstSatz > 0 && (
-          <div style={{ ...rowBase, borderBottom: "3px solid #fff" }}>
+          <div style={{ ...rowBase, backgroundColor: "#fff" }}>
             <span style={{ color: "#555" }}>zzgl. {mwstSatz}% MwSt.</span>
             <span style={{ color: "#111" }}>{fmtEur(s.mwstBetrag)}</span>
           </div>
         )}
         {/* §19 */}
         {kleinunternehmer && (
-          <div style={{ padding: "5px 6px", fontSize: 9.5, color: "#555", borderBottom: "3px solid #fff" }}>
+          <div style={{ padding: `6px ${M}px`, fontSize: 9.5, color: "#555" }}>
             Umsatzsteuer nicht erhoben gemäß §19UStG.
           </div>
         )}
         {/* Brutto */}
-        <div style={{ ...rowBase, backgroundColor: "#eeeeee", fontWeight: 700, fontSize: 10 }}>
+        <div style={{ ...rowBase, backgroundColor: "#f0f0f0", fontWeight: 700, fontSize: 10 }}>
           <span>Gesamtbetrag brutto</span>
           <span>{fmtEur(s.brutto)}</span>
         </div>
