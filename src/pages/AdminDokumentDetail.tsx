@@ -520,8 +520,9 @@ body > div:last-child {
         });
       }
 
-      // 4. Panel schließen + Dokument neu laden + Toast direkt setzen
+      // 4. Panel schließen + URL bereinigen (verhindert dass useEffect Panel wieder öffnet) + Toast
       setSendPanel(false);
+      navigate(`/admin/dokumente/${id}`, { replace: true }); // entfernt ?send=1
       setPublishedToast(true);
       setTimeout(() => setPublishedToast(false), 6000);
       await load();
