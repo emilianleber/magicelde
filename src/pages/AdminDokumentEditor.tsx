@@ -368,11 +368,13 @@ interface PreviewProps {
   datum: string;
   faelligAm: string;
   gueltigBis: string;
+  lieferdatum: string;
   empfaengerName: string;
   empfaengerFirma: string;
   empfaengerAdresse: string;
   empfaengerPlz: string;
   empfaengerOrt: string;
+  empfaengerLand: string;
   kopftext: string;
   fusstext: string;
   positionen: LocalPosition[];
@@ -380,9 +382,16 @@ interface PreviewProps {
   kleinunternehmer: boolean;
   rabattProzent: number | null;
   absenderName: string;
+  absenderUntertitel: string;
   absenderAdresse: string;
   absenderPlz: string;
   absenderOrt: string;
+  absenderEmail: string;
+  absenderTel: string;
+  absenderWebsite: string;
+  absenderIban: string;
+  absenderBic: string;
+  absenderSteuernummer: string;
 }
 
 interface SummenResult {
@@ -411,477 +420,523 @@ function fmt(n: number) {
   return n.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
 }
 
-// DIN 5008: Shared sub-components for document body
-function PreviewAdressblock({ firma, name, adresse, plz, ort, absender, absenderAdresse, absenderPlz, absenderOrt }: {
-  firma?: string; name: string; adresse: string; plz: string; ort: string;
-  absender: string; absenderAdresse: string; absenderPlz: string; absenderOrt: string;
-}) {
-  return (
-    <div style={{ fontSize: "6px", color: "#333", lineHeight: 1.6 }}>
-      {/* DIN 5008: Absenderzeile above recipient */}
-      <div style={{ fontSize: "5.5px", color: "#999", borderBottom: "0.5px solid #eee", paddingBottom: "2px", marginBottom: "3px" }}>
-        {absender} · {absenderAdresse} · {absenderPlz} {absenderOrt}
-      </div>
-      {firma && <div style={{ fontWeight: "bold" }}>{firma}</div>}
-      <div>{name}</div>
-      <div>{adresse}</div>
-      <div>{plz} {ort}</div>
-    </div>
-  );
-}
-
-function PreviewMetaTable({ typLabel, nummer, datum, faelligAm, gueltigBis, color, bold = false }: {
-  typLabel: string; nummer: string; datum: string; faelligAm: string; gueltigBis: string; color: string; bold?: boolean;
-}) {
-  const rows = [
-    { label: `${typLabel}-Nr.`, value: nummer },
-    { label: "Datum", value: datum },
-    ...(faelligAm ? [{ label: "Zahlungsziel", value: faelligAm }] : []),
-    ...(gueltigBis ? [{ label: "Gültig bis", value: gueltigBis }] : []),
-    { label: "Ansprechpartner", value: "Emilian Leber" },
-  ];
-  return (
-    <div style={{ fontSize: "6px" }}>
-      {rows.map(r => (
-        <div key={r.label} style={{ display: "flex", gap: "6px", lineHeight: 1.7 }}>
-          <div style={{ color: "#888", minWidth: "52px" }}>{r.label}</div>
-          <div style={{ fontWeight: bold ? "bold" : "normal", color: "#111" }}>{r.value || "—"}</div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function PreviewPositionenTable({ positionen, color, headerBg = "#111", headerColor = "#fff" }: {
-  positionen: LocalPosition[]; color: string; headerBg?: string; headerColor?: string;
-}) {
-  const leistung = positionen.filter(p => p.typ === "leistung").slice(0, 6);
-  return (
-    <div style={{ fontSize: "6px" }}>
-      <div style={{ display: "flex", backgroundColor: headerBg, color: headerColor, padding: "2px 4px", fontWeight: "bold" }}>
-        <span style={{ width: "14px" }}>Pos</span>
-        <span style={{ flex: 3 }}>Beschreibung</span>
-        <span style={{ width: "28px", textAlign: "right" }}>Menge</span>
-        <span style={{ width: "36px", textAlign: "right" }}>Einzelpr.</span>
-        <span style={{ width: "36px", textAlign: "right" }}>Gesamt</span>
-      </div>
-      {leistung.map((pos, i) => (
-        <div key={pos.id} style={{ display: "flex", padding: "1.5px 4px", backgroundColor: i % 2 === 0 ? "#fafafa" : "#fff", borderBottom: "0.5px solid #ececec" }}>
-          <span style={{ width: "14px", color: "#aaa" }}>{i + 1}.</span>
-          <span style={{ flex: 3, fontWeight: pos.bezeichnung ? "normal" : "normal", color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(leer)"}</span>
-          <span style={{ width: "28px", textAlign: "right" }}>{pos.menge} {pos.einheit?.substring(0, 3)}</span>
-          <span style={{ width: "36px", textAlign: "right" }}>{fmt(pos.einzelpreis)}</span>
-          <span style={{ width: "36px", textAlign: "right", fontWeight: "600" }}>{fmt(pos.gesamt)}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function PreviewSummen({ summen, mwstSatz, kleinunternehmer, color, dark = false }: {
-  summen: SummenResult; mwstSatz: number; kleinunternehmer: boolean; color: string; dark?: boolean;
-}) {
-  const bg = dark ? "#111" : "#f9f9f9";
-  const fg = dark ? "#fff" : "#111";
-  return (
-    <div style={{ display: "flex", justifyContent: "flex-end" }}>
-      <div style={{ minWidth: "130px", backgroundColor: bg, padding: "3px 5px", borderRadius: "2px" }}>
-        {summen.gesamtRabatt > 0 && (
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "5.5px", color: dark ? "rgba(255,255,255,0.6)" : "#888" }}>
-            <span>Rabatt</span><span>-{fmt(summen.gesamtRabatt)}</span>
-          </div>
-        )}
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "5.5px", color: dark ? "rgba(255,255,255,0.6)" : "#888" }}>
-          <span>Nettobetrag</span><span style={{ color: fg }}>{fmt(summen.netto)}</span>
-        </div>
-        {!kleinunternehmer && mwstSatz > 0 && (
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "5.5px", color: dark ? "rgba(255,255,255,0.6)" : "#888" }}>
-            <span>MwSt. {mwstSatz}%</span><span style={{ color: fg }}>{fmt(summen.mwstBetrag)}</span>
-          </div>
-        )}
-        {kleinunternehmer && (
-          <div style={{ fontSize: "5px", color: dark ? "rgba(255,255,255,0.4)" : "#aaa" }}>
-            Umsatzsteuer nicht erhoben gemäß §19 UStG.
-          </div>
-        )}
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "7px", fontWeight: "bold", color: fg, borderTop: `0.5px solid ${dark ? "rgba(255,255,255,0.2)" : "#ddd"}`, marginTop: "2px", paddingTop: "2px" }}>
-          <span>Gesamtbetrag brutto</span><span style={{ color: dark ? "#fff" : color }}>{fmt(summen.brutto)}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function DocumentPreview(props: PreviewProps) {
   const {
-    layoutId, color, typ, nummer, datum, faelligAm, gueltigBis,
-    empfaengerName, empfaengerFirma, empfaengerAdresse, empfaengerPlz, empfaengerOrt,
+    layoutId, color, typ, nummer, datum, faelligAm, gueltigBis, lieferdatum,
+    empfaengerName, empfaengerFirma, empfaengerAdresse, empfaengerPlz, empfaengerOrt, empfaengerLand,
     kopftext, fusstext, positionen, mwstSatz, kleinunternehmer, rabattProzent,
-    absenderName, absenderAdresse, absenderPlz, absenderOrt,
+    absenderName, absenderUntertitel, absenderAdresse, absenderPlz, absenderOrt,
+    absenderEmail, absenderTel, absenderWebsite, absenderIban, absenderBic, absenderSteuernummer,
   } = props;
 
   const summen = calcSummen(positionen, mwstSatz, kleinunternehmer, rabattProzent);
   const typLabel = TYP_LABEL[typ] || typ;
   const initials = (absenderName || "E").charAt(0).toUpperCase();
-  const senderLine = `${absenderAdresse}, ${absenderPlz} ${absenderOrt}`;
-  const font = layoutId === 4 ? "'Courier New', monospace" : layoutId === 10 ? "Georgia, serif" : "Inter, system-ui, sans-serif";
+  const font = layoutId === 4 ? "'Courier New', Courier, monospace"
+    : layoutId === 10 ? "Georgia, 'Times New Roman', serif"
+    : "Inter, system-ui, -apple-system, sans-serif";
 
-  // Shared body (DIN 5008 layout below header)
-  const renderBody = (opts: {
-    headerBg?: string; headerColor?: string; tableHeaderBg?: string;
-    metaBold?: boolean; darkSummen?: boolean; accentLine?: boolean;
-  } = {}) => (
-    <>
-      {/* DIN 5008: Anschrift + Infos nebeneinander */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "5px 12px 3px" }}>
-        <PreviewAdressblock
-          firma={empfaengerFirma} name={empfaengerName}
-          adresse={empfaengerAdresse} plz={empfaengerPlz} ort={empfaengerOrt}
-          absender={absenderName} absenderAdresse={absenderAdresse}
-          absenderPlz={absenderPlz} absenderOrt={absenderOrt}
-        />
-        <PreviewMetaTable typLabel={typLabel} nummer={nummer} datum={datum}
-          faelligAm={faelligAm} gueltigBis={gueltigBis} color={color} bold={opts.metaBold} />
-      </div>
+  // ── DIN 5008 Body (shared across all layouts) ────────────────────────────────
+  const renderDIN5008Body = (tableHeaderBg = "#111", tableHeaderColor = "#fff", dark = false) => {
+    const metaRows = [
+      { label: `${typLabel}-Nr.`, val: nummer || "—" },
+      { label: "Datum", val: datum || "—" },
+      ...(lieferdatum ? [{ label: "Lieferdatum", val: lieferdatum }] : []),
+      ...(faelligAm ? [{ label: "Zahlungsziel", val: faelligAm }] : []),
+      ...(gueltigBis ? [{ label: "Gültig bis", val: gueltigBis }] : []),
+      { label: "Ansprechpartner", val: absenderName },
+    ];
+    const leistungPos = positionen.filter(p => p.typ === "leistung").slice(0, 7);
 
-      {/* DIN 5008: Betreff */}
-      <div style={{ padding: "4px 12px 2px" }}>
-        {opts.accentLine && <div style={{ width: "18px", height: "1.5px", backgroundColor: color, marginBottom: "3px" }} />}
-        <div style={{ fontSize: "8px", fontWeight: "bold", color: "#111" }}>
-          {typLabel}{nummer ? ` · ${nummer}` : ""}
-        </div>
-      </div>
-
-      {/* Kopftext */}
-      {kopftext && (
-        <div style={{ padding: "2px 12px 3px", fontSize: "6px", color: "#444", lineHeight: 1.5 }}>
-          {kopftext.substring(0, 100)}{kopftext.length > 100 ? "…" : ""}
-        </div>
-      )}
-
-      {/* Positionen */}
-      <div style={{ padding: "3px 12px" }}>
-        <PreviewPositionenTable positionen={positionen} color={color}
-          headerBg={opts.tableHeaderBg ?? opts.headerBg ?? "#111"}
-          headerColor={opts.headerColor ?? "#fff"} />
-      </div>
-
-      {/* Summen */}
-      <div style={{ padding: "3px 12px 3px" }}>
-        <PreviewSummen summen={summen} mwstSatz={mwstSatz} kleinunternehmer={kleinunternehmer}
-          color={color} dark={opts.darkSummen} />
-      </div>
-
-      {/* Fußtext + Footer-Linie */}
-      {fusstext && (
-        <div style={{ padding: "2px 12px", fontSize: "5px", color: "#aaa", lineHeight: 1.3 }}>
-          {fusstext.substring(0, 80)}{fusstext.length > 80 ? "…" : ""}
-        </div>
-      )}
-      <div style={{ margin: "2px 12px 0", borderTop: "0.5px solid #ebebeb", paddingTop: "2px" }}>
-        <div style={{ fontSize: "5px", color: "#bbb", display: "flex", justifyContent: "space-between" }}>
-          <span>{absenderName}</span>
-          <span>{senderLine}</span>
-        </div>
-      </div>
-    </>
-  );
-
-  // ── Layout 1: Klassisch ──────────────────────────────────────────────────────
-  if (layoutId === 1) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ backgroundColor: color, padding: "8px 12px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px" }}>{absenderName}</div>
-            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "6px" }}>{senderLine}</div>
-          </div>
-          <div style={{ width: "20px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.25)" }} />
-        </div>
-      </div>
-      {renderBody({ tableHeaderBg: "#111", tableHeaderColor: "#fff" } as Parameters<typeof renderBody>[0])}
-    </div>
-  );
-
-  // ── Layout 2: Wave Dark ──────────────────────────────────────────────────────
-  if (layoutId === 2) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ position: "relative", backgroundColor: "#111", padding: "8px 12px 14px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <div style={{ color: color, fontSize: "5.5px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.5px" }}>Zauberer & Mentalist</div>
-            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px", marginTop: "1px" }}>{absenderName}</div>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "6px" }}>{senderLine}</div>
-          </div>
-          <div style={{ width: "20px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.15)", border: `1px solid ${color}40` }} />
-        </div>
-        {/* Wave */}
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "6px", backgroundColor: "#fff", borderRadius: "50% 50% 0 0 / 100% 100% 0 0" }} />
-      </div>
-      {renderBody({ tableHeaderBg: "#111", metaBold: true })}
-    </div>
-  );
-
-  // ── Layout 3: Split ──────────────────────────────────────────────────────────
-  if (layoutId === 3) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ padding: "8px 12px 5px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <div>
-            <div style={{ fontSize: "14px", fontWeight: "900", color, lineHeight: 1, letterSpacing: "-0.5px" }}>{absenderName}</div>
-            <div style={{ fontSize: "5.5px", color: "#aaa", marginTop: "2px" }}>{senderLine}</div>
-          </div>
-          <div style={{ width: "18px", height: "12px", borderRadius: "2px", backgroundColor: "#f0f0f0" }} />
-        </div>
-        <div style={{ marginTop: "5px", height: "2px", background: `linear-gradient(to right, ${color}, transparent)` }} />
-      </div>
-      {renderBody({ tableHeaderBg: color, accentLine: true })}
-    </div>
-  );
-
-  // ── Layout 4: Retro / Typewriter ─────────────────────────────────────────────
-  if (layoutId === 4) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fffef8", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ padding: "8px 12px 5px" }}>
-        <div style={{ borderTop: "1.5px solid #111", borderBottom: "1.5px solid #111", padding: "3px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <div style={{ fontSize: "8px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px" }}>{absenderName}</div>
-            <div style={{ fontSize: "5.5px", color: "#555", letterSpacing: "0.5px" }}>{senderLine}</div>
-          </div>
-          <div style={{ fontSize: "7px", textAlign: "right" }}>
-            <div style={{ fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.5px" }}>{typLabel}</div>
-            <div style={{ color: "#666" }}>{nummer}</div>
-          </div>
-        </div>
-      </div>
-      {renderBody({ tableHeaderBg: "#111", tableHeaderColor: "#fffef8" } as Parameters<typeof renderBody>[0])}
-    </div>
-  );
-
-  // ── Layout 5: Seitenstreifen ──────────────────────────────────────────────────
-  if (layoutId === 5) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", display: "flex" }}>
-      {/* Left accent stripe */}
-      <div style={{ width: "10px", backgroundColor: color, flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", paddingTop: "8px" }}>
-        <div style={{ color: "#fff", fontSize: "4px", fontWeight: "bold", writingMode: "vertical-rl", textOrientation: "mixed", opacity: 0.7 }}>{typLabel.toUpperCase()}</div>
-      </div>
-      <div style={{ flex: 1, overflow: "hidden" }}>
-        <div style={{ padding: "7px 10px 4px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div>
-              <div style={{ fontSize: "8px", fontWeight: "bold" }}>{absenderName}</div>
-              <div style={{ fontSize: "5.5px", color: "#999" }}>{senderLine}</div>
+    return (
+      <>
+        {/* ── DIN 5008 Zone B: Anschriftfeld links + Informationsblock rechts ── */}
+        <div style={{ display: "flex", padding: "4px 14px 0", gap: "8px", alignItems: "flex-start" }}>
+          {/* Empfängerfeld (DIN 5008: 40mm hoch, 85mm breit) */}
+          <div style={{ flex: "0 0 50%", fontSize: "6px", lineHeight: 1.65 }}>
+            {/* Absenderzeile */}
+            <div style={{ fontSize: "5px", color: "#888", borderBottom: "0.5px solid #ddd", paddingBottom: "1.5px", marginBottom: "3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {absenderName} – {absenderAdresse} – {absenderPlz} {absenderOrt}
             </div>
-            <div style={{ width: "16px", height: "11px", borderRadius: "2px", backgroundColor: "#f0f0f0" }} />
+            {empfaengerFirma && <div style={{ fontWeight: "bold", color: "#111" }}>{empfaengerFirma}</div>}
+            <div style={{ color: "#111" }}>{empfaengerName || "–"}</div>
+            {empfaengerAdresse && <div style={{ color: "#444" }}>{empfaengerAdresse}</div>}
+            {(empfaengerPlz || empfaengerOrt) && <div style={{ color: "#444" }}>{empfaengerPlz} {empfaengerOrt}</div>}
+            {empfaengerLand && empfaengerLand !== "Deutschland" && <div style={{ color: "#666" }}>{empfaengerLand}</div>}
+          </div>
+          {/* Informationsblock (Bezugszeichen) */}
+          <div style={{ flex: 1, fontSize: "6px" }}>
+            {metaRows.map(r => (
+              <div key={r.label} style={{ display: "flex", lineHeight: 1.65 }}>
+                <div style={{ color: "#888", width: "56px", flexShrink: 0 }}>{r.label}</div>
+                <div style={{ fontWeight: "600", color: "#111", flex: 1 }}>{r.val}</div>
+              </div>
+            ))}
           </div>
         </div>
-        {renderBody({ tableHeaderBg: color, accentLine: true })}
-      </div>
-    </div>
-  );
 
-  // ── Layout 6: Dark Premium ────────────────────────────────────────────────────
-  if (layoutId === 6) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ backgroundColor: "#111", padding: "9px 12px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <div style={{ width: "16px", height: "11px", borderRadius: "2px", backgroundColor: color, marginBottom: "4px" }} />
-            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px" }}>{absenderName}</div>
-            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "5.5px" }}>{senderLine}</div>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ color: color, fontSize: "6px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.5px" }}>{typLabel}</div>
-            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "6px", marginTop: "1px" }}>{nummer}</div>
-            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "5.5px" }}>{datum}</div>
-          </div>
-        </div>
-      </div>
-      {renderBody({ tableHeaderBg: "#222", metaBold: true, darkSummen: true })}
-    </div>
-  );
+        {/* ── DIN 5008 Leerraum ── */}
+        <div style={{ height: "6px" }} />
 
-  // ── Layout 7: Corporate ───────────────────────────────────────────────────────
-  if (layoutId === 7) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ padding: "8px 12px 5px", textAlign: "center" }}>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "6px", marginBottom: "3px" }}>
-          <div style={{ width: "18px", height: "12px", borderRadius: "2px", backgroundColor: "#eee" }} />
-          <div>
-            <div style={{ fontSize: "9px", fontWeight: "bold", letterSpacing: "0.3px" }}>{absenderName}</div>
-            <div style={{ fontSize: "5.5px", color: "#999" }}>{senderLine}</div>
+        {/* ── DIN 5008 Zone C: Betreff ── */}
+        <div style={{ padding: "0 14px 3px" }}>
+          <div style={{ fontSize: "7.5px", fontWeight: "700", color: "#111" }}>
+            {typLabel}{nummer ? ` ${nummer}` : ""}
           </div>
         </div>
-        <div style={{ height: "1.5px", background: `linear-gradient(to right, transparent, ${color}, transparent)` }} />
-      </div>
-      {renderBody({ tableHeaderBg: color, tableHeaderColor: "#fff", accentLine: true } as Parameters<typeof renderBody>[0])}
-    </div>
-  );
 
-  // ── Layout 8: Kreativ (Diagonal) ─────────────────────────────────────────────
-  if (layoutId === 8) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ position: "relative", height: "32px", overflow: "hidden", marginBottom: "2px" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundColor: "#f7f7f7" }} />
-        <div style={{ position: "absolute", top: 0, left: 0, width: "65%", height: "100%", backgroundColor: color, clipPath: "polygon(0 0, 90% 0, 70% 100%, 0 100%)" }} />
-        <div style={{ position: "absolute", inset: 0, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 12px" }}>
-          <div>
-            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "8.5px" }}>{absenderName}</div>
-            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "5.5px" }}>{senderLine}</div>
+        {/* ── Anrede + Kopftext ── */}
+        {kopftext ? (
+          <div style={{ padding: "1px 14px 3px", fontSize: "6px", color: "#333", lineHeight: 1.5 }}>
+            {kopftext.substring(0, 120)}{kopftext.length > 120 ? "…" : ""}
           </div>
-          <div style={{ width: "18px", height: "12px", borderRadius: "2px", backgroundColor: "rgba(0,0,0,0.1)" }} />
-        </div>
-      </div>
-      {renderBody({ tableHeaderBg: "#111" })}
-    </div>
-  );
-
-  // ── Layout 9: Skandinavisch ───────────────────────────────────────────────────
-  if (layoutId === 9) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: "Inter, system-ui, sans-serif", color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ padding: "9px 12px 6px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ width: "18px", height: "1.5px", backgroundColor: color }} />
-          <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: "5.5px", color: "#bbb", textTransform: "uppercase", letterSpacing: "0.8px" }}>{absenderName}</div>
+        ) : (
+          <div style={{ padding: "1px 14px 3px", fontSize: "6px", color: "#333" }}>
+            Sehr geehrte Damen und Herren,
           </div>
-        </div>
-        <div style={{ marginTop: "6px" }}>
-          <div style={{ fontSize: "9px", fontWeight: "300", letterSpacing: "-0.3px", color: "#111" }}>{typLabel}</div>
-          <div style={{ fontSize: "5.5px", color: "#999", marginTop: "1px" }}>{nummer} · {datum}</div>
-        </div>
-      </div>
-      {renderBody({ tableHeaderBg: "#f5f5f5", tableHeaderColor: "#111", accentLine: false } as Parameters<typeof renderBody>[0])}
-    </div>
-  );
+        )}
 
-  // ── Layout 10: Luxus ─────────────────────────────────────────────────────────
-  if (layoutId === 10) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fffdf9", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ padding: "8px 12px" }}>
-        <div style={{ borderTop: `1px solid ${color}`, borderBottom: `1px solid ${color}`, padding: "4px 0" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div>
-              <div style={{ fontSize: "9px", fontWeight: "bold", fontStyle: "italic" }}>{absenderName}</div>
-              <div style={{ fontSize: "5.5px", color: "#aaa", fontStyle: "italic" }}>{senderLine}</div>
+        {/* ── Positionen-Tabelle ── */}
+        <div style={{ padding: "3px 14px 0" }}>
+          {/* Tabellenkopf */}
+          <div style={{ display: "flex", backgroundColor: tableHeaderBg, color: tableHeaderColor, padding: "2px 3px", fontSize: "5.5px", fontWeight: "bold" }}>
+            <span style={{ width: "16px" }}>Pos.</span>
+            <span style={{ flex: 4 }}>Beschreibung</span>
+            <span style={{ width: "32px", textAlign: "right" }}>Menge</span>
+            <span style={{ width: "38px", textAlign: "right" }}>Einzelpr.</span>
+            <span style={{ width: "40px", textAlign: "right" }}>Gesamtpr.</span>
+          </div>
+          {/* Zeilen */}
+          {leistungPos.map((pos, i) => (
+            <div key={pos.id} style={{ display: "flex", padding: "1.5px 3px", backgroundColor: i % 2 === 0 ? "#f9f9f9" : "#fff", borderBottom: "0.5px solid #ececec", fontSize: "5.5px" }}>
+              <span style={{ width: "16px", color: "#888" }}>{i + 1}.</span>
+              <span style={{ flex: 4, color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</span>
+              <span style={{ width: "32px", textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit?.substring(0, 4)}</span>
+              <span style={{ width: "38px", textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
+              <span style={{ width: "40px", textAlign: "right", fontWeight: "600", color: "#111" }}>{fmt(pos.gesamt)}</span>
             </div>
-            <div style={{ textAlign: "right" }}>
-              <div style={{ fontSize: "6px", color: color, fontStyle: "italic" }}>{typLabel}</div>
-              <div style={{ fontSize: "5.5px", color: "#888" }}>{nummer}</div>
+          ))}
+          {/* Trennlinie */}
+          <div style={{ borderTop: "0.5px solid #ddd", marginTop: "1px" }} />
+        </div>
+
+        {/* ── Summen (rechts ausgerichtet, DIN 5008) ── */}
+        <div style={{ padding: "3px 14px", display: "flex", justifyContent: "flex-end" }}>
+          <div style={{ minWidth: "140px", fontSize: "6px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.8, color: "#555" }}>
+              <span>Gesamtbetrag netto</span>
+              <span style={{ color: "#111" }}>{fmt(summen.netto)}</span>
+            </div>
+            {!kleinunternehmer && mwstSatz > 0 && (
+              <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.8, color: "#555" }}>
+                <span>zzgl. MwSt. {mwstSatz}%</span>
+                <span style={{ color: "#111" }}>{fmt(summen.mwstBetrag)}</span>
+              </div>
+            )}
+            {kleinunternehmer && (
+              <div style={{ fontSize: "5px", color: "#999", lineHeight: 1.4, marginBottom: "2px" }}>
+                Umsatzsteuer nicht erhoben gemäß §19 UStG.
+              </div>
+            )}
+            <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #111", paddingTop: "2px", marginTop: "1px", fontWeight: "bold", fontSize: "7px" }}>
+              <span>Gesamtbetrag brutto</span>
+              <span style={{ color }}>{fmt(summen.brutto)}</span>
             </div>
           </div>
         </div>
-      </div>
-      {renderBody({ tableHeaderBg: "#f5f0e8", tableHeaderColor: "#5a4a3a", metaBold: true })}
-    </div>
-  );
 
-  // ── Layout 11: Rahmen ─────────────────────────────────────────────────────────
-  if (layoutId === 11) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", padding: "4px" }}>
-      <div style={{ border: `1.5px solid ${color}`, height: "calc(100% - 8px)", overflow: "hidden", borderRadius: "2px" }}>
-        <div style={{ backgroundColor: color, padding: "6px 10px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div>
-              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "8px" }}>{absenderName}</div>
-              <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "5.5px" }}>{senderLine}</div>
+        {/* ── Fußtext / Zahlungsbedingungen ── */}
+        {fusstext && (
+          <div style={{ padding: "2px 14px", fontSize: "5.5px", color: "#555", lineHeight: 1.4 }}>
+            {fusstext.substring(0, 120)}{fusstext.length > 120 ? "…" : ""}
+          </div>
+        )}
+
+        {/* ── Grußformel ── */}
+        <div style={{ padding: "3px 14px 2px", fontSize: "6px", color: "#333" }}>
+          Mit magischen Grüßen
+          <div style={{ marginTop: "4px" }}>
+            <div style={{ fontWeight: "600" }}>{absenderName}</div>
+            {absenderUntertitel && <div style={{ color: "#777" }}>{absenderUntertitel}</div>}
+          </div>
+        </div>
+
+        {/* ── DIN 5008 Fußzeile ── */}
+        <div style={{ borderTop: "0.5px solid #ccc", margin: "2px 14px 0", paddingTop: "2px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "5px", color: "#999" }}>
+            <span>{absenderName} – {absenderAdresse} – {absenderPlz} {absenderOrt}</span>
+            {absenderIban && <span>IBAN: {absenderIban.replace(/(.{4})/g, "$1 ").trim()}</span>}
+            {absenderSteuernummer && <span>St.-Nr.: {absenderSteuernummer}</span>}
+          </div>
+          {(absenderTel || absenderEmail || absenderWebsite) && (
+            <div style={{ display: "flex", gap: "8px", fontSize: "5px", color: "#bbb", marginTop: "1px" }}>
+              {absenderTel && <span>Tel.: {absenderTel}</span>}
+              {absenderEmail && <span>{absenderEmail}</span>}
+              {absenderWebsite && <span>{absenderWebsite}</span>}
             </div>
-            <div style={{ color: "#fff", fontSize: "6px", textAlign: "right" }}>
-              <div style={{ fontWeight: "bold" }}>{typLabel}</div>
-              <div style={{ opacity: 0.7 }}>{nummer}</div>
-            </div>
-          </div>
+          )}
         </div>
-        <div style={{ padding: "0" }}>
-          {renderBody({ tableHeaderBg: "#111" })}
-        </div>
-      </div>
-    </div>
-  );
+      </>
+    );
+  };
 
-  // ── Layout 12: Technik ────────────────────────────────────────────────────────
-  if (layoutId === 12) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#f8f9fb", fontFamily: "Inter, monospace, sans-serif", color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ display: "flex", borderBottom: `2px solid ${color}` }}>
-        <div style={{ flex: 2, backgroundColor: color + "18", padding: "7px 10px 5px" }}>
-          <div style={{ fontSize: "5.5px", color: color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "2px" }}>Absender</div>
-          <div style={{ fontSize: "8px", fontWeight: "bold" }}>{absenderName}</div>
-          <div style={{ fontSize: "5.5px", color: "#666" }}>{senderLine}</div>
-        </div>
-        <div style={{ flex: 1, padding: "7px 10px 5px", borderLeft: `1px solid ${color}30` }}>
-          <div style={{ fontSize: "5.5px", color: color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "2px" }}>Dokument</div>
-          <div style={{ fontSize: "7px", fontWeight: "bold" }}>{typLabel}</div>
-          <div style={{ fontSize: "5.5px", color: "#666" }}>{nummer}</div>
-          <div style={{ fontSize: "5.5px", color: "#888" }}>{datum}</div>
-        </div>
-      </div>
-      {renderBody({ tableHeaderBg: color, tableHeaderColor: "#fff", accentLine: false } as Parameters<typeof renderBody>[0])}
-    </div>
-  );
+  // ── Briefkopf-Varianten (nur der Kopfbereich ändert sich pro Layout) ─────────
 
-  // ── Layout 13: Pfeile ────────────────────────────────────────────────────────
-  if (layoutId === 13) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ padding: "7px 12px 4px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "6px" }}>
-          <span style={{ fontWeight: "bold", fontSize: "8px" }}>{absenderName}</span>
-          <span style={{ color: color, fontWeight: "bold" }}>→</span>
-          <span style={{ color: "#aaa" }}>{absenderAdresse}</span>
-          <span style={{ color: color, fontWeight: "bold" }}>→</span>
-          <span style={{ color: "#aaa" }}>{absenderPlz} {absenderOrt}</span>
-        </div>
-        <div style={{ marginTop: "4px", height: "1px", backgroundColor: color }} />
-      </div>
-      {renderBody({ tableHeaderBg: "#111", accentLine: false })}
-    </div>
-  );
-
-  // ── Layout 14: Panorama ──────────────────────────────────────────────────────
-  if (layoutId === 14) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ background: `linear-gradient(135deg, ${color}, ${color}bb)`, padding: "9px 12px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "5.5px", textTransform: "uppercase", letterSpacing: "0.8px" }}>Zauberer & Mentalist</div>
-            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9.5px", marginTop: "1px" }}>{absenderName}</div>
-            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "5.5px", marginTop: "1px" }}>{senderLine}</div>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ width: "20px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.2)", marginBottom: "4px", marginLeft: "auto" }} />
-            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "6px", fontWeight: "bold" }}>{typLabel.toUpperCase()}</div>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "5.5px" }}>{nummer}</div>
-          </div>
-        </div>
-      </div>
-      {renderBody({ tableHeaderBg: "#111", metaBold: true })}
-    </div>
-  );
-
-  // ── Layout 15: Initialen ─────────────────────────────────────────────────────
-  if (layoutId === 15) return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
-      <div style={{ padding: "7px 12px 4px", display: "flex", alignItems: "center", gap: "8px", borderBottom: `1px solid ${color}30` }}>
-        <div style={{
-          width: "32px", height: "32px", borderRadius: "8px", backgroundColor: color, flexShrink: 0,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          color: "#fff", fontWeight: "900", fontSize: "16px", letterSpacing: "-1px",
-        }}>
-          {initials}
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: "9px", fontWeight: "bold", lineHeight: 1.2 }}>{absenderName}</div>
-          <div style={{ fontSize: "5.5px", color: "#aaa" }}>{senderLine}</div>
+  const BriefkopfKlassisch = () => (
+    <div style={{ backgroundColor: color, padding: "8px 14px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div>
+          <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px", lineHeight: 1.2 }}>{absenderName}</div>
+          {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.75)", fontSize: "5.5px" }}>{absenderUntertitel}</div>}
+          <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "5.5px", marginTop: "2px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: "6px", color: color, fontWeight: "bold" }}>{typLabel}</div>
-          <div style={{ fontSize: "5.5px", color: "#aaa" }}>{nummer}</div>
+          <div style={{ width: "22px", height: "16px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.2)", marginBottom: "3px", marginLeft: "auto" }} />
+          {(absenderTel || absenderEmail) && (
+            <div style={{ fontSize: "5px", color: "rgba(255,255,255,0.6)" }}>
+              {absenderTel && <div>{absenderTel}</div>}
+              {absenderEmail && <div>{absenderEmail}</div>}
+            </div>
+          )}
         </div>
       </div>
-      {renderBody({ tableHeaderBg: color, tableHeaderColor: "#fff", accentLine: true } as Parameters<typeof renderBody>[0])}
     </div>
   );
 
-  return null;
+  const BriefkopfZweiSpaltig = (bg = "#fff", textLeft = "#111", textRight = "#555") => (
+    <div style={{ display: "flex", padding: "8px 14px", backgroundColor: bg, borderBottom: "0.5px solid #e5e5e5" }}>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: "9px", fontWeight: "bold", color: textLeft, lineHeight: 1.2 }}>{absenderName}</div>
+        {absenderUntertitel && <div style={{ fontSize: "5.5px", color: textRight }}>{absenderUntertitel}</div>}
+        <div style={{ fontSize: "5.5px", color: textRight, marginTop: "2px" }}>{absenderAdresse}</div>
+        <div style={{ fontSize: "5.5px", color: textRight }}>{absenderPlz} {absenderOrt}</div>
+      </div>
+      <div style={{ textAlign: "right", fontSize: "5.5px", color: textRight }}>
+        <div style={{ width: "20px", height: "14px", borderRadius: "2px", backgroundColor: bg === "#fff" ? "#eee" : "rgba(255,255,255,0.15)", marginBottom: "4px", marginLeft: "auto" }} />
+        {absenderTel && <div>Tel.: {absenderTel}</div>}
+        {absenderEmail && <div>{absenderEmail}</div>}
+        {absenderWebsite && <div>{absenderWebsite}</div>}
+        {absenderSteuernummer && <div style={{ marginTop: "1px" }}>St.-Nr.: {absenderSteuernummer}</div>}
+        {absenderIban && <div>IBAN: {absenderIban.substring(0, 12)}…</div>}
+      </div>
+    </div>
+  );
+
+  // ── 15 Layout-Renderer ───────────────────────────────────────────────────────
+
+  switch (layoutId) {
+
+    // 1 – Klassisch: Farbiger Kopfbalken, schwarzer Tabellenkopf
+    case 1: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <BriefkopfKlassisch />
+        {renderDIN5008Body("#111", "#fff")}
+      </div>
+    );
+
+    // 2 – Wave Dark: Dunkler Kopf mit Wellenabschluss
+    case 2: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ position: "relative", backgroundColor: "#111", padding: "8px 14px 16px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              {absenderUntertitel && <div style={{ color: color, fontSize: "5px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "1px" }}>{absenderUntertitel}</div>}
+              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px" }}>{absenderName}</div>
+              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "5.5px", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+            </div>
+            <div style={{ textAlign: "right", fontSize: "5.5px" }}>
+              <div style={{ width: "22px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.12)", marginBottom: "3px", marginLeft: "auto" }} />
+              {absenderTel && <div style={{ color: "rgba(255,255,255,0.45)" }}>{absenderTel}</div>}
+              {absenderEmail && <div style={{ color: "rgba(255,255,255,0.45)" }}>{absenderEmail}</div>}
+            </div>
+          </div>
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "7px", backgroundColor: "#fff", borderRadius: "55% 55% 0 0" }} />
+        </div>
+        {renderDIN5008Body("#111", "#fff")}
+      </div>
+    );
+
+    // 3 – Split: Großer Firmenname links, Farbverlauf-Trennlinie
+    case 3: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ padding: "8px 14px 4px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+            <div>
+              <div style={{ fontSize: "13px", fontWeight: "900", color, lineHeight: 1, letterSpacing: "-0.5px" }}>{absenderName}</div>
+              {absenderUntertitel && <div style={{ fontSize: "5.5px", color: "#aaa", marginTop: "1px" }}>{absenderUntertitel}</div>}
+              <div style={{ fontSize: "5.5px", color: "#bbb", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+            </div>
+            <div style={{ textAlign: "right", fontSize: "5.5px", color: "#888" }}>
+              <div style={{ width: "20px", height: "13px", borderRadius: "2px", backgroundColor: "#f0f0f0", marginBottom: "2px", marginLeft: "auto" }} />
+              {absenderTel && <div>{absenderTel}</div>}
+              {absenderEmail && <div>{absenderEmail}</div>}
+            </div>
+          </div>
+          <div style={{ marginTop: "5px", height: "2px", background: `linear-gradient(to right, ${color}, transparent)`, borderRadius: "1px" }} />
+        </div>
+        {renderDIN5008Body(color, "#fff")}
+      </div>
+    );
+
+    // 4 – Retro: Schreibmaschinen-Stil
+    case 4: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fffef8", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ padding: "7px 14px 4px" }}>
+          <div style={{ borderTop: "1.5px solid #111", borderBottom: "1.5px solid #111", padding: "3px 0", display: "flex", justifyContent: "space-between" }}>
+            <div>
+              <div style={{ fontSize: "8.5px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1.5px" }}>{absenderName}</div>
+              {absenderUntertitel && <div style={{ fontSize: "5px", letterSpacing: "0.8px", color: "#555" }}>{absenderUntertitel.toUpperCase()}</div>}
+              <div style={{ fontSize: "5.5px", color: "#666", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+            </div>
+            <div style={{ textAlign: "right", fontSize: "5.5px", color: "#555" }}>
+              {absenderTel && <div>{absenderTel}</div>}
+              {absenderEmail && <div>{absenderEmail}</div>}
+              {absenderSteuernummer && <div>St.-Nr.: {absenderSteuernummer}</div>}
+            </div>
+          </div>
+        </div>
+        {renderDIN5008Body("#111", "#fffef8")}
+      </div>
+    );
+
+    // 5 – Seitenstreifen: Vertikaler Farbstreifen
+    case 5: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px", display: "flex" }}>
+        <div style={{ width: "9px", backgroundColor: color, flexShrink: 0 }} />
+        <div style={{ flex: 1, overflow: "hidden" }}>
+          {BriefkopfZweiSpaltig()}
+          {renderDIN5008Body(color, "#fff")}
+        </div>
+      </div>
+    );
+
+    // 6 – Dark Premium
+    case 6: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ backgroundColor: "#111", padding: "9px 14px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <div style={{ width: "18px", height: "3px", backgroundColor: color, borderRadius: "1px", marginBottom: "4px" }} />
+              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px" }}>{absenderName}</div>
+              {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "5.5px" }}>{absenderUntertitel}</div>}
+              <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "5.5px", marginTop: "2px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+            </div>
+            <div style={{ textAlign: "right", fontSize: "5.5px" }}>
+              <div style={{ width: "22px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.08)", marginBottom: "3px", marginLeft: "auto" }} />
+              {absenderTel && <div style={{ color: "rgba(255,255,255,0.4)" }}>{absenderTel}</div>}
+              {absenderEmail && <div style={{ color: "rgba(255,255,255,0.4)" }}>{absenderEmail}</div>}
+              {absenderIban && <div style={{ color: "rgba(255,255,255,0.3)", marginTop: "2px" }}>IBAN: {absenderIban.substring(0, 10)}…</div>}
+            </div>
+          </div>
+        </div>
+        {renderDIN5008Body("#222", "#fff")}
+      </div>
+    );
+
+    // 7 – Corporate: Zentriert mit Farbverlauf-Linie
+    case 7: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ padding: "7px 14px 4px", textAlign: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", marginBottom: "2px" }}>
+            <div style={{ width: "20px", height: "14px", borderRadius: "3px", backgroundColor: "#eee" }} />
+            <div>
+              <div style={{ fontSize: "9px", fontWeight: "bold" }}>{absenderName}</div>
+              {absenderUntertitel && <div style={{ fontSize: "5px", color: "#999" }}>{absenderUntertitel}</div>}
+            </div>
+          </div>
+          <div style={{ fontSize: "5px", color: "#bbb" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}{absenderTel ? ` · ${absenderTel}` : ""}{absenderEmail ? ` · ${absenderEmail}` : ""}</div>
+          <div style={{ height: "1.5px", background: `linear-gradient(to right, transparent, ${color}, transparent)`, marginTop: "4px" }} />
+        </div>
+        {renderDIN5008Body(color, "#fff")}
+      </div>
+    );
+
+    // 8 – Kreativ: Diagonale Farbfläche
+    case 8: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ position: "relative", height: "30px", overflow: "hidden" }}>
+          <div style={{ position: "absolute", inset: 0, backgroundColor: "#f7f7f7" }} />
+          <div style={{ position: "absolute", top: 0, left: 0, width: "60%", height: "100%", backgroundColor: color, clipPath: "polygon(0 0, 88% 0, 68% 100%, 0 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 14px" }}>
+            <div>
+              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "8.5px" }}>{absenderName}</div>
+              {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.75)", fontSize: "5px" }}>{absenderUntertitel}</div>}
+            </div>
+            <div style={{ textAlign: "right", fontSize: "5.5px", color: "#666" }}>
+              {absenderTel && <div>{absenderTel}</div>}
+              {absenderEmail && <div>{absenderEmail}</div>}
+            </div>
+          </div>
+        </div>
+        {renderDIN5008Body("#111", "#fff")}
+      </div>
+    );
+
+    // 9 – Skandinavisch: Ultra-minimal
+    case 9: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: "Inter, system-ui, sans-serif", color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ padding: "9px 14px 5px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                <div style={{ width: "14px", height: "1.5px", backgroundColor: color }} />
+                <div style={{ fontSize: "8px", fontWeight: "300", letterSpacing: "-0.2px" }}>{absenderName}</div>
+              </div>
+              {absenderUntertitel && <div style={{ fontSize: "5px", color: "#bbb", marginTop: "1px", marginLeft: "18px" }}>{absenderUntertitel}</div>}
+            </div>
+            <div style={{ fontSize: "5px", color: "#ccc", textAlign: "right" }}>
+              {absenderTel && <div>{absenderTel}</div>}
+              {absenderEmail && <div>{absenderEmail}</div>}
+            </div>
+          </div>
+          <div style={{ marginTop: "3px", borderBottom: "0.5px solid #e8e8e8" }} />
+        </div>
+        {renderDIN5008Body("#f4f4f4", "#333")}
+      </div>
+    );
+
+    // 10 – Luxus: Doppelte Linien, Serif-Typografie
+    case 10: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fffdf8", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ padding: "8px 14px" }}>
+          <div style={{ height: "0.5px", backgroundColor: color, marginBottom: "3px" }} />
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2px 0" }}>
+            <div>
+              <div style={{ fontSize: "9px", fontWeight: "bold", fontStyle: "italic" }}>{absenderName}</div>
+              {absenderUntertitel && <div style={{ fontSize: "5.5px", color: "#aaa", fontStyle: "italic" }}>{absenderUntertitel}</div>}
+              <div style={{ fontSize: "5px", color: "#bbb", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+            </div>
+            <div style={{ textAlign: "right", fontSize: "5.5px", color: "#888" }}>
+              {absenderTel && <div>{absenderTel}</div>}
+              {absenderEmail && <div>{absenderEmail}</div>}
+              {absenderSteuernummer && <div style={{ marginTop: "1px", fontSize: "5px" }}>St.-Nr.: {absenderSteuernummer}</div>}
+            </div>
+          </div>
+          <div style={{ height: "0.5px", backgroundColor: color, marginTop: "3px" }} />
+        </div>
+        {renderDIN5008Body("#f8f2e8", "#5a4030")}
+      </div>
+    );
+
+    // 11 – Rahmen: Dokumentumrahmung
+    case 11: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px", padding: "4px" }}>
+        <div style={{ border: `1.5px solid ${color}`, height: "calc(100% - 8px)", overflow: "hidden", borderRadius: "2px" }}>
+          <div style={{ backgroundColor: color, padding: "6px 12px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div>
+                <div style={{ color: "#fff", fontWeight: "bold", fontSize: "8.5px" }}>{absenderName}</div>
+                {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "5px" }}>{absenderUntertitel}</div>}
+                <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "5.5px", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+              </div>
+              <div style={{ textAlign: "right", fontSize: "5.5px" }}>
+                <div style={{ width: "18px", height: "12px", borderRadius: "2px", backgroundColor: "rgba(255,255,255,0.2)", marginBottom: "2px", marginLeft: "auto" }} />
+                {absenderTel && <div style={{ color: "rgba(255,255,255,0.6)" }}>{absenderTel}</div>}
+                {absenderEmail && <div style={{ color: "rgba(255,255,255,0.6)" }}>{absenderEmail}</div>}
+              </div>
+            </div>
+          </div>
+          {renderDIN5008Body("#111", "#fff")}
+        </div>
+      </div>
+    );
+
+    // 12 – Technik: Geometrisch, zweispaltig
+    case 12: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#f8f9fb", fontFamily: "Inter, system-ui, sans-serif", color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ display: "flex", borderBottom: `2px solid ${color}` }}>
+          <div style={{ flex: "0 0 55%", backgroundColor: color + "14", padding: "7px 12px 5px", borderRight: `1px solid ${color}22` }}>
+            <div style={{ fontSize: "5px", color: color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "2px" }}>Absender</div>
+            <div style={{ fontSize: "8.5px", fontWeight: "bold" }}>{absenderName}</div>
+            {absenderUntertitel && <div style={{ fontSize: "5px", color: "#666" }}>{absenderUntertitel}</div>}
+            <div style={{ fontSize: "5.5px", color: "#777", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+          </div>
+          <div style={{ flex: 1, padding: "7px 12px 5px" }}>
+            <div style={{ fontSize: "5px", color: color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "2px" }}>Kontakt</div>
+            {absenderTel && <div style={{ fontSize: "5.5px", color: "#555" }}>{absenderTel}</div>}
+            {absenderEmail && <div style={{ fontSize: "5.5px", color: "#555" }}>{absenderEmail}</div>}
+            {absenderWebsite && <div style={{ fontSize: "5.5px", color: "#777" }}>{absenderWebsite}</div>}
+            {absenderSteuernummer && <div style={{ fontSize: "5px", color: "#999", marginTop: "1px" }}>St.-Nr.: {absenderSteuernummer}</div>}
+          </div>
+        </div>
+        {renderDIN5008Body(color, "#fff")}
+      </div>
+    );
+
+    // 13 – Pfeile: Pfeil-Trenner im Absender
+    case 13: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ padding: "8px 14px 4px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "4px", flexWrap: "wrap" }}>
+            <span style={{ fontWeight: "bold", fontSize: "8.5px" }}>{absenderName}</span>
+            <span style={{ color: color, fontWeight: "bold", fontSize: "8px" }}>›</span>
+            {absenderUntertitel && <>
+              <span style={{ color: "#888", fontSize: "6px" }}>{absenderUntertitel}</span>
+              <span style={{ color: color, fontWeight: "bold", fontSize: "8px" }}>›</span>
+            </>}
+            <span style={{ color: "#aaa", fontSize: "5.5px" }}>{absenderAdresse}</span>
+            <span style={{ color: color, fontWeight: "bold", fontSize: "8px" }}>›</span>
+            <span style={{ color: "#aaa", fontSize: "5.5px" }}>{absenderPlz} {absenderOrt}</span>
+          </div>
+          <div style={{ display: "flex", gap: "6px", fontSize: "5px", color: "#bbb", marginTop: "1px" }}>
+            {absenderTel && <span>{absenderTel}</span>}
+            {absenderEmail && <span>{absenderEmail}</span>}
+            {absenderSteuernummer && <span>St.-Nr.: {absenderSteuernummer}</span>}
+          </div>
+          <div style={{ marginTop: "4px", height: "1px", backgroundColor: color }} />
+        </div>
+        {renderDIN5008Body("#111", "#fff")}
+      </div>
+    );
+
+    // 14 – Panorama: Voller Farbverlauf
+    case 14: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ background: `linear-gradient(135deg, ${color}ee, ${color}88)`, padding: "9px 14px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "5px", textTransform: "uppercase", letterSpacing: "0.7px", marginBottom: "1px" }}>{absenderUntertitel}</div>}
+              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9.5px" }}>{absenderName}</div>
+              <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "5.5px", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <div style={{ width: "22px", height: "15px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.2)", marginBottom: "3px", marginLeft: "auto" }} />
+              <div style={{ fontSize: "5.5px", color: "rgba(255,255,255,0.6)" }}>
+                {absenderTel && <div>{absenderTel}</div>}
+                {absenderEmail && <div>{absenderEmail}</div>}
+                {absenderIban && <div style={{ marginTop: "1px", fontSize: "5px" }}>IBAN: {absenderIban.substring(0, 12)}…</div>}
+              </div>
+            </div>
+          </div>
+        </div>
+        {renderDIN5008Body("#111", "#fff")}
+      </div>
+    );
+
+    // 15 – Initialen: Großes Monogramm-Badge
+    case 15: return (
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
+        <div style={{ padding: "7px 14px 4px", display: "flex", alignItems: "center", gap: "8px", borderBottom: `1px solid #eee` }}>
+          <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: color, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: "900", fontSize: "15px" }}>
+            {initials}
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "9px", fontWeight: "bold" }}>{absenderName}</div>
+            {absenderUntertitel && <div style={{ fontSize: "5.5px", color: "#aaa" }}>{absenderUntertitel}</div>}
+            <div style={{ fontSize: "5.5px", color: "#bbb", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+          </div>
+          <div style={{ textAlign: "right", fontSize: "5.5px", color: "#999" }}>
+            {absenderTel && <div>{absenderTel}</div>}
+            {absenderEmail && <div>{absenderEmail}</div>}
+            {absenderSteuernummer && <div style={{ marginTop: "1px", fontSize: "5px" }}>St.-Nr.: {absenderSteuernummer}</div>}
+          </div>
+        </div>
+        {renderDIN5008Body(color, "#fff")}
+      </div>
+    );
+
+    default: return null;
+  }
 }
 
 // ── Main Component ────────────────────────────────────────────────────────────
@@ -947,9 +1002,16 @@ export default function AdminDokumentEditor() {
 
   // Absender (loaded from settings)
   const [absenderName, setAbsenderName] = useState("Emilian Leber");
+  const [absenderUntertitel, setAbsenderUntertitel] = useState("Zauberer und Mentalist");
   const [absenderAdresse, setAbsenderAdresse] = useState("");
   const [absenderPlz, setAbsenderPlz] = useState("");
   const [absenderOrt, setAbsenderOrt] = useState("");
+  const [absenderEmail, setAbsenderEmail] = useState("");
+  const [absenderTel, setAbsenderTel] = useState("");
+  const [absenderWebsite, setAbsenderWebsite] = useState("");
+  const [absenderIban, setAbsenderIban] = useState("");
+  const [absenderBic, setAbsenderBic] = useState("");
+  const [absenderSteuernummer, setAbsenderSteuernummer] = useState("");
 
   // UI
   const [saving, setSaving] = useState(false);
@@ -965,9 +1027,16 @@ export default function AdminDokumentEditor() {
     supabase.from("admin_settings").select("*").limit(1).maybeSingle().then(({ data }) => {
       if (data) {
         setAbsenderName((data.company_name as string) || "Emilian Leber");
+        setAbsenderUntertitel((data.company_subtitle as string) || "Zauberer und Mentalist");
         setAbsenderAdresse((data.company_address as string) || "");
         setAbsenderPlz((data.company_zip as string) || "");
         setAbsenderOrt((data.company_city as string) || "");
+        setAbsenderEmail((data.company_email as string) || "");
+        setAbsenderTel((data.company_phone as string) || "");
+        setAbsenderWebsite((data.company_website as string) || "");
+        setAbsenderIban((data.bank_iban as string) || "");
+        setAbsenderBic((data.bank_bic as string) || "");
+        setAbsenderSteuernummer((data.tax_id as string) || "");
       }
     });
   }, [authChecked]);
@@ -1214,11 +1283,13 @@ export default function AdminDokumentEditor() {
     datum,
     faelligAm,
     gueltigBis,
+    lieferdatum,
     empfaengerName,
     empfaengerFirma,
     empfaengerAdresse,
     empfaengerPlz,
     empfaengerOrt,
+    empfaengerLand,
     kopftext,
     fusstext,
     positionen,
@@ -1226,9 +1297,16 @@ export default function AdminDokumentEditor() {
     kleinunternehmer,
     rabattProzent,
     absenderName,
+    absenderUntertitel,
     absenderAdresse,
     absenderPlz,
     absenderOrt,
+    absenderEmail,
+    absenderTel,
+    absenderWebsite,
+    absenderIban,
+    absenderBic,
+    absenderSteuernummer,
   };
 
   return (
