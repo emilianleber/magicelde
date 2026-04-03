@@ -680,35 +680,37 @@ function DocumentPreview(props: PreviewProps) {
   // Summen – erscheint auf JEDER Seite, nur Positionen dieser Seite
   const renderSummen = (chunk: LocalPosition[]) => {
     const s = calcSummen(chunk, mwstSatz, kleinunternehmer, rabattProzent);
-    const rowStyle = (bg: boolean): React.CSSProperties => ({
+    const row = (bg: boolean, bold = false, children: React.ReactNode): React.CSSProperties => ({
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: `4px ${M}px`,
-      backgroundColor: bg ? "#f2f2f2" : "transparent",
-      fontSize: 9.5,
+      padding: `7px ${M}px`,
+      backgroundColor: bg ? "#eeeeee" : "transparent",
+      fontSize: bold ? 10 : 9.5,
+      fontWeight: bold ? 700 : 400,
     });
     return (
-      <div style={{ marginTop: 6 }}>
+      <div style={{ borderTop: "1px solid #d8d8d8", marginTop: 4 }}>
         {/* Netto */}
-        <div style={rowStyle(true)}>
+        <div style={row(true)}>
           <span style={{ color: "#333" }}>Gesamtbetrag netto</span>
           <span style={{ color: "#111" }}>{fmtEur(s.netto)}</span>
         </div>
-        {/* MwSt oder §19 */}
+        {/* MwSt */}
         {!kleinunternehmer && mwstSatz > 0 && (
-          <div style={rowStyle(false)}>
+          <div style={row(false)}>
             <span style={{ color: "#555" }}>zzgl. {mwstSatz}% MwSt.</span>
             <span style={{ color: "#111" }}>{fmtEur(s.mwstBetrag)}</span>
           </div>
         )}
+        {/* §19 */}
         {kleinunternehmer && (
-          <div style={{ padding: `3px ${M}px`, fontSize: 8.5, color: "#555" }}>
+          <div style={{ padding: `5px ${M}px`, fontSize: 9.5, color: "#555" }}>
             Umsatzsteuer nicht erhoben gemäß §19UStG.
           </div>
         )}
         {/* Brutto */}
-        <div style={{ ...rowStyle(true), fontWeight: 700, fontSize: 10 }}>
+        <div style={row(true, true)}>
           <span>Gesamtbetrag brutto</span>
           <span>{fmtEur(s.brutto)}</span>
         </div>
