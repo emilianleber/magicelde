@@ -351,11 +351,11 @@ const AdminSettings = () => {
   };
 
   // ── Textvorlagen CRUD ──────────────────────────────────────────────────────
-  const tvStartNew = () => {
+  const tvStartNew = (typ: DokumentTextvorlage["typ"], bereich: DokumentTextvorlage["bereich"]) => {
     setTvEditingId("new");
     setTvDraftName("");
-    setTvDraftTyp("angebot");
-    setTvDraftBereich("kopf");
+    setTvDraftTyp(typ);
+    setTvDraftBereich(bereich);
     setTvDraftInhalt("");
     setTvDraftDefault(false);
     setTvMsg("");
@@ -560,167 +560,142 @@ const AdminSettings = () => {
 
       {/* ── Textvorlagen ── */}
       {activeTab === "textvorlagen" && (
-        <div className="space-y-6">
+        <div className="space-y-8">
           <p className="font-sans text-sm text-muted-foreground">
-            Kopf- und Fußzeilen-Vorlagen für Angebote, Rechnungen, Auftragsbestätigungen und Mahnungen. Im Dokumenteditor per Klick einfügen.
+            Kopf- und Fußzeilen-Vorlagen für jede Dokumentart. Im Editor per Klick einfügen.
           </p>
 
-          {/* New button */}
-          <div className="flex justify-end">
-            {tvEditingId !== "new" && (
-              <button onClick={tvStartNew} className="btn-primary inline-flex items-center gap-2">
-                <Plus className="w-4 h-4" /> Neue Vorlage
-              </button>
-            )}
-          </div>
+          {DOK_TYPEN.map(({ key: dokTyp, label: typLabel }) => (
+            <div key={dokTyp} className="space-y-4">
+              {/* Section header */}
+              <div className="flex items-center gap-3">
+                <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">{typLabel}</span>
+                <div className="flex-1 border-t border-dashed border-border/40" />
+              </div>
 
-          {/* New form */}
-          {tvEditingId === "new" && (
-            <div className="p-6 rounded-2xl bg-accent/5 border border-accent/20 space-y-4">
-              <h3 className="font-display text-base font-bold">Neue Textvorlage</h3>
-              <div className="grid sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Name *</label>
-                  <input value={tvDraftName} onChange={(e) => setTvDraftName(e.target.value)} placeholder="z.B. Herzlich &amp; Persönlich" className={inputCls} />
-                </div>
-                <div>
-                  <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Dokumenttyp</label>
-                  <select value={tvDraftTyp} onChange={(e) => setTvDraftTyp(e.target.value as DokumentTextvorlage["typ"])} className={inputCls}>
-                    {DOK_TYPEN.map((d) => <option key={d.key} value={d.key}>{d.label}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Bereich</label>
-                  <select value={tvDraftBereich} onChange={(e) => setTvDraftBereich(e.target.value as DokumentTextvorlage["bereich"])} className={inputCls}>
-                    <option value="kopf">Kopfzeile</option>
-                    <option value="fuss">Fußzeile</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Inhalt *</label>
-                <textarea
-                  value={tvDraftInhalt}
-                  onChange={(e) => setTvDraftInhalt(e.target.value)}
-                  rows={6}
-                  placeholder="Vorlagentext…"
-                  className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20 resize-none"
-                />
-              </div>
-              <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
-                <input type="checkbox" checked={tvDraftDefault} onChange={(e) => setTvDraftDefault(e.target.checked)} className="rounded" />
-                Als Standard für diesen Typ/Bereich verwenden
-              </label>
-              {tvMsg && <p className="text-xs text-red-500">{tvMsg}</p>}
-              <div className="flex gap-2">
-                <button onClick={tvSave} disabled={tvSaving} className="btn-primary disabled:opacity-60">
-                  <Save className="w-4 h-4 mr-2" /> {tvSaving ? "Speichert…" : "Speichern"}
-                </button>
-                <button onClick={tvCancel} className="inline-flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground border border-border/40 rounded-xl px-4 py-2.5 transition-colors">
-                  <X className="w-4 h-4" /> Abbrechen
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Grouped by typ */}
-          {DOK_TYPEN.map(({ key: typ, label: typLabel }) => {
-            const group = textvorlagen.filter((v) => v.typ === typ);
-            if (group.length === 0 && tvEditingId !== "new") return null;
-            return (
-              <div key={typ} className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">{typLabel}</span>
-                  <div className="flex-1 border-t border-dashed border-border/40" />
-                </div>
-                {["kopf", "fuss"].map((bereich) => {
-                  const items = group.filter((v) => v.bereich === bereich);
-                  if (items.length === 0) return null;
-                  return (
-                    <div key={bereich} className="pl-2 space-y-2">
-                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-semibold">{bereich === "kopf" ? "Kopfzeile" : "Fußzeile"}</p>
-                      {items.map((v) => (
-                        <div key={v.id} className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden">
-                          {tvEditingId === v.id ? (
-                            <div className="p-6 space-y-4">
-                              <h3 className="font-display text-base font-bold">Vorlage bearbeiten</h3>
-                              <div className="grid sm:grid-cols-3 gap-4">
-                                <div>
-                                  <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Name *</label>
-                                  <input value={tvDraftName} onChange={(e) => setTvDraftName(e.target.value)} className={inputCls} />
-                                </div>
-                                <div>
-                                  <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Dokumenttyp</label>
-                                  <select value={tvDraftTyp} onChange={(e) => setTvDraftTyp(e.target.value as DokumentTextvorlage["typ"])} className={inputCls}>
-                                    {DOK_TYPEN.map((d) => <option key={d.key} value={d.key}>{d.label}</option>)}
-                                  </select>
-                                </div>
-                                <div>
-                                  <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Bereich</label>
-                                  <select value={tvDraftBereich} onChange={(e) => setTvDraftBereich(e.target.value as DokumentTextvorlage["bereich"])} className={inputCls}>
-                                    <option value="kopf">Kopfzeile</option>
-                                    <option value="fuss">Fußzeile</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div>
-                                <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Inhalt *</label>
-                                <textarea
-                                  value={tvDraftInhalt}
-                                  onChange={(e) => setTvDraftInhalt(e.target.value)}
-                                  rows={6}
-                                  className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 resize-none"
-                                />
-                              </div>
-                              <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
-                                <input type="checkbox" checked={tvDraftDefault} onChange={(e) => setTvDraftDefault(e.target.checked)} className="rounded" />
-                                Als Standard für diesen Typ/Bereich
-                              </label>
-                              {tvMsg && <p className="text-xs text-red-500">{tvMsg}</p>}
-                              <div className="flex gap-2">
-                                <button onClick={tvSave} disabled={tvSaving} className="btn-primary disabled:opacity-60">
-                                  <Check className="w-4 h-4 mr-2" /> {tvSaving ? "Speichert…" : "Speichern"}
-                                </button>
-                                <button onClick={tvCancel} className="inline-flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground border border-border/40 rounded-xl px-4 py-2.5 transition-colors">
-                                  <X className="w-4 h-4" /> Abbrechen
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="flex items-start justify-between gap-4 p-4">
-                              <div className="min-w-0 flex-1">
-                                <div className="flex items-center gap-2">
-                                  <p className="font-sans text-sm font-semibold text-foreground">{v.name}</p>
-                                  {v.is_default && (
-                                    <span className="inline-block text-[9px] font-bold uppercase tracking-wider bg-foreground text-background px-1.5 py-0.5 rounded">Standard</span>
-                                  )}
-                                </div>
-                                <p className="mt-1 text-xs text-muted-foreground line-clamp-2 whitespace-pre-line">{v.inhalt}</p>
-                              </div>
-                              <div className="flex items-center gap-2 shrink-0">
-                                <button onClick={() => tvStartEdit(v)} className="inline-flex items-center gap-1.5 font-sans text-xs text-muted-foreground hover:text-foreground border border-border/30 rounded-lg px-3 py-1.5 transition-colors">
-                                  <Pencil className="w-3.5 h-3.5" /> Bearbeiten
-                                </button>
-                                <button onClick={() => tvDelete(v.id)} className="inline-flex items-center gap-1.5 font-sans text-xs text-destructive hover:text-destructive/80 border border-destructive/20 rounded-lg px-3 py-1.5 transition-colors">
-                                  <Trash2 className="w-3.5 h-3.5" /> Löschen
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+              {(["kopf", "fuss"] as const).map((bereich) => {
+                const items = textvorlagen.filter((v) => v.typ === dokTyp && v.bereich === bereich);
+                const isAddingHere = tvEditingId === "new" && tvDraftTyp === dokTyp && tvDraftBereich === bereich;
+                return (
+                  <div key={bereich} className="pl-3 space-y-2">
+                    {/* Sub-header row */}
+                    <div className="flex items-center justify-between">
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-semibold">
+                        {bereich === "kopf" ? "Kopfzeile" : "Fußzeile"}
+                      </p>
+                      {!tvEditingId && (
+                        <button
+                          onClick={() => tvStartNew(dokTyp, bereich)}
+                          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground border border-border/30 rounded-lg px-2.5 py-1 transition-colors"
+                        >
+                          <Plus className="w-3 h-3" /> Neue Vorlage
+                        </button>
+                      )}
                     </div>
-                  );
-                })}
-              </div>
-            );
-          })}
 
-          {textvorlagen.length === 0 && tvEditingId !== "new" && (
-            <div className="p-10 rounded-3xl bg-muted/20 border border-border/30 text-center">
-              <p className="font-sans text-sm text-muted-foreground">Noch keine Textvorlagen vorhanden. Nach dem Ausführen der Migration erscheinen hier die Standardvorlagen.</p>
+                    {/* Inline add form */}
+                    {isAddingHere && (
+                      <div className="p-5 rounded-2xl bg-accent/5 border border-accent/20 space-y-4">
+                        <div>
+                          <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Name *</label>
+                          <input
+                            value={tvDraftName}
+                            onChange={(e) => setTvDraftName(e.target.value)}
+                            placeholder="z.B. Herzlich &amp; Persönlich"
+                            className={inputCls}
+                            autoFocus
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Inhalt *</label>
+                          <textarea
+                            value={tvDraftInhalt}
+                            onChange={(e) => setTvDraftInhalt(e.target.value)}
+                            rows={5}
+                            placeholder="Vorlagentext…"
+                            className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20 resize-none"
+                          />
+                        </div>
+                        <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
+                          <input type="checkbox" checked={tvDraftDefault} onChange={(e) => setTvDraftDefault(e.target.checked)} className="rounded" />
+                          Als Standard verwenden
+                        </label>
+                        {tvMsg && <p className="text-xs text-red-500">{tvMsg}</p>}
+                        <div className="flex gap-2">
+                          <button onClick={tvSave} disabled={tvSaving} className="btn-primary disabled:opacity-60">
+                            <Save className="w-4 h-4 mr-2" /> {tvSaving ? "Speichert…" : "Speichern"}
+                          </button>
+                          <button onClick={tvCancel} className="inline-flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground border border-border/40 rounded-xl px-4 py-2.5 transition-colors">
+                            <X className="w-4 h-4" /> Abbrechen
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Existing items */}
+                    {items.map((v) => (
+                      <div key={v.id} className="rounded-2xl bg-muted/20 border border-border/30 overflow-hidden">
+                        {tvEditingId === v.id ? (
+                          <div className="p-5 space-y-4">
+                            <div>
+                              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Name *</label>
+                              <input value={tvDraftName} onChange={(e) => setTvDraftName(e.target.value)} className={inputCls} autoFocus />
+                            </div>
+                            <div>
+                              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Inhalt *</label>
+                              <textarea
+                                value={tvDraftInhalt}
+                                onChange={(e) => setTvDraftInhalt(e.target.value)}
+                                rows={5}
+                                className="w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 resize-none"
+                              />
+                            </div>
+                            <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
+                              <input type="checkbox" checked={tvDraftDefault} onChange={(e) => setTvDraftDefault(e.target.checked)} className="rounded" />
+                              Als Standard verwenden
+                            </label>
+                            {tvMsg && <p className="text-xs text-red-500">{tvMsg}</p>}
+                            <div className="flex gap-2">
+                              <button onClick={tvSave} disabled={tvSaving} className="btn-primary disabled:opacity-60">
+                                <Check className="w-4 h-4 mr-2" /> {tvSaving ? "Speichert…" : "Speichern"}
+                              </button>
+                              <button onClick={tvCancel} className="inline-flex items-center gap-2 font-sans text-sm text-muted-foreground hover:text-foreground border border-border/40 rounded-xl px-4 py-2.5 transition-colors">
+                                <X className="w-4 h-4" /> Abbrechen
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-start justify-between gap-4 p-4">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <p className="font-sans text-sm font-semibold text-foreground">{v.name}</p>
+                                {v.is_default && (
+                                  <span className="inline-block text-[9px] font-bold uppercase tracking-wider bg-foreground text-background px-1.5 py-0.5 rounded">Standard</span>
+                                )}
+                              </div>
+                              <p className="mt-1 text-xs text-muted-foreground line-clamp-2 whitespace-pre-line">{v.inhalt}</p>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <button onClick={() => tvStartEdit(v)} className="inline-flex items-center gap-1.5 font-sans text-xs text-muted-foreground hover:text-foreground border border-border/30 rounded-lg px-3 py-1.5 transition-colors">
+                                <Pencil className="w-3.5 h-3.5" /> Bearbeiten
+                              </button>
+                              <button onClick={() => tvDelete(v.id)} className="inline-flex items-center gap-1.5 font-sans text-xs text-destructive hover:text-destructive/80 border border-destructive/20 rounded-lg px-3 py-1.5 transition-colors">
+                                <Trash2 className="w-3.5 h-3.5" /> Löschen
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    {items.length === 0 && !isAddingHere && (
+                      <p className="text-xs text-muted-foreground/50 italic pl-1">Keine Vorlagen</p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          )}
+          ))}
         </div>
       )}
 
