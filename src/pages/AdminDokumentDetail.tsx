@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentStatus, DokumentTyp, Zahlung } from "@/types/dokumente";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import {
   ArrowLeft, Pencil, Send, CheckCircle, XCircle, ArrowRight,
   Receipt, AlertTriangle, Plus, X, Clock, Trash2, Ban, MoreHorizontal,
