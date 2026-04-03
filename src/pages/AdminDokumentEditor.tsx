@@ -458,7 +458,37 @@ function DocumentPreview(props: PreviewProps) {
     { label: "Ihr Ansprechpartner",val: absenderName },
   ];
 
-  const leistungPos = positionen.filter(p => p.typ === "leistung").slice(0, 8);
+  const leistungPos = positionen.filter(p => p.typ === "leistung");
+
+  // ── Pagination ────────────────────────────────────────────────────────────
+  const estimatePosH = (pos: LocalPosition): number => {
+    let h = 24;
+    if (pos.beschreibung) {
+      h += (Math.ceil(pos.beschreibung.length / 70) + (pos.beschreibung.match(/\n/g) || []).length) * 9;
+    }
+    return h;
+  };
+  // Split positions across pages. Page 1 has limited space due to header + address.
+  const pageChunks: LocalPosition[][] = (() => {
+    const rem = [...leistungPos];
+    const chunks: LocalPosition[][] = [];
+    const fill = (budget: number): LocalPosition[] => {
+      const chunk: LocalPosition[] = [];
+      let used = 0;
+      while (rem.length > 0) {
+        const h = estimatePosH(rem[0]);
+        if (used + h <= budget || chunk.length === 0) {
+          chunk.push(rem.shift()!);
+          used += h;
+        } else break;
+      }
+      return chunk;
+    };
+    chunks.push(fill(190)); // page 1: less room (header + address zone)
+    while (rem.length > 0) chunks.push(fill(750)); // subsequent pages
+    if (chunks.length === 0) chunks.push([]);
+    return chunks;
+  })();
 
   // ── Logo helper (inline – kein eigenes absolute positioning) ─────────────
   const LogoImg = ({ dark = false, size = LS }: { dark?: boolean; size?: number }) => {
@@ -500,17 +530,12 @@ function DocumentPreview(props: PreviewProps) {
     </div>
   );
 
-  // ── Shared DIN 5008 body ──────────────────────────────────────────────────
-  const renderBody = (thBg: string, thColor: string) => (
-    <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
-
-      {/* Zone B: Absenderzeile + Anschriftfeld + Informationsblock
-          DIN 5008: Anschriftzone = 45 mm (≈ 127 px bei 595 px = A4-Breite).
-          paddingTop 44px ≈ 15 mm — DIN-konformer Abstand zwischen Header und Anschriftfeld. */}
+  // ── DIN body helpers ─────────────────────────────────────────────────────
+  const renderDINTop = () => (
+    <>
+      {/* Zone B: Anschriftfeld + Informationsblock */}
       <div style={{ padding: `44px ${M}px 16px`, display: "flex", gap: 40, alignItems: "flex-start" }}>
-        {/* Left: Empfänger – Anschriftfeld 45 mm hoch */}
         <div style={{ flex: "0 0 44%", fontSize: 9.5, lineHeight: 1.55, color: "#222", minHeight: 127 }}>
-          {/* DIN 5008 Rücksendeangabe (Absenderzeile) */}
           <div style={{ fontSize: 7.5, color: "#aaa", borderBottom: "0.5px solid #e0e0e0", paddingBottom: 3, marginBottom: 9, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             {[absenderName, absenderAdresse, `${absenderPlz} ${absenderOrt}`.trim()].filter(Boolean).join(" – ")}
           </div>
@@ -520,8 +545,6 @@ function DocumentPreview(props: PreviewProps) {
           {(empfaengerPlz || empfaengerOrt) && <div>{empfaengerPlz} {empfaengerOrt}</div>}
           {empfaengerLand && empfaengerLand !== "Deutschland" && <div>{empfaengerLand}</div>}
         </div>
-
-        {/* Right: Bezugszeichen / Informationsblock */}
         <div style={{ flex: 1, fontSize: 8.5, lineHeight: 1.7 }}>
           {metaRows.map(r => (
             <div key={r.label} style={{ display: "flex", gap: 6 }}>
@@ -531,54 +554,50 @@ function DocumentPreview(props: PreviewProps) {
           ))}
         </div>
       </div>
-
-      {/* Leerzeile (DIN 5008 – Zone B → C Übergang, ≈ 8 mm) */}
       <div style={{ height: 22 }} />
-
       {/* Zone C: Betreff */}
       <div style={{ padding: `0 ${M}px 6px` }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>
-          {typLabel}{nummer ? ` ${nummer}` : ""}
-        </div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>{typLabel}{nummer ? ` ${nummer}` : ""}</div>
       </div>
-
-      {/* Kopftext */}
       {kopftext && (
-        <div
-          style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}
-          dangerouslySetInnerHTML={{ __html: textToHtml(kopftext) }}
-        />
+        <div style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}
+          dangerouslySetInnerHTML={{ __html: textToHtml(kopftext) }} />
       )}
+    </>
+  );
 
-      {/* Positionen-Tabelle */}
-      <div style={{ padding: `0 ${M}px` }}>
-        <div style={{ display: "flex", backgroundColor: thBg, color: thColor, padding: "4px 6px", fontSize: 8, fontWeight: 700 }}>
-          <span style={{ width: 28 }}>Pos.</span>
-          <span style={{ flex: 4 }}>Beschreibung</span>
-          <span style={{ width: 56, textAlign: "right" }}>Menge</span>
-          <span style={{ width: 66, textAlign: "right" }}>Einzelpreis</span>
-          <span style={{ width: 72, textAlign: "right" }}>Gesamtpreis</span>
-        </div>
-        {leistungPos.length === 0 ? (
-          <div style={{ padding: "5px 6px", fontSize: 8, color: "#ccc", borderBottom: "0.5px solid #eee" }}>Noch keine Positionen</div>
-        ) : leistungPos.map((pos, i) => (
-          <div key={pos.id}>
-            <div style={{ display: "flex", padding: "4px 6px", backgroundColor: i % 2 === 0 ? "#f8f8f8" : "#fff", fontSize: 8.5 }}>
-              <span style={{ width: 28, color: "#999" }}>{i + 1}.</span>
-              <div style={{ flex: 4 }}>
-                <div style={{ fontWeight: pos.bezeichnung ? 600 : 400, color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</div>
-                {pos.beschreibung && <div style={{ fontSize: 7.5, color: "#777", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>{pos.beschreibung}</div>}
-              </div>
-              <span style={{ width: 56, textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit?.substring(0, 5)}</span>
-              <span style={{ width: 66, textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
-              <span style={{ width: 72, textAlign: "right", fontWeight: 600, color: "#111" }}>{fmt(pos.gesamt)}</span>
-            </div>
-            {i < leistungPos.length - 1 && <div style={{ height: "0.5px", backgroundColor: "#ebebeb", margin: "0 6px" }} />}
-          </div>
-        ))}
-        <div style={{ height: "0.75px", backgroundColor: "#ccc", marginTop: 1 }} />
+  const renderPositionsBlock = (chunk: LocalPosition[], thBg: string, thColor: string, globalOffset = 0) => (
+    <div style={{ padding: `0 ${M}px` }}>
+      <div style={{ display: "flex", backgroundColor: thBg, color: thColor, padding: "4px 6px", fontSize: 8, fontWeight: 700 }}>
+        <span style={{ width: 28 }}>Pos.</span>
+        <span style={{ flex: 4 }}>Beschreibung</span>
+        <span style={{ width: 56, textAlign: "right" }}>Menge</span>
+        <span style={{ width: 66, textAlign: "right" }}>Einzelpreis</span>
+        <span style={{ width: 72, textAlign: "right" }}>Gesamtpreis</span>
       </div>
+      {chunk.length === 0 ? (
+        <div style={{ padding: "5px 6px", fontSize: 8, color: "#ccc", borderBottom: "0.5px solid #eee" }}>Noch keine Positionen</div>
+      ) : chunk.map((pos, i) => (
+        <div key={pos.id}>
+          <div style={{ display: "flex", padding: "4px 6px", backgroundColor: i % 2 === 0 ? "#f8f8f8" : "#fff", fontSize: 8.5 }}>
+            <span style={{ width: 28, color: pos.optional ? "#6b9bd2" : "#999" }}>{pos.optional ? "Opt." : `${globalOffset + i + 1}.`}</span>
+            <div style={{ flex: 4 }}>
+              <div style={{ fontWeight: pos.bezeichnung ? 600 : 400, color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</div>
+              {pos.beschreibung && <div style={{ fontSize: 7.5, color: "#777", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>{pos.beschreibung}</div>}
+            </div>
+            <span style={{ width: 56, textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit?.substring(0, 5)}</span>
+            <span style={{ width: 66, textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
+            <span style={{ width: 72, textAlign: "right", fontWeight: 600, color: "#111" }}>{fmt(pos.gesamt)}</span>
+          </div>
+          {i < chunk.length - 1 && <div style={{ height: "0.5px", backgroundColor: "#ebebeb", margin: "0 6px" }} />}
+        </div>
+      ))}
+      <div style={{ height: "0.75px", backgroundColor: "#ccc", marginTop: 1 }} />
+    </div>
+  );
 
+  const renderDINBottom = () => (
+    <>
       {/* Summen */}
       <div style={{ padding: `5px ${M}px 4px`, display: "flex", justifyContent: "flex-end" }}>
         <div style={{ minWidth: 220, fontSize: 9 }}>
@@ -593,9 +612,7 @@ function DocumentPreview(props: PreviewProps) {
             </div>
           )}
           {kleinunternehmer && (
-            <div style={{ fontSize: 7.5, color: "#999", lineHeight: 1.4, marginBottom: 3 }}>
-              Umsatzsteuer nicht erhoben gemäß §19 UStG.
-            </div>
+            <div style={{ fontSize: 7.5, color: "#999", lineHeight: 1.4, marginBottom: 3 }}>Umsatzsteuer nicht erhoben gemäß §19 UStG.</div>
           )}
           <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #111", paddingTop: 3, marginTop: 2, fontWeight: 700, fontSize: 10.5 }}>
             <span>Gesamtbetrag brutto</span>
@@ -603,16 +620,10 @@ function DocumentPreview(props: PreviewProps) {
           </div>
         </div>
       </div>
-
-      {/* Fußtext */}
       {fusstext && (
-        <div
-          style={{ padding: `2px ${M}px 4px`, fontSize: 8.5, color: "#444", lineHeight: 1.55 }}
-          dangerouslySetInnerHTML={{ __html: textToHtml(fusstext) }}
-        />
+        <div style={{ padding: `2px ${M}px 4px`, fontSize: 8.5, color: "#444", lineHeight: 1.55 }}
+          dangerouslySetInnerHTML={{ __html: textToHtml(fusstext) }} />
       )}
-
-      {/* Grußformel */}
       <div style={{ padding: `7px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
         Mit magischen Grüßen
         <div style={{ marginTop: 14 }}>
@@ -620,8 +631,7 @@ function DocumentPreview(props: PreviewProps) {
           {absenderUntertitel && <div style={{ color: "#666" }}>{absenderUntertitel}</div>}
         </div>
       </div>
-
-      {/* DIN 5008 Fußzeile – 4 Spalten (immer am Seitenende) */}
+      {/* DIN 5008 Fußzeile */}
       <div style={{ marginTop: "auto", borderTop: "0.75px solid #c0c0c0", margin: `auto ${M}px 8px`, paddingTop: 5, paddingBottom: 6, display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 600 }}>{absenderName}</div>
@@ -644,15 +654,54 @@ function DocumentPreview(props: PreviewProps) {
           {absenderBic  && <div>BIC: {absenderBic}</div>}
         </div>
       </div>
+    </>
+  );
+
+  // Page 1 body: DIN top + first chunk + (if single page) bottom
+  const renderBody = (thBg: string, thColor: string) => (
+    <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+      {renderDINTop()}
+      {renderPositionsBlock(pageChunks[0], thBg, thColor, 0)}
+      {pageChunks.length === 1 && renderDINBottom()}
     </div>
   );
 
-  // ── Page wrapper ──────────────────────────────────────────────────────────
+  // ── Page wrapper + multi-page renderer ───────────────────────────────────
+  const PAGE_STYLE: React.CSSProperties = {
+    width: "100%", aspectRatio: "210/297", overflow: "hidden",
+    fontFamily: font, color: "#1a1a1a", display: "flex", flexDirection: "column",
+  };
+
+  const renderContinuationPages = (bg: string, thBg: string, thColor: string) => {
+    let globalOffset = pageChunks[0].length;
+    return pageChunks.slice(1).map((chunk, pi) => {
+      const isLast = pi === pageChunks.length - 2;
+      const offset = globalOffset;
+      globalOffset += chunk.length;
+      return (
+        <div key={`page-${pi + 2}`} style={{ ...PAGE_STYLE, backgroundColor: bg }}>
+          {/* Thin continuation header */}
+          <div style={{ borderBottom: "0.5px solid #e0e0e0", padding: `10px ${M}px 8px`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 9, color: "#555" }}>{typLabel}{nummer ? ` – ${nummer}` : ""} · Seite {pi + 2}</span>
+            <LogoImg size={28} />
+          </div>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            {renderPositionsBlock(chunk, thBg, thColor, offset)}
+            {isLast && renderDINBottom()}
+          </div>
+        </div>
+      );
+    });
+  };
+
   const page = (bg: string, header: React.ReactNode, thBg: string, thColor: string) => (
-    <div style={{ width: "100%", height: "100%", backgroundColor: bg, fontFamily: font, color: "#1a1a1a", overflow: "hidden", display: "flex", flexDirection: "column" }}>
-      {header}
-      {renderBody(thBg, thColor)}
-    </div>
+    <>
+      <div style={{ ...PAGE_STYLE, backgroundColor: bg }}>
+        {header}
+        {renderBody(thBg, thColor)}
+      </div>
+      {renderContinuationPages(bg, thBg, thColor)}
+    </>
   );
 
   // ── 15 Layout-Köpfe ───────────────────────────────────────────────────────
@@ -711,18 +760,37 @@ function DocumentPreview(props: PreviewProps) {
 
     // 5 – Seitenstreifen: Vertikaler Farbbalken links
     case 5: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, overflow: "hidden", display: "flex" }}>
-        <div style={{ width: 12, backgroundColor: color, flexShrink: 0 }} />
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-          <div style={{ position: "relative", padding: `22px ${M - 12}px 16px`, minHeight: 105, borderBottom: "0.5px solid #e8e8e8" }}>
-            <AbsBlock />
-            <div style={{ position: "absolute", top: 22, right: M - 12 }}>
-              <LogoImg />
+      <>
+        <div style={{ ...PAGE_STYLE, backgroundColor: "#fff", flexDirection: "row" }}>
+          <div style={{ width: 12, backgroundColor: color, flexShrink: 0 }} />
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+            <div style={{ position: "relative", padding: `22px ${M - 12}px 16px`, minHeight: 105, borderBottom: "0.5px solid #e8e8e8" }}>
+              <AbsBlock />
+              <div style={{ position: "absolute", top: 22, right: M - 12 }}><LogoImg /></div>
             </div>
+            {renderBody(color, "#fff")}
           </div>
-          {renderBody(color, "#fff")}
         </div>
-      </div>
+        {pageChunks.slice(1).map((chunk, pi) => {
+          const isLast = pi === pageChunks.length - 2;
+          const offset = pageChunks.slice(0, pi + 1).reduce((s, c) => s + c.length, 0);
+          return (
+            <div key={`page5-${pi + 2}`} style={{ ...PAGE_STYLE, backgroundColor: "#fff", flexDirection: "row" }}>
+              <div style={{ width: 12, backgroundColor: color, flexShrink: 0 }} />
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+                <div style={{ borderBottom: "0.5px solid #e0e0e0", padding: `10px ${M - 12}px 8px`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: 9, color: "#555" }}>{typLabel}{nummer ? ` – ${nummer}` : ""} · Seite {pi + 2}</span>
+                  <LogoImg size={28} />
+                </div>
+                <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                  {renderPositionsBlock(chunk, color, "#fff", offset)}
+                  {isLast && renderDINBottom()}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </>
     );
 
     // 6 – Dark Premium: Dunkler Kopf mit Akzent
@@ -806,15 +874,35 @@ function DocumentPreview(props: PreviewProps) {
 
     // 11 – Rahmen: Vollständiger Rahmen
     case 11: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, overflow: "hidden", padding: 5, display: "flex", flexDirection: "column" }}>
-        <div style={{ border: `2px solid ${color}`, flex: 1, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-          <div style={{ backgroundColor: color, padding: `18px ${M - 5}px 14px`, position: "relative", minHeight: 100 }}>
-            <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.75)" addrC="rgba(255,255,255,0.55)" />
-            <RightCol dark kontC="rgba(255,255,255,0.65)" top={18} right={M - 5} />
+      <>
+        <div style={{ ...PAGE_STYLE, backgroundColor: "#fff", padding: 5 }}>
+          <div style={{ border: `2px solid ${color}`, flex: 1, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+            <div style={{ backgroundColor: color, padding: `18px ${M - 5}px 14px`, position: "relative", minHeight: 100 }}>
+              <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.75)" addrC="rgba(255,255,255,0.55)" />
+              <RightCol dark kontC="rgba(255,255,255,0.65)" top={18} right={M - 5} />
+            </div>
+            {renderBody("#111", "#fff")}
           </div>
-          {renderBody("#111", "#fff")}
         </div>
-      </div>
+        {pageChunks.slice(1).map((chunk, pi) => {
+          const isLast = pi === pageChunks.length - 2;
+          const offset = pageChunks.slice(0, pi + 1).reduce((s, c) => s + c.length, 0);
+          return (
+            <div key={`page11-${pi + 2}`} style={{ ...PAGE_STYLE, backgroundColor: "#fff", padding: 5 }}>
+              <div style={{ border: `2px solid ${color}`, flex: 1, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                <div style={{ backgroundColor: color, padding: `8px ${M - 5}px`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: 9, color: "#fff" }}>{typLabel}{nummer ? ` – ${nummer}` : ""} · Seite {pi + 2}</span>
+                  <LogoImg size={24} dark />
+                </div>
+                <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                  {renderPositionsBlock(chunk, "#111", "#fff", offset)}
+                  {isLast && renderDINBottom()}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </>
     );
 
     // 12 – Technik: Zweispaltiger Header
@@ -940,6 +1028,7 @@ export default function AdminDokumentEditor() {
 
   // Positions
   const [positionen, setPositionen] = useState<LocalPosition[]>([newPosition()]);
+  const [activePositionId, setActivePositionId] = useState<string | null>(null);
 
   // Tax
   const [mwstSatz, setMwstSatz] = useState(0);
@@ -1477,8 +1566,7 @@ export default function AdminDokumentEditor() {
             <div className="flex-1 overflow-y-auto flex items-start justify-center p-8 bg-muted/10">
               <div
                 id="doc-preview-print"
-                className="bg-white rounded-xl shadow-2xl overflow-hidden"
-                style={{ width: "min(595px, 100%)", aspectRatio: "210/297" }}
+                style={{ width: "min(595px, 100%)", display: "flex", flexDirection: "column", gap: 24 }}
               >
                 <DocumentPreview {...previewProps} />
               </div>
@@ -1713,116 +1801,146 @@ export default function AdminDokumentEditor() {
           </div>
 
           {/* Position rows */}
-          {positionen.map((pos, idx) => (
-            <div key={pos.id} className="border-b border-slate-100 last:border-0">
-              <div className="grid items-start gap-x-3 py-3 px-3"
-                style={{ gridTemplateColumns: "24px 1fr 145px 155px 76px 105px 115px 36px" }}>
+          {positionen.map((pos, idx) => {
+            const isActive = activePositionId === pos.id;
+            const showExtra = isActive || !!pos.beschreibung;
+            const showOptional = isActive || !!pos.optional;
+            return (
+              <div
+                key={pos.id}
+                className="border-b border-slate-100 last:border-0"
+                onFocus={() => setActivePositionId(pos.id)}
+                onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setActivePositionId(null); }}
+              >
+                {/* Main grid row */}
+                <div className="grid items-center gap-x-3 py-2.5 px-3"
+                  style={{ gridTemplateColumns: "28px 1fr 145px 155px 76px 105px 115px 36px" }}>
 
-                {/* Nr */}
-                <span className="text-sm text-muted-foreground pt-2 text-center select-none">{idx + 1}.</span>
+                  {/* Nr / Opt. indicator */}
+                  <span className="text-[11px] font-semibold text-center select-none leading-tight">
+                    {pos.optional
+                      ? <span className="text-blue-400">Opt.</span>
+                      : <span className="text-slate-400">{idx + 1}.</span>
+                    }
+                  </span>
 
-                {/* Bezeichnung + Beschreibung + Optional */}
-                <div className="relative">
-                  <input
-                    placeholder="Bezeichnung oder Artikel suchen…"
-                    value={artikelSuche[pos.id] ?? pos.bezeichnung}
-                    onChange={(e) => searchArtikel(pos.id, e.target.value)}
-                    onBlur={() => { const q = artikelSuche[pos.id]; if (q !== undefined && q !== pos.bezeichnung) updatePosition(pos.id, { bezeichnung: q }); }}
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
-                  />
-                  {(artikelSuggestions[pos.id] || []).length > 0 && (
-                    <div className="absolute z-50 top-full left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl mt-1 overflow-hidden">
-                      {artikelSuggestions[pos.id].map((a) => (
-                        <button key={a.id} onMouseDown={() => selectArtikel(pos.id, a)}
-                          className="w-full text-left px-4 py-3 hover:bg-slate-50 text-sm flex items-start justify-between gap-4 border-b border-slate-50 last:border-0">
-                          <div>
-                            <p className="font-semibold text-slate-800">{a.bezeichnung}</p>
-                            {a.beschreibung && <p className="text-xs text-slate-500 mt-0.5">{a.beschreibung}</p>}
-                          </div>
-                          <span className="text-sm font-bold text-slate-800 shrink-0">{a.preis.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                  <textarea
-                    placeholder="Beschreibung (optional)…"
-                    value={pos.beschreibung}
-                    onChange={(e) => updatePosition(pos.id, { beschreibung: e.target.value })}
-                    rows={3}
-                    className="mt-1.5 w-full rounded-lg border border-slate-100 px-3 py-1.5 text-xs text-slate-500 bg-slate-50 focus:outline-none focus:border-slate-200 resize-y"
-                  />
-                  {/* Optional toggle */}
-                  <label className="mt-2 flex items-center gap-2 cursor-pointer select-none w-fit">
-                    <div
-                      onClick={() => updatePosition(pos.id, { optional: !pos.optional })}
-                      className={`relative w-8 h-4 rounded-full transition-colors shrink-0 ${pos.optional ? "bg-blue-500" : "bg-slate-200"}`}
+                  {/* Bezeichnung */}
+                  <div className="relative">
+                    <input
+                      placeholder="Bezeichnung oder Artikel suchen…"
+                      value={artikelSuche[pos.id] ?? pos.bezeichnung}
+                      onChange={(e) => searchArtikel(pos.id, e.target.value)}
+                      onBlur={() => { const q = artikelSuche[pos.id]; if (q !== undefined && q !== pos.bezeichnung) updatePosition(pos.id, { bezeichnung: q }); }}
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                    />
+                    {(artikelSuggestions[pos.id] || []).length > 0 && (
+                      <div className="absolute z-50 top-full left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl mt-1 overflow-hidden">
+                        {artikelSuggestions[pos.id].map((a) => (
+                          <button key={a.id} onMouseDown={() => selectArtikel(pos.id, a)}
+                            className="w-full text-left px-4 py-3 hover:bg-slate-50 text-sm flex items-start justify-between gap-4 border-b border-slate-50 last:border-0">
+                            <div>
+                              <p className="font-semibold text-slate-800">{a.bezeichnung}</p>
+                              {a.beschreibung && <p className="text-xs text-slate-500 mt-0.5">{a.beschreibung}</p>}
+                            </div>
+                            <span className="text-sm font-bold text-slate-800 shrink-0">{a.preis.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Menge + Einheit */}
+                  <div className="flex items-center gap-1.5">
+                    <input
+                      type="number" value={pos.menge} min={0} step="0.01"
+                      onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
+                      className="w-16 text-right rounded-lg border border-slate-200 px-2 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-100"
+                    />
+                    <select
+                      value={pos.einheit}
+                      onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
+                      className="flex-1 rounded-lg border border-slate-200 px-1.5 py-2 text-sm bg-white focus:outline-none"
                     >
-                      <span className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${pos.optional ? "translate-x-4" : ""}`} />
-                    </div>
-                    <span className="text-xs font-semibold text-slate-500">Optional</span>
-                  </label>
-                </div>
+                      {["pauschal","Std.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
+                    </select>
+                  </div>
 
-                {/* Menge + Einheit */}
-                <div className="flex items-center gap-1.5 pt-0.5">
-                  <input
-                    type="number" value={pos.menge} min={0} step="0.01"
-                    onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
-                    className="w-16 text-right rounded-lg border border-slate-200 px-2 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-100"
-                  />
+                  {/* Preis mit EUR-Suffix */}
+                  <div className="flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden">
+                    <input
+                      type="number" value={pos.einzelpreis} step="0.01" min={0}
+                      onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value) || 0 })}
+                      className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0"
+                    />
+                    <span className="pr-2.5 text-sm text-slate-400 shrink-0">EUR</span>
+                  </div>
+
+                  {/* USt. – disabled/grayed when Kleinunternehmer */}
                   <select
-                    value={pos.einheit}
-                    onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
-                    className="flex-1 rounded-lg border border-slate-200 px-1.5 py-2 text-sm bg-white focus:outline-none"
+                    value={pos.mwstSatz}
+                    onChange={(e) => updatePosition(pos.id, { mwstSatz: parseFloat(e.target.value) })}
+                    disabled={kleinunternehmer}
+                    className={`w-full rounded-lg border px-2 py-2 text-sm focus:outline-none transition-colors ${
+                      kleinunternehmer
+                        ? "border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed"
+                        : "border-slate-200 bg-white"
+                    }`}
                   >
-                    {["pauschal","Std.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
+                    {[0, 7, 19].map((r) => <option key={r} value={r}>{r}%</option>)}
                   </select>
+
+                  {/* Rabatt mit %-Suffix */}
+                  <div className="flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden">
+                    <input
+                      type="number" value={pos.rabattProzent ?? ""} placeholder="0" min={0} max={100}
+                      onChange={(e) => updatePosition(pos.id, { rabattProzent: e.target.value ? parseFloat(e.target.value) : null })}
+                      className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0"
+                    />
+                    <span className="pr-2.5 text-sm text-slate-400 shrink-0">%</span>
+                  </div>
+
+                  {/* Betrag */}
+                  <div className="text-right font-semibold text-sm tabular-nums text-slate-800">
+                    {pos.gesamt.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
+                  </div>
+
+                  {/* Delete */}
+                  <button
+                    onClick={() => removePosition(pos.id)}
+                    className="flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors w-8 h-8 rounded-lg hover:bg-red-50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
 
-                {/* Preis mit EUR-Suffix */}
-                <div className="flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden">
-                  <input
-                    type="number" value={pos.einzelpreis} step="0.01" min={0}
-                    onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value) || 0 })}
-                    className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0"
-                  />
-                  <span className="pr-2.5 text-sm text-slate-400 shrink-0">EUR</span>
-                </div>
-
-                {/* USt. */}
-                <select
-                  value={pos.mwstSatz}
-                  onChange={(e) => updatePosition(pos.id, { mwstSatz: parseFloat(e.target.value) })}
-                  className="w-full rounded-lg border border-slate-200 px-2 py-2 text-sm bg-white focus:outline-none"
-                >
-                  {[0, 7, 19].map((r) => <option key={r} value={r}>{r}%</option>)}
-                </select>
-
-                {/* Rabatt mit %-Suffix */}
-                <div className="flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden">
-                  <input
-                    type="number" value={pos.rabattProzent ?? ""} placeholder="0" min={0} max={100}
-                    onChange={(e) => updatePosition(pos.id, { rabattProzent: e.target.value ? parseFloat(e.target.value) : null })}
-                    className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0"
-                  />
-                  <span className="pr-2.5 text-sm text-slate-400 shrink-0">%</span>
-                </div>
-
-                {/* Betrag */}
-                <div className="text-right font-semibold text-sm tabular-nums text-slate-800 pt-2">
-                  {pos.gesamt.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
-                </div>
-
-                {/* Delete */}
-                <button
-                  onClick={() => removePosition(pos.id)}
-                  className="flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors w-8 h-8 rounded-lg hover:bg-red-50 mt-0.5"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                {/* Beschreibung + Optional – below main row, only when active or has content */}
+                {(showExtra || showOptional) && (
+                  <div className="px-3 pb-2.5" style={{ paddingLeft: "calc(28px + 0.75rem + 0.75rem)" }}>
+                    {showExtra && (
+                      <textarea
+                        placeholder="Beschreibung (optional)…"
+                        value={pos.beschreibung}
+                        onChange={(e) => updatePosition(pos.id, { beschreibung: e.target.value })}
+                        rows={3}
+                        className="w-full rounded-lg border border-slate-100 px-3 py-1.5 text-xs text-slate-500 bg-slate-50 focus:outline-none focus:border-slate-200 resize-y"
+                      />
+                    )}
+                    {showOptional && (
+                      <label className="mt-1.5 flex items-center gap-2 cursor-pointer select-none w-fit">
+                        <div
+                          onClick={() => updatePosition(pos.id, { optional: !pos.optional })}
+                          className={`relative w-8 h-4 rounded-full transition-colors shrink-0 ${pos.optional ? "bg-blue-500" : "bg-slate-200"}`}
+                        >
+                          <span className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${pos.optional ? "translate-x-4" : ""}`} />
+                        </div>
+                        <span className="text-xs font-semibold text-slate-500">Optional</span>
+                      </label>
+                    )}
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* Bottom links */}
           <div className="flex items-center gap-5 pt-4 pb-2 px-3">
