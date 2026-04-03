@@ -1,5 +1,8 @@
-import { useEffect, useRef } from "react";
-import { Bold, Italic, Underline, List } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Bold, Italic, Underline, Strikethrough, List, ListOrdered,
+  AlignLeft, AlignCenter, AlignRight, Link, Undo, Redo, ChevronDown,
+} from "lucide-react";
 
 export const PLACEHOLDERS = [
   { label: "Kundenname", value: "{{name}}" },
@@ -40,16 +43,51 @@ export const replacePlaceholders = (
     .replace(/\{\{datum_heute\}\}/g, today);
 };
 
+/** Convert plain text (with newlines) to basic HTML. If it already contains HTML, return as-is. */
+export const textToHtml = (text: string): string => {
+  if (!text) return "";
+  if (/<[a-z][\s\S]*>/i.test(text)) return text; // already HTML
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .split("\n")
+    .join("<br>");
+};
+
+/** Strip HTML tags to get plain text */
+export const htmlToText = (html: string): string => {
+  if (!html) return "";
+  return html
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+};
+
+export interface TextVorlageItem {
+  id?: string;
+  name: string;
+  inhalt: string;
+}
+
 interface RichTextEditorProps {
   value: string;
   onChange: (html: string) => void;
   placeholder?: string;
   minHeight?: string;
   showPlaceholders?: boolean;
+  templates?: TextVorlageItem[];
 }
 
+const sep = <div className="w-px h-4 bg-border/30 mx-0.5 shrink-0" />;
+
 const toolbarBtnCls =
-  "inline-flex items-center justify-center w-7 h-7 rounded-lg text-muted-foreground hover:text-foreground hover:bg-background/80 transition-colors text-xs font-medium";
+  "inline-flex items-center justify-center w-7 h-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-background/80 transition-colors text-xs font-medium shrink-0";
 
 const RichTextEditor = ({
   value,
@@ -57,14 +95,34 @@ const RichTextEditor = ({
   placeholder = "Text eingeben…",
   minHeight = "180px",
   showPlaceholders = true,
+  templates,
 }: RichTextEditorProps) => {
   const editorRef = useRef<HTMLDivElement>(null);
+  const [showTemplateMenu, setShowTemplateMenu] = useState(false);
+  const [showPlaceholderMenu, setShowPlaceholderMenu] = useState(false);
+  const templateMenuRef = useRef<HTMLDivElement>(null);
+  const placeholderMenuRef = useRef<HTMLDivElement>(null);
 
+  // Set content on mount only
   useEffect(() => {
     if (editorRef.current) {
-      editorRef.current.innerHTML = value || "";
+      editorRef.current.innerHTML = textToHtml(value) || "";
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (templateMenuRef.current && !templateMenuRef.current.contains(e.target as Node)) {
+        setShowTemplateMenu(false);
+      }
+      if (placeholderMenuRef.current && !placeholderMenuRef.current.contains(e.target as Node)) {
+        setShowPlaceholderMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   const exec = (cmd: string, val?: string) => {
@@ -89,40 +147,153 @@ const RichTextEditor = ({
       document.execCommand("insertText", false, text);
     }
     onChange(editorRef.current?.innerHTML || "");
+    setShowPlaceholderMenu(false);
+  };
+
+  const applyTemplate = (vorlage: TextVorlageItem) => {
+    const html = textToHtml(vorlage.inhalt);
+    if (editorRef.current) {
+      editorRef.current.innerHTML = html;
+      onChange(html);
+    }
+    setShowTemplateMenu(false);
   };
 
   return (
-    <div className="rounded-xl border border-border/30 overflow-hidden">
+    <div className="rounded-xl border border-border/30 overflow-visible">
       {/* Toolbar */}
       <div className="flex items-center gap-0.5 px-2 py-1.5 bg-muted/30 border-b border-border/20 flex-wrap gap-y-1">
-        <button type="button" onClick={() => exec("bold")} className={toolbarBtnCls} title="Fett">
+
+        {/* Font size */}
+        <select
+          onChange={(e) => exec("fontSize", e.target.value)}
+          defaultValue="3"
+          className="h-7 rounded-md border border-border/20 bg-background/60 text-xs text-muted-foreground px-1 focus:outline-none cursor-pointer shrink-0"
+          title="Schriftgröße"
+        >
+          <option value="1">8</option>
+          <option value="2">10</option>
+          <option value="3">12</option>
+          <option value="4">14</option>
+          <option value="5">18</option>
+          <option value="6">24</option>
+        </select>
+
+        {sep}
+
+        {/* Basic formatting */}
+        <button type="button" onClick={() => exec("bold")} className={toolbarBtnCls} title="Fett (Strg+B)">
           <Bold className="w-3.5 h-3.5" />
         </button>
-        <button type="button" onClick={() => exec("italic")} className={toolbarBtnCls} title="Kursiv">
+        <button type="button" onClick={() => exec("italic")} className={toolbarBtnCls} title="Kursiv (Strg+I)">
           <Italic className="w-3.5 h-3.5" />
         </button>
-        <button type="button" onClick={() => exec("underline")} className={toolbarBtnCls} title="Unterstrichen">
+        <button type="button" onClick={() => exec("underline")} className={toolbarBtnCls} title="Unterstrichen (Strg+U)">
           <Underline className="w-3.5 h-3.5" />
         </button>
-        <button type="button" onClick={() => exec("insertUnorderedList")} className={toolbarBtnCls} title="Liste">
-          <List className="w-3.5 h-3.5" />
+        <button type="button" onClick={() => exec("strikeThrough")} className={toolbarBtnCls} title="Durchgestrichen">
+          <Strikethrough className="w-3.5 h-3.5" />
         </button>
 
+        {sep}
+
+        {/* Lists */}
+        <button type="button" onClick={() => exec("insertUnorderedList")} className={toolbarBtnCls} title="Aufzählung">
+          <List className="w-3.5 h-3.5" />
+        </button>
+        <button type="button" onClick={() => exec("insertOrderedList")} className={toolbarBtnCls} title="Nummerierte Liste">
+          <ListOrdered className="w-3.5 h-3.5" />
+        </button>
+
+        {sep}
+
+        {/* Alignment */}
+        <button type="button" onClick={() => exec("justifyLeft")} className={toolbarBtnCls} title="Linksbündig">
+          <AlignLeft className="w-3.5 h-3.5" />
+        </button>
+        <button type="button" onClick={() => exec("justifyCenter")} className={toolbarBtnCls} title="Zentriert">
+          <AlignCenter className="w-3.5 h-3.5" />
+        </button>
+        <button type="button" onClick={() => exec("justifyRight")} className={toolbarBtnCls} title="Rechtsbündig">
+          <AlignRight className="w-3.5 h-3.5" />
+        </button>
+
+        {sep}
+
+        {/* Link */}
+        <button type="button" onClick={() => {
+          const url = window.prompt("URL eingeben:", "https://");
+          if (url) exec("createLink", url);
+        }} className={toolbarBtnCls} title="Link einfügen">
+          <Link className="w-3.5 h-3.5" />
+        </button>
+
+        {sep}
+
+        {/* Undo / Redo */}
+        <button type="button" onClick={() => exec("undo")} className={toolbarBtnCls} title="Rückgängig">
+          <Undo className="w-3.5 h-3.5" />
+        </button>
+        <button type="button" onClick={() => exec("redo")} className={toolbarBtnCls} title="Wiederholen">
+          <Redo className="w-3.5 h-3.5" />
+        </button>
+
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* Textvorlage dropdown */}
+        {templates && templates.length > 0 && (
+          <div className="relative" ref={templateMenuRef}>
+            <button
+              type="button"
+              onClick={() => { setShowTemplateMenu((v) => !v); setShowPlaceholderMenu(false); }}
+              className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 rounded-lg border border-border/30 bg-background/60 text-muted-foreground hover:text-foreground hover:bg-background transition-colors whitespace-nowrap"
+            >
+              Textvorlage <ChevronDown className="w-3 h-3" />
+            </button>
+            {showTemplateMenu && (
+              <div className="absolute right-0 top-full mt-1 z-50 min-w-[200px] bg-background border border-border/30 rounded-xl shadow-lg overflow-hidden">
+                {templates.map((v, i) => (
+                  <button
+                    key={v.id ?? i}
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); applyTemplate(v); }}
+                    className="w-full text-left px-4 py-2.5 text-sm hover:bg-muted/60 transition-colors"
+                  >
+                    {v.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Platzhalter dropdown */}
         {showPlaceholders && (
-          <>
-            <div className="w-px h-4 bg-border/30 mx-1" />
-            <span className="font-sans text-[10px] text-muted-foreground mr-1">Platzhalter:</span>
-            {PLACEHOLDERS.map((p) => (
-              <button
-                key={p.value}
-                type="button"
-                onClick={() => insertPlaceholder(p.value)}
-                className="font-sans text-[10px] px-2 py-1 rounded-md bg-accent/10 text-accent hover:bg-accent/20 transition-colors whitespace-nowrap"
-              >
-                {p.label}
-              </button>
-            ))}
-          </>
+          <div className="relative" ref={placeholderMenuRef}>
+            <button
+              type="button"
+              onClick={() => { setShowPlaceholderMenu((v) => !v); setShowTemplateMenu(false); }}
+              className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 rounded-lg border border-border/30 bg-background/60 text-muted-foreground hover:text-foreground hover:bg-background transition-colors whitespace-nowrap"
+            >
+              Platzhalter <ChevronDown className="w-3 h-3" />
+            </button>
+            {showPlaceholderMenu && (
+              <div className="absolute right-0 top-full mt-1 z-50 min-w-[180px] bg-background border border-border/30 rounded-xl shadow-lg overflow-hidden">
+                {PLACEHOLDERS.map((p) => (
+                  <button
+                    key={p.value}
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); insertPlaceholder(p.value); }}
+                    className="w-full text-left px-4 py-2.5 text-sm hover:bg-muted/60 transition-colors flex items-center justify-between gap-3"
+                  >
+                    <span>{p.label}</span>
+                    <span className="text-[10px] text-muted-foreground font-mono">{p.value}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         )}
       </div>
 

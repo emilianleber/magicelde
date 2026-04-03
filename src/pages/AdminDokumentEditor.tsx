@@ -5,6 +5,7 @@ import { dokumenteService } from "@/services/dokumenteService";
 import type { DokumentTyp } from "@/types/dokumente";
 import type { Artikel } from "@/types/dokumente";
 import { ArrowLeft, ChevronDown, ChevronUp, Eye, Printer, Save, Send, Trash2, X } from "lucide-react";
+import RichTextEditor, { textToHtml } from "@/components/admin/RichTextEditor";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -540,12 +541,12 @@ function DocumentPreview(props: PreviewProps) {
       </div>
 
       {/* Kopftext */}
-      <div style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
-        {kopftext
-          ? <div style={{ whiteSpace: "pre-wrap" }}>{kopftext.substring(0, 500)}{kopftext.length > 500 ? "…" : ""}</div>
-          : <div>Sehr geehrte Damen und Herren,<br />vielen Dank für Ihre Anfrage. Gerne unterbreite ich Ihnen das gewünschte freibleibende Angebot:</div>
-        }
-      </div>
+      {kopftext && (
+        <div
+          style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}
+          dangerouslySetInnerHTML={{ __html: textToHtml(kopftext) }}
+        />
+      )}
 
       {/* Positionen-Tabelle */}
       <div style={{ padding: `0 ${M}px` }}>
@@ -603,9 +604,10 @@ function DocumentPreview(props: PreviewProps) {
 
       {/* Fußtext */}
       {fusstext && (
-        <div style={{ padding: `2px ${M}px 4px`, fontSize: 8.5, color: "#444", lineHeight: 1.55, whiteSpace: "pre-wrap" }}>
-          {fusstext.substring(0, 500)}{fusstext.length > 500 ? "…" : ""}
-        </div>
+        <div
+          style={{ padding: `2px ${M}px 4px`, fontSize: 8.5, color: "#444", lineHeight: 1.55 }}
+          dangerouslySetInnerHTML={{ __html: textToHtml(fusstext) }}
+        />
       )}
 
       {/* Grußformel */}
@@ -1674,47 +1676,18 @@ export default function AdminDokumentEditor() {
           </div>
 
           {/* ════ KOPF-TEXT ════ */}
-          <div className="flex items-center gap-3 pt-8 pb-2">
+          <div className="flex items-center gap-3 pt-8 pb-3">
             <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Kopf-Text</span>
             <div className="flex-1 border-t border-dashed border-border/40" />
           </div>
-          {/* Template chips */}
-          {(() => {
-            const chips = textvorlagen.filter(
-              (v) => v.bereich === "kopf" && (v.typ === typ || v.typ === "alle")
-            );
-            return chips.length > 0 ? (
-              <div className="flex flex-wrap gap-1.5 pb-3">
-                {chips.map((v) => (
-                  <button
-                    key={v.id}
-                    type="button"
-                    onClick={() => setKopftext(v.inhalt)}
-                    title={v.inhalt}
-                    className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-border/30 bg-muted/30 hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {v.is_default && <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 shrink-0" />}
-                    {v.name}
-                  </button>
-                ))}
-                {kopftext && (
-                  <button
-                    type="button"
-                    onClick={() => setKopftext("")}
-                    className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-border/20 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
-                  >
-                    <X className="w-3 h-3" /> Leeren
-                  </button>
-                )}
-              </div>
-            ) : null;
-          })()}
-          <textarea
-            placeholder="Anschreiben an den Kunden…"
+          <RichTextEditor
+            key={`kopf-${id ?? "new"}`}
             value={kopftext}
-            onChange={(e) => setKopftext(e.target.value)}
-            rows={5}
-            className="w-full rounded-xl bg-background border border-border/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"
+            onChange={setKopftext}
+            placeholder="Anschreiben an den Kunden…"
+            minHeight="120px"
+            showPlaceholders={false}
+            templates={textvorlagen.filter((v) => v.bereich === "kopf" && (v.typ === typ || v.typ === "alle"))}
           />
 
           {/* ════ PRODUKTE ════ */}
@@ -1832,47 +1805,18 @@ export default function AdminDokumentEditor() {
           </div>
 
           {/* ════ FUSS-TEXT ════ */}
-          <div className="flex items-center gap-3 pt-8 pb-2">
+          <div className="flex items-center gap-3 pt-8 pb-3">
             <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Fuss-Text</span>
             <div className="flex-1 border-t border-dashed border-border/40" />
           </div>
-          {/* Template chips */}
-          {(() => {
-            const chips = textvorlagen.filter(
-              (v) => v.bereich === "fuss" && (v.typ === typ || v.typ === "alle")
-            );
-            return chips.length > 0 ? (
-              <div className="flex flex-wrap gap-1.5 pb-3">
-                {chips.map((v) => (
-                  <button
-                    key={v.id}
-                    type="button"
-                    onClick={() => setFusstext(v.inhalt)}
-                    title={v.inhalt}
-                    className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-border/30 bg-muted/30 hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {v.is_default && <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 shrink-0" />}
-                    {v.name}
-                  </button>
-                ))}
-                {fusstext && (
-                  <button
-                    type="button"
-                    onClick={() => setFusstext("")}
-                    className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-border/20 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
-                  >
-                    <X className="w-3 h-3" /> Leeren
-                  </button>
-                )}
-              </div>
-            ) : null;
-          })()}
-          <textarea
+          <RichTextEditor
+            key={`fuss-${id ?? "new"}`}
             value={fusstext}
-            onChange={(e) => setFusstext(e.target.value)}
-            rows={5}
+            onChange={setFusstext}
             placeholder="Bankdaten, Zahlungshinweise, Grüße…"
-            className="w-full rounded-xl bg-background border border-border/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"
+            minHeight="120px"
+            showPlaceholders={false}
+            templates={textvorlagen.filter((v) => v.bereich === "fuss" && (v.typ === typ || v.typ === "alle"))}
           />
 
           {/* ════ MEHR OPTIONEN ════ */}
