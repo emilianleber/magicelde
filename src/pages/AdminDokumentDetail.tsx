@@ -144,14 +144,8 @@ export default function AdminDokumentDetail() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc, searchParams]);
 
-  // Erfolgs-Toast nach Portal-Veröffentlichung (?published=1)
-  const [publishedToast, setPublishedToast] = useState(!!searchParams.get("published"));
-  useEffect(() => {
-    if (!searchParams.get("published")) return;
-    setPublishedToast(true);
-    const t = setTimeout(() => setPublishedToast(false), 5000);
-    return () => clearTimeout(t);
-  }, [searchParams]);
+  // Erfolgs-Toast nach Portal-Veröffentlichung (direkt gesetzt, kein URL-param nötig)
+  const [publishedToast, setPublishedToast] = useState(false);
 
   const handleStatusChange = async (status: DokumentStatus) => {
     if (!id) return;
@@ -526,9 +520,11 @@ body > div:last-child {
         });
       }
 
-      // 4. Panel schließen + navigieren
+      // 4. Panel schließen + Dokument neu laden + Toast direkt setzen
       setSendPanel(false);
-      navigate(`/admin/dokumente/${id}?published=1`);
+      setPublishedToast(true);
+      setTimeout(() => setPublishedToast(false), 6000);
+      await load();
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : (typeof e === "object" ? JSON.stringify(e) : String(e));
       setSendMsg({ type: "err", text: "Fehler: " + msg });
