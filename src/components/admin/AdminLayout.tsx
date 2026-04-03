@@ -21,6 +21,9 @@ import {
   Video,
   MapPin,
   Users2,
+  Receipt,
+  FileCheck,
+  ShoppingBag,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -55,6 +58,12 @@ const prodNavItems = [
   { label: "Produktionen", href: "/admin/produktionen", icon: Sparkles },
   { label: "Locations",    href: "/admin/locations",    icon: MapPin },
   { label: "Partner",      href: "/admin/partner",      icon: Users2 },
+];
+
+const finanzNavItems = [
+  { label: "Angebote",   href: "/admin/dokumente/angebote",   icon: FileCheck },
+  { label: "Rechnungen", href: "/admin/dokumente/rechnungen", icon: Receipt },
+  { label: "Artikel",    href: "/admin/artikel",              icon: ShoppingBag },
 ];
 
 // Bottom nav shows the first 5 items for mobile
@@ -137,6 +146,27 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
             </p>
           </div>
           {prodNavItems.map((item) => (
+            <Link
+              key={item.href}
+              to={item.href}
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
+                isActive(item.href)
+                  ? "bg-foreground text-background font-semibold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+              }`}
+            >
+              <item.icon className="w-4 h-4 shrink-0" />
+              <span>{item.label}</span>
+            </Link>
+          ))}
+
+          {/* Finanzen section */}
+          <div className="mt-4 mb-2 px-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
+              Finanzen
+            </p>
+          </div>
+          {finanzNavItems.map((item) => (
             <Link
               key={item.href}
               to={item.href}
@@ -235,6 +265,28 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
                 </p>
               </div>
               {prodNavItems.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all ${
+                    isActive(item.href)
+                      ? "bg-foreground text-background font-semibold"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                  }`}
+                >
+                  <item.icon className="w-4 h-4 shrink-0" />
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+
+              {/* Finanzen section */}
+              <div className="mt-4 mb-2 px-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
+                  Finanzen
+                </p>
+              </div>
+              {finanzNavItems.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
@@ -389,6 +441,31 @@ const EmbeddedAdminLayout = ({ title, subtitle, actions, children }: AdminLayout
                           </div>
                         )}
                       </React.Fragment>
+                    );
+                  })}
+
+                  {/* Finanzen section */}
+                  <div className="mt-4 mb-2 px-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/60">
+                      Finanzen
+                    </p>
+                  </div>
+                  {finanzNavItems.map((item) => {
+                    const isActiveItem = location.pathname === item.href ||
+                      (item.href !== "/admin" && location.pathname.startsWith(item.href));
+                    return (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition-all ${
+                          isActiveItem
+                            ? "bg-background text-foreground shadow-sm border border-border/20"
+                            : "text-muted-foreground hover:text-foreground hover:bg-background/60"
+                        }`}
+                      >
+                        <item.icon className="w-4 h-4" />
+                        <span className="font-medium">{item.label}</span>
+                      </Link>
                     );
                   })}
                 </nav>

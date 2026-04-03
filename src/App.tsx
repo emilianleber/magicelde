@@ -1,5 +1,11 @@
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminEffekte from "@/pages/AdminEffekte";
+import AdminPakete from "@/pages/AdminPakete";
+import AdminShows from "@/pages/AdminShows";
+import AdminProduktionen from "@/pages/AdminProduktionen";
+import AdminLocations from "@/pages/AdminLocations";
+import AdminPartner from "@/pages/AdminPartner";
+import AdminArtikel from "@/pages/AdminArtikel";
 import AdminRequests from "@/pages/AdminRequests";
 import AdminRequestDetail from "@/pages/AdminRequestDetail";
 import AdminEvents from "@/pages/AdminEvents";
@@ -15,6 +21,9 @@ import AdminTodos from "@/pages/AdminTodos";
 import AdminDocuments from "@/pages/AdminDocuments";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminPasswordReset from "@/pages/AdminPasswordReset";
+import AdminDokumentEditor from "@/pages/AdminDokumentEditor";
+import AdminDokumentDetail from "@/pages/AdminDokumentDetail";
+import AdminDokumenteListe from "@/pages/AdminDokumenteListe";
 
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -97,7 +106,20 @@ const AdminRoutes = () => (
     <Route path="/admin/documents/angebote" element={<AdminDocuments />} />
     <Route path="/admin/documents/rechnungen" element={<AdminDocuments />} />
     <Route path="/admin/documents/auftragsbestaetigung" element={<AdminDocuments />} />
+    <Route path="/admin/dokumente" element={<AdminDokumenteListe />} />
+    <Route path="/admin/dokumente/angebote" element={<AdminDokumenteListe />} />
+    <Route path="/admin/dokumente/rechnungen" element={<AdminDokumenteListe />} />
+    <Route path="/admin/dokumente/auftragsbestaetigung" element={<AdminDokumenteListe />} />
+    <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
+    <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
+    <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
     <Route path="/admin/effekte" element={<AdminEffekte />} />
+    <Route path="/admin/pakete" element={<AdminPakete />} />
+    <Route path="/admin/shows" element={<AdminShows />} />
+    <Route path="/admin/produktionen" element={<AdminProduktionen />} />
+    <Route path="/admin/locations" element={<AdminLocations />} />
+    <Route path="/admin/partner" element={<AdminPartner />} />
+    <Route path="/admin/artikel" element={<AdminArtikel />} />
     <Route path="/admin/login" element={<AdminLogin />} />
     <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
     <Route path="*" element={<Navigate to="/admin/customers" replace />} />
@@ -190,7 +212,20 @@ const App = () => (
             <Route path="/admin/documents/angebote" element={<AdminDocuments />} />
             <Route path="/admin/documents/rechnungen" element={<AdminDocuments />} />
             <Route path="/admin/documents/auftragsbestaetigung" element={<AdminDocuments />} />
+            <Route path="/admin/dokumente" element={<AdminDokumenteListe />} />
+            <Route path="/admin/dokumente/angebote" element={<AdminDokumenteListe />} />
+            <Route path="/admin/dokumente/rechnungen" element={<AdminDokumenteListe />} />
+            <Route path="/admin/dokumente/auftragsbestaetigung" element={<AdminDokumenteListe />} />
+            <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
+            <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
+            <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
             <Route path="/admin/effekte" element={<AdminEffekte />} />
+            <Route path="/admin/pakete" element={<AdminPakete />} />
+            <Route path="/admin/shows" element={<AdminShows />} />
+            <Route path="/admin/produktionen" element={<AdminProduktionen />} />
+            <Route path="/admin/locations" element={<AdminLocations />} />
+            <Route path="/admin/partner" element={<AdminPartner />} />
+            <Route path="/admin/artikel" element={<AdminArtikel />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
             <Route path="*" element={<NotFound />} />
