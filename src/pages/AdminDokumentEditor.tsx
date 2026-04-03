@@ -616,7 +616,7 @@ function DocumentPreview(props: PreviewProps) {
       </div>
 
       {/* DIN 5008 Fußzeile – 4 Spalten (immer am Seitenende) */}
-      <div style={{ marginTop: "auto", borderTop: "0.75px solid #c0c0c0", margin: `auto ${M}px 0`, paddingTop: 5, paddingBottom: 8, display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
+      <div style={{ marginTop: "auto", borderTop: "0.75px solid #c0c0c0", margin: `auto ${M}px 8px`, paddingTop: 5, paddingBottom: 6, display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 600 }}>{absenderName}</div>
           {absenderUntertitel && <div>{absenderUntertitel}</div>}
