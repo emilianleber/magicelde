@@ -1096,6 +1096,12 @@ export default function AdminDokumentEditor() {
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [requestSuche, setRequestSuche] = useState("");
+  const [requestSuggestions, setRequestSuggestions] = useState<Record<string, string>[]>([]);
+  const [requestLabel, setRequestLabel] = useState("");
+  const [eventSuche, setEventSuche] = useState("");
+  const [eventSuggestions, setEventSuggestions] = useState<Record<string, string>[]>([]);
+  const [eventLabel, setEventLabel] = useState("");
   const [empfaengerName, setEmpfaengerName] = useState("");
   const [empfaengerFirma, setEmpfaengerFirma] = useState("");
   const [empfaengerAdresse, setEmpfaengerAdresse] = useState("");
@@ -1207,8 +1213,26 @@ export default function AdminDokumentEditor() {
     if (!authChecked || !isNew) return;
     const reqId = searchParams.get("requestId");
     const evId = searchParams.get("eventId");
-    if (reqId) setSelectedRequestId(reqId);
-    if (evId) setSelectedEventId(evId);
+    if (reqId) {
+      setSelectedRequestId(reqId);
+      supabase.from("portal_requests").select("id, name, anlass, datum").eq("id", reqId).maybeSingle().then(({ data: r }) => {
+        if (r) {
+          const lbl = [r.anlass, r.datum ? new Date(r.datum as string).toLocaleDateString("de-DE") : "", r.name].filter(Boolean).join(" · ");
+          setRequestLabel(lbl);
+          setRequestSuche(lbl);
+        }
+      });
+    }
+    if (evId) {
+      setSelectedEventId(evId);
+      supabase.from("portal_events").select("id, title, event_date, location").eq("id", evId).maybeSingle().then(({ data: ev }) => {
+        if (ev) {
+          const lbl = [ev.title, ev.event_date ? new Date(ev.event_date as string).toLocaleDateString("de-DE") : "", ev.location].filter(Boolean).join(" · ");
+          setEventLabel(lbl);
+          setEventSuche(lbl);
+        }
+      });
+    }
   }, [authChecked, isNew, searchParams]);
 
   // Pre-fill customer from URL param ?customerId=... when creating a new document
@@ -1269,6 +1293,25 @@ export default function AdminDokumentEditor() {
       setSelectedCustomerId(doc.customerId || null);
       setSelectedRequestId(doc.requestId || null);
       setSelectedEventId(doc.eventId || null);
+      // Prefill labels for linked request/event
+      if (doc.requestId) {
+        supabase.from("portal_requests").select("id, name, anlass, datum").eq("id", doc.requestId).maybeSingle().then(({ data: r }) => {
+          if (r) {
+            const lbl = [r.anlass, r.datum ? new Date(r.datum as string).toLocaleDateString("de-DE") : "", r.name].filter(Boolean).join(" · ");
+            setRequestLabel(lbl);
+            setRequestSuche(lbl);
+          }
+        });
+      }
+      if (doc.eventId) {
+        supabase.from("portal_events").select("id, title, event_date, location").eq("id", doc.eventId).maybeSingle().then(({ data: ev }) => {
+          if (ev) {
+            const lbl = [ev.title, ev.event_date ? new Date(ev.event_date as string).toLocaleDateString("de-DE") : "", ev.location].filter(Boolean).join(" · ");
+            setEventLabel(lbl);
+            setEventSuche(lbl);
+          }
+        });
+      }
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [authChecked, isNew, id, navigate]);
@@ -1311,6 +1354,62 @@ export default function AdminDokumentEditor() {
     setKontaktSuche(k.name || "");
     setKontaktSuggestions([]);
     setSelectedCustomerId(k.id || null);
+  };
+
+  // Anfrage search
+  const searchRequests = async (q: string) => {
+    setRequestSuche(q);
+    if (q.length < 1) { setRequestSuggestions([]); return; }
+    let query = supabase
+      .from("portal_requests")
+      .select("id, name, firma, anlass, datum")
+      .or(`name.ilike.%${q}%,anlass.ilike.%${q}%,firma.ilike.%${q}%`);
+    if (selectedCustomerId) query = query.eq("customer_id", selectedCustomerId);
+    const { data } = await query.limit(6);
+    setRequestSuggestions((data || []) as Record<string, string>[]);
+  };
+
+  const selectRequest = (r: Record<string, string>) => {
+    setSelectedRequestId(r.id);
+    const label = [r.anlass, r.datum ? new Date(r.datum).toLocaleDateString("de-DE") : "", r.name].filter(Boolean).join(" · ");
+    setRequestLabel(label);
+    setRequestSuche(label);
+    setRequestSuggestions([]);
+  };
+
+  const clearRequest = () => {
+    setSelectedRequestId(null);
+    setRequestLabel("");
+    setRequestSuche("");
+  };
+
+  // Event search
+  const searchEvents = async (q: string) => {
+    setEventSuche(q);
+    if (q.length < 1) { setEventSuggestions([]); return; }
+    let query = supabase
+      .from("portal_events")
+      .select("id, title, event_date, location");
+    if (selectedCustomerId) {
+      query = query.eq("customer_id", selectedCustomerId);
+    }
+    query = query.or(`title.ilike.%${q}%,location.ilike.%${q}%`);
+    const { data } = await query.limit(6);
+    setEventSuggestions((data || []) as Record<string, string>[]);
+  };
+
+  const selectEvent = (e: Record<string, string>) => {
+    setSelectedEventId(e.id);
+    const label = [e.title, e.event_date ? new Date(e.event_date).toLocaleDateString("de-DE") : "", e.location].filter(Boolean).join(" · ");
+    setEventLabel(label);
+    setEventSuche(label);
+    setEventSuggestions([]);
+  };
+
+  const clearEvent = () => {
+    setSelectedEventId(null);
+    setEventLabel("");
+    setEventSuche("");
   };
 
   // Artikel search
@@ -1824,6 +1923,72 @@ body > div:last-child {
                   </div>
                 )}
               </div>
+
+              {/* Anfrage verknüpfen – nur bei Angebot / Auftragsbestätigung */}
+              {(typ === "angebot" || typ === "auftragsbestaetigung") && (
+                <div className="mb-4">
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Anfrage verknüpfen</label>
+                  <div className="relative">
+                    <input
+                      placeholder="Anfrage suchen (Anlass, Name…)"
+                      value={requestSuche}
+                      onChange={(e) => searchRequests(e.target.value)}
+                      className="w-full rounded-lg bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 pr-8"
+                    />
+                    {selectedRequestId && (
+                      <button type="button" onClick={clearRequest} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-lg leading-none">×</button>
+                    )}
+                    {requestSuggestions.length > 0 && (
+                      <div className="absolute z-20 top-full left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl mt-1 overflow-hidden">
+                        {requestSuggestions.map((r) => (
+                          <button key={r.id} type="button" onMouseDown={() => selectRequest(r)} className="w-full text-left px-4 py-2.5 hover:bg-slate-50 text-sm flex items-center justify-between border-b border-slate-50 last:border-0">
+                            <div>
+                              <p className="font-semibold text-slate-800">{r.anlass || "Anfrage"}</p>
+                              <p className="text-xs text-slate-500">{r.name}{r.datum ? ` · ${new Date(r.datum).toLocaleDateString("de-DE")}` : ""}</p>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {selectedRequestId && (
+                    <p className="mt-1 text-[11px] text-emerald-600 font-medium">✓ Verknüpft</p>
+                  )}
+                </div>
+              )}
+
+              {/* Event verknüpfen – nur bei Rechnung / Mahnung */}
+              {(typ === "rechnung" || typ === "mahnung") && (
+                <div className="mb-4">
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Event verknüpfen</label>
+                  <div className="relative">
+                    <input
+                      placeholder="Event suchen (Titel, Ort…)"
+                      value={eventSuche}
+                      onChange={(e) => searchEvents(e.target.value)}
+                      className="w-full rounded-lg bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 pr-8"
+                    />
+                    {selectedEventId && (
+                      <button type="button" onClick={clearEvent} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-lg leading-none">×</button>
+                    )}
+                    {eventSuggestions.length > 0 && (
+                      <div className="absolute z-20 top-full left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl mt-1 overflow-hidden">
+                        {eventSuggestions.map((ev) => (
+                          <button key={ev.id} type="button" onMouseDown={() => selectEvent(ev)} className="w-full text-left px-4 py-2.5 hover:bg-slate-50 text-sm flex items-center justify-between border-b border-slate-50 last:border-0">
+                            <div>
+                              <p className="font-semibold text-slate-800">{ev.title}</p>
+                              <p className="text-xs text-slate-500">{ev.event_date ? new Date(ev.event_date).toLocaleDateString("de-DE") : ""}{ev.location ? ` · ${ev.location}` : ""}</p>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {selectedEventId && (
+                    <p className="mt-1 text-[11px] text-emerald-600 font-medium">✓ Verknüpft</p>
+                  )}
+                </div>
+              )}
 
               <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Anschrift</label>
               {/* Stacked address inputs – look like an address block */}
