@@ -35,6 +35,7 @@ interface AdminSettingsData {
   default_payment_days: number;
   default_offer_days: number;
   default_tax_rate: number;
+  kleinunternehmer: boolean;
   document_template: number;
   company_logo_url: string;
 }
@@ -59,6 +60,7 @@ const DEFAULT_SETTINGS: Omit<AdminSettingsData, "id"> = {
   default_payment_days: 14,
   default_offer_days: 14,
   default_tax_rate: 0,
+  kleinunternehmer: false,
   document_template: 1,
   company_logo_url: "",
 };
@@ -895,6 +897,25 @@ const AdminSettings = () => {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Kleinunternehmerregelung */}
+          <div>
+            <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-3">
+              Umsatzsteuer
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer group w-fit">
+              <div
+                onClick={() => updateSetting("kleinunternehmer", !settings.kleinunternehmer)}
+                className={`relative w-10 h-5 rounded-full transition-colors shrink-0 ${settings.kleinunternehmer ? "bg-foreground" : "bg-border"}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${settings.kleinunternehmer ? "translate-x-5" : ""}`} />
+              </div>
+              <div>
+                <div className="text-sm font-medium group-hover:text-foreground transition-colors">Kleinunternehmerregelung (§ 19 UStG)</div>
+                <div className="text-xs text-muted-foreground">Keine Umsatzsteuer auf Rechnungen ausweisen</div>
+              </div>
+            </label>
           </div>
 
           {/* Document template / layout selection */}

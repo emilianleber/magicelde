@@ -1179,6 +1179,8 @@ export default function AdminDokumentEditor() {
         setAbsenderLand((data.company_country as string) || "Deutschland");
         setLogoUrl((data.company_logo_url as string) || "");
         // Apply saved defaults only for new documents
+        // Kleinunternehmerregelung immer aus Settings laden (gilt für alle Dokumente)
+        setKleinunternehmer(Boolean((data as any).kleinunternehmer));
         if (isNew) {
           if (data.document_template) setSelectedLayout(data.document_template as number);
           if (data.default_tax_rate !== undefined) setMwstSatz(Number(data.default_tax_rate) || 0);
