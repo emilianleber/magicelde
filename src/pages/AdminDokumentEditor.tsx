@@ -457,18 +457,25 @@ function DocumentPreview(props: PreviewProps) {
 
   const leistungPos = positionen.filter(p => p.typ === "leistung").slice(0, 8);
 
-  // ── Logo helper ───────────────────────────────────────────────────────────
-  const Logo = ({ dark = false, posStyle = {} }: { dark?: boolean; posStyle?: React.CSSProperties }) => {
-    const base: React.CSSProperties = { position: "absolute", top: 22, right: M, width: LS, height: LS, ...posStyle };
+  // ── Logo helper (inline – kein eigenes absolute positioning) ─────────────
+  const LogoImg = ({ dark = false, size = LS }: { dark?: boolean; size?: number }) => {
     if (logoUrl) {
-      return <img src={logoUrl} style={{ ...base, objectFit: "contain", borderRadius: 4 }} alt="Logo" />;
+      return <img src={logoUrl} style={{ width: size, height: size, objectFit: "contain", borderRadius: 4, display: "block" }} alt="Logo" />;
     }
     return (
-      <div style={{ ...base, borderRadius: 6, backgroundColor: dark ? "rgba(255,255,255,0.14)" : "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ width: size, height: size, borderRadius: 6, backgroundColor: dark ? "rgba(255,255,255,0.14)" : "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
         <span style={{ fontSize: 8, color: dark ? "rgba(255,255,255,0.45)" : "#ccc", fontWeight: 600 }}>LOGO</span>
       </div>
     );
   };
+
+  // Rechte Kopfspalte: Logo oben, Kontaktinfo darunter (kein Overlap)
+  const RightCol = ({ dark = false, kontC = "#999", top = 22, right = M }: { dark?: boolean; kontC?: string; top?: number; right?: number }) => (
+    <div style={{ position: "absolute", top, right, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+      <LogoImg dark={dark} />
+      <KontBlock c={kontC} />
+    </div>
+  );
 
   // ── Sender text blocks ────────────────────────────────────────────────────
   const AbsBlock = ({ nameC = "#111", subC = "#666", addrC = "#888" }: { nameC?: string; subC?: string; addrC?: string }) => (
@@ -645,12 +652,13 @@ function DocumentPreview(props: PreviewProps) {
   // ── 15 Layout-Köpfe ───────────────────────────────────────────────────────
   switch (layoutId) {
 
-    // 1 – Klassisch: Weißes Blatt, Logo oben rechts (wie Emilians Angebote)
+    // 1 – Klassisch: Weißes Blatt, Logo oben rechts (wie Emilians echte Angebote – kein Kontakt im Kopf)
     case 1: return page("#fff",
       <div style={{ position: "relative", padding: `22px ${M}px 16px`, minHeight: 105, borderBottom: "0.5px solid #e8e8e8" }}>
         <AbsBlock />
-        <Logo />
-        <div style={{ position: "absolute", bottom: 16, right: M }}><KontBlock c="#999" /></div>
+        <div style={{ position: "absolute", top: 22, right: M }}>
+          <LogoImg />
+        </div>
       </div>,
       "#111", "#fff"
     );
@@ -661,8 +669,7 @@ function DocumentPreview(props: PreviewProps) {
         <div style={{ height: 4, backgroundColor: color }} />
         <div style={{ padding: `14px ${M}px 14px`, position: "relative", minHeight: 96 }}>
           <AbsBlock />
-          <Logo />
-          <div style={{ position: "absolute", bottom: 14, right: M }}><KontBlock c="#999" /></div>
+          <RightCol />
         </div>
         <div style={{ height: "0.5px", backgroundColor: "#e8e8e8" }} />
       </div>,
@@ -673,8 +680,7 @@ function DocumentPreview(props: PreviewProps) {
     case 3: return page("#fff",
       <div style={{ backgroundColor: color, padding: `22px ${M}px 18px`, position: "relative", minHeight: 110 }}>
         <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.75)" addrC="rgba(255,255,255,0.55)" />
-        <Logo dark />
-        <div style={{ position: "absolute", bottom: 18, right: M }}><KontBlock c="rgba(255,255,255,0.65)" /></div>
+        <RightCol dark kontC="rgba(255,255,255,0.65)" />
       </div>,
       "#111", "#fff"
     );
@@ -688,7 +694,10 @@ function DocumentPreview(props: PreviewProps) {
             {absenderUntertitel && <div style={{ fontSize: 8.5, letterSpacing: 1, color: "#555", marginTop: 1 }}>{absenderUntertitel.toUpperCase()}</div>}
             <div style={{ fontSize: 8, color: "#666", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
           </div>
-          <KontBlock c="#555" />
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+            <LogoImg size={50} />
+            <KontBlock c="#555" />
+          </div>
         </div>
       </div>,
       "#111", "#fffef8"
@@ -701,10 +710,9 @@ function DocumentPreview(props: PreviewProps) {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
           <div style={{ position: "relative", padding: `22px ${M - 12}px 16px`, minHeight: 105, borderBottom: "0.5px solid #e8e8e8" }}>
             <AbsBlock />
-            {logoUrl
-              ? <img src={logoUrl} style={{ position: "absolute", top: 22, right: M - 12, width: LS, height: LS, objectFit: "contain", borderRadius: 4 }} alt="" />
-              : <div style={{ position: "absolute", top: 22, right: M - 12, width: LS, height: LS, borderRadius: 6, backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 8, color: "#ccc", fontWeight: 600 }}>LOGO</span></div>}
-            <div style={{ position: "absolute", bottom: 16, right: M - 12 }}><KontBlock c="#999" /></div>
+            <div style={{ position: "absolute", top: 22, right: M - 12 }}>
+              <LogoImg />
+            </div>
           </div>
           {renderBody(color, "#fff")}
         </div>
@@ -716,8 +724,7 @@ function DocumentPreview(props: PreviewProps) {
       <div style={{ backgroundColor: "#111", padding: `22px ${M}px 18px`, position: "relative", minHeight: 110 }}>
         <div style={{ width: 24, height: 3, backgroundColor: color, borderRadius: 2, marginBottom: 8 }} />
         <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.55)" addrC="rgba(255,255,255,0.35)" />
-        <Logo dark />
-        <div style={{ position: "absolute", bottom: 18, right: M }}><KontBlock c="rgba(255,255,255,0.4)" /></div>
+        <RightCol dark kontC="rgba(255,255,255,0.4)" />
       </div>,
       "#222", "#fff"
     );
@@ -726,9 +733,7 @@ function DocumentPreview(props: PreviewProps) {
     case 7: return page("#fff",
       <div style={{ padding: `18px ${M}px 14px`, textAlign: "center", minHeight: 105, borderBottom: "0.5px solid #eee" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 5 }}>
-          {logoUrl
-            ? <img src={logoUrl} style={{ width: 50, height: 50, objectFit: "contain", borderRadius: 4 }} alt="" />
-            : <div style={{ width: 50, height: 42, borderRadius: 4, backgroundColor: "#eee" }} />}
+          <LogoImg size={50} />
           <div style={{ textAlign: "left" }}>
             <div style={{ fontSize: 13, fontWeight: 700 }}>{absenderName}</div>
             {absenderUntertitel && <div style={{ fontSize: 9, color: "#999" }}>{absenderUntertitel}</div>}
@@ -753,11 +758,9 @@ function DocumentPreview(props: PreviewProps) {
             {absenderUntertitel && <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)" }}>{absenderUntertitel}</div>}
             <div style={{ fontSize: 8, color: "rgba(255,255,255,0.65)", marginTop: 3 }}>{absenderAdresse}</div>
           </div>
-          <div style={{ textAlign: "right" }}>
-            {logoUrl
-              ? <img src={logoUrl} style={{ width: 55, height: 50, objectFit: "contain", borderRadius: 4, marginBottom: 4, marginLeft: "auto", display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} alt="" />
-              : <div style={{ width: 55, height: 44, borderRadius: 4, backgroundColor: "rgba(0,0,0,0.1)", marginBottom: 4, marginLeft: "auto" }} />}
-            <KontBlock c="#666" />
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+            <LogoImg size={55} />
+            <KontBlock c="#555" />
           </div>
         </div>
       </div>,
@@ -773,8 +776,7 @@ function DocumentPreview(props: PreviewProps) {
         </div>
         {absenderUntertitel && <div style={{ fontSize: 8.5, color: "#bbb", marginLeft: 26 }}>{absenderUntertitel}</div>}
         <div style={{ fontSize: 8, color: "#ddd", marginLeft: 26, marginTop: 2 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-        <Logo />
-        <div style={{ position: "absolute", bottom: 16, right: M }}><KontBlock c="#ccc" /></div>
+        <RightCol kontC="#ccc" />
         <div style={{ marginTop: 14, borderBottom: "0.75px solid #ebebeb" }} />
       </div>,
       "#f2f2f2", "#333"
@@ -784,12 +786,10 @@ function DocumentPreview(props: PreviewProps) {
     case 10: return page("#fffdf8",
       <div style={{ position: "relative", padding: `20px ${M}px 14px`, minHeight: 105 }}>
         <div style={{ height: 0.75, backgroundColor: color, marginBottom: 10 }} />
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
           <AbsBlock nameC="#333" subC="#aaa" addrC="#bbb" />
-          <div style={{ textAlign: "right" }}>
-            {logoUrl
-              ? <img src={logoUrl} style={{ width: 55, height: 46, objectFit: "contain", borderRadius: 4, marginBottom: 4, marginLeft: "auto", display: "block" }} alt="" />
-              : <div style={{ width: 55, height: 42, borderRadius: 4, backgroundColor: "#f0ebe0", marginBottom: 4, marginLeft: "auto" }} />}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+            <LogoImg size={55} />
             <KontBlock c="#aaa" />
           </div>
         </div>
@@ -804,12 +804,7 @@ function DocumentPreview(props: PreviewProps) {
         <div style={{ border: `2px solid ${color}`, flex: 1, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column" }}>
           <div style={{ backgroundColor: color, padding: `18px ${M - 5}px 14px`, position: "relative", minHeight: 100 }}>
             <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.75)" addrC="rgba(255,255,255,0.55)" />
-            <div style={{ position: "absolute", top: 18, right: M - 5, width: LS, height: LS }}>
-              {logoUrl
-                ? <img src={logoUrl} style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 4, backgroundColor: "rgba(255,255,255,0.1)" }} alt="" />
-                : <div style={{ width: "100%", height: "100%", borderRadius: 4, backgroundColor: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 8, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>LOGO</span></div>}
-            </div>
-            <div style={{ position: "absolute", bottom: 14, right: M - 5 }}><KontBlock c="rgba(255,255,255,0.65)" /></div>
+            <RightCol dark kontC="rgba(255,255,255,0.65)" top={18} right={M - 5} />
           </div>
           {renderBody("#111", "#fff")}
         </div>
@@ -823,19 +818,17 @@ function DocumentPreview(props: PreviewProps) {
           <div style={{ fontSize: 8, color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 5 }}>Absender</div>
           <AbsBlock nameC="#111" subC="#666" addrC="#888" />
         </div>
-        <div style={{ flex: 1, padding: "18px 18px 14px", position: "relative" }}>
-          <div style={{ fontSize: 8, color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 5 }}>Kontakt</div>
-          <div style={{ fontSize: 8.5, color: "#555", lineHeight: 1.65 }}>
-            {absenderTel && <div>{absenderTel}</div>}
-            {absenderEmail && <div>{absenderEmail}</div>}
-            {absenderWebsite && <div>{absenderWebsite}</div>}
-            {absenderSteuernummer && <div style={{ marginTop: 4, color: "#888" }}>St.-Nr.: {absenderSteuernummer}</div>}
+        <div style={{ flex: 1, padding: "18px 18px 14px", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div>
+            <div style={{ fontSize: 8, color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 5 }}>Kontakt</div>
+            <div style={{ fontSize: 8.5, color: "#555", lineHeight: 1.65 }}>
+              {absenderTel && <div>{absenderTel}</div>}
+              {absenderEmail && <div>{absenderEmail}</div>}
+              {absenderWebsite && <div>{absenderWebsite}</div>}
+              {absenderSteuernummer && <div style={{ marginTop: 4, color: "#888" }}>St.-Nr.: {absenderSteuernummer}</div>}
+            </div>
           </div>
-          <div style={{ position: "absolute", top: 18, right: 18, width: 55, height: 46 }}>
-            {logoUrl
-              ? <img src={logoUrl} style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 4 }} alt="" />
-              : <div style={{ width: "100%", height: "100%", borderRadius: 4, backgroundColor: "#e8eaed" }} />}
-          </div>
+          <LogoImg size={52} />
         </div>
       </div>,
       color, "#fff"
@@ -854,7 +847,9 @@ function DocumentPreview(props: PreviewProps) {
           {absenderTel && <span>{absenderTel}</span>}
           {absenderEmail && <span>{absenderEmail}</span>}
         </div>
-        <Logo />
+        <div style={{ position: "absolute", top: 22, right: M }}>
+          <LogoImg />
+        </div>
         <div style={{ marginTop: 12, height: 1, backgroundColor: color }} />
       </div>,
       "#111", "#fff"
@@ -866,12 +861,7 @@ function DocumentPreview(props: PreviewProps) {
         <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 2 }}>{absenderUntertitel}</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>{absenderName}</div>
         <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.6)", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-        <div style={{ position: "absolute", top: 22, right: M, width: LS, height: LS }}>
-          {logoUrl
-            ? <img src={logoUrl} style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 4, backgroundColor: "rgba(255,255,255,0.1)" }} alt="" />
-            : <div style={{ width: "100%", height: "100%", borderRadius: 6, backgroundColor: "rgba(255,255,255,0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 8, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>LOGO</span></div>}
-        </div>
-        <div style={{ position: "absolute", bottom: 18, right: M }}><KontBlock c="rgba(255,255,255,0.65)" /></div>
+        <RightCol dark kontC="rgba(255,255,255,0.65)" />
       </div>,
       "#111", "#fff"
     );
