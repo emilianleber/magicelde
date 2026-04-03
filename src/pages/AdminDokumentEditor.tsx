@@ -492,7 +492,7 @@ function DocumentPreview(props: PreviewProps) {
   // Fusstext + Signatur only on LAST page
   const LAST_EXTRA      = FUSS_H + GRUSS_H;
 
-  const CONT_HDR_H = 44;
+  const CONT_HDR_H = 96; // 16px top + 68px logo + 12px bottom
 
   // Budgets
   const P1_SINGLE  = Math.max(24, PAGE_H - HDR_H - DIN_TOP_H - KOPF_H - TBL_HDR_H - PER_PAGE_BOTTOM - LAST_EXTRA);
@@ -756,11 +756,9 @@ function DocumentPreview(props: PreviewProps) {
       globalOffset += chunk.length;
       return (
         <div key={`page-${pageNum}`} style={{ ...PAGE_STYLE, backgroundColor: bg }}>
-          {/* Continuation header: logo only, like reference PDF */}
-          <div style={{ position: "relative", padding: `20px ${M}px 0`, minHeight: 80 }}>
-            <div style={{ position: "absolute", top: 20, right: M }}>
-              <LogoImg />
-            </div>
+          {/* Continuation header: logo only, proper flow so positions start below */}
+          <div style={{ padding: `16px ${M}px 12px`, display: "flex", justifyContent: "flex-end" }}>
+            <LogoImg />
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             {renderPositionsBlock(chunk, thBg, thColor, offset)}
