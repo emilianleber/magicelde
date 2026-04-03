@@ -611,7 +611,7 @@ function DocumentPreview(props: PreviewProps) {
       <div style={{ display: "flex", backgroundColor: thBg, color: thColor, padding: "4px 6px", fontSize: 8, fontWeight: 700 }}>
         <span style={{ width: 28 }}>Pos.</span>
         <span style={{ flex: 4 }}>Beschreibung</span>
-        <span style={{ width: 56, textAlign: "right" }}>Menge</span>
+        <span style={{ width: 68, textAlign: "right" }}>Menge</span>
         <span style={{ width: 66, textAlign: "right" }}>Einzelpreis</span>
         <span style={{ width: 72, textAlign: "right" }}>Gesamtpreis</span>
       </div>
@@ -625,7 +625,7 @@ function DocumentPreview(props: PreviewProps) {
               <div style={{ fontWeight: pos.bezeichnung ? 600 : 400, color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</div>
               {pos.beschreibung && <div style={{ fontSize: 7.5, color: "#777", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>{pos.beschreibung}</div>}
             </div>
-            <span style={{ width: 56, textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit?.substring(0, 5)}</span>
+            <span style={{ width: 68, textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit}</span>
             <span style={{ width: 66, textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
             <span style={{ width: 72, textAlign: "right", fontWeight: 600, color: "#111" }}>{fmt(pos.gesamt)}</span>
           </div>
@@ -682,10 +682,10 @@ function DocumentPreview(props: PreviewProps) {
     const s = calcSummen(chunk, mwstSatz, kleinunternehmer, rabattProzent);
     const rowBase: React.CSSProperties = {
       display: "flex", justifyContent: "space-between", alignItems: "center",
-      padding: `8px ${M}px`, fontSize: 9.5,
+      padding: "7px 8px", fontSize: 9.5,
     };
     return (
-      <div style={{ marginTop: 6, borderTop: "0.75px solid #d0d0d0" }}>
+      <div style={{ margin: `4px ${M}px 0` }}>
         {/* Netto */}
         <div style={{ ...rowBase, backgroundColor: "#f0f0f0" }}>
           <span style={{ color: "#333" }}>Gesamtbetrag netto</span>
@@ -700,7 +700,7 @@ function DocumentPreview(props: PreviewProps) {
         )}
         {/* §19 */}
         {kleinunternehmer && (
-          <div style={{ padding: `6px ${M}px`, fontSize: 9.5, color: "#555" }}>
+          <div style={{ padding: "6px 8px", fontSize: 9.5, color: "#555" }}>
             Umsatzsteuer nicht erhoben gemäß §19UStG.
           </div>
         )}
@@ -1868,7 +1868,7 @@ ${pagesHtml}
 
           {/* Table header */}
           <div className="grid items-center text-sm font-medium text-slate-500 px-2 pb-2 pt-1"
-            style={{ gridTemplateColumns: "32px 1fr 65px 95px 185px 88px 120px 120px 40px" }}>
+            style={{ gridTemplateColumns: "32px 1fr 80px 95px 185px 88px 120px 120px 40px" }}>
             <span />
             <span>Produkt oder Service</span>
             <span className="col-span-2">Menge</span>
@@ -1897,7 +1897,7 @@ ${pagesHtml}
               >
                 {/* Main grid row */}
                 <div className="grid items-center gap-x-2 py-2 px-2"
-                  style={{ gridTemplateColumns: "32px 1fr 65px 95px 185px 88px 120px 120px 40px" }}>
+                  style={{ gridTemplateColumns: "32px 1fr 80px 95px 185px 88px 120px 120px 40px" }}>
 
                   {/* Nr / Opt. */}
                   <span className="text-sm text-center select-none text-slate-400">
@@ -1930,11 +1930,31 @@ ${pagesHtml}
                   </div>
 
                   {/* Qty */}
-                  <input
-                    type="number" value={pos.menge} min={0} step="0.01"
-                    onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
-                    className={`w-full text-right px-2.5 py-2 ${inp}`}
-                  />
+                  <div className={`flex items-center overflow-hidden focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 ${inp}`}>
+                    <input
+                      type="number" value={pos.menge} min={0} step="0.01"
+                      onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
+                      className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <div className="flex flex-col border-l border-slate-200 shrink-0">
+                      <button
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => updatePosition(pos.id, { menge: Math.round((pos.menge + 1) * 100) / 100 })}
+                        className="px-1 h-[18px] flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                      >
+                        <ChevronUp className="w-2.5 h-2.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => updatePosition(pos.id, { menge: Math.max(0, Math.round((pos.menge - 1) * 100) / 100) })}
+                        className="px-1 h-[18px] flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors border-t border-slate-200"
+                      >
+                        <ChevronDown className="w-2.5 h-2.5" />
+                      </button>
+                    </div>
+                  </div>
 
                   {/* Einheit */}
                   <select
