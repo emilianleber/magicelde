@@ -673,30 +673,47 @@ function DocumentPreview(props: PreviewProps) {
     </div>
   );
 
-  // Summen – erscheint auf JEDER Seite
-  const renderSummen = () => (
-    <div style={{ padding: `5px ${M}px 4px`, display: "flex", justifyContent: "flex-end" }}>
-      <div style={{ minWidth: 220, fontSize: 9 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
-          <span>Gesamtbetrag netto</span>
-          <span style={{ color: "#111" }}>{fmt(summen.netto)}</span>
+  // Hilfsfunktion: Betrag als "1.041,75 EUR"
+  const fmtEur = (n: number) =>
+    n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " EUR";
+
+  // Summen – erscheint auf JEDER Seite (volle Breite, wie Referenz-PDF)
+  const renderSummen = () => {
+    const rowStyle = (bg: boolean): React.CSSProperties => ({
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: `4px ${M}px`,
+      backgroundColor: bg ? "#f2f2f2" : "transparent",
+      fontSize: 9.5,
+    });
+    return (
+      <div style={{ marginTop: 6 }}>
+        {/* Netto */}
+        <div style={rowStyle(true)}>
+          <span style={{ color: "#333" }}>Gesamtbetrag netto</span>
+          <span style={{ color: "#111" }}>{fmtEur(summen.netto)}</span>
         </div>
+        {/* MwSt oder §19 */}
         {!kleinunternehmer && mwstSatz > 0 && (
-          <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
-            <span>zzgl. {mwstSatz}% MwSt.</span>
-            <span style={{ color: "#111" }}>{fmt(summen.mwstBetrag)}</span>
+          <div style={rowStyle(false)}>
+            <span style={{ color: "#555" }}>zzgl. {mwstSatz}% MwSt.</span>
+            <span style={{ color: "#111" }}>{fmtEur(summen.mwstBetrag)}</span>
           </div>
         )}
         {kleinunternehmer && (
-          <div style={{ fontSize: 7.5, color: "#999", lineHeight: 1.4, marginBottom: 3 }}>Umsatzsteuer nicht erhoben gemäß §19 UStG.</div>
+          <div style={{ padding: `3px ${M}px`, fontSize: 8.5, color: "#555" }}>
+            Umsatzsteuer nicht erhoben gemäß §19UStG.
+          </div>
         )}
-        <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #111", paddingTop: 3, marginTop: 2, fontWeight: 700, fontSize: 10.5 }}>
+        {/* Brutto */}
+        <div style={{ ...rowStyle(true), fontWeight: 700, fontSize: 10 }}>
           <span>Gesamtbetrag brutto</span>
-          <span style={{ color }}>{fmt(summen.brutto)}</span>
+          <span>{fmtEur(summen.brutto)}</span>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // Fußtext + Signatur – nur auf der letzten Seite
   const renderDINBottom = (pageNum: number) => (
