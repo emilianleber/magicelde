@@ -118,24 +118,36 @@ export default function AdminDokumenteListe() {
 
   const handleStatusChange = async (e: React.MouseEvent, doc: Dokument, status: DokumentStatus) => {
     e.stopPropagation();
-    await dokumenteService.setStatus(doc.id, status);
-    setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status } : d));
+    try {
+      await dokumenteService.setStatus(doc.id, status);
+      setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status } : d));
+    } catch (err: unknown) {
+      alert("Fehler beim Statuswechsel: " + ((err as any)?.message || String(err)));
+    }
     setActionId(null);
   };
 
   const handleStornieren = async (e: React.MouseEvent, doc: Dokument) => {
     e.stopPropagation();
     if (!confirm(`${TYP_LABEL[doc.typ]} ${doc.nummer} stornieren?`)) return;
-    await dokumenteService.setStatus(doc.id, "storniert");
-    setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status: "storniert" as DokumentStatus } : d));
+    try {
+      await dokumenteService.setStatus(doc.id, "storniert");
+      setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status: "storniert" as DokumentStatus } : d));
+    } catch (err: unknown) {
+      alert("Fehler beim Stornieren: " + ((err as any)?.message || String(err)));
+    }
     setActionId(null);
   };
 
   const handleDelete = async (e: React.MouseEvent, doc: Dokument) => {
     e.stopPropagation();
     if (!confirm(`${TYP_LABEL[doc.typ]} ${doc.nummer} unwiderruflich löschen?`)) return;
-    await dokumenteService.delete(doc.id);
-    setDokumente(prev => prev.filter(d => d.id !== doc.id));
+    try {
+      await dokumenteService.delete(doc.id);
+      setDokumente(prev => prev.filter(d => d.id !== doc.id));
+    } catch (err: unknown) {
+      alert("Fehler beim Löschen: " + ((err as any)?.message || String(err)));
+    }
     setActionId(null);
   };
 

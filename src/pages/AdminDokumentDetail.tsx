@@ -140,7 +140,8 @@ export default function AdminDokumentDetail() {
   useEffect(() => {
     if (!doc || !searchParams.get("send")) return;
     openSendPanel();
-  }, [doc]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doc, searchParams]);
 
   const handleStatusChange = async (status: DokumentStatus) => {
     if (!id) return;
@@ -261,7 +262,7 @@ export default function AdminDokumentDetail() {
     pdf.text(kopfL, ML, y); y += kopfL.length * 4.5 + 6;
 
     // Positionen-Tabelle
-    const pos = d.positionen.filter(p => p.typ === "leistung" || p.typ === "produkt");
+    const pos = (d.positionen ?? []).filter(p => p.typ === "leistung" || p.typ === "produkt");
     pdf.setFillColor(17, 17, 17); pdf.rect(ML, y, CW, 6, "F");
     pdf.setTextColor(255, 255, 255); pdf.setFontSize(7.5); pdf.setFont("helvetica", "bold");
     pdf.text("Pos.", ML + 2, y + 4);
@@ -297,7 +298,7 @@ export default function AdminDokumentDetail() {
     pdf.setFontSize(8.5);
     pdf.setFont("helvetica", "normal"); pdf.setTextColor(100, 100, 100);
     pdf.text("Gesamtbetrag netto", sumX, y); pdf.setTextColor(17, 17, 17); pdf.text(fmtDE(d.netto), RIGHT, y, { align: "right" }); y += 4.5;
-    d.mwstGruppen.filter(g => g.satz > 0).forEach(g => {
+    (d.mwstGruppen ?? []).filter(g => g.satz > 0).forEach(g => {
       pdf.setTextColor(100, 100, 100); pdf.text(`zzgl. ${g.satz}% MwSt.`, sumX, y);
       pdf.setTextColor(17, 17, 17); pdf.text(fmtDE(g.steuer), RIGHT, y, { align: "right" }); y += 4.5;
     });
@@ -372,6 +373,8 @@ export default function AdminDokumentDetail() {
     try {
       const pdf = generatePdf(doc);
       pdf.save(`${doc.nummer}.pdf`);
+    } catch (e: unknown) {
+      setSendMsg({ type: "err", text: "PDF-Fehler: " + ((e as any)?.message || String(e)) });
     } finally { setSendLoading(null); }
   };
 

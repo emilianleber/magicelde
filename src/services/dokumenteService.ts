@@ -302,7 +302,9 @@ export const dokumenteService = {
       if (posErr) throw posErr;
     }
 
-    return (await this.getById(inserted.id))!;
+    const created = await this.getById(inserted.id);
+    if (!created) throw new Error("Dokument nach Erstellung nicht gefunden (id=" + inserted.id + ")");
+    return created;
   },
 
   // ── Update ────────────────────────────────────────────────────────────────
@@ -371,7 +373,9 @@ export const dokumenteService = {
 
     const { error } = await supabase.from("portal_documents").update(patch).eq("id", id);
     if (error) throw error;
-    return (await this.getById(id))!;
+    const updated = await this.getById(id);
+    if (!updated) throw new Error("Dokument nach Update nicht gefunden (id=" + id + ")");
+    return updated;
   },
 
   // ── Delete ────────────────────────────────────────────────────────────────
