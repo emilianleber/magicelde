@@ -363,6 +363,40 @@ const Kundenportal = () => {
         }
       }
 
+      // Anfragen laden (wird auch als Fallback für Profilname genutzt)
+      const { data: requestsData } = await supabase
+        .from("portal_requests").select("*").eq("email", user.email).order("created_at", { ascending: false });
+      if (requestsData) {
+        setRequests(requestsData);
+        if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id);
+      }
+
+      // Kein portal_customers Eintrag → aus Anfrage-Daten anlegen
+      if (!cust && requestsData && requestsData.length > 0) {
+        const req = requestsData[0] as any;
+        const capW = (s?: string | null) => s ? s.replace(/\b\w/g, (c: string) => c.toUpperCase()) : null;
+        const { data: created } = await supabase.from("portal_customers").insert({
+          name: capW(req.name) || user.email!.split("@")[0],
+          email: user.email!,
+          ...(req.firma ? { company: req.firma } : {}),
+          ...(req.phone ? { phone: req.phone } : {}),
+        }).select("*").maybeSingle();
+        if (created) cust = created;
+      }
+
+      // Wenn Eintrag gefunden/erstellt: Name befüllen falls leer
+      if (cust && !cust.name && requestsData && requestsData.length > 0) {
+        const req = requestsData[0] as any;
+        const capW = (s?: string | null) => s ? s.replace(/\b\w/g, (c: string) => c.toUpperCase()) : null;
+        const newName = capW(req.name);
+        if (newName) {
+          const { data: updated } = await supabase.from("portal_customers")
+            .update({ name: newName, ...(req.firma && !cust.company ? { company: req.firma } : {}), ...(req.phone && !cust.phone ? { phone: req.phone } : {}) })
+            .eq("id", cust.id).select("*").single();
+          if (updated) cust = updated;
+        }
+      }
+
       if (cust) {
         setCustomer(cust);
         const [eventsRes, docsRes, msgsRes, imapRes] = await Promise.all([
@@ -383,13 +417,6 @@ const Kundenportal = () => {
             .order("created_at", { ascending: false });
           if (crData) setChangeRequests(crData);
         }
-      }
-
-      const { data: requestsData } = await supabase
-        .from("portal_requests").select("*").eq("email", user.email).order("created_at", { ascending: false });
-      if (requestsData) {
-        setRequests(requestsData);
-        if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id);
       }
 
       setLoading(false);
@@ -539,7 +566,9 @@ const Kundenportal = () => {
 
   const capWords = (s?: string | null) =>
     s ? s.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/_/g, " ") : "";
-  const displayName = capWords(customer?.name) || "Kunde";
+  // Fallback: Name aus neuester Anfrage wenn Profil noch leer
+  const latestReqName = (requests[0] as any)?.name;
+  const displayName = capWords(customer?.name) || capWords(latestReqName) || "Kunde";
   const firstName = displayName.split(" ")[0];
   const kundennummer = customer?.kundennummer || "";
   const currentRequest = requests[0] || null;
