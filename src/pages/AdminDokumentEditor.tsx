@@ -1703,11 +1703,11 @@ export default function AdminDokumentEditor() {
 
           {/* Table header */}
           <div className="grid text-[10px] font-semibold uppercase tracking-wider text-muted-foreground pb-2 px-1 border-b border-border/20"
-            style={{ gridTemplateColumns: "28px 1fr 90px 100px 70px 80px 90px 32px" }}>
+            style={{ gridTemplateColumns: "24px 1fr 100px 120px 64px 90px 100px 28px" }}>
             <span />
             <span>Produkt oder Service</span>
             <span className="text-right">Menge</span>
-            <span className="text-right">Preis ({bruttoEingabe ? "brutto" : "netto"})</span>
+            <span className="text-right">Preis ({bruttoEingabe ? "Brutto" : "Netto"})</span>
             <span className="text-right">USt.</span>
             <span className="text-right">Rabatt</span>
             <span className="text-right">Betrag</span>
@@ -1719,7 +1719,7 @@ export default function AdminDokumentEditor() {
             <div key={pos.id} className="border-b border-border/10 last:border-0">
               {/* Main row */}
               <div className="grid items-start gap-2 py-2.5 px-1"
-                style={{ gridTemplateColumns: "28px 1fr 90px 100px 70px 80px 90px 32px" }}>
+                style={{ gridTemplateColumns: "24px 1fr 100px 120px 64px 90px 100px 28px" }}>
                 {/* Nr */}
                 <span className="text-xs text-muted-foreground pt-2 text-center">{idx + 1}.</span>
 
@@ -1754,35 +1754,32 @@ export default function AdminDokumentEditor() {
                   />
                 </div>
 
-                {/* Menge + Einheit */}
-                <div className="flex gap-1 items-center">
+                {/* Menge + Einheit — vertikal gestapelt */}
+                <div className="flex flex-col gap-1">
                   <input type="number" value={pos.menge} onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value)||0 })}
-                    className="w-14 text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
+                    className="w-full text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
                   <select value={pos.einheit} onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
-                    className="flex-1 rounded-lg border border-border/20 px-1 py-1.5 text-xs bg-background focus:outline-none">
+                    className="w-full rounded-lg border border-border/20 px-1.5 py-1 text-xs bg-background focus:outline-none">
                     {["pauschal","Std.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
                   </select>
                 </div>
 
                 {/* Preis */}
-                <div className="flex items-center justify-end gap-1">
-                  <input type="number" value={pos.einzelpreis} step="0.01" onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value)||0 })}
-                    className="w-full text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
-                  <span className="text-xs text-muted-foreground shrink-0">EUR</span>
-                </div>
+                <input type="number" value={pos.einzelpreis} step="0.01" onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value)||0 })}
+                  className="w-full text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
 
                 {/* MwSt pro Position */}
                 <select value={pos.mwstSatz} onChange={(e) => updatePosition(pos.id, { mwstSatz: parseFloat(e.target.value) })}
-                  className="rounded-lg border border-border/20 px-1 py-1.5 text-xs bg-background focus:outline-none text-right">
+                  className="w-full rounded-lg border border-border/20 px-1.5 py-1.5 text-xs bg-background focus:outline-none">
                   {[0,7,19].map((r) => <option key={r} value={r}>{r}%</option>)}
                 </select>
 
                 {/* Rabatt */}
-                <div className="flex items-center justify-end gap-0.5">
+                <div className="flex items-center gap-0.5">
                   <input type="number" value={pos.rabattProzent ?? ""} placeholder="0"
                     onChange={(e) => updatePosition(pos.id, { rabattProzent: e.target.value ? parseFloat(e.target.value) : null })}
-                    className="w-12 text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
-                  <span className="text-xs text-muted-foreground">%</span>
+                    className="w-full text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
+                  <span className="text-xs text-muted-foreground shrink-0">%</span>
                 </div>
 
                 {/* Betrag */}
