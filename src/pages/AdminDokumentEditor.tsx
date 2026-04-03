@@ -1235,7 +1235,11 @@ export default function AdminDokumentEditor() {
         setMessage("Gespeichert");
       }
     } catch (e: unknown) {
-      setMessage("Fehler: " + (e instanceof Error ? e.message : String(e)));
+      const msg = e instanceof Error
+        ? e.message
+        : (e as any)?.message || (e as any)?.details || JSON.stringify(e);
+      setMessage("Fehler: " + msg);
+      console.error("Dokument speichern Fehler:", e);
     } finally {
       setSaving(false);
     }
