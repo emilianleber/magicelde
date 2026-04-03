@@ -5,7 +5,7 @@ import { dokumenteService } from "@/services/dokumenteService";
 import type { DokumentTyp } from "@/types/dokumente";
 import type { Artikel } from "@/types/dokumente";
 import { ArrowLeft, ChevronDown, ChevronUp, Eye, Printer, Save, Send, Trash2, X } from "lucide-react";
-import RichTextEditor, { textToHtml } from "@/components/admin/RichTextEditor";
+import RichTextEditor, { textToHtml, htmlToText } from "@/components/admin/RichTextEditor";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -600,8 +600,9 @@ function DocumentPreview(props: PreviewProps) {
         <div style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>{typLabel}{nummer ? ` ${nummer}` : ""}</div>
       </div>
       {kopftext && (
-        <div style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}
-          dangerouslySetInnerHTML={{ __html: textToHtml(kopftext) }} />
+        <div style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55, whiteSpace: "pre-wrap" }}>
+          {htmlToText(kopftext)}
+        </div>
       )}
     </>
   );
@@ -717,8 +718,9 @@ function DocumentPreview(props: PreviewProps) {
   const renderDINBottom = (pageNum: number) => (
     <>
       {fusstext && (
-        <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.65 }}
-          dangerouslySetInnerHTML={{ __html: textToHtml(fusstext) }} />
+        <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.65, whiteSpace: "pre-wrap" }}>
+          {htmlToText(fusstext)}
+        </div>
       )}
       <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
         <div style={{ fontWeight: 700 }}>{absenderName}</div>
@@ -1496,59 +1498,74 @@ export default function AdminDokumentEditor() {
     } finally { setSaving(false); }
   };
 
-  // Drucken / PDF: DOM-Nodes direkt per importNode übertragen – kein HTML-Parsing
+  // Drucken / PDF: Clone im selben Dokument, dann window.print() mit @media print
   const handlePrintPreview = () => {
     const el = document.getElementById("doc-preview-print");
     if (!el) return;
-    const win = window.open("", "_blank");
-    if (!win) return;
-    const doc = win.document;
 
-    // Basis-Dokument aufbauen
-    doc.open();
-    doc.write("<!DOCTYPE html><html><head></head><body></body></html>");
-    doc.close();
+    // Alten Print-Container entfernen (falls noch vorhanden)
+    document.getElementById("__printWrap")?.remove();
+    document.getElementById("__printCSS")?.remove();
 
-    // Fonts + Reset
-    doc.head.innerHTML = `
-      <meta charset="UTF-8">
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=block" rel="stylesheet">
-    `;
-    const style = doc.createElement("style");
-    style.textContent = `
-      * { margin:0; padding:0; box-sizing:border-box; }
-      html, body { background:#fff; font-family:Inter,system-ui,sans-serif; }
-      .a4-page { width:595px; height:842px; overflow:hidden; display:block; background:#fff; }
-      @page { size:A4 portrait; margin:0; }
-      @media print {
-        * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
-        .a4-page { page-break-after:always; page-break-inside:avoid; zoom:1.3341; }
-      }
-    `;
-    doc.head.appendChild(style);
+    // Print-Container im selben Dokument erstellen
+    const wrap = document.createElement("div");
+    wrap.id = "__printWrap";
 
-    // Jede Vorschau-Seite direkt als DOM-Node übertragen (kein outerHTML / document.write-Parsing)
     Array.from(el.children).forEach((pageEl) => {
-      const imported = doc.importNode(pageEl, true) as HTMLElement;
-      imported.style.width = "595px";
-      imported.style.height = "842px";
-      imported.style.removeProperty("aspect-ratio");
-      imported.style.overflow = "hidden";
-      const wrapper = doc.createElement("div");
-      wrapper.className = "a4-page";
-      wrapper.appendChild(imported);
-      doc.body.appendChild(wrapper);
+      const clone = pageEl.cloneNode(true) as HTMLElement;
+      // Explizite Pixelmaße setzen, aspect-ratio entfernen
+      clone.style.cssText = clone.style.cssText
+        .replace(/aspect-ratio\s*:[^;]+;?/gi, "")
+        .replace(/width\s*:\s*[^;]+;?/gi, "width:595px;")
+        .replace(/height\s*:\s*[^;]+;?/gi, "");
+      clone.style.width = "595px";
+      clone.style.height = "842px";
+      clone.style.overflow = "hidden";
+      clone.style.display = "flex";
+      clone.style.flexDirection = "column";
+      wrap.appendChild(clone);
     });
 
-    // Drucken nach Fontladen
-    const doPrint = () => setTimeout(() => win.print(), 300);
-    if ((doc as any).fonts?.ready) {
-      (doc as any).fonts.ready.then(doPrint);
-    } else {
-      setTimeout(doPrint, 1200);
-    }
+    document.body.appendChild(wrap);
+
+    // Print-CSS injizieren
+    const style = document.createElement("style");
+    style.id = "__printCSS";
+    style.textContent = `
+      @media print {
+        @page { size: A4 portrait; margin: 0; }
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        html, body { visibility: hidden !important; }
+        #__printWrap { visibility: visible !important; }
+        #__printWrap * { visibility: visible !important; }
+        #__printWrap {
+          position: fixed !important;
+          top: 0 !important; left: 0 !important;
+          display: block !important;
+        }
+        #__printWrap > * {
+          display: flex !important;
+          flex-direction: column !important;
+          width: 595px !important;
+          height: 842px !important;
+          overflow: hidden !important;
+          page-break-after: always !important;
+          break-after: page !important;
+          zoom: 1.3341;
+        }
+      }
+      @media screen {
+        #__printWrap { display: none !important; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    window.print();
+
+    setTimeout(() => {
+      document.getElementById("__printWrap")?.remove();
+      document.getElementById("__printCSS")?.remove();
+    }, 4000);
   };
 
   const typLabel = TYP_LABEL[typ] || typ;
