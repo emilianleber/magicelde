@@ -1787,13 +1787,13 @@ export default function AdminDokumentEditor() {
           </div>
           <div>
 
-          {/* Table header */}
-          <div className="grid items-center text-[11px] font-semibold uppercase tracking-wider text-slate-400 px-3 py-2.5 bg-slate-50 rounded-lg mb-2"
-            style={{ gridTemplateColumns: "24px 1fr 145px 155px 76px 105px 115px 36px" }}>
+          {/* Table header — 9 cols: nr | bezeichnung | qty | unit | preis | ust | rabatt | betrag | del */}
+          <div className="grid items-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 px-2 py-2 mb-1"
+            style={{ gridTemplateColumns: "32px 1fr 56px 88px 160px 80px 100px 110px 36px" }}>
             <span />
             <span>Produkt oder Service</span>
-            <span>Menge</span>
-            <span>Preis <span className="font-normal">({bruttoEingabe ? "brutto" : "netto"})</span></span>
+            <span className="col-span-2">Menge</span>
+            <span>Preis <span className="normal-case font-normal">({bruttoEingabe ? "brutto" : "netto"})</span></span>
             <span>USt.</span>
             <span>Rabatt</span>
             <span className="text-right">Betrag</span>
@@ -1805,6 +1805,10 @@ export default function AdminDokumentEditor() {
             const isActive = activePositionId === pos.id;
             const showExtra = isActive || !!pos.beschreibung;
             const showOptional = isActive || !!pos.optional;
+
+            // shared pill input style
+            const pill = "rounded-full border border-slate-200 bg-white text-sm focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+
             return (
               <div
                 key={pos.id}
@@ -1813,13 +1817,13 @@ export default function AdminDokumentEditor() {
                 onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setActivePositionId(null); }}
               >
                 {/* Main grid row */}
-                <div className="grid items-center gap-x-3 py-2.5 px-3"
-                  style={{ gridTemplateColumns: "28px 1fr 145px 155px 76px 105px 115px 36px" }}>
+                <div className="grid items-center gap-x-2 py-2 px-2"
+                  style={{ gridTemplateColumns: "32px 1fr 56px 88px 160px 80px 100px 110px 36px" }}>
 
-                  {/* Nr / Opt. indicator */}
-                  <span className="text-[11px] font-semibold text-center select-none leading-tight">
+                  {/* Nr / Opt. */}
+                  <span className="text-[11px] font-semibold text-center select-none">
                     {pos.optional
-                      ? <span className="text-blue-400">Opt.</span>
+                      ? <span className="text-blue-400 text-[10px]">Opt.</span>
                       : <span className="text-slate-400">{idx + 1}.</span>
                     }
                   </span>
@@ -1831,7 +1835,7 @@ export default function AdminDokumentEditor() {
                       value={artikelSuche[pos.id] ?? pos.bezeichnung}
                       onChange={(e) => searchArtikel(pos.id, e.target.value)}
                       onBlur={() => { const q = artikelSuche[pos.id]; if (q !== undefined && q !== pos.bezeichnung) updatePosition(pos.id, { bezeichnung: q }); }}
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                      className={`w-full px-3.5 py-2 ${pill}`}
                     />
                     {(artikelSuggestions[pos.id] || []).length > 0 && (
                       <div className="absolute z-50 top-full left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl mt-1 overflow-hidden">
@@ -1849,80 +1853,76 @@ export default function AdminDokumentEditor() {
                     )}
                   </div>
 
-                  {/* Menge + Einheit */}
-                  <div className="flex items-center gap-1.5">
-                    <input
-                      type="number" value={pos.menge} min={0} step="0.01"
-                      onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
-                      className="w-16 text-right rounded-lg border border-slate-200 px-2 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-100"
-                    />
-                    <select
-                      value={pos.einheit}
-                      onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
-                      className="flex-1 rounded-lg border border-slate-200 px-1.5 py-2 text-sm bg-white focus:outline-none"
-                    >
-                      {["pauschal","Std.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
-                    </select>
-                  </div>
+                  {/* Qty */}
+                  <input
+                    type="number" value={pos.menge} min={0} step="0.01"
+                    onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
+                    className={`w-full text-right px-2.5 py-2 ${pill}`}
+                  />
+
+                  {/* Einheit */}
+                  <select
+                    value={pos.einheit}
+                    onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
+                    className={`w-full px-2.5 py-2 ${pill} pr-1`}
+                  >
+                    {["pauschal","Std.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
+                  </select>
 
                   {/* Preis mit EUR-Suffix */}
-                  <div className="flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden">
+                  <div className="flex items-center rounded-full border border-slate-200 bg-white overflow-hidden focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100">
                     <input
                       type="number" value={pos.einzelpreis} step="0.01" min={0}
                       onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value) || 0 })}
-                      className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0"
+                      className="flex-1 text-right px-3 py-2 text-sm bg-transparent focus:outline-none min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
-                    <span className="pr-2.5 text-sm text-slate-400 shrink-0">EUR</span>
+                    <span className="pr-3.5 text-sm text-slate-400 shrink-0 font-medium">EUR</span>
                   </div>
 
-                  {/* USt. – disabled/grayed when Kleinunternehmer */}
+                  {/* USt. */}
                   <select
                     value={pos.mwstSatz}
                     onChange={(e) => updatePosition(pos.id, { mwstSatz: parseFloat(e.target.value) })}
                     disabled={kleinunternehmer}
-                    className={`w-full rounded-lg border px-2 py-2 text-sm focus:outline-none transition-colors ${
-                      kleinunternehmer
-                        ? "border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed"
-                        : "border-slate-200 bg-white"
-                    }`}
+                    className={`w-full px-2.5 py-2 ${pill} ${kleinunternehmer ? "border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed" : ""}`}
                   >
                     {[0, 7, 19].map((r) => <option key={r} value={r}>{r}%</option>)}
                   </select>
 
                   {/* Rabatt mit %-Suffix */}
-                  <div className="flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden">
+                  <div className="flex items-center rounded-full border border-slate-200 bg-white overflow-hidden focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100">
                     <input
                       type="number" value={pos.rabattProzent ?? ""} placeholder="0" min={0} max={100}
                       onChange={(e) => updatePosition(pos.id, { rabattProzent: e.target.value ? parseFloat(e.target.value) : null })}
-                      className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0"
+                      className="flex-1 text-right pl-3 py-2 text-sm bg-transparent focus:outline-none min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
-                    <span className="pr-2.5 text-sm text-slate-400 shrink-0">%</span>
+                    <span className="pr-3.5 text-sm text-slate-400 shrink-0">%</span>
                   </div>
 
                   {/* Betrag */}
-                  <div className="text-right font-semibold text-sm tabular-nums text-slate-800">
+                  <div className="text-right font-semibold text-sm tabular-nums text-slate-800 pr-1">
                     {pos.gesamt.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
                   </div>
 
                   {/* Delete */}
                   <button
                     onClick={() => removePosition(pos.id)}
-                    className="flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors w-8 h-8 rounded-lg hover:bg-red-50"
+                    className="flex items-center justify-center text-slate-300 hover:text-red-400 transition-colors w-8 h-8 rounded-full hover:bg-red-50"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
-                {/* Beschreibung + Optional – below main row, only when active or has content */}
+                {/* Beschreibung + Optional – below main row */}
                 {(showExtra || showOptional) && (
-                  <div className="px-3 pb-2.5" style={{ paddingLeft: "calc(28px + 0.75rem + 0.75rem)" }}>
+                  <div className="pb-2.5 px-2" style={{ paddingLeft: "calc(32px + 0.5rem + 0.5rem)" }}>
                     {showExtra && (
                       <textarea
                         placeholder="Beschreibung (optional)…"
                         value={pos.beschreibung}
                         onChange={(e) => updatePosition(pos.id, { beschreibung: e.target.value })}
-                        rows={3}
-                        className="w-full rounded-lg border border-slate-100 px-3 py-1.5 text-xs text-slate-500 bg-slate-50 focus:outline-none focus:border-slate-200 resize-y"
+                        rows={2}
+                        className="w-full rounded-xl border border-slate-100 px-3.5 py-2 text-xs text-slate-500 bg-slate-50/80 focus:outline-none focus:border-slate-200 resize-y"
                       />
                     )}
                     {showOptional && (
