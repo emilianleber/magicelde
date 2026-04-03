@@ -692,20 +692,20 @@ function DocumentPreview(props: PreviewProps) {
     return (
       <div style={{ borderTop: "1px solid #d8d8d8", marginTop: 4 }}>
         {/* Netto */}
-        <div style={row(true)}>
+        <div style={{ ...row(true), borderBottom: "3px solid #fff" }}>
           <span style={{ color: "#333" }}>Gesamtbetrag netto</span>
           <span style={{ color: "#111" }}>{fmtEur(s.netto)}</span>
         </div>
         {/* MwSt */}
         {!kleinunternehmer && mwstSatz > 0 && (
-          <div style={row(false)}>
+          <div style={{ ...row(false), borderBottom: "3px solid #fff" }}>
             <span style={{ color: "#555" }}>zzgl. {mwstSatz}% MwSt.</span>
             <span style={{ color: "#111" }}>{fmtEur(s.mwstBetrag)}</span>
           </div>
         )}
         {/* §19 */}
         {kleinunternehmer && (
-          <div style={{ padding: `5px ${M}px`, fontSize: 9.5, color: "#555" }}>
+          <div style={{ padding: `5px ${M}px`, fontSize: 9.5, color: "#555", borderBottom: "3px solid #fff" }}>
             Umsatzsteuer nicht erhoben gemäß §19UStG.
           </div>
         )}
