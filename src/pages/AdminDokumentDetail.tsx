@@ -526,7 +526,8 @@ body > div:last-child {
         });
       }
 
-      // 4. Immer navigieren nach erfolgreichen Kern-Operationen
+      // 4. Panel schließen + navigieren
+      setSendPanel(false);
       navigate(`/admin/dokumente/${id}?published=1`);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : (typeof e === "object" ? JSON.stringify(e) : String(e));

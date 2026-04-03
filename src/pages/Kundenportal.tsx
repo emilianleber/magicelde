@@ -11,6 +11,7 @@ import {
   ArrowRight,
   Download,
   LogOut,
+  RotateCcw,
   User,
   LayoutDashboard,
   FolderOpen,
@@ -317,6 +318,17 @@ const Kundenportal = () => {
     return () => subscription.unsubscribe();
   }, [navigate, previewCustomerId]);
 
+  // Refresh-Funktion (auch für manuellen Refresh-Button)
+  const [refreshKey, setRefreshKey] = useState(0);
+  const triggerRefresh = () => setRefreshKey(k => k + 1);
+
+  // Daten neu laden wenn Tab wieder aktiv wird (z.B. nach Admin-Publish in anderem Tab)
+  useEffect(() => {
+    const onFocus = () => { if (user) triggerRefresh(); };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [user]);
+
   useEffect(() => {
     if (!user) return;
     const fetchData = async () => {
@@ -432,7 +444,7 @@ const Kundenportal = () => {
       setLoading(false);
     };
     fetchData();
-  }, [user, previewCustomerId]);
+  }, [user, previewCustomerId, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (customer) {
@@ -681,6 +693,16 @@ const Kundenportal = () => {
                 </button>
               ))}
             </nav>
+
+            {/* Refresh */}
+            <button
+              onClick={triggerRefresh}
+              title="Inhalte aktualisieren"
+              className="shrink-0 flex items-center gap-1.5 font-sans text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <RotateCcw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+              <span className="hidden sm:inline">Aktualisieren</span>
+            </button>
 
             {/* Logout */}
             {!isAdminPreview && (
