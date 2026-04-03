@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService } from "@/services/dokumenteService";
 import type { DokumentTyp } from "@/types/dokumente";
 import type { Artikel } from "@/types/dokumente";
-import { ArrowLeft, Eye, Printer, Save, Send, X } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, Eye, Printer, Save, Send, Trash2, X } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -966,13 +966,28 @@ export default function AdminDokumentEditor() {
   const [absenderLand, setAbsenderLand] = useState("Deutschland");
   const [logoUrl, setLogoUrl] = useState("");
 
+  // Textvorlagen
+  const [textvorlagen, setTextvorlagen] = useState<Array<{
+    id: string; name: string; typ: string; bereich: string; inhalt: string; is_default: boolean;
+  }>>([]);
+
   // UI
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(!isNew);
   const [showVorschau, setShowVorschau] = useState(false);
+  const [showMehrOptionen, setShowMehrOptionen] = useState(false);
+  const [bruttoEingabe, setBruttoEingabe] = useState(false); // false=Netto, true=Brutto
 
   const currentColor = FARBEN[selectedColor - 1];
+
+  // Load textvorlagen
+  useEffect(() => {
+    if (!authChecked) return;
+    supabase.from("dokument_textvorlagen").select("*").order("typ").order("bereich").order("sort_order").then(({ data }) => {
+      if (data) setTextvorlagen(data as typeof textvorlagen);
+    });
+  }, [authChecked]);
 
   // Load admin settings
   useEffect(() => {
@@ -1516,441 +1531,426 @@ export default function AdminDokumentEditor() {
       )}
 
       {/* TOP BAR */}
-      <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-border/20 bg-background z-10">
+      <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-border/10 bg-background z-10">
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors"
-          >
+          <button onClick={() => navigate(-1)} className="p-2 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div>
-            <h1 className="text-base font-bold leading-tight">
-              {isNew ? `Neues ${typLabel}` : `${typLabel} bearbeiten`}
-            </h1>
+            <h1 className="text-base font-bold leading-tight">{isNew ? `Neues ${typLabel}` : `${typLabel} bearbeiten`}</h1>
             <p className="text-xs text-muted-foreground">{nummer || "Nummer wird beim Speichern vergeben"}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {message && (
-            <span className={`text-xs px-3 py-1.5 rounded-lg ${message.startsWith("Fehler") ? "bg-red-50 text-red-600" : "bg-green-50 text-green-700"}`}>
-              {message}
-            </span>
+            <span className={`text-xs px-3 py-1.5 rounded-lg ${message.startsWith("Fehler") ? "bg-red-50 text-red-600" : "bg-green-50 text-green-700"}`}>{message}</span>
           )}
-          <button
-            onClick={() => setShowVorschau(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors"
-          >
-            <Eye className="w-4 h-4" />
-            Vorschau
+          <button onClick={() => setShowVorschau(true)} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors">
+            <Eye className="w-4 h-4" />Vorschau
           </button>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors disabled:opacity-50"
-          >
-            <Save className="w-4 h-4" />
-            {saving ? "Speichere…" : "Speichern"}
+          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors disabled:opacity-50">
+            <Save className="w-4 h-4" />{saving ? "Speichere…" : "Als Entwurf speichern"}
           </button>
-          <button
-            onClick={handleSaveAndNavigate}
-            disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
-          >
-            <Send className="w-4 h-4" />
-            Versenden
+          <button onClick={handleSaveAndNavigate} disabled={saving} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50">
+            <Send className="w-4 h-4" />Versenden / Drucken / Herunterladen
           </button>
         </div>
       </div>
 
       {/* FULL-WIDTH FORM */}
-      <div className="flex-1 overflow-hidden flex min-h-0 relative">
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6 max-w-3xl mx-auto w-full pb-24">
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-4xl mx-auto px-6 pb-16">
 
-          {/* EMPFÄNGER */}
-          <section>
-            <h2 className="text-sm font-semibold mb-3">Empfänger</h2>
-            {/* Contact autocomplete */}
-            <div className="relative mb-3">
-              <input
-                placeholder="Person oder Organisation suchen…"
-                value={kontaktSuche}
-                onChange={(e) => searchKontakte(e.target.value)}
-                className={inputCls}
-              />
-              {kontaktSuggestions.length > 0 && (
-                <div className="absolute z-20 top-full left-0 right-0 bg-background border border-border/30 rounded-xl shadow-lg mt-1 overflow-hidden">
-                  {kontaktSuggestions.map((k) => (
-                    <button
-                      key={k.id}
-                      onClick={() => selectKontakt(k)}
-                      className="w-full text-left px-4 py-2.5 hover:bg-muted/60 text-sm flex items-center justify-between"
-                    >
-                      <div>
-                        <p className="font-medium">{k.name}</p>
-                        {k.company && <p className="text-xs text-muted-foreground">{k.company}</p>}
-                      </div>
-                      <span className="text-xs text-muted-foreground">{k.email}</span>
-                    </button>
-                  ))}
+          {/* ── SECTION HELPER ── */}
+          {/* Inline section label style: gray badge + dashed line */}
+
+          {/* ════ KONTAKT- UND DOKUMENTINFORMATIONEN ════ */}
+          <div className="flex items-center gap-3 pt-8 pb-4">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded whitespace-nowrap">
+              Kontakt- und {typLabel}sinformationen
+            </span>
+            <div className="flex-1 border-t border-dashed border-border/40" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            {/* LEFT: Kunde + Anschrift */}
+            <div>
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Kunde</label>
+              <div className="relative mb-4">
+                <input
+                  placeholder="Person oder Organisation suchen…"
+                  value={kontaktSuche}
+                  onChange={(e) => searchKontakte(e.target.value)}
+                  className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+                />
+                {kontaktSuggestions.length > 0 && (
+                  <div className="absolute z-20 top-full left-0 right-0 bg-background border border-border/30 rounded-xl shadow-lg mt-1 overflow-hidden">
+                    {kontaktSuggestions.map((k) => (
+                      <button key={k.id} onClick={() => selectKontakt(k)} className="w-full text-left px-4 py-2.5 hover:bg-muted/60 text-sm flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">{k.name}</p>
+                          {k.company && <p className="text-xs text-muted-foreground">{k.company}</p>}
+                        </div>
+                        <span className="text-xs text-muted-foreground">{k.email}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Anschrift</label>
+              {/* Stacked address inputs – look like an address block */}
+              <div className="rounded-xl border border-border/30 overflow-hidden divide-y divide-border/20">
+                <input placeholder="Firma (optional)" value={empfaengerFirma} onChange={(e) => setEmpfaengerFirma(e.target.value)}
+                  className="w-full px-3 py-2 text-sm bg-background focus:outline-none focus:bg-muted/20 placeholder:text-muted-foreground/50" />
+                <input placeholder="Name *" value={empfaengerName} onChange={(e) => setEmpfaengerName(e.target.value)}
+                  className="w-full px-3 py-2 text-sm bg-background focus:outline-none focus:bg-muted/20 placeholder:text-muted-foreground/50" />
+                <input placeholder="Straße und Hausnummer" value={empfaengerAdresse} onChange={(e) => setEmpfaengerAdresse(e.target.value)}
+                  className="w-full px-3 py-2 text-sm bg-background focus:outline-none focus:bg-muted/20 placeholder:text-muted-foreground/50" />
+                <div className="flex divide-x divide-border/20">
+                  <input placeholder="PLZ" value={empfaengerPlz} onChange={(e) => setEmpfaengerPlz(e.target.value)}
+                    className="w-24 px-3 py-2 text-sm bg-background focus:outline-none focus:bg-muted/20 placeholder:text-muted-foreground/50" />
+                  <input placeholder="Ort" value={empfaengerOrt} onChange={(e) => setEmpfaengerOrt(e.target.value)}
+                    className="flex-1 px-3 py-2 text-sm bg-background focus:outline-none focus:bg-muted/20 placeholder:text-muted-foreground/50" />
                 </div>
-              )}
+              </div>
+              <input placeholder="Land" value={empfaengerLand} onChange={(e) => setEmpfaengerLand(e.target.value)}
+                className="mt-1.5 w-full rounded-xl border border-border/30 px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
             </div>
-            {/* Editable address fields */}
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className={labelCls}>Name</label>
-                <input placeholder="Name" value={empfaengerName} onChange={(e) => setEmpfaengerName(e.target.value)} className={inputCls} />
-              </div>
-              <div>
-                <label className={labelCls}>Firma (optional)</label>
-                <input placeholder="Firma" value={empfaengerFirma} onChange={(e) => setEmpfaengerFirma(e.target.value)} className={inputCls} />
-              </div>
-              <div className="col-span-2">
-                <label className={labelCls}>Straße und Hausnummer</label>
-                <input placeholder="Straße und Hausnummer" value={empfaengerAdresse} onChange={(e) => setEmpfaengerAdresse(e.target.value)} className={inputCls} />
-              </div>
-              <div>
-                <label className={labelCls}>PLZ</label>
-                <input placeholder="PLZ" value={empfaengerPlz} onChange={(e) => setEmpfaengerPlz(e.target.value)} className={inputCls} />
-              </div>
-              <div>
-                <label className={labelCls}>Ort</label>
-                <input placeholder="Ort" value={empfaengerOrt} onChange={(e) => setEmpfaengerOrt(e.target.value)} className={inputCls} />
-              </div>
-              <div className="col-span-2">
-                <label className={labelCls}>Land</label>
-                <input placeholder="Land" value={empfaengerLand} onChange={(e) => setEmpfaengerLand(e.target.value)} className={inputCls} />
-              </div>
-            </div>
-          </section>
 
-          {/* DOKUMENT-INFO */}
-          <section>
-            <h2 className="text-sm font-semibold mb-3">{typLabel}sinformationen</h2>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className={labelCls}>{typLabel}sdatum</label>
-                <input type="date" value={datum} onChange={(e) => setDatum(e.target.value)} className={inputCls} />
-              </div>
-              <div>
-                <label className={labelCls}>Lieferdatum</label>
-                <input type="date" value={lieferdatum} onChange={(e) => setLieferdatum(e.target.value)} className={inputCls} />
-              </div>
+            {/* RIGHT: Dokument-Meta */}
+            <div className="space-y-3">
               {isNew && (
                 <div>
-                  <label className={labelCls}>Dokumenttyp</label>
-                  <select value={typ} onChange={(e) => setTyp(e.target.value)} className={inputCls}>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Dokumenttyp</label>
+                  <select value={typ} onChange={(e) => setTyp(e.target.value)}
+                    className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20">
                     <option value="angebot">Angebot</option>
                     <option value="rechnung">Rechnung</option>
                     <option value="auftragsbestaetigung">Auftragsbestätigung</option>
                   </select>
                 </div>
               )}
-              {!isNew && (
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className={labelCls}>{typLabel}snummer</label>
-                  <input value={nummer} onChange={(e) => setNummer(e.target.value)} className={inputCls} />
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">{typLabel}nummer</label>
+                  <input value={nummer} onChange={(e) => setNummer(e.target.value)} placeholder="Wird vergeben…"
+                    className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20" />
                 </div>
-              )}
+                <div>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">{typLabel}datum</label>
+                  <input type="date" value={datum} onChange={(e) => setDatum(e.target.value)}
+                    className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+                </div>
+              </div>
+
               {typ === "angebot" && (
                 <div>
-                  <label className={labelCls}>Gültig bis</label>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Gültig bis</label>
                   <div className="flex items-center gap-2">
-                    <input
-                      type="date"
-                      value={gueltigBis}
-                      onChange={(e) => setGueltigBis(e.target.value)}
-                      className="flex-1 rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
-                    />
+                    <input type="date" value={gueltigBis} onChange={(e) => setGueltigBis(e.target.value)}
+                      className="flex-1 rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20" />
                     <span className="text-xs text-muted-foreground shrink-0">in</span>
-                    <input
-                      type="number"
-                      value={gueltigBisTage}
-                      onChange={(e) => {
-                        const days = parseInt(e.target.value) || 0;
-                        setGueltigBisTage(days);
-                        setGueltigBis(addDays(days));
-                      }}
-                      className="w-16 rounded-xl bg-background border border-border/30 px-2 py-2 text-sm text-right focus:outline-none focus:ring-2 focus:ring-foreground/20"
-                    />
+                    <input type="number" value={gueltigBisTage} onChange={(e) => { const d = parseInt(e.target.value)||0; setGueltigBisTage(d); setGueltigBis(addDays(d)); }}
+                      className="w-14 rounded-xl bg-background border border-border/30 px-2 py-2 text-sm text-right focus:outline-none focus:ring-2 focus:ring-foreground/20" />
                     <span className="text-xs text-muted-foreground shrink-0">Tagen</span>
                   </div>
                 </div>
               )}
               {(typ === "rechnung" || typ === "auftragsbestaetigung" || typ === "mahnung") && (
                 <div>
-                  <label className={labelCls}>Zahlungsziel</label>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Zahlungsziel</label>
                   <div className="flex items-center gap-2">
-                    <input
-                      type="date"
-                      value={faelligAm}
-                      onChange={(e) => setFaelligAm(e.target.value)}
-                      className="flex-1 rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
-                    />
+                    <input type="date" value={faelligAm} onChange={(e) => setFaelligAm(e.target.value)}
+                      className="flex-1 rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20" />
                     <span className="text-xs text-muted-foreground shrink-0">in</span>
-                    <input
-                      type="number"
-                      value={zahlungszielTage}
-                      onChange={(e) => {
-                        const days = parseInt(e.target.value) || 0;
-                        setZahlungszielTage(days);
-                        setFaelligAm(addDays(days));
-                      }}
-                      className="w-16 rounded-xl bg-background border border-border/30 px-2 py-2 text-sm text-right focus:outline-none focus:ring-2 focus:ring-foreground/20"
-                    />
+                    <input type="number" value={zahlungszielTage} onChange={(e) => { const d = parseInt(e.target.value)||0; setZahlungszielTage(d); setFaelligAm(addDays(d)); }}
+                      className="w-14 rounded-xl bg-background border border-border/30 px-2 py-2 text-sm text-right focus:outline-none focus:ring-2 focus:ring-foreground/20" />
                     <span className="text-xs text-muted-foreground shrink-0">Tagen</span>
                   </div>
                 </div>
               )}
             </div>
-          </section>
+          </div>
 
-          {/* KOPFTEXT */}
-          <section>
-            <h2 className="text-sm font-semibold mb-3">Kopftext</h2>
-            <input
-              readOnly
-              value={nummer ? `${typLabel} Nr. ${nummer}` : typLabel}
-              className={`${inputCls} mb-2 bg-muted/20 cursor-default`}
-            />
-            <textarea
-              placeholder="Anschreiben…"
-              value={kopftext}
-              onChange={(e) => setKopftext(e.target.value)}
-              rows={4}
-              className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"
-            />
-          </section>
+          {/* ════ KOPF-TEXT ════ */}
+          <div className="flex items-center gap-3 pt-8 pb-2">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Kopf-Text</span>
+            <div className="flex-1 border-t border-dashed border-border/40" />
+          </div>
+          {/* Template chips */}
+          {(() => {
+            const chips = textvorlagen.filter(
+              (v) => v.bereich === "kopf" && (v.typ === typ || v.typ === "alle")
+            );
+            return chips.length > 0 ? (
+              <div className="flex flex-wrap gap-1.5 pb-3">
+                {chips.map((v) => (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => setKopftext(v.inhalt)}
+                    title={v.inhalt}
+                    className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-border/30 bg-muted/30 hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {v.is_default && <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 shrink-0" />}
+                    {v.name}
+                  </button>
+                ))}
+                {kopftext && (
+                  <button
+                    type="button"
+                    onClick={() => setKopftext("")}
+                    className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-border/20 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+                  >
+                    <X className="w-3 h-3" /> Leeren
+                  </button>
+                )}
+              </div>
+            ) : null;
+          })()}
+          <textarea
+            placeholder="Anschreiben an den Kunden…"
+            value={kopftext}
+            onChange={(e) => setKopftext(e.target.value)}
+            rows={5}
+            className="w-full rounded-xl bg-background border border-border/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"
+          />
 
-          {/* POSITIONS */}
-          <section>
-            <h2 className="text-sm font-semibold mb-3">Positionen</h2>
-
-            {/* Column headers */}
-            <div
-              className="hidden sm:grid text-[10px] text-muted-foreground uppercase font-semibold px-2 pb-1"
-              style={{ gridTemplateColumns: "2fr 60px 80px 90px 60px 90px 28px" }}
-            >
-              <span>Bezeichnung</span>
-              <span className="text-right">Menge</span>
-              <span className="text-right">Einheit</span>
-              <span className="text-right">Einzelpr.</span>
-              <span className="text-right">Rabatt</span>
-              <span className="text-right">Gesamt</span>
-              <span />
+          {/* ════ PRODUKTE ════ */}
+          <div className="flex items-center gap-3 pt-8 pb-4">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Produkte</span>
+            <div className="flex-1 border-t border-dashed border-border/40" />
+            {/* Brutto / Netto toggle */}
+            <div className="flex rounded-xl border border-border/30 overflow-hidden shrink-0">
+              <button onClick={() => setBruttoEingabe(true)} className={`px-4 py-1.5 text-xs font-semibold transition-colors ${bruttoEingabe ? "bg-foreground text-background" : "bg-background text-muted-foreground hover:text-foreground"}`}>Brutto</button>
+              <button onClick={() => setBruttoEingabe(false)} className={`px-4 py-1.5 text-xs font-semibold transition-colors ${!bruttoEingabe ? "bg-foreground text-background" : "bg-background text-muted-foreground hover:text-foreground"}`}>Netto</button>
             </div>
+          </div>
 
-            {positionen.map((pos) => (
-              <div key={pos.id} className="mb-2 rounded-xl bg-muted/10 border border-border/20 p-3">
-                {/* Bezeichnung with autocomplete */}
-                <div className="relative mb-2">
+          {/* Table header */}
+          <div className="grid text-[10px] font-semibold uppercase tracking-wider text-muted-foreground pb-2 px-1 border-b border-border/20"
+            style={{ gridTemplateColumns: "28px 1fr 90px 100px 70px 80px 90px 32px" }}>
+            <span />
+            <span>Produkt oder Service</span>
+            <span className="text-right">Menge</span>
+            <span className="text-right">Preis ({bruttoEingabe ? "brutto" : "netto"})</span>
+            <span className="text-right">USt.</span>
+            <span className="text-right">Rabatt</span>
+            <span className="text-right">Betrag</span>
+            <span />
+          </div>
+
+          {/* Position rows */}
+          {positionen.map((pos, idx) => (
+            <div key={pos.id} className="border-b border-border/10 last:border-0">
+              {/* Main row */}
+              <div className="grid items-start gap-2 py-2.5 px-1"
+                style={{ gridTemplateColumns: "28px 1fr 90px 100px 70px 80px 90px 32px" }}>
+                {/* Nr */}
+                <span className="text-xs text-muted-foreground pt-2 text-center">{idx + 1}.</span>
+
+                {/* Bezeichnung + Beschreibung */}
+                <div className="relative">
                   <input
                     placeholder="Bezeichnung oder Artikel suchen…"
                     value={artikelSuche[pos.id] ?? pos.bezeichnung}
                     onChange={(e) => searchArtikel(pos.id, e.target.value)}
-                    onBlur={() => {
-                      const q = artikelSuche[pos.id];
-                      if (q !== undefined && q !== pos.bezeichnung) {
-                        updatePosition(pos.id, { bezeichnung: q });
-                      }
-                    }}
-                    className="w-full rounded-lg bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+                    onBlur={() => { const q = artikelSuche[pos.id]; if (q !== undefined && q !== pos.bezeichnung) updatePosition(pos.id, { bezeichnung: q }); }}
+                    className="w-full rounded-lg border border-border/20 px-2.5 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
                   />
                   {(artikelSuggestions[pos.id] || []).length > 0 && (
                     <div className="absolute z-20 top-full left-0 right-0 bg-background border border-border/30 rounded-xl shadow-lg mt-1 overflow-hidden">
                       {artikelSuggestions[pos.id].map((a) => (
-                        <button
-                          key={a.id}
-                          onMouseDown={() => selectArtikel(pos.id, a)}
-                          className="w-full text-left px-3 py-2 hover:bg-muted/60 text-sm flex items-center justify-between"
-                        >
+                        <button key={a.id} onMouseDown={() => selectArtikel(pos.id, a)}
+                          className="w-full text-left px-3 py-2 hover:bg-muted/60 text-sm flex items-center justify-between">
                           <div>
                             <p className="font-medium">{a.bezeichnung}</p>
                             {a.beschreibung && <p className="text-xs text-muted-foreground">{a.beschreibung}</p>}
                           </div>
-                          <span className="text-sm font-semibold shrink-0 ml-2">
-                            {a.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
-                          </span>
+                          <span className="text-sm font-semibold shrink-0 ml-2">{a.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
                         </button>
                       ))}
                     </div>
                   )}
+                  <input
+                    placeholder="Beschreibung (optional)…"
+                    value={pos.beschreibung}
+                    onChange={(e) => updatePosition(pos.id, { beschreibung: e.target.value })}
+                    className="mt-1 w-full rounded-lg border border-border/10 px-2.5 py-1 text-xs text-muted-foreground bg-background/40 focus:outline-none focus:ring-1 focus:ring-foreground/10"
+                  />
                 </div>
 
-                {/* Beschreibung */}
-                <input
-                  placeholder="Beschreibung (optional)…"
-                  value={pos.beschreibung}
-                  onChange={(e) => updatePosition(pos.id, { beschreibung: e.target.value })}
-                  className="w-full mb-2 rounded-lg bg-background/40 border border-border/20 px-3 py-1.5 text-xs text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground/20"
-                />
-
-                {/* Numbers row */}
-                <div className="grid items-center gap-2" style={{ gridTemplateColumns: "60px 80px 90px 60px 90px 28px" }}>
-                  <input
-                    type="number"
-                    value={pos.menge}
-                    onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
-                    className="text-right rounded-lg border border-border/30 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
-                  />
-                  <select
-                    value={pos.einheit}
-                    onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
-                    className="rounded-lg border border-border/30 px-2 py-1.5 text-sm bg-background focus:outline-none"
-                  >
-                    {["pauschal", "Std.", "Stk.", "km", "m²", "Tag", "Nacht"].map((u) => (
-                      <option key={u}>{u}</option>
-                    ))}
+                {/* Menge + Einheit */}
+                <div className="flex gap-1 items-center">
+                  <input type="number" value={pos.menge} onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value)||0 })}
+                    className="w-14 text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
+                  <select value={pos.einheit} onChange={(e) => updatePosition(pos.id, { einheit: e.target.value })}
+                    className="flex-1 rounded-lg border border-border/20 px-1 py-1.5 text-xs bg-background focus:outline-none">
+                    {["pauschal","Std.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
                   </select>
-                  <input
-                    type="number"
-                    value={pos.einzelpreis}
-                    step="0.01"
-                    onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value) || 0 })}
-                    className="text-right rounded-lg border border-border/30 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
-                  />
-                  <input
-                    type="number"
-                    value={pos.rabattProzent ?? ""}
-                    placeholder="0%"
+                </div>
+
+                {/* Preis */}
+                <div className="flex items-center justify-end gap-1">
+                  <input type="number" value={pos.einzelpreis} step="0.01" onChange={(e) => updatePosition(pos.id, { einzelpreis: parseFloat(e.target.value)||0 })}
+                    className="w-full text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
+                  <span className="text-xs text-muted-foreground shrink-0">EUR</span>
+                </div>
+
+                {/* MwSt pro Position */}
+                <select value={pos.mwstSatz} onChange={(e) => updatePosition(pos.id, { mwstSatz: parseFloat(e.target.value) })}
+                  className="rounded-lg border border-border/20 px-1 py-1.5 text-xs bg-background focus:outline-none text-right">
+                  {[0,7,19].map((r) => <option key={r} value={r}>{r}%</option>)}
+                </select>
+
+                {/* Rabatt */}
+                <div className="flex items-center justify-end gap-0.5">
+                  <input type="number" value={pos.rabattProzent ?? ""} placeholder="0"
                     onChange={(e) => updatePosition(pos.id, { rabattProzent: e.target.value ? parseFloat(e.target.value) : null })}
-                    className="text-right rounded-lg border border-border/30 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
-                  />
-                  <div className="text-right font-semibold text-sm tabular-nums">
-                    {pos.gesamt.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
-                  </div>
+                    className="w-12 text-right rounded-lg border border-border/20 px-2 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20" />
+                  <span className="text-xs text-muted-foreground">%</span>
+                </div>
+
+                {/* Betrag */}
+                <div className="text-right font-semibold text-sm tabular-nums pt-1.5">
+                  {pos.gesamt.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+                </div>
+
+                {/* Delete */}
+                <button onClick={() => removePosition(pos.id)}
+                  className="flex items-center justify-center text-muted-foreground/40 hover:text-red-500 transition-colors w-7 h-7 rounded-lg hover:bg-red-50 mt-0.5">
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {/* Add position links */}
+          <div className="flex items-center gap-4 pt-3 pb-1">
+            <button onClick={addPosition} className="text-sm text-blue-600 hover:text-blue-700 font-medium">+ Position hinzufügen</button>
+          </div>
+
+          {/* ════ FUSS-TEXT ════ */}
+          <div className="flex items-center gap-3 pt-8 pb-2">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Fuss-Text</span>
+            <div className="flex-1 border-t border-dashed border-border/40" />
+          </div>
+          {/* Template chips */}
+          {(() => {
+            const chips = textvorlagen.filter(
+              (v) => v.bereich === "fuss" && (v.typ === typ || v.typ === "alle")
+            );
+            return chips.length > 0 ? (
+              <div className="flex flex-wrap gap-1.5 pb-3">
+                {chips.map((v) => (
                   <button
-                    onClick={() => removePosition(pos.id)}
-                    className="flex items-center justify-center text-muted-foreground hover:text-red-500 transition-colors w-7 h-7 rounded-lg hover:bg-red-50"
+                    key={v.id}
+                    type="button"
+                    onClick={() => setFusstext(v.inhalt)}
+                    title={v.inhalt}
+                    className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-border/30 bg-muted/30 hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    ×
+                    {v.is_default && <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 shrink-0" />}
+                    {v.name}
                   </button>
+                ))}
+                {fusstext && (
+                  <button
+                    type="button"
+                    onClick={() => setFusstext("")}
+                    className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-border/20 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+                  >
+                    <X className="w-3 h-3" /> Leeren
+                  </button>
+                )}
+              </div>
+            ) : null;
+          })()}
+          <textarea
+            value={fusstext}
+            onChange={(e) => setFusstext(e.target.value)}
+            rows={5}
+            placeholder="Bankdaten, Zahlungshinweise, Grüße…"
+            className="w-full rounded-xl bg-background border border-border/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"
+          />
+
+          {/* ════ MEHR OPTIONEN ════ */}
+          <div className="flex items-center gap-3 pt-8 pb-4">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-1 rounded">Mehr Optionen</span>
+            <div className="flex-1 border-t border-dashed border-border/40" />
+            <button onClick={() => setShowMehrOptionen((v) => !v)}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium shrink-0">
+              {showMehrOptionen ? "Optionen ausblenden" : "Weitere Optionen einblenden"}
+            </button>
+          </div>
+
+          {showMehrOptionen && (
+            <div className="grid grid-cols-2 gap-6 pb-4">
+              <div>
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Mehrwertsteuersatz</label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {[0, 7, 19].map((r) => (
+                    <button key={r} onClick={() => setMwstSatz(r)}
+                      className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${mwstSatz === r ? "bg-foreground text-background border-foreground" : "border-border/30 text-muted-foreground hover:text-foreground"}`}>
+                      {r}%
+                    </button>
+                  ))}
+                </div>
+                <label className="flex items-center gap-2 mt-3 text-sm cursor-pointer text-muted-foreground hover:text-foreground">
+                  <input type="checkbox" checked={kleinunternehmer} onChange={(e) => setKleinunternehmer(e.target.checked)} className="rounded" />
+                  § 19 UStG – keine Umsatzsteuer ausweisen
+                </label>
+              </div>
+              <div>
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Lieferdatum</label>
+                <input type="date" value={lieferdatum} onChange={(e) => setLieferdatum(e.target.value)}
+                  className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 mb-4" />
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Gesamtrabatt</label>
+                <div className="flex items-center gap-2">
+                  <input type="number" value={rabattProzent ?? ""} placeholder="0"
+                    onChange={(e) => setRabattProzent(e.target.value ? parseFloat(e.target.value) : null)}
+                    className="w-24 rounded-xl border border-border/30 px-3 py-2 text-sm text-right bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+                  <span className="text-sm text-muted-foreground">%</span>
                 </div>
               </div>
-            ))}
-
-            <button
-              onClick={addPosition}
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mt-2 px-2 py-1.5 rounded-xl hover:bg-muted/40 transition-colors"
-            >
-              <span className="text-lg leading-none">+</span>
-              Position hinzufügen
-            </button>
-          </section>
-
-          {/* MWST + SUMMEN */}
-          <section className="bg-muted/10 rounded-xl p-4 border border-border/20">
-            {/* MwSt toggle */}
-            <div className="flex items-center gap-2 mb-4 flex-wrap">
-              <span className="text-sm font-medium">MwSt.:</span>
-              {[0, 7, 19].map((r) => (
-                <button
-                  key={r}
-                  onClick={() => setMwstSatz(r)}
-                  className={`px-3 py-1.5 rounded-lg text-sm border transition-all ${
-                    mwstSatz === r
-                      ? "bg-foreground text-background border-foreground"
-                      : "border-border/30 hover:border-border text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {r}%
-                </button>
-              ))}
-              <label className="flex items-center gap-1.5 text-sm ml-4 cursor-pointer text-muted-foreground hover:text-foreground">
-                <input
-                  type="checkbox"
-                  checked={kleinunternehmer}
-                  onChange={(e) => setKleinunternehmer(e.target.checked)}
-                  className="rounded"
-                />
-                § 19 UStG
-              </label>
             </div>
+          )}
 
-            {/* Gesamtrabatt */}
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-sm text-muted-foreground">Gesamtrabatt:</span>
-              <div className="flex items-center gap-1">
-                <input
-                  type="number"
-                  value={rabattProzent ?? ""}
-                  placeholder="0"
-                  onChange={(e) => setRabattProzent(e.target.value ? parseFloat(e.target.value) : null)}
-                  className="w-16 rounded-lg border border-border/30 px-2 py-1 text-sm text-right bg-background focus:outline-none focus:ring-1 focus:ring-foreground/20"
-                />
-                <span className="text-sm text-muted-foreground">%</span>
-              </div>
-            </div>
-
-            {/* Summen */}
-            <div className="space-y-1.5 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Nettobetrag</span>
-                <span className="tabular-nums">{summen.netto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
+          {/* ════ SUMMEN ════ */}
+          <div className="flex items-center gap-3 pt-4 pb-4">
+            <div className="flex-1 border-t border-dashed border-border/40" />
+          </div>
+          <div className="flex justify-end pb-10">
+            <div className="w-80 space-y-2 text-sm">
+              <div className="flex justify-between text-muted-foreground">
+                <span>Gesamtsumme Netto (inkl. Rabatte / Aufschläge)</span>
+                <span className="tabular-nums ml-4">{summen.netto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
               </div>
               {summen.gesamtRabatt > 0 && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Rabatt {rabattProzent}%</span>
-                  <span className="tabular-nums text-green-600">-{summen.gesamtRabatt.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Rabatt {rabattProzent}%</span>
+                  <span className="tabular-nums ml-4 text-green-600">−{summen.gesamtRabatt.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
                 </div>
               )}
-              {!kleinunternehmer && mwstSatz > 0 && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">MwSt. {mwstSatz}%</span>
-                  <span className="tabular-nums">{summen.mwstBetrag.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
+              {kleinunternehmer ? (
+                <div className="flex justify-between text-muted-foreground text-xs italic">
+                  <span>Gem. § 19 UStG keine Umsatzsteuer</span>
+                  <span>0,00 EUR</span>
+                </div>
+              ) : (
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Umsatzsteuer {mwstSatz}%</span>
+                  <span className="tabular-nums ml-4">{summen.mwstBetrag.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
                 </div>
               )}
-              {kleinunternehmer && (
-                <div className="text-xs text-muted-foreground italic">
-                  Gem. § 19 UStG wird keine Umsatzsteuer ausgewiesen.
-                </div>
-              )}
-              <div className="flex justify-between font-bold text-base border-t border-border/30 pt-2 mt-2">
-                <span>Gesamtbetrag</span>
-                <span className="tabular-nums">{summen.brutto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
+              <div className="flex justify-between font-bold text-lg border-t border-border/30 pt-3 mt-1">
+                <span>Gesamt</span>
+                <span className="tabular-nums ml-4">{summen.brutto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</span>
               </div>
-            </div>
-          </section>
-
-          {/* FUSSTEXT */}
-          <section>
-            <h2 className="text-sm font-semibold mb-3">Fußtext</h2>
-            <textarea
-              value={fusstext}
-              onChange={(e) => setFusstext(e.target.value)}
-              rows={3}
-              placeholder="Bankdaten, Hinweise, Danksagung…"
-              className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"
-            />
-          </section>
-
-          <div className="h-8" />
-        </div>
-
-        {/* ── FLOATING SUMMEN BAR ── */}
-        <div className="absolute bottom-0 left-0 right-0 z-10 bg-background/95 backdrop-blur-sm border-t border-border/20 px-6 py-3">
-          <div className="max-w-3xl mx-auto flex items-center justify-between gap-6">
-            <div className="flex items-center gap-6 text-sm">
-              <div>
-                <span className="text-xs text-muted-foreground">Netto</span>
-                <p className="font-semibold tabular-nums">{summen.netto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
-              </div>
-              {!kleinunternehmer && mwstSatz > 0 && (
-                <div>
-                  <span className="text-xs text-muted-foreground">MwSt. {mwstSatz}%</span>
-                  <p className="font-semibold tabular-nums">{summen.mwstBetrag.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
-                </div>
-              )}
-              {kleinunternehmer && (
-                <span className="text-xs text-muted-foreground">§ 19 UStG – keine MwSt.</span>
-              )}
-            </div>
-            <div className="text-right">
-              <span className="text-xs text-muted-foreground uppercase tracking-wide">Gesamtbetrag</span>
-              <p className="text-xl font-bold tabular-nums">{summen.brutto.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
             </div>
           </div>
+
         </div>
       </div>
     </div>
