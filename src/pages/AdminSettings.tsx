@@ -33,6 +33,7 @@ interface AdminSettingsData {
   bank_bic: string;
   bank_account_holder: string;
   default_payment_days: number;
+  default_offer_days: number;
   default_tax_rate: number;
   document_template: number;
   company_logo_url: string;
@@ -56,6 +57,7 @@ const DEFAULT_SETTINGS: Omit<AdminSettingsData, "id"> = {
   bank_bic: "",
   bank_account_holder: "Emilian Leber",
   default_payment_days: 14,
+  default_offer_days: 14,
   default_tax_rate: 0,
   document_template: 1,
   company_logo_url: "",
@@ -604,18 +606,33 @@ const AdminSettings = () => {
       {activeTab === "dokumente" && settings && (
         <div className="max-w-2xl space-y-8">
           {/* Default payment days */}
-          <div>
-            <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
-              Standard Fälligkeit (Tage)
-            </label>
-            <input
-              type="number"
-              value={settings.default_payment_days}
-              onChange={(e) => updateSetting("default_payment_days", parseInt(e.target.value) || 0)}
-              className={inputCls + " max-w-xs"}
-              min={0}
-              max={365}
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                Zahlungsziel Rechnung (Tage)
+              </label>
+              <input
+                type="number"
+                value={settings.default_payment_days}
+                onChange={(e) => updateSetting("default_payment_days", parseInt(e.target.value) || 0)}
+                className={inputCls}
+                min={0}
+                max={365}
+              />
+            </div>
+            <div>
+              <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                Gültig bis Angebot (Tage)
+              </label>
+              <input
+                type="number"
+                value={(settings as any).default_offer_days ?? 14}
+                onChange={(e) => updateSetting("default_offer_days" as any, parseInt(e.target.value) || 0)}
+                className={inputCls}
+                min={0}
+                max={365}
+              />
+            </div>
           </div>
 
           {/* Default tax rate */}

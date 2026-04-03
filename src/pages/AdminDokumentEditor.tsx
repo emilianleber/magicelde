@@ -913,7 +913,8 @@ export default function AdminDokumentEditor() {
   const [typ, setTyp] = useState<string>(searchParams.get("typ") || "angebot");
   const [nummer, setNummer] = useState("");
   const [datum, setDatum] = useState(today());
-  const [gueltigBis, setGueltigBis] = useState("");
+  const [gueltigBis, setGueltigBis] = useState(addDays(14));
+  const [gueltigBisTage, setGueltigBisTage] = useState(14);
   const [faelligAm, setFaelligAm] = useState(addDays(14));
   const [zahlungszielTage, setZahlungszielTage] = useState(14);
   const [lieferdatum, setLieferdatum] = useState("");
@@ -1001,6 +1002,9 @@ export default function AdminDokumentEditor() {
             setZahlungszielTage(days);
             setFaelligAm(addDays(days));
           }
+          const offerDays = Number((data as any).default_offer_days) || 14;
+          setGueltigBisTage(offerDays);
+          setGueltigBis(addDays(offerDays));
         }
       }
     });
@@ -1032,7 +1036,12 @@ export default function AdminDokumentEditor() {
       setTyp(doc.typ);
       setNummer(doc.nummer);
       setDatum(doc.datum);
-      setGueltigBis(doc.gueltigBis || "");
+      const gb = doc.gueltigBis || "";
+      setGueltigBis(gb);
+      if (gb) {
+        const diff = Math.round((new Date(gb).getTime() - new Date(doc.datum).getTime()) / 86400000);
+        if (diff > 0) setGueltigBisTage(diff);
+      }
       setFaelligAm(doc.faelligAm || "");
       setZahlungszielTage(doc.zahlungszielTage);
       setLieferdatum(doc.lieferdatum || "");
@@ -1647,10 +1656,29 @@ export default function AdminDokumentEditor() {
               {typ === "angebot" && (
                 <div>
                   <label className={labelCls}>Gültig bis</label>
-                  <input type="date" value={gueltigBis} onChange={(e) => setGueltigBis(e.target.value)} className={inputCls} />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="date"
+                      value={gueltigBis}
+                      onChange={(e) => setGueltigBis(e.target.value)}
+                      className="flex-1 rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+                    />
+                    <span className="text-xs text-muted-foreground shrink-0">in</span>
+                    <input
+                      type="number"
+                      value={gueltigBisTage}
+                      onChange={(e) => {
+                        const days = parseInt(e.target.value) || 0;
+                        setGueltigBisTage(days);
+                        setGueltigBis(addDays(days));
+                      }}
+                      className="w-16 rounded-xl bg-background border border-border/30 px-2 py-2 text-sm text-right focus:outline-none focus:ring-2 focus:ring-foreground/20"
+                    />
+                    <span className="text-xs text-muted-foreground shrink-0">Tagen</span>
+                  </div>
                 </div>
               )}
-              {(typ === "rechnung" || typ === "auftragsbestaetigung") && (
+              {(typ === "rechnung" || typ === "auftragsbestaetigung" || typ === "mahnung") && (
                 <div>
                   <label className={labelCls}>Zahlungsziel</label>
                   <div className="flex items-center gap-2">
