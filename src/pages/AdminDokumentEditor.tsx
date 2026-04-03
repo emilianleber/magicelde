@@ -1494,15 +1494,18 @@ export default function AdminDokumentEditor() {
     } finally { setSaving(false); }
   };
 
-  // Drucken / PDF: Preview exakt wie auf dem Bildschirm drucken
+  // Drucken / PDF: jede Seite separat in eigenen A4-Container
   const handlePrintPreview = () => {
     const el = document.getElementById("doc-preview-print");
     if (!el) return;
     const win = window.open("", "_blank");
     if (!win) return;
 
-    // Snapshot des Preview-HTML
-    const html = el.innerHTML;
+    // Jede direkte Kindseite (inkl. ihrer eigenen Styles) separat in A4-Wrapper
+    const pageEls = Array.from(el.children);
+    const pagesHtml = pageEls.map((pageEl) =>
+      `<div class="a4-page"><div class="preview-scale">${pageEl.outerHTML}</div></div>`
+    ).join("");
 
     win.document.write(`<!DOCTYPE html>
 <html><head>
@@ -1516,19 +1519,16 @@ export default function AdminDokumentEditor() {
   @page { size:A4 portrait; margin:0; }
   @media print {
     * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
-    html, body { width:210mm; height:297mm; }
+    .a4-page { page-break-after:always; page-break-inside:avoid; }
   }
   /* 595px → 210mm: scale 1.3341 */
-  .a4-page { width:210mm; height:297mm; overflow:hidden; position:relative; }
-  .preview-scale { width:595px; height:842px; transform:scale(1.3341); transform-origin:top left; overflow:hidden; position:relative; }
+  .a4-page { width:210mm; height:297mm; overflow:hidden; }
+  .preview-scale { width:595px; height:842px; transform:scale(1.3341); transform-origin:top left; overflow:hidden; }
 </style>
 </head>
 <body>
-<div class="a4-page">
-  <div class="preview-scale">${html}</div>
-</div>
+${pagesHtml}
 <script>
-  // Warten bis Inter geladen ist, dann drucken
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function() {
       setTimeout(function() { window.print(); }, 200);
