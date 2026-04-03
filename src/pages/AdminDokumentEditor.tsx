@@ -392,6 +392,8 @@ interface PreviewProps {
   absenderIban: string;
   absenderBic: string;
   absenderSteuernummer: string;
+  absenderInhaber: string;
+  absenderLand: string;
 }
 
 interface SummenResult {
@@ -427,14 +429,191 @@ function DocumentPreview(props: PreviewProps) {
     kopftext, fusstext, positionen, mwstSatz, kleinunternehmer, rabattProzent,
     absenderName, absenderUntertitel, absenderAdresse, absenderPlz, absenderOrt,
     absenderEmail, absenderTel, absenderWebsite, absenderIban, absenderBic, absenderSteuernummer,
+    absenderInhaber, absenderLand,
   } = props;
 
   const summen = calcSummen(positionen, mwstSatz, kleinunternehmer, rabattProzent);
   const typLabel = TYP_LABEL[typ] || typ;
   const initials = (absenderName || "E").charAt(0).toUpperCase();
+
+  // A4 preview: 595px wide × 842px tall → use real document proportions
+  // Fonts match ~10pt body text at 72dpi
   const font = layoutId === 4 ? "'Courier New', Courier, monospace"
     : layoutId === 10 ? "Georgia, 'Times New Roman', serif"
     : "Inter, system-ui, -apple-system, sans-serif";
+
+  const PX = {
+    marginH: 52,        // 18mm horizontal margin
+    logoSize: 68,       // logo placeholder
+    logoTop: 22,
+    logoRight: 52,
+    headerH: 115,       // Briefkopf zone height
+    absenderzeileY: 120,
+    anschriftY: 138,
+    betreffY: 295,
+    bodyTextY: 318,
+    tableY: 345,
+    footerH: 82,        // footer zone height at bottom
+    body: 9.5,          // base body font size
+    title: 12,
+    small: 8,
+    caption: 7.5,
+  };
+
+  const metaRows = [
+    { label: `${typLabel}-Nr.`, val: nummer || "—" },
+    { label: "Datum", val: datum || "—" },
+    ...(lieferdatum ? [{ label: "Lieferdatum", val: lieferdatum }] : []),
+    ...(faelligAm   ? [{ label: "Zahlungsziel", val: faelligAm }]   : []),
+    ...(gueltigBis  ? [{ label: "Gültig bis",   val: gueltigBis }]  : []),
+    { label: "Ihre Kundennummer", val: "—" },
+    { label: "Ihr Ansprechpartner", val: absenderName },
+  ];
+
+  const leistungPos = positionen.filter(p => p.typ === "leistung").slice(0, 8);
+
+  // ── Shared DIN 5008 body (below Briefkopf) ────────────────────────────────
+  const renderBody = (tableHBg: string, tableHColor: string) => (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+
+      {/* Zone B: Absenderzeile + Anschrift + Bezugszeichen */}
+      <div style={{ padding: `8px ${PX.marginH}px 0`, display: "flex", gap: 16, alignItems: "flex-start" }}>
+        {/* Empfängerblock */}
+        <div style={{ flex: "0 0 46%", fontSize: PX.body, lineHeight: 1.6, color: "#222" }}>
+          {/* DIN 5008 Absenderzeile */}
+          <div style={{ fontSize: PX.caption, color: "#999", borderBottom: "0.5px solid #ddd", paddingBottom: 2, marginBottom: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {absenderName} – {absenderAdresse} – {absenderPlz} {absenderOrt}
+          </div>
+          {empfaengerFirma && <div style={{ fontWeight: 600 }}>{empfaengerFirma}</div>}
+          <div>{empfaengerName || <span style={{ color: "#ccc" }}>Empfänger</span>}</div>
+          {empfaengerAdresse && <div>{empfaengerAdresse}</div>}
+          {(empfaengerPlz || empfaengerOrt) && <div>{empfaengerPlz} {empfaengerOrt}</div>}
+          {empfaengerLand && empfaengerLand !== "Deutschland" && <div>{empfaengerLand}</div>}
+        </div>
+        {/* Informationsblock (Bezugszeichen) */}
+        <div style={{ flex: 1, fontSize: PX.small + 0.5, lineHeight: 1.75 }}>
+          {metaRows.map(r => (
+            <div key={r.label} style={{ display: "flex" }}>
+              <div style={{ color: "#888", minWidth: 100, flexShrink: 0 }}>{r.label}</div>
+              <div style={{ fontWeight: 600, color: "#111" }}>{r.val}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Blank / Bezugszeile space */}
+      <div style={{ height: 22 }} />
+
+      {/* Zone C: Betreff */}
+      <div style={{ padding: `0 ${PX.marginH}px 4px` }}>
+        <div style={{ fontSize: PX.title, fontWeight: 700, color: "#111" }}>
+          {typLabel}{nummer ? ` ${nummer}` : ""}
+        </div>
+      </div>
+
+      {/* Anrede + Kopftext */}
+      <div style={{ padding: `0 ${PX.marginH}px 6px`, fontSize: PX.body, color: "#333", lineHeight: 1.55 }}>
+        {kopftext
+          ? <>{kopftext.substring(0, 200)}{kopftext.length > 200 ? "…" : ""}</>
+          : <>Sehr geehrte Damen und Herren,<br />vielen Dank für Ihre Anfrage. Gerne unterbreite ich Ihnen das gewünschte Angebot:</>
+        }
+      </div>
+
+      {/* Positionen-Tabelle */}
+      <div style={{ padding: `0 ${PX.marginH}px`, flex: 1 }}>
+        {/* Tabellenkopf */}
+        <div style={{ display: "flex", backgroundColor: tableHBg, color: tableHColor, padding: "4px 6px", fontSize: PX.small, fontWeight: 700 }}>
+          <span style={{ width: 28 }}>Pos.</span>
+          <span style={{ flex: 4 }}>Beschreibung</span>
+          <span style={{ width: 52, textAlign: "right" }}>Menge</span>
+          <span style={{ width: 62, textAlign: "right" }}>Einzelpreis</span>
+          <span style={{ width: 68, textAlign: "right" }}>Gesamtpreis</span>
+        </div>
+        {leistungPos.length === 0 ? (
+          <div style={{ padding: "6px 6px", fontSize: PX.small, color: "#ccc", borderBottom: "0.5px solid #eee" }}>
+            Noch keine Positionen
+          </div>
+        ) : leistungPos.map((pos, i) => (
+          <div key={pos.id} style={{ display: "flex", padding: "3.5px 6px", backgroundColor: i % 2 === 0 ? "#f9f9f9" : "#fff", borderBottom: "0.5px solid #ebebeb", fontSize: PX.small + 0.5 }}>
+            <span style={{ width: 28, color: "#999" }}>{i + 1}.</span>
+            <span style={{ flex: 4, color: pos.bezeichnung ? "#111" : "#bbb" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</span>
+            <span style={{ width: 52, textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit?.substring(0, 4)}</span>
+            <span style={{ width: 62, textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
+            <span style={{ width: 68, textAlign: "right", fontWeight: 600, color: "#111" }}>{fmt(pos.gesamt)}</span>
+          </div>
+        ))}
+        <div style={{ borderTop: "0.5px solid #ccc", marginTop: 1 }} />
+      </div>
+
+      {/* Summen */}
+      <div style={{ padding: `4px ${PX.marginH}px`, display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ minWidth: 210, fontSize: PX.body }}>
+          <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
+            <span>Gesamtbetrag netto</span>
+            <span style={{ color: "#111" }}>{fmt(summen.netto)}</span>
+          </div>
+          {!kleinunternehmer && mwstSatz > 0 && (
+            <div style={{ display: "flex", justifyContent: "space-between", lineHeight: 1.9, color: "#555" }}>
+              <span>zzgl. MwSt. {mwstSatz}%</span>
+              <span style={{ color: "#111" }}>{fmt(summen.mwstBetrag)}</span>
+            </div>
+          )}
+          {kleinunternehmer && (
+            <div style={{ fontSize: PX.small, color: "#999", lineHeight: 1.4, marginBottom: 3 }}>
+              Umsatzsteuer nicht erhoben gemäß §19 UStG.
+            </div>
+          )}
+          <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #111", paddingTop: 3, marginTop: 2, fontWeight: 700, fontSize: PX.body + 1 }}>
+            <span>Gesamtbetrag brutto</span>
+            <span style={{ color }}>{fmt(summen.brutto)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Fußtext / Zahlungsbedingungen */}
+      {fusstext && (
+        <div style={{ padding: `3px ${PX.marginH}px`, fontSize: PX.small + 0.5, color: "#444", lineHeight: 1.55 }}>
+          {fusstext.substring(0, 200)}{fusstext.length > 200 ? "…" : ""}
+        </div>
+      )}
+
+      {/* Grußformel */}
+      <div style={{ padding: `6px ${PX.marginH}px 4px`, fontSize: PX.body, color: "#333", lineHeight: 1.6 }}>
+        Mit magischen Grüßen
+        <div style={{ marginTop: 12 }}>
+          <div style={{ fontWeight: 600 }}>{absenderName}</div>
+          {absenderUntertitel && <div style={{ color: "#666" }}>{absenderUntertitel}</div>}
+        </div>
+      </div>
+
+      {/* ── DIN 5008 Fußzeile: 4 Spalten ────────────────────────────────── */}
+      <div style={{ borderTop: "0.75px solid #bbb", margin: `4px ${PX.marginH}px 0`, paddingTop: 6, paddingBottom: 8, display: "flex", gap: 0, fontSize: PX.caption + 0.5, color: "#555", lineHeight: 1.65 }}>
+        {/* Spalte 1: Adresse */}
+        <div style={{ flex: 1 }}>
+          <div>{absenderName} {absenderUntertitel}</div>
+          {absenderAdresse && <div>{absenderAdresse}</div>}
+          {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
+          {absenderLand && <div>{absenderLand}</div>}
+        </div>
+        {/* Spalte 2: Kontakt */}
+        <div style={{ flex: 1 }}>
+          {absenderTel     && <div>Tel. {absenderTel}</div>}
+          {absenderEmail   && <div>E-Mail {absenderEmail}</div>}
+          {absenderWebsite && <div>Web {absenderWebsite}</div>}
+        </div>
+        {/* Spalte 3: Steuer */}
+        <div style={{ flex: 1 }}>
+          {absenderSteuernummer && <div>Steuer-Nr. {absenderSteuernummer}</div>}
+          {absenderInhaber      && <div>Inhaber/-in {absenderInhaber}</div>}
+        </div>
+        {/* Spalte 4: Bank */}
+        <div style={{ flex: 1 }}>
+          {absenderIban && <div>IBAN {absenderIban}</div>}
+          {absenderBic  && <div>BIC {absenderBic}</div>}
+        </div>
+      </div>
+    </div>
+  );
 
   // ── DIN 5008 Body (shared across all layouts) ────────────────────────────────
   const renderDIN5008Body = (tableHeaderBg = "#111", tableHeaderColor = "#fff", dark = false) => {
@@ -580,359 +759,302 @@ function DocumentPreview(props: PreviewProps) {
     );
   };
 
-  // ── Briefkopf-Varianten (nur der Kopfbereich ändert sich pro Layout) ─────────
+  // ── Briefkopf-Bausteine ──────────────────────────────────────────────────────
+  const M = PX.marginH;
+  const LS = PX.logoSize;
 
-  const BriefkopfKlassisch = () => (
-    <div style={{ backgroundColor: color, padding: "8px 14px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-        <div>
-          <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px", lineHeight: 1.2 }}>{absenderName}</div>
-          {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.75)", fontSize: "5.5px" }}>{absenderUntertitel}</div>}
-          <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "5.5px", marginTop: "2px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <div style={{ width: "22px", height: "16px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.2)", marginBottom: "3px", marginLeft: "auto" }} />
-          {(absenderTel || absenderEmail) && (
-            <div style={{ fontSize: "5px", color: "rgba(255,255,255,0.6)" }}>
-              {absenderTel && <div>{absenderTel}</div>}
-              {absenderEmail && <div>{absenderEmail}</div>}
-            </div>
-          )}
-        </div>
+  // Logo-Platzhalter (oben rechts, wie im DIN 5008 Beispiel)
+  const LogoBox = ({ dark = false }: { dark?: boolean }) => (
+    <div style={{ position: "absolute", top: PX.logoTop, right: M, width: LS, height: LS, borderRadius: 6, backgroundColor: dark ? "rgba(255,255,255,0.12)" : "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 2 }}>
+      <div style={{ fontSize: 9, color: dark ? "rgba(255,255,255,0.35)" : "#ccc", fontWeight: 600, letterSpacing: 0.5 }}>LOGO</div>
+    </div>
+  );
+
+  // Absender-Textblock (oben links)
+  const AbsenderBlock = ({ color: c = "#111", sub = "#666", addr = "#888" }: { color?: string; sub?: string; addr?: string }) => (
+    <div>
+      <div style={{ fontSize: 13, fontWeight: 700, color: c, lineHeight: 1.25 }}>{absenderName}</div>
+      {absenderUntertitel && <div style={{ fontSize: 9.5, color: sub, marginTop: 1 }}>{absenderUntertitel}</div>}
+      <div style={{ fontSize: 8.5, color: addr, marginTop: 3, lineHeight: 1.55 }}>
+        {absenderAdresse && <div>{absenderAdresse}</div>}
+        {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
       </div>
     </div>
   );
 
-  const BriefkopfZweiSpaltig = (bg = "#fff", textLeft = "#111", textRight = "#555") => (
-    <div style={{ display: "flex", padding: "8px 14px", backgroundColor: bg, borderBottom: "0.5px solid #e5e5e5" }}>
-      <div style={{ flex: 1 }}>
-        <div style={{ fontSize: "9px", fontWeight: "bold", color: textLeft, lineHeight: 1.2 }}>{absenderName}</div>
-        {absenderUntertitel && <div style={{ fontSize: "5.5px", color: textRight }}>{absenderUntertitel}</div>}
-        <div style={{ fontSize: "5.5px", color: textRight, marginTop: "2px" }}>{absenderAdresse}</div>
-        <div style={{ fontSize: "5.5px", color: textRight }}>{absenderPlz} {absenderOrt}</div>
-      </div>
-      <div style={{ textAlign: "right", fontSize: "5.5px", color: textRight }}>
-        <div style={{ width: "20px", height: "14px", borderRadius: "2px", backgroundColor: bg === "#fff" ? "#eee" : "rgba(255,255,255,0.15)", marginBottom: "4px", marginLeft: "auto" }} />
-        {absenderTel && <div>Tel.: {absenderTel}</div>}
-        {absenderEmail && <div>{absenderEmail}</div>}
-        {absenderWebsite && <div>{absenderWebsite}</div>}
-        {absenderSteuernummer && <div style={{ marginTop: "1px" }}>St.-Nr.: {absenderSteuernummer}</div>}
-        {absenderIban && <div>IBAN: {absenderIban.substring(0, 12)}…</div>}
-      </div>
+  // Kontakt-Textblock (oben rechts, neben/unter Logo)
+  const KontaktBlock = ({ c = "#666" }: { c?: string }) => (
+    <div style={{ fontSize: 8.5, color: c, lineHeight: 1.65, textAlign: "right" }}>
+      {absenderTel     && <div>{absenderTel}</div>}
+      {absenderEmail   && <div>{absenderEmail}</div>}
+      {absenderWebsite && <div>{absenderWebsite}</div>}
     </div>
   );
 
-  // ── 15 Layout-Renderer ───────────────────────────────────────────────────────
+  // Wrapper
+  const wrap = (bg: string, header: React.ReactNode, thBg: string, thColor: string) => (
+    <div style={{ width: "100%", height: "100%", backgroundColor: bg, fontFamily: font, color: "#1a1a1a", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+      {header}
+      {renderBody(thBg, thColor)}
+    </div>
+  );
 
+  // ── 15 Layouts ────────────────────────────────────────────────────────────────
   switch (layoutId) {
 
-    // 1 – Klassisch: Farbiger Kopfbalken, schwarzer Tabellenkopf
-    case 1: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <BriefkopfKlassisch />
-        {renderDIN5008Body("#111", "#fff")}
-      </div>
-    );
-
-    // 2 – Wave Dark: Dunkler Kopf mit Wellenabschluss
-    case 2: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ position: "relative", backgroundColor: "#111", padding: "8px 14px 16px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              {absenderUntertitel && <div style={{ color: color, fontSize: "5px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "1px" }}>{absenderUntertitel}</div>}
-              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px" }}>{absenderName}</div>
-              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "5.5px", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-            </div>
-            <div style={{ textAlign: "right", fontSize: "5.5px" }}>
-              <div style={{ width: "22px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.12)", marginBottom: "3px", marginLeft: "auto" }} />
-              {absenderTel && <div style={{ color: "rgba(255,255,255,0.45)" }}>{absenderTel}</div>}
-              {absenderEmail && <div style={{ color: "rgba(255,255,255,0.45)" }}>{absenderEmail}</div>}
-            </div>
-          </div>
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "7px", backgroundColor: "#fff", borderRadius: "55% 55% 0 0" }} />
+    // 1 – Klassisch: Voller Farbbalken, Logo rechts weiß
+    case 1: return wrap("#fff",
+      <div style={{ backgroundColor: color, padding: `${PX.logoTop}px ${M}px 18px`, position: "relative", minHeight: PX.headerH }}>
+        <AbsenderBlock color="#fff" sub="rgba(255,255,255,0.8)" addr="rgba(255,255,255,0.65)" />
+        <div style={{ position: "absolute", top: PX.logoTop, right: M, width: LS, height: LS, borderRadius: 6, backgroundColor: "rgba(255,255,255,0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>LOGO</div>
         </div>
-        {renderDIN5008Body("#111", "#fff")}
-      </div>
-    );
-
-    // 3 – Split: Großer Firmenname links, Farbverlauf-Trennlinie
-    case 3: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ padding: "8px 14px 4px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-            <div>
-              <div style={{ fontSize: "13px", fontWeight: "900", color, lineHeight: 1, letterSpacing: "-0.5px" }}>{absenderName}</div>
-              {absenderUntertitel && <div style={{ fontSize: "5.5px", color: "#aaa", marginTop: "1px" }}>{absenderUntertitel}</div>}
-              <div style={{ fontSize: "5.5px", color: "#bbb", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-            </div>
-            <div style={{ textAlign: "right", fontSize: "5.5px", color: "#888" }}>
-              <div style={{ width: "20px", height: "13px", borderRadius: "2px", backgroundColor: "#f0f0f0", marginBottom: "2px", marginLeft: "auto" }} />
-              {absenderTel && <div>{absenderTel}</div>}
-              {absenderEmail && <div>{absenderEmail}</div>}
-            </div>
-          </div>
-          <div style={{ marginTop: "5px", height: "2px", background: `linear-gradient(to right, ${color}, transparent)`, borderRadius: "1px" }} />
+        <div style={{ position: "absolute", bottom: 18, right: M }}>
+          <KontaktBlock c="rgba(255,255,255,0.7)" />
         </div>
-        {renderDIN5008Body(color, "#fff")}
-      </div>
+      </div>,
+      "#111", "#fff"
     );
 
-    // 4 – Retro: Schreibmaschinen-Stil
-    case 4: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fffef8", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ padding: "7px 14px 4px" }}>
-          <div style={{ borderTop: "1.5px solid #111", borderBottom: "1.5px solid #111", padding: "3px 0", display: "flex", justifyContent: "space-between" }}>
-            <div>
-              <div style={{ fontSize: "8.5px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1.5px" }}>{absenderName}</div>
-              {absenderUntertitel && <div style={{ fontSize: "5px", letterSpacing: "0.8px", color: "#555" }}>{absenderUntertitel.toUpperCase()}</div>}
-              <div style={{ fontSize: "5.5px", color: "#666", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-            </div>
-            <div style={{ textAlign: "right", fontSize: "5.5px", color: "#555" }}>
-              {absenderTel && <div>{absenderTel}</div>}
-              {absenderEmail && <div>{absenderEmail}</div>}
-              {absenderSteuernummer && <div>St.-Nr.: {absenderSteuernummer}</div>}
-            </div>
+    // 2 – Wave Dark
+    case 2: return wrap("#fff",
+      <div style={{ backgroundColor: "#111", padding: `${PX.logoTop}px ${M}px 28px`, position: "relative", minHeight: PX.headerH }}>
+        <div style={{ position: "absolute", top: 8, left: M }}>
+          <div style={{ fontSize: 8, color: color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 }}>{absenderUntertitel}</div>
+        </div>
+        <div style={{ marginTop: 20 }}>
+          <AbsenderBlock color="#fff" sub="rgba(255,255,255,0.6)" addr="rgba(255,255,255,0.4)" />
+        </div>
+        <LogoBox dark />
+        <div style={{ position: "absolute", bottom: 22, right: M }}><KontaktBlock c="rgba(255,255,255,0.45)" /></div>
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 10, backgroundColor: "#fff", borderRadius: "60% 60% 0 0" }} />
+      </div>,
+      "#111", "#fff"
+    );
+
+    // 3 – Split: Firmenname riesig + Farbverlauf-Linie
+    case 3: return wrap("#fff",
+      <div style={{ padding: `${PX.logoTop}px ${M}px 12px`, position: "relative", minHeight: PX.headerH }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 900, color, lineHeight: 1, letterSpacing: -1 }}>{absenderName}</div>
+            {absenderUntertitel && <div style={{ fontSize: 9.5, color: "#aaa", marginTop: 2 }}>{absenderUntertitel}</div>}
+            <div style={{ fontSize: 8.5, color: "#bbb", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <LogoBox />
+            <div style={{ marginTop: 6 }}><KontaktBlock c="#888" /></div>
           </div>
         </div>
-        {renderDIN5008Body("#111", "#fffef8")}
-      </div>
+        <div style={{ marginTop: 14, height: 2, background: `linear-gradient(to right, ${color}, transparent)`, borderRadius: 1 }} />
+      </div>,
+      color, "#fff"
     );
 
-    // 5 – Seitenstreifen: Vertikaler Farbstreifen
+    // 4 – Retro: Typewriter, doppelte Linie
+    case 4: return wrap("#fffef8",
+      <div style={{ padding: `${PX.logoTop}px ${M}px 12px` }}>
+        <div style={{ borderTop: "2px solid #111", borderBottom: "2px solid #111", padding: "8px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2 }}>{absenderName}</div>
+            {absenderUntertitel && <div style={{ fontSize: 8.5, letterSpacing: 1, color: "#555", marginTop: 1 }}>{absenderUntertitel.toUpperCase()}</div>}
+            <div style={{ fontSize: 8, color: "#666", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <KontaktBlock c="#555" />
+          </div>
+        </div>
+      </div>,
+      "#111", "#fffef8"
+    );
+
+    // 5 – Seitenstreifen
     case 5: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px", display: "flex" }}>
-        <div style={{ width: "9px", backgroundColor: color, flexShrink: 0 }} />
-        <div style={{ flex: 1, overflow: "hidden" }}>
-          {BriefkopfZweiSpaltig()}
-          {renderDIN5008Body(color, "#fff")}
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", display: "flex" }}>
+        <div style={{ width: 14, backgroundColor: color, flexShrink: 0 }} />
+        <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+          <div style={{ padding: `${PX.logoTop}px ${M - 14}px 12px`, position: "relative", minHeight: PX.headerH, borderBottom: "0.5px solid #e5e5e5" }}>
+            <AbsenderBlock />
+            <LogoBox />
+            <div style={{ position: "absolute", bottom: 12, right: M - 14 }}><KontaktBlock c="#888" /></div>
+          </div>
+          {renderBody(color, "#fff")}
         </div>
       </div>
     );
 
     // 6 – Dark Premium
-    case 6: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ backgroundColor: "#111", padding: "9px 14px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              <div style={{ width: "18px", height: "3px", backgroundColor: color, borderRadius: "1px", marginBottom: "4px" }} />
-              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px" }}>{absenderName}</div>
-              {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "5.5px" }}>{absenderUntertitel}</div>}
-              <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "5.5px", marginTop: "2px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-            </div>
-            <div style={{ textAlign: "right", fontSize: "5.5px" }}>
-              <div style={{ width: "22px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.08)", marginBottom: "3px", marginLeft: "auto" }} />
-              {absenderTel && <div style={{ color: "rgba(255,255,255,0.4)" }}>{absenderTel}</div>}
-              {absenderEmail && <div style={{ color: "rgba(255,255,255,0.4)" }}>{absenderEmail}</div>}
-              {absenderIban && <div style={{ color: "rgba(255,255,255,0.3)", marginTop: "2px" }}>IBAN: {absenderIban.substring(0, 10)}…</div>}
-            </div>
-          </div>
-        </div>
-        {renderDIN5008Body("#222", "#fff")}
-      </div>
+    case 6: return wrap("#fff",
+      <div style={{ backgroundColor: "#111", padding: `${PX.logoTop}px ${M}px 18px`, position: "relative", minHeight: PX.headerH }}>
+        <div style={{ width: 28, height: 3, backgroundColor: color, borderRadius: 2, marginBottom: 8 }} />
+        <AbsenderBlock color="#fff" sub="rgba(255,255,255,0.55)" addr="rgba(255,255,255,0.35)" />
+        <LogoBox dark />
+        <div style={{ position: "absolute", bottom: 18, right: M }}><KontaktBlock c="rgba(255,255,255,0.4)" /></div>
+      </div>,
+      "#222", "#fff"
     );
 
-    // 7 – Corporate: Zentriert mit Farbverlauf-Linie
-    case 7: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ padding: "7px 14px 4px", textAlign: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", marginBottom: "2px" }}>
-            <div style={{ width: "20px", height: "14px", borderRadius: "3px", backgroundColor: "#eee" }} />
-            <div>
-              <div style={{ fontSize: "9px", fontWeight: "bold" }}>{absenderName}</div>
-              {absenderUntertitel && <div style={{ fontSize: "5px", color: "#999" }}>{absenderUntertitel}</div>}
-            </div>
-          </div>
-          <div style={{ fontSize: "5px", color: "#bbb" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}{absenderTel ? ` · ${absenderTel}` : ""}{absenderEmail ? ` · ${absenderEmail}` : ""}</div>
-          <div style={{ height: "1.5px", background: `linear-gradient(to right, transparent, ${color}, transparent)`, marginTop: "4px" }} />
-        </div>
-        {renderDIN5008Body(color, "#fff")}
-      </div>
-    );
-
-    // 8 – Kreativ: Diagonale Farbfläche
-    case 8: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ position: "relative", height: "30px", overflow: "hidden" }}>
-          <div style={{ position: "absolute", inset: 0, backgroundColor: "#f7f7f7" }} />
-          <div style={{ position: "absolute", top: 0, left: 0, width: "60%", height: "100%", backgroundColor: color, clipPath: "polygon(0 0, 88% 0, 68% 100%, 0 100%)" }} />
-          <div style={{ position: "absolute", inset: 0, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 14px" }}>
-            <div>
-              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "8.5px" }}>{absenderName}</div>
-              {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.75)", fontSize: "5px" }}>{absenderUntertitel}</div>}
-            </div>
-            <div style={{ textAlign: "right", fontSize: "5.5px", color: "#666" }}>
-              {absenderTel && <div>{absenderTel}</div>}
-              {absenderEmail && <div>{absenderEmail}</div>}
-            </div>
+    // 7 – Corporate: zentriert
+    case 7: return wrap("#fff",
+      <div style={{ padding: `${PX.logoTop}px ${M}px 12px`, textAlign: "center", position: "relative", minHeight: PX.headerH }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 4 }}>
+          <div style={{ width: LS * 0.8, height: LS * 0.55, borderRadius: 5, backgroundColor: "#eee" }} />
+          <div style={{ textAlign: "left" }}>
+            <div style={{ fontSize: 13, fontWeight: 700 }}>{absenderName}</div>
+            {absenderUntertitel && <div style={{ fontSize: 9, color: "#999" }}>{absenderUntertitel}</div>}
           </div>
         </div>
-        {renderDIN5008Body("#111", "#fff")}
-      </div>
+        <div style={{ fontSize: 8, color: "#bbb" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}{absenderTel ? ` · ${absenderTel}` : ""}{absenderEmail ? ` · ${absenderEmail}` : ""}</div>
+        <div style={{ height: 1.5, background: `linear-gradient(to right, transparent, ${color}, transparent)`, marginTop: 10 }} />
+      </div>,
+      color, "#fff"
     );
 
-    // 9 – Skandinavisch: Ultra-minimal
-    case 9: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: "Inter, system-ui, sans-serif", color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ padding: "9px 14px 5px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                <div style={{ width: "14px", height: "1.5px", backgroundColor: color }} />
-                <div style={{ fontSize: "8px", fontWeight: "300", letterSpacing: "-0.2px" }}>{absenderName}</div>
-              </div>
-              {absenderUntertitel && <div style={{ fontSize: "5px", color: "#bbb", marginTop: "1px", marginLeft: "18px" }}>{absenderUntertitel}</div>}
-            </div>
-            <div style={{ fontSize: "5px", color: "#ccc", textAlign: "right" }}>
-              {absenderTel && <div>{absenderTel}</div>}
-              {absenderEmail && <div>{absenderEmail}</div>}
-            </div>
+    // 8 – Kreativ: Diagonal
+    case 8: return wrap("#fff",
+      <div style={{ position: "relative", height: PX.headerH, overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundColor: "#f5f5f5" }} />
+        <div style={{ position: "absolute", top: 0, left: 0, width: "62%", height: "100%", backgroundColor: color, clipPath: "polygon(0 0, 90% 0, 72% 100%, 0 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, display: "flex", justifyContent: "space-between", alignItems: "center", padding: `0 ${M}px` }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{absenderName}</div>
+            {absenderUntertitel && <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)" }}>{absenderUntertitel}</div>}
+            <div style={{ fontSize: 8, color: "rgba(255,255,255,0.65)", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
           </div>
-          <div style={{ marginTop: "3px", borderBottom: "0.5px solid #e8e8e8" }} />
-        </div>
-        {renderDIN5008Body("#f4f4f4", "#333")}
-      </div>
-    );
-
-    // 10 – Luxus: Doppelte Linien, Serif-Typografie
-    case 10: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fffdf8", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ padding: "8px 14px" }}>
-          <div style={{ height: "0.5px", backgroundColor: color, marginBottom: "3px" }} />
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2px 0" }}>
-            <div>
-              <div style={{ fontSize: "9px", fontWeight: "bold", fontStyle: "italic" }}>{absenderName}</div>
-              {absenderUntertitel && <div style={{ fontSize: "5.5px", color: "#aaa", fontStyle: "italic" }}>{absenderUntertitel}</div>}
-              <div style={{ fontSize: "5px", color: "#bbb", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-            </div>
-            <div style={{ textAlign: "right", fontSize: "5.5px", color: "#888" }}>
-              {absenderTel && <div>{absenderTel}</div>}
-              {absenderEmail && <div>{absenderEmail}</div>}
-              {absenderSteuernummer && <div style={{ marginTop: "1px", fontSize: "5px" }}>St.-Nr.: {absenderSteuernummer}</div>}
-            </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ width: LS * 0.75, height: LS * 0.55, borderRadius: 4, backgroundColor: "rgba(0,0,0,0.08)", marginBottom: 4, marginLeft: "auto" }} />
+            <KontaktBlock c="#777" />
           </div>
-          <div style={{ height: "0.5px", backgroundColor: color, marginTop: "3px" }} />
         </div>
-        {renderDIN5008Body("#f8f2e8", "#5a4030")}
-      </div>
+      </div>,
+      "#111", "#fff"
     );
 
-    // 11 – Rahmen: Dokumentumrahmung
+    // 9 – Skandinavisch
+    case 9: return wrap("#fff",
+      <div style={{ padding: `${PX.logoTop}px ${M}px 14px`, position: "relative", minHeight: PX.headerH }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+          <div style={{ width: 20, height: 2, backgroundColor: color }} />
+          <div style={{ fontSize: 13, fontWeight: 300, letterSpacing: -0.3 }}>{absenderName}</div>
+        </div>
+        {absenderUntertitel && <div style={{ fontSize: 8.5, color: "#bbb", marginLeft: 28 }}>{absenderUntertitel}</div>}
+        <div style={{ fontSize: 8, color: "#ccc", marginLeft: 28, marginTop: 2 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+        <LogoBox />
+        <div style={{ position: "absolute", bottom: 14, right: M }}><KontaktBlock c="#ccc" /></div>
+        <div style={{ marginTop: 16, borderBottom: "0.75px solid #e0e0e0" }} />
+      </div>,
+      "#f2f2f2", "#333"
+    );
+
+    // 10 – Luxus: Serif, doppelte Linien
+    case 10: return wrap("#fffdf8",
+      <div style={{ padding: `${PX.logoTop}px ${M}px 14px`, position: "relative", minHeight: PX.headerH }}>
+        <div style={{ height: 0.75, backgroundColor: color, marginBottom: 10 }} />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, fontStyle: "italic" }}>{absenderName}</div>
+            {absenderUntertitel && <div style={{ fontSize: 9, color: "#aaa", fontStyle: "italic" }}>{absenderUntertitel}</div>}
+            <div style={{ fontSize: 8, color: "#bbb", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+          </div>
+          <div>
+            <div style={{ width: LS * 0.75, height: LS * 0.55, borderRadius: 4, backgroundColor: "#f0ebe0", marginBottom: 4 }} />
+            <KontaktBlock c="#aaa" />
+          </div>
+        </div>
+        <div style={{ height: 0.75, backgroundColor: color, marginTop: 10 }} />
+      </div>,
+      "#f0e8d8", "#5a4030"
+    );
+
+    // 11 – Rahmen
     case 11: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px", padding: "4px" }}>
-        <div style={{ border: `1.5px solid ${color}`, height: "calc(100% - 8px)", overflow: "hidden", borderRadius: "2px" }}>
-          <div style={{ backgroundColor: color, padding: "6px 12px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-              <div>
-                <div style={{ color: "#fff", fontWeight: "bold", fontSize: "8.5px" }}>{absenderName}</div>
-                {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "5px" }}>{absenderUntertitel}</div>}
-                <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "5.5px", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-              </div>
-              <div style={{ textAlign: "right", fontSize: "5.5px" }}>
-                <div style={{ width: "18px", height: "12px", borderRadius: "2px", backgroundColor: "rgba(255,255,255,0.2)", marginBottom: "2px", marginLeft: "auto" }} />
-                {absenderTel && <div style={{ color: "rgba(255,255,255,0.6)" }}>{absenderTel}</div>}
-                {absenderEmail && <div style={{ color: "rgba(255,255,255,0.6)" }}>{absenderEmail}</div>}
-              </div>
-            </div>
+      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", padding: 6, display: "flex", flexDirection: "column" }}>
+        <div style={{ border: `2px solid ${color}`, flex: 1, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+          <div style={{ backgroundColor: color, padding: `${PX.logoTop * 0.6}px ${M - 6}px 14px`, position: "relative", minHeight: PX.headerH * 0.85 }}>
+            <AbsenderBlock color="#fff" sub="rgba(255,255,255,0.8)" addr="rgba(255,255,255,0.6)" />
+            <div style={{ position: "absolute", top: 12, right: M - 6, width: LS * 0.75, height: LS * 0.55, borderRadius: 4, backgroundColor: "rgba(255,255,255,0.2)" }} />
+            <div style={{ position: "absolute", bottom: 14, right: M - 6 }}><KontaktBlock c="rgba(255,255,255,0.7)" /></div>
           </div>
-          {renderDIN5008Body("#111", "#fff")}
+          {renderBody("#111", "#fff")}
         </div>
       </div>
     );
 
-    // 12 – Technik: Geometrisch, zweispaltig
-    case 12: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#f8f9fb", fontFamily: "Inter, system-ui, sans-serif", color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ display: "flex", borderBottom: `2px solid ${color}` }}>
-          <div style={{ flex: "0 0 55%", backgroundColor: color + "14", padding: "7px 12px 5px", borderRight: `1px solid ${color}22` }}>
-            <div style={{ fontSize: "5px", color: color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "2px" }}>Absender</div>
-            <div style={{ fontSize: "8.5px", fontWeight: "bold" }}>{absenderName}</div>
-            {absenderUntertitel && <div style={{ fontSize: "5px", color: "#666" }}>{absenderUntertitel}</div>}
-            <div style={{ fontSize: "5.5px", color: "#777", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-          </div>
-          <div style={{ flex: 1, padding: "7px 12px 5px" }}>
-            <div style={{ fontSize: "5px", color: color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "2px" }}>Kontakt</div>
-            {absenderTel && <div style={{ fontSize: "5.5px", color: "#555" }}>{absenderTel}</div>}
-            {absenderEmail && <div style={{ fontSize: "5.5px", color: "#555" }}>{absenderEmail}</div>}
-            {absenderWebsite && <div style={{ fontSize: "5.5px", color: "#777" }}>{absenderWebsite}</div>}
-            {absenderSteuernummer && <div style={{ fontSize: "5px", color: "#999", marginTop: "1px" }}>St.-Nr.: {absenderSteuernummer}</div>}
-          </div>
+    // 12 – Technik: Zweispaltig Header
+    case 12: return wrap("#f8f9fb",
+      <div style={{ display: "flex", borderBottom: `2.5px solid ${color}`, minHeight: PX.headerH }}>
+        <div style={{ flex: "0 0 58%", backgroundColor: color + "13", padding: `${PX.logoTop}px ${M}px 14px`, borderRight: `1px solid ${color}20` }}>
+          <div style={{ fontSize: 8.5, color: color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 6 }}>Absender</div>
+          <AbsenderBlock color="#111" sub="#666" addr="#888" />
         </div>
-        {renderDIN5008Body(color, "#fff")}
-      </div>
+        <div style={{ flex: 1, padding: `${PX.logoTop}px 20px 14px`, position: "relative" }}>
+          <div style={{ fontSize: 8.5, color: color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 6 }}>Kontakt</div>
+          <div style={{ fontSize: 8.5, color: "#555", lineHeight: 1.65 }}>
+            {absenderTel     && <div>{absenderTel}</div>}
+            {absenderEmail   && <div>{absenderEmail}</div>}
+            {absenderWebsite && <div>{absenderWebsite}</div>}
+            {absenderSteuernummer && <div style={{ marginTop: 4, color: "#888" }}>St.-Nr.: {absenderSteuernummer}</div>}
+          </div>
+          <div style={{ position: "absolute", top: PX.logoTop, right: 20, width: LS * 0.7, height: LS * 0.5, borderRadius: 4, backgroundColor: "#e8eaed" }} />
+        </div>
+      </div>,
+      color, "#fff"
     );
 
-    // 13 – Pfeile: Pfeil-Trenner im Absender
-    case 13: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ padding: "8px 14px 4px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "4px", flexWrap: "wrap" }}>
-            <span style={{ fontWeight: "bold", fontSize: "8.5px" }}>{absenderName}</span>
-            <span style={{ color: color, fontWeight: "bold", fontSize: "8px" }}>›</span>
-            {absenderUntertitel && <>
-              <span style={{ color: "#888", fontSize: "6px" }}>{absenderUntertitel}</span>
-              <span style={{ color: color, fontWeight: "bold", fontSize: "8px" }}>›</span>
-            </>}
-            <span style={{ color: "#aaa", fontSize: "5.5px" }}>{absenderAdresse}</span>
-            <span style={{ color: color, fontWeight: "bold", fontSize: "8px" }}>›</span>
-            <span style={{ color: "#aaa", fontSize: "5.5px" }}>{absenderPlz} {absenderOrt}</span>
-          </div>
-          <div style={{ display: "flex", gap: "6px", fontSize: "5px", color: "#bbb", marginTop: "1px" }}>
-            {absenderTel && <span>{absenderTel}</span>}
-            {absenderEmail && <span>{absenderEmail}</span>}
-            {absenderSteuernummer && <span>St.-Nr.: {absenderSteuernummer}</span>}
-          </div>
-          <div style={{ marginTop: "4px", height: "1px", backgroundColor: color }} />
+    // 13 – Pfeile
+    case 13: return wrap("#fff",
+      <div style={{ padding: `${PX.logoTop}px ${M}px 12px`, position: "relative", minHeight: PX.headerH }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginBottom: 4 }}>
+          <span style={{ fontWeight: 700, fontSize: 13 }}>{absenderName}</span>
+          {absenderUntertitel && <>
+            <span style={{ color: color, fontWeight: 700, fontSize: 14 }}>›</span>
+            <span style={{ color: "#888", fontSize: 9.5 }}>{absenderUntertitel}</span>
+          </>}
+          <span style={{ color: color, fontWeight: 700, fontSize: 14 }}>›</span>
+          <span style={{ color: "#aaa", fontSize: 8.5 }}>{absenderAdresse}</span>
+          <span style={{ color: color, fontWeight: 700, fontSize: 14 }}>›</span>
+          <span style={{ color: "#aaa", fontSize: 8.5 }}>{absenderPlz} {absenderOrt}</span>
         </div>
-        {renderDIN5008Body("#111", "#fff")}
-      </div>
+        <div style={{ fontSize: 8, color: "#bbb", display: "flex", gap: 12 }}>
+          {absenderTel && <span>{absenderTel}</span>}
+          {absenderEmail && <span>{absenderEmail}</span>}
+        </div>
+        <LogoBox />
+        <div style={{ marginTop: 14, height: 1, backgroundColor: color }} />
+      </div>,
+      "#111", "#fff"
     );
 
-    // 14 – Panorama: Voller Farbverlauf
-    case 14: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ background: `linear-gradient(135deg, ${color}ee, ${color}88)`, padding: "9px 14px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              {absenderUntertitel && <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "5px", textTransform: "uppercase", letterSpacing: "0.7px", marginBottom: "1px" }}>{absenderUntertitel}</div>}
-              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9.5px" }}>{absenderName}</div>
-              <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "5.5px", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-            </div>
-            <div style={{ textAlign: "right" }}>
-              <div style={{ width: "22px", height: "15px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.2)", marginBottom: "3px", marginLeft: "auto" }} />
-              <div style={{ fontSize: "5.5px", color: "rgba(255,255,255,0.6)" }}>
-                {absenderTel && <div>{absenderTel}</div>}
-                {absenderEmail && <div>{absenderEmail}</div>}
-                {absenderIban && <div style={{ marginTop: "1px", fontSize: "5px" }}>IBAN: {absenderIban.substring(0, 12)}…</div>}
-              </div>
-            </div>
-          </div>
+    // 14 – Panorama: Farbverlauf
+    case 14: return wrap("#fff",
+      <div style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, padding: `${PX.logoTop}px ${M}px 18px`, position: "relative", minHeight: PX.headerH }}>
+        <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 3 }}>{absenderUntertitel}</div>
+        <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>{absenderName}</div>
+        <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.6)", marginTop: 4 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+        <div style={{ position: "absolute", top: PX.logoTop, right: M, width: LS, height: LS, borderRadius: 6, backgroundColor: "rgba(255,255,255,0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>LOGO</div>
         </div>
-        {renderDIN5008Body("#111", "#fff")}
-      </div>
+        <div style={{ position: "absolute", bottom: 18, right: M }}><KontaktBlock c="rgba(255,255,255,0.65)" /></div>
+      </div>,
+      "#111", "#fff"
     );
 
-    // 15 – Initialen: Großes Monogramm-Badge
-    case 15: return (
-      <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", fontSize: "6px" }}>
-        <div style={{ padding: "7px 14px 4px", display: "flex", alignItems: "center", gap: "8px", borderBottom: `1px solid #eee` }}>
-          <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: color, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: "900", fontSize: "15px" }}>
-            {initials}
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: "9px", fontWeight: "bold" }}>{absenderName}</div>
-            {absenderUntertitel && <div style={{ fontSize: "5.5px", color: "#aaa" }}>{absenderUntertitel}</div>}
-            <div style={{ fontSize: "5.5px", color: "#bbb", marginTop: "1px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-          </div>
-          <div style={{ textAlign: "right", fontSize: "5.5px", color: "#999" }}>
-            {absenderTel && <div>{absenderTel}</div>}
-            {absenderEmail && <div>{absenderEmail}</div>}
-            {absenderSteuernummer && <div style={{ marginTop: "1px", fontSize: "5px" }}>St.-Nr.: {absenderSteuernummer}</div>}
-          </div>
+    // 15 – Initialen: Monogramm
+    case 15: return wrap("#fff",
+      <div style={{ padding: `${PX.logoTop}px ${M}px 14px`, display: "flex", alignItems: "center", gap: 14, borderBottom: "1px solid #eee", minHeight: PX.headerH }}>
+        <div style={{ width: LS, height: LS, borderRadius: 14, backgroundColor: color, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 900, fontSize: 26 }}>
+          {initials}
         </div>
-        {renderDIN5008Body(color, "#fff")}
-      </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 13, fontWeight: 700 }}>{absenderName}</div>
+          {absenderUntertitel && <div style={{ fontSize: 9.5, color: "#aaa" }}>{absenderUntertitel}</div>}
+          <div style={{ fontSize: 8.5, color: "#bbb", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <KontaktBlock c="#999" />
+        </div>
+      </div>,
+      color, "#fff"
     );
 
     default: return null;
@@ -1012,6 +1134,8 @@ export default function AdminDokumentEditor() {
   const [absenderIban, setAbsenderIban] = useState("");
   const [absenderBic, setAbsenderBic] = useState("");
   const [absenderSteuernummer, setAbsenderSteuernummer] = useState("");
+  const [absenderInhaber, setAbsenderInhaber] = useState("");
+  const [absenderLand, setAbsenderLand] = useState("Deutschland");
 
   // UI
   const [saving, setSaving] = useState(false);
@@ -1037,6 +1161,8 @@ export default function AdminDokumentEditor() {
         setAbsenderIban((data.bank_iban as string) || "");
         setAbsenderBic((data.bank_bic as string) || "");
         setAbsenderSteuernummer((data.tax_id as string) || "");
+        setAbsenderInhaber((data.company_owner as string) || (data.company_name as string) || "");
+        setAbsenderLand((data.company_country as string) || "Deutschland");
       }
     });
   }, [authChecked]);
@@ -1307,6 +1433,8 @@ export default function AdminDokumentEditor() {
     absenderIban,
     absenderBic,
     absenderSteuernummer,
+    absenderInhaber,
+    absenderLand,
   };
 
   return (
