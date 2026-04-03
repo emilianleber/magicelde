@@ -52,12 +52,21 @@ const FARBEN = [
 ];
 
 const LAYOUTS = [
-  { id: 1, name: "Klassisch", desc: "Farbiger Kopfbalken, Logo links" },
-  { id: 2, name: "Zentriert", desc: "Logo oben Mitte, kein Balken" },
-  { id: 3, name: "Geteilt", desc: "Zweispaltig, Firmenname groß" },
-  { id: 4, name: "Minimal", desc: "Dezente Linie, kleines Logo" },
-  { id: 5, name: "Modern", desc: "Großer Anfangsbuchstabe" },
-  { id: 6, name: "Dark Band", desc: "Dunkle Kopfkarte mit Logo" },
+  { id: 1,  name: "Klassisch",     desc: "Farbbalken oben, schwarzer Tabellenkopf" },
+  { id: 2,  name: "Wave Dark",     desc: "Dunkler Kopf mit Wellen-Akzent" },
+  { id: 3,  name: "Split",         desc: "Firmenname groß links, Meta rechts" },
+  { id: 4,  name: "Retro",         desc: "Schreibmaschinen-Stil, Unterstrich" },
+  { id: 5,  name: "Seitenstreifen",desc: "Vertikaler Farbstreifen links" },
+  { id: 6,  name: "Dark Premium",  desc: "Volle dunkle Kopfkarte" },
+  { id: 7,  name: "Corporate",     desc: "Zentrierter Logo-Bereich, Trennlinie" },
+  { id: 8,  name: "Kreativ",       desc: "Diagonale Farbfläche im Kopf" },
+  { id: 9,  name: "Skandinavisch", desc: "Ultra-minimal, viel Weißraum" },
+  { id: 10, name: "Luxus",         desc: "Doppelte Linien, edle Typografie" },
+  { id: 11, name: "Rahmen",        desc: "Vollständige Dokumentrahmung" },
+  { id: 12, name: "Technik",       desc: "Geometrisch, Großbuchstaben" },
+  { id: 13, name: "Pfeile",        desc: "Pfeil-Trenner, moderner Stil" },
+  { id: 14, name: "Panorama",      desc: "Voller Farbverlauf oben" },
+  { id: 15, name: "Initialen",     desc: "Großes Monogramm-Badge" },
 ];
 
 const TYP_LABEL: Record<string, string> = {
@@ -79,112 +88,268 @@ function addDays(days: number): string {
 // ── LayoutThumbnail ───────────────────────────────────────────────────────────
 
 function LayoutThumbnail({ layoutId, color }: { layoutId: number; color: string }) {
+  const lines = (n: number, w = "full", opacity = 1) =>
+    Array.from({ length: n }).map((_, i) => (
+      <div key={i} className={`h-0.5 bg-gray-${opacity < 1 ? "100" : "200"} rounded w-${w}`} />
+    ));
+
   switch (layoutId) {
+    /* 1 – Klassisch */
     case 1:
       return (
-        <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
-          <div className="w-full h-4 rounded" style={{ backgroundColor: color }} />
-          <div className="flex gap-1 px-0.5">
-            <div className="flex-1 space-y-0.5">
-              <div className="h-0.5 bg-gray-200 rounded w-3/4" />
-              <div className="h-0.5 bg-gray-200 rounded w-1/2" />
-              <div className="h-0.5 bg-gray-200 rounded w-2/3" />
+        <div className="w-full h-full bg-white flex flex-col">
+          <div className="w-full h-3.5" style={{ backgroundColor: color }} />
+          <div className="flex-1 p-1 flex flex-col gap-1">
+            <div className="flex justify-between">
+              <div className="space-y-0.5">{lines(3)}</div>
+              <div className="space-y-0.5 text-right">{lines(3)}</div>
             </div>
-          </div>
-          <div className="px-0.5 space-y-0.5 mt-1">
-            <div className="h-0.5 bg-gray-100 rounded w-full" />
-            <div className="h-0.5 bg-gray-100 rounded w-full" />
-            <div className="h-0.5 bg-gray-100 rounded w-4/5" />
+            <div className="h-1.5 rounded mt-0.5" style={{ backgroundColor: "#111" }} />
+            <div className="space-y-0.5">{lines(3, "full", 0.5)}</div>
           </div>
         </div>
       );
+    /* 2 – Wave Dark */
     case 2:
       return (
-        <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
-          <div className="h-0.5 w-full rounded" style={{ backgroundColor: color }} />
-          <div className="flex justify-center py-1">
-            <div className="w-4 h-3 rounded bg-gray-200" />
+        <div className="w-full h-full bg-white flex flex-col overflow-hidden">
+          <div className="relative h-5" style={{ backgroundColor: "#111" }}>
+            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-white" style={{ borderRadius: "60% 60% 0 0" }} />
+            <div className="absolute right-1 top-1 w-2 h-2 rounded bg-white/20" />
+            <div className="w-1 h-1 rounded-full absolute left-1 top-1" style={{ backgroundColor: color }} />
           </div>
-          <div className="px-0.5 space-y-0.5">
-            <div className="h-0.5 bg-gray-200 rounded w-full mx-auto" />
-            <div className="h-0.5 bg-gray-200 rounded w-3/4 mx-auto" />
-          </div>
-          <div className="px-0.5 space-y-0.5 mt-1">
-            <div className="h-0.5 bg-gray-100 rounded w-full" />
-            <div className="h-0.5 bg-gray-100 rounded w-full" />
+          <div className="flex-1 p-1 flex flex-col gap-1">
+            <div className="flex justify-between">{lines(2)}{lines(2)}</div>
+            <div className="h-1 rounded mt-0.5" style={{ backgroundColor: color }} />
+            <div className="space-y-0.5">{lines(3, "full", 0.5)}</div>
           </div>
         </div>
       );
+    /* 3 – Split */
     case 3:
       return (
         <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
-          <div className="flex gap-1">
-            <div className="flex-1 space-y-0.5">
-              <div className="h-1 rounded w-full" style={{ backgroundColor: color, opacity: 0.7 }} />
-              <div className="h-0.5 bg-gray-200 rounded w-3/4" />
-            </div>
-            <div className="flex-1 space-y-0.5 text-right">
-              <div className="h-0.5 bg-gray-200 rounded w-full" />
-              <div className="h-0.5 bg-gray-200 rounded w-2/3 ml-auto" />
-            </div>
+          <div className="flex justify-between items-end">
+            <div className="font-bold text-[6px]" style={{ color }}>EM</div>
+            <div className="space-y-0.5">{lines(2)}</div>
           </div>
-          <div className="h-px bg-gray-200 w-full" />
-          <div className="px-0.5 space-y-0.5">
-            <div className="h-0.5 bg-gray-100 rounded w-full" />
-            <div className="h-0.5 bg-gray-100 rounded w-full" />
+          <div className="h-px w-full" style={{ backgroundColor: color }} />
+          <div className="flex justify-between">
+            <div className="space-y-0.5">{lines(3)}</div>
+            <div className="space-y-0.5">{lines(3)}</div>
           </div>
+          <div className="space-y-0.5 mt-1">{lines(2, "full", 0.5)}</div>
         </div>
       );
+    /* 4 – Retro */
     case 4:
       return (
         <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
+          <div className="space-y-0.5">
+            <div className="h-0.5 bg-gray-800 rounded w-full" />
+            <div className="h-0.5 bg-gray-200 rounded w-3/4" />
+            <div className="h-0.5 bg-gray-800 rounded w-full" />
+          </div>
+          <div className="flex justify-between mt-0.5">
+            <div className="space-y-0.5">{lines(2)}</div>
+            <div className="space-y-0.5">{lines(2)}</div>
+          </div>
+          <div className="space-y-0.5 mt-1">{lines(2, "full", 0.5)}</div>
+        </div>
+      );
+    /* 5 – Seitenstreifen */
+    case 5:
+      return (
+        <div className="w-full h-full bg-white flex">
+          <div className="w-2 h-full" style={{ backgroundColor: color }} />
+          <div className="flex-1 p-1 flex flex-col gap-1">
+            <div className="flex justify-between">
+              <div className="space-y-0.5">{lines(3)}</div>
+              <div className="space-y-0.5">{lines(2)}</div>
+            </div>
+            <div className="space-y-0.5 mt-1">{lines(3, "full", 0.5)}</div>
+          </div>
+        </div>
+      );
+    /* 6 – Dark Premium */
+    case 6:
+      return (
+        <div className="w-full h-full bg-white flex flex-col">
+          <div className="p-1 flex justify-between items-center" style={{ backgroundColor: "#111" }}>
+            <div className="space-y-0.5">
+              <div className="h-0.5 bg-white/70 rounded w-8" />
+              <div className="h-0.5 bg-white/30 rounded w-5" />
+            </div>
+            <div className="w-3 h-2 rounded bg-white/20" />
+          </div>
+          <div className="flex-1 p-1 flex flex-col gap-1">
+            <div className="flex justify-between">
+              <div className="space-y-0.5">{lines(3)}</div>
+              <div className="space-y-0.5">{lines(3)}</div>
+            </div>
+            <div className="h-1 rounded mt-0.5" style={{ backgroundColor: color }} />
+            <div className="space-y-0.5">{lines(2, "full", 0.5)}</div>
+          </div>
+        </div>
+      );
+    /* 7 – Corporate */
+    case 7:
+      return (
+        <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
+          <div className="flex flex-col items-center gap-0.5 pb-1 border-b" style={{ borderColor: color }}>
+            <div className="w-4 h-2 rounded bg-gray-200" />
+            <div className="h-0.5 bg-gray-300 rounded w-10" />
+          </div>
+          <div className="flex justify-between mt-0.5">
+            <div className="space-y-0.5">{lines(3)}</div>
+            <div className="space-y-0.5">{lines(3)}</div>
+          </div>
+          <div className="space-y-0.5 mt-1">{lines(2, "full", 0.5)}</div>
+        </div>
+      );
+    /* 8 – Kreativ */
+    case 8:
+      return (
+        <div className="w-full h-full bg-white flex flex-col overflow-hidden">
+          <div className="relative h-4 overflow-hidden">
+            <div className="absolute inset-0" style={{ backgroundColor: "#f5f5f5" }} />
+            <div className="absolute top-0 left-0 w-2/3 h-full" style={{ backgroundColor: color, clipPath: "polygon(0 0, 80% 0, 60% 100%, 0 100%)" }} />
+            <div className="absolute inset-0 flex items-center px-1">
+              <div className="h-0.5 bg-white rounded w-5" />
+            </div>
+          </div>
+          <div className="flex-1 p-1 flex flex-col gap-1">
+            <div className="flex justify-between">
+              <div className="space-y-0.5">{lines(3)}</div>
+              <div className="space-y-0.5">{lines(2)}</div>
+            </div>
+            <div className="space-y-0.5 mt-1">{lines(2, "full", 0.5)}</div>
+          </div>
+        </div>
+      );
+    /* 9 – Skandinavisch */
+    case 9:
+      return (
+        <div className="w-full h-full bg-white p-1.5 flex flex-col gap-1.5">
+          <div className="flex justify-between items-start">
+            <div className="h-0.5 w-5 rounded" style={{ backgroundColor: color }} />
+            <div className="h-0.5 bg-gray-300 rounded w-3" />
+          </div>
+          <div className="flex justify-between">
+            <div className="space-y-1">{lines(2)}</div>
+            <div className="space-y-1">{lines(2)}</div>
+          </div>
+          <div className="space-y-1 mt-auto">{lines(2, "full", 0.5)}</div>
+        </div>
+      );
+    /* 10 – Luxus */
+    case 10:
+      return (
+        <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
+          <div className="h-px w-full" style={{ backgroundColor: color }} />
+          <div className="flex justify-between py-0.5">
+            <div className="space-y-0.5">{lines(2)}</div>
+            <div className="space-y-0.5">{lines(2)}</div>
+          </div>
+          <div className="h-px w-full" style={{ backgroundColor: color }} />
+          <div className="flex justify-between mt-0.5">
+            <div className="space-y-0.5">{lines(3)}</div>
+            <div className="space-y-0.5">{lines(3)}</div>
+          </div>
+          <div className="space-y-0.5 mt-1">{lines(2, "full", 0.5)}</div>
+        </div>
+      );
+    /* 11 – Rahmen */
+    case 11:
+      return (
+        <div className="w-full h-full bg-white p-0.5">
+          <div className="w-full h-full border-2 p-1 flex flex-col gap-1" style={{ borderColor: color }}>
+            <div className="flex justify-between">
+              <div className="space-y-0.5">{lines(2)}</div>
+              <div className="space-y-0.5">{lines(2)}</div>
+            </div>
+            <div className="h-px w-full" style={{ backgroundColor: color }} />
+            <div className="space-y-0.5">{lines(3, "full", 0.5)}</div>
+          </div>
+        </div>
+      );
+    /* 12 – Technik */
+    case 12:
+      return (
+        <div className="w-full h-full bg-white flex flex-col">
+          <div className="flex" style={{ borderBottom: `2px solid ${color}` }}>
+            <div className="flex-1 p-1" style={{ backgroundColor: color + "15" }}>
+              <div className="h-0.5 bg-gray-400 rounded w-8 mb-0.5" />
+              <div className="h-0.5 bg-gray-300 rounded w-5" />
+            </div>
+            <div className="p-1 space-y-0.5">
+              <div className="h-0.5 bg-gray-200 rounded w-7" />
+              <div className="h-0.5 bg-gray-200 rounded w-5" />
+            </div>
+          </div>
+          <div className="flex-1 p-1 flex flex-col gap-1">
+            <div className="space-y-0.5">{lines(3, "full", 0.5)}</div>
+          </div>
+        </div>
+      );
+    /* 13 – Pfeile */
+    case 13:
+      return (
+        <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
+          <div className="flex items-center gap-0.5 text-[5px]">
+            <span className="font-bold" style={{ color }}>E</span>
+            <span className="text-gray-300">→</span>
+            <span className="text-gray-400">Str.</span>
+            <span className="text-gray-300">→</span>
+            <span className="text-gray-400">Stadt</span>
+          </div>
+          <div className="flex justify-between mt-0.5">
+            <div className="space-y-0.5">{lines(3)}</div>
+            <div className="space-y-0.5">{lines(3)}</div>
+          </div>
+          <div className="h-px mt-0.5" style={{ backgroundColor: color }} />
+          <div className="space-y-0.5">{lines(2, "full", 0.5)}</div>
+        </div>
+      );
+    /* 14 – Panorama */
+    case 14:
+      return (
+        <div className="w-full h-full bg-white flex flex-col">
+          <div className="h-5 flex items-center justify-between px-1" style={{ background: `linear-gradient(135deg, ${color}, ${color}99)` }}>
+            <div className="space-y-0.5">
+              <div className="h-0.5 bg-white/80 rounded w-6" />
+              <div className="h-0.5 bg-white/40 rounded w-4" />
+            </div>
+            <div className="space-y-0.5 text-right">
+              <div className="h-0.5 bg-white/60 rounded w-5" />
+              <div className="h-0.5 bg-white/30 rounded w-4" />
+            </div>
+          </div>
+          <div className="flex-1 p-1 flex flex-col gap-1">
+            <div className="flex justify-between">
+              <div className="space-y-0.5">{lines(3)}</div>
+              <div className="space-y-0.5">{lines(2)}</div>
+            </div>
+            <div className="space-y-0.5 mt-1">{lines(2, "full", 0.5)}</div>
+          </div>
+        </div>
+      );
+    /* 15 – Initialen */
+    case 15:
+      return (
+        <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
           <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded bg-gray-300" />
-            <div className="space-y-0.5 flex-1">
-              <div className="h-0.5 bg-gray-300 rounded w-full" />
+            <div className="w-5 h-5 rounded flex items-center justify-center text-white text-[7px] font-black shrink-0" style={{ backgroundColor: color }}>E</div>
+            <div className="flex-1">
+              <div className="h-0.5 bg-gray-300 rounded w-full mb-0.5" />
               <div className="h-0.5 bg-gray-200 rounded w-2/3" />
             </div>
           </div>
-          <div className="h-px w-full rounded" style={{ backgroundColor: color }} />
-          <div className="px-0.5 space-y-0.5">
-            <div className="h-0.5 bg-gray-100 rounded w-full" />
-            <div className="h-0.5 bg-gray-100 rounded w-4/5" />
+          <div className="flex justify-between mt-0.5">
+            <div className="space-y-0.5">{lines(3)}</div>
+            <div className="space-y-0.5">{lines(3)}</div>
           </div>
-        </div>
-      );
-    case 5:
-      return (
-        <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
-          <div className="flex items-center gap-1">
-            <div className="w-5 h-5 rounded flex items-center justify-center text-white text-[8px] font-bold"
-              style={{ backgroundColor: color }}>
-              E
-            </div>
-            <div className="space-y-0.5 flex-1">
-              <div className="h-0.5 bg-gray-200 rounded w-full" />
-              <div className="h-0.5 bg-gray-200 rounded w-1/2" />
-            </div>
-          </div>
-          <div className="px-0.5 space-y-0.5 mt-1">
-            <div className="h-0.5 bg-gray-100 rounded w-full" />
-            <div className="h-0.5 bg-gray-100 rounded w-4/5" />
-          </div>
-        </div>
-      );
-    case 6:
-      return (
-        <div className="w-full h-full bg-white p-1 flex flex-col gap-1">
-          <div className="w-full rounded p-1 flex items-center gap-1" style={{ backgroundColor: "#1a1a1a" }}>
-            <div className="w-3 h-2 rounded bg-white/30" />
-            <div className="flex-1 space-y-0.5">
-              <div className="h-0.5 bg-white/60 rounded w-3/4" />
-              <div className="h-0.5 bg-white/30 rounded w-1/2" />
-            </div>
-          </div>
-          <div className="px-0.5 space-y-0.5">
-            <div className="h-0.5 bg-gray-100 rounded w-full" />
-            <div className="h-0.5 bg-gray-100 rounded w-4/5" />
-          </div>
+          <div className="space-y-0.5 mt-1">{lines(2, "full", 0.5)}</div>
         </div>
       );
     default:
@@ -246,6 +411,107 @@ function fmt(n: number) {
   return n.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
 }
 
+// DIN 5008: Shared sub-components for document body
+function PreviewAdressblock({ firma, name, adresse, plz, ort, absender, absenderAdresse, absenderPlz, absenderOrt }: {
+  firma?: string; name: string; adresse: string; plz: string; ort: string;
+  absender: string; absenderAdresse: string; absenderPlz: string; absenderOrt: string;
+}) {
+  return (
+    <div style={{ fontSize: "6px", color: "#333", lineHeight: 1.6 }}>
+      {/* DIN 5008: Absenderzeile above recipient */}
+      <div style={{ fontSize: "5.5px", color: "#999", borderBottom: "0.5px solid #eee", paddingBottom: "2px", marginBottom: "3px" }}>
+        {absender} · {absenderAdresse} · {absenderPlz} {absenderOrt}
+      </div>
+      {firma && <div style={{ fontWeight: "bold" }}>{firma}</div>}
+      <div>{name}</div>
+      <div>{adresse}</div>
+      <div>{plz} {ort}</div>
+    </div>
+  );
+}
+
+function PreviewMetaTable({ typLabel, nummer, datum, faelligAm, gueltigBis, color, bold = false }: {
+  typLabel: string; nummer: string; datum: string; faelligAm: string; gueltigBis: string; color: string; bold?: boolean;
+}) {
+  const rows = [
+    { label: `${typLabel}-Nr.`, value: nummer },
+    { label: "Datum", value: datum },
+    ...(faelligAm ? [{ label: "Zahlungsziel", value: faelligAm }] : []),
+    ...(gueltigBis ? [{ label: "Gültig bis", value: gueltigBis }] : []),
+    { label: "Ansprechpartner", value: "Emilian Leber" },
+  ];
+  return (
+    <div style={{ fontSize: "6px" }}>
+      {rows.map(r => (
+        <div key={r.label} style={{ display: "flex", gap: "6px", lineHeight: 1.7 }}>
+          <div style={{ color: "#888", minWidth: "52px" }}>{r.label}</div>
+          <div style={{ fontWeight: bold ? "bold" : "normal", color: "#111" }}>{r.value || "—"}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PreviewPositionenTable({ positionen, color, headerBg = "#111", headerColor = "#fff" }: {
+  positionen: LocalPosition[]; color: string; headerBg?: string; headerColor?: string;
+}) {
+  const leistung = positionen.filter(p => p.typ === "leistung").slice(0, 6);
+  return (
+    <div style={{ fontSize: "6px" }}>
+      <div style={{ display: "flex", backgroundColor: headerBg, color: headerColor, padding: "2px 4px", fontWeight: "bold" }}>
+        <span style={{ width: "14px" }}>Pos</span>
+        <span style={{ flex: 3 }}>Beschreibung</span>
+        <span style={{ width: "28px", textAlign: "right" }}>Menge</span>
+        <span style={{ width: "36px", textAlign: "right" }}>Einzelpr.</span>
+        <span style={{ width: "36px", textAlign: "right" }}>Gesamt</span>
+      </div>
+      {leistung.map((pos, i) => (
+        <div key={pos.id} style={{ display: "flex", padding: "1.5px 4px", backgroundColor: i % 2 === 0 ? "#fafafa" : "#fff", borderBottom: "0.5px solid #ececec" }}>
+          <span style={{ width: "14px", color: "#aaa" }}>{i + 1}.</span>
+          <span style={{ flex: 3, fontWeight: pos.bezeichnung ? "normal" : "normal", color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(leer)"}</span>
+          <span style={{ width: "28px", textAlign: "right" }}>{pos.menge} {pos.einheit?.substring(0, 3)}</span>
+          <span style={{ width: "36px", textAlign: "right" }}>{fmt(pos.einzelpreis)}</span>
+          <span style={{ width: "36px", textAlign: "right", fontWeight: "600" }}>{fmt(pos.gesamt)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PreviewSummen({ summen, mwstSatz, kleinunternehmer, color, dark = false }: {
+  summen: SummenResult; mwstSatz: number; kleinunternehmer: boolean; color: string; dark?: boolean;
+}) {
+  const bg = dark ? "#111" : "#f9f9f9";
+  const fg = dark ? "#fff" : "#111";
+  return (
+    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ minWidth: "130px", backgroundColor: bg, padding: "3px 5px", borderRadius: "2px" }}>
+        {summen.gesamtRabatt > 0 && (
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "5.5px", color: dark ? "rgba(255,255,255,0.6)" : "#888" }}>
+            <span>Rabatt</span><span>-{fmt(summen.gesamtRabatt)}</span>
+          </div>
+        )}
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "5.5px", color: dark ? "rgba(255,255,255,0.6)" : "#888" }}>
+          <span>Nettobetrag</span><span style={{ color: fg }}>{fmt(summen.netto)}</span>
+        </div>
+        {!kleinunternehmer && mwstSatz > 0 && (
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "5.5px", color: dark ? "rgba(255,255,255,0.6)" : "#888" }}>
+            <span>MwSt. {mwstSatz}%</span><span style={{ color: fg }}>{fmt(summen.mwstBetrag)}</span>
+          </div>
+        )}
+        {kleinunternehmer && (
+          <div style={{ fontSize: "5px", color: dark ? "rgba(255,255,255,0.4)" : "#aaa" }}>
+            Umsatzsteuer nicht erhoben gemäß §19 UStG.
+          </div>
+        )}
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "7px", fontWeight: "bold", color: fg, borderTop: `0.5px solid ${dark ? "rgba(255,255,255,0.2)" : "#ddd"}`, marginTop: "2px", paddingTop: "2px" }}>
+          <span>Gesamtbetrag brutto</span><span style={{ color: dark ? "#fff" : color }}>{fmt(summen.brutto)}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DocumentPreview(props: PreviewProps) {
   const {
     layoutId, color, typ, nummer, datum, faelligAm, gueltigBis,
@@ -257,173 +523,365 @@ function DocumentPreview(props: PreviewProps) {
   const summen = calcSummen(positionen, mwstSatz, kleinunternehmer, rabattProzent);
   const typLabel = TYP_LABEL[typ] || typ;
   const initials = (absenderName || "E").charAt(0).toUpperCase();
+  const senderLine = `${absenderAdresse}, ${absenderPlz} ${absenderOrt}`;
+  const font = layoutId === 4 ? "'Courier New', monospace" : layoutId === 10 ? "Georgia, serif" : "Inter, system-ui, sans-serif";
 
-  // Build header depending on layout
-  const renderHeader = () => {
-    switch (layoutId) {
-      case 1:
-        return (
-          <div style={{ backgroundColor: color, padding: "10px 12px", marginBottom: "8px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div>
-                <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px" }}>{absenderName}</div>
-                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "7px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-              </div>
-              <div style={{ color: "#fff", fontSize: "8px", fontWeight: "bold", textAlign: "right" }}>
-                <div>{typLabel}</div>
-                <div style={{ fontSize: "7px", opacity: 0.8 }}>{nummer}</div>
-              </div>
-            </div>
-          </div>
-        );
-      case 2:
-        return (
-          <div style={{ textAlign: "center", padding: "8px 12px", borderTop: `3px solid ${color}`, marginBottom: "8px" }}>
-            <div style={{ fontWeight: "bold", fontSize: "9px", marginTop: "4px" }}>{absenderName}</div>
-            <div style={{ fontSize: "7px", color: "#999" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-            <div style={{ fontSize: "8px", fontWeight: "bold", color, marginTop: "4px" }}>{typLabel}</div>
-          </div>
-        );
-      case 3:
-        return (
-          <div style={{ padding: "8px 12px", marginBottom: "6px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div>
-                <div style={{ fontSize: "11px", fontWeight: "900", color, lineHeight: 1 }}>{absenderName}</div>
-                <div style={{ fontSize: "6px", color: "#999", marginTop: "2px" }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-              </div>
-              <div style={{ textAlign: "right", fontSize: "7px" }}>
-                <div style={{ fontWeight: "bold", fontSize: "8px" }}>{typLabel}</div>
-                <div style={{ color: "#999" }}>{nummer}</div>
-                <div style={{ color: "#999" }}>{datum}</div>
-              </div>
-            </div>
-            <div style={{ borderTop: `1.5px solid ${color}`, marginTop: "6px" }} />
-          </div>
-        );
-      case 4:
-        return (
-          <div style={{ padding: "8px 12px", marginBottom: "6px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <div style={{ width: "14px", height: "14px", borderRadius: "3px", backgroundColor: "#eee", flexShrink: 0 }} />
-              <div>
-                <div style={{ fontSize: "7px", fontWeight: "bold" }}>{absenderName}</div>
-                <div style={{ fontSize: "6px", color: "#999" }}>{absenderAdresse}, {absenderPlz} {absenderOrt}</div>
-              </div>
-            </div>
-            <div style={{ borderBottom: `1px solid ${color}`, marginTop: "5px" }} />
-          </div>
-        );
-      case 5:
-        return (
-          <div style={{ padding: "8px 12px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
-            <div style={{
-              width: "28px", height: "28px", borderRadius: "6px", backgroundColor: color,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              color: "#fff", fontWeight: "900", fontSize: "14px", flexShrink: 0,
-            }}>
-              {initials}
-            </div>
-            <div>
-              <div style={{ fontSize: "8px", fontWeight: "bold" }}>{absenderName}</div>
-              <div style={{ fontSize: "6px", color: "#999" }}>{absenderAdresse}, {absenderPlz} {absenderOrt}</div>
-            </div>
-          </div>
-        );
-      case 6:
-        return (
-          <div style={{ backgroundColor: "#1a1a1a", padding: "8px 12px", marginBottom: "8px", borderRadius: "4px 4px 0 0" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <div style={{ width: "14px", height: "10px", borderRadius: "2px", backgroundColor: "rgba(255,255,255,0.2)" }} />
-                <div>
-                  <div style={{ color: "#fff", fontSize: "8px", fontWeight: "bold" }}>{absenderName}</div>
-                  <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "6px" }}>{absenderAdresse}</div>
-                </div>
-              </div>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ color: "#fff", fontSize: "7px", fontWeight: "bold" }}>{typLabel}</div>
-                <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "6px" }}>{nummer}</div>
-              </div>
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+  // Shared body (DIN 5008 layout below header)
+  const renderBody = (opts: {
+    headerBg?: string; headerColor?: string; tableHeaderBg?: string;
+    metaBold?: boolean; darkSummen?: boolean; accentLine?: boolean;
+  } = {}) => (
+    <>
+      {/* DIN 5008: Anschrift + Infos nebeneinander */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "5px 12px 3px" }}>
+        <PreviewAdressblock
+          firma={empfaengerFirma} name={empfaengerName}
+          adresse={empfaengerAdresse} plz={empfaengerPlz} ort={empfaengerOrt}
+          absender={absenderName} absenderAdresse={absenderAdresse}
+          absenderPlz={absenderPlz} absenderOrt={absenderOrt}
+        />
+        <PreviewMetaTable typLabel={typLabel} nummer={nummer} datum={datum}
+          faelligAm={faelligAm} gueltigBis={gueltigBis} color={color} bold={opts.metaBold} />
+      </div>
 
-  return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: "sans-serif", color: "#1a1a1a", overflow: "hidden" }}>
-      {renderHeader()}
-
-      {/* Recipient + Meta */}
-      <div style={{ padding: "0 12px 6px", display: "flex", justifyContent: "space-between" }}>
-        <div>
-          {empfaengerFirma && <div style={{ fontSize: "7px", fontWeight: "bold" }}>{empfaengerFirma}</div>}
-          <div style={{ fontSize: "7px" }}>{empfaengerName}</div>
-          <div style={{ fontSize: "6.5px", color: "#555" }}>{empfaengerAdresse}</div>
-          <div style={{ fontSize: "6.5px", color: "#555" }}>{empfaengerPlz} {empfaengerOrt}</div>
-        </div>
-        <div style={{ textAlign: "right", fontSize: "6.5px", color: "#555" }}>
-          <div>Datum: {datum}</div>
-          {faelligAm && <div>Fällig: {faelligAm}</div>}
-          {gueltigBis && <div>Gültig bis: {gueltigBis}</div>}
-          {nummer && <div style={{ fontWeight: "bold", color: "#1a1a1a" }}>{typLabel} {nummer}</div>}
+      {/* DIN 5008: Betreff */}
+      <div style={{ padding: "4px 12px 2px" }}>
+        {opts.accentLine && <div style={{ width: "18px", height: "1.5px", backgroundColor: color, marginBottom: "3px" }} />}
+        <div style={{ fontSize: "8px", fontWeight: "bold", color: "#111" }}>
+          {typLabel}{nummer ? ` · ${nummer}` : ""}
         </div>
       </div>
 
       {/* Kopftext */}
       {kopftext && (
-        <div style={{ padding: "4px 12px", fontSize: "6.5px", color: "#444", lineHeight: 1.4 }}>
-          {kopftext.substring(0, 120)}{kopftext.length > 120 ? "…" : ""}
+        <div style={{ padding: "2px 12px 3px", fontSize: "6px", color: "#444", lineHeight: 1.5 }}>
+          {kopftext.substring(0, 100)}{kopftext.length > 100 ? "…" : ""}
         </div>
       )}
 
-      {/* Positions table */}
-      <div style={{ padding: "4px 12px" }}>
-        <div style={{ borderBottom: `1px solid ${color}`, display: "flex", fontSize: "6px", fontWeight: "bold", paddingBottom: "2px", marginBottom: "2px" }}>
-          <span style={{ flex: 3 }}>Beschreibung</span>
-          <span style={{ width: "24px", textAlign: "right" }}>Mge.</span>
-          <span style={{ width: "40px", textAlign: "right" }}>Einzelpr.</span>
-          <span style={{ width: "40px", textAlign: "right" }}>Gesamt</span>
-        </div>
-        {positionen.filter(p => p.typ === "leistung").slice(0, 8).map((pos) => (
-          <div key={pos.id} style={{ display: "flex", fontSize: "6px", paddingBottom: "1.5px", borderBottom: "0.5px solid #f0f0f0" }}>
-            <span style={{ flex: 3 }}>{pos.bezeichnung || "(leer)"}</span>
-            <span style={{ width: "24px", textAlign: "right" }}>{pos.menge}</span>
-            <span style={{ width: "40px", textAlign: "right" }}>{fmt(pos.einzelpreis)}</span>
-            <span style={{ width: "40px", textAlign: "right", fontWeight: "bold" }}>{fmt(pos.gesamt)}</span>
-          </div>
-        ))}
+      {/* Positionen */}
+      <div style={{ padding: "3px 12px" }}>
+        <PreviewPositionenTable positionen={positionen} color={color}
+          headerBg={opts.tableHeaderBg ?? opts.headerBg ?? "#111"}
+          headerColor={opts.headerColor ?? "#fff"} />
       </div>
 
       {/* Summen */}
-      <div style={{ padding: "4px 12px", marginTop: "4px" }}>
-        <div style={{ borderTop: `1px solid ${color}`, paddingTop: "3px" }}>
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: "16px", fontSize: "6px" }}>
-            <div style={{ textAlign: "right" }}>
-              <div>Netto:</div>
-              {!kleinunternehmer && mwstSatz > 0 && <div>MwSt. {mwstSatz}%:</div>}
-              <div style={{ fontWeight: "bold", borderTop: "0.5px solid #ddd", paddingTop: "1px", marginTop: "1px" }}>Gesamt:</div>
+      <div style={{ padding: "3px 12px 3px" }}>
+        <PreviewSummen summen={summen} mwstSatz={mwstSatz} kleinunternehmer={kleinunternehmer}
+          color={color} dark={opts.darkSummen} />
+      </div>
+
+      {/* Fußtext + Footer-Linie */}
+      {fusstext && (
+        <div style={{ padding: "2px 12px", fontSize: "5px", color: "#aaa", lineHeight: 1.3 }}>
+          {fusstext.substring(0, 80)}{fusstext.length > 80 ? "…" : ""}
+        </div>
+      )}
+      <div style={{ margin: "2px 12px 0", borderTop: "0.5px solid #ebebeb", paddingTop: "2px" }}>
+        <div style={{ fontSize: "5px", color: "#bbb", display: "flex", justifyContent: "space-between" }}>
+          <span>{absenderName}</span>
+          <span>{senderLine}</span>
+        </div>
+      </div>
+    </>
+  );
+
+  // ── Layout 1: Klassisch ──────────────────────────────────────────────────────
+  if (layoutId === 1) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ backgroundColor: color, padding: "8px 12px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px" }}>{absenderName}</div>
+            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "6px" }}>{senderLine}</div>
+          </div>
+          <div style={{ width: "20px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.25)" }} />
+        </div>
+      </div>
+      {renderBody({ tableHeaderBg: "#111", tableHeaderColor: "#fff" } as Parameters<typeof renderBody>[0])}
+    </div>
+  );
+
+  // ── Layout 2: Wave Dark ──────────────────────────────────────────────────────
+  if (layoutId === 2) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ position: "relative", backgroundColor: "#111", padding: "8px 12px 14px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ color: color, fontSize: "5.5px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.5px" }}>Zauberer & Mentalist</div>
+            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px", marginTop: "1px" }}>{absenderName}</div>
+            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "6px" }}>{senderLine}</div>
+          </div>
+          <div style={{ width: "20px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.15)", border: `1px solid ${color}40` }} />
+        </div>
+        {/* Wave */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "6px", backgroundColor: "#fff", borderRadius: "50% 50% 0 0 / 100% 100% 0 0" }} />
+      </div>
+      {renderBody({ tableHeaderBg: "#111", metaBold: true })}
+    </div>
+  );
+
+  // ── Layout 3: Split ──────────────────────────────────────────────────────────
+  if (layoutId === 3) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ padding: "8px 12px 5px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+          <div>
+            <div style={{ fontSize: "14px", fontWeight: "900", color, lineHeight: 1, letterSpacing: "-0.5px" }}>{absenderName}</div>
+            <div style={{ fontSize: "5.5px", color: "#aaa", marginTop: "2px" }}>{senderLine}</div>
+          </div>
+          <div style={{ width: "18px", height: "12px", borderRadius: "2px", backgroundColor: "#f0f0f0" }} />
+        </div>
+        <div style={{ marginTop: "5px", height: "2px", background: `linear-gradient(to right, ${color}, transparent)` }} />
+      </div>
+      {renderBody({ tableHeaderBg: color, accentLine: true })}
+    </div>
+  );
+
+  // ── Layout 4: Retro / Typewriter ─────────────────────────────────────────────
+  if (layoutId === 4) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fffef8", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ padding: "8px 12px 5px" }}>
+        <div style={{ borderTop: "1.5px solid #111", borderBottom: "1.5px solid #111", padding: "3px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ fontSize: "8px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px" }}>{absenderName}</div>
+            <div style={{ fontSize: "5.5px", color: "#555", letterSpacing: "0.5px" }}>{senderLine}</div>
+          </div>
+          <div style={{ fontSize: "7px", textAlign: "right" }}>
+            <div style={{ fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.5px" }}>{typLabel}</div>
+            <div style={{ color: "#666" }}>{nummer}</div>
+          </div>
+        </div>
+      </div>
+      {renderBody({ tableHeaderBg: "#111", tableHeaderColor: "#fffef8" } as Parameters<typeof renderBody>[0])}
+    </div>
+  );
+
+  // ── Layout 5: Seitenstreifen ──────────────────────────────────────────────────
+  if (layoutId === 5) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", display: "flex" }}>
+      {/* Left accent stripe */}
+      <div style={{ width: "10px", backgroundColor: color, flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", paddingTop: "8px" }}>
+        <div style={{ color: "#fff", fontSize: "4px", fontWeight: "bold", writingMode: "vertical-rl", textOrientation: "mixed", opacity: 0.7 }}>{typLabel.toUpperCase()}</div>
+      </div>
+      <div style={{ flex: 1, overflow: "hidden" }}>
+        <div style={{ padding: "7px 10px 4px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <div style={{ fontSize: "8px", fontWeight: "bold" }}>{absenderName}</div>
+              <div style={{ fontSize: "5.5px", color: "#999" }}>{senderLine}</div>
             </div>
-            <div style={{ textAlign: "right", minWidth: "40px" }}>
-              <div>{fmt(summen.netto)}</div>
-              {!kleinunternehmer && mwstSatz > 0 && <div>{fmt(summen.mwstBetrag)}</div>}
-              <div style={{ fontWeight: "bold", borderTop: "0.5px solid #ddd", paddingTop: "1px", marginTop: "1px" }}>{fmt(summen.brutto)}</div>
+            <div style={{ width: "16px", height: "11px", borderRadius: "2px", backgroundColor: "#f0f0f0" }} />
+          </div>
+        </div>
+        {renderBody({ tableHeaderBg: color, accentLine: true })}
+      </div>
+    </div>
+  );
+
+  // ── Layout 6: Dark Premium ────────────────────────────────────────────────────
+  if (layoutId === 6) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ backgroundColor: "#111", padding: "9px 12px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ width: "16px", height: "11px", borderRadius: "2px", backgroundColor: color, marginBottom: "4px" }} />
+            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9px" }}>{absenderName}</div>
+            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "5.5px" }}>{senderLine}</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ color: color, fontSize: "6px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.5px" }}>{typLabel}</div>
+            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "6px", marginTop: "1px" }}>{nummer}</div>
+            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "5.5px" }}>{datum}</div>
+          </div>
+        </div>
+      </div>
+      {renderBody({ tableHeaderBg: "#222", metaBold: true, darkSummen: true })}
+    </div>
+  );
+
+  // ── Layout 7: Corporate ───────────────────────────────────────────────────────
+  if (layoutId === 7) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ padding: "8px 12px 5px", textAlign: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "6px", marginBottom: "3px" }}>
+          <div style={{ width: "18px", height: "12px", borderRadius: "2px", backgroundColor: "#eee" }} />
+          <div>
+            <div style={{ fontSize: "9px", fontWeight: "bold", letterSpacing: "0.3px" }}>{absenderName}</div>
+            <div style={{ fontSize: "5.5px", color: "#999" }}>{senderLine}</div>
+          </div>
+        </div>
+        <div style={{ height: "1.5px", background: `linear-gradient(to right, transparent, ${color}, transparent)` }} />
+      </div>
+      {renderBody({ tableHeaderBg: color, tableHeaderColor: "#fff", accentLine: true } as Parameters<typeof renderBody>[0])}
+    </div>
+  );
+
+  // ── Layout 8: Kreativ (Diagonal) ─────────────────────────────────────────────
+  if (layoutId === 8) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ position: "relative", height: "32px", overflow: "hidden", marginBottom: "2px" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundColor: "#f7f7f7" }} />
+        <div style={{ position: "absolute", top: 0, left: 0, width: "65%", height: "100%", backgroundColor: color, clipPath: "polygon(0 0, 90% 0, 70% 100%, 0 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 12px" }}>
+          <div>
+            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "8.5px" }}>{absenderName}</div>
+            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "5.5px" }}>{senderLine}</div>
+          </div>
+          <div style={{ width: "18px", height: "12px", borderRadius: "2px", backgroundColor: "rgba(0,0,0,0.1)" }} />
+        </div>
+      </div>
+      {renderBody({ tableHeaderBg: "#111" })}
+    </div>
+  );
+
+  // ── Layout 9: Skandinavisch ───────────────────────────────────────────────────
+  if (layoutId === 9) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: "Inter, system-ui, sans-serif", color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ padding: "9px 12px 6px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ width: "18px", height: "1.5px", backgroundColor: color }} />
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: "5.5px", color: "#bbb", textTransform: "uppercase", letterSpacing: "0.8px" }}>{absenderName}</div>
+          </div>
+        </div>
+        <div style={{ marginTop: "6px" }}>
+          <div style={{ fontSize: "9px", fontWeight: "300", letterSpacing: "-0.3px", color: "#111" }}>{typLabel}</div>
+          <div style={{ fontSize: "5.5px", color: "#999", marginTop: "1px" }}>{nummer} · {datum}</div>
+        </div>
+      </div>
+      {renderBody({ tableHeaderBg: "#f5f5f5", tableHeaderColor: "#111", accentLine: false } as Parameters<typeof renderBody>[0])}
+    </div>
+  );
+
+  // ── Layout 10: Luxus ─────────────────────────────────────────────────────────
+  if (layoutId === 10) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fffdf9", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ padding: "8px 12px" }}>
+        <div style={{ borderTop: `1px solid ${color}`, borderBottom: `1px solid ${color}`, padding: "4px 0" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <div style={{ fontSize: "9px", fontWeight: "bold", fontStyle: "italic" }}>{absenderName}</div>
+              <div style={{ fontSize: "5.5px", color: "#aaa", fontStyle: "italic" }}>{senderLine}</div>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <div style={{ fontSize: "6px", color: color, fontStyle: "italic" }}>{typLabel}</div>
+              <div style={{ fontSize: "5.5px", color: "#888" }}>{nummer}</div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Fusstext */}
-      {fusstext && (
-        <div style={{ padding: "3px 12px", fontSize: "5.5px", color: "#888", lineHeight: 1.3, borderTop: "0.5px solid #eee", marginTop: "4px" }}>
-          {fusstext.substring(0, 100)}{fusstext.length > 100 ? "…" : ""}
-        </div>
-      )}
+      {renderBody({ tableHeaderBg: "#f5f0e8", tableHeaderColor: "#5a4a3a", metaBold: true })}
     </div>
   );
+
+  // ── Layout 11: Rahmen ─────────────────────────────────────────────────────────
+  if (layoutId === 11) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden", padding: "4px" }}>
+      <div style={{ border: `1.5px solid ${color}`, height: "calc(100% - 8px)", overflow: "hidden", borderRadius: "2px" }}>
+        <div style={{ backgroundColor: color, padding: "6px 10px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <div style={{ color: "#fff", fontWeight: "bold", fontSize: "8px" }}>{absenderName}</div>
+              <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "5.5px" }}>{senderLine}</div>
+            </div>
+            <div style={{ color: "#fff", fontSize: "6px", textAlign: "right" }}>
+              <div style={{ fontWeight: "bold" }}>{typLabel}</div>
+              <div style={{ opacity: 0.7 }}>{nummer}</div>
+            </div>
+          </div>
+        </div>
+        <div style={{ padding: "0" }}>
+          {renderBody({ tableHeaderBg: "#111" })}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── Layout 12: Technik ────────────────────────────────────────────────────────
+  if (layoutId === 12) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#f8f9fb", fontFamily: "Inter, monospace, sans-serif", color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ display: "flex", borderBottom: `2px solid ${color}` }}>
+        <div style={{ flex: 2, backgroundColor: color + "18", padding: "7px 10px 5px" }}>
+          <div style={{ fontSize: "5.5px", color: color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "2px" }}>Absender</div>
+          <div style={{ fontSize: "8px", fontWeight: "bold" }}>{absenderName}</div>
+          <div style={{ fontSize: "5.5px", color: "#666" }}>{senderLine}</div>
+        </div>
+        <div style={{ flex: 1, padding: "7px 10px 5px", borderLeft: `1px solid ${color}30` }}>
+          <div style={{ fontSize: "5.5px", color: color, fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: "2px" }}>Dokument</div>
+          <div style={{ fontSize: "7px", fontWeight: "bold" }}>{typLabel}</div>
+          <div style={{ fontSize: "5.5px", color: "#666" }}>{nummer}</div>
+          <div style={{ fontSize: "5.5px", color: "#888" }}>{datum}</div>
+        </div>
+      </div>
+      {renderBody({ tableHeaderBg: color, tableHeaderColor: "#fff", accentLine: false } as Parameters<typeof renderBody>[0])}
+    </div>
+  );
+
+  // ── Layout 13: Pfeile ────────────────────────────────────────────────────────
+  if (layoutId === 13) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ padding: "7px 12px 4px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "6px" }}>
+          <span style={{ fontWeight: "bold", fontSize: "8px" }}>{absenderName}</span>
+          <span style={{ color: color, fontWeight: "bold" }}>→</span>
+          <span style={{ color: "#aaa" }}>{absenderAdresse}</span>
+          <span style={{ color: color, fontWeight: "bold" }}>→</span>
+          <span style={{ color: "#aaa" }}>{absenderPlz} {absenderOrt}</span>
+        </div>
+        <div style={{ marginTop: "4px", height: "1px", backgroundColor: color }} />
+      </div>
+      {renderBody({ tableHeaderBg: "#111", accentLine: false })}
+    </div>
+  );
+
+  // ── Layout 14: Panorama ──────────────────────────────────────────────────────
+  if (layoutId === 14) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ background: `linear-gradient(135deg, ${color}, ${color}bb)`, padding: "9px 12px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "5.5px", textTransform: "uppercase", letterSpacing: "0.8px" }}>Zauberer & Mentalist</div>
+            <div style={{ color: "#fff", fontWeight: "bold", fontSize: "9.5px", marginTop: "1px" }}>{absenderName}</div>
+            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "5.5px", marginTop: "1px" }}>{senderLine}</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ width: "20px", height: "14px", borderRadius: "3px", backgroundColor: "rgba(255,255,255,0.2)", marginBottom: "4px", marginLeft: "auto" }} />
+            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "6px", fontWeight: "bold" }}>{typLabel.toUpperCase()}</div>
+            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "5.5px" }}>{nummer}</div>
+          </div>
+        </div>
+      </div>
+      {renderBody({ tableHeaderBg: "#111", metaBold: true })}
+    </div>
+  );
+
+  // ── Layout 15: Initialen ─────────────────────────────────────────────────────
+  if (layoutId === 15) return (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", fontFamily: font, color: "#1a1a1a", overflow: "hidden" }}>
+      <div style={{ padding: "7px 12px 4px", display: "flex", alignItems: "center", gap: "8px", borderBottom: `1px solid ${color}30` }}>
+        <div style={{
+          width: "32px", height: "32px", borderRadius: "8px", backgroundColor: color, flexShrink: 0,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          color: "#fff", fontWeight: "900", fontSize: "16px", letterSpacing: "-1px",
+        }}>
+          {initials}
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: "9px", fontWeight: "bold", lineHeight: 1.2 }}>{absenderName}</div>
+          <div style={{ fontSize: "5.5px", color: "#aaa" }}>{senderLine}</div>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontSize: "6px", color: color, fontWeight: "bold" }}>{typLabel}</div>
+          <div style={{ fontSize: "5.5px", color: "#aaa" }}>{nummer}</div>
+        </div>
+      </div>
+      {renderBody({ tableHeaderBg: color, tableHeaderColor: "#fff", accentLine: true } as Parameters<typeof renderBody>[0])}
+    </div>
+  );
+
+  return null;
 }
 
 // ── Main Component ────────────────────────────────────────────────────────────
