@@ -6,27 +6,28 @@ import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentTyp, DokumentStatus } from "@/types/dokumente";
 import {
   Plus, FileText, TrendingUp, AlertTriangle, CheckCircle,
-  Search, Trash2, Ban, ThumbsUp, ThumbsDown, MoreVertical,
+  Search, Trash2, Ban, ThumbsUp, ThumbsDown, MoreVertical, Eye, Mail, BellRing, CircleCheck,
 } from "lucide-react";
 
-const STATUS_CONFIG: Record<DokumentStatus, { label: string; cls: string }> = {
-  entwurf:      { label: "Entwurf",     cls: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400" },
-  gesendet:     { label: "Gesendet",    cls: "bg-blue-100 text-blue-700" },
-  akzeptiert:   { label: "Akzeptiert",  cls: "bg-green-100 text-green-700" },
-  abgelehnt:    { label: "Abgelehnt",   cls: "bg-red-100 text-red-700" },
-  offen:        { label: "Offen",       cls: "bg-amber-100 text-amber-700" },
-  teilbezahlt:  { label: "Teilbezahlt", cls: "bg-indigo-100 text-indigo-700" },
-  bezahlt:      { label: "Bezahlt",     cls: "bg-green-100 text-green-700" },
-  ueberfaellig: { label: "Überfällig",  cls: "bg-red-100 text-red-700" },
-  storniert:    { label: "Storniert",   cls: "bg-gray-100 text-gray-400" },
+const STATUS_CONFIG: Record<DokumentStatus, { label: string; dot: string }> = {
+  entwurf:      { label: "Entwurf",     dot: "bg-gray-300 border-2 border-gray-300" },
+  gesendet:     { label: "Gesendet",    dot: "bg-blue-500" },
+  akzeptiert:   { label: "Akzeptiert",  dot: "bg-green-500" },
+  abgelehnt:    { label: "Abgelehnt",   dot: "bg-red-500" },
+  offen:        { label: "Offen",       dot: "bg-amber-400" },
+  teilbezahlt:  { label: "Teilbezahlt", dot: "bg-indigo-400" },
+  bezahlt:      { label: "Bezahlt",     dot: "bg-green-500" },
+  ueberfaellig: { label: "Überfällig",  dot: "bg-red-500" },
+  storniert:    { label: "Storniert",   dot: "bg-gray-300" },
 };
 
-function StatusBadge({ status }: { status: DokumentStatus }) {
-  const cfg = STATUS_CONFIG[status] ?? { label: status, cls: "bg-gray-100 text-gray-600" };
+function StatusCell({ status }: { status: DokumentStatus }) {
+  const cfg = STATUS_CONFIG[status] ?? { label: status, dot: "bg-gray-300" };
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-semibold ${cfg.cls}`}>
-      {cfg.label}
-    </span>
+    <div className="flex items-center gap-2">
+      <span className={`w-3 h-3 rounded-full shrink-0 ${cfg.dot}`} />
+      <span className="text-sm font-medium text-foreground">{cfg.label}</span>
+    </div>
   );
 }
 
@@ -138,6 +139,8 @@ export default function AdminDokumenteListe() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [actionId, setActionId] = useState<string | null>(null);
+  const [previewDoc, setPreviewDoc] = useState<{ id: string; html: string; titel: string } | null>(null);
+  const [previewLoading, setPreviewLoading] = useState<string | null>(null);
   const [kennzahlen, setKennzahlen] = useState({ offenBetrag: 0, ueberfaelligBetrag: 0, bezahltMonatBetrag: 0, offenAnzahl: 0 });
 
   // Typ aus URL-Pfad
@@ -223,6 +226,30 @@ export default function AdminDokumenteListe() {
     setActionId(null);
   };
 
+  const handleMahnungErstellen = (e: React.MouseEvent, doc: Dokument) => {
+    e.stopPropagation();
+    setActionId(null);
+    navigate(`/admin/dokumente/new?typ=mahnung&quelldokumentId=${doc.id}&quelldokumentNummer=${encodeURIComponent(doc.nummer)}`);
+  };
+
+  const handlePreview = async (e: React.MouseEvent, doc: Dokument) => {
+    e.stopPropagation();
+    setPreviewLoading(doc.id);
+    try {
+      const full = await dokumenteService.getById(doc.id);
+      if (full?.previewHtml) {
+        setPreviewDoc({ id: doc.id, html: full.previewHtml, titel: doc.nummer || doc.typ });
+      } else {
+        // Kein preview_html → in den Editor, damit man speichern und Vorschau erzeugen kann
+        navigate(`/admin/dokumente/${doc.id}/bearbeiten`);
+      }
+    } catch (err) {
+      navigate(`/admin/dokumente/${doc.id}/bearbeiten`);
+    } finally {
+      setPreviewLoading(null);
+    }
+  };
+
   const today = new Date().toISOString().split("T")[0];
 
   // Action-Button oben rechts
@@ -255,6 +282,36 @@ export default function AdminDokumenteListe() {
   if (!authChecked) return null;
 
   return (
+    <>
+    {/* ── Vorschau-Modal ── */}
+    {previewDoc && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm" onClick={() => setPreviewDoc(null)}>
+        <div className="relative bg-white rounded-2xl shadow-2xl flex flex-col" style={{ width: 660, height: "90vh" }} onClick={e => e.stopPropagation()}>
+          {/* Header */}
+          <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 bg-gray-50 rounded-t-2xl shrink-0">
+            <span className="text-sm font-semibold text-gray-800">{previewDoc.titel}</span>
+            <button onClick={() => setPreviewDoc(null)} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-200 text-gray-500 hover:text-gray-800 transition-colors text-base">✕</button>
+          </div>
+          {/* iFrame mit vollständigem HTML */}
+          {previewDoc.html ? (
+            <iframe
+              srcDoc={`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box;}html,body{width:595px;background:#fff;}body>div{width:595px;height:842px;overflow:hidden;}</style></head><body>${previewDoc.html}</body></html>`}
+              style={{ width: "100%", flex: 1, border: "none", borderRadius: "0 0 1rem 1rem", transform: "scale(1)", transformOrigin: "top left" }}
+              title="Vorschau"
+            />
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center text-gray-400 gap-3">
+              <FileText className="w-10 h-10 opacity-30" />
+              <p className="text-sm">Keine Vorschau verfügbar</p>
+              <p className="text-xs text-gray-400">Öffne das Dokument und speichere es erneut</p>
+              <button onClick={() => { setPreviewDoc(null); navigate(`/admin/dokumente/${previewDoc.id}`); }} className="mt-2 px-4 py-2 rounded-xl bg-foreground text-background text-xs font-medium hover:opacity-90 transition-opacity">
+                Dokument öffnen
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
     <AdminLayout
       title={pageInfo?.title ?? "Dokumente"}
       subtitle={pageInfo?.subtitle ?? "Angebote · Rechnungen · Auftragsbestätigungen · Mahnungen"}
@@ -362,36 +419,15 @@ export default function AdminDokumenteListe() {
         </div>
       ) : (
         <div className="rounded-2xl border border-border/20 bg-background">
-          {/* Header */}
-          <div className="hidden md:grid text-[10px] text-muted-foreground uppercase font-semibold tracking-wider px-4 py-2.5 bg-muted/10 border-b border-border/10 rounded-t-2xl"
-            style={{ gridTemplateColumns: "100px minmax(0,1fr) 75px 75px 80px 90px 100px 136px" }}>
-            <span>Nummer</span>
-            <span>Kontakt</span>
-            <span>Typ</span>
-            <span>Datum</span>
-            <span>Fällig / Gültig</span>
-            <span className="text-right">Betrag</span>
-            <span className="text-right">Status</span>
-            <span className="text-right">Aktionen</span>
-          </div>
-
           {actionId && <div className="fixed inset-0 z-10" onClick={() => setActionId(null)} />}
 
-          {filtered.map((doc) => {
-            const isOverdue = doc.faelligAm && doc.faelligAm < today && (doc.status === "offen" || doc.status === "gesendet" || doc.status === "ueberfaellig");
-            const contact = doc.empfaenger.firma || doc.empfaenger.name || "—";
-            const showMenu = actionId === doc.id;
-            const isStorniert = doc.status === "storniert";
-            const canAcceptReject = canAcceptRejectCheck(doc);
-
-            return (
-              <div key={doc.id}
-                className={`relative border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30 dark:bg-red-900/10" : ""} ${isStorniert ? "opacity-50" : ""}`}
-                onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
-              >
-
-                {/* ── Mobile ── */}
-                <div className="md:hidden px-4 py-3.5 flex items-center gap-3">
+          {/* ── Mobile Liste ── */}
+          <div className="md:hidden divide-y divide-border/10">
+            {filtered.map((doc) => {
+              const contact = doc.empfaenger.firma || doc.empfaenger.name || "—";
+              const isOverdue = doc.faelligAm && doc.faelligAm < today && (doc.status === "offen" || doc.status === "gesendet" || doc.status === "ueberfaellig");
+              return (
+                <div key={doc.id} className="px-4 py-3.5 flex items-center gap-3 cursor-pointer hover:bg-muted/20" onClick={() => navigate(`/admin/dokumente/${doc.id}`)}>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-sm font-semibold font-mono">{doc.nummer}</span>
@@ -401,88 +437,185 @@ export default function AdminDokumenteListe() {
                   </div>
                   <div className="shrink-0 text-right">
                     <p className={`text-sm font-bold tabular-nums ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</p>
-                    <div className="mt-1"><StatusBadge status={doc.status} /></div>
+                    <div className="mt-1"><StatusCell status={doc.status} /></div>
                   </div>
                 </div>
+              );
+            })}
+          </div>
 
-                {/* ── Desktop ── */}
-                <div className="hidden md:grid items-center px-4 gap-2"
-                  style={{ gridTemplateColumns: "100px minmax(0,1fr) 75px 75px 80px 90px 100px 136px" }}>
-
-                  <span className="font-mono text-xs font-semibold text-muted-foreground py-3">{doc.nummer}</span>
-                  <div className="min-w-0 py-3 text-left">
-                    <p className="truncate font-medium text-sm">{contact}</p>
-                    {doc.empfaenger.firma && doc.empfaenger.name && (
-                      <p className="truncate text-xs text-muted-foreground">{doc.empfaenger.name}</p>
-                    )}
-                  </div>
-                  <span className={`text-xs font-medium py-3 ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
-                  <span className="text-xs text-muted-foreground py-3">{fmtDate(doc.datum)}</span>
-                  <span className={`text-xs py-3 ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>
-                    {doc.typ === "angebot" ? (fmtDate(doc.gueltigBis) || "—") : (fmtDate(doc.faelligAm) || "—")}
-                  </span>
-                  <span className={`text-right font-semibold tabular-nums text-sm py-3 ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</span>
-                  <div className="flex justify-end py-3"><StatusBadge status={doc.status} /></div>
-
-                  {/* ── Actions ── */}
-                  <div className="flex items-center justify-end gap-1 py-2" onClick={(e) => e.stopPropagation()}>
-                    {canAcceptReject ? (
-                      <>
-                        <button
-                          onClick={(e) => handleStatusChange(e, doc, "akzeptiert")}
-                          title="Angenommen"
-                          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold text-green-700 bg-green-50 hover:bg-green-100 transition-colors whitespace-nowrap"
-                        >
-                          <ThumbsUp className="w-3 h-3 shrink-0" /> Ja
-                        </button>
-                        <button
-                          onClick={(e) => handleStatusChange(e, doc, "abgelehnt")}
-                          title="Abgelehnt"
-                          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors whitespace-nowrap"
-                        >
-                          <ThumbsDown className="w-3 h-3 shrink-0" /> Nein
-                        </button>
-                      </>
-                    ) : (
-                      <div className="w-[60px]" />
-                    )}
-
-                    {/* ··· Menü */}
-                    <div className="relative">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); setActionId(showMenu ? null : doc.id); }}
-                        title="Weitere Aktionen"
-                        className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
-                      >
-                        <MoreVertical className="w-4 h-4" />
-                      </button>
-
-                      {showMenu && (
-                        <div className="absolute right-0 top-full mt-1 z-50 bg-background border border-border/30 rounded-xl shadow-xl overflow-hidden w-44 py-1">
-                          {!isStorniert && (
-                            <button
-                              onClick={(e) => handleStornieren(e, doc)}
-                              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-amber-700 hover:bg-amber-50 transition-colors text-left"
-                            >
-                              <Ban className="w-3.5 h-3.5 shrink-0" /> Stornieren
-                            </button>
-                          )}
-                          <button
-                            onClick={(e) => handleDelete(e, doc)}
-                            className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-red-600 hover:bg-red-50 transition-colors text-left"
-                          >
-                            <Trash2 className="w-3.5 h-3.5 shrink-0" /> Endgültig löschen
+          {/* ── Desktop Tabelle ── */}
+          {activeTyp === "rechnung" ? (
+            /* ── Rechnungen-Layout ── */
+            <table className="hidden md:table w-full table-fixed border-collapse">
+              <colgroup>
+                <col style={{ width: "11%" }} /> {/* Status */}
+                <col style={{ width: "10%" }} /> {/* Fälligkeit */}
+                <col style={{ width: "11%" }} /> {/* Rechnungsnr. */}
+                <col style={{ width: "22%" }} /> {/* Kunde */}
+                <col style={{ width: "9%" }} />  {/* Datum */}
+                <col style={{ width: "11%" }} /> {/* Betrag */}
+                <col style={{ width: "11%" }} /> {/* Offen */}
+                <col style={{ width: "15%" }} /> {/* Aktionen */}
+              </colgroup>
+              <thead>
+                <tr className="bg-muted/10 border-b border-border/10">
+                  {[
+                    { h: "Status", align: "left", first: true },
+                    { h: "Fälligkeit", align: "left" },
+                    { h: "Rechnungsnr.", align: "left" },
+                    { h: "Kunde", align: "left" },
+                    { h: "Datum", align: "left" },
+                    { h: "Betrag (Brutto)", align: "right" },
+                    { h: "Offen (Brutto)", align: "right" },
+                    { h: "", align: "right", last: true },
+                  ].map(({ h, align, first, last }, i) => (
+                    <th key={i} className={`text-[10px] font-semibold uppercase tracking-wider text-muted-foreground py-2.5 text-${align} ${first ? "px-4" : last ? "px-4" : "px-3"}`}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((doc) => {
+                  const isOverdue = doc.faelligAm && doc.faelligAm < today && (doc.status === "offen" || doc.status === "ueberfaellig");
+                  const contact = doc.empfaenger.firma || doc.empfaenger.name || "—";
+                  const showMenu = actionId === doc.id;
+                  const isStorniert = doc.status === "storniert";
+                  const isBezahlt = doc.status === "bezahlt";
+                  return (
+                    <tr key={doc.id} onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
+                      className={`group border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30" : ""} ${isStorniert ? "opacity-50" : ""}`}>
+                      <td className="px-4 py-3"><StatusCell status={doc.status} /></td>
+                      <td className={`px-3 py-3 text-sm ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>{fmtDate(doc.faelligAm) || "–"}</td>
+                      <td className="px-3 py-3 font-mono text-sm text-muted-foreground">{doc.nummer || "–"}</td>
+                      <td className="px-3 py-3"><p className="truncate font-semibold text-sm">{contact}</p></td>
+                      <td className="px-3 py-3 text-sm text-muted-foreground">{fmtDate(doc.datum)}</td>
+                      <td className="px-3 py-3 text-right font-semibold tabular-nums text-sm">{fmt(doc.brutto)}</td>
+                      <td className={`px-3 py-3 text-right font-semibold tabular-nums text-sm ${isOverdue ? "text-red-600" : isBezahlt ? "text-green-600" : ""}`}>{fmt(doc.offenerBetrag)}</td>
+                      <td className="px-4 py-2 relative" onClick={(e) => e.stopPropagation()}>
+                        <div className={`flex items-center justify-end gap-1 transition-opacity ${showMenu ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
+                          <button onClick={(e) => previewLoading === doc.id ? undefined : handlePreview(e, doc)} title="Vorschau" className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
+                            {previewLoading === doc.id ? <span className="w-4 h-4 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin block" /> : <Eye className="w-4 h-4" />}
                           </button>
+                          <button onClick={(e) => { e.stopPropagation(); navigate(`/admin/dokumente/${doc.id}?send=1`); }} title="Versenden" className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
+                            <Mail className="w-4 h-4" />
+                          </button>
+                          <div className="relative">
+                            <button onClick={(e) => { e.stopPropagation(); setActionId(showMenu ? null : doc.id); }} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
+                              <MoreVertical className="w-4 h-4" />
+                            </button>
+                            {showMenu && (
+                              <div className="absolute right-0 top-full mt-1 z-50 bg-background border border-border/30 rounded-xl shadow-xl overflow-hidden w-48 py-1">
+                                {!isBezahlt && !isStorniert && (
+                                  <button onClick={(e) => handleStatusChange(e, doc, "bezahlt")} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-green-700 hover:bg-green-50 transition-colors text-left">
+                                    <CircleCheck className="w-3.5 h-3.5 shrink-0" /> Als bezahlt markieren
+                                  </button>
+                                )}
+                                {!isStorniert && (
+                                  <button onClick={(e) => handleMahnungErstellen(e, doc)} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-amber-700 hover:bg-amber-50 transition-colors text-left">
+                                    <BellRing className="w-3.5 h-3.5 shrink-0" /> Mahnung erstellen
+                                  </button>
+                                )}
+                                {!isStorniert && (
+                                  <button onClick={(e) => handleStornieren(e, doc)} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-orange-700 hover:bg-orange-50 transition-colors text-left">
+                                    <Ban className="w-3.5 h-3.5 shrink-0" /> Stornieren
+                                  </button>
+                                )}
+                                <button onClick={(e) => handleDelete(e, doc)} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-red-600 hover:bg-red-50 transition-colors text-left">
+                                  <Trash2 className="w-3.5 h-3.5 shrink-0" /> Löschen
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            /* ── Standard-Layout (Angebote, AB, Mahnungen, Übersicht) ── */
+            <table className="hidden md:table w-full table-fixed border-collapse">
+              <colgroup>
+                <col style={{ width: "14%" }} />
+                <col style={{ width: "10%" }} />
+                <col style={{ width: "38%" }} />
+                <col style={{ width: "12%" }} />
+                <col style={{ width: "14%" }} />
+                <col style={{ width: "12%" }} />
+              </colgroup>
+              <thead>
+                <tr className="bg-muted/10 border-b border-border/10">
+                  {["Status", "Nr.", "Kunde / Betreff", "Datum", "Betrag (Brutto)", ""].map((h, i) => (
+                    <th key={i} className={`text-[10px] font-semibold uppercase tracking-wider text-muted-foreground py-2.5 ${i === 0 ? "px-4 text-left" : i >= 4 ? "px-4 text-right" : "px-3 text-left"}`}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((doc) => {
+                  const isOverdue = doc.faelligAm && doc.faelligAm < today && (doc.status === "offen" || doc.status === "gesendet" || doc.status === "ueberfaellig");
+                  const contact = doc.empfaenger.firma || doc.empfaenger.name || "—";
+                  const betreff = `${TYP_LABEL[doc.typ]} ${doc.nummer}`;
+                  const showMenu = actionId === doc.id;
+                  const isStorniert = doc.status === "storniert";
+                  const canAcceptReject = canAcceptRejectCheck(doc);
+                  return (
+                    <tr key={doc.id} onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
+                      className={`group border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30" : ""} ${isStorniert ? "opacity-50" : ""}`}>
+                      <td className="px-4 py-3"><StatusCell status={doc.status} /></td>
+                      <td className="px-3 py-3 font-mono text-sm text-muted-foreground">{doc.nummer || "– – –"}</td>
+                      <td className="px-3 py-3 min-w-0">
+                        <p className="truncate font-semibold text-sm">{contact}</p>
+                        <p className="truncate text-xs text-muted-foreground">{betreff}</p>
+                      </td>
+                      <td className="px-3 py-3 text-sm text-muted-foreground">{fmtDate(doc.datum)}</td>
+                      <td className={`px-4 py-3 text-right font-semibold tabular-nums text-sm ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</td>
+                      <td className="px-4 py-2 relative" onClick={(e) => e.stopPropagation()}>
+                        <div className={`flex items-center justify-end gap-1 transition-opacity ${showMenu ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
+                          <button onClick={(e) => previewLoading === doc.id ? undefined : handlePreview(e, doc)} title="Vorschau" className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
+                            {previewLoading === doc.id ? <span className="w-4 h-4 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin block" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                          <button onClick={(e) => { e.stopPropagation(); navigate(`/admin/dokumente/${doc.id}?send=1`); }} title="Versenden" className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
+                            <Mail className="w-4 h-4" />
+                          </button>
+                          <div className="relative">
+                            <button onClick={(e) => { e.stopPropagation(); setActionId(showMenu ? null : doc.id); }} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
+                              <MoreVertical className="w-4 h-4" />
+                            </button>
+                            {showMenu && (
+                              <div className="absolute right-0 top-full mt-1 z-50 bg-background border border-border/30 rounded-xl shadow-xl overflow-hidden w-44 py-1">
+                                {canAcceptReject && (
+                                  <button onClick={(e) => handleStatusChange(e, doc, "akzeptiert")} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-green-700 hover:bg-green-50 transition-colors text-left">
+                                    <ThumbsUp className="w-3.5 h-3.5 shrink-0" /> Annehmen
+                                  </button>
+                                )}
+                                {canAcceptReject && (
+                                  <button onClick={(e) => handleStatusChange(e, doc, "abgelehnt")} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-red-500 hover:bg-red-50 transition-colors text-left">
+                                    <ThumbsDown className="w-3.5 h-3.5 shrink-0" /> Ablehnen
+                                  </button>
+                                )}
+                                {!isStorniert && (
+                                  <button onClick={(e) => handleStornieren(e, doc)} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-amber-700 hover:bg-amber-50 transition-colors text-left">
+                                    <Ban className="w-3.5 h-3.5 shrink-0" /> Stornieren
+                                  </button>
+                                )}
+                                <button onClick={(e) => handleDelete(e, doc)} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-red-600 hover:bg-red-50 transition-colors text-left">
+                                  <Trash2 className="w-3.5 h-3.5 shrink-0" /> Löschen
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
     </AdminLayout>
+    </>
   );
 }

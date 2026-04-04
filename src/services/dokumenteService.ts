@@ -47,7 +47,7 @@ function toDokument(row: Record<string, unknown>, positionen: Dokumentposition[]
     quelldokumentId: (row.quelldokument_id as string) || undefined,
     quelldokumentNummer: (row.quelldokument_nummer as string) || undefined,
     folgedokumentId: (row.folgedokument_id as string) || undefined,
-    folgedokumentTyp: (row.folgedokument_typ as DokumentTyp) || undefined,
+    folgedokumentTyp: COLUMN_TYP[(row.folgedokument_typ as string)] || undefined,
 
     customerId: (row.customer_id as string) || undefined,
     eventId: (row.event_id as string) || undefined,
