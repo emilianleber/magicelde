@@ -278,17 +278,19 @@ serve(async (req) => {
     }
 
     // Log (fire-and-forget)
-    await supabase.from("portal_messages").insert({
-      customer_id: customer?.id || null,
-      request_id: requestId || null,
-      event_id: eventId || null,
-      subject,
-      body: body.slice(0, 500),
-      from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
-      to_email: toEmail,
-      status: "sent",
-      read_by_customer: false,
-    }).catch(() => {});
+    try {
+      await supabase.from("portal_messages").insert({
+        customer_id: customer?.id || null,
+        request_id: requestId || null,
+        event_id: eventId || null,
+        subject,
+        body: body.slice(0, 500),
+        from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
+        to_email: toEmail,
+        status: "sent",
+        read_by_customer: false,
+      });
+    } catch (_) {}
 
     return new Response(JSON.stringify({ success: true, to: toEmail, subject }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
