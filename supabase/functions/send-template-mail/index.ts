@@ -36,27 +36,73 @@ const corsHeaders = {
 // Importiert die shared email shell
 // In Supabase Edge Functions: relative imports aus _shared/
 const signature = `
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e4e4e7;margin-top:12px;">
-  <tr><td style="padding-top:24px;">
-    <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-      <tr>
-        <td style="padding-right:16px;vertical-align:top;">
-          <img src="https://magicel.de/logo-signatur.png" alt="EL" width="56" height="56" style="border-radius:14px;display:block;" />
-        </td>
-        <td style="vertical-align:top;">
-          <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a;font-family:${FONT};line-height:1.3;">Emilian Leber</p>
-          <p style="margin:2px 0 0;font-size:12px;color:#71717a;font-family:${FONT};">Zauberer &amp; Entertainer</p>
-        </td>
-      </tr>
-    </table>
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:14px;background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:12px;">
-      <tr><td style="padding:12px 16px;font-size:12px;color:#52525b;font-family:${FONT};">
-        📞 <a href="tel:+4915563744696" style="color:#0a0a0a;text-decoration:none;font-weight:500;">+49 155 63744696</a><br/>
-        ✉️ <a href="mailto:el@magicel.de" style="color:#0a0a0a;text-decoration:none;font-weight:500;">el@magicel.de</a><br/>
-        🌐 <a href="https://magicel.de" style="color:#0a0a0a;text-decoration:none;font-weight:500;">magicel.de</a><br/>
-        💬 <a href="https://wa.me/4915563744696" style="color:#25D366;text-decoration:none;font-weight:500;">WhatsApp schreiben</a>
-      </td></tr>
-    </table>
+<!-- ═══ PROFESSIONELLE SIGNATUR ═══ -->
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-top:2px solid #e4e4e7;margin-top:32px;padding-top:28px;">
+  <tr>
+    <!-- Logo -->
+    <td style="width:80px;vertical-align:top;padding-right:20px;">
+      <img src="https://magicel.de/logo-signatur.png" alt="Emilian Leber" width="72" height="72" style="border-radius:16px;display:block;border:1px solid #e4e4e7;" />
+    </td>
+    <!-- Info -->
+    <td style="vertical-align:top;">
+      <p style="margin:0;font-size:18px;font-weight:800;color:#0a0a0a;font-family:${FONT};line-height:1.3;">Emilian Leber</p>
+      <p style="margin:3px 0 0;font-size:13px;font-weight:600;color:#6366f1;font-family:${FONT};">Zauberer &amp; Entertainer</p>
+      <p style="margin:2px 0 0;font-size:11px;color:#a1a1aa;font-family:${FONT};font-style:italic;">Ausgezeichnet mit dem Deutschen Zauberpreis</p>
+
+      <!-- Trennlinie -->
+      <div style="margin:12px 0;height:1px;background-color:#e4e4e7;width:200px;"></div>
+
+      <!-- Kontaktdaten -->
+      <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <tr>
+          <td style="padding:3px 0;font-size:13px;color:#71717a;font-family:${FONT};width:24px;vertical-align:middle;">📞</td>
+          <td style="padding:3px 0;font-size:13px;font-family:${FONT};"><a href="tel:+4915563744696" style="color:#0a0a0a;text-decoration:none;font-weight:500;">+49 155 637 44 696</a></td>
+        </tr>
+        <tr>
+          <td style="padding:3px 0;font-size:13px;color:#71717a;font-family:${FONT};vertical-align:middle;">✉️</td>
+          <td style="padding:3px 0;font-size:13px;font-family:${FONT};"><a href="mailto:el@magicel.de" style="color:#0a0a0a;text-decoration:none;font-weight:500;">el@magicel.de</a></td>
+        </tr>
+        <tr>
+          <td style="padding:3px 0;font-size:13px;color:#71717a;font-family:${FONT};vertical-align:middle;">🌐</td>
+          <td style="padding:3px 0;font-size:13px;font-family:${FONT};"><a href="https://magicel.de" style="color:#0a0a0a;text-decoration:none;font-weight:500;">www.magicel.de</a></td>
+        </tr>
+        <tr>
+          <td style="padding:3px 0;font-size:13px;color:#71717a;font-family:${FONT};vertical-align:middle;">📍</td>
+          <td style="padding:3px 0;font-size:13px;color:#52525b;font-family:${FONT};">Regensburg, Deutschland</td>
+        </tr>
+      </table>
+
+      <!-- WhatsApp Button -->
+      <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:14px;">
+        <tr>
+          <td style="background-color:#25D366;border-radius:8px;">
+            <a href="https://wa.me/4915563744696" style="display:inline-block;padding:8px 18px;font-size:12px;font-weight:700;color:#ffffff;text-decoration:none;font-family:${FONT};">
+              💬 WhatsApp schreiben
+            </a>
+          </td>
+          <td style="padding-left:8px;">
+            <a href="https://www.instagram.com/emilian.leber/" style="display:inline-block;padding:8px 12px;font-size:12px;color:#71717a;text-decoration:none;font-family:${FONT};border:1px solid #e4e4e7;border-radius:8px;">
+              📸 Instagram
+            </a>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Bewertungen -->
+      <p style="margin:14px 0 0;font-size:11px;color:#a1a1aa;font-family:${FONT};">
+        ⭐ 5.0 bei <a href="https://g.page/r/CfLlgBMpyJ0vEBM/review" style="color:#a1a1aa;text-decoration:underline;">Google</a>
+        &nbsp;·&nbsp;
+        ⭐ Top-Dienstleister bei <a href="https://www.provenexpert.com/emilian-leber/" style="color:#a1a1aa;text-decoration:underline;">ProvenExpert</a>
+      </p>
+    </td>
+  </tr>
+</table>
+
+<!-- Disclaimer -->
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:20px;">
+  <tr><td style="padding:12px 0;font-size:10px;color:#d4d4d8;font-family:${FONT};line-height:1.6;">
+    Diese E-Mail ist ausschließlich für den/die Adressaten bestimmt und kann vertrauliche Informationen enthalten.
+    Sollten Sie diese E-Mail irrtümlich erhalten haben, informieren Sie bitte den Absender und löschen Sie die Nachricht.
   </td></tr>
 </table>`;
 
@@ -65,37 +111,48 @@ const buildHtml = (subject: string, body: string) => `<!DOCTYPE html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>${subject}</title>
 <style>:root{color-scheme:light!important}html,body{background-color:#fff!important;margin:0!important;padding:0!important}@media(prefers-color-scheme:dark){html,body{background-color:#fff!important}}</style>
 </head>
-<body style="margin:0;padding:0;background-color:#fff;font-family:${FONT};">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#fff;">
-<tr><td align="center" style="padding:32px 16px;">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.1);border-collapse:separate;border:1px solid #e4e4e7;">
+<body style="margin:0;padding:0;background-color:#ffffff;font-family:${FONT};">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;">
+<tr><td align="center" style="padding:20px 16px 0;">
 
-  <!-- Header -->
-  <tr><td bgcolor="#0a0a0a" style="background-color:#0a0a0a;padding:28px 36px 22px;border-radius:20px 20px 0 0;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td><p style="margin:0;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;font-family:${FONT};">Emilian Leber</p></td>
-      <td style="text-align:right"><span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;font-family:${FONT};">Zauberer &amp; Entertainer</span></td>
-    </tr></table>
-    <div style="margin-top:16px;height:2px;width:56px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
-  </td></tr>
+  <!-- Header Bar -->
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;">
+    <tr><td bgcolor="#0a0a0a" style="background-color:#0a0a0a;padding:22px 32px 18px;border-radius:14px 14px 0 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td><p style="margin:0;font-size:18px;font-weight:800;color:#fff;letter-spacing:-0.3px;font-family:${FONT};">Emilian Leber</p></td>
+        <td style="text-align:right"><span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#71717a;font-family:${FONT};">Zauberer &amp; Entertainer</span></td>
+      </tr></table>
+      <div style="margin-top:12px;height:2px;width:48px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
+    </td></tr>
+  </table>
 
-  <!-- Body -->
-  <tr><td style="padding:36px 36px 24px;background-color:#fff;">
-    <div style="font-size:16px;line-height:1.85;color:#333;font-family:${FONT};white-space:pre-line;">${body}</div>
-    ${signature}
-  </td></tr>
+  <!-- Body — kein Card, direkt auf weiß -->
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;">
+    <tr><td style="padding:28px 32px 16px;background-color:#ffffff;">
+      <div style="font-size:15px;line-height:1.65;color:#27272a;font-family:${FONT};">${body}</div>
+    </td></tr>
+  </table>
+
+  <!-- Signatur -->
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;">
+    <tr><td style="padding:0 32px 24px;background-color:#ffffff;">
+      ${signature}
+    </td></tr>
+  </table>
 
   <!-- Footer -->
-  <tr><td bgcolor="#f4f4f5" style="background-color:#f4f4f5;padding:20px 36px;text-align:center;border-top:1px solid #e4e4e7;border-radius:0 0 20px 20px;">
-    <p style="margin:0 0 6px;font-size:11px;color:#a1a1aa;font-family:${FONT};">Emilian Leber · Regensburg</p>
-    <p style="margin:0;font-size:11px;color:#a1a1aa;font-family:${FONT};">
-      <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:underline;">Datenschutz</a> ·
-      <a href="https://magicel.de/impressum" style="color:#a1a1aa;text-decoration:underline;">Impressum</a> ·
-      <a href="https://magicel.de/agb" style="color:#a1a1aa;text-decoration:underline;">AGB</a>
-    </p>
-  </td></tr>
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;">
+    <tr><td style="padding:16px 32px;text-align:center;border-top:1px solid #e4e4e7;">
+      <p style="margin:0 0 4px;font-size:10px;color:#a1a1aa;font-family:${FONT};">Emilian Leber · Regensburg · Deutschland</p>
+      <p style="margin:0;font-size:10px;color:#a1a1aa;font-family:${FONT};">
+        <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:underline;">Datenschutz</a> ·
+        <a href="https://magicel.de/impressum" style="color:#a1a1aa;text-decoration:underline;">Impressum</a> ·
+        <a href="https://magicel.de/agb" style="color:#a1a1aa;text-decoration:underline;">AGB</a>
+      </p>
+    </td></tr>
+  </table>
 
-</table></td></tr></table>
+</td></tr></table>
 </body></html>`;
 
 serve(async (req) => {
@@ -162,13 +219,20 @@ serve(async (req) => {
     const vorname = nameParts[0] || "";
     const nachname = nameParts.slice(1).join(" ") || nameParts[0] || "";
     const firma = customer?.company || request?.firma || "";
-    const anrede = firma ? "Frau/Herr" : ""; // Kann später pro Kunde gespeichert werden
+    // Anrede: aus Kunde oder Anfrage lesen, Fallback leer (kein "Frau/Herr")
+    const anrede = customer?.anrede || request?.anrede || "";
+
+    // Intelligente Begrüßung: "Hallo Herr Mustermann" oder "Hallo Max Mustermann"
+    const begruessung = anrede
+      ? `${anrede} ${nachname}`  // "Herr Mustermann" / "Frau Müller"
+      : (vorname || name);       // "Max" / "Max Mustermann"
 
     const replacePlaceholders = (text: string) => text
       .replace(/\{\{anrede\}\}/gi, anrede)
       .replace(/\{\{vorname\}\}/gi, vorname)
       .replace(/\{\{nachname\}\}/gi, nachname)
       .replace(/\{\{name\}\}/gi, name)
+      .replace(/\{\{begruessung\}\}/gi, begruessung)
       .replace(/\{\{firma\}\}/gi, firma)
       .replace(/\{\{email\}\}/gi, toEmail)
       .replace(/\{\{anlass\}\}/gi, request?.anlass || event?.title || "")
@@ -180,22 +244,31 @@ serve(async (req) => {
     const subject = replacePlaceholders(template.betreff);
     const body = replacePlaceholders(template.inhalt);
 
-    // HTML-Mail aufbauen
-    // Zeilen mit • am Anfang als Liste formatieren
-    const formattedBody = body
-      .split("\n")
-      .map((line: string) => {
-        const trimmed = line.trim();
-        if (trimmed.startsWith("•")) {
-          return `<div style="padding:4px 0 4px 8px;margin-left:12px;border-left:2px solid #e4e4e7;">${trimmed.slice(1).trim()}</div>`;
-        }
-        if (trimmed.startsWith("🎩") || trimmed.startsWith("✨") || trimmed.startsWith("💫")) {
-          return `<div style="padding:8px 0 4px;"><strong>${trimmed}</strong></div>`;
-        }
-        if (trimmed === "") return "<br/>";
-        return trimmed;
-      })
-      .join("\n");
+    // HTML-Mail aufbauen — saubere Formatierung
+    const lines = body.split("\n");
+    let formattedBody = "";
+    let inList = false;
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+
+      if (trimmed.startsWith("•")) {
+        if (!inList) { formattedBody += `<ul style="margin:8px 0 8px 4px;padding-left:20px;color:#27272a;">`; inList = true; }
+        formattedBody += `<li style="padding:2px 0;line-height:1.5;">${trimmed.slice(1).trim()}</li>`;
+        continue;
+      }
+
+      if (inList) { formattedBody += "</ul>"; inList = false; }
+
+      if (trimmed.startsWith("🎩") || trimmed.startsWith("✨") || trimmed.startsWith("💫")) {
+        formattedBody += `<p style="margin:16px 0 4px;font-weight:700;font-size:15px;">${trimmed}</p>`;
+      } else if (trimmed === "") {
+        formattedBody += `<div style="height:10px;"></div>`;
+      } else {
+        formattedBody += `<p style="margin:0 0 6px;">${trimmed}</p>`;
+      }
+    }
+    if (inList) formattedBody += "</ul>";
 
     const html = buildHtml(subject, formattedBody);
 
