@@ -196,16 +196,18 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
         href="/admin/dokumente"
         label="Dokumente"
         icon={FileText}
-        isActive={location.pathname === "/admin/dokumente"}
+        isActive={location.pathname.startsWith("/admin/dokumente")}
         mobile={mobile}
         onClick={onClose}
       />
-      <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
-        <SubNavLink href="/admin/dokumente/angebote" label="Angebote" isActive={location.pathname.startsWith("/admin/dokumente/angebote")} onClick={onClose} />
-        <SubNavLink href="/admin/dokumente/rechnungen" label="Rechnungen" isActive={location.pathname.startsWith("/admin/dokumente/rechnungen")} onClick={onClose} />
-        <SubNavLink href="/admin/dokumente/auftragsbestaetigung" label="Auftragsbestät." isActive={location.pathname.startsWith("/admin/dokumente/auftragsbestaetigung")} onClick={onClose} />
-        <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
-      </div>
+      {location.pathname.startsWith("/admin/dokumente") && (
+        <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
+          <SubNavLink href="/admin/dokumente/angebote" label="Angebote" isActive={location.pathname.startsWith("/admin/dokumente/angebote")} onClick={onClose} />
+          <SubNavLink href="/admin/dokumente/rechnungen" label="Rechnungen" isActive={location.pathname.startsWith("/admin/dokumente/rechnungen")} onClick={onClose} />
+          <SubNavLink href="/admin/dokumente/auftragsbestaetigung" label="Auftragsbestät." isActive={location.pathname.startsWith("/admin/dokumente/auftragsbestaetigung")} onClick={onClose} />
+          <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
+        </div>
+      )}
       <NavLink href="/admin/artikel" label="Artikel" icon={ShoppingBag} isActive={isActive("/admin/artikel")} mobile={mobile} onClick={onClose} />
 
       {/* Produktionen */}
