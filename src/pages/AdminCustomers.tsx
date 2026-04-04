@@ -133,11 +133,11 @@ const AdminCustomers = () => {
 
   const softDeleteSelected = async () => {
     if (!selectedIds.length) return;
+    if (!confirm(`${selectedIds.length} Kunde(n) endgültig löschen? Dies kann nicht rückgängig gemacht werden.`)) return;
     setDeleting(true);
-    const deletedAt = new Date().toISOString();
-    const { error } = await supabase.from("portal_customers").update({ deleted_at: deletedAt }).in("id", selectedIds);
+    const { error } = await supabase.from("portal_customers").delete().in("id", selectedIds);
     if (!error) {
-      setCustomers((prev) => prev.map((c) => selectedIds.includes(c.id) ? { ...c, deleted_at: deletedAt } : c));
+      setCustomers((prev) => prev.filter((c) => !selectedIds.includes(c.id)));
       setSelectedIds([]);
     }
     setDeleting(false);

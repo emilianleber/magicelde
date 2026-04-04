@@ -174,11 +174,12 @@ const AdminRequests = () => {
 
   const deleteSelected = async () => {
     if (!selectedIds.length) return;
+    if (!confirm(`${selectedIds.length} Anfrage(n) endgültig löschen?`)) return;
     setDeleting(true);
     const { error } = await supabase
-      .from("portal_requests").update({ deleted_at: new Date().toISOString() }).in("id", selectedIds);
+      .from("portal_requests").delete().in("id", selectedIds);
     if (!error) {
-      setRequests((prev) => prev.map((r) => selectedIds.includes(r.id) ? { ...r, deleted_at: new Date().toISOString() } : r));
+      setRequests((prev) => prev.filter((r) => !selectedIds.includes(r.id)));
       setSelectedIds([]);
     }
     setDeleting(false);
