@@ -113,12 +113,23 @@ const getEmailShell = (
               </div>` : ""}
 
               <!-- signature -->
-              <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e4e4e7;margin-top:8px;">
-                <tr><td style="padding-top:22px;">
-                  <p style="margin:0 0 2px;font-size:14px;color:#71717a;font-family:${FONT};">Mit magischen Grüßen,</p>
-                  <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a;font-family:${FONT};">Emilian Leber</p>
-                  <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa;font-family:${FONT};">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
-                </td></tr>
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:24px;">
+                <tr><td colspan="2" style="padding-bottom:16px;"><div style="height:2px;background:linear-gradient(90deg,#6366f1 0%,#a855f7 40%,#e4e4e7 40%);border-radius:2px;"></div></td></tr>
+                <tr>
+                  <td style="width:64px;vertical-align:top;padding-right:18px;">
+                    <img src="https://magicel.de/favicon.ico" alt="EL" width="48" height="48" style="border-radius:12px;display:block;" />
+                  </td>
+                  <td style="vertical-align:top;">
+                    <p style="margin:0;font-size:15px;font-weight:700;color:#18181b;font-family:${FONT};">Emilian Leber</p>
+                    <p style="margin:2px 0 0;font-size:10px;font-weight:600;color:#6366f1;font-family:${FONT};text-transform:uppercase;letter-spacing:1px;">Zauberer &amp; Entertainer</p>
+                    <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:8px;">
+                      <tr><td style="padding:2px 0;font-size:11px;color:#71717a;font-family:${FONT};width:14px;">T</td><td style="padding:2px 0 2px 6px;font-size:11px;font-family:${FONT};"><a href="tel:+4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td></tr>
+                      <tr><td style="padding:2px 0;font-size:11px;color:#71717a;font-family:${FONT};">E</td><td style="padding:2px 0 2px 6px;font-size:11px;font-family:${FONT};"><a href="mailto:el@magicel.de" style="color:#3f3f46;text-decoration:none;">el@magicel.de</a></td></tr>
+                      <tr><td style="padding:2px 0;font-size:11px;color:#71717a;font-family:${FONT};">W</td><td style="padding:2px 0 2px 6px;font-size:11px;font-family:${FONT};"><a href="https://magicel.de" style="color:#3f3f46;text-decoration:none;">www.magicel.de</a></td></tr>
+                    </table>
+                    <p style="margin:6px 0 0;font-size:10px;color:#a1a1aa;font-family:${FONT};">Regensburg · Deutschland · <a href="https://wa.me/4915563744696" style="color:#a1a1aa;text-decoration:none;">WhatsApp</a></p>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>
@@ -167,23 +178,50 @@ const statusBadge = (text: string, color = "#0a0a0a", bg = "#f4f4f5") => `
   ${text}
 </div>`;
 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+const fmtDatum = (d: string | null) => d ? new Date(d + "T12:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" }) : "–";
+
+const formatLabels: Record<string, string> = {
+  buehne: "Bühnenshow", buehnenshow: "Bühnenshow", closeup: "Close-Up",
+  "close-up": "Close-Up", walking_act: "Walking Act", magic_dinner: "Magic Dinner",
+  kombination: "Kombination", beratung: "Beratung",
+};
+const fmtFormat = (f: string | null) => f ? (formatLabels[f.toLowerCase()] || f) : "–";
+
+const capitalize = (s: string) => s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ");
+
+// Begrüßung: "Herr Müller" oder "Max Mustermann"
+const getBegruessung = (nameRaw: string, anrede?: string | null) => {
+  const name = capitalize(nameRaw);
+  if (anrede) {
+    const parts = name.split(" ");
+    const nachname = parts.slice(1).join(" ") || parts[0];
+    return `${anrede} ${nachname}`;
+  }
+  return name;
+};
+
 // ─── Request Mail Templates ───────────────────────────────────────────────────
 const requestMailTemplate = (request: any) => {
   const rows = [
     { icon: "🎉", label: "Anlass", value: request.anlass || "–" },
-    { icon: "📅", label: "Datum", value: request.datum || "–" },
+    { icon: "📅", label: "Datum", value: fmtDatum(request.datum) },
     { icon: "📍", label: "Ort", value: request.ort || "–" },
     { icon: "👥", label: "Gäste", value: String(request.gaeste ?? "–") },
-  ];
+    request.format ? { icon: "🎭", label: "Format", value: fmtFormat(request.format) } : null,
+  ].filter(Boolean) as { icon: string; label: string; value: string }[];
+
+  const anrede = request.anrede || "";
+  const gruss = getBegruessung(request.name, anrede);
 
   switch (request.status) {
     case "neu":
       return {
-        subject: "Deine Anfrage ist eingegangen – Emilian Leber",
+        subject: "Ihre Anfrage ist eingegangen – Emilian Leber",
         html: getEmailShell(
           "Anfrage",
-          "Danke für deine Anfrage!",
-          `Hallo ${request.name}, vielen Dank für deine Anfrage! Ich habe sie erhalten und melde mich in Kürze persönlich bei dir.`,
+          "Vielen Dank für Ihre Anfrage!",
+          `Hallo ${gruss}, vielen Dank für Ihre Anfrage! Ich habe sie erhalten und melde mich in Kürze persönlich bei Ihnen.`,
           `${statusBadge("✦ Anfrage eingegangen", "#2563eb", "#eff6ff")}${infoTable(rows)}`
         ),
       };
@@ -191,33 +229,33 @@ const requestMailTemplate = (request: any) => {
     case "in_bearbeitung":
     case "details_besprechen":
       return {
-        subject: "Deine Anfrage wird bearbeitet – Emilian Leber",
+        subject: "Ihre Anfrage wird bearbeitet – Emilian Leber",
         html: getEmailShell(
           "Anfrage",
-          "Ich arbeite an deiner Anfrage.",
-          `Hallo ${request.name}, ich habe mir deine Anfrage angeschaut und arbeite gerade an einem passenden Konzept für dich. Ich melde mich in Kürze mit weiteren Details.`,
+          "Ich arbeite an Ihrer Anfrage.",
+          `Hallo ${gruss}, ich habe mir Ihre Anfrage angeschaut und arbeite gerade an einem passenden Konzept für Sie. Ich melde mich in Kürze mit weiteren Details.`,
           `${statusBadge("✦ In Bearbeitung", "#b45309", "#fffbeb")}${infoTable(rows)}`
         ),
       };
 
     case "warte_auf_kunde":
       return {
-        subject: "Kurze Rückfrage zu deiner Anfrage – Emilian Leber",
+        subject: "Kurze Rückfrage zu Ihrer Anfrage – Emilian Leber",
         html: getEmailShell(
           "Anfrage",
-          "Ich warte auf deine Rückmeldung.",
-          `Hallo ${request.name}, ich habe dir Informationen zu deiner Anfrage geschickt und warte auf deine Rückmeldung. Falls du Fragen hast, melde dich jederzeit!`,
+          "Ich warte auf Ihre Rückmeldung.",
+          `Hallo ${gruss}, ich habe Ihnen Informationen zu Ihrer Anfrage geschickt und warte auf Ihre Rückmeldung. Falls Sie Fragen haben, melden Sie sich jederzeit!`,
           `${statusBadge("✦ Rückmeldung ausstehend", "#b45309", "#fffbeb")}${infoTable(rows)}`
         ),
       };
 
     case "angebot_gesendet":
       return {
-        subject: "Dein Angebot von Emilian Leber ist fertig",
+        subject: "Ihr Angebot von Emilian Leber ist fertig",
         html: getEmailShell(
           "Anfrage",
-          "Dein Angebot ist unterwegs.",
-          `Hallo ${request.name}, ich habe alles für deine Anfrage zusammengestellt. Die nächsten Schritte besprechen wir jetzt gemeinsam.`,
+          "Ihr Angebot ist unterwegs.",
+          `Hallo ${gruss}, ich habe alles für Ihre Anfrage zusammengestellt. Die nächsten Schritte besprechen wir jetzt gemeinsam.`,
           `${statusBadge("✦ Angebot vorbereitet", "#2563eb", "#eff6ff")}${infoTable(rows)}`
         ),
       };
@@ -225,28 +263,28 @@ const requestMailTemplate = (request: any) => {
     case "gebucht":
     case "bestätigt":
       return {
-        subject: "Dein Event mit Emilian Leber ist gebucht! 🎉",
+        subject: "Ihr Event mit Emilian Leber ist gebucht! 🎉",
         html: getEmailShell(
           "Buchung",
-          "Dein Event ist gebucht.",
-          `Hallo ${request.name}, großartige Neuigkeit – dein Termin ist jetzt offiziell eingeplant. Ich freue mich sehr darauf!`,
+          "Ihr Event ist gebucht.",
+          `Hallo ${gruss}, großartige Neuigkeit – Ihr Termin ist jetzt offiziell eingeplant. Ich freue mich sehr darauf!`,
           `${statusBadge("✦ Buchung bestätigt", "#15803d", "#f0fdf4")}${infoTable(rows)}
           <p style="margin:0;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
-            Den aktuellen Stand findest du jederzeit im Bereich <strong style="color:#0a0a0a;">Events</strong> in deinem Kundenportal.
+            Den aktuellen Stand finden Sie jederzeit im Bereich <strong style="color:#0a0a0a;">Events</strong> in Ihrem Kundenportal.
           </p>`
         ),
       };
 
     case "abgelehnt":
       return {
-        subject: "Update zu deiner Anfrage – Emilian Leber",
+        subject: "Update zu Ihrer Anfrage – Emilian Leber",
         html: getEmailShell(
           "Anfrage",
-          "Update zu deiner Anfrage.",
-          `Hallo ${request.name}, ich wollte dir kurz persönlich Rückmeldung zu deiner Anfrage geben.`,
+          "Update zu Ihrer Anfrage.",
+          `Hallo ${gruss}, ich wollte Ihnen kurz persönlich Rückmeldung zu Ihrer Anfrage geben.`,
           `${infoTable(rows)}
           <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
-            Leider kann ich deine Anfrage zum aktuellen Zeitpunkt nicht wie gewünscht umsetzen. Vielen Dank für dein Interesse und dein Vertrauen – ich hoffe, wir finden in Zukunft einen passenden Rahmen.
+            Leider kann ich Ihre Anfrage zum aktuellen Zeitpunkt nicht wie gewünscht umsetzen. Vielen Dank für Ihr Interesse und Ihr Vertrauen – ich hoffe, wir finden in Zukunft einen passenden Rahmen.
           </p>`,
           false
         ),
@@ -256,14 +294,14 @@ const requestMailTemplate = (request: any) => {
     case "storniert":
     case "zurückgezogen":
       return {
-        subject: "Deine Stornierung ist bestätigt – Emilian Leber",
+        subject: "Ihre Stornierung ist bestätigt – Emilian Leber",
         html: getEmailShell(
           "Stornierung",
           "Stornierung bestätigt.",
-          `Hallo ${request.name}, deine Stornierungsanfrage wurde bearbeitet und ist jetzt abgeschlossen.`,
+          `Hallo ${gruss}, Ihre Stornierungsanfrage wurde bearbeitet und ist jetzt abgeschlossen.`,
           `${statusBadge("✦ Stornierung bestätigt", "#b45309", "#fffbeb")}${infoTable(rows)}
           <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
-            Falls du in Zukunft eine neue Anfrage stellen möchtest, freue ich mich jederzeit von dir zu hören.
+            Falls Sie in Zukunft eine neue Anfrage stellen möchtest, freue ich mich jederzeit von Ihnen zu hören.
           </p>`,
           false
         ),
@@ -275,10 +313,11 @@ const requestMailTemplate = (request: any) => {
 };
 
 // ─── Event Mail Templates ─────────────────────────────────────────────────────
-const eventMailTemplate = (event: any, customerName: string, email: string, days?: number, dokumentTyp?: string) => {
+const eventMailTemplate = (event: any, customerName: string, email: string, days?: number, dokumentTyp?: string, customerAnrede?: string) => {
+  const gruss = getBegruessung(customerName, customerAnrede);
   const rows = [
     { icon: "✨", label: "Event", value: event.title || "–" },
-    { icon: "📅", label: "Datum", value: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric" }) : "–" },
+    { icon: "📅", label: "Datum", value: fmtDatum(event.event_date) },
     { icon: "📍", label: "Ort", value: event.location || "–" },
     { icon: "👥", label: "Gäste", value: String(event.guests ?? "–") },
     { icon: "🎭", label: "Format", value: event.format || "–" },
@@ -288,11 +327,11 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
     case "in_planung":
       return {
         to: email,
-        subject: "Dein Event wird geplant – Emilian Leber",
+        subject: "Ihr Event wird geplant – Emilian Leber",
         html: getEmailShell(
           "Event",
           "Die Planung läuft.",
-          `Hallo ${customerName}, dein Event ist in Planung! Ich kümmere mich um die Details und melde mich in Kürze bei dir.`,
+          `Hallo ${gruss}, Ihr Event ist in Planung! Ich kümmere mich um die Details und melde mich in Kürze bei Ihnen.`,
           `${statusBadge("✦ In Planung", "#2563eb", "#eff6ff")}${infoTable(rows)}`
         ),
       };
@@ -300,11 +339,11 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
     case "details_offen":
       return {
         to: email,
-        subject: "Details zu deinem Event – Emilian Leber",
+        subject: "Details zu Ihrem Event – Emilian Leber",
         html: getEmailShell(
           "Event",
           "Noch ein paar Details.",
-          `Hallo ${customerName}, für dein Event müssen noch einige Details geklärt werden. Ich melde mich dazu bei dir – oder du kannst mir jederzeit über das Kundenportal schreiben.`,
+          `Hallo ${gruss}, für Ihr Event müssen noch einige Details geklärt werden. Ich melde mich dazu bei Ihnen – oder Sie können mir jederzeit über das Kundenportal schreiben.`,
           `${statusBadge("✦ Details offen", "#b45309", "#fffbeb")}${infoTable(rows)}`
         ),
       };
@@ -312,11 +351,11 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
     case "vertrag_gesendet":
       return {
         to: email,
-        subject: "Dein Vertrag steht bereit – Emilian Leber",
+        subject: "Ihr Vertrag steht bereit – Emilian Leber",
         html: getEmailShell(
           "Vertrag",
-          "Dein Vertrag ist bereit.",
-          `Hallo ${customerName}, der nächste Schritt für dein Event ist vorbereitet. Der Vertrag liegt jetzt in deinem Kundenportal bereit.`,
+          "Ihr Vertrag ist bereit.",
+          `Hallo ${gruss}, der nächste Schritt für Ihr Event ist vorbereitet. Der Vertrag liegt jetzt in Ihrem Kundenportal bereit.`,
           `${statusBadge("✦ Vertrag bereitgestellt", "#2563eb", "#eff6ff")}${infoTable(rows)}`
         ),
       };
@@ -328,7 +367,7 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
         html: getEmailShell(
           "Vertrag",
           "Vertrag bestätigt.",
-          `Hallo ${customerName}, der Vertrag wurde bestätigt – wir sind startklar! Ich freue mich schon sehr auf dein Event.`,
+          `Hallo ${gruss}, der Vertrag wurde bestätigt – wir sind startklar! Ich freue mich schon sehr auf Ihr Event.`,
           `${statusBadge("✦ Vertrag bestätigt", "#15803d", "#f0fdf4")}${infoTable(rows)}`
         ),
       };
@@ -337,25 +376,25 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
       if (dokumentTyp === "abschlagsrechnung") {
         return {
           to: email,
-          subject: "Deine Abschlagsrechnung ist bereit – Emilian Leber",
+          subject: "Ihre Abschlagsrechnung ist bereit – Emilian Leber",
           html: getEmailShell(
             "Abschlagsrechnung",
-            "Deine Abschlagsrechnung ist bereit.",
-            `Hallo ${customerName}, ich habe eine Abschlagsrechnung für dein Event erstellt. Diese steht in deinem Kundenportal zum Download bereit. Bitte überweise den Teilbetrag innerhalb der angegebenen Frist.`,
+            "Ihre Abschlagsrechnung ist bereit.",
+            `Hallo ${gruss}, ich habe eine Abschlagsrechnung für Ihr Event erstellt. Diese steht in Ihrem Kundenportal zum Download bereit. Bitte überweisen Sie den Teilbetrag innerhalb der angegebenen Frist.`,
             `${statusBadge("✦ Abschlagsrechnung", "#2563eb", "#eff6ff")}${infoTable(rows)}
             <p style="margin:0;font-size:14px;line-height:1.75;color:#71717a;font-family:${FONT};">
-              Die Schlussrechnung erhältst du nach dem Event.
+              Die Schlussrechnung erhalten Sie nach dem Event.
             </p>`
           ),
         };
       }
       return {
         to: email,
-        subject: "Deine Schlussrechnung ist bereit – Emilian Leber",
+        subject: "Ihre Schlussrechnung ist bereit – Emilian Leber",
         html: getEmailShell(
           "Schlussrechnung",
-          "Deine Schlussrechnung ist bereit.",
-          `Hallo ${customerName}, die Schlussrechnung für dein Event wurde erstellt und steht in deinem Kundenportal zum Download bereit. Bereits gezahlte Abschlagsbeträge wurden verrechnet.`,
+          "Ihre Schlussrechnung ist bereit.",
+          `Hallo ${gruss}, die Schlussrechnung für Ihr Event wurde erstellt und steht in Ihrem Kundenportal zum Download bereit. Bereits gezahlte Abschlagsbeträge wurden verrechnet.`,
           `${statusBadge("✦ Schlussrechnung erstellt", "#2563eb", "#eff6ff")}${infoTable(rows)}`
         ),
       };
@@ -367,7 +406,7 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
         html: getEmailShell(
           "Zahlung",
           "Zahlung verbucht.",
-          `Hallo ${customerName}, vielen Dank – die Zahlung wurde verbucht. Alles ist auf Kurs für dein Event!`,
+          `Hallo ${gruss}, vielen Dank – die Zahlung wurde verbucht. Alles ist auf Kurs für Ihr Event!`,
           `${statusBadge("✦ Zahlung erhalten", "#15803d", "#f0fdf4")}${infoTable(rows)}`
         ),
       };
@@ -381,14 +420,14 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
         html: getEmailShell(
           "Danke",
           "Vielen Dank.",
-          `Hallo ${customerName}, vielen Dank für das wunderbare Event und dein Vertrauen. Es war mir eine echte Freude!`,
+          `Hallo ${gruss}, vielen Dank für das wunderbare Event und Ihr Vertrauen. Es war mir eine echte Freude!`,
           `${infoTable(rows)}
           <!-- review section -->
           <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;">
             <tr>
               <td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:22px 24px;">
                 <p style="margin:0 0 18px;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
-                  Falls du einen Moment hast, würde ich mich sehr über eine Bewertung freuen – das hilft anderen bei ihrer Entscheidung. 🙏
+                  Falls Sie einen Moment haben, würde ich mich sehr über eine Bewertung freuen – das hilft anderen bei ihrer Entscheidung. 🙏
                 </p>
                 <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
                   <tr>
@@ -425,14 +464,14 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
     case "storniert":
       return {
         to: email,
-        subject: "Stornierung deines Events bestätigt – Emilian Leber",
+        subject: "Stornierung Ihres Events bestätigt – Emilian Leber",
         html: getEmailShell(
           "Stornierung",
-          "Dein Event wurde storniert.",
-          `Hallo ${customerName}, die Stornierung deines Events wurde bestätigt und ist jetzt abgeschlossen.`,
+          "Ihr Event wurde storniert.",
+          `Hallo ${gruss}, die Stornierung Ihres Events wurde bestätigt und ist jetzt abgeschlossen.`,
           `${statusBadge("✦ Event storniert", "#b45309", "#fffbeb")}${infoTable(rows)}
           <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
-            Falls du in Zukunft wieder eine Veranstaltung planen möchtest, freue ich mich jederzeit von dir zu hören.
+            Falls Sie in Zukunft wieder eine Veranstaltung planen möchtest, freue ich mich jederzeit von Ihnen zu hören.
           </p>`,
           false
         ),
@@ -442,14 +481,14 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
       const daysText = days === 1 ? "morgen" : `in ${days ?? "wenigen"} Tagen`;
       return {
         to: email,
-        subject: `Deine Rechnung ist ${daysText} fällig – Emilian Leber`,
+        subject: `Ihre Rechnung ist ${daysText} fällig – Emilian Leber`,
         html: getEmailShell(
           "Zahlungserinnerung",
-          "Deine Rechnung ist bald fällig.",
-          `Hallo ${customerName}, kurze freundliche Erinnerung: deine Rechnung ist ${daysText} fällig. Du findest sie jederzeit in deinem Kundenportal zum Download.`,
+          "Ihre Rechnung ist bald fällig.",
+          `Hallo ${gruss}, kurze freundliche Erinnerung: Ihre Rechnung ist ${daysText} fällig. Sie finden sie jederzeit in Ihrem Kundenportal zum Download.`,
           `${statusBadge("✦ Zahlung ausstehend", "#b45309", "#fffbeb")}${infoTable(rows)}
           <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
-            Bei Fragen zur Rechnung melde dich gerne direkt bei mir.
+            Bei Fragen zur Rechnung melden Sie sich gerne direkt bei mir.
           </p>`
         ),
       };
@@ -637,7 +676,8 @@ serve(async (req) => {
         customer.name || customer.email.split("@")[0] || "Kunde",
         customer.email,
         days,
-        dokumentTyp
+        dokumentTyp,
+        customer.anrede || ""
       );
 
       if (!mail) {
@@ -697,7 +737,7 @@ serve(async (req) => {
       const html = getEmailShell(
         isApproved ? "Angenommen" : "Abgelehnt",
         isApproved ? "Deine Anfrage wurde angenommen." : "Deine Anfrage wurde abgelehnt.",
-        `Hallo ${firstName}, hier ist meine Rückmeldung zu deiner Anfrage.`,
+        `Hallo ${firstName}, hier ist meine Rückmeldung zu Ihrer Anfrage.`,
         `${statusBadge(isApproved ? "✦ Angenommen" : "✦ Abgelehnt",
           isApproved ? "#15803d" : "#b91c1c",
           isApproved ? "#f0fdf4" : "#fef2f2")}
@@ -719,7 +759,7 @@ serve(async (req) => {
 
       await sendMail(
         customer.email,
-        isApproved ? `Rückmeldung zu deiner Anfrage: angenommen` : `Rückmeldung zu deiner Anfrage: abgelehnt`,
+        isApproved ? `Rückmeldung zu Ihrer Anfrage: angenommen` : `Rückmeldung zu Ihrer Anfrage: abgelehnt`,
         html
       );
 
@@ -727,7 +767,7 @@ serve(async (req) => {
         customer_id: customer.id,
         request_id: cr.request_id || null,
         event_id: cr.event_id || null,
-        subject: isApproved ? `Rückmeldung zu deiner Anfrage: angenommen` : `Rückmeldung zu deiner Anfrage: abgelehnt`,
+        subject: isApproved ? `Rückmeldung zu Ihrer Anfrage: angenommen` : `Rückmeldung zu Ihrer Anfrage: abgelehnt`,
         body: cr.subject,
         from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
         to_email: customer.email,
