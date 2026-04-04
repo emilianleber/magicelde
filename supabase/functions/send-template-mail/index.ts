@@ -264,10 +264,20 @@ serve(async (req) => {
     const html = buildHtml(subject, formattedBody);
 
     // Senden
-    const transporter = createTransporter();
-    await transporter.sendMail({ from: SMTP_FROM, to: toEmail, subject, html });
+    try {
+      const transporter = createTransporter();
+      await transporter.sendMail({ from: SMTP_FROM, to: toEmail, subject, html });
+      console.log(`Mail gesendet an ${toEmail}: ${subject}`);
+    } catch (smtpErr: any) {
+      console.error("SMTP Fehler:", smtpErr.message || smtpErr);
+      // Mail-Fehler nicht als 500 zurückgeben wenn es nur SMTP ist
+      return new Response(JSON.stringify({ success: false, error: "Mail konnte nicht gesendet werden: " + (smtpErr.message || "SMTP Fehler") }), {
+        status: 200, // 200 damit Frontend keinen generic Error zeigt
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
-    // Log
+    // Log (fire-and-forget)
     await supabase.from("portal_messages").insert({
       customer_id: customer?.id || null,
       request_id: requestId || null,
