@@ -129,6 +129,7 @@ const AdminCustomerDetail = () => {
   // Edit mode
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState("");
+  const [anrede, setAnrede] = useState("");
   const [firma, setFirma] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");

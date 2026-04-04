@@ -42,7 +42,7 @@ INSERT INTO public.email_templates (slug, name, beschreibung, betreff, inhalt, k
 
 ('erstanfrage', 'Erstanfrage – Details erfragen', 'Nach neuer Anfrage: Details zum Event erfragen + Show-Konzepte vorstellen',
 'Ihre Anfrage bei Emilian Leber – nächste Schritte',
-'Hallo {{anrede}} {{nachname}},
+'Hallo {{begruessung}},
 
 vielen Dank für Ihre Anfrage und Ihr Interesse an meiner Zaubershow – ich freue mich sehr darüber!
 
@@ -73,7 +73,7 @@ Ich freue mich auf Ihre Antwort und darauf, Ihre Veranstaltung mit etwas Magie z
 
 ('7_tage_vorher', '7 Tage vor Event – Letzte Details', 'Eine Woche vor dem Event: Letzte Details klären',
 'Ihr Event in einer Woche – letzte Details',
-'Hallo {{anrede}} {{nachname}},
+'Hallo {{begruessung}},
 
 in Kürze ist es soweit – ich freue mich schon sehr auf Ihre Veranstaltung!
 
@@ -92,7 +92,7 @@ Ich freue mich auf einen gelungenen, magischen Abend!',
 
 ('angebot_nachfrage', 'Angebots-Nachfrage', 'Freundlich nach Status des Angebots fragen',
 'Kurze Rückfrage zu meinem Angebot',
-'Hallo {{anrede}} {{nachname}},
+'Hallo {{begruessung}},
 
 ich hoffe, es geht Ihnen gut.
 
@@ -105,7 +105,7 @@ Vielen Dank für Ihre Zeit und Ihre Rückmeldung.',
 
 ('nach_buchung', 'Nach Buchung – Nächste Schritte', 'Nach Buchungsbestätigung: Freude + nächste Schritte erklären',
 'Großartig – Ihr Event ist gebucht! ✨',
-'Hallo {{anrede}} {{nachname}},
+'Hallo {{begruessung}},
 
 ich freue mich sehr, dass wir zusammenarbeiten werden! Ihr Event ist jetzt offiziell gebucht.
 
@@ -121,7 +121,7 @@ Ich freue mich auf einen wunderbaren Abend!',
 
 ('rechnung_erinnerung', 'Zahlungserinnerung', 'Freundliche Erinnerung an offene Rechnung',
 'Freundliche Erinnerung: Offene Rechnung',
-'Hallo {{anrede}} {{nachname}},
+'Hallo {{begruessung}},
 
 ich hoffe, Sie denken gerne an unser gemeinsames Event zurück!
 

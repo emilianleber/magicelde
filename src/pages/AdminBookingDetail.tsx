@@ -988,11 +988,17 @@ const AdminBookingDetail = () => {
                         setSendingTemplate(true); setMessage("");
                         try {
                           const { data: { session } } = await supabase.auth.getSession();
-                          const { error } = await supabase.functions.invoke("send-template-mail", {
-                            headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : undefined,
-                            body: { templateSlug: tpl.slug, requestId: request?.id, eventId: event?.id, customerId: request?.customer_id },
+                          const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/send-template-mail", {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+                              ...(session?.access_token ? { "Authorization": `Bearer ${session.access_token}` } : {}),
+                            },
+                            body: JSON.stringify({ templateSlug: tpl.slug, requestId: request?.id, eventId: event?.id, customerId: request?.customer_id }),
                           });
-                          if (error) throw error;
+                          const result = await res.json();
+                          if (!res.ok || result.error) throw new Error(result.error || "Fehler beim Senden");
                           setMessage(`"${tpl.name}" gesendet!`);
                           setMailSentAt(new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }));
                         } catch (err: any) {
