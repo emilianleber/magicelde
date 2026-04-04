@@ -65,6 +65,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       format: "A4",
       printBackground: true,
       margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
+      // CSS pixels are 96dpi, PDF points are 72dpi → scale 96/72 = 4/3
+      // makes 1 CSS px = 1 PDF point → 595px content fills 595pt = A4 width exactly
+      scale: 96 / 72,
     });
 
     res.setHeader("Access-Control-Allow-Origin", "*");
