@@ -225,10 +225,10 @@ serve(async (req) => {
     // Anrede: aus Kunde oder Anfrage lesen, Fallback leer (kein "Frau/Herr")
     const anrede = customer?.anrede || request?.anrede || "";
 
-    // Intelligente Begrüßung: "Hallo Herr Mustermann" oder "Hallo Max Mustermann"
+    // Intelligente Begrüßung: "Herr Mustermann" oder "Max Mustermann"
     const begruessung = anrede
       ? `${anrede} ${nachname}`  // "Herr Mustermann" / "Frau Müller"
-      : (vorname || name);       // "Max" / "Max Mustermann"
+      : nameCap;                 // "Max Mustermann" (Vor- und Nachname)
 
     const replacePlaceholders = (text: string) => text
       .replace(/\{\{anrede\}\}/gi, anrede)
