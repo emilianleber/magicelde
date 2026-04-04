@@ -209,6 +209,8 @@ const AdminBookingDetail = () => {
   const [mailHistory, setMailHistory] = useState<Array<{ id: string; created_at: string; subject: string; to_email: string; status: string }>>([]);
   const [mailSentAt, setMailSentAt] = useState<string | null>(null);
   const [showDocCreator, setShowDocCreator] = useState(false);
+  const [emailTemplates, setEmailTemplates] = useState<{ slug: string; name: string; kategorie: string }[]>([]);
+  const [sendingTemplate, setSendingTemplate] = useState(false);
   const [editingDoc, setEditingDoc] = useState<(DocumentData & { positions?: DocumentPosition[] }) | null>(null);
 
   // Draft fields
@@ -321,6 +323,15 @@ const AdminBookingDetail = () => {
         .order("created_at", { ascending: false })
         .limit(10);
       setMailHistory(msgs || []);
+
+      // E-Mail-Vorlagen laden
+      const { data: tpls } = await supabase
+        .from("email_templates")
+        .select("slug, name, kategorie")
+        .eq("aktiv", true)
+        .order("sortierung", { ascending: true });
+      setEmailTemplates(tpls || []);
+
       setLoading(false);
     };
     load();
@@ -714,6 +725,54 @@ const AdminBookingDetail = () => {
             </div>
           </div>
 
+          {/* ── Event-Planung (nur bei gebuchten Events) ── */}
+          {event && (
+            <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+              <h2 className="text-sm font-bold text-foreground mb-4">Event-Planung</h2>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {[
+                  { key: "ansprechpartner_name", label: "Ansprechpartner vor Ort", placeholder: "Name des Kontakts", icon: "👤" },
+                  { key: "ansprechpartner_tel", label: "Telefon Ansprechpartner", placeholder: "+49...", icon: "📞" },
+                  { key: "parkmoeglichkeit", label: "Parkmöglichkeit", placeholder: "Wo parken? Equipment abladen?", icon: "🅿️" },
+                  { key: "aufbau_zeit", label: "Aufbauzeit / Ankunft", placeholder: "z.B. 17:00, 30 Min vorher", icon: "🕐" },
+                  { key: "technik_vorhanden", label: "Vorhandene Technik", placeholder: "Mikrofon, Licht, Musik...", icon: "🎤" },
+                  { key: "ankuendigung", label: "Ankündigung", placeholder: "Selbst starten oder vorgestellt werden?", icon: "📢" },
+                  { key: "budget_rahmen", label: "Budget-Rahmen", placeholder: "z.B. 1500-2500€", icon: "💰" },
+                  { key: "besonderheiten", label: "Besonderheiten", placeholder: "Überraschung, Allergien, Sprache...", icon: "⭐" },
+                ].map((field) => (
+                  <div key={field.key}>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">{field.icon} {field.label}</label>
+                    <input
+                      value={(event as any)[field.key] || ""}
+                      onChange={async (e) => {
+                        const val = e.target.value;
+                        setEvent((prev: any) => prev ? { ...prev, [field.key]: val } : prev);
+                        // Auto-save nach 500ms Debounce (vereinfacht: sofort)
+                        await supabase.from("portal_events").update({ [field.key]: val }).eq("id", event.id);
+                      }}
+                      placeholder={field.placeholder}
+                      className={inputCls}
+                    />
+                  </div>
+                ))}
+                <div className="sm:col-span-2">
+                  <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">📋 Ablauf-Notizen</label>
+                  <textarea
+                    value={(event as any).ablauf_notizen || ""}
+                    onChange={async (e) => {
+                      const val = e.target.value;
+                      setEvent((prev: any) => prev ? { ...prev, ablauf_notizen: val } : prev);
+                      await supabase.from("portal_events").update({ ablauf_notizen: val }).eq("id", event.id);
+                    }}
+                    rows={3}
+                    placeholder="Ablauf des Abends, Timing, besondere Wünsche..."
+                    className={`${inputCls} resize-none`}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* ── Documents ── */}
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
             <div className="flex items-center justify-between mb-4">
@@ -914,6 +973,42 @@ const AdminBookingDetail = () => {
                 </button>
               )}
             </div>
+
+            {/* E-Mail-Vorlagen */}
+            {emailTemplates.length > 0 && (
+              <div className="border-t border-border/20 pt-4 mt-4">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Vorlage senden</p>
+                <div className="space-y-1.5">
+                  {emailTemplates.map((tpl) => (
+                    <button
+                      key={tpl.slug}
+                      disabled={sendingTemplate}
+                      onClick={async () => {
+                        if (!confirm(`"${tpl.name}" an den Kunden senden?`)) return;
+                        setSendingTemplate(true); setMessage("");
+                        try {
+                          const { data: { session } } = await supabase.auth.getSession();
+                          const { error } = await supabase.functions.invoke("send-template-mail", {
+                            headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : undefined,
+                            body: { templateSlug: tpl.slug, requestId: request?.id, eventId: event?.id, customerId: request?.customer_id },
+                          });
+                          if (error) throw error;
+                          setMessage(`"${tpl.name}" gesendet!`);
+                          setMailSentAt(new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }));
+                        } catch (err: any) {
+                          setMessage("Fehler: " + (err.message || "Unbekannt"));
+                        }
+                        setSendingTemplate(false);
+                      }}
+                      className="w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl border border-border/20 bg-background/60 text-sm hover:bg-muted/40 disabled:opacity-50 transition-colors"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                      <span className="flex-1 truncate">{tpl.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="border-t border-border/20 pt-4 mt-4 space-y-2">
               <button onClick={sendStatusMail} disabled={sendingMail}
