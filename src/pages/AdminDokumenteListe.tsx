@@ -364,7 +364,7 @@ export default function AdminDokumenteListe() {
         <div className="rounded-2xl border border-border/20 bg-background">
           {/* Header */}
           <div className="hidden md:grid text-[10px] text-muted-foreground uppercase font-semibold tracking-wider px-4 py-2.5 bg-muted/10 border-b border-border/10 rounded-t-2xl"
-            style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 110px 108px" }}>
+            style={{ gridTemplateColumns: "100px minmax(0,1fr) 75px 75px 80px 90px 100px 136px" }}>
             <span>Nummer</span>
             <span>Kontakt</span>
             <span>Typ</span>
@@ -407,7 +407,7 @@ export default function AdminDokumenteListe() {
 
                 {/* ── Desktop ── */}
                 <div className="hidden md:grid items-center px-4 gap-2"
-                  style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 110px 108px" }}>
+                  style={{ gridTemplateColumns: "100px minmax(0,1fr) 75px 75px 80px 90px 100px 136px" }}>
 
                   <span className="font-mono text-xs font-semibold text-muted-foreground py-3">{doc.nummer}</span>
                   <div className="min-w-0 py-3 text-left">
