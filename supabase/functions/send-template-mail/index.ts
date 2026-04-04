@@ -215,7 +215,10 @@ serve(async (req) => {
 
     // Platzhalter ersetzen
     const name = customer?.name || request?.name || "";
-    const nameParts = name.split(" ");
+    // Namen capitalisieren (adam eva → Adam Eva)
+    const capitalize = (s: string) => s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ");
+    const nameCap = capitalize(name);
+    const nameParts = nameCap.split(" ");
     const vorname = nameParts[0] || "";
     const nachname = nameParts.slice(1).join(" ") || nameParts[0] || "";
     const firma = customer?.company || request?.firma || "";
