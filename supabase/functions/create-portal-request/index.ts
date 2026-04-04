@@ -96,11 +96,12 @@ serve(async (req) => {
     // 1) Kunde suchen
     let customerId: string | null = null;
 
-    const { data: existingCustomer, error: existingCustomerError } = await supabase
+    const { data: existingCustomers, error: existingCustomerError } = await supabase
       .from("portal_customers")
       .select("*")
       .eq("email", safeEmail)
-      .maybeSingle();
+      .limit(1);
+    const existingCustomer = existingCustomers?.[0] || null;
 
     if (existingCustomerError) {
       console.error("CUSTOMER LOOKUP ERROR:", existingCustomerError);

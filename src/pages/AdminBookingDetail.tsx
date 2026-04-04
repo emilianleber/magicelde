@@ -430,8 +430,8 @@ const AdminBookingDetail = () => {
         headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
         body: JSON.stringify({ type: event ? "event" : "request", recordId: event?.id || request.id }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Fehler");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.message || `Server-Fehler (${res.status})`);
       if (data.skipped) {
         setMessage("Kein Mail für diesen Status vorgesehen.");
       } else {
