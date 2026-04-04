@@ -76,8 +76,17 @@ serve(async (req) => {
     const safePhone  = phone  ? String(phone).trim()  : null;
     const safeAnlass = anlass ? capitalize(String(anlass).trim()) : null;
     const safeDatum  = datum  ? String(datum).trim()  : null;
+    // Datum formatieren: "2026-09-26" → "26. September 2026"
+    const fmtDatum = safeDatum ? new Date(safeDatum + "T12:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" }) : null;
     const safeOrt    = ort    ? capitalize(String(ort).trim())    : null;
-    const safeFormat = format ? capitalize(String(format).trim()) : null;
+    // Format-Werte übersetzen
+    const formatLabels: Record<string, string> = {
+      buehne: "Bühnenshow", buehnenshow: "Bühnenshow", closeup: "Close-Up",
+      "close-up": "Close-Up", walking_act: "Walking Act", magic_dinner: "Magic Dinner",
+      kombination: "Kombination", beratung: "Beratung",
+    };
+    const rawFormat = format ? String(format).trim().toLowerCase() : null;
+    const safeFormat = rawFormat ? (formatLabels[rawFormat] || capitalize(rawFormat)) : null;
     const safeNachricht = nachricht ? String(nachricht).trim() : null;
     const safeGaeste =
       gaeste !== null && gaeste !== undefined && gaeste !== ""
@@ -244,7 +253,7 @@ serve(async (req) => {
           <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">✉️ E-Mail</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeEmail}</td></tr>
           <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📞 Telefon</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safePhone || "–"}</td></tr>
           <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">🎉 Anlass</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeAnlass || "–"}</td></tr>
-          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📅 Datum</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeDatum || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📅 Datum</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${fmtDatum || "–"}</td></tr>
           <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📍 Ort</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeOrt || "–"}</td></tr>
           <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">👥 Gäste</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeGaeste ?? "–"}</td></tr>
           <tr><td bgcolor="#f9fafb" style="padding:12px 0;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">🎭 Format</td><td bgcolor="#f9fafb" style="padding:12px 0;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeFormat || "–"}</td></tr>
@@ -311,7 +320,7 @@ serve(async (req) => {
         <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
           ${safeFirma ? `<tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;width:40%;background-color:#f9fafb!important;">🏢 Firma</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeFirma}</td></tr>` : ""}
           <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;width:40%;background-color:#f9fafb!important;">🎉 Anlass</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeAnlass || "–"}</td></tr>
-          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📅 Datum</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeDatum || "–"}</td></tr>
+          <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📅 Datum</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${fmtDatum || "–"}</td></tr>
           <tr><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">📍 Ort</td><td bgcolor="#f9fafb" style="padding:12px 0;border-bottom:1px solid #e4e4e7;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeOrt || "–"}</td></tr>
           <tr><td bgcolor="#f9fafb" style="padding:12px 0;font-size:14px;color:#71717a!important;background-color:#f9fafb!important;">🎭 Format</td><td bgcolor="#f9fafb" style="padding:12px 0;font-size:14px;font-weight:600;color:#0a0a0a!important;background-color:#f9fafb!important;">${safeFormat || "–"}</td></tr>
         </table>
