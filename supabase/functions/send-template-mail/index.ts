@@ -47,7 +47,7 @@ const signature = `
   <tr>
     <!-- Logo links -->
     <td style="width:64px;vertical-align:top;padding-right:18px;">
-      <img src="https://magicel.de/logo-signatur.png" alt="EL" width="56" height="56" style="border-radius:12px;display:block;" />
+      <img src="https://magicel.de/favicon.ico" alt="EL" width="56" height="56" style="border-radius:12px;display:block;" />
     </td>
 
     <!-- Rechte Seite -->
