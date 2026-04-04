@@ -108,6 +108,9 @@ const AdminDashboard = () => {
   const [customerCount, setCustomerCount] = useState(0);
   const [finanzenKpis, setFinanzenKpis] = useState<{
     offenBetrag: number; ueberfaelligBetrag: number; bezahltMonatBetrag: number; offenAnzahl: number;
+    jahresUmsatz?: number; letzterMonatUmsatz?: number; prognose?: number;
+    monatsUmsaetze?: { monat: string; betrag: number }[];
+    offeneDokumente?: { id: string; nummer: string; typ: string; betrag: number; faellig: string; kunde: string }[];
   } | null>(null);
 
   const [calMonth, setCalMonth] = useState<Date>(() => { const d = new Date(); d.setDate(1); return d; });
@@ -166,9 +169,9 @@ const AdminDashboard = () => {
       if (!c.error) setCustomers(c.data || []);
       if (!m.error) setMessages(m.data || []);
 
-      // Load financial KPIs
+      // Load financial KPIs (erweitert)
       try {
-        const kpis = await dokumenteService.getKennzahlen();
+        const kpis = await dokumenteService.getFinanzDashboard();
         setFinanzenKpis(kpis);
       } catch (_) {}
 
@@ -370,27 +373,77 @@ const AdminDashboard = () => {
       }
       case "finanzen": {
         const fmt = (n: number) => new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
+        const maxMonat = Math.max(1, ...(finanzenKpis?.monatsUmsaetze || []).map(m => m.betrag));
+        const monatLabel = (m: string) => new Date(m + "-01").toLocaleDateString("de-DE", { month: "short" });
         return (
           <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-display text-base font-bold text-foreground">Finanzen</h2>
               <Link to="/admin/dokumente" className="text-xs text-accent hover:text-accent/80 flex items-center gap-1">Alle Dokumente <ArrowRight className="w-3 h-3" /></Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+            {/* KPI Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
               {[
-                { label: "Offen", value: finanzenKpis ? fmt(finanzenKpis.offenBetrag) : "–", sub: finanzenKpis ? `${finanzenKpis.offenAnzahl} Rechnungen` : "", icon: Receipt, color: "text-blue-500 bg-blue-500/10", href: "/admin/dokumente/rechnungen" },
-                { label: "Überfällig", value: finanzenKpis ? fmt(finanzenKpis.ueberfaelligBetrag) : "–", sub: "Überfällig", icon: AlertCircle, color: "text-red-500 bg-red-500/10", href: "/admin/dokumente/rechnungen" },
-                { label: "Bezahlt (Monat)", value: finanzenKpis ? fmt(finanzenKpis.bezahltMonatBetrag) : "–", sub: "Diesen Monat", icon: Euro, color: "text-green-500 bg-green-500/10", href: "/admin/dokumente/rechnungen" },
-                { label: "Dokumente", value: "→", sub: "Angebote & Rechnungen", icon: FileText, color: "text-purple-500 bg-purple-500/10", href: "/admin/dokumente" },
+                { label: "Jahresumsatz", value: finanzenKpis ? fmt(finanzenKpis.jahresUmsatz || 0) : "–", color: "text-emerald-600 bg-emerald-500/10", icon: TrendingUp },
+                { label: "Diesen Monat", value: finanzenKpis ? fmt(finanzenKpis.bezahltMonatBetrag) : "–", color: "text-green-500 bg-green-500/10", icon: Euro },
+                { label: "Letzter Monat", value: finanzenKpis ? fmt(finanzenKpis.letzterMonatUmsatz || 0) : "–", color: "text-blue-500 bg-blue-500/10", icon: Calendar },
+                { label: "Prognose (Jahr)", value: finanzenKpis ? fmt(finanzenKpis.prognose || 0) : "–", color: "text-purple-500 bg-purple-500/10", icon: TrendingUp },
+                { label: "Offen", value: finanzenKpis ? fmt(finanzenKpis.offenBetrag) : "–", sub: `${finanzenKpis?.offenAnzahl || 0} Rechnungen`, color: "text-amber-600 bg-amber-500/10", icon: Receipt },
+                { label: "Überfällig", value: finanzenKpis ? fmt(finanzenKpis.ueberfaelligBetrag) : "–", color: "text-red-500 bg-red-500/10", icon: AlertCircle },
               ].map((c) => (
-                <Link key={c.label} to={c.href} className="p-4 rounded-xl bg-background/60 border border-border/20 hover:border-accent/20 transition-colors">
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center mb-2.5 ${c.color}`}><c.icon className="w-3.5 h-3.5" /></div>
-                  <p className="font-display text-lg font-bold text-foreground leading-tight">{c.value}</p>
-                  <p className="font-sans text-[11px] text-muted-foreground mt-0.5">{c.label}</p>
-                  {c.sub && <p className="font-sans text-[10px] text-muted-foreground/60 mt-0.5">{c.sub}</p>}
-                </Link>
+                <div key={c.label} className="p-3 rounded-xl bg-background/60 border border-border/20">
+                  <div className={`w-6 h-6 rounded-lg flex items-center justify-center mb-2 ${c.color}`}><c.icon className="w-3 h-3" /></div>
+                  <p className="font-display text-base font-bold text-foreground leading-tight">{c.value}</p>
+                  <p className="font-sans text-[10px] text-muted-foreground mt-0.5">{c.label}</p>
+                </div>
               ))}
             </div>
+
+            {/* Monatlicher Umsatz Balkendiagramm */}
+            {(finanzenKpis?.monatsUmsaetze || []).length > 0 && (
+              <div className="mb-5">
+                <p className="font-sans text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Monatlicher Umsatz</p>
+                <div className="flex items-end gap-1 h-24">
+                  {(finanzenKpis?.monatsUmsaetze || []).map((m) => (
+                    <div key={m.monat} className="flex-1 flex flex-col items-center gap-1">
+                      <div
+                        className="w-full bg-accent/80 rounded-t-md transition-all"
+                        style={{ height: `${Math.max(4, (m.betrag / maxMonat) * 100)}%` }}
+                        title={`${monatLabel(m.monat)}: ${fmt(m.betrag)}`}
+                      />
+                      <span className="text-[9px] text-muted-foreground">{monatLabel(m.monat)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Offene Rechnungen */}
+            {(finanzenKpis?.offeneDokumente || []).length > 0 && (
+              <div>
+                <p className="font-sans text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Offene Rechnungen</p>
+                <div className="space-y-1.5">
+                  {(finanzenKpis?.offeneDokumente || []).slice(0, 5).map((doc) => {
+                    const days = doc.faellig ? Math.round((new Date(doc.faellig).getTime() - Date.now()) / 86400000) : null;
+                    return (
+                      <Link key={doc.id} to={`/admin/dokumente/${doc.id}`} className="flex items-center gap-3 p-2.5 rounded-lg bg-background/60 border border-border/20 hover:border-accent/20 transition-colors">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-sans text-xs font-semibold text-foreground truncate">{doc.nummer} · {doc.kunde}</p>
+                          <p className="font-sans text-[10px] text-muted-foreground">{doc.typ}</p>
+                        </div>
+                        <p className="font-sans text-xs font-bold text-foreground shrink-0">{fmt(doc.betrag)}</p>
+                        {days !== null && (
+                          <span className={`font-sans text-[9px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 ${days < 0 ? "bg-red-100 text-red-700" : days <= 3 ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>
+                            {days < 0 ? `${Math.abs(days)}d überfällig` : days === 0 ? "heute" : `${days}d`}
+                          </span>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         );
       }

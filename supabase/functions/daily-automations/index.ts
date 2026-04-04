@@ -307,6 +307,62 @@ serve(async (req) => {
       results.push(`Zahlungserinnerung: ${customer.email} (Doc ${doc.id})`);
     }
 
+    // ─────────────────────────────────────────────────────────
+    // 5. FEEDBACK-ABFRAGE: 30 Tage nach Event
+    //    Erstellt Admin-Todo: "Hat Kunde X bewertet?"
+    //    Admin entscheidet → wenn nein, Feedback-Mail wird gesendet
+    // ─────────────────────────────────────────────────────────
+    const thirtyDaysAgo = addDays(todayStr, -30);
+    const { data: feedbackEvents } = await supabase
+      .from("portal_events")
+      .select("*, customer:customer_id(id, name, email)")
+      .eq("event_date", thirtyDaysAgo)
+      .is("deleted_at", null)
+      .eq("status", "event_erfolgt");
+
+    for (const evt of feedbackEvents || []) {
+      const customer = evt.customer as any;
+      if (!customer?.email || !customer?.name) continue;
+
+      const todoKey = `[AUTO] Feedback-Check: ${customer.name} (Event ${evt.id})`;
+
+      // Prüfen ob Todo schon existiert
+      const { data: existingTodo } = await supabase
+        .from("portal_todos")
+        .select("id")
+        .eq("title", todoKey)
+        .limit(1);
+      if ((existingTodo || []).length > 0) continue;
+
+      // Admin-Todo erstellen
+      await supabase.from("portal_todos").insert({
+        title: todoKey,
+        status: "offen",
+        priority: "medium",
+        due_date: todayStr,
+        customer_id: customer.id,
+        event_id: evt.id,
+      });
+
+      // Admin-Mail mit Entscheidungs-Link
+      const adminEmail = Deno.env.get("SMTP_USER") || "el@magicel.de";
+      const feedbackUrl = `https://admin.magicel.de/admin/bookings/event/${evt.id}`;
+      await sendMail(
+        adminEmail,
+        `Feedback-Check: Hat ${customer.name} bewertet?`,
+        `<div style="font-family:${FONT};font-size:14px;color:#333;padding:20px;max-width:500px;">
+          <h2 style="margin:0 0 16px;">Feedback-Erinnerung</h2>
+          <p>Das Event <strong>${evt.title || "Veranstaltung"}</strong> mit <strong>${customer.name}</strong> war vor 30 Tagen.</p>
+          <p style="margin:16px 0;">Hat der Kunde bereits eine Bewertung abgegeben?</p>
+          <p style="margin:8px 0;"><strong>Wenn nein</strong> → Sende die interne Feedback-Mail über das CRM:</p>
+          <p><a href="${feedbackUrl}" style="display:inline-block;background:#0a0a0a;color:#fff;padding:12px 24px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px;">Event im CRM öffnen</a></p>
+          <p style="margin-top:16px;font-size:12px;color:#888;">Im CRM findest du einen "Feedback anfragen" Button beim Event. Dieser sendet dem Kunden eine freundliche Mail mit einem Link zum internen Feedback-Formular im Kundenportal.</p>
+        </div>`
+      );
+
+      results.push(`Feedback-Check Todo: ${customer.name} (Event ${evt.id})`);
+    }
+
     // ── Admin-Benachrichtigung ──
     if (results.length > 0) {
       const adminEmail = Deno.env.get("SMTP_USER") || "el@magicel.de";

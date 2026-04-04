@@ -169,6 +169,42 @@ serve(async (req) => {
       ? `<p><strong>Firma:</strong> ${safeFirma}</p>`
       : "";
 
+    // Wiederkehrenden Kunden erkennen
+    let returningCustomerHtml = "";
+    if (existingCustomer && customerId) {
+      const { data: prevEvents } = await supabase
+        .from("portal_events")
+        .select("id, title, event_date, status")
+        .eq("customer_id", customerId)
+        .is("deleted_at", null)
+        .order("event_date", { ascending: false })
+        .limit(5);
+
+      const { data: prevRequests } = await supabase
+        .from("portal_requests")
+        .select("id")
+        .eq("customer_id", customerId)
+        .is("deleted_at", null);
+
+      const eventCount = (prevEvents || []).length;
+      const requestCount = (prevRequests || []).length;
+
+      if (eventCount > 0 || requestCount > 1) {
+        const eventList = (prevEvents || []).map(e =>
+          `<li style="padding:4px 0;font-size:13px;color:#0a0a0a;">${e.title || "Event"} – ${e.event_date ? new Date(e.event_date).toLocaleDateString("de-DE") : "–"} (${e.status || "–"})</li>`
+        ).join("");
+
+        returningCustomerHtml = `
+        <div style="margin-bottom:24px;padding:16px 20px;background-color:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;">
+          <p style="margin:0 0 8px;font-size:13px;font-weight:700;color:#15803d;">🔄 Wiederkehrender Kunde! (${requestCount} Anfragen, ${eventCount} Events)</p>
+          ${eventList ? `<ul style="margin:0;padding:0 0 0 18px;">${eventList}</ul>` : ""}
+          <p style="margin:8px 0 0;font-size:12px;color:#16a34a;">
+            <a href="https://admin.magicel.de/admin/customers/${customerId}" style="color:#16a34a;text-decoration:underline;">Kundenprofil öffnen</a>
+          </p>
+        </div>`;
+      }
+    }
+
     // 3) Admin-Mail
     try {
       const adminMail = await resend.emails.send({
@@ -198,6 +234,7 @@ serve(async (req) => {
     <div style="margin-top:16px;height:2px;width:48px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
   </td></tr>
   <tr><td bgcolor="#ffffff" style="padding:36px 36px 32px;background-color:#ffffff!important;">
+    ${returningCustomerHtml}
     <div style="display:inline-block;background-color:#eff6ff!important;color:#2563eb!important;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:24px;">Neue Anfrage</div>
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;"><tr>
       <td bgcolor="#f9fafb" style="background-color:#f9fafb!important;border:1px solid #e4e4e7;border-radius:14px;padding:4px 20px;">

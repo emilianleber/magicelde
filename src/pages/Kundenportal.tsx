@@ -120,7 +120,7 @@ interface PortalChangeRequest {
   event_id: string | null;
 }
 
-type Tab = "dashboard" | "events" | "documents" | "requests" | "nachrichten" | "einstellungen" | "kontakt";
+type Tab = "dashboard" | "events" | "documents" | "requests" | "nachrichten" | "einstellungen" | "kontakt" | "feedback";
 
 const inputCls =
   "w-full rounded-xl bg-black/[0.02] border border-black/[0.1] px-4 py-3 text-sm text-foreground placeholder:text-black/25 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/30 transition-all";
@@ -269,7 +269,7 @@ const Kundenportal = () => {
   const [messages, setMessages] = useState<PortalMessage[]>([]);
   const [imapMails, setImapMails] = useState<any[]>([]);
   const [expandedRequestId, setExpandedRequestId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>("dashboard");
+  const [activeTab, setActiveTab] = useState<Tab>(urlTab || "dashboard");
   const [loading, setLoading] = useState(true);
 
   const [settingsDraft, setSettingsDraft] = useState({
@@ -299,7 +299,18 @@ const Kundenportal = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const previewCustomerId = searchParams.get("preview");
+  const urlTab = searchParams.get("tab") as Tab | null;
+  const urlEventId = searchParams.get("eventId");
   const [isAdminPreview, setIsAdminPreview] = useState(false);
+  const [feedbackEventId, setFeedbackEventId] = useState<string | null>(urlEventId);
+  const [fbRating, setFbRating] = useState(0);
+  const [fbHighlights, setFbHighlights] = useState("");
+  const [fbVerbesserungen, setFbVerbesserungen] = useState("");
+  const [fbWeiterempfehlung, setFbWeiterempfehlung] = useState(true);
+  const [fbKommentar, setFbKommentar] = useState("");
+  const [fbSending, setFbSending] = useState(false);
+  const [fbSent, setFbSent] = useState(false);
+  const [fbError, setFbError] = useState("");
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -2027,6 +2038,135 @@ const Kundenportal = () => {
             )}
           </div>
         )}
+
+        {/* ── FEEDBACK ── */}
+        {activeTab === "feedback" && (() => {
+          const targetEventId = feedbackEventId || events[0]?.id;
+          const targetEvent = events.find(e => e.id === targetEventId);
+
+          const submitFeedback = async () => {
+            if (!customer || !targetEventId || fbRating === 0) return;
+            setFbSending(true); setFbError("");
+            try {
+              const { error } = await supabase.from("customer_feedback").insert({
+                customer_id: customer.id,
+                event_id: targetEventId,
+                rating: fbRating,
+                highlights: fbHighlights,
+                verbesserungen: fbVerbesserungen,
+                weiterempfehlung: fbWeiterempfehlung,
+                kommentar: fbKommentar,
+              });
+              if (error) throw error;
+              setFbSent(true);
+            } catch (err: any) {
+              setFbError(err.message || "Fehler beim Senden");
+            }
+            setFbSending(false);
+          };
+
+          if (fbSent) return (
+            <div className="p-8 rounded-3xl bg-white border border-black/[0.06] shadow-sm text-center">
+              <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-green-600" />
+              </div>
+              <h2 className="font-display text-xl font-bold text-foreground mb-2">Vielen Dank!</h2>
+              <p className="font-sans text-sm text-muted-foreground">Dein Feedback hilft mir, mein Programm noch besser zu machen. Ich freue mich auf das nächste Event mit dir!</p>
+            </div>
+          );
+
+          return (
+            <div className="space-y-5">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-sm">
+                <h1 className="font-display text-xl font-bold text-foreground mb-1 border-l-[3px] border-accent pl-3">Feedback</h1>
+                <p className="font-sans text-sm text-muted-foreground mb-6 pl-4">
+                  {targetEvent ? `Zu deinem Event „${targetEvent.title}"` : "Wie war dein Event?"}
+                </p>
+
+                {/* Sterne-Bewertung */}
+                <div className="mb-6">
+                  <label className="font-sans text-xs font-semibold text-foreground uppercase tracking-wide mb-3 block">Gesamtbewertung</label>
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <button
+                        key={star}
+                        onClick={() => setFbRating(star)}
+                        className={`w-12 h-12 rounded-xl text-2xl transition-all ${fbRating >= star ? "bg-amber-100 border-2 border-amber-400 scale-110" : "bg-black/[0.02] border border-black/[0.08] hover:bg-amber-50"}`}
+                      >
+                        {fbRating >= star ? "⭐" : "☆"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Highlights */}
+                <div className="mb-5">
+                  <label className="font-sans text-xs font-semibold text-foreground uppercase tracking-wide mb-2 block">Was hat dir am besten gefallen?</label>
+                  <textarea
+                    value={fbHighlights}
+                    onChange={e => setFbHighlights(e.target.value)}
+                    rows={3}
+                    placeholder="Die besten Momente des Abends..."
+                    className={inputCls + " resize-none"}
+                  />
+                </div>
+
+                {/* Verbesserungen */}
+                <div className="mb-5">
+                  <label className="font-sans text-xs font-semibold text-foreground uppercase tracking-wide mb-2 block">Was könnte besser sein?</label>
+                  <textarea
+                    value={fbVerbesserungen}
+                    onChange={e => setFbVerbesserungen(e.target.value)}
+                    rows={3}
+                    placeholder="Ehrliches Feedback hilft mir, mich zu verbessern..."
+                    className={inputCls + " resize-none"}
+                  />
+                </div>
+
+                {/* Weiterempfehlung */}
+                <div className="mb-5">
+                  <label className="font-sans text-xs font-semibold text-foreground uppercase tracking-wide mb-3 block">Würdest du mich weiterempfehlen?</label>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setFbWeiterempfehlung(true)}
+                      className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${fbWeiterempfehlung ? "bg-green-100 border-2 border-green-400 text-green-700" : "bg-black/[0.02] border border-black/[0.08] text-muted-foreground hover:bg-green-50"}`}
+                    >
+                      👍 Ja, auf jeden Fall!
+                    </button>
+                    <button
+                      onClick={() => setFbWeiterempfehlung(false)}
+                      className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${!fbWeiterempfehlung ? "bg-amber-100 border-2 border-amber-400 text-amber-700" : "bg-black/[0.02] border border-black/[0.08] text-muted-foreground hover:bg-amber-50"}`}
+                    >
+                      🤔 Eher nicht
+                    </button>
+                  </div>
+                </div>
+
+                {/* Freitext */}
+                <div className="mb-6">
+                  <label className="font-sans text-xs font-semibold text-foreground uppercase tracking-wide mb-2 block">Noch etwas auf dem Herzen?</label>
+                  <textarea
+                    value={fbKommentar}
+                    onChange={e => setFbKommentar(e.target.value)}
+                    rows={2}
+                    placeholder="Optional..."
+                    className={inputCls + " resize-none"}
+                  />
+                </div>
+
+                {fbError && <p className="font-sans text-sm text-red-600 mb-3">{fbError}</p>}
+
+                <button
+                  onClick={submitFeedback}
+                  disabled={fbSending || fbRating === 0}
+                  className="w-full inline-flex items-center justify-center gap-2 bg-foreground text-background py-3 rounded-xl text-sm font-bold hover:opacity-90 disabled:opacity-40 transition-all"
+                >
+                  {fbSending ? "Wird gesendet..." : "Feedback absenden"}
+                </button>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* ── KONTAKT ── */}
         {activeTab === "kontakt" && (

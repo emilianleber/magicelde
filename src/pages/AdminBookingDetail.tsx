@@ -915,12 +915,36 @@ const AdminBookingDetail = () => {
               )}
             </div>
 
-            <div className="border-t border-border/20 pt-4 mt-4">
+            <div className="border-t border-border/20 pt-4 mt-4 space-y-2">
               <button onClick={sendStatusMail} disabled={sendingMail}
                 className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border/30 bg-background/60 px-4 py-2.5 text-sm font-medium hover:bg-muted/40 disabled:opacity-50 transition-colors">
                 <Mail className="w-4 h-4" />
                 {sendingMail ? "Sendet..." : "Status-Mail senden"}
               </button>
+              {event && (
+                <button
+                  onClick={async () => {
+                    if (!confirm("Feedback-Anfrage an den Kunden senden?")) return;
+                    setMessage("");
+                    try {
+                      const { data: { session } } = await supabase.auth.getSession();
+                      const { data, error } = await supabase.functions.invoke("send-feedback-request", {
+                        headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : undefined,
+                        body: { eventId: event.id },
+                      });
+                      if (error) throw error;
+                      if (data?.alreadyExists) setMessage("Feedback wurde bereits abgegeben.");
+                      else setMessage("Feedback-Anfrage gesendet!");
+                    } catch (err: any) {
+                      setMessage("Fehler: " + (err.message || "Unbekannt"));
+                    }
+                  }}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-purple-200 bg-purple-50 px-4 py-2.5 text-sm font-medium text-purple-700 hover:bg-purple-100 transition-colors"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  Feedback anfragen
+                </button>
+              )}
               {mailSentAt && (
                 <p className="text-xs text-green-700 flex items-center gap-1 mt-2">
                   <Check className="w-3 h-3" /> Gesendet um {mailSentAt}
