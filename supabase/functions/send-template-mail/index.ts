@@ -36,73 +36,61 @@ const corsHeaders = {
 // Importiert die shared email shell
 // In Supabase Edge Functions: relative imports aus _shared/
 const signature = `
-<!-- ═══ PROFESSIONELLE SIGNATUR ═══ -->
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-top:2px solid #e4e4e7;margin-top:32px;padding-top:28px;">
+<!-- ═══ SIGNATUR ═══ -->
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:32px;">
+
+  <!-- Trennlinie mit Akzent -->
+  <tr><td colspan="2" style="padding-bottom:20px;">
+    <div style="height:2px;background:linear-gradient(90deg,#6366f1 0%,#a855f7 40%,#e4e4e7 40%);border-radius:2px;"></div>
+  </td></tr>
+
   <tr>
-    <!-- Logo -->
-    <td style="width:80px;vertical-align:top;padding-right:20px;">
-      <img src="https://magicel.de/logo-signatur.png" alt="Emilian Leber" width="72" height="72" style="border-radius:16px;display:block;border:1px solid #e4e4e7;" />
+    <!-- Logo links -->
+    <td style="width:64px;vertical-align:top;padding-right:18px;">
+      <img src="https://magicel.de/logo-signatur.png" alt="EL" width="56" height="56" style="border-radius:12px;display:block;" />
     </td>
-    <!-- Info -->
+
+    <!-- Rechte Seite -->
     <td style="vertical-align:top;">
-      <p style="margin:0;font-size:18px;font-weight:800;color:#0a0a0a;font-family:${FONT};line-height:1.3;">Emilian Leber</p>
-      <p style="margin:3px 0 0;font-size:13px;font-weight:600;color:#6366f1;font-family:${FONT};">Zauberer &amp; Entertainer</p>
-      <p style="margin:2px 0 0;font-size:11px;color:#a1a1aa;font-family:${FONT};font-style:italic;">Ausgezeichnet mit dem Deutschen Zauberpreis</p>
+      <!-- Name -->
+      <p style="margin:0;font-size:16px;font-weight:700;color:#18181b;font-family:${FONT};letter-spacing:-0.2px;">Emilian Leber</p>
+      <p style="margin:2px 0 0;font-size:11px;font-weight:600;color:#6366f1;font-family:${FONT};text-transform:uppercase;letter-spacing:1px;">Zauberer &amp; Entertainer</p>
 
-      <!-- Trennlinie -->
-      <div style="margin:12px 0;height:1px;background-color:#e4e4e7;width:200px;"></div>
-
-      <!-- Kontaktdaten -->
-      <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+      <!-- Kontaktblock -->
+      <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:10px;">
         <tr>
-          <td style="padding:3px 0;font-size:13px;color:#71717a;font-family:${FONT};width:24px;vertical-align:middle;">📞</td>
-          <td style="padding:3px 0;font-size:13px;font-family:${FONT};"><a href="tel:+4915563744696" style="color:#0a0a0a;text-decoration:none;font-weight:500;">+49 155 637 44 696</a></td>
+          <td style="padding:2px 0;font-size:12px;color:#71717a;font-family:${FONT};width:16px;vertical-align:middle;">T</td>
+          <td style="padding:2px 0 2px 6px;font-size:12px;font-family:${FONT};"><a href="tel:+4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td>
         </tr>
         <tr>
-          <td style="padding:3px 0;font-size:13px;color:#71717a;font-family:${FONT};vertical-align:middle;">✉️</td>
-          <td style="padding:3px 0;font-size:13px;font-family:${FONT};"><a href="mailto:el@magicel.de" style="color:#0a0a0a;text-decoration:none;font-weight:500;">el@magicel.de</a></td>
+          <td style="padding:2px 0;font-size:12px;color:#71717a;font-family:${FONT};vertical-align:middle;">E</td>
+          <td style="padding:2px 0 2px 6px;font-size:12px;font-family:${FONT};"><a href="mailto:el@magicel.de" style="color:#3f3f46;text-decoration:none;">el@magicel.de</a></td>
         </tr>
         <tr>
-          <td style="padding:3px 0;font-size:13px;color:#71717a;font-family:${FONT};vertical-align:middle;">🌐</td>
-          <td style="padding:3px 0;font-size:13px;font-family:${FONT};"><a href="https://magicel.de" style="color:#0a0a0a;text-decoration:none;font-weight:500;">www.magicel.de</a></td>
-        </tr>
-        <tr>
-          <td style="padding:3px 0;font-size:13px;color:#71717a;font-family:${FONT};vertical-align:middle;">📍</td>
-          <td style="padding:3px 0;font-size:13px;color:#52525b;font-family:${FONT};">Regensburg, Deutschland</td>
+          <td style="padding:2px 0;font-size:12px;color:#71717a;font-family:${FONT};vertical-align:middle;">W</td>
+          <td style="padding:2px 0 2px 6px;font-size:12px;font-family:${FONT};"><a href="https://magicel.de" style="color:#3f3f46;text-decoration:none;">www.magicel.de</a></td>
         </tr>
       </table>
 
-      <!-- WhatsApp Button -->
-      <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:14px;">
+      <!-- Adresse -->
+      <p style="margin:8px 0 0;font-size:11px;color:#a1a1aa;font-family:${FONT};">Regensburg · Deutschland</p>
+
+      <!-- Links -->
+      <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:10px;">
         <tr>
-          <td style="background-color:#25D366;border-radius:8px;">
-            <a href="https://wa.me/4915563744696" style="display:inline-block;padding:8px 18px;font-size:12px;font-weight:700;color:#ffffff;text-decoration:none;font-family:${FONT};">
-              💬 WhatsApp schreiben
-            </a>
-          </td>
-          <td style="padding-left:8px;">
-            <a href="https://www.instagram.com/emilian.leber/" style="display:inline-block;padding:8px 12px;font-size:12px;color:#71717a;text-decoration:none;font-family:${FONT};border:1px solid #e4e4e7;border-radius:8px;">
-              📸 Instagram
-            </a>
-          </td>
+          <td style="padding-right:12px;"><a href="https://wa.me/4915563744696" style="font-size:11px;color:#71717a;text-decoration:none;font-family:${FONT};">WhatsApp</a></td>
+          <td style="padding-right:12px;border-left:1px solid #e4e4e7;padding-left:12px;"><a href="https://www.instagram.com/emilian.leber/" style="font-size:11px;color:#71717a;text-decoration:none;font-family:${FONT};">Instagram</a></td>
+          <td style="padding-right:12px;border-left:1px solid #e4e4e7;padding-left:12px;"><a href="https://g.page/r/CfLlgBMpyJ0vEBM/review" style="font-size:11px;color:#71717a;text-decoration:none;font-family:${FONT};">Google ⭐ 5.0</a></td>
         </tr>
       </table>
-
-      <!-- Bewertungen -->
-      <p style="margin:14px 0 0;font-size:11px;color:#a1a1aa;font-family:${FONT};">
-        ⭐ 5.0 bei <a href="https://g.page/r/CfLlgBMpyJ0vEBM/review" style="color:#a1a1aa;text-decoration:underline;">Google</a>
-        &nbsp;·&nbsp;
-        ⭐ Top-Dienstleister bei <a href="https://www.provenexpert.com/emilian-leber/" style="color:#a1a1aa;text-decoration:underline;">ProvenExpert</a>
-      </p>
     </td>
   </tr>
 </table>
 
-<!-- Disclaimer -->
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:20px;">
-  <tr><td style="padding:12px 0;font-size:10px;color:#d4d4d8;font-family:${FONT};line-height:1.6;">
-    Diese E-Mail ist ausschließlich für den/die Adressaten bestimmt und kann vertrauliche Informationen enthalten.
-    Sollten Sie diese E-Mail irrtümlich erhalten haben, informieren Sie bitte den Absender und löschen Sie die Nachricht.
+<!-- Rechtliches -->
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:16px;">
+  <tr><td style="padding:10px 0 0;font-size:9px;color:#d4d4d8;font-family:${FONT};line-height:1.5;">
+    Diese Nachricht ist vertraulich. Sollten Sie nicht der beabsichtigte Empfänger sein, informieren Sie bitte den Absender und löschen Sie diese E-Mail.
   </td></tr>
 </table>`;
 
