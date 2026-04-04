@@ -241,7 +241,7 @@ const requestMailTemplate = (request: any) => {
 };
 
 // ─── Event Mail Templates ─────────────────────────────────────────────────────
-const eventMailTemplate = (event: any, customerName: string, email: string, days?: number) => {
+const eventMailTemplate = (event: any, customerName: string, email: string, days?: number, dokumentTyp?: string) => {
   const rows = [
     { icon: "✨", label: "Event", value: event.title || "–" },
     { icon: "📅", label: "Datum", value: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric" }) : "–" },
@@ -276,14 +276,29 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
       };
 
     case "rechnung_gesendet":
+      if (dokumentTyp === "abschlagsrechnung") {
+        return {
+          to: email,
+          subject: "Deine Abschlagsrechnung ist bereit – Emilian Leber",
+          html: getEmailShell(
+            "Abschlagsrechnung",
+            "Deine Abschlagsrechnung ist bereit.",
+            `Hallo ${customerName}, ich habe eine Abschlagsrechnung für dein Event erstellt. Diese steht in deinem Kundenportal zum Download bereit. Bitte überweise den Teilbetrag innerhalb der angegebenen Frist.`,
+            `${statusBadge("✦ Abschlagsrechnung", "#2563eb", "#eff6ff")}${infoTable(rows)}
+            <p style="margin:0;font-size:14px;line-height:1.75;color:#71717a;font-family:${FONT};">
+              Die Schlussrechnung erhältst du nach dem Event.
+            </p>`
+          ),
+        };
+      }
       return {
         to: email,
-        subject: "Deine Rechnung ist bereit – Emilian Leber",
+        subject: "Deine Schlussrechnung ist bereit – Emilian Leber",
         html: getEmailShell(
-          "Rechnung",
-          "Deine Rechnung ist bereit.",
-          `Hallo ${customerName}, die Rechnung für dein Event wurde erstellt und steht in deinem Kundenportal zum Download bereit.`,
-          `${statusBadge("✦ Rechnung erstellt", "#2563eb", "#eff6ff")}${infoTable(rows)}`
+          "Schlussrechnung",
+          "Deine Schlussrechnung ist bereit.",
+          `Hallo ${customerName}, die Schlussrechnung für dein Event wurde erstellt und steht in deinem Kundenportal zum Download bereit. Bereits gezahlte Abschlagsbeträge wurden verrechnet.`,
+          `${statusBadge("✦ Schlussrechnung erstellt", "#2563eb", "#eff6ff")}${infoTable(rows)}`
         ),
       };
 
@@ -447,7 +462,7 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const { type, recordId, customerId, changeRequestId, days } = body;
+    const { type, recordId, customerId, changeRequestId, days, dokumentTyp } = body;
 
     if (!type) {
       return new Response(JSON.stringify({ error: "type fehlt" }), {
@@ -563,7 +578,8 @@ serve(async (req) => {
         event,
         customer.name || customer.email.split("@")[0] || "Kunde",
         customer.email,
-        days
+        days,
+        dokumentTyp
       );
 
       if (!mail) {

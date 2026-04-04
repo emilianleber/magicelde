@@ -25,6 +25,9 @@ import AdminPasswordReset from "@/pages/AdminPasswordReset";
 import AdminDokumentEditor from "@/pages/AdminDokumentEditor";
 import AdminDokumentDetail from "@/pages/AdminDokumentDetail";
 import AdminDokumenteListe from "@/pages/AdminDokumenteListe";
+import AdminBookings from "@/pages/AdminBookings";
+import AdminBookingDetail from "@/pages/AdminBookingDetail";
+import AdminProgramm from "@/pages/AdminProgramm";
 
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -88,25 +91,33 @@ const AuthEventHandler = () => {
 // ── Admin CRM routes (only on admin.magicel.de or localhost) ─────────────────
 const AdminRoutes = () => (
   <Routes>
-    <Route path="/" element={<Navigate to="/admin/customers" replace />} />
+    <Route path="/" element={<Navigate to="/admin" replace />} />
     <Route path="/admin" element={<AdminDashboard />} />
-    <Route path="/admin/requests" element={<AdminRequests />} />
+
+    {/* ── Unified Bookings (new) ── */}
+    <Route path="/admin/bookings" element={<AdminBookings />} />
+    <Route path="/admin/bookings/new" element={<AdminNewRequest />} />
+    <Route path="/admin/bookings/:id" element={<AdminBookingDetail />} />
+    <Route path="/admin/bookings/event/:id" element={<AdminEventDetail />} />
+
+    {/* ── Old routes → redirect to new bookings ── */}
+    <Route path="/admin/requests" element={<Navigate to="/admin/bookings" replace />} />
+    <Route path="/admin/requests/new" element={<Navigate to="/admin/bookings/new" replace />} />
     <Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
-    <Route path="/admin/events" element={<AdminEvents />} />
-    <Route path="/admin/events/:id" element={<AdminEventDetail />} />
-    <Route path="/admin/new-request" element={<AdminNewRequest />} />
-    <Route path="/admin/requests/new" element={<AdminNewRequest />} />
+    <Route path="/admin/events" element={<Navigate to="/admin/bookings" replace />} />
     <Route path="/admin/events/new" element={<AdminNewEvent />} />
-    <Route path="/admin/mails" element={<AdminMails />} />
+    <Route path="/admin/events/:id" element={<AdminEventDetail />} />
+    <Route path="/admin/new-request" element={<Navigate to="/admin/bookings/new" replace />} />
+
+    {/* ── Kunden ── */}
     <Route path="/admin/customers" element={<AdminCustomers />} />
     <Route path="/admin/customers/:id" element={<AdminCustomerDetail />} />
     <Route path="/admin/customers/new" element={<AdminNewCustomer />} />
-    <Route path="/admin/settings" element={<AdminSettings />} />
-    <Route path="/admin/todos" element={<AdminTodos />} />
-    <Route path="/admin/documents" element={<AdminDocuments />} />
-    <Route path="/admin/documents/angebote" element={<AdminDocuments />} />
-    <Route path="/admin/documents/rechnungen" element={<AdminDocuments />} />
-    <Route path="/admin/documents/auftragsbestaetigung" element={<AdminDocuments />} />
+
+    {/* ── Kalender ── */}
+    <Route path="/admin/kalender" element={<AdminKalender />} />
+
+    {/* ── Dokumente ── */}
     <Route path="/admin/dokumente" element={<AdminDokumenteListe />} />
     <Route path="/admin/dokumente/angebote" element={<AdminDokumenteListe />} />
     <Route path="/admin/dokumente/rechnungen" element={<AdminDokumenteListe />} />
@@ -115,17 +126,31 @@ const AdminRoutes = () => (
     <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
     <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
     <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
-    <Route path="/admin/kalender" element={<AdminKalender />} />
+    <Route path="/admin/documents" element={<Navigate to="/admin/dokumente" replace />} />
+    <Route path="/admin/documents/*" element={<Navigate to="/admin/dokumente" replace />} />
+
+    {/* ── Mein Programm (new hub) ── */}
+    <Route path="/admin/programm" element={<AdminProgramm />} />
     <Route path="/admin/effekte" element={<AdminEffekte />} />
     <Route path="/admin/pakete" element={<AdminPakete />} />
     <Route path="/admin/shows" element={<AdminShows />} />
     <Route path="/admin/produktionen" element={<AdminProduktionen />} />
     <Route path="/admin/locations" element={<AdminLocations />} />
     <Route path="/admin/partner" element={<AdminPartner />} />
+
+    {/* ── Einstellungen (Artikel bleibt vorerst separat) ── */}
+    <Route path="/admin/settings" element={<AdminSettings />} />
     <Route path="/admin/artikel" element={<AdminArtikel />} />
+
+    {/* ── Mails & Todos (still accessible, just not in main nav) ── */}
+    <Route path="/admin/mails" element={<AdminMails />} />
+    <Route path="/admin/todos" element={<AdminTodos />} />
+
+    {/* ── Auth ── */}
     <Route path="/admin/login" element={<AdminLogin />} />
     <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
-    <Route path="*" element={<Navigate to="/admin/customers" replace />} />
+
+    <Route path="*" element={<Navigate to="/admin" replace />} />
   </Routes>
 );
 
@@ -198,23 +223,26 @@ const App = () => (
             <Route path="/kundenportal/login" element={<KundenportalLogin />} />
             <Route path="/kundenportal" element={<Kundenportal />} />
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/requests" element={<AdminRequests />} />
+            {/* Unified Bookings */}
+            <Route path="/admin/bookings" element={<AdminBookings />} />
+            <Route path="/admin/bookings/new" element={<AdminNewRequest />} />
+            <Route path="/admin/bookings/:id" element={<AdminBookingDetail />} />
+            <Route path="/admin/bookings/event/:id" element={<AdminEventDetail />} />
+            {/* Old routes redirect */}
+            <Route path="/admin/requests" element={<Navigate to="/admin/bookings" replace />} />
+            <Route path="/admin/requests/new" element={<Navigate to="/admin/bookings/new" replace />} />
             <Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
-            <Route path="/admin/events" element={<AdminEvents />} />
-            <Route path="/admin/events/:id" element={<AdminEventDetail />} />
-            <Route path="/admin/new-request" element={<AdminNewRequest />} />
-            <Route path="/admin/requests/new" element={<AdminNewRequest />} />
+            <Route path="/admin/events" element={<Navigate to="/admin/bookings" replace />} />
             <Route path="/admin/events/new" element={<AdminNewEvent />} />
-            <Route path="/admin/mails" element={<AdminMails />} />
+            <Route path="/admin/events/:id" element={<AdminEventDetail />} />
+            <Route path="/admin/new-request" element={<Navigate to="/admin/bookings/new" replace />} />
+            {/* Kunden */}
             <Route path="/admin/customers" element={<AdminCustomers />} />
             <Route path="/admin/customers/:id" element={<AdminCustomerDetail />} />
             <Route path="/admin/customers/new" element={<AdminNewCustomer />} />
-            <Route path="/admin/settings" element={<AdminSettings />} />
-            <Route path="/admin/todos" element={<AdminTodos />} />
-            <Route path="/admin/documents" element={<AdminDocuments />} />
-            <Route path="/admin/documents/angebote" element={<AdminDocuments />} />
-            <Route path="/admin/documents/rechnungen" element={<AdminDocuments />} />
-            <Route path="/admin/documents/auftragsbestaetigung" element={<AdminDocuments />} />
+            {/* Kalender */}
+            <Route path="/admin/kalender" element={<AdminKalender />} />
+            {/* Dokumente */}
             <Route path="/admin/dokumente" element={<AdminDokumenteListe />} />
             <Route path="/admin/dokumente/angebote" element={<AdminDokumenteListe />} />
             <Route path="/admin/dokumente/rechnungen" element={<AdminDokumenteListe />} />
@@ -223,14 +251,23 @@ const App = () => (
             <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
             <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
             <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
-            <Route path="/admin/kalender" element={<AdminKalender />} />
+            <Route path="/admin/documents" element={<Navigate to="/admin/dokumente" replace />} />
+            <Route path="/admin/documents/*" element={<Navigate to="/admin/dokumente" replace />} />
+            {/* Mein Programm */}
+            <Route path="/admin/programm" element={<AdminProgramm />} />
             <Route path="/admin/effekte" element={<AdminEffekte />} />
             <Route path="/admin/pakete" element={<AdminPakete />} />
             <Route path="/admin/shows" element={<AdminShows />} />
             <Route path="/admin/produktionen" element={<AdminProduktionen />} />
             <Route path="/admin/locations" element={<AdminLocations />} />
             <Route path="/admin/partner" element={<AdminPartner />} />
+            {/* Einstellungen */}
+            <Route path="/admin/settings" element={<AdminSettings />} />
             <Route path="/admin/artikel" element={<AdminArtikel />} />
+            {/* Mails & Todos */}
+            <Route path="/admin/mails" element={<AdminMails />} />
+            <Route path="/admin/todos" element={<AdminTodos />} />
+            {/* Auth */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
             <Route path="*" element={<NotFound />} />

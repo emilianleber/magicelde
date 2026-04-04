@@ -230,7 +230,7 @@ export default function AdminKalender() {
             </h3>
             <div className="space-y-3">
               {selEvts.map((e) => (
-                <Link key={e.id} to={`/admin/events/${e.id}`}
+                <Link key={e.id} to={`/admin/bookings/event/${e.id}`}
                   className="flex items-center gap-3 p-3 rounded-xl bg-blue-50 border border-blue-200/60 hover:border-blue-300 transition-colors group">
                   <div className="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center shrink-0">
                     <Calendar className="w-4 h-4 text-blue-600" />
@@ -250,7 +250,7 @@ export default function AdminKalender() {
                 </Link>
               ))}
               {selReqs.map((r) => (
-                <Link key={r.id} to={`/admin/requests/${r.id}`}
+                <Link key={r.id} to={`/admin/bookings/${r.id}`}
                   className="flex items-center gap-3 p-3 rounded-xl bg-orange-50 border border-orange-200/60 hover:border-orange-300 transition-colors group">
                   <div className="w-8 h-8 rounded-lg bg-orange-400/15 flex items-center justify-center shrink-0">
                     <Calendar className="w-4 h-4 text-orange-600" />
@@ -274,7 +274,7 @@ export default function AdminKalender() {
         <div className="rounded-2xl border border-border/30 bg-muted/5 p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-sm">Nächste Events (60 Tage)</h3>
-            <Link to="/admin/events" className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
+            <Link to="/admin/bookings" className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
               Alle Events <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
@@ -291,7 +291,7 @@ export default function AdminKalender() {
                 const evtDate = new Date(e.event_date! + "T12:00:00");
                 const daysUntil = Math.round((evtDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
                 return (
-                  <Link key={e.id} to={`/admin/events/${e.id}`}
+                  <Link key={e.id} to={`/admin/bookings/event/${e.id}`}
                     className="flex items-center gap-4 p-3 rounded-xl bg-background/40 border border-border/20 hover:border-accent/30 hover:bg-muted/20 transition-all group">
                     <div className="shrink-0 w-12 text-center">
                       <p className="text-[10px] font-semibold uppercase text-muted-foreground">

@@ -198,14 +198,14 @@ const AdminDashboard = () => {
           <h2 className="font-display text-base font-bold text-foreground mb-4">Statistiken</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: "Alle Anfragen",     value: requests.length,  icon: MessageCircle, href: "/admin/requests",   color: "text-blue-500 bg-blue-500/10" },
-              { label: "Neue Anfragen",     value: newRequests.length, icon: Clock3,      href: "/admin/requests",   color: "text-accent bg-accent/10" },
-              { label: "Events",            value: events.length,    icon: Calendar,      href: "/admin/events",     color: "text-green-500 bg-green-500/10" },
+              { label: "Alle Anfragen",     value: requests.length,  icon: MessageCircle, href: "/admin/bookings",   color: "text-blue-500 bg-blue-500/10" },
+              { label: "Neue Anfragen",     value: newRequests.length, icon: Clock3,      href: "/admin/bookings",   color: "text-accent bg-accent/10" },
+              { label: "Events",            value: events.length,    icon: Calendar,      href: "/admin/bookings",     color: "text-green-500 bg-green-500/10" },
               { label: "Kunden",            value: customerCount,    icon: Users,         href: "/admin/customers",  color: "text-purple-500 bg-purple-500/10" },
-              { label: "Diesen Monat",      value: thisMonth.length, icon: TrendingUp,    href: "/admin/requests",   color: "text-orange-500 bg-orange-500/10" },
+              { label: "Diesen Monat",      value: thisMonth.length, icon: TrendingUp,    href: "/admin/bookings",   color: "text-orange-500 bg-orange-500/10" },
               { label: "Offene Todos",      value: openTodos.length, icon: CheckSquare,   href: "/admin/todos",      color: "text-yellow-600 bg-yellow-500/10" },
               { label: "Mails gesendet",    value: messages.length,  icon: Mail,          href: "/admin/mails",      color: "text-pink-500 bg-pink-500/10" },
-              { label: "Conversion",        value: `${convRate}%`,   icon: TrendingUp,    href: "/admin/events",     color: "text-teal-500 bg-teal-500/10" },
+              { label: "Conversion",        value: `${convRate}%`,   icon: TrendingUp,    href: "/admin/bookings",     color: "text-teal-500 bg-teal-500/10" },
             ].map((c) => (
               <Link key={c.label} to={c.href} className="p-4 rounded-xl bg-background/60 border border-border/20 hover:border-accent/20 transition-colors">
                 <div className={`w-7 h-7 rounded-lg flex items-center justify-center mb-2.5 ${c.color}`}><c.icon className="w-3.5 h-3.5" /></div>
@@ -218,14 +218,14 @@ const AdminDashboard = () => {
       );
       case "neue_anfragen": return (
         <div className="p-6 rounded-2xl bg-muted/20 border border-border/30 h-full">
-          <div className="flex items-center justify-between mb-4"><h2 className="font-display text-base font-bold text-foreground">Neue Anfragen</h2><Link to="/admin/requests" className="text-xs text-accent hover:text-accent/80 flex items-center gap-1">Alle <ArrowRight className="w-3 h-3" /></Link></div>
-          <div className="space-y-2">{requests.slice(0, 5).map((r) => (<Link key={r.id} to={`/admin/requests/${r.id}`} className="block p-3 rounded-xl bg-background/60 border border-border/20 hover:border-accent/20 transition-colors"><div className="flex items-center justify-between gap-2"><div className="min-w-0"><p className="font-sans text-sm font-semibold text-foreground truncate">{r.name}</p><p className="font-sans text-xs text-muted-foreground mt-0.5 truncate">{r.anlass || "Anfrage"} · {new Date(r.created_at).toLocaleDateString("de-DE")}</p></div><span className="font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-muted text-muted-foreground shrink-0">{r.status || "offen"}</span></div></Link>))}{requests.length === 0 && <p className="font-sans text-sm text-muted-foreground">Keine Anfragen.</p>}</div>
+          <div className="flex items-center justify-between mb-4"><h2 className="font-display text-base font-bold text-foreground">Neue Anfragen</h2><Link to="/admin/bookings" className="text-xs text-accent hover:text-accent/80 flex items-center gap-1">Alle <ArrowRight className="w-3 h-3" /></Link></div>
+          <div className="space-y-2">{requests.slice(0, 5).map((r) => (<Link key={r.id} to={`/admin/bookings/${r.id}`} className="block p-3 rounded-xl bg-background/60 border border-border/20 hover:border-accent/20 transition-colors"><div className="flex items-center justify-between gap-2"><div className="min-w-0"><p className="font-sans text-sm font-semibold text-foreground truncate">{r.name}</p><p className="font-sans text-xs text-muted-foreground mt-0.5 truncate">{r.anlass || "Anfrage"} · {new Date(r.created_at).toLocaleDateString("de-DE")}</p></div><span className="font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-muted text-muted-foreground shrink-0">{r.status || "offen"}</span></div></Link>))}{requests.length === 0 && <p className="font-sans text-sm text-muted-foreground">Keine Anfragen.</p>}</div>
         </div>
       );
       case "naechste_events": return (
         <div className="p-6 rounded-2xl bg-muted/20 border border-border/30 h-full">
-          <div className="flex items-center justify-between mb-4"><h2 className="font-display text-base font-bold text-foreground">Nächste Events</h2><Link to="/admin/events" className="text-xs text-accent hover:text-accent/80 flex items-center gap-1">Alle <ArrowRight className="w-3 h-3" /></Link></div>
-          <div className="space-y-2">{events.filter((e) => !!e.event_date).slice(0, 5).map((e) => (<Link key={e.id} to={`/admin/events/${e.id}`} className="block p-3 rounded-xl bg-background/60 border border-border/20 hover:border-accent/20 transition-colors"><p className="font-sans text-sm font-semibold text-foreground truncate">{e.title}</p><p className="font-sans text-xs text-muted-foreground mt-0.5">{e.event_date ? new Date(e.event_date).toLocaleDateString("de-DE") : "–"}{e.location ? ` · ${e.location}` : ""}</p></Link>))}{events.length === 0 && <p className="font-sans text-sm text-muted-foreground">Keine Events.</p>}</div>
+          <div className="flex items-center justify-between mb-4"><h2 className="font-display text-base font-bold text-foreground">Nächste Events</h2><Link to="/admin/bookings" className="text-xs text-accent hover:text-accent/80 flex items-center gap-1">Alle <ArrowRight className="w-3 h-3" /></Link></div>
+          <div className="space-y-2">{events.filter((e) => !!e.event_date).slice(0, 5).map((e) => (<Link key={e.id} to={`/admin/bookings/event/${e.id}`} className="block p-3 rounded-xl bg-background/60 border border-border/20 hover:border-accent/20 transition-colors"><p className="font-sans text-sm font-semibold text-foreground truncate">{e.title}</p><p className="font-sans text-xs text-muted-foreground mt-0.5">{e.event_date ? new Date(e.event_date).toLocaleDateString("de-DE") : "–"}{e.location ? ` · ${e.location}` : ""}</p></Link>))}{events.length === 0 && <p className="font-sans text-sm text-muted-foreground">Keine Events.</p>}</div>
         </div>
       );
       case "offene_todos": return (
@@ -399,9 +399,9 @@ const AdminDashboard = () => {
           <h2 className="font-display text-base font-bold text-foreground mb-4">Schnellzugriff</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: "Neue Anfrage",  href: "/admin/requests/new",           icon: MessageCircle, color: "bg-blue-500/10 text-blue-600 hover:bg-blue-500/20" },
+              { label: "Neue Anfrage",  href: "/admin/bookings/new",            icon: MessageCircle, color: "bg-blue-500/10 text-blue-600 hover:bg-blue-500/20" },
               { label: "Neues Angebot", href: "/admin/dokumente/new?typ=angebot", icon: FileText,     color: "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20" },
-              { label: "Neues Event",   href: "/admin/events/new",             icon: CalendarRange,  color: "bg-purple-500/10 text-purple-600 hover:bg-purple-500/20" },
+              { label: "Neues Event",   href: "/admin/bookings/new",            icon: CalendarRange,  color: "bg-purple-500/10 text-purple-600 hover:bg-purple-500/20" },
               { label: "Neuer Kunde",   href: "/admin/customers/new",          icon: UserPlus,       color: "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20" },
             ].map((a) => (
               <Link key={a.label} to={a.href} className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-border/20 transition-colors text-center ${a.color}`}>

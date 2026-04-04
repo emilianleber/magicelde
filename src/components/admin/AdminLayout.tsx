@@ -7,24 +7,14 @@ import {
   MessageCircle,
   CalendarDays,
   Users,
-  CheckSquare,
-  Mail,
   Settings,
   LogOut,
   Zap,
   Menu,
   X,
-  Sparkles,
-  Wand2,
-  Package,
-  Video,
-  MapPin,
-  Users2,
-  Receipt,
-  FileCheck,
-  ShoppingBag,
   FileText,
   CalendarRange,
+  Wand2,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -36,39 +26,21 @@ interface AdminLayoutProps {
 
 // ── Nav structure ────────────────────────────────────────────────────────────
 
-const crmNavItems = [
-  { label: "Dashboard",  href: "/admin",           icon: LayoutDashboard },
-  { label: "Anfragen",   href: "/admin/requests",  icon: MessageCircle,  badge: true },
-  { label: "Events",     href: "/admin/events",    icon: CalendarDays },
-  { label: "Kunden",     href: "/admin/customers", icon: Users },
-  { label: "Kalender",   href: "/admin/kalender",  icon: CalendarRange },
-];
-
-const komNavItems = [
-  { label: "Mails",  href: "/admin/mails",  icon: Mail },
-  { label: "Todos",  href: "/admin/todos",  icon: CheckSquare },
-];
-
-const finanzNavItems = [
-  { label: "Dokumente", href: "/admin/dokumente", icon: FileText },
-  { label: "Artikel",   href: "/admin/artikel",   icon: ShoppingBag },
-];
-
-const prodNavItems = [
-  { label: "Effekte",      href: "/admin/effekte",      icon: Wand2 },
-  { label: "Pakete",       href: "/admin/pakete",       icon: Package },
-  { label: "Shows",        href: "/admin/shows",        icon: Video },
-  { label: "Produktionen", href: "/admin/produktionen", icon: Sparkles },
-  { label: "Locations",    href: "/admin/locations",    icon: MapPin },
-  { label: "Partner",      href: "/admin/partner",      icon: Users2 },
+const mainNavItems = [
+  { label: "Dashboard",           href: "/admin",            icon: LayoutDashboard },
+  { label: "Anfragen & Buchungen", href: "/admin/bookings",  icon: MessageCircle,  badge: true },
+  { label: "Kunden",              href: "/admin/customers",  icon: Users },
+  { label: "Kalender",            href: "/admin/kalender",   icon: CalendarRange },
+  { label: "Dokumente",           href: "/admin/dokumente",  icon: FileText },
+  { label: "Mein Programm",       href: "/admin/programm",   icon: Wand2 },
+  { label: "Einstellungen",       href: "/admin/settings",   icon: Settings },
 ];
 
 const bottomNavItems = [
-  { label: "Dashboard", href: "/admin",           icon: LayoutDashboard },
-  { label: "Anfragen",  href: "/admin/requests",  icon: MessageCircle,  badge: true },
-  { label: "Events",    href: "/admin/events",    icon: CalendarDays },
-  { label: "Kunden",    href: "/admin/customers", icon: Users },
-  { label: "Finanzen",  href: "/admin/dokumente", icon: FileText },
+  { label: "Dashboard",  href: "/admin",            icon: LayoutDashboard },
+  { label: "Anfragen",   href: "/admin/bookings",   icon: MessageCircle,  badge: true },
+  { label: "Kunden",     href: "/admin/customers",   icon: Users },
+  { label: "Kalender",   href: "/admin/kalender",    icon: CalendarRange },
 ];
 
 const IS_ADMIN_DOMAIN = window.location.hostname === "admin.magicel.de" || window.location.hostname === "localhost";
@@ -169,56 +141,29 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
 
   const renderNav = (mobile = false, onClose?: () => void) => (
     <nav className={`flex-1 overflow-y-auto px-3 py-4`}>
-      {/* CRM */}
-      {crmNavItems.map((item) => (
-        <NavLink
-          key={item.href}
-          href={item.href}
-          label={item.label}
-          icon={item.icon}
-          badge={item.badge}
-          badgeCount={item.badge ? newRequestCount : undefined}
-          isActive={isActive(item.href)}
-          mobile={mobile}
-          onClick={onClose}
-        />
+      {mainNavItems.map((item) => (
+        <React.Fragment key={item.href}>
+          <NavLink
+            href={item.href}
+            label={item.label}
+            icon={item.icon}
+            badge={"badge" in item && (item as any).badge}
+            badgeCount={"badge" in item && (item as any).badge ? newRequestCount : undefined}
+            isActive={isActive(item.href)}
+            mobile={mobile}
+            onClick={onClose}
+          />
+          {/* Dokumente sub-links */}
+          {item.href === "/admin/dokumente" && location.pathname.startsWith("/admin/dokumente") && (
+            <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
+              <SubNavLink href="/admin/dokumente/angebote" label="Angebote" isActive={location.pathname.startsWith("/admin/dokumente/angebote")} onClick={onClose} />
+              <SubNavLink href="/admin/dokumente/rechnungen" label="Rechnungen" isActive={location.pathname.startsWith("/admin/dokumente/rechnungen")} onClick={onClose} />
+              <SubNavLink href="/admin/dokumente/auftragsbestaetigung" label="Auftragsbestät." isActive={location.pathname.startsWith("/admin/dokumente/auftragsbestaetigung")} onClick={onClose} />
+              <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
+            </div>
+          )}
+        </React.Fragment>
       ))}
-
-      {/* Kommunikation */}
-      <SectionLabel label="Kommunikation" />
-      {komNavItems.map((item) => (
-        <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} isActive={isActive(item.href)} mobile={mobile} onClick={onClose} />
-      ))}
-
-      {/* Finanzen */}
-      <SectionLabel label="Finanzen" />
-      <NavLink
-        href="/admin/dokumente"
-        label="Dokumente"
-        icon={FileText}
-        isActive={location.pathname.startsWith("/admin/dokumente")}
-        mobile={mobile}
-        onClick={onClose}
-      />
-      {location.pathname.startsWith("/admin/dokumente") && (
-        <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
-          <SubNavLink href="/admin/dokumente/angebote" label="Angebote" isActive={location.pathname.startsWith("/admin/dokumente/angebote")} onClick={onClose} />
-          <SubNavLink href="/admin/dokumente/rechnungen" label="Rechnungen" isActive={location.pathname.startsWith("/admin/dokumente/rechnungen")} onClick={onClose} />
-          <SubNavLink href="/admin/dokumente/auftragsbestaetigung" label="Auftragsbestät." isActive={location.pathname.startsWith("/admin/dokumente/auftragsbestaetigung")} onClick={onClose} />
-          <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
-        </div>
-      )}
-      <NavLink href="/admin/artikel" label="Artikel" icon={ShoppingBag} isActive={isActive("/admin/artikel")} mobile={mobile} onClick={onClose} />
-
-      {/* Produktionen */}
-      <SectionLabel label="Produktionen" />
-      {prodNavItems.map((item) => (
-        <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} isActive={isActive(item.href)} mobile={mobile} onClick={onClose} />
-      ))}
-
-      {/* Einstellungen */}
-      <SectionLabel label="System" />
-      <NavLink href="/admin/settings" label="Einstellungen" icon={Settings} isActive={isActive("/admin/settings")} mobile={mobile} onClick={onClose} />
     </nav>
   );
 
@@ -360,12 +305,7 @@ const EmbeddedAdminLayout = ({ title, subtitle, actions, children }: AdminLayout
     supabase.from("portal_requests").select("*", { count: "exact", head: true }).eq("status", "neu").then(({ count }) => setNewRequestCount(count || 0));
   }, [location.pathname]);
 
-  const allNavItems = [
-    ...crmNavItems,
-    ...komNavItems,
-    ...finanzNavItems,
-    { label: "Einstellungen", href: "/admin/settings", icon: Settings },
-  ];
+  const allNavItems = mainNavItems;
 
   return (
     <PageLayout>

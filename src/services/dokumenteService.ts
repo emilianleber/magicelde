@@ -416,6 +416,80 @@ export const dokumenteService = {
       await this.setStatus(quelleId, "akzeptiert");
     }
 
+    // Positionen kopieren
+    let positionen = quelle.positionen.map((p) => ({ ...p }));
+    let fusstext = quelle.fusstext;
+
+    // Bei Schlussrechnung: Abschlagsrechnungen verrechnen
+    if (zielTyp === "rechnung" && (quelle.typ === "auftragsbestaetigung" || quelle.typ === "abschlagsrechnung")) {
+      // Alle Abschlagsrechnungen für dasselbe Event/Request finden
+      const eventId = quelle.eventId;
+      const requestId = quelle.requestId;
+      const customerId = quelle.customerId;
+
+      let abschlagsQuery = supabase
+        .from("portal_documents")
+        .select("id, document_number, total, bezahlt_betrag, status, type")
+        .eq("type", "Abschlagsrechnung")
+        .neq("status", "storniert");
+
+      if (eventId) abschlagsQuery = abschlagsQuery.eq("event_id", eventId);
+      else if (requestId) abschlagsQuery = abschlagsQuery.eq("request_id", requestId);
+      else if (customerId) abschlagsQuery = abschlagsQuery.eq("customer_id", customerId);
+
+      const { data: abschlagsRechnungen } = await abschlagsQuery;
+
+      if (abschlagsRechnungen && abschlagsRechnungen.length > 0) {
+        // Abzugspositionen ans Ende der Positionen hängen
+        const maxPos = positionen.length > 0 ? Math.max(...positionen.map(p => p.position)) : 0;
+
+        // Haupt-MwSt-Satz aus der Quelle bestimmen (meistverwendeter Satz)
+        const mwstCounts: Record<number, number> = {};
+        quelle.positionen.forEach(p => {
+          if (p.typ === "leistung" || p.typ === "produkt") {
+            mwstCounts[p.mwstSatz] = (mwstCounts[p.mwstSatz] || 0) + Math.abs(p.gesamt);
+          }
+        });
+        const hauptMwstSatz = Object.entries(mwstCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+        const mwstSatz = hauptMwstSatz ? Number(hauptMwstSatz) : 19;
+
+        // Trennzeile
+        positionen.push({
+          id: `tmp-sep`,
+          position: maxPos + 1,
+          typ: "text",
+          bezeichnung: "Abzüglich bereits geleisteter Abschlagszahlungen:",
+          menge: 0,
+          einheit: "",
+          einzelpreis: 0,
+          gesamt: 0,
+          mwstSatz: 0,
+          rabattProzent: 0,
+        });
+
+        abschlagsRechnungen.forEach((ar, i) => {
+          // Bezahlten Betrag nutzen, Fallback auf Gesamtbetrag
+          const bezahlt = (ar.bezahlt_betrag as number) || (ar.total as number) || 0;
+          positionen.push({
+            id: `tmp-ar-${i}`,
+            position: maxPos + 2 + i,
+            typ: "leistung",
+            bezeichnung: `Abzug ${ar.document_number || "Abschlagsrechnung"}`,
+            menge: 1,
+            einheit: "pauschal",
+            einzelpreis: -bezahlt,
+            gesamt: -bezahlt,
+            mwstSatz,
+            rabattProzent: 0,
+          });
+        });
+
+        // Fußtext ergänzen
+        const arNummern = abschlagsRechnungen.map(ar => ar.document_number).filter(Boolean).join(", ");
+        fusstext = `Bereits gezahlte Abschlagsrechnungen (${arNummern}) wurden verrechnet.\n\n${fusstext || ""}`;
+      }
+    }
+
     // Neues Dokument erstellen
     const zielDoc = await this.create(
       zielTyp,
@@ -432,14 +506,14 @@ export const dokumenteService = {
         empfaenger: quelle.empfaenger,
         absender: quelle.absender,
         kopftext: quelle.kopftext,
-        fusstext: quelle.fusstext,
+        fusstext,
         zahlungszielTage: quelle.zahlungszielTage,
         rabattProzent: quelle.rabattProzent,
         faelligAm: zielTyp === "rechnung" || zielTyp === "abschlagsrechnung"
           ? addDays(new Date(), quelle.zahlungszielTage)
           : undefined,
       },
-      quelle.positionen.map((p) => ({ ...p })),
+      positionen,
     );
 
     // Quelldokument mit Folge-Referenz aktualisieren

@@ -41,10 +41,27 @@ const ZAHLUNGSART_LABEL: Record<Zahlung["zahlungsart"], string> = {
   sonstiges:    "Sonstiges",
 };
 
-const WORKFLOW_STEPS: DokumentTyp[] = ["angebot", "auftragsbestaetigung", "rechnung", "mahnung"];
+const WORKFLOW_STEPS: DokumentTyp[] = ["angebot", "auftragsbestaetigung", "abschlagsrechnung", "rechnung", "mahnung"];
+
+// Mögliche Folgedokument-Typen pro Dokumenttyp
+const WORKFLOW_OPTIONS: Partial<Record<DokumentTyp, { typ: DokumentTyp; label: string }[]>> = {
+  angebot:              [{ typ: "auftragsbestaetigung", label: "→ Auftragsbestätigung" }],
+  auftragsbestaetigung: [
+    { typ: "abschlagsrechnung", label: "→ Abschlagsrechnung" },
+    { typ: "rechnung", label: "→ Schlussrechnung" },
+  ],
+  abschlagsrechnung:    [
+    { typ: "abschlagsrechnung", label: "→ Weitere Abschlagsrechnung" },
+    { typ: "rechnung", label: "→ Schlussrechnung" },
+  ],
+  rechnung:             [{ typ: "mahnung", label: "→ Mahnung" }],
+};
+
+// Legacy: erster Eintrag als Standard-Workflow
 const WORKFLOW: Partial<Record<DokumentTyp, DokumentTyp>> = {
   angebot:              "auftragsbestaetigung",
   auftragsbestaetigung: "rechnung",
+  abschlagsrechnung:    "rechnung",
   rechnung:             "mahnung",
 };
 
@@ -157,9 +174,9 @@ export default function AdminDokumentDetail() {
     finally { setStatusChanging(false); }
   };
 
-  const handleConvert = async () => {
+  const handleConvert = async (zielTypOverride?: DokumentTyp) => {
     if (!doc || !id) return;
-    const zielTyp = WORKFLOW[doc.typ];
+    const zielTyp = zielTypOverride || WORKFLOW[doc.typ];
     if (!zielTyp) return;
     if (!confirm(`${TYP_LABEL[doc.typ]} in ${TYP_LABEL[zielTyp]} umwandeln?`)) return;
     setConverting(true);
@@ -518,7 +535,7 @@ body > div:last-child {
           const token = session?.access_token;
           supabase.functions.invoke("admin-send-status-mail", {
             headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-            body: { type: mailType, recordId: mailRecordId },
+            body: { type: mailType, recordId: mailRecordId, dokumentTyp: doc.typ },
           }).catch(console.error);
         });
       }
@@ -678,13 +695,26 @@ body > div:last-child {
                 </button>
               </>
             )}
-            {nextTyp && !doc.folgedokumentId && (
-              <button onClick={handleConvert} disabled={converting}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-50">
-                <ArrowRight className="w-3.5 h-3.5" />
-                {converting ? "Wandle um…" : `→ ${TYP_LABEL[nextTyp]}`}
-              </button>
-            )}
+            {(() => {
+              const options = WORKFLOW_OPTIONS[doc.typ];
+              if (!options || options.length === 0 || doc.folgedokumentId) return null;
+              if (options.length === 1) {
+                return (
+                  <button onClick={() => handleConvert(options[0].typ)} disabled={converting}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-50">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                    {converting ? "Wandle um…" : options[0].label}
+                  </button>
+                );
+              }
+              return options.map((opt) => (
+                <button key={opt.typ} onClick={() => handleConvert(opt.typ)} disabled={converting}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 disabled:opacity-50 transition-colors">
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  {converting ? "…" : opt.label}
+                </button>
+              ));
+            })()}
             <button onClick={() => navigate(`/admin/dokumente/${doc.id}/bearbeiten`)}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border/30 text-sm hover:bg-muted/60 transition-colors">
               <Pencil className="w-3.5 h-3.5" />
