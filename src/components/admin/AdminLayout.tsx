@@ -118,6 +118,30 @@ const SectionLabel = ({ label }: { label: string }) => (
   </div>
 );
 
+// ── Sub-NavLink (eingerückt unter Eltern-Eintrag) ────────────────────────────
+
+interface SubNavLinkProps {
+  href: string;
+  label: string;
+  isActive: boolean;
+  onClick?: () => void;
+}
+
+const SubNavLink = ({ href, label, isActive, onClick }: SubNavLinkProps) => (
+  <Link
+    to={href}
+    onClick={onClick}
+    className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-[13px] transition-all ${
+      isActive
+        ? "text-foreground font-semibold"
+        : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+    }`}
+  >
+    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? "bg-foreground" : "bg-border"}`} />
+    {label}
+  </Link>
+);
+
 // ── Standalone sidebar (admin.magicel.de) ────────────────────────────────────
 
 const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayoutProps) => {
@@ -168,9 +192,21 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
 
       {/* Finanzen */}
       <SectionLabel label="Finanzen" />
-      {finanzNavItems.map((item) => (
-        <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} isActive={isActive(item.href)} mobile={mobile} onClick={onClose} />
-      ))}
+      <NavLink
+        href="/admin/dokumente"
+        label="Dokumente"
+        icon={FileText}
+        isActive={location.pathname === "/admin/dokumente"}
+        mobile={mobile}
+        onClick={onClose}
+      />
+      <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
+        <SubNavLink href="/admin/dokumente/angebote" label="Angebote" isActive={location.pathname.startsWith("/admin/dokumente/angebote")} onClick={onClose} />
+        <SubNavLink href="/admin/dokumente/rechnungen" label="Rechnungen" isActive={location.pathname.startsWith("/admin/dokumente/rechnungen")} onClick={onClose} />
+        <SubNavLink href="/admin/dokumente/auftragsbestaetigung" label="Auftragsbestät." isActive={location.pathname.startsWith("/admin/dokumente/auftragsbestaetigung")} onClick={onClose} />
+        <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
+      </div>
+      <NavLink href="/admin/artikel" label="Artikel" icon={ShoppingBag} isActive={isActive("/admin/artikel")} mobile={mobile} onClick={onClose} />
 
       {/* Produktionen */}
       <SectionLabel label="Produktionen" />

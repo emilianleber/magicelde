@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentTyp, DokumentStatus } from "@/types/dokumente";
 import {
   Plus, FileText, TrendingUp, AlertTriangle, CheckCircle,
-  Search, ChevronRight, Trash2, Ban, ThumbsUp, ThumbsDown, MoreVertical,
+  Search, Trash2, Ban, ThumbsUp, ThumbsDown, MoreVertical,
 } from "lucide-react";
 
 const STATUS_CONFIG: Record<DokumentStatus, { label: string; cls: string }> = {
@@ -57,33 +57,105 @@ function fmtDate(s?: string) {
   catch { return s; }
 }
 
-type Tab = "alle" | "angebote" | "rechnungen" | "auftragsbestaetigung" | "mahnungen";
+// ── Status-Filter pro Typ ────────────────────────────────────────────────────
 
-const TABS: { id: Tab; label: string; path: string; typ?: DokumentTyp }[] = [
-  { id: "alle",                 label: "Alle",                  path: "/admin/dokumente" },
-  { id: "angebote",             label: "Angebote",              path: "/admin/dokumente/angebote",             typ: "angebot" },
-  { id: "rechnungen",           label: "Rechnungen",            path: "/admin/dokumente/rechnungen",           typ: "rechnung" },
-  { id: "auftragsbestaetigung", label: "Auftragsbestätig.",      path: "/admin/dokumente/auftragsbestaetigung", typ: "auftragsbestaetigung" },
-  { id: "mahnungen",            label: "Mahnungen",             path: "/admin/dokumente/mahnungen",            typ: "mahnung" },
-];
+const STATUS_TABS: Record<string, { status: DokumentStatus | null; label: string }[]> = {
+  angebot: [
+    { status: null,          label: "Alle" },
+    { status: "entwurf",     label: "Entwurf" },
+    { status: "gesendet",    label: "Gesendet" },
+    { status: "akzeptiert",  label: "Angenommen" },
+    { status: "abgelehnt",   label: "Abgelehnt" },
+    { status: "storniert",   label: "Storniert" },
+  ],
+  rechnung: [
+    { status: null,           label: "Alle" },
+    { status: "entwurf",      label: "Entwurf" },
+    { status: "offen",        label: "Offen" },
+    { status: "teilbezahlt",  label: "Teilbezahlt" },
+    { status: "bezahlt",      label: "Bezahlt" },
+    { status: "ueberfaellig", label: "Überfällig" },
+    { status: "storniert",    label: "Storniert" },
+  ],
+  auftragsbestaetigung: [
+    { status: null,        label: "Alle" },
+    { status: "entwurf",   label: "Entwurf" },
+    { status: "gesendet",  label: "Gesendet" },
+    { status: "akzeptiert",label: "Angenommen" },
+  ],
+  mahnung: [
+    { status: null,       label: "Alle" },
+    { status: "entwurf",  label: "Entwurf" },
+    { status: "gesendet", label: "Gesendet" },
+  ],
+};
+
+// ── Seiten-Info pro Typ ──────────────────────────────────────────────────────
+
+const PAGE_INFO: Record<string, { title: string; subtitle: string; newHref: string; newLabel: string }> = {
+  angebot: {
+    title: "Angebote",
+    subtitle: "Alle Angebote im Überblick",
+    newHref: "/admin/dokumente/new?typ=angebot",
+    newLabel: "Neues Angebot",
+  },
+  rechnung: {
+    title: "Rechnungen",
+    subtitle: "Alle Rechnungen im Überblick",
+    newHref: "/admin/dokumente/new?typ=rechnung",
+    newLabel: "Neue Rechnung",
+  },
+  auftragsbestaetigung: {
+    title: "Auftragsbestätigungen",
+    subtitle: "Alle AB im Überblick",
+    newHref: "/admin/dokumente/new?typ=auftragsbestaetigung",
+    newLabel: "Neue AB",
+  },
+  mahnung: {
+    title: "Mahnungen",
+    subtitle: "Alle Mahnungen im Überblick",
+    newHref: "/admin/dokumente/new?typ=mahnung",
+    newLabel: "Neue Mahnung",
+  },
+};
+
+const TYP_PATH: Record<DokumentTyp, string> = {
+  angebot: "/admin/dokumente/angebote",
+  rechnung: "/admin/dokumente/rechnungen",
+  auftragsbestaetigung: "/admin/dokumente/auftragsbestaetigung",
+  mahnung: "/admin/dokumente/mahnungen",
+  abschlagsrechnung: "/admin/dokumente",
+  gutschrift: "/admin/dokumente",
+  stornorechnung: "/admin/dokumente",
+};
 
 export default function AdminDokumenteListe() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [authChecked, setAuthChecked] = useState(false);
   const [dokumente, setDokumente] = useState<Dokument[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [actionId, setActionId] = useState<string | null>(null); // which row has actions open
+  const [actionId, setActionId] = useState<string | null>(null);
   const [kennzahlen, setKennzahlen] = useState({ offenBetrag: 0, ueberfaelligBetrag: 0, bezahltMonatBetrag: 0, offenAnzahl: 0 });
 
-  const activeTab: Tab = (() => {
-    if (location.pathname.includes("/mahnungen")) return "mahnungen";
-    if (location.pathname.includes("/angebote")) return "angebote";
-    if (location.pathname.includes("/rechnungen")) return "rechnungen";
+  // Typ aus URL-Pfad
+  const activeTyp: DokumentTyp | undefined = (() => {
+    if (location.pathname.includes("/angebote")) return "angebot";
+    if (location.pathname.includes("/rechnungen")) return "rechnung";
     if (location.pathname.includes("/auftragsbestaetigung")) return "auftragsbestaetigung";
-    return "alle";
+    if (location.pathname.includes("/mahnungen")) return "mahnung";
+    return undefined;
   })();
+
+  // Status-Filter aus Query-Param
+  const activeStatus = (searchParams.get("status") as DokumentStatus) || null;
+
+  // Basis-Pfad für Status-Tab-Links
+  const basePath = activeTyp ? TYP_PATH[activeTyp] : "/admin/dokumente";
+
+  const pageInfo = activeTyp ? PAGE_INFO[activeTyp] : null;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -94,19 +166,19 @@ export default function AdminDokumenteListe() {
 
   useEffect(() => {
     if (!authChecked) return;
-    const tabInfo = TABS.find(t => t.id === activeTab);
     setLoading(true);
     Promise.all([
-      dokumenteService.getAll(tabInfo?.typ ? { typ: tabInfo.typ } : undefined),
+      dokumenteService.getAll(activeTyp ? { typ: activeTyp } : undefined),
       dokumenteService.getKennzahlen(),
     ]).then(([docs, kz]) => {
       setDokumente(docs);
       setKennzahlen(kz);
       setLoading(false);
     }).catch(() => setLoading(false));
-  }, [authChecked, activeTab]);
+  }, [authChecked, activeTyp]);
 
   const filtered = dokumente.filter(d => {
+    if (activeStatus && d.status !== activeStatus) return false;
     if (!search) return true;
     const q = search.toLowerCase();
     return (
@@ -153,27 +225,41 @@ export default function AdminDokumenteListe() {
 
   const today = new Date().toISOString().split("T")[0];
 
-  const actions = (
+  // Action-Button oben rechts
+  const actions = pageInfo ? (
+    <Link
+      to={pageInfo.newHref}
+      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity"
+    >
+      <Plus className="w-3.5 h-3.5" />
+      {pageInfo.newLabel}
+    </Link>
+  ) : (
     <div className="flex items-center gap-2">
       <Link to="/admin/dokumente/new?typ=angebot" className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors">
-        <Plus className="w-3.5 h-3.5" />
-        Angebot
+        <Plus className="w-3.5 h-3.5" /> Angebot
       </Link>
       <Link to="/admin/dokumente/new?typ=auftragsbestaetigung" className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors">
-        <Plus className="w-3.5 h-3.5" />
-        Auftragsbestät.
+        <Plus className="w-3.5 h-3.5" /> Auftragsbestät.
       </Link>
       <Link to="/admin/dokumente/new?typ=rechnung" className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity">
-        <Plus className="w-3.5 h-3.5" />
-        Rechnung
+        <Plus className="w-3.5 h-3.5" /> Rechnung
       </Link>
     </div>
   );
 
+  const statusTabs = activeTyp ? STATUS_TABS[activeTyp] : null;
+  const canAcceptRejectCheck = (doc: Dokument) =>
+    doc.typ === "angebot" && (doc.status === "entwurf" || doc.status === "gesendet");
+
   if (!authChecked) return null;
 
   return (
-    <AdminLayout title="Finanzen" subtitle="Angebote · Rechnungen · Auftragsbestätigungen" actions={actions}>
+    <AdminLayout
+      title={pageInfo?.title ?? "Dokumente"}
+      subtitle={pageInfo?.subtitle ?? "Angebote · Rechnungen · Auftragsbestätigungen · Mahnungen"}
+      actions={actions}
+    >
 
       {/* ── KPIs ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
@@ -202,7 +288,7 @@ export default function AdminDokumenteListe() {
             valueCls: "text-green-700",
           },
           {
-            label: "Dokumente gesamt",
+            label: activeTyp ? `${pageInfo?.title ?? "Dokumente"} gesamt` : "Dokumente gesamt",
             value: String(dokumente.length),
             sub: `${filtered.length} angezeigt`,
             icon: FileText,
@@ -222,24 +308,30 @@ export default function AdminDokumenteListe() {
         ))}
       </div>
 
-      {/* ── Tabs + Search ── */}
+      {/* ── Status-Filter + Search ── */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-        {/* Tabs */}
-        <div className="flex gap-0.5 bg-muted/20 rounded-xl p-1 border border-border/20 overflow-x-auto flex-shrink-0">
-          {TABS.map((tab) => (
-            <Link
-              key={tab.id}
-              to={tab.path}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg whitespace-nowrap transition-all ${
-                activeTab === tab.id
-                  ? "bg-foreground text-background shadow-sm"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/60"
-              }`}
-            >
-              {tab.label}
-            </Link>
-          ))}
-        </div>
+        {/* Status-Tabs (nur bei Typ-Seiten) */}
+        {statusTabs && (
+          <div className="flex gap-0.5 bg-muted/20 rounded-xl p-1 border border-border/20 overflow-x-auto flex-shrink-0">
+            {statusTabs.map((tab) => {
+              const isActive = activeStatus === tab.status;
+              const href = tab.status ? `${basePath}?status=${tab.status}` : basePath;
+              return (
+                <Link
+                  key={tab.label}
+                  to={href}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg whitespace-nowrap transition-all ${
+                    isActive
+                      ? "bg-foreground text-background shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-background/60"
+                  }`}
+                >
+                  {tab.label}
+                </Link>
+              );
+            })}
+          </div>
+        )}
 
         {/* Search */}
         <div className="relative flex-1 min-w-0">
@@ -265,7 +357,7 @@ export default function AdminDokumenteListe() {
           </div>
           <p className="font-medium text-muted-foreground mb-1">Keine Dokumente</p>
           <p className="text-sm text-muted-foreground/60">
-            {search ? `Keine Treffer für „${search}"` : "Erstelle dein erstes Dokument"}
+            {search ? `Keine Treffer für „${search}"` : activeStatus ? `Keine Dokumente mit Status „${STATUS_CONFIG[activeStatus]?.label}"` : "Erstelle dein erstes Dokument"}
           </p>
         </div>
       ) : (
@@ -290,7 +382,7 @@ export default function AdminDokumenteListe() {
             const contact = doc.empfaenger.firma || doc.empfaenger.name || "—";
             const showMenu = actionId === doc.id;
             const isStorniert = doc.status === "storniert";
-            const canAcceptReject = doc.typ === "angebot" && (doc.status === "entwurf" || doc.status === "gesendet");
+            const canAcceptReject = canAcceptRejectCheck(doc);
 
             return (
               <div key={doc.id}
@@ -313,11 +405,10 @@ export default function AdminDokumenteListe() {
                   </div>
                 </div>
 
-                {/* ── Desktop: grid ── */}
+                {/* ── Desktop ── */}
                 <div className="hidden md:grid items-center px-4 gap-2"
                   style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 110px 108px" }}>
 
-                  {/* Daten-Zellen */}
                   <span className="font-mono text-xs font-semibold text-muted-foreground py-3">{doc.nummer}</span>
                   <div className="min-w-0 py-3 text-left">
                     <p className="truncate font-medium text-sm">{contact}</p>
@@ -333,7 +424,7 @@ export default function AdminDokumenteListe() {
                   <span className={`text-right font-semibold tabular-nums text-sm py-3 ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</span>
                   <div className="flex justify-end py-3"><StatusBadge status={doc.status} /></div>
 
-                  {/* ── Actions-Spalte ── */}
+                  {/* ── Actions ── */}
                   <div className="flex items-center justify-end gap-1 py-2" onClick={(e) => e.stopPropagation()}>
                     {canAcceptReject ? (
                       <>
@@ -342,16 +433,14 @@ export default function AdminDokumenteListe() {
                           title="Angenommen"
                           className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold text-green-700 bg-green-50 hover:bg-green-100 transition-colors whitespace-nowrap"
                         >
-                          <ThumbsUp className="w-3 h-3 shrink-0" />
-                          Ja
+                          <ThumbsUp className="w-3 h-3 shrink-0" /> Ja
                         </button>
                         <button
                           onClick={(e) => handleStatusChange(e, doc, "abgelehnt")}
                           title="Abgelehnt"
                           className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors whitespace-nowrap"
                         >
-                          <ThumbsDown className="w-3 h-3 shrink-0" />
-                          Nein
+                          <ThumbsDown className="w-3 h-3 shrink-0" /> Nein
                         </button>
                       </>
                     ) : (
@@ -375,16 +464,14 @@ export default function AdminDokumenteListe() {
                               onClick={(e) => handleStornieren(e, doc)}
                               className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-amber-700 hover:bg-amber-50 transition-colors text-left"
                             >
-                              <Ban className="w-3.5 h-3.5 shrink-0" />
-                              Stornieren
+                              <Ban className="w-3.5 h-3.5 shrink-0" /> Stornieren
                             </button>
                           )}
                           <button
                             onClick={(e) => handleDelete(e, doc)}
                             className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-red-600 hover:bg-red-50 transition-colors text-left"
                           >
-                            <Trash2 className="w-3.5 h-3.5 shrink-0" />
-                            Endgültig löschen
+                            <Trash2 className="w-3.5 h-3.5 shrink-0" /> Endgültig löschen
                           </button>
                         </div>
                       )}
@@ -394,16 +481,6 @@ export default function AdminDokumenteListe() {
               </div>
             );
           })}
-        </div>
-      )}
-
-      {/* Summary footer */}
-      {filtered.length > 0 && (
-        <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground px-1">
-          <span>{filtered.length} Dokument{filtered.length !== 1 ? "e" : ""}</span>
-          <span className="font-semibold tabular-nums">
-            Gesamt: {fmt(filtered.reduce((s, d) => s + d.brutto, 0))}
-          </span>
         </div>
       )}
     </AdminLayout>
