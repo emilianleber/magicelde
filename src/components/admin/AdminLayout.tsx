@@ -168,51 +168,28 @@ export const AdminPersistentShell = () => {
 
   const renderNav = (mobile = false, onClose?: () => void) => (
     <nav className="flex-1 overflow-y-auto px-3 py-4">
-      {crmNavItems.map((item) => (
-        <NavLink
-          key={item.href}
-          href={item.href}
-          label={item.label}
-          icon={item.icon}
-          badge={item.badge}
-          badgeCount={item.badge ? newRequestCount : undefined}
-          isActive={isActive(item.href)}
-          mobile={mobile}
-          onClick={onClose}
-        />
+      {mainNavItems.map((item) => (
+        <React.Fragment key={item.href}>
+          <NavLink
+            href={item.href}
+            label={item.label}
+            icon={item.icon}
+            badge={"badge" in item && (item as any).badge}
+            badgeCount={"badge" in item && (item as any).badge ? newRequestCount : undefined}
+            isActive={isActive(item.href)}
+            mobile={mobile}
+            onClick={onClose}
+          />
+          {item.href === "/admin/dokumente" && location.pathname.startsWith("/admin/dokumente") && (
+            <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
+              <SubNavLink href="/admin/dokumente/angebote" label="Angebote" isActive={location.pathname.startsWith("/admin/dokumente/angebote")} onClick={onClose} />
+              <SubNavLink href="/admin/dokumente/rechnungen" label="Rechnungen" isActive={location.pathname.startsWith("/admin/dokumente/rechnungen")} onClick={onClose} />
+              <SubNavLink href="/admin/dokumente/auftragsbestaetigung" label="Auftragsbestät." isActive={location.pathname.startsWith("/admin/dokumente/auftragsbestaetigung")} onClick={onClose} />
+              <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
+            </div>
+          )}
+        </React.Fragment>
       ))}
-
-      <SectionLabel label="Kommunikation" />
-      {komNavItems.map((item) => (
-        <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} isActive={isActive(item.href)} mobile={mobile} onClick={onClose} />
-      ))}
-
-      <SectionLabel label="Finanzen" />
-      <NavLink
-        href="/admin/dokumente"
-        label="Dokumente"
-        icon={FileText}
-        isActive={location.pathname.startsWith("/admin/dokumente")}
-        mobile={mobile}
-        onClick={onClose}
-      />
-      {location.pathname.startsWith("/admin/dokumente") && (
-        <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
-          <SubNavLink href="/admin/dokumente/angebote" label="Angebote" isActive={location.pathname.startsWith("/admin/dokumente/angebote")} onClick={onClose} />
-          <SubNavLink href="/admin/dokumente/auftragsbestaetigung" label="Auftragsbestät." isActive={location.pathname.startsWith("/admin/dokumente/auftragsbestaetigung")} onClick={onClose} />
-          <SubNavLink href="/admin/dokumente/rechnungen" label="Rechnungen" isActive={location.pathname.startsWith("/admin/dokumente/rechnungen")} onClick={onClose} />
-          <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
-        </div>
-      )}
-      <NavLink href="/admin/artikel" label="Artikel" icon={ShoppingBag} isActive={isActive("/admin/artikel")} mobile={mobile} onClick={onClose} />
-
-      <SectionLabel label="Produktionen" />
-      {prodNavItems.map((item) => (
-        <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} isActive={isActive(item.href)} mobile={mobile} onClick={onClose} />
-      ))}
-
-      <SectionLabel label="System" />
-      <NavLink href="/admin/settings" label="Einstellungen" icon={Settings} isActive={isActive("/admin/settings")} mobile={mobile} onClick={onClose} />
     </nav>
   );
 
