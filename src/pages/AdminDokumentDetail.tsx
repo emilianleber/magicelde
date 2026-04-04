@@ -183,7 +183,7 @@ export default function AdminDokumentDetail() {
     setMoreMenuOpen(false);
     try {
       await dokumenteService.delete(id);
-      navigate("/admin/dokumente");
+      navigate(-1);
     } catch (e: unknown) {
       alert("Fehler beim Löschen: " + ((e as any)?.message || String(e)));
       setDeleting(false);
@@ -594,7 +594,7 @@ body > div:last-child {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-background">
+      <div className="flex items-center justify-center min-h-[300px]">
         <div className="animate-spin rounded-full h-8 w-8 border-2 border-foreground border-t-transparent" />
       </div>
     );
@@ -602,10 +602,10 @@ body > div:last-child {
 
   if (!doc) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-background text-muted-foreground">
+      <div className="flex flex-col items-center justify-center min-h-[300px] text-muted-foreground">
         <p className="mb-4 font-medium">Dokument nicht gefunden.</p>
-        <button onClick={() => navigate("/admin/dokumente")} className="px-4 py-2 rounded-xl border border-border/30 text-sm hover:bg-muted/60">
-          Zurück zur Übersicht
+        <button onClick={() => navigate(-1)} className="px-4 py-2 rounded-xl border border-border/30 text-sm hover:bg-muted/60">
+          Zurück
         </button>
       </div>
     );
@@ -636,7 +636,7 @@ body > div:last-child {
       <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border/20">
         <div className="flex items-center justify-between px-6 py-3">
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate("/admin/dokumente")} className="p-2 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => navigate(-1)} className="p-2 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft className="w-4 h-4" />
             </button>
             <div>
@@ -678,12 +678,20 @@ body > div:last-child {
                 </button>
               </>
             )}
-            {nextTyp && !doc.folgedokumentId && (
-              <button onClick={handleConvert} disabled={converting}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-50">
-                <ArrowRight className="w-3.5 h-3.5" />
-                {converting ? "Wandle um…" : `→ ${TYP_LABEL[nextTyp]}`}
-              </button>
+            {nextTyp && (
+              doc.folgedokumentId ? (
+                <button onClick={() => navigate(`/admin/dokumente/${doc.folgedokumentId}`)}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors">
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  Zur {doc.folgedokumentTyp ? TYP_LABEL[doc.folgedokumentTyp] : TYP_LABEL[nextTyp]}
+                </button>
+              ) : (
+                <button onClick={handleConvert} disabled={converting}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-50">
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  {converting ? "Wandle um…" : TYP_LABEL[nextTyp]}
+                </button>
+              )
             )}
             <button onClick={() => navigate(`/admin/dokumente/${doc.id}/bearbeiten`)}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border/30 text-sm hover:bg-muted/60 transition-colors">
@@ -739,23 +747,14 @@ body > div:last-child {
         {/* Workflow stepper */}
         <WorkflowStepper currentTyp={doc.typ} />
 
-        {/* Workflow chain links */}
-        {(doc.quelldokumentId || doc.folgedokumentId) && (
-          <div className="px-6 py-1.5 bg-muted/5 border-t border-border/10 flex items-center gap-3 text-xs text-muted-foreground">
-            {doc.quelldokumentId && (
-              <button onClick={() => navigate(`/admin/dokumente/${doc.quelldokumentId}`)}
-                className="hover:text-foreground transition-colors flex items-center gap-1">
-                <ArrowLeft className="w-3 h-3" /> {doc.quelldokumentNummer}
-              </button>
-            )}
-            {doc.quelldokumentId && doc.folgedokumentId && <span>·</span>}
-            {doc.folgedokumentId && (
-              <button onClick={() => navigate(`/admin/dokumente/${doc.folgedokumentId}`)}
-                className="hover:text-foreground transition-colors flex items-center gap-1">
-                {doc.folgedokumentTyp ? TYP_LABEL[doc.folgedokumentTyp] : "Folgedokument"}
-                <ArrowRight className="w-3 h-3" />
-              </button>
-            )}
+        {/* Quelldokument-Link (von welchem Dokument wurde dieses erstellt) */}
+        {doc.quelldokumentId && (
+          <div className="px-6 py-1.5 bg-muted/5 border-t border-border/10 flex items-center gap-2 text-xs text-muted-foreground">
+            <span>Erstellt aus</span>
+            <button onClick={() => navigate(`/admin/dokumente/${doc.quelldokumentId}`)}
+              className="hover:text-foreground transition-colors flex items-center gap-1 font-medium">
+              <ArrowLeft className="w-3 h-3" /> {doc.quelldokumentNummer}
+            </button>
           </div>
         )}
       </div>
