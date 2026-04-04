@@ -269,7 +269,6 @@ const Kundenportal = () => {
   const [messages, setMessages] = useState<PortalMessage[]>([]);
   const [imapMails, setImapMails] = useState<any[]>([]);
   const [expandedRequestId, setExpandedRequestId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>(urlTab || "dashboard");
   const [loading, setLoading] = useState(true);
 
   const [settingsDraft, setSettingsDraft] = useState({
@@ -301,6 +300,7 @@ const Kundenportal = () => {
   const previewCustomerId = searchParams.get("preview");
   const urlTab = searchParams.get("tab") as Tab | null;
   const urlEventId = searchParams.get("eventId");
+  const [activeTab, setActiveTab] = useState<Tab>(urlTab || "dashboard");
   const [isAdminPreview, setIsAdminPreview] = useState(false);
   const [feedbackEventId, setFeedbackEventId] = useState<string | null>(urlEventId);
   const [fbRating, setFbRating] = useState(0);
