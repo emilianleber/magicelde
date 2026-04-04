@@ -269,15 +269,15 @@ export default function AdminDokumenteListe() {
           </p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-border/20 overflow-hidden bg-background">
+        <div className="rounded-2xl border border-border/20 bg-background">
           {/* Header */}
-          <div className="hidden md:grid text-[10px] text-muted-foreground uppercase font-semibold tracking-wider px-4 py-2.5 bg-muted/10 border-b border-border/10"
-            style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 100px 148px" }}>
+          <div className="hidden md:grid text-[10px] text-muted-foreground uppercase font-semibold tracking-wider px-4 py-2.5 bg-muted/10 border-b border-border/10 rounded-t-2xl"
+            style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 110px 108px" }}>
             <span>Nummer</span>
             <span>Kontakt</span>
             <span>Typ</span>
             <span>Datum</span>
-            <span>Fällig</span>
+            <span>Fällig / Gültig</span>
             <span className="text-right">Betrag</span>
             <span className="text-right">Status</span>
             <span className="text-right">Aktionen</span>
@@ -293,13 +293,13 @@ export default function AdminDokumenteListe() {
             const canAcceptReject = doc.typ === "angebot" && (doc.status === "entwurf" || doc.status === "gesendet");
 
             return (
-              <div key={doc.id} className={`relative border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 ${isOverdue ? "bg-red-50/30 dark:bg-red-900/10" : ""} ${isStorniert ? "opacity-50" : ""}`}>
+              <div key={doc.id}
+                className={`relative border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30 dark:bg-red-900/10" : ""} ${isStorniert ? "opacity-50" : ""}`}
+                onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
+              >
 
                 {/* ── Mobile ── */}
-                <div
-                  className="md:hidden px-4 py-3.5 flex items-center gap-3 cursor-pointer"
-                  onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
-                >
+                <div className="md:hidden px-4 py-3.5 flex items-center gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-sm font-semibold font-mono">{doc.nummer}</span>
@@ -313,31 +313,28 @@ export default function AdminDokumenteListe() {
                   </div>
                 </div>
 
-                {/* ── Desktop: grid mit fester Actions-Spalte ── */}
+                {/* ── Desktop: grid ── */}
                 <div className="hidden md:grid items-center px-4 gap-2"
-                  style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 100px 148px" }}>
+                  style={{ gridTemplateColumns: "110px 1fr 90px 88px 88px 100px 110px 108px" }}>
 
-                  {/* Daten-Zellen — klickbar zur Detail-Seite */}
-                  <button
-                    onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
-                    className="contents"
-                  >
-                    <span className="font-mono text-xs font-semibold text-muted-foreground py-3">{doc.nummer}</span>
-                    <div className="min-w-0 py-3">
-                      <p className="truncate font-medium text-sm">{contact}</p>
-                      {doc.empfaenger.firma && doc.empfaenger.name && (
-                        <p className="truncate text-xs text-muted-foreground">{doc.empfaenger.name}</p>
-                      )}
-                    </div>
-                    <span className={`text-xs font-medium py-3 ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
-                    <span className="text-xs text-muted-foreground py-3">{fmtDate(doc.datum)}</span>
-                    <span className={`text-xs py-3 ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>{fmtDate(doc.faelligAm)}</span>
-                    <span className={`text-right font-semibold tabular-nums text-sm py-3 ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</span>
-                    <div className="flex justify-end py-3"><StatusBadge status={doc.status} /></div>
-                  </button>
+                  {/* Daten-Zellen */}
+                  <span className="font-mono text-xs font-semibold text-muted-foreground py-3">{doc.nummer}</span>
+                  <div className="min-w-0 py-3 text-left">
+                    <p className="truncate font-medium text-sm">{contact}</p>
+                    {doc.empfaenger.firma && doc.empfaenger.name && (
+                      <p className="truncate text-xs text-muted-foreground">{doc.empfaenger.name}</p>
+                    )}
+                  </div>
+                  <span className={`text-xs font-medium py-3 ${TYP_COLOR[doc.typ] ?? "text-muted-foreground"}`}>{TYP_LABEL[doc.typ]}</span>
+                  <span className="text-xs text-muted-foreground py-3">{fmtDate(doc.datum)}</span>
+                  <span className={`text-xs py-3 ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>
+                    {doc.typ === "angebot" ? (fmtDate(doc.gueltigBis) || "—") : (fmtDate(doc.faelligAm) || "—")}
+                  </span>
+                  <span className={`text-right font-semibold tabular-nums text-sm py-3 ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</span>
+                  <div className="flex justify-end py-3"><StatusBadge status={doc.status} /></div>
 
-                  {/* ── Actions-Spalte (feste Breite 148px, immer gleich) ── */}
-                  <div className="flex items-center justify-end gap-1 py-2 pl-1 w-[148px] shrink-0">
+                  {/* ── Actions-Spalte ── */}
+                  <div className="flex items-center justify-end gap-1 py-2" onClick={(e) => e.stopPropagation()}>
                     {canAcceptReject ? (
                       <>
                         <button
@@ -358,8 +355,7 @@ export default function AdminDokumenteListe() {
                         </button>
                       </>
                     ) : (
-                      /* Platzhalter damit alle Zeilen gleich breit sind */
-                      <div className="w-[72px]" />
+                      <div className="w-[60px]" />
                     )}
 
                     {/* ··· Menü */}
@@ -373,7 +369,7 @@ export default function AdminDokumenteListe() {
                       </button>
 
                       {showMenu && (
-                        <div className="absolute right-0 top-full mt-1 z-30 bg-background border border-border/30 rounded-xl shadow-xl overflow-hidden w-44 py-1">
+                        <div className="absolute right-0 top-full mt-1 z-50 bg-background border border-border/30 rounded-xl shadow-xl overflow-hidden w-44 py-1">
                           {!isStorniert && (
                             <button
                               onClick={(e) => handleStornieren(e, doc)}
@@ -393,14 +389,6 @@ export default function AdminDokumenteListe() {
                         </div>
                       )}
                     </div>
-
-                    {/* Pfeil zur Detail-Seite */}
-                    <button
-                      onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
-                      className="p-1.5 rounded-lg text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/40 transition-colors"
-                    >
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
                   </div>
                 </div>
               </div>
