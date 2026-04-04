@@ -18,10 +18,10 @@ function buildHtml(previewHtml: string, title: string) {
   <title>${title}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; background: #fff; }
+    html, body { width: 595px; background: #fff; }
     body > div {
-      width: 100%;
-      aspect-ratio: 210 / 297;
+      width: 595px;
+      height: 842px;
       overflow: hidden;
       break-after: page;
     }
@@ -57,8 +57,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const page = await browser.newPage();
-    // A4 bei 96dpi = 794×1123px — Inhalt füllt die Seite 1:1
-    await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 1 });
+    // Viewport exakt wie das Dokument-Design (595px breit)
+    await page.setViewport({ width: 595, height: 842, deviceScaleFactor: 2 });
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
 
     const pdf = await page.pdf({
