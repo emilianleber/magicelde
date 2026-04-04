@@ -294,6 +294,7 @@ const Kundenportal = () => {
   const [offerActionError, setOfferActionError] = useState<Record<string, string>>({});
 
   const [eventCancelId, setEventCancelId] = useState<string | null>(null);
+  const [pdfLoading, setPdfLoading] = useState<string | null>(null); // doc.id während Download
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -611,22 +612,37 @@ const Kundenportal = () => {
     (d) => d.type === "Angebot" && d.status === "gesendet"
   );
 
-  const openAngebotInBrowser = (doc: PortalDocument) => {
-    const html = doc.preview_html;
-    if (!html) return;
-    const scale = ((210 / 25.4) * 96) / 595;
-    const win = window.open("", "_blank");
-    if (!win) return;
-    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${doc.nummer || "Angebot"}</title><style>
-      *{margin:0;padding:0;box-sizing:border-box}
-      html,body{width:${Math.round(595*scale)}px;background:#fff}
-      body>div{width:595px;height:840px;zoom:${scale.toFixed(6)};overflow:hidden;page-break-after:always}
-      body>div:last-child{page-break-after:auto}
-      @media print{@page{size:A4;margin:0}body{zoom:1}}
-      @media screen{body{padding:16px;background:#f4f4f5;display:flex;flex-direction:column;gap:12px}}
-      @media screen{body>div{box-shadow:0 2px 12px rgba(0,0,0,.12);border-radius:4px}}
-    </style></head><body>${html}</body></html>`);
-    win.document.close();
+  const openAngebotInBrowser = async (doc: PortalDocument) => {
+    if (!doc.preview_html) return;
+    const docTitle = doc.nummer || doc.name || "Angebot";
+    setPdfLoading(doc.id);
+
+    try {
+      // Vercel Serverless Function — Puppeteer (Node.js) → echtes Vektor-PDF
+      const res = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ preview_html: doc.preview_html, title: docTitle }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`PDF-Fehler (${res.status}): ${err}`);
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${docTitle}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("PDF error:", e);
+      alert("Fehler: " + (e instanceof Error ? e.message : String(e)));
+    } finally {
+      setPdfLoading(null);
+    }
   };
 
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
@@ -732,7 +748,7 @@ const Kundenportal = () => {
         {activeTab === "dashboard" && (
           <div className="space-y-5">
             {/* Welcome hero */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-accent/20 via-amber-50/80 to-orange-50/40 border border-accent/20 p-6 sm:p-8">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50/80 via-indigo-50/40 to-white border border-blue-100/60 p-6 sm:p-8">
               <div className="relative z-10">
                 <div className="flex items-center gap-4 mb-3">
                   <AvatarDisplay name={displayName} avatarUrl={customer?.avatar_url} size="lg" />
@@ -819,16 +835,16 @@ const Kundenportal = () => {
               };
 
               return (
-                <div key={angebot.id} className="rounded-3xl overflow-hidden border border-amber-200/60 shadow-sm bg-white">
-                  {/* Golden top accent */}
-                  <div className="h-1.5 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400" />
+                <div key={angebot.id} className="rounded-3xl overflow-hidden border border-blue-200/60 shadow-sm bg-white">
+                  {/* Festive top accent */}
+                  <div className="h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500" />
 
                   <div className="px-6 pt-5 pb-6">
                     {/* Header */}
                     <div className="flex items-start justify-between gap-3 mb-4">
                       <div>
-                        <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-1">
-                          ✦ Offenes Angebot
+                        <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">
+                          🎉 Dein Angebot ist fertig
                         </p>
                         <h2 className="font-display text-lg font-bold text-foreground leading-tight">
                           {angebot.nummer || angebot.name || "Angebot"}
@@ -843,14 +859,6 @@ const Kundenportal = () => {
                             {new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(betrag)}
                           </p>
                         )}
-                        {angebot.preview_html && (
-                          <button
-                            onClick={() => openAngebotInBrowser(angebot)}
-                            className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-700 hover:text-amber-900 transition-colors"
-                          >
-                            <Download className="w-3 h-3" /> Angebot öffnen
-                          </button>
-                        )}
                       </div>
                     </div>
 
@@ -862,11 +870,25 @@ const Kundenportal = () => {
                       Bitte entscheide dich: Möchtest du das Angebot annehmen oder hast du noch Fragen?
                     </p>
 
+                    {/* Angebot öffnen */}
+                    {angebot.preview_html && (
+                      <button
+                        onClick={() => openAngebotInBrowser(angebot)}
+                        disabled={pdfLoading === angebot.id}
+                        className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold transition-all active:scale-[0.98] mb-3 disabled:opacity-60 disabled:cursor-not-allowed"
+                      >
+                        {pdfLoading === angebot.id
+                          ? <><span className="w-4 h-4 rounded-full border-2 border-indigo-300 border-t-indigo-700 animate-spin" /> PDF wird erstellt…</>
+                          : <><Download className="w-4 h-4" /> Angebot als PDF herunterladen</>
+                        }
+                      </button>
+                    )}
+
                     {/* ANNEHMEN – big green */}
                     <button
                       disabled={isLoading || !reqId}
                       onClick={() => doAction("accept")}
-                      className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-white text-sm font-bold shadow-sm shadow-emerald-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-3"
+                      className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-sm font-bold shadow-sm shadow-emerald-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-3"
                     >
                       {isLoading
                         ? <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -1419,13 +1441,13 @@ const Kundenportal = () => {
                           const betrag = doc.brutto ?? doc.amount;
 
                           return (
-                            <div key={doc.id} className="rounded-2xl overflow-hidden border border-amber-200/60 bg-white shadow-sm">
-                              <div className="h-1 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400" />
+                            <div key={doc.id} className="rounded-2xl overflow-hidden border border-blue-200/60 bg-white shadow-sm">
+                              <div className="h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500" />
                               <div className="p-5">
                                 {/* Header row */}
                                 <div className="flex items-start justify-between gap-3 mb-3">
                                   <div>
-                                    <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-1">✦ Offenes Angebot</span>
+                                    <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">🎉 Dein Angebot ist fertig</span>
                                     <p className="font-sans text-sm font-semibold text-foreground">{doc.name}</p>
                                     <p className="font-sans text-xs text-muted-foreground">{new Date(doc.created_at).toLocaleDateString("de-DE")}</p>
                                   </div>
@@ -1435,22 +1457,28 @@ const Kundenportal = () => {
                                         {new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(betrag)}
                                       </p>
                                     )}
-                                    {doc.preview_html && (
-                                      <button
-                                        onClick={() => openAngebotInBrowser(doc)}
-                                        className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium text-amber-700 hover:text-amber-900"
-                                      >
-                                        <Download className="w-3 h-3" /> Öffnen
-                                      </button>
-                                    )}
                                   </div>
                                 </div>
+
+                                {/* Angebot öffnen */}
+                                {doc.preview_html && (
+                                  <button
+                                    onClick={() => openAngebotInBrowser(doc)}
+                                    disabled={pdfLoading === doc.id}
+                                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold transition-all active:scale-[0.98] mb-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                                  >
+                                    {pdfLoading === doc.id
+                                      ? <><span className="w-4 h-4 rounded-full border-2 border-indigo-300 border-t-indigo-700 animate-spin" /> PDF wird erstellt…</>
+                                      : <><Download className="w-4 h-4" /> Angebot als PDF herunterladen</>
+                                    }
+                                  </button>
+                                )}
 
                                 {/* Annehmen */}
                                 <button
                                   disabled={isLoading || !reqId}
                                   onClick={() => doAction("accept")}
-                                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold shadow-sm shadow-emerald-200 transition-all active:scale-[0.98] disabled:opacity-50 mb-2"
+                                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-sm shadow-emerald-300 transition-all active:scale-[0.98] disabled:opacity-50 mb-2"
                                 >
                                   {isLoading ? <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
                                   Angebot annehmen
