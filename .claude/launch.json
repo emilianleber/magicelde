@@ -3,9 +3,9 @@
   "configurations": [
     {
       "name": "magicelde",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 8080
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "--port", "5199"],
+      "port": 5199
     }
   ]
 }

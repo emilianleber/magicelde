@@ -511,13 +511,13 @@ const AdminCustomerDetail = () => {
         {/* Quick actions */}
         <div className="flex gap-2">
           <Link
-            to={`/admin/requests/new?customerId=${customer.id}`}
+            to={`/admin/bookings/new?customerId=${customer.id}`}
             className="inline-flex items-center gap-1.5 text-sm border border-border/30 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground hover:border-accent/20 transition-all"
           >
             <Plus className="w-4 h-4" /> Anfrage
           </Link>
           <Link
-            to={`/admin/events/new?customerId=${customer.id}`}
+            to={`/admin/bookings/new?customerId=${customer.id}`}
             className="inline-flex items-center gap-1.5 text-sm border border-border/30 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground hover:border-accent/20 transition-all"
           >
             <Plus className="w-4 h-4" /> Event
@@ -568,7 +568,7 @@ const AdminCustomerDetail = () => {
                 <MessageCircle className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
                 <p className="text-sm text-muted-foreground mb-3">Noch keine Anfragen.</p>
                 <Link
-                  to={`/admin/requests/new?customerId=${customer.id}`}
+                  to={`/admin/bookings/new?customerId=${customer.id}`}
                   className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-semibold hover:opacity-80 transition-opacity"
                 >
                   <Plus className="w-4 h-4" /> Erste Anfrage erstellen
@@ -579,7 +579,7 @@ const AdminCustomerDetail = () => {
                 {activeRequests.map((req) => (
                   <Link
                     key={req.id}
-                    to={`/admin/requests/${req.id}`}
+                    to={`/admin/bookings/${req.id}`}
                     className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30 hover:border-accent/20 hover:bg-muted/30 transition-all group"
                   >
                     <div className="flex-1 min-w-0">
@@ -612,7 +612,7 @@ const AdminCustomerDetail = () => {
                 <Calendar className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
                 <p className="text-sm text-muted-foreground mb-3">Noch keine Events.</p>
                 <Link
-                  to={`/admin/events/new?customerId=${customer.id}`}
+                  to={`/admin/bookings/new?customerId=${customer.id}`}
                   className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-semibold hover:opacity-80 transition-opacity"
                 >
                   <Plus className="w-4 h-4" /> Erstes Event erstellen
@@ -623,7 +623,7 @@ const AdminCustomerDetail = () => {
                 {activeEvents.map((evt) => (
                   <Link
                     key={evt.id}
-                    to={`/admin/events/${evt.id}`}
+                    to={`/admin/bookings/event/${evt.id}`}
                     className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30 hover:border-accent/20 hover:bg-muted/30 transition-all group"
                   >
                     {evt.event_date && (

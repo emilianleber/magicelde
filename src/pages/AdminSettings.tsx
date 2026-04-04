@@ -86,7 +86,7 @@ const LAYOUTS_META = [
 const inputCls =
   "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
 
-type TabId = "vorlagen" | "textvorlagen" | "signatur" | "unternehmen" | "bank" | "dokumente";
+type TabId = "vorlagen" | "textvorlagen" | "signatur" | "unternehmen" | "bank" | "dokumente" | "artikel" | "kalender";
 
 interface DokumentTextvorlage {
   id: string;
@@ -428,6 +428,8 @@ const AdminSettings = () => {
     { id: "unternehmen", label: "Unternehmen" },
     { id: "bank", label: "Bank" },
     { id: "dokumente", label: "Dokumente" },
+    { id: "artikel", label: "Artikel" },
+    { id: "kalender", label: "Kalender-Abo" },
   ];
 
   return (
@@ -983,6 +985,88 @@ const AdminSettings = () => {
           </button>
         </div>
       )}
+      {activeTab === "artikel" && (
+        <div className="p-6 rounded-2xl bg-muted/20 border border-border/30 text-center">
+          <p className="text-sm text-muted-foreground mb-3">Artikel-Stammdaten verwalten: Leistungen, Produkte und Preise für Angebote und Rechnungen.</p>
+          <a href="/admin/artikel" className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 transition-opacity">
+            Artikel verwalten
+          </a>
+        </div>
+      )}
+
+      {activeTab === "kalender" && (() => {
+        const calUrl = `https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/calendar-feed`;
+        const copyUrl = () => {
+          navigator.clipboard.writeText(calUrl);
+        };
+        return (
+          <div className="space-y-5">
+            <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+              <h3 className="text-sm font-bold text-foreground mb-3">Kalender-Abo URL</h3>
+              <p className="text-xs text-muted-foreground mb-4">
+                Abonniere diesen Kalender-Feed in Apple Kalender, Google Kalender oder Outlook.
+                Alle Anfragen und gebuchten Events erscheinen automatisch mit Status-Erkennung.
+              </p>
+              <div className="flex items-center gap-2 mb-4">
+                <input
+                  readOnly
+                  value={calUrl}
+                  className="flex-1 rounded-xl bg-background border border-border/30 px-4 py-2.5 text-xs font-mono text-foreground select-all"
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
+                />
+                <button
+                  onClick={copyUrl}
+                  className="shrink-0 inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 transition-opacity"
+                >
+                  Kopieren
+                </button>
+              </div>
+
+              <div className="space-y-3 text-xs text-muted-foreground">
+                <div className="p-3 rounded-xl bg-background/60 border border-border/20">
+                  <p className="font-semibold text-foreground mb-1">Apple Kalender (iPhone/Mac)</p>
+                  <p>Einstellungen → Kalender → Accounts → Kalenderabo hinzufügen → URL einfügen</p>
+                </div>
+                <div className="p-3 rounded-xl bg-background/60 border border-border/20">
+                  <p className="font-semibold text-foreground mb-1">Google Kalender</p>
+                  <p>Andere Kalender → Per URL → URL einfügen (aktualisiert ca. alle 12h)</p>
+                </div>
+                <div className="p-3 rounded-xl bg-background/60 border border-border/20">
+                  <p className="font-semibold text-foreground mb-1">Outlook</p>
+                  <p>Kalender → Kalender hinzufügen → Aus dem Internet abonnieren → URL einfügen</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+              <h3 className="text-sm font-bold text-foreground mb-3">So erkennst du den Status</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-3 p-2 rounded-lg">
+                  <span className="text-lg">✅</span>
+                  <div>
+                    <p className="font-semibold text-foreground">GEBUCHT</p>
+                    <p className="text-xs text-muted-foreground">Fest gebuchtes Event mit Erinnerungen</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-2 rounded-lg">
+                  <span className="text-lg">🟡</span>
+                  <div>
+                    <p className="font-semibold text-foreground">ANFRAGE</p>
+                    <p className="text-xs text-muted-foreground">Termin reserviert, noch nicht gebucht</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-2 rounded-lg">
+                  <span className="text-lg">⚠️</span>
+                  <div>
+                    <p className="font-semibold text-foreground">Erinnerung</p>
+                    <p className="text-xs text-muted-foreground">Automatisch wenn Uhrzeit noch fehlt</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </AdminLayout>
   );
 };

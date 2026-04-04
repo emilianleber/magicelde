@@ -416,6 +416,80 @@ export const dokumenteService = {
       await this.setStatus(quelleId, "akzeptiert");
     }
 
+    // Positionen kopieren
+    let positionen = quelle.positionen.map((p) => ({ ...p }));
+    let fusstext = quelle.fusstext;
+
+    // Bei Schlussrechnung: Abschlagsrechnungen verrechnen
+    if (zielTyp === "rechnung" && (quelle.typ === "auftragsbestaetigung" || quelle.typ === "abschlagsrechnung")) {
+      // Alle Abschlagsrechnungen für dasselbe Event/Request finden
+      const eventId = quelle.eventId;
+      const requestId = quelle.requestId;
+      const customerId = quelle.customerId;
+
+      let abschlagsQuery = supabase
+        .from("portal_documents")
+        .select("id, document_number, total, bezahlt_betrag, status, type")
+        .eq("type", "Abschlagsrechnung")
+        .neq("status", "storniert");
+
+      if (eventId) abschlagsQuery = abschlagsQuery.eq("event_id", eventId);
+      else if (requestId) abschlagsQuery = abschlagsQuery.eq("request_id", requestId);
+      else if (customerId) abschlagsQuery = abschlagsQuery.eq("customer_id", customerId);
+
+      const { data: abschlagsRechnungen } = await abschlagsQuery;
+
+      if (abschlagsRechnungen && abschlagsRechnungen.length > 0) {
+        // Abzugspositionen ans Ende der Positionen hängen
+        const maxPos = positionen.length > 0 ? Math.max(...positionen.map(p => p.position)) : 0;
+
+        // Haupt-MwSt-Satz aus der Quelle bestimmen (meistverwendeter Satz)
+        const mwstCounts: Record<number, number> = {};
+        quelle.positionen.forEach(p => {
+          if (p.typ === "leistung" || p.typ === "produkt") {
+            mwstCounts[p.mwstSatz] = (mwstCounts[p.mwstSatz] || 0) + Math.abs(p.gesamt);
+          }
+        });
+        const hauptMwstSatz = Object.entries(mwstCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+        const mwstSatz = hauptMwstSatz ? Number(hauptMwstSatz) : 19;
+
+        // Trennzeile
+        positionen.push({
+          id: `tmp-sep`,
+          position: maxPos + 1,
+          typ: "text",
+          bezeichnung: "Abzüglich bereits geleisteter Abschlagszahlungen:",
+          menge: 0,
+          einheit: "",
+          einzelpreis: 0,
+          gesamt: 0,
+          mwstSatz: 0,
+          rabattProzent: 0,
+        });
+
+        abschlagsRechnungen.forEach((ar, i) => {
+          // Bezahlten Betrag nutzen, Fallback auf Gesamtbetrag
+          const bezahlt = (ar.bezahlt_betrag as number) || (ar.total as number) || 0;
+          positionen.push({
+            id: `tmp-ar-${i}`,
+            position: maxPos + 2 + i,
+            typ: "leistung",
+            bezeichnung: `Abzug ${ar.document_number || "Abschlagsrechnung"}`,
+            menge: 1,
+            einheit: "pauschal",
+            einzelpreis: -bezahlt,
+            gesamt: -bezahlt,
+            mwstSatz,
+            rabattProzent: 0,
+          });
+        });
+
+        // Fußtext ergänzen
+        const arNummern = abschlagsRechnungen.map(ar => ar.document_number).filter(Boolean).join(", ");
+        fusstext = `Bereits gezahlte Abschlagsrechnungen (${arNummern}) wurden verrechnet.\n\n${fusstext || ""}`;
+      }
+    }
+
     // Neues Dokument erstellen
     const zielDoc = await this.create(
       zielTyp,
@@ -432,14 +506,14 @@ export const dokumenteService = {
         empfaenger: quelle.empfaenger,
         absender: quelle.absender,
         kopftext: quelle.kopftext,
-        fusstext: quelle.fusstext,
+        fusstext,
         zahlungszielTage: quelle.zahlungszielTage,
         rabattProzent: quelle.rabattProzent,
         faelligAm: zielTyp === "rechnung" || zielTyp === "abschlagsrechnung"
           ? addDays(new Date(), quelle.zahlungszielTage)
           : undefined,
       },
-      quelle.positionen.map((p) => ({ ...p })),
+      positionen,
     );
 
     // Quelldokument mit Folge-Referenz aktualisieren
@@ -529,6 +603,110 @@ export const dokumenteService = {
     }
 
     return { offenBetrag, ueberfaelligBetrag, bezahltMonatBetrag, offenAnzahl };
+  },
+
+  /** Erweiterte Finanzkennzahlen für das Finanz-Dashboard */
+  async getFinanzDashboard(): Promise<{
+    offenBetrag: number;
+    ueberfaelligBetrag: number;
+    bezahltMonatBetrag: number;
+    offenAnzahl: number;
+    jahresUmsatz: number;
+    letzterMonatUmsatz: number;
+    monatsUmsaetze: { monat: string; betrag: number }[];
+    prognose: number;
+    offeneDokumente: { id: string; nummer: string; typ: string; betrag: number; faellig: string; kunde: string }[];
+  }> {
+    const now = new Date();
+    const yearStart = `${now.getFullYear()}-01-01`;
+    const today = now.toISOString().split("T")[0];
+
+    // Alle Rechnungsdokumente laden
+    const { data } = await supabase
+      .from("portal_documents")
+      .select("id, document_number, type, total, status, faellig_am, due_date, created_at, bezahlt_betrag, customer_id")
+      .in("type", ["Rechnung", "Abschlagsrechnung"]);
+
+    // Kundennamen laden
+    const { data: customers } = await supabase
+      .from("portal_customers")
+      .select("id, name, company");
+    const custMap: Record<string, string> = {};
+    (customers || []).forEach(c => {
+      custMap[c.id] = c.company ? `${c.name} (${c.company})` : (c.name || "");
+    });
+
+    let offenBetrag = 0, ueberfaelligBetrag = 0, bezahltMonatBetrag = 0, offenAnzahl = 0;
+    let jahresUmsatz = 0, letzterMonatUmsatz = 0;
+    const monatsBuckets: Record<string, number> = {};
+    const offeneDokumente: { id: string; nummer: string; typ: string; betrag: number; faellig: string; kunde: string }[] = [];
+
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+
+    for (const row of data || []) {
+      const status = row.status as string;
+      const brutto = (row.total as number) || 0;
+      const bezahlt = (row.bezahlt_betrag as number) || 0;
+      const offen = brutto - bezahlt;
+      const faellig = (row.faellig_am as string) || (row.due_date as string) || "";
+      const created = row.created_at as string;
+
+      // Offene Beträge
+      if (status === "offen" || status === "teilbezahlt" || status === "gesendet") {
+        offenBetrag += offen;
+        offenAnzahl++;
+        if (faellig && faellig < today) ueberfaelligBetrag += offen;
+        offeneDokumente.push({
+          id: row.id as string,
+          nummer: (row.document_number as string) || "",
+          typ: (row.type as string) || "",
+          betrag: offen,
+          faellig: faellig || "",
+          kunde: custMap[row.customer_id as string] || "",
+        });
+      }
+
+      // Bezahlt diesen Monat
+      if (status === "bezahlt" && created >= monthStart.toISOString()) {
+        bezahltMonatBetrag += bezahlt;
+      }
+
+      // Jahresumsatz (bezahlt in diesem Jahr)
+      if (status === "bezahlt" && created >= yearStart) {
+        jahresUmsatz += bezahlt;
+      }
+
+      // Letzter Monat
+      if (status === "bezahlt" && created >= lastMonthStart.toISOString() && created <= lastMonthEnd.toISOString()) {
+        letzterMonatUmsatz += bezahlt;
+      }
+
+      // Monatliche Umsätze (letzte 12 Monate)
+      if (status === "bezahlt" && created >= yearStart) {
+        const monat = created.slice(0, 7); // "2026-04"
+        monatsBuckets[monat] = (monatsBuckets[monat] || 0) + bezahlt;
+      }
+    }
+
+    // Monatsumsätze sortiert
+    const monatsUmsaetze = Object.entries(monatsBuckets)
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([monat, betrag]) => ({ monat, betrag }));
+
+    // Prognose: Durchschnitt der letzten 3 Monate × 12
+    const letzte3 = monatsUmsaetze.slice(-3);
+    const avg3 = letzte3.length > 0 ? letzte3.reduce((s, m) => s + m.betrag, 0) / letzte3.length : 0;
+    const prognose = avg3 * 12;
+
+    // Offene Dokumente nach Fälligkeit sortieren
+    offeneDokumente.sort((a, b) => (a.faellig || "9999").localeCompare(b.faellig || "9999"));
+
+    return {
+      offenBetrag, ueberfaelligBetrag, bezahltMonatBetrag, offenAnzahl,
+      jahresUmsatz, letzterMonatUmsatz, monatsUmsaetze, prognose, offeneDokumente,
+    };
   },
 };
 

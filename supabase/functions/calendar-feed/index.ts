@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std/http/server.ts";
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase = createClient(
@@ -15,34 +15,42 @@ const escapeIcsText = (value?: string | null) => {
     .replace(/;/g, "\\;");
 };
 
-const formatUtcDateTime = (date: Date) => {
-  return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-};
+const formatUtcDateTime = (date: Date) =>
+  date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
-const formatAllDayDate = (dateStr: string) => {
-  return dateStr.replace(/-/g, "");
-};
+const formatAllDayDate = (dateStr: string) => dateStr.replace(/-/g, "");
 
 const addOneDay = (dateStr: string) => {
   const d = new Date(`${dateStr}T00:00:00`);
   d.setDate(d.getDate() + 1);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}${m}${day}`;
+  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
 };
 
-const buildDateTimeFromDateAndTime = (dateStr: string, timeStr: string) => {
-  const date = new Date(`${dateStr}T${timeStr}:00`);
-  return formatUtcDateTime(date);
+const buildDateTime = (dateStr: string, timeStr: string) =>
+  formatUtcDateTime(new Date(`${dateStr}T${timeStr}:00`));
+
+// Status-Emoji für schnelle visuelle Erkennung
+const statusEmoji = (status: string | null): string => {
+  switch (status) {
+    case "neu": return "🔵";
+    case "in_bearbeitung":
+    case "details_besprechen": return "🟡";
+    case "angebot_gesendet":
+    case "warte_auf_kunde": return "🟠";
+    case "bestätigt": return "🟢";
+    case "abgelehnt": return "🔴";
+    default: return "⚪";
+  }
 };
 
 serve(async () => {
+  // Events mit Kundennamen laden
   const { data: events, error: eventsError } = await supabase
     .from("portal_events")
-    .select("*")
+    .select("*, customer:customer_id(name, company, email, phone)")
     .is("deleted_at", null);
 
+  // Nur offene Anfragen (ohne event_id = noch nicht gebucht)
   const { data: requests, error: requestsError } = await supabase
     .from("portal_requests")
     .select("*")
@@ -61,93 +69,150 @@ VERSION:2.0
 PRODID:-//Magicel CRM//DE
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-WR-CALNAME:Magicel CRM
+X-WR-CALNAME:Magicel Events
 X-WR-TIMEZONE:Europe/Berlin
+REFRESH-INTERVAL;VALUE=DURATION:PT15M
+X-PUBLISHED-TTL:PT15M
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+BEGIN:STANDARD
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+END:DAYLIGHT
+END:VTIMEZONE
 `;
 
-  // EVENTS = fest gebucht
+  // ══════════════════════════════════════════════════════
+  // GEBUCHTE EVENTS — grün, fest im Kalender
+  // ══════════════════════════════════════════════════════
   for (const e of events || []) {
     if (!e.event_date) continue;
 
-    const eventName = e.title || "Veranstaltung";
-    const companyOrName = e.company || e.firma || e.customer_name || "";
-    const summary = companyOrName
-      ? `${eventName} ${companyOrName} – gebucht`
-      : `${eventName} – gebucht`;
+    const customer = e.customer as any;
+    const customerName = customer?.name || "";
+    const customerCompany = customer?.company || "";
+    const displayName = customerCompany ? `${customerName} (${customerCompany})` : customerName;
 
-    const noteLines = [
-      `Status: ${e.status || "gebucht"}`,
+    // Summary: ✅ Hochzeit Max Mustermann (Firma GmbH) — gebucht
+    const eventType = e.title || "Event";
+    const summary = `✅ ${eventType}${displayName ? ` – ${displayName}` : ""} — GEBUCHT`;
+
+    // Beschreibung mit allen Details
+    const descLines = [
+      `Status: GEBUCHT`,
+      `Typ: ${eventType}`,
+      customerName ? `Kunde: ${customerName}` : null,
+      customerCompany ? `Firma: ${customerCompany}` : null,
+      customer?.email ? `E-Mail: ${customer.email}` : null,
+      customer?.phone ? `Tel: ${customer.phone}` : null,
       e.format ? `Format: ${e.format}` : null,
       e.guests ? `Gäste: ${e.guests}` : null,
-      e.location ? `Ort: ${e.location}` : null,
-      e.notes ? `Details: ${e.notes}` : null,
-      e.request_id
-        ? `Anfrage: https://magicel.de/admin/requests/${e.request_id}`
-        : null,
-      `Event: https://magicel.de/admin/events/${e.id}`,
-    ].filter(Boolean);
+      e.notes ? `Notizen: ${e.notes}` : null,
+      "",
+      `CRM: https://admin.magicel.de/admin/bookings/event/${e.id}`,
+    ].filter((l) => l !== null);
 
-    const description = noteLines.join("\n");
-
-    ics += `
-BEGIN:VEVENT
+    ics += `BEGIN:VEVENT
 UID:event-${e.id}@magicel
 DTSTAMP:${formatUtcDateTime(new Date())}
 `;
 
     if (e.start_time) {
-      const start = buildDateTimeFromDateAndTime(e.event_date, e.start_time);
+      const start = buildDateTime(e.event_date, e.start_time);
       const end = e.end_time
-        ? buildDateTimeFromDateAndTime(e.event_date, e.end_time)
-        : start;
-
+        ? buildDateTime(e.event_date, e.end_time)
+        : buildDateTime(e.event_date, `${String(Number(e.start_time.split(":")[0]) + 3).padStart(2, "0")}:${e.start_time.split(":")[1] || "00"}`);
       ics += `DTSTART:${start}
 DTEND:${end}
 `;
     } else {
+      // Ganztägig + Erinnerung dass Uhrzeit fehlt
       ics += `DTSTART;VALUE=DATE:${formatAllDayDate(e.event_date)}
 DTEND;VALUE=DATE:${addOneDay(e.event_date)}
 `;
     }
 
+    // Erinnerungen: 1 Tag + 2 Stunden vorher
     ics += `SUMMARY:${escapeIcsText(summary)}
 LOCATION:${escapeIcsText(e.location || "")}
-DESCRIPTION:${escapeIcsText(description)}
-END:VEVENT
+DESCRIPTION:${escapeIcsText(descLines.join("\n"))}
+CATEGORIES:GEBUCHT
+STATUS:CONFIRMED
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:Morgen: ${escapeIcsText(eventType)} ${escapeIcsText(displayName)}
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT2H
+ACTION:DISPLAY
+DESCRIPTION:In 2 Stunden: ${escapeIcsText(eventType)} ${escapeIcsText(displayName)}
+END:VALARM
+`;
+
+    // Extra Erinnerung wenn keine Uhrzeit
+    if (!e.start_time) {
+      ics += `BEGIN:VALARM
+TRIGGER:-P3D
+ACTION:DISPLAY
+DESCRIPTION:⚠️ UHRZEIT FEHLT: ${escapeIcsText(eventType)} am ${e.event_date} – bitte Uhrzeit mit ${escapeIcsText(customerName)} klären!
+END:VALARM
+`;
+    }
+
+    ics += `END:VEVENT
 `;
   }
 
-  // REQUESTS = reserviert / Option
+  // ══════════════════════════════════════════════════════
+  // ANFRAGEN — gelb/orange, Termin reserviert
+  // ══════════════════════════════════════════════════════
   for (const r of requests || []) {
     if (!r.datum) continue;
 
-    const eventType = r.anlass || "Veranstaltung";
-    const companyOrName = r.firma || r.name || "";
-    const summary = companyOrName
-      ? `Termin reserviert: ${eventType} ${companyOrName}`
-      : `Termin reserviert: ${eventType}`;
+    const eventType = r.anlass || "Anfrage";
+    const contactName = r.name || "";
+    const company = r.firma || "";
+    const displayName = company ? `${contactName} (${company})` : contactName;
 
-    const noteLines = [
+    // Summary: 🟡 Hochzeit Max Mustermann — ANFRAGE
+    const emoji = statusEmoji(r.status);
+    const summary = `${emoji} ${eventType}${displayName ? ` – ${displayName}` : ""} — ANFRAGE`;
+
+    const descLines = [
       `Status: ${r.status || "Anfrage"}`,
+      `Typ: ${eventType}`,
+      contactName ? `Kontakt: ${contactName}` : null,
+      company ? `Firma: ${company}` : null,
+      r.email ? `E-Mail: ${r.email}` : null,
+      r.phone ? `Tel: ${r.phone}` : null,
       r.format ? `Format: ${r.format}` : null,
       r.gaeste ? `Gäste: ${r.gaeste}` : null,
       r.ort ? `Ort: ${r.ort}` : null,
-      r.nachricht ? `Details: ${r.nachricht}` : null,
-      `Anfrage: https://magicel.de/admin/requests/${r.id}`,
-    ].filter(Boolean);
+      r.nachricht ? `Nachricht: ${r.nachricht}` : null,
+      "",
+      `CRM: https://admin.magicel.de/admin/bookings/${r.id}`,
+    ].filter((l) => l !== null);
 
-    const description = noteLines.join("\n");
-
-    ics += `
-BEGIN:VEVENT
+    ics += `BEGIN:VEVENT
 UID:req-${r.id}@magicel
 DTSTAMP:${formatUtcDateTime(new Date())}
 `;
 
     if (r.uhrzeit) {
-      const start = buildDateTimeFromDateAndTime(r.datum, r.uhrzeit);
-
+      const start = buildDateTime(r.datum, r.uhrzeit);
       ics += `DTSTART:${start}
+DTEND:${start}
 `;
     } else {
       ics += `DTSTART;VALUE=DATE:${formatAllDayDate(r.datum)}
@@ -157,8 +222,23 @@ DTEND;VALUE=DATE:${addOneDay(r.datum)}
 
     ics += `SUMMARY:${escapeIcsText(summary)}
 LOCATION:${escapeIcsText(r.ort || "")}
-DESCRIPTION:${escapeIcsText(description)}
-END:VEVENT
+DESCRIPTION:${escapeIcsText(descLines.join("\n"))}
+CATEGORIES:ANFRAGE
+STATUS:TENTATIVE
+TRANSP:TRANSPARENT
+`;
+
+    // Erinnerung: Uhrzeit klären wenn keine hinterlegt
+    if (!r.uhrzeit) {
+      ics += `BEGIN:VALARM
+TRIGGER:-P5D
+ACTION:DISPLAY
+DESCRIPTION:⚠️ UHRZEIT KLÄREN: ${escapeIcsText(eventType)} mit ${escapeIcsText(contactName)} am ${r.datum}
+END:VALARM
+`;
+    }
+
+    ics += `END:VEVENT
 `;
   }
 
@@ -167,6 +247,8 @@ END:VEVENT
   return new Response(ics, {
     headers: {
       "Content-Type": "text/calendar; charset=utf-8",
+      "Content-Disposition": "inline; filename=magicel-events.ics",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
     },
   });
 });
