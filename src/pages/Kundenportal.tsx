@@ -389,9 +389,11 @@ const Kundenportal = () => {
       cust = byUserId;
 
       if (!cust) {
-        const { data: byEmail } = await supabase.from("portal_customers").select("*").eq("email", user.email).maybeSingle();
+        // .limit(1) statt .maybeSingle() — verhindert Fehler bei Duplikaten
+        const { data: byEmailArr } = await supabase.from("portal_customers").select("*").eq("email", user.email).limit(1);
+        const byEmail = byEmailArr?.[0] || null;
         if (byEmail) {
-          // user_id verknüpfen – schlägt UPDATE fehl, nehmen wir byEmail (kein Duplikat!)
+          // user_id verknüpfen
           const { data: linked } = await supabase.from("portal_customers").update({ user_id: user.id }).eq("id", byEmail.id).select("*").single();
           cust = linked ?? byEmail;
         }
