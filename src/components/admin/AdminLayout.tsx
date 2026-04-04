@@ -71,7 +71,7 @@ const bottomNavItems = [
   { label: "Finanzen",  href: "/admin/dokumente", icon: FileText },
 ];
 
-const IS_ADMIN_DOMAIN = window.location.hostname === "admin.magicel.de";
+const IS_ADMIN_DOMAIN = window.location.hostname === "admin.magicel.de" || window.location.hostname === "localhost";
 
 // ── Reusable NavLink ─────────────────────────────────────────────────────────
 

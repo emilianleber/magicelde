@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService } from "@/services/dokumenteService";
@@ -105,6 +105,7 @@ export default function AdminDokumentDetail() {
   const [deleting, setDeleting] = useState(false);
 
   const [sendPanel, setSendPanel] = useState(false);
+  const sendPanelAutoOpened = useRef(false); // verhindert Re-Open nach load()
   const [sendLoading, setSendLoading] = useState<"download" | "portal" | "email" | null>(null);
   const [emailTo, setEmailTo] = useState("");
   const [emailSubject, setEmailSubject] = useState("");
@@ -138,8 +139,10 @@ export default function AdminDokumentDetail() {
   useEffect(() => { if (authChecked) load(); }, [authChecked, id]);
 
   // Send-Panel direkt öffnen wenn ?send=1 in der URL (kommt vom Editor-Versenden-Button)
+  // useRef verhindert, dass das Panel nach load() erneut öffnet
   useEffect(() => {
-    if (!doc || !searchParams.get("send")) return;
+    if (!doc || !searchParams.get("send") || sendPanelAutoOpened.current) return;
+    sendPanelAutoOpened.current = true;
     openSendPanel();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc, searchParams]);
@@ -520,7 +523,8 @@ body > div:last-child {
         });
       }
 
-      // 4. Panel schließen + URL bereinigen (verhindert dass useEffect Panel wieder öffnet) + Toast
+      // 4. Panel schließen + URL bereinigen + Toast
+      sendPanelAutoOpened.current = false; // Reset: falls User erneut per ?send=1 kommt
       setSendPanel(false);
       navigate(`/admin/dokumente/${id}`, { replace: true }); // entfernt ?send=1
       setPublishedToast(true);
