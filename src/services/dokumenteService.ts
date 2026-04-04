@@ -183,6 +183,11 @@ async function naechsteNummer(typ: DokumentTyp): Promise<string> {
   return formatted;
 }
 
+// ── Public: fetch & reserve next number without creating the document yet ──
+export async function reserviereNummer(typ: DokumentTyp): Promise<string> {
+  return naechsteNummer(typ);
+}
+
 // ── Haupt-Service ────────────────────────────────────────────────────────────
 
 export const dokumenteService = {
@@ -233,8 +238,9 @@ export const dokumenteService = {
     typ: DokumentTyp,
     data: Partial<Omit<Dokument, "id" | "nummer" | "typ" | "createdAt" | "updatedAt">>,
     positionen: Omit<Dokumentposition, "id">[],
+    vorgeneriertNummer?: string,
   ): Promise<Dokument> {
-    const nummer = await naechsteNummer(typ);
+    const nummer = vorgeneriertNummer || await naechsteNummer(typ);
     const summen = berechneSummen(
       positionen.map((p, i) => ({ ...p, id: `tmp-${i}` })),
       data.rabattProzent,

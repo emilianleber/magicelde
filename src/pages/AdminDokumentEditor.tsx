@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { flushSync } from "react-dom";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { dokumenteService } from "@/services/dokumenteService";
+import { dokumenteService, reserviereNummer } from "@/services/dokumenteService";
 import type { DokumentTyp } from "@/types/dokumente";
 import type { Artikel } from "@/types/dokumente";
 import { ArrowLeft, ChevronDown, ChevronUp, Eye, Printer, Save, Send, Trash2, X } from "lucide-react";
@@ -1506,6 +1507,14 @@ export default function AdminDokumentEditor() {
       };
       const dokumentTyp = typMap[typ] || "angebot";
 
+      // For new documents: pre-generate the number so the preview HTML already contains it
+      let vorgeneriertNummer: string | undefined;
+      if (isNew) {
+        vorgeneriertNummer = await reserviereNummer(dokumentTyp);
+        // Synchronously update state so the DOM re-renders with the number before we capture it
+        flushSync(() => setNummer(vorgeneriertNummer!));
+      }
+
       const previewHtml = document.getElementById("doc-preview-capture")?.innerHTML || "";
 
       if (isNew) {
@@ -1529,6 +1538,7 @@ export default function AdminDokumentEditor() {
             previewHtml,
           },
           posForService,
+          vorgeneriertNummer,
         );
         setMessage("Gespeichert");
         navigate(`/admin/dokumente/${saved.id}`);
