@@ -177,6 +177,40 @@ const requestMailTemplate = (request: any) => {
   ];
 
   switch (request.status) {
+    case "neu":
+      return {
+        subject: "Deine Anfrage ist eingegangen – Emilian Leber",
+        html: getEmailShell(
+          "Anfrage",
+          "Danke für deine Anfrage!",
+          `Hallo ${request.name}, vielen Dank für deine Anfrage! Ich habe sie erhalten und melde mich in Kürze persönlich bei dir.`,
+          `${statusBadge("✦ Anfrage eingegangen", "#2563eb", "#eff6ff")}${infoTable(rows)}`
+        ),
+      };
+
+    case "in_bearbeitung":
+    case "details_besprechen":
+      return {
+        subject: "Deine Anfrage wird bearbeitet – Emilian Leber",
+        html: getEmailShell(
+          "Anfrage",
+          "Ich arbeite an deiner Anfrage.",
+          `Hallo ${request.name}, ich habe mir deine Anfrage angeschaut und arbeite gerade an einem passenden Konzept für dich. Ich melde mich in Kürze mit weiteren Details.`,
+          `${statusBadge("✦ In Bearbeitung", "#b45309", "#fffbeb")}${infoTable(rows)}`
+        ),
+      };
+
+    case "warte_auf_kunde":
+      return {
+        subject: "Kurze Rückfrage zu deiner Anfrage – Emilian Leber",
+        html: getEmailShell(
+          "Anfrage",
+          "Ich warte auf deine Rückmeldung.",
+          `Hallo ${request.name}, ich habe dir Informationen zu deiner Anfrage geschickt und warte auf deine Rückmeldung. Falls du Fragen hast, melde dich jederzeit!`,
+          `${statusBadge("✦ Rückmeldung ausstehend", "#b45309", "#fffbeb")}${infoTable(rows)}`
+        ),
+      };
+
     case "angebot_gesendet":
       return {
         subject: "Dein Angebot von Emilian Leber ist fertig",
@@ -251,6 +285,30 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
   ];
 
   switch (event.status) {
+    case "in_planung":
+      return {
+        to: email,
+        subject: "Dein Event wird geplant – Emilian Leber",
+        html: getEmailShell(
+          "Event",
+          "Die Planung läuft.",
+          `Hallo ${customerName}, dein Event ist in Planung! Ich kümmere mich um die Details und melde mich in Kürze bei dir.`,
+          `${statusBadge("✦ In Planung", "#2563eb", "#eff6ff")}${infoTable(rows)}`
+        ),
+      };
+
+    case "details_offen":
+      return {
+        to: email,
+        subject: "Details zu deinem Event – Emilian Leber",
+        html: getEmailShell(
+          "Event",
+          "Noch ein paar Details.",
+          `Hallo ${customerName}, für dein Event müssen noch einige Details geklärt werden. Ich melde mich dazu bei dir – oder du kannst mir jederzeit über das Kundenportal schreiben.`,
+          `${statusBadge("✦ Details offen", "#b45309", "#fffbeb")}${infoTable(rows)}`
+        ),
+      };
+
     case "vertrag_gesendet":
       return {
         to: email,
