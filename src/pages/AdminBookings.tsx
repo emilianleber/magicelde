@@ -304,19 +304,18 @@ const AdminBookings = () => {
   /* ── Actions ── */
   const deleteSelected = async () => {
     if (!selectedIds.length) return;
+    if (!confirm(`${selectedIds.length} Eintrag/Einträge endgültig löschen? Dies kann nicht rückgängig gemacht werden.`)) return;
     setDeleting(true);
-    // Separate request and event IDs
     const reqIds = selectedIds.filter((id) => id.startsWith("req-")).map((id) => id.slice(4));
     const evtIds = selectedIds.filter((id) => id.startsWith("evt-")).map((id) => id.slice(4));
-    const now = new Date().toISOString();
 
     await Promise.all([
-      reqIds.length ? supabase.from("portal_requests").update({ deleted_at: now }).in("id", reqIds) : Promise.resolve(),
-      evtIds.length ? supabase.from("portal_events").update({ deleted_at: now }).in("id", evtIds) : Promise.resolve(),
+      reqIds.length ? supabase.from("portal_requests").delete().in("id", reqIds) : Promise.resolve(),
+      evtIds.length ? supabase.from("portal_events").delete().in("id", evtIds) : Promise.resolve(),
     ]);
 
-    setRequests((prev) => prev.map((r) => reqIds.includes(r.id) ? { ...r, deleted_at: now } : r));
-    setEvents((prev) => prev.map((e) => evtIds.includes(e.id) ? { ...e, deleted_at: now } : e));
+    setRequests((prev) => prev.filter((r) => !reqIds.includes(r.id)));
+    setEvents((prev) => prev.filter((e) => !evtIds.includes(e.id)));
     setSelectedIds([]);
     setDeleting(false);
   };
