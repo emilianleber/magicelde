@@ -300,7 +300,15 @@ serve(async (req) => {
         .update({ status: "gebucht", event_id: newEvent.id })
         .eq("id", request_id);
 
-      // 7. Create Auftragsbestätigung document
+      // 7. Create Auftragsbestätigung document — mit passenden Textvorlagen
+      const { data: vorlagen } = await adminSupabase
+        .from("dokument_textvorlagen")
+        .select("bereich, inhalt")
+        .or("typ.eq.auftragsbestaetigung,typ.eq.alle")
+        .eq("is_default", true);
+      const abKopftext = vorlagen?.find((v: any) => v.bereich === "kopf")?.inhalt || angebot.kopftext;
+      const abFusstext = vorlagen?.find((v: any) => v.bereich === "fuss")?.inhalt || angebot.fusstext;
+
       const today = new Date().toISOString().split("T")[0];
       const { data: newAB, error: abError } = await adminSupabase
         .from("portal_documents")
@@ -316,8 +324,8 @@ serve(async (req) => {
           quelldokument_nummer: angebot.document_number,
           empfaenger: angebot.empfaenger,
           absender: angebot.absender,
-          kopftext: angebot.kopftext,
-          fusstext: angebot.fusstext,
+          kopftext: abKopftext,
+          fusstext: abFusstext,
           zahlungsziel_tage: angebot.zahlungsziel_tage,
           rabatt_prozent: angebot.rabatt_prozent,
           subtotal: angebot.subtotal,
