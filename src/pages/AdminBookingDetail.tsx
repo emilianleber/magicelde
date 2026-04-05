@@ -221,6 +221,12 @@ const AdminBookingDetail = () => {
   const [user, setUser] = useState<SupaUser | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Abschlagsrechnung Dialog
+  const [showAbschlagDialog, setShowAbschlagDialog] = useState(false);
+  const [abschlagMode, setAbschlagMode] = useState<"prozent" | "fix">("prozent");
+  const [abschlagWert, setAbschlagWert] = useState("50");
+  const [abschlagCreating, setAbschlagCreating] = useState(false);
   const [saving, setSaving] = useState(false);
   const [converting, setConverting] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -449,6 +455,149 @@ const AdminBookingDetail = () => {
       setMessage("Fehler beim Konvertieren.");
     }
     setConverting(false);
+  };
+
+  /* ── Abschlagsrechnung erstellen ── */
+  const createAbschlagsrechnung = async () => {
+    if (!request || !customer) return;
+    setAbschlagCreating(true);
+    try {
+      // Angebot finden für Referenz und Betrag
+      const angebot = documents.find(d => (d as any).type === "Angebot" || d.name?.toLowerCase().includes("angebot"));
+      const angebotNr = angebot ? ((angebot as any).document_number || angebot.name) : "";
+      const angebotTotal = angebot ? ((angebot as any).total || (angebot as any).amount || 0) : 0;
+
+      // Betrag berechnen
+      let betrag = 0;
+      if (abschlagMode === "prozent") {
+        const pct = parseFloat(abschlagWert) || 0;
+        betrag = Math.round(angebotTotal * pct / 100 * 100) / 100;
+      } else {
+        betrag = parseFloat(abschlagWert) || 0;
+      }
+
+      if (betrag <= 0) {
+        setMessage("Bitte gültigen Betrag eingeben.");
+        setAbschlagCreating(false);
+        return;
+      }
+
+      // Textvorlagen laden
+      const { data: vorlagen } = await supabase
+        .from("dokument_textvorlagen")
+        .select("bereich, inhalt")
+        .or("typ.eq.abschlagsrechnung,typ.eq.alle")
+        .eq("is_default", true);
+      const kopftext = vorlagen?.find(v => v.bereich === "kopf")?.inhalt || "";
+      const fusstext = vorlagen?.find(v => v.bereich === "fuss")?.inhalt || "";
+
+      // Absender laden
+      const { data: settings } = await supabase.from("admin_settings").select("*").limit(1).maybeSingle();
+
+      // Nächste Nummer
+      const prefix = (settings?.nk_rechnung_prefix as string) || "RE";
+      const naechste = (settings?.nk_rechnung_naechste as number) ?? 1;
+      const year = new Date().getFullYear();
+      const nummer = `${prefix}-${year}-${String(naechste).padStart(3, "0")}`;
+
+      // Nummer hochzählen
+      await supabase.from("admin_settings").update({ nk_rechnung_naechste: naechste + 1 }).eq("id", settings?.id);
+
+      const today = new Date().toISOString().split("T")[0];
+      const zahlungszielTage = (settings?.default_payment_days as number) || 14;
+      const faelligDate = new Date();
+      faelligDate.setDate(faelligDate.getDate() + zahlungszielTage);
+      const faelligAm = faelligDate.toISOString().split("T")[0];
+
+      const bezeichnung = angebotNr
+        ? `Teilrechnung aus Angebot ${angebotNr}`
+        : "Abschlagszahlung";
+      const beschreibung = abschlagMode === "prozent"
+        ? `${abschlagWert}% des Gesamtbetrags${angebotNr ? ` (${angebotNr})` : ""}`
+        : `Teilbetrag${angebotNr ? ` aus ${angebotNr}` : ""}`;
+
+      const { data: newDoc, error: docError } = await supabase
+        .from("portal_documents")
+        .insert({
+          type: "Abschlagsrechnung",
+          document_number: nummer,
+          document_date: today,
+          status: "entwurf",
+          customer_id: customer.id,
+          event_id: event?.id || null,
+          request_id: request.id,
+          quelldokument_id: angebot?.id || null,
+          quelldokument_nummer: angebotNr || null,
+          empfaenger: {
+            name: customer.name || "",
+            firma: customer.company || undefined,
+            adresse: customer.rechnungs_strasse || "",
+            plz: customer.rechnungs_plz || "",
+            ort: customer.rechnungs_ort || "",
+            land: customer.rechnungs_land || "Deutschland",
+          },
+          absender: {
+            name: (settings?.company_name as string) || "Emilian Leber",
+            adresse: (settings?.company_address as string) || "",
+            plz: (settings?.company_zip as string) || "",
+            ort: (settings?.company_city as string) || "",
+            land: "Deutschland",
+            email: (settings?.company_email as string) || "",
+            telefon: (settings?.company_phone as string) || "",
+            website: (settings?.company_website as string) || "",
+            steuernummer: (settings?.tax_number as string) || "",
+            iban: (settings?.bank_iban as string) || "",
+            bic: (settings?.bank_bic as string) || "",
+            kleinunternehmer: Boolean((settings as any)?.kleinunternehmer),
+          },
+          kopftext,
+          fusstext,
+          zahlungsziel_tage: zahlungszielTage,
+          faellig_am: faelligAm,
+          subtotal: betrag,
+          total: betrag,
+          amount: betrag,
+          brutto: betrag,
+          offener_betrag: betrag,
+          bezahlt_betrag: 0,
+          name: `Abschlagsrechnung ${nummer}`,
+        })
+        .select("*")
+        .single();
+
+      if (docError || !newDoc) throw new Error("Fehler beim Erstellen");
+
+      // Position einfügen
+      await supabase.from("document_positions").insert({
+        document_id: newDoc.id,
+        position: 1,
+        type: "leistung",
+        bezeichnung,
+        beschreibung,
+        quantity: 1,
+        unit: "pauschal",
+        unit_price: betrag,
+        total: betrag,
+        mwst_satz: 0,
+      });
+
+      setShowAbschlagDialog(false);
+      setMessage(`Abschlagsrechnung ${nummer} erstellt (${betrag.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €)`);
+
+      // Dokumente neu laden
+      const { data: docs } = await supabase
+        .from("portal_documents")
+        .select("*")
+        .or(`request_id.eq.${request.id}${event?.id ? `,event_id.eq.${event.id}` : ""},customer_id.eq.${customer.id}`)
+        .order("created_at", { ascending: false });
+      if (docs) setDocuments(docs);
+
+      // Direkt zum Dokument navigieren
+      navigate(`/admin/dokumente/${newDoc.id}`);
+    } catch (err: any) {
+      setMessage("Fehler: " + (err.message || "Unbekannt"));
+    }
+    setAbschlagCreating(false);
   };
 
   /* ── Send status mail ── */
@@ -830,11 +979,11 @@ const AdminBookingDetail = () => {
                   return (
                     <>
                       {!event && <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={primaryCls}><FileText className="w-3 h-3" />Angebot</Link>}
-                      {event && phase === "in_planung" && <Link to={`/admin/dokumente/new?typ=abschlagsrechnung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Abschlagsrechnung</Link>}
+                      {event && phase === "in_planung" && <button onClick={() => setShowAbschlagDialog(true)} className={primaryCls}><FileText className="w-3 h-3" />Abschlagsrechnung</button>}
                       {event && (phase === "event_erfolgt" || phase === "abgeschlossen") && <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Schlussrechnung</Link>}
                       <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={btnCls}>Angebot</Link>
                       <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={btnCls}>Rechnung</Link>
-                      <Link to={`/admin/dokumente/new?typ=abschlagsrechnung${params}`} className={btnCls}>Abschlag</Link>
+                      <button onClick={() => setShowAbschlagDialog(true)} className={btnCls}>Abschlag</button>
                     </>
                   );
                 })()}
@@ -1215,6 +1364,83 @@ const AdminBookingDetail = () => {
         </div>
       </div>
     </AdminLayout>
+
+    {/* Abschlagsrechnung Dialog */}
+    {showAbschlagDialog && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowAbschlagDialog(false)}>
+        <div className="bg-background rounded-2xl shadow-2xl border border-border/30 p-6 w-full max-w-md mx-4" onClick={e => e.stopPropagation()}>
+          <h3 className="text-lg font-bold mb-1">Abschlagsrechnung erstellen</h3>
+          {(() => {
+            const angebot = documents.find(d => (d as any).type === "Angebot");
+            const angebotTotal = angebot ? ((angebot as any).total || (angebot as any).amount || 0) : 0;
+            const angebotNr = angebot ? ((angebot as any).document_number || angebot.name) : "";
+            const betrag = abschlagMode === "prozent"
+              ? Math.round(angebotTotal * (parseFloat(abschlagWert) || 0) / 100 * 100) / 100
+              : parseFloat(abschlagWert) || 0;
+            return (
+              <>
+                {angebotNr && <p className="text-xs text-muted-foreground mb-4">Basierend auf {angebotNr} · {angebotTotal.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>}
+
+                <div className="flex gap-2 mb-4">
+                  <button
+                    onClick={() => setAbschlagMode("prozent")}
+                    className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${abschlagMode === "prozent" ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}
+                  >
+                    Prozentual
+                  </button>
+                  <button
+                    onClick={() => setAbschlagMode("fix")}
+                    className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${abschlagMode === "fix" ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}
+                  >
+                    Fixer Betrag
+                  </button>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-xs font-semibold text-muted-foreground mb-1.5">
+                    {abschlagMode === "prozent" ? "Prozentsatz" : "Betrag (€)"}
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={abschlagWert}
+                      onChange={e => setAbschlagWert(e.target.value)}
+                      className="flex-1 rounded-xl bg-muted/20 border border-border/30 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
+                      min="0"
+                      step={abschlagMode === "prozent" ? "5" : "0.01"}
+                    />
+                    <span className="text-sm text-muted-foreground font-medium">{abschlagMode === "prozent" ? "%" : "€"}</span>
+                  </div>
+                </div>
+
+                {betrag > 0 && (
+                  <div className="rounded-xl bg-green-50 border border-green-200 p-3 mb-4 text-center">
+                    <p className="text-xs text-green-600 mb-0.5">Abschlagsbetrag</p>
+                    <p className="text-xl font-bold text-green-700">{betrag.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowAbschlagDialog(false)}
+                    className="flex-1 py-2.5 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/40"
+                  >
+                    Abbrechen
+                  </button>
+                  <button
+                    onClick={createAbschlagsrechnung}
+                    disabled={abschlagCreating || betrag <= 0}
+                    className="flex-1 py-2.5 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-90 disabled:opacity-50"
+                  >
+                    {abschlagCreating ? "Erstelle…" : "Erstellen"}
+                  </button>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      </div>
+    )}
 
     {showDocCreator && request && (
       <DocumentCreator
