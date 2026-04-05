@@ -78,7 +78,7 @@ serve(async (req) => {
     const safeDatum  = datum  ? String(datum).trim()  : null;
     // Datum formatieren: "2026-09-26" → "26. September 2026"
     const fmtDatum = safeDatum ? new Date(safeDatum + "T12:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" }) : null;
-    const safeOrt    = ort    ? capitalize(String(ort).trim())    : null;
+    const safeOrt    = ort    ? String(ort).trim()    : null;
     // Format-Werte übersetzen
     const formatLabels: Record<string, string> = {
       buehne: "Bühnenshow", buehnenshow: "Bühnenshow", closeup: "Close-Up",
