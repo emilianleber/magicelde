@@ -466,99 +466,7 @@ function DocumentPreview(props: PreviewProps) {
 
   const leistungPos = positionen.filter(p => p.typ === "leistung");
 
-  // ── Pagination ────────────────────────────────────────────────────────────
-  const estimatePosH = (pos: LocalPosition): number => {
-    let h = 18; // base row height
-    if (pos.beschreibung) {
-      const stripped = pos.beschreibung.replace(/<[^>]+>/g, " ").trim();
-      const lines = stripped.split("\n").reduce((acc, line) =>
-        acc + Math.max(1, Math.ceil((line.length || 1) / 55)), 0);
-      h += lines * 10;
-    }
-    return h;
-  };
-
-  const stripHtmlLen = (html: string) =>
-    html ? html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().length : 0;
-
-  // Dynamic heights at 595px page width (font-size 8.5-9.5, line-height ~1.5)
-  const PAGE_H     = 842;
-  const HDR_H      = 110; // header (logo + name)
-  const DIN_TOP_H  = 200; // address zone + gap + betreff
-  const KOPF_H     = estimateHtmlH(kopftext);
-  const TBL_HDR_H  = 20;
-  const SUMMEN_H   = 55;
-  const GRUSS_H    = 8;
-  const DIN_FTR_H  = 75; // Footer absolut positioniert
-  const estimateHtmlH = (html: string): number => {
-    if (!html) return 0;
-    // font-size 9.5, line-height 1.65 → ~16px per line, ~50 chars per line at 595-2*52=491px
-    const segments = html.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "").split("\n");
-    const totalLines = segments.reduce((sum, seg) => {
-      const trimmed = seg.trim();
-      return sum + (trimmed.length === 0 ? 1 : Math.ceil(trimmed.length / 50));
-    }, 0);
-    return Math.max(16, totalLines * 16 + 10);
-  };
-  const FUSS_H     = estimateHtmlH(fusstext);
-
-  // Summen + DIN footer appear on EVERY page
-  const PER_PAGE_BOTTOM = SUMMEN_H + DIN_FTR_H;
-  // Fusstext + Signatur only on LAST page
-  const LAST_EXTRA      = FUSS_H + GRUSS_H;
-
-  const CONT_HDR_H = 96; // 16px top + 68px logo + 12px bottom
-
-  // Budgets
-  const P1_SINGLE  = Math.max(24, PAGE_H - HDR_H - DIN_TOP_H - KOPF_H - TBL_HDR_H - PER_PAGE_BOTTOM - LAST_EXTRA);
-  const P1_MULTI   = Math.max(24, PAGE_H - HDR_H - DIN_TOP_H - KOPF_H - TBL_HDR_H - PER_PAGE_BOTTOM);
-  const PC_MID     = Math.max(24, PAGE_H - CONT_HDR_H - TBL_HDR_H - PER_PAGE_BOTTOM);
-  const PC_LAST    = Math.max(24, PAGE_H - CONT_HDR_H - TBL_HDR_H - PER_PAGE_BOTTOM - LAST_EXTRA);
-
-  const pageChunks: LocalPosition[][] = (() => {
-    const fill = (items: LocalPosition[], budget: number, forceFirst = true): LocalPosition[] => {
-      const chunk: LocalPosition[] = [];
-      let used = 0;
-      while (items.length > 0) {
-        const h = estimatePosH(items[0]);
-        if (used + h <= budget || (forceFirst && chunk.length === 0)) {
-          chunk.push(items.shift()!);
-          used += h;
-        } else break;
-      }
-      return chunk;
-    };
-
-    // Check total content height
-    const totalPosH = leistungPos.reduce((sum, p) => sum + estimatePosH(p), 0);
-
-    // Pass 1: try fitting everything on one page (conservative budget incl. fuss/gruss)
-    if (totalPosH <= P1_SINGLE) {
-      return leistungPos.length > 0 ? [leistungPos] : [[]];
-    }
-
-    // Pass 2: multi-page
-    const rem = [...leistungPos];
-    // Page 1 budget: reserve fuss/gruss only if all items might fit on page 1
-    const p1Budget = totalPosH <= P1_MULTI ? P1_SINGLE : P1_MULTI;
-    const chunks: LocalPosition[][] = [fill(rem, p1Budget)];
-    while (rem.length > 0) {
-      const testBudget = rem.length <= 30 ? PC_LAST : PC_MID;
-      chunks.push(fill(rem, testBudget));
-    }
-    // If only 1 chunk but content didn't fit single-page, force split
-    if (chunks.length === 1 && totalPosH > P1_SINGLE) {
-      // Split: put items on page 1 without fuss, fuss goes on page 2
-      const rem2 = [...leistungPos];
-      const ch1 = fill(rem2, P1_MULTI);
-      if (rem2.length > 0) {
-        return [ch1, ...(() => { const r: LocalPosition[][] = []; while (rem2.length > 0) r.push(fill(rem2, PC_LAST)); return r; })()];
-      }
-      // All positions fit on P1_MULTI but fuss needs page 2 → add empty page 2
-      return [ch1, []];
-    }
-    return chunks;
-  })();
+  // Keine manuelle Pagination — Content fließt natürlich, Seitenumbruch via CSS beim Drucken
 
   // ── Logo helper (inline – kein eigenes absolute positioning) ─────────────
   const LogoImg = ({ dark = false, size = LS }: { dark?: boolean; size?: number }) => {
@@ -666,11 +574,11 @@ function DocumentPreview(props: PreviewProps) {
     </div>
   );
 
-  const totalPages = pageChunks.length;
+  const totalPages = 1; // CSS-basiert, nur 1 Container
 
-  // DIN 5008 Fußzeile – erscheint auf JEDER Seite, fixe Position am Seitenende
-  const renderDINFooter = (pageNum: number) => (
-    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, backgroundColor: "#fff" }}>
+  // DIN 5008 Fußzeile – am Ende des Dokuments
+  const renderDINFooter = (_pageNum: number) => (
+    <div style={{ marginTop: "auto" }}>
       <div style={{ margin: `0 ${M}px`, borderTop: "0.5px solid #d4d4d8", paddingTop: 8, paddingBottom: 10 }}>
         {totalPages > 1 && (
           <div style={{ textAlign: "right", fontSize: 6.5, color: "#a1a1aa", marginBottom: 5 }}>
@@ -753,55 +661,27 @@ function DocumentPreview(props: PreviewProps) {
     </>
   );
 
-  // Page 1 body: DIN top + first chunk + summen (always) + fusstext/sig (only last page) + footer
+  // Body: DIN top + alle Positionen + Summen + Fußtext + Footer
   const renderBody = (thBg: string, thColor: string) => (
     <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
       {renderDINTop()}
-      {renderPositionsBlock(pageChunks[0], thBg, thColor, 0)}
-      {renderSummen(pageChunks[0])}
-      {pageChunks.length === 1 ? renderDINBottom(1) : renderDINFooter(1)}
+      {renderPositionsBlock(leistungPos, thBg, thColor, 0)}
+      {renderSummen(leistungPos)}
+      {renderDINBottom(1)}
     </div>
   );
 
   // ── Page wrapper + multi-page renderer ───────────────────────────────────
   const PAGE_STYLE: React.CSSProperties = {
-    width: "100%", aspectRatio: "210/297", overflow: "hidden", position: "relative" as const,
+    width: "100%", minHeight: 842,
     fontFamily: font, color: "#1a1a1a", display: "flex", flexDirection: "column",
   };
 
-  const renderContinuationPages = (bg: string, thBg: string, thColor: string) => {
-    let globalOffset = pageChunks[0].length;
-    return pageChunks.slice(1).map((chunk, pi) => {
-      const isLast = pi === pageChunks.length - 2;
-      const offset = globalOffset;
-      const pageNum = pi + 2;
-      globalOffset += chunk.length;
-      // Kumulativ: alle Positionen bis einschließlich dieser Seite
-      const cumulative = pageChunks.slice(0, pi + 2).flat();
-      return (
-        <div key={`page-${pageNum}`} style={{ ...PAGE_STYLE, backgroundColor: bg }}>
-          {/* Continuation header: logo only, proper flow so positions start below */}
-          <div style={{ padding: `16px ${M}px 12px`, display: "flex", justifyContent: "flex-end" }}>
-            <LogoImg />
-          </div>
-          <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            {renderPositionsBlock(chunk, thBg, thColor, offset)}
-            {renderSummen(cumulative)}
-            {isLast ? renderDINBottom(pageNum) : renderDINFooter(pageNum)}
-          </div>
-        </div>
-      );
-    });
-  };
-
   const page = (bg: string, header: React.ReactNode, thBg: string, thColor: string) => (
-    <>
-      <div style={{ ...PAGE_STYLE, backgroundColor: bg }}>
-        {header}
-        {renderBody(thBg, thColor)}
-      </div>
-      {renderContinuationPages(bg, thBg, thColor)}
-    </>
+    <div style={{ ...PAGE_STYLE, backgroundColor: bg }}>
+      {header}
+      {renderBody(thBg, thColor)}
+    </div>
   );
 
   // ── 15 Layout-Köpfe ───────────────────────────────────────────────────────
@@ -1696,21 +1576,12 @@ export default function AdminDokumentEditor() {
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
-@page { size: A4 portrait; margin: 0; }
-html, body { margin: 0; padding: 0; }
+@page { size: A4 portrait; margin: 10mm 0 0 0; }
+html, body { margin: 0; padding: 0; width: 595px; }
 body > div {
   width: 595px !important;
-  height: 842px !important;
-  zoom: ${scale.toFixed(6)} !important;
-  overflow: hidden !important;
+  min-height: auto !important;
   aspect-ratio: auto !important;
-  position: relative !important;
-  page-break-after: always !important;
-  break-after: page !important;
-}
-body > div:last-child {
-  page-break-after: auto !important;
-  break-after: auto !important;
 }
 @media screen {
   body {
@@ -1724,6 +1595,7 @@ body > div:last-child {
   body > div {
     box-shadow: 0 6px 32px rgba(0,0,0,0.35);
     background: #fff;
+    min-height: 842px !important;
   }
 }
 </style>
