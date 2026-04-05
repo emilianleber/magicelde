@@ -459,7 +459,7 @@ function DocumentPreview(props: PreviewProps) {
     ...(lieferdatum && isRechnung ? [{ label: "Lieferdatum",    val: lieferdatum }] : []),
     ...(faelligAm && isRechnung   ? [{ label: "Zahlungsziel",   val: faelligAm }]   : []),
     ...(gueltigBis && !isAngebot  ? [{ label: "Gültig bis",     val: gueltigBis }]  : []),
-    ...(empfaengerKundennummer ? [{ label: "Ihre Kundennummer",  val: empfaengerKundennummer }] : []),
+    { label: "Ihre Kundennummer",  val: empfaengerKundennummer || "—" },
     { label: "Ihr Ansprechpartner",val: absenderName },
   ];
 
@@ -1298,6 +1298,12 @@ export default function AdminDokumentEditor() {
         gesamt: p.gesamt,
       })));
       setSelectedCustomerId(doc.customerId || null);
+      // Load kundennummer from customer
+      if (doc.customerId) {
+        supabase.from("portal_customers").select("kundennummer").eq("id", doc.customerId).maybeSingle().then(({ data: c }) => {
+          if (c?.kundennummer) setEmpfaengerKundennummer(c.kundennummer);
+        });
+      }
       setSelectedRequestId(doc.requestId || null);
       setSelectedEventId(doc.eventId || null);
       // Prefill labels for linked request/event
