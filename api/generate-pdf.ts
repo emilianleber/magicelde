@@ -22,16 +22,15 @@ function buildHtml(previewHtml: string, title: string) {
     html, body { width: 595px; background: #fff; font-family: Inter, system-ui, sans-serif; }
     body > div {
       width: 595px;
-      min-height: auto;
-      height: auto;
+      min-height: auto !important;
+      height: auto !important;
       position: relative;
       padding-bottom: 0 !important;
     }
     /* Footer aus absoluter Positionierung in den Flow bringen */
-    body > div > div:last-child > div:last-child,
-    [style*="position: absolute"][style*="bottom: 0"] {
+    [style*="position: absolute"][style*="bottom"] {
       position: static !important;
-      margin-top: 20px;
+      margin-top: auto;
     }
   </style>
 </head>
