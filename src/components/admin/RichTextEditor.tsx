@@ -103,10 +103,24 @@ const RichTextEditor = ({
   const templateMenuRef = useRef<HTMLDivElement>(null);
   const placeholderMenuRef = useRef<HTMLDivElement>(null);
 
-  // Set content on mount only
+  // Sync editor content when value changes externally
+  const lastExternalValue = useRef(value);
+  useEffect(() => {
+    if (!editorRef.current) return;
+    // On mount or when value changed externally (not from user typing)
+    if (value !== lastExternalValue.current) {
+      lastExternalValue.current = value;
+      if (editorRef.current.innerHTML !== textToHtml(value)) {
+        editorRef.current.innerHTML = textToHtml(value) || "";
+      }
+    }
+  }, [value]);
+
+  // Set content on mount
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.innerHTML = textToHtml(value) || "";
+      lastExternalValue.current = value;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -125,10 +139,16 @@ const RichTextEditor = ({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  const emitChange = () => {
+    const html = editorRef.current?.innerHTML || "";
+    lastExternalValue.current = html;
+    onChange(html);
+  };
+
   const exec = (cmd: string, val?: string) => {
     editorRef.current?.focus();
     document.execCommand(cmd, false, val);
-    onChange(editorRef.current?.innerHTML || "");
+    emitChange();
   };
 
   const insertPlaceholder = (text: string) => {
@@ -146,7 +166,7 @@ const RichTextEditor = ({
     } else {
       document.execCommand("insertText", false, text);
     }
-    onChange(editorRef.current?.innerHTML || "");
+    emitChange();
     setShowPlaceholderMenu(false);
   };
 
@@ -154,7 +174,7 @@ const RichTextEditor = ({
     const html = textToHtml(vorlage.inhalt);
     if (editorRef.current) {
       editorRef.current.innerHTML = html;
-      onChange(html);
+      emitChange();
     }
     setShowTemplateMenu(false);
   };
@@ -302,7 +322,7 @@ const RichTextEditor = ({
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
-        onInput={() => onChange(editorRef.current?.innerHTML || "")}
+        onInput={() => emitChange()}
         data-placeholder={placeholder}
         style={{ minHeight }}
         className="px-4 py-3 text-sm text-foreground bg-background/60 focus:outline-none leading-relaxed
