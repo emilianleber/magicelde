@@ -128,8 +128,9 @@ const AdminCustomerDetail = () => {
 
   // Edit mode
   const [editMode, setEditMode] = useState(false);
-  const [name, setName] = useState("");
   const [anrede, setAnrede] = useState("");
+  const [vorname, setVorname] = useState("");
+  const [nachname, setNachname] = useState("");
   const [firma, setFirma] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -180,7 +181,9 @@ const AdminCustomerDetail = () => {
       if (custErr || !cust) { setLoading(false); return; }
 
       setCustomer(cust);
-      setName(cust.name || "");
+      setAnrede(cust.anrede || "");
+      setVorname(cust.vorname || cust.name?.split(" ")[0] || "");
+      setNachname(cust.nachname || cust.name?.split(" ").slice(1).join(" ") || "");
       setFirma(cust.company || "");
       setEmail(cust.email || "");
       setPhone(cust.phone || "");
@@ -231,10 +234,10 @@ const AdminCustomerDetail = () => {
     setSaveMsg("");
     const { error } = await supabase
       .from("portal_customers")
-      .update({ name: name.trim(), company: firma.trim() || null, email: email.trim().toLowerCase(), phone: phone.trim() || null, kundennummer: kundennummer.trim() || null })
+      .update({ name: `${vorname.trim()} ${nachname.trim()}`.trim(), vorname: vorname.trim(), nachname: nachname.trim(), anrede: anrede || null, company: firma.trim() || null, email: email.trim().toLowerCase(), phone: phone.trim() || null, kundennummer: kundennummer.trim() || null })
       .eq("id", customer.id);
     if (error) { setSaveMsg("Fehler beim Speichern."); setSaving(false); return; }
-    setCustomer({ ...customer, name: name.trim(), company: firma.trim() || null, email: email.trim().toLowerCase(), phone: phone.trim() || null, kundennummer: kundennummer.trim() || null });
+    setCustomer({ ...customer, name: `${vorname.trim()} ${nachname.trim()}`.trim(), vorname: vorname.trim(), nachname: nachname.trim(), anrede: anrede || null, company: firma.trim() || null, email: email.trim().toLowerCase(), phone: phone.trim() || null, kundennummer: kundennummer.trim() || null } as any);
     setSaveMsg("Gespeichert ✓");
     setSaving(false);
     setTimeout(() => { setSaveMsg(""); setEditMode(false); }, 1500);
@@ -451,11 +454,26 @@ const AdminCustomerDetail = () => {
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="grid sm:grid-cols-2 gap-3 mb-3">
+            <div className="grid grid-cols-[100px_1fr_1fr] gap-3 mb-3">
               <div>
-                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Name</label>
-                <input value={name} onChange={(e) => setName(e.target.value)} className={smallInputCls} />
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Anrede</label>
+                <select value={anrede} onChange={(e) => setAnrede(e.target.value)} className={smallInputCls}>
+                  <option value="">–</option>
+                  <option value="Herr">Herr</option>
+                  <option value="Frau">Frau</option>
+                  <option value="Divers">Divers</option>
+                </select>
               </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Vorname</label>
+                <input value={vorname} onChange={(e) => setVorname(e.target.value)} className={smallInputCls} />
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Nachname</label>
+                <input value={nachname} onChange={(e) => setNachname(e.target.value)} className={smallInputCls} />
+              </div>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-3 mb-3">
               <div>
                 <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Firma</label>
                 <input value={firma} onChange={(e) => setFirma(e.target.value)} className={smallInputCls} />

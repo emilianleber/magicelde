@@ -38,6 +38,9 @@ serve(async (req) => {
     }
 
     const {
+      anrede,
+      vorname,
+      nachname,
       name,
       firma,
       email,
@@ -70,7 +73,10 @@ serve(async (req) => {
     const capitalize = (s: string) =>
       s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
-    const safeName   = capitalize(String(name).trim());
+    const safeVorname = vorname ? capitalize(String(vorname).trim()) : "";
+    const safeNachname = nachname ? capitalize(String(nachname).trim()) : "";
+    const safeName = name ? capitalize(String(name).trim()) : `${safeVorname} ${safeNachname}`.trim();
+    const safeAnrede = anrede ? String(anrede).trim() : null;
     const safeFirma  = firma  ? String(firma).trim()  : null;   // Firmenname unverändert
     const safeEmail  = String(email).trim().toLowerCase();
     const safePhone  = phone  ? String(phone).trim()  : null;
@@ -113,7 +119,8 @@ serve(async (req) => {
 
       // Immer alle vom Kunden gemachten Angaben aktualisieren – so bleibt
       // das Profil konsistent, auch wenn es vorher leer war.
-      const updateData: Record<string, any> = { name: safeName };
+      const updateData: Record<string, any> = { name: safeName, vorname: safeVorname, nachname: safeNachname };
+      if (safeAnrede) updateData.anrede  = safeAnrede;
       if (safeFirma)  updateData.company = safeFirma;
       if (safePhone)  updateData.phone   = safePhone;
 
@@ -131,6 +138,9 @@ serve(async (req) => {
         .from("portal_customers")
         .insert({
           name: safeName,
+          vorname: safeVorname,
+          nachname: safeNachname,
+          anrede: safeAnrede,
           ...(safeFirma  ? { company: safeFirma }  : {}),
           email: safeEmail,
           ...(safePhone  ? { phone: safePhone }    : {}),
@@ -153,6 +163,9 @@ serve(async (req) => {
         user_id: null,
         customer_id: customerId,
         name: safeName,
+        vorname: safeVorname,
+        nachname: safeNachname,
+        anrede: safeAnrede,
         firma: safeFirma,
         email: safeEmail,
         phone: safePhone,
@@ -174,7 +187,10 @@ serve(async (req) => {
 
     console.log("DB INSERT OK:", insertData);
 
-    const displayGreeting = safeName || "Hallo";
+    // Begrüßung: "Herr Mustermann" oder "Max Mustermann"
+    const displayGreeting = safeAnrede
+      ? `${safeAnrede} ${safeNachname}`
+      : safeName || "Hallo";
     const displayFirmaBlock = safeFirma
       ? `<p><strong>Firma:</strong> ${safeFirma}</p>`
       : "";
