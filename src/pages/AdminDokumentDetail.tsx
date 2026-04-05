@@ -219,19 +219,34 @@ export default function AdminDokumentDetail() {
       await Promise.all(imgs.map(img =>
         img.complete ? Promise.resolve() : new Promise<void>(res => { img.onload = () => res(); img.onerror = () => res(); })
       ));
-      const pages = Array.from(container.children) as HTMLElement[];
+      // Ganzen Container als ein Bild rendern, dann auf A4-Seiten aufteilen
+      const el = (container.children[0] as HTMLElement) || container;
+      el.style.width = "595px";
+      el.style.overflow = "visible";
+      el.style.height = "auto";
+      el.style.minHeight = "auto";
+      el.style.position = "relative";
+      const canvas = await html2canvas(el, {
+        scale: 2, useCORS: true, allowTaint: true,
+        backgroundColor: "#ffffff", width: 595, logging: false,
+      });
       const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-      for (let i = 0; i < pages.length; i++) {
-        const page = pages[i];
-        page.style.width = "595px";
-        page.style.height = "840px";
-        page.style.overflow = "hidden";
-        const canvas = await html2canvas(page, {
-          scale: 2, useCORS: true, allowTaint: true,
-          backgroundColor: "#ffffff", width: 595, height: 840, logging: false,
-        });
+      const pageHeightPx = 842 * 2; // scale=2
+      const totalHeight = canvas.height;
+      const totalPages = Math.ceil(totalHeight / pageHeightPx);
+      for (let i = 0; i < totalPages; i++) {
         if (i > 0) pdf.addPage();
-        pdf.addImage(canvas.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 210, 297);
+        const srcY = i * pageHeightPx;
+        const srcH = Math.min(pageHeightPx, totalHeight - srcY);
+        // Crop canvas to this page
+        const pageCanvas = document.createElement("canvas");
+        pageCanvas.width = 595 * 2;
+        pageCanvas.height = pageHeightPx;
+        const ctx = pageCanvas.getContext("2d")!;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+        ctx.drawImage(canvas, 0, srcY, 595 * 2, srcH, 0, 0, 595 * 2, srcH);
+        pdf.addImage(pageCanvas.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 210, 297);
       }
       return pdf.output("blob");
     } finally {
