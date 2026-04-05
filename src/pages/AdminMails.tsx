@@ -129,14 +129,14 @@ const AdminMails = () => {
         supabase.from("portal_customers").select("id,name,email,company").is("deleted_at", null).order("name"),
         supabase.from("portal_messages").select("id,created_at,customer_id,subject,body,from_email,to_email,customer:customer_id(name)").order("created_at", { ascending: false }),
       ]);
-      if (!tplRes.error) setTemplates(tplRes.data || []);
-      // email_templates als Vorlagen hinzufügen (ohne Duplikate)
+      // Beide Template-Quellen zusammenführen (ohne Duplikate)
+      const portalTpls: MailTemplate[] = tplRes.data || [];
       const { data: etData } = await supabase.from("email_templates").select("slug,name,betreff,inhalt").eq("aktiv", true).order("sortierung");
-      if (etData) {
-        const existingNames = new Set((tplRes.data || []).map((t: any) => t.name));
-        const newTpls = etData.filter((t: any) => !existingNames.has(t.name));
-        setTemplates((prev) => [...prev, ...newTpls.map((t: any) => ({ id: t.slug, name: t.name, subject: t.betreff, body: t.inhalt.replace(/\n/g, "<br>") }))]);
-      }
+      const existingNames = new Set(portalTpls.map((t) => t.name));
+      const emailTpls: MailTemplate[] = (etData || [])
+        .filter((t: any) => !existingNames.has(t.name))
+        .map((t: any) => ({ id: t.slug, name: t.name, subject: t.betreff, body: t.inhalt.replace(/\n/g, "<br>") }));
+      setTemplates([...portalTpls, ...emailTpls]);
       if (!sigRes.error && sigRes.data) setSignature(sigRes.data.body);
       if (!custRes.error) setCustomers(custRes.data || []);
       if (!sentRes.error) setSentMails(sentRes.data || []);
