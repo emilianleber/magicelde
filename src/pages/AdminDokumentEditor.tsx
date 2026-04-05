@@ -56,21 +56,11 @@ const FARBEN = [
 ];
 
 const LAYOUTS = [
-  { id: 1,  name: "Klassisch",     desc: "Farbbalken oben, schwarzer Tabellenkopf" },
-  { id: 2,  name: "Wave Dark",     desc: "Dunkler Kopf mit Wellen-Akzent" },
-  { id: 3,  name: "Split",         desc: "Firmenname groß links, Meta rechts" },
-  { id: 4,  name: "Retro",         desc: "Schreibmaschinen-Stil, Unterstrich" },
-  { id: 5,  name: "Seitenstreifen",desc: "Vertikaler Farbstreifen links" },
-  { id: 6,  name: "Dark Premium",  desc: "Volle dunkle Kopfkarte" },
-  { id: 7,  name: "Corporate",     desc: "Zentrierter Logo-Bereich, Trennlinie" },
-  { id: 8,  name: "Kreativ",       desc: "Diagonale Farbfläche im Kopf" },
-  { id: 9,  name: "Skandinavisch", desc: "Ultra-minimal, viel Weißraum" },
-  { id: 10, name: "Luxus",         desc: "Doppelte Linien, edle Typografie" },
-  { id: 11, name: "Rahmen",        desc: "Vollständige Dokumentrahmung" },
-  { id: 12, name: "Technik",       desc: "Geometrisch, Großbuchstaben" },
-  { id: 13, name: "Pfeile",        desc: "Pfeil-Trenner, moderner Stil" },
-  { id: 14, name: "Panorama",      desc: "Voller Farbverlauf oben" },
-  { id: 15, name: "Initialen",     desc: "Großes Monogramm-Badge" },
+  { id: 1,  name: "Klassisch",      desc: "Logo oben rechts, klare Linie" },
+  { id: 2,  name: "Farbstreifen",   desc: "Dünner Akzentstreifen oben" },
+  { id: 3,  name: "Farbkopf",       desc: "Voller farbiger Kopfbereich" },
+  { id: 6,  name: "Dark Premium",   desc: "Eleganter dunkler Kopf" },
+  { id: 9,  name: "Minimal",        desc: "Ultra-minimal, viel Weißraum" },
 ];
 
 const TYP_LABEL: Record<string, string> = {
@@ -720,60 +710,6 @@ function DocumentPreview(props: PreviewProps) {
       "#111", "#fff"
     );
 
-    // 4 – Retro: Schreibmaschinen-Stil, doppelte Linie
-    case 4: return page("#fffef8",
-      <div style={{ padding: `20px ${M}px 14px` }}>
-        <div style={{ borderTop: "2px solid #111", borderBottom: "2px solid #111", padding: "8px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2 }}>{absenderName}</div>
-            {absenderUntertitel && <div style={{ fontSize: 8.5, letterSpacing: 1, color: "#555", marginTop: 1 }}>{absenderUntertitel.toUpperCase()}</div>}
-            <div style={{ fontSize: 8, color: "#666", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-            <LogoImg size={50} />
-            <KontBlock c="#555" />
-          </div>
-        </div>
-      </div>,
-      "#111", "#fffef8"
-    );
-
-    // 5 – Seitenstreifen: Vertikaler Farbbalken links
-    case 5: return (
-      <>
-        <div style={{ ...PAGE_STYLE, backgroundColor: "#fff", flexDirection: "row" }}>
-          <div style={{ width: 12, backgroundColor: color, flexShrink: 0 }} />
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-            <div style={{ position: "relative", padding: `22px ${M - 12}px 16px`, minHeight: 105, borderBottom: "0.5px solid #e8e8e8" }}>
-              <AbsBlock />
-              <div style={{ position: "absolute", top: 22, right: M - 12 }}><LogoImg /></div>
-            </div>
-            {renderBody(color, "#fff")}
-          </div>
-        </div>
-        {pageChunks.slice(1).map((chunk, pi) => {
-          const isLast = pi === pageChunks.length - 2;
-          const offset = pageChunks.slice(0, pi + 1).reduce((s, c) => s + c.length, 0);
-          return (
-            <div key={`page5-${pi + 2}`} style={{ ...PAGE_STYLE, backgroundColor: "#fff", flexDirection: "row" }}>
-              <div style={{ width: 12, backgroundColor: color, flexShrink: 0 }} />
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-                <div style={{ borderBottom: "0.5px solid #e0e0e0", padding: `10px ${M - 12}px 8px`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 9, color: "#555" }}>{typLabel}{nummer ? ` – ${nummer}` : ""} · Seite {pi + 2}</span>
-                  <LogoImg size={28} />
-                </div>
-                <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-                  {renderPositionsBlock(chunk, color, "#fff", offset)}
-                  {renderSummen(pageChunks.slice(0, pi + 2).flat())}
-                  {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </>
-    );
-
     // 6 – Dark Premium: Dunkler Kopf mit Akzent
     case 6: return page("#fff",
       <div style={{ backgroundColor: "#111", padding: `22px ${M}px 18px`, position: "relative", minHeight: 110 }}>
@@ -782,44 +718,6 @@ function DocumentPreview(props: PreviewProps) {
         <RightCol dark kontC="rgba(255,255,255,0.4)" />
       </div>,
       "#222", "#fff"
-    );
-
-    // 7 – Corporate: Logo + Name zentriert
-    case 7: return page("#fff",
-      <div style={{ padding: `18px ${M}px 14px`, textAlign: "center", minHeight: 105, borderBottom: "0.5px solid #eee" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 5 }}>
-          <LogoImg size={50} />
-          <div style={{ textAlign: "left" }}>
-            <div style={{ fontSize: 13, fontWeight: 700 }}>{absenderName}</div>
-            {absenderUntertitel && <div style={{ fontSize: 9, color: "#999" }}>{absenderUntertitel}</div>}
-          </div>
-        </div>
-        <div style={{ fontSize: 8, color: "#bbb" }}>
-          {[absenderAdresse, `${absenderPlz} ${absenderOrt}`.trim(), absenderTel, absenderEmail].filter(Boolean).join(" · ")}
-        </div>
-        <div style={{ height: 1.5, background: `linear-gradient(to right, transparent, ${color}, transparent)`, marginTop: 10 }} />
-      </div>,
-      color, "#fff"
-    );
-
-    // 8 – Kreativ: Diagonal
-    case 8: return page("#fff",
-      <div style={{ position: "relative", minHeight: 110, overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundColor: "#f5f5f5" }} />
-        <div style={{ position: "absolute", top: 0, left: 0, width: "60%", height: "100%", backgroundColor: color, clipPath: "polygon(0 0, 90% 0, 70% 100%, 0 100%)" }} />
-        <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", padding: `22px ${M}px` }}>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{absenderName}</div>
-            {absenderUntertitel && <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)" }}>{absenderUntertitel}</div>}
-            <div style={{ fontSize: 8, color: "rgba(255,255,255,0.65)", marginTop: 3 }}>{absenderAdresse}</div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-            <LogoImg size={55} />
-            <KontBlock c="#555" />
-          </div>
-        </div>
-      </div>,
-      "#111", "#fff"
     );
 
     // 9 – Skandinavisch: Minimal
@@ -835,127 +733,6 @@ function DocumentPreview(props: PreviewProps) {
         <div style={{ marginTop: 14, borderBottom: "0.75px solid #ebebeb" }} />
       </div>,
       "#f2f2f2", "#333"
-    );
-
-    // 10 – Luxus: Serif, goldene Linien
-    case 10: return page("#fffdf8",
-      <div style={{ position: "relative", padding: `20px ${M}px 14px`, minHeight: 105 }}>
-        <div style={{ height: 0.75, backgroundColor: color, marginBottom: 10 }} />
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
-          <AbsBlock nameC="#333" subC="#aaa" addrC="#bbb" />
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-            <LogoImg size={55} />
-            <KontBlock c="#aaa" />
-          </div>
-        </div>
-        <div style={{ height: 0.75, backgroundColor: color, marginTop: 10 }} />
-      </div>,
-      "#f0e8d8", "#5a4030"
-    );
-
-    // 11 – Rahmen: Vollständiger Rahmen
-    case 11: return (
-      <>
-        <div style={{ ...PAGE_STYLE, backgroundColor: "#fff", padding: 5 }}>
-          <div style={{ border: `2px solid ${color}`, flex: 1, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-            <div style={{ backgroundColor: color, padding: `18px ${M - 5}px 14px`, position: "relative", minHeight: 100 }}>
-              <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.75)" addrC="rgba(255,255,255,0.55)" />
-              <RightCol dark kontC="rgba(255,255,255,0.65)" top={18} right={M - 5} />
-            </div>
-            {renderBody("#111", "#fff")}
-          </div>
-        </div>
-        {pageChunks.slice(1).map((chunk, pi) => {
-          const isLast = pi === pageChunks.length - 2;
-          const offset = pageChunks.slice(0, pi + 1).reduce((s, c) => s + c.length, 0);
-          return (
-            <div key={`page11-${pi + 2}`} style={{ ...PAGE_STYLE, backgroundColor: "#fff", padding: 5 }}>
-              <div style={{ border: `2px solid ${color}`, flex: 1, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                <div style={{ backgroundColor: color, padding: `8px ${M - 5}px`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 9, color: "#fff" }}>{typLabel}{nummer ? ` – ${nummer}` : ""} · Seite {pi + 2}</span>
-                  <LogoImg size={24} dark />
-                </div>
-                <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-                  {renderPositionsBlock(chunk, "#111", "#fff", offset)}
-                  {renderSummen(pageChunks.slice(0, pi + 2).flat())}
-                  {isLast ? renderDINBottom(pi + 2) : renderDINFooter(pi + 2)}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </>
-    );
-
-    // 12 – Technik: Zweispaltiger Header
-    case 12: return page("#f8f9fb",
-      <div style={{ display: "flex", borderBottom: `2.5px solid ${color}`, minHeight: 108 }}>
-        <div style={{ flex: "0 0 58%", backgroundColor: color + "12", padding: `18px ${M}px 14px`, borderRight: `1px solid ${color}22` }}>
-          <div style={{ fontSize: 8, color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 5 }}>Absender</div>
-          <AbsBlock nameC="#111" subC="#666" addrC="#888" />
-        </div>
-        <div style={{ flex: 1, padding: "18px 18px 14px", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div>
-            <div style={{ fontSize: 8, color, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 5 }}>Kontakt</div>
-            <div style={{ fontSize: 8.5, color: "#555", lineHeight: 1.65 }}>
-              {absenderTel && <div>{absenderTel}</div>}
-              {absenderEmail && <div>{absenderEmail}</div>}
-              {absenderWebsite && <div>{absenderWebsite}</div>}
-              {absenderSteuernummer && <div style={{ marginTop: 4, color: "#888" }}>St.-Nr.: {absenderSteuernummer}</div>}
-            </div>
-          </div>
-          <LogoImg size={52} />
-        </div>
-      </div>,
-      color, "#fff"
-    );
-
-    // 13 – Pfeile: Breadcrumb-Stil
-    case 13: return page("#fff",
-      <div style={{ position: "relative", padding: `22px ${M}px 14px`, minHeight: 105 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap", marginBottom: 3 }}>
-          <span style={{ fontWeight: 700, fontSize: 13 }}>{absenderName}</span>
-          {absenderUntertitel && <><span style={{ color, fontWeight: 700, fontSize: 14 }}>›</span><span style={{ color: "#888", fontSize: 9 }}>{absenderUntertitel}</span></>}
-          {absenderAdresse && <><span style={{ color, fontWeight: 700, fontSize: 14 }}>›</span><span style={{ color: "#aaa", fontSize: 8.5 }}>{absenderAdresse}</span></>}
-          {(absenderPlz || absenderOrt) && <><span style={{ color, fontWeight: 700, fontSize: 14 }}>›</span><span style={{ color: "#aaa", fontSize: 8.5 }}>{absenderPlz} {absenderOrt}</span></>}
-        </div>
-        <div style={{ fontSize: 8, color: "#bbb", display: "flex", gap: 10 }}>
-          {absenderTel && <span>{absenderTel}</span>}
-          {absenderEmail && <span>{absenderEmail}</span>}
-        </div>
-        <div style={{ position: "absolute", top: 22, right: M }}>
-          <LogoImg />
-        </div>
-        <div style={{ marginTop: 12, height: 1, backgroundColor: color }} />
-      </div>,
-      "#111", "#fff"
-    );
-
-    // 14 – Panorama: Farbverlauf-Kopf
-    case 14: return page("#fff",
-      <div style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, padding: `22px ${M}px 18px`, position: "relative", minHeight: 110 }}>
-        <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 2 }}>{absenderUntertitel}</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>{absenderName}</div>
-        <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.6)", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-        <RightCol dark kontC="rgba(255,255,255,0.65)" />
-      </div>,
-      "#111", "#fff"
-    );
-
-    // 15 – Initialen / Logo groß links
-    case 15: return page("#fff",
-      <div style={{ padding: `20px ${M}px 14px`, display: "flex", alignItems: "center", gap: 14, borderBottom: "1px solid #eee", minHeight: 105 }}>
-        {logoUrl
-          ? <img src={logoUrl} style={{ width: LS, height: LS, objectFit: "contain", borderRadius: 10, flexShrink: 0 }} alt="" />
-          : <div style={{ width: LS, height: LS, borderRadius: 12, backgroundColor: color, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 900, fontSize: 26 }}>{initials}</div>}
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 13, fontWeight: 700 }}>{absenderName}</div>
-          {absenderUntertitel && <div style={{ fontSize: 9, color: "#aaa" }}>{absenderUntertitel}</div>}
-          <div style={{ fontSize: 8.5, color: "#bbb", marginTop: 3 }}>{absenderAdresse} · {absenderPlz} {absenderOrt}</div>
-        </div>
-        <KontBlock c="#999" />
-      </div>,
-      color, "#fff"
     );
 
     default: return null;
