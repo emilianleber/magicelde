@@ -93,12 +93,23 @@ serve(async (req) => {
       <tr>
         <td bgcolor="#ffffff" style="padding:36px 36px 32px;background-color:#ffffff!important;">
           <div style="font-size:15px;line-height:1.8;color:#52525b!important;">${mailBody.replace(/\n/g, "<br>")}</div>
-          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e4e4e7;margin-top:32px;">
-            <tr><td bgcolor="#ffffff" style="padding-top:24px;background-color:#ffffff!important;">
-              <p style="margin:0 0 2px;font-size:14px;color:#71717a!important;">Mit magischen Grüßen,</p>
-              <p style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a!important;">Emilian Leber</p>
-              <p style="margin:4px 0 0;font-size:12px;color:#a1a1aa!important;">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
-            </td></tr>
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:24px;">
+            <tr><td colspan="2" style="padding-bottom:16px;"><div style="height:2px;background:linear-gradient(90deg,#6366f1 0%,#a855f7 40%,#e4e4e7 40%);border-radius:2px;"></div></td></tr>
+            <tr>
+              <td style="width:64px;vertical-align:top;padding-right:18px;">
+                <img src="https://magicel.de/favicon.ico" alt="EL" width="48" height="48" style="border-radius:12px;display:block;" />
+              </td>
+              <td style="vertical-align:top;">
+                <p style="margin:0;font-size:15px;font-weight:700;color:#18181b!important;">Emilian Leber</p>
+                <p style="margin:2px 0 0;font-size:10px;font-weight:600;color:#6366f1;text-transform:uppercase;letter-spacing:1px;">Zauberer &amp; Entertainer</p>
+                <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:8px;">
+                  <tr><td style="padding:2px 0;font-size:11px;color:#71717a;width:14px;">T</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="tel:+4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td></tr>
+                  <tr><td style="padding:2px 0;font-size:11px;color:#71717a;">E</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="mailto:el@magicel.de" style="color:#3f3f46;text-decoration:none;">el@magicel.de</a></td></tr>
+                  <tr><td style="padding:2px 0;font-size:11px;color:#71717a;">W</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="https://magicel.de" style="color:#3f3f46;text-decoration:none;">www.magicel.de</a></td></tr>
+                </table>
+                <p style="margin:6px 0 0;font-size:10px;color:#a1a1aa;">Regensburg · Deutschland · <a href="https://wa.me/4915563744696" style="color:#a1a1aa;text-decoration:none;">WhatsApp</a></p>
+              </td>
+            </tr>
           </table>
         </td>
       </tr>
