@@ -725,6 +725,17 @@ const AdminBookingDetail = () => {
             </div>
           </div>
 
+          {/* ── Uhrzeit-Warnung ── */}
+          {!uhrzeit && datum && (
+            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
+              <span className="text-lg">⚠️</span>
+              <div>
+                <p className="text-sm font-semibold text-amber-800">Uhrzeit fehlt noch</p>
+                <p className="text-xs text-amber-600 mt-0.5">Bitte klären Sie die Uhrzeit mit dem Kunden. Ohne Uhrzeit wird der Termin als ganztägig im Kalender angezeigt.</p>
+              </div>
+            </div>
+          )}
+
           {/* ── Event-Planung (nur bei gebuchten Events) ── */}
           {event && (
             <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
@@ -737,7 +748,6 @@ const AdminBookingDetail = () => {
                   { key: "aufbau_zeit", label: "Aufbauzeit / Ankunft", placeholder: "z.B. 17:00, 30 Min vorher", icon: "🕐" },
                   { key: "technik_vorhanden", label: "Vorhandene Technik", placeholder: "Mikrofon, Licht, Musik...", icon: "🎤" },
                   { key: "ankuendigung", label: "Ankündigung", placeholder: "Selbst starten oder vorgestellt werden?", icon: "📢" },
-                  { key: "budget_rahmen", label: "Budget-Rahmen", placeholder: "z.B. 1500-2500€", icon: "💰" },
                   { key: "besonderheiten", label: "Besonderheiten", placeholder: "Überraschung, Allergien, Sprache...", icon: "⭐" },
                 ].map((field) => (
                   <div key={field.key}>
