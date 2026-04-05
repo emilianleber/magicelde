@@ -5,9 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService, reserviereNummer } from "@/services/dokumenteService";
 import type { DokumentTyp } from "@/types/dokumente";
 import type { Artikel } from "@/types/dokumente";
-import { ArrowLeft, ChevronDown, ChevronUp, Download, Eye, Printer, Save, Send, Trash2, X } from "lucide-react";
-import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
+import { ArrowLeft, ChevronDown, ChevronUp, Download, Eye, Save, Send, Trash2, X } from "lucide-react";
 import RichTextEditor, { textToHtml, htmlToText } from "@/components/admin/RichTextEditor";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -590,8 +588,7 @@ function DocumentPreview(props: PreviewProps) {
             {[absenderName, absenderAdresse, `${absenderPlz} ${absenderOrt}`.trim()].filter(Boolean).join(" – ")}
           </div>
           {empfaengerFirma && <div style={{ fontWeight: 600, color: "#111" }}>{empfaengerFirma}</div>}
-          {empfaengerAnrede && <div style={{ color: "#111" }}>{empfaengerAnrede === "Herr" ? "Herrn" : empfaengerAnrede}</div>}
-          <div style={{ color: "#111" }}>{empfaengerName || <span style={{ color: "#ccc" }}>Empfänger Name</span>}</div>
+          <div style={{ color: "#111" }}>{empfaengerAnrede ? `${empfaengerAnrede === "Herr" ? "Herrn" : empfaengerAnrede} ` : ""}{empfaengerName || <span style={{ color: "#ccc" }}>Empfänger Name</span>}</div>
           {empfaengerAdresse && <div>{empfaengerAdresse}</div>}
           {(empfaengerPlz || empfaengerOrt) && <div>{empfaengerPlz} {empfaengerOrt}</div>}
           {empfaengerLand && empfaengerLand !== "Deutschland" && <div>{empfaengerLand}</div>}
@@ -1651,38 +1648,72 @@ export default function AdminDokumentEditor() {
     } finally { setSaving(false); }
   };
 
-  // PDF direkt downloaden via html2canvas + jsPDF
-  const [pdfGenerating, setPdfGenerating] = useState(false);
-  const handleDownloadPdf = async () => {
+  // PDF: Neues Fenster öffnen → User wählt "Als PDF sichern" im Druckdialog
+  const handleDownloadPdf = () => {
     const el = document.getElementById("doc-preview-print");
     if (!el) return;
-    setPdfGenerating(true);
-    try {
-      const pages = el.querySelectorAll<HTMLElement>(":scope > div");
-      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-      for (let i = 0; i < pages.length; i++) {
-        if (i > 0) pdf.addPage();
-        const canvas = await html2canvas(pages[i], {
-          scale: 2, useCORS: true, backgroundColor: "#ffffff",
-          width: 595, height: 842,
-        });
-        const imgData = canvas.toDataURL("image/jpeg", 0.95);
-        pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
-      }
-      // Fallback: wenn keine pages gefunden, ganzes Element nehmen
-      if (pages.length === 0) {
-        const canvas = await html2canvas(el, {
-          scale: 2, useCORS: true, backgroundColor: "#ffffff",
-        });
-        const imgData = canvas.toDataURL("image/jpeg", 0.95);
-        pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
-      }
-      pdf.save(`${nummer || "Dokument"}.pdf`);
-    } catch (err) {
-      console.error("PDF-Generierung fehlgeschlagen:", err);
-      alert("PDF konnte nicht erstellt werden. Bitte versuchen Sie es erneut.");
+
+    const html = el.innerHTML;
+    const win = window.open("", "_blank");
+    if (!win) {
+      alert("Bitte erlauben Sie Popups für diese Seite, um das PDF zu öffnen.");
+      return;
     }
-    setPdfGenerating(false);
+
+    const scale = ((210 / 25.4) * 96) / 595;
+
+    win.document.write(`<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>${nummer || "Dokument"}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+@page { size: A4 portrait; margin: 0; }
+html, body { margin: 0; padding: 0; }
+body > div {
+  width: 595px !important;
+  height: 842px !important;
+  zoom: ${scale.toFixed(6)} !important;
+  overflow: hidden !important;
+  aspect-ratio: auto !important;
+  position: relative !important;
+  page-break-after: always !important;
+  break-after: page !important;
+}
+body > div:last-child {
+  page-break-after: auto !important;
+  break-after: auto !important;
+}
+@media screen {
+  body {
+    background: #444;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  body > div {
+    box-shadow: 0 6px 32px rgba(0,0,0,0.35);
+    background: #fff;
+  }
+}
+</style>
+</head>
+<body>${html}</body>
+</html>`);
+
+    win.document.close();
+    setTimeout(() => {
+      win.focus();
+      win.print();
+    }, 900);
   };
 
   const typLabel = TYP_LABEL[typ] || typ;
@@ -1776,11 +1807,10 @@ export default function AdminDokumentEditor() {
               </button>
               <button
                 onClick={handleDownloadPdf}
-                disabled={pdfGenerating}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors"
               >
                 <Download className="w-4 h-4" />
-                {pdfGenerating ? "PDF wird erstellt…" : "PDF herunterladen"}
+                PDF / Drucken
               </button>
               <button
                 onClick={handleSaveAndNavigate}
