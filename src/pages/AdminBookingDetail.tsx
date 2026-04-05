@@ -185,6 +185,8 @@ const eventStatusOptions = [
   { value: "rechnung_gesendet", label: "Rechnung gesendet" },
   { value: "rechnung_bezahlt", label: "Rechnung bezahlt" },
   { value: "event_erfolgt", label: "Event erfolgt" },
+  { value: "schlussrechnung", label: "Schlussrechnung" },
+  { value: "abgeschlossen", label: "Abgeschlossen" },
   { value: "storniert", label: "Storniert" },
 ];
 
