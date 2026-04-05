@@ -45,7 +45,7 @@ serve(async (req) => {
       type: "magiclink",
       email,
       options: {
-        redirectTo: "https://magicel.de/kundenportal",
+        redirectTo: "https://www.magicel.de/kundenportal",
       },
     });
     if (linkErr || !linkData?.properties?.action_link) {

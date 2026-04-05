@@ -94,7 +94,7 @@ Hallo ${name}, Ihr Event „${eventTitle}" liegt nun etwas zurück und ich würd
 Es dauert nur 2 Minuten – versprochen! 🙏
 </p>
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-top:28px;"><tr><td align="center">
-<a href="https://magicel.de/kundenportal?tab=feedback&eventId=${eventId}" style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:14px;font-weight:700;font-family:${FONT};">Feedback geben →</a>
+<a href="https://www.magicel.de/kundenportal?tab=feedback&eventId=${eventId}" style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:14px;font-weight:700;font-family:${FONT};">Feedback geben →</a>
 </td></tr></table>
 </td></tr>
 <tr><td style="padding:0 32px 28px;border-top:1px solid #f4f4f5;">
