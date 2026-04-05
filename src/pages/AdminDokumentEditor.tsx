@@ -468,13 +468,12 @@ function DocumentPreview(props: PreviewProps) {
 
   // ── Pagination ────────────────────────────────────────────────────────────
   const estimatePosH = (pos: LocalPosition): number => {
-    // Base row height in the PDF (font-size ~8.5, padding 4+4)
-    let h = 22;
+    let h = 18; // base row height
     if (pos.beschreibung) {
       const stripped = pos.beschreibung.replace(/<[^>]+>/g, " ").trim();
       const lines = stripped.split("\n").reduce((acc, line) =>
-        acc + Math.max(1, Math.ceil((line.length || 1) / 45)), 0);
-      h += lines * 11;
+        acc + Math.max(1, Math.ceil((line.length || 1) / 55)), 0);
+      h += lines * 10;
     }
     return h;
   };
@@ -484,13 +483,13 @@ function DocumentPreview(props: PreviewProps) {
 
   // Dynamic heights at 595px page width (font-size 8.5-9.5, line-height ~1.5)
   const PAGE_H     = 842;
-  const HDR_H      = 130; // header height across all layouts
-  const DIN_TOP_H  = 220; // address zone + gap + betreff
-  const KOPF_H     = kopftext ? Math.max(16, Math.ceil(stripHtmlLen(kopftext) / 75) * 15 + 12) : 0;
-  const TBL_HDR_H  = 22;
-  const SUMMEN_H   = 62;
-  const GRUSS_H    = 12; // nur Abstand, Signatur ist im Fußtext enthalten
-  const DIN_FTR_H  = 85; // Footer ist absolut positioniert, dieser Wert reserviert Platz
+  const HDR_H      = 110; // header (logo + name)
+  const DIN_TOP_H  = 200; // address zone + gap + betreff
+  const KOPF_H     = kopftext ? Math.max(12, Math.ceil(stripHtmlLen(kopftext) / 80) * 12 + 8) : 0;
+  const TBL_HDR_H  = 20;
+  const SUMMEN_H   = 55;
+  const GRUSS_H    = 8;
+  const DIN_FTR_H  = 75; // Footer absolut positioniert
   const estimateHtmlH = (html: string): number => {
     if (!html) return 0;
     // Split by <br> into segments, estimate lines per segment by char count
