@@ -652,19 +652,18 @@ function DocumentPreview(props: PreviewProps) {
   // DIN 5008 Fußzeile – erscheint auf JEDER Seite, fixe Position am Seitenende
   const renderDINFooter = (pageNum: number) => (
     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, backgroundColor: "#fff" }}>
-      <div style={{ margin: `0 ${M}px 8px`, borderTop: "0.75px solid #c0c0c0", paddingTop: 5, paddingBottom: 6 }}>
+      <div style={{ margin: `0 ${M}px`, borderTop: "0.5px solid #d4d4d8", paddingTop: 8, paddingBottom: 10 }}>
         {totalPages > 1 && (
-          <div style={{ textAlign: "right", fontSize: 7, color: "#999", marginBottom: 4 }}>
+          <div style={{ textAlign: "right", fontSize: 6.5, color: "#a1a1aa", marginBottom: 5 }}>
             Seite {pageNum} von {totalPages}
           </div>
         )}
-        <div style={{ display: "flex", fontSize: 7.5, color: "#555", lineHeight: 1.7 }}>
+        <div style={{ display: "flex", gap: 20, fontSize: 7, color: "#a1a1aa", lineHeight: 1.65 }}>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600 }}>{absenderName}</div>
+            <div style={{ fontWeight: 600, color: "#71717a" }}>{absenderName}</div>
             {absenderUntertitel && <div>{absenderUntertitel}</div>}
             {absenderAdresse && <div>{absenderAdresse}</div>}
             {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
-            {absenderLand && absenderLand !== "Deutschland" && <div>{absenderLand}</div>}
           </div>
           <div style={{ flex: 1 }}>
             {absenderTel     && <div>Tel.: {absenderTel}</div>}
@@ -673,10 +672,10 @@ function DocumentPreview(props: PreviewProps) {
           </div>
           <div style={{ flex: 1 }}>
             {absenderSteuernummer && <div>Steuer-Nr.: {absenderSteuernummer}</div>}
-            {absenderInhaber      && <div>Inhaber/-in: {absenderInhaber}</div>}
+            {absenderInhaber      && <div>Inhaber: {absenderInhaber}</div>}
           </div>
           <div style={{ flex: 1 }}>
-            {absenderIban && <div>IBAN: {absenderIban}</div>}
+            {absenderIban && <div style={{ whiteSpace: "nowrap" }}>IBAN: {absenderIban}</div>}
             {absenderBic  && <div>BIC: {absenderBic}</div>}
           </div>
         </div>
