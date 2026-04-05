@@ -485,20 +485,20 @@ function DocumentPreview(props: PreviewProps) {
   const PAGE_H     = 842;
   const HDR_H      = 110; // header (logo + name)
   const DIN_TOP_H  = 200; // address zone + gap + betreff
-  const KOPF_H     = kopftext ? Math.max(12, Math.ceil(stripHtmlLen(kopftext) / 80) * 12 + 8) : 0;
+  const KOPF_H     = estimateHtmlH(kopftext);
   const TBL_HDR_H  = 20;
   const SUMMEN_H   = 55;
   const GRUSS_H    = 8;
   const DIN_FTR_H  = 75; // Footer absolut positioniert
   const estimateHtmlH = (html: string): number => {
     if (!html) return 0;
-    // Split by <br> into segments, estimate lines per segment by char count
+    // font-size 9.5, line-height 1.65 → ~16px per line, ~50 chars per line at 595-2*52=491px
     const segments = html.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "").split("\n");
     const totalLines = segments.reduce((sum, seg) => {
       const trimmed = seg.trim();
-      return sum + (trimmed.length === 0 ? 1 : Math.ceil(trimmed.length / 70));
+      return sum + (trimmed.length === 0 ? 1 : Math.ceil(trimmed.length / 50));
     }, 0);
-    return Math.max(16, totalLines * 12 + 8);
+    return Math.max(16, totalLines * 16 + 10);
   };
   const FUSS_H     = estimateHtmlH(fusstext);
 
