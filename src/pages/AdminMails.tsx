@@ -129,7 +129,7 @@ const AdminMails = () => {
       if (!tplRes.error) setTemplates(tplRes.data || []);
       // Auch email_templates laden für Schnellversand-Vorlagen
       const { data: etData } = await supabase.from("email_templates").select("slug,name,betreff,inhalt").eq("aktiv", true).order("sortierung");
-      if (etData) setTemplates((prev) => [...prev, ...etData.map((t: any) => ({ id: t.slug, name: t.name, subject: t.betreff, body: t.inhalt }))]);
+      if (etData) setTemplates((prev) => [...prev, ...etData.map((t: any) => ({ id: t.slug, name: t.name, subject: t.betreff, body: t.inhalt.replace(/\n/g, "<br>") }))]);
       if (!sigRes.error && sigRes.data) setSignature(sigRes.data.body);
       if (!custRes.error) setCustomers(custRes.data || []);
       if (!sentRes.error) setSentMails(sentRes.data || []);
