@@ -272,7 +272,6 @@ const requestMailTemplate = (request: any) => {
       };
 
     case "gebucht":
-    case "bestätigt":
       return {
         subject: "Ihr Event mit Emilian Leber ist gebucht! 🎉",
         html: getEmailShell(
@@ -282,6 +281,20 @@ const requestMailTemplate = (request: any) => {
           `${statusBadge("✦ Buchung bestätigt", "#15803d", "#f0fdf4")}${infoTable(rows)}
           <p style="margin:0;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
             Den aktuellen Stand finden Sie jederzeit im Bereich <strong style="color:#0a0a0a;">Events</strong> in Ihrem Kundenportal.
+          </p>`
+        ),
+      };
+
+    case "bestätigt":
+      return {
+        subject: "Ihre Buchung ist bestätigt – Emilian Leber ✅",
+        html: getEmailShell(
+          "Bestätigung",
+          "Buchung bestätigt.",
+          `Hallo ${gruss}, Ihre Buchung wurde offiziell bestätigt. Alle Details sind festgehalten und ich freue mich auf Ihr Event!`,
+          `${statusBadge("✦ Bestätigt", "#15803d", "#f0fdf4")}${infoTable(rows)}
+          <p style="margin:0;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
+            Den aktuellen Stand finden Sie jederzeit in Ihrem Kundenportal.
           </p>`
         ),
       };
@@ -302,18 +315,40 @@ const requestMailTemplate = (request: any) => {
       };
 
     case "archiviert":
+      return {
+        subject: "Ihre Anfrage wurde archiviert – Emilian Leber",
+        html: getEmailShell(
+          "Archiviert",
+          "Anfrage archiviert.",
+          `Hallo ${gruss}, Ihre Anfrage wurde archiviert. Falls Sie in Zukunft eine neue Veranstaltung planen, freue ich mich jederzeit von Ihnen zu hören!`,
+          `${statusBadge("✦ Archiviert", "#71717a", "#f4f4f5")}${infoTable(rows)}`,
+          false
+        ),
+      };
+
     case "storniert":
-    case "zurückgezogen":
       return {
         subject: "Ihre Stornierung ist bestätigt – Emilian Leber",
         html: getEmailShell(
           "Stornierung",
           "Stornierung bestätigt.",
-          `Hallo ${gruss}, Ihre Stornierungsanfrage wurde bearbeitet und ist jetzt abgeschlossen.`,
+          `Hallo ${gruss}, Ihre Stornierung wurde bearbeitet und ist jetzt abgeschlossen.`,
           `${statusBadge("✦ Stornierung bestätigt", "#b45309", "#fffbeb")}${infoTable(rows)}
           <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
-            Falls Sie in Zukunft eine neue Anfrage stellen möchtest, freue ich mich jederzeit von Ihnen zu hören.
+            Falls Sie in Zukunft eine neue Anfrage stellen möchten, freue ich mich jederzeit von Ihnen zu hören.
           </p>`,
+          false
+        ),
+      };
+
+    case "zurückgezogen":
+      return {
+        subject: "Ihre Anfrage wurde zurückgezogen – Emilian Leber",
+        html: getEmailShell(
+          "Zurückgezogen",
+          "Anfrage zurückgezogen.",
+          `Hallo ${gruss}, Ihre Anfrage wurde wie gewünscht zurückgezogen. Falls Sie es sich anders überlegen oder eine neue Anfrage stellen möchten, bin ich jederzeit für Sie da.`,
+          `${statusBadge("✦ Zurückgezogen", "#71717a", "#f4f4f5")}${infoTable(rows)}`,
           false
         ),
       };
