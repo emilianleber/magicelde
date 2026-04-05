@@ -165,7 +165,7 @@ serve(async (req) => {
       <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;">
       <tr><td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:22px 24px;">
         <p style="margin:0 0 18px;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
-          Falls du einen Moment hast, würde ich mich sehr über eine Bewertung freuen – das hilft anderen bei ihrer Entscheidung. 🙏
+          Falls Sie einen Moment haben, würde ich mich sehr über eine Bewertung freuen – das hilft anderen bei ihrer Entscheidung. 🙏
         </p>
         <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
         <tr>
@@ -182,7 +182,7 @@ serve(async (req) => {
         getEmailShell(
           "Danke",
           "Vielen Dank.",
-          `Hallo ${name}, vielen Dank für das wunderbare Event und dein Vertrauen. Es war mir eine echte Freude!`,
+          `Hallo ${name}, vielen Dank für das wunderbare Event und Ihr Vertrauen. Es war mir eine echte Freude!`,
           `${infoTable(rows)}${reviewSection}`,
           false
         )
@@ -226,8 +226,8 @@ serve(async (req) => {
         "In einer Woche ist es soweit! 🎩",
         getEmailShell(
           "Erinnerung",
-          "Dein Event in 7 Tagen.",
-          `Hallo ${name}, nur noch eine Woche bis zu deinem Event! Ich freue mich schon sehr. Falls du noch Fragen oder Änderungswünsche hast, melde dich gerne.`,
+          "Ihr Event in 7 Tagen.",
+          `Hallo ${name}, nur noch eine Woche bis zu Ihrem Event! Ich freue mich schon sehr. Falls Sie noch Fragen oder Änderungswünsche haben, melden Sie sich gerne.`,
           `${statusBadge("📅 In 7 Tagen", "#2563eb", "#eff6ff")}${infoTable(rows)}`
         )
       );
@@ -257,11 +257,11 @@ serve(async (req) => {
 
       await sendMail(
         customer.email,
-        "Dein Angebot läuft bald ab – Emilian Leber",
+        "Ihr Angebot läuft bald ab – Emilian Leber",
         getEmailShell(
           "Angebot",
-          "Dein Angebot läuft in 3 Tagen ab.",
-          `Hallo ${name}, kurze Erinnerung: dein Angebot ${doc.document_number || ""} ist noch bis zum ${fmtDate(in3days)} gültig. Falls du noch Fragen hast, melde dich gerne – ich helfe dir bei der Entscheidung.`,
+          "Ihr Angebot läuft in 3 Tagen ab.",
+          `Hallo ${name}, kurze Erinnerung: Ihr Angebot ${doc.document_number || ""} ist noch bis zum ${fmtDate(in3days)} gültig. Falls Sie noch Fragen haben, melden Sie sich gerne – ich helfe Ihnen bei der Entscheidung.`,
           `${statusBadge("⏳ Läuft bald ab", "#b45309", "#fffbeb")}`
         )
       );
@@ -296,10 +296,10 @@ serve(async (req) => {
         `Freundliche Erinnerung: ${typLabel} heute fällig – Emilian Leber`,
         getEmailShell(
           "Zahlung",
-          `Deine ${typLabel} ist heute fällig.`,
-          `Hallo ${name}, kurze freundliche Erinnerung: deine ${typLabel} ${doc.document_number || ""} ist heute fällig. Du findest sie jederzeit in deinem Kundenportal zum Download.`,
+          `Ihre ${typLabel} ist heute fällig.`,
+          `Hallo ${name}, kurze freundliche Erinnerung: Ihre ${typLabel} ist heute fällig. Sie finden sie jederzeit in Ihrem Kundenportal zum Download.`,
           `${statusBadge("✦ Zahlung fällig", "#b45309", "#fffbeb")}
-          <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">Bei Fragen zur Rechnung melde dich gerne direkt bei mir.</p>`
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">Bei Fragen zur Rechnung melden Sie sich gerne direkt bei mir.</p>`
         )
       );
 

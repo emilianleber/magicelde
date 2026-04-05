@@ -375,18 +375,18 @@ serve(async (req) => {
 
       const customerHtml = getEmailShell(
         "Buchung",
-        "Dein Event ist gebucht! 🎉",
-        `Hallo ${firstName}, herzlichen Glückwunsch – deine Buchung ist jetzt offiziell bestätigt! Ich freue mich sehr darauf, dein Event unvergesslich zu machen.`,
+        "Ihr Event ist gebucht! 🎉",
+        `Hallo ${firstName}, herzlichen Glückwunsch – deine Buchung ist jetzt offiziell bestätigt! Ich freue mich sehr darauf, Ihr Event unvergesslich zu machen.`,
         `${statusBadge("✦ Buchung bestätigt", "#15803d", "#f0fdf4")}${infoTable(eventRows)}
         <p style="margin:0;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
-          Alle weiteren Details und deine Auftragsbestätigung findest du in deinem <strong style="color:#0a0a0a;">Kundenportal</strong>. Bei Fragen melde dich einfach direkt bei mir.
+          Alle weiteren Details und deine Auftragsbestätigung findest du in deinem <strong style="color:#0a0a0a;">Kundenportal</strong>. Bei Fragen melden Sie sich einfach direkt bei mir.
         </p>`,
         true
       );
 
       await sendMail(
         customer.email,
-        "Dein Event ist gebucht – Emilian Leber",
+        "Ihr Event ist gebucht – Emilian Leber",
         customerHtml
       );
 
@@ -430,18 +430,18 @@ serve(async (req) => {
 
       const customerHtml = getEmailShell(
         "Anfrage",
-        "Update zu deiner Anfrage.",
-        `Hallo ${firstName}, ich habe deine Rückmeldung zu meinem Angebot erhalten. Schade, dass es diesmal nicht geklappt hat – aber ich hoffe, wir finden in Zukunft den richtigen Rahmen für dein Event.`,
+        "Update zu Ihrer Anfrage.",
+        `Hallo ${firstName}, ich habe deine Rückmeldung zu meinem Angebot erhalten. Schade, dass es diesmal nicht geklappt hat – aber ich hoffe, wir finden in Zukunft den richtigen Rahmen für Ihr Event.`,
         `${infoTable(requestRows)}
         <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
-          Falls du neue Pläne hast oder sich etwas geändert hat, kannst du jederzeit eine neue Anfrage stellen. Ich freue mich, von dir zu hören.
+          Falls du neue Pläne hast oder sich etwas geändert hat, kannst du jederzeit eine neue Anfrage stellen. Ich freue mich, von Ihnen zu hören.
         </p>`,
         false
       );
 
       await sendMail(
         customer.email,
-        "Update zu deiner Anfrage – Emilian Leber",
+        "Update zu Ihrer Anfrage – Emilian Leber",
         customerHtml
       );
 

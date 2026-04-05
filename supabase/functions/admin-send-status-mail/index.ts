@@ -501,8 +501,8 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
 const newCustomerMail = (customer: any) =>
   getEmailShell(
     "Willkommen",
-    `Schön, dass du da bist, ${customer.name?.split(" ")[0] || ""}!`,
-    "Du wurdest in meinem Kundenportal angelegt. Dort findest du alle Infos zu deinen Anfragen, Events und Dokumenten – jederzeit und überall.",
+    `Schön, dass Sie da sind, ${customer.name?.split(" ")[0] || ""}!`,
+    "Sie wurden in meinem Kundenportal angelegt. Dort finden Sie alle Infos zu Ihren Anfragen, Events und Dokumenten – jederzeit und überall.",
     `${customer.firma ? `
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:16px;">
       <tr><td bgcolor="#f9fafb" style="background-color:#f9fafb;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
@@ -736,14 +736,14 @@ serve(async (req) => {
 
       const html = getEmailShell(
         isApproved ? "Angenommen" : "Abgelehnt",
-        isApproved ? "Deine Anfrage wurde angenommen." : "Deine Anfrage wurde abgelehnt.",
+        isApproved ? "Ihre Anfrage wurde angenommen." : "Ihre Anfrage wurde abgelehnt.",
         `Hallo ${firstName}, hier ist meine Rückmeldung zu Ihrer Anfrage.`,
         `${statusBadge(isApproved ? "✦ Angenommen" : "✦ Abgelehnt",
           isApproved ? "#15803d" : "#b91c1c",
           isApproved ? "#f0fdf4" : "#fef2f2")}
         <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px;">
           <tr><td bgcolor="#f9fafb" style="background-color:#f9fafb!important;border:1px solid #e4e4e7;border-radius:14px;padding:16px 20px;">
-            <p style="margin:0 0 4px;font-size:13px;color:#71717a!important;font-family:${FONT};">Deine Anfrage</p>
+            <p style="margin:0 0 4px;font-size:13px;color:#71717a!important;font-family:${FONT};">Ihre Anfrage</p>
             <p style="margin:0;font-size:15px;font-weight:600;color:#0a0a0a!important;font-family:${FONT};">${cr.subject}</p>
           </td></tr>
         </table>
