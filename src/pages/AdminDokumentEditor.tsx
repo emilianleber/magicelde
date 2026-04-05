@@ -489,7 +489,7 @@ function DocumentPreview(props: PreviewProps) {
   const KOPF_H     = kopftext ? Math.max(16, Math.ceil(stripHtmlLen(kopftext) / 75) * 15 + 12) : 0;
   const TBL_HDR_H  = 22;
   const SUMMEN_H   = 62;
-  const GRUSS_H    = 60;
+  const GRUSS_H    = 12; // nur Abstand, Signatur ist im Fußtext enthalten
   const DIN_FTR_H  = 78;
   const FUSS_H     = fusstext ? Math.max(16, Math.ceil(stripHtmlLen(fusstext) / 75) * 15 + 12) : 0;
 
@@ -731,10 +731,6 @@ function DocumentPreview(props: PreviewProps) {
           {htmlToText(fusstext.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, ""))}
         </div>
       )}
-      <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
-        <div style={{ fontWeight: 700 }}>{absenderName}</div>
-        {absenderUntertitel && <div style={{ color: "#666", fontSize: 9 }}>{absenderUntertitel}</div>}
-      </div>
       {renderDINFooter(pageNum)}
     </>
   );
@@ -751,7 +747,7 @@ function DocumentPreview(props: PreviewProps) {
 
   // ── Page wrapper + multi-page renderer ───────────────────────────────────
   const PAGE_STYLE: React.CSSProperties = {
-    width: "100%", aspectRatio: "210/297", overflow: "hidden",
+    width: "100%", aspectRatio: "210/297",
     fontFamily: font, color: "#1a1a1a", display: "flex", flexDirection: "column",
   };
 
