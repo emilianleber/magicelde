@@ -179,20 +179,18 @@ const statusOptions = [
   { value: "archiviert", label: "Archiviert" },
 ];
 
-// Hauptphasen des Events
+// Event-Status (frei wählbar, nicht zwingend sequentiell)
 const eventStatusOptions = [
-  { value: "in_planung", label: "In Planung" },
-  { value: "event_erfolgt", label: "Event durchgeführt" },
-  { value: "abgeschlossen", label: "Abgeschlossen" },
-  { value: "storniert", label: "Storniert" },
+  { value: "in_planung", label: "In Planung", icon: "📋" },
+  { value: "details_offen", label: "Details klären", icon: "📩" },
+  { value: "vertrag_gesendet", label: "Vertrag gesendet", icon: "📄" },
+  { value: "vertrag_bestaetigt", label: "Vertrag bestätigt", icon: "✅" },
+  { value: "rechnung_gesendet", label: "Rechnung gesendet", icon: "💰" },
+  { value: "rechnung_bezahlt", label: "Rechnung bezahlt", icon: "✅" },
+  { value: "event_erfolgt", label: "Event durchgeführt", icon: "🎉" },
+  { value: "abgeschlossen", label: "Abgeschlossen", icon: "🏁" },
+  { value: "storniert", label: "Storniert", icon: "❌" },
 ];
-
-// Unabhängige Aufgaben (können in beliebiger Reihenfolge erledigt werden)
-const eventTasks = [
-  { key: "details_status", label: "Details geklärt", doneValue: "erledigt" },
-  { key: "contract_status", label: "Vertrag", doneValue: "erledigt" },
-  { key: "invoice_status", label: "Rechnung", doneValue: "erledigt" },
-] as const;
 
 const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
   if (!val) return "";
@@ -404,9 +402,16 @@ const AdminBookingDetail = () => {
         format: draftFormat || null,
         guests: draftGaeste ? Number(draftGaeste) : null,
         status: event.status,
-        details_status: event.details_status || "offen",
-        contract_status: event.contract_status || "offen",
-        invoice_status: event.invoice_status || "offen",
+        // Aufgaben-Status automatisch setzen basierend auf Event-Status
+        details_status: ["details_offen"].includes(event.status || "") ? "offen"
+          : ["vertrag_gesendet", "vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(event.status || "") ? "erledigt"
+          : event.details_status || "offen",
+        contract_status: ["vertrag_gesendet"].includes(event.status || "") ? "gesendet"
+          : ["vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(event.status || "") ? "erledigt"
+          : event.contract_status || "offen",
+        invoice_status: ["rechnung_gesendet"].includes(event.status || "") ? "gesendet"
+          : ["rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(event.status || "") ? "erledigt"
+          : event.invoice_status || "offen",
       }).eq("id", event.id);
     }
 
@@ -977,38 +982,22 @@ const AdminBookingDetail = () => {
                     <Check className="w-3.5 h-3.5" /> Gebucht
                   </p>
                 </div>
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Phase</p>
-                <div className="space-y-1 mb-4">
-                  {eventStatusOptions.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setEvent((prev: any) => prev ? { ...prev, status: opt.value } : prev)}
-                      className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
-                        event.status === opt.value
-                          ? "bg-foreground text-background font-semibold"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
-                <div className="space-y-1.5 mb-5">
-                  {eventTasks.map((task) => {
-                    const isDone = (event as any)[task.key] === task.doneValue;
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Event-Status</p>
+                <div className="space-y-1 mb-5">
+                  {eventStatusOptions.map((opt) => {
+                    const isActive = event.status === opt.value;
                     return (
                       <button
-                        key={task.key}
-                        onClick={() => setEvent((prev: any) => prev ? { ...prev, [task.key]: isDone ? "offen" : task.doneValue } : prev)}
+                        key={opt.value}
+                        onClick={() => setEvent((prev: any) => prev ? { ...prev, status: opt.value } : prev)}
                         className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
-                          isDone ? "text-green-700 bg-green-50 border border-green-200" : "text-muted-foreground hover:bg-muted/40 border border-transparent"
+                          isActive
+                            ? "bg-foreground text-background font-semibold"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
                         }`}
                       >
-                        <span className={`w-5 h-5 rounded flex items-center justify-center shrink-0 text-xs ${isDone ? "bg-green-500 text-white" : "border border-muted-foreground/30"}`}>
-                          {isDone ? "✓" : ""}
-                        </span>
-                        {task.label}
+                        <span className="w-5 text-center">{opt.icon}</span>
+                        {opt.label}
                       </button>
                     );
                   })}
