@@ -187,11 +187,7 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
   const st = request?.status || "";
   const evSt = event?.status || "";
 
-  // Hilfsfunktion: ist ein Status in der Pipeline "erreicht"?
-  const eventOrder = ["in_planung", "details_offen", "vertrag_gesendet", "vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "schlussrechnung_gesendet", "schlussrechnung_bezahlt", "abgeschlossen"];
-  const evIdx = eventOrder.indexOf(evSt);
-  const evReached = (s: string) => evIdx >= eventOrder.indexOf(s);
-
+  // Anfrage-Phase
   steps.push({ label: "Anfrage eingegangen", done: !!request, hint: request?.created_at ? new Date(request.created_at).toLocaleDateString("de-DE") : undefined });
   steps.push({ label: "In Bearbeitung", done: ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
   if (st === "details_besprechen") {
@@ -201,33 +197,26 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
 
   if (event) {
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
-    // Details offen: nur anzeigen wenn aktiv (verschwindet wenn erledigt)
-    if (evSt === "details_offen") {
+
+    // Aufgaben — nur anzeigen wenn relevant, nicht als fester Schritt
+    // Details: nur wenn offen (verschwindet wenn erledigt)
+    if (event.details_status !== "erledigt" && (evSt === "details_offen" || evSt === "in_planung")) {
       steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
     }
-    // Vertrag nur anzeigen wenn tatsächlich ein Vertrag gesendet wurde
-    if (evSt === "vertrag_gesendet" || evSt === "vertrag_bestaetigt" || event.contract_status === "erledigt") {
-      const vertragDone = evSt === "vertrag_bestaetigt" || event.contract_status === "erledigt";
-      steps.push({ label: vertragDone ? "Vertrag bestätigt ✓" : "Vertrag gesendet", done: vertragDone });
+    // Vertrag: nur wenn vorhanden
+    if (event.contract_status === "erledigt") {
+      steps.push({ label: "Vertrag bestätigt", done: true });
+    }
+    // Rechnung: nur wenn vorhanden
+    if (event.invoice_status === "erledigt") {
+      steps.push({ label: "Rechnung bezahlt", done: true });
+    } else if (event.invoice_status && event.invoice_status !== "offen") {
+      steps.push({ label: "Rechnung offen", done: false });
     }
 
-    // Abschlagsrechnung als ein Schritt: offen oder bezahlt
-    const abschlagBezahlt = evReached("rechnung_bezahlt");
-    const abschlagGesendet = evReached("rechnung_gesendet");
-    if (abschlagGesendet || abschlagBezahlt) {
-      steps.push({ label: abschlagBezahlt ? "Abschlagsrechnung bezahlt ✓" : "Abschlagsrechnung offen", done: abschlagBezahlt });
-    }
-
-    steps.push({ label: "Event durchgeführt", done: evReached("event_erfolgt") });
-
-    // Schlussrechnung als ein Schritt: offen oder bezahlt
-    const schlussBezahlt = evReached("schlussrechnung_bezahlt");
-    const schlussGesendet = evReached("schlussrechnung_gesendet");
-    if (evReached("event_erfolgt")) {
-      steps.push({ label: schlussBezahlt ? "Schlussrechnung bezahlt ✓" : schlussGesendet ? "Schlussrechnung offen" : "Schlussrechnung", done: schlussBezahlt });
-    }
-
-    if (evReached("event_erfolgt")) {
+    // Event-Hauptphasen
+    steps.push({ label: "Event durchgeführt", done: evSt === "event_erfolgt" || evSt === "abgeschlossen" });
+    if (evSt === "event_erfolgt" || evSt === "abgeschlossen") {
       steps.push({ label: "Abgeschlossen", done: evSt === "abgeschlossen" });
     }
   } else {
@@ -884,7 +873,7 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
             </div>
 
             {/* Stats grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               {[
                 { label: "Anfragen", value: requests.length, icon: Calendar, tab: "requests" as Tab },
                 { label: "Dokumente", value: documents.length, icon: FileText, tab: "documents" as Tab },

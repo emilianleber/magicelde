@@ -59,6 +59,9 @@ interface PortalEvent {
   guests: number | null;
   customer_id?: string | null;
   notes?: string | null;
+  details_status?: string | null;
+  contract_status?: string | null;
+  invoice_status?: string | null;
 }
 
 interface PortalCustomer {
@@ -176,19 +179,20 @@ const statusOptions = [
   { value: "archiviert", label: "Archiviert" },
 ];
 
+// Hauptphasen des Events
 const eventStatusOptions = [
   { value: "in_planung", label: "In Planung" },
-  { value: "details_offen", label: "Details offen" },
-  { value: "vertrag_gesendet", label: "Vertrag gesendet" },
-  { value: "vertrag_bestaetigt", label: "Vertrag bestätigt" },
-  { value: "rechnung_gesendet", label: "Abschlagsrechnung gesendet" },
-  { value: "rechnung_bezahlt", label: "Abschlag bezahlt" },
   { value: "event_erfolgt", label: "Event durchgeführt" },
-  { value: "schlussrechnung_gesendet", label: "Schlussrechnung gesendet" },
-  { value: "schlussrechnung_bezahlt", label: "Schlussrechnung bezahlt" },
   { value: "abgeschlossen", label: "Abgeschlossen" },
   { value: "storniert", label: "Storniert" },
 ];
+
+// Unabhängige Aufgaben (können in beliebiger Reihenfolge erledigt werden)
+const eventTasks = [
+  { key: "details_status", label: "Details geklärt", doneValue: "erledigt" },
+  { key: "contract_status", label: "Vertrag", doneValue: "erledigt" },
+  { key: "invoice_status", label: "Rechnung", doneValue: "erledigt" },
+] as const;
 
 const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
   if (!val) return "";
@@ -400,6 +404,9 @@ const AdminBookingDetail = () => {
         format: draftFormat || null,
         guests: draftGaeste ? Number(draftGaeste) : null,
         status: event.status,
+        details_status: event.details_status || "offen",
+        contract_status: event.contract_status || "offen",
+        invoice_status: event.invoice_status || "offen",
       }).eq("id", event.id);
     }
 
@@ -970,9 +977,9 @@ const AdminBookingDetail = () => {
                     <Check className="w-3.5 h-3.5" /> Gebucht
                   </p>
                 </div>
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Event-Status</p>
-                <div className="space-y-1 mb-5">
-                  {eventStatusOptions.map((opt, i) => (
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Phase</p>
+                <div className="space-y-1 mb-4">
+                  {eventStatusOptions.map((opt) => (
                     <button
                       key={opt.value}
                       onClick={() => setEvent((prev: any) => prev ? { ...prev, status: opt.value } : prev)}
@@ -982,12 +989,29 @@ const AdminBookingDetail = () => {
                           : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
                       }`}
                     >
-                      <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold ${event.status === opt.value ? "bg-background/20 text-background" : "bg-muted/60 text-muted-foreground"}`}>
-                        {i + 1}
-                      </span>
                       {opt.label}
                     </button>
                   ))}
+                </div>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
+                <div className="space-y-1.5 mb-5">
+                  {eventTasks.map((task) => {
+                    const isDone = (event as any)[task.key] === task.doneValue;
+                    return (
+                      <button
+                        key={task.key}
+                        onClick={() => setEvent((prev: any) => prev ? { ...prev, [task.key]: isDone ? "offen" : task.doneValue } : prev)}
+                        className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
+                          isDone ? "text-green-700 bg-green-50 border border-green-200" : "text-muted-foreground hover:bg-muted/40 border border-transparent"
+                        }`}
+                      >
+                        <span className={`w-5 h-5 rounded flex items-center justify-center shrink-0 text-xs ${isDone ? "bg-green-500 text-white" : "border border-muted-foreground/30"}`}>
+                          {isDone ? "✓" : ""}
+                        </span>
+                        {task.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </>
             ) : (
