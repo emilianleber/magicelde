@@ -205,9 +205,10 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
     if (evSt === "details_offen") {
       steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
     }
-    // Vertrag nur anzeigen wenn er gesendet/bestätigt wurde
-    if (evReached("vertrag_gesendet")) {
-      steps.push({ label: evReached("vertrag_bestaetigt") ? "Vertrag bestätigt ✓" : "Vertrag gesendet", done: evReached("vertrag_bestaetigt") });
+    // Vertrag nur anzeigen wenn tatsächlich ein Vertrag gesendet wurde
+    if (evSt === "vertrag_gesendet" || evSt === "vertrag_bestaetigt" || event.contract_status === "erledigt") {
+      const vertragDone = evSt === "vertrag_bestaetigt" || event.contract_status === "erledigt";
+      steps.push({ label: vertragDone ? "Vertrag bestätigt ✓" : "Vertrag gesendet", done: vertragDone });
     }
 
     // Abschlagsrechnung als ein Schritt: offen oder bezahlt
