@@ -211,18 +211,24 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
       steps.push({ label: "Vertrag bestätigt", done: true });
     }
 
-    // Rechnung: nur anzeigen wenn gesendet oder bezahlt
-    if (event.invoice_status === "gesendet") {
-      steps.push({ label: "Rechnung offen", done: false });
-    } else if (event.invoice_status === "erledigt") {
-      steps.push({ label: "Rechnung bezahlt", done: true });
+    // Vor Event: Abschlagsrechnung (nur in Phase in_planung)
+    if (evSt === "in_planung" && event.invoice_status === "gesendet") {
+      steps.push({ label: "Abschlagsrechnung offen", done: false });
+    } else if (evSt === "in_planung" && event.invoice_status === "erledigt") {
+      steps.push({ label: "Abschlagsrechnung bezahlt", done: true });
     }
 
     // Event durchgeführt
     const eventDone = evSt === "event_erfolgt" || evSt === "abgeschlossen";
     steps.push({ label: "Event durchgeführt", done: eventDone });
 
+    // Nach Event: Schlussrechnung
     if (eventDone) {
+      if (event.invoice_status === "gesendet") {
+        steps.push({ label: "Schlussrechnung offen", done: false });
+      } else if (event.invoice_status === "erledigt") {
+        steps.push({ label: "Schlussrechnung bezahlt", done: true });
+      }
       steps.push({ label: "Abgeschlossen", done: evSt === "abgeschlossen" });
     }
   } else {

@@ -187,12 +187,20 @@ const eventPhases = [
   { value: "storniert", label: "Storniert" },
 ];
 
-// Aufgaben mit Zuständen (rotieren bei Klick, null = nicht aktiv)
-const eventTaskDefs = [
-  { key: "details_status", label: "Details", states: [null, "offen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "offen" },
-  { key: "contract_status", label: "Vertrag", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bestätigt ✓"], mailOn: "gesendet" },
-  { key: "invoice_status", label: "Rechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
-] as const;
+// Aufgaben pro Phase (rotieren bei Klick, null = nicht aktiv)
+type TaskDef = { key: string; label: string; states: (string | null)[]; stateLabels: string[]; mailOn: string };
+const tasksByPhase: Record<string, TaskDef[]> = {
+  in_planung: [
+    { key: "details_status", label: "Details", states: [null, "offen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "offen" },
+    { key: "contract_status", label: "Vertrag", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bestätigt ✓"], mailOn: "gesendet" },
+    { key: "invoice_status", label: "Abschlagsrechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
+  ],
+  event_erfolgt: [
+    { key: "invoice_status", label: "Schlussrechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
+  ],
+  abgeschlossen: [],
+  storniert: [],
+};
 
 const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
   if (!val) return "";
@@ -1005,9 +1013,11 @@ const AdminBookingDetail = () => {
                 </div>
 
                 {/* Aufgaben */}
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
+                {(tasksByPhase[event.status || "in_planung"] || []).length > 0 && (
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
+                )}
                 <div className="space-y-2 mb-5">
-                  {eventTaskDefs.map((task) => {
+                  {(tasksByPhase[event.status || "in_planung"] || []).map((task) => {
                     const currentVal = (event as any)[task.key] || null;
                     const currentIdx = task.states.indexOf(currentVal as any);
                     const effectiveIdx = currentIdx === -1 ? 0 : currentIdx;
