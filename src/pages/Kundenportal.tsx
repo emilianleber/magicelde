@@ -199,13 +199,8 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
 
     // Details: nur anzeigen wenn offen (verschwindet wenn erledigt)
-    if (event.details_status === "offen" || !event.details_status) {
-      // Nur anzeigen wenn der Admin Details aktiv angefragt hat
-      if (evSt === "in_planung") {
-        // Noch keine Details angefragt — nicht anzeigen
-      }
-    }
-    if (event.details_status === "offen" && evSt !== "event_erfolgt" && evSt !== "abgeschlossen") {
+    // Details: nur anzeigen wenn explizit auf "offen" gesetzt (null/erledigt = nicht anzeigen)
+    if (event.details_status === "offen") {
       steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
     }
 
