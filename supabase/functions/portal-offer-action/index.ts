@@ -12,14 +12,14 @@ const corsHeaders = {
 // ─── Supabase clients ────────────────────────────────────────────────────────
 // Admin client (service role) for all DB operations
 const adminSupabase = createClient(
-  Deno.env.get("PROJECT_URL")!,
-  Deno.env.get("SERVICE_ROLE_KEY")!
+  Deno.env.get("PROJECT_URL") || Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SERVICE_ROLE_KEY") || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
 
 // Anon client for verifying customer JWTs
 const anonSupabase = createClient(
-  Deno.env.get("PROJECT_URL")!,
-  Deno.env.get("ANON_KEY")!
+  Deno.env.get("PROJECT_URL") || Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("ANON_KEY") || Deno.env.get("SUPABASE_ANON_KEY")!
 );
 
 // ─── SMTP ─────────────────────────────────────────────────────────────────────
