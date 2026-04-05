@@ -468,12 +468,12 @@ function DocumentPreview(props: PreviewProps) {
   // ── Pagination ────────────────────────────────────────────────────────────
   const estimatePosH = (pos: LocalPosition): number => {
     // Base row height in the PDF (font-size ~8.5, padding 4+4)
-    let h = 20;
+    let h = 22;
     if (pos.beschreibung) {
       const stripped = pos.beschreibung.replace(/<[^>]+>/g, " ").trim();
       const lines = stripped.split("\n").reduce((acc, line) =>
-        acc + Math.max(1, Math.ceil((line.length || 1) / 55)), 0);
-      h += lines * 10;
+        acc + Math.max(1, Math.ceil((line.length || 1) / 45)), 0);
+      h += lines * 11;
     }
     return h;
   };
@@ -487,9 +487,9 @@ function DocumentPreview(props: PreviewProps) {
   const DIN_TOP_H  = 237; // address zone (44+127+16) + gap(22) + betreff(25) + kopftext-fallback
   const KOPF_H     = kopftext ? Math.max(16, Math.ceil(stripHtmlLen(kopftext) / 75) * 15 + 12) : 0;
   const TBL_HDR_H  = 22;
-  const SUMMEN_H   = 58;
-  const GRUSS_H    = 55;
-  const DIN_FTR_H  = 72;
+  const SUMMEN_H   = 62;
+  const GRUSS_H    = 60;
+  const DIN_FTR_H  = 78;
   const FUSS_H     = fusstext ? Math.max(16, Math.ceil(stripHtmlLen(fusstext) / 75) * 15 + 12) : 0;
 
   // Summen + DIN footer appear on EVERY page
@@ -585,6 +585,7 @@ function DocumentPreview(props: PreviewProps) {
             {[absenderName, absenderAdresse, `${absenderPlz} ${absenderOrt}`.trim()].filter(Boolean).join(" – ")}
           </div>
           {empfaengerFirma && <div style={{ fontWeight: 600, color: "#111" }}>{empfaengerFirma}</div>}
+          {empfaengerAnrede && <div style={{ color: "#111" }}>{empfaengerAnrede === "Herr" ? "Herrn" : empfaengerAnrede}</div>}
           <div style={{ color: "#111" }}>{empfaengerName || <span style={{ color: "#ccc" }}>Empfänger Name</span>}</div>
           {empfaengerAdresse && <div>{empfaengerAdresse}</div>}
           {(empfaengerPlz || empfaengerOrt) && <div>{empfaengerPlz} {empfaengerOrt}</div>}
@@ -1108,6 +1109,7 @@ export default function AdminDokumentEditor() {
   const [eventSuggestions, setEventSuggestions] = useState<Record<string, string>[]>([]);
   const [eventLabel, setEventLabel] = useState("");
   const [empfaengerKundennummer, setEmpfaengerKundennummer] = useState("");
+  const [empfaengerAnrede, setEmpfaengerAnrede] = useState("");
   const [empfaengerName, setEmpfaengerName] = useState("");
   const [empfaengerFirma, setEmpfaengerFirma] = useState("");
   const [empfaengerAdresse, setEmpfaengerAdresse] = useState("");
@@ -1253,6 +1255,7 @@ export default function AdminDokumentEditor() {
       setEmpfaengerName(data.name || "");
       setEmpfaengerFirma(data.company || "");
       setEmpfaengerKundennummer(data.kundennummer || "");
+      setEmpfaengerAnrede(data.anrede || "");
       if (data.rechnungs_strasse) setEmpfaengerAdresse(data.rechnungs_strasse);
       if (data.rechnungs_plz) setEmpfaengerPlz(data.rechnungs_plz);
       if (data.rechnungs_ort) setEmpfaengerOrt(data.rechnungs_ort);
@@ -1298,10 +1301,11 @@ export default function AdminDokumentEditor() {
         gesamt: p.gesamt,
       })));
       setSelectedCustomerId(doc.customerId || null);
-      // Load kundennummer from customer
+      // Load kundennummer + anrede from customer
       if (doc.customerId) {
-        supabase.from("portal_customers").select("kundennummer").eq("id", doc.customerId).maybeSingle().then(({ data: c }) => {
+        supabase.from("portal_customers").select("kundennummer, anrede").eq("id", doc.customerId).maybeSingle().then(({ data: c }) => {
           if (c?.kundennummer) setEmpfaengerKundennummer(c.kundennummer);
+          if (c?.anrede) setEmpfaengerAnrede(c.anrede);
         });
       }
       setSelectedRequestId(doc.requestId || null);
@@ -1351,7 +1355,7 @@ export default function AdminDokumentEditor() {
     if (q.length < 2) { setKontaktSuggestions([]); return; }
     const { data } = await supabase
       .from("portal_customers")
-      .select("id, name, company, email, kundennummer, rechnungs_strasse, rechnungs_plz, rechnungs_ort, rechnungs_land")
+      .select("id, name, company, email, kundennummer, anrede, rechnungs_strasse, rechnungs_plz, rechnungs_ort, rechnungs_land")
       .or(`name.ilike.%${q}%,company.ilike.%${q}%,email.ilike.%${q}%`)
       .limit(5);
     setKontaktSuggestions((data || []) as Record<string, string>[]);
@@ -1361,6 +1365,7 @@ export default function AdminDokumentEditor() {
     setEmpfaengerName(k.name || "");
     setEmpfaengerFirma(k.company || "");
     setEmpfaengerKundennummer(k.kundennummer || "");
+    setEmpfaengerAnrede(k.anrede || "");
     setEmpfaengerAdresse(k.rechnungs_strasse || "");
     setEmpfaengerPlz(k.rechnungs_plz || "");
     setEmpfaengerOrt(k.rechnungs_ort || "");
