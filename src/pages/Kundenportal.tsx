@@ -890,11 +890,13 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                 if (!reqId) return;
                 setOfferActionLoading(p => ({ ...p, [reqId]: true }));
                 setOfferActionError(p => ({ ...p, [reqId]: "" }));
-                const { error } = await supabase.functions.invoke("portal-offer-action", {
+                const { data, error } = await supabase.functions.invoke("portal-offer-action", {
                   body: { action, request_id: reqId },
                 });
                 if (error) {
-                  setOfferActionError(p => ({ ...p, [reqId]: action === "accept" ? "Fehler beim Annehmen – bitte versuche es erneut." : "Fehler beim Ablehnen." }));
+                  console.error("portal-offer-action error:", error, data);
+                  const msg = (typeof data === "object" && data?.error) ? data.error : (error.message || "Unbekannter Fehler");
+                  setOfferActionError(p => ({ ...p, [reqId]: `${action === "accept" ? "Fehler beim Annehmen" : "Fehler beim Ablehnen"}: ${msg}` }));
                 } else {
                   // Optimistic: mark as handled locally
                   setDocuments(prev => prev.map(d => d.id === angebot.id ? { ...d, status: action === "accept" ? "akzeptiert" : "abgelehnt" } : d));
