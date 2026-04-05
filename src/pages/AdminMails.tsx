@@ -127,9 +127,13 @@ const AdminMails = () => {
         supabase.from("portal_messages").select("id,created_at,customer_id,subject,body,from_email,to_email,customer:customer_id(name)").order("created_at", { ascending: false }),
       ]);
       if (!tplRes.error) setTemplates(tplRes.data || []);
-      // Auch email_templates laden für Schnellversand-Vorlagen
+      // email_templates als Vorlagen hinzufügen (ohne Duplikate)
       const { data: etData } = await supabase.from("email_templates").select("slug,name,betreff,inhalt").eq("aktiv", true).order("sortierung");
-      if (etData) setTemplates((prev) => [...prev, ...etData.map((t: any) => ({ id: t.slug, name: t.name, subject: t.betreff, body: t.inhalt.replace(/\n/g, "<br>") }))]);
+      if (etData) {
+        const existingNames = new Set((tplRes.data || []).map((t: any) => t.name));
+        const newTpls = etData.filter((t: any) => !existingNames.has(t.name));
+        setTemplates((prev) => [...prev, ...newTpls.map((t: any) => ({ id: t.slug, name: t.name, subject: t.betreff, body: t.inhalt.replace(/\n/g, "<br>") }))]);
+      }
       if (!sigRes.error && sigRes.data) setSignature(sigRes.data.body);
       if (!custRes.error) setCustomers(custRes.data || []);
       if (!sentRes.error) setSentMails(sentRes.data || []);
