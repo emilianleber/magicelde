@@ -72,7 +72,7 @@ interface PortalDocument {
   created_at: string;
 }
 
-type Tab = "anfragen" | "events" | "dokumente" | "mails";
+type Tab = "buchungen" | "dokumente" | "mails";
 
 const inputCls =
   "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
@@ -137,7 +137,7 @@ const AdminCustomerDetail = () => {
   const [kundennummer, setKundennummer] = useState("");
 
   // Tabs
-  const [activeTab, setActiveTab] = useState<Tab>("anfragen");
+  const [activeTab, setActiveTab] = useState<Tab>("buchungen");
 
   // Mail compose
   const [showCompose, setShowCompose] = useState(false);
@@ -506,8 +506,7 @@ const AdminCustomerDetail = () => {
         {/* Stats */}
         <div className="flex gap-3 flex-1 flex-wrap">
           {[
-            { label: "Anfragen", value: activeRequests.length, tab: "anfragen" as Tab, icon: MessageCircle },
-            { label: "Events", value: activeEvents.length, tab: "events" as Tab, icon: Calendar },
+            { label: "Buchungen", value: activeRequests.length + activeEvents.length, tab: "buchungen" as Tab, icon: MessageCircle },
             { label: "Dokumente", value: nativeDokumente.length + documents.filter((d) => !["Angebot","Auftragsbestätigung","Rechnung","Abschlagsrechnung","Mahnung","Gutschrift","Stornorechnung"].includes(d.type || "")).length, tab: "dokumente" as Tab, icon: FileText },
             { label: "Mails", value: mailCount, tab: "mails" as Tab, icon: Mail },
           ].map((s) => (
@@ -533,13 +532,7 @@ const AdminCustomerDetail = () => {
             to={`/admin/bookings/new?customerId=${customer.id}`}
             className="inline-flex items-center gap-1.5 text-sm border border-border/30 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground hover:border-accent/20 transition-all"
           >
-            <Plus className="w-4 h-4" /> Anfrage
-          </Link>
-          <Link
-            to={`/admin/bookings/new?customerId=${customer.id}`}
-            className="inline-flex items-center gap-1.5 text-sm border border-border/30 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground hover:border-accent/20 transition-all"
-          >
-            <Plus className="w-4 h-4" /> Event
+            <Plus className="w-4 h-4" /> Neue Anfrage
           </Link>
           <button
             onClick={() => { setShowCompose(true); setActiveTab("mails"); }}
@@ -579,69 +572,59 @@ const AdminCustomerDetail = () => {
 
       {/* Tab content */}
       <div>
-        {/* ANFRAGEN */}
-        {activeTab === "anfragen" && (
+        {/* BUCHUNGEN (Anfragen + Events vereint) */}
+        {activeTab === "buchungen" && (
           <div>
-            {activeRequests.length === 0 ? (
+            {activeRequests.length === 0 && activeEvents.length === 0 ? (
               <div className="p-10 rounded-2xl bg-muted/20 border border-border/30 text-center">
                 <MessageCircle className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground mb-3">Noch keine Anfragen.</p>
+                <p className="text-sm text-muted-foreground mb-3">Noch keine Buchungen.</p>
                 <Link
                   to={`/admin/bookings/new?customerId=${customer.id}`}
                   className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-semibold hover:opacity-80 transition-opacity"
                 >
-                  <Plus className="w-4 h-4" /> Erste Anfrage erstellen
+                  <Plus className="w-4 h-4" /> Neue Anfrage erstellen
                 </Link>
               </div>
             ) : (
               <div className="space-y-2">
+                {/* Anfragen */}
                 {activeRequests.map((req) => (
                   <Link
-                    key={req.id}
+                    key={`req-${req.id}`}
                     to={`/admin/bookings/${req.id}`}
                     className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30 hover:border-accent/20 hover:bg-muted/30 transition-all group"
                   >
+                    {req.datum && (
+                      <div className="shrink-0 w-11 text-center">
+                        <p className="text-[10px] font-semibold text-muted-foreground uppercase">
+                          {new Date(req.datum).toLocaleDateString("de-DE", { month: "short" })}
+                        </p>
+                        <p className="text-lg font-bold text-foreground leading-none">{new Date(req.datum).getDate()}</p>
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-semibold text-foreground">{req.anlass || "Anfrage"}</span>
-                        <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border/20">
-                          {formatRequestStatusLabel(req.status)}
+                        <span className={`text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border font-medium ${
+                          req.event_id ? "text-green-700 bg-green-50 border-green-200" : "text-blue-600 bg-blue-50 border-blue-200"
+                        }`}>
+                          {req.event_id ? "Gebucht" : formatRequestStatusLabel(req.status)}
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-xs text-muted-foreground">
                         {req.datum && <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(req.datum).toLocaleDateString("de-DE")}</span>}
                         {req.ort && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{req.ort}</span>}
                         {req.gaeste && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{req.gaeste} Gäste</span>}
-                        <span className="text-muted-foreground/50">{new Date(req.created_at).toLocaleDateString("de-DE")}</span>
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
                   </Link>
                 ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* EVENTS */}
-        {activeTab === "events" && (
-          <div>
-            {activeEvents.length === 0 ? (
-              <div className="p-10 rounded-2xl bg-muted/20 border border-border/30 text-center">
-                <Calendar className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground mb-3">Noch keine Events.</p>
-                <Link
-                  to={`/admin/bookings/new?customerId=${customer.id}`}
-                  className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-semibold hover:opacity-80 transition-opacity"
-                >
-                  <Plus className="w-4 h-4" /> Erstes Event erstellen
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {activeEvents.map((evt) => (
+                {/* Standalone Events (ohne Anfrage) */}
+                {activeEvents.filter(evt => !activeRequests.some(r => r.event_id === evt.id)).map((evt) => (
                   <Link
-                    key={evt.id}
+                    key={`evt-${evt.id}`}
                     to={`/admin/bookings/event/${evt.id}`}
                     className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30 hover:border-accent/20 hover:bg-muted/30 transition-all group"
                   >
@@ -656,13 +639,12 @@ const AdminCustomerDetail = () => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-semibold text-foreground">{evt.title}</span>
-                        <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border/20">
-                          {formatEventStatusLabel(evt.status)}
+                        <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full text-green-700 bg-green-50 border border-green-200 font-medium">
+                          Gebucht
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-xs text-muted-foreground">
                         {evt.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{evt.location}</span>}
-                        {evt.format && <span className="flex items-center gap-1"><Theater className="w-3 h-3" />{evt.format}</span>}
                         {evt.guests && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{evt.guests} Gäste</span>}
                       </div>
                     </div>
