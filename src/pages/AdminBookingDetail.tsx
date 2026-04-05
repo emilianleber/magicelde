@@ -181,11 +181,9 @@ const eventStatusOptions = [
   { value: "details_offen", label: "Details offen" },
   { value: "vertrag_gesendet", label: "Vertrag gesendet" },
   { value: "vertrag_bestaetigt", label: "Vertrag bestätigt" },
-  { value: "abschlagsrechnung", label: "Abschlagsrechnung" },
   { value: "rechnung_gesendet", label: "Rechnung gesendet" },
   { value: "rechnung_bezahlt", label: "Rechnung bezahlt" },
   { value: "event_erfolgt", label: "Event erfolgt" },
-  { value: "schlussrechnung", label: "Schlussrechnung" },
   { value: "abgeschlossen", label: "Abgeschlossen" },
   { value: "storniert", label: "Storniert" },
 ];
