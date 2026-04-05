@@ -283,15 +283,22 @@ const requestMailTemplate = (request: any) => {
 
     case "gebucht":
       return {
-        subject: "Ihr Event mit Emilian Leber ist gebucht! 🎉",
+        subject: "Ihre Auftragsbestätigung von Emilian Leber liegt bereit 📄",
         html: getEmailShell(
-          "Buchung",
-          "Ihr Event ist gebucht.",
-          `Hallo ${gruss}, großartige Neuigkeit – Ihr Termin ist jetzt offiziell eingeplant. Ich freue mich sehr darauf!`,
-          `${statusBadge("✦ Buchung bestätigt", "#15803d", "#f0fdf4")}${infoTable(rows)}
-          <p style="margin:0;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
-            Den aktuellen Stand finden Sie jederzeit im Bereich <strong style="color:#0a0a0a;">Events</strong> in Ihrem Kundenportal.
-          </p>`
+          "Auftragsbestätigung",
+          "Ihre Auftragsbestätigung ist fertig!",
+          `Hallo ${gruss}, vielen Dank für Ihre Buchung! Ihre <strong>Auftragsbestätigung</strong> mit allen Details zu Ihrem Event liegt jetzt in Ihrem Kundenportal zum Download bereit.`,
+          `${statusBadge("✦ Auftragsbestätigung bereit", "#15803d", "#f0fdf4")}${infoTable(rows)}
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
+            Bitte prüfen Sie die Auftragsbestätigung und melden Sie sich bei mir, falls Änderungen gewünscht sind. Im Bereich <strong style="color:#0a0a0a;">Dokumente</strong> in Ihrem Kundenportal finden Sie alle Unterlagen.
+          </p>
+          <div style="text-align:center;margin:8px 0 16px;">
+            <a href="https://magicel.de/kundenportal/login"
+               style="display:inline-block;background-color:#15803d;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;font-family:${FONT};">
+              📄 Auftragsbestätigung ansehen
+            </a>
+          </div>`,
+          false
         ),
       };
 
