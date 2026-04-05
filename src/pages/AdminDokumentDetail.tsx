@@ -852,7 +852,7 @@ body > div:last-child {
         {doc.kopftext && (
           <div className="rounded-2xl border border-border/20 bg-muted/5 px-5 py-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Anschreiben</p>
-            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">{doc.kopftext}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">{doc.kopftext.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "")}</p>
           </div>
         )}
 
@@ -926,7 +926,7 @@ body > div:last-child {
         {doc.fusstext && (
           <div className="rounded-2xl border border-border/20 bg-muted/5 px-5 py-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Fußtext</p>
-            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">{doc.fusstext}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">{doc.fusstext.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "")}</p>
           </div>
         )}
 
