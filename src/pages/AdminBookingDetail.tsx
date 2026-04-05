@@ -986,10 +986,33 @@ const AdminBookingDetail = () => {
                 <div className="space-y-1 mb-5">
                   {eventStatusOptions.map((opt) => {
                     const isActive = event.status === opt.value;
+                    const noMail = ["abgeschlossen"].includes(opt.value);
                     return (
                       <button
                         key={opt.value}
-                        onClick={() => setEvent((prev: any) => prev ? { ...prev, status: opt.value } : prev)}
+                        onClick={async () => {
+                          if (isActive) return;
+                          // Status setzen + speichern
+                          const newEvent = { ...event, status: opt.value };
+                          setEvent(newEvent as any);
+                          await supabase.from("portal_events").update({
+                            status: opt.value,
+                            details_status: ["details_offen"].includes(opt.value) ? "offen"
+                              : ["vertrag_gesendet", "vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(opt.value) ? "erledigt"
+                              : event.details_status || "offen",
+                            contract_status: ["vertrag_gesendet"].includes(opt.value) ? "gesendet"
+                              : ["vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(opt.value) ? "erledigt"
+                              : event.contract_status || "offen",
+                            invoice_status: ["rechnung_gesendet"].includes(opt.value) ? "gesendet"
+                              : ["rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(opt.value) ? "erledigt"
+                              : event.invoice_status || "offen",
+                          }).eq("id", event.id);
+                          setMessage(`Status → ${opt.label}`);
+                          // Fragen ob Mail senden
+                          if (!noMail && confirm(`Status auf "${opt.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                            sendStatusMail();
+                          }
+                        }}
                         className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
                           isActive
                             ? "bg-foreground text-background font-semibold"
@@ -998,6 +1021,7 @@ const AdminBookingDetail = () => {
                       >
                         <span className="w-5 text-center">{opt.icon}</span>
                         {opt.label}
+                        {!noMail && !isActive && <Mail className="w-3 h-3 ml-auto text-muted-foreground/30" />}
                       </button>
                     );
                   })}
@@ -1005,22 +1029,33 @@ const AdminBookingDetail = () => {
               </>
             ) : (
               <div className="space-y-1 mb-5">
-                {statusOptions.map((opt, i) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setStatus(opt.value)}
-                    className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
-                      status === opt.value
-                        ? "bg-foreground text-background font-semibold"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                    }`}
-                  >
-                    <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold ${status === opt.value ? "bg-background/20 text-background" : "bg-muted/60 text-muted-foreground"}`}>
-                      {i + 1}
-                    </span>
-                    {opt.label}
-                  </button>
-                ))}
+                {statusOptions.map((opt) => {
+                  const isActive = status === opt.value;
+                  const noMail = ["archiviert"].includes(opt.value);
+                  return (
+                    <button
+                      key={opt.value}
+                      onClick={async () => {
+                        if (isActive) return;
+                        setStatus(opt.value);
+                        await supabase.from("portal_requests").update({ status: opt.value }).eq("id", request.id);
+                        setRequest({ ...request, status: opt.value });
+                        setMessage(`Status → ${opt.label}`);
+                        if (!noMail && confirm(`Status auf "${opt.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                          sendStatusMail();
+                        }
+                      }}
+                      className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
+                        isActive
+                          ? "bg-foreground text-background font-semibold"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                      }`}
+                    >
+                      {opt.label}
+                      {!noMail && !isActive && <Mail className="w-3 h-3 ml-auto text-muted-foreground/30" />}
+                    </button>
+                  );
+                })}
               </div>
             )}
 
