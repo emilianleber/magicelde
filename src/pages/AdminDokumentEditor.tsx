@@ -375,6 +375,7 @@ interface PreviewProps {
   lieferdatum: string;
   empfaengerName: string;
   empfaengerFirma: string;
+  empfaengerKundennummer: string;
   empfaengerAdresse: string;
   empfaengerPlz: string;
   empfaengerOrt: string;
@@ -430,7 +431,7 @@ function fmt(n: number) {
 function DocumentPreview(props: PreviewProps) {
   const {
     layoutId, color, typ, nummer, datum, faelligAm, gueltigBis, lieferdatum,
-    empfaengerName, empfaengerFirma, empfaengerAdresse, empfaengerPlz, empfaengerOrt, empfaengerLand,
+    empfaengerName, empfaengerFirma, empfaengerKundennummer, empfaengerAdresse, empfaengerPlz, empfaengerOrt, empfaengerLand,
     kopftext, fusstext, positionen, mwstSatz, kleinunternehmer, rabattProzent,
     absenderName, absenderUntertitel, absenderAdresse, absenderPlz, absenderOrt,
     absenderEmail, absenderTel, absenderWebsite, absenderIban, absenderBic, absenderSteuernummer,
@@ -458,7 +459,7 @@ function DocumentPreview(props: PreviewProps) {
     ...(lieferdatum && isRechnung ? [{ label: "Lieferdatum",    val: lieferdatum }] : []),
     ...(faelligAm && isRechnung   ? [{ label: "Zahlungsziel",   val: faelligAm }]   : []),
     ...(gueltigBis && !isAngebot  ? [{ label: "Gültig bis",     val: gueltigBis }]  : []),
-    { label: "Ihre Kundennummer",  val: "—" },
+    ...(empfaengerKundennummer ? [{ label: "Ihre Kundennummer",  val: empfaengerKundennummer }] : []),
     { label: "Ihr Ansprechpartner",val: absenderName },
   ];
 
@@ -1106,6 +1107,7 @@ export default function AdminDokumentEditor() {
   const [eventSuche, setEventSuche] = useState("");
   const [eventSuggestions, setEventSuggestions] = useState<Record<string, string>[]>([]);
   const [eventLabel, setEventLabel] = useState("");
+  const [empfaengerKundennummer, setEmpfaengerKundennummer] = useState("");
   const [empfaengerName, setEmpfaengerName] = useState("");
   const [empfaengerFirma, setEmpfaengerFirma] = useState("");
   const [empfaengerAdresse, setEmpfaengerAdresse] = useState("");
@@ -1250,6 +1252,7 @@ export default function AdminDokumentEditor() {
       setKontaktSuche(data.name || "");
       setEmpfaengerName(data.name || "");
       setEmpfaengerFirma(data.company || "");
+      setEmpfaengerKundennummer(data.kundennummer || "");
       if (data.rechnungs_strasse) setEmpfaengerAdresse(data.rechnungs_strasse);
       if (data.rechnungs_plz) setEmpfaengerPlz(data.rechnungs_plz);
       if (data.rechnungs_ort) setEmpfaengerOrt(data.rechnungs_ort);
@@ -1342,7 +1345,7 @@ export default function AdminDokumentEditor() {
     if (q.length < 2) { setKontaktSuggestions([]); return; }
     const { data } = await supabase
       .from("portal_customers")
-      .select("id, name, company, email, rechnungs_strasse, rechnungs_plz, rechnungs_ort, rechnungs_land")
+      .select("id, name, company, email, kundennummer, rechnungs_strasse, rechnungs_plz, rechnungs_ort, rechnungs_land")
       .or(`name.ilike.%${q}%,company.ilike.%${q}%,email.ilike.%${q}%`)
       .limit(5);
     setKontaktSuggestions((data || []) as Record<string, string>[]);
@@ -1351,6 +1354,7 @@ export default function AdminDokumentEditor() {
   const selectKontakt = (k: Record<string, string>) => {
     setEmpfaengerName(k.name || "");
     setEmpfaengerFirma(k.company || "");
+    setEmpfaengerKundennummer(k.kundennummer || "");
     setEmpfaengerAdresse(k.rechnungs_strasse || "");
     setEmpfaengerPlz(k.rechnungs_plz || "");
     setEmpfaengerOrt(k.rechnungs_ort || "");
@@ -1733,6 +1737,7 @@ body > div:last-child {
     lieferdatum,
     empfaengerName,
     empfaengerFirma,
+    empfaengerKundennummer,
     empfaengerAdresse,
     empfaengerPlz,
     empfaengerOrt,
