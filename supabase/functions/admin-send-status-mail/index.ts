@@ -225,7 +225,6 @@ const requestMailTemplate = (request: any) => {
       };
 
     case "in_bearbeitung":
-    case "details_besprechen":
       return {
         subject: "Ihre Anfrage wird bearbeitet – Emilian Leber",
         html: getEmailShell(
@@ -233,6 +232,20 @@ const requestMailTemplate = (request: any) => {
           "Ich arbeite an Ihrer Anfrage.",
           `Hallo ${gruss}, ich habe mir Ihre Anfrage angeschaut und arbeite gerade an einem passenden Konzept für Sie. Ich melde mich in Kürze mit weiteren Details.`,
           `${statusBadge("✦ In Bearbeitung", "#b45309", "#fffbeb")}${infoTable(rows)}`
+        ),
+      };
+
+    case "details_besprechen":
+      return {
+        subject: "Noch ein paar Details zu Ihrer Anfrage – Emilian Leber",
+        html: getEmailShell(
+          "📩 Details klären",
+          "Ich benötige noch ein paar Informationen.",
+          `Hallo ${gruss}, vielen Dank für Ihre Anfrage! Um Ihnen ein passendes Angebot erstellen zu können, benötige ich noch einige Details von Ihnen.`,
+          `${statusBadge("✦ Details erforderlich", "#7c3aed", "#f5f3ff")}${infoTable(rows)}
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
+            Bitte antworten Sie einfach auf diese E-Mail oder schreiben Sie mir über Ihr Kundenportal – ich melde mich dann schnellstmöglich bei Ihnen.
+          </p>`
         ),
       };
 
