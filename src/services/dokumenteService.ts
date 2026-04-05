@@ -278,6 +278,7 @@ export const dokumenteService = {
         subtotal: summen.netto,
         total: summen.brutto,
         amount: summen.brutto,
+        brutto: summen.brutto,
         rabatt_prozent: data.rabattProzent || null,
         rabatt_betrag: summen.rabattBetrag || null,
         bezahlt_betrag: 0,
@@ -358,6 +359,7 @@ export const dokumenteService = {
       patch.mwst_gruppen = summen.mwstGruppen;
       patch.total = summen.brutto;
       patch.amount = summen.brutto;
+      patch.brutto = summen.brutto;
       patch.rabatt_betrag = summen.rabattBetrag;
 
       // Replace positions
