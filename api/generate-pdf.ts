@@ -20,17 +20,21 @@ function buildHtml(previewHtml: string, title: string) {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     html, body { width: 595px; background: #fff; font-family: Inter, system-ui, sans-serif; }
+    @page { size: A4 portrait; margin: 0 0 80px 0; }
     body > div {
       width: 595px;
       min-height: auto !important;
       height: auto !important;
       position: relative;
-      padding-bottom: 0 !important;
+      padding-bottom: 80px !important;
     }
-    /* Footer aus absoluter Positionierung in den Flow bringen */
+    /* Footer fix am Seitenende auf jeder Seite (Puppeteer unterstützt position:fixed in Print) */
     [style*="position: absolute"][style*="bottom"] {
-      position: static !important;
-      margin-top: auto;
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      background: #fff !important;
     }
   </style>
 </head>
