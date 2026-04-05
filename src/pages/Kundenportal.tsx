@@ -201,7 +201,10 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
 
   if (event) {
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
-    steps.push({ label: "Vertrag", done: evReached("vertrag_bestaetigt") });
+    // Vertrag nur anzeigen wenn er gesendet/bestätigt wurde
+    if (evReached("vertrag_gesendet")) {
+      steps.push({ label: evReached("vertrag_bestaetigt") ? "Vertrag bestätigt ✓" : "Vertrag gesendet", done: evReached("vertrag_bestaetigt") });
+    }
 
     // Abschlagsrechnung als ein Schritt: offen oder bezahlt
     const abschlagBezahlt = evReached("rechnung_bezahlt");
