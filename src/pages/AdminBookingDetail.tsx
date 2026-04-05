@@ -821,19 +821,23 @@ const AdminBookingDetail = () => {
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-bold text-foreground">Dokumente</h2>
-              <div className="flex items-center gap-2">
-                <Link
-                  to={`/admin/dokumente/new?typ=angebot${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-3 py-1.5 text-xs font-bold hover:bg-foreground/90"
-                >
-                  <FileText className="w-3 h-3" /> Angebot erstellen
-                </Link>
-                <button
-                  onClick={() => { setEditingDoc(null); setShowDocCreator(true); }}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-3 py-1.5 text-xs font-medium hover:bg-muted/40"
-                >
-                  <Plus className="w-3 h-3" /> Erstellen
-                </button>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {(() => {
+                  const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
+                  const phase = event?.status || "";
+                  const btnCls = "inline-flex items-center gap-1 rounded-lg border border-border/30 px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted/40 transition-colors";
+                  const primaryCls = "inline-flex items-center gap-1 rounded-lg bg-foreground text-background px-2.5 py-1.5 text-[11px] font-bold hover:bg-foreground/90";
+                  return (
+                    <>
+                      {!event && <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={primaryCls}><FileText className="w-3 h-3" />Angebot</Link>}
+                      {event && phase === "in_planung" && <Link to={`/admin/dokumente/new?typ=abschlagsrechnung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Abschlagsrechnung</Link>}
+                      {event && (phase === "event_erfolgt" || phase === "abgeschlossen") && <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Schlussrechnung</Link>}
+                      <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={btnCls}>Angebot</Link>
+                      <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={btnCls}>Rechnung</Link>
+                      <Link to={`/admin/dokumente/new?typ=abschlagsrechnung${params}`} className={btnCls}>Abschlag</Link>
+                    </>
+                  );
+                })()}
               </div>
             </div>
             <div className="flex items-center gap-2 mb-3 flex-wrap">
