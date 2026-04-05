@@ -881,7 +881,7 @@ const Kundenportal = () => {
               const reqId = angebot.request_id;
               const isLoading = reqId ? !!offerActionLoading[reqId] : false;
               const errMsg = reqId ? offerActionError[reqId] : null;
-              const betrag = angebot.brutto ?? angebot.amount;
+              const betrag = angebot.amount ?? angebot.brutto;
 
               const doAction = async (action: "accept" | "reject") => {
                 if (!reqId) return;
@@ -1550,7 +1550,7 @@ const Kundenportal = () => {
                             setOfferActionLoading(p => ({ ...p, [reqId]: false }));
                           };
 
-                          const betrag = doc.brutto ?? doc.amount;
+                          const betrag = doc.amount ?? doc.brutto;
 
                           return (
                             <div key={doc.id} className="rounded-2xl overflow-hidden border border-blue-200/60 bg-white shadow-sm">
