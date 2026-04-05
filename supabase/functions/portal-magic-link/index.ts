@@ -140,7 +140,7 @@ serve(async (req) => {
             </table>
 
             <h1 class="em-text-dark" style="margin:0 0 16px;font-size:26px;font-weight:800;color:#0a0a0a;line-height:1.2;letter-spacing:-0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">${greeting}</h1>
-            <p class="em-text-muted" style="margin:0 0 28px;font-size:15px;color:#52525b;line-height:1.7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Du hast einen Zugangslink für dein persönliches Kundenportal angefordert. Klicke auf den Button, um dich einzuloggen und deine Anfragen, Events und Dokumente einzusehen.</p>
+            <p class="em-text-muted" style="margin:0 0 28px;font-size:15px;color:#52525b;line-height:1.7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Sie haben einen Zugangslink für Ihr persönliches Kundenportal angefordert. Klicken Sie auf den Button, um sich einzuloggen und Ihre Anfragen, Events und Dokumente einzusehen.</p>
 
             <!-- Button (table-based) -->
             <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:28px;">
@@ -156,19 +156,26 @@ serve(async (req) => {
               <tr>
                 <td bgcolor="#f4f4f5" class="em-bg-gray" style="background-color:#f4f4f5;border-radius:12px;padding:16px 20px;">
                   <p class="em-text-sub" style="margin:0;font-size:12px;color:#71717a;line-height:1.5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
-                    <strong class="em-text-dark" style="color:#0a0a0a;">Hinweis:</strong> Dieser Link ist 24 Stunden gültig und kann nur einmal verwendet werden. Falls du keinen Login-Link angefordert hast, kannst du diese E-Mail ignorieren.
+                    <strong class="em-text-dark" style="color:#0a0a0a;">Hinweis:</strong> Dieser Link ist 24 Stunden gültig und kann nur einmal verwendet werden. Falls Sie keinen Login-Link angefordert haben, können Sie diese E-Mail ignorieren.
                   </p>
                 </td>
               </tr>
             </table>
 
             <!-- Signature -->
-            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e4e4e7;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:24px;">
+              <tr><td colspan="2" style="padding-bottom:16px;"><div style="height:2px;background:linear-gradient(90deg,#6366f1 0%,#a855f7 40%,#e4e4e7 40%);border-radius:2px;"></div></td></tr>
               <tr>
-                <td bgcolor="#ffffff" class="em-bg-white" style="padding-top:22px;background-color:#ffffff;">
-                  <p class="em-text-sub" style="margin:0 0 2px;font-size:14px;color:#71717a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Mit magischen Grüßen,</p>
-                  <p class="em-text-dark" style="margin:0;font-size:16px;font-weight:700;color:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p>
-                  <p class="em-text-light" style="margin:4px 0 0;font-size:12px;color:#a1a1aa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Zauberer &amp; Showkünstler &middot; <a href="https://magicel.de" class="em-link" style="color:#a1a1aa;text-decoration:none;">magicel.de</a></p>
+                <td style="width:64px;vertical-align:top;padding-right:18px;"><img src="https://magicel.de/favicon.ico" alt="EL" width="48" height="48" style="border-radius:12px;display:block;" /></td>
+                <td style="vertical-align:top;">
+                  <p style="margin:0;font-size:15px;font-weight:700;color:#18181b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p>
+                  <p style="margin:2px 0 0;font-size:10px;font-weight:600;color:#6366f1;text-transform:uppercase;letter-spacing:1px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Zauberer &amp; Entertainer</p>
+                  <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:8px;">
+                    <tr><td style="padding:2px 0;font-size:11px;color:#71717a;width:14px;">T</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="tel:+4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td></tr>
+                    <tr><td style="padding:2px 0;font-size:11px;color:#71717a;">E</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="mailto:el@magicel.de" style="color:#3f3f46;text-decoration:none;">el@magicel.de</a></td></tr>
+                    <tr><td style="padding:2px 0;font-size:11px;color:#71717a;">W</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="https://magicel.de" style="color:#3f3f46;text-decoration:none;">www.magicel.de</a></td></tr>
+                  </table>
+                  <p style="margin:6px 0 0;font-size:10px;color:#a1a1aa;">Regensburg · Deutschland · <a href="https://wa.me/4915563744696" style="color:#a1a1aa;text-decoration:none;">WhatsApp</a></p>
                 </td>
               </tr>
             </table>

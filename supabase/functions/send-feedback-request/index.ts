@@ -88,7 +88,7 @@ serve(async (req) => {
 <tr><td style="padding:36px 32px;">
 <h1 style="margin:0 0 18px;font-size:22px;font-weight:700;color:#0a0a0a;font-family:${FONT};line-height:1.3;">Wie war's?</h1>
 <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
-Hallo ${name}, dein Event „${eventTitle}" liegt nun etwas zurück und ich würde mich sehr über dein ehrliches Feedback freuen. Das hilft mir, mich weiterzuentwickeln und mein Programm noch besser zu machen.
+Hallo ${name}, Ihr Event „${eventTitle}" liegt nun etwas zurück und ich würde mich sehr über Ihr ehrliches Feedback freuen. Das hilft mir, mich weiterzuentwickeln und mein Programm noch besser zu machen.
 </p>
 <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
 Es dauert nur 2 Minuten – versprochen! 🙏
