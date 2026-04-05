@@ -21,11 +21,9 @@ function buildHtml(previewHtml: string, title: string) {
     html, body { width: 595px; background: #fff; }
     body > div {
       width: 595px;
-      height: 842px;
-      overflow: hidden;
-      break-after: page;
+      min-height: 842px;
+      height: auto;
     }
-    body > div:last-child { break-after: auto; }
   </style>
 </head>
 <body>${previewHtml}</body>
