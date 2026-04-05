@@ -1745,42 +1745,6 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
               <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Anfragen & Events</h1>
             </div>
 
-            {/* Gebuchte Events */}
-            {events.length > 0 && (
-              <>
-                <p className="text-xs font-semibold uppercase tracking-wider text-accent mt-2">Gebuchte Events</p>
-                {events.map((ev) => {
-                  const days = getCountdownDays(ev.event_date);
-                  return (
-                    <div key={ev.id} className="rounded-2xl bg-white border border-green-200/60 shadow-sm overflow-hidden">
-                      <div className="px-5 py-4 flex items-start justify-between gap-3">
-                        <div>
-                          <p className="font-display text-base font-bold text-foreground">{ev.title || "Event"}</p>
-                          <div className="flex items-center gap-3 mt-1 flex-wrap text-xs text-muted-foreground">
-                            {ev.event_date && <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(ev.event_date).toLocaleDateString("de-DE")}</span>}
-                            {ev.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{ev.location}</span>}
-                            {ev.guests && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{ev.guests} Gäste</span>}
-                            {ev.format && <span className="flex items-center gap-1"><Theater className="w-3 h-3" />{ev.format}</span>}
-                          </div>
-                        </div>
-                        {days !== null && days >= 0 && (
-                          <div className="text-right shrink-0">
-                            <p className="font-display text-2xl font-bold text-accent">{days}</p>
-                            <p className="text-[10px] text-muted-foreground">Tage</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </>
-            )}
-
-            {/* Offene Anfragen */}
-            {requests.filter(r => !r.event_id).length > 0 && (
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-4">Offene Anfragen</p>
-            )}
-
             {requests.length === 0 ? (
               <div className="p-10 rounded-3xl bg-white border border-black/[0.06] shadow-sm text-center">
                 <div className="w-14 h-14 rounded-full bg-black/[0.03] flex items-center justify-center mx-auto mb-4">
@@ -1797,8 +1761,10 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
             ) : (
               requests.map((r) => {
                 const isOpen = expandedRequestId === r.id;
+                const linkedEvent = events.find(e => e.request_id === r.id);
+                const days = linkedEvent ? getCountdownDays(linkedEvent.event_date) : null;
                 return (
-                  <div key={r.id} className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
+                  <div key={r.id} className={`rounded-2xl bg-white shadow-sm overflow-hidden ${linkedEvent ? "border border-green-200/60" : "border border-black/[0.06]"}`}>
                     <button
                       type="button"
                       onClick={() => setExpandedRequestId(isOpen ? null : r.id)}
@@ -1808,24 +1774,32 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2.5 flex-wrap mb-1.5">
                             <h3 className="font-display text-base font-bold text-foreground">{capWords(r.anlass) || "Anfrage"}</h3>
-                            {r.firma && (
-                              <span className="font-sans text-xs text-muted-foreground flex items-center gap-1">
-                                <Building2 className="w-3 h-3" />{r.firma}
-                              </span>
-                            )}
-                            <span className={`font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full ${formatStatusClasses(r.status)}`}>
-                              {formatStatusLabel(r.status)}
+                            <span className={`font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full ${linkedEvent ? "text-green-600 bg-green-50 border border-green-200" : formatStatusClasses(r.status)}`}>
+                              {linkedEvent ? "Gebucht" : formatStatusLabel(r.status)}
                             </span>
-                            {r.event_id && (
-                              <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full text-green-400 bg-green-400/10 border border-green-400/20">Gebucht</span>
+                          </div>
+                          <div className="flex items-center gap-3 flex-wrap text-xs text-muted-foreground">
+                            {linkedEvent ? (
+                              <>
+                                {linkedEvent.event_date && <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(linkedEvent.event_date).toLocaleDateString("de-DE")}</span>}
+                                {linkedEvent.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{linkedEvent.location}</span>}
+                                {linkedEvent.guests && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{linkedEvent.guests} Gäste</span>}
+                              </>
+                            ) : (
+                              <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{new Date(r.created_at).toLocaleDateString("de-DE")}</span>
                             )}
                           </div>
-                          <p className="font-sans text-xs text-muted-foreground flex items-center gap-1.5">
-                            <Clock className="w-3 h-3" />{new Date(r.created_at).toLocaleDateString("de-DE")}
-                          </p>
                         </div>
-                        <div className="text-muted-foreground shrink-0 mt-0.5">
-                          {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                        <div className="flex items-center gap-3 shrink-0">
+                          {days !== null && days >= 0 && (
+                            <div className="text-right">
+                              <p className="font-display text-xl font-bold text-accent">{days}</p>
+                              <p className="text-[10px] text-muted-foreground">Tage</p>
+                            </div>
+                          )}
+                          <div className="text-muted-foreground mt-0.5">
+                            {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                          </div>
                         </div>
                       </div>
                     </button>
