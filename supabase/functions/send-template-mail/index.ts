@@ -227,7 +227,21 @@ serve(async (req) => {
       .replace(/\{\{datum\}\}/gi, (request?.datum || event?.event_date) ? new Date(request?.datum || event?.event_date).toLocaleDateString("de-DE") : "")
       .replace(/\{\{ort\}\}/gi, request?.ort || event?.location || "")
       .replace(/\{\{gaeste\}\}/gi, String(request?.gaeste || event?.guests || ""))
-      .replace(/\{\{format\}\}/gi, request?.format || event?.format || "");
+      .replace(/\{\{format\}\}/gi, request?.format || event?.format || "")
+      .replace(/\{\{tageszeit\}\}/gi, (() => {
+        const h = new Date().getHours();
+        if (h < 11) return "Morgen";
+        if (h < 14) return "Mittag";
+        if (h < 17) return "Nachmittag";
+        return "Abend";
+      })())
+      .replace(/\{\{tageszeit_gruss\}\}/gi, (() => {
+        const h = new Date().getHours();
+        if (h < 11) return "einen wunderbaren, magischen Morgen";
+        if (h < 14) return "einen zauberhaften Tag";
+        if (h < 17) return "einen magischen Nachmittag";
+        return "einen gelungenen, magischen Abend";
+      })());
 
     const subject = replacePlaceholders(template.betreff);
     const body = replacePlaceholders(template.inhalt);
