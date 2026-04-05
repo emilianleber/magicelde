@@ -292,11 +292,13 @@ export default function AdminDokumentDetail() {
     // Informationsblock (rechts)
     const infoX = ML + CW * 0.55;
     let infoY = y;
+    const isAngebot = d.typ === "angebot";
     const metaR = [
       { label: `${tl}-Nr.`, val: d.nummer },
       { label: "Datum", val: fmtD(d.datum) },
-      ...(d.faelligAm ? [{ label: "Zahlungsziel", val: fmtD(d.faelligAm) }] : []),
-      ...(d.gueltigBis ? [{ label: "Gültig bis", val: fmtD(d.gueltigBis) }] : []),
+      ...(d.gueltigBis && isAngebot ? [{ label: "Gültig bis", val: fmtD(d.gueltigBis) }] : []),
+      ...(d.faelligAm && !isAngebot ? [{ label: "Zahlungsziel", val: fmtD(d.faelligAm) }] : []),
+      ...(d.gueltigBis && !isAngebot ? [{ label: "Gültig bis", val: fmtD(d.gueltigBis) }] : []),
       { label: "Ansprechpartner", val: d.absender.name },
     ];
     pdf.setFontSize(8);
@@ -812,8 +814,8 @@ body > div:last-child {
           {[
             { label: "Datum", value: fmtDate(doc.datum), icon: Clock },
             { label: doc.typ === "angebot" ? "Gültig bis" : "Fällig am", value: fmtDate(doc.gueltigBis || doc.faelligAm), icon: Clock },
-            { label: "Zahlungsziel", value: doc.zahlungszielTage + " Tage", icon: Clock },
-            { label: "Lieferdatum", value: fmtDate(doc.lieferdatum), icon: Clock },
+            ...(doc.typ !== "angebot" ? [{ label: "Zahlungsziel", value: doc.zahlungszielTage + " Tage", icon: Clock }] : []),
+            ...(doc.typ !== "angebot" ? [{ label: "Lieferdatum", value: fmtDate(doc.lieferdatum), icon: Clock }] : []),
           ].map(({ label, value }) => (
             <div key={label} className="rounded-xl bg-muted/10 border border-border/10 px-4 py-3">
               <p className="text-xs text-muted-foreground mb-1">{label}</p>
