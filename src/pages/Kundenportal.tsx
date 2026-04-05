@@ -389,12 +389,14 @@ const Kundenportal = () => {
       cust = byUserId;
 
       if (!cust) {
-        // .limit(1) statt .maybeSingle() — verhindert Fehler bei Duplikaten
-        const { data: byEmailArr } = await supabase.from("portal_customers").select("*").eq("email", user.email).limit(1);
+        // Case-insensitive E-Mail-Suche — verhindert Duplikate durch Groß-/Kleinschreibung
+        const { data: byEmailArr } = await supabase.from("portal_customers").select("*").ilike("email", user.email!).limit(1);
         const byEmail = byEmailArr?.[0] || null;
         if (byEmail) {
-          // user_id verknüpfen
-          const { data: linked } = await supabase.from("portal_customers").update({ user_id: user.id }).eq("id", byEmail.id).select("*").single();
+          // user_id verknüpfen + E-Mail normalisieren
+          const { data: linked } = await supabase.from("portal_customers")
+            .update({ user_id: user.id, email: user.email!.toLowerCase() })
+            .eq("id", byEmail.id).select("*").single();
           cust = linked ?? byEmail;
         }
       }
@@ -409,16 +411,29 @@ const Kundenportal = () => {
 
       const capW = (s?: string | null) => s ? s.replace(/\b\w/g, (c: string) => c.toUpperCase()) : null;
 
-      // Nur wenn wirklich KEIN Eintrag existiert (weder via user_id noch via Email)
+      // Nur wenn wirklich KEIN Eintrag existiert — letzte Prüfung per customer_id der Anfrage
       if (!cust && requestsData && requestsData.length > 0) {
         const req = requestsData[0] as any;
-        const { data: created } = await supabase.from("portal_customers").insert({
-          name: capW(req.name) || user.email!.split("@")[0],
-          email: user.email!,
-          ...(req.firma ? { company: req.firma } : {}),
-          ...(req.phone ? { phone: req.phone } : {}),
-        }).select("*").maybeSingle();
-        if (created) cust = created;
+        // Prüfe ob die Anfrage schon einen Kunden hat
+        if (req.customer_id) {
+          const { data: reqCust } = await supabase.from("portal_customers").select("*").eq("id", req.customer_id).single();
+          if (reqCust) {
+            // user_id verknüpfen
+            await supabase.from("portal_customers").update({ user_id: user.id }).eq("id", reqCust.id);
+            cust = { ...reqCust, user_id: user.id };
+          }
+        }
+        // Wirklich kein Kunde gefunden — erst dann erstellen
+        if (!cust) {
+          const { data: created } = await supabase.from("portal_customers").insert({
+            name: capW(req.name) || user.email!.split("@")[0],
+            email: user.email!.toLowerCase(),
+            user_id: user.id,
+            ...(req.firma ? { company: req.firma } : {}),
+            ...(req.phone ? { phone: req.phone } : {}),
+          }).select("*").maybeSingle();
+          if (created) cust = created;
+        }
       }
 
       // Eintrag vorhanden aber Name leer → aus Anfrage befüllen

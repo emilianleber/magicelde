@@ -105,7 +105,7 @@ serve(async (req) => {
     const { data: existingCustomers, error: existingCustomerError } = await supabase
       .from("portal_customers")
       .select("*")
-      .eq("email", safeEmail)
+      .ilike("email", safeEmail)
       .limit(1);
     const existingCustomer = existingCustomers?.[0] || null;
 
