@@ -191,14 +191,12 @@ const fmtFormat = (f: string | null) => f ? (formatLabels[f.toLowerCase()] || f)
 const capitalize = (s: string) => s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
 // Begrüßung: "Herr Müller" oder "Max Mustermann"
-const getBegruessung = (nameRaw: string, anrede?: string | null) => {
+const getBegruessung = (nameRaw: string, anrede?: string | null, vornameField?: string | null, nachnameField?: string | null) => {
   const name = capitalize(nameRaw);
-  if (anrede) {
-    const parts = name.split(" ");
-    const nachname = parts.slice(1).join(" ") || parts[0];
-    return `${anrede} ${nachname}`;
-  }
-  return name;
+  const vn = vornameField ? capitalize(vornameField) : name.split(" ")[0];
+  const nn = nachnameField ? capitalize(nachnameField) : name.split(" ").slice(1).join(" ") || vn;
+  if (anrede) return `${anrede} ${nn}`;
+  return `${vn} ${nn}`.trim();
 };
 
 // ─── Request Mail Templates ───────────────────────────────────────────────────
@@ -212,7 +210,7 @@ const requestMailTemplate = (request: any) => {
   ].filter(Boolean) as { icon: string; label: string; value: string }[];
 
   const anrede = request.anrede || "";
-  const gruss = getBegruessung(request.name, anrede);
+  const gruss = getBegruessung(request.name, anrede, request.vorname, request.nachname);
 
   switch (request.status) {
     case "neu":
@@ -313,8 +311,8 @@ const requestMailTemplate = (request: any) => {
 };
 
 // ─── Event Mail Templates ─────────────────────────────────────────────────────
-const eventMailTemplate = (event: any, customerName: string, email: string, days?: number, dokumentTyp?: string, customerAnrede?: string) => {
-  const gruss = getBegruessung(customerName, customerAnrede);
+const eventMailTemplate = (event: any, customerName: string, email: string, days?: number, dokumentTyp?: string, customerAnrede?: string, customerVorname?: string, customerNachname?: string) => {
+  const gruss = getBegruessung(customerName, customerAnrede, customerVorname, customerNachname);
   const rows = [
     { icon: "✨", label: "Event", value: event.title || "–" },
     { icon: "📅", label: "Datum", value: fmtDatum(event.event_date) },
@@ -677,7 +675,9 @@ serve(async (req) => {
         customer.email,
         days,
         dokumentTyp,
-        customer.anrede || ""
+        customer.anrede || "",
+        customer.vorname || "",
+        customer.nachname || ""
       );
 
       if (!mail) {

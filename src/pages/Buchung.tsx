@@ -74,7 +74,10 @@ const FormSection = () => {
     const formData = new FormData(form);
 
     const payload = {
-      name: String(formData.get("name") || "").trim(),
+      anrede: String(formData.get("anrede") || "").trim() || null,
+      vorname: String(formData.get("vorname") || "").trim(),
+      nachname: String(formData.get("nachname") || "").trim(),
+      name: `${String(formData.get("vorname") || "").trim()} ${String(formData.get("nachname") || "").trim()}`.trim(),
       firma: String(formData.get("firma") || "").trim() || null,
       email: String(formData.get("email") || "").trim(),
       phone: String(formData.get("phone") || "").trim(),
@@ -147,11 +150,28 @@ const FormSection = () => {
           }`}
         >
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid sm:grid-cols-2 gap-5">
+            <div className="grid grid-cols-[100px_1fr_1fr] sm:grid-cols-[120px_1fr_1fr_1fr] gap-3 sm:gap-5">
+              <select
+                name="anrede"
+                className={inputCls}
+                defaultValue=""
+              >
+                <option value="">Anrede</option>
+                <option value="Herr">Herr</option>
+                <option value="Frau">Frau</option>
+                <option value="Divers">Divers</option>
+              </select>
               <input
                 type="text"
-                name="name"
-                placeholder="Name *"
+                name="vorname"
+                placeholder="Vorname *"
+                required
+                className={inputCls}
+              />
+              <input
+                type="text"
+                name="nachname"
+                placeholder="Nachname *"
                 required
                 className={inputCls}
               />
@@ -160,7 +180,7 @@ const FormSection = () => {
                 name="email"
                 placeholder="E-Mail *"
                 required
-                className={inputCls}
+                className={`${inputCls} col-span-2 sm:col-span-1`}
               />
             </div>
 

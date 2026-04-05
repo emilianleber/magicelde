@@ -203,20 +203,17 @@ serve(async (req) => {
 
     // Platzhalter ersetzen
     const name = customer?.name || request?.name || "";
-    // Namen capitalisieren (adam eva → Adam Eva)
+    // Vorname/Nachname aus DB-Feldern, Fallback auf name-Split
     const capitalize = (s: string) => s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-    const nameCap = capitalize(name);
-    const nameParts = nameCap.split(" ");
-    const vorname = nameParts[0] || "";
-    const nachname = nameParts.slice(1).join(" ") || nameParts[0] || "";
+    const vorname = capitalize(customer?.vorname || request?.vorname || name.split(" ")[0] || "");
+    const nachname = capitalize(customer?.nachname || request?.nachname || name.split(" ").slice(1).join(" ") || "");
     const firma = customer?.company || request?.firma || "";
-    // Anrede: aus Kunde oder Anfrage lesen, Fallback leer (kein "Frau/Herr")
     const anrede = customer?.anrede || request?.anrede || "";
 
-    // Intelligente Begrüßung: "Herr Mustermann" oder "Max Mustermann"
+    // Begrüßung: "Herr Mustermann" oder "Max Mustermann"
     const begruessung = anrede
-      ? `${anrede} ${nachname}`  // "Herr Mustermann" / "Frau Müller"
-      : nameCap;                 // "Max Mustermann" (Vor- und Nachname)
+      ? `${anrede} ${nachname}`
+      : `${vorname} ${nachname}`.trim();
 
     const replacePlaceholders = (text: string) => text
       .replace(/\{\{anrede\}\}/gi, anrede)

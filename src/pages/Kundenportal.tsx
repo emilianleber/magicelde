@@ -272,7 +272,7 @@ const Kundenportal = () => {
   const [loading, setLoading] = useState(true);
 
   const [settingsDraft, setSettingsDraft] = useState({
-    name: "", company: "", phone: "",
+    anrede: "", vorname: "", nachname: "", name: "", company: "", phone: "",
     rechnungs_strasse: "", rechnungs_plz: "", rechnungs_ort: "", rechnungs_land: "Deutschland",
   });
   const [settingsSaving, setSettingsSaving] = useState(false);
