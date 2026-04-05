@@ -188,7 +188,7 @@ const formatLabels: Record<string, string> = {
 };
 const fmtFormat = (f: string | null) => f ? (formatLabels[f.toLowerCase()] || f) : "–";
 
-const capitalize = (s: string) => s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ");
+const capitalize = (s: string) => s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
 // Begrüßung: "Herr Müller" oder "Max Mustermann"
 const getBegruessung = (nameRaw: string, anrede?: string | null) => {
@@ -320,7 +320,7 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
     { icon: "📅", label: "Datum", value: fmtDatum(event.event_date) },
     { icon: "📍", label: "Ort", value: event.location || "–" },
     { icon: "👥", label: "Gäste", value: String(event.guests ?? "–") },
-    { icon: "🎭", label: "Format", value: event.format || "–" },
+    { icon: "🎭", label: "Format", value: fmtFormat(event.format) },
   ];
 
   switch (event.status) {

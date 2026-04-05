@@ -66,9 +66,9 @@ serve(async (req) => {
       throw new Error("Name und E-Mail fehlen");
     }
 
-    // Hilfsfunktion: ersten Buchstaben jedes Worts großschreiben
+    // Hilfsfunktion: ersten Buchstaben jedes Worts großschreiben (ohne Umlaute zu zerstören)
     const capitalize = (s: string) =>
-      s.replace(/\b\w/g, (c) => c.toUpperCase());
+      s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
     const safeName   = capitalize(String(name).trim());
     const safeFirma  = firma  ? String(firma).trim()  : null;   // Firmenname unverändert
