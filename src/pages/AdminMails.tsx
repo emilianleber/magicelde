@@ -415,11 +415,13 @@ const AdminMails = () => {
     if (!composeToEmail || !composeSubject || !composeBody) { setSendMsg("Empfänger, Betreff und Nachricht sind Pflichtfelder."); return; }
     setSending(true); setSendMsg("");
     try {
+      await supabase.auth.refreshSession();
       const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error("Nicht eingeloggt – bitte neu anmelden.");
       const attachmentUrls = selectedDocIds.map((id) => customerDocs.find((d) => d.id === id)?.file_url).filter(Boolean);
       const res = await fetch(`${SUPABASE_URL}/functions/v1/send-customer-mail`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session?.access_token}` },
+        headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
         body: JSON.stringify({ customer_id: composeCustomerId || null, subject: composeSubject, body: composeBody, to_email: composeToEmail, to_name: composeToName || null, attachment_urls: attachmentUrls }),
       });
       const data = await res.json();
