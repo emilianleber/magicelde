@@ -167,16 +167,19 @@ const documentTypes = [
 
 // Status-Optionen die manuell gesetzt werden können.
 // "bestätigt" wird nur über den "Als gebucht markieren" Button gesetzt (erstellt auch Event).
-const statusOptions = [
+// Anfrage-Phasen
+const requestPhases = [
   { value: "neu", label: "Neu" },
   { value: "in_bearbeitung", label: "In Bearbeitung" },
-  { value: "details_besprechen", label: "Details besprechen" },
   { value: "angebot_gesendet", label: "Angebot gesendet" },
-  { value: "warte_auf_kunde", label: "Warte auf Kunde" },
-  { value: "gebucht", label: "Gebucht" },
-  { value: "bestätigt", label: "Bestätigt" },
   { value: "abgelehnt", label: "Abgelehnt" },
   { value: "archiviert", label: "Archiviert" },
+];
+
+// Anfrage-Aufgaben
+const requestTaskDefs: TaskDef[] = [
+  { key: "_details", label: "Details", states: [null, "details_besprechen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "details_besprechen" },
+  { key: "_warte", label: "Rückmeldung", states: [null, "warte_auf_kunde", "erledigt"], stateLabels: ["—", "Warte", "Erhalten ✓"], mailOn: "warte_auf_kunde" },
 ];
 
 // Hauptphasen
@@ -1218,35 +1221,77 @@ const AdminBookingDetail = () => {
                 </div>
               </>
             ) : (
-              <div className="space-y-1 mb-5">
-                {statusOptions.map((opt) => {
-                  const isActive = status === opt.value;
-                  const noMail = ["archiviert"].includes(opt.value);
-                  return (
-                    <button
-                      key={opt.value}
-                      onClick={async () => {
-                        if (isActive) return;
-                        setStatus(opt.value);
-                        await supabase.from("portal_requests").update({ status: opt.value }).eq("id", request.id);
-                        setRequest({ ...request, status: opt.value });
-                        setMessage(`Status → ${opt.label}`);
-                        if (!noMail && confirm(`Status auf "${opt.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
-                          sendStatusMail();
-                        }
-                      }}
-                      className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
-                        isActive
-                          ? "bg-foreground text-background font-semibold"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                      }`}
-                    >
-                      {opt.label}
-                      {!noMail && !isActive && <Mail className="w-3 h-3 ml-auto text-muted-foreground/30" />}
-                    </button>
-                  );
-                })}
-              </div>
+              <>
+                {/* Phase */}
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Phase</p>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {requestPhases.map((phase) => {
+                    const isActive = status === phase.value;
+                    return (
+                      <button
+                        key={phase.value}
+                        onClick={async () => {
+                          if (isActive) return;
+                          setStatus(phase.value);
+                          await supabase.from("portal_requests").update({ status: phase.value }).eq("id", request.id);
+                          setRequest({ ...request, status: phase.value });
+                          setMessage(`Phase → ${phase.label}`);
+                          if (!["archiviert", "neu"].includes(phase.value) && confirm(`Phase auf "${phase.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                            sendStatusMail();
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                          isActive ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
+                        }`}
+                      >
+                        {phase.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Aufgaben */}
+                {!["abgelehnt", "archiviert"].includes(status) && (
+                  <>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
+                    <div className="space-y-2 mb-5">
+                      {requestTaskDefs.map((task) => {
+                        const isTaskActive = status === task.states[1];
+                        const isTaskDone = task.states[2] === "erledigt" && (
+                          (task.key === "_details" && ["angebot_gesendet", "warte_auf_kunde", "bestätigt", "gebucht"].includes(status)) ||
+                          (task.key === "_warte" && ["bestätigt", "gebucht"].includes(status))
+                        );
+                        const stateIdx = isTaskDone ? 2 : isTaskActive ? 1 : 0;
+                        const stateLabel = task.stateLabels[stateIdx];
+                        return (
+                          <button
+                            key={task.key}
+                            onClick={async () => {
+                              if (isTaskDone) return;
+                              const newStatus = isTaskActive ? "in_bearbeitung" : (task.states[1] as string);
+                              setStatus(newStatus);
+                              await supabase.from("portal_requests").update({ status: newStatus }).eq("id", request.id);
+                              setRequest({ ...request, status: newStatus });
+                              setMessage(`${task.label} → ${isTaskActive ? "Zurückgesetzt" : task.stateLabels[1]}`);
+                              if (!isTaskActive && confirm(`${task.label} auf "${task.stateLabels[1]}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                                sendStatusMail();
+                              }
+                            }}
+                            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors border ${
+                              isTaskDone ? "bg-green-50 border-green-200 text-green-700"
+                              : isTaskActive ? "bg-blue-50 border-blue-200 text-blue-700"
+                              : "bg-muted/20 border-border/20 text-muted-foreground hover:bg-muted/40"
+                            }`}
+                          >
+                            <span className="font-medium">{task.label}</span>
+                            <span className={`text-xs font-semibold ${isTaskDone ? "text-green-600" : isTaskActive ? "text-blue-600" : "text-muted-foreground/50"}`}>{stateLabel}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+              </>
             )}
 
             {/* Actions */}
