@@ -179,18 +179,20 @@ const statusOptions = [
   { value: "archiviert", label: "Archiviert" },
 ];
 
-// Event-Status (frei wählbar, nicht zwingend sequentiell)
-const eventStatusOptions = [
-  { value: "in_planung", label: "In Planung", icon: "📋" },
-  { value: "details_offen", label: "Details klären", icon: "📩" },
-  { value: "vertrag_gesendet", label: "Vertrag gesendet", icon: "📄" },
-  { value: "vertrag_bestaetigt", label: "Vertrag bestätigt", icon: "✅" },
-  { value: "rechnung_gesendet", label: "Rechnung gesendet", icon: "💰" },
-  { value: "rechnung_bezahlt", label: "Rechnung bezahlt", icon: "✅" },
-  { value: "event_erfolgt", label: "Event durchgeführt", icon: "🎉" },
-  { value: "abgeschlossen", label: "Abgeschlossen", icon: "🏁" },
-  { value: "storniert", label: "Storniert", icon: "❌" },
+// Hauptphasen
+const eventPhases = [
+  { value: "in_planung", label: "In Planung" },
+  { value: "event_erfolgt", label: "Event durchgeführt" },
+  { value: "abgeschlossen", label: "Abgeschlossen" },
+  { value: "storniert", label: "Storniert" },
 ];
+
+// Aufgaben mit Zuständen (rotieren bei Klick)
+const eventTaskDefs = [
+  { key: "details_status", label: "Details", states: ["offen", "erledigt"], stateLabels: ["Offen", "Geklärt ✓"] },
+  { key: "contract_status", label: "Vertrag", states: ["offen", "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bestätigt ✓"] },
+  { key: "invoice_status", label: "Rechnung", states: ["offen", "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"] },
+] as const;
 
 const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
   if (!val) return "";
@@ -402,16 +404,9 @@ const AdminBookingDetail = () => {
         format: draftFormat || null,
         guests: draftGaeste ? Number(draftGaeste) : null,
         status: event.status,
-        // Aufgaben-Status automatisch setzen basierend auf Event-Status
-        details_status: ["details_offen"].includes(event.status || "") ? "offen"
-          : ["vertrag_gesendet", "vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(event.status || "") ? "erledigt"
-          : event.details_status || "offen",
-        contract_status: ["vertrag_gesendet"].includes(event.status || "") ? "gesendet"
-          : ["vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(event.status || "") ? "erledigt"
-          : event.contract_status || "offen",
-        invoice_status: ["rechnung_gesendet"].includes(event.status || "") ? "gesendet"
-          : ["rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(event.status || "") ? "erledigt"
-          : event.invoice_status || "offen",
+        details_status: event.details_status || "offen",
+        contract_status: event.contract_status || "offen",
+        invoice_status: event.invoice_status || "offen",
       }).eq("id", event.id);
     }
 
@@ -982,46 +977,66 @@ const AdminBookingDetail = () => {
                     <Check className="w-3.5 h-3.5" /> Gebucht
                   </p>
                 </div>
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Event-Status</p>
-                <div className="space-y-1 mb-5">
-                  {eventStatusOptions.map((opt) => {
-                    const isActive = event.status === opt.value;
-                    const noMail = ["abgeschlossen"].includes(opt.value);
+                {/* Hauptphase */}
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Phase</p>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {eventPhases.map((phase) => {
+                    const isActive = event.status === phase.value;
                     return (
                       <button
-                        key={opt.value}
+                        key={phase.value}
                         onClick={async () => {
                           if (isActive) return;
-                          // Status setzen + speichern
-                          const newEvent = { ...event, status: opt.value };
-                          setEvent(newEvent as any);
-                          await supabase.from("portal_events").update({
-                            status: opt.value,
-                            details_status: ["details_offen"].includes(opt.value) ? "offen"
-                              : ["vertrag_gesendet", "vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(opt.value) ? "erledigt"
-                              : event.details_status || "offen",
-                            contract_status: ["vertrag_gesendet"].includes(opt.value) ? "gesendet"
-                              : ["vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(opt.value) ? "erledigt"
-                              : event.contract_status || "offen",
-                            invoice_status: ["rechnung_gesendet"].includes(opt.value) ? "gesendet"
-                              : ["rechnung_bezahlt", "event_erfolgt", "abgeschlossen"].includes(opt.value) ? "erledigt"
-                              : event.invoice_status || "offen",
-                          }).eq("id", event.id);
-                          setMessage(`Status → ${opt.label}`);
-                          // Fragen ob Mail senden
-                          if (!noMail && confirm(`Status auf "${opt.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                          setEvent((prev: any) => prev ? { ...prev, status: phase.value } : prev);
+                          await supabase.from("portal_events").update({ status: phase.value }).eq("id", event.id);
+                          setMessage(`Phase → ${phase.label}`);
+                          if (phase.value !== "abgeschlossen" && phase.value !== "in_planung" && confirm(`Phase auf "${phase.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
                             sendStatusMail();
                           }
                         }}
-                        className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
-                          isActive
-                            ? "bg-foreground text-background font-semibold"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                          isActive ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
                         }`}
                       >
-                        <span className="w-5 text-center">{opt.icon}</span>
-                        {opt.label}
-                        {!noMail && !isActive && <Mail className="w-3 h-3 ml-auto text-muted-foreground/30" />}
+                        {phase.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Aufgaben */}
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
+                <div className="space-y-2 mb-5">
+                  {eventTaskDefs.map((task) => {
+                    const currentVal = (event as any)[task.key] || "offen";
+                    const currentIdx = task.states.indexOf(currentVal as any);
+                    const stateLabel = task.stateLabels[Math.max(0, currentIdx)];
+                    const isDone = currentVal === "erledigt";
+                    const isMiddle = currentIdx > 0 && currentIdx < task.states.length - 1;
+                    return (
+                      <button
+                        key={task.key}
+                        onClick={async () => {
+                          // Zum nächsten Zustand rotieren
+                          const nextIdx = (currentIdx + 1) % task.states.length;
+                          const nextVal = task.states[nextIdx];
+                          setEvent((prev: any) => prev ? { ...prev, [task.key]: nextVal } : prev);
+                          await supabase.from("portal_events").update({ [task.key]: nextVal }).eq("id", event.id);
+                          const nextLabel = task.stateLabels[nextIdx];
+                          setMessage(`${task.label} → ${nextLabel}`);
+                          // Bei "gesendet" fragen ob Mail
+                          if (nextVal === "gesendet" && confirm(`${task.label} auf "${nextLabel}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                            sendStatusMail();
+                          }
+                        }}
+                        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors border ${
+                          isDone ? "bg-green-50 border-green-200 text-green-700"
+                          : isMiddle ? "bg-blue-50 border-blue-200 text-blue-700"
+                          : "bg-muted/20 border-border/20 text-muted-foreground hover:bg-muted/40"
+                        }`}
+                      >
+                        <span className="font-medium">{task.label}</span>
+                        <span className={`text-xs font-semibold ${isDone ? "text-green-600" : isMiddle ? "text-blue-600" : "text-muted-foreground/50"}`}>{stateLabel}</span>
                       </button>
                     );
                   })}
