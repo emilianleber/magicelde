@@ -433,9 +433,7 @@ function DocumentPreview(props: PreviewProps) {
   const typLabel = TYP_LABEL[typ] || typ;
   const initials = (absenderName || "E").charAt(0).toUpperCase();
 
-  const font = layoutId === 4 ? "'Courier New', Courier, monospace"
-    : layoutId === 10 ? "Georgia, 'Times New Roman', serif"
-    : "Inter, system-ui, -apple-system, sans-serif";
+  const font = "Inter, system-ui, -apple-system, sans-serif";
 
   // A4 proportions for 595px wide container
   const M = 52;   // horizontal margin ≈ 18mm
@@ -665,7 +663,7 @@ function DocumentPreview(props: PreviewProps) {
   const PAGE_STYLE: React.CSSProperties = {
     width: "100%", minHeight: 842, position: "relative" as const,
     fontFamily: font, color: "#1a1a1a", display: "flex", flexDirection: "column",
-    paddingBottom: 80, // Platz für den fix positionierten DIN-Footer
+    paddingBottom: 100, // Platz für den fix positionierten DIN-Footer
   };
 
   const page = (bg: string, header: React.ReactNode, thBg: string, thColor: string) => (
