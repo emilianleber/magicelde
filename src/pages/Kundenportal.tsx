@@ -201,6 +201,10 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
 
   if (event) {
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
+    // Details offen: nur anzeigen wenn aktiv (verschwindet wenn erledigt)
+    if (evSt === "details_offen") {
+      steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
+    }
     // Vertrag nur anzeigen wenn er gesendet/bestätigt wurde
     if (evReached("vertrag_gesendet")) {
       steps.push({ label: evReached("vertrag_bestaetigt") ? "Vertrag bestätigt ✓" : "Vertrag gesendet", done: evReached("vertrag_bestaetigt") });
