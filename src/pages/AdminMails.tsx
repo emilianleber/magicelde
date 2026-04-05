@@ -333,8 +333,31 @@ const AdminMails = () => {
     }
     if (selectedTemplateId && c) {
       const tpl = templates.find((t) => t.id === selectedTemplateId);
-      if (tpl) setComposeBody(replacePlaceholders(tpl.body, { name: c.name, firma: c.company, email: c.email }) + (signature ? `<br><br>---<br>${signature}` : ""));
+      if (tpl) {
+        setComposeSubject(replaceAllPlaceholders(tpl.subject || "", c));
+        setComposeBody(replaceAllPlaceholders(tpl.body, c));
+      }
     }
+  };
+
+  const replaceAllPlaceholders = (text: string, c?: PortalCustomer | null) => {
+    const name = c?.name || "";
+    const parts = name.split(" ");
+    const vorname = parts[0] || "";
+    const nachname = parts.slice(1).join(" ") || parts[0] || "";
+    const anrede = (c as any)?.anrede || "";
+    const begruessung = anrede ? `${anrede} ${nachname}` : name;
+    return text
+      .replace(/\{\{begruessung\}\}/gi, begruessung)
+      .replace(/\{\{anrede\}\}/gi, anrede)
+      .replace(/\{\{vorname\}\}/gi, vorname)
+      .replace(/\{\{nachname\}\}/gi, nachname)
+      .replace(/\{\{name\}\}/gi, name)
+      .replace(/\{\{firma\}\}/gi, c?.company || "")
+      .replace(/\{\{email\}\}/gi, c?.email || "")
+      .replace(/\{name\}/gi, name)
+      .replace(/\{firma\}/gi, c?.company || "")
+      .replace(/\{email\}/gi, c?.email || "");
   };
 
   const handleTemplateSelect = (templateId: string) => {
@@ -342,9 +365,9 @@ const AdminMails = () => {
     if (!templateId) return;
     const tpl = templates.find((t) => t.id === templateId);
     if (!tpl) return;
-    if (tpl.subject) setComposeSubject(tpl.subject);
     const c = customers.find((c) => c.id === composeCustomerId);
-    setComposeBody(replacePlaceholders(tpl.body, { name: c?.name, firma: c?.company, email: c?.email }) + (signature ? `<br><br>---<br>${signature}` : ""));
+    if (tpl.subject) setComposeSubject(replaceAllPlaceholders(tpl.subject, c));
+    setComposeBody(replaceAllPlaceholders(tpl.body, c));
   };
 
   const sendMail = async () => {
