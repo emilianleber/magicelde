@@ -106,7 +106,7 @@ const getEmailShell = (
 
               ${showPortalButton ? `
               <div style="text-align:center;margin:28px 0 24px;">
-                <a href="https://magicel.de/kundenportal/login"
+                <a href="https://www.magicel.de/kundenportal/login"
                    style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:15px 34px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;font-family:${FONT};">
                   Kundenportal öffnen &rarr;
                 </a>
@@ -272,7 +272,7 @@ const requestMailTemplate = (request: any) => {
             Schauen Sie sich das Angebot in Ruhe an. Bei Fragen oder Anpassungswünschen bin ich jederzeit für Sie da – per Telefon, E-Mail oder WhatsApp.
           </p>
           <div style="text-align:center;margin:8px 0 16px;">
-            <a href="https://magicel.de/kundenportal/login"
+            <a href="https://www.magicel.de/kundenportal/login"
                style="display:inline-block;background-color:#2563eb;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;font-family:${FONT};">
               📄 Angebot im Kundenportal ansehen
             </a>
@@ -293,7 +293,7 @@ const requestMailTemplate = (request: any) => {
             Bitte prüfen Sie die Auftragsbestätigung und melden Sie sich bei mir, falls Änderungen gewünscht sind. Im Bereich <strong style="color:#0a0a0a;">Dokumente</strong> in Ihrem Kundenportal finden Sie alle Unterlagen.
           </p>
           <div style="text-align:center;margin:8px 0 16px;">
-            <a href="https://magicel.de/kundenportal/login"
+            <a href="https://www.magicel.de/kundenportal/login"
                style="display:inline-block;background-color:#15803d;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;font-family:${FONT};">
               📄 Auftragsbestätigung ansehen
             </a>

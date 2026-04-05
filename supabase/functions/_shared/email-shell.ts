@@ -137,7 +137,7 @@ export const getEmailShell = (
 
       ${showPortalButton ? `
       <div style="text-align:center;margin:28px 0 16px;">
-        <a href="https://magicel.de/kundenportal/login"
+        <a href="https://www.magicel.de/kundenportal/login"
            style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:15px 34px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;font-family:${FONT};">
           Kundenportal öffnen &rarr;
         </a>

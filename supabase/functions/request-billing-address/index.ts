@@ -62,7 +62,7 @@ serve(async (req) => {
 
       <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:20px;">
         <tr><td align="center">
-          <a href="https://magicel.de/kundenportal/login" style="display:inline-block;background-color:#0a0a0a;color:#fff;text-decoration:none;padding:14px 32px;border-radius:12px;font-size:14px;font-weight:700;font-family:${FONT};">Kundenportal öffnen →</a>
+          <a href="https://www.magicel.de/kundenportal/login" style="display:inline-block;background-color:#0a0a0a;color:#fff;text-decoration:none;padding:14px 32px;border-radius:12px;font-size:14px;font-weight:700;font-family:${FONT};">Kundenportal öffnen →</a>
         </td></tr>
       </table>
 

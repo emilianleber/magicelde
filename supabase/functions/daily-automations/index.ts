@@ -60,7 +60,7 @@ const getEmailShell = (title: string, headline: string, intro: string, content: 
 <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">${intro}</p>
 ${content}
 ${showPortalButton ? `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-top:28px;"><tr><td align="center">
-<a href="https://magicel.de/kundenportal" style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:14px;font-weight:700;font-family:${FONT};">Kundenportal öffnen →</a>
+<a href="https://www.magicel.de/kundenportal" style="display:inline-block;background-color:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:14px;font-weight:700;font-family:${FONT};">Kundenportal öffnen →</a>
 </td></tr></table>` : ""}
 </td></tr>
 <!-- Signature -->

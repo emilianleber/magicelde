@@ -36,7 +36,7 @@ const createTransporter = () =>
 
 const SMTP_FROM = `"Emilian Leber" <${Deno.env.get("SMTP_USER") || "el@magicel.de"}>`;
 const ADMIN_EMAIL = Deno.env.get("SMTP_USER") || "el@magicel.de";
-const PORTAL_URL = Deno.env.get("PORTAL_URL") || "https://www.magicel.de/portal";
+const PORTAL_URL = Deno.env.get("PORTAL_URL") || "https://www.magicel.de/kundenportal/login";
 
 const sendMail = async (to: string, subject: string, html: string) => {
   const transporter = createTransporter();
