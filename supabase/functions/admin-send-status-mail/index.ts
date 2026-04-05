@@ -622,7 +622,7 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const { type, recordId, customerId, changeRequestId, days, dokumentTyp } = body;
+    const { type, recordId, customerId, changeRequestId, days, dokumentTyp, statusOverride } = body;
 
     if (!type) {
       return new Response(JSON.stringify({ error: "type fehlt" }), {
@@ -734,8 +734,10 @@ serve(async (req) => {
 
       if (customerError || !customer?.email) throw new Error("Kunde oder Kundenmail nicht gefunden.");
 
+      // statusOverride erlaubt es, die Mail für einen anderen Status zu senden
+      const effectiveEvent = statusOverride ? { ...event, status: statusOverride } : event;
       const mail = eventMailTemplate(
-        event,
+        effectiveEvent,
         customer.name || customer.email.split("@")[0] || "Kunde",
         customer.email,
         days,
