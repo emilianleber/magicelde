@@ -145,6 +145,7 @@ const AdminCustomerDetail = () => {
   const [composeBody, setComposeBody] = useState("");
   const [sending, setSending] = useState(false);
   const [mailMsg, setMailMsg] = useState("");
+  const [mailTemplates, setMailTemplates] = useState<{ slug: string; name: string; betreff: string; inhalt: string }[]>([]);
 
   // Expanded mail
   const [expandedMailId, setExpandedMailId] = useState<string | null>(null);
@@ -222,6 +223,10 @@ const AdminCustomerDetail = () => {
       const received = (imapRes.data || []).map((m: any) => ({ ...m, _type: "received", _date: m.received_at }));
       const sent = (sentRes.data || []).map((m: any) => ({ ...m, _type: "sent", _date: m.created_at }));
       setCustomerMails([...received, ...sent].sort((a, b) => new Date(b._date).getTime() - new Date(a._date).getTime()));
+
+      // E-Mail-Vorlagen laden
+      const { data: tpls } = await supabase.from("email_templates").select("slug, name, betreff, inhalt").eq("aktiv", true).order("sortierung");
+      setMailTemplates(tpls || []);
 
       setLoading(false);
     };

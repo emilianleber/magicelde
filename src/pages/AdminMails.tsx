@@ -43,7 +43,7 @@ interface PortalMessage {
   customer?: { name: string | null } | null;
 }
 
-interface PortalCustomer { id: string; name: string | null; email: string | null; firma?: string | null; }
+interface PortalCustomer { id: string; name: string | null; email: string | null; company?: string | null; }
 interface MailTemplate { id: string; name: string; subject: string | null; body: string; }
 interface CustomerDoc { id: string; name: string; type: string | null; file_url: string | null; }
 
@@ -123,10 +123,13 @@ const AdminMails = () => {
       const [tplRes, sigRes, custRes, sentRes] = await Promise.all([
         supabase.from("portal_mail_templates").select("*").order("name"),
         supabase.from("portal_signature").select("*").limit(1).maybeSingle(),
-        supabase.from("portal_customers").select("id,name,email,firma").order("name"),
+        supabase.from("portal_customers").select("id,name,email,company").is("deleted_at", null).order("name"),
         supabase.from("portal_messages").select("id,created_at,customer_id,subject,body,from_email,to_email,customer:customer_id(name)").order("created_at", { ascending: false }),
       ]);
       if (!tplRes.error) setTemplates(tplRes.data || []);
+      // Auch email_templates laden für Schnellversand-Vorlagen
+      const { data: etData } = await supabase.from("email_templates").select("slug,name,betreff,inhalt").eq("aktiv", true).order("sortierung");
+      if (etData) setTemplates((prev) => [...prev, ...etData.map((t: any) => ({ id: t.slug, name: t.name, subject: t.betreff, body: t.inhalt }))]);
       if (!sigRes.error && sigRes.data) setSignature(sigRes.data.body);
       if (!custRes.error) setCustomers(custRes.data || []);
       if (!sentRes.error) setSentMails(sentRes.data || []);
@@ -330,7 +333,7 @@ const AdminMails = () => {
     }
     if (selectedTemplateId && c) {
       const tpl = templates.find((t) => t.id === selectedTemplateId);
-      if (tpl) setComposeBody(replacePlaceholders(tpl.body, { name: c.name, firma: c.firma, email: c.email }) + (signature ? `<br><br>---<br>${signature}` : ""));
+      if (tpl) setComposeBody(replacePlaceholders(tpl.body, { name: c.name, firma: c.company, email: c.email }) + (signature ? `<br><br>---<br>${signature}` : ""));
     }
   };
 
@@ -341,7 +344,7 @@ const AdminMails = () => {
     if (!tpl) return;
     if (tpl.subject) setComposeSubject(tpl.subject);
     const c = customers.find((c) => c.id === composeCustomerId);
-    setComposeBody(replacePlaceholders(tpl.body, { name: c?.name, firma: c?.firma, email: c?.email }) + (signature ? `<br><br>---<br>${signature}` : ""));
+    setComposeBody(replacePlaceholders(tpl.body, { name: c?.name, firma: c?.company, email: c?.email }) + (signature ? `<br><br>---<br>${signature}` : ""));
   };
 
   const sendMail = async () => {
@@ -461,7 +464,7 @@ const AdminMails = () => {
               <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Kunde (optional)</label>
               <select value={composeCustomerId} onChange={(e) => handleCustomerSelect(e.target.value)} className={inputCls}>
                 <option value="">— Kunde wählen —</option>
-                {customers.map((c) => <option key={c.id} value={c.id}>{c.name}{c.firma ? ` · ${c.firma}` : ""}</option>)}
+                {customers.map((c) => <option key={c.id} value={c.id}>{c.name}{(c as any).company ? ` · ${(c as any).company}` : ""}</option>)}
               </select>
             </div>
             <div>
