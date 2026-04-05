@@ -749,9 +749,8 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
 
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
     { id: "dashboard", label: "Start", icon: LayoutDashboard },
-    { id: "events", label: "Events", icon: Calendar },
+    { id: "requests", label: "Anfragen & Events", icon: Calendar },
     { id: "documents", label: "Dokumente", icon: FolderOpen },
-    { id: "requests", label: "Anfragen", icon: Theater },
     { id: "nachrichten", label: "Nachrichten", icon: Mail, badge: unreadCount || undefined },
     { id: "einstellungen", label: "Einstellungen", icon: Settings },
     { id: "kontakt", label: "Kontakt", icon: Phone },
@@ -887,9 +886,8 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
             {/* Stats grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "Events", value: events.length, icon: Calendar, tab: "events" as Tab },
+                { label: "Anfragen", value: requests.length, icon: Calendar, tab: "requests" as Tab },
                 { label: "Dokumente", value: documents.length, icon: FileText, tab: "documents" as Tab },
-                { label: "Anfragen", value: requests.length, icon: Theater, tab: "requests" as Tab },
                 { label: "Nachrichten", value: messages.length, icon: Mail, tab: "nachrichten" as Tab, badge: unreadCount },
               ].map((stat) => (
                 <button
@@ -1363,7 +1361,7 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
         )}
 
         {/* ── EVENTS ── */}
-        {activeTab === "events" && (
+        {activeTab === "__disabled_events__" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
               <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Events</h1>
@@ -1744,13 +1742,44 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
         {activeTab === "requests" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
-              <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Anfragen</h1>
-              {requests.length > 0 && (
-                <span className="font-sans text-xs text-muted-foreground border border-black/[0.07] rounded-full px-2.5 py-1">
-                  {requests.length} {requests.length === 1 ? "Anfrage" : "Anfragen"}
-                </span>
-              )}
+              <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Anfragen & Events</h1>
             </div>
+
+            {/* Gebuchte Events */}
+            {events.length > 0 && (
+              <>
+                <p className="text-xs font-semibold uppercase tracking-wider text-accent mt-2">Gebuchte Events</p>
+                {events.map((ev) => {
+                  const days = getCountdownDays(ev.event_date);
+                  return (
+                    <div key={ev.id} className="rounded-2xl bg-white border border-green-200/60 shadow-sm overflow-hidden">
+                      <div className="px-5 py-4 flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-display text-base font-bold text-foreground">{ev.title || "Event"}</p>
+                          <div className="flex items-center gap-3 mt-1 flex-wrap text-xs text-muted-foreground">
+                            {ev.event_date && <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(ev.event_date).toLocaleDateString("de-DE")}</span>}
+                            {ev.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{ev.location}</span>}
+                            {ev.guests && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{ev.guests} Gäste</span>}
+                            {ev.format && <span className="flex items-center gap-1"><Theater className="w-3 h-3" />{ev.format}</span>}
+                          </div>
+                        </div>
+                        {days !== null && days >= 0 && (
+                          <div className="text-right shrink-0">
+                            <p className="font-display text-2xl font-bold text-accent">{days}</p>
+                            <p className="text-[10px] text-muted-foreground">Tage</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            )}
+
+            {/* Offene Anfragen */}
+            {requests.filter(r => !r.event_id).length > 0 && (
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-4">Offene Anfragen</p>
+            )}
 
             {requests.length === 0 ? (
               <div className="p-10 rounded-3xl bg-white border border-black/[0.06] shadow-sm text-center">
