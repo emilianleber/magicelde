@@ -444,7 +444,7 @@ const AdminBookingDetail = () => {
   };
 
   /* ── Send status mail ── */
-  const sendStatusMail = async () => {
+  const sendStatusMail = async (statusOverride?: string) => {
     if (!request) return;
     setSendingMail(true); setMessage("");
     try {
@@ -454,7 +454,7 @@ const AdminBookingDetail = () => {
       const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail", {
         method: "POST",
         headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
-        body: JSON.stringify({ type: event ? "event" : "request", recordId: event?.id || request.id }),
+        body: JSON.stringify({ type: event ? "event" : "request", recordId: event?.id || request.id, statusOverride }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || data.message || `Server-Fehler (${res.status})`);
@@ -1024,8 +1024,17 @@ const AdminBookingDetail = () => {
                           await supabase.from("portal_events").update({ [task.key]: nextVal }).eq("id", event.id);
                           const nextLabel = task.stateLabels[nextIdx];
                           setMessage(`${task.label} → ${nextLabel}`);
-                          if (nextVal === task.mailOn && confirm(`${task.label} auf "${nextLabel}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
-                            sendStatusMail();
+                          // Mail mit passendem Status senden
+                          if (nextVal === task.mailOn) {
+                            const mailStatusMap: Record<string, string> = {
+                              details_status: "details_offen",
+                              contract_status: "vertrag_gesendet",
+                              invoice_status: "rechnung_gesendet",
+                            };
+                            const mailStatus = mailStatusMap[task.key];
+                            if (mailStatus && confirm(`${task.label} auf "${nextLabel}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                              sendStatusMail(mailStatus);
+                            }
                           }
                         }}
                         className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors border ${
