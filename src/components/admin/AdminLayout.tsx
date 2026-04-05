@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   FileText,
+  Mail,
   CalendarRange,
   Wand2,
 } from "lucide-react";
@@ -32,6 +33,7 @@ const mainNavItems = [
   { label: "Kunden",              href: "/admin/customers",  icon: Users },
   { label: "Kalender",            href: "/admin/kalender",   icon: CalendarRange },
   { label: "Dokumente",           href: "/admin/dokumente",  icon: FileText },
+  { label: "Mails",               href: "/admin/mails",      icon: Mail },
   { label: "Mein Programm",       href: "/admin/programm",   icon: Wand2 },
   { label: "Einstellungen",       href: "/admin/settings",   icon: Settings },
 ];
