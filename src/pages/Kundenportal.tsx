@@ -196,27 +196,27 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
   steps.push({ label: "Angebot erhalten", done: ["angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
 
   if (event) {
+    const evOrder = ["in_planung", "details_offen", "vertrag_gesendet", "vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "abgeschlossen"];
+    const evIdx = evOrder.indexOf(evSt);
+    const reached = (s: string) => evIdx >= evOrder.indexOf(s);
+
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
 
-    // Aufgaben — nur anzeigen wenn relevant, nicht als fester Schritt
-    // Details: nur wenn offen (verschwindet wenn erledigt)
-    if (event.details_status !== "erledigt" && (evSt === "details_offen" || evSt === "in_planung")) {
+    // Details: nur anzeigen wenn Status details_offen (verschwindet danach)
+    if (evSt === "details_offen") {
       steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
     }
-    // Vertrag: nur wenn vorhanden
-    if (event.contract_status === "erledigt") {
-      steps.push({ label: "Vertrag bestätigt", done: true });
+    // Vertrag: nur anzeigen wenn gesendet oder bestätigt
+    if (evSt === "vertrag_gesendet" || evSt === "vertrag_bestaetigt" || event.contract_status === "erledigt") {
+      steps.push({ label: reached("vertrag_bestaetigt") || event.contract_status === "erledigt" ? "Vertrag bestätigt ✓" : "Vertrag gesendet", done: reached("vertrag_bestaetigt") || event.contract_status === "erledigt" });
     }
-    // Rechnung: nur wenn vorhanden
-    if (event.invoice_status === "erledigt") {
-      steps.push({ label: "Rechnung bezahlt", done: true });
-    } else if (event.invoice_status && event.invoice_status !== "offen") {
-      steps.push({ label: "Rechnung offen", done: false });
+    // Rechnung: nur anzeigen wenn gesendet oder bezahlt
+    if (reached("rechnung_gesendet") || event.invoice_status === "erledigt") {
+      steps.push({ label: reached("rechnung_bezahlt") || event.invoice_status === "erledigt" ? "Rechnung bezahlt ✓" : "Rechnung offen", done: reached("rechnung_bezahlt") || event.invoice_status === "erledigt" });
     }
 
-    // Event-Hauptphasen
-    steps.push({ label: "Event durchgeführt", done: evSt === "event_erfolgt" || evSt === "abgeschlossen" });
-    if (evSt === "event_erfolgt" || evSt === "abgeschlossen") {
+    steps.push({ label: "Event durchgeführt", done: reached("event_erfolgt") });
+    if (reached("event_erfolgt")) {
       steps.push({ label: "Abgeschlossen", done: evSt === "abgeschlossen" });
     }
   } else {
