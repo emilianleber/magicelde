@@ -1086,6 +1086,40 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
               </div>
             )}
 
+            {/* Auftragsbestätigung Widget */}
+            {documents.filter(d => d.type === "Auftragsbestätigung").length > 0 && (
+              <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
+                <div className="px-5 py-3.5 border-b border-black/[0.05] flex items-center justify-between">
+                  <h2 className="font-display text-sm font-bold text-foreground flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-green-600" /> Auftragsbestätigung
+                  </h2>
+                  <button onClick={() => setActiveTab("documents")} className="font-sans text-xs text-accent hover:text-accent/70 flex items-center gap-1">
+                    Dokumente <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+                {documents.filter(d => d.type === "Auftragsbestätigung").map(doc => (
+                  <div key={doc.id} className="flex items-center gap-3 px-5 py-3">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-sans text-sm font-medium text-foreground truncate">{doc.name}</p>
+                      <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                        {new Date(doc.created_at).toLocaleDateString("de-DE")}
+                        {doc.amount != null && ` · ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(doc.amount)}`}
+                      </p>
+                    </div>
+                    {doc.preview_html ? (
+                      <button onClick={() => openAngebotInBrowser(doc)} className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-green-50 text-green-600 hover:bg-green-100 transition-all active:scale-95">
+                        <Download className="w-4 h-4" />
+                      </button>
+                    ) : doc.file_url ? (
+                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-green-50 text-green-600 hover:bg-green-100 transition-all active:scale-95">
+                        <Download className="w-4 h-4" />
+                      </a>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Empty state CTA */}
             {requests.length === 0 && (
               <div className="p-8 rounded-3xl bg-white border border-black/[0.06] shadow-sm text-center">
@@ -1477,7 +1511,7 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                     )}
                   </div>
                 </div>
-                {doc.file_url && (
+                {doc.file_url ? (
                   <a
                     href={doc.file_url}
                     target="_blank"
@@ -1487,7 +1521,15 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                     <Download className="w-4 h-4" />
                     <span className="font-sans text-xs font-medium hidden sm:inline">Download</span>
                   </a>
-                )}
+                ) : doc.preview_html ? (
+                  <button
+                    onClick={() => openAngebotInBrowser(doc)}
+                    className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-all active:scale-95 shrink-0 gap-2 px-3"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span className="font-sans text-xs font-medium hidden sm:inline">PDF</span>
+                  </button>
+                ) : null}
               </div>
             );
           };
