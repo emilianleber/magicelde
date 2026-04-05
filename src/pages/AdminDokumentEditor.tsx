@@ -507,12 +507,12 @@ function DocumentPreview(props: PreviewProps) {
   const PC_LAST    = Math.max(24, PAGE_H - CONT_HDR_H - TBL_HDR_H - PER_PAGE_BOTTOM - LAST_EXTRA);
 
   const pageChunks: LocalPosition[][] = (() => {
-    const fill = (items: LocalPosition[], budget: number): LocalPosition[] => {
+    const fill = (items: LocalPosition[], budget: number, forceFirst = true): LocalPosition[] => {
       const chunk: LocalPosition[] = [];
       let used = 0;
       while (items.length > 0) {
         const h = estimatePosH(items[0]);
-        if (used + h <= budget || chunk.length === 0) {
+        if (used + h <= budget || (forceFirst && chunk.length === 0)) {
           chunk.push(items.shift()!);
           used += h;
         } else break;
@@ -520,18 +520,18 @@ function DocumentPreview(props: PreviewProps) {
       return chunk;
     };
 
-    // Pass 1: try fitting everything on one page (conservative budget incl. fuss/gruss)
-    const try1 = [...leistungPos];
-    const firstChunk = fill(try1, P1_SINGLE);
-    // Check if all items fit AND the total height doesn't exceed the budget
+    // Check total content height
     const totalPosH = leistungPos.reduce((sum, p) => sum + estimatePosH(p), 0);
-    if (try1.length === 0 && totalPosH <= P1_SINGLE) return firstChunk.length > 0 ? [firstChunk] : [[]];
+
+    // Pass 1: try fitting everything on one page (conservative budget incl. fuss/gruss)
+    if (totalPosH <= P1_SINGLE) {
+      return leistungPos.length > 0 ? [leistungPos] : [[]];
+    }
 
     // Pass 2: multi-page – page 1 doesn't need fuss/gruss reserved
     const rem = [...leistungPos];
     const chunks: LocalPosition[][] = [fill(rem, P1_MULTI)];
     while (rem.length > 0) {
-      // Use PC_LAST for likely-last chunk, PC_MID otherwise
       const testBudget = rem.length <= 30 ? PC_LAST : PC_MID;
       chunks.push(fill(rem, testBudget));
     }
