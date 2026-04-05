@@ -678,37 +678,40 @@ const Kundenportal = () => {
     (d) => d.type === "Angebot" && d.status === "gesendet"
   );
 
-  const openAngebotInBrowser = async (doc: PortalDocument) => {
+  const openAngebotInBrowser = (doc: PortalDocument) => {
     if (!doc.preview_html) return;
     const docTitle = doc.nummer || doc.name || "Angebot";
-    setPdfLoading(doc.id);
 
-    try {
-      // Vercel Serverless Function — Puppeteer (Node.js) → echtes Vektor-PDF
-      const res = await fetch("/api/generate-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ preview_html: doc.preview_html, title: docTitle }),
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        throw new Error(`PDF-Fehler (${res.status}): ${err}`);
-      }
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${docTitle}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error("PDF error:", e);
-      alert("Fehler: " + (e instanceof Error ? e.message : String(e)));
-    } finally {
-      setPdfLoading(null);
+    const win = window.open("", "_blank");
+    if (!win) {
+      alert("Bitte erlauben Sie Popups für diese Seite.");
+      return;
     }
+
+    const scale = ((210 / 25.4) * 96) / 595;
+
+    win.document.write(`<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>${docTitle}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+@page { size: A4 portrait; margin: 10mm 0 0 0; }
+html, body { margin: 0; padding: 0; width: 595px; }
+body > div { width: 595px !important; min-height: 842px !important; height: auto !important; aspect-ratio: auto !important; }
+@media screen {
+  body { background: #444; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+  body > div { box-shadow: 0 6px 32px rgba(0,0,0,0.35); background: #fff; }
+}
+</style>
+</head>
+<body>${doc.preview_html}</body>
+</html>`);
+
+    win.document.close();
+    setTimeout(() => { win.focus(); win.print(); }, 900);
   };
 
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
