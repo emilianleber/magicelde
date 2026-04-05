@@ -452,7 +452,7 @@ const AdminBookingDetail = () => {
   };
 
   /* ── Send status mail ── */
-  const sendStatusMail = async (statusOverride?: string) => {
+  const sendStatusMail = async (statusOverride?: string, dokumentTyp?: string) => {
     if (!request) return;
     setSendingMail(true); setMessage("");
     try {
@@ -462,7 +462,7 @@ const AdminBookingDetail = () => {
       const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail", {
         method: "POST",
         headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
-        body: JSON.stringify({ type: event ? "event" : "request", recordId: event?.id || request.id, statusOverride }),
+        body: JSON.stringify({ type: event ? "event" : "request", recordId: event?.id || request.id, statusOverride, dokumentTyp }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || data.message || `Server-Fehler (${res.status})`);
@@ -1042,8 +1042,12 @@ const AdminBookingDetail = () => {
                               invoice_status: "rechnung_gesendet",
                             };
                             const mailStatus = mailStatusMap[task.key];
+                            // Dokumenttyp basierend auf Phase
+                            const docTyp = task.key === "invoice_status"
+                              ? (event.status === "in_planung" ? "abschlagsrechnung" : undefined)
+                              : undefined;
                             if (mailStatus && confirm(`${task.label} auf "${nextLabel}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
-                              sendStatusMail(mailStatus);
+                              sendStatusMail(mailStatus, docTyp);
                             }
                           }
                         }}
