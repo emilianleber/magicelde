@@ -185,18 +185,43 @@ const formatEventStatusClasses = (status?: string | null) => {
 const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null) => {
   const steps: { label: string; done: boolean; hint?: string; action?: string }[] = [];
   const st = request?.status || "";
+  const evSt = event?.status || "";
+
+  // Hilfsfunktion: ist ein Status in der Pipeline "erreicht"?
+  const eventOrder = ["in_planung", "details_offen", "vertrag_gesendet", "vertrag_bestaetigt", "rechnung_gesendet", "rechnung_bezahlt", "event_erfolgt", "schlussrechnung_gesendet", "schlussrechnung_bezahlt", "abgeschlossen"];
+  const evIdx = eventOrder.indexOf(evSt);
+  const evReached = (s: string) => evIdx >= eventOrder.indexOf(s);
+
   steps.push({ label: "Anfrage eingegangen", done: !!request, hint: request?.created_at ? new Date(request.created_at).toLocaleDateString("de-DE") : undefined });
   steps.push({ label: "In Bearbeitung", done: ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
   if (st === "details_besprechen") {
     steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
   }
   steps.push({ label: "Angebot erhalten", done: ["angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
+
   if (event) {
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
-    steps.push({ label: "Details geklärt", done: event.details_status === "erledigt" });
-    steps.push({ label: "Vertrag", done: event.contract_status === "erledigt" });
-    steps.push({ label: "Rechnung", done: event.invoice_status === "erledigt" });
-    steps.push({ label: "Event durchgeführt", done: event.status === "event_erfolgt" });
+    steps.push({ label: "Vertrag", done: evReached("vertrag_bestaetigt") });
+
+    // Abschlagsrechnung als ein Schritt: offen oder bezahlt
+    const abschlagBezahlt = evReached("rechnung_bezahlt");
+    const abschlagGesendet = evReached("rechnung_gesendet");
+    if (abschlagGesendet || abschlagBezahlt) {
+      steps.push({ label: abschlagBezahlt ? "Abschlagsrechnung bezahlt ✓" : "Abschlagsrechnung offen", done: abschlagBezahlt });
+    }
+
+    steps.push({ label: "Event durchgeführt", done: evReached("event_erfolgt") });
+
+    // Schlussrechnung als ein Schritt: offen oder bezahlt
+    const schlussBezahlt = evReached("schlussrechnung_bezahlt");
+    const schlussGesendet = evReached("schlussrechnung_gesendet");
+    if (evReached("event_erfolgt")) {
+      steps.push({ label: schlussBezahlt ? "Schlussrechnung bezahlt ✓" : schlussGesendet ? "Schlussrechnung offen" : "Schlussrechnung", done: schlussBezahlt });
+    }
+
+    if (evReached("event_erfolgt")) {
+      steps.push({ label: "Abgeschlossen", done: evSt === "abgeschlossen" });
+    }
   } else {
     steps.push({ label: "Buchung", done: false });
   }
