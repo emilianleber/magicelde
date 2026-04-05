@@ -170,8 +170,22 @@ const statusOptions = [
   { value: "details_besprechen", label: "Details besprechen" },
   { value: "angebot_gesendet", label: "Angebot gesendet" },
   { value: "warte_auf_kunde", label: "Warte auf Kunde" },
+  { value: "gebucht", label: "Gebucht" },
+  { value: "bestätigt", label: "Bestätigt" },
   { value: "abgelehnt", label: "Abgelehnt" },
   { value: "archiviert", label: "Archiviert" },
+];
+
+const eventStatusOptions = [
+  { value: "in_planung", label: "In Planung" },
+  { value: "details_offen", label: "Details offen" },
+  { value: "vertrag_gesendet", label: "Vertrag gesendet" },
+  { value: "vertrag_bestaetigt", label: "Vertrag bestätigt" },
+  { value: "abschlagsrechnung", label: "Abschlagsrechnung" },
+  { value: "rechnung_gesendet", label: "Rechnung gesendet" },
+  { value: "rechnung_bezahlt", label: "Rechnung bezahlt" },
+  { value: "event_erfolgt", label: "Event erfolgt" },
+  { value: "storniert", label: "Storniert" },
 ];
 
 const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
@@ -383,6 +397,7 @@ const AdminBookingDetail = () => {
         location: draftOrt || null,
         format: draftFormat || null,
         guests: draftGaeste ? Number(draftGaeste) : null,
+        status: event.status,
       }).eq("id", event.id);
     }
 
@@ -945,14 +960,34 @@ const AdminBookingDetail = () => {
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
             <h2 className="text-sm font-bold text-foreground mb-4">Status & Aktionen</h2>
 
-            {/* Status selector — nur wenn noch nicht gebucht */}
-            {request.event_id ? (
-              <div className="mb-5 p-3 rounded-xl bg-green-50 border border-green-200 text-center">
-                <p className="text-sm font-semibold text-green-700 flex items-center justify-center gap-2">
-                  <Check className="w-4 h-4" /> Gebucht
-                </p>
-                <p className="text-xs text-green-600 mt-1">Event wurde erstellt</p>
-              </div>
+            {/* Status selector */}
+            {request.event_id && event ? (
+              <>
+                <div className="mb-3 p-2.5 rounded-xl bg-green-50 border border-green-200 text-center">
+                  <p className="text-xs font-semibold text-green-700 flex items-center justify-center gap-1.5">
+                    <Check className="w-3.5 h-3.5" /> Gebucht
+                  </p>
+                </div>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Event-Status</p>
+                <div className="space-y-1 mb-5">
+                  {eventStatusOptions.map((opt, i) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setEvent((prev: any) => prev ? { ...prev, status: opt.value } : prev)}
+                      className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
+                        event.status === opt.value
+                          ? "bg-foreground text-background font-semibold"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                      }`}
+                    >
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold ${event.status === opt.value ? "bg-background/20 text-background" : "bg-muted/60 text-muted-foreground"}`}>
+                        {i + 1}
+                      </span>
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="space-y-1 mb-5">
                 {statusOptions.map((opt, i) => (
