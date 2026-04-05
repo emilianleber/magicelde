@@ -627,7 +627,7 @@ function DocumentPreview(props: PreviewProps) {
               <div style={{ fontWeight: pos.bezeichnung ? 600 : 400, color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</div>
               {pos.beschreibung && <div style={{ fontSize: 7.5, color: "#777", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>{pos.beschreibung}</div>}
             </div>
-            <span style={{ width: 68, textAlign: "right", color: "#555" }}>{pos.menge} {pos.einheit}</span>
+            <span style={{ width: 68, textAlign: "right", color: "#555" }}>{pos.menge % 1 === 0 ? pos.menge : pos.menge.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 2 })} {pos.einheit}</span>
             <span style={{ width: 66, textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
             <span style={{ width: 72, textAlign: "right", fontWeight: 600, color: "#111" }}>{fmt(pos.gesamt)}</span>
           </div>
@@ -2168,15 +2168,15 @@ body > div:last-child {
                   {/* Qty */}
                   <div className={`flex items-center overflow-hidden focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 ${inp}`}>
                     <input
-                      type="number" value={pos.menge} min={0} step="0.01"
-                      onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value) || 0 })}
+                      type="number" value={pos.menge} min={0} step="any"
+                      onChange={(e) => updatePosition(pos.id, { menge: parseFloat(e.target.value.replace(",", ".")) || 0 })}
                       className="flex-1 text-right px-2 py-2 text-sm bg-transparent focus:outline-none min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                     <div className="flex flex-col border-l border-slate-200 shrink-0">
                       <button
                         type="button"
                         onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => updatePosition(pos.id, { menge: Math.round((pos.menge + 1) * 100) / 100 })}
+                        onClick={() => updatePosition(pos.id, { menge: Math.round((pos.menge + 0.5) * 100) / 100 })}
                         className="px-1 h-[18px] flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
                       >
                         <ChevronUp className="w-2.5 h-2.5" />
@@ -2184,7 +2184,7 @@ body > div:last-child {
                       <button
                         type="button"
                         onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => updatePosition(pos.id, { menge: Math.max(0, Math.round((pos.menge - 1) * 100) / 100) })}
+                        onClick={() => updatePosition(pos.id, { menge: Math.max(0, Math.round((pos.menge - 0.5) * 100) / 100) })}
                         className="px-1 h-[18px] flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors border-t border-slate-200"
                       >
                         <ChevronDown className="w-2.5 h-2.5" />
