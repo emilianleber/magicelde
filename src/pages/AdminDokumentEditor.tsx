@@ -449,12 +449,15 @@ function DocumentPreview(props: PreviewProps) {
   const M = 52;   // horizontal margin ≈ 18mm
   const LS = 68;  // logo square size
 
+  const isAngebot = typ === "angebot";
+  const isRechnung = ["rechnung", "abschlagsrechnung", "schlussrechnung", "mahnung", "gutschrift", "stornorechnung"].includes(typ);
   const metaRows = [
     { label: `${typLabel}-Nr.`,    val: nummer     || "—" },
     { label: "Datum",              val: datum       || "—" },
-    ...(lieferdatum ? [{ label: "Lieferdatum",    val: lieferdatum }] : []),
-    ...(faelligAm   ? [{ label: "Zahlungsziel",   val: faelligAm }]   : []),
-    ...(gueltigBis  ? [{ label: "Gültig bis",     val: gueltigBis }]  : []),
+    ...(gueltigBis && isAngebot  ? [{ label: "Gültig bis",     val: gueltigBis }]  : []),
+    ...(lieferdatum && isRechnung ? [{ label: "Lieferdatum",    val: lieferdatum }] : []),
+    ...(faelligAm && isRechnung   ? [{ label: "Zahlungsziel",   val: faelligAm }]   : []),
+    ...(gueltigBis && !isAngebot  ? [{ label: "Gültig bis",     val: gueltigBis }]  : []),
     { label: "Ihre Kundennummer",  val: "—" },
     { label: "Ihr Ansprechpartner",val: absenderName },
   ];
@@ -602,7 +605,7 @@ function DocumentPreview(props: PreviewProps) {
       </div>
       {kopftext && (
         <div style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55, whiteSpace: "pre-wrap" }}>
-          {htmlToText(kopftext)}
+          {htmlToText(kopftext.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, ""))}
         </div>
       )}
     </>
@@ -720,7 +723,7 @@ function DocumentPreview(props: PreviewProps) {
     <>
       {fusstext && (
         <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.65, whiteSpace: "pre-wrap" }}>
-          {htmlToText(fusstext)}
+          {htmlToText(fusstext.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, ""))}
         </div>
       )}
       <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}>
