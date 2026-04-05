@@ -187,11 +187,11 @@ const eventPhases = [
   { value: "storniert", label: "Storniert" },
 ];
 
-// Aufgaben mit Zuständen (rotieren bei Klick)
+// Aufgaben mit Zuständen (rotieren bei Klick, null = nicht aktiv)
 const eventTaskDefs = [
-  { key: "details_status", label: "Details", states: ["offen", "erledigt"], stateLabels: ["Offen", "Geklärt ✓"] },
-  { key: "contract_status", label: "Vertrag", states: ["offen", "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bestätigt ✓"] },
-  { key: "invoice_status", label: "Rechnung", states: ["offen", "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"] },
+  { key: "details_status", label: "Details", states: [null, "offen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "offen" },
+  { key: "contract_status", label: "Vertrag", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bestätigt ✓"], mailOn: "gesendet" },
+  { key: "invoice_status", label: "Rechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
 ] as const;
 
 const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
@@ -404,9 +404,9 @@ const AdminBookingDetail = () => {
         format: draftFormat || null,
         guests: draftGaeste ? Number(draftGaeste) : null,
         status: event.status,
-        details_status: event.details_status || "offen",
-        contract_status: event.contract_status || "offen",
-        invoice_status: event.invoice_status || "offen",
+        details_status: event.details_status || null,
+        contract_status: event.contract_status || null,
+        invoice_status: event.invoice_status || null,
       }).eq("id", event.id);
     }
 
@@ -1008,35 +1008,34 @@ const AdminBookingDetail = () => {
                 <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
                 <div className="space-y-2 mb-5">
                   {eventTaskDefs.map((task) => {
-                    const currentVal = (event as any)[task.key] || "offen";
+                    const currentVal = (event as any)[task.key] || null;
                     const currentIdx = task.states.indexOf(currentVal as any);
-                    const stateLabel = task.stateLabels[Math.max(0, currentIdx)];
+                    const effectiveIdx = currentIdx === -1 ? 0 : currentIdx;
+                    const stateLabel = task.stateLabels[effectiveIdx];
                     const isDone = currentVal === "erledigt";
-                    const isMiddle = currentIdx > 0 && currentIdx < task.states.length - 1;
+                    const isActive = currentVal !== null && currentVal !== "erledigt";
                     return (
                       <button
                         key={task.key}
                         onClick={async () => {
-                          // Zum nächsten Zustand rotieren
-                          const nextIdx = (currentIdx + 1) % task.states.length;
+                          const nextIdx = (effectiveIdx + 1) % task.states.length;
                           const nextVal = task.states[nextIdx];
                           setEvent((prev: any) => prev ? { ...prev, [task.key]: nextVal } : prev);
                           await supabase.from("portal_events").update({ [task.key]: nextVal }).eq("id", event.id);
                           const nextLabel = task.stateLabels[nextIdx];
                           setMessage(`${task.label} → ${nextLabel}`);
-                          // Bei "gesendet" fragen ob Mail
-                          if (nextVal === "gesendet" && confirm(`${task.label} auf "${nextLabel}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                          if (nextVal === task.mailOn && confirm(`${task.label} auf "${nextLabel}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
                             sendStatusMail();
                           }
                         }}
                         className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors border ${
                           isDone ? "bg-green-50 border-green-200 text-green-700"
-                          : isMiddle ? "bg-blue-50 border-blue-200 text-blue-700"
+                          : isActive ? "bg-blue-50 border-blue-200 text-blue-700"
                           : "bg-muted/20 border-border/20 text-muted-foreground hover:bg-muted/40"
                         }`}
                       >
                         <span className="font-medium">{task.label}</span>
-                        <span className={`text-xs font-semibold ${isDone ? "text-green-600" : isMiddle ? "text-blue-600" : "text-muted-foreground/50"}`}>{stateLabel}</span>
+                        <span className={`text-xs font-semibold ${isDone ? "text-green-600" : isActive ? "text-blue-600" : "text-muted-foreground/50"}`}>{stateLabel}</span>
                       </button>
                     );
                   })}
