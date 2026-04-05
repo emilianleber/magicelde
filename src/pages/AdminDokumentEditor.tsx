@@ -484,8 +484,8 @@ function DocumentPreview(props: PreviewProps) {
 
   // Dynamic heights at 595px page width (font-size 8.5-9.5, line-height ~1.5)
   const PAGE_H     = 842;
-  const HDR_H      = 148; // conservative header height across all layouts
-  const DIN_TOP_H  = 237; // address zone (44+127+16) + gap(22) + betreff(25) + kopftext-fallback
+  const HDR_H      = 130; // header height across all layouts
+  const DIN_TOP_H  = 220; // address zone + gap + betreff
   const KOPF_H     = kopftext ? Math.max(16, Math.ceil(stripHtmlLen(kopftext) / 75) * 15 + 12) : 0;
   const TBL_HDR_H  = 22;
   const SUMMEN_H   = 62;
@@ -493,11 +493,13 @@ function DocumentPreview(props: PreviewProps) {
   const DIN_FTR_H  = 85; // Footer ist absolut positioniert, dieser Wert reserviert Platz
   const estimateHtmlH = (html: string): number => {
     if (!html) return 0;
-    // Count <br> tags as line breaks, then estimate remaining text lines
-    const brCount = (html.match(/<br\s*\/?>/gi) || []).length;
-    const textLen = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().length;
-    const textLines = Math.ceil(textLen / 65);
-    return Math.max(16, (brCount + textLines) * 13 + 12);
+    // Split by <br> into segments, estimate lines per segment by char count
+    const segments = html.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "").split("\n");
+    const totalLines = segments.reduce((sum, seg) => {
+      const trimmed = seg.trim();
+      return sum + (trimmed.length === 0 ? 1 : Math.ceil(trimmed.length / 70));
+    }, 0);
+    return Math.max(16, totalLines * 12 + 8);
   };
   const FUSS_H     = estimateHtmlH(fusstext);
 
