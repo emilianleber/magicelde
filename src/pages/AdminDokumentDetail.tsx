@@ -930,6 +930,36 @@ body > div:last-child {
           </div>
         )}
 
+        {/* Unternehmensdaten */}
+        {doc.absender && (
+          <div className="rounded-2xl border border-border/20 bg-muted/5 overflow-hidden">
+            <div className="px-5 py-3 border-b border-border/10">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Unternehmensdaten</p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border/10">
+              <div className="bg-background px-4 py-3">
+                <p className="font-semibold text-sm">{doc.absender?.name}</p>
+                <p className="text-xs text-muted-foreground mt-1">{doc.absender?.adresse}</p>
+                <p className="text-xs text-muted-foreground">{doc.absender?.plz} {doc.absender?.ort}</p>
+              </div>
+              <div className="bg-background px-4 py-3">
+                {(doc.absender as any)?.telefon && <p className="text-xs text-muted-foreground">Tel: {(doc.absender as any).telefon}</p>}
+                {doc.absender?.email && <p className="text-xs text-muted-foreground">E-Mail: {doc.absender.email}</p>}
+                {(doc.absender as any)?.website && <p className="text-xs text-muted-foreground">Web: {(doc.absender as any).website}</p>}
+              </div>
+              <div className="bg-background px-4 py-3">
+                {(doc.absender as any)?.steuernummer && <p className="text-xs text-muted-foreground">Steuer-Nr: {(doc.absender as any).steuernummer}</p>}
+                {doc.absender?.kleinunternehmer && <p className="text-xs text-muted-foreground italic">§ 19 UStG – Kleinunternehmer</p>}
+              </div>
+              <div className="bg-background px-4 py-3">
+                {doc.absender?.iban && <p className="text-xs text-muted-foreground font-mono">IBAN: {doc.absender.iban}</p>}
+                {doc.absender?.bic && <p className="text-xs text-muted-foreground font-mono">BIC: {doc.absender.bic}</p>}
+                {(doc.absender as any)?.bank && <p className="text-xs text-muted-foreground">{(doc.absender as any).bank}</p>}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Zahlungen — only for Rechnungen */}
         {(doc.typ === "rechnung" || doc.typ === "abschlagsrechnung" || doc.typ === "mahnung") && (
           <div className="rounded-2xl border border-border/20 overflow-hidden">
