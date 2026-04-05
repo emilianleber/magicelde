@@ -104,16 +104,18 @@ Es dauert nur 2 Minuten – versprochen! 🙏
     });
 
     // Log in portal_messages
-    await supabase.from("portal_messages").insert({
-      customer_id: customer.id,
-      event_id: eventId,
-      subject: `[AUTO] Feedback-Anfrage Event ${eventId}`,
-      body: "Feedback-Anfrage gesendet",
-      from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
-      to_email: customer.email,
-      status: "sent",
-      read_by_customer: false,
-    }).catch(() => {});
+    try {
+      await supabase.from("portal_messages").insert({
+        customer_id: customer.id,
+        event_id: eventId,
+        subject: `[AUTO] Feedback-Anfrage Event ${eventId}`,
+        body: "Feedback-Anfrage gesendet",
+        from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
+        to_email: customer.email,
+        status: "sent",
+        read_by_customer: false,
+      });
+    } catch (_) {}
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
