@@ -16,13 +16,22 @@ function buildHtml(previewHtml: string, title: string) {
 <head>
   <meta charset="UTF-8">
   <title>${title}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 595px; background: #fff; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    html, body { width: 595px; background: #fff; font-family: Inter, system-ui, sans-serif; }
     body > div {
       width: 595px;
-      min-height: 842px;
+      min-height: auto;
       height: auto;
+      position: relative;
+      padding-bottom: 0 !important;
+    }
+    /* Footer aus absoluter Positionierung in den Flow bringen */
+    body > div > div:last-child > div:last-child,
+    [style*="position: absolute"][style*="bottom: 0"] {
+      position: static !important;
+      margin-top: 20px;
     }
   </style>
 </head>
