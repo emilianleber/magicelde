@@ -376,6 +376,7 @@ interface PreviewProps {
   empfaengerName: string;
   empfaengerFirma: string;
   empfaengerKundennummer: string;
+  empfaengerAnrede: string;
   empfaengerAdresse: string;
   empfaengerPlz: string;
   empfaengerOrt: string;
@@ -431,7 +432,7 @@ function fmt(n: number) {
 function DocumentPreview(props: PreviewProps) {
   const {
     layoutId, color, typ, nummer, datum, faelligAm, gueltigBis, lieferdatum,
-    empfaengerName, empfaengerFirma, empfaengerKundennummer, empfaengerAdresse, empfaengerPlz, empfaengerOrt, empfaengerLand,
+    empfaengerName, empfaengerFirma, empfaengerKundennummer, empfaengerAnrede, empfaengerAdresse, empfaengerPlz, empfaengerOrt, empfaengerLand,
     kopftext, fusstext, positionen, mwstSatz, kleinunternehmer, rabattProzent,
     absenderName, absenderUntertitel, absenderAdresse, absenderPlz, absenderOrt,
     absenderEmail, absenderTel, absenderWebsite, absenderIban, absenderBic, absenderSteuernummer,
@@ -522,7 +523,9 @@ function DocumentPreview(props: PreviewProps) {
     // Pass 1: try fitting everything on one page (conservative budget incl. fuss/gruss)
     const try1 = [...leistungPos];
     const firstChunk = fill(try1, P1_SINGLE);
-    if (try1.length === 0) return firstChunk.length > 0 ? [firstChunk] : [[]];
+    // Check if all items fit AND the total height doesn't exceed the budget
+    const totalPosH = leistungPos.reduce((sum, p) => sum + estimatePosH(p), 0);
+    if (try1.length === 0 && totalPosH <= P1_SINGLE) return firstChunk.length > 0 ? [firstChunk] : [[]];
 
     // Pass 2: multi-page – page 1 doesn't need fuss/gruss reserved
     const rem = [...leistungPos];
@@ -1751,6 +1754,7 @@ body > div:last-child {
     empfaengerName,
     empfaengerFirma,
     empfaengerKundennummer,
+    empfaengerAnrede,
     empfaengerAdresse,
     empfaengerPlz,
     empfaengerOrt,
