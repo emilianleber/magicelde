@@ -474,16 +474,10 @@ export default function AdminDokumentDetail() {
 html, body { margin: 0; padding: 0; }
 body > div {
   width: 595px !important;
-  height: 840px !important;
+  min-height: 840px !important;
+  height: auto !important;
   zoom: ${scale.toFixed(6)} !important;
-  overflow: hidden !important;
   aspect-ratio: auto !important;
-  page-break-after: always !important;
-  break-after: page !important;
-}
-body > div:last-child {
-  page-break-after: auto !important;
-  break-after: auto !important;
 }
 @media screen {
   body {
