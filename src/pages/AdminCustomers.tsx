@@ -30,7 +30,7 @@ interface PortalCustomer {
 }
 
 type SortOption = "newest" | "oldest" | "name_asc" | "name_desc" | "company_asc" | "company_desc";
-type ViewFilter = "aktiv" | "alle";
+type ViewFilter = "aktiv" | "inaktiv" | "alle";
 
 const AdminCustomers = () => {
   const navigate = useNavigate();
@@ -41,6 +41,7 @@ const AdminCustomers = () => {
   const [customers, setCustomers] = useState<PortalCustomer[]>([]);
   const [reqCountMap, setReqCountMap] = useState<Record<string, number>>({});
   const [evtCountMap, setEvtCountMap] = useState<Record<string, number>>({});
+  const [activeCustomerIds, setActiveCustomerIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [viewFilter, setViewFilter] = useState<ViewFilter>("aktiv");
@@ -73,8 +74,8 @@ const AdminCustomers = () => {
 
       const [custRes, reqRes, evtRes] = await Promise.all([
         supabase.from("portal_customers").select("*"),
-        supabase.from("portal_requests").select("customer_id").is("deleted_at", null),
-        supabase.from("portal_events").select("customer_id").is("deleted_at", null),
+        supabase.from("portal_requests").select("customer_id, status").is("deleted_at", null),
+        supabase.from("portal_events").select("customer_id, event_date, status").is("deleted_at", null),
       ]);
 
       if (!custRes.error) setCustomers(custRes.data || []);
@@ -87,6 +88,18 @@ const AdminCustomers = () => {
       (evtRes.data || []).forEach((e) => { if (e.customer_id) eMap[e.customer_id] = (eMap[e.customer_id] || 0) + 1; });
       setEvtCountMap(eMap);
 
+      // Aktive Kunden: haben offene Anfrage ODER zukünftiges Event
+      const activeStatuses = ["neu", "in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde", "bestätigt"];
+      const today = new Date().toISOString().split("T")[0];
+      const activeCustomerIds = new Set<string>();
+      (reqRes.data || []).forEach((r: any) => {
+        if (r.customer_id && activeStatuses.includes(r.status)) activeCustomerIds.add(r.customer_id);
+      });
+      (evtRes.data || []).forEach((e: any) => {
+        if (e.customer_id && e.event_date && e.event_date >= today && e.status !== "storniert") activeCustomerIds.add(e.customer_id);
+      });
+      setActiveCustomerIds(activeCustomerIds);
+
       setLoading(false);
     };
     loadData();
@@ -97,9 +110,9 @@ const AdminCustomers = () => {
     const filtered = customers.filter((c) => {
       const matchesSearch = !q || c.name?.toLowerCase().includes(q) || c.company?.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q) || c.kundennummer?.toLowerCase().includes(q) || c.phone?.toLowerCase().includes(q);
       const isDeleted = !!c.deleted_at;
-      if (viewFilter === "aktiv") return matchesSearch && !isDeleted;
-      if (viewFilter === "geloescht") return matchesSearch && isDeleted;
-      return matchesSearch;
+      if (viewFilter === "aktiv") return matchesSearch && !isDeleted && activeCustomerIds.has(c.id);
+      if (viewFilter === "inaktiv") return matchesSearch && !isDeleted && !activeCustomerIds.has(c.id);
+      return matchesSearch && !isDeleted;
     });
     return [...filtered].sort((a, b) => {
       const aDate = a.created_at ? new Date(a.created_at).getTime() : 0;
@@ -116,8 +129,9 @@ const AdminCustomers = () => {
     });
   }, [customers, search, sortBy, viewFilter]);
 
-  const activeCount = customers.filter((c) => !c.deleted_at).length;
-  const deletedCount = customers.filter((c) => !!c.deleted_at).length;
+  const allCount = customers.filter((c) => !c.deleted_at).length;
+  const activeCount = customers.filter((c) => !c.deleted_at && activeCustomerIds.has(c.id)).length;
+  const inactiveCount = allCount - activeCount;
   const customersWithCompany = customers.filter((c) => !c.deleted_at && !!c.company).length;
   const totalRequests = Object.values(reqCountMap).reduce((s, v) => s + v, 0);
   const recentCustomers = customers.filter((c) => !c.deleted_at && c.created_at && new Date(c.created_at) > new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)).length;
@@ -265,7 +279,8 @@ const AdminCustomers = () => {
       <div className="flex gap-1 bg-muted/40 rounded-xl p-1 mb-4 w-fit">
         {[
           { key: "aktiv", label: `Aktiv (${activeCount})` },
-          { key: "alle", label: "Alle" },
+          { key: "inaktiv", label: `Inaktiv (${inactiveCount})` },
+          { key: "alle", label: `Alle (${allCount})` },
         ].map((tab) => (
           <button
             key={tab.key}
