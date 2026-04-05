@@ -2153,11 +2153,8 @@ body > div:last-child {
                       <div className="absolute z-50 top-full left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl mt-1 overflow-hidden">
                         {artikelSuggestions[pos.id].map((a) => (
                           <button key={a.id} onMouseDown={() => selectArtikel(pos.id, a)}
-                            className="w-full text-left px-4 py-3 hover:bg-slate-50 text-sm flex items-start justify-between gap-4 border-b border-slate-100 last:border-0">
-                            <div>
-                              <p className="font-semibold text-slate-800">{a.bezeichnung}</p>
-                              {a.beschreibung && <p className="text-xs text-slate-500 mt-0.5">{a.beschreibung}</p>}
-                            </div>
+                            className="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 text-sm flex items-center justify-between gap-4 border-b border-slate-100 last:border-0">
+                            <span className="font-semibold text-slate-800">{a.bezeichnung}</span>
                             <span className="text-sm font-bold text-slate-800 shrink-0">{a.preis.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR</span>
                           </button>
                         ))}
