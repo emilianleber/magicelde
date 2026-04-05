@@ -72,17 +72,17 @@ Ich freue mich auf Ihre Antwort und darauf, Ihre Veranstaltung mit etwas Magie z
 'anfrage', 1),
 
 ('7_tage_vorher', '7 Tage vor Event – Letzte Details', 'Eine Woche vor dem Event: Letzte Details klären',
-'Ihr Event in einer Woche – letzte Details',
+'Ihr Event am {{event_datum}} – letzte Details',
 'Hallo {{begruessung}},
 
-in Kürze ist es soweit – ich freue mich schon sehr auf Ihre Veranstaltung!
+in Kürze ist es soweit – ich freue mich schon sehr auf Ihre Veranstaltung ({{anlass}}) am {{event_datum}} in {{event_ort}}!
 
 Damit am Veranstaltungstag alles reibungslos abläuft, würde ich gerne noch ein paar letzte Details mit Ihnen abstimmen:
 
 • Uhrzeit & Ablauf: Gibt es bereits einen genauen Zeitpunkt, zu dem mein Auftritt stattfinden soll?
 • Ansprechpartner vor Ort: Wer ist am Veranstaltungstag mein Kontakt, falls kurzfristig etwas abgestimmt werden muss?
 • Parkmöglichkeit & Zugang: Wo kann ich am besten parken und mein Equipment ausladen?
-• Anzahl der Gäste: Hat sich an der Gästezahl oder dem geplanten Ablauf noch etwas geändert?
+• Anzahl der Gäste: Aktuell sind {{gaeste}} Gäste geplant – hat sich daran etwas geändert?
 • Ankündigung: Soll mich jemand kurz ankündigen oder wünschen Sie, dass ich selbst direkt ins Programm starte?
 
 Wenn Sie möchten, können wir auch gerne kurz telefonieren – manchmal ist das einfacher als per E-Mail.
@@ -104,10 +104,10 @@ Vielen Dank für Ihre Zeit und Ihre Rückmeldung.',
 'anfrage', 3),
 
 ('nach_buchung', 'Nach Buchung – Nächste Schritte', 'Nach Buchungsbestätigung: Freude + nächste Schritte erklären',
-'Großartig – Ihr Event ist gebucht! ✨',
+'Großartig – Ihr Event ({{anlass}}) am {{event_datum}} ist gebucht! ✨',
 'Hallo {{begruessung}},
 
-ich freue mich sehr, dass wir zusammenarbeiten werden! Ihr Event ist jetzt offiziell gebucht.
+ich freue mich sehr, dass wir zusammenarbeiten werden! Ihr Event ({{anlass}}) am {{event_datum}} in {{event_ort}} ist jetzt offiziell gebucht.
 
 So geht es weiter:
 1. Sie erhalten in Kürze Ihre Auftragsbestätigung
@@ -120,10 +120,10 @@ Ich freue mich auf einen wunderbaren Abend!',
 'event', 4),
 
 ('rechnung_erinnerung', 'Zahlungserinnerung', 'Freundliche Erinnerung an offene Rechnung',
-'Freundliche Erinnerung: Offene Rechnung',
+'Freundliche Erinnerung: Offene Rechnung ({{anlass}} am {{event_datum}})',
 'Hallo {{begruessung}},
 
-ich hoffe, Sie denken gerne an unser gemeinsames Event zurück!
+ich hoffe, Sie denken gerne an unser gemeinsames Event ({{anlass}} am {{event_datum}}) zurück!
 
 Ich wollte mich kurz und freundlich melden, da die Rechnung für Ihre Veranstaltung noch offen ist. Möglicherweise ist sie untergegangen – das passiert im Alltag schnell.
 

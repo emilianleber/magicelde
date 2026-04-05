@@ -46,6 +46,7 @@ interface PortalMessage {
 interface PortalCustomer { id: string; name: string | null; email: string | null; company?: string | null; }
 interface MailTemplate { id: string; name: string; subject: string | null; body: string; }
 interface CustomerDoc { id: string; name: string; type: string | null; file_url: string | null; }
+interface CustomerEvent { id: string; title: string; event_date: string | null; location: string | null; guests: number | null; format: string | null; anlass?: string | null; }
 
 const inputCls = "w-full rounded-xl bg-background/60 border border-border/30 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20";
 
@@ -90,6 +91,8 @@ const AdminMails = () => {
   const [composeBody, setComposeBody] = useState("");
   const [customerDocs, setCustomerDocs] = useState<CustomerDoc[]>([]);
   const [selectedDocIds, setSelectedDocIds] = useState<string[]>([]);
+  const [customerEvents, setCustomerEvents] = useState<CustomerEvent[]>([]);
+  const [composeEventId, setComposeEventId] = useState("");
   const [sending, setSending] = useState(false);
   const [sendMsg, setSendMsg] = useState("");
 
@@ -329,28 +332,38 @@ const AdminMails = () => {
   const handleCustomerSelect = async (customerId: string) => {
     setComposeCustomerId(customerId);
     setSelectedDocIds([]); setCustomerDocs([]);
+    setCustomerEvents([]); setComposeEventId("");
     const c = customers.find((c) => c.id === customerId);
     if (c) { setComposeToEmail(c.email || ""); setComposeToName(c.name || ""); }
     if (customerId) {
-      const { data } = await supabase.from("portal_documents").select("id,name,type,file_url").eq("customer_id", customerId);
-      setCustomerDocs(data || []);
+      const [docRes, evtRes, reqRes] = await Promise.all([
+        supabase.from("portal_documents").select("id,name,type,file_url").eq("customer_id", customerId),
+        supabase.from("portal_events").select("id,title,event_date,location,guests,format").eq("customer_id", customerId).order("event_date", { ascending: false }),
+        supabase.from("portal_requests").select("id,anlass,datum,ort,gaeste,format,name").eq("customer_id", customerId).is("deleted_at", null).order("created_at", { ascending: false }),
+      ]);
+      setCustomerDocs(docRes.data || []);
+      // Merge events and requests into a unified list
+      const evts: CustomerEvent[] = (evtRes.data || []).map((e: any) => ({ ...e, anlass: e.title }));
+      const reqs: CustomerEvent[] = (reqRes.data || []).map((r: any) => ({ id: `req_${r.id}`, title: r.anlass || r.name || "Anfrage", event_date: r.datum, location: r.ort, guests: r.gaeste, format: r.format, anlass: r.anlass }));
+      setCustomerEvents([...evts, ...reqs]);
     }
     if (selectedTemplateId && c) {
       const tpl = templates.find((t) => t.id === selectedTemplateId);
       if (tpl) {
-        setComposeSubject(replaceAllPlaceholders(tpl.subject || "", c));
-        setComposeBody(replaceAllPlaceholders(tpl.body, c));
+        setComposeSubject(replaceAllPlaceholders(tpl.subject || "", c, getSelectedEvent()));
+        setComposeBody(replaceAllPlaceholders(tpl.body, c, getSelectedEvent()));
       }
     }
   };
 
-  const replaceAllPlaceholders = (text: string, c?: PortalCustomer | null) => {
+  const replaceAllPlaceholders = (text: string, c?: PortalCustomer | null, evt?: CustomerEvent | null) => {
     const name = c?.name || "";
     const parts = name.split(" ");
     const vorname = parts[0] || "";
     const nachname = parts.slice(1).join(" ") || parts[0] || "";
     const anrede = (c as any)?.anrede || "";
     const begruessung = anrede ? `${anrede} ${nachname}` : name;
+    const fmtDate = (d: string | null | undefined) => d ? new Date(d + "T12:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" }) : "";
     return text
       .replace(/\{\{begruessung\}\}/gi, begruessung)
       .replace(/\{\{anrede\}\}/gi, anrede)
@@ -359,10 +372,20 @@ const AdminMails = () => {
       .replace(/\{\{name\}\}/gi, name)
       .replace(/\{\{firma\}\}/gi, c?.company || "")
       .replace(/\{\{email\}\}/gi, c?.email || "")
+      .replace(/\{\{event_datum\}\}/gi, fmtDate(evt?.event_date))
+      .replace(/\{\{event_ort\}\}/gi, evt?.location || "")
+      .replace(/\{\{event_titel\}\}/gi, evt?.title || "")
+      .replace(/\{\{anlass\}\}/gi, evt?.anlass || evt?.title || "")
+      .replace(/\{\{gaeste\}\}/gi, String(evt?.guests ?? ""))
+      .replace(/\{\{datum\}\}/gi, fmtDate(evt?.event_date))
+      .replace(/\{\{ort\}\}/gi, evt?.location || "")
+      .replace(/\{\{format\}\}/gi, evt?.format || "")
       .replace(/\{name\}/gi, name)
       .replace(/\{firma\}/gi, c?.company || "")
       .replace(/\{email\}/gi, c?.email || "");
   };
+
+  const getSelectedEvent = () => customerEvents.find((e) => e.id === composeEventId) || null;
 
   const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplateId(templateId);
@@ -370,8 +393,22 @@ const AdminMails = () => {
     const tpl = templates.find((t) => t.id === templateId);
     if (!tpl) return;
     const c = customers.find((c) => c.id === composeCustomerId);
-    if (tpl.subject) setComposeSubject(replaceAllPlaceholders(tpl.subject, c));
-    setComposeBody(replaceAllPlaceholders(tpl.body, c));
+    const evt = getSelectedEvent();
+    if (tpl.subject) setComposeSubject(replaceAllPlaceholders(tpl.subject, c, evt));
+    setComposeBody(replaceAllPlaceholders(tpl.body, c, evt));
+  };
+
+  const handleEventSelect = (eventId: string) => {
+    setComposeEventId(eventId);
+    if (selectedTemplateId) {
+      const tpl = templates.find((t) => t.id === selectedTemplateId);
+      const c = customers.find((c) => c.id === composeCustomerId);
+      const evt = customerEvents.find((e) => e.id === eventId) || null;
+      if (tpl) {
+        if (tpl.subject) setComposeSubject(replaceAllPlaceholders(tpl.subject, c, evt));
+        setComposeBody(replaceAllPlaceholders(tpl.body, c, evt));
+      }
+    }
   };
 
   const sendMail = async () => {
@@ -479,7 +516,7 @@ const AdminMails = () => {
       {showCompose && (
         <div className="mb-8 p-6 rounded-2xl bg-muted/20 border border-border/30 space-y-4">
           <h2 className="font-display text-base font-bold text-foreground">Neue Mail verfassen</h2>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Vorlage</label>
               <select value={selectedTemplateId} onChange={(e) => handleTemplateSelect(e.target.value)} className={inputCls}>
@@ -494,6 +531,15 @@ const AdminMails = () => {
                 {customers.map((c) => <option key={c.id} value={c.id}>{c.name}{(c as any).company ? ` · ${(c as any).company}` : ""}</option>)}
               </select>
             </div>
+            {customerEvents.length > 0 && (
+              <div>
+                <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Event / Anfrage</label>
+                <select value={composeEventId} onChange={(e) => handleEventSelect(e.target.value)} className={inputCls}>
+                  <option value="">— Event wählen —</option>
+                  {customerEvents.map((e) => <option key={e.id} value={e.id}>{e.title}{e.event_date ? ` · ${new Date(e.event_date + "T12:00:00").toLocaleDateString("de-DE")}` : ""}</option>)}
+                </select>
+              </div>
+            )}
             <div>
               <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">An (E-Mail) *</label>
               <input value={composeToEmail} onChange={(e) => setComposeToEmail(e.target.value)} placeholder="empfaenger@beispiel.de" className={inputCls} />

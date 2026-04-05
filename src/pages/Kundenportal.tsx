@@ -183,10 +183,14 @@ const formatEventStatusClasses = (status?: string | null) => {
 };
 
 const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null) => {
-  const steps: { label: string; done: boolean; hint?: string }[] = [];
+  const steps: { label: string; done: boolean; hint?: string; action?: string }[] = [];
+  const st = request?.status || "";
   steps.push({ label: "Anfrage eingegangen", done: !!request, hint: request?.created_at ? new Date(request.created_at).toLocaleDateString("de-DE") : undefined });
-  steps.push({ label: "In Bearbeitung", done: ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"].includes(request?.status || "") || !!event });
-  steps.push({ label: "Angebot erhalten", done: ["angebot_gesendet", "warte_auf_kunde"].includes(request?.status || "") || !!event });
+  steps.push({ label: "In Bearbeitung", done: ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
+  if (st === "details_besprechen") {
+    steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
+  }
+  steps.push({ label: "Angebot erhalten", done: ["angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
   if (event) {
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
     steps.push({ label: "Details geklärt", done: event.details_status === "erledigt" });
@@ -284,6 +288,12 @@ const Kundenportal = () => {
   const [crMessage, setCrMessage] = useState<Record<string, string>>({});
   const [crSubmitting, setCrSubmitting] = useState<Record<string, boolean>>({});
   const [crSuccess, setCrSuccess] = useState<Record<string, boolean>>({});
+
+  const [expandedMailId, setExpandedMailId] = useState<string | null>(null);
+  const [detailsReplyOpen, setDetailsReplyOpen] = useState(false);
+  const [detailsReplyMsg, setDetailsReplyMsg] = useState("");
+  const [detailsReplySending, setDetailsReplySending] = useState(false);
+  const [detailsReplySuccess, setDetailsReplySuccess] = useState(false);
 
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [avatarError, setAvatarError] = useState("");
@@ -594,6 +604,34 @@ const Kundenportal = () => {
       );
     }
     setCrSubmitting((p) => ({ ...p, [linkedId]: false }));
+  };
+
+  const submitDetailsReply = async () => {
+    if (!customer || !detailsReplyMsg.trim() || !currentRequest) return;
+    setDetailsReplySending(true);
+    const payload = {
+      customer_id: customer.id,
+      request_id: currentRequest.id,
+      subject: "Antwort: Details zu meiner Anfrage",
+      message: detailsReplyMsg.trim(),
+      status: "offen",
+      action: "details_antwort",
+    };
+    const { data, error } = await supabase.from("portal_change_requests").insert(payload).select("*").single();
+    if (!error && data) {
+      setChangeRequests((prev) => [data, ...prev]);
+      setDetailsReplySuccess(true);
+      setDetailsReplyMsg("");
+      setDetailsReplyOpen(false);
+      setTimeout(() => setDetailsReplySuccess(false), 4000);
+      notifyAdmin(
+        `📩 Antwort auf Detail-Anfrage von ${customer.name || customer.email}`,
+        `<p><strong>${customer.name || customer.email}</strong> hat auf Ihre Detail-Anfrage geantwortet:</p>
+        <p>${payload.message.replace(/\n/g, "<br>")}</p>
+        <p><a href="https://magicel.de/admin/requests/${currentRequest.id}" style="display:inline-block;background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:bold;">Anfrage öffnen →</a></p>`
+      );
+    }
+    setDetailsReplySending(false);
   };
 
   const crStatusBadge = (status: string) => {
@@ -1101,11 +1139,56 @@ const Kundenportal = () => {
                               step.done ? "text-foreground font-medium" : isCurrent ? "text-foreground font-semibold" : "text-foreground/40"
                             }`}>
                               {step.label}
-                              {isCurrent && (
+                              {isCurrent && !step.action && (
                                 <span className="ml-2 font-sans text-[10px] uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-accent/10 text-accent">Aktuell</span>
+                              )}
+                              {isCurrent && step.action === "details_antworten" && (
+                                <span className="ml-2 font-sans text-[10px] uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-600 border border-violet-500/20">Ihre Antwort benötigt</span>
                               )}
                             </p>
                             {step.hint && <p className="font-sans text-xs text-muted-foreground mt-0.5">{step.hint}</p>}
+                            {step.action === "details_antworten" && isCurrent && (
+                              <div className="mt-3">
+                                {detailsReplySuccess ? (
+                                  <div className="flex items-center gap-2 text-sm text-green-600 font-medium">
+                                    <CheckCircle2 className="w-4 h-4" /> Antwort gesendet!
+                                  </div>
+                                ) : !detailsReplyOpen ? (
+                                  <button
+                                    onClick={() => setDetailsReplyOpen(true)}
+                                    className="inline-flex items-center gap-2 font-sans text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-xl px-4 py-2.5 transition-all active:scale-95"
+                                  >
+                                    <Send className="w-3.5 h-3.5" /> Jetzt antworten
+                                  </button>
+                                ) : (
+                                  <div className="space-y-3 mt-1">
+                                    <p className="font-sans text-xs text-muted-foreground">Bitte teilen Sie uns die gewünschten Details mit:</p>
+                                    <textarea
+                                      value={detailsReplyMsg}
+                                      onChange={(e) => setDetailsReplyMsg(e.target.value)}
+                                      placeholder="Ihre Antwort schreiben…"
+                                      rows={4}
+                                      className="w-full rounded-xl bg-black/[0.02] border border-black/[0.1] px-4 py-3 text-sm text-foreground placeholder:text-black/25 focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-500/30 transition-all resize-none"
+                                    />
+                                    <div className="flex items-center gap-2">
+                                      <button
+                                        onClick={submitDetailsReply}
+                                        disabled={detailsReplySending || !detailsReplyMsg.trim()}
+                                        className="inline-flex items-center gap-2 font-sans text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-50 rounded-xl px-4 py-2.5 transition-all active:scale-95"
+                                      >
+                                        <Send className="w-3.5 h-3.5" /> {detailsReplySending ? "Senden…" : "Absenden"}
+                                      </button>
+                                      <button
+                                        onClick={() => { setDetailsReplyOpen(false); setDetailsReplyMsg(""); }}
+                                        className="font-sans text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2.5"
+                                      >
+                                        Abbrechen
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
                       );
@@ -1865,54 +1948,72 @@ const Kundenportal = () => {
                   <p className="font-sans text-sm text-muted-foreground">Kommunikation mit Emilian Leber erscheint hier.</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden divide-y divide-black/[0.05]">
                   {allMails.map((msg) => {
                     const isFromAdmin = msg._dir === "from_admin";
                     const isUnread = isFromAdmin && !msg.read_by_customer;
+                    const isExpanded = expandedMailId === msg.id;
+                    const dateStr = new Date(msg._date).toLocaleDateString("de-DE", { day: "2-digit", month: "short" });
+                    const fullDate = new Date(msg._date).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
+                    // Extract preview text from body
+                    const rawBody = isFromAdmin ? (msg as any).body : ((msg as any).body_text || "");
+                    const previewText = rawBody?.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim().slice(0, 120) || "";
+
                     return (
                       <div
                         key={msg.id}
-                        className={`rounded-2xl border overflow-hidden transition-all ${isUnread ? "bg-accent/[0.05] border-accent/20" : "bg-white border-black/[0.06] shadow-sm"}`}
+                        className={`transition-colors ${isUnread ? "bg-accent/[0.03]" : ""} ${isExpanded ? "" : "cursor-pointer hover:bg-black/[0.015]"}`}
+                        onClick={() => !isExpanded && setExpandedMailId(msg.id)}
                       >
-                        <div className={`px-5 py-3.5 border-b flex items-center justify-between gap-3 ${isUnread ? "border-accent/10" : "border-black/[0.05]"}`}>
-                          <div className="flex items-center gap-3 min-w-0">
-                            {isFromAdmin ? (
-                              <img src="https://www.magicel.de/assets/hero-magic-D6fUzBvI.jpg" alt="EL" className="w-8 h-8 rounded-full object-cover object-top shrink-0" />
-                            ) : (
-                              <div className="w-8 h-8 rounded-full bg-black/[0.04] text-muted-foreground flex items-center justify-center shrink-0 text-xs font-bold">
-                                {customer?.name?.[0]?.toUpperCase() || "K"}
-                              </div>
-                            )}
-                            <div className="min-w-0">
-                              <p className={`font-sans text-[10px] font-semibold uppercase tracking-widest ${isFromAdmin ? "text-accent" : "text-muted-foreground"}`}>
+                        {/* Header row - always visible */}
+                        <div className="px-5 py-3.5 flex items-center gap-3">
+                          {isFromAdmin ? (
+                            <img src="https://www.magicel.de/assets/hero-magic-D6fUzBvI.jpg" alt="EL" className="w-9 h-9 rounded-full object-cover object-top shrink-0" />
+                          ) : (
+                            <div className="w-9 h-9 rounded-full bg-black/[0.04] text-muted-foreground flex items-center justify-center shrink-0 text-xs font-bold">
+                              {customer?.name?.[0]?.toUpperCase() || "K"}
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-0.5">
+                              <p className={`font-sans text-xs font-semibold ${isFromAdmin ? "text-accent" : "text-muted-foreground"}`}>
                                 {isFromAdmin ? "Emilian Leber" : "Sie"}
                               </p>
-                              <p className="font-sans text-sm font-semibold text-foreground truncate">{msg.subject || "(Kein Betreff)"}</p>
+                              <span className="font-sans text-[11px] text-muted-foreground/50">{dateStr}</span>
+                              {isUnread && <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />}
+                            </div>
+                            <p className="font-sans text-sm font-semibold text-foreground truncate">{msg.subject || "(Kein Betreff)"}</p>
+                            {!isExpanded && previewText && (
+                              <p className="font-sans text-xs text-muted-foreground/60 truncate mt-0.5">{previewText}…</p>
+                            )}
+                          </div>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setExpandedMailId(isExpanded ? null : msg.id); }}
+                            className="shrink-0 p-1.5 rounded-lg hover:bg-black/[0.04] transition-colors"
+                          >
+                            {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                          </button>
+                        </div>
+
+                        {/* Expanded body */}
+                        {isExpanded && (
+                          <div className="px-5 pb-4 border-t border-black/[0.04]">
+                            <div className="pt-4 pl-12">
+                              {isFromAdmin ? (
+                                <div className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: (msg as any).body }} />
+                              ) : (
+                                (msg as any).body_html ? (
+                                  <div className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: (msg as any).body_html }} />
+                                ) : (msg as any).body_text ? (
+                                  <pre className="font-sans text-sm text-foreground/80 whitespace-pre-wrap">{(msg as any).body_text}</pre>
+                                ) : (
+                                  <p className="font-sans text-sm text-muted-foreground italic">Kein Inhalt.</p>
+                                )
+                              )}
+                              <p className="font-sans text-[11px] text-muted-foreground/40 mt-4">{fullDate}</p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {isUnread && <span className="w-2 h-2 rounded-full bg-accent" />}
-                            <p className="font-sans text-[11px] text-muted-foreground">
-                              {new Date(msg._date).toLocaleDateString("de-DE", { day: "2-digit", month: "short" })}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="px-5 py-4">
-                          {isFromAdmin ? (
-                            <div className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: msg.body }} />
-                          ) : (
-                            msg.body_html ? (
-                              <div className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: msg.body_html }} />
-                            ) : msg.body_text ? (
-                              <pre className="font-sans text-sm text-foreground/80 whitespace-pre-wrap">{msg.body_text}</pre>
-                            ) : (
-                              <p className="font-sans text-sm text-muted-foreground italic">Kein Inhalt.</p>
-                            )
-                          )}
-                        </div>
-                        <div className="px-5 pb-3 font-sans text-[11px] text-muted-foreground/50">
-                          {new Date(msg._date).toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                        </div>
+                        )}
                       </div>
                     );
                   })}
