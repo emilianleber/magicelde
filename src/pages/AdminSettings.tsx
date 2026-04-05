@@ -811,26 +811,9 @@ const AdminSettings = () => {
             <p className="font-sans text-[10px] text-muted-foreground mt-3">Diese Signatur wird in allen automatischen E-Mails verwendet. Um sie zu ändern, kontaktiere den Entwickler.</p>
           </div>
 
-          {/* Dokument-Signatur (RichText) */}
-          <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
-            <h3 className="font-sans text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">Dokument-Signatur (für manuelle Mails)</h3>
-            <RichTextEditor
-              value={signatureBody}
-              onChange={setSignatureBody}
-              placeholder="Signatur für manuell versendete Mails…"
-              minHeight="200px"
-              showPlaceholders={false}
-            />
-            {signatureMsg && (
-              <p className={`font-sans text-sm mt-2 ${signatureMsg.includes("Fehler") ? "text-red-500" : "text-accent"}`}>
-                {signatureMsg}
-              </p>
-            )}
-            <button onClick={saveSignature} disabled={savingSignature} className="btn-primary disabled:opacity-60 mt-3">
-              <Save className="w-4 h-4 mr-2" />
-              {savingSignature ? "Speichert…" : "Signatur speichern"}
-            </button>
-          </div>
+          <p className="font-sans text-xs text-muted-foreground">
+            Diese Signatur wird in <strong>allen</strong> E-Mails verwendet — automatische Status-Mails, Vorlagen, Rechnungsadresse, Feedback, Magic Link etc.
+          </p>
         </div>
       )}
 
