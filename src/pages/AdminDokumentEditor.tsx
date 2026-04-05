@@ -491,7 +491,15 @@ function DocumentPreview(props: PreviewProps) {
   const SUMMEN_H   = 62;
   const GRUSS_H    = 12; // nur Abstand, Signatur ist im Fußtext enthalten
   const DIN_FTR_H  = 85; // Footer ist absolut positioniert, dieser Wert reserviert Platz
-  const FUSS_H     = fusstext ? Math.max(16, Math.ceil(stripHtmlLen(fusstext) / 75) * 15 + 12) : 0;
+  const estimateHtmlH = (html: string): number => {
+    if (!html) return 0;
+    // Count <br> tags as line breaks, then estimate remaining text lines
+    const brCount = (html.match(/<br\s*\/?>/gi) || []).length;
+    const textLen = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().length;
+    const textLines = Math.ceil(textLen / 65);
+    return Math.max(16, (brCount + textLines) * 13 + 12);
+  };
+  const FUSS_H     = estimateHtmlH(fusstext);
 
   // Summen + DIN footer appear on EVERY page
   const PER_PAGE_BOTTOM = SUMMEN_H + DIN_FTR_H;
@@ -528,12 +536,25 @@ function DocumentPreview(props: PreviewProps) {
       return leistungPos.length > 0 ? [leistungPos] : [[]];
     }
 
-    // Pass 2: multi-page – page 1 doesn't need fuss/gruss reserved
+    // Pass 2: multi-page
     const rem = [...leistungPos];
-    const chunks: LocalPosition[][] = [fill(rem, P1_MULTI)];
+    // Page 1 budget: reserve fuss/gruss only if all items might fit on page 1
+    const p1Budget = totalPosH <= P1_MULTI ? P1_SINGLE : P1_MULTI;
+    const chunks: LocalPosition[][] = [fill(rem, p1Budget)];
     while (rem.length > 0) {
       const testBudget = rem.length <= 30 ? PC_LAST : PC_MID;
       chunks.push(fill(rem, testBudget));
+    }
+    // If only 1 chunk but content didn't fit single-page, force split
+    if (chunks.length === 1 && totalPosH > P1_SINGLE) {
+      // Split: put items on page 1 without fuss, fuss goes on page 2
+      const rem2 = [...leistungPos];
+      const ch1 = fill(rem2, P1_MULTI);
+      if (rem2.length > 0) {
+        return [ch1, ...(() => { const r: LocalPosition[][] = []; while (rem2.length > 0) r.push(fill(rem2, PC_LAST)); return r; })()];
+      }
+      // All positions fit on P1_MULTI but fuss needs page 2 → add empty page 2
+      return [ch1, []];
     }
     return chunks;
   })();
