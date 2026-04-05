@@ -30,7 +30,7 @@ interface PortalCustomer {
 }
 
 type SortOption = "newest" | "oldest" | "name_asc" | "name_desc" | "company_asc" | "company_desc";
-type ViewFilter = "aktiv" | "geloescht" | "alle";
+type ViewFilter = "aktiv" | "alle";
 
 const AdminCustomers = () => {
   const navigate = useNavigate();
@@ -265,7 +265,6 @@ const AdminCustomers = () => {
       <div className="flex gap-1 bg-muted/40 rounded-xl p-1 mb-4 w-fit">
         {[
           { key: "aktiv", label: `Aktiv (${activeCount})` },
-          { key: "geloescht", label: `Gelöscht (${deletedCount})` },
           { key: "alle", label: "Alle" },
         ].map((tab) => (
           <button
