@@ -5,7 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { dokumenteService, reserviereNummer } from "@/services/dokumenteService";
 import type { DokumentTyp } from "@/types/dokumente";
 import type { Artikel } from "@/types/dokumente";
-import { ArrowLeft, ChevronDown, ChevronUp, Eye, Printer, Save, Send, Trash2, X } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, Download, Eye, Printer, Save, Send, Trash2, X } from "lucide-react";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import RichTextEditor, { textToHtml, htmlToText } from "@/components/admin/RichTextEditor";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -490,7 +492,7 @@ function DocumentPreview(props: PreviewProps) {
   const TBL_HDR_H  = 22;
   const SUMMEN_H   = 62;
   const GRUSS_H    = 12; // nur Abstand, Signatur ist im Fußtext enthalten
-  const DIN_FTR_H  = 78;
+  const DIN_FTR_H  = 85; // Footer ist absolut positioniert, dieser Wert reserviert Platz
   const FUSS_H     = fusstext ? Math.max(16, Math.ceil(stripHtmlLen(fusstext) / 75) * 15 + 12) : 0;
 
   // Summen + DIN footer appear on EVERY page
@@ -609,9 +611,8 @@ function DocumentPreview(props: PreviewProps) {
         <div style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>{typLabel}{nummer ? ` ${nummer}` : ""}</div>
       </div>
       {kopftext && (
-        <div style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55, whiteSpace: "pre-wrap" }}>
-          {htmlToText(kopftext.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, ""))}
-        </div>
+        <div style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}
+          dangerouslySetInnerHTML={{ __html: textToHtml(kopftext) }} />
       )}
     </>
   );
@@ -648,9 +649,9 @@ function DocumentPreview(props: PreviewProps) {
 
   const totalPages = pageChunks.length;
 
-  // DIN 5008 Fußzeile – erscheint auf JEDER Seite
+  // DIN 5008 Fußzeile – erscheint auf JEDER Seite, fixe Position am Seitenende
   const renderDINFooter = (pageNum: number) => (
-    <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, backgroundColor: "#fff" }}>
       <div style={{ margin: `0 ${M}px 8px`, borderTop: "0.75px solid #c0c0c0", paddingTop: 5, paddingBottom: 6 }}>
         {totalPages > 1 && (
           <div style={{ textAlign: "right", fontSize: 7, color: "#999", marginBottom: 4 }}>
@@ -727,9 +728,8 @@ function DocumentPreview(props: PreviewProps) {
   const renderDINBottom = (pageNum: number) => (
     <>
       {fusstext && (
-        <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.65, whiteSpace: "pre-wrap" }}>
-          {htmlToText(fusstext.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, ""))}
-        </div>
+        <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.65 }}
+          dangerouslySetInnerHTML={{ __html: textToHtml(fusstext) }} />
       )}
       {renderDINFooter(pageNum)}
     </>
@@ -747,7 +747,7 @@ function DocumentPreview(props: PreviewProps) {
 
   // ── Page wrapper + multi-page renderer ───────────────────────────────────
   const PAGE_STYLE: React.CSSProperties = {
-    width: "100%", aspectRatio: "210/297",
+    width: "100%", aspectRatio: "210/297", overflow: "hidden", position: "relative" as const,
     fontFamily: font, color: "#1a1a1a", display: "flex", flexDirection: "column",
   };
 
@@ -1652,75 +1652,38 @@ export default function AdminDokumentEditor() {
     } finally { setSaving(false); }
   };
 
-  // Drucken / PDF: Neues Fenster mit sauberem A4-Print öffnen
-  const handlePrintPreview = () => {
+  // PDF direkt downloaden via html2canvas + jsPDF
+  const [pdfGenerating, setPdfGenerating] = useState(false);
+  const handleDownloadPdf = async () => {
     const el = document.getElementById("doc-preview-print");
     if (!el) return;
-
-    const html = el.innerHTML;
-    const win = window.open("", "_blank");
-    if (!win) {
-      alert("Bitte erlauben Sie Popups für diese Seite, um das PDF zu öffnen.");
-      return;
+    setPdfGenerating(true);
+    try {
+      const pages = el.querySelectorAll<HTMLElement>(":scope > div");
+      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+      for (let i = 0; i < pages.length; i++) {
+        if (i > 0) pdf.addPage();
+        const canvas = await html2canvas(pages[i], {
+          scale: 2, useCORS: true, backgroundColor: "#ffffff",
+          width: 595, height: 842,
+        });
+        const imgData = canvas.toDataURL("image/jpeg", 0.95);
+        pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
+      }
+      // Fallback: wenn keine pages gefunden, ganzes Element nehmen
+      if (pages.length === 0) {
+        const canvas = await html2canvas(el, {
+          scale: 2, useCORS: true, backgroundColor: "#ffffff",
+        });
+        const imgData = canvas.toDataURL("image/jpeg", 0.95);
+        pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
+      }
+      pdf.save(`${nummer || "Dokument"}.pdf`);
+    } catch (err) {
+      console.error("PDF-Generierung fehlgeschlagen:", err);
+      alert("PDF konnte nicht erstellt werden. Bitte versuchen Sie es erneut.");
     }
-
-    // 595px Vorschau → 210mm A4-Breite  (210/25.4 * 96 / 595 ≈ 1.3341)
-    const scale = ((210 / 25.4) * 96) / 595;
-
-    win.document.write(`<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<title>${nummer || "Dokument"}</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after {
-  box-sizing: border-box;
-  -webkit-print-color-adjust: exact !important;
-  print-color-adjust: exact !important;
-}
-@page { size: A4 portrait; margin: 0; }
-html, body { margin: 0; padding: 0; }
-/* Jede Seite = 595×842px, skaliert auf A4 210×297mm */
-body > div {
-  width: 595px !important;
-  height: 840px !important;
-  zoom: ${scale.toFixed(6)} !important;
-  overflow: hidden !important;
-  aspect-ratio: auto !important;
-  page-break-after: always !important;
-  break-after: page !important;
-}
-body > div:last-child {
-  page-break-after: auto !important;
-  break-after: auto !important;
-}
-/* Bildschirm-Ansicht im Print-Fenster */
-@media screen {
-  body {
-    background: #444;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-  }
-  body > div {
-    box-shadow: 0 6px 32px rgba(0,0,0,0.35);
-  }
-}
-</style>
-</head>
-<body>${html}</body>
-</html>`);
-
-    win.document.close();
-
-    // Fonts + Bilder laden lassen, dann drucken
-    setTimeout(() => {
-      win.focus();
-      win.print();
-    }, 900);
+    setPdfGenerating(false);
   };
 
   const typLabel = TYP_LABEL[typ] || typ;
@@ -1813,11 +1776,12 @@ body > div:last-child {
                 {saving ? "Speichere…" : "Speichern"}
               </button>
               <button
-                onClick={handlePrintPreview}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors"
+                onClick={handleDownloadPdf}
+                disabled={pdfGenerating}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors disabled:opacity-50"
               >
-                <Printer className="w-4 h-4" />
-                Drucken / PDF
+                <Download className="w-4 h-4" />
+                {pdfGenerating ? "PDF wird erstellt…" : "PDF herunterladen"}
               </button>
               <button
                 onClick={handleSaveAndNavigate}
