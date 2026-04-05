@@ -566,9 +566,9 @@ function DocumentPreview(props: PreviewProps) {
 
   const totalPages = 1; // CSS-basiert, nur 1 Container
 
-  // DIN 5008 Fußzeile – am Ende des Dokuments
+  // DIN 5008 Fußzeile – fix am Seitenende (842px)
   const renderDINFooter = (_pageNum: number) => (
-    <div style={{ marginTop: "auto" }}>
+    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, backgroundColor: "#fff" }}>
       <div style={{ margin: `0 ${M}px`, borderTop: "0.5px solid #d4d4d8", paddingTop: 8, paddingBottom: 10 }}>
         {totalPages > 1 && (
           <div style={{ textAlign: "right", fontSize: 6.5, color: "#a1a1aa", marginBottom: 5 }}>
@@ -663,8 +663,9 @@ function DocumentPreview(props: PreviewProps) {
 
   // ── Page wrapper + multi-page renderer ───────────────────────────────────
   const PAGE_STYLE: React.CSSProperties = {
-    width: "100%", minHeight: 842,
+    width: "100%", minHeight: 842, position: "relative" as const,
     fontFamily: font, color: "#1a1a1a", display: "flex", flexDirection: "column",
+    paddingBottom: 80, // Platz für den fix positionierten DIN-Footer
   };
 
   const page = (bg: string, header: React.ReactNode, thBg: string, thColor: string) => (
