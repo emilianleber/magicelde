@@ -290,7 +290,10 @@ const AdminRequestDetail = () => {
     if (!request) return;
     setSendingMail(true); setMessage("");
     try {
+      // Refresh session to avoid expired JWT
+      await supabase.auth.refreshSession();
       const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error("Nicht eingeloggt – bitte neu anmelden.");
       const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail", {
         method: "POST",
         headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
