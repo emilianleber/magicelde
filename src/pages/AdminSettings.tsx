@@ -125,6 +125,17 @@ const AdminSettings = () => {
   const [savingTemplate, setSavingTemplate] = useState(false);
   const [templateMsg, setTemplateMsg] = useState("");
 
+  // E-Mail-Vorlagen (send-template-mail)
+  const [emailTemplates, setEmailTemplates] = useState<{ id: string; slug: string; name: string; betreff: string; inhalt: string; kategorie: string; aktiv: boolean }[]>([]);
+  const [editingEmailTpl, setEditingEmailTpl] = useState<string | null>(null);
+  const [etDraftBetreff, setEtDraftBetreff] = useState("");
+  const [etDraftInhalt, setEtDraftInhalt] = useState("");
+  const [etSaving, setEtSaving] = useState(false);
+
+  // Signatur
+  const [signaturHtml, setSignaturHtml] = useState("");
+  const [signaturSaving, setSignaturSaving] = useState(false);
+
   // Dokument-Textvorlagen
   const [textvorlagen, setTextvorlagen] = useState<DokumentTextvorlage[]>([]);
   const [tvEditingId, setTvEditingId] = useState<string | "new" | null>(null);
@@ -176,15 +187,17 @@ const AdminSettings = () => {
       if (!admin) { setIsAdmin(false); setLoading(false); return; }
       setIsAdmin(true);
 
-      const [templatesResult, signatureResult, settingsResult, tvResult] = await Promise.all([
+      const [templatesResult, signatureResult, settingsResult, tvResult, etResult] = await Promise.all([
         supabase.from("portal_mail_templates").select("*").order("created_at", { ascending: false }),
         supabase.from("portal_signature").select("*").limit(1).maybeSingle(),
         supabase.from("admin_settings").select("*").limit(1).maybeSingle(),
         supabase.from("dokument_textvorlagen").select("*").order("typ").order("bereich").order("sort_order"),
+        supabase.from("email_templates").select("*").order("sortierung", { ascending: true }),
       ]);
 
       if (!templatesResult.error) setTemplates(templatesResult.data || []);
       if (!tvResult.error) setTextvorlagen((tvResult.data || []) as DokumentTextvorlage[]);
+      if (!etResult.error) setEmailTemplates(etResult.data || []);
       if (!signatureResult.error && signatureResult.data) {
         setSignatureId(signatureResult.data.id);
         setSignatureBody(signatureResult.data.body);
@@ -562,6 +575,70 @@ const AdminSettings = () => {
         </div>
       )}
 
+      {/* ── E-Mail-Vorlagen (send-template-mail) ── */}
+      {activeTab === "vorlagen" && emailTemplates.length > 0 && (
+        <div className="space-y-4 mt-8 pt-8 border-t border-border/20">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-display text-base font-bold text-foreground">Schnellversand-Vorlagen</h3>
+              <p className="font-sans text-xs text-muted-foreground mt-1">Diese Vorlagen können mit 1-Klick aus der Buchungs-Detailseite gesendet werden. Platzhalter: {"{{begruessung}}"}, {"{{anlass}}"}, {"{{datum}}"}, {"{{ort}}"}</p>
+            </div>
+          </div>
+          {emailTemplates.map((tpl) => (
+            <div key={tpl.id} className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <h4 className="font-sans text-sm font-bold text-foreground">{tpl.name}</h4>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full ${tpl.aktiv ? "bg-green-50 text-green-700 border border-green-200" : "bg-muted text-muted-foreground border border-border/20"}`}>
+                    {tpl.aktiv ? "Aktiv" : "Inaktiv"}
+                  </span>
+                </div>
+                <button
+                  onClick={() => {
+                    if (editingEmailTpl === tpl.id) { setEditingEmailTpl(null); }
+                    else { setEditingEmailTpl(tpl.id); setEtDraftBetreff(tpl.betreff); setEtDraftInhalt(tpl.inhalt); }
+                  }}
+                  className="font-sans text-xs text-accent hover:text-accent/80"
+                >
+                  {editingEmailTpl === tpl.id ? "Abbrechen" : "Bearbeiten"}
+                </button>
+              </div>
+
+              {editingEmailTpl === tpl.id ? (
+                <div className="space-y-3">
+                  <div>
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-1.5">Betreff</label>
+                    <input value={etDraftBetreff} onChange={(e) => setEtDraftBetreff(e.target.value)} className={inputCls} />
+                  </div>
+                  <div>
+                    <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-1.5">Inhalt</label>
+                    <textarea value={etDraftInhalt} onChange={(e) => setEtDraftInhalt(e.target.value)} rows={12} className={`${inputCls} resize-y font-mono text-xs`} />
+                  </div>
+                  <button
+                    disabled={etSaving}
+                    onClick={async () => {
+                      setEtSaving(true);
+                      await supabase.from("email_templates").update({ betreff: etDraftBetreff, inhalt: etDraftInhalt, updated_at: new Date().toISOString() }).eq("id", tpl.id);
+                      setEmailTemplates((prev) => prev.map((t) => t.id === tpl.id ? { ...t, betreff: etDraftBetreff, inhalt: etDraftInhalt } : t));
+                      setEditingEmailTpl(null);
+                      setEtSaving(false);
+                    }}
+                    className="btn-primary inline-flex items-center gap-2"
+                  >
+                    <Save className="w-4 h-4" /> {etSaving ? "Speichert…" : "Speichern"}
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <p className="font-sans text-xs text-muted-foreground mb-1">Betreff: <span className="text-foreground font-medium">{tpl.betreff}</span></p>
+                  <p className="font-sans text-xs text-muted-foreground line-clamp-3 whitespace-pre-line">{tpl.inhalt.slice(0, 200)}…</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* ── Textvorlagen ── */}
       {activeTab === "textvorlagen" && (
         <div className="space-y-8">
@@ -705,26 +782,55 @@ const AdminSettings = () => {
 
       {/* ── Signatur ── */}
       {activeTab === "signatur" && (
-        <div className="max-w-2xl space-y-4">
+        <div className="max-w-2xl space-y-6">
           <p className="font-sans text-sm text-muted-foreground">
-            Die Signatur wird automatisch an jede Mail angehängt.
+            Die Signatur wird automatisch an jede E-Mail angehängt (Status-Mails, Vorlagen, Rechnungsadresse etc.).
           </p>
-          <RichTextEditor
-            value={signatureBody}
-            onChange={setSignatureBody}
-            placeholder="Signatur eingeben, z.B. Mit freundlichen Grüßen, Emilian Leber…"
-            minHeight="200px"
-            showPlaceholders={false}
-          />
-          {signatureMsg && (
-            <p className={`font-sans text-sm ${signatureMsg.includes("Fehler") ? "text-red-500" : "text-accent"}`}>
-              {signatureMsg}
-            </p>
-          )}
-          <button onClick={saveSignature} disabled={savingSignature} className="btn-primary disabled:opacity-60">
-            <Save className="w-4 h-4 mr-2" />
-            {savingSignature ? "Speichert…" : "Signatur speichern"}
-          </button>
+
+          {/* Vorschau der aktuellen Signatur */}
+          <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+            <h3 className="font-sans text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-4">Aktuelle E-Mail-Signatur (Vorschau)</h3>
+            <div className="bg-white rounded-xl border border-border/20 p-6" dangerouslySetInnerHTML={{ __html: `
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+                <tr><td colspan="2" style="padding-bottom:16px;"><div style="height:2px;background:linear-gradient(90deg,#6366f1 0%,#a855f7 40%,#e4e4e7 40%);border-radius:2px;"></div></td></tr>
+                <tr>
+                  <td style="width:64px;vertical-align:top;padding-right:18px;"><img src="/favicon.ico" alt="EL" width="48" height="48" style="border-radius:12px;display:block;" /></td>
+                  <td style="vertical-align:top;font-family:Inter,sans-serif;">
+                    <p style="margin:0;font-size:15px;font-weight:700;color:#18181b;">Emilian Leber</p>
+                    <p style="margin:2px 0 0;font-size:10px;font-weight:600;color:#6366f1;text-transform:uppercase;letter-spacing:1px;">Zauberer & Entertainer</p>
+                    <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:8px;">
+                      <tr><td style="padding:2px 0;font-size:11px;color:#71717a;width:14px;">T</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="#" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td></tr>
+                      <tr><td style="padding:2px 0;font-size:11px;color:#71717a;">E</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="#" style="color:#3f3f46;text-decoration:none;">el@magicel.de</a></td></tr>
+                      <tr><td style="padding:2px 0;font-size:11px;color:#71717a;">W</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="#" style="color:#3f3f46;text-decoration:none;">www.magicel.de</a></td></tr>
+                    </table>
+                    <p style="margin:6px 0 0;font-size:10px;color:#a1a1aa;">Regensburg · Deutschland · <a href="#" style="color:#a1a1aa;text-decoration:none;">WhatsApp</a></p>
+                  </td>
+                </tr>
+              </table>
+            ` }} />
+            <p className="font-sans text-[10px] text-muted-foreground mt-3">Diese Signatur wird in allen automatischen E-Mails verwendet. Um sie zu ändern, kontaktiere den Entwickler.</p>
+          </div>
+
+          {/* Dokument-Signatur (RichText) */}
+          <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+            <h3 className="font-sans text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">Dokument-Signatur (für manuelle Mails)</h3>
+            <RichTextEditor
+              value={signatureBody}
+              onChange={setSignatureBody}
+              placeholder="Signatur für manuell versendete Mails…"
+              minHeight="200px"
+              showPlaceholders={false}
+            />
+            {signatureMsg && (
+              <p className={`font-sans text-sm mt-2 ${signatureMsg.includes("Fehler") ? "text-red-500" : "text-accent"}`}>
+                {signatureMsg}
+              </p>
+            )}
+            <button onClick={saveSignature} disabled={savingSignature} className="btn-primary disabled:opacity-60 mt-3">
+              <Save className="w-4 h-4 mr-2" />
+              {savingSignature ? "Speichert…" : "Signatur speichern"}
+            </button>
+          </div>
         </div>
       )}
 
