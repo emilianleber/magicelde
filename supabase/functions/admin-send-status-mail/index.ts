@@ -262,12 +262,22 @@ const requestMailTemplate = (request: any) => {
 
     case "angebot_gesendet":
       return {
-        subject: "Ihr Angebot von Emilian Leber ist fertig",
+        subject: "Ihr Angebot von Emilian Leber liegt bereit ✨",
         html: getEmailShell(
-          "Anfrage",
-          "Ihr Angebot ist unterwegs.",
-          `Hallo ${gruss}, ich habe alles für Ihre Anfrage zusammengestellt. Die nächsten Schritte besprechen wir jetzt gemeinsam.`,
-          `${statusBadge("✦ Angebot vorbereitet", "#2563eb", "#eff6ff")}${infoTable(rows)}`
+          "Angebot",
+          "Ihr individuelles Angebot ist fertig!",
+          `Hallo ${gruss}, ich habe mir Ihre Veranstaltung genau angeschaut und ein passendes Angebot für Sie erstellt. Sie finden es ab sofort in Ihrem <strong>Kundenportal</strong> zum Download bereit.`,
+          `${statusBadge("✦ Angebot bereit", "#2563eb", "#eff6ff")}${infoTable(rows)}
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
+            Schauen Sie sich das Angebot in Ruhe an. Bei Fragen oder Anpassungswünschen bin ich jederzeit für Sie da – per Telefon, E-Mail oder WhatsApp.
+          </p>
+          <div style="text-align:center;margin:8px 0 16px;">
+            <a href="https://magicel.de/kundenportal/login"
+               style="display:inline-block;background-color:#2563eb;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;font-family:${FONT};">
+              📄 Angebot im Kundenportal ansehen
+            </a>
+          </div>`,
+          false
         ),
       };
 
