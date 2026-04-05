@@ -87,6 +87,7 @@ const statusOptions = [
   { value: "details_besprechen", label: "Details besprechen" },
   { value: "angebot_gesendet", label: "Angebot gesendet" },
   { value: "warte_auf_kunde", label: "Warte auf Kunde" },
+  { value: "gebucht", label: "Gebucht" },
   { value: "bestätigt", label: "Bestätigt" },
   { value: "abgelehnt", label: "Abgelehnt" },
   { value: "archiviert", label: "Archiviert" },
@@ -796,9 +797,12 @@ const AdminRequestDetail = () => {
                 <Sparkles className="w-4 h-4" /> {converting ? "Konvertiert…" : "Zu Event konvertieren"}
               </button>
             ) : (
-              <Link to={`/admin/events/${request.event_id}`} className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-100 transition-colors">
-                Verknüpftes Event öffnen <ArrowRight className="w-4 h-4" />
-              </Link>
+              <>
+                <Link to={`/admin/events/${request.event_id}`} className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-100 transition-colors">
+                  Verknüpftes Event öffnen <ArrowRight className="w-4 h-4" />
+                </Link>
+                <p className="text-xs text-muted-foreground text-center mt-1">Weitere Status-Änderungen (Details, Vertrag, Rechnung) über die Event-Seite</p>
+              </>
             )}
           </div>
 
