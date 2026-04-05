@@ -364,7 +364,9 @@ serve(async (req) => {
         .eq("id", angebot.id);
 
       // 10. Send customer confirmation email
-      const firstName = customer.name?.split(" ")[0] || customer.name || "Hallo";
+      const anrede = customer.anrede || "";
+      const nachname = customer.name?.split(" ").slice(1).join(" ") || customer.name || "";
+      const gruss = anrede ? `${anrede} ${nachname}` : customer.name || "";
       const eventRows = [
         { icon: "🎉", label: "Anlass", value: request.anlass || "–" },
         { icon: "📅", label: "Datum", value: fmtDate(request.datum) },
@@ -376,10 +378,10 @@ serve(async (req) => {
       const customerHtml = getEmailShell(
         "Buchung",
         "Ihr Event ist gebucht! 🎉",
-        `Hallo ${firstName}, herzlichen Glückwunsch – deine Buchung ist jetzt offiziell bestätigt! Ich freue mich sehr darauf, Ihr Event unvergesslich zu machen.`,
+        `Hallo ${gruss}, herzlichen Glückwunsch – Ihre Buchung ist jetzt offiziell bestätigt! Ich freue mich sehr darauf, Ihr Event unvergesslich zu machen.`,
         `${statusBadge("✦ Buchung bestätigt", "#15803d", "#f0fdf4")}${infoTable(eventRows)}
         <p style="margin:0;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
-          Alle weiteren Details und deine Auftragsbestätigung findest du in deinem <strong style="color:#0a0a0a;">Kundenportal</strong>. Bei Fragen melden Sie sich einfach direkt bei mir.
+          Alle weiteren Details und Ihre Auftragsbestätigung finden Sie in Ihrem <strong style="color:#0a0a0a;">Kundenportal</strong>. Bei Fragen stehe ich Ihnen jederzeit gerne zur Verfügung.
         </p>`,
         true
       );
@@ -421,7 +423,9 @@ serve(async (req) => {
         .eq("id", request_id);
 
       // 5. Send customer email
-      const firstName = customer.name?.split(" ")[0] || customer.name || "Hallo";
+      const anrede2 = customer.anrede || "";
+      const nachname2 = customer.name?.split(" ").slice(1).join(" ") || customer.name || "";
+      const gruss2 = anrede2 ? `${anrede2} ${nachname2}` : customer.name || "";
       const requestRows = [
         { icon: "🎉", label: "Anlass", value: request.anlass || "–" },
         { icon: "📅", label: "Datum", value: fmtDate(request.datum) },
@@ -431,10 +435,10 @@ serve(async (req) => {
       const customerHtml = getEmailShell(
         "Anfrage",
         "Update zu Ihrer Anfrage.",
-        `Hallo ${firstName}, ich habe deine Rückmeldung zu meinem Angebot erhalten. Schade, dass es diesmal nicht geklappt hat – aber ich hoffe, wir finden in Zukunft den richtigen Rahmen für Ihr Event.`,
+        `Hallo ${gruss2}, ich habe Ihre Rückmeldung zu meinem Angebot erhalten. Schade, dass es diesmal nicht geklappt hat – aber ich hoffe, wir finden in Zukunft den richtigen Rahmen für Ihre Veranstaltung.`,
         `${infoTable(requestRows)}
         <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
-          Falls du neue Pläne hast oder sich etwas geändert hat, kannst du jederzeit eine neue Anfrage stellen. Ich freue mich, von Ihnen zu hören.
+          Falls Sie neue Pläne haben oder sich etwas geändert hat, können Sie jederzeit eine neue Anfrage stellen. Ich freue mich, von Ihnen zu hören.
         </p>`,
         false
       );
