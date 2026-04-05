@@ -506,7 +506,7 @@ const AdminCustomerDetail = () => {
         {/* Stats */}
         <div className="flex gap-3 flex-1 flex-wrap">
           {[
-            { label: "Buchungen", value: activeRequests.length + activeEvents.length, tab: "buchungen" as Tab, icon: MessageCircle },
+            { label: "Buchungen", value: activeRequests.length + activeEvents.filter(e => !activeRequests.some(r => r.event_id === e.id)).length, tab: "buchungen" as Tab, icon: MessageCircle },
             { label: "Dokumente", value: nativeDokumente.length + documents.filter((d) => !["Angebot","Auftragsbestätigung","Rechnung","Abschlagsrechnung","Mahnung","Gutschrift","Stornorechnung"].includes(d.type || "")).length, tab: "dokumente" as Tab, icon: FileText },
             { label: "Mails", value: mailCount, tab: "mails" as Tab, icon: Mail },
           ].map((s) => (
