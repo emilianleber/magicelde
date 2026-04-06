@@ -263,6 +263,8 @@ const AdminBookingDetail = () => {
   const [internalNotes, setInternalNotes] = useState("");
   const [message, setMessage] = useState("");
   const [sendingMail, setSendingMail] = useState(false);
+  const [uhrzeitAnfragen, setUhrzeitAnfragen] = useState(false);
+  const [uhrzeitAnfragenSaving, setUhrzeitAnfragenSaving] = useState(false);
 
   const [draftAnlass, setDraftAnlass] = useState("");
   const [draftDatum, setDraftDatum] = useState("");
@@ -301,6 +303,7 @@ const AdminBookingDetail = () => {
       setAnlass(data.anlass || "");
       setDatum(data.datum || "");
       setUhrzeit(data.uhrzeit || "");
+      setUhrzeitAnfragen(!!data.uhrzeit_anfragen);
       setOrt(data.ort || "");
       setGaeste(data.gaeste?.toString() || "");
       setFormat(data.format || "");
@@ -930,13 +933,47 @@ const AdminBookingDetail = () => {
             </div>
           </div>
 
-          {/* ── Uhrzeit-Warnung ── */}
+          {/* ── Uhrzeit-Warnung + Anfrage-Button ── */}
           {!uhrzeit && datum && (
             <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
               <span className="text-lg">⚠️</span>
-              <div>
+              <div className="flex-1">
                 <p className="text-sm font-semibold text-amber-800">Uhrzeit fehlt noch</p>
-                <p className="text-xs text-amber-600 mt-0.5">Bitte klären Sie die Uhrzeit mit dem Kunden. Ohne Uhrzeit wird der Termin als ganztägig im Kalender angezeigt.</p>
+                <p className="text-xs text-amber-600 mt-0.5 mb-3">Ohne Uhrzeit wird der Termin als ganztägig im Kalender angezeigt.</p>
+                {uhrzeitAnfragen ? (
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-1.5">
+                      ✓ Uhrzeit-Anfrage aktiv im Kundenportal
+                    </span>
+                    <button
+                      onClick={async () => {
+                        setUhrzeitAnfragenSaving(true);
+                        await supabase.from("portal_requests").update({ uhrzeit_anfragen: false }).eq("id", id);
+                        if (event) await supabase.from("portal_events").update({ uhrzeit_anfragen: false }).eq("id", event.id);
+                        setUhrzeitAnfragen(false);
+                        setUhrzeitAnfragenSaving(false);
+                      }}
+                      disabled={uhrzeitAnfragenSaving}
+                      className="text-xs text-muted-foreground hover:text-foreground underline"
+                    >
+                      Deaktivieren
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={async () => {
+                      setUhrzeitAnfragenSaving(true);
+                      await supabase.from("portal_requests").update({ uhrzeit_anfragen: true }).eq("id", id);
+                      if (event) await supabase.from("portal_events").update({ uhrzeit_anfragen: true }).eq("id", event.id);
+                      setUhrzeitAnfragen(true);
+                      setUhrzeitAnfragenSaving(false);
+                    }}
+                    disabled={uhrzeitAnfragenSaving}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 text-xs font-semibold transition-all disabled:opacity-50"
+                  >
+                    {uhrzeitAnfragenSaving ? "…" : "🕐 Uhrzeit beim Kunden anfragen"}
+                  </button>
+                )}
               </div>
             </div>
           )}
