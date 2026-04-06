@@ -12,14 +12,14 @@ const corsHeaders = {
 // ─── Supabase clients ────────────────────────────────────────────────────────
 // Admin client (service role) for all DB operations
 const adminSupabase = createClient(
-  Deno.env.get("PROJECT_URL")!,
-  Deno.env.get("SERVICE_ROLE_KEY")!
+  Deno.env.get("PROJECT_URL") || Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SERVICE_ROLE_KEY") || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
 
 // Anon client for verifying customer JWTs
 const anonSupabase = createClient(
-  Deno.env.get("PROJECT_URL")!,
-  Deno.env.get("ANON_KEY")!
+  Deno.env.get("PROJECT_URL") || Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("ANON_KEY") || Deno.env.get("SUPABASE_ANON_KEY")!
 );
 
 // ─── SMTP ─────────────────────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ const createTransporter = () =>
 
 const SMTP_FROM = `"Emilian Leber" <${Deno.env.get("SMTP_USER") || "el@magicel.de"}>`;
 const ADMIN_EMAIL = Deno.env.get("SMTP_USER") || "el@magicel.de";
-const PORTAL_URL = Deno.env.get("PORTAL_URL") || "https://www.magicel.de/portal";
+const PORTAL_URL = Deno.env.get("PORTAL_URL") || "https://www.magicel.de/kundenportal/login";
 
 const sendMail = async (to: string, subject: string, html: string) => {
   const transporter = createTransporter();
@@ -300,7 +300,15 @@ serve(async (req) => {
         .update({ status: "gebucht", event_id: newEvent.id })
         .eq("id", request_id);
 
-      // 7. Create Auftragsbestätigung document
+      // 7. Create Auftragsbestätigung document — mit passenden Textvorlagen
+      const { data: vorlagen } = await adminSupabase
+        .from("dokument_textvorlagen")
+        .select("bereich, inhalt")
+        .or("typ.eq.auftragsbestaetigung,typ.eq.alle")
+        .eq("is_default", true);
+      const abKopftext = vorlagen?.find((v: any) => v.bereich === "kopf")?.inhalt || angebot.kopftext;
+      const abFusstext = vorlagen?.find((v: any) => v.bereich === "fuss")?.inhalt || angebot.fusstext;
+
       const today = new Date().toISOString().split("T")[0];
       const { data: newAB, error: abError } = await adminSupabase
         .from("portal_documents")
@@ -316,8 +324,8 @@ serve(async (req) => {
           quelldokument_nummer: angebot.document_number,
           empfaenger: angebot.empfaenger,
           absender: angebot.absender,
-          kopftext: angebot.kopftext,
-          fusstext: angebot.fusstext,
+          kopftext: abKopftext,
+          fusstext: abFusstext,
           zahlungsziel_tage: angebot.zahlungsziel_tage,
           rabatt_prozent: angebot.rabatt_prozent,
           subtotal: angebot.subtotal,
@@ -364,7 +372,9 @@ serve(async (req) => {
         .eq("id", angebot.id);
 
       // 10. Send customer confirmation email
-      const firstName = customer.name?.split(" ")[0] || customer.name || "Hallo";
+      const anrede = customer.anrede || "";
+      const nachname = customer.name?.split(" ").slice(1).join(" ") || customer.name || "";
+      const gruss = anrede ? `${anrede} ${nachname}` : customer.name || "";
       const eventRows = [
         { icon: "🎉", label: "Anlass", value: request.anlass || "–" },
         { icon: "📅", label: "Datum", value: fmtDate(request.datum) },
@@ -376,10 +386,10 @@ serve(async (req) => {
       const customerHtml = getEmailShell(
         "Buchung",
         "Ihr Event ist gebucht! 🎉",
-        `Hallo ${firstName}, herzlichen Glückwunsch – deine Buchung ist jetzt offiziell bestätigt! Ich freue mich sehr darauf, Ihr Event unvergesslich zu machen.`,
+        `Hallo ${gruss}, herzlichen Glückwunsch – Ihre Buchung ist jetzt offiziell bestätigt! Ich freue mich sehr darauf, Ihr Event unvergesslich zu machen.`,
         `${statusBadge("✦ Buchung bestätigt", "#15803d", "#f0fdf4")}${infoTable(eventRows)}
         <p style="margin:0;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
-          Alle weiteren Details und deine Auftragsbestätigung findest du in deinem <strong style="color:#0a0a0a;">Kundenportal</strong>. Bei Fragen melden Sie sich einfach direkt bei mir.
+          Alle weiteren Details und Ihre Auftragsbestätigung finden Sie in Ihrem <strong style="color:#0a0a0a;">Kundenportal</strong>. Bei Fragen stehe ich Ihnen jederzeit gerne zur Verfügung.
         </p>`,
         true
       );
@@ -421,7 +431,9 @@ serve(async (req) => {
         .eq("id", request_id);
 
       // 5. Send customer email
-      const firstName = customer.name?.split(" ")[0] || customer.name || "Hallo";
+      const anrede2 = customer.anrede || "";
+      const nachname2 = customer.name?.split(" ").slice(1).join(" ") || customer.name || "";
+      const gruss2 = anrede2 ? `${anrede2} ${nachname2}` : customer.name || "";
       const requestRows = [
         { icon: "🎉", label: "Anlass", value: request.anlass || "–" },
         { icon: "📅", label: "Datum", value: fmtDate(request.datum) },
@@ -431,10 +443,10 @@ serve(async (req) => {
       const customerHtml = getEmailShell(
         "Anfrage",
         "Update zu Ihrer Anfrage.",
-        `Hallo ${firstName}, ich habe deine Rückmeldung zu meinem Angebot erhalten. Schade, dass es diesmal nicht geklappt hat – aber ich hoffe, wir finden in Zukunft den richtigen Rahmen für Ihr Event.`,
+        `Hallo ${gruss2}, ich habe Ihre Rückmeldung zu meinem Angebot erhalten. Schade, dass es diesmal nicht geklappt hat – aber ich hoffe, wir finden in Zukunft den richtigen Rahmen für Ihre Veranstaltung.`,
         `${infoTable(requestRows)}
         <p style="margin:0;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
-          Falls du neue Pläne hast oder sich etwas geändert hat, kannst du jederzeit eine neue Anfrage stellen. Ich freue mich, von Ihnen zu hören.
+          Falls Sie neue Pläne haben oder sich etwas geändert hat, können Sie jederzeit eine neue Anfrage stellen. Ich freue mich, von Ihnen zu hören.
         </p>`,
         false
       );

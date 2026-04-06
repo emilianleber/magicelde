@@ -242,18 +242,52 @@ const formatEventStatusClasses = (status?: string | null) => {
 const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null) => {
   const steps: { label: string; done: boolean; hint?: string; action?: string }[] = [];
   const st = request?.status || "";
+  const evSt = event?.status || "";
+
+  // Anfrage-Phase
   steps.push({ label: "Anfrage eingegangen", done: !!request, hint: request?.created_at ? new Date(request.created_at).toLocaleDateString("de-DE") : undefined });
   steps.push({ label: "In Bearbeitung", done: ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
   if (st === "details_besprechen") {
     steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
   }
   steps.push({ label: "Angebot erhalten", done: ["angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
+
   if (event) {
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
-    steps.push({ label: "Details geklärt", done: event.details_status === "erledigt" });
-    steps.push({ label: "Vertrag", done: event.contract_status === "erledigt" });
-    steps.push({ label: "Rechnung", done: event.invoice_status === "erledigt" });
-    steps.push({ label: "Event durchgeführt", done: event.status === "event_erfolgt" });
+
+    // Details: nur anzeigen wenn offen (verschwindet wenn erledigt)
+    // Details: nur anzeigen wenn explizit auf "offen" gesetzt (null/erledigt = nicht anzeigen)
+    if (event.details_status === "offen") {
+      steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
+    }
+
+    // Vertrag: nur anzeigen wenn gesendet oder bestätigt
+    if (event.contract_status === "gesendet") {
+      steps.push({ label: "Vertrag gesendet", done: false });
+    } else if (event.contract_status === "erledigt") {
+      steps.push({ label: "Vertrag bestätigt", done: true });
+    }
+
+    // Vor Event: Abschlagsrechnung (nur in Phase in_planung)
+    if (evSt === "in_planung" && event.invoice_status === "gesendet") {
+      steps.push({ label: "Abschlagsrechnung offen", done: false });
+    } else if (evSt === "in_planung" && event.invoice_status === "erledigt") {
+      steps.push({ label: "Abschlagsrechnung bezahlt", done: true });
+    }
+
+    // Event durchgeführt
+    const eventDone = evSt === "event_erfolgt" || evSt === "abgeschlossen";
+    steps.push({ label: "Event durchgeführt", done: eventDone });
+
+    // Nach Event: Schlussrechnung
+    if (eventDone) {
+      if (event.invoice_status === "gesendet") {
+        steps.push({ label: "Schlussrechnung offen", done: false });
+      } else if (event.invoice_status === "erledigt") {
+        steps.push({ label: "Schlussrechnung bezahlt", done: true });
+      }
+      steps.push({ label: "Abgeschlossen", done: evSt === "abgeschlossen" });
+    }
   } else {
     steps.push({ label: "Buchung", done: false });
   }
@@ -927,11 +961,10 @@ const Kundenportal = () => {
             </div>
 
             {/* Stats grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               {[
-                { label: "Events", value: events.length, icon: Calendar, tab: "events" as Tab },
+                { label: "Anfragen", value: requests.length, icon: Calendar, tab: "requests" as Tab },
                 { label: "Dokumente", value: documents.length, icon: FileText, tab: "documents" as Tab },
-                { label: "Anfragen", value: requests.length, icon: Theater, tab: "requests" as Tab },
                 { label: "Nachrichten", value: messages.length, icon: Mail, tab: "nachrichten" as Tab, badge: unreadCount },
               ].map((stat) => (
                 <button
@@ -1018,11 +1051,13 @@ const Kundenportal = () => {
                 if (!reqId) return;
                 setOfferActionLoading(p => ({ ...p, [reqId]: true }));
                 setOfferActionError(p => ({ ...p, [reqId]: "" }));
-                const { error } = await supabase.functions.invoke("portal-offer-action", {
+                const { data, error } = await supabase.functions.invoke("portal-offer-action", {
                   body: { action, request_id: reqId },
                 });
                 if (error) {
-                  setOfferActionError(p => ({ ...p, [reqId]: action === "accept" ? "Fehler beim Annehmen – bitte versuche es erneut." : "Fehler beim Ablehnen." }));
+                  console.error("portal-offer-action error:", error, data);
+                  const msg = (typeof data === "object" && data?.error) ? data.error : (error.message || "Unbekannter Fehler");
+                  setOfferActionError(p => ({ ...p, [reqId]: `${action === "accept" ? "Fehler beim Annehmen" : "Fehler beim Ablehnen"}: ${msg}` }));
                 } else {
                   // Optimistic: mark as handled locally
                   setDocuments(prev => prev.map(d => d.id === angebot.id ? { ...d, status: action === "accept" ? "akzeptiert" : "abgelehnt" } : d));
@@ -1209,6 +1244,40 @@ const Kundenportal = () => {
                     );
                   })}
                 </div>
+              </div>
+            )}
+
+            {/* Auftragsbestätigung Widget */}
+            {documents.filter(d => d.type === "Auftragsbestätigung").length > 0 && (
+              <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
+                <div className="px-5 py-3.5 border-b border-black/[0.05] flex items-center justify-between">
+                  <h2 className="font-display text-sm font-bold text-foreground flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-green-600" /> Auftragsbestätigung
+                  </h2>
+                  <button onClick={() => setActiveTab("documents")} className="font-sans text-xs text-accent hover:text-accent/70 flex items-center gap-1">
+                    Dokumente <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+                {documents.filter(d => d.type === "Auftragsbestätigung").map(doc => (
+                  <div key={doc.id} className="flex items-center gap-3 px-5 py-3">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-sans text-sm font-medium text-foreground truncate">{doc.name}</p>
+                      <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                        {new Date(doc.created_at).toLocaleDateString("de-DE")}
+                        {doc.amount != null && ` · ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(doc.amount)}`}
+                      </p>
+                    </div>
+                    {doc.preview_html ? (
+                      <button onClick={() => openAngebotInBrowser(doc)} className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-green-50 text-green-600 hover:bg-green-100 transition-all active:scale-95">
+                        <Download className="w-4 h-4" />
+                      </button>
+                    ) : doc.file_url ? (
+                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-green-50 text-green-600 hover:bg-green-100 transition-all active:scale-95">
+                        <Download className="w-4 h-4" />
+                      </a>
+                    ) : null}
+                  </div>
+                ))}
               </div>
             )}
 
@@ -1422,7 +1491,7 @@ const Kundenportal = () => {
         )}
 
         {/* ── EVENTS ── */}
-        {activeTab === "events" && (
+        {activeTab === "__disabled_events__" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
               <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Buchungen</h1>
@@ -1636,7 +1705,7 @@ const Kundenportal = () => {
                     )}
                   </div>
                 </div>
-                {doc.file_url && (
+                {doc.file_url ? (
                   <a
                     href={doc.file_url}
                     target="_blank"
@@ -1646,7 +1715,15 @@ const Kundenportal = () => {
                     <Download className="w-4 h-4" />
                     <span className="font-sans text-xs font-medium hidden sm:inline">Download</span>
                   </a>
-                )}
+                ) : doc.preview_html ? (
+                  <button
+                    onClick={() => openAngebotInBrowser(doc)}
+                    className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-all active:scale-95 shrink-0 gap-2 px-3"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span className="font-sans text-xs font-medium hidden sm:inline">PDF</span>
+                  </button>
+                ) : null}
               </div>
             );
           };
@@ -1828,12 +1905,7 @@ const Kundenportal = () => {
         {activeTab === "requests" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
-              <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Anfragen</h1>
-              {requests.length > 0 && (
-                <span className="font-sans text-xs text-muted-foreground border border-black/[0.07] rounded-full px-2.5 py-1">
-                  {requests.length} {requests.length === 1 ? "Anfrage" : "Anfragen"}
-                </span>
-              )}
+              <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Anfragen & Events</h1>
             </div>
 
             {requests.length === 0 ? (
@@ -1852,8 +1924,10 @@ const Kundenportal = () => {
             ) : (
               requests.map((r) => {
                 const isOpen = expandedRequestId === r.id;
+                const linkedEvent = events.find(e => e.request_id === r.id);
+                const days = linkedEvent ? getCountdownDays(linkedEvent.event_date) : null;
                 return (
-                  <div key={r.id} className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
+                  <div key={r.id} className={`rounded-2xl bg-white shadow-sm overflow-hidden ${linkedEvent ? "border border-green-200/60" : "border border-black/[0.06]"}`}>
                     <button
                       type="button"
                       onClick={() => setExpandedRequestId(isOpen ? null : r.id)}
@@ -1863,24 +1937,32 @@ const Kundenportal = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2.5 flex-wrap mb-1.5">
                             <h3 className="font-display text-base font-bold text-foreground">{capWords(r.anlass) || "Anfrage"}</h3>
-                            {r.firma && (
-                              <span className="font-sans text-xs text-muted-foreground flex items-center gap-1">
-                                <Building2 className="w-3 h-3" />{r.firma}
-                              </span>
-                            )}
-                            <span className={`font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full ${formatStatusClasses(r.status)}`}>
-                              {formatStatusLabel(r.status)}
+                            <span className={`font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full ${linkedEvent ? "text-green-600 bg-green-50 border border-green-200" : formatStatusClasses(r.status)}`}>
+                              {linkedEvent ? "Gebucht" : formatStatusLabel(r.status)}
                             </span>
-                            {r.event_id && (
-                              <span className="font-sans text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full text-green-400 bg-green-400/10 border border-green-400/20">Gebucht</span>
+                          </div>
+                          <div className="flex items-center gap-3 flex-wrap text-xs text-muted-foreground">
+                            {linkedEvent ? (
+                              <>
+                                {linkedEvent.event_date && <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(linkedEvent.event_date).toLocaleDateString("de-DE")}</span>}
+                                {linkedEvent.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{linkedEvent.location}</span>}
+                                {linkedEvent.guests && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{linkedEvent.guests} Gäste</span>}
+                              </>
+                            ) : (
+                              <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{new Date(r.created_at).toLocaleDateString("de-DE")}</span>
                             )}
                           </div>
-                          <p className="font-sans text-xs text-muted-foreground flex items-center gap-1.5">
-                            <Clock className="w-3 h-3" />{new Date(r.created_at).toLocaleDateString("de-DE")}
-                          </p>
                         </div>
-                        <div className="text-muted-foreground shrink-0 mt-0.5">
-                          {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                        <div className="flex items-center gap-3 shrink-0">
+                          {days !== null && days >= 0 && (
+                            <div className="text-right">
+                              <p className="font-display text-xl font-bold text-accent">{days}</p>
+                              <p className="text-[10px] text-muted-foreground">Tage</p>
+                            </div>
+                          )}
+                          <div className="text-muted-foreground mt-0.5">
+                            {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                          </div>
                         </div>
                       </div>
                     </button>

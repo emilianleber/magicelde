@@ -60,6 +60,9 @@ interface PortalEvent {
   guests: number | null;
   customer_id?: string | null;
   notes?: string | null;
+  details_status?: string | null;
+  contract_status?: string | null;
+  invoice_status?: string | null;
 }
 
 interface PortalCustomer {
@@ -165,15 +168,43 @@ const documentTypes = [
 
 // Status-Optionen die manuell gesetzt werden können.
 // "bestätigt" wird nur über den "Als gebucht markieren" Button gesetzt (erstellt auch Event).
-const statusOptions = [
+// Anfrage-Phasen
+const requestPhases = [
   { value: "neu", label: "Neu" },
   { value: "in_bearbeitung", label: "In Bearbeitung" },
-  { value: "details_besprechen", label: "Details besprechen" },
   { value: "angebot_gesendet", label: "Angebot gesendet" },
-  { value: "warte_auf_kunde", label: "Warte auf Kunde" },
   { value: "abgelehnt", label: "Abgelehnt" },
   { value: "archiviert", label: "Archiviert" },
 ];
+
+// Anfrage-Aufgaben
+const requestTaskDefs: TaskDef[] = [
+  { key: "_details", label: "Details", states: [null, "details_besprechen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "details_besprechen" },
+  { key: "_warte", label: "Rückmeldung", states: [null, "warte_auf_kunde", "erledigt"], stateLabels: ["—", "Warte", "Erhalten ✓"], mailOn: "warte_auf_kunde" },
+];
+
+// Hauptphasen
+const eventPhases = [
+  { value: "in_planung", label: "In Planung" },
+  { value: "event_erfolgt", label: "Event durchgeführt" },
+  { value: "abgeschlossen", label: "Abgeschlossen" },
+  { value: "storniert", label: "Storniert" },
+];
+
+// Aufgaben pro Phase (rotieren bei Klick, null = nicht aktiv)
+type TaskDef = { key: string; label: string; states: (string | null)[]; stateLabels: string[]; mailOn: string };
+const tasksByPhase: Record<string, TaskDef[]> = {
+  in_planung: [
+    { key: "details_status", label: "Details", states: [null, "offen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "offen" },
+    { key: "contract_status", label: "Vertrag", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bestätigt ✓"], mailOn: "gesendet" },
+    { key: "invoice_status", label: "Abschlagsrechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
+  ],
+  event_erfolgt: [
+    { key: "invoice_status", label: "Schlussrechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
+  ],
+  abgeschlossen: [],
+  storniert: [],
+};
 
 const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
   if (!val) return "";
@@ -194,6 +225,12 @@ const AdminBookingDetail = () => {
   const [user, setUser] = useState<SupaUser | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Abschlagsrechnung Dialog
+  const [showAbschlagDialog, setShowAbschlagDialog] = useState(false);
+  const [abschlagMode, setAbschlagMode] = useState<"prozent" | "fix">("prozent");
+  const [abschlagWert, setAbschlagWert] = useState("50");
+  const [abschlagCreating, setAbschlagCreating] = useState(false);
   const [saving, setSaving] = useState(false);
   const [converting, setConverting] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -384,6 +421,10 @@ const AdminBookingDetail = () => {
         location: draftOrt || null,
         format: draftFormat || null,
         guests: draftGaeste ? Number(draftGaeste) : null,
+        status: event.status,
+        details_status: event.details_status || null,
+        contract_status: event.contract_status || null,
+        invoice_status: event.invoice_status || null,
       }).eq("id", event.id);
     }
 
@@ -420,8 +461,151 @@ const AdminBookingDetail = () => {
     setConverting(false);
   };
 
+  /* ── Abschlagsrechnung erstellen ── */
+  const createAbschlagsrechnung = async () => {
+    if (!request || !customer) return;
+    setAbschlagCreating(true);
+    try {
+      // Angebot finden für Referenz und Betrag
+      const angebot = documents.find(d => (d as any).type === "Angebot" || d.name?.toLowerCase().includes("angebot"));
+      const angebotNr = angebot ? ((angebot as any).document_number || angebot.name) : "";
+      const angebotTotal = angebot ? ((angebot as any).total || (angebot as any).amount || 0) : 0;
+
+      // Betrag berechnen
+      let betrag = 0;
+      if (abschlagMode === "prozent") {
+        const pct = parseFloat(abschlagWert) || 0;
+        betrag = Math.round(angebotTotal * pct / 100 * 100) / 100;
+      } else {
+        betrag = parseFloat(abschlagWert) || 0;
+      }
+
+      if (betrag <= 0) {
+        setMessage("Bitte gültigen Betrag eingeben.");
+        setAbschlagCreating(false);
+        return;
+      }
+
+      // Textvorlagen laden
+      const { data: vorlagen } = await supabase
+        .from("dokument_textvorlagen")
+        .select("bereich, inhalt")
+        .or("typ.eq.abschlagsrechnung,typ.eq.alle")
+        .eq("is_default", true);
+      const kopftext = vorlagen?.find(v => v.bereich === "kopf")?.inhalt || "";
+      const fusstext = vorlagen?.find(v => v.bereich === "fuss")?.inhalt || "";
+
+      // Absender laden
+      const { data: settings } = await supabase.from("admin_settings").select("*").limit(1).maybeSingle();
+
+      // Nächste Nummer
+      const prefix = (settings?.nk_rechnung_prefix as string) || "RE";
+      const naechste = (settings?.nk_rechnung_naechste as number) ?? 1;
+      const year = new Date().getFullYear();
+      const nummer = `${prefix}-${year}-${String(naechste).padStart(3, "0")}`;
+
+      // Nummer hochzählen
+      await supabase.from("admin_settings").update({ nk_rechnung_naechste: naechste + 1 }).eq("id", settings?.id);
+
+      const today = new Date().toISOString().split("T")[0];
+      const zahlungszielTage = (settings?.default_payment_days as number) || 14;
+      const faelligDate = new Date();
+      faelligDate.setDate(faelligDate.getDate() + zahlungszielTage);
+      const faelligAm = faelligDate.toISOString().split("T")[0];
+
+      const bezeichnung = angebotNr
+        ? `Teilrechnung aus Angebot ${angebotNr}`
+        : "Abschlagszahlung";
+      const beschreibung = abschlagMode === "prozent"
+        ? `${abschlagWert}% des Gesamtbetrags${angebotNr ? ` (${angebotNr})` : ""}`
+        : `Teilbetrag${angebotNr ? ` aus ${angebotNr}` : ""}`;
+
+      const { data: newDoc, error: docError } = await supabase
+        .from("portal_documents")
+        .insert({
+          type: "Abschlagsrechnung",
+          document_number: nummer,
+          document_date: today,
+          status: "entwurf",
+          customer_id: customer.id,
+          event_id: event?.id || null,
+          request_id: request.id,
+          quelldokument_id: angebot?.id || null,
+          quelldokument_nummer: angebotNr || null,
+          empfaenger: {
+            name: customer.name || "",
+            firma: customer.company || undefined,
+            adresse: customer.rechnungs_strasse || "",
+            plz: customer.rechnungs_plz || "",
+            ort: customer.rechnungs_ort || "",
+            land: customer.rechnungs_land || "Deutschland",
+          },
+          absender: {
+            name: (settings?.company_name as string) || "Emilian Leber",
+            adresse: (settings?.company_address as string) || "",
+            plz: (settings?.company_zip as string) || "",
+            ort: (settings?.company_city as string) || "",
+            land: "Deutschland",
+            email: (settings?.company_email as string) || "",
+            telefon: (settings?.company_phone as string) || "",
+            website: (settings?.company_website as string) || "",
+            steuernummer: (settings?.tax_number as string) || "",
+            iban: (settings?.bank_iban as string) || "",
+            bic: (settings?.bank_bic as string) || "",
+            kleinunternehmer: Boolean((settings as any)?.kleinunternehmer),
+          },
+          kopftext,
+          fusstext,
+          zahlungsziel_tage: zahlungszielTage,
+          faellig_am: faelligAm,
+          subtotal: betrag,
+          total: betrag,
+          amount: betrag,
+          brutto: betrag,
+          offener_betrag: betrag,
+          bezahlt_betrag: 0,
+          name: `Abschlagsrechnung ${nummer}`,
+        })
+        .select("*")
+        .single();
+
+      if (docError || !newDoc) throw new Error("Fehler beim Erstellen");
+
+      // Position einfügen
+      await supabase.from("document_positions").insert({
+        document_id: newDoc.id,
+        position: 1,
+        type: "leistung",
+        bezeichnung,
+        beschreibung,
+        quantity: 1,
+        unit: "pauschal",
+        unit_price: betrag,
+        total: betrag,
+        mwst_satz: 0,
+      });
+
+      setShowAbschlagDialog(false);
+      setMessage(`Abschlagsrechnung ${nummer} erstellt (${betrag.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €)`);
+
+      // Dokumente neu laden
+      const { data: docs } = await supabase
+        .from("portal_documents")
+        .select("*")
+        .or(`request_id.eq.${request.id}${event?.id ? `,event_id.eq.${event.id}` : ""},customer_id.eq.${customer.id}`)
+        .order("created_at", { ascending: false });
+      if (docs) setDocuments(docs);
+
+      // Direkt zum Dokument navigieren
+      navigate(`/admin/dokumente/${newDoc.id}`);
+    } catch (err: any) {
+      setMessage("Fehler: " + (err.message || "Unbekannt"));
+    }
+    setAbschlagCreating(false);
+  };
+
   /* ── Send status mail ── */
-  const sendStatusMail = async () => {
+  const sendStatusMail = async (statusOverride?: string, dokumentTyp?: string) => {
     if (!request) return;
     setSendingMail(true); setMessage("");
     try {
@@ -431,7 +615,7 @@ const AdminBookingDetail = () => {
       const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/admin-send-status-mail", {
         method: "POST",
         headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
-        body: JSON.stringify({ type: event ? "event" : "request", recordId: event?.id || request.id }),
+        body: JSON.stringify({ type: event ? "event" : "request", recordId: event?.id || request.id, statusOverride, dokumentTyp }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || data.message || `Server-Fehler (${res.status})`);
@@ -808,19 +992,23 @@ const AdminBookingDetail = () => {
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-bold text-foreground">Dokumente</h2>
-              <div className="flex items-center gap-2">
-                <Link
-                  to={`/admin/dokumente/new?typ=angebot${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-3 py-1.5 text-xs font-bold hover:bg-foreground/90"
-                >
-                  <FileText className="w-3 h-3" /> Angebot erstellen
-                </Link>
-                <button
-                  onClick={() => { setEditingDoc(null); setShowDocCreator(true); }}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-3 py-1.5 text-xs font-medium hover:bg-muted/40"
-                >
-                  <Plus className="w-3 h-3" /> Erstellen
-                </button>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {(() => {
+                  const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
+                  const phase = event?.status || "";
+                  const btnCls = "inline-flex items-center gap-1 rounded-lg border border-border/30 px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted/40 transition-colors";
+                  const primaryCls = "inline-flex items-center gap-1 rounded-lg bg-foreground text-background px-2.5 py-1.5 text-[11px] font-bold hover:bg-foreground/90";
+                  return (
+                    <>
+                      {!event && <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={primaryCls}><FileText className="w-3 h-3" />Angebot</Link>}
+                      {event && phase === "in_planung" && <button onClick={() => setShowAbschlagDialog(true)} className={primaryCls}><FileText className="w-3 h-3" />Abschlagsrechnung</button>}
+                      {event && (phase === "event_erfolgt" || phase === "abgeschlossen") && <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Schlussrechnung</Link>}
+                      <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={btnCls}>Angebot</Link>
+                      <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={btnCls}>Rechnung</Link>
+                      <button onClick={() => setShowAbschlagDialog(true)} className={btnCls}>Abschlag</button>
+                    </>
+                  );
+                })()}
               </div>
             </div>
             <div className="flex items-center gap-2 mb-3 flex-wrap">
@@ -964,33 +1152,165 @@ const AdminBookingDetail = () => {
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
             <h2 className="text-sm font-bold text-foreground mb-4">Status & Aktionen</h2>
 
-            {/* Status selector — nur wenn noch nicht gebucht */}
-            {request.event_id ? (
-              <div className="mb-5 p-3 rounded-xl bg-green-50 border border-green-200 text-center">
-                <p className="text-sm font-semibold text-green-700 flex items-center justify-center gap-2">
-                  <Check className="w-4 h-4" /> Gebucht
-                </p>
-                <p className="text-xs text-green-600 mt-1">Event wurde erstellt</p>
-              </div>
+            {/* Status selector */}
+            {request.event_id && event ? (
+              <>
+                <div className="mb-3 p-2.5 rounded-xl bg-green-50 border border-green-200 text-center">
+                  <p className="text-xs font-semibold text-green-700 flex items-center justify-center gap-1.5">
+                    <Check className="w-3.5 h-3.5" /> Gebucht
+                  </p>
+                </div>
+                {/* Hauptphase */}
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Phase</p>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {eventPhases.map((phase) => {
+                    const isActive = event.status === phase.value;
+                    return (
+                      <button
+                        key={phase.value}
+                        onClick={async () => {
+                          if (isActive) return;
+                          setEvent((prev: any) => prev ? { ...prev, status: phase.value } : prev);
+                          await supabase.from("portal_events").update({ status: phase.value }).eq("id", event.id);
+                          setMessage(`Phase → ${phase.label}`);
+                          if (phase.value !== "abgeschlossen" && phase.value !== "in_planung" && confirm(`Phase auf "${phase.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                            sendStatusMail();
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                          isActive ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
+                        }`}
+                      >
+                        {phase.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Aufgaben */}
+                {(tasksByPhase[event.status || "in_planung"] || []).length > 0 && (
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
+                )}
+                <div className="space-y-2 mb-5">
+                  {(tasksByPhase[event.status || "in_planung"] || []).map((task) => {
+                    const currentVal = (event as any)[task.key] || null;
+                    const currentIdx = task.states.indexOf(currentVal as any);
+                    const effectiveIdx = currentIdx === -1 ? 0 : currentIdx;
+                    const stateLabel = task.stateLabels[effectiveIdx];
+                    const isDone = currentVal === "erledigt";
+                    const isActive = currentVal !== null && currentVal !== "erledigt";
+                    return (
+                      <button
+                        key={task.key}
+                        onClick={async () => {
+                          const nextIdx = (effectiveIdx + 1) % task.states.length;
+                          const nextVal = task.states[nextIdx];
+                          setEvent((prev: any) => prev ? { ...prev, [task.key]: nextVal } : prev);
+                          await supabase.from("portal_events").update({ [task.key]: nextVal }).eq("id", event.id);
+                          const nextLabel = task.stateLabels[nextIdx];
+                          setMessage(`${task.label} → ${nextLabel}`);
+                          // Mail mit passendem Status senden
+                          if (nextVal === task.mailOn) {
+                            const mailStatusMap: Record<string, string> = {
+                              details_status: "details_offen",
+                              contract_status: "vertrag_gesendet",
+                              invoice_status: "rechnung_gesendet",
+                            };
+                            const mailStatus = mailStatusMap[task.key];
+                            // Dokumenttyp basierend auf Phase
+                            const docTyp = task.key === "invoice_status"
+                              ? (event.status === "in_planung" ? "abschlagsrechnung" : undefined)
+                              : undefined;
+                            if (mailStatus && confirm(`${task.label} auf "${nextLabel}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                              sendStatusMail(mailStatus, docTyp);
+                            }
+                          }
+                        }}
+                        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors border ${
+                          isDone ? "bg-green-50 border-green-200 text-green-700"
+                          : isActive ? "bg-blue-50 border-blue-200 text-blue-700"
+                          : "bg-muted/20 border-border/20 text-muted-foreground hover:bg-muted/40"
+                        }`}
+                      >
+                        <span className="font-medium">{task.label}</span>
+                        <span className={`text-xs font-semibold ${isDone ? "text-green-600" : isActive ? "text-blue-600" : "text-muted-foreground/50"}`}>{stateLabel}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
             ) : (
-              <div className="space-y-1 mb-5">
-                {statusOptions.map((opt, i) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setStatus(opt.value)}
-                    className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
-                      status === opt.value
-                        ? "bg-foreground text-background font-semibold"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                    }`}
-                  >
-                    <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold ${status === opt.value ? "bg-background/20 text-background" : "bg-muted/60 text-muted-foreground"}`}>
-                      {i + 1}
-                    </span>
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
+              <>
+                {/* Phase */}
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Phase</p>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {requestPhases.map((phase) => {
+                    const isActive = status === phase.value;
+                    return (
+                      <button
+                        key={phase.value}
+                        onClick={async () => {
+                          if (isActive) return;
+                          setStatus(phase.value);
+                          await supabase.from("portal_requests").update({ status: phase.value }).eq("id", request.id);
+                          setRequest({ ...request, status: phase.value });
+                          setMessage(`Phase → ${phase.label}`);
+                          if (!["archiviert", "neu"].includes(phase.value) && confirm(`Phase auf "${phase.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                            sendStatusMail();
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                          isActive ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
+                        }`}
+                      >
+                        {phase.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Aufgaben */}
+                {!["abgelehnt", "archiviert"].includes(status) && (
+                  <>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
+                    <div className="space-y-2 mb-5">
+                      {requestTaskDefs.map((task) => {
+                        const isTaskActive = status === task.states[1];
+                        const isTaskDone = task.states[2] === "erledigt" && (
+                          (task.key === "_details" && ["angebot_gesendet", "warte_auf_kunde", "bestätigt", "gebucht"].includes(status)) ||
+                          (task.key === "_warte" && ["bestätigt", "gebucht"].includes(status))
+                        );
+                        const stateIdx = isTaskDone ? 2 : isTaskActive ? 1 : 0;
+                        const stateLabel = task.stateLabels[stateIdx];
+                        return (
+                          <button
+                            key={task.key}
+                            onClick={async () => {
+                              if (isTaskDone) return;
+                              const newStatus = isTaskActive ? "in_bearbeitung" : (task.states[1] as string);
+                              setStatus(newStatus);
+                              await supabase.from("portal_requests").update({ status: newStatus }).eq("id", request.id);
+                              setRequest({ ...request, status: newStatus });
+                              setMessage(`${task.label} → ${isTaskActive ? "Zurückgesetzt" : task.stateLabels[1]}`);
+                              if (!isTaskActive && confirm(`${task.label} auf "${task.stateLabels[1]}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
+                                sendStatusMail();
+                              }
+                            }}
+                            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors border ${
+                              isTaskDone ? "bg-green-50 border-green-200 text-green-700"
+                              : isTaskActive ? "bg-blue-50 border-blue-200 text-blue-700"
+                              : "bg-muted/20 border-border/20 text-muted-foreground hover:bg-muted/40"
+                            }`}
+                          >
+                            <span className="font-medium">{task.label}</span>
+                            <span className={`text-xs font-semibold ${isTaskDone ? "text-green-600" : isTaskActive ? "text-blue-600" : "text-muted-foreground/50"}`}>{stateLabel}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+              </>
             )}
 
             {/* Actions */}
@@ -1108,6 +1428,83 @@ const AdminBookingDetail = () => {
         </div>
       </div>
     </AdminLayout>
+
+    {/* Abschlagsrechnung Dialog */}
+    {showAbschlagDialog && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowAbschlagDialog(false)}>
+        <div className="bg-background rounded-2xl shadow-2xl border border-border/30 p-6 w-full max-w-md mx-4" onClick={e => e.stopPropagation()}>
+          <h3 className="text-lg font-bold mb-1">Abschlagsrechnung erstellen</h3>
+          {(() => {
+            const angebot = documents.find(d => (d as any).type === "Angebot");
+            const angebotTotal = angebot ? ((angebot as any).total || (angebot as any).amount || 0) : 0;
+            const angebotNr = angebot ? ((angebot as any).document_number || angebot.name) : "";
+            const betrag = abschlagMode === "prozent"
+              ? Math.round(angebotTotal * (parseFloat(abschlagWert) || 0) / 100 * 100) / 100
+              : parseFloat(abschlagWert) || 0;
+            return (
+              <>
+                {angebotNr && <p className="text-xs text-muted-foreground mb-4">Basierend auf {angebotNr} · {angebotTotal.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>}
+
+                <div className="flex gap-2 mb-4">
+                  <button
+                    onClick={() => setAbschlagMode("prozent")}
+                    className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${abschlagMode === "prozent" ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}
+                  >
+                    Prozentual
+                  </button>
+                  <button
+                    onClick={() => setAbschlagMode("fix")}
+                    className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${abschlagMode === "fix" ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}
+                  >
+                    Fixer Betrag
+                  </button>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-xs font-semibold text-muted-foreground mb-1.5">
+                    {abschlagMode === "prozent" ? "Prozentsatz" : "Betrag (€)"}
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={abschlagWert}
+                      onChange={e => setAbschlagWert(e.target.value)}
+                      className="flex-1 rounded-xl bg-muted/20 border border-border/30 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
+                      min="0"
+                      step={abschlagMode === "prozent" ? "5" : "0.01"}
+                    />
+                    <span className="text-sm text-muted-foreground font-medium">{abschlagMode === "prozent" ? "%" : "€"}</span>
+                  </div>
+                </div>
+
+                {betrag > 0 && (
+                  <div className="rounded-xl bg-green-50 border border-green-200 p-3 mb-4 text-center">
+                    <p className="text-xs text-green-600 mb-0.5">Abschlagsbetrag</p>
+                    <p className="text-xl font-bold text-green-700">{betrag.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowAbschlagDialog(false)}
+                    className="flex-1 py-2.5 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/40"
+                  >
+                    Abbrechen
+                  </button>
+                  <button
+                    onClick={createAbschlagsrechnung}
+                    disabled={abschlagCreating || betrag <= 0}
+                    className="flex-1 py-2.5 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-90 disabled:opacity-50"
+                  >
+                    {abschlagCreating ? "Erstelle…" : "Erstellen"}
+                  </button>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      </div>
+    )}
 
     {showDocCreator && request && (
       <DocumentCreator

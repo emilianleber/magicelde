@@ -492,6 +492,28 @@ export const dokumenteService = {
       }
     }
 
+    // Standard-Textvorlagen für den Zieltyp laden
+    const typMap: Record<string, string> = {
+      angebot: "angebot", rechnung: "rechnung", auftragsbestaetigung: "auftragsbestaetigung",
+      abschlagsrechnung: "abschlagsrechnung", schlussrechnung: "schlussrechnung",
+      mahnung: "mahnung", gutschrift: "gutschrift", stornorechnung: "stornorechnung",
+    };
+    const vorlagenTyp = typMap[zielTyp] || "alle";
+    const { data: vorlagen } = await supabase
+      .from("dokument_textvorlagen")
+      .select("bereich, inhalt")
+      .or(`typ.eq.${vorlagenTyp},typ.eq.alle`)
+      .eq("is_default", true);
+    const defaultKopf = vorlagen?.find(v => v.bereich === "kopf")?.inhalt || quelle.kopftext;
+    let defaultFuss = vorlagen?.find(v => v.bereich === "fuss")?.inhalt || fusstext;
+
+    // Bei Schlussrechnung: Abschlagsverrechnung an den Fußtext anhängen
+    if (fusstext !== quelle.fusstext) {
+      // fusstext wurde oben modifiziert (Abschlagsverrechnung), an den default anhängen
+      const arHinweis = fusstext?.split("\n\n")[0] || "";
+      if (arHinweis) defaultFuss = `${arHinweis}\n\n${defaultFuss}`;
+    }
+
     // Neues Dokument erstellen
     const zielDoc = await this.create(
       zielTyp,
@@ -507,8 +529,8 @@ export const dokumenteService = {
         produktionId: quelle.produktionId,
         empfaenger: quelle.empfaenger,
         absender: quelle.absender,
-        kopftext: quelle.kopftext,
-        fusstext,
+        kopftext: defaultKopf,
+        fusstext: defaultFuss,
         zahlungszielTage: quelle.zahlungszielTage,
         rabattProzent: quelle.rabattProzent,
         faelligAm: zielTyp === "rechnung" || zielTyp === "abschlagsrechnung"

@@ -18,14 +18,9 @@ function buildHtml(previewHtml: string, title: string) {
   <title>${title}</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    @page {
-      size: A4 portrait;
-      margin: 0;
-    }
+    @page { size: A4 portrait; margin: 0 0 80px 0; }
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
@@ -39,23 +34,18 @@ function buildHtml(previewHtml: string, title: string) {
     }
     body > div {
       width: 595px;
-      min-height: 842px;
+      min-height: auto !important;
+      height: auto !important;
       position: relative;
-      overflow: hidden;
-      page-break-after: always;
-      break-after: page;
+      padding-bottom: 80px !important;
     }
-    body > div:last-child {
-      page-break-after: auto;
-      break-after: auto;
-    }
-    /* Footer immer am Seitenende */
-    body > div > div:last-child > div:last-child,
-    [style*="position: absolute"][style*="bottom: 0"] {
-      position: absolute !important;
+    /* Footer fix am Seitenende auf jeder Seite */
+    [style*="position: absolute"][style*="bottom"] {
+      position: fixed !important;
       bottom: 0 !important;
       left: 0 !important;
       right: 0 !important;
+      background: #fff !important;
     }
     /* Konsistente Schriftgroessen */
     body * {
@@ -92,7 +82,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const page = await browser.newPage();
-    // Viewport exakt A4 bei 72dpi (595x842 pt)
     await page.setViewport({ width: 595, height: 842, deviceScaleFactor: 2 });
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
 

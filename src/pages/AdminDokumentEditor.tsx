@@ -66,7 +66,12 @@ const LAYOUTS = [
 const TYP_LABEL: Record<string, string> = {
   angebot: "Angebot",
   rechnung: "Rechnung",
+  abschlagsrechnung: "Abschlagsrechnung",
+  schlussrechnung: "Schlussrechnung",
   auftragsbestaetigung: "Auftragsbestätigung",
+  mahnung: "Mahnung",
+  gutschrift: "Gutschrift",
+  stornorechnung: "Stornorechnung",
 };
 
 function today() {
@@ -1192,12 +1197,7 @@ export default function AdminDokumentEditor() {
         rabattProzent: p.rabattProzent ?? undefined,
       }));
 
-      const typMap: Record<string, DokumentTyp> = {
-        angebot: "angebot",
-        rechnung: "rechnung",
-        auftragsbestaetigung: "auftragsbestaetigung",
-      };
-      const dokumentTyp = typMap[typ] || "angebot";
+      const dokumentTyp = (typ as DokumentTyp) || "angebot";
 
       // For new documents: pre-generate the number so the preview HTML already contains it
       let vorgeneriertNummer: string | undefined;
@@ -1296,7 +1296,7 @@ export default function AdminDokumentEditor() {
         menge: p.menge, einheit: p.einheit, einzelpreis: p.einzelpreis, gesamt: p.gesamt,
         mwstSatz: p.mwstSatz || mwstSatz, rabattProzent: p.rabattProzent ?? undefined,
       }));
-      const typMap: Record<string, DokumentTyp> = { angebot: "angebot", rechnung: "rechnung", auftragsbestaetigung: "auftragsbestaetigung" };
+      const typMap: Record<string, DokumentTyp> = { angebot: "angebot", rechnung: "rechnung", abschlagsrechnung: "abschlagsrechnung", auftragsbestaetigung: "auftragsbestaetigung", mahnung: "mahnung", gutschrift: "gutschrift", stornorechnung: "stornorechnung" };
       const dokumentTyp = typMap[typ] || "angebot";
 
       const previewHtml = document.getElementById("doc-preview-capture")?.innerHTML || "";
