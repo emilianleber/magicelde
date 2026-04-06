@@ -848,13 +848,22 @@ export default function AdminDokumentEditor() {
 
   const currentColor = FARBEN[selectedColor - 1];
 
-  // Load textvorlagen
+  // Load textvorlagen + auto-fill Standard bei neuem Dokument
   useEffect(() => {
     if (!authChecked) return;
     supabase.from("dokument_textvorlagen").select("*").order("typ").order("bereich").order("sort_order").then(({ data }) => {
-      if (data) setTextvorlagen(data as typeof textvorlagen);
+      if (data) {
+        setTextvorlagen(data as typeof textvorlagen);
+        // Bei neuem Dokument: Standard-Kopf/Fußtext automatisch setzen
+        if (isNew) {
+          const stdKopf = data.find((v: any) => v.bereich === "kopf" && v.typ === typ && v.name === "Standard");
+          const stdFuss = data.find((v: any) => v.bereich === "fuss" && v.typ === typ && v.name === "Standard");
+          if (stdKopf && !kopftext) setKopftext(stdKopf.inhalt || "");
+          if (stdFuss && !fusstext) setFusstext(stdFuss.inhalt || "");
+        }
+      }
     });
-  }, [authChecked]);
+  }, [authChecked, typ]);
 
   // Load admin settings
   useEffect(() => {
