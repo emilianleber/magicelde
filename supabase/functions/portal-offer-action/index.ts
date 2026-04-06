@@ -310,6 +310,16 @@ serve(async (req) => {
       const abFusstext = vorlagen?.find((v: any) => v.bereich === "fuss")?.inhalt || angebot.fusstext;
 
       const today = new Date().toISOString().split("T")[0];
+
+      // preview_html vom Angebot übernehmen und Typ/Nummer anpassen
+      let abPreviewHtml = angebot.preview_html || null;
+      if (abPreviewHtml) {
+        // "Angebot" → "Auftragsbestätigung" im HTML
+        abPreviewHtml = abPreviewHtml
+          .replace(/Angebot/g, "Auftragsbestätigung")
+          .replace(new RegExp(angebot.document_number || "AN-XXXX", "g"), nummer);
+      }
+
       const { data: newAB, error: abError } = await adminSupabase
         .from("portal_documents")
         .insert({
@@ -338,6 +348,7 @@ serve(async (req) => {
           offener_betrag: angebot.total,
           bezahlt_betrag: 0,
           name: "Auftragsbestätigung " + nummer,
+          preview_html: abPreviewHtml,
         })
         .select("*")
         .single();
