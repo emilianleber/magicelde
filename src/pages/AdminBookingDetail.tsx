@@ -267,6 +267,7 @@ const AdminBookingDetail = () => {
   const [internalNotes, setInternalNotes] = useState("");
   const [message, setMessage] = useState("");
   const [sendingMail, setSendingMail] = useState(false);
+  const [billingReqStatus, setBillingReqStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
 
   const [draftAnlass, setDraftAnlass] = useState("");
   const [draftDatum, setDraftDatum] = useState("");
@@ -814,19 +815,42 @@ const AdminBookingDetail = () => {
           {customer?.id && !customer.rechnungs_strasse && (
             <button
               onClick={async () => {
+                setBillingReqStatus("loading");
                 try {
                   const { data: { session } } = await supabase.auth.getSession();
-                  await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/request-billing-address", {
+                  const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/request-billing-address", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
-                    body: JSON.stringify({ customerId: customer.id }),
+                    body: JSON.stringify({
+                      customer_name: customer.name || request?.name || "",
+                      customer_email: customer.email || request?.email || "",
+                      customer_anrede: (customer as any).anrede || null,
+                      customer_nachname: (customer as any).nachname || null,
+                    }),
                   });
-                  setMessage("Rechnungsadresse angefordert ✓");
-                } catch { setMessage("Fehler beim Anfordern"); }
+                  if (!res.ok) throw new Error("Fehler");
+                  setBillingReqStatus("sent");
+                } catch {
+                  setBillingReqStatus("error");
+                }
               }}
-              className="inline-flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700 font-medium"
+              disabled={billingReqStatus === "loading" || billingReqStatus === "sent"}
+              className={`inline-flex items-center gap-1 text-xs font-medium transition-colors ${
+                billingReqStatus === "sent" ? "text-green-600" :
+                billingReqStatus === "error" ? "text-red-600" :
+                billingReqStatus === "loading" ? "text-muted-foreground" :
+                "text-amber-600 hover:text-amber-700"
+              }`}
             >
-              <Building2 className="w-3 h-3" /> Rechnungsadresse anfordern
+              {billingReqStatus === "loading" ? (
+                <><span className="w-3 h-3 rounded-full border-2 border-amber-300 border-t-amber-700 animate-spin" /> Sende…</>
+              ) : billingReqStatus === "sent" ? (
+                <><Check className="w-3 h-3" /> E-Mail gesendet ✓</>
+              ) : billingReqStatus === "error" ? (
+                <><Building2 className="w-3 h-3" /> Fehler – erneut versuchen</>
+              ) : (
+                <><Building2 className="w-3 h-3" /> Rechnungsadresse anfordern</>
+              )}
             </button>
           )}
         </div>
