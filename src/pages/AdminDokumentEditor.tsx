@@ -959,7 +959,21 @@ export default function AdminDokumentEditor() {
         sessionStorage.removeItem("prefill_positionen");
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setPositionen(parsed);
+          // Merge mit LocalPosition-Defaults damit keine Felder fehlen
+          const full: LocalPosition[] = parsed.map((p: any) => ({
+            id: p.id || crypto.randomUUID(),
+            typ: p.typ || "leistung",
+            bezeichnung: p.bezeichnung || "",
+            beschreibung: p.beschreibung || "",
+            menge: p.menge ?? 1,
+            einheit: p.einheit || "pauschal",
+            einzelpreis: p.einzelpreis ?? 0,
+            mwstSatz: p.mwstSatz ?? 0,
+            rabattProzent: p.rabattProzent ?? null,
+            gesamt: p.gesamt ?? (p.menge ?? 1) * (p.einzelpreis ?? 0),
+            optional: p.optional ?? false,
+          }));
+          setPositionen(full);
         }
       }
     } catch {}

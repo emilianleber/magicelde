@@ -1065,10 +1065,17 @@ const AdminBookingDetail = () => {
                 </div>
                 <button
                   onClick={async () => {
+<<<<<<< Updated upstream
                     // Anfahrts-Artikel live aus DB laden (immer aktueller Preis)
+=======
+                    // Session refreshen für DB-Zugriff
+                    await supabase.auth.refreshSession();
+
+                    // Anfahrts-Artikel live aus DB laden (Spalte heißt "preis" nicht "einzelpreis")
+>>>>>>> Stashed changes
                     const { data: anfahrtArt } = await supabase
                       .from("artikel_stamm")
-                      .select("bezeichnung, beschreibung, einzelpreis, einheit")
+                      .select("bezeichnung, beschreibung, preis, einheit")
                       .ilike("bezeichnung", "%anfahrt%")
                       .limit(1)
                       .maybeSingle();
@@ -1091,9 +1098,15 @@ const AdminBookingDetail = () => {
                         bezeichnung: anfahrtArt.bezeichnung,
                         beschreibung: anfahrtArt.beschreibung || "",
                         menge: 1,
+<<<<<<< Updated upstream
                         einheit: anfahrtArt.einheit || "km",
                         einzelpreis: anfahrtArt.einzelpreis ?? 0,
                         gesamt: anfahrtArt.einzelpreis ?? 0,
+=======
+                        einheit: anfahrtArt?.einheit || "km",
+                        einzelpreis: anfahrtArt?.preis ?? 0,
+                        gesamt: anfahrtArt?.preis ?? 0,
+>>>>>>> Stashed changes
                         optional: false,
                       }] : []),
                     ];
