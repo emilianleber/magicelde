@@ -661,25 +661,8 @@ const DocumentCreator: React.FC<DocumentCreatorProps> = ({
     }
   };
 
-  // ── Save without PDF ──
-  const handleSave = async () => {
-    setSaving(true);
-    setMessage("");
-    try {
-      const docId = await saveToDb();
-      setMessage("✓ Gespeichert");
-      onDocumentSaved({
-        type, document_number: docNumber, document_date: docDate,
-        due_date: dueDate, intro_text: introText, closing_text: closingText,
-        tax_rate: taxRate, subtotal, tax_amount: taxAmount, total,
-        id: docId ?? undefined, positions,
-      });
-    } catch (e: unknown) {
-      setMessage("Fehler: " + (e instanceof Error ? e.message : String(e)));
-    } finally {
-      setSaving(false);
-    }
-  };
+  // ── Save = immer mit PDF ──
+  const handleSave = () => handleGeneratePdf();
 
   // ─────────────────────────────────────────────
   // Render
