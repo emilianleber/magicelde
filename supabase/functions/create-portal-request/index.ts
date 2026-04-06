@@ -99,61 +99,40 @@ serve(async (req) => {
         ? Number(gaeste)
         : null;
 
-    // 1) Kunde suchen
+    // 1) Kunde per UPSERT anlegen/aktualisieren (verhindert Duplikate)
     let customerId: string | null = null;
 
-    const { data: existingCustomers, error: existingCustomerError } = await supabase
+    // Email immer lowercase für konsistente Suche
+    const normalizedEmail = safeEmail.toLowerCase();
+
+    const customerPayload: Record<string, any> = {
+      name: safeName,
+      vorname: safeVorname,
+      nachname: safeNachname,
+      email: normalizedEmail,
+    };
+    if (safeAnrede) customerPayload.anrede  = safeAnrede;
+    if (safeFirma)  customerPayload.company = safeFirma;
+    if (safePhone)  customerPayload.phone   = safePhone;
+
+    // UPSERT: Insert or update on email conflict → atomare Operation, keine Race Condition
+    const { data: upsertedCustomer, error: upsertError } = await supabase
       .from("portal_customers")
+      .upsert(customerPayload, { onConflict: "email", ignoreDuplicates: false })
       .select("*")
-      .ilike("email", safeEmail)
-      .limit(1);
-    const existingCustomer = existingCustomers?.[0] || null;
+      .maybeSingle();
 
-    if (existingCustomerError) {
-      console.error("CUSTOMER LOOKUP ERROR:", existingCustomerError);
-      throw existingCustomerError;
-    }
-
-    if (existingCustomer) {
-      customerId = existingCustomer.id;
-
-      // Immer alle vom Kunden gemachten Angaben aktualisieren – so bleibt
-      // das Profil konsistent, auch wenn es vorher leer war.
-      const updateData: Record<string, any> = { name: safeName, vorname: safeVorname, nachname: safeNachname };
-      if (safeAnrede) updateData.anrede  = safeAnrede;
-      if (safeFirma)  updateData.company = safeFirma;
-      if (safePhone)  updateData.phone   = safePhone;
-
-      const { error: updateCustomerError } = await supabase
+    if (upsertError) {
+      console.error("CUSTOMER UPSERT ERROR:", upsertError);
+      // Fallback: Nochmals per Email suchen (z.B. wenn unique index noch fehlt)
+      const { data: fallbackCustomers } = await supabase
         .from("portal_customers")
-        .update(updateData)
-        .eq("id", existingCustomer.id);
-
-      if (updateCustomerError) {
-        console.error("CUSTOMER UPDATE ERROR:", updateCustomerError);
-        // Nicht werfen – Request trotzdem speichern
-      }
-    } else {
-      const { data: createdCustomer, error: createCustomerError } = await supabase
-        .from("portal_customers")
-        .insert({
-          name: safeName,
-          vorname: safeVorname,
-          nachname: safeNachname,
-          anrede: safeAnrede,
-          ...(safeFirma  ? { company: safeFirma }  : {}),
-          email: safeEmail,
-          ...(safePhone  ? { phone: safePhone }    : {}),
-        })
-        .select("*")
-        .maybeSingle();
-
-      if (createCustomerError) {
-        // Fehler loggen aber nicht abbrechen – Anfrage trotzdem speichern
-        console.error("CUSTOMER CREATE ERROR:", createCustomerError);
-      } else if (createdCustomer) {
-        customerId = createdCustomer.id;
-      }
+        .select("id")
+        .ilike("email", normalizedEmail)
+        .limit(1);
+      customerId = fallbackCustomers?.[0]?.id || null;
+    } else if (upsertedCustomer) {
+      customerId = upsertedCustomer.id;
     }
 
     // 2) Anfrage speichern
