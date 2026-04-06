@@ -40,32 +40,36 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const container = document.querySelector("body > div") as HTMLElement;
       if (!container) return null;
 
-      // Header = erstes Kind
+      // Header = erstes Kind (Logo + Name + Adresse + Trennlinie)
       const headerEl = container.children[0] as HTMLElement;
       const headerHtml = headerEl ? headerEl.outerHTML : "";
 
-      // Footer = div mit position:absolute + bottom
-      let footerHtml = "";
-      let footerIdx = -1;
-      for (let i = container.children.length - 1; i >= 0; i--) {
-        const s = (container.children[i] as HTMLElement).getAttribute("style") || "";
-        if (s.includes("position") && s.includes("bottom")) {
-          const el = container.children[i] as HTMLElement;
-          // Footer-Styles normalisieren für Table-Context
-          el.style.position = "relative";
-          el.style.bottom = "auto";
-          el.style.left = "auto";
-          el.style.right = "auto";
-          footerHtml = el.outerHTML;
-          footerIdx = i;
+      // Footer = IRGENDWO verschachtelter div mit position:absolute + bottom
+      // (ist innerhalb des Body-Divs, nicht direkt ein Kind von container)
+      let footerEl: HTMLElement | null = null;
+      const allDivs = container.querySelectorAll("div");
+      for (let i = allDivs.length - 1; i >= 0; i--) {
+        const s = allDivs[i].getAttribute("style") || "";
+        if (s.includes("position") && s.includes("absolute") && s.includes("bottom")) {
+          footerEl = allDivs[i] as HTMLElement;
           break;
         }
       }
 
-      // Content = alles zwischen Header und Footer
+      // Footer aus dem DOM entfernen und HTML extrahieren
+      let footerHtml = "";
+      if (footerEl) {
+        footerEl.style.position = "relative";
+        footerEl.style.bottom = "auto";
+        footerEl.style.left = "auto";
+        footerEl.style.right = "auto";
+        footerHtml = footerEl.outerHTML;
+        footerEl.remove(); // Entfernen damit er nicht im Content erscheint
+      }
+
+      // Content = alles nach dem Header (Footer wurde schon entfernt)
       const contentParts: string[] = [];
       for (let i = 1; i < container.children.length; i++) {
-        if (i === footerIdx) continue;
         contentParts.push((container.children[i] as HTMLElement).outerHTML);
       }
 
@@ -111,6 +115,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
+      scale: 96 / 72, // 595px Content → volle A4-Breite
       margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
       preferCSSPageSize: true,
     });
