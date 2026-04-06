@@ -1146,9 +1146,11 @@ const AdminBookingDetail = () => {
                   return (
                     <>
                       {!event && <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={primaryCls}><FileText className="w-3 h-3" />Angebot</Link>}
+                      {event && phase === "in_planung" && <Link to={`/admin/dokumente/new?typ=auftragsbestaetigung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Auftragsbestätigung</Link>}
                       {event && phase === "in_planung" && <button onClick={() => setShowAbschlagDialog(true)} className={primaryCls}><FileText className="w-3 h-3" />Abschlagsrechnung</button>}
                       {event && (phase === "event_erfolgt" || phase === "abgeschlossen") && <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Schlussrechnung</Link>}
                       <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={btnCls}>Angebot</Link>
+                      <Link to={`/admin/dokumente/new?typ=auftragsbestaetigung${params}`} className={btnCls}>Auftragsbestätigung</Link>
                       <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={btnCls}>Rechnung</Link>
                       <button onClick={() => setShowAbschlagDialog(true)} className={btnCls}>Abschlag</button>
                     </>
