@@ -268,60 +268,50 @@ const AdminPakete = () => {
           <p className="text-sm text-muted-foreground">Keine Pakete gefunden.</p>
         </div>
       ) : (
-        /* ── Card grid ── */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((p) => (
-            <div
-              key={p.id}
-              className="relative p-5 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/30 hover:bg-muted/40 transition-all group"
-            >
-              {/* Edit button */}
-              <button
-                onClick={() => openEdit(p)}
-                className="absolute top-4 right-4 p-1.5 rounded-lg text-muted-foreground/50 hover:text-foreground hover:bg-muted/60 transition-colors opacity-0 group-hover:opacity-100"
-              >
-                <Pencil className="w-3.5 h-3.5" />
-              </button>
+        /* ── Grouped by category ── */
+        <div className="space-y-4">
+          {(() => {
+            // Auto-group by name prefix
+            const groups: { label: string; icon: string; color: string; items: typeof filtered }[] = [
+              { label: "Close-Up", icon: "🃏", color: "bg-blue-50 border-blue-200", items: filtered.filter(p => p.name.startsWith("Close-Up")) },
+              { label: "Hochzeit", icon: "💍", color: "bg-pink-50 border-pink-200", items: filtered.filter(p => p.name.startsWith("Hochzeit")) },
+              { label: "Bühnenshow", icon: "🎭", color: "bg-purple-50 border-purple-200", items: filtered.filter(p => p.name.startsWith("Bühnenshow")) },
+              { label: "Kombination", icon: "✨", color: "bg-amber-50 border-amber-200", items: filtered.filter(p => p.name.startsWith("Kombination")) },
+            ];
+            // Catch-all for ungrouped
+            const grouped = new Set(groups.flatMap(g => g.items.map(i => i.id)));
+            const rest = filtered.filter(p => !grouped.has(p.id));
+            if (rest.length) groups.push({ label: "Sonstige", icon: "📦", color: "bg-muted/40 border-border/30", items: rest });
 
-              {/* Heading */}
-              <h3 className="text-sm font-bold text-foreground mb-1 pr-8 leading-tight">
-                {p.name}
-              </h3>
-
-              {/* Price + duration */}
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-base font-bold text-foreground">
-                  {formatCurrency(p.preis)}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {p.zieldauer} min
-                </span>
-              </div>
-
-              {/* Anlässe badges */}
-              {p.anlaesse.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {p.anlaesse.map((a) => (
-                    <span
-                      key={a}
-                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${anlassColor(a)}`}
+            return groups.filter(g => g.items.length > 0).map((group) => (
+              <div key={group.label} className={`rounded-2xl border overflow-hidden ${group.color}`}>
+                <div className="px-5 py-3 flex items-center gap-2">
+                  <span className="text-base">{group.icon}</span>
+                  <h3 className="text-sm font-bold text-foreground">{group.label}</h3>
+                  <span className="text-xs text-muted-foreground ml-1">{group.items.length} Pakete</span>
+                </div>
+                <div className="bg-white divide-y divide-border/20">
+                  {group.items
+                    .sort((a, b) => a.preis - b.preis)
+                    .map((p) => (
+                    <div
+                      key={p.id}
+                      onClick={() => openEdit(p)}
+                      className="flex items-center gap-4 px-5 py-3 hover:bg-muted/20 cursor-pointer transition-colors group"
                     >
-                      {a}
-                    </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-foreground">{p.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{p.beschreibungIntern || p.beschreibungKunde}</p>
+                      </div>
+                      <span className="text-xs text-muted-foreground shrink-0">{p.zieldauer} min</span>
+                      <span className="text-sm font-bold text-foreground shrink-0 w-20 text-right">{formatCurrency(p.preis)}</span>
+                      <Pencil className="w-3.5 h-3.5 text-muted-foreground/30 group-hover:text-foreground shrink-0 transition-colors" />
+                    </div>
                   ))}
                 </div>
-              )}
-
-              {/* Description preview */}
-              {p.beschreibungKunde && (
-                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                  {p.beschreibungKunde.length > 80
-                    ? p.beschreibungKunde.slice(0, 80) + "…"
-                    : p.beschreibungKunde}
-                </p>
-              )}
-            </div>
-          ))}
+              </div>
+            ));
+          })()}
         </div>
       )}
 

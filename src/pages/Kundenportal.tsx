@@ -341,7 +341,10 @@ const Kundenportal = () => {
   const [offerActionError, setOfferActionError] = useState<Record<string, string>>({});
 
   const [eventCancelId, setEventCancelId] = useState<string | null>(null);
-  const [pdfLoading, setPdfLoading] = useState<string | null>(null); // doc.id während Download
+  const [pdfLoading, setPdfLoading] = useState<string | null>(null);
+  const [replyText, setReplyText] = useState("");
+  const [replySending, setReplySending] = useState(false);
+  const [replySent, setReplySent] = useState(false);
 
 
   const navigate = useNavigate();
@@ -458,7 +461,7 @@ const Kundenportal = () => {
         if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id);
       }
 
-      const capW = (s?: string | null) => s ? s.replace(/\b\w/g, (c: string) => c.toUpperCase()) : null;
+      const capW = (s?: string | null) => s ? s.replace(/(^|\s)\S/g, (c: string) => c.toUpperCase()) : null;
 
       // Nur wenn wirklich KEIN Eintrag existiert — letzte Prüfung per customer_id der Anfrage
       if (!cust && requestsData && requestsData.length > 0) {
@@ -693,7 +696,7 @@ const Kundenportal = () => {
   }
 
   const capWords = (s?: string | null) =>
-    s ? s.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/_/g, " ") : "";
+    s ? s.replace(/_/g, " ").replace(/(^|\s)\S/g, (c) => c.toUpperCase()) : "";
   // Fallback: Name aus neuester Anfrage wenn Profil noch leer
   const latestReqName = (requests[0] as any)?.name;
   const displayName = capWords(customer?.name) || capWords(latestReqName) || "Kunde";
@@ -717,40 +720,48 @@ const Kundenportal = () => {
     (d) => d.type === "Angebot" && d.status === "gesendet"
   );
 
-  const openAngebotInBrowser = (doc: PortalDocument) => {
-    if (!doc.preview_html) return;
-    const docTitle = doc.nummer || doc.name || "Angebot";
-
-    const win = window.open("", "_blank");
-    if (!win) {
-      alert("Bitte erlauben Sie Popups für diese Seite.");
-      return;
+  const downloadPdf = async (doc: PortalDocument) => {
+    const docTitle = doc.nummer || doc.name || "Dokument";
+    setPdfLoading(doc.id);
+    try {
+      // 1. Bevorzugt: Vorab-generiertes PDF aus Storage
+      if (doc.file_url) {
+        const a = document.createElement("a");
+        a.href = doc.file_url;
+        a.download = `${docTitle}.pdf`;
+        a.target = "_blank";
+        a.rel = "noopener";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return;
+      }
+      // 2. Fallback: PDF live über API generieren
+      if (!doc.preview_html) {
+        alert("Dieses Dokument ist noch nicht als PDF verfügbar.");
+        return;
+      }
+      const res = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ preview_html: doc.preview_html, title: docTitle }),
+      });
+      if (!res.ok) throw new Error(`PDF-Fehler (${res.status})`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${docTitle}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("PDF error:", e);
+      alert("PDF-Download fehlgeschlagen. Bitte versuche es erneut.");
+    } finally {
+      setPdfLoading(null);
     }
-
-    const scale = ((210 / 25.4) * 96) / 595;
-
-    win.document.write(`<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<title>${docTitle}</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-@page { size: A4 portrait; margin: 10mm 0 0 0; }
-html, body { margin: 0; padding: 0; width: 595px; }
-body > div { width: 595px !important; min-height: 842px !important; height: auto !important; aspect-ratio: auto !important; }
-@media screen {
-  body { background: #444; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
-  body > div { box-shadow: 0 6px 32px rgba(0,0,0,0.35); background: #fff; }
-}
-</style>
-</head>
-<body>${doc.preview_html}</body>
-</html>`);
-
-    win.document.close();
-    setTimeout(() => { win.focus(); win.print(); }, 900);
   };
 
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
@@ -981,7 +992,7 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                     {/* Angebot öffnen */}
                     {angebot.preview_html && (
                       <button
-                        onClick={() => openAngebotInBrowser(angebot)}
+                        onClick={() => downloadPdf(angebot)}
                         disabled={pdfLoading === angebot.id}
                         className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold transition-all active:scale-[0.98] mb-3 disabled:opacity-60 disabled:cursor-not-allowed"
                       >
@@ -1144,7 +1155,7 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                       </p>
                     </div>
                     {doc.preview_html ? (
-                      <button onClick={() => openAngebotInBrowser(doc)} className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-green-50 text-green-600 hover:bg-green-100 transition-all active:scale-95">
+                      <button onClick={() => downloadPdf(doc)} className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-green-50 text-green-600 hover:bg-green-100 transition-all active:scale-95">
                         <Download className="w-4 h-4" />
                       </button>
                     ) : doc.file_url ? (
@@ -1560,7 +1571,7 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                   </a>
                 ) : doc.preview_html ? (
                   <button
-                    onClick={() => openAngebotInBrowser(doc)}
+                    onClick={() => downloadPdf(doc)}
                     className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-all active:scale-95 shrink-0 gap-2 px-3"
                   >
                     <Download className="w-4 h-4" />
@@ -1659,7 +1670,7 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                                 {/* Angebot öffnen */}
                                 {doc.preview_html && (
                                   <button
-                                    onClick={() => openAngebotInBrowser(doc)}
+                                    onClick={() => downloadPdf(doc)}
                                     disabled={pdfLoading === doc.id}
                                     className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold transition-all active:scale-[0.98] mb-2 disabled:opacity-60 disabled:cursor-not-allowed"
                                   >
@@ -2088,17 +2099,28 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                         {isExpanded && (
                           <div className="px-5 pb-4 border-t border-black/[0.04]">
                             <div className="pt-4 pl-12">
-                              {isFromAdmin ? (
-                                <div className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: (msg as any).body }} />
-                              ) : (
-                                (msg as any).body_html ? (
-                                  <div className="font-sans text-sm text-foreground/80 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: (msg as any).body_html }} />
-                                ) : (msg as any).body_text ? (
-                                  <pre className="font-sans text-sm text-foreground/80 whitespace-pre-wrap">{(msg as any).body_text}</pre>
-                                ) : (
-                                  <p className="font-sans text-sm text-muted-foreground italic">Kein Inhalt.</p>
-                                )
-                              )}
+                              {(() => {
+                                const bodyContent = isFromAdmin
+                                  ? (msg as any).body || ""
+                                  : (msg as any).body_html || (msg as any).body_text || "";
+                                const isHtml = /<[a-z][\s\S]*>/i.test(bodyContent);
+                                if (!bodyContent) return <p className="font-sans text-sm text-muted-foreground italic">Kein Inhalt.</p>;
+                                if (isHtml) {
+                                  return <div className="font-sans text-sm text-foreground/80 leading-relaxed [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:mb-2 [&_ol]:list-decimal [&_ol]:pl-4 [&_ol]:mb-2 [&_li]:mb-1 [&_br]:block [&_a]:text-accent [&_a]:underline [&_strong]:font-semibold [&_h1]:text-lg [&_h1]:font-bold [&_h1]:mb-2 [&_h2]:text-base [&_h2]:font-bold [&_h2]:mb-2 [&_h3]:text-sm [&_h3]:font-bold [&_h3]:mb-1" dangerouslySetInnerHTML={{ __html: bodyContent }} />;
+                                }
+                                // Plain text: Zeilenumbrüche als <br>, Bullet Points als Liste
+                                const formatted = bodyContent
+                                  .replace(/•\s*/g, "• ")
+                                  .split("\n")
+                                  .map((line: string, i: number) => {
+                                    const trimmed = line.trim();
+                                    if (trimmed.startsWith("•")) {
+                                      return <li key={i} className="font-sans text-sm text-foreground/80 ml-4 mb-1">{trimmed.slice(1).trim()}</li>;
+                                    }
+                                    return trimmed ? <p key={i} className="font-sans text-sm text-foreground/80 mb-1.5">{trimmed}</p> : <br key={i} />;
+                                  });
+                                return <div className="leading-relaxed">{formatted}</div>;
+                              })()}
                               <p className="font-sans text-[11px] text-muted-foreground/40 mt-4">{fullDate}</p>
                             </div>
                           </div>
@@ -2109,21 +2131,52 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                 </div>
               )}
 
-              <div className="rounded-2xl border border-black/[0.06] bg-white/80 shadow-sm p-5 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                  <MessageCircle className="w-5 h-5 text-accent" />
+              {/* Inline Antwort-Formular */}
+              <div className="rounded-2xl border border-black/[0.06] bg-white shadow-sm p-5">
+                <p className="font-sans text-sm font-semibold text-foreground mb-3">Nachricht an Emilian</p>
+                <textarea
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="Ihre Nachricht…"
+                  rows={3}
+                  className="w-full rounded-xl bg-black/[0.02] border border-black/[0.08] px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 resize-none mb-3"
+                />
+                <div className="flex items-center justify-between">
+                  <p className="font-sans text-[11px] text-muted-foreground">Wird direkt per E-Mail zugestellt</p>
+                  <button
+                    onClick={async () => {
+                      if (!replyText.trim() || !customer?.email) return;
+                      setReplySending(true);
+                      try {
+                        await supabase.functions.invoke("send-customer-mail", {
+                          body: {
+                            to: "el@magicel.de",
+                            subject: `Nachricht von ${customer.name || customer.email}`,
+                            body: replyText.trim(),
+                            customer_id: customer.id,
+                            from_name: customer.name || "Kunde",
+                            reply_to: customer.email,
+                          },
+                        });
+                        setReplyText("");
+                        setReplySent(true);
+                        setTimeout(() => setReplySent(false), 4000);
+                      } catch { /* ignore */ }
+                      setReplySending(false);
+                    }}
+                    disabled={!replyText.trim() || replySending}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 disabled:opacity-40 transition-all active:scale-95"
+                  >
+                    {replySending ? (
+                      <span className="w-3.5 h-3.5 rounded-full border-2 border-background/30 border-t-background animate-spin" />
+                    ) : replySent ? (
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    ) : (
+                      <Send className="w-3.5 h-3.5" />
+                    )}
+                    {replySent ? "Gesendet!" : "Senden"}
+                  </button>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-sans text-sm font-semibold text-foreground">Neue Nachricht senden</p>
-                  <p className="font-sans text-xs text-muted-foreground">Kontaktieren Sie Emilian direkt</p>
-                </div>
-                <a
-                  href="mailto:el@magicel.de"
-                  className="shrink-0 inline-flex items-center gap-1.5 font-sans text-sm text-accent border border-accent/20 rounded-xl px-3.5 py-2.5 hover:bg-accent/5 transition-all active:scale-95 min-h-[44px]"
-                >
-                  <Mail className="w-4 h-4" />
-                  E-Mail
-                </a>
               </div>
             </div>
           );
