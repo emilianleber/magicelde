@@ -50,27 +50,49 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
 
-    // Footer-HTML aus dem Dokument extrahieren (der absolute-bottom Block)
+    // Footer-HTML extrahieren
     const footerHtml = await page.evaluate(() => {
       const el = document.querySelector('[style*="position: absolute"][style*="bottom"]') as HTMLElement;
       return el ? el.outerHTML : "";
     });
 
+    // Logo-URL extrahieren (aus dem <img> im Header)
+    const logoUrl = await page.evaluate(() => {
+      const img = document.querySelector('img[src*="logo"], img[src*="favicon"]') as HTMLImageElement;
+      return img ? img.src : "";
+    });
+
+    // Header-Template: Logo oben rechts + Firmenname links (auf jeder Seite)
+    const headerTemplate = `
+      <div style="width:100%;padding:12px 40px 0;display:flex;justify-content:space-between;align-items:flex-start;font-family:Inter,system-ui,sans-serif;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#111;">Emilian Leber</div>
+          <div style="font-size:7px;color:#666;">Zauberer &amp; Mentalist</div>
+        </div>
+        ${logoUrl ? `<img src="${logoUrl}" style="width:48px;height:48px;object-fit:contain;" />` : ""}
+      </div>
+    `;
+
+    // Footer-Template: Unternehmensdaten + Seitenzahl
     const footerTemplate = footerHtml
-      ? `<div style="width:100%;font-size:7px;font-family:Inter,system-ui,sans-serif;">${footerHtml.replace(/display:\s*none\s*!important/g, "display:block")}</div>`
+      ? `<div style="width:100%;font-size:7px;font-family:Inter,system-ui,sans-serif;">
+          ${footerHtml.replace(/display:\s*none\s*!important/g, "display:block")}
+        </div>`
       : `<div></div>`;
+
+    const hasHeaderFooter = !!footerHtml;
 
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
       scale: 96 / 72,
-      displayHeaderFooter: !!footerHtml,
-      headerTemplate: `<div></div>`,
+      displayHeaderFooter: hasHeaderFooter,
+      headerTemplate: hasHeaderFooter ? headerTemplate : `<div></div>`,
       footerTemplate,
       margin: {
-        top: "10mm",
+        top: hasHeaderFooter ? "28mm" : "10mm",
         right: "0mm",
-        bottom: footerHtml ? "22mm" : "10mm",
+        bottom: hasHeaderFooter ? "24mm" : "10mm",
         left: "0mm",
       },
     });
