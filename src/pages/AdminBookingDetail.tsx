@@ -179,11 +179,31 @@ const requestPhases = [
   { value: "archiviert", label: "Archiviert" },
 ];
 
+<<<<<<< Updated upstream
 // Anfrage-Aufgaben
 const requestTaskDefs: TaskDef[] = [
   { key: "_details", label: "Details", states: [null, "details_besprechen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "details_besprechen" },
   { key: "_warte", label: "Rückmeldung", states: [null, "warte_auf_kunde", "erledigt"], stateLabels: ["—", "Warte", "Erhalten ✓"], mailOn: "warte_auf_kunde" },
 ];
+=======
+// Checkliste pro Status (rein visuell, ändert NICHT den Status)
+const checklistByStatus: Record<string, { key: string; label: string }[]> = {
+  neu: [
+    { key: "chk_anfrage_gelesen", label: "Anfrage gelesen" },
+    { key: "chk_kunde_kontaktiert", label: "Kunde kontaktiert" },
+  ],
+  in_bearbeitung: [
+    { key: "chk_details_geklaert", label: "Details geklärt (Anlass, Datum, Ort, Gäste)" },
+    { key: "chk_format_gewaehlt", label: "Format / Paket gewählt" },
+    { key: "chk_angebot_erstellt", label: "Angebot erstellt" },
+  ],
+  angebot_gesendet: [
+    { key: "chk_angebot_versendet", label: "Angebot an Kunde versendet" },
+    { key: "chk_rueckmeldung", label: "Rückmeldung vom Kunden erhalten" },
+    { key: "chk_fragen_geklaert", label: "Offene Fragen geklärt" },
+  ],
+};
+>>>>>>> Stashed changes
 
 // Hauptphasen
 const eventPhases = [
@@ -193,16 +213,19 @@ const eventPhases = [
   { value: "storniert", label: "Storniert" },
 ];
 
-// Aufgaben pro Phase (rotieren bei Klick, null = nicht aktiv)
-type TaskDef = { key: string; label: string; states: (string | null)[]; stateLabels: string[]; mailOn: string };
-const tasksByPhase: Record<string, TaskDef[]> = {
+// Event-Checklisten pro Phase (rein visuell)
+const eventChecklistByPhase: Record<string, { key: string; label: string }[]> = {
   in_planung: [
-    { key: "details_status", label: "Details", states: [null, "offen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "offen" },
-    { key: "contract_status", label: "Vertrag", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bestätigt ✓"], mailOn: "gesendet" },
-    { key: "invoice_status", label: "Abschlagsrechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
+    { key: "echk_details", label: "Event-Details mit Kunde geklärt" },
+    { key: "echk_auftragsbestaetigung", label: "Auftragsbestätigung erstellt" },
+    { key: "echk_abschlag", label: "Abschlagsrechnung erstellt" },
+    { key: "echk_technik", label: "Technik / Aufbau geklärt" },
+    { key: "echk_ansprechpartner", label: "Ansprechpartner vor Ort bekannt" },
   ],
   event_erfolgt: [
-    { key: "invoice_status", label: "Schlussrechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
+    { key: "echk_schlussrechnung", label: "Schlussrechnung erstellt" },
+    { key: "echk_bezahlt", label: "Zahlung erhalten" },
+    { key: "echk_feedback", label: "Feedback angefragt" },
   ],
   abgeschlossen: [],
   storniert: [],
@@ -1277,57 +1300,33 @@ const AdminBookingDetail = () => {
                   })}
                 </div>
 
-                {/* Aufgaben */}
-                {(tasksByPhase[event.status || "in_planung"] || []).length > 0 && (
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
+                {/* Checkliste pro Event-Phase */}
+                {(eventChecklistByPhase[event.status || "in_planung"] || []).length > 0 && (
+                  <>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Checkliste</p>
+                    <div className="space-y-1.5 mb-5">
+                      {(eventChecklistByPhase[event.status || "in_planung"] || []).map((item) => {
+                        const checked = checklist[item.key] || false;
+                        return (
+                          <button
+                            key={item.key}
+                            onClick={() => setChecklist(prev => ({ ...prev, [item.key]: !prev[item.key] }))}
+                            className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm transition-colors border ${
+                              checked ? "bg-green-50 border-green-200" : "bg-muted/10 border-border/20 hover:bg-muted/30"
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ${
+                              checked ? "bg-green-500 text-white" : "border border-border/40"
+                            }`}>
+                              {checked && <Check className="w-3 h-3" />}
+                            </span>
+                            <span className={`font-medium text-left ${checked ? "text-green-700 line-through" : "text-foreground"}`}>{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
                 )}
-                <div className="space-y-2 mb-5">
-                  {(tasksByPhase[event.status || "in_planung"] || []).map((task) => {
-                    const currentVal = (event as any)[task.key] || null;
-                    const currentIdx = task.states.indexOf(currentVal as any);
-                    const effectiveIdx = currentIdx === -1 ? 0 : currentIdx;
-                    const stateLabel = task.stateLabels[effectiveIdx];
-                    const isDone = currentVal === "erledigt";
-                    const isActive = currentVal !== null && currentVal !== "erledigt";
-                    return (
-                      <button
-                        key={task.key}
-                        onClick={async () => {
-                          const nextIdx = (effectiveIdx + 1) % task.states.length;
-                          const nextVal = task.states[nextIdx];
-                          setEvent((prev: any) => prev ? { ...prev, [task.key]: nextVal } : prev);
-                          await supabase.from("portal_events").update({ [task.key]: nextVal }).eq("id", event.id);
-                          const nextLabel = task.stateLabels[nextIdx];
-                          setMessage(`${task.label} → ${nextLabel}`);
-                          // Mail mit passendem Status senden
-                          if (nextVal === task.mailOn) {
-                            const mailStatusMap: Record<string, string> = {
-                              details_status: "details_offen",
-                              contract_status: "vertrag_gesendet",
-                              invoice_status: "rechnung_gesendet",
-                            };
-                            const mailStatus = mailStatusMap[task.key];
-                            // Dokumenttyp basierend auf Phase
-                            const docTyp = task.key === "invoice_status"
-                              ? (event.status === "in_planung" ? "abschlagsrechnung" : undefined)
-                              : undefined;
-                            if (mailStatus && confirm(`${task.label} auf "${nextLabel}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
-                              sendStatusMail(mailStatus, docTyp);
-                            }
-                          }
-                        }}
-                        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors border ${
-                          isDone ? "bg-green-50 border-green-200 text-green-700"
-                          : isActive ? "bg-blue-50 border-blue-200 text-blue-700"
-                          : "bg-muted/20 border-border/20 text-muted-foreground hover:bg-muted/40"
-                        }`}
-                      >
-                        <span className="font-medium">{task.label}</span>
-                        <span className={`text-xs font-semibold ${isDone ? "text-green-600" : isActive ? "text-blue-600" : "text-muted-foreground/50"}`}>{stateLabel}</span>
-                      </button>
-                    );
-                  })}
-                </div>
               </>
             ) : (
               <>
@@ -1359,6 +1358,7 @@ const AdminBookingDetail = () => {
                   })}
                 </div>
 
+<<<<<<< Updated upstream
                 {/* Aufgaben */}
                 {!["abgelehnt", "archiviert"].includes(status) && (
                   <>
@@ -1372,6 +1372,15 @@ const AdminBookingDetail = () => {
                         );
                         const stateIdx = isTaskDone ? 2 : isTaskActive ? 1 : 0;
                         const stateLabel = task.stateLabels[stateIdx];
+=======
+                {/* Checkliste pro Status (ändert NICHT den Status) */}
+                {(checklistByStatus[status] || []).length > 0 && (
+                  <>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Checkliste</p>
+                    <div className="space-y-1.5 mb-5">
+                      {(checklistByStatus[status] || []).map((item) => {
+                        const checked = checklist[item.key] || false;
+>>>>>>> Stashed changes
                         return (
                           <button
                             key={task.key}
