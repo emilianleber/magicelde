@@ -58,6 +58,8 @@ interface BookingRequest {
   phone: string | null;
   anlass: string | null;
   datum: string | null;
+  uhrzeit?: string | null;
+  uhrzeit_anfragen?: boolean;
   ort: string | null;
   gaeste: number | null;
   format: string | null;
@@ -72,6 +74,8 @@ interface PortalEvent {
   id: string;
   title: string;
   event_date: string | null;
+  start_time?: string | null;
+  uhrzeit_anfragen?: boolean;
   location: string | null;
   status: string | null;
   format: string | null;
@@ -338,6 +342,11 @@ const Kundenportal = () => {
 
   const [eventCancelId, setEventCancelId] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState<string | null>(null); // doc.id während Download
+
+  // Uhrzeit-Widget State
+  const [uhrzeitInput, setUhrzeitInput] = useState<Record<string, string>>({});
+  const [uhrzeitSaving, setUhrzeitSaving] = useState<Record<string, boolean>>({});
+  const [uhrzeitSaved, setUhrzeitSaved] = useState<Record<string, boolean>>({});
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -1076,6 +1085,87 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                 </div>
               );
             })}
+
+            {/* ── UHRZEIT FEHLT WIDGET (nur wenn Admin es aktiviert hat) ── */}
+            {(() => {
+              const eventsOhneZeit = events.filter(e => e.event_date && !e.start_time && e.uhrzeit_anfragen === true);
+              const requestsOhneZeit = requests.filter(r => r.datum && !r.uhrzeit && r.uhrzeit_anfragen === true
+                && !eventsOhneZeit.some(e => e.request_id === r.id)
+              );
+              const items = [
+                ...eventsOhneZeit.map(e => ({ type: "event" as const, id: e.id, title: e.title, date: e.event_date!, table: "portal_events", field: "start_time" })),
+                ...requestsOhneZeit.map(r => ({ type: "request" as const, id: r.id, title: r.anlass || "Anfrage", date: r.datum!, table: "portal_requests", field: "uhrzeit" })),
+              ];
+              if (items.length === 0) return null;
+
+              const handleSaveUhrzeit = async (item: typeof items[0]) => {
+                const val = uhrzeitInput[item.id];
+                if (!val) return;
+                setUhrzeitSaving(p => ({ ...p, [item.id]: true }));
+                const { error } = await supabase
+                  .from(item.table)
+                  .update({ [item.field]: val, uhrzeit_anfragen: false })
+                  .eq("id", item.id);
+                if (!error) {
+                  setUhrzeitSaved(p => ({ ...p, [item.id]: true }));
+                  if (item.type === "event") {
+                    setEvents(prev => prev.map(e => e.id === item.id ? { ...e, start_time: val, uhrzeit_anfragen: false } : e));
+                  } else {
+                    setRequests(prev => prev.map(r => r.id === item.id ? { ...r, uhrzeit: val, uhrzeit_anfragen: false } : r));
+                  }
+                  setTimeout(() => setUhrzeitSaved(p => ({ ...p, [item.id]: false })), 3000);
+                }
+                setUhrzeitSaving(p => ({ ...p, [item.id]: false }));
+              };
+
+              return (
+                <div className="rounded-2xl bg-amber-50/80 border border-amber-200/60 overflow-hidden">
+                  <div className="px-5 py-4 border-b border-amber-200/40 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-600" />
+                    <h2 className="font-display text-sm font-bold text-amber-800">Uhrzeit fehlt</h2>
+                  </div>
+                  <div className="divide-y divide-amber-200/30">
+                    {items.map(item => (
+                      <div key={item.id} className="px-5 py-4">
+                        <p className="font-sans text-sm text-amber-900 mb-1">
+                          <span className="font-semibold">{item.title}</span>
+                          {" am "}
+                          <span className="font-semibold">{new Date(item.date).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" })}</span>
+                        </p>
+                        <p className="font-sans text-xs text-amber-700 mb-3">
+                          Bitte teile uns die gewünschte Uhrzeit mit, damit wir alles planen können.
+                        </p>
+                        {uhrzeitSaved[item.id] ? (
+                          <div className="flex items-center gap-2 text-emerald-600 text-sm font-medium">
+                            <CheckCircle2 className="w-4 h-4" /> Uhrzeit gespeichert – vielen Dank!
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="time"
+                              value={uhrzeitInput[item.id] || ""}
+                              onChange={e => setUhrzeitInput(p => ({ ...p, [item.id]: e.target.value }))}
+                              className="rounded-xl bg-white border border-amber-300 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+                            />
+                            <button
+                              onClick={() => handleSaveUhrzeit(item)}
+                              disabled={!uhrzeitInput[item.id] || uhrzeitSaving[item.id]}
+                              className="inline-flex items-center gap-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 text-sm font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+                            >
+                              {uhrzeitSaving[item.id]
+                                ? <span className="w-3.5 h-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                                : <Send className="w-3.5 h-3.5" />
+                              }
+                              Senden
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Invoice widget */}
             {documents.filter(d => d.type === "Rechnung" || d.type === "Abschlagsrechnung" || d.type === "Mahnung").length > 0 && (
