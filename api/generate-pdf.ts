@@ -74,7 +74,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     // Schritt 2: HTML NEU laden MIT den korrekten Paddings im CSS
-    const finalHtml = buildHtml(preview_html, docTitle, headerHeight + 16, footerHeight + 12);
+    // Extra Padding großzügig: scale 96/72 vergrößert alles, Footer braucht mehr Platz
+    const finalHtml = buildHtml(preview_html, docTitle, headerHeight + 20, footerHeight + 30);
     await page.setContent(finalHtml, { waitUntil: "networkidle0", timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
 

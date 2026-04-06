@@ -865,6 +865,15 @@ export default function AdminDokumentEditor() {
     });
   }, [authChecked, typ]);
 
+  // Auto-generate document number for new documents
+  useEffect(() => {
+    if (!authChecked || !isNew) return;
+    // Nur generieren wenn noch leer (nicht bei Typ-Wechsel)
+    if (nummer) return;
+    const dokumentTyp = (typ as any) || "angebot";
+    reserviereNummer(dokumentTyp).then((n) => { if (n) setNummer(n); }).catch(() => {});
+  }, [authChecked, isNew]); // Bewusst KEIN typ in deps – nur einmal beim Laden
+
   // Load admin settings
   useEffect(() => {
     if (!authChecked) return;
