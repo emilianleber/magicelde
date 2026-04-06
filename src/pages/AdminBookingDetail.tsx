@@ -1064,23 +1064,15 @@ const AdminBookingDetail = () => {
                   }} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
                 </div>
                 <button
-<<<<<<< Updated upstream
-                  onClick={() => {
-<<<<<<< HEAD
-                    // Positionen: Paket + Anfahrtspauschale
-=======
                   onClick={async () => {
-                    // Anfahrts-Artikel live aus DB laden
-                    const { data: anfahrtArtikel } = await supabase
+                    // Anfahrts-Artikel live aus DB laden (immer aktueller Preis)
+                    const { data: anfahrtArt } = await supabase
                       .from("artikel_stamm")
                       .select("bezeichnung, beschreibung, einzelpreis, einheit")
                       .ilike("bezeichnung", "%anfahrt%")
                       .limit(1)
                       .maybeSingle();
 
->>>>>>> Stashed changes
-=======
->>>>>>> origin/main
                     const positions = [
                       {
                         id: crypto.randomUUID(),
@@ -1093,33 +1085,15 @@ const AdminBookingDetail = () => {
                         gesamt: selectedPaket.preis,
                         optional: false,
                       },
-                      ...(anfahrtArtikel ? [{
+                      ...(anfahrtArt ? [{
                         id: crypto.randomUUID(),
                         typ: "leistung",
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-                        bezeichnung: "Anfahrt",
-                        beschreibung: "An- und Abreise zum Veranstaltungsort",
+                        bezeichnung: anfahrtArt.bezeichnung,
+                        beschreibung: anfahrtArt.beschreibung || "",
                         menge: 1,
-                        einheit: "Pauschal",
-                        einzelpreis: 0,
-                        gesamt: 0,
-=======
-                        bezeichnung: anfahrtArtikel.bezeichnung,
-                        beschreibung: anfahrtArtikel.beschreibung || "",
-                        menge: 1,
-                        einheit: anfahrtArtikel.einheit || "km",
-                        einzelpreis: anfahrtArtikel.einzelpreis || 0,
-                        gesamt: anfahrtArtikel.einzelpreis || 0,
->>>>>>> Stashed changes
-=======
-                        bezeichnung: "Anfahrtspauschale",
-                        beschreibung: "Anfahrt und Rückreise zum Veranstaltungsort. Berechnung ab Regensburg (Kilometerangabe einfache Strecke).",
-                        menge: 1,
-                        einheit: "km",
-                        einzelpreis: 0.35,
-                        gesamt: 0.35,
->>>>>>> origin/main
+                        einheit: anfahrtArt.einheit || "km",
+                        einzelpreis: anfahrtArt.einzelpreis ?? 0,
+                        gesamt: anfahrtArt.einzelpreis ?? 0,
                         optional: false,
                       }] : []),
                     ];
