@@ -737,14 +737,24 @@ const Kundenportal = () => {
         return;
       }
       // 2. Fallback: PDF live über API generieren
-      if (!doc.preview_html) {
+      let html = doc.preview_html;
+      // Falls preview_html fehlt, nochmal aus DB laden
+      if (!html) {
+        const { data: fresh } = await supabase
+          .from("portal_documents")
+          .select("preview_html")
+          .eq("id", doc.id)
+          .maybeSingle();
+        html = fresh?.preview_html || null;
+      }
+      if (!html) {
         alert("Dieses Dokument ist noch nicht als PDF verfügbar.");
         return;
       }
       const res = await fetch("/api/generate-pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ preview_html: doc.preview_html, title: docTitle }),
+        body: JSON.stringify({ preview_html: html, title: docTitle }),
       });
       if (!res.ok) throw new Error(`PDF-Fehler (${res.status})`);
       const blob = await res.blob();
@@ -1154,15 +1164,20 @@ const Kundenportal = () => {
                         {doc.amount != null && ` · ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(doc.amount)}`}
                       </p>
                     </div>
-                    {doc.preview_html ? (
-                      <button onClick={() => downloadPdf(doc)} className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-green-50 text-green-600 hover:bg-green-100 transition-all active:scale-95">
-                        <Download className="w-4 h-4" />
-                      </button>
-                    ) : doc.file_url ? (
-                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-green-50 text-green-600 hover:bg-green-100 transition-all active:scale-95">
-                        <Download className="w-4 h-4" />
-                      </a>
-                    ) : null}
+                    <button
+                      onClick={() => downloadPdf(doc)}
+                      disabled={pdfLoading === doc.id}
+                      className={`shrink-0 w-9 h-9 flex items-center justify-center rounded-xl transition-all active:scale-95 ${
+                        doc.file_url || doc.preview_html
+                          ? "bg-green-50 text-green-600 hover:bg-green-100"
+                          : "bg-muted/30 text-muted-foreground hover:bg-muted/50"
+                      }`}
+                    >
+                      {pdfLoading === doc.id
+                        ? <span className="w-4 h-4 rounded-full border-2 border-green-300 border-t-green-600 animate-spin" />
+                        : <Download className="w-4 h-4" />
+                      }
+                    </button>
                   </div>
                 ))}
               </div>
@@ -1559,25 +1574,17 @@ const Kundenportal = () => {
                     )}
                   </div>
                 </div>
-                {doc.file_url ? (
-                  <a
-                    href={doc.file_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-all active:scale-95 shrink-0 gap-2 px-3"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span className="font-sans text-xs font-medium hidden sm:inline">Download</span>
-                  </a>
-                ) : doc.preview_html ? (
-                  <button
-                    onClick={() => downloadPdf(doc)}
-                    className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-all active:scale-95 shrink-0 gap-2 px-3"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span className="font-sans text-xs font-medium hidden sm:inline">PDF</span>
-                  </button>
-                ) : null}
+                <button
+                  onClick={() => downloadPdf(doc)}
+                  disabled={pdfLoading === doc.id}
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-all active:scale-95 shrink-0 gap-2 px-3"
+                >
+                  {pdfLoading === doc.id
+                    ? <span className="w-4 h-4 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
+                    : <Download className="w-4 h-4" />
+                  }
+                  <span className="font-sans text-xs font-medium hidden sm:inline">Download</span>
+                </button>
               </div>
             );
           };
