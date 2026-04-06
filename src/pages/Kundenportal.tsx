@@ -34,7 +34,6 @@ import {
   Building2,
   AlertTriangle,
   X,
-  Check,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
@@ -60,6 +59,7 @@ interface BookingRequest {
   anlass: string | null;
   datum: string | null;
   uhrzeit?: string | null;
+  uhrzeit_anfragen?: boolean;
   ort: string | null;
   gaeste: number | null;
   format: string | null;
@@ -75,6 +75,7 @@ interface PortalEvent {
   title: string;
   event_date: string | null;
   start_time?: string | null;
+  uhrzeit_anfragen?: boolean;
   location: string | null;
   status: string | null;
   format: string | null;
@@ -127,61 +128,6 @@ type Tab = "dashboard" | "events" | "documents" | "requests" | "nachrichten" | "
 
 const inputCls =
   "w-full rounded-xl bg-black/[0.02] border border-black/[0.1] px-4 py-3 text-sm text-foreground placeholder:text-black/25 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/30 transition-all";
-
-// ── Uhrzeit-Widget Komponente ──
-const UhrzeitWidget: React.FC<{ event: { id: string; title: string; event_date: string | null }; customerId?: string; onSaved: () => void }> = ({ event: ev, onSaved }) => {
-  const [uhrzeitInput, setUhrzeitInput] = useState("");
-  const [uhrzeitSaving, setUhrzeitSaving] = useState(false);
-  const saveUhrzeit = async () => {
-    if (!uhrzeitInput) return;
-    setUhrzeitSaving(true);
-    await supabase.from("portal_events").update({ start_time: uhrzeitInput }).eq("id", ev.id);
-    onSaved();
-    setUhrzeitSaving(false);
-  };
-  return (
-    <div className="p-5 rounded-2xl bg-amber-50/80 border border-amber-200/60">
-      <div className="flex items-start gap-3">
-        <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center shrink-0 mt-0.5">
-          <Clock className="w-4 h-4 text-amber-600" />
-        </div>
-        <div className="flex-1">
-          <h3 className="font-sans text-sm font-semibold text-amber-900">Uhrzeit fehlt: {ev.title}</h3>
-          <p className="font-sans text-xs text-amber-700 mt-1 mb-3">
-            Bitte teile mir die gewünschte Startzeit für dein Event am{" "}
-            {ev.event_date ? new Date(ev.event_date + "T12:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" }) : "–"} mit.
-          </p>
-          <div className="flex items-center gap-2">
-            <input
-              type="time"
-              value={uhrzeitInput}
-              onChange={(e) => setUhrzeitInput(e.target.value)}
-              className="rounded-xl bg-white border border-amber-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300"
-            />
-            <button
-              onClick={saveUhrzeit}
-              disabled={!uhrzeitInput || uhrzeitSaving}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-600 text-white text-sm font-semibold hover:bg-amber-700 disabled:opacity-40 transition-all"
-            >
-              {uhrzeitSaving ? "Wird gespeichert…" : "Uhrzeit speichern"}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const FORMAT_LABELS: Record<string, string> = {
-  buehne: "Bühnenshow", buehnenshow: "Bühnenshow",
-  closeup: "Close-Up", "close-up": "Close-Up",
-  walking_act: "Walking Act", magic_dinner: "Magic Dinner",
-  kombination: "Kombination", beratung: "Beratung",
-  Bühnenshow: "Bühnenshow", "Close-Up": "Close-Up",
-  "Walking Act": "Walking Act", "Magic Dinner": "Magic Dinner",
-  Kombination: "Kombination", Beratung: "Beratung",
-};
-const fmtFormat = (f?: string | null) => f ? (FORMAT_LABELS[f] || FORMAT_LABELS[f.toLowerCase()] || f) : null;
 
 const formatStatusLabel = (status?: string | null) => {
   switch (status) {
@@ -417,11 +363,6 @@ const Kundenportal = () => {
   const [fbKommentar, setFbKommentar] = useState("");
   const [fbSending, setFbSending] = useState(false);
   const [fbSent, setFbSent] = useState(false);
-
-  // Reply form
-  const [replyText, setReplyText] = useState("");
-  const [replySending, setReplySending] = useState(false);
-  const [replySent, setReplySent] = useState(false);
   const [fbError, setFbError] = useState("");
 
   useEffect(() => {
@@ -756,7 +697,7 @@ const Kundenportal = () => {
   }
 
   const capWords = (s?: string | null) =>
-    s ? s.replace(/_/g, " ").split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ") : "";
+    s ? s.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/_/g, " ") : "";
   // Fallback: Name aus neuester Anfrage wenn Profil noch leer
   const latestReqName = (requests[0] as any)?.name;
   const displayName = capWords(customer?.name) || capWords(latestReqName) || "Kunde";
@@ -780,64 +721,49 @@ const Kundenportal = () => {
     (d) => d.type === "Angebot" && d.status === "gesendet"
   );
 
-  const downloadDocumentPdf = async (doc: PortalDocument) => {
-    const docTitle = doc.nummer || doc.name || "Dokument";
-    setPdfLoading(doc.id);
+  const openAngebotInBrowser = (doc: PortalDocument) => {
+    if (!doc.preview_html) return;
+    const docTitle = doc.nummer || doc.name || "Angebot";
 
-    try {
-      // 1. Bevorzugt: Pre-generiertes PDF aus Storage
-      if (doc.file_url) {
-        const a = document.createElement("a");
-        a.href = doc.file_url;
-        a.download = `${docTitle}.pdf`;
-        a.target = "_blank";
-        a.rel = "noopener";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        return;
-      }
-
-      // 2. Fallback: PDF über API generieren
-      if (!doc.preview_html) {
-        alert("Dieses Dokument ist noch nicht als PDF verfügbar.");
-        return;
-      }
-
-      const res = await fetch("/api/generate-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ preview_html: doc.preview_html, title: docTitle }),
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        throw new Error(`PDF-Fehler (${res.status}): ${err}`);
-      }
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${docTitle}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error("PDF error:", e);
-      alert("PDF-Download fehlgeschlagen: " + (e instanceof Error ? e.message : String(e)));
-    } finally {
-      setPdfLoading(null);
+    const win = window.open("", "_blank");
+    if (!win) {
+      alert("Bitte erlauben Sie Popups für diese Seite.");
+      return;
     }
+
+    const scale = ((210 / 25.4) * 96) / 595;
+
+    win.document.write(`<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>${docTitle}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+@page { size: A4 portrait; margin: 10mm 0 0 0; }
+html, body { margin: 0; padding: 0; width: 595px; }
+body > div { width: 595px !important; min-height: 842px !important; height: auto !important; aspect-ratio: auto !important; }
+@media screen {
+  body { background: #444; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+  body > div { box-shadow: 0 6px 32px rgba(0,0,0,0.35); background: #fff; }
+}
+</style>
+</head>
+<body>${doc.preview_html}</body>
+</html>`);
+
+    win.document.close();
+    setTimeout(() => { win.focus(); win.print(); }, 900);
   };
 
-  // Vereinfachte Navigation: 4 Haupttabs + Settings als Icon
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
     { id: "dashboard", label: "Start", icon: LayoutDashboard },
-    { id: "events", label: "Buchungen", icon: Calendar },
+    { id: "requests", label: "Anfragen & Events", icon: Calendar },
     { id: "documents", label: "Dokumente", icon: FolderOpen },
     { id: "nachrichten", label: "Nachrichten", icon: Mail, badge: unreadCount || undefined },
+    { id: "einstellungen", label: "Einstellungen", icon: Settings },
+    { id: "kontakt", label: "Kontakt", icon: Phone },
   ];
 
   return (
@@ -895,13 +821,14 @@ const Kundenportal = () => {
               ))}
             </nav>
 
-            {/* Settings */}
+            {/* Refresh */}
             <button
-              onClick={() => setActiveTab("einstellungen")}
-              title="Einstellungen"
-              className={`shrink-0 p-1.5 rounded-lg transition-colors ${activeTab === "einstellungen" ? "bg-accent/10 text-accent" : "text-muted-foreground hover:text-foreground hover:bg-black/[0.04]"}`}
+              onClick={triggerRefresh}
+              title="Inhalte aktualisieren"
+              className="shrink-0 flex items-center gap-1.5 font-sans text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              <Settings className="w-4 h-4" />
+              <RotateCcw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+              <span className="hidden sm:inline">Aktualisieren</span>
             </button>
 
             {/* Logout */}
@@ -993,59 +920,6 @@ const Kundenportal = () => {
               ))}
             </div>
 
-            {/* ── RECHNUNG FÄLLIG WIDGET ── */}
-            {(() => {
-              const offeneRechnungen = documents.filter(d =>
-                ["Rechnung", "Abschlagsrechnung"].includes(d.type || "") &&
-                d.status !== "bezahlt" && d.due_date
-              );
-              if (offeneRechnungen.length === 0) return null;
-              return offeneRechnungen.map(doc => {
-                const daysUntilDue = doc.due_date ? Math.ceil((new Date(doc.due_date).getTime() - Date.now()) / 86400000) : null;
-                const isOverdue = daysUntilDue !== null && daysUntilDue < 0;
-                const betrag = doc.amount ?? doc.brutto;
-                return (
-                  <div key={`due-${doc.id}`} className={`p-5 rounded-2xl border ${isOverdue ? "bg-red-50/80 border-red-200/60" : "bg-blue-50/80 border-blue-200/60"}`}>
-                    <div className="flex items-start gap-3">
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${isOverdue ? "bg-red-100" : "bg-blue-100"}`}>
-                        <FileText className={`w-4 h-4 ${isOverdue ? "text-red-600" : "text-blue-600"}`} />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className={`font-sans text-sm font-semibold ${isOverdue ? "text-red-900" : "text-blue-900"}`}>
-                          {doc.type} {doc.nummer || doc.name}
-                        </h3>
-                        <p className={`font-sans text-xs mt-0.5 ${isOverdue ? "text-red-700" : "text-blue-700"}`}>
-                          {betrag != null && new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(betrag)}
-                          {" · "}
-                          {isOverdue
-                            ? `${Math.abs(daysUntilDue!)} Tage überfällig`
-                            : daysUntilDue === 0 ? "Heute fällig"
-                            : daysUntilDue === 1 ? "Morgen fällig"
-                            : `Fällig in ${daysUntilDue} Tagen`}
-                        </p>
-                        <button
-                          onClick={() => setActiveTab("documents")}
-                          className={`mt-2 inline-flex items-center gap-1.5 text-xs font-semibold ${isOverdue ? "text-red-700" : "text-blue-700"} hover:underline`}
-                        >
-                          Dokument ansehen <ArrowRight className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              });
-            })()}
-
-            {/* ── UHRZEIT FEHLT WIDGET ── */}
-            {events.filter(e => e.event_date && !e.start_time && e.status !== "storniert").map((ev) => (
-              <UhrzeitWidget key={`time-${ev.id}`} event={ev} customerId={customer?.id} onSaved={async () => {
-                if (customer?.id) {
-                  const { data } = await supabase.from("portal_events").select("*").eq("customer_id", customer.id);
-                  if (data) setEvents(data);
-                }
-              }} />
-            ))}
-
             {/* ── OFFENE ANGEBOTE WIDGET ── */}
             {offeneAngebote.length > 0 && offeneAngebote.map((angebot) => {
               const reqId = angebot.request_id;
@@ -1111,7 +985,7 @@ const Kundenportal = () => {
                     {/* Angebot öffnen */}
                     {angebot.preview_html && (
                       <button
-                        onClick={() => downloadDocumentPdf(angebot)}
+                        onClick={() => openAngebotInBrowser(angebot)}
                         disabled={pdfLoading === angebot.id}
                         className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold transition-all active:scale-[0.98] mb-3 disabled:opacity-60 disabled:cursor-not-allowed"
                       >
@@ -1212,12 +1086,11 @@ const Kundenportal = () => {
               );
             })}
 
-            {/* ── UHRZEIT FEHLT WIDGET ── */}
+            {/* ── UHRZEIT FEHLT WIDGET (nur wenn Admin es aktiviert hat) ── */}
             {(() => {
-              // Events oder Requests mit Datum aber ohne Uhrzeit
-              const eventsOhneZeit = events.filter(e => e.event_date && !e.start_time && e.status !== "abgeschlossen" && e.status !== "storniert");
-              const requestsOhneZeit = requests.filter(r => r.datum && !r.uhrzeit && r.status !== "abgelehnt" && r.status !== "storniert"
-                && !eventsOhneZeit.some(e => e.request_id === r.id) // Nicht doppelt zeigen
+              const eventsOhneZeit = events.filter(e => e.event_date && !e.start_time && e.uhrzeit_anfragen === true);
+              const requestsOhneZeit = requests.filter(r => r.datum && !r.uhrzeit && r.uhrzeit_anfragen === true
+                && !eventsOhneZeit.some(e => e.request_id === r.id)
               );
               const items = [
                 ...eventsOhneZeit.map(e => ({ type: "event" as const, id: e.id, title: e.title, date: e.event_date!, table: "portal_events", field: "start_time" })),
@@ -1556,7 +1429,7 @@ const Kundenportal = () => {
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-x-5 gap-y-2 font-sans text-sm text-muted-foreground mb-4">
-                    {currentEvent.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{fmtFormat(currentEvent.format) || currentEvent.format}</span>}
+                    {currentEvent.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{currentEvent.format}</span>}
                     {currentEvent.guests && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-accent" />{currentEvent.guests} Gäste</span>}
                   </div>
                   {currentEvent.event_date && (
@@ -1598,10 +1471,10 @@ const Kundenportal = () => {
         {activeTab === "__disabled_events__" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
-              <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Buchungen</h1>
-              {(events.length + requests.length) > 0 && (
+              <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Events</h1>
+              {events.length > 0 && (
                 <span className="font-sans text-xs text-muted-foreground border border-black/[0.07] rounded-full px-2.5 py-1">
-                  {events.length + requests.length} Buchungen
+                  {events.length} {events.length === 1 ? "Event" : "Events"}
                 </span>
               )}
             </div>
@@ -1634,7 +1507,7 @@ const Kundenportal = () => {
                           </span>
                         )}
                         {e.location && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-accent" />{e.location}</span>}
-                        {e.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{fmtFormat(e.format) || e.format}</span>}
+                        {e.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{e.format}</span>}
                         {e.guests && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-accent" />{e.guests} Gäste</span>}
                       </div>
 
@@ -1734,39 +1607,6 @@ const Kundenportal = () => {
                   </div>
                 );
               })
-            )}
-
-            {/* ── OFFENE ANFRAGEN (innerhalb Buchungen-Tab) ── */}
-            {requests.length > 0 && (
-              <>
-                <div className="flex items-center justify-between mt-6 mb-2">
-                  <h2 className="font-display text-lg font-bold text-foreground border-l-[3px] border-muted-foreground/30 pl-3">Anfragen</h2>
-                  <span className="font-sans text-xs text-muted-foreground border border-black/[0.07] rounded-full px-2.5 py-1">
-                    {requests.length} {requests.length === 1 ? "Anfrage" : "Anfragen"}
-                  </span>
-                </div>
-                {requests.map((r: any) => (
-                  <div key={r.id} className="rounded-2xl bg-white border border-black/[0.06] shadow-sm p-5">
-                    <div className="flex items-start justify-between gap-3 flex-wrap mb-3">
-                      <h3 className="font-display text-base font-bold text-foreground">{capWords(r.anlass) || "Anfrage"}</h3>
-                      <span className={`font-sans text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full shrink-0 ${formatStatusClasses(r.status)}`}>
-                        {formatStatusLabel(r.status)}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-x-5 gap-y-2 font-sans text-sm text-muted-foreground">
-                      {r.datum && (
-                        <span className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-accent" />
-                          {new Date(r.datum + "T12:00:00").toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric" })}
-                        </span>
-                      )}
-                      {r.ort && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-accent" />{capWords(r.ort)}</span>}
-                      {r.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{fmtFormat(r.format) || capWords(r.format)}</span>}
-                      {r.gaeste && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-accent" />{r.gaeste} Gäste</span>}
-                    </div>
-                  </div>
-                ))}
-              </>
             )}
           </div>
         )}
@@ -1920,7 +1760,7 @@ const Kundenportal = () => {
                                 {/* Angebot öffnen */}
                                 {doc.preview_html && (
                                   <button
-                                    onClick={() => downloadDocumentPdf(doc)}
+                                    onClick={() => openAngebotInBrowser(doc)}
                                     disabled={pdfLoading === doc.id}
                                     className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold transition-all active:scale-[0.98] mb-2 disabled:opacity-60 disabled:cursor-not-allowed"
                                   >
@@ -2078,7 +1918,7 @@ const Kundenportal = () => {
                             { label: "Datum", icon: Calendar, value: r.datum ? new Date(r.datum).toLocaleDateString("de-DE") : "Nicht angegeben" },
                             { label: "Ort", icon: MapPin, value: capWords(r.ort) || "Nicht angegeben" },
                             { label: "Gäste", icon: Users, value: r.gaeste != null ? String(r.gaeste) : "Nicht angegeben" },
-                            { label: "Format", icon: Theater, value: fmtFormat(r.format) || capWords(r.format) || "Nicht angegeben" },
+                            { label: "Format", icon: Theater, value: capWords(r.format) || "Nicht angegeben" },
                             { label: "Telefon", icon: Phone, value: r.phone || "Nicht angegeben" },
                             { label: "E-Mail", icon: Mail, value: r.email },
                             ...(r.firma ? [{ label: "Firma", icon: Building2, value: r.firma }] : []),
@@ -2370,51 +2210,21 @@ const Kundenportal = () => {
                 </div>
               )}
 
-              {/* Antwort-Formular */}
-              <div className="rounded-2xl border border-black/[0.06] bg-white shadow-sm p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <MessageCircle className="w-4 h-4 text-accent" />
-                  <p className="font-sans text-sm font-semibold text-foreground">Nachricht senden</p>
+              <div className="rounded-2xl border border-black/[0.06] bg-white/80 shadow-sm p-5 flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                  <MessageCircle className="w-5 h-5 text-accent" />
                 </div>
-                <textarea
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                  placeholder="Schreiben Sie hier Ihre Nachricht..."
-                  rows={3}
-                  className={inputCls + " resize-none mb-3"}
-                />
-                <div className="flex items-center justify-between">
-                  <p className="font-sans text-[11px] text-muted-foreground">Ihre Nachricht wird an Emilian Leber gesendet.</p>
-                  <button
-                    onClick={async () => {
-                      if (!replyText.trim() || !customer?.id) return;
-                      setReplySending(true);
-                      try {
-                        await supabase.from("portal_change_requests").insert({
-                          customer_id: customer.id,
-                          subject: "Nachricht vom Kunden",
-                          message: replyText.trim(),
-                          type: "nachricht",
-                          status: "offen",
-                        });
-                        setReplyText("");
-                        setReplySent(true);
-                        setTimeout(() => setReplySent(false), 4000);
-                      } catch (_) {}
-                      setReplySending(false);
-                    }}
-                    disabled={!replyText.trim() || replySending}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-semibold hover:opacity-90 disabled:opacity-40 transition-all"
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                    {replySending ? "Wird gesendet…" : "Senden"}
-                  </button>
+                <div className="flex-1 min-w-0">
+                  <p className="font-sans text-sm font-semibold text-foreground">Neue Nachricht senden</p>
+                  <p className="font-sans text-xs text-muted-foreground">Kontaktieren Sie Emilian direkt</p>
                 </div>
-                {replySent && (
-                  <div className="mt-2 flex items-center gap-1.5 text-xs text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
-                    <Check className="w-3.5 h-3.5" /> Nachricht gesendet
-                  </div>
-                )}
+                <a
+                  href="mailto:el@magicel.de"
+                  className="shrink-0 inline-flex items-center gap-1.5 font-sans text-sm text-accent border border-accent/20 rounded-xl px-3.5 py-2.5 hover:bg-accent/5 transition-all active:scale-95 min-h-[44px]"
+                >
+                  <Mail className="w-4 h-4" />
+                  E-Mail
+                </a>
               </div>
             </div>
           );
