@@ -1065,11 +1065,15 @@ const AdminBookingDetail = () => {
                 </div>
                 <button
                   onClick={async () => {
-                    // Anfahrts-Artikel live aus DB laden (immer aktueller Preis)
+                    // Session refreshen für DB-Zugriff
+                    await supabase.auth.refreshSession();
+
+                    // Anfahrts-Artikel live aus DB laden
                     const { data: anfahrtArt } = await supabase
                       .from("artikel_stamm")
                       .select("bezeichnung, beschreibung, einzelpreis, einheit")
                       .ilike("bezeichnung", "%anfahrt%")
+                      .eq("aktiv", true)
                       .limit(1)
                       .maybeSingle();
 
@@ -1079,23 +1083,23 @@ const AdminBookingDetail = () => {
                         typ: "leistung",
                         bezeichnung: selectedPaket.name,
                         beschreibung: selectedPaket.beschreibungKunde || "",
-                        menge: 1,
-                        einheit: "Pauschal",
-                        einzelpreis: selectedPaket.preis,
+                        menge: selectedPaket.zieldauer,
+                        einheit: "Min.",
+                        einzelpreis: Math.round((selectedPaket.preis / selectedPaket.zieldauer) * 100) / 100,
                         gesamt: selectedPaket.preis,
                         optional: false,
                       },
-                      ...(anfahrtArt ? [{
+                      {
                         id: crypto.randomUUID(),
                         typ: "leistung",
-                        bezeichnung: anfahrtArt.bezeichnung,
-                        beschreibung: anfahrtArt.beschreibung || "",
+                        bezeichnung: anfahrtArt?.bezeichnung || "Anfahrtspauschale",
+                        beschreibung: anfahrtArt?.beschreibung || "Anfahrt und Rückreise zum Veranstaltungsort",
                         menge: 1,
-                        einheit: anfahrtArt.einheit || "km",
-                        einzelpreis: anfahrtArt.einzelpreis ?? 0,
-                        gesamt: anfahrtArt.einzelpreis ?? 0,
+                        einheit: anfahrtArt?.einheit || "km",
+                        einzelpreis: anfahrtArt?.einzelpreis ?? 0,
+                        gesamt: anfahrtArt?.einzelpreis ?? 0,
                         optional: false,
-                      }] : []),
+                      },
                     ];
                     sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
                     const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
