@@ -283,6 +283,7 @@ const AdminBookingDetail = () => {
   const [message, setMessage] = useState("");
   const [sendingMail, setSendingMail] = useState(false);
   const [billingReqStatus, setBillingReqStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
+  const [checklist, setChecklist] = useState<Record<string, boolean>>({});
 
   const [draftAnlass, setDraftAnlass] = useState("");
   const [draftDatum, setDraftDatum] = useState("");
