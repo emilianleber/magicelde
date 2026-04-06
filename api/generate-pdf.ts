@@ -7,7 +7,7 @@ const CHROMIUM_URL =
 
 export const config = { maxDuration: 60 };
 
-function buildHtml(previewHtml: string, title: string, headerPad: number, footerPad: number) {
+function buildHtml(previewHtml: string, title: string) {
   return `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -18,21 +18,9 @@ function buildHtml(previewHtml: string, title: string, headerPad: number, footer
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     html, body { width: 595px; background: #fff; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 9pt; line-height: 1.5; color: #111; }
     body * { font-family: 'Inter', system-ui, -apple-system, sans-serif !important; }
-    body > div { width: 595px; position: relative; padding-top: ${headerPad}px; padding-bottom: ${footerPad}px; }
-
-    /* Header auf jeder Seite wiederholen */
-    body > div > div:first-child {
-      position: fixed !important;
-      top: 0 !important; left: 0 !important; right: 0 !important;
-      z-index: 10; background: #fff !important;
-    }
-
-    /* Footer auf jeder Seite wiederholen */
-    [style*="position: absolute"][style*="bottom"] {
-      position: fixed !important;
-      bottom: 0 !important; left: 0 !important; right: 0 !important;
-      z-index: 10; background: #fff !important;
-    }
+    body > div { width: 595px; position: relative; }
+    /* Footer aus Content-Flow entfernen – wird per Puppeteer footerTemplate gerendert */
+    [style*="position: absolute"][style*="bottom"] { display: none !important; }
   </style>
 </head>
 <body>${previewHtml}</body>
@@ -51,40 +39,56 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!preview_html) return res.status(400).json({ error: "preview_html fehlt" });
 
   const docTitle = title || "Dokument";
+  const html = buildHtml(preview_html, docTitle);
+
   const executablePath = await chromium.executablePath(CHROMIUM_URL);
   const browser = await puppeteer.launch({ args: chromium.args, executablePath, headless: true });
 
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: 595, height: 842, deviceScaleFactor: 2 });
-
-    // Schritt 1: HTML ohne Padding laden um Header/Footer-Höhe zu messen
-    const measureHtml = buildHtml(preview_html, docTitle, 0, 0);
-    await page.setContent(measureHtml, { waitUntil: "networkidle0", timeout: 30000 });
+    await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
 
-    const { headerHeight, footerHeight } = await page.evaluate(() => {
+    // Footer-HTML aus dem Content extrahieren (wird per CSS display:none versteckt)
+    const footerInnerHtml = await page.evaluate(() => {
+      // Vor dem display:none greifen wir den Footer-Content
       const container = document.querySelector("body > div") as HTMLElement;
-      if (!container) return { headerHeight: 0, footerHeight: 0 };
-      const firstChild = container.children[0] as HTMLElement;
-      const hH = firstChild ? firstChild.offsetHeight : 0;
-      const footerEl = container.querySelector('[style*="position: absolute"][style*="bottom"]') as HTMLElement;
-      const fH = footerEl ? footerEl.offsetHeight : 0;
-      return { headerHeight: hH, footerHeight: fH };
+      if (!container) return "";
+      // Der Footer ist der letzte Block mit position:absolute + bottom
+      const allDivs = container.querySelectorAll("div");
+      for (let i = allDivs.length - 1; i >= 0; i--) {
+        const s = allDivs[i].getAttribute("style") || "";
+        if (s.includes("position") && s.includes("absolute") && s.includes("bottom")) {
+          return allDivs[i].innerHTML;
+        }
+      }
+      return "";
     });
 
-    // Schritt 2: HTML NEU laden MIT den korrekten Paddings im CSS
-    // Extra Padding großzügig: scale 96/72 vergrößert alles, Footer braucht mehr Platz
-    const finalHtml = buildHtml(preview_html, docTitle, headerHeight + 20, footerHeight + 30);
-    await page.setContent(finalHtml, { waitUntil: "networkidle0", timeout: 30000 });
-    await page.evaluate(() => document.fonts.ready);
+    // Puppeteer footerTemplate – wird auf JEDER Seite gerendert, außerhalb des Content-Flow
+    const footerTemplate = footerInnerHtml
+      ? `<style>
+          #footer-wrap { width: 595px; margin: 0 auto; padding: 0; font-family: Inter, system-ui, sans-serif; }
+          #footer-wrap * { font-family: Inter, system-ui, sans-serif !important; }
+        </style>
+        <div id="footer-wrap" style="width:595px;font-size:10px;">${footerInnerHtml}</div>`
+      : "<div></div>";
 
-    // Schritt 3: PDF generieren
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
       scale: 96 / 72,
-      margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
+      displayHeaderFooter: true,
+      // Leerer Header – der echte Header bleibt im Content (damit Logo korrekt dargestellt wird)
+      headerTemplate: "<div></div>",
+      footerTemplate,
+      margin: {
+        top: "8mm",    // Kleiner oberer Rand – Header ist im Content
+        right: "0mm",
+        bottom: "25mm", // Platz für den Puppeteer-Footer
+        left: "0mm",
+      },
     });
 
     res.setHeader("Access-Control-Allow-Origin", "*");
