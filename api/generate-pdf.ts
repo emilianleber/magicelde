@@ -95,18 +95,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     body * { font-family: 'Inter', system-ui, -apple-system, sans-serif !important; }
     table { width: 595px; border-collapse: collapse; }
     thead td, tbody td { padding: 0; vertical-align: top; }
-    tfoot td { padding: 0; }
     thead { display: table-header-group; }
-    tfoot { display: table-footer-group; }
     tbody { display: table-row-group; }
-    /* Footer-Inhalt am Seitenende fixieren */
-    tfoot td > div { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; }
+    /* Footer per position:fixed → immer am Seitenende auf jeder Seite */
+    #pdf-footer { position: fixed; bottom: 0; left: 0; right: 0; width: 595px; background: #fff; z-index: 10; }
   </style>
 </head>
 <body>
+  <!-- Footer: fixed am Seitenende jeder Seite -->
+  <div id="pdf-footer">${parts.footerHtml}</div>
+  <!-- Table: thead wiederholt Header auf jeder Seite -->
   <table>
     <thead><tr><td>${parts.headerHtml}</td></tr></thead>
-    <tfoot><tr><td>${parts.footerHtml}</td></tr></tfoot>
     <tbody><tr><td>${parts.contentHtml}</td></tr></tbody>
   </table>
 </body>
@@ -117,10 +117,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Footer-Höhe messen und als padding-bottom auf tbody td setzen
     await page.evaluate(() => {
-      const footerDiv = document.querySelector("tfoot td > div") as HTMLElement;
+      const footer = document.getElementById("pdf-footer") as HTMLElement;
       const tbodyTd = document.querySelector("tbody td") as HTMLElement;
-      if (footerDiv && tbodyTd) {
-        tbodyTd.style.paddingBottom = (footerDiv.offsetHeight + 12) + "px";
+      if (footer && tbodyTd) {
+        tbodyTd.style.paddingBottom = (footer.offsetHeight + 14) + "px";
       }
     });
 
