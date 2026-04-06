@@ -1104,7 +1104,7 @@ const Kundenportal = () => {
             })}
 
             {/* Invoice widget */}
-            {documents.filter(d => d.type === "Rechnung" || d.type === "Abschlagsrechnung" || d.type === "Mahnung").length > 0 && (
+            {documents.filter(d => d.type === "Rechnung" || d.type === "Abschlagsrechnung" || d.type === "Schlussrechnung" || d.type === "Mahnung").length > 0 && (
               <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
                 <div className="px-5 py-4 border-b border-black/[0.05] flex items-center justify-between">
                   <h2 className="font-display text-sm font-bold text-foreground flex items-center gap-2">
@@ -1115,7 +1115,7 @@ const Kundenportal = () => {
                   </button>
                 </div>
                 <div className="divide-y divide-black/[0.04]">
-                  {documents.filter(d => d.type === "Rechnung" || d.type === "Abschlagsrechnung" || d.type === "Mahnung").map(doc => {
+                  {documents.filter(d => d.type === "Rechnung" || d.type === "Abschlagsrechnung" || d.type === "Schlussrechnung" || d.type === "Mahnung").map(doc => {
                     const days = doc.due_date ? Math.round((new Date(doc.due_date).setHours(0,0,0,0) - new Date().setHours(0,0,0,0)) / 86400000) : null;
                     return (
                       <div key={doc.id} className="flex items-center gap-3 px-5 py-3.5">
@@ -1538,7 +1538,7 @@ const Kundenportal = () => {
 
         {/* ── DOKUMENTE ── */}
         {activeTab === "documents" && (() => {
-          const rechnungsTypen = ["Rechnung", "Abschlagsrechnung", "Mahnung"];
+          const rechnungsTypen = ["Rechnung", "Abschlagsrechnung", "Schlussrechnung", "Mahnung"];
           const rechnungen = documents.filter(d => rechnungsTypen.includes(d.type || ""));
           const angebote = documents.filter(d => d.type === "Angebot");
           const vertraege = documents.filter(d => d.type === "Vertrag" || d.type === "Auftragsbestätigung");
