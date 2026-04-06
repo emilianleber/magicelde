@@ -18,7 +18,7 @@ function buildHtml(previewHtml: string, title: string) {
   <title>${title}</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    @page { size: A4 portrait; margin: 0 0 80px 0; }
+    @page { size: A4 portrait; margin: 0 0 50px 0; }
     * {
       margin: 0; padding: 0; box-sizing: border-box;
       -webkit-print-color-adjust: exact !important;
@@ -37,7 +37,7 @@ function buildHtml(previewHtml: string, title: string) {
       min-height: auto !important;
       height: auto !important;
       position: relative;
-      padding-bottom: 80px !important;
+      padding-bottom: 50px !important;
     }
     /* Footer fix am Seitenende auf jeder Seite */
     [style*="position: absolute"][style*="bottom"] {
