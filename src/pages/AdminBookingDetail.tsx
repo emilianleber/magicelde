@@ -1046,92 +1046,79 @@ const AdminBookingDetail = () => {
             </div>
           )}
 
-          {/* ── Paket zuordnen ── */}
-          <div className="p-5 rounded-2xl bg-accent/5 border border-accent/20">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-accent" /> Paket / Konzept zuordnen
-              </h2>
-            </div>
-            {selectedPaket ? (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-accent/10">
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">{selectedPaket.name}</p>
-                    <p className="text-xs text-muted-foreground">{selectedPaket.zieldauer} Min. · {selectedPaket.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
-                    {selectedPaket.beschreibungKunde && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{selectedPaket.beschreibungKunde}</p>}
-                  </div>
-                  <button onClick={async () => {
-                    setSelectedPaket(null);
-                    await supabase.from("portal_requests").update({ paket_id: null }).eq("id", request.id);
-                  }} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
-                </div>
-                <button
-                  onClick={async () => {
-                    // Session refreshen für DB-Zugriff
-                    await supabase.auth.refreshSession();
-
-                    // Anfahrts-Artikel live aus DB laden
-                    const { data: anfahrtArt } = await supabase
-                      .from("artikel_stamm")
-                      .select("bezeichnung, beschreibung, preis, einheit")
-                      .ilike("bezeichnung", "%anfahrt%")
-                      .eq("aktiv", true)
-                      .limit(1)
-                      .maybeSingle();
-
-                    const positions = [
-                      {
-                        id: crypto.randomUUID(),
-                        typ: "leistung",
-                        bezeichnung: selectedPaket.name,
-                        beschreibung: selectedPaket.beschreibungKunde || "",
-                        menge: selectedPaket.zieldauer,
-                        einheit: "Min.",
-                        einzelpreis: Math.round((selectedPaket.preis / selectedPaket.zieldauer) * 100) / 100,
-                        gesamt: selectedPaket.preis,
-                        optional: false,
-                      },
-                      {
-                        id: crypto.randomUUID(),
-                        typ: "leistung",
-                        bezeichnung: anfahrtArt?.bezeichnung || "Anfahrtspauschale",
-                        beschreibung: anfahrtArt?.beschreibung || "Anfahrt und Rückreise zum Veranstaltungsort",
-                        menge: 1,
-                        einheit: anfahrtArt?.einheit || "km",
-                        einzelpreis: anfahrtArt?.preis ?? 0,
-                        gesamt: anfahrtArt?.preis ?? 0,
-                        optional: false,
-                      },
-                    ];
-                    sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
-                    const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
-                    navigate(`/admin/dokumente/new?typ=angebot${params}`);
-                  }}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 transition-opacity"
-                >
-                  <FileText className="w-4 h-4" /> Angebot aus Paket erstellen
-                </button>
+          {/* ── Paket/Konzept: VOR Buchung zuordnen, NACH Buchung anzeigen ── */}
+          {!event ? (
+            /* VOR BUCHUNG: Paket/Konzept zuordnen */
+            <div className="p-5 rounded-2xl bg-accent/5 border border-accent/20">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-accent" /> Paket / Konzept zuordnen
+                </h2>
               </div>
-            ) : (
-              <select
-                value=""
-                onChange={async (e) => {
-                  const p = allPakete.find(pk => pk.id === e.target.value);
-                  if (p) {
-                    setSelectedPaket(p);
-                    await supabase.from("portal_requests").update({ paket_id: p.id }).eq("id", request.id);
-                  }
-                }}
-                className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-muted-foreground"
-              >
-                <option value="">Paket auswählen…</option>
-                {allPakete.map(p => (
-                  <option key={p.id} value={p.id}>{p.name} – {p.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })} ({p.zieldauer} Min.)</option>
-                ))}
-              </select>
-            )}
-          </div>
+              {selectedPaket ? (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-accent/10">
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{selectedPaket.name}</p>
+                      <p className="text-xs text-muted-foreground">{selectedPaket.zieldauer} Min. · {selectedPaket.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
+                      {selectedPaket.beschreibungKunde && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{selectedPaket.beschreibungKunde}</p>}
+                    </div>
+                    <button onClick={async () => {
+                      setSelectedPaket(null);
+                      await supabase.from("portal_requests").update({ paket_id: null }).eq("id", request.id);
+                    }} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      await supabase.auth.refreshSession();
+                      const { data: anfahrtArt } = await supabase.from("artikel_stamm").select("bezeichnung, beschreibung, preis, einheit").ilike("bezeichnung", "%anfahrt%").eq("aktiv", true).limit(1).maybeSingle();
+                      const positions = [
+                        { id: crypto.randomUUID(), typ: "leistung", bezeichnung: selectedPaket.name, beschreibung: selectedPaket.beschreibungKunde || "", menge: selectedPaket.zieldauer, einheit: "Min.", einzelpreis: Math.round((selectedPaket.preis / selectedPaket.zieldauer) * 100) / 100, gesamt: selectedPaket.preis, optional: false },
+                        { id: crypto.randomUUID(), typ: "leistung", bezeichnung: anfahrtArt?.bezeichnung || "Anfahrtspauschale", beschreibung: anfahrtArt?.beschreibung || "Anfahrt und Rückreise zum Veranstaltungsort", menge: 1, einheit: anfahrtArt?.einheit || "km", einzelpreis: anfahrtArt?.preis ?? 0, gesamt: anfahrtArt?.preis ?? 0, optional: false },
+                      ];
+                      sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
+                      const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
+                      navigate(`/admin/dokumente/new?typ=angebot${params}`);
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 transition-opacity"
+                  >
+                    <FileText className="w-4 h-4" /> Angebot aus Paket erstellen
+                  </button>
+                </div>
+              ) : (
+                <select
+                  value=""
+                  onChange={async (e) => {
+                    const p = allPakete.find(pk => pk.id === e.target.value);
+                    if (p) {
+                      setSelectedPaket(p);
+                      await supabase.from("portal_requests").update({ paket_id: p.id }).eq("id", request.id);
+                    }
+                  }}
+                  className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-muted-foreground"
+                >
+                  <option value="">Paket auswählen…</option>
+                  {allPakete.map(p => (
+                    <option key={p.id} value={p.id}>{p.name} – {p.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })} ({p.zieldauer} Min.)</option>
+                  ))}
+                </select>
+              )}
+            </div>
+          ) : selectedPaket ? (
+            /* NACH BUCHUNG: Show/Programm anzeigen */
+            <div className="p-5 rounded-2xl bg-gradient-to-br from-accent/5 to-purple-50/30 border border-accent/20">
+              <h2 className="text-sm font-bold text-foreground flex items-center gap-2 mb-3">
+                <Sparkles className="w-4 h-4 text-accent" /> Show / Programm
+              </h2>
+              <div className="p-4 rounded-xl bg-white border border-accent/10">
+                <p className="text-base font-bold text-foreground">{selectedPaket.name}</p>
+                <p className="text-xs text-muted-foreground mt-1">{selectedPaket.zieldauer} Min. · {selectedPaket.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
+                {selectedPaket.beschreibungKunde && (
+                  <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{selectedPaket.beschreibungKunde}</p>
+                )}
+              </div>
+            </div>
+          ) : null}
 
           {/* ── Documents ── */}
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
@@ -1145,16 +1132,16 @@ const AdminBookingDetail = () => {
                   const primaryCls = "inline-flex items-center gap-1 rounded-lg bg-foreground text-background px-2.5 py-1.5 text-[11px] font-bold hover:bg-foreground/90";
                   return (
                     <>
+                      {/* Nur kontextabhängige Buttons – keine doppelten */}
                       {!event && <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={primaryCls}><FileText className="w-3 h-3" />Angebot</Link>}
-                      {event && phase === "in_planung" && <Link to={`/admin/dokumente/new?typ=auftragsbestaetigung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Auftragsbestätigung</Link>}
-                      {event && phase === "in_planung" && <button onClick={() => setShowAbschlagDialog(true)} className={primaryCls}><FileText className="w-3 h-3" />Abschlagsrechnung</button>}
+                      {event && phase === "in_planung" && <Link to={`/admin/dokumente/new?typ=auftragsbestaetigung${params}`} className={btnCls}><FileText className="w-3 h-3" />Auftragsbestätigung</Link>}
+                      {event && phase === "in_planung" && <button onClick={() => setShowAbschlagDialog(true)} className={btnCls}><FileText className="w-3 h-3" />Abschlagsrechnung</button>}
                       {event && (phase === "event_erfolgt" || phase === "abgeschlossen") && (
                         <button onClick={() => createSchlussrechnung(params)} className={primaryCls}><FileText className="w-3 h-3" />Schlussrechnung</button>
                       )}
-                      <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={btnCls}>Angebot</Link>
-                      <Link to={`/admin/dokumente/new?typ=auftragsbestaetigung${params}`} className={btnCls}>Auftragsbestätigung</Link>
-                      <button onClick={() => createSchlussrechnung(params)} className={btnCls}>Schlussrechnung</button>
-                      <button onClick={() => setShowAbschlagDialog(true)} className={btnCls}>Abschlag</button>
+                      {event && (phase === "event_erfolgt" || phase === "abgeschlossen") && (
+                        <button onClick={() => setShowAbschlagDialog(true)} className={btnCls}><FileText className="w-3 h-3" />Abschlag</button>
+                      )}
                     </>
                   );
                 })()}

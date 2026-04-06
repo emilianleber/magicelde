@@ -775,12 +775,9 @@ const Kundenportal = () => {
   };
 
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
-    { id: "dashboard", label: "Start", icon: LayoutDashboard },
-    { id: "requests", label: "Anfragen & Events", icon: Calendar },
+    { id: "dashboard", label: "Übersicht", icon: LayoutDashboard },
     { id: "documents", label: "Dokumente", icon: FolderOpen },
-    { id: "nachrichten", label: "Nachrichten", icon: Mail, badge: unreadCount || undefined },
-    { id: "einstellungen", label: "Einstellungen", icon: Settings },
-    { id: "kontakt", label: "Kontakt", icon: Phone },
+    { id: "kontakt", label: "Kontakt & Daten", icon: Phone },
   ];
 
   return (
@@ -1125,11 +1122,13 @@ const Kundenportal = () => {
                             {doc.amount != null && (
                               <span className="font-sans text-xs text-muted-foreground">{new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(doc.amount)}</span>
                             )}
-                            {days !== null && (
+                            {doc.status === "bezahlt" ? (
+                              <span className="font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Bezahlt ✓</span>
+                            ) : days !== null ? (
                               <span className={`font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full ${days < 0 ? "bg-red-100 text-red-700" : days <= 7 ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>
                                 {days < 0 ? `${Math.abs(days)} Tage überfällig` : days === 0 ? "Heute fällig" : `fällig in ${days} Tagen`}
                               </span>
-                            )}
+                            ) : null}
                           </div>
                         </div>
                         {doc.file_url && (
@@ -1567,11 +1566,13 @@ const Kundenportal = () => {
                     {doc.amount != null && (
                       <span className="font-sans text-xs text-muted-foreground">{new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(doc.amount)}</span>
                     )}
-                    {days !== null && (
+                    {doc.status === "bezahlt" ? (
+                      <span className="font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Bezahlt ✓</span>
+                    ) : days !== null ? (
                       <span className={`font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full ${days < 0 ? "bg-red-100 text-red-700" : days <= 7 ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>
                         {days < 0 ? `${Math.abs(days)} Tage überfällig` : days === 0 ? "Heute fällig" : `fällig in ${days} Tagen`}
                       </span>
-                    )}
+                    ) : null}
                   </div>
                 </div>
                 <button
@@ -2438,57 +2439,70 @@ const Kundenportal = () => {
         {/* ── KONTAKT ── */}
         {activeTab === "kontakt" && (
           <div className="space-y-5">
-            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-sm">
-              <h2 className="font-display text-xl font-bold text-foreground mb-1">Direkt in Kontakt</h2>
-              <p className="font-sans text-sm text-muted-foreground mb-6">Haben Sie Fragen oder möchten Sie etwas besprechen?</p>
+            <h1 className="font-display text-xl font-bold text-foreground border-l-[3px] border-accent pl-3">Kontakt & Daten</h1>
 
-              <div className="grid sm:grid-cols-2 gap-4">
-                <a href="tel:+4915563744696" className="flex items-center gap-4 p-4 rounded-2xl bg-black/[0.015] border border-black/[0.05] hover:border-accent/30 hover:bg-accent/[0.02] transition-all group">
-                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
-                    <Phone className="w-5 h-5 text-accent" />
-                  </div>
+            {/* Kontaktdaten */}
+            <div className="p-6 rounded-2xl bg-white border border-black/[0.06] shadow-sm">
+              <h2 className="font-sans text-sm font-bold text-foreground mb-4">Kontakt</h2>
+              <div className="grid sm:grid-cols-3 gap-3">
+                <a href="tel:+4915563744696" className="flex items-center gap-3 p-3 rounded-xl bg-black/[0.02] border border-black/[0.04] hover:border-accent/20 transition-all">
+                  <Phone className="w-4 h-4 text-accent shrink-0" />
                   <div>
-                    <p className="font-sans text-sm font-semibold text-foreground">Anrufen</p>
-                    <p className="font-sans text-xs text-muted-foreground">+49 155 63744696</p>
+                    <p className="font-sans text-xs text-muted-foreground">Telefon</p>
+                    <p className="font-sans text-sm font-medium text-foreground">+49 155 63744696</p>
                   </div>
                 </a>
-
-                <a href="mailto:el@magicel.de" className="flex items-center gap-4 p-4 rounded-2xl bg-black/[0.015] border border-black/[0.05] hover:border-accent/30 hover:bg-accent/[0.02] transition-all group">
-                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
-                    <Mail className="w-5 h-5 text-accent" />
-                  </div>
+                <a href="mailto:el@magicel.de" className="flex items-center gap-3 p-3 rounded-xl bg-black/[0.02] border border-black/[0.04] hover:border-accent/20 transition-all">
+                  <Mail className="w-4 h-4 text-accent shrink-0" />
                   <div>
-                    <p className="font-sans text-sm font-semibold text-foreground">E-Mail schreiben</p>
-                    <p className="font-sans text-xs text-muted-foreground">el@magicel.de</p>
+                    <p className="font-sans text-xs text-muted-foreground">E-Mail</p>
+                    <p className="font-sans text-sm font-medium text-foreground">el@magicel.de</p>
+                  </div>
+                </a>
+                <a href="https://wa.me/4915563744696" target="_blank" rel="noopener" className="flex items-center gap-3 p-3 rounded-xl bg-black/[0.02] border border-black/[0.04] hover:border-accent/20 transition-all">
+                  <MessageCircle className="w-4 h-4 text-accent shrink-0" />
+                  <div>
+                    <p className="font-sans text-xs text-muted-foreground">WhatsApp</p>
+                    <p className="font-sans text-sm font-medium text-foreground">Nachricht senden</p>
                   </div>
                 </a>
               </div>
             </div>
 
-            <div
-              className="relative overflow-hidden rounded-3xl p-6"
-              style={{ background: "linear-gradient(135deg, hsl(230,65%,48%), hsl(280,55%,45%), hsl(345,70%,42%))" }}
-            >
-              {/* subtle glow orb */}
-              <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/10 blur-2xl pointer-events-none" />
-              <div className="relative flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
-                  <MessageCircle className="w-6 h-6 text-white" />
+            {/* Rechnungsadresse */}
+            <div className="p-6 rounded-2xl bg-white border border-black/[0.06] shadow-sm">
+              <h2 className="font-sans text-sm font-bold text-foreground mb-4">Ihre Rechnungsadresse</h2>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-muted-foreground mb-1">Straße & Hausnummer</label>
+                  <input value={settingsDraft.rechnungs_strasse} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_strasse: e.target.value }))} placeholder="Musterstraße 1" className="w-full rounded-xl bg-black/[0.02] border border-black/[0.06] px-3 py-2.5 text-sm" />
                 </div>
-                <div className="flex-1">
-                  <p className="font-sans text-base font-bold text-white mb-1">Chat-Assistent</p>
-                  <p className="font-sans text-sm text-white/75 mb-5">
-                    Schnelle Antworten auf häufige Fragen zu Ihrem Event oder unseren Showkonzepten.
-                  </p>
-                  <button
-                    onClick={() => document.dispatchEvent(new CustomEvent("open-chatbot"))}
-                    className="inline-flex items-center gap-2 bg-white text-gray-900 font-semibold text-sm px-5 py-2.5 rounded-2xl hover:bg-white/90 active:scale-95 transition-all shadow-lg"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    Chat öffnen
-                  </button>
+                <div className="grid grid-cols-[100px_1fr] gap-2">
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">PLZ</label>
+                    <input value={settingsDraft.rechnungs_plz} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_plz: e.target.value }))} placeholder="12345" className="w-full rounded-xl bg-black/[0.02] border border-black/[0.06] px-3 py-2.5 text-sm" />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Ort</label>
+                    <input value={settingsDraft.rechnungs_ort} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_ort: e.target.value }))} placeholder="Musterstadt" className="w-full rounded-xl bg-black/[0.02] border border-black/[0.06] px-3 py-2.5 text-sm" />
+                  </div>
                 </div>
               </div>
+              <button
+                onClick={async () => {
+                  if (!customer?.id) return;
+                  await supabase.from("portal_customers").update({
+                    rechnungs_strasse: settingsDraft.rechnungs_strasse.trim() || null,
+                    rechnungs_plz: settingsDraft.rechnungs_plz.trim() || null,
+                    rechnungs_ort: settingsDraft.rechnungs_ort.trim() || null,
+                    rechnungs_land: settingsDraft.rechnungs_land.trim() || "Deutschland",
+                  }).eq("id", customer.id);
+                  setMessage("Rechnungsadresse gespeichert ✓");
+                }}
+                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 transition-opacity"
+              >
+                <Save className="w-3.5 h-3.5" /> Speichern
+              </button>
             </div>
           </div>
         )}
