@@ -1102,19 +1102,35 @@ body > div { width: 595px !important; min-height: 842px !important; height: auto
                 const val = uhrzeitInput[item.id];
                 if (!val) return;
                 setUhrzeitSaving(p => ({ ...p, [item.id]: true }));
-                const { error } = await supabase
+
+                // Primäre Tabelle updaten
+                await supabase
                   .from(item.table)
                   .update({ [item.field]: val, uhrzeit_anfragen: false })
                   .eq("id", item.id);
-                if (!error) {
-                  setUhrzeitSaved(p => ({ ...p, [item.id]: true }));
-                  if (item.type === "event") {
-                    setEvents(prev => prev.map(e => e.id === item.id ? { ...e, start_time: val, uhrzeit_anfragen: false } : e));
-                  } else {
-                    setRequests(prev => prev.map(r => r.id === item.id ? { ...r, uhrzeit: val, uhrzeit_anfragen: false } : r));
+
+                // Bidirektional: Event ↔ Request sync
+                if (item.type === "event") {
+                  const evt = events.find(e => e.id === item.id);
+                  if (evt?.request_id) {
+                    await supabase.from("portal_requests")
+                      .update({ uhrzeit: val, uhrzeit_anfragen: false })
+                      .eq("id", evt.request_id);
+                    setRequests(prev => prev.map(r => r.id === evt.request_id ? { ...r, uhrzeit: val, uhrzeit_anfragen: false } : r));
                   }
-                  setTimeout(() => setUhrzeitSaved(p => ({ ...p, [item.id]: false })), 3000);
+                  setEvents(prev => prev.map(e => e.id === item.id ? { ...e, start_time: val, uhrzeit_anfragen: false } : e));
+                } else {
+                  const req = requests.find(r => r.id === item.id);
+                  if (req?.event_id) {
+                    await supabase.from("portal_events")
+                      .update({ start_time: val, uhrzeit_anfragen: false })
+                      .eq("id", req.event_id);
+                    setEvents(prev => prev.map(e => e.id === req.event_id ? { ...e, start_time: val, uhrzeit_anfragen: false } : e));
+                  }
+                  setRequests(prev => prev.map(r => r.id === item.id ? { ...r, uhrzeit: val, uhrzeit_anfragen: false } : r));
                 }
+
+                setUhrzeitSaved(p => ({ ...p, [item.id]: true }));
                 setUhrzeitSaving(p => ({ ...p, [item.id]: false }));
               };
 
