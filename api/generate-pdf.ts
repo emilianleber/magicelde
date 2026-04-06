@@ -88,11 +88,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Warten bis Inter-Font geladen ist
     await page.evaluate(() => document.fonts.ready);
 
+    // 595 CSS-px bei 96dpi = 15.75cm, A4 = 21cm → scale 96/72 = 1.333
+    // Damit füllt der 595px Content exakt die A4-Breite
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
       margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
-      preferCSSPageSize: true,
+      scale: 96 / 72,
     });
 
     res.setHeader("Access-Control-Allow-Origin", "*");
