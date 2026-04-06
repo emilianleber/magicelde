@@ -25,6 +25,8 @@ import {
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
 import DocumentCreator, { type DocumentData, type DocumentPosition } from "@/components/admin/DocumentCreator";
+import { paketeService } from "@/services/paketeService";
+import type { Paket } from "@/types/productions";
 
 /* ── Types ──────────────────────────────────────────────────────────────────── */
 
@@ -247,6 +249,8 @@ const AdminBookingDetail = () => {
   const [mailHistory, setMailHistory] = useState<Array<{ id: string; created_at: string; subject: string; to_email: string; status: string }>>([]);
   const [mailSentAt, setMailSentAt] = useState<string | null>(null);
   const [showDocCreator, setShowDocCreator] = useState(false);
+  const [allPakete, setAllPakete] = useState<Paket[]>([]);
+  const [selectedPaket, setSelectedPaket] = useState<Paket | null>(null);
   const [emailTemplates, setEmailTemplates] = useState<{ slug: string; name: string; kategorie: string }[]>([]);
   const [sendingTemplate, setSendingTemplate] = useState(false);
   const [editingDoc, setEditingDoc] = useState<(DocumentData & { positions?: DocumentPosition[] }) | null>(null);
@@ -369,6 +373,9 @@ const AdminBookingDetail = () => {
         .eq("aktiv", true)
         .order("sortierung", { ascending: true });
       setEmailTemplates(tpls || []);
+
+      // Pakete laden
+      try { setAllPakete(await paketeService.getAll()); } catch {}
 
       setLoading(false);
     };
@@ -987,6 +994,65 @@ const AdminBookingDetail = () => {
               </div>
             </div>
           )}
+
+          {/* ── Paket zuordnen ── */}
+          <div className="p-5 rounded-2xl bg-accent/5 border border-accent/20">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-accent" /> Paket / Konzept zuordnen
+              </h2>
+            </div>
+            {selectedPaket ? (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-accent/10">
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{selectedPaket.name}</p>
+                    <p className="text-xs text-muted-foreground">{selectedPaket.zieldauer} Min. · {selectedPaket.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
+                    {selectedPaket.beschreibungKunde && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{selectedPaket.beschreibungKunde}</p>}
+                  </div>
+                  <button onClick={() => setSelectedPaket(null)} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
+                </div>
+                <button
+                  onClick={() => {
+                    // Angebot mit Paket-Positionen erstellen
+                    const positions: DocumentPosition[] = [{
+                      id: crypto.randomUUID(),
+                      typ: "leistung",
+                      bezeichnung: selectedPaket.name,
+                      beschreibung: selectedPaket.beschreibungKunde || "",
+                      menge: 1,
+                      einheit: "Std.",
+                      einzelpreis: selectedPaket.preis,
+                      gesamt: selectedPaket.preis,
+                      optional: false,
+                    }];
+                    setEditingDoc({
+                      type: "Angebot",
+                      positionen: positions,
+                    } as any);
+                    setShowDocCreator(true);
+                  }}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 transition-opacity"
+                >
+                  <FileText className="w-4 h-4" /> Angebot aus Paket erstellen
+                </button>
+              </div>
+            ) : (
+              <select
+                value=""
+                onChange={(e) => {
+                  const p = allPakete.find(pk => pk.id === e.target.value);
+                  if (p) setSelectedPaket(p);
+                }}
+                className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-muted-foreground"
+              >
+                <option value="">Paket auswählen…</option>
+                {allPakete.map(p => (
+                  <option key={p.id} value={p.id}>{p.name} – {p.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })} ({p.zieldauer} Min.)</option>
+                ))}
+              </select>
+            )}
+          </div>
 
           {/* ── Documents ── */}
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
