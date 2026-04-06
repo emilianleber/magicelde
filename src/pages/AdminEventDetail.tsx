@@ -192,9 +192,9 @@ const AdminEventDetail = () => {
       setFormat(data.format || "");
       setGuests(data.guests != null ? String(data.guests) : "");
       setStatus(data.status || "in_planung");
-      setDetailsStatus(data.details_status || "offen");
-      setContractStatus(data.contract_status || "offen");
-      setInvoiceStatus(data.invoice_status || "offen");
+      setDetailsStatus(data.details_status || null);
+      setContractStatus(data.contract_status || null);
+      setInvoiceStatus(data.invoice_status || null);
       setNotes(data.notes || "");
       setDraftEventDate(data.event_date || "");
       setDraftStartTime(data.start_time || "");

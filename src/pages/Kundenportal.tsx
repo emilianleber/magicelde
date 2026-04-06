@@ -1285,8 +1285,8 @@ const Kundenportal = () => {
               </div>
             )}
 
-            {/* Current request card */}
-            {currentRequest && (
+            {/* Current request card – nur wenn NICHT gebucht (sonst zeigt Event-Card) */}
+            {currentRequest && !currentRequest.event_id && (
               <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
                 <div className="px-5 py-4 border-b border-black/[0.05] flex items-center justify-between">
                   <h2 className="font-display text-sm font-bold text-foreground">Aktuelle Anfrage</h2>
