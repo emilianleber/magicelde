@@ -25,6 +25,8 @@ import {
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
 import DocumentCreator, { type DocumentData, type DocumentPosition } from "@/components/admin/DocumentCreator";
+import { paketeService } from "@/services/paketeService";
+import type { Paket } from "@/types/productions";
 
 /* ── Types ──────────────────────────────────────────────────────────────────── */
 
@@ -177,12 +179,23 @@ const requestPhases = [
   { value: "archiviert", label: "Archiviert" },
 ];
 
-// Anfrage-Checkliste (rein visuell, ändert NICHT den Status)
-const requestChecklist = [
-  { key: "chk_details", label: "Details geklärt" },
-  { key: "chk_angebot", label: "Angebot erstellt" },
-  { key: "chk_rueckmeldung", label: "Rückmeldung erhalten" },
-];
+// Checkliste pro Status (rein visuell, ändert NICHT den Status)
+const checklistByStatus: Record<string, { key: string; label: string }[]> = {
+  neu: [
+    { key: "chk_anfrage_gelesen", label: "Anfrage gelesen" },
+    { key: "chk_kunde_kontaktiert", label: "Kunde kontaktiert" },
+  ],
+  in_bearbeitung: [
+    { key: "chk_details_geklaert", label: "Details geklärt (Anlass, Datum, Ort, Gäste)" },
+    { key: "chk_format_gewaehlt", label: "Format / Paket gewählt" },
+    { key: "chk_angebot_erstellt", label: "Angebot erstellt" },
+  ],
+  angebot_gesendet: [
+    { key: "chk_angebot_versendet", label: "Angebot an Kunde versendet" },
+    { key: "chk_rueckmeldung", label: "Rückmeldung vom Kunden erhalten" },
+    { key: "chk_fragen_geklaert", label: "Offene Fragen geklärt" },
+  ],
+};
 
 // Hauptphasen
 const eventPhases = [
@@ -192,16 +205,19 @@ const eventPhases = [
   { value: "storniert", label: "Storniert" },
 ];
 
-// Aufgaben pro Phase (rotieren bei Klick, null = nicht aktiv)
-type TaskDef = { key: string; label: string; states: (string | null)[]; stateLabels: string[]; mailOn: string };
-const tasksByPhase: Record<string, TaskDef[]> = {
+// Event-Checklisten pro Phase (rein visuell)
+const eventChecklistByPhase: Record<string, { key: string; label: string }[]> = {
   in_planung: [
-    { key: "details_status", label: "Details", states: [null, "offen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "offen" },
-    { key: "contract_status", label: "Vertrag", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bestätigt ✓"], mailOn: "gesendet" },
-    { key: "invoice_status", label: "Abschlagsrechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
+    { key: "echk_details", label: "Event-Details mit Kunde geklärt" },
+    { key: "echk_auftragsbestaetigung", label: "Auftragsbestätigung erstellt" },
+    { key: "echk_abschlag", label: "Abschlagsrechnung erstellt" },
+    { key: "echk_technik", label: "Technik / Aufbau geklärt" },
+    { key: "echk_ansprechpartner", label: "Ansprechpartner vor Ort bekannt" },
   ],
   event_erfolgt: [
-    { key: "invoice_status", label: "Schlussrechnung", states: [null, "gesendet", "erledigt"], stateLabels: ["—", "Gesendet", "Bezahlt ✓"], mailOn: "gesendet" },
+    { key: "echk_schlussrechnung", label: "Schlussrechnung erstellt" },
+    { key: "echk_bezahlt", label: "Zahlung erhalten" },
+    { key: "echk_feedback", label: "Feedback angefragt" },
   ],
   abgeschlossen: [],
   storniert: [],
@@ -210,7 +226,7 @@ const tasksByPhase: Record<string, TaskDef[]> = {
 const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
   if (!val) return "";
   const match = options.find((o) => o.value.toLowerCase() === val.toLowerCase());
-  return match ? match.label : val.replace(/_/g, " ").replace(/(^|\s)\S/g, (c) => c.toUpperCase());
+  return match ? match.label : val.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/_/g, " ");
 };
 
 const inputCls =
@@ -248,6 +264,8 @@ const AdminBookingDetail = () => {
   const [mailHistory, setMailHistory] = useState<Array<{ id: string; created_at: string; subject: string; to_email: string; status: string }>>([]);
   const [mailSentAt, setMailSentAt] = useState<string | null>(null);
   const [showDocCreator, setShowDocCreator] = useState(false);
+  const [allPakete, setAllPakete] = useState<Paket[]>([]);
+  const [selectedPaket, setSelectedPaket] = useState<Paket | null>(null);
   const [emailTemplates, setEmailTemplates] = useState<{ slug: string; name: string; kategorie: string }[]>([]);
   const [sendingTemplate, setSendingTemplate] = useState(false);
   const [editingDoc, setEditingDoc] = useState<(DocumentData & { positions?: DocumentPosition[] }) | null>(null);
@@ -265,7 +283,6 @@ const AdminBookingDetail = () => {
   const [message, setMessage] = useState("");
   const [sendingMail, setSendingMail] = useState(false);
   const [billingReqStatus, setBillingReqStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
-  const [checklist, setChecklist] = useState<Record<string, boolean>>({});
 
   const [draftAnlass, setDraftAnlass] = useState("");
   const [draftDatum, setDraftDatum] = useState("");
@@ -372,6 +389,9 @@ const AdminBookingDetail = () => {
         .eq("aktiv", true)
         .order("sortierung", { ascending: true });
       setEmailTemplates(tpls || []);
+
+      // Pakete laden
+      try { setAllPakete(await paketeService.getAll()); } catch {}
 
       setLoading(false);
     };
@@ -1014,6 +1034,65 @@ const AdminBookingDetail = () => {
             </div>
           )}
 
+          {/* ── Paket zuordnen ── */}
+          <div className="p-5 rounded-2xl bg-accent/5 border border-accent/20">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-accent" /> Paket / Konzept zuordnen
+              </h2>
+            </div>
+            {selectedPaket ? (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-accent/10">
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{selectedPaket.name}</p>
+                    <p className="text-xs text-muted-foreground">{selectedPaket.zieldauer} Min. · {selectedPaket.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
+                    {selectedPaket.beschreibungKunde && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{selectedPaket.beschreibungKunde}</p>}
+                  </div>
+                  <button onClick={() => setSelectedPaket(null)} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
+                </div>
+                <button
+                  onClick={() => {
+                    // Angebot mit Paket-Positionen erstellen
+                    const positions: DocumentPosition[] = [{
+                      id: crypto.randomUUID(),
+                      typ: "leistung",
+                      bezeichnung: selectedPaket.name,
+                      beschreibung: selectedPaket.beschreibungKunde || "",
+                      menge: 1,
+                      einheit: "Std.",
+                      einzelpreis: selectedPaket.preis,
+                      gesamt: selectedPaket.preis,
+                      optional: false,
+                    }];
+                    setEditingDoc({
+                      type: "Angebot",
+                      positionen: positions,
+                    } as any);
+                    setShowDocCreator(true);
+                  }}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 transition-opacity"
+                >
+                  <FileText className="w-4 h-4" /> Angebot aus Paket erstellen
+                </button>
+              </div>
+            ) : (
+              <select
+                value=""
+                onChange={(e) => {
+                  const p = allPakete.find(pk => pk.id === e.target.value);
+                  if (p) setSelectedPaket(p);
+                }}
+                className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-muted-foreground"
+              >
+                <option value="">Paket auswählen…</option>
+                {allPakete.map(p => (
+                  <option key={p.id} value={p.id}>{p.name} – {p.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })} ({p.zieldauer} Min.)</option>
+                ))}
+              </select>
+            )}
+          </div>
+
           {/* ── Documents ── */}
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
             <div className="flex items-center justify-between mb-4">
@@ -1213,57 +1292,33 @@ const AdminBookingDetail = () => {
                   })}
                 </div>
 
-                {/* Aufgaben */}
-                {(tasksByPhase[event.status || "in_planung"] || []).length > 0 && (
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
+                {/* Checkliste pro Event-Phase */}
+                {(eventChecklistByPhase[event.status || "in_planung"] || []).length > 0 && (
+                  <>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Checkliste</p>
+                    <div className="space-y-1.5 mb-5">
+                      {(eventChecklistByPhase[event.status || "in_planung"] || []).map((item) => {
+                        const checked = checklist[item.key] || false;
+                        return (
+                          <button
+                            key={item.key}
+                            onClick={() => setChecklist(prev => ({ ...prev, [item.key]: !prev[item.key] }))}
+                            className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm transition-colors border ${
+                              checked ? "bg-green-50 border-green-200" : "bg-muted/10 border-border/20 hover:bg-muted/30"
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ${
+                              checked ? "bg-green-500 text-white" : "border border-border/40"
+                            }`}>
+                              {checked && <Check className="w-3 h-3" />}
+                            </span>
+                            <span className={`font-medium text-left ${checked ? "text-green-700 line-through" : "text-foreground"}`}>{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
                 )}
-                <div className="space-y-2 mb-5">
-                  {(tasksByPhase[event.status || "in_planung"] || []).map((task) => {
-                    const currentVal = (event as any)[task.key] || null;
-                    const currentIdx = task.states.indexOf(currentVal as any);
-                    const effectiveIdx = currentIdx === -1 ? 0 : currentIdx;
-                    const stateLabel = task.stateLabels[effectiveIdx];
-                    const isDone = currentVal === "erledigt";
-                    const isActive = currentVal !== null && currentVal !== "erledigt";
-                    return (
-                      <button
-                        key={task.key}
-                        onClick={async () => {
-                          const nextIdx = (effectiveIdx + 1) % task.states.length;
-                          const nextVal = task.states[nextIdx];
-                          setEvent((prev: any) => prev ? { ...prev, [task.key]: nextVal } : prev);
-                          await supabase.from("portal_events").update({ [task.key]: nextVal }).eq("id", event.id);
-                          const nextLabel = task.stateLabels[nextIdx];
-                          setMessage(`${task.label} → ${nextLabel}`);
-                          // Mail mit passendem Status senden
-                          if (nextVal === task.mailOn) {
-                            const mailStatusMap: Record<string, string> = {
-                              details_status: "details_offen",
-                              contract_status: "vertrag_gesendet",
-                              invoice_status: "rechnung_gesendet",
-                            };
-                            const mailStatus = mailStatusMap[task.key];
-                            // Dokumenttyp basierend auf Phase
-                            const docTyp = task.key === "invoice_status"
-                              ? (event.status === "in_planung" ? "abschlagsrechnung" : undefined)
-                              : undefined;
-                            if (mailStatus && confirm(`${task.label} auf "${nextLabel}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
-                              sendStatusMail(mailStatus, docTyp);
-                            }
-                          }
-                        }}
-                        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors border ${
-                          isDone ? "bg-green-50 border-green-200 text-green-700"
-                          : isActive ? "bg-blue-50 border-blue-200 text-blue-700"
-                          : "bg-muted/20 border-border/20 text-muted-foreground hover:bg-muted/40"
-                        }`}
-                      >
-                        <span className="font-medium">{task.label}</span>
-                        <span className={`text-xs font-semibold ${isDone ? "text-green-600" : isActive ? "text-blue-600" : "text-muted-foreground/50"}`}>{stateLabel}</span>
-                      </button>
-                    );
-                  })}
-                </div>
               </>
             ) : (
               <>
@@ -1295,12 +1350,12 @@ const AdminBookingDetail = () => {
                   })}
                 </div>
 
-                {/* Checkliste (ändert NICHT den Status) */}
-                {!["abgelehnt", "archiviert"].includes(status) && (
+                {/* Checkliste pro Status (ändert NICHT den Status) */}
+                {(checklistByStatus[status] || []).length > 0 && (
                   <>
                     <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Checkliste</p>
                     <div className="space-y-1.5 mb-5">
-                      {requestChecklist.map((item) => {
+                      {(checklistByStatus[status] || []).map((item) => {
                         const checked = checklist[item.key] || false;
                         return (
                           <button
@@ -1315,7 +1370,7 @@ const AdminBookingDetail = () => {
                             }`}>
                               {checked && <Check className="w-3 h-3" />}
                             </span>
-                            <span className={`font-medium ${checked ? "text-green-700 line-through" : "text-foreground"}`}>{item.label}</span>
+                            <span className={`font-medium text-left ${checked ? "text-green-700 line-through" : "text-foreground"}`}>{item.label}</span>
                           </button>
                         );
                       })}
