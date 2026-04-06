@@ -1344,9 +1344,18 @@ const AdminBookingDetail = () => {
                         return (
                           <div key={item.key} className="space-y-1">
                             <button
-                              onClick={() => setChecklist(prev => ({ ...prev, [item.key]: !prev[item.key] }))}
+                              onClick={async () => {
+                                const newChecked = !checked;
+                                setChecklist(prev => ({ ...prev, [item.key]: newChecked }));
+                                // Wenn Portal-verknüpft und aktiv: abhaken = erledigt setzen
+                                if (item.portalField && portalActive && newChecked) {
+                                  await supabase.from("portal_events").update({ [item.portalField]: "erledigt" }).eq("id", event.id);
+                                  setEvent((prev: any) => prev ? { ...prev, [item.portalField!]: "erledigt" } : prev);
+                                  setMessage(`${item.label} – als erledigt markiert`);
+                                }
+                              }}
                               className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm transition-colors border ${
-                                checked ? "bg-green-50 border-green-200" : "bg-muted/10 border-border/20 hover:bg-muted/30"
+                                checked || portalDone ? "bg-green-50 border-green-200" : portalActive ? "bg-amber-50 border-amber-200" : "bg-muted/10 border-border/20 hover:bg-muted/30"
                               }`}
                             >
                               <span className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ${
