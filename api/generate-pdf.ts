@@ -7,7 +7,19 @@ const CHROMIUM_URL =
 
 export const config = { maxDuration: 60 };
 
-function buildHtml(previewHtml: string, title: string) {
+/**
+ * Strategie: Manuelle Pagination im Browser.
+ *
+ * 1. HTML laden, Header- und Footer-HTML extrahieren
+ * 2. Alle Kinder des Content-Bereichs durchgehen
+ * 3. Wenn ein Kind die Seitengrenze überschreitet → neue Seite
+ * 4. Jede Seite bekommt Header + Footer als echtes HTML
+ * 5. Puppeteer generiert PDF ohne eigene Header/Footer
+ */
+function buildPaginatedHtml(
+  previewHtml: string,
+  title: string,
+) {
   return `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -15,12 +27,37 @@ function buildHtml(previewHtml: string, title: string) {
   <title>${title}</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    @page { size: A4 portrait; margin: 0; }
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     html, body { width: 595px; background: #fff; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 9pt; line-height: 1.5; color: #111; }
     body * { font-family: 'Inter', system-ui, -apple-system, sans-serif !important; }
-    body > div { width: 595px; position: relative; }
-    /* Header und Footer aus Content entfernen – werden als Bilder in Puppeteer Templates gerendert */
-    [style*="position: absolute"][style*="bottom"] { display: none !important; }
+
+    .pdf-page {
+      width: 595px;
+      height: 842px;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+    }
+    .pdf-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .pdf-page-header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+    }
+    .pdf-page-footer {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 10;
+      background: #fff;
+    }
+    .pdf-page-content {
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>${previewHtml}</body>
@@ -39,6 +76,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!preview_html) return res.status(400).json({ error: "preview_html fehlt" });
 
   const docTitle = title || "Dokument";
+  const html = buildPaginatedHtml(preview_html, docTitle);
 
   const executablePath = await chromium.executablePath(CHROMIUM_URL);
   const browser = await puppeteer.launch({ args: chromium.args, executablePath, headless: true });
@@ -46,96 +84,122 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: 595, height: 842, deviceScaleFactor: 2 });
-
-    // Schritt 1: Volles HTML laden (mit Header/Footer sichtbar) um Screenshots zu machen
-    const fullHtml = `<!DOCTYPE html>
-<html lang="de"><head><meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  * { margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important; }
-  html,body { width:595px;background:#fff;font-family:'Inter',system-ui,sans-serif;font-size:9pt;line-height:1.5;color:#111; }
-  body * { font-family:'Inter',system-ui,sans-serif!important; }
-  body > div { width:595px;position:relative; }
-</style></head>
-<body>${preview_html}</body></html>`;
-
-    await page.setContent(fullHtml, { waitUntil: "networkidle0", timeout: 30000 });
+    await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
 
-    // Header-Block (erstes Kind des Containers) als Base64 screenshotten
-    const headerBase64 = await page.evaluate(() => {
+    // Manuelle Pagination: Content in Seiten aufteilen
+    await page.evaluate(() => {
+      const PAGE_W = 595;
+      const PAGE_H = 842;
+
       const container = document.querySelector("body > div") as HTMLElement;
-      if (!container) return null;
-      const header = container.children[0] as HTMLElement;
-      if (!header) return null;
-      return { height: header.offsetHeight };
+      if (!container) return;
+
+      // Header = erstes Kind (mit Logo, Name, Adresse, Trennlinie)
+      const headerEl = container.children[0] as HTMLElement;
+      const headerHtml = headerEl ? headerEl.outerHTML : "";
+      const headerH = headerEl ? headerEl.offsetHeight : 0;
+
+      // Footer = Block mit position:absolute + bottom
+      let footerHtml = "";
+      let footerH = 0;
+      const allEls = container.querySelectorAll("div");
+      for (let i = allEls.length - 1; i >= 0; i--) {
+        const s = allEls[i].getAttribute("style") || "";
+        if (s.includes("position") && s.includes("absolute") && s.includes("bottom")) {
+          footerHtml = allEls[i].outerHTML;
+          footerH = allEls[i].offsetHeight;
+          allEls[i].remove();
+          break;
+        }
+      }
+
+      // Content-Kinder sammeln (ohne Header und Footer)
+      const contentChildren: HTMLElement[] = [];
+      for (let i = 1; i < container.children.length; i++) {
+        contentChildren.push(container.children[i] as HTMLElement);
+      }
+
+      // Verfügbare Höhe pro Seite
+      const availableH = PAGE_H - headerH - footerH - 20; // 20px Sicherheitspuffer
+
+      // Seiten bauen
+      const pages: HTMLElement[] = [];
+      let currentPage = document.createElement("div");
+      currentPage.className = "pdf-page";
+      let currentContentDiv = document.createElement("div");
+      currentContentDiv.className = "pdf-page-content";
+      currentContentDiv.style.position = "absolute";
+      currentContentDiv.style.top = `${headerH}px`;
+      currentContentDiv.style.left = "0";
+      currentContentDiv.style.right = "0";
+      let usedH = 0;
+
+      const finishPage = () => {
+        // Header einfügen
+        const hDiv = document.createElement("div");
+        hDiv.className = "pdf-page-header";
+        hDiv.innerHTML = headerHtml;
+        currentPage.appendChild(hDiv);
+
+        // Content einfügen
+        currentPage.appendChild(currentContentDiv);
+
+        // Footer einfügen
+        if (footerHtml) {
+          const fDiv = document.createElement("div");
+          fDiv.className = "pdf-page-footer";
+          fDiv.innerHTML = footerHtml;
+          // position:absolute im Footer-HTML überschreiben
+          const innerDiv = fDiv.querySelector("div") as HTMLElement;
+          if (innerDiv) {
+            innerDiv.style.position = "relative";
+            innerDiv.style.bottom = "auto";
+          }
+          currentPage.appendChild(fDiv);
+        }
+
+        pages.push(currentPage);
+      };
+
+      const startNewPage = () => {
+        finishPage();
+        currentPage = document.createElement("div");
+        currentPage.className = "pdf-page";
+        currentContentDiv = document.createElement("div");
+        currentContentDiv.className = "pdf-page-content";
+        currentContentDiv.style.position = "absolute";
+        currentContentDiv.style.top = `${headerH}px`;
+        currentContentDiv.style.left = "0";
+        currentContentDiv.style.right = "0";
+        usedH = 0;
+      };
+
+      for (const child of contentChildren) {
+        const childH = child.offsetHeight;
+        if (usedH + childH > availableH && usedH > 0) {
+          startNewPage();
+        }
+        const clone = child.cloneNode(true) as HTMLElement;
+        currentContentDiv.appendChild(clone);
+        usedH += childH;
+      }
+
+      // Letzte Seite abschließen
+      finishPage();
+
+      // DOM ersetzen
+      document.body.innerHTML = "";
+      for (const p of pages) {
+        document.body.appendChild(p);
+      }
     });
-
-    const headerScreenshot = await page.$eval("body > div > div:first-child", (el) => {
-      const canvas = document.createElement("canvas");
-      // Wir nutzen eine andere Methode - Element Clip
-      return null;
-    }).catch(() => null);
-
-    // Stattdessen: Header als Element-Screenshot
-    const headerEl = await page.$("body > div > div:first-child");
-    let headerImgBase64 = "";
-    let headerH = 0;
-    if (headerEl) {
-      const box = await headerEl.boundingBox();
-      if (box) {
-        headerH = box.height;
-        const screenshot = await headerEl.screenshot({ encoding: "base64", type: "png" });
-        headerImgBase64 = screenshot as string;
-      }
-    }
-
-    // Footer-Block screenshotten
-    const footerEl = await page.$('[style*="position: absolute"][style*="bottom"]');
-    let footerImgBase64 = "";
-    let footerH = 0;
-    if (footerEl) {
-      const box = await footerEl.boundingBox();
-      if (box) {
-        footerH = box.height;
-        const screenshot = await footerEl.screenshot({ encoding: "base64", type: "png" });
-        footerImgBase64 = screenshot as string;
-      }
-    }
-
-    // Schritt 2: Content-HTML laden (Header bleibt im Flow auf Seite 1, Footer versteckt)
-    const contentHtml = buildHtml(preview_html, docTitle);
-    await page.setContent(contentHtml, { waitUntil: "networkidle0", timeout: 30000 });
-    await page.evaluate(() => document.fonts.ready);
-
-    // Header/Footer als Puppeteer-Templates (Bilder skaliert auf A4-Breite)
-    // Puppeteer Templates rendern bei der VOLLEN Seitenbreite, daher width:100%
-    const headerTemplate = headerImgBase64
-      ? `<div style="width:100%;text-align:center;padding:0;margin:0;"><img src="data:image/png;base64,${headerImgBase64}" style="width:100%;height:auto;display:block;" /></div>`
-      : "<div></div>";
-
-    const footerTemplate = footerImgBase64
-      ? `<div style="width:100%;text-align:center;padding:0;margin:0;"><img src="data:image/png;base64,${footerImgBase64}" style="width:100%;height:auto;display:block;" /></div>`
-      : "<div></div>";
-
-    // Höhe in mm umrechnen (595px = 210mm bei scale 96/72)
-    const pxToMm = (px: number) => Math.ceil((px / 595) * 210);
-    const headerMm = headerImgBase64 ? pxToMm(headerH) + 4 : 8;
-    const footerMm = footerImgBase64 ? pxToMm(footerH) + 4 : 8;
 
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
-      scale: 96 / 72,
-      displayHeaderFooter: !!(headerImgBase64 || footerImgBase64),
-      headerTemplate,
-      footerTemplate,
-      margin: {
-        top: `${headerMm}mm`,
-        right: "0mm",
-        bottom: `${footerMm}mm`,
-        left: "0mm",
-      },
+      margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
+      preferCSSPageSize: true,
     });
 
     res.setHeader("Access-Control-Allow-Origin", "*");
