@@ -1329,7 +1329,7 @@ export default function AdminDokumentEditor() {
         menge: p.menge, einheit: p.einheit, einzelpreis: p.einzelpreis, gesamt: p.gesamt,
         mwstSatz: p.mwstSatz || mwstSatz, rabattProzent: p.rabattProzent ?? undefined,
       }));
-      const typMap: Record<string, DokumentTyp> = { angebot: "angebot", rechnung: "rechnung", abschlagsrechnung: "abschlagsrechnung", auftragsbestaetigung: "auftragsbestaetigung", mahnung: "mahnung", gutschrift: "gutschrift", stornorechnung: "stornorechnung" };
+      const typMap: Record<string, DokumentTyp> = { angebot: "angebot", rechnung: "rechnung", abschlagsrechnung: "abschlagsrechnung", schlussrechnung: "schlussrechnung", auftragsbestaetigung: "auftragsbestaetigung", mahnung: "mahnung", gutschrift: "gutschrift", stornorechnung: "stornorechnung" };
       const dokumentTyp = typMap[typ] || "angebot";
 
       const previewHtml = document.getElementById("doc-preview-capture")?.innerHTML || "";
@@ -1784,8 +1784,12 @@ body > div {
                   <select value={typ} onChange={(e) => setTyp(e.target.value)}
                     className="w-full rounded-lg bg-white border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300">
                     <option value="angebot">Angebot</option>
-                    <option value="rechnung">Rechnung</option>
                     <option value="auftragsbestaetigung">Auftragsbestätigung</option>
+                    <option value="rechnung">Rechnung</option>
+                    <option value="abschlagsrechnung">Abschlagsrechnung</option>
+                    <option value="schlussrechnung">Schlussrechnung</option>
+                    <option value="mahnung">Mahnung</option>
+                    <option value="gutschrift">Gutschrift</option>
                   </select>
                 </div>
               )}

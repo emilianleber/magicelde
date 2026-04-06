@@ -5,6 +5,7 @@ export type DokumentTyp =
   | 'auftragsbestaetigung'
   | 'rechnung'
   | 'abschlagsrechnung'
+  | 'schlussrechnung'
   | 'mahnung'
   | 'gutschrift'
   | 'stornorechnung'
