@@ -550,6 +550,95 @@ const AdminBookingDetail = () => {
     setAbschlagCreating(false);
   };
 
+  /* ── Schlussrechnung aus Angebot + Abschlagsverrechnung ── */
+  const createSchlussrechnung = async (urlParams: string) => {
+    if (!request || !customer) return;
+    try {
+      // Angebot finden
+      const angebot = documents.find(d => (d as any).type === "Angebot");
+      const angebotNr = angebot ? ((angebot as any).document_number || angebot.name) : "";
+      const angebotId = angebot?.id;
+
+      // Positionen vom Angebot laden
+      let angebotPositionen: any[] = [];
+      if (angebotId) {
+        const { data: pos } = await supabase
+          .from("document_positions")
+          .select("*")
+          .eq("document_id", angebotId)
+          .order("position");
+        angebotPositionen = pos || [];
+      }
+
+      // Abschlagsrechnungen finden
+      const abschlaege = documents.filter(d =>
+        (d as any).type === "Abschlagsrechnung" || d.name?.toLowerCase().includes("abschlag")
+      );
+      const summeAbschlaege = abschlaege.reduce((s, d) => s + ((d as any).total || (d as any).amount || 0), 0);
+
+      // Positionen für Editor vorbereiten
+      const positions: any[] = [];
+
+      // 1. Positionen vom Angebot übernehmen
+      if (angebotPositionen.length > 0) {
+        for (const p of angebotPositionen) {
+          positions.push({
+            id: crypto.randomUUID(),
+            typ: "leistung",
+            bezeichnung: p.bezeichnung || p.description || "",
+            beschreibung: p.beschreibung || "",
+            menge: p.quantity || p.menge || 1,
+            einheit: p.unit || p.einheit || "pauschal",
+            einzelpreis: p.unit_price || p.einzelpreis || 0,
+            gesamt: p.total || p.gesamt || 0,
+            optional: false,
+          });
+        }
+      } else if (angebot) {
+        // Fallback: eine Position mit Gesamtbetrag
+        const total = (angebot as any).total || (angebot as any).amount || 0;
+        positions.push({
+          id: crypto.randomUUID(),
+          typ: "leistung",
+          bezeichnung: `Leistungen gemäß Angebot ${angebotNr}`,
+          beschreibung: "",
+          menge: 1,
+          einheit: "pauschal",
+          einzelpreis: total,
+          gesamt: total,
+          optional: false,
+        });
+      }
+
+      // 2. Verrechnung der Abschläge als Abzugs-Position
+      if (summeAbschlaege > 0) {
+        const abschlagDetails = abschlaege.map(d => {
+          const nr = (d as any).document_number || d.name;
+          const betrag = (d as any).total || (d as any).amount || 0;
+          return `${nr}: -${betrag.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €`;
+        }).join(", ");
+
+        positions.push({
+          id: crypto.randomUUID(),
+          typ: "leistung",
+          bezeichnung: "Abzüglich geleisteter Abschlagszahlungen",
+          beschreibung: abschlagDetails,
+          menge: 1,
+          einheit: "pauschal",
+          einzelpreis: -summeAbschlaege,
+          gesamt: -summeAbschlaege,
+          optional: false,
+        });
+      }
+
+      // Zum Editor navigieren
+      sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
+      navigate(`/admin/dokumente/new?typ=schlussrechnung${urlParams}`);
+    } catch (err: any) {
+      setMessage("Fehler: " + (err.message || "Unbekannt"));
+    }
+  };
+
   /* ── Send status mail ── */
   const sendStatusMail = async (statusOverride?: string, dokumentTyp?: string) => {
     if (!request) return;
@@ -1059,10 +1148,12 @@ const AdminBookingDetail = () => {
                       {!event && <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={primaryCls}><FileText className="w-3 h-3" />Angebot</Link>}
                       {event && phase === "in_planung" && <Link to={`/admin/dokumente/new?typ=auftragsbestaetigung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Auftragsbestätigung</Link>}
                       {event && phase === "in_planung" && <button onClick={() => setShowAbschlagDialog(true)} className={primaryCls}><FileText className="w-3 h-3" />Abschlagsrechnung</button>}
-                      {event && (phase === "event_erfolgt" || phase === "abgeschlossen") && <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={primaryCls}><FileText className="w-3 h-3" />Schlussrechnung</Link>}
+                      {event && (phase === "event_erfolgt" || phase === "abgeschlossen") && (
+                        <button onClick={() => createSchlussrechnung(params)} className={primaryCls}><FileText className="w-3 h-3" />Schlussrechnung</button>
+                      )}
                       <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={btnCls}>Angebot</Link>
                       <Link to={`/admin/dokumente/new?typ=auftragsbestaetigung${params}`} className={btnCls}>Auftragsbestätigung</Link>
-                      <Link to={`/admin/dokumente/new?typ=rechnung${params}`} className={btnCls}>Rechnung</Link>
+                      <button onClick={() => createSchlussrechnung(params)} className={btnCls}>Schlussrechnung</button>
                       <button onClick={() => setShowAbschlagDialog(true)} className={btnCls}>Abschlag</button>
                     </>
                   );
