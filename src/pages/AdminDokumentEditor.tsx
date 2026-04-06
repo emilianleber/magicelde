@@ -668,7 +668,7 @@ function DocumentPreview(props: PreviewProps) {
   const PAGE_STYLE: React.CSSProperties = {
     width: "100%", minHeight: 842, position: "relative" as const,
     fontFamily: font, color: "#1a1a1a", display: "flex", flexDirection: "column",
-    paddingBottom: 100, // Platz für den fix positionierten DIN-Footer
+    paddingBottom: 60, // Platz für den fix positionierten DIN-Footer
   };
 
   const page = (bg: string, header: React.ReactNode, thBg: string, thColor: string) => (
