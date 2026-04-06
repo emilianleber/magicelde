@@ -1946,7 +1946,7 @@ body > div {
                     className={`w-full pl-3 pr-8 py-2 appearance-none bg-no-repeat ${inp}`}
                     style={chevron}
                   >
-                    {["pauschal","Std.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
+                    {["pauschal","Std.","Min.","Stk.","km","m²","Tag","Nacht"].map((u) => <option key={u}>{u}</option>)}
                   </select>
 
                   {/* Preis mit EUR */}
