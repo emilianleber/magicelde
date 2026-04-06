@@ -205,10 +205,13 @@ const eventPhases = [
   { value: "storniert", label: "Storniert" },
 ];
 
-// Event-Checklisten pro Phase (rein visuell)
-const eventChecklistByPhase: Record<string, { key: string; label: string }[]> = {
+// Event-Checklisten pro Phase
+// portalField: wenn gesetzt, wird dieser DB-Feld auf dem Event aktualisiert
+// portalValue: der Wert der gesetzt wird wenn "An Kunde" geklickt wird
+type CheckItem = { key: string; label: string; portalField?: string; portalValue?: string; portalLabel?: string };
+const eventChecklistByPhase: Record<string, CheckItem[]> = {
   in_planung: [
-    { key: "echk_details", label: "Event-Details mit Kunde geklärt" },
+    { key: "echk_details", label: "Event-Details klären", portalField: "details_status", portalValue: "offen", portalLabel: "Details beim Kunden anfragen" },
     { key: "echk_auftragsbestaetigung", label: "Auftragsbestätigung erstellt" },
     { key: "echk_abschlag", label: "Abschlagsrechnung erstellt" },
     { key: "echk_technik", label: "Technik / Aufbau geklärt" },
@@ -1336,21 +1339,51 @@ const AdminBookingDetail = () => {
                     <div className="space-y-1.5 mb-5">
                       {(eventChecklistByPhase[event.status || "in_planung"] || []).map((item) => {
                         const checked = checklist[item.key] || false;
+                        const portalActive = item.portalField && (event as any)[item.portalField] === item.portalValue;
+                        const portalDone = item.portalField && (event as any)[item.portalField] === "erledigt";
                         return (
-                          <button
-                            key={item.key}
-                            onClick={() => setChecklist(prev => ({ ...prev, [item.key]: !prev[item.key] }))}
-                            className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm transition-colors border ${
-                              checked ? "bg-green-50 border-green-200" : "bg-muted/10 border-border/20 hover:bg-muted/30"
-                            }`}
-                          >
-                            <span className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ${
-                              checked ? "bg-green-500 text-white" : "border border-border/40"
-                            }`}>
-                              {checked && <Check className="w-3 h-3" />}
-                            </span>
-                            <span className={`font-medium text-left ${checked ? "text-green-700 line-through" : "text-foreground"}`}>{item.label}</span>
-                          </button>
+                          <div key={item.key} className="space-y-1">
+                            <button
+                              onClick={() => setChecklist(prev => ({ ...prev, [item.key]: !prev[item.key] }))}
+                              className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm transition-colors border ${
+                                checked ? "bg-green-50 border-green-200" : "bg-muted/10 border-border/20 hover:bg-muted/30"
+                              }`}
+                            >
+                              <span className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ${
+                                checked ? "bg-green-500 text-white" : "border border-border/40"
+                              }`}>
+                                {checked && <Check className="w-3 h-3" />}
+                              </span>
+                              <span className={`font-medium text-left flex-1 ${checked ? "text-green-700 line-through" : "text-foreground"}`}>{item.label}</span>
+                              {portalActive && <span className="text-[9px] text-amber-600 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5">Im Portal aktiv</span>}
+                              {portalDone && <span className="text-[9px] text-green-600 bg-green-50 border border-green-200 rounded px-1.5 py-0.5">Kunde hat geantwortet</span>}
+                            </button>
+                            {/* "An Kunde senden" Button für Portal-verknüpfte Items */}
+                            {item.portalField && !portalActive && !portalDone && (
+                              <button
+                                onClick={async () => {
+                                  await supabase.from("portal_events").update({ [item.portalField!]: item.portalValue }).eq("id", event.id);
+                                  setEvent((prev: any) => prev ? { ...prev, [item.portalField!]: item.portalValue } : prev);
+                                  setMessage(`${item.portalLabel || item.label} – im Kundenportal aktiviert`);
+                                }}
+                                className="ml-7 inline-flex items-center gap-1.5 text-[11px] text-accent hover:text-accent/80 font-medium"
+                              >
+                                <Mail className="w-3 h-3" /> {item.portalLabel || `Im Portal anzeigen`}
+                              </button>
+                            )}
+                            {item.portalField && portalActive && (
+                              <button
+                                onClick={async () => {
+                                  await supabase.from("portal_events").update({ [item.portalField!]: null }).eq("id", event.id);
+                                  setEvent((prev: any) => prev ? { ...prev, [item.portalField!]: null } : prev);
+                                  setMessage("Portal-Anzeige deaktiviert");
+                                }}
+                                className="ml-7 inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground"
+                              >
+                                <X className="w-3 h-3" /> Deaktivieren
+                              </button>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
