@@ -8,6 +8,9 @@ const CHROMIUM_URL =
 export const config = { maxDuration: 60 };
 
 function buildHtml(previewHtml: string, title: string) {
+  // Der erste Header-Block (mit Logo, Name, Adresse) und der Footer-Block
+  // werden per CSS position:fixed auf jeder Seite wiederholt.
+  // Der eigentliche Content bekommt margin-top/bottom damit er nicht überdeckt wird.
   return `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -19,8 +22,26 @@ function buildHtml(previewHtml: string, title: string) {
     html, body { width: 595px; background: #fff; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 9pt; line-height: 1.5; color: #111; }
     body * { font-family: 'Inter', system-ui, -apple-system, sans-serif !important; }
     body > div { width: 595px; position: relative; }
-    /* Footer aus dem Flow nehmen – wird von Puppeteer als footerTemplate gerendert */
-    [style*="position: absolute"][style*="bottom"] { display: none !important; }
+
+    /* Header (erster Block mit border-bottom) auf jeder Seite wiederholen */
+    body > div > div:first-child {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 10;
+      background: #fff !important;
+    }
+
+    /* Footer (absolute bottom Block) auf jeder Seite wiederholen */
+    [style*="position: absolute"][style*="bottom"] {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 10;
+      background: #fff !important;
+    }
   </style>
 </head>
 <body>${previewHtml}</body>
@@ -50,51 +71,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
 
-    // Footer-HTML extrahieren
-    const footerHtml = await page.evaluate(() => {
-      const el = document.querySelector('[style*="position: absolute"][style*="bottom"]') as HTMLElement;
-      return el ? el.outerHTML : "";
+    // Header- und Footer-Höhe messen für korrekte Margins
+    const { headerHeight, footerHeight } = await page.evaluate(() => {
+      const container = document.querySelector("body > div") as HTMLElement;
+      if (!container) return { headerHeight: 0, footerHeight: 0 };
+
+      const firstChild = container.children[0] as HTMLElement;
+      const hH = firstChild ? firstChild.offsetHeight : 0;
+
+      const footerEl = container.querySelector('[style*="position: absolute"][style*="bottom"]') as HTMLElement;
+      const fH = footerEl ? footerEl.offsetHeight : 0;
+
+      return { headerHeight: hH, footerHeight: fH };
     });
 
-    // Logo-URL extrahieren (aus dem <img> im Header)
-    const logoUrl = await page.evaluate(() => {
-      const img = document.querySelector('img[src*="logo"], img[src*="favicon"]') as HTMLImageElement;
-      return img ? img.src : "";
-    });
-
-    // Header-Template: Logo oben rechts + Firmenname links (auf jeder Seite)
-    const headerTemplate = `
-      <div style="width:100%;padding:12px 40px 0;display:flex;justify-content:space-between;align-items:flex-start;font-family:Inter,system-ui,sans-serif;">
-        <div>
-          <div style="font-size:11px;font-weight:700;color:#111;">Emilian Leber</div>
-          <div style="font-size:7px;color:#666;">Zauberer &amp; Mentalist</div>
-        </div>
-        ${logoUrl ? `<img src="${logoUrl}" style="width:48px;height:48px;object-fit:contain;" />` : ""}
-      </div>
-    `;
-
-    // Footer-Template: Unternehmensdaten + Seitenzahl
-    const footerTemplate = footerHtml
-      ? `<div style="width:100%;font-size:7px;font-family:Inter,system-ui,sans-serif;">
-          ${footerHtml.replace(/display:\s*none\s*!important/g, "display:block")}
-        </div>`
-      : `<div></div>`;
-
-    const hasHeaderFooter = !!footerHtml;
+    // Content-Bereich braucht Padding damit Header/Footer ihn nicht überdecken
+    await page.evaluate((hH: number, fH: number) => {
+      const container = document.querySelector("body > div") as HTMLElement;
+      if (!container) return;
+      // Padding für den Content (nach dem fixed Header, vor dem fixed Footer)
+      container.style.paddingTop = `${hH + 16}px`;
+      container.style.paddingBottom = `${fH + 10}px`;
+    }, headerHeight, footerHeight);
 
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
       scale: 96 / 72,
-      displayHeaderFooter: hasHeaderFooter,
-      headerTemplate: hasHeaderFooter ? headerTemplate : `<div></div>`,
-      footerTemplate,
-      margin: {
-        top: hasHeaderFooter ? "28mm" : "10mm",
-        right: "0mm",
-        bottom: hasHeaderFooter ? "24mm" : "10mm",
-        left: "0mm",
-      },
+      margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
     });
 
     res.setHeader("Access-Control-Allow-Origin", "*");
