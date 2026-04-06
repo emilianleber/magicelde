@@ -1071,7 +1071,7 @@ const AdminBookingDetail = () => {
                     // Anfahrts-Artikel live aus DB laden
                     const { data: anfahrtArt } = await supabase
                       .from("artikel_stamm")
-                      .select("bezeichnung, beschreibung, einzelpreis, einheit")
+                      .select("bezeichnung, beschreibung, preis, einheit")
                       .ilike("bezeichnung", "%anfahrt%")
                       .eq("aktiv", true)
                       .limit(1)
@@ -1096,8 +1096,8 @@ const AdminBookingDetail = () => {
                         beschreibung: anfahrtArt?.beschreibung || "Anfahrt und Rückreise zum Veranstaltungsort",
                         menge: 1,
                         einheit: anfahrtArt?.einheit || "km",
-                        einzelpreis: anfahrtArt?.einzelpreis ?? 0,
-                        gesamt: anfahrtArt?.einzelpreis ?? 0,
+                        einzelpreis: anfahrtArt?.preis ?? 0,
+                        gesamt: anfahrtArt?.preis ?? 0,
                         optional: false,
                       },
                     ];
