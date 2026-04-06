@@ -147,12 +147,34 @@ const AdminCustomers = () => {
 
   const softDeleteSelected = async () => {
     if (!selectedIds.length) return;
-    if (!confirm(`${selectedIds.length} Kunde(n) endgültig löschen? Dies kann nicht rückgängig gemacht werden.`)) return;
+    if (!confirm(`${selectedIds.length} Kunde(n) endgültig löschen? Alle zugehörigen Daten werden ebenfalls gelöscht.`)) return;
     setDeleting(true);
-    const { error } = await supabase.from("portal_customers").delete().in("id", selectedIds);
-    if (!error) {
-      setCustomers((prev) => prev.filter((c) => !selectedIds.includes(c.id)));
-      setSelectedIds([]);
+    try {
+      // Delete related data first to avoid FK constraint errors
+      for (const cid of selectedIds) {
+        // Delete events first (timeline has FK to events)
+        const { data: events } = await supabase.from("portal_events").select("id").eq("customer_id", cid);
+        if (events?.length) {
+          const eventIds = events.map(e => e.id);
+          await supabase.from("portal_timeline").delete().in("event_id", eventIds);
+          await supabase.from("portal_events").delete().eq("customer_id", cid);
+        }
+        await supabase.from("portal_documents").delete().eq("customer_id", cid);
+        await supabase.from("portal_requests").delete().eq("customer_id", cid);
+        await supabase.from("portal_messages").delete().eq("customer_id", cid);
+        await supabase.from("change_requests").delete().eq("customer_id", cid);
+        await supabase.from("customer_feedback").delete().eq("customer_id", cid);
+        await supabase.from("portal_todos").update({ customer_id: null }).eq("customer_id", cid);
+      }
+      const { error } = await supabase.from("portal_customers").delete().in("id", selectedIds);
+      if (error) {
+        alert("Fehler beim Löschen: " + error.message);
+      } else {
+        setCustomers((prev) => prev.filter((c) => !selectedIds.includes(c.id)));
+        setSelectedIds([]);
+      }
+    } catch (e) {
+      alert("Fehler: " + (e instanceof Error ? e.message : String(e)));
     }
     setDeleting(false);
   };
@@ -161,6 +183,15 @@ const AdminCustomers = () => {
     if (!selectedIds.length) return;
     setHardDeleting(true);
     setHardDeleteError(null);
+    // Delete related data first to avoid FK constraint errors
+    for (const cid of selectedIds) {
+      await supabase.from("portal_documents").delete().eq("customer_id", cid);
+      await supabase.from("portal_events").delete().eq("customer_id", cid);
+      await supabase.from("portal_requests").delete().eq("customer_id", cid);
+      await supabase.from("portal_messages").delete().eq("customer_id", cid);
+      await supabase.from("change_requests").delete().eq("customer_id", cid);
+      await supabase.from("customer_feedback").delete().eq("customer_id", cid);
+    }
     const { error } = await supabase.from("portal_customers").delete().in("id", selectedIds);
     if (error) {
       setHardDeleteError(error.message || "Fehler beim Löschen.");

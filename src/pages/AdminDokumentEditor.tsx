@@ -441,7 +441,7 @@ function DocumentPreview(props: PreviewProps) {
   const font = "Inter, system-ui, -apple-system, sans-serif";
 
   // A4 proportions for 595px wide container
-  const M = 52;   // horizontal margin ≈ 18mm
+  const M = 40;   // horizontal margin ≈ 14mm (breiter Content)
   const LS = 68;  // logo square size
 
   const isAngebot = typ === "angebot";
@@ -484,9 +484,9 @@ function DocumentPreview(props: PreviewProps) {
   // ── Sender text blocks ────────────────────────────────────────────────────
   const AbsBlock = ({ nameC = "#111", subC = "#666", addrC = "#888" }: { nameC?: string; subC?: string; addrC?: string }) => (
     <div>
-      <div style={{ fontSize: 13, fontWeight: 700, color: nameC, lineHeight: 1.25 }}>{absenderName}</div>
-      {absenderUntertitel && <div style={{ fontSize: 9, color: subC, marginTop: 1 }}>{absenderUntertitel}</div>}
-      <div style={{ fontSize: 8.5, color: addrC, marginTop: 3, lineHeight: 1.5 }}>
+      <div style={{ fontSize: 15, fontWeight: 700, color: nameC, lineHeight: 1.25 }}>{absenderName}</div>
+      {absenderUntertitel && <div style={{ fontSize: 10, color: subC, marginTop: 2 }}>{absenderUntertitel}</div>}
+      <div style={{ fontSize: 9.5, color: addrC, marginTop: 4, lineHeight: 1.5 }}>
         {absenderAdresse && <div>{absenderAdresse}</div>}
         {(absenderPlz || absenderOrt) && <div>{absenderPlz} {absenderOrt}</div>}
       </div>
@@ -494,7 +494,7 @@ function DocumentPreview(props: PreviewProps) {
   );
 
   const KontBlock = ({ c = "#888" }: { c?: string }) => (
-    <div style={{ fontSize: 8, color: c, lineHeight: 1.65, textAlign: "right" }}>
+    <div style={{ fontSize: 9, color: c, lineHeight: 1.65, textAlign: "right" }}>
       {absenderTel     && <div>{absenderTel}</div>}
       {absenderEmail   && <div>{absenderEmail}</div>}
       {absenderWebsite && <div>{absenderWebsite}</div>}
@@ -505,9 +505,9 @@ function DocumentPreview(props: PreviewProps) {
   const renderDINTop = () => (
     <>
       {/* Zone B: Anschriftfeld + Informationsblock */}
-      <div style={{ padding: `44px ${M}px 16px`, display: "flex", gap: 40, alignItems: "flex-start" }}>
-        <div style={{ flex: "0 0 44%", fontSize: 9.5, lineHeight: 1.55, color: "#222", minHeight: 127 }}>
-          <div style={{ fontSize: 7.5, color: "#aaa", borderBottom: "0.5px solid #e0e0e0", paddingBottom: 3, marginBottom: 9, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+      <div style={{ padding: `36px ${M}px 16px`, display: "flex", gap: 40, alignItems: "flex-start" }}>
+        <div style={{ flex: "0 0 46%", fontSize: 10, lineHeight: 1.55, color: "#222", minHeight: 127 }}>
+          <div style={{ fontSize: 8, color: "#aaa", borderBottom: "0.5px solid #e0e0e0", paddingBottom: 3, marginBottom: 9, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             {[absenderName, absenderAdresse, `${absenderPlz} ${absenderOrt}`.trim()].filter(Boolean).join(" – ")}
           </div>
           {empfaengerFirma && <div style={{ fontWeight: 600, color: "#111" }}>{empfaengerFirma}</div>}
@@ -516,10 +516,10 @@ function DocumentPreview(props: PreviewProps) {
           {(empfaengerPlz || empfaengerOrt) && <div>{empfaengerPlz} {empfaengerOrt}</div>}
           {empfaengerLand && empfaengerLand !== "Deutschland" && <div>{empfaengerLand}</div>}
         </div>
-        <div style={{ flex: 1, fontSize: 8.5, lineHeight: 1.7 }}>
+        <div style={{ flex: 1, fontSize: 9.5, lineHeight: 1.7 }}>
           {metaRows.map(r => (
             <div key={r.label} style={{ display: "flex", gap: 6 }}>
-              <div style={{ color: "#999", minWidth: 110, flexShrink: 0 }}>{r.label}</div>
+              <div style={{ color: "#999", minWidth: 120, flexShrink: 0 }}>{r.label}</div>
               <div style={{ fontWeight: 600, color: "#111" }}>{r.val}</div>
             </div>
           ))}
@@ -528,10 +528,10 @@ function DocumentPreview(props: PreviewProps) {
       <div style={{ height: 22 }} />
       {/* Zone C: Betreff */}
       <div style={{ padding: `0 ${M}px 6px` }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>{typLabel}{nummer ? ` ${nummer}` : ""}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: "#111" }}>{typLabel}{nummer ? ` ${nummer}` : ""}</div>
       </div>
       {kopftext && (
-        <div style={{ padding: `0 ${M}px 8px`, fontSize: 9.5, color: "#333", lineHeight: 1.55 }}
+        <div style={{ padding: `0 ${M}px 8px`, fontSize: 10, color: "#333", lineHeight: 1.6 }}
           dangerouslySetInnerHTML={{ __html: textToHtml(kopftext) }} />
       )}
     </>
@@ -539,26 +539,26 @@ function DocumentPreview(props: PreviewProps) {
 
   const renderPositionsBlock = (chunk: LocalPosition[], thBg: string, thColor: string, globalOffset = 0) => (
     <div style={{ padding: `0 ${M}px` }}>
-      <div style={{ display: "flex", backgroundColor: thBg, color: thColor, padding: "4px 6px", fontSize: 8, fontWeight: 700 }}>
-        <span style={{ width: 28 }}>Pos.</span>
+      <div style={{ display: "flex", backgroundColor: thBg, color: thColor, padding: "5px 8px", fontSize: 9, fontWeight: 700 }}>
+        <span style={{ width: 30 }}>Pos.</span>
         <span style={{ flex: 4 }}>Beschreibung</span>
-        <span style={{ width: 68, textAlign: "right" }}>Menge</span>
-        <span style={{ width: 66, textAlign: "right" }}>Einzelpreis</span>
-        <span style={{ width: 72, textAlign: "right" }}>Gesamtpreis</span>
+        <span style={{ width: 72, textAlign: "right" }}>Menge</span>
+        <span style={{ width: 72, textAlign: "right" }}>Einzelpreis</span>
+        <span style={{ width: 78, textAlign: "right" }}>Gesamtpreis</span>
       </div>
       {chunk.length === 0 ? (
-        <div style={{ padding: "5px 6px", fontSize: 8, color: "#ccc", borderBottom: "0.5px solid #eee" }}>Noch keine Positionen</div>
+        <div style={{ padding: "6px 8px", fontSize: 9, color: "#ccc", borderBottom: "0.5px solid #eee" }}>Noch keine Positionen</div>
       ) : chunk.map((pos, i) => (
         <div key={pos.id}>
-          <div style={{ display: "flex", padding: "4px 6px", backgroundColor: i % 2 === 0 ? "#f8f8f8" : "#fff", fontSize: 8.5 }}>
-            <span style={{ width: 28, color: pos.optional ? "#6b9bd2" : "#999" }}>{pos.optional ? "Opt." : `${globalOffset + i + 1}.`}</span>
+          <div style={{ display: "flex", padding: "5px 8px", backgroundColor: i % 2 === 0 ? "#f8f8f8" : "#fff", fontSize: 9.5 }}>
+            <span style={{ width: 30, color: pos.optional ? "#6b9bd2" : "#999" }}>{pos.optional ? "Opt." : `${globalOffset + i + 1}.`}</span>
             <div style={{ flex: 4 }}>
               <div style={{ fontWeight: pos.bezeichnung ? 600 : 400, color: pos.bezeichnung ? "#111" : "#ccc" }}>{pos.bezeichnung || "(keine Bezeichnung)"}</div>
-              {pos.beschreibung && <div style={{ fontSize: 7.5, color: "#777", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>{pos.beschreibung}</div>}
+              {pos.beschreibung && <div style={{ fontSize: 8.5, color: "#777", lineHeight: 1.45, whiteSpace: "pre-wrap" }}>{pos.beschreibung}</div>}
             </div>
-            <span style={{ width: 68, textAlign: "right", color: "#555" }}>{pos.menge % 1 === 0 ? pos.menge : pos.menge.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 2 })} {pos.einheit}</span>
-            <span style={{ width: 66, textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
-            <span style={{ width: 72, textAlign: "right", fontWeight: 600, color: "#111" }}>{fmt(pos.gesamt)}</span>
+            <span style={{ width: 72, textAlign: "right", color: "#555" }}>{pos.menge % 1 === 0 ? pos.menge : pos.menge.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 2 })} {pos.einheit}</span>
+            <span style={{ width: 72, textAlign: "right", color: "#555" }}>{fmt(pos.einzelpreis)}</span>
+            <span style={{ width: 78, textAlign: "right", fontWeight: 600, color: "#111" }}>{fmt(pos.gesamt)}</span>
           </div>
           {i < chunk.length - 1 && <div style={{ height: "0.5px", backgroundColor: "#ebebeb", margin: "0 6px" }} />}
         </div>
@@ -578,7 +578,7 @@ function DocumentPreview(props: PreviewProps) {
             Seite {pageNum} von {totalPages}
           </div>
         )}
-        <div style={{ display: "flex", gap: 20, fontSize: 7, color: "#a1a1aa", lineHeight: 1.65 }}>
+        <div style={{ display: "flex", gap: 20, fontSize: 7.5, color: "#a1a1aa", lineHeight: 1.65 }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 600, color: "#71717a" }}>{absenderName}</div>
             {absenderUntertitel && <div>{absenderUntertitel}</div>}
@@ -612,7 +612,7 @@ function DocumentPreview(props: PreviewProps) {
     const s = calcSummen(chunk, mwstSatz, kleinunternehmer, rabattProzent);
     const rowBase: React.CSSProperties = {
       display: "flex", justifyContent: "space-between", alignItems: "center",
-      padding: "7px 8px", fontSize: 9.5,
+      padding: "7px 10px", fontSize: 10,
     };
     return (
       <div style={{ margin: `4px ${M}px 0` }}>
@@ -630,12 +630,12 @@ function DocumentPreview(props: PreviewProps) {
         )}
         {/* §19 */}
         {kleinunternehmer && (
-          <div style={{ padding: "6px 8px", fontSize: 9.5, color: "#555" }}>
+          <div style={{ padding: "6px 10px", fontSize: 10, color: "#555" }}>
             Umsatzsteuer nicht erhoben gemäß §19UStG.
           </div>
         )}
         {/* Brutto */}
-        <div style={{ ...rowBase, backgroundColor: "#f0f0f0", fontWeight: 700, fontSize: 10 }}>
+        <div style={{ ...rowBase, backgroundColor: "#f0f0f0", fontWeight: 700, fontSize: 11 }}>
           <span>Gesamtbetrag brutto</span>
           <span>{fmtEur(s.brutto)}</span>
         </div>
@@ -647,7 +647,7 @@ function DocumentPreview(props: PreviewProps) {
   const renderDINBottom = (pageNum: number) => (
     <>
       {fusstext && (
-        <div style={{ padding: `6px ${M}px 4px`, fontSize: 9.5, color: "#333", lineHeight: 1.65 }}
+        <div style={{ padding: `8px ${M}px 4px`, fontSize: 10, color: "#333", lineHeight: 1.65 }}
           dangerouslySetInnerHTML={{ __html: textToHtml(fusstext) }} />
       )}
       {renderDINFooter(pageNum)}
@@ -683,9 +683,9 @@ function DocumentPreview(props: PreviewProps) {
 
     // 1 – Klassisch: Weißes Blatt, Logo oben rechts (wie Emilians echte Angebote – kein Kontakt im Kopf)
     case 1: return page("#fff",
-      <div style={{ position: "relative", padding: `22px ${M}px 16px`, minHeight: 105, borderBottom: "0.5px solid #e8e8e8" }}>
+      <div style={{ position: "relative", padding: `38px ${M}px 16px`, minHeight: 110, borderBottom: "0.5px solid #e8e8e8" }}>
         <AbsBlock />
-        <div style={{ position: "absolute", top: 22, right: M }}>
+        <div style={{ position: "absolute", top: 38, right: M }}>
           <LogoImg />
         </div>
       </div>,
@@ -707,7 +707,7 @@ function DocumentPreview(props: PreviewProps) {
 
     // 3 – Voller Farbkopf
     case 3: return page("#fff",
-      <div style={{ backgroundColor: color, padding: `22px ${M}px 18px`, position: "relative", minHeight: 110 }}>
+      <div style={{ backgroundColor: color, padding: `36px ${M}px 18px`, position: "relative", minHeight: 110 }}>
         <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.75)" addrC="rgba(255,255,255,0.55)" />
         <RightCol dark kontC="rgba(255,255,255,0.65)" />
       </div>,
@@ -716,7 +716,7 @@ function DocumentPreview(props: PreviewProps) {
 
     // 6 – Dark Premium: Dunkler Kopf mit Akzent
     case 6: return page("#fff",
-      <div style={{ backgroundColor: "#111", padding: `22px ${M}px 18px`, position: "relative", minHeight: 110 }}>
+      <div style={{ backgroundColor: "#111", padding: `36px ${M}px 18px`, position: "relative", minHeight: 110 }}>
         <div style={{ width: 24, height: 3, backgroundColor: color, borderRadius: 2, marginBottom: 8 }} />
         <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.55)" addrC="rgba(255,255,255,0.35)" />
         <RightCol dark kontC="rgba(255,255,255,0.4)" />
@@ -726,7 +726,7 @@ function DocumentPreview(props: PreviewProps) {
 
     // 9 – Skandinavisch: Minimal
     case 9: return page("#fff",
-      <div style={{ position: "relative", padding: `22px ${M}px 16px`, minHeight: 105 }}>
+      <div style={{ position: "relative", padding: `36px ${M}px 16px`, minHeight: 105 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
           <div style={{ width: 18, height: 2, backgroundColor: color }} />
           <div style={{ fontSize: 13, fontWeight: 300, letterSpacing: -0.3 }}>{absenderName}</div>
@@ -1327,7 +1327,47 @@ export default function AdminDokumentEditor() {
   };
 
   // PDF: Neues Fenster öffnen → User wählt "Als PDF sichern" im Druckdialog
-  const handleDownloadPdf = () => {
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
+
+  const handleDownloadPdf = async () => {
+    const el = document.getElementById("doc-preview-capture");
+    if (!el) return;
+
+    const html = el.innerHTML;
+    const docTitle = nummer || "Dokument";
+    setDownloadingPdf(true);
+
+    try {
+      const res = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ preview_html: html, title: docTitle }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`PDF-Fehler (${res.status}): ${err}`);
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${docTitle}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("PDF error:", e);
+      alert("PDF-Fehler: " + (e instanceof Error ? e.message : String(e)));
+    } finally {
+      setDownloadingPdf(false);
+    }
+  };
+
+  // Legacy: Drucken-Fenster fuer den Fall dass API nicht erreichbar
+  const handlePrintFallback = () => {
     const el = document.getElementById("doc-preview-print");
     if (!el) return;
 
@@ -1337,8 +1377,6 @@ export default function AdminDokumentEditor() {
       alert("Bitte erlauben Sie Popups für diese Seite, um das PDF zu öffnen.");
       return;
     }
-
-    const scale = ((210 / 25.4) * 96) / 595;
 
     win.document.write(`<!DOCTYPE html>
 <html lang="de">
@@ -1477,10 +1515,11 @@ body > div {
               </button>
               <button
                 onClick={handleDownloadPdf}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors"
+                disabled={downloadingPdf}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors disabled:opacity-50"
               >
                 <Download className="w-4 h-4" />
-                PDF / Drucken
+                {downloadingPdf ? "PDF wird erstellt…" : "PDF herunterladen"}
               </button>
               <button
                 onClick={handleSaveAndNavigate}

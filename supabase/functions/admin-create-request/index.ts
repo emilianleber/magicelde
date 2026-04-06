@@ -32,34 +32,32 @@ serve(async (req) => {
 
     let resolvedCustomerId = customer_id || null;
 
-    // Wenn kein customer_id übergeben: Kunde per E-Mail suchen oder neu anlegen
+    // Wenn kein customer_id übergeben: Kunde per UPSERT anlegen/aktualisieren
     if (!resolvedCustomerId) {
-      let { data: customer } = await supabase
+      const normalizedEmail = email.trim().toLowerCase();
+      const payload: Record<string, any> = { email: normalizedEmail };
+      if (name)  payload.name  = name;
+      if (firma) payload.company = firma;
+      if (phone) payload.phone = phone;
+
+      const { data: customer, error } = await supabase
         .from("portal_customers")
+        .upsert(payload, { onConflict: "email", ignoreDuplicates: false })
         .select("*")
-        .eq("email", email)
         .maybeSingle();
 
-      if (!customer) {
-        const { data: newCustomer, error } = await supabase
+      if (error) {
+        // Fallback: per Email suchen
+        const { data: existing } = await supabase
           .from("portal_customers")
-          .insert({ name: name || "", firma: firma || null, email, phone: phone || null })
-          .select("*")
-          .single();
-
-        if (error) throw error;
-        customer = newCustomer;
+          .select("id")
+          .ilike("email", normalizedEmail)
+          .limit(1);
+        resolvedCustomerId = existing?.[0]?.id || null;
+        if (!resolvedCustomerId) throw error;
       } else {
-        const updateData: any = {};
-        if (!customer.name && name) updateData.name = name;
-        if (!customer.firma && firma) updateData.firma = firma;
-        if (!customer.phone && phone) updateData.phone = phone;
-        if (Object.keys(updateData).length > 0) {
-          await supabase.from("portal_customers").update(updateData).eq("id", customer.id);
-        }
+        resolvedCustomerId = customer!.id;
       }
-
-      resolvedCustomerId = customer.id;
     }
 
     // Anfrage speichern mit customer_id

@@ -125,6 +125,7 @@ serve(async (req) => {
 
     await transporter.sendMail({
       from: `"Emilian Leber" <${smtpUser}>`,
+      replyTo: `"Emilian Leber" <${smtpUser}>`,
       to: toAddress,
       subject,
       html: wrappedHtml,

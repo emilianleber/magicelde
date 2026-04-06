@@ -26,8 +26,12 @@ const addOneDay = (dateStr: string) => {
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
 };
 
-const buildDateTime = (dateStr: string, timeStr: string) =>
-  formatUtcDateTime(new Date(`${dateStr}T${timeStr}:00`));
+// Zeitformat mit TZID statt UTC — Zeiten sind in Europe/Berlin gespeichert
+const buildLocalDateTime = (dateStr: string, timeStr: string) => {
+  const d = dateStr.replace(/-/g, "");
+  const t = timeStr.replace(/:/g, "").substring(0, 4) + "00";
+  return `${d}T${t}`;
+};
 
 // Status-Emoji für schnelle visuelle Erkennung
 const statusEmoji = (status: string | null): string => {
@@ -128,12 +132,11 @@ DTSTAMP:${formatUtcDateTime(new Date())}
 `;
 
     if (e.start_time) {
-      const start = buildDateTime(e.event_date, e.start_time);
-      const end = e.end_time
-        ? buildDateTime(e.event_date, e.end_time)
-        : buildDateTime(e.event_date, `${String(Number(e.start_time.split(":")[0]) + 3).padStart(2, "0")}:${e.start_time.split(":")[1] || "00"}`);
-      ics += `DTSTART:${start}
-DTEND:${end}
+      const start = buildLocalDateTime(e.event_date, e.start_time);
+      const endTime = e.end_time || `${String(Number(e.start_time.split(":")[0]) + 3).padStart(2, "0")}:${e.start_time.split(":")[1] || "00"}`;
+      const end = buildLocalDateTime(e.event_date, endTime);
+      ics += `DTSTART;TZID=Europe/Berlin:${start}
+DTEND;TZID=Europe/Berlin:${end}
 `;
     } else {
       // Ganztägig + Erinnerung dass Uhrzeit fehlt
@@ -210,9 +213,9 @@ DTSTAMP:${formatUtcDateTime(new Date())}
 `;
 
     if (r.uhrzeit) {
-      const start = buildDateTime(r.datum, r.uhrzeit);
-      ics += `DTSTART:${start}
-DTEND:${start}
+      const start = buildLocalDateTime(r.datum, r.uhrzeit);
+      ics += `DTSTART;TZID=Europe/Berlin:${start}
+DTEND;TZID=Europe/Berlin:${start}
 `;
     } else {
       ics += `DTSTART;VALUE=DATE:${formatAllDayDate(r.datum)}
