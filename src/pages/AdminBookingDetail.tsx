@@ -392,7 +392,15 @@ const AdminBookingDetail = () => {
       setEmailTemplates(tpls || []);
 
       // Pakete laden
-      try { setAllPakete(await paketeService.getAll()); } catch {}
+      try {
+        const pakete = await paketeService.getAll();
+        setAllPakete(pakete);
+        // Paket-Zuordnung wiederherstellen
+        if (data.paket_id) {
+          const p = pakete.find(pk => pk.id === data.paket_id);
+          if (p) setSelectedPaket(p);
+        }
+      } catch {}
 
       setLoading(false);
     };
@@ -1050,11 +1058,15 @@ const AdminBookingDetail = () => {
                     <p className="text-xs text-muted-foreground">{selectedPaket.zieldauer} Min. · {selectedPaket.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
                     {selectedPaket.beschreibungKunde && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{selectedPaket.beschreibungKunde}</p>}
                   </div>
-                  <button onClick={() => setSelectedPaket(null)} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
+                  <button onClick={async () => {
+                    setSelectedPaket(null);
+                    await supabase.from("portal_requests").update({ paket_id: null }).eq("id", request.id);
+                  }} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
                 </div>
                 <button
 <<<<<<< Updated upstream
                   onClick={() => {
+<<<<<<< HEAD
                     // Positionen: Paket + Anfahrtspauschale
 =======
                   onClick={async () => {
@@ -1067,6 +1079,8 @@ const AdminBookingDetail = () => {
                       .maybeSingle();
 
 >>>>>>> Stashed changes
+=======
+>>>>>>> origin/main
                     const positions = [
                       {
                         id: crypto.randomUUID(),
@@ -1082,6 +1096,7 @@ const AdminBookingDetail = () => {
                       ...(anfahrtArtikel ? [{
                         id: crypto.randomUUID(),
                         typ: "leistung",
+<<<<<<< HEAD
 <<<<<<< Updated upstream
                         bezeichnung: "Anfahrt",
                         beschreibung: "An- und Abreise zum Veranstaltungsort",
@@ -1097,10 +1112,17 @@ const AdminBookingDetail = () => {
                         einzelpreis: anfahrtArtikel.einzelpreis || 0,
                         gesamt: anfahrtArtikel.einzelpreis || 0,
 >>>>>>> Stashed changes
+=======
+                        bezeichnung: "Anfahrtspauschale",
+                        beschreibung: "Anfahrt und Rückreise zum Veranstaltungsort. Berechnung ab Regensburg (Kilometerangabe einfache Strecke).",
+                        menge: 1,
+                        einheit: "km",
+                        einzelpreis: 0.35,
+                        gesamt: 0.35,
+>>>>>>> origin/main
                         optional: false,
                       }] : []),
                     ];
-                    // In sessionStorage speichern → Editor liest sie aus
                     sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
                     const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
                     navigate(`/admin/dokumente/new?typ=angebot${params}`);
@@ -1113,9 +1135,12 @@ const AdminBookingDetail = () => {
             ) : (
               <select
                 value=""
-                onChange={(e) => {
+                onChange={async (e) => {
                   const p = allPakete.find(pk => pk.id === e.target.value);
-                  if (p) setSelectedPaket(p);
+                  if (p) {
+                    setSelectedPaket(p);
+                    await supabase.from("portal_requests").update({ paket_id: p.id }).eq("id", request.id);
+                  }
                 }}
                 className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-muted-foreground"
               >
