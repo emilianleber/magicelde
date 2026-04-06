@@ -179,13 +179,6 @@ const requestPhases = [
   { value: "archiviert", label: "Archiviert" },
 ];
 
-<<<<<<< Updated upstream
-// Anfrage-Aufgaben
-const requestTaskDefs: TaskDef[] = [
-  { key: "_details", label: "Details", states: [null, "details_besprechen", "erledigt"], stateLabels: ["—", "Offen", "Geklärt ✓"], mailOn: "details_besprechen" },
-  { key: "_warte", label: "Rückmeldung", states: [null, "warte_auf_kunde", "erledigt"], stateLabels: ["—", "Warte", "Erhalten ✓"], mailOn: "warte_auf_kunde" },
-];
-=======
 // Checkliste pro Status (rein visuell, ändert NICHT den Status)
 const checklistByStatus: Record<string, { key: string; label: string }[]> = {
   neu: [
@@ -203,7 +196,6 @@ const checklistByStatus: Record<string, { key: string; label: string }[]> = {
     { key: "chk_fragen_geklaert", label: "Offene Fragen geklärt" },
   ],
 };
->>>>>>> Stashed changes
 
 // Hauptphasen
 const eventPhases = [
@@ -1358,21 +1350,6 @@ const AdminBookingDetail = () => {
                   })}
                 </div>
 
-<<<<<<< Updated upstream
-                {/* Aufgaben */}
-                {!["abgelehnt", "archiviert"].includes(status) && (
-                  <>
-                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Aufgaben</p>
-                    <div className="space-y-2 mb-5">
-                      {requestTaskDefs.map((task) => {
-                        const isTaskActive = status === task.states[1];
-                        const isTaskDone = task.states[2] === "erledigt" && (
-                          (task.key === "_details" && ["angebot_gesendet", "warte_auf_kunde", "bestätigt", "gebucht"].includes(status)) ||
-                          (task.key === "_warte" && ["bestätigt", "gebucht"].includes(status))
-                        );
-                        const stateIdx = isTaskDone ? 2 : isTaskActive ? 1 : 0;
-                        const stateLabel = task.stateLabels[stateIdx];
-=======
                 {/* Checkliste pro Status (ändert NICHT den Status) */}
                 {(checklistByStatus[status] || []).length > 0 && (
                   <>
@@ -1380,29 +1357,20 @@ const AdminBookingDetail = () => {
                     <div className="space-y-1.5 mb-5">
                       {(checklistByStatus[status] || []).map((item) => {
                         const checked = checklist[item.key] || false;
->>>>>>> Stashed changes
                         return (
                           <button
-                            key={task.key}
-                            onClick={async () => {
-                              if (isTaskDone) return;
-                              const newStatus = isTaskActive ? "in_bearbeitung" : (task.states[1] as string);
-                              setStatus(newStatus);
-                              await supabase.from("portal_requests").update({ status: newStatus }).eq("id", request.id);
-                              setRequest({ ...request, status: newStatus });
-                              setMessage(`${task.label} → ${isTaskActive ? "Zurückgesetzt" : task.stateLabels[1]}`);
-                              if (!isTaskActive && confirm(`${task.label} auf "${task.stateLabels[1]}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
-                                sendStatusMail();
-                              }
-                            }}
-                            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-colors border ${
-                              isTaskDone ? "bg-green-50 border-green-200 text-green-700"
-                              : isTaskActive ? "bg-blue-50 border-blue-200 text-blue-700"
-                              : "bg-muted/20 border-border/20 text-muted-foreground hover:bg-muted/40"
+                            key={item.key}
+                            onClick={() => setChecklist(prev => ({ ...prev, [item.key]: !prev[item.key] }))}
+                            className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm transition-colors border ${
+                              checked ? "bg-green-50 border-green-200" : "bg-muted/10 border-border/20 hover:bg-muted/30"
                             }`}
                           >
-                            <span className="font-medium">{task.label}</span>
-                            <span className={`text-xs font-semibold ${isTaskDone ? "text-green-600" : isTaskActive ? "text-blue-600" : "text-muted-foreground/50"}`}>{stateLabel}</span>
+                            <span className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ${
+                              checked ? "bg-green-500 text-white" : "border border-border/40"
+                            }`}>
+                              {checked && <Check className="w-3 h-3" />}
+                            </span>
+                            <span className={`font-medium text-left ${checked ? "text-green-700 line-through" : "text-foreground"}`}>{item.label}</span>
                           </button>
                         );
                       })}
