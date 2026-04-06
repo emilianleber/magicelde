@@ -505,7 +505,7 @@ function DocumentPreview(props: PreviewProps) {
   const renderDINTop = () => (
     <>
       {/* Zone B: Anschriftfeld + Informationsblock */}
-      <div style={{ padding: `36px ${M}px 16px`, display: "flex", gap: 40, alignItems: "flex-start" }}>
+      <div style={{ padding: `24px ${M}px 12px`, display: "flex", gap: 40, alignItems: "flex-start" }}>
         <div style={{ flex: "0 0 46%", fontSize: 10, lineHeight: 1.55, color: "#222", minHeight: 127 }}>
           <div style={{ fontSize: 8, color: "#aaa", borderBottom: "0.5px solid #e0e0e0", paddingBottom: 3, marginBottom: 9, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             {[absenderName, absenderAdresse, `${absenderPlz} ${absenderOrt}`.trim()].filter(Boolean).join(" – ")}
@@ -525,7 +525,7 @@ function DocumentPreview(props: PreviewProps) {
           ))}
         </div>
       </div>
-      <div style={{ height: 22 }} />
+      <div style={{ height: 10 }} />
       {/* Zone C: Betreff */}
       <div style={{ padding: `0 ${M}px 6px` }}>
         <div style={{ fontSize: 14, fontWeight: 700, color: "#111" }}>{typLabel}{nummer ? ` ${nummer}` : ""}</div>
@@ -683,9 +683,9 @@ function DocumentPreview(props: PreviewProps) {
 
     // 1 – Klassisch: Weißes Blatt, Logo oben rechts (wie Emilians echte Angebote – kein Kontakt im Kopf)
     case 1: return page("#fff",
-      <div style={{ position: "relative", padding: `38px ${M}px 16px`, minHeight: 110, borderBottom: "0.5px solid #e8e8e8" }}>
+      <div style={{ position: "relative", padding: `20px ${M}px 12px`, minHeight: 90, borderBottom: "0.5px solid #e8e8e8" }}>
         <AbsBlock />
-        <div style={{ position: "absolute", top: 38, right: M }}>
+        <div style={{ position: "absolute", top: 20, right: M }}>
           <LogoImg />
         </div>
       </div>,
@@ -707,7 +707,7 @@ function DocumentPreview(props: PreviewProps) {
 
     // 3 – Voller Farbkopf
     case 3: return page("#fff",
-      <div style={{ backgroundColor: color, padding: `36px ${M}px 18px`, position: "relative", minHeight: 110 }}>
+      <div style={{ backgroundColor: color, padding: `20px ${M}px 14px`, position: "relative", minHeight: 90 }}>
         <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.75)" addrC="rgba(255,255,255,0.55)" />
         <RightCol dark kontC="rgba(255,255,255,0.65)" />
       </div>,
@@ -716,7 +716,7 @@ function DocumentPreview(props: PreviewProps) {
 
     // 6 – Dark Premium: Dunkler Kopf mit Akzent
     case 6: return page("#fff",
-      <div style={{ backgroundColor: "#111", padding: `36px ${M}px 18px`, position: "relative", minHeight: 110 }}>
+      <div style={{ backgroundColor: "#111", padding: `20px ${M}px 14px`, position: "relative", minHeight: 90 }}>
         <div style={{ width: 24, height: 3, backgroundColor: color, borderRadius: 2, marginBottom: 8 }} />
         <AbsBlock nameC="#fff" subC="rgba(255,255,255,0.55)" addrC="rgba(255,255,255,0.35)" />
         <RightCol dark kontC="rgba(255,255,255,0.4)" />
@@ -726,7 +726,7 @@ function DocumentPreview(props: PreviewProps) {
 
     // 9 – Skandinavisch: Minimal
     case 9: return page("#fff",
-      <div style={{ position: "relative", padding: `36px ${M}px 16px`, minHeight: 105 }}>
+      <div style={{ position: "relative", padding: `20px ${M}px 12px`, minHeight: 85 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
           <div style={{ width: 18, height: 2, backgroundColor: color }} />
           <div style={{ fontSize: 13, fontWeight: 300, letterSpacing: -0.3 }}>{absenderName}</div>
