@@ -94,10 +94,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     html, body { width: 595px; background: #fff; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 9pt; line-height: 1.5; color: #111; }
     body * { font-family: 'Inter', system-ui, -apple-system, sans-serif !important; }
     table { width: 595px; border-collapse: collapse; }
-    thead td, tfoot td, tbody td { padding: 0; vertical-align: top; }
+    thead td, tbody td { padding: 0; vertical-align: top; }
+    tfoot td { padding: 0; }
     thead { display: table-header-group; }
     tfoot { display: table-footer-group; }
     tbody { display: table-row-group; }
+    /* Footer-Inhalt am Seitenende fixieren */
+    tfoot td > div { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; }
   </style>
 </head>
 <body>
@@ -111,6 +114,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     await page.setContent(tableHtml, { waitUntil: "networkidle0", timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
+
+    // Footer-Höhe messen und als padding-bottom auf tbody td setzen
+    await page.evaluate(() => {
+      const footerDiv = document.querySelector("tfoot td > div") as HTMLElement;
+      const tbodyTd = document.querySelector("tbody td") as HTMLElement;
+      if (footerDiv && tbodyTd) {
+        tbodyTd.style.paddingBottom = (footerDiv.offsetHeight + 12) + "px";
+      }
+    });
 
     const pdf = await page.pdf({
       format: "A4",
