@@ -941,6 +941,21 @@ export default function AdminDokumentEditor() {
     });
   }, [authChecked, isNew, searchParams]);
 
+  // Pre-fill positions from sessionStorage (e.g. from Paket→Angebot)
+  useEffect(() => {
+    if (!authChecked || !isNew) return;
+    try {
+      const raw = sessionStorage.getItem("prefill_positionen");
+      if (raw) {
+        sessionStorage.removeItem("prefill_positionen");
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setPositionen(parsed);
+        }
+      }
+    } catch {}
+  }, [authChecked, isNew]);
+
   // Load existing document for edit
   useEffect(() => {
     if (!authChecked || isNew || !id) return;

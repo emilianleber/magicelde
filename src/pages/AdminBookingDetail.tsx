@@ -1054,23 +1054,35 @@ const AdminBookingDetail = () => {
                 </div>
                 <button
                   onClick={() => {
-                    // Angebot mit Paket-Positionen erstellen
-                    const positions: DocumentPosition[] = [{
-                      id: crypto.randomUUID(),
-                      typ: "leistung",
-                      bezeichnung: selectedPaket.name,
-                      beschreibung: selectedPaket.beschreibungKunde || "",
-                      menge: 1,
-                      einheit: "Std.",
-                      einzelpreis: selectedPaket.preis,
-                      gesamt: selectedPaket.preis,
-                      optional: false,
-                    }];
-                    setEditingDoc({
-                      type: "Angebot",
-                      positionen: positions,
-                    } as any);
-                    setShowDocCreator(true);
+                    // Positionen: Paket + Anfahrtspauschale
+                    const positions = [
+                      {
+                        id: crypto.randomUUID(),
+                        typ: "leistung",
+                        bezeichnung: selectedPaket.name,
+                        beschreibung: selectedPaket.beschreibungKunde || "",
+                        menge: 1,
+                        einheit: "Pauschal",
+                        einzelpreis: selectedPaket.preis,
+                        gesamt: selectedPaket.preis,
+                        optional: false,
+                      },
+                      {
+                        id: crypto.randomUUID(),
+                        typ: "leistung",
+                        bezeichnung: "Anfahrt",
+                        beschreibung: "An- und Abreise zum Veranstaltungsort",
+                        menge: 1,
+                        einheit: "Pauschal",
+                        einzelpreis: 0,
+                        gesamt: 0,
+                        optional: false,
+                      },
+                    ];
+                    // In sessionStorage speichern → Editor liest sie aus
+                    sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
+                    const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
+                    navigate(`/admin/dokumente/new?typ=angebot${params}`);
                   }}
                   className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 transition-opacity"
                 >
