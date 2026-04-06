@@ -28,6 +28,7 @@ const TYP_LABEL: Record<DokumentTyp, string> = {
   auftragsbestaetigung: "Auftragsbestätigung",
   rechnung:             "Rechnung",
   abschlagsrechnung:    "Abschlagsrechnung",
+  schlussrechnung:      "Schlussrechnung",
   mahnung:              "Mahnung",
   gutschrift:           "Gutschrift",
   stornorechnung:       "Stornorechnung",

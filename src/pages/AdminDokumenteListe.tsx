@@ -36,6 +36,7 @@ const TYP_LABEL: Record<DokumentTyp, string> = {
   auftragsbestaetigung: "Auftragsb.",
   rechnung: "Rechnung",
   abschlagsrechnung: "Abschlagsrg.",
+  schlussrechnung: "Schlussrg.",
   mahnung: "Mahnung",
   gutschrift: "Gutschrift",
   stornorechnung: "Storno",
@@ -126,6 +127,7 @@ const TYP_PATH: Record<DokumentTyp, string> = {
   auftragsbestaetigung: "/admin/dokumente/auftragsbestaetigung",
   mahnung: "/admin/dokumente/mahnungen",
   abschlagsrechnung: "/admin/dokumente",
+  schlussrechnung: "/admin/dokumente/rechnungen",
   gutschrift: "/admin/dokumente",
   stornorechnung: "/admin/dokumente",
 };
