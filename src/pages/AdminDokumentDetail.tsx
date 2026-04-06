@@ -168,10 +168,34 @@ export default function AdminDokumentDetail() {
   const [publishedToast, setPublishedToast] = useState(false);
 
   const handleStatusChange = async (status: DokumentStatus) => {
-    if (!id) return;
+    if (!id || !doc) return;
     setStatusChanging(true);
-    try { await dokumenteService.setStatus(id, status); await load(); }
-    finally { setStatusChanging(false); }
+    try {
+      await dokumenteService.setStatus(id, status);
+
+      // Sync: Wenn Rechnung auf "bezahlt" → Event-Status aktualisieren
+      if (status === "bezahlt" && doc.eventId) {
+        await supabase.from("portal_events")
+          .update({ status: "rechnung_bezahlt", invoice_status: "erledigt" })
+          .eq("id", doc.eventId);
+      }
+
+      // Sync: Angebot akzeptiert → Request-Status aktualisieren
+      if (status === "akzeptiert" && doc.typ === "angebot" && doc.requestId) {
+        await supabase.from("portal_requests")
+          .update({ status: "bestätigt" })
+          .eq("id", doc.requestId);
+      }
+
+      // Sync: Angebot abgelehnt → Request-Status aktualisieren
+      if (status === "abgelehnt" && doc.typ === "angebot" && doc.requestId) {
+        await supabase.from("portal_requests")
+          .update({ status: "abgelehnt" })
+          .eq("id", doc.requestId);
+      }
+
+      await load();
+    } finally { setStatusChanging(false); }
   };
 
   const handleConvert = async (zielTypOverride?: DokumentTyp) => {
@@ -440,7 +464,7 @@ export default function AdminDokumentDetail() {
     return urlData.signedUrl;
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!doc) return;
 
     const html = doc.previewHtml;
@@ -449,54 +473,35 @@ export default function AdminDokumentDetail() {
       return;
     }
 
-    const win = window.open("", "_blank");
-    if (!win) {
-      setSendMsg({ type: "err", text: "Bitte Popups für diese Seite erlauben." });
-      return;
+    setSendLoading("download"); setSendMsg(null);
+    try {
+      const res = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ preview_html: html, title: doc.nummer || "Dokument" }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`PDF-Fehler (${res.status}): ${err}`);
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${doc.nummer || "Dokument"}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setSendMsg({ type: "ok", text: "PDF heruntergeladen" });
+    } catch (e) {
+      console.error("PDF error:", e);
+      setSendMsg({ type: "err", text: "PDF-Fehler: " + (e instanceof Error ? e.message : String(e)) });
+    } finally {
+      setSendLoading(null);
     }
-
-    // 595px Vorschau → 210mm A4  (210/25.4 * 96 / 595 ≈ 1.3341)
-    const scale = ((210 / 25.4) * 96) / 595;
-
-    win.document.write(`<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<title>${doc.nummer}</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after {
-  box-sizing: border-box;
-  -webkit-print-color-adjust: exact !important;
-  print-color-adjust: exact !important;
-}
-@page { size: A4 portrait; margin: 0; }
-html, body { margin: 0; padding: 0; }
-body > div {
-  width: 595px !important;
-  min-height: 840px !important;
-  height: auto !important;
-  zoom: ${scale.toFixed(6)} !important;
-  aspect-ratio: auto !important;
-}
-@media screen {
-  body {
-    background: #444;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-  }
-  body > div { box-shadow: 0 6px 32px rgba(0,0,0,0.35); }
-}
-</style>
-</head>
-<body>${html}</body>
-</html>`);
-
-    win.document.close();
-    setTimeout(() => { win.focus(); win.print(); }, 900);
   };
 
   const handlePublishPortal = async () => {
@@ -510,6 +515,16 @@ body > div {
 
     setSendLoading("portal"); setSendMsg(null);
     try {
+      // 0. PDF generieren und hochladen (damit Portal echtes PDF hat)
+      if (doc.previewHtml) {
+        try {
+          const pdfBlob = await generatePdfViaApi(doc.previewHtml, doc.nummer || "Dokument");
+          await uploadPdfBlob(pdfBlob, id);
+        } catch (pdfErr) {
+          console.warn("PDF-Upload fehlgeschlagen (Portal funktioniert trotzdem):", pdfErr);
+        }
+      }
+
       // 1. Dokument-Status → gesendet
       await dokumenteService.setStatus(id, "gesendet");
 
@@ -540,15 +555,22 @@ body > div {
         }
       }
 
-      // 3. Statusmail: fire-and-forget – Fehler hier verhindern NICHT die Navigation
+      // 3. Statusmail senden
       if (mailType && mailRecordId) {
-        supabase.auth.getSession().then(({ data: { session } }) => {
+        try {
+          await supabase.auth.refreshSession();
+          const { data: { session } } = await supabase.auth.getSession();
           const token = session?.access_token;
-          supabase.functions.invoke("admin-send-status-mail", {
-            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-            body: { type: mailType, recordId: mailRecordId, dokumentTyp: doc.typ },
-          }).catch(console.error);
-        });
+          if (token) {
+            const mailRes = await supabase.functions.invoke("admin-send-status-mail", {
+              headers: { Authorization: `Bearer ${token}` },
+              body: { type: mailType, recordId: mailRecordId, dokumentTyp: doc.typ },
+            });
+            if (mailRes.error) console.warn("Status-Mail Fehler:", mailRes.error);
+          }
+        } catch (mailErr) {
+          console.warn("Status-Mail konnte nicht gesendet werden:", mailErr);
+        }
       }
 
       // 4. Panel schließen + URL bereinigen + Toast
@@ -565,6 +587,20 @@ body > div {
     } finally { setSendLoading(null); }
   };
 
+  // Generiert echtes PDF über Vercel-API aus preview_html
+  const generatePdfViaApi = async (html: string, title: string): Promise<Blob> => {
+    const res = await fetch("/api/generate-pdf", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ preview_html: html, title }),
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(`PDF-Generierung fehlgeschlagen (${res.status}): ${err}`);
+    }
+    return res.blob();
+  };
+
   const handleSendEmail = async () => {
     if (!doc || !id || !emailTo) return;
     if (!doc.previewHtml) {
@@ -573,7 +609,7 @@ body > div {
     }
     setSendLoading("email"); setSendMsg(null);
     try {
-      const blob = await generatePreviewPdfBlob(doc.previewHtml);
+      const blob = await generatePdfViaApi(doc.previewHtml, doc.nummer || "Dokument");
       const signedUrl = await uploadPdfBlob(blob, id);
       const { error } = await supabase.functions.invoke("send-customer-mail", {
         body: {

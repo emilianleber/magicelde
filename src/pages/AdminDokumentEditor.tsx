@@ -1327,7 +1327,47 @@ export default function AdminDokumentEditor() {
   };
 
   // PDF: Neues Fenster öffnen → User wählt "Als PDF sichern" im Druckdialog
-  const handleDownloadPdf = () => {
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
+
+  const handleDownloadPdf = async () => {
+    const el = document.getElementById("doc-preview-capture");
+    if (!el) return;
+
+    const html = el.innerHTML;
+    const docTitle = nummer || "Dokument";
+    setDownloadingPdf(true);
+
+    try {
+      const res = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ preview_html: html, title: docTitle }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`PDF-Fehler (${res.status}): ${err}`);
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${docTitle}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("PDF error:", e);
+      alert("PDF-Fehler: " + (e instanceof Error ? e.message : String(e)));
+    } finally {
+      setDownloadingPdf(false);
+    }
+  };
+
+  // Legacy: Drucken-Fenster fuer den Fall dass API nicht erreichbar
+  const handlePrintFallback = () => {
     const el = document.getElementById("doc-preview-print");
     if (!el) return;
 
@@ -1337,8 +1377,6 @@ export default function AdminDokumentEditor() {
       alert("Bitte erlauben Sie Popups für diese Seite, um das PDF zu öffnen.");
       return;
     }
-
-    const scale = ((210 / 25.4) * 96) / 595;
 
     win.document.write(`<!DOCTYPE html>
 <html lang="de">
@@ -1477,10 +1515,11 @@ body > div {
               </button>
               <button
                 onClick={handleDownloadPdf}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors"
+                disabled={downloadingPdf}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors disabled:opacity-50"
               >
                 <Download className="w-4 h-4" />
-                PDF / Drucken
+                {downloadingPdf ? "PDF wird erstellt…" : "PDF herunterladen"}
               </button>
               <button
                 onClick={handleSaveAndNavigate}

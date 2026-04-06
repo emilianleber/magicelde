@@ -18,20 +18,48 @@ function buildHtml(previewHtml: string, title: string) {
   <title>${title}</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    html, body { width: 595px; background: #fff; font-family: Inter, system-ui, sans-serif; }
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    html, body {
+      width: 595px;
+      background: #fff;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 9pt;
+      line-height: 1.5;
+      color: #111;
+    }
     body > div {
       width: 595px;
-      min-height: auto;
-      height: auto;
+      min-height: 842px;
       position: relative;
-      padding-bottom: 0 !important;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
     }
-    /* Footer aus absoluter Positionierung in den Flow bringen */
+    body > div:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    /* Footer immer am Seitenende */
     body > div > div:last-child > div:last-child,
     [style*="position: absolute"][style*="bottom: 0"] {
-      position: static !important;
-      margin-top: 20px;
+      position: absolute !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+    }
+    /* Konsistente Schriftgroessen */
+    body * {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
     }
   </style>
 </head>
@@ -64,22 +92,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const page = await browser.newPage();
-    // Viewport exakt wie das Dokument-Design (595px breit)
+    // Viewport exakt A4 bei 72dpi (595x842 pt)
     await page.setViewport({ width: 595, height: 842, deviceScaleFactor: 2 });
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
+
+    // Warten bis Inter-Font geladen ist
+    await page.evaluate(() => document.fonts.ready);
 
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
       margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
-      // CSS pixels are 96dpi, PDF points are 72dpi → scale 96/72 = 4/3
-      // makes 1 CSS px = 1 PDF point → 595px content fills 595pt = A4 width exactly
-      scale: 96 / 72,
+      preferCSSPageSize: true,
     });
 
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachment; filename="${docTitle}.pdf"`);
+    res.setHeader("Content-Disposition", `attachment; filename="${encodeURIComponent(docTitle)}.pdf"`);
     res.status(200).send(Buffer.from(pdf));
   } finally {
     await browser.close();

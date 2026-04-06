@@ -424,6 +424,64 @@ const DocumentCreator: React.FC<DocumentCreatorProps> = ({
   const [generatingPdf, setGeneratingPdf] = useState(false);
   const [message, setMessage] = useState("");
 
+  // Abschlagsrechnung
+  const [abschlagsModus, setAbschlagsModus] = useState<"manuell" | "prozent" | "festbetrag">("manuell");
+  const [abschlagsProzent, setAbschlagsProzent] = useState(50);
+  const [abschlagsBetrag, setAbschlagsBetrag] = useState(0);
+  const [quellDokTotal, setQuellDokTotal] = useState(0); // Gesamtbetrag des Quelldokuments
+
+  // ── Abschlagsrechnung: Quelldokument laden und Positionen automatisch setzen ──
+  useEffect(() => {
+    if (type === "Abschlagsrechnung" && abschlagsModus !== "manuell") {
+      // Lade Gesamtbetrag des letzten Angebots für diesen Kunden/Event
+      const loadQuellTotal = async () => {
+        const query = supabase
+          .from("portal_documents")
+          .select("total, document_number")
+          .eq("type", "Angebot")
+          .order("created_at", { ascending: false })
+          .limit(1);
+        if (eventId) query.eq("event_id", eventId);
+        else if (requestId) query.eq("request_id", requestId);
+        else if (customerId) query.eq("customer_id", customerId);
+
+        const { data } = await query;
+        if (data && data.length > 0) {
+          const t = data[0].total || 0;
+          setQuellDokTotal(t);
+          const betrag = abschlagsModus === "prozent"
+            ? Math.round((t * abschlagsProzent / 100) * 100) / 100
+            : abschlagsBetrag;
+          setPositions([{
+            id: crypto.randomUUID(),
+            description: abschlagsModus === "prozent"
+              ? `Abschlagszahlung (${abschlagsProzent}% von ${data[0].document_number || "Angebot"})`
+              : `Abschlagszahlung`,
+            quantity: 1,
+            unit: "Pauschal",
+            unit_price: betrag,
+            total: betrag,
+          }]);
+        }
+      };
+      loadQuellTotal();
+    }
+  }, [type, abschlagsModus, abschlagsProzent, abschlagsBetrag]);
+
+  // Festbetrag-Modus: Position aktualisieren
+  useEffect(() => {
+    if (type === "Abschlagsrechnung" && abschlagsModus === "festbetrag" && abschlagsBetrag > 0) {
+      setPositions([{
+        id: crypto.randomUUID(),
+        description: "Abschlagszahlung",
+        quantity: 1,
+        unit: "Pauschal",
+        unit_price: abschlagsBetrag,
+        total: abschlagsBetrag,
+      }]);
+    }
+  }, [abschlagsBetrag, abschlagsModus]);
+
   // ── Auto-fill number + texts on type change ──
   useEffect(() => {
     if (!isEdit) {
@@ -708,6 +766,67 @@ const DocumentCreator: React.FC<DocumentCreatorProps> = ({
               )}
             </div>
           </div>
+
+          {/* ── Abschlagsrechnung Modus ── */}
+          {type === "Abschlagsrechnung" && (
+            <div className="p-4 rounded-xl bg-blue-50/50 border border-blue-200/50 space-y-3">
+              <h3 className="text-xs font-semibold text-blue-600 uppercase tracking-wider">Abschlagsrechnung</h3>
+              <div className="grid grid-cols-3 gap-2">
+                {([
+                  { key: "prozent" as const, label: "Prozentual" },
+                  { key: "festbetrag" as const, label: "Fester Betrag" },
+                  { key: "manuell" as const, label: "Manuell" },
+                ]).map(({ key, label }) => (
+                  <button
+                    key={key}
+                    onClick={() => setAbschlagsModus(key)}
+                    className={`px-3 py-2 rounded-xl text-sm font-medium border transition-all ${
+                      abschlagsModus === key
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-foreground border-border/30 hover:border-blue-300"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              {abschlagsModus === "prozent" && (
+                <div className="flex items-center gap-3">
+                  <input
+                    type="number"
+                    min={1}
+                    max={100}
+                    value={abschlagsProzent}
+                    onChange={(e) => setAbschlagsProzent(Number(e.target.value) || 0)}
+                    className="w-24 rounded-lg bg-white border border-border/30 px-3 py-2 text-sm text-right"
+                  />
+                  <span className="text-sm text-muted-foreground">%</span>
+                  {quellDokTotal > 0 && (
+                    <span className="text-xs text-muted-foreground">
+                      = {formatCurrency(Math.round(quellDokTotal * abschlagsProzent / 100 * 100) / 100)} von {formatCurrency(quellDokTotal)}
+                    </span>
+                  )}
+                </div>
+              )}
+              {abschlagsModus === "festbetrag" && (
+                <div className="flex items-center gap-3">
+                  <input
+                    type="number"
+                    min={0}
+                    step="0.01"
+                    value={abschlagsBetrag}
+                    onChange={(e) => setAbschlagsBetrag(parseFloat(e.target.value) || 0)}
+                    placeholder="Betrag in EUR"
+                    className="w-40 rounded-lg bg-white border border-border/30 px-3 py-2 text-sm text-right"
+                  />
+                  <span className="text-sm text-muted-foreground">EUR</span>
+                </div>
+              )}
+              {abschlagsModus === "manuell" && (
+                <p className="text-xs text-muted-foreground">Positionen manuell eingeben.</p>
+              )}
+            </div>
+          )}
 
           {/* ── Customer display ── */}
           {customer && (
