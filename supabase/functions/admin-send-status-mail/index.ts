@@ -22,7 +22,7 @@ const SMTP_FROM = `"Emilian Leber" <${Deno.env.get("SMTP_USER") || "el@magicel.d
 
 const sendMail = async (to: string, subject: string, html: string) => {
   const transporter = createTransporter();
-  await transporter.sendMail({ from: SMTP_FROM, to, subject, html });
+  await transporter.sendMail({ from: SMTP_FROM, replyTo: SMTP_FROM, to, subject, html });
 };
 
 const corsHeaders = {
@@ -188,7 +188,7 @@ const formatLabels: Record<string, string> = {
 };
 const fmtFormat = (f: string | null) => f ? (formatLabels[f.toLowerCase()] || f) : "–";
 
-const capitalize = (s: string) => s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+const capitalize = (s: string) => s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ");
 
 // Begrüßung: "Herr Müller" oder "Max Mustermann"
 const getBegruessung = (nameRaw: string, anrede?: string | null, vornameField?: string | null, nachnameField?: string | null) => {

@@ -20,6 +20,7 @@ import {
   Upload,
   Users,
   X,
+  Building2,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -720,7 +721,7 @@ const AdminBookingDetail = () => {
   if (isAdmin === false) return <div className="pt-28 text-center">Kein Zugriff</div>;
   if (!request) return <div className="pt-28 text-center">Anfrage nicht gefunden</div>;
 
-  const capName = (s?: string | null) => s ? s.replace(/\b\w/g, (c) => c.toUpperCase()) : "";
+  const capName = (s?: string | null) => s ? s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ") : "";
   const displayCustomerName = capName(customer?.name || request.name) || "Unbekannter Kunde";
   const displayFirma = customer?.company || request.firma || "";
   const isError = message.startsWith("Fehler") || message.startsWith("Mail-Fehler");
@@ -802,6 +803,24 @@ const AdminBookingDetail = () => {
             <Link to={`/admin/customers/${customer.id}`} className="inline-flex items-center gap-1 text-xs text-accent hover:text-accent/80">
               Kundenkonto <ArrowRight className="w-3 h-3" />
             </Link>
+          )}
+          {customer?.id && !customer.rechnungs_strasse && (
+            <button
+              onClick={async () => {
+                try {
+                  const { data: { session } } = await supabase.auth.getSession();
+                  await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/request-billing-address", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
+                    body: JSON.stringify({ customerId: customer.id }),
+                  });
+                  setMessage("Rechnungsadresse angefordert ✓");
+                } catch { setMessage("Fehler beim Anfordern"); }
+              }}
+              className="inline-flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700 font-medium"
+            >
+              <Building2 className="w-3 h-3" /> Rechnungsadresse anfordern
+            </button>
           )}
         </div>
       </div>

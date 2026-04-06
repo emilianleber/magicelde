@@ -69,9 +69,9 @@ serve(async (req) => {
       throw new Error("Name und E-Mail fehlen");
     }
 
-    // Hilfsfunktion: ersten Buchstaben jedes Worts großschreiben (ohne Umlaute zu zerstören)
+    // Hilfsfunktion: ersten Buchstaben jedes Worts großschreiben, Rest lowercase
     const capitalize = (s: string) =>
-      s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+      s.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ");
 
     const safeVorname = vorname ? capitalize(String(vorname).trim()) : "";
     const safeNachname = nachname ? capitalize(String(nachname).trim()) : "";
