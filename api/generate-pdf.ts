@@ -26,82 +26,96 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const page = await browser.newPage();
     await page.setViewport({ width: 595, height: 842, deviceScaleFactor: 2 });
 
-    // Einfaches HTML: Content wie er ist, CSS kümmert sich um alles
-    const html = `<!DOCTYPE html>
+    // Schritt 1: Original laden um Header/Footer/Content zu extrahieren
+    const rawHtml = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>*{margin:0;padding:0;box-sizing:border-box}html,body{width:595px;background:#fff;font-family:'Inter',system-ui,sans-serif;font-size:9pt;line-height:1.5;color:#111}body *{font-family:'Inter',system-ui,sans-serif!important}body>div{width:595px;position:relative}</style>
+</head><body>${preview_html}</body></html>`;
+
+    await page.setContent(rawHtml, { waitUntil: "networkidle0", timeout: 30000 });
+    await page.evaluate(() => document.fonts.ready);
+
+    // Header, Footer und Content-Blöcke extrahieren
+    const parts = await page.evaluate(() => {
+      const container = document.querySelector("body > div") as HTMLElement;
+      if (!container) return null;
+
+      // Header = erstes Kind (Logo + Name + Adresse + Trennlinie)
+      const headerEl = container.children[0] as HTMLElement;
+      const headerHtml = headerEl ? headerEl.outerHTML : "";
+
+      // Footer = IRGENDWO verschachtelter div mit position:absolute + bottom
+      // (ist innerhalb des Body-Divs, nicht direkt ein Kind von container)
+      let footerEl: HTMLElement | null = null;
+      const allDivs = container.querySelectorAll("div");
+      for (let i = allDivs.length - 1; i >= 0; i--) {
+        const s = allDivs[i].getAttribute("style") || "";
+        if (s.includes("position") && s.includes("absolute") && s.includes("bottom")) {
+          footerEl = allDivs[i] as HTMLElement;
+          break;
+        }
+      }
+
+      // Footer aus dem DOM entfernen und HTML extrahieren
+      let footerHtml = "";
+      if (footerEl) {
+        footerEl.style.position = "relative";
+        footerEl.style.bottom = "auto";
+        footerEl.style.left = "auto";
+        footerEl.style.right = "auto";
+        footerHtml = footerEl.outerHTML;
+        footerEl.remove(); // Entfernen damit er nicht im Content erscheint
+      }
+
+      // Content = alles nach dem Header (Footer wurde schon entfernt)
+      const contentParts: string[] = [];
+      for (let i = 1; i < container.children.length; i++) {
+        contentParts.push((container.children[i] as HTMLElement).outerHTML);
+      }
+
+      return { headerHtml, footerHtml, contentHtml: contentParts.join("") };
+    });
+
+    if (!parts) throw new Error("Could not extract document parts");
+
+    // Schritt 2: Table-basiertes HTML bauen
+    // <thead> = Header (wird auf jeder Seite wiederholt)
+    // <tfoot> = Footer (wird auf jeder Seite wiederholt)
+    // <tbody> = Content (fließt natürlich über Seiten)
+    const tableHtml = `<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
   <title>${docTitle}</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    @page {
-      size: A4 portrait;
-      margin: 0;
-    }
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-    html, body {
-      width: 595px;
-      background: #fff;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: 9pt;
-      line-height: 1.5;
-      color: #111;
-    }
-    body * {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-    }
-    body > div {
-      width: 595px;
-      min-height: 842px;
-      position: relative;
-    }
-    /* Footer: position fixed = auf jeder gedruckten Seite wiederholt */
-    [style*="position: absolute"][style*="bottom"] {
-      position: fixed !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      background: #fff !important;
-    }
+    @page { size: A4 portrait; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    html, body { width: 595px; background: #fff; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 9pt; line-height: 1.5; color: #111; }
+    body * { font-family: 'Inter', system-ui, -apple-system, sans-serif !important; }
+    table { width: 595px; border-collapse: collapse; }
+    thead td, tfoot td, tbody td { padding: 0; vertical-align: top; }
+    thead { display: table-header-group; }
+    tfoot { display: table-footer-group; }
+    tbody { display: table-row-group; }
   </style>
 </head>
-<body>${preview_html}</body>
+<body>
+  <table>
+    <thead><tr><td>${parts.headerHtml}</td></tr></thead>
+    <tfoot><tr><td>${parts.footerHtml}</td></tr></tfoot>
+    <tbody><tr><td>${parts.contentHtml}</td></tr></tbody>
+  </table>
+</body>
 </html>`;
 
-    await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
+    await page.setContent(tableHtml, { waitUntil: "networkidle0", timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
-
-    // Footer-Höhe messen und als padding-bottom auf den Container setzen
-    // Damit der Content NICHT unter den fixed Footer rutscht
-    await page.evaluate(() => {
-      const container = document.querySelector("body > div") as HTMLElement;
-      if (!container) return;
-
-      // Footer finden und Höhe messen
-      const allDivs = container.querySelectorAll("div");
-      let footerH = 0;
-      for (let i = allDivs.length - 1; i >= 0; i--) {
-        const s = allDivs[i].getAttribute("style") || "";
-        if (s.includes("position") && s.includes("bottom")) {
-          footerH = allDivs[i].offsetHeight;
-          break;
-        }
-      }
-
-      // Padding-bottom = Footer-Höhe + Sicherheit
-      // Das verhindert dass Content unter den Footer rutscht
-      if (footerH > 0) {
-        container.style.paddingBottom = (footerH + 16) + "px";
-      }
-    });
 
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
+      scale: 96 / 72, // 595px Content → volle A4-Breite
       margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
       preferCSSPageSize: true,
     });
