@@ -501,16 +501,13 @@ const AdminBookingDetail = () => {
     if (!request || !customer) return;
     setAbschlagCreating(true);
     try {
-      // Angebot finden für Referenz und Betrag
       const angebot = documents.find(d => (d as any).type === "Angebot" || d.name?.toLowerCase().includes("angebot"));
       const angebotNr = angebot ? ((angebot as any).document_number || angebot.name) : "";
       const angebotTotal = angebot ? ((angebot as any).total || (angebot as any).amount || 0) : 0;
 
-      // Betrag berechnen
       let betrag = 0;
       if (abschlagMode === "prozent") {
-        const pct = parseFloat(abschlagWert) || 0;
-        betrag = Math.round(angebotTotal * pct / 100 * 100) / 100;
+        betrag = Math.round(angebotTotal * (parseFloat(abschlagWert) || 0) / 100 * 100) / 100;
       } else {
         betrag = parseFloat(abschlagWert) || 0;
       }
@@ -521,33 +518,7 @@ const AdminBookingDetail = () => {
         return;
       }
 
-      // Textvorlagen laden
-      const { data: vorlagen } = await supabase
-        .from("dokument_textvorlagen")
-        .select("bereich, inhalt")
-        .or("typ.eq.abschlagsrechnung,typ.eq.alle")
-        .eq("is_default", true);
-      const kopftext = vorlagen?.find(v => v.bereich === "kopf")?.inhalt || "";
-      const fusstext = vorlagen?.find(v => v.bereich === "fuss")?.inhalt || "";
-
-      // Absender laden
-      const { data: settings } = await supabase.from("admin_settings").select("*").limit(1).maybeSingle();
-
-      // Nächste Nummer
-      const prefix = (settings?.nk_rechnung_prefix as string) || "RE";
-      const naechste = (settings?.nk_rechnung_naechste as number) ?? 1;
-      const year = new Date().getFullYear();
-      const nummer = `${prefix}-${year}-${String(naechste).padStart(3, "0")}`;
-
-      // Nummer hochzählen
-      await supabase.from("admin_settings").update({ nk_rechnung_naechste: naechste + 1 }).eq("id", settings?.id);
-
-      const today = new Date().toISOString().split("T")[0];
-      const zahlungszielTage = (settings?.default_payment_days as number) || 14;
-      const faelligDate = new Date();
-      faelligDate.setDate(faelligDate.getDate() + zahlungszielTage);
-      const faelligAm = faelligDate.toISOString().split("T")[0];
-
+      // Position für den Dokument-Editor vorbereiten
       const bezeichnung = angebotNr
         ? `Teilrechnung aus Angebot ${angebotNr}`
         : "Abschlagszahlung";
@@ -555,84 +526,24 @@ const AdminBookingDetail = () => {
         ? `${abschlagWert}% des Gesamtbetrags${angebotNr ? ` (${angebotNr})` : ""}`
         : `Teilbetrag${angebotNr ? ` aus ${angebotNr}` : ""}`;
 
-      const { data: newDoc, error: docError } = await supabase
-        .from("portal_documents")
-        .insert({
-          type: "Abschlagsrechnung",
-          document_number: nummer,
-          document_date: today,
-          status: "entwurf",
-          customer_id: customer.id,
-          event_id: event?.id || null,
-          request_id: request.id,
-          quelldokument_id: angebot?.id || null,
-          quelldokument_nummer: angebotNr || null,
-          empfaenger: {
-            name: customer.name || "",
-            firma: customer.company || undefined,
-            adresse: customer.rechnungs_strasse || "",
-            plz: customer.rechnungs_plz || "",
-            ort: customer.rechnungs_ort || "",
-            land: customer.rechnungs_land || "Deutschland",
-          },
-          absender: {
-            name: (settings?.company_name as string) || "Emilian Leber",
-            adresse: (settings?.company_address as string) || "",
-            plz: (settings?.company_zip as string) || "",
-            ort: (settings?.company_city as string) || "",
-            land: "Deutschland",
-            email: (settings?.company_email as string) || "",
-            telefon: (settings?.company_phone as string) || "",
-            website: (settings?.company_website as string) || "",
-            steuernummer: (settings?.tax_number as string) || "",
-            iban: (settings?.bank_iban as string) || "",
-            bic: (settings?.bank_bic as string) || "",
-            kleinunternehmer: Boolean((settings as any)?.kleinunternehmer),
-          },
-          kopftext,
-          fusstext,
-          zahlungsziel_tage: zahlungszielTage,
-          faellig_am: faelligAm,
-          subtotal: betrag,
-          total: betrag,
-          amount: betrag,
-          brutto: betrag,
-          offener_betrag: betrag,
-          bezahlt_betrag: 0,
-          name: `Abschlagsrechnung ${nummer}`,
-        })
-        .select("*")
-        .single();
-
-      if (docError || !newDoc) throw new Error("Fehler beim Erstellen");
-
-      // Position einfügen
-      await supabase.from("document_positions").insert({
-        document_id: newDoc.id,
-        position: 1,
-        type: "leistung",
+      const positions = [{
+        id: crypto.randomUUID(),
+        typ: "leistung",
         bezeichnung,
         beschreibung,
-        quantity: 1,
-        unit: "pauschal",
-        unit_price: betrag,
-        total: betrag,
-        mwst_satz: 0,
-      });
+        menge: 1,
+        einheit: "pauschal",
+        einzelpreis: betrag,
+        gesamt: betrag,
+        optional: false,
+      }];
 
+      // Zum Dokument-Editor navigieren mit vorausgefüllten Positionen
+      sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
+      const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
       setShowAbschlagDialog(false);
-      setMessage(`Abschlagsrechnung ${nummer} erstellt (${betrag.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €)`);
-
-      // Dokumente neu laden
-      const { data: docs } = await supabase
-        .from("portal_documents")
-        .select("*")
-        .or(`request_id.eq.${request.id}${event?.id ? `,event_id.eq.${event.id}` : ""},customer_id.eq.${customer.id}`)
-        .order("created_at", { ascending: false });
-      if (docs) setDocuments(docs);
-
-      // Direkt zum Dokument navigieren
-      navigate(`/admin/dokumente/${newDoc.id}`);
+      navigate(`/admin/dokumente/new?typ=abschlagsrechnung${params}`);
+      return;
     } catch (err: any) {
       setMessage("Fehler: " + (err.message || "Unbekannt"));
     }
