@@ -345,6 +345,7 @@ const Kundenportal = () => {
   const [replyText, setReplyText] = useState("");
   const [replySending, setReplySending] = useState(false);
   const [replySent, setReplySent] = useState(false);
+  const [paketInfo, setPaketInfo] = useState<{ name: string; beschreibung: string; zieldauer: number; preis: number } | null>(null);
 
 
   const navigate = useNavigate();
@@ -682,6 +683,15 @@ const Kundenportal = () => {
     return <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20">Offen</span>;
   };
 
+  // Paket laden wenn Request eins hat (MUSS vor early return stehen!)
+  const paketId = requests[0] ? (requests[0] as any).paket_id || null : null;
+  useEffect(() => {
+    if (!paketId) return;
+    supabase.from("pakete").select("name, beschreibung_kunde, zieldauer, preis").eq("id", paketId).maybeSingle().then(({ data }) => {
+      if (data) setPaketInfo({ name: data.name, beschreibung: data.beschreibung_kunde || "", zieldauer: data.zieldauer, preis: data.preis });
+    });
+  }, [paketId]);
+
   if (!user || loading) {
     return (
       <PageLayout>
@@ -705,15 +715,7 @@ const Kundenportal = () => {
   const currentRequest = requests[0] || null;
   const currentEvent = events.find((e) => e.request_id === currentRequest?.id) || events[0] || null;
 
-  // Paket laden wenn Request eins hat
-  const [paketInfo, setPaketInfo] = useState<{ name: string; beschreibung: string; zieldauer: number; preis: number } | null>(null);
-  const paketId = (currentRequest as any)?.paket_id || null;
-  useEffect(() => {
-    if (!paketId) return;
-    supabase.from("pakete").select("name, beschreibung_kunde, zieldauer, preis").eq("id", paketId).maybeSingle().then(({ data }) => {
-      if (data) setPaketInfo({ name: data.name, beschreibung: data.beschreibung_kunde || "", zieldauer: data.zieldauer, preis: data.preis });
-    });
-  }, [paketId]);
+  const paketIdDummy = (currentRequest as any)?.paket_id; // paketId wird oben geladen
   const nextEvent = events.find((e) => {
     const d = getCountdownDays(e.event_date);
     return d !== null && d >= 0;
