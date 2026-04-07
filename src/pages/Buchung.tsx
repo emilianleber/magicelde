@@ -222,7 +222,7 @@ const FormSection = () => {
                 </option>
                 <option value="gala">Gala / Awards</option>
                 <option value="messe">Messe / Promotion</option>
-                <option value="magic-dinner">Magic Dinner</option>
+                <option value="Magic Dinner">Magic Dinner</option>
                 <option value="teamevent">Teamevent / Incentive</option>
                 <option value="sonstiges">Sonstiges</option>
               </select>
@@ -264,10 +264,11 @@ const FormSection = () => {
                   Gewünschtes Format
                 </option>
                 <option value="closeup">Close-Up Magie</option>
-                <option value="buehne">Bühnenshow</option>
-                <option value="walking">Walking Act</option>
-                <option value="dinner">Magic Dinner</option>
-                <option value="kombi">Kombination</option>
+                <option value="buehnenshow">Bühnenshow</option>
+                <option value="walking_act">Walking Act</option>
+                <option value="magic_dinner">Magic Dinner</option>
+                <option value="kombination">Kombination</option>
+                <option value="moderation">Moderation</option>
                 <option value="unsicher">Noch unsicher — berate mich</option>
               </select>
 
