@@ -964,39 +964,6 @@ const Kundenportal = () => {
               </div>
             )}
 
-            {/* ── Show/Paket Karte ── */}
-            {paketInfo && (
-              <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
-                <div className="p-5 sm:p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center shrink-0">
-                      <Sparkles className="w-6 h-6 text-accent" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-sans text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Ihre Show</p>
-                      <h2 className="font-display text-lg font-bold text-foreground">{paketInfo.name}</h2>
-                      <p className="font-sans text-xs text-muted-foreground mt-1">Bis zu {paketInfo.zieldauer} Minuten</p>
-                      {paketInfo.beschreibung && (
-                        <p className="font-sans text-sm text-muted-foreground/80 mt-3 leading-relaxed">{paketInfo.beschreibung}</p>
-                      )}
-                    </div>
-                  </div>
-                  {/* Link zur passenden Unterseite */}
-                  {(() => {
-                    const name = paketInfo.name.toLowerCase();
-                    const link = name.includes("close") ? "/close-up" : name.includes("bühne") ? "/buehnenshow" : name.includes("kombi") ? "/kombination" : null;
-                    if (!link) return null;
-                    return (
-                      <a href={`https://www.magicel.de${link}`} target="_blank" rel="noopener noreferrer"
-                        className="mt-4 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-medium">
-                        Mehr erfahren <ArrowRight className="w-3.5 h-3.5" />
-                      </a>
-                    );
-                  })()}
-                </div>
-              </div>
-            )}
-
             {/* ── Angebote + Rechnungen gleichgroß nebeneinander ── */}
             <div className="grid sm:grid-cols-2 gap-4">
               {/* Dokumente-Karte */}
