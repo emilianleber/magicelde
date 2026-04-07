@@ -71,7 +71,7 @@ export default function AdminKalender() {
       setLoading(true);
       const [evtRes, reqRes] = await Promise.all([
         supabase.from("portal_events").select("id,title,event_date,start_time,location,status,guests,format,customer_id").order("event_date", { ascending: true }),
-        supabase.from("portal_requests").select("id,name,anlass,datum,ort,status").order("datum", { ascending: true }),
+        supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id").is("event_id", null).order("datum", { ascending: true }),
       ]);
       if (!evtRes.error) setEvents(evtRes.data || []);
       if (!reqRes.error) setRequests(reqRes.data || []);

@@ -21,6 +21,7 @@ import {
   Users,
   X,
   Building2,
+  Eye,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -842,9 +843,14 @@ const AdminBookingDetail = () => {
         </div>
         <div className="flex flex-col gap-2 shrink-0">
           {customer?.id && (
-            <Link to={`/admin/customers/${customer.id}`} className="inline-flex items-center gap-1 text-xs text-accent hover:text-accent/80">
-              Kundenkonto <ArrowRight className="w-3 h-3" />
-            </Link>
+            <>
+              <Link to={`/admin/customers/${customer.id}`} className="inline-flex items-center gap-1 text-xs text-accent hover:text-accent/80">
+                Kundenkonto <ArrowRight className="w-3 h-3" />
+              </Link>
+              <a href={`https://magicel.de/kundenportal?preview=${customer.id}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-purple-600 hover:text-purple-700">
+                <Eye className="w-3 h-3" /> Kundenportal-Ansicht
+              </a>
+            </>
           )}
           {customer?.id && !customer.rechnungs_strasse && (
             <button
