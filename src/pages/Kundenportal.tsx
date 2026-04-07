@@ -194,19 +194,13 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
   // Anfrage-Phase
   steps.push({ label: "Anfrage eingegangen", done: !!request, hint: request?.created_at ? new Date(request.created_at).toLocaleDateString("de-DE") : undefined });
   steps.push({ label: "In Bearbeitung", done: ["in_bearbeitung", "details_besprechen", "angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
-  if (st === "details_besprechen") {
-    steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
-  }
+  // "Details klären" entfernt – Kommunikation läuft per Mail/WhatsApp
   steps.push({ label: "Angebot erhalten", done: ["angebot_gesendet", "warte_auf_kunde"].includes(st) || !!event });
 
   if (event) {
     steps.push({ label: "Event gebucht", done: true, hint: event.event_date ? new Date(event.event_date).toLocaleDateString("de-DE") : undefined });
 
-    // Details: nur anzeigen wenn offen (verschwindet wenn erledigt)
-    // Details: nur anzeigen wenn explizit auf "offen" gesetzt (null/erledigt = nicht anzeigen)
-    if (event.details_status === "offen") {
-      steps.push({ label: "📩 Details klären", done: false, hint: "Wir benötigen noch Informationen von Ihnen", action: "details_antworten" });
-    }
+    // "Details klären" entfernt – Kommunikation per Mail/WhatsApp
 
     // Vertrag: nur anzeigen wenn gesendet oder bestätigt
     if (event.contract_status === "gesendet") {
@@ -1336,48 +1330,7 @@ const Kundenportal = () => {
                               )}
                             </p>
                             {step.hint && <p className="font-sans text-xs text-muted-foreground mt-0.5">{step.hint}</p>}
-                            {step.action === "details_antworten" && isCurrent && (
-                              <div className="mt-3">
-                                {detailsReplySuccess ? (
-                                  <div className="flex items-center gap-2 text-sm text-green-600 font-medium">
-                                    <CheckCircle2 className="w-4 h-4" /> Antwort gesendet!
-                                  </div>
-                                ) : !detailsReplyOpen ? (
-                                  <button
-                                    onClick={() => setDetailsReplyOpen(true)}
-                                    className="inline-flex items-center gap-2 font-sans text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-xl px-4 py-2.5 transition-all active:scale-95"
-                                  >
-                                    <Send className="w-3.5 h-3.5" /> Jetzt antworten
-                                  </button>
-                                ) : (
-                                  <div className="space-y-3 mt-1">
-                                    <p className="font-sans text-xs text-muted-foreground">Bitte teilen Sie uns die gewünschten Details mit:</p>
-                                    <textarea
-                                      value={detailsReplyMsg}
-                                      onChange={(e) => setDetailsReplyMsg(e.target.value)}
-                                      placeholder="Ihre Antwort schreiben…"
-                                      rows={4}
-                                      className="w-full rounded-xl bg-black/[0.02] border border-black/[0.1] px-4 py-3 text-sm text-foreground placeholder:text-black/25 focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-500/30 transition-all resize-none"
-                                    />
-                                    <div className="flex items-center gap-2">
-                                      <button
-                                        onClick={submitDetailsReply}
-                                        disabled={detailsReplySending || !detailsReplyMsg.trim()}
-                                        className="inline-flex items-center gap-2 font-sans text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-50 rounded-xl px-4 py-2.5 transition-all active:scale-95"
-                                      >
-                                        <Send className="w-3.5 h-3.5" /> {detailsReplySending ? "Senden…" : "Absenden"}
-                                      </button>
-                                      <button
-                                        onClick={() => { setDetailsReplyOpen(false); setDetailsReplyMsg(""); }}
-                                        className="font-sans text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2.5"
-                                      >
-                                        Abbrechen
-                                      </button>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            )}
+                            {/* Details-Antwort entfernt – Kommunikation per Mail/WhatsApp */}
                           </div>
                         </div>
                       );
