@@ -22,6 +22,8 @@ import {
   X,
   Building2,
   Eye,
+  Send,
+  Clock,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -1304,7 +1306,7 @@ const AdminBookingDetail = () => {
                         setComposeTemplateId(tplId);
                         if (!tplId) return;
                         // Vorlage laden und Betreff/Body füllen
-                        const { data: tpl } = await supabase.from("email_templates").select("name, subject, body_html").eq("id", tplId).maybeSingle();
+                        const { data: tpl } = await supabase.from("email_templates").select("name, subject, body_html").eq("slug", tplId).maybeSingle();
                         if (tpl) {
                           setComposeSubject(tpl.subject || tpl.name || "");
                           setComposeBody(tpl.body_html || "");
