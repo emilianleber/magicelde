@@ -88,8 +88,10 @@ serve(async (req) => {
     // Format-Werte übersetzen
     const formatLabels: Record<string, string> = {
       buehne: "Bühnenshow", buehnenshow: "Bühnenshow", closeup: "Close-Up",
-      "close-up": "Close-Up", walking_act: "Walking Act", magic_dinner: "Magic Dinner",
-      kombination: "Kombination", beratung: "Beratung",
+      "close-up": "Close-Up", walking_act: "Walking Act", walking: "Walking Act",
+      magic_dinner: "Magic Dinner", "magic-dinner": "Magic Dinner", dinner: "Magic Dinner",
+      kombination: "Kombination", kombi: "Kombination", beratung: "Beratung",
+      moderation: "Moderation", unsicher: "Noch offen",
     };
     const rawFormat = format ? String(format).trim().toLowerCase() : null;
     const safeFormat = rawFormat ? (formatLabels[rawFormat] || capitalize(rawFormat)) : null;
