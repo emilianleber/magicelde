@@ -1630,7 +1630,7 @@ body > div {
       {/* TOP BAR */}
       <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-border/10 bg-background z-10">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors">
+          <button onClick={() => navigate(isNew ? "/admin/dokumente" : `/admin/dokumente/${id}`)} className="p-2 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div>
