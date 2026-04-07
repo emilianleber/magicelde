@@ -884,40 +884,85 @@ const Kundenportal = () => {
         {/* ── DASHBOARD ── */}
         {activeTab === "dashboard" && (
           <div className="space-y-5">
-            {/* Welcome hero */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50/80 via-indigo-50/40 to-white border border-blue-100/60 p-6 sm:p-8">
-              <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-3">
+
+            {/* ── EVENT HERO ── */}
+            {currentEvent ? (
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 sm:p-8 text-white">
+                <div className="relative z-10">
+                  <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/50 mb-2">Ihr Event</p>
+                  <h1 className="font-display text-2xl sm:text-3xl font-bold">{currentEvent.title}</h1>
+                  <div className="flex flex-wrap gap-x-5 gap-y-2 mt-3 text-sm text-white/70">
+                    {currentEvent.event_date && (
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5" />
+                        {new Date(currentEvent.event_date).toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                      </span>
+                    )}
+                    {currentEvent.location && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{currentEvent.location}</span>}
+                    {currentEvent.guests && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5" />{currentEvent.guests} Gäste</span>}
+                    {currentEvent.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5" />{capWords(currentEvent.format)}</span>}
+                  </div>
+                  {countdown !== null && countdown >= 0 && (
+                    <div className="mt-4 inline-flex items-center gap-2 bg-white/10 backdrop-blur rounded-xl px-4 py-2.5">
+                      <Clock className="w-4 h-4 text-accent" />
+                      <span className="text-sm font-semibold text-white">
+                        {countdown === 0 ? "🎉 Heute!" : countdown === 1 ? "Morgen" : `Noch ${countdown} Tage`}
+                      </span>
+                    </div>
+                  )}
+                  {currentEvent.event_date && (
+                    <button onClick={() => downloadICS(currentEvent)} className="mt-3 ml-2 inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-white transition-colors">
+                      <CalendarPlus className="w-3 h-3" /> Zum Kalender hinzufügen
+                    </button>
+                  )}
+                </div>
+                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
+              </div>
+            ) : (
+              /* Kein Event → Willkommen */
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50/80 via-indigo-50/40 to-white border border-blue-100/60 p-6 sm:p-8">
+                <div className="relative z-10 flex items-center gap-4">
                   <AvatarDisplay name={displayName} avatarUrl={customer?.avatar_url} size="lg" />
                   <div>
-                    <p className="font-sans text-xs text-accent/80 uppercase tracking-widest mb-1">Willkommen zurück</p>
-                    <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground">
-                      Guten Tag, {firstName}
-                    </h1>
-                    {customer?.company && (
-                      <p className="font-sans text-sm text-muted-foreground">{customer.company}</p>
-                    )}
+                    <p className="font-sans text-xs text-accent/80 uppercase tracking-widest mb-1">Willkommen</p>
+                    <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground">Guten Tag, {firstName}</h1>
                   </div>
                 </div>
+              </div>
+            )}
 
-                {nextEvent && countdown !== null && countdown >= 0 && (
-                  <div className="mt-5 inline-flex items-center gap-3 bg-white/60 backdrop-blur border border-black/[0.07] rounded-2xl px-4 py-3">
-                    <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
-                      <Clock className="w-4 h-4 text-accent" />
+            {/* ── SHOW/KONZEPT KARTE ── */}
+            {paketInfo && (
+              <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
+                <div className="relative p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-100 flex items-center justify-center shrink-0">
+                      <Sparkles className="w-7 h-7 text-accent" />
                     </div>
-                    <div>
-                      <p className="font-sans text-[11px] text-muted-foreground uppercase tracking-widest">Nächstes Event</p>
-                      <p className="font-sans text-sm font-semibold text-foreground">
-                        {countdown === 0 ? "Heute!" : countdown === 1 ? "Morgen" : `In ${countdown} Tagen`}
-                        {" · "}{nextEvent.title}
-                      </p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-sans text-[10px] text-accent uppercase tracking-[0.2em] font-semibold mb-1">Ihre Show</p>
+                      <h2 className="font-display text-xl font-bold text-foreground">{paketInfo.name}</h2>
+                      <p className="font-sans text-sm text-muted-foreground mt-1">Bis zu {paketInfo.zieldauer} Minuten Showprogramm</p>
                     </div>
                   </div>
-                )}
+                  {paketInfo.beschreibung && (
+                    <p className="font-sans text-sm text-foreground/70 mt-4 leading-relaxed border-t border-black/[0.05] pt-4">{paketInfo.beschreibung}</p>
+                  )}
+                  {/* Link zur Showformat-Unterseite */}
+                  {(() => {
+                    const n = paketInfo.name.toLowerCase();
+                    const link = n.includes("close") ? "/close-up" : n.includes("bühne") ? "/buehnenshow" : n.includes("kombi") ? "/kombination" : n.includes("hochzeit") ? "/hochzeit" : null;
+                    if (!link) return null;
+                    return (
+                      <a href={`https://www.magicel.de${link}`} target="_blank" rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
+                        Mehr über dieses Showformat erfahren <ArrowRight className="w-3.5 h-3.5" />
+                      </a>
+                    );
+                  })()}
+                </div>
               </div>
-              <div className="absolute -right-10 -top-10 w-80 h-80 rounded-full bg-accent/6 blur-3xl pointer-events-none" />
-              <div className="absolute -left-6 -bottom-6 w-32 h-32 rounded-full bg-accent/4 blur-2xl pointer-events-none" />
-            </div>
+            )}
 
             {/* ── Show/Paket Karte ── */}
             {paketInfo && (
