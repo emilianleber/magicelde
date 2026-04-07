@@ -1153,6 +1153,101 @@ const AdminSettings = () => {
                 </div>
               </div>
             </div>
+
+            {/* ── Meinen Kalender verbinden ── */}
+            <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+              <h3 className="text-sm font-bold text-foreground mb-1">Meinen Kalender verbinden</h3>
+              <p className="text-xs text-muted-foreground mb-4">
+                Verbinde deinen privaten Kalender (Apple/Google/Outlook) damit deine Termine im CRM-Kalender angezeigt werden und Konflikte bei Anfragen erkannt werden.
+              </p>
+
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">iCal URL</label>
+                  <input
+                    value={(settings as any)?.calendar_url || ""}
+                    onChange={(e) => setSettings((s: any) => ({ ...s, calendar_url: e.target.value }))}
+                    placeholder="https://p123-caldav.icloud.com/..."
+                    className="w-full rounded-xl bg-muted/40 border border-border/30 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20"
+                  />
+                  <p className="text-[10px] text-muted-foreground mt-1">
+                    Apple: Kalender → Kalender teilen → Privater Link. Google: Kalender-Einstellungen → Geheime Adresse im iCal-Format.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={(settings as any)?.calendar_enabled || false}
+                      onChange={(e) => setSettings((s: any) => ({ ...s, calendar_enabled: e.target.checked }))}
+                      className="h-4 w-4 rounded"
+                    />
+                    <span className="text-sm text-foreground">Kalender-Sync aktivieren</span>
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={async () => {
+                      if (!settings?.id) return;
+                      setSaving(true);
+                      await supabase.from("admin_settings").update({
+                        calendar_url: (settings as any).calendar_url || null,
+                        calendar_enabled: (settings as any).calendar_enabled || false,
+                      }).eq("id", settings.id);
+
+                      // Sofort synchronisieren
+                      if ((settings as any).calendar_enabled && (settings as any).calendar_url) {
+                        try {
+                          const { data: { session } } = await supabase.auth.getSession();
+                          await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/sync-calendar", {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                              apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+                              ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+                            },
+                          }).then(r => r.json()).then(d => {
+                            setMessage(d.error ? `Fehler: ${d.error}` : `✓ ${d.synced} Termine synchronisiert`);
+                          });
+                        } catch { setMessage("Sync-Fehler"); }
+                      } else {
+                        setMessage("Gespeichert");
+                      }
+                      setSaving(false);
+                    }}
+                    disabled={saving}
+                    className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 disabled:opacity-50"
+                  >
+                    {saving ? "Speichert..." : "Speichern & Sync"}
+                  </button>
+
+                  {(settings as any)?.calendar_enabled && (settings as any)?.calendar_url && (
+                    <button
+                      onClick={async () => {
+                        const { data: { session } } = await supabase.auth.getSession();
+                        const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/sync-calendar", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+                            ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+                          },
+                        });
+                        const d = await res.json();
+                        setMessage(d.error ? `Fehler: ${d.error}` : `✓ ${d.synced} Termine synchronisiert`);
+                      }}
+                      className="inline-flex items-center gap-2 rounded-xl border border-border/30 px-4 py-2.5 text-sm font-medium hover:bg-muted/40"
+                    >
+                      🔄 Jetzt synchronisieren
+                    </button>
+                  )}
+                </div>
+
+                {message && <p className={`text-xs ${message.startsWith("Fehler") || message.startsWith("Sync") ? "text-destructive" : "text-green-600"}`}>{message}</p>}
+              </div>
+            </div>
           </div>
         );
       })()}

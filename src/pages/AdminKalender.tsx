@@ -55,6 +55,7 @@ export default function AdminKalender() {
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState<CalEvent[]>([]);
   const [requests, setRequests] = useState<CalRequest[]>([]);
+  const [ownEvents, setOwnEvents] = useState<{ id: string; summary: string; start_date: string; start_time: string | null; all_day: boolean }[]>([]);
   const [calMonth, setCalMonth] = useState<Date>(() => { const d = new Date(); d.setDate(1); return d; });
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
@@ -69,12 +70,14 @@ export default function AdminKalender() {
     if (!authChecked) return;
     const load = async () => {
       setLoading(true);
-      const [evtRes, reqRes] = await Promise.all([
+      const [evtRes, reqRes, ownRes] = await Promise.all([
         supabase.from("portal_events").select("id,title,event_date,start_time,location,status,guests,format,customer_id").order("event_date", { ascending: true }),
         supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id").is("event_id", null).order("datum", { ascending: true }),
+        supabase.from("calendar_events_cache").select("id,summary,start_date,start_time,all_day").order("start_date", { ascending: true }),
       ]);
       if (!evtRes.error) setEvents(evtRes.data || []);
       if (!reqRes.error) setRequests(reqRes.data || []);
+      if (!ownRes.error) setOwnEvents(ownRes.data || []);
       setLoading(false);
     };
     load();
@@ -88,6 +91,7 @@ export default function AdminKalender() {
 
   const evtByDate: Record<string, CalEvent[]> = {};
   const reqByDate: Record<string, CalRequest[]> = {};
+  const ownByDate: Record<string, typeof ownEvents> = {};
 
   events.forEach((e) => {
     if (!e.event_date) return;
@@ -101,6 +105,12 @@ export default function AdminKalender() {
     const d = r.datum.slice(0, 10);
     if (!reqByDate[d]) reqByDate[d] = [];
     reqByDate[d].push(r);
+  });
+
+  ownEvents.forEach((o) => {
+    const d = o.start_date;
+    if (!ownByDate[d]) ownByDate[d] = [];
+    ownByDate[d].push(o);
   });
 
   const cells: (number | null)[] = [
@@ -171,9 +181,10 @@ export default function AdminKalender() {
               const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
               const dayEvts = evtByDate[dateStr] || [];
               const dayReqs = reqByDate[dateStr] || [];
+              const dayOwn = ownByDate[dateStr] || [];
               const isToday = dateStr === todayStr;
               const isSelected = selectedDate === dateStr;
-              const hasItems = dayEvts.length + dayReqs.length > 0;
+              const hasItems = dayEvts.length + dayReqs.length + dayOwn.length > 0;
               const isWeekend = (i % 7) >= 5;
 
               return (
@@ -202,8 +213,13 @@ export default function AdminKalender() {
                         {r.anlass || r.name}
                       </div>
                     ))}
-                    {dayEvts.length + dayReqs.length > 3 && (
-                      <p className="text-[9px] text-muted-foreground px-1">+{dayEvts.length + dayReqs.length - 3} mehr</p>
+                    {dayOwn.slice(0, 1).map((o) => (
+                      <div key={o.id} className="text-[10px] leading-tight px-1 py-0.5 rounded bg-purple-400/15 text-purple-700 truncate">
+                        {o.summary}
+                      </div>
+                    ))}
+                    {dayEvts.length + dayReqs.length + dayOwn.length > 3 && (
+                      <p className="text-[9px] text-muted-foreground px-1">+{dayEvts.length + dayReqs.length + dayOwn.length - 3} mehr</p>
                     )}
                   </div>
                 </button>

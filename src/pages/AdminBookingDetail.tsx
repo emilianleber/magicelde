@@ -248,6 +248,7 @@ const AdminBookingDetail = () => {
   const [loading, setLoading] = useState(true);
 
   const [activeDetailTab, setActiveDetailTab] = useState<"konzept" | "dokumente" | "planung" | "nachrichten">("konzept");
+  const [calendarConflicts, setCalendarConflicts] = useState<{ summary: string }[]>([]);
   // Abschlagsrechnung Dialog
   const [showAbschlagDialog, setShowAbschlagDialog] = useState(false);
   const [abschlagMode, setAbschlagMode] = useState<"prozent" | "fix">("prozent");
@@ -412,6 +413,13 @@ const AdminBookingDetail = () => {
           if (p) setSelectedPaket(p);
         }
       } catch {}
+
+      // Terminkonflikt prüfen
+      if (data.datum) {
+        supabase.from("calendar_events_cache").select("summary").eq("start_date", data.datum).then(({ data: conflicts }) => {
+          setCalendarConflicts(conflicts || []);
+        });
+      }
 
       setLoading(false);
     };
@@ -1005,6 +1013,13 @@ const AdminBookingDetail = () => {
           {!uhrzeit && datum && (
             <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center gap-2 text-xs text-amber-700 font-medium">
               ⚠️ Uhrzeit fehlt – bitte mit Kunde klären
+            </div>
+          )}
+
+          {/* ── Terminkonflikt-Warnung ── */}
+          {datum && calendarConflicts.length > 0 && (
+            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-medium">
+              🚨 Terminkonflikt am {new Date(datum).toLocaleDateString("de-DE")}: {calendarConflicts.map(c => c.summary).join(", ")}
             </div>
           )}
 
