@@ -729,7 +729,8 @@ export default function AdminDokumentDetail() {
               <Send className="w-3.5 h-3.5" />
               Versenden
             </button>
-            {doc.typ === "angebot" && (doc.status === "gesendet" || doc.status === "entwurf") && (
+            {/* Angebot: Akzeptiert/Abgelehnt nur wenn gesendet */}
+            {doc.typ === "angebot" && doc.status === "gesendet" && (
               <>
                 <button onClick={() => handleStatusChange("akzeptiert")} disabled={statusChanging}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-green-200 text-green-700 text-sm hover:bg-green-50 disabled:opacity-50">
@@ -743,24 +744,26 @@ export default function AdminDokumentDetail() {
                 </button>
               </>
             )}
-            {doc.folgedokumentId ? (
+            {/* Rechnung: Als bezahlt markieren */}
+            {["rechnung", "abschlagsrechnung", "schlussrechnung"].includes(doc.typ) && doc.status !== "bezahlt" && doc.status !== "storniert" && (
+              <button onClick={() => handleStatusChange("bezahlt")} disabled={statusChanging}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-green-200 text-green-700 text-sm hover:bg-green-50 disabled:opacity-50">
+                <CheckCircle className="w-3.5 h-3.5" />
+                Bezahlt
+              </button>
+            )}
+            {/* Folgedokument-Link */}
+            {doc.folgedokumentId && (
               <button onClick={() => navigate(`/admin/dokumente/${doc.folgedokumentId}`)}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 transition-colors">
                 <ArrowRight className="w-3.5 h-3.5" />
                 Zur {doc.folgedokumentTyp ? TYP_LABEL[doc.folgedokumentTyp] : "Folgedokument"}
               </button>
-            ) : (() => {
+            )}
+            {/* Workflow: Nächste Schritte nur wenn sinnvoll (gesendet/akzeptiert) */}
+            {!doc.folgedokumentId && ["gesendet", "akzeptiert", "offen"].includes(doc.status || "") && (() => {
               const options = WORKFLOW_OPTIONS[doc.typ];
               if (!options || options.length === 0) return null;
-              if (options.length === 1) {
-                return (
-                  <button onClick={() => handleConvert(options[0].typ)} disabled={converting}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-50">
-                    <ArrowRight className="w-3.5 h-3.5" />
-                    {converting ? "Wandle um…" : options[0].label}
-                  </button>
-                );
-              }
               return options.map((opt) => (
                 <button key={opt.typ} onClick={() => handleConvert(opt.typ)} disabled={converting}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/60 disabled:opacity-50 transition-colors">
@@ -787,18 +790,35 @@ export default function AdminDokumentDetail() {
               {moreMenuOpen && (
                 <>
                   <div className="fixed inset-0 z-30" onClick={() => setMoreMenuOpen(false)} />
-                  <div className="absolute right-0 top-full mt-1.5 z-40 w-52 bg-background border border-border/30 rounded-2xl shadow-xl overflow-hidden">
-                    {/* Stornieren – nur wenn noch nicht storniert */}
+                  <div className="absolute right-0 top-full mt-1.5 z-40 w-56 bg-background border border-border/30 rounded-2xl shadow-xl overflow-hidden">
+                    {/* Schnellzugriffe */}
+                    {["angebot", "auftragsbestaetigung", "abschlagsrechnung"].includes(doc.typ) && (
+                      <button
+                        onClick={() => { setMoreMenuOpen(false); handleConvert("abschlagsrechnung" as any); }}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-muted/40 transition-colors text-left"
+                      >
+                        <FileText className="w-4 h-4 shrink-0 text-muted-foreground" />
+                        <p className="font-medium">Abschlagsrechnung erstellen</p>
+                      </button>
+                    )}
+                    {["auftragsbestaetigung", "abschlagsrechnung"].includes(doc.typ) && (
+                      <button
+                        onClick={() => { setMoreMenuOpen(false); handleConvert("schlussrechnung" as any); }}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-muted/40 transition-colors text-left"
+                      >
+                        <FileText className="w-4 h-4 shrink-0 text-muted-foreground" />
+                        <p className="font-medium">Schlussrechnung erstellen</p>
+                      </button>
+                    )}
+                    <div className="border-t border-border/10" />
+                    {/* Stornieren */}
                     {doc.status !== "storniert" && (
                       <button
                         onClick={handleStornieren}
                         className="w-full flex items-center gap-3 px-4 py-3 text-sm text-amber-700 hover:bg-amber-50 transition-colors text-left"
                       >
                         <Ban className="w-4 h-4 shrink-0" />
-                        <div>
-                          <p className="font-medium">Stornieren</p>
-                          <p className="text-[10px] text-amber-600/70 mt-0.5">Status → Storniert</p>
-                        </div>
+                        <p className="font-medium">Stornieren</p>
                       </button>
                     )}
                     <div className="border-t border-border/10" />
@@ -808,10 +828,7 @@ export default function AdminDokumentDetail() {
                       className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors text-left disabled:opacity-50"
                     >
                       <Trash2 className="w-4 h-4 shrink-0" />
-                      <div>
-                        <p className="font-medium">{deleting ? "Löschen…" : "Endgültig löschen"}</p>
-                        <p className="text-[10px] text-red-500/70 mt-0.5">Nicht wiederherstellbar</p>
-                      </div>
+                      <p className="font-medium">{deleting ? "Löschen…" : "Endgültig löschen"}</p>
                     </button>
                   </div>
                 </>
