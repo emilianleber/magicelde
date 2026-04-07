@@ -1572,9 +1572,6 @@ const AdminBookingDetail = () => {
                           setEvent((prev: any) => prev ? { ...prev, status: phase.value } : prev);
                           await supabase.from("portal_events").update({ status: phase.value }).eq("id", event.id);
                           setMessage(`Phase → ${phase.label}`);
-                          if (phase.value !== "abgeschlossen" && phase.value !== "in_planung" && confirm(`Phase auf "${phase.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
-                            sendStatusMail();
-                          }
                         }}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                           isActive ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
@@ -1669,9 +1666,6 @@ const AdminBookingDetail = () => {
                           await supabase.from("portal_requests").update({ status: phase.value }).eq("id", request.id);
                           setRequest({ ...request, status: phase.value });
                           setMessage(`Phase → ${phase.label}`);
-                          if (!["archiviert", "neu"].includes(phase.value) && confirm(`Phase auf "${phase.label}" gesetzt.\n\nStatus-Mail an den Kunden senden?`)) {
-                            sendStatusMail();
-                          }
                         }}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                           isActive ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
