@@ -890,7 +890,7 @@ const AdminBookingDetail = () => {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-[2fr_1fr] gap-5 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-5 items-start">
         {/* ═══ LEFT COLUMN ═══ */}
         <div className="space-y-5">
 
@@ -1020,7 +1020,11 @@ const AdminBookingDetail = () => {
             />
           </div>
 
-          {/* ── TAB NAVIGATION ── */}
+        </div>
+        {/* LEFT COLUMN ENDE – Tabs auf voller Breite */}
+
+        {/* ── TAB NAVIGATION (volle Breite) ── */}
+        <div className="lg:col-span-2 space-y-5">
           <div className="flex items-center gap-1 bg-muted/30 rounded-xl p-1">
             {([
               { id: "konzept" as const, label: "🎭 Konzept" },
@@ -1413,45 +1417,13 @@ const AdminBookingDetail = () => {
                   <Mail className="w-4 h-4" />
                   {sendingMail ? "Sendet..." : "Status-Mail senden"}
                 </button>
-                {event && (
-                  <button
-                    onClick={async () => {
-                      if (!confirm("Feedback-Anfrage an den Kunden senden?")) return;
-                      try {
-                        const { data: { session } } = await supabase.auth.getSession();
-                        const { data, error } = await supabase.functions.invoke("send-feedback-request", {
-                          headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : undefined,
-                          body: { eventId: event.id },
-                        });
-                        if (error) throw error;
-                        setMessage(data?.alreadyExists ? "Feedback wurde bereits abgegeben." : "Feedback-Anfrage gesendet!");
-                      } catch (err: any) { setMessage("Fehler: " + (err.message || "Unbekannt")); }
-                    }}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-purple-200 bg-purple-50 px-4 py-2.5 text-sm font-medium text-purple-700 hover:bg-purple-100 transition-colors"
-                  >
-                    <MessageSquare className="w-4 h-4" /> Feedback anfragen
-                  </button>
-                )}
+                {/* Feedback wird automatisch 1 Monat nach Event gesendet */}
                 {message && (
                   <p className={`text-xs rounded-lg px-3 py-2 ${message.startsWith("Fehler") ? "bg-destructive/10 text-destructive" : "bg-green-50 text-green-700"}`}>{message}</p>
                 )}
               </div>
 
-              {/* Mail History */}
-              {mailHistory.length > 0 && (
-                <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
-                  <p className="text-xs font-bold text-foreground mb-3">Gesendete Mails</p>
-                  <div className="space-y-1.5">
-                    {mailHistory.map((msg) => (
-                      <div key={msg.id} className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-background/40">
-                        <span className="text-green-600">✓</span>
-                        <span className="flex-1 truncate font-medium">{msg.subject}</span>
-                        <span className="text-muted-foreground shrink-0">{new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "short" })}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Mail History ist weiter unten im Nachrichten-Tab */}
             </div>
           )}
 
