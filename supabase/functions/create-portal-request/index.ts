@@ -99,40 +99,61 @@ serve(async (req) => {
         ? Number(gaeste)
         : null;
 
-    // 1) Kunde per UPSERT anlegen/aktualisieren (verhindert Duplikate)
+    // 1) Kunde suchen oder anlegen
     let customerId: string | null = null;
-
-    // Email immer lowercase für konsistente Suche
     const normalizedEmail = safeEmail.toLowerCase();
 
-    const customerPayload: Record<string, any> = {
-      name: safeName,
-      vorname: safeVorname,
-      nachname: safeNachname,
-      email: normalizedEmail,
-    };
-    if (safeAnrede) customerPayload.anrede  = safeAnrede;
-    if (safeFirma)  customerPayload.company = safeFirma;
-    if (safePhone)  customerPayload.phone   = safePhone;
-
-    // UPSERT: Insert or update on email conflict → atomare Operation, keine Race Condition
-    const { data: upsertedCustomer, error: upsertError } = await supabase
+    // Erst suchen (case-insensitive)
+    const { data: existingArr } = await supabase
       .from("portal_customers")
-      .upsert(customerPayload, { onConflict: "email", ignoreDuplicates: false })
-      .select("*")
-      .maybeSingle();
+      .select("id")
+      .ilike("email", normalizedEmail)
+      .limit(1);
 
-    if (upsertError) {
-      console.error("CUSTOMER UPSERT ERROR:", upsertError);
-      // Fallback: Nochmals per Email suchen (z.B. wenn unique index noch fehlt)
-      const { data: fallbackCustomers } = await supabase
+    if (existingArr && existingArr.length > 0) {
+      // Existierenden Kunden updaten
+      customerId = existingArr[0].id;
+      const updateData: Record<string, any> = { name: safeName, vorname: safeVorname, nachname: safeNachname };
+      if (safeAnrede) updateData.anrede = safeAnrede;
+      if (safeFirma) updateData.company = safeFirma;
+      if (safePhone) updateData.phone = safePhone;
+      await supabase.from("portal_customers").update(updateData).eq("id", customerId);
+    } else {
+      // Neuen Kunden anlegen
+      const { data: created, error: createErr } = await supabase
         .from("portal_customers")
+        .insert({
+          name: safeName, vorname: safeVorname, nachname: safeNachname,
+          email: normalizedEmail,
+          ...(safeAnrede ? { anrede: safeAnrede } : {}),
+          ...(safeFirma ? { company: safeFirma } : {}),
+          ...(safePhone ? { phone: safePhone } : {}),
+        })
         .select("id")
-        .ilike("email", normalizedEmail)
-        .limit(1);
-      customerId = fallbackCustomers?.[0]?.id || null;
-    } else if (upsertedCustomer) {
-      customerId = upsertedCustomer.id;
+        .maybeSingle();
+      if (createErr) {
+        console.error("CUSTOMER CREATE ERROR:", createErr);
+        // Race condition fallback: nochmal suchen
+        const { data: retry } = await supabase.from("portal_customers").select("id").ilike("email", normalizedEmail).limit(1);
+        customerId = retry?.[0]?.id || null;
+      } else {
+        customerId = created?.id || null;
+      }
+    }
+
+    // Duplikat-Schutz: Gleiche Email + Anlass in den letzten 60 Sekunden?
+    const oneMinAgo = new Date(Date.now() - 60000).toISOString();
+    const { data: recentDup } = await supabase
+      .from("portal_requests")
+      .select("id")
+      .ilike("email", normalizedEmail)
+      .gte("created_at", oneMinAgo)
+      .limit(1);
+    if (recentDup && recentDup.length > 0) {
+      return new Response(
+        JSON.stringify({ success: true, message: "Anfrage bereits eingegangen", id: recentDup[0].id }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     // 2) Anfrage speichern
