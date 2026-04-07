@@ -272,6 +272,12 @@ const AdminBookingDetail = () => {
   const [selectedPaket, setSelectedPaket] = useState<Paket | null>(null);
   const [emailTemplates, setEmailTemplates] = useState<{ slug: string; name: string; kategorie: string }[]>([]);
   const [sendingTemplate, setSendingTemplate] = useState(false);
+  const [showComposeEmail, setShowComposeEmail] = useState(false);
+  const [composeTemplateId, setComposeTemplateId] = useState("");
+  const [composeSubject, setComposeSubject] = useState("");
+  const [composeBody, setComposeBody] = useState("");
+  const [composeSending, setComposeSending] = useState(false);
+  const [sendMailWithSave, setSendMailWithSave] = useState(false);
   const [editingDoc, setEditingDoc] = useState<(DocumentData & { positions?: DocumentPosition[] }) | null>(null);
 
   // Draft fields
@@ -1250,8 +1256,120 @@ const AdminBookingDetail = () => {
           {/* ══ TAB: NACHRICHTEN ══ */}
           {activeDetailTab === "nachrichten" && (
             <div className="space-y-4 mt-4">
-              {/* E-Mail-Vorlagen */}
-              {emailTemplates.length > 0 && (
+              {/* + Neue E-Mail Button */}
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-muted-foreground">An: <strong>{customer?.email || "–"}</strong></p>
+                <button
+                  onClick={() => setShowComposeEmail(!showComposeEmail)}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-4 py-2 text-xs font-bold hover:opacity-80"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Neue E-Mail
+                </button>
+              </div>
+
+              {/* Compose Panel */}
+              {showComposeEmail && (
+                <div className="p-5 rounded-2xl bg-muted/20 border border-border/30 space-y-3">
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Vorlage</label>
+                    <select
+                      value={composeTemplateId}
+                      onChange={async (e) => {
+                        const tplId = e.target.value;
+                        setComposeTemplateId(tplId);
+                        if (!tplId) return;
+                        // Vorlage laden und Betreff/Body füllen
+                        const { data: tpl } = await supabase.from("email_templates").select("name, subject, body_html").eq("id", tplId).maybeSingle();
+                        if (tpl) {
+                          setComposeSubject(tpl.subject || tpl.name || "");
+                          setComposeBody(tpl.body_html || "");
+                        }
+                      }}
+                      className={inputCls}
+                    >
+                      <option value="">— Vorlage wählen —</option>
+                      {emailTemplates.map((t) => <option key={t.slug} value={t.slug}>{t.name}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Betreff</label>
+                    <input value={composeSubject} onChange={(e) => setComposeSubject(e.target.value)} placeholder="Betreff" className={inputCls} />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Nachricht</label>
+                    <textarea value={composeBody} onChange={(e) => setComposeBody(e.target.value)} rows={6} placeholder="Nachricht…" className={`${inputCls} resize-none`} />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={async () => {
+                        if (!composeSubject.trim() || !customer?.email) return;
+                        setComposeSending(true);
+                        try {
+                          await supabase.auth.refreshSession();
+                          const { data: { session } } = await supabase.auth.getSession();
+                          await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/send-customer-mail", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}) },
+                            body: JSON.stringify({
+                              to_email: customer.email,
+                              to_name: customer.name || "",
+                              subject: composeSubject,
+                              body: composeBody.replace(/\n/g, "<br>"),
+                              customer_id: customer.id,
+                              request_id: request?.id,
+                              event_id: event?.id,
+                            }),
+                          });
+                          setMessage("E-Mail gesendet!");
+                          setShowComposeEmail(false);
+                          setComposeSubject(""); setComposeBody(""); setComposeTemplateId("");
+                          // Mail-History neu laden
+                          const { data: msgs } = await supabase.from("portal_messages").select("id, created_at, subject, to_email, status").or(`request_id.eq.${request?.id}${event?.id ? `,event_id.eq.${event.id}` : ""}`).order("created_at", { ascending: false }).limit(20);
+                          setMailHistory(msgs || []);
+                        } catch (err: any) { setMessage("Fehler: " + (err.message || "Unbekannt")); }
+                        setComposeSending(false);
+                      }}
+                      disabled={composeSending || !composeSubject.trim()}
+                      className="inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 disabled:opacity-50"
+                    >
+                      <Send className="w-3.5 h-3.5" /> {composeSending ? "Sendet…" : "Senden"}
+                    </button>
+                    <button onClick={() => setShowComposeEmail(false)} className="text-sm text-muted-foreground hover:text-foreground">Abbrechen</button>
+                  </div>
+                </div>
+              )}
+
+              {/* Mail-History */}
+              {mailHistory.length > 0 ? (
+                <div className="space-y-2">
+                  {mailHistory.map((msg) => (
+                    <div key={msg.id} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-muted/10 border border-border/20">
+                      <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center shrink-0">
+                        <Mail className="w-3.5 h-3.5 text-green-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">{msg.subject || "(Kein Betreff)"}</p>
+                        <p className="text-[11px] text-muted-foreground">
+                          An {msg.to_email} · {new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "short" })} {new Date(msg.created_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
+                        </p>
+                      </div>
+                      <span className="text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-full border border-green-200 bg-green-50 text-green-700 shrink-0">Gesendet</span>
+                    </div>
+                  ))}
+                </div>
+              ) : !showComposeEmail && (
+                <div className="p-8 rounded-xl bg-muted/10 border border-border/20 text-center">
+                  <Mail className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">Noch keine Nachrichten gesendet</p>
+                </div>
+              )}
+
+              {message && (
+                <p className={`text-xs rounded-lg px-3 py-2 ${message.startsWith("Fehler") ? "bg-destructive/10 text-destructive" : "bg-green-50 text-green-700"}`}>{message}</p>
+              )}
+
+              {/* Alte Schnellmail-Vorlagen entfernt */}
+              {false && emailTemplates.length > 0 && (
                 <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
                   <p className="text-xs font-bold text-foreground mb-3">Schnellmail-Vorlagen</p>
                   <div className="space-y-1.5">
@@ -1604,9 +1722,18 @@ const AdminBookingDetail = () => {
 
             {/* Actions */}
             <div className="space-y-2">
-              <button onClick={saveChanges} disabled={saving} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 disabled:opacity-50 transition-opacity">
+              <button onClick={async () => {
+                await saveChanges();
+                if (sendMailWithSave) {
+                  sendStatusMail();
+                }
+              }} disabled={saving} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 disabled:opacity-50 transition-opacity">
                 <Save className="w-4 h-4" /> {saving ? "Speichert..." : "Speichern"}
               </button>
+              <label className="flex items-center gap-2 px-1 cursor-pointer">
+                <input type="checkbox" checked={sendMailWithSave} onChange={(e) => setSendMailWithSave(e.target.checked)} className="h-3.5 w-3.5 rounded" />
+                <span className="text-xs text-muted-foreground">Status-Mail beim Speichern senden</span>
+              </label>
               {!request.event_id && status !== "abgelehnt" && (
                 <button onClick={convertToEvent} disabled={converting} className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-100 disabled:opacity-50 transition-colors">
                   <Sparkles className="w-4 h-4" /> {converting ? "Wird gebucht..." : "Als gebucht markieren"}
@@ -1614,84 +1741,7 @@ const AdminBookingDetail = () => {
               )}
             </div>
 
-            {/* E-Mail-Vorlagen */}
-            {emailTemplates.length > 0 && (
-              <div className="border-t border-border/20 pt-4 mt-4">
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Vorlage senden</p>
-                <div className="space-y-1.5">
-                  {emailTemplates.map((tpl) => (
-                    <button
-                      key={tpl.slug}
-                      disabled={sendingTemplate}
-                      onClick={async () => {
-                        if (!confirm(`"${tpl.name}" an den Kunden senden?`)) return;
-                        setSendingTemplate(true); setMessage("");
-                        try {
-                          const { data: { session } } = await supabase.auth.getSession();
-                          const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/send-template-mail", {
-                            method: "POST",
-                            headers: {
-                              "Content-Type": "application/json",
-                              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-                              ...(session?.access_token ? { "Authorization": `Bearer ${session.access_token}` } : {}),
-                            },
-                            body: JSON.stringify({ templateSlug: tpl.slug, requestId: request?.id, eventId: event?.id, customerId: request?.customer_id }),
-                          });
-                          const result = await res.json();
-                          if (!res.ok || result.error) throw new Error(result.error || "Fehler beim Senden");
-                          setMessage(`"${tpl.name}" gesendet!`);
-                          setMailSentAt(new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }));
-                        } catch (err: any) {
-                          setMessage("Fehler: " + (err.message || "Unbekannt"));
-                        }
-                        setSendingTemplate(false);
-                      }}
-                      className="w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl border border-border/20 bg-background/60 text-sm hover:bg-muted/40 disabled:opacity-50 transition-colors"
-                    >
-                      <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                      <span className="flex-1 truncate">{tpl.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="border-t border-border/20 pt-4 mt-4 space-y-2">
-              <button onClick={sendStatusMail} disabled={sendingMail}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border/30 bg-background/60 px-4 py-2.5 text-sm font-medium hover:bg-muted/40 disabled:opacity-50 transition-colors">
-                <Mail className="w-4 h-4" />
-                {sendingMail ? "Sendet..." : "Status-Mail senden"}
-              </button>
-              {event && (
-                <button
-                  onClick={async () => {
-                    if (!confirm("Feedback-Anfrage an den Kunden senden?")) return;
-                    setMessage("");
-                    try {
-                      const { data: { session } } = await supabase.auth.getSession();
-                      const { data, error } = await supabase.functions.invoke("send-feedback-request", {
-                        headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : undefined,
-                        body: { eventId: event.id },
-                      });
-                      if (error) throw error;
-                      if (data?.alreadyExists) setMessage("Feedback wurde bereits abgegeben.");
-                      else setMessage("Feedback-Anfrage gesendet!");
-                    } catch (err: any) {
-                      setMessage("Fehler: " + (err.message || "Unbekannt"));
-                    }
-                  }}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-purple-200 bg-purple-50 px-4 py-2.5 text-sm font-medium text-purple-700 hover:bg-purple-100 transition-colors"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  Feedback anfragen
-                </button>
-              )}
-              {mailSentAt && (
-                <p className="text-xs text-green-700 flex items-center gap-1 mt-2">
-                  <Check className="w-3 h-3" /> Gesendet um {mailSentAt}
-                </p>
-              )}
-            </div>
+            {/* Vorlagen + Status-Mail + Feedback → jetzt im Nachrichten-Tab */}
 
             {message && (
               <div className={`mt-3 rounded-xl px-3 py-2 text-sm ${isError ? "bg-destructive/10 text-destructive" : "bg-green-500/10 text-green-700"}`}>
@@ -1700,20 +1750,7 @@ const AdminBookingDetail = () => {
             )}
           </div>
 
-          {/* ── Internal Notes ── */}
-          <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
-            <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Interne Notizen</label>
-            {isEditing ? (
-              <textarea value={draftInternalNotes} onChange={(e) => setDraftInternalNotes(e.target.value)} rows={5} className={`${inputCls} resize-none`} />
-            ) : (
-              <div
-                onClick={startEditing}
-                className="min-h-[80px] p-3 rounded-xl bg-background/60 border border-border/20 text-sm text-foreground whitespace-pre-line cursor-text hover:border-border/40 transition-colors"
-              >
-                {internalNotes || <span className="text-muted-foreground/60">Klicken zum Bearbeiten...</span>}
-              </div>
-            )}
-          </div>
+          {/* Interne Notizen → jetzt unter Event-Details (links) */}
         </div>
       </div>
     </AdminLayout>
