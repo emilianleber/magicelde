@@ -81,8 +81,10 @@ serve(async (req) => {
 
     for (const source of sources) {
       try {
-        const icsRes = await fetch(source.url);
-        if (!icsRes.ok) { results.push({ name: source.name, synced: 0, error: `HTTP ${icsRes.status}` }); continue; }
+        // webcal:// → https:// automatisch ersetzen
+        const url = source.url.replace(/^webcal:\/\//i, "https://");
+        const icsRes = await fetch(url);
+        if (!icsRes.ok) { results.push({ name: source.name, synced: 0, error: `HTTP ${icsRes.status} von ${url.substring(0, 60)}...` }); continue; }
         const icsText = await icsRes.text();
         const events = parseIcal(icsText);
 
