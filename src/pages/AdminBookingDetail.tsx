@@ -1021,10 +1021,10 @@ const AdminBookingDetail = () => {
           </div>
 
         </div>
-        {/* LEFT COLUMN ENDE – Tabs auf voller Breite */}
+        {/* LEFT COLUMN ENDE */}
 
-        {/* ── TAB NAVIGATION (volle Breite) ── */}
-        <div className="lg:col-span-2 space-y-5">
+        {/* ── TAB NAVIGATION (volle Breite, nach Status via CSS order) ── */}
+        <div className="lg:col-span-2 space-y-5 order-last">
           <div className="flex items-center gap-1 bg-muted/30 rounded-xl p-1">
             {([
               { id: "konzept" as const, label: "🎭 Konzept" },
