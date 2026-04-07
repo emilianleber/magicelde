@@ -28,15 +28,16 @@ serve(async (req) => {
 
     // 1. Ensure there is exactly ONE auth user for this email.
     //    If none exists yet, create it (email already confirmed, no invite email sent).
-    const { data: existingUser } = await supabase.auth.admin.listUsers();
-    const found = existingUser?.users?.find((u: any) => u.email === email);
+    const { data: { users } } = await supabase.auth.admin.listUsers({ filter: email, page: 1, perPage: 1 });
+    const found = users?.find((u: any) => u.email === email);
 
     if (!found) {
       const { error: createErr } = await supabase.auth.admin.createUser({
         email,
-        email_confirm: true, // mark as confirmed — no separate confirmation email
+        email_confirm: true,
       });
-      if (createErr) throw createErr;
+      // Ignore "User already registered" error (race condition)
+      if (createErr && !createErr.message?.includes("already")) throw createErr;
     }
 
     // 2. Generate a magic link WITHOUT Supabase sending its own email.
