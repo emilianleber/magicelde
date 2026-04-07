@@ -227,7 +227,19 @@ const FormSection = () => {
                 <option value="sonstiges">Sonstiges</option>
               </select>
 
-              <input type="date" name="datum" className={inputCls} />
+              <label className="relative block">
+                <span className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground/40 transition-opacity peer-[:not(:placeholder-shown)]:opacity-0" id="datumLabel">Wunschdatum</span>
+                <input
+                  type="date"
+                  name="datum"
+                  className={`${inputCls} min-h-[52px] peer`}
+                  onChange={(e) => {
+                    const label = document.getElementById("datumLabel");
+                    if (label) label.style.opacity = e.target.value ? "0" : "1";
+                  }}
+                  onFocus={(e) => { try { (e.target as any).showPicker?.(); } catch {} }}
+                />
+              </label>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-5">
