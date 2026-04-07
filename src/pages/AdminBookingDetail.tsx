@@ -246,7 +246,7 @@ const AdminBookingDetail = () => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const [activeDetailTab, setActiveDetailTab] = useState<"konzept" | "dokumente" | "planung" | "nachrichten" | "notizen">("konzept");
+  const [activeDetailTab, setActiveDetailTab] = useState<"konzept" | "dokumente" | "planung" | "nachrichten">("konzept");
   // Abschlagsrechnung Dialog
   const [showAbschlagDialog, setShowAbschlagDialog] = useState(false);
   const [abschlagMode, setAbschlagMode] = useState<"prozent" | "fix">("prozent");
@@ -996,6 +996,24 @@ const AdminBookingDetail = () => {
             </div>
           )}
 
+          {/* ── Interne Notizen (direkt unter Event-Details) ── */}
+          <div className="p-4 rounded-2xl bg-muted/10 border border-border/20">
+            <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">Interne Notizen</label>
+            <textarea
+              value={draftInternalNotes}
+              onChange={(e) => setDraftInternalNotes(e.target.value)}
+              onBlur={async () => {
+                if (draftInternalNotes !== internalNotes && request) {
+                  setInternalNotes(draftInternalNotes);
+                  await supabase.from("portal_requests").update({ notizen_intern: draftInternalNotes || null }).eq("id", request.id);
+                }
+              }}
+              rows={2}
+              placeholder="Interne Notizen zu dieser Anfrage..."
+              className={`${inputCls} resize-none text-xs`}
+            />
+          </div>
+
           {/* ── TAB NAVIGATION ── */}
           <div className="flex items-center gap-1 bg-muted/30 rounded-xl p-1">
             {([
@@ -1003,7 +1021,6 @@ const AdminBookingDetail = () => {
               { id: "dokumente" as const, label: "📄 Dokumente" },
               ...(event ? [{ id: "planung" as const, label: "🗓️ Planung" }] : []),
               { id: "nachrichten" as const, label: "✉️ Nachrichten" },
-              { id: "notizen" as const, label: "📝 Notizen" },
             ]).map((tab) => (
               <button key={tab.id} onClick={() => setActiveDetailTab(tab.id)}
                 className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all text-center ${activeDetailTab === tab.id ? "bg-foreground text-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
@@ -1072,21 +1089,7 @@ const AdminBookingDetail = () => {
             </div>
           )}
 
-          {/* ══ TAB: NOTIZEN ══ */}
-          {activeDetailTab === "notizen" && (
-            <div className="space-y-4">
-              <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
-                <label className="block text-xs font-semibold text-foreground mb-2">Interne Notizen</label>
-                <textarea
-                  value={internalNotes}
-                  onChange={(e) => { setInternalNotes(e.target.value); setDraftInternalNotes(e.target.value); }}
-                  rows={6}
-                  placeholder="Interne Notizen zu dieser Anfrage..."
-                  className={`${inputCls} resize-none`}
-                />
-              </div>
-            </div>
-          )}
+          {/* Notizen-Tab entfernt – Notizen sind jetzt unter Event-Details */}
 
           {/* ── Paket/Konzept (nur im Konzept-Tab) ── */}
           {activeDetailTab === "konzept" && (
@@ -1334,8 +1337,8 @@ const AdminBookingDetail = () => {
             </div>
           )}
 
-          {/* ── Change Requests (im Notizen-Tab) ── */}
-          {activeDetailTab === "notizen" && (
+          {/* ── Change Requests (im Nachrichten-Tab) ── */}
+          {activeDetailTab === "nachrichten" && (
             <>
           {/* ── Change Requests ── */}
           {changeRequests.length > 0 && (
