@@ -133,7 +133,13 @@ DTSTAMP:${formatUtcDateTime(new Date())}
 
     if (e.start_time) {
       const start = buildLocalDateTime(e.event_date, e.start_time);
-      const endTime = e.end_time || `${String(Number(e.start_time.split(":")[0]) + 3).padStart(2, "0")}:${e.start_time.split(":")[1] || "00"}`;
+      // Default-Dauer: 60 Minuten (statt 3 Stunden)
+      const startHour = Number(e.start_time.split(":")[0]);
+      const startMin = Number(e.start_time.split(":")[1] || "0");
+      const endMinTotal = startHour * 60 + startMin + 60; // +60 Min Default
+      const endH = String(Math.floor(endMinTotal / 60) % 24).padStart(2, "0");
+      const endM = String(endMinTotal % 60).padStart(2, "0");
+      const endTime = e.end_time || `${endH}:${endM}`;
       const end = buildLocalDateTime(e.event_date, endTime);
       ics += `DTSTART;TZID=Europe/Berlin:${start}
 DTEND;TZID=Europe/Berlin:${end}
