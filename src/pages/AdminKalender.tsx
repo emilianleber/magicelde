@@ -55,7 +55,8 @@ export default function AdminKalender() {
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState<CalEvent[]>([]);
   const [requests, setRequests] = useState<CalRequest[]>([]);
-  const [ownEvents, setOwnEvents] = useState<{ id: string; summary: string; start_date: string; start_time: string | null; all_day: boolean }[]>([]);
+  const [ownEvents, setOwnEvents] = useState<{ id: string; summary: string; start_date: string; start_time: string | null; all_day: boolean; source_id: string | null }[]>([]);
+  const [calSources, setCalSources] = useState<Record<string, { name: string; color: string }>>({});
   const [calMonth, setCalMonth] = useState<Date>(() => { const d = new Date(); d.setDate(1); return d; });
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
@@ -70,14 +71,20 @@ export default function AdminKalender() {
     if (!authChecked) return;
     const load = async () => {
       setLoading(true);
-      const [evtRes, reqRes, ownRes] = await Promise.all([
+      const [evtRes, reqRes, ownRes, srcRes] = await Promise.all([
         supabase.from("portal_events").select("id,title,event_date,start_time,location,status,guests,format,customer_id").order("event_date", { ascending: true }),
         supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id").is("event_id", null).order("datum", { ascending: true }),
-        supabase.from("calendar_events_cache").select("id,summary,start_date,start_time,all_day").order("start_date", { ascending: true }),
+        supabase.from("calendar_events_cache").select("id,summary,start_date,start_time,all_day,source_id").order("start_date", { ascending: true }),
+        supabase.from("calendar_sources").select("id,name,color"),
       ]);
       if (!evtRes.error) setEvents(evtRes.data || []);
       if (!reqRes.error) setRequests(reqRes.data || []);
       if (!ownRes.error) setOwnEvents(ownRes.data || []);
+      if (!srcRes.error && srcRes.data) {
+        const map: Record<string, { name: string; color: string }> = {};
+        for (const s of srcRes.data) map[s.id] = { name: s.name, color: s.color || "#6366f1" };
+        setCalSources(map);
+      }
       setLoading(false);
     };
     load();
@@ -154,7 +161,7 @@ export default function AdminKalender() {
                 {calMonth.toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {monthEvents.length} Event{monthEvents.length !== 1 ? "s" : ""} · {monthRequests.length} Anfrage{monthRequests.length !== 1 ? "n" : ""}
+                {monthEvents.length} Event{monthEvents.length !== 1 ? "s" : ""} · {monthRequests.length} Anfrage{monthRequests.length !== 1 ? "n" : ""} · {ownEvents.filter(o => o.start_date.startsWith(`${year}-${String(month + 1).padStart(2, "0")}`)).length} Termine
               </p>
             </div>
             <button
@@ -213,11 +220,14 @@ export default function AdminKalender() {
                         {r.anlass || r.name}
                       </div>
                     ))}
-                    {dayOwn.slice(0, 1).map((o) => (
-                      <div key={o.id} className="text-[10px] leading-tight px-1 py-0.5 rounded bg-purple-400/15 text-purple-700 truncate">
-                        {o.summary}
-                      </div>
-                    ))}
+                    {dayOwn.slice(0, 2).map((o) => {
+                      const srcColor = o.source_id && calSources[o.source_id]?.color || "#6366f1";
+                      return (
+                        <div key={o.id} className="text-[10px] leading-tight px-1 py-0.5 rounded truncate" style={{ backgroundColor: `${srcColor}20`, color: srcColor }}>
+                          {o.summary}
+                        </div>
+                      );
+                    })}
                     {dayEvts.length + dayReqs.length + dayOwn.length > 3 && (
                       <p className="text-[9px] text-muted-foreground px-1">+{dayEvts.length + dayReqs.length + dayOwn.length - 3} mehr</p>
                     )}
@@ -228,18 +238,23 @@ export default function AdminKalender() {
           </div>
 
           {/* Legend */}
-          <div className="flex items-center gap-5 px-6 py-3 border-t border-border/20 text-xs text-muted-foreground bg-muted/5">
+          <div className="flex items-center gap-5 px-6 py-3 border-t border-border/20 text-xs text-muted-foreground bg-muted/5 flex-wrap">
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-sm bg-blue-500/40 inline-block" /> Events
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-sm bg-orange-400/40 inline-block" /> Anfragen
             </span>
+            {Object.entries(calSources).map(([id, src]) => (
+              <span key={id} className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-sm inline-block" style={{ backgroundColor: src.color }} /> {src.name}
+              </span>
+            ))}
           </div>
         </div>
 
         {/* Selected day detail */}
-        {selectedDate && (selEvts.length > 0 || selReqs.length > 0) && (
+        {selectedDate && (selEvts.length > 0 || selReqs.length > 0 || (ownByDate[selectedDate] || []).length > 0) && (
           <div className="rounded-2xl border border-border/30 bg-muted/5 p-5">
             <h3 className="font-semibold text-sm mb-4">
               {new Date(selectedDate + "T12:00:00").toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long" })}
@@ -282,6 +297,22 @@ export default function AdminKalender() {
                   <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
               ))}
+              {/* Eigene Termine */}
+              {(ownByDate[selectedDate] || []).map((o) => {
+                const srcColor = o.source_id && calSources[o.source_id]?.color || "#6366f1";
+                const srcName = o.source_id && calSources[o.source_id]?.name || "Kalender";
+                return (
+                  <div key={o.id} className="flex items-center gap-3 p-3 rounded-xl border" style={{ backgroundColor: `${srcColor}10`, borderColor: `${srcColor}30` }}>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${srcColor}20` }}>
+                      <Clock className="w-4 h-4" style={{ color: srcColor }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-foreground truncate">{o.summary}</p>
+                      <p className="text-xs text-muted-foreground">{o.start_time ? o.start_time.slice(0, 5) : "Ganztägig"} · {srcName}</p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
