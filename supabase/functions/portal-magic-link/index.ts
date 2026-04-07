@@ -36,8 +36,9 @@ serve(async (req) => {
         email,
         email_confirm: true,
       });
-      // Ignore "User already registered" error (race condition)
-      if (createErr && !createErr.message?.includes("already")) throw createErr;
+      // Ignoriere Fehler – versuche trotzdem Magic Link zu generieren
+      // (User könnte bereits existieren oder DB-temporäres Problem)
+      if (createErr) console.error("createUser error (continuing):", createErr.message);
     }
 
     // 2. Generate a magic link WITHOUT Supabase sending its own email.
