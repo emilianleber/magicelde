@@ -157,6 +157,8 @@ const AdminSettings = () => {
   const [settings, setSettings] = useState<AdminSettingsData | null>(null);
   const [savingSettings, setSavingSettings] = useState(false);
   const [settingsMsg, setSettingsMsg] = useState("");
+  const [calSaving, setCalSaving] = useState(false);
+  const [calMsg, setCalMsg] = useState("");
 
   // Logo upload
   const logoInputRef = useRef<HTMLInputElement>(null);
@@ -1191,7 +1193,7 @@ const AdminSettings = () => {
                   <button
                     onClick={async () => {
                       if (!settings?.id) return;
-                      setSaving(true);
+                      setCalSaving(true);
                       await supabase.from("admin_settings").update({
                         calendar_url: (settings as any).calendar_url || null,
                         calendar_enabled: (settings as any).calendar_enabled || false,
@@ -1209,18 +1211,18 @@ const AdminSettings = () => {
                               ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
                             },
                           }).then(r => r.json()).then(d => {
-                            setMessage(d.error ? `Fehler: ${d.error}` : `✓ ${d.synced} Termine synchronisiert`);
+                            setCalMsg(d.error ? `Fehler: ${d.error}` : `✓ ${d.synced} Termine synchronisiert`);
                           });
-                        } catch { setMessage("Sync-Fehler"); }
+                        } catch { setCalMsg("Sync-Fehler"); }
                       } else {
-                        setMessage("Gespeichert");
+                        setCalMsg("Gespeichert");
                       }
-                      setSaving(false);
+                      setCalSaving(false);
                     }}
-                    disabled={saving}
+                    disabled={calSaving}
                     className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 disabled:opacity-50"
                   >
-                    {saving ? "Speichert..." : "Speichern & Sync"}
+                    {calSaving ? "Speichert..." : "Speichern & Sync"}
                   </button>
 
                   {(settings as any)?.calendar_enabled && (settings as any)?.calendar_url && (
@@ -1236,7 +1238,7 @@ const AdminSettings = () => {
                           },
                         });
                         const d = await res.json();
-                        setMessage(d.error ? `Fehler: ${d.error}` : `✓ ${d.synced} Termine synchronisiert`);
+                        setCalMsg(d.error ? `Fehler: ${d.error}` : `✓ ${d.synced} Termine synchronisiert`);
                       }}
                       className="inline-flex items-center gap-2 rounded-xl border border-border/30 px-4 py-2.5 text-sm font-medium hover:bg-muted/40"
                     >
@@ -1245,7 +1247,7 @@ const AdminSettings = () => {
                   )}
                 </div>
 
-                {message && <p className={`text-xs ${message.startsWith("Fehler") || message.startsWith("Sync") ? "text-destructive" : "text-green-600"}`}>{message}</p>}
+                {calMsg && <p className={`text-xs ${calMsg.startsWith("Fehler") || calMsg.startsWith("Sync") ? "text-destructive" : "text-green-600"}`}>{calMsg}</p>}
               </div>
             </div>}
           </div>
