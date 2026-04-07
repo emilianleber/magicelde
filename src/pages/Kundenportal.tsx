@@ -704,6 +704,16 @@ const Kundenportal = () => {
   const kundennummer = customer?.kundennummer || "";
   const currentRequest = requests[0] || null;
   const currentEvent = events.find((e) => e.request_id === currentRequest?.id) || events[0] || null;
+
+  // Paket laden wenn Request eins hat
+  const [paketInfo, setPaketInfo] = useState<{ name: string; beschreibung: string; zieldauer: number; preis: number } | null>(null);
+  useEffect(() => {
+    const pid = (currentRequest as any)?.paket_id;
+    if (!pid) return;
+    supabase.from("pakete").select("name, beschreibung_kunde, zieldauer, preis").eq("id", pid).maybeSingle().then(({ data }) => {
+      if (data) setPaketInfo({ name: data.name, beschreibung: data.beschreibung_kunde || "", zieldauer: data.zieldauer, preis: data.preis });
+    });
+  }, [currentRequest]);
   const nextEvent = events.find((e) => {
     const d = getCountdownDays(e.event_date);
     return d !== null && d >= 0;
@@ -907,32 +917,77 @@ const Kundenportal = () => {
               <div className="absolute -left-6 -bottom-6 w-32 h-32 rounded-full bg-accent/4 blur-2xl pointer-events-none" />
             </div>
 
-            {/* Stats grid */}
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { label: "Anfragen", value: requests.length, icon: Calendar, tab: "requests" as Tab },
-                { label: "Dokumente", value: documents.length, icon: FileText, tab: "documents" as Tab },
-                { label: "Nachrichten", value: messages.length, icon: Mail, tab: "nachrichten" as Tab, badge: unreadCount },
-              ].map((stat) => (
-                <button
-                  key={stat.label}
-                  onClick={() => setActiveTab(stat.tab)}
-                  className="group relative p-4 sm:p-5 rounded-2xl bg-white border border-black/[0.06] shadow-sm hover:shadow-md hover:border-accent/20 transition-all text-left active:scale-95 min-h-[100px]"
-                >
-                  <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center mb-3">
-                    <stat.icon className="w-4 h-4 text-accent" />
+            {/* ── Show/Paket Karte ── */}
+            {paketInfo && (
+              <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center shrink-0">
+                      <Sparkles className="w-6 h-6 text-accent" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-sans text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Ihre Show</p>
+                      <h2 className="font-display text-lg font-bold text-foreground">{paketInfo.name}</h2>
+                      <p className="font-sans text-xs text-muted-foreground mt-1">Bis zu {paketInfo.zieldauer} Minuten</p>
+                      {paketInfo.beschreibung && (
+                        <p className="font-sans text-sm text-muted-foreground/80 mt-3 leading-relaxed">{paketInfo.beschreibung}</p>
+                      )}
+                    </div>
                   </div>
-                  <p className="font-display text-2xl font-bold text-foreground">{stat.value}</p>
-                  <p className="font-sans text-xs text-muted-foreground mt-0.5">{stat.label}</p>
-                  {"badge" in stat && stat.badge !== undefined && stat.badge > 0 && (
-                    <span className="absolute top-3 right-3 min-w-[20px] h-5 rounded-full bg-accent text-[9px] font-bold text-white flex items-center justify-center px-1">
-                      {stat.badge}
-                    </span>
-                  )}
-                  <ArrowRight className="absolute bottom-4 right-4 w-3.5 h-3.5 text-muted-foreground/20 group-hover:text-accent/40 group-hover:translate-x-0.5 transition-all" />
-                </button>
-              ))}
+                  {/* Link zur passenden Unterseite */}
+                  {(() => {
+                    const name = paketInfo.name.toLowerCase();
+                    const link = name.includes("close") ? "/close-up" : name.includes("bühne") ? "/buehnenshow" : name.includes("kombi") ? "/kombination" : null;
+                    if (!link) return null;
+                    return (
+                      <a href={`https://www.magicel.de${link}`} target="_blank" rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-medium">
+                        Mehr erfahren <ArrowRight className="w-3.5 h-3.5" />
+                      </a>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
+
+            {/* ── Angebote + Rechnungen gleichgroß nebeneinander ── */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {/* Dokumente-Karte */}
+              <button
+                onClick={() => setActiveTab("documents")}
+                className="group p-5 rounded-2xl bg-white border border-black/[0.06] shadow-sm hover:shadow-md hover:border-accent/20 transition-all text-left"
+              >
+                <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center mb-3">
+                  <FolderOpen className="w-4 h-4 text-accent" />
+                </div>
+                <p className="font-display text-2xl font-bold text-foreground">{documents.length}</p>
+                <p className="font-sans text-xs text-muted-foreground mt-0.5">Dokumente</p>
+                <ArrowRight className="mt-2 w-3.5 h-3.5 text-muted-foreground/20 group-hover:text-accent/40 transition-all" />
+              </button>
+
+              {/* Rechnungen-Karte */}
+              {(() => {
+                const rechnungen = documents.filter(d => ["Rechnung", "Abschlagsrechnung", "Schlussrechnung"].includes(d.type || ""));
+                const offene = rechnungen.filter(d => d.status !== "bezahlt");
+                return (
+                  <button
+                    onClick={() => setActiveTab("documents")}
+                    className="group p-5 rounded-2xl bg-white border border-black/[0.06] shadow-sm hover:shadow-md hover:border-accent/20 transition-all text-left"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-amber-50 flex items-center justify-center mb-3">
+                      <FileText className="w-4 h-4 text-amber-600" />
+                    </div>
+                    <p className="font-display text-2xl font-bold text-foreground">{rechnungen.length}</p>
+                    <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                      {offene.length > 0 ? `${offene.length} offen` : "Alle bezahlt ✓"}
+                    </p>
+                    <ArrowRight className="mt-2 w-3.5 h-3.5 text-muted-foreground/20 group-hover:text-accent/40 transition-all" />
+                  </button>
+                );
+              })()}
             </div>
+
+            {/* Stats-Grid entfernt – Dokumente/Rechnungen sind jetzt oben als Cards */}
 
             {/* ── OFFENE ANGEBOTE WIDGET ── */}
             {offeneAngebote.length > 0 && offeneAngebote.map((angebot) => {
