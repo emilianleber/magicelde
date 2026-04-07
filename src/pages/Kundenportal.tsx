@@ -707,13 +707,13 @@ const Kundenportal = () => {
 
   // Paket laden wenn Request eins hat
   const [paketInfo, setPaketInfo] = useState<{ name: string; beschreibung: string; zieldauer: number; preis: number } | null>(null);
+  const paketId = (currentRequest as any)?.paket_id || null;
   useEffect(() => {
-    const pid = (currentRequest as any)?.paket_id;
-    if (!pid) return;
-    supabase.from("pakete").select("name, beschreibung_kunde, zieldauer, preis").eq("id", pid).maybeSingle().then(({ data }) => {
+    if (!paketId) return;
+    supabase.from("pakete").select("name, beschreibung_kunde, zieldauer, preis").eq("id", paketId).maybeSingle().then(({ data }) => {
       if (data) setPaketInfo({ name: data.name, beschreibung: data.beschreibung_kunde || "", zieldauer: data.zieldauer, preis: data.preis });
     });
-  }, [currentRequest]);
+  }, [paketId]);
   const nextEvent = events.find((e) => {
     const d = getCountdownDays(e.event_date);
     return d !== null && d >= 0;
