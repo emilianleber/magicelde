@@ -1155,7 +1155,7 @@ const AdminSettings = () => {
             </div>
 
             {/* ── Meinen Kalender verbinden ── */}
-            <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
+            {settings && <div className="p-6 rounded-2xl bg-muted/20 border border-border/30">
               <h3 className="text-sm font-bold text-foreground mb-1">Meinen Kalender verbinden</h3>
               <p className="text-xs text-muted-foreground mb-4">
                 Verbinde deinen privaten Kalender (Apple/Google/Outlook) damit deine Termine im CRM-Kalender angezeigt werden und Konflikte bei Anfragen erkannt werden.
@@ -1247,7 +1247,7 @@ const AdminSettings = () => {
 
                 {message && <p className={`text-xs ${message.startsWith("Fehler") || message.startsWith("Sync") ? "text-destructive" : "text-green-600"}`}>{message}</p>}
               </div>
-            </div>
+            </div>}
           </div>
         );
       })()}

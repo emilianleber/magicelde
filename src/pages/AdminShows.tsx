@@ -455,7 +455,7 @@ const AdminShows = () => {
       title="Konzepte"
       subtitle="Show-Konzepte und Abläufe"
       actions={
-        <button onClick={openNew} className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 transition-opacity">
+        <button onClick={() => navigate("/admin/shows/new")} className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 transition-opacity">
           <Plus className="w-4 h-4" /> Neues Konzept
         </button>
       }
@@ -500,7 +500,7 @@ const AdminShows = () => {
             <Video className="w-8 h-8 text-muted-foreground/40" />
           </div>
           <p className="text-sm font-semibold text-foreground mb-1">Noch kein Konzept angelegt</p>
-          <button onClick={openNew} className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 transition-opacity">
+          <button onClick={() => navigate("/admin/shows/new")} className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 transition-opacity">
             <Plus className="w-4 h-4" /> Erstes Konzept anlegen
           </button>
         </div>
@@ -513,7 +513,7 @@ const AdminShows = () => {
           {filtered.map((s) => (
             <div
               key={s.id}
-              onClick={() => openEdit(s)}
+              onClick={() => navigate(`/admin/shows/${s.id}`)}
               className="relative p-5 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/30 hover:bg-muted/40 transition-all flex flex-col gap-3 cursor-pointer"
             >
               <div className="flex items-start justify-between gap-2">

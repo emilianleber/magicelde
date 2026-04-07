@@ -3,6 +3,7 @@ import AdminKalender from "@/pages/AdminKalender";
 import AdminEffekte from "@/pages/AdminEffekte";
 import AdminPakete from "@/pages/AdminPakete";
 import AdminShows from "@/pages/AdminShows";
+import AdminShowEditor from "@/pages/AdminShowEditor";
 import AdminProduktionen from "@/pages/AdminProduktionen";
 import AdminLocations from "@/pages/AdminLocations";
 import AdminPartner from "@/pages/AdminPartner";
@@ -145,6 +146,7 @@ const AdminRoutes = () => (
       <Route path="/admin/effekte" element={<AdminEffekte />} />
       <Route path="/admin/pakete" element={<AdminPakete />} />
       <Route path="/admin/shows" element={<AdminShows />} />
+      <Route path="/admin/shows/:id" element={<AdminShowEditor />} />
       <Route path="/admin/produktionen" element={<AdminProduktionen />} />
       <Route path="/admin/locations" element={<AdminLocations />} />
       <Route path="/admin/partner" element={<AdminPartner />} />
@@ -274,6 +276,7 @@ const App = () => (
               <Route path="/admin/effekte" element={<AdminEffekte />} />
               <Route path="/admin/pakete" element={<AdminPakete />} />
               <Route path="/admin/shows" element={<AdminShows />} />
+              <Route path="/admin/shows/:id" element={<AdminShowEditor />} />
               <Route path="/admin/produktionen" element={<AdminProduktionen />} />
               <Route path="/admin/locations" element={<AdminLocations />} />
               <Route path="/admin/partner" element={<AdminPartner />} />
