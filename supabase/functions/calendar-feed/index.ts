@@ -61,6 +61,13 @@ serve(async () => {
     .is("deleted_at", null)
     .is("event_id", null);
 
+  // ToDos mit Datum
+  const { data: todos } = await supabase
+    .from("portal_todos")
+    .select("id, title, due_date, priority, status")
+    .not("due_date", "is", null)
+    .neq("status", "erledigt");
+
   if (eventsError || requestsError) {
     return new Response("Fehler beim Laden der Kalenderdaten", {
       status: 500,
@@ -248,6 +255,30 @@ END:VALARM
     }
 
     ics += `END:VEVENT
+`;
+  }
+
+  // ══════════════════════════════════════════════════════
+  // TODOS — als ganztägige Events im Kalender
+  // ══════════════════════════════════════════════════════
+  for (const t of todos || []) {
+    if (!t.due_date) continue;
+    const priorityEmoji = t.priority === "hoch" ? "🔴" : t.priority === "niedrig" ? "🟢" : "🟡";
+    const summary = `${priorityEmoji} ToDo: ${escapeIcsText(t.title)}`;
+    ics += `BEGIN:VEVENT
+UID:todo-${t.id}@magicel
+DTSTAMP:${formatUtcDateTime(new Date())}
+DTSTART;VALUE=DATE:${formatAllDayDate(t.due_date)}
+DTEND;VALUE=DATE:${addOneDay(t.due_date)}
+SUMMARY:${summary}
+CATEGORIES:TODO
+STATUS:TENTATIVE
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:ToDo fällig: ${escapeIcsText(t.title)}
+END:VALARM
+END:VEVENT
 `;
   }
 

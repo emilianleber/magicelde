@@ -57,7 +57,9 @@ export default function AdminKalender() {
   const [requests, setRequests] = useState<CalRequest[]>([]);
   const [ownEvents, setOwnEvents] = useState<{ id: string; summary: string; start_date: string; start_time: string | null; all_day: boolean; source_id: string | null }[]>([]);
   const [calSources, setCalSources] = useState<Record<string, { name: string; color: string }>>({});
+  const [todos, setTodos] = useState<{ id: string; title: string; due_date: string; status: string | null; priority: string | null }[]>([]);
   const [calMonth, setCalMonth] = useState<Date>(() => { const d = new Date(); d.setDate(1); return d; });
+  const [selectedEntry, setSelectedEntry] = useState<{ type: string; data: any } | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   useEffect(() => {
@@ -71,15 +73,17 @@ export default function AdminKalender() {
     if (!authChecked) return;
     const load = async () => {
       setLoading(true);
-      const [evtRes, reqRes, ownRes, srcRes] = await Promise.all([
+      const [evtRes, reqRes, ownRes, srcRes, todoRes] = await Promise.all([
         supabase.from("portal_events").select("id,title,event_date,start_time,location,status,guests,format,customer_id").order("event_date", { ascending: true }),
         supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id").is("event_id", null).order("datum", { ascending: true }),
         supabase.from("calendar_events_cache").select("id,summary,start_date,start_time,all_day,source_id").order("start_date", { ascending: true }),
         supabase.from("calendar_sources").select("id,name,color"),
+        supabase.from("portal_todos").select("id,title,due_date,status,priority").not("due_date", "is", null).neq("status", "erledigt").order("due_date"),
       ]);
       if (!evtRes.error) setEvents(evtRes.data || []);
       if (!reqRes.error) setRequests(reqRes.data || []);
       if (!ownRes.error) setOwnEvents(ownRes.data || []);
+      if (!todoRes.error) setTodos(todoRes.data || []);
       if (!srcRes.error && srcRes.data) {
         const map: Record<string, { name: string; color: string }> = {};
         for (const s of srcRes.data) map[s.id] = { name: s.name, color: s.color || "#6366f1" };
@@ -118,6 +122,14 @@ export default function AdminKalender() {
     const d = o.start_date;
     if (!ownByDate[d]) ownByDate[d] = [];
     ownByDate[d].push(o);
+  });
+
+  const todoByDate: Record<string, typeof todos> = {};
+  todos.forEach((t) => {
+    if (!t.due_date) return;
+    const d = t.due_date.slice(0, 10);
+    if (!todoByDate[d]) todoByDate[d] = [];
+    todoByDate[d].push(t);
   });
 
   const cells: (number | null)[] = [
@@ -189,9 +201,10 @@ export default function AdminKalender() {
               const dayEvts = evtByDate[dateStr] || [];
               const dayReqs = reqByDate[dateStr] || [];
               const dayOwn = ownByDate[dateStr] || [];
+              const dayTodos = todoByDate[dateStr] || [];
               const isToday = dateStr === todayStr;
               const isSelected = selectedDate === dateStr;
-              const hasItems = dayEvts.length + dayReqs.length + dayOwn.length > 0;
+              const hasItems = dayEvts.length + dayReqs.length + dayOwn.length + dayTodos.length > 0;
               const isWeekend = (i % 7) >= 5;
 
               return (
@@ -228,8 +241,13 @@ export default function AdminKalender() {
                         </div>
                       );
                     })}
-                    {dayEvts.length + dayReqs.length + dayOwn.length > 3 && (
-                      <p className="text-[9px] text-muted-foreground px-1">+{dayEvts.length + dayReqs.length + dayOwn.length - 3} mehr</p>
+                    {dayTodos.slice(0, 1).map((t) => (
+                      <div key={t.id} className="text-[10px] leading-tight px-1 py-0.5 rounded bg-amber-400/15 text-amber-700 truncate">
+                        ☐ {t.title}
+                      </div>
+                    ))}
+                    {dayEvts.length + dayReqs.length + dayOwn.length + dayTodos.length > 3 && (
+                      <p className="text-[9px] text-muted-foreground px-1">+{dayEvts.length + dayReqs.length + dayOwn.length + dayTodos.length - 3} mehr</p>
                     )}
                   </div>
                 </button>
@@ -245,6 +263,9 @@ export default function AdminKalender() {
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-sm bg-orange-400/40 inline-block" /> Anfragen
             </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-sm bg-amber-400/40 inline-block" /> ToDos
+            </span>
             {Object.entries(calSources).map(([id, src]) => (
               <span key={id} className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-sm inline-block" style={{ backgroundColor: src.color }} /> {src.name}
@@ -254,7 +275,7 @@ export default function AdminKalender() {
         </div>
 
         {/* Selected day detail */}
-        {selectedDate && (selEvts.length > 0 || selReqs.length > 0 || (ownByDate[selectedDate] || []).length > 0) && (
+        {selectedDate && (selEvts.length > 0 || selReqs.length > 0 || (ownByDate[selectedDate] || []).length > 0 || (todoByDate[selectedDate] || []).length > 0) && (
           <div className="rounded-2xl border border-border/30 bg-muted/5 p-5">
             <h3 className="font-semibold text-sm mb-4">
               {new Date(selectedDate + "T12:00:00").toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long" })}
@@ -297,6 +318,23 @@ export default function AdminKalender() {
                   <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
               ))}
+              {/* ToDos */}
+              {(todoByDate[selectedDate] || []).map((t) => (
+                <Link key={t.id} to="/admin/todos"
+                  className="flex items-center gap-3 p-3 rounded-xl bg-amber-50 border border-amber-200/60 hover:border-amber-300 transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-amber-400/15 flex items-center justify-center shrink-0">
+                    <Check className="w-4 h-4 text-amber-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">{t.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t.priority === "hoch" ? "🔴 Hoch" : t.priority === "niedrig" ? "🟢 Niedrig" : "🟡 Mittel"}
+                    </p>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200 font-medium">ToDo</span>
+                </Link>
+              ))}
+
               {/* Eigene Termine */}
               {(ownByDate[selectedDate] || []).map((o) => {
                 const srcColor = o.source_id && calSources[o.source_id]?.color || "#6366f1";

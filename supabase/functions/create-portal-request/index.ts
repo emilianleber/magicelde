@@ -176,7 +176,7 @@ serve(async (req) => {
 
     // Wiederkehrenden Kunden erkennen
     let returningCustomerHtml = "";
-    if (existingCustomer && customerId) {
+    if (customerId) {
       const { data: prevEvents } = await supabase
         .from("portal_events")
         .select("id, title, event_date, status")
