@@ -211,7 +211,7 @@ const eventPhases = [
 type CheckItem = { key: string; label: string; portalField?: string; portalValue?: string; portalLabel?: string };
 const eventChecklistByPhase: Record<string, CheckItem[]> = {
   in_planung: [
-    { key: "echk_details", label: "Event-Details klären", portalField: "details_status", portalValue: "offen", portalLabel: "Details beim Kunden anfragen" },
+    { key: "echk_details", label: "Event-Details geklärt" },
     { key: "echk_auftragsbestaetigung", label: "Auftragsbestätigung erstellt" },
     { key: "echk_abschlag", label: "Abschlagsrechnung erstellt" },
     { key: "echk_technik", label: "Technik / Aufbau geklärt" },
@@ -246,7 +246,7 @@ const AdminBookingDetail = () => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const [activeDetailTab, setActiveDetailTab] = useState<"konzept" | "dokumente" | "planung" | "notizen">("konzept");
+  const [activeDetailTab, setActiveDetailTab] = useState<"konzept" | "dokumente" | "planung" | "nachrichten" | "notizen">("konzept");
   // Abschlagsrechnung Dialog
   const [showAbschlagDialog, setShowAbschlagDialog] = useState(false);
   const [abschlagMode, setAbschlagMode] = useState<"prozent" | "fix">("prozent");
@@ -1002,6 +1002,7 @@ const AdminBookingDetail = () => {
               { id: "konzept" as const, label: "🎭 Konzept" },
               { id: "dokumente" as const, label: "📄 Dokumente" },
               ...(event ? [{ id: "planung" as const, label: "🗓️ Planung" }] : []),
+              { id: "nachrichten" as const, label: "✉️ Nachrichten" },
               { id: "notizen" as const, label: "📝 Notizen" },
             ]).map((tab) => (
               <button key={tab.id} onClick={() => setActiveDetailTab(tab.id)}
@@ -1241,6 +1242,96 @@ const AdminBookingDetail = () => {
           </div>
 
             </>
+          )}
+
+          {/* ══ TAB: NACHRICHTEN ══ */}
+          {activeDetailTab === "nachrichten" && (
+            <div className="space-y-4 mt-4">
+              {/* E-Mail-Vorlagen */}
+              {emailTemplates.length > 0 && (
+                <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+                  <p className="text-xs font-bold text-foreground mb-3">Schnellmail-Vorlagen</p>
+                  <div className="space-y-1.5">
+                    {emailTemplates.map((tpl) => (
+                      <button
+                        key={tpl.slug}
+                        disabled={sendingTemplate}
+                        onClick={async () => {
+                          if (!confirm(`"${tpl.name}" an ${customer?.email || "den Kunden"} senden?`)) return;
+                          setSendingTemplate(true); setMessage("");
+                          try {
+                            const { data: { session } } = await supabase.auth.getSession();
+                            const res = await fetch("https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/send-template-mail", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json", "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, ...(session?.access_token ? { "Authorization": `Bearer ${session.access_token}` } : {}) },
+                              body: JSON.stringify({ templateSlug: tpl.slug, requestId: request?.id, eventId: event?.id, customerId: request?.customer_id }),
+                            });
+                            const result = await res.json();
+                            if (!res.ok || result.error) throw new Error(result.error || "Fehler");
+                            setMessage(`"${tpl.name}" an ${customer?.email || "Kunde"} gesendet!`);
+                          } catch (err: any) { setMessage("Fehler: " + (err.message || "Unbekannt")); }
+                          setSendingTemplate(false);
+                        }}
+                        className="w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-xl border border-border/20 bg-background/60 text-sm hover:bg-muted/40 disabled:opacity-50 transition-colors"
+                      >
+                        <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                        <span className="flex-1 truncate">{tpl.name}</span>
+                        <span className="text-[10px] text-muted-foreground shrink-0">{tpl.kategorie}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Status-Mail + Feedback */}
+              <div className="p-5 rounded-2xl bg-muted/20 border border-border/30 space-y-3">
+                <p className="text-xs font-bold text-foreground mb-1">Aktionen</p>
+                <p className="text-xs text-muted-foreground">Empfänger: <strong>{customer?.email || "–"}</strong></p>
+                <button onClick={() => sendStatusMail()} disabled={sendingMail}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border/30 bg-background/60 px-4 py-2.5 text-sm font-medium hover:bg-muted/40 disabled:opacity-50 transition-colors">
+                  <Mail className="w-4 h-4" />
+                  {sendingMail ? "Sendet..." : "Status-Mail senden"}
+                </button>
+                {event && (
+                  <button
+                    onClick={async () => {
+                      if (!confirm("Feedback-Anfrage an den Kunden senden?")) return;
+                      try {
+                        const { data: { session } } = await supabase.auth.getSession();
+                        const { data, error } = await supabase.functions.invoke("send-feedback-request", {
+                          headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : undefined,
+                          body: { eventId: event.id },
+                        });
+                        if (error) throw error;
+                        setMessage(data?.alreadyExists ? "Feedback wurde bereits abgegeben." : "Feedback-Anfrage gesendet!");
+                      } catch (err: any) { setMessage("Fehler: " + (err.message || "Unbekannt")); }
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-purple-200 bg-purple-50 px-4 py-2.5 text-sm font-medium text-purple-700 hover:bg-purple-100 transition-colors"
+                  >
+                    <MessageSquare className="w-4 h-4" /> Feedback anfragen
+                  </button>
+                )}
+                {message && (
+                  <p className={`text-xs rounded-lg px-3 py-2 ${message.startsWith("Fehler") ? "bg-destructive/10 text-destructive" : "bg-green-50 text-green-700"}`}>{message}</p>
+                )}
+              </div>
+
+              {/* Mail History */}
+              {mailHistory.length > 0 && (
+                <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+                  <p className="text-xs font-bold text-foreground mb-3">Gesendete Mails</p>
+                  <div className="space-y-1.5">
+                    {mailHistory.map((msg) => (
+                      <div key={msg.id} className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-background/40">
+                        <span className="text-green-600">✓</span>
+                        <span className="flex-1 truncate font-medium">{msg.subject}</span>
+                        <span className="text-muted-foreground shrink-0">{new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "short" })}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           )}
 
           {/* ── Change Requests (im Notizen-Tab) ── */}
