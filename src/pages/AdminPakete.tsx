@@ -25,8 +25,18 @@ const anlassColor = (anlass: string) =>
 
 // ── Form state ─────────────────────────────────────────────────────────────────
 
+const FORMAT_OPTIONS = [
+  { value: "", label: "– Kein Format –" },
+  { value: "closeup", label: "Close-Up" },
+  { value: "buehnenshow", label: "Bühnenshow" },
+  { value: "kombination", label: "Kombination" },
+  { value: "magic_dinner", label: "Magic Dinner" },
+  { value: "moderation", label: "Moderation" },
+];
+
 interface FormState {
   name: string;
+  format: string;
   beschreibungIntern: string;
   beschreibungKunde: string;
   zieldauer: number;
@@ -36,6 +46,7 @@ interface FormState {
 
 const defaultForm: FormState = {
   name: "",
+  format: "",
   beschreibungIntern: "",
   beschreibungKunde: "",
   zieldauer: 60,
@@ -110,6 +121,7 @@ const AdminPakete = () => {
     setIsNew(false);
     setForm({
       name: p.name,
+      format: (p as any).format || "",
       beschreibungIntern: p.beschreibungIntern,
       beschreibungKunde: p.beschreibungKunde,
       zieldauer: p.zieldauer,
@@ -161,16 +173,20 @@ const AdminPakete = () => {
       };
       if (isNew) {
         const created = await paketeService.create(payload);
+        // Format separat speichern (nicht im Service-Typ)
+        if (form.format) await supabase.from("pakete").update({ format: form.format }).eq("id", created.id);
         setPakete((prev) =>
-          [...prev, created].sort((a, b) => a.name.localeCompare(b.name))
+          [...prev, { ...created, format: form.format } as any].sort((a, b) => a.name.localeCompare(b.name))
         );
         setPanelMsg({ type: "ok", text: "Paket angelegt." });
         setSelectedPaket(created);
         setIsNew(false);
       } else if (selectedPaket) {
         const updated = await paketeService.update(selectedPaket.id, payload);
-        setPakete((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
-        setSelectedPaket(updated);
+        await supabase.from("pakete").update({ format: form.format || null }).eq("id", selectedPaket.id);
+        const withFormat = { ...updated, format: form.format } as any;
+        setPakete((prev) => prev.map((p) => (p.id === updated.id ? withFormat : p)));
+        setSelectedPaket(withFormat);
         setPanelMsg({ type: "ok", text: "Gespeichert." });
       }
     } catch (err: unknown) {
@@ -359,6 +375,18 @@ const AdminPakete = () => {
               placeholder="z.B. Premium Hochzeitspaket"
               className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
             />
+          </div>
+
+          {/* Format */}
+          <div>
+            <label className="block text-xs font-semibold text-foreground mb-1.5">Showformat</label>
+            <select
+              value={form.format}
+              onChange={(e) => setForm((f) => ({ ...f, format: e.target.value }))}
+              className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/20"
+            >
+              {FORMAT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </select>
           </div>
 
           {/* Zieldauer + Preis */}

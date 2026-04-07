@@ -345,7 +345,7 @@ const Kundenportal = () => {
   const [replyText, setReplyText] = useState("");
   const [replySending, setReplySending] = useState(false);
   const [replySent, setReplySent] = useState(false);
-  const [paketInfo, setPaketInfo] = useState<{ name: string; beschreibung: string; zieldauer: number; preis: number } | null>(null);
+  const [paketInfo, setPaketInfo] = useState<{ name: string; beschreibung: string; zieldauer: number; preis: number; format: string | null } | null>(null);
 
 
   const navigate = useNavigate();
@@ -687,8 +687,8 @@ const Kundenportal = () => {
   const paketId = requests[0] ? (requests[0] as any).paket_id || null : null;
   useEffect(() => {
     if (!paketId) return;
-    supabase.from("pakete").select("name, beschreibung_kunde, zieldauer, preis").eq("id", paketId).maybeSingle().then(({ data }) => {
-      if (data) setPaketInfo({ name: data.name, beschreibung: data.beschreibung_kunde || "", zieldauer: data.zieldauer, preis: data.preis });
+    supabase.from("pakete").select("name, beschreibung_kunde, zieldauer, preis, format").eq("id", paketId).maybeSingle().then(({ data }) => {
+      if (data) setPaketInfo({ name: data.name, beschreibung: data.beschreibung_kunde || "", zieldauer: data.zieldauer, preis: data.preis, format: data.format || null });
     });
   }, [paketId]);
 
@@ -948,12 +948,18 @@ const Kundenportal = () => {
                   {paketInfo.beschreibung && (
                     <p className="font-sans text-sm text-foreground/70 mt-4 leading-relaxed border-t border-black/[0.05] pt-4">{paketInfo.beschreibung}</p>
                   )}
-                  {/* Links zur Showformat-Unterseite */}
+                  {/* Links zur Showformat-Unterseite (basierend auf format-Feld) */}
                   {(() => {
-                    const n = paketInfo.name.toLowerCase();
+                    const fmt = paketInfo.format;
                     const linkCls = "mt-4 mr-3 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-semibold transition-colors";
-                    // Kombination: Zwei Links (Close-Up + Bühnenshow)
-                    if (n.includes("kombi")) {
+                    const FORMAT_LINKS: Record<string, { url: string; label: string }> = {
+                      closeup: { url: "/close-up", label: "Close-Up Magie" },
+                      buehnenshow: { url: "/buehnenshow", label: "Bühnenshow" },
+                      magic_dinner: { url: "/magic-dinner", label: "Magic Dinner" },
+                      moderation: { url: "/moderation", label: "Moderation" },
+                    };
+                    // Kombination: Zwei Links
+                    if (fmt === "kombination") {
                       return (
                         <div className="flex flex-wrap gap-x-4 gap-y-2">
                           <a href="https://www.magicel.de/close-up" target="_blank" rel="noopener noreferrer" className={linkCls}>
@@ -965,15 +971,11 @@ const Kundenportal = () => {
                         </div>
                       );
                     }
-                    const link = n.includes("close") || n.includes("hochzeit") ? "/close-up"
-                      : n.includes("bühne") ? "/buehnenshow"
-                      : n.includes("dinner") ? "/magic-dinner"
-                      : n.includes("moderation") ? "/moderation"
-                      : null;
-                    if (!link) return null;
+                    const info = fmt ? FORMAT_LINKS[fmt] : null;
+                    if (!info) return null;
                     return (
-                      <a href={`https://www.magicel.de${link}`} target="_blank" rel="noopener noreferrer" className={linkCls}>
-                        Mehr über dieses Showformat erfahren <ArrowRight className="w-3.5 h-3.5" />
+                      <a href={`https://www.magicel.de${info.url}`} target="_blank" rel="noopener noreferrer" className={linkCls}>
+                        Mehr über {info.label} erfahren <ArrowRight className="w-3.5 h-3.5" />
                       </a>
                     );
                   })()}
