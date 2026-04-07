@@ -246,6 +246,7 @@ const AdminBookingDetail = () => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [activeDetailTab, setActiveDetailTab] = useState<"konzept" | "dokumente" | "planung" | "notizen">("konzept");
   // Abschlagsrechnung Dialog
   const [showAbschlagDialog, setShowAbschlagDialog] = useState(false);
   const [abschlagMode, setAbschlagMode] = useState<"prozent" | "fix">("prozent");
@@ -990,17 +991,34 @@ const AdminBookingDetail = () => {
 
           {/* ── Uhrzeit-Warnung ── */}
           {!uhrzeit && datum && (
-            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
-              <span className="text-lg">⚠️</span>
-              <div>
-                <p className="text-sm font-semibold text-amber-800">Uhrzeit fehlt noch</p>
-                <p className="text-xs text-amber-600 mt-0.5">Bitte klären Sie die Uhrzeit mit dem Kunden. Ohne Uhrzeit wird der Termin als ganztägig im Kalender angezeigt.</p>
-              </div>
+            <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center gap-2 text-xs text-amber-700 font-medium">
+              ⚠️ Uhrzeit fehlt – bitte mit Kunde klären
             </div>
           )}
 
-          {/* ── Event-Planung (nur bei gebuchten Events) ── */}
-          {event && (
+          {/* ── TAB NAVIGATION ── */}
+          <div className="flex items-center gap-1 bg-muted/30 rounded-xl p-1">
+            {([
+              { id: "konzept" as const, label: "🎭 Konzept" },
+              { id: "dokumente" as const, label: "📄 Dokumente" },
+              ...(event ? [{ id: "planung" as const, label: "🗓️ Planung" }] : []),
+              { id: "notizen" as const, label: "📝 Notizen" },
+            ]).map((tab) => (
+              <button key={tab.id} onClick={() => setActiveDetailTab(tab.id)}
+                className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all text-center ${activeDetailTab === tab.id ? "bg-foreground text-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+              >{tab.label}</button>
+            ))}
+          </div>
+
+          {/* ══ TAB: KONZEPT ══ */}
+          {activeDetailTab === "konzept" && (
+            <>
+          {/* Paket/Konzept wird hier angezeigt – siehe weiter unten */}
+            </>
+          )}
+
+          {/* ══ TAB: PLANUNG ══ */}
+          {activeDetailTab === "planung" && event && (
             <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
               <h2 className="text-sm font-bold text-foreground mb-4">Event-Planung</h2>
               <div className="grid sm:grid-cols-2 gap-3">
@@ -1046,6 +1064,32 @@ const AdminBookingDetail = () => {
             </div>
           )}
 
+          {/* ══ TAB: DOKUMENTE ══ */}
+          {activeDetailTab === "dokumente" && (
+            <div className="space-y-0">
+          {/* Dokumente-Content wird hier eingefügt */}
+            </div>
+          )}
+
+          {/* ══ TAB: NOTIZEN ══ */}
+          {activeDetailTab === "notizen" && (
+            <div className="space-y-4">
+              <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
+                <label className="block text-xs font-semibold text-foreground mb-2">Interne Notizen</label>
+                <textarea
+                  value={internalNotes}
+                  onChange={(e) => { setInternalNotes(e.target.value); setDraftInternalNotes(e.target.value); }}
+                  rows={6}
+                  placeholder="Interne Notizen zu dieser Anfrage..."
+                  className={`${inputCls} resize-none`}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* ── Paket/Konzept (nur im Konzept-Tab) ── */}
+          {activeDetailTab === "konzept" && (
+            <>
           {/* ── Paket/Konzept: VOR Buchung zuordnen, NACH Buchung anzeigen ── */}
           {!event ? (
             /* VOR BUCHUNG: Paket/Konzept zuordnen */
@@ -1120,6 +1164,12 @@ const AdminBookingDetail = () => {
             </div>
           ) : null}
 
+            </>
+          )}
+
+          {/* ── Documents (nur im Dokumente-Tab) ── */}
+          {activeDetailTab === "dokumente" && (
+            <>
           {/* ── Documents ── */}
           <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
             <div className="flex items-center justify-between mb-4">
@@ -1190,6 +1240,12 @@ const AdminBookingDetail = () => {
             </div>
           </div>
 
+            </>
+          )}
+
+          {/* ── Change Requests (im Notizen-Tab) ── */}
+          {activeDetailTab === "notizen" && (
+            <>
           {/* ── Change Requests ── */}
           {changeRequests.length > 0 && (
             <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
@@ -1279,6 +1335,8 @@ const AdminBookingDetail = () => {
                 ))}
               </div>
             </div>
+          )}
+            </>
           )}
         </div>
 
