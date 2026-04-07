@@ -1247,7 +1247,12 @@ const AdminSettings = () => {
                         headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}) },
                       });
                       const d = await res.json();
-                      setCalMsg(d.error ? `Fehler: ${d.error}` : `✓ ${d.synced} Termine aus ${d.sources?.length || 0} Kalendern synchronisiert`);
+                      if (d.error) {
+                        setCalMsg(`Fehler: ${d.error}`);
+                      } else {
+                        const details = (d.sources || []).map((s: any) => s.error ? `❌ ${s.name}: ${s.error}` : `✓ ${s.name}: ${s.synced} Termine`).join("\n");
+                        setCalMsg(`${d.synced} Termine synchronisiert\n${details}`);
+                      }
                       // Reload sources
                       const { data: fresh } = await supabase.from("calendar_sources").select("*").order("created_at");
                       if (fresh) setCalSources(fresh);
@@ -1261,7 +1266,7 @@ const AdminSettings = () => {
                 </button>
               </div>
 
-              {calMsg && <p className={`text-xs mt-2 ${calMsg.startsWith("Fehler") ? "text-destructive" : "text-green-600"}`}>{calMsg}</p>}
+              {calMsg && <pre className={`text-xs mt-2 whitespace-pre-wrap ${calMsg.startsWith("Fehler") ? "text-destructive" : "text-green-600"}`}>{calMsg}</pre>}
 
               <div className="mt-4 p-3 rounded-xl bg-background/60 border border-border/10">
                 <p className="text-[10px] text-muted-foreground font-semibold mb-1">So findest du die iCal-URL:</p>
