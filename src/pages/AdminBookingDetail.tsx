@@ -255,6 +255,7 @@ const AdminBookingDetail = () => {
   const [abschlagWert, setAbschlagWert] = useState("50");
   const [abschlagCreating, setAbschlagCreating] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
   const [converting, setConverting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -1711,11 +1712,11 @@ const AdminBookingDetail = () => {
             <div className="space-y-2">
               <button onClick={async () => {
                 await saveChanges();
-                if (sendMailWithSave) {
-                  sendStatusMail();
-                }
-              }} disabled={saving} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 disabled:opacity-50 transition-opacity">
-                <Save className="w-4 h-4" /> {saving ? "Speichert..." : "Speichern"}
+                if (sendMailWithSave) sendStatusMail();
+                setSaveSuccess(true);
+                setTimeout(() => setSaveSuccess(false), 2000);
+              }} disabled={saving} className={`w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all disabled:opacity-50 ${saveSuccess ? "bg-green-600 text-white" : "bg-foreground text-background hover:opacity-80"}`}>
+                <Save className="w-4 h-4" /> {saving ? "Speichert..." : saveSuccess ? "Gespeichert ✓" : "Speichern"}
               </button>
               <label className="flex items-center gap-2 px-1 cursor-pointer">
                 <input type="checkbox" checked={sendMailWithSave} onChange={(e) => setSendMailWithSave(e.target.checked)} className="h-3.5 w-3.5 rounded" />

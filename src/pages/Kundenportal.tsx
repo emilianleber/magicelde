@@ -2538,11 +2538,12 @@ const Kundenportal = () => {
                     rechnungs_ort: settingsDraft.rechnungs_ort.trim() || null,
                     rechnungs_land: settingsDraft.rechnungs_land.trim() || "Deutschland",
                   }).eq("id", customer.id);
-                  setMessage("Rechnungsadresse gespeichert ✓");
+                  setSettingsMsg("Gespeichert ✓");
+                  setTimeout(() => setSettingsMsg(""), 2500);
                 }}
-                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:opacity-80 transition-opacity"
+                className={`mt-4 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all ${settingsMsg ? "bg-green-600 text-white" : "bg-foreground text-background hover:opacity-80"}`}
               >
-                <Save className="w-3.5 h-3.5" /> Speichern
+                <Save className="w-3.5 h-3.5" /> {settingsMsg || "Speichern"}
               </button>
             </div>
           </div>
