@@ -221,7 +221,7 @@ const Chatbot = () => {
       {/* Toggle Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 group"
+        className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-6 z-50 w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 group"
         style={{ background: "linear-gradient(135deg, hsl(230, 65%, 48%), hsl(280, 55%, 45%), hsl(345, 70%, 42%))" }}
         aria-label="Chat öffnen"
       >
@@ -237,7 +237,7 @@ const Chatbot = () => {
 
       {/* Chat Panel */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] bg-background rounded-3xl shadow-2xl border border-border/50 flex flex-col overflow-hidden animate-fade-up" style={{ animationDuration: "0.3s", height: "520px" }}>
+        <div className="fixed bottom-24 right-6 z-50 w-full sm:w-[380px] max-w-[calc(100vw-3rem)] bg-background rounded-3xl shadow-2xl border border-border/50 flex flex-col overflow-hidden animate-fade-up" style={{ animationDuration: "0.3s", height: "520px" }}>
           {/* Header */}
           <div className="px-5 py-4 border-b border-border/30 flex items-center gap-3" style={{ background: "linear-gradient(135deg, hsl(230, 65%, 48%), hsl(280, 55%, 45%), hsl(345, 70%, 42%))" }}>
             <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
@@ -282,7 +282,7 @@ const Chatbot = () => {
                       <button
                         key={j}
                         onClick={() => handleSend(btn.value)}
-                        className="px-3 py-1.5 rounded-full text-xs font-medium border border-border/40 bg-background hover:bg-muted/60 text-foreground transition-colors"
+                        className="px-3.5 py-2 rounded-full text-xs font-medium border border-border/40 bg-background hover:bg-muted/60 text-foreground transition-colors"
                       >
                         {btn.label}
                       </button>

@@ -2434,12 +2434,12 @@ const Kundenportal = () => {
                   <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Straße & Hausnummer</label>
                   <input value={settingsDraft.rechnungs_strasse} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_strasse: e.target.value }))} placeholder="Musterstraße 1" className={inputCls} />
                 </div>
-                <div className="grid grid-cols-5 gap-3">
-                  <div className="col-span-2">
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                  <div className="col-span-1 sm:col-span-2">
                     <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">PLZ</label>
                     <input value={settingsDraft.rechnungs_plz} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_plz: e.target.value }))} placeholder="12345" className={inputCls} />
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-1 sm:col-span-3">
                     <label className="block font-sans text-[11px] uppercase tracking-widest text-muted-foreground mb-2">Ort</label>
                     <input value={settingsDraft.rechnungs_ort} onChange={(e) => setSettingsDraft((d) => ({ ...d, rechnungs_ort: e.target.value }))} placeholder="Musterstadt" className={inputCls} />
                   </div>

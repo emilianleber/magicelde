@@ -309,7 +309,7 @@ export default function AdminDokumenteListe() {
     {/* ── Vorschau-Modal ── */}
     {previewDoc && (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm" onClick={() => setPreviewDoc(null)}>
-        <div className="relative bg-white rounded-2xl shadow-2xl flex flex-col" style={{ width: 660, height: "90vh" }} onClick={e => e.stopPropagation()}>
+        <div className="relative bg-white rounded-2xl shadow-2xl flex flex-col" style={{ width: "min(660px, calc(100vw - 2rem))", height: "90vh" }} onClick={e => e.stopPropagation()}>
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 bg-gray-50 rounded-t-2xl shrink-0">
             <span className="text-sm font-semibold text-gray-800">{previewDoc.titel}</span>
@@ -318,8 +318,8 @@ export default function AdminDokumenteListe() {
           {/* iFrame mit vollständigem HTML */}
           {previewDoc.html ? (
             <iframe
-              srcDoc={`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box;}html,body{width:595px;background:#fff;}body>div{width:595px;height:842px;overflow:hidden;}</style></head><body>${previewDoc.html}</body></html>`}
-              style={{ width: "100%", flex: 1, border: "none", borderRadius: "0 0 1rem 1rem", transform: "scale(1)", transformOrigin: "top left" }}
+              srcDoc={`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box;}html,body{width:100%;max-width:595px;background:#fff;}body>div{width:100%;max-width:595px;height:842px;overflow:hidden;}</style></head><body>${previewDoc.html}</body></html>`}
+              style={{ width: "100%", flex: 1, border: "none", borderRadius: "0 0 1rem 1rem" }}
               title="Vorschau"
             />
           ) : (

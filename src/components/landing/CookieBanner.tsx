@@ -28,7 +28,7 @@ const CookieBanner = () => {
 
   return (
     <div
-      className="fixed bottom-20 left-4 right-4 sm:left-6 sm:right-6 z-[60] animate-fade-up"
+      className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-4 right-4 sm:left-6 sm:right-6 z-[60] animate-fade-up"
       style={{ animationDuration: "0.4s" }}
     >
       <div className="max-w-xl mx-auto bg-background/95 backdrop-blur-2xl border border-border/50 rounded-2xl shadow-xl p-5 sm:p-6">
@@ -43,7 +43,7 @@ const CookieBanner = () => {
           </a>
           .
         </p>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <button
             onClick={handleAccept}
             className="btn-primary !px-5 !py-2 !text-sm"

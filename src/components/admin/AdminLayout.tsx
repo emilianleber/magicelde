@@ -230,7 +230,7 @@ export const AdminPersistentShell = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden fixed inset-0 z-50 flex">
             <div className="absolute inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
-            <aside className="relative w-[260px] flex flex-col bg-background border-r border-border/20 h-full z-10">
+            <aside className="relative w-[260px] flex flex-col bg-background border-r border-border/20 h-full z-10" style={{ paddingTop: "env(safe-area-inset-top)" }}>
               <div className="flex items-center justify-between px-5 py-5 border-b border-border/20">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-xl bg-foreground flex items-center justify-center shrink-0">
@@ -299,7 +299,7 @@ export const AdminPersistentShell = () => {
               <Link
                 key={item.href}
                 to={item.href}
-                className={`relative flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl transition-all ${active ? "text-foreground" : "text-muted-foreground"}`}
+                className={`relative flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl transition-all ${active ? "text-foreground" : "text-muted-foreground"}`}
               >
                 <item.icon className={`w-5 h-5 ${active ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
                 <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>{item.label}</span>
@@ -313,7 +313,7 @@ export const AdminPersistentShell = () => {
           })}
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl text-muted-foreground"
+            className="flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl text-muted-foreground"
           >
             <Menu className="w-5 h-5 stroke-[1.5]" />
             <span className="text-[10px] font-medium">Mehr</span>
@@ -433,7 +433,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
-          <aside className="relative w-[260px] flex flex-col bg-background border-r border-border/20 h-full z-10">
+          <aside className="relative w-[260px] flex flex-col bg-background border-r border-border/20 h-full z-10" style={{ paddingTop: "env(safe-area-inset-top)" }}>
             <div className="flex items-center justify-between px-5 py-5 border-b border-border/20">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-foreground flex items-center justify-center shrink-0">
@@ -496,7 +496,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
             <Link
               key={item.href}
               to={item.href}
-              className={`relative flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl transition-all ${active ? "text-foreground" : "text-muted-foreground"}`}
+              className={`relative flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl transition-all ${active ? "text-foreground" : "text-muted-foreground"}`}
             >
               <item.icon className={`w-5 h-5 ${active ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
               <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>{item.label}</span>
@@ -510,7 +510,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
         })}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl text-muted-foreground"
+          className="flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl text-muted-foreground"
         >
           <Menu className="w-5 h-5 stroke-[1.5]" />
           <span className="text-[10px] font-medium">Mehr</span>

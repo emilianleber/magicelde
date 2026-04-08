@@ -244,7 +244,7 @@ export default function AdminKalender() {
                 <button
                   key={i}
                   onClick={() => setSelectedDate(isSelected ? null : dateStr)}
-                  className={`relative min-h-[80px] p-1.5 border-b border-r border-border/10 text-left transition-colors flex flex-col
+                  className={`relative min-h-[80px] sm:min-h-[80px] min-h-[44px] p-1 sm:p-1.5 border-b border-r border-border/10 text-left transition-colors flex flex-col
                     ${isToday ? "bg-foreground/5" : ""}
                     ${isSelected ? "bg-accent/10 ring-2 ring-inset ring-accent/30" : hasItems ? "hover:bg-muted/30" : "hover:bg-muted/20"}
                     ${isWeekend && !isToday ? "bg-muted/5" : ""}
@@ -400,7 +400,7 @@ export default function AdminKalender() {
             {/* Panel */}
             <div
               ref={drawerRef}
-              className="relative w-full max-w-md bg-background border-l border-border/40 shadow-2xl animate-in slide-in-from-right duration-200 overflow-y-auto"
+              className="relative w-full sm:max-w-md bg-background border-l border-border/40 shadow-2xl animate-in slide-in-from-right duration-200 overflow-y-auto"
             >
               {/* Drawer header */}
               <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border/20 px-6 py-4 flex items-center justify-between">

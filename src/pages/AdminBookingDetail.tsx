@@ -1161,7 +1161,7 @@ const AdminBookingDetail = () => {
 
         {/* ── TAB NAVIGATION (volle Breite, nach Status via CSS order) ── */}
         <div className="lg:col-span-2 space-y-5 order-last">
-          <div className="flex items-center gap-1 bg-muted/30 rounded-xl p-1">
+          <div className="flex items-center gap-1 bg-muted/30 rounded-xl p-1 overflow-x-auto">
             {([
               { id: "konzept" as const, label: "🎭 Konzept" },
               { id: "dokumente" as const, label: "📄 Dokumente" },
@@ -1169,7 +1169,7 @@ const AdminBookingDetail = () => {
               { id: "nachrichten" as const, label: "✉️ Nachrichten" },
             ]).map((tab) => (
               <button key={tab.id} onClick={() => setActiveDetailTab(tab.id)}
-                className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all text-center ${activeDetailTab === tab.id ? "bg-foreground text-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all text-center whitespace-nowrap ${activeDetailTab === tab.id ? "bg-foreground text-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
               >{tab.label}</button>
             ))}
           </div>

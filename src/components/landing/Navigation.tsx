@@ -33,10 +33,10 @@ const Navigation = () => {
     : "h-7 w-auto brightness-0 invert transition-all duration-500 drop-shadow-md";
 
   const mobilePanelCls =
-    "lg:hidden bg-background/95 backdrop-blur-2xl border border-border/30 mt-2 mx-3 rounded-2xl p-4 flex flex-col gap-0.5 animate-fade-up shadow-xl max-h-[78vh] overflow-y-auto";
+    "lg:hidden bg-background/95 backdrop-blur-2xl border border-border/30 mt-2 mx-3 rounded-2xl p-4 pt-[env(safe-area-inset-top)] flex flex-col gap-0.5 animate-fade-up shadow-xl max-h-[78vh] overflow-y-auto";
 
   const mobileLinkCls =
-    "px-3 py-2 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors";
+    "px-3 py-3 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors";
 
   const mobileHeadingCls =
     "font-sans text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/40 px-3 pt-1 pb-1.5";
@@ -157,7 +157,7 @@ const Navigation = () => {
 
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className={`lg:hidden p-2 transition-colors ${
+          className={`lg:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors ${
             scrolled ? "text-foreground" : "text-white"
           }`}
           aria-label="Menü"
