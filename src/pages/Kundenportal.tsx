@@ -328,9 +328,9 @@ const generateEpcQrData = (amount: number, reference: string): string => {
     "002",           // Version
     "1",             // Encoding (UTF-8)
     "SCT",           // SEPA Credit Transfer
-    "COBADEFFXXX",   // BIC (Placeholder - Commerzbank)
+    "COBADEFFXXX",   // BIC
     "Emilian Leber", // Beneficiary name
-    "DE89370400440532013000", // IBAN (Placeholder)
+    "DE10750400620610807000", // IBAN
     `EUR${amount.toFixed(2)}`, // Amount
     "",              // Purpose
     reference,       // Reference
@@ -2556,7 +2556,7 @@ const Kundenportal = () => {
                   Eine kurze Bewertung auf Google hilft anderen, mich zu finden. Das dauert nur 30 Sekunden!
                 </p>
                 <a
-                  href="https://search.google.com/local/writereview?placeid=PLACEHOLDER"
+                  href="https://g.page/r/CfLlgBMpyJ0vEAE/review"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-sm shadow-blue-200 transition-all active:scale-[0.98]"
@@ -2789,9 +2789,9 @@ const Kundenportal = () => {
 
                 {[
                   { label: "Empfänger", value: "Emilian Leber", key: "empfaenger" },
-                  { label: "IBAN", value: "DE89 3704 0044 0532 0130 00", key: "iban" },
+                  { label: "IBAN", value: "DE10 7504 0062 0610 8070 00", key: "iban" },
                   { label: "BIC", value: "COBADEFFXXX", key: "bic" },
-                  { label: "Bank", value: "Commerzbank", key: "bank" },
+                  { label: "Bank", value: "Commerzbank AG", key: "bank" },
                   { label: "Verwendungszweck", value: rechnungsNr, key: "verwendung" },
                 ].map(({ label, value, key }) => (
                   <div key={key} className="flex items-center gap-3 p-3 rounded-xl bg-black/[0.02] border border-black/[0.05]">
