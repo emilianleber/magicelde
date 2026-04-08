@@ -105,17 +105,17 @@ export const AwardBadges = ({ className = "" }: { className?: string }) => (
 
 /* ─── Client Logos ─── */
 const clientLogos: { name: string; logo?: string }[] = [
-  { name: "Schneider Weisse", logo: "/logos/schneider-weisse.png" },
-  { name: "Sixt", logo: "/logos/sixt.png" },
-  { name: "Sparkasse", logo: "/logos/sparkasse.png" },
-  { name: "Versicherungskammer Bayern", logo: "/logos/vkb.png" },
-  { name: "Wächter", logo: "/logos/waechter.png" },
-  { name: "STRABAG", logo: "/logos/strabag.png" },
-  { name: "Stadt Regensburg", logo: "/logos/stadt-regensburg.png" },
-  { name: "DPSG", logo: "/logos/dpsg.png" },
-  { name: "Steinhofer INGENIEURE", logo: "/logos/steinhofer.png" },
-  { name: "Wald&Wiese", logo: "/logos/wald-wiese.png" },
-  { name: "HEIM & HAUS", logo: "/logos/heim-haus.png" },
+  { name: "Schneider Weisse", logo: "/logos/schneider-weisse.svg" },
+  { name: "Sixt", logo: "/logos/sixt.svg" },
+  { name: "Sparkasse", logo: "/logos/sparkasse.svg" },
+  { name: "Versicherungskammer Bayern", logo: "/logos/vkb.svg" },
+  { name: "Wächter", logo: "/logos/waechter.svg" },
+  { name: "STRABAG", logo: "/logos/strabag.svg" },
+  { name: "Stadt Regensburg", logo: "/logos/stadt-regensburg.svg" },
+  { name: "DPSG", logo: "/logos/dpsg.svg" },
+  { name: "Steinhofer INGENIEURE", logo: "/logos/steinhofer.svg" },
+  { name: "Wald&Wiese", logo: "/logos/wald-wiese.svg" },
+  { name: "HEIM & HAUS", logo: "/logos/heim-haus.svg" },
 ];
 
 /* Logo Item – zeigt Bild falls vorhanden, sonst Text */
