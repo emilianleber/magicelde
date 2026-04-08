@@ -167,6 +167,15 @@ const Kontakt = () => (
         content="Jetzt Kontakt aufnehmen mit Zauberer Emilian Leber. Unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event – Antwort innerhalb von 24 Stunden."
       />
       <link rel="canonical" href="https://www.magicel.de/kontakt" />
+      <meta property="og:title" content="Kontakt & Anfrage – Zauberer Emilian Leber" />
+      <meta property="og:description" content="Jetzt Kontakt aufnehmen mit Zauberer Emilian Leber. Unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event – Antwort innerhalb von 24 Stunden." />
+      <meta property="og:url" content="https://www.magicel.de/kontakt" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Kontakt & Anfrage – Zauberer Emilian Leber" />
+      <meta name="twitter:description" content="Jetzt Kontakt aufnehmen mit Zauberer Emilian Leber. Unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event – Antwort innerhalb von 24 Stunden." />
     </Helmet>
     <PageLayout>
       <HeroKontakt />

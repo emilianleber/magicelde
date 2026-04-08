@@ -116,12 +116,21 @@ const FotosSection = () => {
 const Presse = () => (
   <>
     <Helmet>
-      <title>Presse – Zauberer Emilian Leber in den Medien</title>
+      <title>Presse – Emilian Leber | Pressekit &amp; Medien</title>
       <meta
         name="description"
         content="Presseinfos, Medienauftritte und Pressekit von Zauberer Emilian Leber. Für Journalisten und Medienanfragen – Fotos und Infomaterial zum Download."
       />
       <link rel="canonical" href="https://www.magicel.de/presse" />
+      <meta property="og:title" content="Presse – Emilian Leber | Pressekit & Medien" />
+      <meta property="og:description" content="Presseinfos, Medienauftritte und Pressekit von Zauberer Emilian Leber. Für Journalisten und Medienanfragen – Fotos und Infomaterial zum Download." />
+      <meta property="og:url" content="https://www.magicel.de/presse" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Presse – Emilian Leber | Pressekit & Medien" />
+      <meta name="twitter:description" content="Presseinfos, Medienauftritte und Pressekit von Zauberer Emilian Leber. Für Journalisten und Medienanfragen – Fotos und Infomaterial zum Download." />
     </Helmet>
     <PageLayout>
     <HeroPresse />

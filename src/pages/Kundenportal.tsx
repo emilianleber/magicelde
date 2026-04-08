@@ -7,6 +7,7 @@ import {
   FileText,
   MessageCircle,
   CheckCircle2,
+  Check,
   Circle,
   ArrowRight,
   Download,
@@ -34,6 +35,11 @@ import {
   Building2,
   AlertTriangle,
   X,
+  Star,
+  ExternalLink,
+  Landmark,
+  CreditCard,
+  Copy,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 
@@ -296,6 +302,42 @@ const AvatarDisplay = ({ name, avatarUrl, size = "md" }: { name: string; avatarU
   );
 };
 
+// Paket-Name für Kunden aufhübschen: S/M/L usw. entfernen
+const customerFriendlyPaketName = (name: string, anlass?: string | null): string => {
+  // Remove S/M/L/XL suffixes
+  const cleaned = name.replace(/\s+(S|M|L|XL)$/i, "").trim();
+  // Map to customer-friendly names
+  const anlassLower = (anlass || "").toLowerCase();
+  if (cleaned.toLowerCase().includes("kombination")) return "Ihr individuelles Showpaket";
+  if (cleaned.toLowerCase().includes("hochzeit")) return "Ihr Hochzeits-Showpaket";
+  if (cleaned.toLowerCase().includes("bühnenshow") || cleaned.toLowerCase().includes("buehnenshow")) return "Ihre Bühnenshow";
+  if (cleaned.toLowerCase().includes("close-up") || cleaned.toLowerCase().includes("closeup")) {
+    if (anlassLower.includes("hochzeit")) return "Ihre Hochzeits-Zaubershow";
+    return "Ihre Close-Up Zaubershow";
+  }
+  if (cleaned.toLowerCase().includes("magic dinner")) return "Ihr Magic Dinner";
+  if (cleaned.toLowerCase().includes("moderation")) return "Ihre Show-Moderation";
+  return "Ihr individuelles Showpaket";
+};
+
+// EPC QR Code Data für Banküberweisung
+const generateEpcQrData = (amount: number, reference: string): string => {
+  // EPC069-12 format for SEPA credit transfer QR codes
+  return [
+    "BCD",           // Service Tag
+    "002",           // Version
+    "1",             // Encoding (UTF-8)
+    "SCT",           // SEPA Credit Transfer
+    "COBADEFFXXX",   // BIC (Placeholder - Commerzbank)
+    "Emilian Leber", // Beneficiary name
+    "DE89370400440532013000", // IBAN (Placeholder)
+    `EUR${amount.toFixed(2)}`, // Amount
+    "",              // Purpose
+    reference,       // Reference
+    `Rechnung ${reference}`, // Remittance text
+  ].join("\n");
+};
+
 const Kundenportal = () => {
   const [user, setUser] = useState<SupaUser | null>(null);
   const [customer, setCustomer] = useState<PortalCustomer | null>(null);
@@ -341,6 +383,9 @@ const Kundenportal = () => {
   const [replySent, setReplySent] = useState(false);
   const [paketInfo, setPaketInfo] = useState<{ name: string; beschreibung: string; zieldauer: number; preis: number; format: string | null } | null>(null);
 
+  const [paymentDoc, setPaymentDoc] = useState<PortalDocument | null>(null);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [existingFeedbackEventIds, setExistingFeedbackEventIds] = useState<string[]>([]);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -521,6 +566,15 @@ const Kundenportal = () => {
     };
     fetchData();
   }, [user, previewCustomerId, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Feedback-Check: Welche Events haben schon Feedback?
+  useEffect(() => {
+    if (!customer?.id || events.length === 0) return;
+    const eventIds = events.map(e => e.id);
+    supabase.from("customer_feedback").select("event_id").in("event_id", eventIds).then(({ data }) => {
+      if (data) setExistingFeedbackEventIds(data.map((f: any) => f.event_id));
+    });
+  }, [customer?.id, events]);
 
   useEffect(() => {
     if (customer) {
@@ -935,7 +989,7 @@ const Kundenportal = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-sans text-[10px] text-accent uppercase tracking-[0.2em] font-semibold mb-1">Ihre Show</p>
-                      <h2 className="font-display text-xl font-bold text-foreground">{paketInfo.name}</h2>
+                      <h2 className="font-display text-xl font-bold text-foreground">{customerFriendlyPaketName(paketInfo.name, currentRequest?.anlass)}</h2>
                       <p className="font-sans text-sm text-muted-foreground mt-1">Bis zu {paketInfo.zieldauer} Minuten Showprogramm</p>
                     </div>
                   </div>
@@ -1182,42 +1236,81 @@ const Kundenportal = () => {
               );
             })}
 
-            {/* Invoice widget */}
+            {/* Invoice widgets - redesigned as proper cards */}
             {documents.filter(d => d.type === "Rechnung" || d.type === "Abschlagsrechnung" || d.type === "Schlussrechnung" || d.type === "Mahnung").length > 0 && (
-              <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
-                <div className="px-5 py-4 border-b border-black/[0.05] flex items-center justify-between">
-                  <h2 className="font-display text-sm font-bold text-foreground flex items-center gap-2">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-display text-base font-bold text-foreground flex items-center gap-2">
                     <FileText className="w-4 h-4 text-accent" /> Rechnungen
                   </h2>
                   <button onClick={() => setActiveTab("documents")} className="font-sans text-xs text-accent hover:text-accent/70 flex items-center gap-1">
-                    Alle <ArrowRight className="w-3 h-3" />
+                    Alle Dokumente <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>
-                <div className="divide-y divide-black/[0.04]">
+                <div className="grid sm:grid-cols-2 gap-4">
                   {documents.filter(d => d.type === "Rechnung" || d.type === "Abschlagsrechnung" || d.type === "Schlussrechnung" || d.type === "Mahnung").map(doc => {
                     const days = doc.due_date ? Math.round((new Date(doc.due_date).setHours(0,0,0,0) - new Date().setHours(0,0,0,0)) / 86400000) : null;
+                    const isPaid = doc.status === "bezahlt";
+                    const isOverdue = days !== null && days < 0;
+                    const betrag = doc.amount ?? doc.brutto;
                     return (
-                      <div key={doc.id} className="flex items-center gap-3 px-5 py-3.5">
-                        <div className="flex-1 min-w-0">
-                          <p className="font-sans text-sm font-medium text-foreground truncate">{doc.name}</p>
-                          <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                            {doc.amount != null && (
-                              <span className="font-sans text-xs text-muted-foreground">{new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(doc.amount)}</span>
-                            )}
-                            {doc.status === "bezahlt" ? (
-                              <span className="font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Bezahlt ✓</span>
-                            ) : days !== null ? (
-                              <span className={`font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full ${days < 0 ? "bg-red-100 text-red-700" : days <= 7 ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>
-                                {days < 0 ? `${Math.abs(days)} Tage überfällig` : days === 0 ? "Heute fällig" : `fällig in ${days} Tagen`}
-                              </span>
-                            ) : null}
+                      <div key={doc.id} className={`rounded-2xl bg-white border shadow-sm overflow-hidden transition-all hover:shadow-md ${isOverdue ? "border-red-200" : isPaid ? "border-green-200/60" : "border-black/[0.06]"}`}>
+                        {/* Top accent bar */}
+                        <div className={`h-1 ${isOverdue ? "bg-red-500" : isPaid ? "bg-green-500" : "bg-gradient-to-r from-amber-400 to-orange-400"}`} />
+
+                        <div className="p-5">
+                          {/* Header with download */}
+                          <div className="flex items-start justify-between gap-3 mb-3">
+                            <div>
+                              <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Rechnung</p>
+                              <p className="font-sans text-sm font-semibold text-foreground">{doc.nummer || doc.name}</p>
+                            </div>
+                            <button
+                              onClick={() => downloadPdf(doc)}
+                              disabled={pdfLoading === doc.id}
+                              className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-accent/10 text-accent hover:bg-accent/20 transition-all active:scale-95"
+                              title="PDF herunterladen"
+                            >
+                              {pdfLoading === doc.id
+                                ? <span className="w-4 h-4 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
+                                : <Download className="w-4 h-4" />
+                              }
+                            </button>
                           </div>
+
+                          {/* Price */}
+                          {betrag != null && (
+                            <p className="font-display text-2xl font-bold text-foreground mb-2">
+                              {new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(betrag)}
+                            </p>
+                          )}
+
+                          {/* Due date / status badge */}
+                          {isPaid ? (
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-100 text-green-700 mb-4">
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <span className="font-sans text-xs font-semibold">Bezahlt</span>
+                            </div>
+                          ) : days !== null ? (
+                            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-4 ${days < 0 ? "bg-red-100 text-red-700" : days <= 7 ? "bg-amber-100 text-amber-700" : "bg-blue-50 text-blue-700"}`}>
+                              <Clock className="w-3.5 h-3.5" />
+                              <span className="font-sans text-xs font-semibold">
+                                {days < 0 ? `${Math.abs(days)} Tage überfällig` : days === 0 ? "Heute fällig" : `Fällig in ${days} Tagen`}
+                              </span>
+                            </div>
+                          ) : null}
+
+                          {/* Pay now button (only for unpaid) */}
+                          {!isPaid && (
+                            <button
+                              onClick={() => setPaymentDoc(doc)}
+                              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-90 transition-all active:scale-[0.98]"
+                            >
+                              <CreditCard className="w-4 h-4" />
+                              Jetzt bezahlen
+                            </button>
+                          )}
                         </div>
-                        {doc.file_url && (
-                          <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-accent/10 text-accent hover:bg-accent/20 transition-all">
-                            <Download className="w-4 h-4" />
-                          </a>
-                        )}
                       </div>
                     );
                   })}
@@ -1408,6 +1501,49 @@ const Kundenportal = () => {
                 </div>
               </div>
             )}
+
+            {/* 30-day Feedback Reminder Banner */}
+            {(() => {
+              const feedbackCandidates = events.filter(e => {
+                if (!e.event_date) return false;
+                const daysSince = getCountdownDays(e.event_date);
+                if (daysSince === null) return false;
+                // Event was in the past (daysSince is negative), and at least 7 days ago
+                if (daysSince > -7) return false;
+                // No feedback yet for this event
+                if (existingFeedbackEventIds.includes(e.id)) return false;
+                // Event was completed
+                return ["event_erfolgt", "abgeschlossen"].includes(e.status || "");
+              });
+              if (feedbackCandidates.length === 0) return null;
+              const target = feedbackCandidates[0];
+              const daysSince = Math.abs(getCountdownDays(target.event_date) || 0);
+              return (
+                <div className="rounded-2xl bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 border border-amber-200/60 shadow-sm p-5 overflow-hidden relative">
+                  <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-amber-200/30 blur-2xl pointer-events-none" />
+                  <div className="relative z-10">
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+                        <Star className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <div>
+                        <p className="font-sans text-sm font-bold text-foreground">Wie war Ihr Event?</p>
+                        <p className="font-sans text-xs text-muted-foreground mt-0.5">
+                          {target.title} war vor {daysSince} Tagen -- Ihre Meinung ist uns wichtig!
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => { setFeedbackEventId(target.id); setActiveTab("feedback"); window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }); }}
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold transition-all active:scale-[0.98]"
+                    >
+                      <Star className="w-4 h-4" />
+                      Jetzt Feedback geben
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Contact strip */}
             <div className="rounded-2xl border border-black/[0.06] bg-white/80 shadow-sm p-5 flex items-center gap-4">
@@ -2375,12 +2511,69 @@ const Kundenportal = () => {
           };
 
           if (fbSent) return (
-            <div className="p-8 rounded-3xl bg-white border border-black/[0.06] shadow-sm text-center">
-              <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-                <Check className="w-8 h-8 text-green-600" />
+            <div className="space-y-5">
+              <div className="p-8 sm:p-10 rounded-3xl bg-white border border-black/[0.06] shadow-sm text-center relative overflow-hidden">
+                {/* Animated confetti-like decorations */}
+                <div className="absolute -top-4 -left-4 w-20 h-20 rounded-full bg-green-200/40 blur-xl animate-pulse" />
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-accent/10 blur-xl animate-pulse" style={{ animationDelay: "0.5s" }} />
+
+                <div className="relative z-10">
+                  {/* Animated checkmark */}
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center mx-auto mb-5 animate-[bounce_0.6s_ease-out]">
+                    <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center shadow-lg shadow-green-200">
+                      <Check className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
+
+                  <h2 className="font-display text-2xl font-bold text-foreground mb-2">Vielen Dank!</h2>
+                  <p className="font-sans text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
+                    Dein Feedback hilft mir, mein Programm noch besser zu machen. Ich freue mich auf das nächste Event mit dir!
+                  </p>
+
+                  {/* Star rating recap */}
+                  <div className="flex items-center justify-center gap-1 mt-4 mb-2">
+                    {[1, 2, 3, 4, 5].map(s => (
+                      <span key={s} className={`text-xl ${fbRating >= s ? "opacity-100" : "opacity-20"}`}>
+                        {fbRating >= s ? "\u2B50" : "\u2606"}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <h2 className="font-display text-xl font-bold text-foreground mb-2">Vielen Dank!</h2>
-              <p className="font-sans text-sm text-muted-foreground">Dein Feedback hilft mir, mein Programm noch besser zu machen. Ich freue mich auf das nächste Event mit dir!</p>
+
+              {/* Google Review CTA */}
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-50 via-white to-blue-50 border border-blue-200/60 shadow-sm text-center">
+                <div className="w-12 h-12 rounded-xl bg-white border border-blue-100 shadow-sm flex items-center justify-center mx-auto mb-4">
+                  <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                  </svg>
+                </div>
+                <h3 className="font-display text-lg font-bold text-foreground mb-1">Bewerten Sie uns auch auf Google!</h3>
+                <p className="font-sans text-sm text-muted-foreground mb-5 max-w-xs mx-auto">
+                  Eine kurze Bewertung auf Google hilft anderen, mich zu finden. Das dauert nur 30 Sekunden!
+                </p>
+                <a
+                  href="https://search.google.com/local/writereview?placeid=PLACEHOLDER"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-sm shadow-blue-200 transition-all active:scale-[0.98]"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Google Bewertung schreiben
+                </a>
+              </div>
+
+              {/* Back to dashboard */}
+              <button
+                onClick={() => { setActiveTab("dashboard"); window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }); }}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-black/[0.08] text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-black/[0.03] transition-all"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Zurück zur Übersicht
+              </button>
             </div>
           );
 
@@ -2551,6 +2744,110 @@ const Kundenportal = () => {
 
         </div>
       </section>
+
+      {/* Payment info modal */}
+      {paymentDoc && (() => {
+        const betrag = paymentDoc.amount ?? paymentDoc.brutto;
+        const rechnungsNr = paymentDoc.nummer || paymentDoc.name || "---";
+        const copyToClipboard = (text: string, field: string) => {
+          navigator.clipboard.writeText(text).then(() => {
+            setCopiedField(field);
+            setTimeout(() => setCopiedField(null), 2000);
+          });
+        };
+        return (
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setPaymentDoc(null)}>
+            <div className="w-full max-w-lg bg-white rounded-3xl border border-black/[0.1] shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+              {/* Header */}
+              <div className="bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-5 text-white relative overflow-hidden">
+                <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
+                <div className="relative z-10 flex items-start justify-between">
+                  <div>
+                    <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/50 mb-1">Zahlungsinformationen</p>
+                    <h3 className="font-display text-lg font-bold">{rechnungsNr}</h3>
+                  </div>
+                  <button onClick={() => setPaymentDoc(null)} className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all">
+                    <X className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+                {betrag != null && (
+                  <div className="mt-3">
+                    <p className="font-sans text-xs text-white/50">Betrag</p>
+                    <p className="font-display text-3xl font-bold text-white">
+                      {new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(betrag)}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Bank details */}
+              <div className="p-6 space-y-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Landmark className="w-4 h-4 text-accent" />
+                  <p className="font-sans text-sm font-bold text-foreground">Bankverbindung</p>
+                </div>
+
+                {[
+                  { label: "Empfänger", value: "Emilian Leber", key: "empfaenger" },
+                  { label: "IBAN", value: "DE89 3704 0044 0532 0130 00", key: "iban" },
+                  { label: "BIC", value: "COBADEFFXXX", key: "bic" },
+                  { label: "Bank", value: "Commerzbank", key: "bank" },
+                  { label: "Verwendungszweck", value: rechnungsNr, key: "verwendung" },
+                ].map(({ label, value, key }) => (
+                  <div key={key} className="flex items-center gap-3 p-3 rounded-xl bg-black/[0.02] border border-black/[0.05]">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-sans text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">{label}</p>
+                      <p className="font-sans text-sm font-semibold text-foreground font-mono">{value}</p>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(value.replace(/\s/g, key === "iban" ? "" : " ").trim(), key)}
+                      className="shrink-0 w-8 h-8 rounded-lg bg-black/[0.04] hover:bg-accent/10 flex items-center justify-center text-muted-foreground hover:text-accent transition-all active:scale-95"
+                      title="Kopieren"
+                    >
+                      {copiedField === key ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                ))}
+
+                {/* QR Code section */}
+                <div className="mt-4 pt-4 border-t border-black/[0.05]">
+                  <div className="flex items-center gap-2 mb-3">
+                    <CreditCard className="w-4 h-4 text-accent" />
+                    <p className="font-sans text-sm font-bold text-foreground">QR-Code für Banküberweisung</p>
+                  </div>
+                  <div className="flex items-center justify-center p-6 rounded-xl bg-black/[0.02] border border-black/[0.05]">
+                    {/* EPC QR Code placeholder - in production, use a QR library */}
+                    <div className="text-center">
+                      <div className="w-32 h-32 mx-auto mb-3 bg-white border-2 border-black/[0.1] rounded-xl flex items-center justify-center">
+                        <img
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(betrag ? generateEpcQrData(betrag, rechnungsNr) : rechnungsNr)}`}
+                          alt="QR Code"
+                          className="w-28 h-28 rounded-lg"
+                          crossOrigin="anonymous"
+                        />
+                      </div>
+                      <p className="font-sans text-xs text-muted-foreground">QR-Code mit Banking-App scannen</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Download button */}
+                <button
+                  onClick={() => { downloadPdf(paymentDoc); }}
+                  disabled={pdfLoading === paymentDoc.id}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-black/[0.08] text-sm font-semibold text-foreground hover:bg-black/[0.03] transition-all active:scale-[0.98]"
+                >
+                  {pdfLoading === paymentDoc.id
+                    ? <span className="w-4 h-4 rounded-full border-2 border-foreground/30 border-t-foreground animate-spin" />
+                    : <Download className="w-4 h-4" />
+                  }
+                  Rechnung herunterladen
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Event cancel modal */}
       {eventCancelId && (

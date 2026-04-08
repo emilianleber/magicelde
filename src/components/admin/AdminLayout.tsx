@@ -16,6 +16,7 @@ import {
   Mail,
   CalendarRange,
   Wand2,
+  CheckSquare,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -32,6 +33,7 @@ const mainNavItems = [
   { label: "Anfragen & Buchungen", href: "/admin/bookings",  icon: MessageCircle,  badge: true },
   { label: "Kunden",              href: "/admin/customers",  icon: Users },
   { label: "Kalender",            href: "/admin/kalender",   icon: CalendarRange },
+  { label: "Todos",               href: "/admin/todos",      icon: CheckSquare },
   { label: "Dokumente",           href: "/admin/dokumente",  icon: FileText },
   { label: "Mails",               href: "/admin/mails",      icon: Mail },
   { label: "Mein Programm",       href: "/admin/programm",   icon: Wand2 },

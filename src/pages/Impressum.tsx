@@ -1,7 +1,23 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 
 const Impressum = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Impressum – Emilian Leber</title>
+      <meta name="description" content="Impressum von Emilian Leber, Zauberer und Showkünstler aus Regensburg. Angaben gemäß § 5 TMG." />
+      <link rel="canonical" href="https://www.magicel.de/impressum" />
+      <meta property="og:title" content="Impressum – Emilian Leber" />
+      <meta property="og:description" content="Impressum von Emilian Leber, Zauberer und Showkünstler aus Regensburg. Angaben gemäß § 5 TMG." />
+      <meta property="og:url" content="https://www.magicel.de/impressum" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Impressum – Emilian Leber" />
+      <meta name="twitter:description" content="Impressum von Emilian Leber, Zauberer und Showkünstler aus Regensburg. Angaben gemäß § 5 TMG." />
+    </Helmet>
+    <PageLayout>
     <section className="min-h-screen">
       <div className="container px-6 pt-32 pb-24 md:pt-40">
         <div className="max-w-3xl mx-auto">
@@ -96,6 +112,7 @@ const Impressum = () => (
       </div>
     </section>
   </PageLayout>
+  </>
 );
 
 export default Impressum;

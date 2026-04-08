@@ -8,8 +8,10 @@ import html2canvas from "html2canvas";
 import {
   ArrowLeft, Pencil, Send, CheckCircle, XCircle, ArrowRight,
   Receipt, AlertTriangle, Plus, X, Clock, Trash2, Ban, MoreHorizontal,
-  Download, Globe, Mail, Loader2,
+  Download, Globe, Mail, Loader2, Search,
 } from "lucide-react";
+
+interface EmailSearchCustomer { id: string; name: string | null; email: string | null; company?: string | null; }
 
 const STATUS_CFG: Record<DokumentStatus, { label: string; cls: string; dot: string }> = {
   entwurf:     { label: "Entwurf",     cls: "bg-gray-100 text-gray-600",     dot: "bg-gray-400" },
@@ -130,6 +132,13 @@ export default function AdminDokumentDetail() {
   const [emailBody, setEmailBody] = useState("");
   const [sendMsg, setSendMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
 
+  // Customer email search for send panel
+  const [emailSearchQuery, setEmailSearchQuery] = useState("");
+  const [emailSearchResults, setEmailSearchResults] = useState<EmailSearchCustomer[]>([]);
+  const [showEmailDropdown, setShowEmailDropdown] = useState(false);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const emailDropdownRef = useRef<HTMLDivElement>(null);
+
   const [zahlungPanel, setZahlungPanel] = useState(false);
   const [zahlungForm, setZahlungForm] = useState({
     datum: new Date().toISOString().split("T")[0],
@@ -165,8 +174,40 @@ export default function AdminDokumentDetail() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc, searchParams]);
 
+  // Customer email search for the send panel
+  useEffect(() => {
+    const q = emailSearchQuery.trim().toLowerCase();
+    if (!q || q.length < 1) { setEmailSearchResults([]); setShowEmailDropdown(false); return; }
+    const doSearch = async () => {
+      const { data } = await supabase
+        .from("portal_customers")
+        .select("id,name,email,company")
+        .is("deleted_at", null)
+        .or(`email.ilike.%${q}%,name.ilike.%${q}%,company.ilike.%${q}%`)
+        .limit(8);
+      setEmailSearchResults((data as EmailSearchCustomer[]) || []);
+      setShowEmailDropdown(true);
+    };
+    const timer = setTimeout(doSearch, 250);
+    return () => clearTimeout(timer);
+  }, [emailSearchQuery]);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (
+        emailDropdownRef.current && !emailDropdownRef.current.contains(e.target as Node) &&
+        emailInputRef.current && !emailInputRef.current.contains(e.target as Node)
+      ) {
+        setShowEmailDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
   // Erfolgs-Toast nach Portal-Veröffentlichung (direkt gesetzt, kein URL-param nötig)
-  const [publishedToast, setPublishedToast] = useState(false);
+  const [publishedToast, setPublishedToast] = useState<false | "with_mail" | "no_mail">(false);
 
   const handleStatusChange = async (status: DokumentStatus) => {
     if (!id || !doc) return;
@@ -533,6 +574,10 @@ export default function AdminDokumentDetail() {
       let mailType: string | null = null;
       let mailRecordId: string | null = null;
 
+      // Auftragsbestaetigung: Status aktualisieren, aber KEINE Statusmail senden
+      // (AB-Bestaetigungsmail wird separat verschickt)
+      const skipStatusMail = doc.typ === "auftragsbestaetigung";
+
       if (doc.requestId) {
         let reqStatus: string | null = null;
         if (doc.typ === "angebot") reqStatus = "angebot_gesendet";
@@ -540,23 +585,27 @@ export default function AdminDokumentDetail() {
 
         if (reqStatus) {
           await supabase.from("portal_requests").update({ status: reqStatus }).eq("id", doc.requestId);
-          mailType = "request";
-          mailRecordId = doc.requestId;
+          if (!skipStatusMail) {
+            mailType = "request";
+            mailRecordId = doc.requestId;
+          }
         }
       } else if (doc.eventId) {
         let eventStatus: string | null = null;
         if (doc.typ === "auftragsbestaetigung") eventStatus = "vertrag_gesendet";
-        else if (doc.typ === "rechnung" || doc.typ === "abschlagsrechnung") eventStatus = "rechnung_gesendet";
+        else if (doc.typ === "rechnung" || doc.typ === "abschlagsrechnung" || doc.typ === "schlussrechnung") eventStatus = "rechnung_gesendet";
         else if (doc.typ === "mahnung") eventStatus = "rechnung_faellig";
 
         if (eventStatus) {
           await supabase.from("portal_events").update({ status: eventStatus }).eq("id", doc.eventId);
-          mailType = "event";
-          mailRecordId = doc.eventId;
+          if (!skipStatusMail) {
+            mailType = "event";
+            mailRecordId = doc.eventId;
+          }
         }
       }
 
-      // 3. Statusmail senden
+      // 3. Statusmail senden (nicht für Auftragsbestätigung – AB-Mail wird separat gesendet)
       if (mailType && mailRecordId) {
         try {
           await supabase.auth.refreshSession();
@@ -578,7 +627,7 @@ export default function AdminDokumentDetail() {
       sendPanelAutoOpened.current = false; // Reset: falls User erneut per ?send=1 kommt
       setSendPanel(false);
       navigate(`/admin/dokumente/${id}`, { replace: true }); // entfernt ?send=1
-      setPublishedToast(true);
+      setPublishedToast(skipStatusMail ? "no_mail" : "with_mail");
       setTimeout(() => setPublishedToast(false), 6000);
       await load();
     } catch (e: unknown) {
@@ -631,12 +680,27 @@ export default function AdminDokumentDetail() {
     } finally { setSendLoading(null); }
   };
 
-  const openSendPanel = () => {
+  const openSendPanel = async () => {
     if (!doc) return;
     const tl = TYP_LABEL[doc.typ] ?? doc.typ;
-    setEmailTo(doc.empfaenger.email ?? "");
+
+    // Auto-fill email from linked customer
+    let customerEmail = doc.empfaenger.email ?? "";
+    if (!customerEmail && doc.customerId) {
+      const { data: cust } = await supabase
+        .from("portal_customers")
+        .select("email")
+        .eq("id", doc.customerId)
+        .maybeSingle();
+      if (cust?.email) customerEmail = cust.email;
+    }
+
+    setEmailTo(customerEmail);
+    setEmailSearchQuery("");
+    setEmailSearchResults([]);
+    setShowEmailDropdown(false);
     setEmailSubject(`${tl} ${doc.nummer}`);
-    setEmailBody(`Sehr geehrte Damen und Herren,\n\nanbei erhalten Sie ${tl} ${doc.nummer} im Anhang.\n\nBei Fragen stehe ich gerne zur Verfügung.\n\nMit magischen Grüßen\n${doc.absender.name}`);
+    setEmailBody(`Sehr geehrte Damen und Herren,\n\nanbei erhalten Sie ${tl} ${doc.nummer} im Anhang.\n\nBei Fragen stehe ich gerne zur Verfügung.\n\nMit freundlichen Grüßen\nEmilian Leber\nMagicEL – Entertainment & Zauberkunst`);
     setSendMsg(null);
     setSendPanel(true);
   };
@@ -690,7 +754,9 @@ export default function AdminDokumentDetail() {
       {publishedToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3 rounded-2xl bg-emerald-600 text-white shadow-xl text-sm font-semibold animate-in fade-in slide-in-from-top-2 duration-300">
           <CheckCircle className="w-4 h-4 shrink-0" />
-          Im Kundenportal veröffentlicht · Status auf „Gesendet" gesetzt · Statusmail verschickt ✓
+          {publishedToast === "with_mail"
+            ? 'Im Kundenportal veröffentlicht · Status auf \u201EGesendet\u201C gesetzt · Statusmail verschickt'
+            : 'Im Kundenportal veröffentlicht · Status auf \u201EGesendet\u201C gesetzt'}
           <button onClick={() => setPublishedToast(false)} className="ml-2 opacity-70 hover:opacity-100">
             <X className="w-4 h-4" />
           </button>
@@ -1180,15 +1246,45 @@ export default function AdminDokumentDetail() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <div>
+                  <div className="relative">
                     <label className="text-xs text-muted-foreground mb-1 block">An</label>
-                    <input
-                      type="email"
-                      value={emailTo}
-                      onChange={(e) => setEmailTo(e.target.value)}
-                      placeholder="kunde@example.com"
-                      className="w-full rounded-xl bg-background border border-border/30 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
-                    />
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/50 pointer-events-none" />
+                      <input
+                        ref={emailInputRef}
+                        type="text"
+                        value={emailTo}
+                        onChange={(e) => {
+                          setEmailTo(e.target.value);
+                          setEmailSearchQuery(e.target.value);
+                        }}
+                        onFocus={() => { if (emailSearchResults.length > 0) setShowEmailDropdown(true); }}
+                        placeholder="E-Mail eingeben oder Kunde suchen..."
+                        className="w-full rounded-xl bg-background border border-border/30 pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+                      />
+                    </div>
+                    {showEmailDropdown && emailSearchResults.length > 0 && (
+                      <div
+                        ref={emailDropdownRef}
+                        className="absolute z-50 left-0 right-0 mt-1 bg-background border border-border/40 rounded-xl shadow-xl overflow-hidden max-h-48 overflow-y-auto"
+                      >
+                        {emailSearchResults.map((c) => (
+                          <button
+                            key={c.id}
+                            type="button"
+                            onClick={() => {
+                              setEmailTo(c.email || "");
+                              setEmailSearchQuery("");
+                              setShowEmailDropdown(false);
+                            }}
+                            className="w-full text-left px-3 py-2 hover:bg-muted/40 transition-colors border-b border-border/10 last:border-0"
+                          >
+                            <p className="text-sm font-medium text-foreground">{c.name || "Unbenannt"}{c.company ? ` · ${c.company}` : ""}</p>
+                            <p className="text-xs text-muted-foreground">{c.email || "Keine E-Mail"}</p>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 block">Betreff</label>

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import ProcessSteps from "@/components/landing/ProcessSteps";
@@ -296,7 +297,22 @@ const FAQBuehne = () => {
 };
 
 const Buehnenshow = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Bühnenshow Zauberer – Emilian Leber | Comedy-Zaubershow</title>
+      <meta name="description" content="Die Bühnenshow von Zauberer Emilian Leber: Comedy-Magie mit Dramaturgie, Publikumseinbindung und Wow-Momenten. Für Firmenfeiern, Galas und Events." />
+      <link rel="canonical" href="https://www.magicel.de/buehnenshow" />
+      <meta property="og:title" content="Bühnenshow Zauberer – Emilian Leber | Comedy-Zaubershow" />
+      <meta property="og:description" content="Die Bühnenshow von Zauberer Emilian Leber: Comedy-Magie mit Dramaturgie, Publikumseinbindung und Wow-Momenten. Für Firmenfeiern, Galas und Events." />
+      <meta property="og:url" content="https://www.magicel.de/buehnenshow" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Bühnenshow Zauberer – Emilian Leber | Comedy-Zaubershow" />
+      <meta name="twitter:description" content="Die Bühnenshow von Zauberer Emilian Leber: Comedy-Magie mit Dramaturgie, Publikumseinbindung und Wow-Momenten. Für Firmenfeiern, Galas und Events." />
+    </Helmet>
+    <PageLayout>
     <BackgroundHero
       imageSrc={stageImg}
       badge="Showkonzept"
@@ -318,6 +334,7 @@ const Buehnenshow = () => (
     <ProcessSteps />
     <BookingCTA headline={"Die Bühne gehört dir."} subline="Lass uns über dein Event sprechen — ich entwickle eine Show, die perfekt zu eurem Anlass passt." />
   </PageLayout>
+  </>
 );
 
 export default Buehnenshow;

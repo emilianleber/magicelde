@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import BackgroundHero from "@/components/landing/BackgroundHero";
@@ -180,7 +181,22 @@ const FAQModeration = () => {
 };
 
 const Moderation = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Event-Moderator – Emilian Leber | Moderation mit Magie</title>
+      <meta name="description" content="Event-Moderator Emilian Leber: Moderation mit Charme, Humor und optionaler Magie. Für Firmenfeiern, Galas, Award-Verleihungen und Messen." />
+      <link rel="canonical" href="https://www.magicel.de/moderation" />
+      <meta property="og:title" content="Event-Moderator – Emilian Leber | Moderation mit Magie" />
+      <meta property="og:description" content="Event-Moderator Emilian Leber: Moderation mit Charme, Humor und optionaler Magie. Für Firmenfeiern, Galas, Award-Verleihungen und Messen." />
+      <meta property="og:url" content="https://www.magicel.de/moderation" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Event-Moderator – Emilian Leber | Moderation mit Magie" />
+      <meta name="twitter:description" content="Event-Moderator Emilian Leber: Moderation mit Charme, Humor und optionaler Magie. Für Firmenfeiern, Galas, Award-Verleihungen und Messen." />
+    </Helmet>
+    <PageLayout>
     <BackgroundHero
       imageSrc={stageImg}
       badge="Moderation"
@@ -197,6 +213,7 @@ const Moderation = () => (
     <ProcessSteps />
     <BookingCTA headline={"Euer Event verdient einen besonderen Moderator."} subline="Ich moderiere mit Persönlichkeit, Charme und optionaler Magie — für Events, die in Erinnerung bleiben." />
   </PageLayout>
+  </>
 );
 
 export default Moderation;

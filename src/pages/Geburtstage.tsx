@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import ProcessSteps from "@/components/landing/ProcessSteps";
@@ -295,7 +296,22 @@ const UeberMichKurz = () => {
 };
 
 const Geburtstage = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Geburtstag Zauberer – Emilian Leber | Zaubershow für Geburtstage</title>
+      <meta name="description" content="Zauberer für Geburtstage: Emilian Leber macht deinen Geburtstag unvergesslich. Comedy-Magie als Überraschung für 30., 40., 50. oder 60. Geburtstag." />
+      <link rel="canonical" href="https://www.magicel.de/geburtstage" />
+      <meta property="og:title" content="Geburtstag Zauberer – Emilian Leber | Zaubershow für Geburtstage" />
+      <meta property="og:description" content="Zauberer für Geburtstage: Emilian Leber macht deinen Geburtstag unvergesslich. Comedy-Magie als Überraschung für 30., 40., 50. oder 60. Geburtstag." />
+      <meta property="og:url" content="https://www.magicel.de/geburtstage" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Geburtstag Zauberer – Emilian Leber | Zaubershow für Geburtstage" />
+      <meta name="twitter:description" content="Zauberer für Geburtstage: Emilian Leber macht deinen Geburtstag unvergesslich. Comedy-Magie als Überraschung für 30., 40., 50. oder 60. Geburtstag." />
+    </Helmet>
+    <PageLayout>
     <BackgroundHero
       imageSrc={heroImg}
       badge="Zauberer für deinen Geburtstag"
@@ -317,6 +333,7 @@ const Geburtstage = () => (
     <ProcessSteps />
     <BookingCTA headline={"Mach deinen Geburtstag\nunvergesslich."} subline="Erzähl mir von deiner Feier — ich entwickle das passende Konzept aus Comedy, Magie und Interaktion." />
   </PageLayout>
+  </>
 );
 
 export default Geburtstage;

@@ -45,12 +45,21 @@ const TicketsPage = () => {
   return (
     <>
       <Helmet>
-        <title>Shows &amp; Tickets – Zauberer Emilian Leber live erleben</title>
+        <title>Tickets – Emilian Leber | Shows &amp; Events</title>
         <meta
           name="description"
           content="Tickets für die Zaubershow von Emilian Leber. Erlebe 90 Minuten Comedy-Magie live – jetzt Tickets sichern und unvergessliche Abende genießen."
         />
         <link rel="canonical" href="https://www.magicel.de/tickets" />
+        <meta property="og:title" content="Tickets – Emilian Leber | Shows & Events" />
+        <meta property="og:description" content="Tickets für die Zaubershow von Emilian Leber. Erlebe 90 Minuten Comedy-Magie live – jetzt Tickets sichern und unvergessliche Abende genießen." />
+        <meta property="og:url" content="https://www.magicel.de/tickets" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+        <meta property="og:locale" content="de_DE" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Tickets – Emilian Leber | Shows & Events" />
+        <meta name="twitter:description" content="Tickets für die Zaubershow von Emilian Leber. Erlebe 90 Minuten Comedy-Magie live – jetzt Tickets sichern und unvergessliche Abende genießen." />
       </Helmet>
       <PageLayout>
       {/* Hero */}

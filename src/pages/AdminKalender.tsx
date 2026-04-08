@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar, ChevronLeft, ChevronRight, MapPin, Users, Clock, ArrowRight } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, MapPin, Users, Clock, ArrowRight, X, ExternalLink, CheckSquare, FileText } from "lucide-react";
 
 interface CalEvent {
   id: string;
@@ -23,7 +23,30 @@ interface CalRequest {
   datum: string | null;
   ort: string | null;
   status: string | null;
+  email?: string | null;
+  telefon?: string | null;
+  gaeste?: number | null;
+  nachricht?: string | null;
 }
+
+interface OwnEvent {
+  id: string;
+  summary: string;
+  start_date: string;
+  start_time: string | null;
+  end_date: string | null;
+  end_time: string | null;
+  all_day: boolean;
+  source_id: string | null;
+  location: string | null;
+  description: string | null;
+}
+
+type DrawerEntry =
+  | { type: "event"; data: CalEvent }
+  | { type: "request"; data: CalRequest }
+  | { type: "own"; data: OwnEvent }
+  | null;
 
 const STATUS_COLORS: Record<string, string> = {
   in_planung: "bg-blue-100 text-blue-700 border-blue-200",
@@ -55,12 +78,22 @@ export default function AdminKalender() {
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState<CalEvent[]>([]);
   const [requests, setRequests] = useState<CalRequest[]>([]);
-  const [ownEvents, setOwnEvents] = useState<{ id: string; summary: string; start_date: string; start_time: string | null; all_day: boolean; source_id: string | null }[]>([]);
+  const [ownEvents, setOwnEvents] = useState<OwnEvent[]>([]);
   const [calSources, setCalSources] = useState<Record<string, { name: string; color: string }>>({});
   const [todos, setTodos] = useState<{ id: string; title: string; due_date: string; status: string | null; priority: string | null }[]>([]);
   const [calMonth, setCalMonth] = useState<Date>(() => { const d = new Date(); d.setDate(1); return d; });
-  const [selectedEntry, setSelectedEntry] = useState<{ type: string; data: any } | null>(null);
+  const [drawerEntry, setDrawerEntry] = useState<DrawerEntry>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+
+  // Close drawer on Escape key
+  useEffect(() => {
+    const handleKey = (ev: KeyboardEvent) => { if (ev.key === "Escape") setDrawerEntry(null); };
+    if (drawerEntry) {
+      document.addEventListener("keydown", handleKey);
+      return () => document.removeEventListener("keydown", handleKey);
+    }
+  }, [drawerEntry]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -75,8 +108,8 @@ export default function AdminKalender() {
       setLoading(true);
       const [evtRes, reqRes, ownRes, srcRes, todoRes] = await Promise.all([
         supabase.from("portal_events").select("id,title,event_date,start_time,location,status,guests,format,customer_id").order("event_date", { ascending: true }),
-        supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id").is("event_id", null).order("datum", { ascending: true }),
-        supabase.from("calendar_events_cache").select("id,summary,start_date,start_time,all_day,source_id").order("start_date", { ascending: true }),
+        supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id,email,telefon,gaeste,nachricht").is("event_id", null).order("datum", { ascending: true }),
+        supabase.from("calendar_events_cache").select("id,summary,start_date,start_time,end_date,end_time,all_day,source_id,location,description").order("start_date", { ascending: true }),
         supabase.from("calendar_sources").select("id,name,color"),
         supabase.from("portal_todos").select("id,title,due_date,status,priority").not("due_date", "is", null).neq("status", "erledigt").order("due_date"),
       ]);
@@ -282,8 +315,8 @@ export default function AdminKalender() {
             </h3>
             <div className="space-y-3">
               {selEvts.map((e) => (
-                <Link key={e.id} to={`/admin/bookings/event/${e.id}`}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-blue-50 border border-blue-200/60 hover:border-blue-300 transition-colors group">
+                <button key={e.id} onClick={() => setDrawerEntry({ type: "event", data: e })}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl bg-blue-50 border border-blue-200/60 hover:border-blue-300 transition-colors group text-left">
                   <div className="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center shrink-0">
                     <Calendar className="w-4 h-4 text-blue-600" />
                   </div>
@@ -299,11 +332,11 @@ export default function AdminKalender() {
                     {formatEventStatus(e.status)}
                   </span>
                   <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Link>
+                </button>
               ))}
               {selReqs.map((r) => (
-                <Link key={r.id} to={`/admin/bookings/${r.id}`}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-orange-50 border border-orange-200/60 hover:border-orange-300 transition-colors group">
+                <button key={r.id} onClick={() => setDrawerEntry({ type: "request", data: r })}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl bg-orange-50 border border-orange-200/60 hover:border-orange-300 transition-colors group text-left">
                   <div className="w-8 h-8 rounded-lg bg-orange-400/15 flex items-center justify-center shrink-0">
                     <Calendar className="w-4 h-4 text-orange-600" />
                   </div>
@@ -316,19 +349,19 @@ export default function AdminKalender() {
                   </div>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 border border-orange-200 font-medium">Anfrage</span>
                   <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Link>
+                </button>
               ))}
               {/* ToDos */}
               {(todoByDate[selectedDate] || []).map((t) => (
                 <Link key={t.id} to="/admin/todos"
                   className="flex items-center gap-3 p-3 rounded-xl bg-amber-50 border border-amber-200/60 hover:border-amber-300 transition-colors">
                   <div className="w-8 h-8 rounded-lg bg-amber-400/15 flex items-center justify-center shrink-0">
-                    <Check className="w-4 h-4 text-amber-600" />
+                    <CheckSquare className="w-4 h-4 text-amber-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-foreground truncate">{t.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {t.priority === "hoch" ? "🔴 Hoch" : t.priority === "niedrig" ? "🟢 Niedrig" : "🟡 Mittel"}
+                      {t.priority === "hoch" ? "Hoch" : t.priority === "niedrig" ? "Niedrig" : "Mittel"}
                     </p>
                   </div>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200 font-medium">ToDo</span>
@@ -340,7 +373,9 @@ export default function AdminKalender() {
                 const srcColor = o.source_id && calSources[o.source_id]?.color || "#6366f1";
                 const srcName = o.source_id && calSources[o.source_id]?.name || "Kalender";
                 return (
-                  <div key={o.id} className="flex items-center gap-3 p-3 rounded-xl border" style={{ backgroundColor: `${srcColor}10`, borderColor: `${srcColor}30` }}>
+                  <button key={o.id} onClick={() => setDrawerEntry({ type: "own", data: o })}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl border text-left hover:opacity-80 transition-opacity cursor-pointer"
+                    style={{ backgroundColor: `${srcColor}10`, borderColor: `${srcColor}30` }}>
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${srcColor}20` }}>
                       <Clock className="w-4 h-4" style={{ color: srcColor }} />
                     </div>
@@ -348,9 +383,241 @@ export default function AdminKalender() {
                       <p className="text-sm font-semibold text-foreground truncate">{o.summary}</p>
                       <p className="text-xs text-muted-foreground">{o.start_time ? o.start_time.slice(0, 5) : "Ganztägig"} · {srcName}</p>
                     </div>
-                  </div>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </button>
                 );
               })}
+            </div>
+          </div>
+        )}
+
+        {/* ---- Detail Drawer (slide-in panel) ---- */}
+        {drawerEntry && (
+          <div className="fixed inset-0 z-50 flex justify-end" onClick={(ev) => { if (ev.target === ev.currentTarget) setDrawerEntry(null); }}>
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+
+            {/* Panel */}
+            <div
+              ref={drawerRef}
+              className="relative w-full max-w-md bg-background border-l border-border/40 shadow-2xl animate-in slide-in-from-right duration-200 overflow-y-auto"
+            >
+              {/* Drawer header */}
+              <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border/20 px-6 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {drawerEntry.type === "event" && (
+                    <>
+                      <div className="w-7 h-7 rounded-lg bg-blue-500/15 flex items-center justify-center">
+                        <Calendar className="w-3.5 h-3.5 text-blue-600" />
+                      </div>
+                      <span className="text-xs font-semibold text-blue-700 uppercase tracking-wider">Event</span>
+                    </>
+                  )}
+                  {drawerEntry.type === "request" && (
+                    <>
+                      <div className="w-7 h-7 rounded-lg bg-orange-400/15 flex items-center justify-center">
+                        <FileText className="w-3.5 h-3.5 text-orange-600" />
+                      </div>
+                      <span className="text-xs font-semibold text-orange-700 uppercase tracking-wider">Anfrage</span>
+                    </>
+                  )}
+                  {drawerEntry.type === "own" && (() => {
+                    const srcColor = drawerEntry.data.source_id && calSources[drawerEntry.data.source_id]?.color || "#6366f1";
+                    const srcName = drawerEntry.data.source_id && calSources[drawerEntry.data.source_id]?.name || "Kalender";
+                    return (
+                      <>
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${srcColor}20` }}>
+                          <Clock className="w-3.5 h-3.5" style={{ color: srcColor }} />
+                        </div>
+                        <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: srcColor }}>{srcName}</span>
+                      </>
+                    );
+                  })()}
+                </div>
+                <button
+                  onClick={() => setDrawerEntry(null)}
+                  className="w-8 h-8 rounded-lg border border-border/30 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Drawer body */}
+              <div className="px-6 py-5 space-y-5">
+                {/* ---- EVENT detail ---- */}
+                {drawerEntry.type === "event" && (() => {
+                  const e = drawerEntry.data;
+                  return (
+                    <>
+                      <div>
+                        <h2 className="text-lg font-bold text-foreground">{e.title}</h2>
+                        <span className={`inline-block mt-2 text-xs px-2.5 py-1 rounded-full border font-medium ${STATUS_COLORS[e.status || ""] || "bg-gray-100 text-gray-600 border-gray-200"}`}>
+                          {formatEventStatus(e.status)}
+                        </span>
+                      </div>
+
+                      <div className="space-y-3">
+                        {e.event_date && (
+                          <div className="flex items-start gap-3">
+                            <Calendar className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <div>
+                              <p className="text-sm font-medium text-foreground">
+                                {new Date(e.event_date + "T12:00:00").toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                              </p>
+                              {e.start_time && <p className="text-xs text-muted-foreground">{e.start_time} Uhr</p>}
+                            </div>
+                          </div>
+                        )}
+                        {e.location && (
+                          <div className="flex items-start gap-3">
+                            <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <p className="text-sm text-foreground">{e.location}</p>
+                          </div>
+                        )}
+                        {e.guests && (
+                          <div className="flex items-start gap-3">
+                            <Users className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <p className="text-sm text-foreground">{e.guests} Gäste</p>
+                          </div>
+                        )}
+                        {e.format && (
+                          <div className="flex items-start gap-3">
+                            <FileText className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <p className="text-sm text-foreground">{e.format}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-2 border-t border-border/20">
+                        <Link
+                          to={`/admin/bookings/event/${e.id}`}
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-opacity"
+                        >
+                          Details öffnen <ExternalLink className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </>
+                  );
+                })()}
+
+                {/* ---- REQUEST detail ---- */}
+                {drawerEntry.type === "request" && (() => {
+                  const r = drawerEntry.data;
+                  return (
+                    <>
+                      <div>
+                        <h2 className="text-lg font-bold text-foreground">{r.anlass || "Anfrage"}</h2>
+                        <span className="inline-block mt-2 text-xs px-2.5 py-1 rounded-full bg-orange-100 text-orange-700 border border-orange-200 font-medium">
+                          Anfrage
+                        </span>
+                      </div>
+
+                      <div className="space-y-3">
+                        {r.name && (
+                          <div className="flex items-start gap-3">
+                            <Users className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <div>
+                              <p className="text-sm font-medium text-foreground">{r.name}</p>
+                              {r.email && <p className="text-xs text-muted-foreground">{r.email}</p>}
+                              {r.telefon && <p className="text-xs text-muted-foreground">{r.telefon}</p>}
+                            </div>
+                          </div>
+                        )}
+                        {r.datum && (
+                          <div className="flex items-start gap-3">
+                            <Calendar className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <p className="text-sm text-foreground">
+                              {new Date(r.datum + "T12:00:00").toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                            </p>
+                          </div>
+                        )}
+                        {r.ort && (
+                          <div className="flex items-start gap-3">
+                            <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <p className="text-sm text-foreground">{r.ort}</p>
+                          </div>
+                        )}
+                        {r.gaeste && (
+                          <div className="flex items-start gap-3">
+                            <Users className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <p className="text-sm text-foreground">{r.gaeste} Gäste</p>
+                          </div>
+                        )}
+                        {r.nachricht && (
+                          <div className="rounded-xl bg-muted/20 border border-border/20 p-3">
+                            <p className="text-xs font-semibold text-muted-foreground mb-1">Nachricht</p>
+                            <p className="text-sm text-foreground whitespace-pre-wrap">{r.nachricht}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-2 border-t border-border/20">
+                        <Link
+                          to={`/admin/bookings/${r.id}`}
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-opacity"
+                        >
+                          Details öffnen <ExternalLink className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </>
+                  );
+                })()}
+
+                {/* ---- OWN EVENT (calendar_events_cache) detail ---- */}
+                {drawerEntry.type === "own" && (() => {
+                  const o = drawerEntry.data;
+                  const srcColor = o.source_id && calSources[o.source_id]?.color || "#6366f1";
+                  const srcName = o.source_id && calSources[o.source_id]?.name || "Kalender";
+                  return (
+                    <>
+                      <div>
+                        <h2 className="text-lg font-bold text-foreground">{o.summary}</h2>
+                        <span
+                          className="inline-block mt-2 text-xs px-2.5 py-1 rounded-full border font-medium"
+                          style={{ backgroundColor: `${srcColor}15`, color: srcColor, borderColor: `${srcColor}40` }}
+                        >
+                          {srcName}
+                        </span>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-3">
+                          <Calendar className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                          <div>
+                            <p className="text-sm font-medium text-foreground">
+                              {new Date(o.start_date + "T12:00:00").toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                            </p>
+                            {o.all_day ? (
+                              <p className="text-xs text-muted-foreground">Ganztägig</p>
+                            ) : (
+                              <p className="text-xs text-muted-foreground">
+                                {o.start_time ? o.start_time.slice(0, 5) : ""}{o.end_time ? ` – ${o.end_time.slice(0, 5)}` : ""} Uhr
+                              </p>
+                            )}
+                            {o.end_date && o.end_date !== o.start_date && (
+                              <p className="text-xs text-muted-foreground">
+                                bis {new Date(o.end_date + "T12:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" })}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        {o.location && (
+                          <div className="flex items-start gap-3">
+                            <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <p className="text-sm text-foreground">{o.location}</p>
+                          </div>
+                        )}
+                        {o.description && (
+                          <div className="rounded-xl bg-muted/20 border border-border/20 p-3">
+                            <p className="text-xs font-semibold text-muted-foreground mb-1">Beschreibung</p>
+                            <p className="text-sm text-foreground whitespace-pre-wrap">{o.description}</p>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
             </div>
           </div>
         )}
@@ -376,8 +643,8 @@ export default function AdminKalender() {
                 const evtDate = new Date(e.event_date! + "T12:00:00");
                 const daysUntil = Math.round((evtDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
                 return (
-                  <Link key={e.id} to={`/admin/bookings/event/${e.id}`}
-                    className="flex items-center gap-4 p-3 rounded-xl bg-background/40 border border-border/20 hover:border-accent/30 hover:bg-muted/20 transition-all group">
+                  <button key={e.id} onClick={() => setDrawerEntry({ type: "event", data: e })}
+                    className="w-full flex items-center gap-4 p-3 rounded-xl bg-background/40 border border-border/20 hover:border-accent/30 hover:bg-muted/20 transition-all group text-left">
                     <div className="shrink-0 w-12 text-center">
                       <p className="text-[10px] font-semibold uppercase text-muted-foreground">
                         {evtDate.toLocaleDateString("de-DE", { month: "short" })}
@@ -400,7 +667,7 @@ export default function AdminKalender() {
                       </p>
                     </div>
                     <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </Link>
+                  </button>
                 );
               })}
             </div>

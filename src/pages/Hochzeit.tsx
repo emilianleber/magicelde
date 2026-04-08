@@ -3,6 +3,7 @@ import BookingCTA from "@/components/landing/BookingCTA";
 import ProcessSteps from "@/components/landing/ProcessSteps";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import BackgroundHero from "@/components/landing/BackgroundHero";
+import { TrustStrip, ClientLogos } from "@/components/landing/TrustElements";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
@@ -781,6 +782,15 @@ const Hochzeit = () => (
         content="Emilian Leber ist Hochzeitszauberer und sorgt in München, Berlin, Hamburg und deutschlandweit mit moderner Zauberkunst für unvergessliche Momente auf Ihrer Hochzeit."
       />
       <link rel="canonical" href="https://www.magicel.de/hochzeit" />
+      <meta property="og:title" content="Hochzeitszauberer – Emilian Leber | Zauberer für Hochzeiten" />
+      <meta property="og:description" content="Emilian Leber ist Hochzeitszauberer und sorgt deutschlandweit mit moderner Zauberkunst für unvergessliche Momente auf Ihrer Hochzeit." />
+      <meta property="og:url" content="https://www.magicel.de/hochzeit" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Hochzeitszauberer – Emilian Leber | Zauberer für Hochzeiten" />
+      <meta name="twitter:description" content="Emilian Leber ist Hochzeitszauberer und sorgt deutschlandweit mit moderner Zauberkunst für unvergessliche Momente auf Ihrer Hochzeit." />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Service",
@@ -800,6 +810,8 @@ const Hochzeit = () => (
 
     <PageLayout>
       <HeroWedding />
+      <TrustStrip />
+      <TestimonialsSlider />
       <WarumSection />
       <EmotionenSection />
       <VergleichSection />
@@ -807,7 +819,6 @@ const Hochzeit = () => (
       <GaesteErlebnis />
       <PaketeSection />
       <UeberMichKurz />
-      <TestimonialsSlider />
       <GalerieWedding />
       <TippsSection />
       <StatsWedding />

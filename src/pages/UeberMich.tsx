@@ -214,6 +214,15 @@ const UeberMich = () => (
         content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 500+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows."
       />
       <link rel="canonical" href="https://www.magicel.de/ueber-mich" />
+      <meta property="og:title" content="Über Emilian Leber – Zauberer & Showkünstler" />
+      <meta property="og:description" content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 500+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows." />
+      <meta property="og:url" content="https://www.magicel.de/ueber-mich" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Über Emilian Leber – Zauberer & Showkünstler" />
+      <meta name="twitter:description" content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 500+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows." />
     </Helmet>
     <PageLayout>
     <HeroUeber />

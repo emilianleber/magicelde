@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -60,7 +61,34 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
 const FAQPage = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>FAQ – Häufige Fragen | Emilian Leber Zauberer</title>
+        <meta name="description" content="Häufige Fragen zu Buchung, Shows, Preisen und Technik. Alles, was du über Zauberer Emilian Leber und seine Shows wissen musst." />
+        <link rel="canonical" href="https://www.magicel.de/faq" />
+        <meta property="og:title" content="FAQ – Häufige Fragen | Emilian Leber Zauberer" />
+        <meta property="og:description" content="Häufige Fragen zu Buchung, Shows, Preisen und Technik. Alles, was du über Zauberer Emilian Leber und seine Shows wissen musst." />
+        <meta property="og:url" content="https://www.magicel.de/faq" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+        <meta property="og:locale" content="de_DE" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="FAQ – Häufige Fragen | Emilian Leber Zauberer" />
+        <meta name="twitter:description" content="Häufige Fragen zu Buchung, Shows, Preisen und Technik. Alles, was du über Zauberer Emilian Leber und seine Shows wissen musst." />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": faqs.flatMap(cat => cat.items.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": item.a
+            }
+          })))
+        })}</script>
+      </Helmet>
+      <PageLayout>
       <section className="relative min-h-[60vh] flex flex-col justify-center overflow-hidden">
         <div className="container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
           <div className="max-w-5xl mx-auto text-center">
@@ -95,6 +123,7 @@ const FAQPage = () => {
 
       <BookingCTA headline={"Noch Fragen?"} subline="Schreib mir einfach — ich antworte persönlich und innerhalb von 24 Stunden." buttonText="Jetzt Kontakt aufnehmen" />
     </PageLayout>
+    </>
   );
 };
 

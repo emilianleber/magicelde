@@ -6,7 +6,7 @@ import { dokumenteService } from "@/services/dokumenteService";
 import type { Dokument, DokumentTyp, DokumentStatus } from "@/types/dokumente";
 import {
   Plus, FileText, TrendingUp, AlertTriangle, CheckCircle,
-  Search, Trash2, Ban, ThumbsUp, ThumbsDown, MoreVertical, Eye, Mail, BellRing, CircleCheck,
+  Search, Trash2, Ban, ThumbsUp, ThumbsDown, MoreVertical, Eye, Mail, BellRing, CircleCheck, ArrowRight,
 } from "lucide-react";
 
 const STATUS_CONFIG: Record<DokumentStatus, { label: string; dot: string }> = {
@@ -131,6 +131,27 @@ const TYP_PATH: Record<DokumentTyp, string> = {
   gutschrift: "/admin/dokumente",
   stornorechnung: "/admin/dokumente",
 };
+
+// ── Nächster Schritt pro Dokumenttyp ─────────────────────────────────────────
+function getNextStep(doc: Dokument): { label: string; href: string } | null {
+  if (doc.status === "storniert") return null;
+  switch (doc.typ) {
+    case "angebot":
+      if (doc.status === "akzeptiert")
+        return { label: "Auftragsbestätigung erstellen", href: `/admin/dokumente/new?typ=auftragsbestaetigung&quelldokumentId=${doc.id}&quelldokumentNummer=${encodeURIComponent(doc.nummer)}` };
+      return null;
+    case "auftragsbestaetigung":
+      if (doc.status === "gesendet" || doc.status === "akzeptiert")
+        return { label: "Abschlagsrechnung erstellen", href: `/admin/dokumente/new?typ=abschlagsrechnung&quelldokumentId=${doc.id}&quelldokumentNummer=${encodeURIComponent(doc.nummer)}` };
+      return null;
+    case "abschlagsrechnung":
+      if (doc.status === "bezahlt" || doc.status === "offen")
+        return { label: "Schlussrechnung erstellen", href: `/admin/dokumente/new?typ=schlussrechnung&quelldokumentId=${doc.id}&quelldokumentNummer=${encodeURIComponent(doc.nummer)}` };
+      return null;
+    default:
+      return null;
+  }
+}
 
 export default function AdminDokumenteListe() {
   const navigate = useNavigate();
@@ -507,6 +528,11 @@ export default function AdminDokumenteListe() {
                             </button>
                             {showMenu && (
                               <div className="absolute right-0 top-full mt-1 z-50 bg-background border border-border/30 rounded-xl shadow-xl overflow-hidden w-48 py-1">
+                                {(() => { const ns = getNextStep(doc); return ns ? (
+                                  <button onClick={(e) => { e.stopPropagation(); setActionId(null); navigate(ns.href); }} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-indigo-700 hover:bg-indigo-50 transition-colors text-left font-medium border-b border-border/10">
+                                    <ArrowRight className="w-3.5 h-3.5 shrink-0" /> {ns.label}
+                                  </button>
+                                ) : null; })()}
                                 {!isBezahlt && !isStorniert && (
                                   <button onClick={(e) => handleStatusChange(e, doc, "bezahlt")} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-green-700 hover:bg-green-50 transition-colors text-left">
                                     <CircleCheck className="w-3.5 h-3.5 shrink-0" /> Als bezahlt markieren
@@ -586,6 +612,11 @@ export default function AdminDokumenteListe() {
                             </button>
                             {showMenu && (
                               <div className="absolute right-0 top-full mt-1 z-50 bg-background border border-border/30 rounded-xl shadow-xl overflow-hidden w-44 py-1">
+                                {(() => { const ns = getNextStep(doc); return ns ? (
+                                  <button onClick={(e) => { e.stopPropagation(); setActionId(null); navigate(ns.href); }} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-indigo-700 hover:bg-indigo-50 transition-colors text-left font-medium border-b border-border/10">
+                                    <ArrowRight className="w-3.5 h-3.5 shrink-0" /> {ns.label}
+                                  </button>
+                                ) : null; })()}
                                 {canAcceptReject && (
                                   <button onClick={(e) => handleStatusChange(e, doc, "akzeptiert")} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-green-700 hover:bg-green-50 transition-colors text-left">
                                     <ThumbsUp className="w-3.5 h-3.5 shrink-0" /> Annehmen
