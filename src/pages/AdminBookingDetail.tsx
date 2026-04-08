@@ -258,6 +258,7 @@ const AdminBookingDetail = () => {
   const [abschlagCreating, setAbschlagCreating] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [dismissedWarnings, setDismissedWarnings] = useState<Set<string>>(new Set());
   const [converting, setConverting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -1013,16 +1014,18 @@ const AdminBookingDetail = () => {
           </div>
 
           {/* ── Uhrzeit-Warnung ── */}
-          {!uhrzeit && datum && (
+          {!uhrzeit && datum && !dismissedWarnings.has("uhrzeit") && (
             <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center gap-2 text-xs text-amber-700 font-medium">
-              ⚠️ Uhrzeit fehlt – bitte mit Kunde klären
+              <span className="flex-1">⚠️ Uhrzeit fehlt – bitte mit Kunde klären</span>
+              <button onClick={() => setDismissedWarnings(prev => new Set(prev).add("uhrzeit"))} className="p-0.5 hover:text-amber-900"><X className="w-3.5 h-3.5" /></button>
             </div>
           )}
 
           {/* ── Terminkonflikt-Warnung ── */}
-          {datum && calendarConflicts.length > 0 && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-medium">
-              🚨 Terminkonflikt am {new Date(datum).toLocaleDateString("de-DE")}: {calendarConflicts.map(c => c.summary).join(", ")}
+          {datum && calendarConflicts.length > 0 && !dismissedWarnings.has("konflikt") && (
+            <div className="p-3 rounded-xl bg-red-50 border border-red-200 flex items-center gap-2 text-xs text-red-700 font-medium">
+              <span className="flex-1">🚨 Terminkonflikt am {new Date(datum).toLocaleDateString("de-DE")}: {calendarConflicts.map(c => c.summary).join(", ")}</span>
+              <button onClick={() => setDismissedWarnings(prev => new Set(prev).add("konflikt"))} className="p-0.5 hover:text-red-900"><X className="w-3.5 h-3.5" /></button>
             </div>
           )}
 
