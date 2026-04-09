@@ -54,7 +54,7 @@ const VideoHeroSection = () => (
   </div>
 );
 
-/* ─── 3. Social Proof / Zahlen ─── */
+/* ─── 3. Social Proof / Zahlen (Dark Section) ─── */
 const StatItem = ({
   end,
   suffix,
@@ -68,11 +68,11 @@ const StatItem = ({
 
   return (
     <div className="text-center" ref={ref}>
-      <p className="font-display text-5xl md:text-6xl font-bold text-foreground tabular-nums">
+      <p className="font-display text-6xl md:text-7xl lg:text-8xl font-black tabular-nums text-gradient glow-number">
         {count}
         {suffix}
       </p>
-      <p className="font-sans text-xs uppercase tracking-widest text-muted-foreground mt-3">
+      <p className="font-sans text-xs uppercase tracking-[0.2em] text-white/40 mt-4">
         {label}
       </p>
     </div>
@@ -83,17 +83,69 @@ const SocialProofSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section className="section-medium" ref={ref}>
+    <section className="section-dark section-large" ref={ref}>
       <div className="container px-6">
+        <div
+          className={`max-w-3xl mx-auto text-center mb-20 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <h2 className="headline-section">
+            Zahlen, die <span className="text-gradient">sprechen</span>.
+          </h2>
+        </div>
         <div
           className={`flex flex-wrap justify-center gap-16 md:gap-24 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
+          style={{ animationDelay: "0.15s" }}
         >
           <StatItem end={200} suffix="+" label="Events" />
           <StatItem end={10} suffix="+" label="Jahre Erfahrung" />
           <StatItem end={100} suffix="%" label="Weiterempfehlung" />
           <StatItem end={30} suffix="+" label="Bewertungen" />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─── Video Section (Dark) ─── */
+const VideoSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+
+  return (
+    <section className="section-dark section-large" ref={ref}>
+      <div className="container px-6">
+        <div
+          className={`max-w-3xl mx-auto text-center mb-16 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <span className="badge-accent mb-8 inline-flex">Live erleben</span>
+          <h2 className="headline-section mb-6">
+            Magie in <span className="text-gradient">Aktion</span>.
+          </h2>
+          <p className="text-lg text-white/50 max-w-xl mx-auto">
+            Ein Ausschnitt aus einer Live-Performance — erlebe die Energie, die
+            Reaktionen und die Momente, die ein Event unvergesslich machen.
+          </p>
+        </div>
+        <div
+          className={`max-w-4xl mx-auto ${
+            isVisible ? "animate-scale-up" : "opacity-0"
+          }`}
+          style={{ animationDelay: "0.2s" }}
+        >
+          <div className="video-container rounded-3xl overflow-hidden glow-accent">
+            <iframe
+              src="https://www.youtube.com/embed/R0_mXGxzC9E"
+              title="Emilian Leber — Live Performance"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -157,7 +209,7 @@ const ShowformateSlider = () => {
         >
           <span className="badge-accent mb-8 inline-flex">Showkonzepte</span>
           <h2 className="headline-section text-foreground mb-6">
-            Fünf Formate. Ein Versprechen.
+            Fünf Formate. Ein <span className="text-gradient">Versprechen</span>.
           </h2>
           <p className="text-body max-w-xl mx-auto">
             Jedes Showformat ist einzigartig — und wird individuell auf dein
@@ -212,7 +264,7 @@ const ComedySection = () => {
               Comedy + Magie
             </span>
             <h2 className="headline-section text-foreground mb-6">
-              Warum Zauberer mit Comedy so gut funktionieren.
+              Warum Zauberer mit Comedy so gut <span className="text-gradient">funktionieren</span>.
             </h2>
 
             <div className="space-y-5 text-detail max-w-lg">
@@ -307,7 +359,7 @@ const ErlebnisSection = () => {
         >
           <span className="badge-muted mb-8 inline-flex">Das Erlebnis</span>
           <h2 className="headline-section text-foreground mb-6">
-            Was deine Gäste erleben.
+            Was deine Gäste <span className="text-gradient">erleben</span>.
           </h2>
           <p className="text-body max-w-xl mx-auto">
             Es geht nicht um Tricks. Es geht um die Momente dazwischen — um
@@ -365,7 +417,7 @@ const ReferenzenSlider = () => {
   ];
 
   return (
-    <section className="section-large" ref={ref}>
+    <section className="section-dark section-large overflow-hidden" ref={ref} style={{ background: "linear-gradient(135deg, #08080d 0%, #0f0a1e 50%, #08080d 100%)" }}>
       <div className="container px-6">
         <div
           className={`max-w-3xl mx-auto text-center mb-16 ${
@@ -373,31 +425,31 @@ const ReferenzenSlider = () => {
           }`}
         >
           <span className="badge-accent mb-8 inline-flex">Bewertungen</span>
-          <h2 className="headline-section text-foreground mb-6">
-            Was Kunden sagen.
+          <h2 className="headline-section mb-6">
+            Was Kunden <span className="text-gradient">sagen</span>.
           </h2>
         </div>
 
         <HorizontalSlider
           items={testimonials.map((t) => ({
             content: (
-              <blockquote className="p-8 rounded-3xl bg-muted/40 h-full flex flex-col">
+              <blockquote className="p-8 rounded-3xl glass-light h-full flex flex-col">
                 <div className="flex gap-0.5 mb-5">
                   {[...Array(5)].map((_, j) => (
                     <Star
                       key={j}
-                      className="w-4 h-4 fill-accent/70 text-accent/70"
+                      className="w-4 h-4 fill-yellow-400/80 text-yellow-400/80"
                     />
                   ))}
                 </div>
-                <p className="font-sans text-base text-foreground leading-relaxed mb-6 flex-1">
+                <p className="font-sans text-base text-white/85 leading-relaxed mb-6 flex-1">
                   „{t.quote}"
                 </p>
                 <footer>
-                  <p className="font-sans text-sm font-semibold text-foreground">
+                  <p className="font-sans text-sm font-semibold text-white">
                     {t.author}
                   </p>
-                  <p className="font-sans text-xs text-muted-foreground">
+                  <p className="font-sans text-xs text-white/40">
                     {t.role}
                   </p>
                 </footer>
@@ -579,7 +631,7 @@ const FAQIntegrated = () => {
   ];
 
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-dark section-large" ref={ref}>
       <div className="container px-6">
         <div
           className={`max-w-3xl mx-auto ${
@@ -587,28 +639,28 @@ const FAQIntegrated = () => {
           }`}
         >
           <div className="text-center mb-16">
-            <span className="badge-muted mb-8 inline-flex">FAQ</span>
-            <h2 className="headline-section text-foreground mb-6">
-              Häufige Fragen.
+            <span className="badge-accent mb-8 inline-flex">FAQ</span>
+            <h2 className="headline-section mb-6">
+              Häufige <span className="text-gradient">Fragen</span>.
             </h2>
           </div>
 
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-white/10">
             {faqs.map((faq) => (
               <details key={faq.q} className="group py-6">
-                <summary className="flex items-center justify-between cursor-pointer font-sans text-base md:text-lg font-medium text-foreground pr-8 hover:text-accent transition-colors list-none">
+                <summary className="flex items-center justify-between cursor-pointer font-sans text-base md:text-lg font-medium text-white/90 pr-8 hover:text-white transition-colors list-none">
                   {faq.q}
-                  <span className="text-muted-foreground group-open:rotate-45 transition-transform duration-300 text-xl">
+                  <span className="text-white/30 group-open:rotate-45 transition-transform duration-300 text-xl">
                     +
                   </span>
                 </summary>
-                <p className="text-detail max-w-2xl mt-4">{faq.a}</p>
+                <p className="text-white/50 max-w-2xl mt-4 text-sm leading-relaxed">{faq.a}</p>
               </details>
             ))}
           </div>
 
           <div className="text-center mt-12">
-            <Link to="/faq" className="btn-secondary">
+            <Link to="/faq" className="inline-flex items-center gap-2 text-sm font-medium text-white/50 hover:text-white transition-colors">
               Alle Fragen ansehen →
             </Link>
           </div>
@@ -698,6 +750,7 @@ const Index = () => {
         <AnlassSection />
         <ReferenzenSlider />
         <ComedySection />
+        <VideoSection />
         <ErlebnisSection />
         <SocialProofSection />
         <GalerieSection />
