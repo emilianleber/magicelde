@@ -5,7 +5,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
+import staunenImg from "@/assets/staunen.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import greatestTalentImg from "@/assets/greatest-talent-presse.jpg";
 import talentsTeamImg from "@/assets/talents-of-magic-team.jpg";
@@ -243,18 +243,18 @@ const FotosSection = () => {
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 max-w-6xl mx-auto ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
           {[
-            { src: portraitImg, label: "Portrait" },
-            { src: stageImg, label: "Bühnenshow" },
-            { src: heroImg, label: "Performance" },
-            { src: audienceImg, label: "Publikum" },
-            { src: closeupImg, label: "Close-Up Magie" },
-            { src: greatestTalentImg, label: "Greatest Talent" },
-            { src: talentsTeamImg, label: "Talents of Magic Team" },
-            { src: buehneDpsgImg, label: "Bühne DPSG" },
-            { src: schneiderWeisseImg, label: "Schneider Weisse Close-Up" },
+            { src: portraitImg, label: "Portrait", pos: "object-top" },
+            { src: stageImg, label: "Bühnenshow", pos: "object-center" },
+            { src: heroImg, label: "Performance", pos: "object-center" },
+            { src: staunenImg, label: "Publikum", pos: "object-top" },
+            { src: closeupImg, label: "Close-Up Magie", pos: "object-center" },
+            { src: greatestTalentImg, label: "Greatest Talent", pos: "object-center" },
+            { src: talentsTeamImg, label: "Talents of Magic Team", pos: "object-center" },
+            { src: buehneDpsgImg, label: "Bühne DPSG", pos: "object-top" },
+            { src: schneiderWeisseImg, label: "Schneider Weisse Close-Up", pos: "object-top" },
           ].map((img, i) => (
             <div key={i} className="group rounded-2xl overflow-hidden aspect-[4/3] relative">
-              <img src={img.src} alt={`Pressefoto – ${img.label}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+              <img src={img.src} alt={`Pressefoto – ${img.label}`} className={`w-full h-full object-cover ${img.pos} group-hover:scale-105 transition-transform duration-500`} loading="lazy" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                 <span className="text-white text-xs font-medium">{img.label}</span>
               </div>

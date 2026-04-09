@@ -32,8 +32,6 @@ import heroStartImg from "@/assets/hero-start.jpg";
 import audienceImg from "@/assets/buehne-zuschauer.jpg";
 import closeupImg from "@/assets/emilian-portrait-cards.jpg";
 import stageImg from "@/assets/stage-show.jpg";
-import weddingImg from "@/assets/wedding-magic.jpg";
-import corporateImg from "@/assets/firmenfeier-hero.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import closeupWalkingImg from "@/assets/schneider-weisse-closeup.jpg";
 import emotionenImg from "@/assets/emotionen.jpg";
@@ -109,7 +107,7 @@ const ShowformateSlider = () => {
   const formate = [
     {
       img: closeupImg,
-      imgClass: "object-[center_center]",
+      imgClass: "object-[center_20%]",
       title: "Close-Up Magie",
       sub: "Direkt bei deinen Gästen",
       desc: "Interaktive Magie zum Anfassen — perfekt als Eisbreaker bei Empfängen, Networking-Events und Dinner-Begleitung.",
@@ -117,7 +115,7 @@ const ShowformateSlider = () => {
     },
     {
       img: moderatorImg,
-      imgClass: "object-[center_top]",
+      imgClass: "object-[center_15%]",
       title: "Bühnenshow",
       sub: "Das zentrale Highlight",
       desc: "Eine durchkomponierte Performance mit Dramaturgie, Comedy und Momenten, die ein ganzes Publikum gleichzeitig zum Staunen bringen.",
@@ -125,7 +123,7 @@ const ShowformateSlider = () => {
     },
     {
       img: magicDinnerEventImg,
-      imgClass: "object-[center_top]",
+      imgClass: "object-[center_25%]",
       title: "Magic Dinner",
       sub: "Kulinarik trifft Magie",
       desc: "Zwischen den Gängen wird gezaubert — direkt am Tisch, persönlich und exklusiv. Jeder Gang wird zum Event.",
@@ -133,7 +131,7 @@ const ShowformateSlider = () => {
     },
     {
       img: closeupWalkingImg,
-      imgClass: "object-[center_center]",
+      imgClass: "object-[center_20%]",
       title: "Walking Act",
       sub: "Frei & spontan",
       desc: "Magie zwischen den Gästen — locker, witzig und der perfekte Gesprächsstarter für jede Veranstaltung.",
@@ -141,7 +139,7 @@ const ShowformateSlider = () => {
     },
     {
       img: emotionenImg,
-      imgClass: "object-[center_center]",
+      imgClass: "object-[center_30%]",
       title: "Individuelles Konzept",
       sub: "Maßgeschneidert",
       desc: "Angepasst auf eure Marke, eure Botschaft, euer Event — inklusive Einbindung von Firmeninhalten und persönlichen Elementen.",
@@ -176,7 +174,7 @@ const ShowformateSlider = () => {
                   <img
                     src={f.img}
                     alt={f.title}
-                    className={`absolute inset-0 w-full h-full ${f.imgClass} transition-transform duration-700 group-hover:scale-105`}
+                    className={`absolute inset-0 w-full h-full object-cover ${f.imgClass} transition-transform duration-700 group-hover:scale-105`}
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />

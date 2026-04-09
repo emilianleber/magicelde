@@ -9,10 +9,12 @@ import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
 import closeupImg from "@/assets/hero-closeup.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
+import staunenImg from "@/assets/staunen.jpg";
+import schneiderWeisseImg from "@/assets/schneider-weisse-closeup.jpg";
+import haendeImg from "@/assets/haende-interaktion.jpg";
 import { ArrowRight, Hand, Eye, MessageCircle, Zap, Star, Users, Heart, Sparkles, Clock } from "lucide-react";
 
 const WasIstSection = () => {
@@ -106,7 +108,7 @@ const NaeheSection = () => {
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`order-2 md:order-1 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={audienceImg} alt="Staunende Gäste" className="w-full h-[500px] object-cover" loading="lazy" />
+              <img src={staunenImg} alt="Staunende Gäste" className="w-full h-[500px] object-cover object-top" loading="lazy" />
             </div>
           </div>
           <div className={`order-1 md:order-2 ${isVisible ? "animate-slide-right" : "opacity-0"}`}>
@@ -193,9 +195,9 @@ const GalerieSection = () => {
     <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
-          {[closeupImg, audienceImg, heroImg, stageImg, portraitImg, closeupImg].map((src, i) => (
+          {[closeupImg, schneiderWeisseImg, heroImg, stageImg, portraitImg, haendeImg].map((src, i) => (
             <div key={i} className="rounded-2xl overflow-hidden aspect-square group">
-              <img src={src} alt="Close-Up" className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
+              <img src={src} alt="Close-Up" className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
             </div>
           ))}
         </div>

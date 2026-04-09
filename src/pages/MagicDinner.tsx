@@ -8,11 +8,13 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
 import closeupImg from "@/assets/emilian-magic-dinner.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
 import stageImg from "@/assets/magicdinner-buehne.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import dinnerImg from "@/assets/hero-dinner.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
+import staunenImg from "@/assets/staunen.jpg";
+import schneiderWeisseImg from "@/assets/schneider-weisse-closeup.jpg";
+import haendeImg from "@/assets/haende-interaktion.jpg";
 import { ArrowRight, UtensilsCrossed, Sparkles, Wine, Users, Star, Heart, Eye, Clock, Check, Utensils, MessageCircle } from "lucide-react";
 
 /* ─── 2. Was ist ein Magic Dinner ─── */
@@ -126,7 +128,7 @@ const WarumBesondersSection = () => {
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`order-2 md:order-1 ${isVisible ? "animate-slide-left" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={audienceImg} alt="Begeisterte Gäste beim Magic Dinner" className="w-full h-[500px] object-cover" loading="lazy" />
+              <img src={staunenImg} alt="Begeisterte Gäste beim Magic Dinner" className="w-full h-[500px] object-cover object-top" loading="lazy" />
             </div>
           </div>
           <div className={`order-1 md:order-2 ${isVisible ? "animate-slide-right" : "opacity-0"}`}>
@@ -235,7 +237,7 @@ const GaesteErlebnis = () => {
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={audienceImg} alt="Begeisterte Gäste beim Magic Dinner" className="w-full h-[500px] object-cover" loading="lazy" />
+              <img src={haendeImg} alt="Interaktion beim Magic Dinner" className="w-full h-[500px] object-cover object-top" loading="lazy" />
             </div>
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}>
@@ -308,9 +310,9 @@ const GalerieSection = () => {
           <h2 className="headline-section text-foreground mb-6">Eindrücke.</h2>
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
-          {[dinnerImg, closeupImg, audienceImg, heroImg, portraitImg, stageImg].map((src, i) => (
+          {[dinnerImg, closeupImg, schneiderWeisseImg, heroImg, portraitImg, stageImg].map((src, i) => (
             <div key={i} className="rounded-2xl overflow-hidden aspect-square group">
-              <img src={src} alt="Magic Dinner Impressionen" className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
+              <img src={src} alt="Magic Dinner Impressionen" className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
             </div>
           ))}
         </div>
@@ -383,7 +385,7 @@ const UeberMichKurz = () => {
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={portraitImg} alt="Emilian Leber — MagicEL" className="w-full h-[500px] object-cover" loading="lazy" />
+              <img src={portraitImg} alt="Emilian Leber — MagicEL" className="w-full h-[500px] object-cover object-top" loading="lazy" />
             </div>
           </div>
         </div>

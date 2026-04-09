@@ -14,6 +14,8 @@ import audienceImg from "@/assets/zuschauer-blau.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
+import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
+import buehneDpsgImg from "@/assets/buehne-dpsg.jpg";
 import { ArrowRight, Users, Clock, Mic, Palette, Star, Zap, Theater, Sparkles, Eye } from "lucide-react";
 
 const WasIstSection = () => {
@@ -149,7 +151,7 @@ const EinsatzSection = () => {
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={audienceImg} alt="Begeistertes Publikum" className="w-full h-[500px] object-cover" loading="lazy" />
+              <img src={audienceImg} alt="Begeistertes Publikum" className="w-full h-[500px] object-cover object-top" loading="lazy" />
             </div>
           </div>
         </div>
@@ -255,9 +257,9 @@ const GalerieSection = () => {
     <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
-          {[stageImg, audienceImg, heroImg, closeupImg, portraitImg, stageImg].map((src, i) => (
+          {[stageImg, buehneZuschauerImg, heroImg, closeupImg, portraitImg, buehneDpsgImg].map((src, i) => (
             <div key={i} className="rounded-2xl overflow-hidden aspect-[4/3] group">
-              <img src={src} alt="Bühnenshow" className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
+              <img src={src} alt="Bühnenshow" className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
             </div>
           ))}
         </div>

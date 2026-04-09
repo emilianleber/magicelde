@@ -9,11 +9,12 @@ import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
-import heroImg from "@/assets/hero-birthday.jpg";
+import heroImg from "@/assets/emotionen.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
-import audienceImg from "@/assets/haende-interaktion.jpg";
+import audienceImg from "@/assets/emilian-magic-dinner.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
+import haendeImg from "@/assets/haende-interaktion.jpg";
 import { Star, PartyPopper, Gift, Users, Music, ArrowRight, Heart, Sparkles, Check, MessageCircle } from "lucide-react";
 
 const WarumSection = () => {
@@ -92,7 +93,7 @@ const ErlebnisSection = () => {
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={audienceImg} alt="Begeisterte Gäste" className="w-full h-[500px] object-cover" loading="lazy" />
+              <img src={audienceImg} alt="Begeisterte Gäste" className="w-full h-[500px] object-cover object-top" loading="lazy" />
             </div>
           </div>
         </div>
@@ -229,9 +230,9 @@ const GalerieSection = () => {
           <h2 className="headline-section text-foreground">Momente.</h2>
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
-          {[heroImg, audienceImg, closeupImg, stageImg, portraitImg, heroImg].map((src, i) => (
+          {[heroImg, audienceImg, closeupImg, stageImg, portraitImg, haendeImg].map((src, i) => (
             <div key={i} className="rounded-2xl overflow-hidden aspect-square group">
-              <img src={src} alt="Geburtstag" className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
+              <img src={src} alt="Geburtstag" className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
             </div>
           ))}
         </div>

@@ -8,11 +8,11 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import weddingImg from "@/assets/hochzeit-hero.jpg";
+import weddingImg from "@/assets/emilian-magic-dinner.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
+import audienceImg from "@/assets/schneider-weisse-closeup.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import {
   Check,
@@ -310,7 +310,7 @@ const GaesteErlebnis = () => {
               <img
                 src={audienceImg}
                 alt="Staunende Hochzeitsgäste"
-                className="w-full h-[500px] object-cover"
+                className="w-full h-[500px] object-cover object-top"
                 loading="lazy"
               />
             </div>
@@ -603,7 +603,7 @@ const GalerieWedding = () => {
               <img
                 src={img.src}
                 alt={img.alt}
-                className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-700"
                 loading="lazy"
               />
             </div>

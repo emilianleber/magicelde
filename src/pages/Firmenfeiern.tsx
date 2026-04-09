@@ -7,11 +7,11 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import corporateImg from "@/assets/firmenfeier-hero.jpg";
+import corporateImg from "@/assets/magicdinner-buehne.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
+import audienceImg from "@/assets/schneider-weisse-closeup.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import {
   Check,
@@ -158,7 +158,7 @@ const LoesungSection = () => {
               <img
                 src={audienceImg}
                 alt="Begeisterte Gäste bei einem Firmenevent"
-                className="w-full h-[500px] object-cover"
+                className="w-full h-[500px] object-cover object-top"
                 loading="lazy"
               />
             </div>

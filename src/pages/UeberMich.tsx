@@ -9,7 +9,8 @@ import portraitImg from "@/assets/magician-portrait.jpg";
 import portraitKartenImg from "@/assets/portrait-karten.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
+import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
+import emotionenImg from "@/assets/emotionen.jpg";
 import { Laugh, Heart, Target, Award, Sparkles, Music } from "lucide-react";
 
 const HeroUeber = () => (
@@ -109,7 +110,7 @@ const WasAndersSection = () => {
           <div className={`order-2 md:order-1 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
             <div className="grid grid-cols-1 gap-4">
               <div className="rounded-3xl overflow-hidden">
-                <img src={audienceImg} alt="Begeistertes Publikum" className="w-full h-[300px] object-cover" loading="lazy" />
+                <img src={buehneZuschauerImg} alt="Begeistertes Publikum" className="w-full h-[300px] object-cover object-top" loading="lazy" />
               </div>
               <div className="rounded-3xl overflow-hidden">
                 <img src={portraitKartenImg} alt="Emilian Leber mit Karten" className="w-full h-[300px] object-cover" loading="lazy" />
@@ -200,7 +201,7 @@ const GalerieSection = () => {
     <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div className={`grid md:grid-cols-2 gap-4 max-w-5xl mx-auto ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
-          {[stageImg, heroImg, audienceImg, portraitImg].map((src, i) => (
+          {[stageImg, heroImg, emotionenImg, portraitImg].map((src, i) => (
             <div key={i} className="rounded-3xl overflow-hidden aspect-[4/3] group">
               <img src={src} alt="Performance" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
             </div>

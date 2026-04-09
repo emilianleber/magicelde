@@ -6,11 +6,11 @@ import { useCounter } from "@/hooks/useCounter";
 import { TrustStrip, ClientLogos, TrustSection } from "@/components/landing/TrustElements";
 import { Star } from "lucide-react";
 import heroImg from "@/assets/hero-magic.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import closeupImg from "@/assets/schneider-weisse-closeup.jpg";
-import corporateImg from "@/assets/firmenfeier-hero.jpg";
-import weddingImg from "@/assets/wedding-magic.jpg";
+import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
+import emotionenImg from "@/assets/emotionen.jpg";
+import buehneDpsgImg from "@/assets/buehne-dpsg.jpg";
 
 const StatItem = ({ end, suffix, label }: { end: number; suffix: string; label: string }) => {
   const { count, ref } = useCounter(end);
@@ -103,13 +103,13 @@ const GalerieSection = () => {
         <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[180px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
           {[
             { src: heroImg, alt: "Live Performance", className: "col-span-2 row-span-2" },
-            { src: audienceImg, alt: "Publikum" },
-            { src: corporateImg, alt: "Corporate Event" },
-            { src: weddingImg, alt: "Hochzeit" },
+            { src: buehneZuschauerImg, alt: "Publikum" },
+            { src: emotionenImg, alt: "Corporate Event" },
+            { src: buehneDpsgImg, alt: "Live Show" },
             { src: stageImg, alt: "Bühne" },
           ].map((img, i) => (
             <div key={i} className={`${img.className || ""} rounded-2xl overflow-hidden group`}>
-              <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
+              <img src={img.src} alt={img.alt} className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
             </div>
           ))}
         </div>

@@ -7,9 +7,9 @@ import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
 import stageImg from "@/assets/stage-show.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import heroImg from "@/assets/moderator-hero.jpg";
+import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 import { Mic, Users, Sparkles, Star, ArrowRight, Zap, Heart, Check, Clock, Award, MessageCircle } from "lucide-react";
 
 const WasIstSection = () => {
@@ -40,7 +40,7 @@ const WasIstSection = () => {
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={stageImg} alt="Moderation auf der Bühne" className="w-full h-[500px] object-cover" loading="lazy" />
+              <img src={heroImg} alt="Moderation auf der Bühne" className="w-full h-[500px] object-cover object-top" loading="lazy" />
             </div>
           </div>
         </div>
@@ -117,7 +117,7 @@ const KombiSection = () => {
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={audienceImg} alt="Begeistertes Publikum" className="w-full h-[500px] object-cover" loading="lazy" />
+              <img src={buehneZuschauerImg} alt="Begeistertes Publikum" className="w-full h-[500px] object-cover object-top" loading="lazy" />
             </div>
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}>
@@ -198,7 +198,7 @@ const Moderation = () => (
     </Helmet>
     <PageLayout>
     <BackgroundHero
-      imageSrc={stageImg}
+      imageSrc={heroImg}
       badge="Moderation"
       headline="Moderation mit"
       animatedWords={["Charme.", "Präsenz.", "Timing.", "Persönlichkeit."]}
