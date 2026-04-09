@@ -139,7 +139,7 @@ const VideoSection = () => {
         >
           <div className="video-container rounded-3xl overflow-hidden glow-accent">
             <iframe
-              src="https://www.youtube.com/embed/R0_mXGxzC9E"
+              src="https://www.youtube.com/embed/ZdIDq9VtqxU"
               title="Emilian Leber — Live Performance"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -209,7 +209,7 @@ const ShowformateSlider = () => {
         >
           <span className="badge-accent mb-8 inline-flex">Showkonzepte</span>
           <h2 className="headline-section text-foreground mb-6">
-            Fünf Formate. Ein <span className="text-gradient">Versprechen</span>.
+            Fünf Formate. Ein Versprechen.
           </h2>
           <p className="text-body max-w-xl mx-auto">
             Jedes Showformat ist einzigartig — und wird individuell auf dein
@@ -264,7 +264,7 @@ const ComedySection = () => {
               Comedy + Magie
             </span>
             <h2 className="headline-section text-foreground mb-6">
-              Warum Zauberer mit Comedy so gut <span className="text-gradient">funktionieren</span>.
+              Warum Zauberer mit Comedy so gut funktionieren.
             </h2>
 
             <div className="space-y-5 text-detail max-w-lg">
@@ -350,25 +350,25 @@ const ErlebnisSection = () => {
   ];
 
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-dark section-large" ref={ref} style={{ background: "radial-gradient(ellipse at 50% 100%, hsl(260 70% 15% / 0.3) 0%, #08080d 70%)" }}>
       <div className="container px-6">
         <div
           className={`max-w-3xl mx-auto text-center mb-20 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <span className="badge-muted mb-8 inline-flex">Das Erlebnis</span>
-          <h2 className="headline-section text-foreground mb-6">
+          <span className="badge-accent mb-8 inline-flex">Das Erlebnis</span>
+          <h2 className="headline-section mb-6">
             Was deine Gäste <span className="text-gradient">erleben</span>.
           </h2>
-          <p className="text-body max-w-xl mx-auto">
+          <p className="text-lg text-white/50 max-w-xl mx-auto leading-relaxed">
             Es geht nicht um Tricks. Es geht um die Momente dazwischen — um
             Staunen, Lachen und das Gefühl, etwas Besonderes erlebt zu haben.
           </p>
         </div>
 
         <div
-          className={`grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto ${
+          className={`grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
           style={{ animationDelay: "0.15s" }}
@@ -376,13 +376,13 @@ const ErlebnisSection = () => {
           {moments.map((m, i) => (
             <div
               key={m.title}
-              className="p-8 rounded-3xl bg-background"
+              className="p-8 rounded-3xl glass-light hover:bg-white/10 transition-all duration-500"
               style={{ animationDelay: `${0.2 + i * 0.08}s` }}
             >
-              <h3 className="font-display text-lg font-bold text-foreground mb-3">
+              <h3 className="font-display text-lg font-bold text-white mb-3">
                 {m.title}
               </h3>
-              <p className="text-detail">{m.desc}</p>
+              <p className="text-sm text-white/50 leading-relaxed">{m.desc}</p>
             </div>
           ))}
         </div>
@@ -490,14 +490,14 @@ const AblaufSection = () => {
   ];
 
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div
           className={`max-w-3xl mx-auto text-center mb-20 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <span className="badge-muted mb-8 inline-flex">Ablauf</span>
+          <span className="badge-accent mb-8 inline-flex">Ablauf</span>
           <h2 className="headline-section text-foreground mb-6">
             So einfach geht&apos;s.
           </h2>
@@ -516,10 +516,10 @@ const AblaufSection = () => {
           {steps.map((s, i) => (
             <div
               key={s.num}
-              className="p-6 rounded-3xl bg-background"
+              className="p-6 rounded-3xl bg-muted/40 hover:bg-muted/60 transition-all duration-300 group"
               style={{ animationDelay: `${0.2 + i * 0.1}s` }}
             >
-              <span className="font-display text-5xl font-bold text-accent/10">
+              <span className="font-display text-5xl font-bold text-accent/10 group-hover:text-accent/20 transition-colors">
                 {s.num}
               </span>
               <h3 className="font-display text-lg font-bold text-foreground mt-2 mb-3">
@@ -641,7 +641,7 @@ const FAQIntegrated = () => {
           <div className="text-center mb-16">
             <span className="badge-accent mb-8 inline-flex">FAQ</span>
             <h2 className="headline-section mb-6">
-              Häufige <span className="text-gradient">Fragen</span>.
+              Häufige Fragen.
             </h2>
           </div>
 
@@ -663,6 +663,48 @@ const FAQIntegrated = () => {
             <Link to="/faq" className="inline-flex items-center gap-2 text-sm font-medium text-white/50 hover:text-white transition-colors">
               Alle Fragen ansehen →
             </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─── Interview Section ─── */
+const InterviewSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+
+  return (
+    <section className="section-large" ref={ref}>
+      <div className="container px-6">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center max-w-5xl mx-auto">
+          <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
+            <span className="badge-accent mb-8 inline-flex">Interview</span>
+            <h2 className="headline-section text-foreground mb-6">
+              Die Person hinter der <span className="text-gradient">Magie</span>.
+            </h2>
+            <p className="text-body max-w-lg mb-6">
+              Was treibt einen modernen Zauberer an? Wie entsteht eine Show?
+              In diesem Interview gibt Emilian einen ehrlichen Blick hinter die Kulissen.
+            </p>
+            <p className="text-detail max-w-lg">
+              Über den Weg vom Hobby zur Profession, über die Philosophie hinter
+              moderner Zauberkunst und warum Comedy und Magie die perfekte Kombination sind.
+            </p>
+          </div>
+          <div
+            className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}
+            style={{ animationDelay: "0.2s" }}
+          >
+            <div className="video-container rounded-3xl overflow-hidden shadow-2xl">
+              <iframe
+                src="https://www.youtube.com/embed/R0_mXGxzC9E"
+                title="Emilian Leber — Interview"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -758,6 +800,7 @@ const Index = () => {
         <FuerWenSection />
         <FAQIntegrated />
         <UeberMichSection />
+        <InterviewSection />
         <CTASection />
       </main>
       <Footer />

@@ -2,7 +2,6 @@ import Navigation from "./Navigation";
 import Footer from "./Footer";
 import Chatbot from "./Chatbot";
 import WhatsAppButton from "./WhatsAppButton";
-import CookieBanner from "./CookieBanner";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -15,7 +14,6 @@ const PageLayout = ({ children }: PageLayoutProps) => (
     <Footer />
     <Chatbot />
     <WhatsAppButton />
-    <CookieBanner />
   </>
 );
 
