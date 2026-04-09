@@ -20,7 +20,7 @@ const usps = [
   {
     icon: Sparkles,
     title: "Premium-Qualität",
-    desc: "Über 500 erfolgreiche Auftritte, Finalist bei Talents of Magic und Erfahrung auf Bühnen jeder Größe. Professionell in der Planung, brillant in der Performance.",
+    desc: "Über 200 erfolgreiche Auftritte, Finalist bei Talents of Magic und Erfahrung auf Bühnen jeder Größe. Professionell in der Planung, brillant in der Performance.",
   },
 ];
 

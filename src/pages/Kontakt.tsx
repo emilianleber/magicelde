@@ -14,20 +14,23 @@ import {
 } from "lucide-react";
 
 const HeroKontakt = () => (
-  <section className="relative min-h-[60vh] flex flex-col justify-center overflow-hidden">
+  <section
+    className="section-dark relative min-h-[60vh] flex flex-col justify-center overflow-hidden"
+    style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}
+  >
     <div className="container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
       <div className="max-w-5xl mx-auto text-center">
         <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
           <span className="badge-accent mb-8 inline-flex">Kontakt</span>
         </div>
         <h1
-          className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground"
+          className="headline-hero mb-8 opacity-0 animate-fade-up text-white"
           style={{ animationDelay: "0.3s" }}
         >
-          Lass uns sprechen.
+          Lass uns <span className="text-gradient">sprechen.</span>
         </h1>
         <p
-          className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up"
+          className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto opacity-0 animate-fade-up"
           style={{ animationDelay: "0.5s" }}
         >
           Ich freue mich auf deine Nachricht. Ob erste Idee oder konkretes Event —
@@ -176,7 +179,7 @@ const Kontakt = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Kontakt & Anfrage – Zauberer Emilian Leber" />
       <meta name="twitter:description" content="Jetzt Kontakt aufnehmen mit Zauberer Emilian Leber. Unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event – Antwort innerhalb von 24 Stunden." />
-        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
     </Helmet>
     <PageLayout>
       <HeroKontakt />

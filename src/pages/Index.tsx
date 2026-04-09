@@ -755,20 +755,20 @@ const Index = () => {
             {
               "@type": "Review",
               "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-              "author": { "@type": "Person", "name": "Thomas K." },
-              "reviewBody": "Emilian hat unsere Firmenfeier zu einem unvergesslichen Abend gemacht. Die Gäste reden heute noch davon — und wir buchen ihn jedes Jahr wieder!"
+              "author": { "@type": "Person", "name": "Martina Senftl" },
+              "reviewBody": "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!"
             },
             {
               "@type": "Review",
               "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-              "author": { "@type": "Person", "name": "Sarah M." },
-              "reviewBody": "So eine intime, verblüffende Magie habe ich noch nie erlebt. Perfekt für unseren Empfang."
+              "author": { "@type": "Person", "name": "Petra Zeitler" },
+              "reviewBody": "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!"
             },
             {
               "@type": "Review",
               "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-              "author": { "@type": "Person", "name": "Julia & Thomas" },
-              "reviewBody": "Die perfekte Balance zwischen Eleganz, Humor und absolutem Staunen."
+              "author": { "@type": "Person", "name": "Christina" },
+              "reviewBody": "Emilian hat unseren 50. Geburtstag unvergesslich gemacht. Die Mischung aus Close-Up und Bühnenshow war perfekt."
             }
           ]
         })}</script>
@@ -778,8 +778,8 @@ const Index = () => {
         <BackgroundHero
           imageSrc={heroStartImg}
           badge="Zauberer · Showkünstler · Performer"
-          headline="Magie, die begeistert."
-          animatedWords={["Verbindet.", "Überrascht.", "Bewegt.", "Bleibt."]}
+          headline="Magie, die"
+          animatedWords={["begeistert.", "verbindet.", "überrascht.", "bewegt.", "bleibt."]}
           subline="Ich bin Emilian Leber und sorge mit moderner Zauberkunst für Momente, über die deine Gäste noch lange sprechen."
           ctaPrimary={{ text: "Jetzt anfragen", to: "/buchung" }}
           ctaSecondary={{ text: "Showkonzepte ansehen", href: "#showkonzepte" }}

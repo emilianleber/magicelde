@@ -358,11 +358,11 @@ const MehrwertSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section className="section-large" ref={ref}>
+    <section className="section-large section-dark" ref={ref} style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex">Mehrwert</span>
-          <h2 className="headline-section text-foreground mb-6">Mehr als nur Unterhaltung.</h2>
+          <h2 className="headline-section text-white mb-6">Mehr als nur <span className="text-gradient">Unterhaltung</span>.</h2>
         </div>
         <div
           className={`grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto ${
@@ -402,10 +402,10 @@ const MehrwertSection = () => {
               desc: "Positive Emotionen verbinden sich direkt mit Ihrem Unternehmen und Ihrem Event.",
             },
           ].map((item) => (
-            <div key={item.title} className="p-6 rounded-3xl bg-muted/40 hover:bg-muted/60 transition-all duration-300 group">
+            <div key={item.title} className="p-6 rounded-3xl glass transition-all duration-300 group">
               <item.icon className="w-7 h-7 text-accent mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="font-display text-lg font-bold text-foreground mb-2">{item.title}</h3>
-              <p className="text-detail text-sm">{item.desc}</p>
+              <h3 className="font-display text-lg font-bold text-white mb-2">{item.title}</h3>
+              <p className="text-white/60 text-sm">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -440,26 +440,26 @@ const ReferenzenSlider = () => {
   ];
 
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" ref={ref} style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="headline-section text-foreground">Was Kunden sagen.</h2>
+          <h2 className="headline-section text-white">Was Kunden <span className="text-gradient">sagen</span>.</h2>
         </div>
         <HorizontalSlider
           items={testimonials.map((t) => ({
             content: (
-              <blockquote className="p-8 rounded-3xl bg-background h-full flex flex-col">
+              <blockquote className="p-8 rounded-3xl glass h-full flex flex-col">
                 <div className="flex gap-0.5 mb-5">
                   {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-accent/70 text-accent/70" />
+                    <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <p className="font-sans text-base text-foreground leading-relaxed mb-6 flex-1">
+                <p className="font-sans text-base text-white/80 leading-relaxed mb-6 flex-1">
                   „{t.quote}"
                 </p>
                 <footer>
-                  <p className="font-sans text-sm font-semibold text-foreground">{t.author}</p>
-                  <p className="font-sans text-xs text-muted-foreground">{t.role}</p>
+                  <p className="font-sans text-sm font-semibold text-white">{t.author}</p>
+                  <p className="font-sans text-xs text-white/40">{t.role}</p>
                 </footer>
               </blockquote>
             ),
@@ -652,7 +652,7 @@ const FAQEntscheider = () => {
             <span className="badge-muted mb-8 inline-flex">FAQ</span>
             <h2 className="headline-section text-foreground mb-6">Fragen von Entscheidern.</h2>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border/40">
             {faqs.map((faq) => (
               <details key={faq.q} className="group py-6">
                 <summary className="flex items-center justify-between cursor-pointer font-sans text-base md:text-lg font-medium text-foreground pr-8 hover:text-accent transition-colors list-none">
@@ -661,7 +661,7 @@ const FAQEntscheider = () => {
                     +
                   </span>
                 </summary>
-                <p className="text-detail max-w-2xl mt-4">{faq.a}</p>
+                <p className="text-muted-foreground max-w-2xl mt-4">{faq.a}</p>
               </details>
             ))}
           </div>

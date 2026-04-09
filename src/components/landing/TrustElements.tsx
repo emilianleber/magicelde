@@ -50,10 +50,10 @@ const ProvenExpertIcon = ({ className = "w-5 h-5" }: { className?: string }) => 
 );
 
 /* ─── Rating Badges (Google, ProvenExpert) ─── */
-export const RatingBadges = ({ className = "" }: { className?: string }) => (
+export const RatingBadges = ({ className = "", dark = false }: { className?: string; dark?: boolean }) => (
   <div className={`flex items-center justify-center gap-6 sm:gap-8 ${className}`}>
     {/* Google Badge */}
-    <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+    <div className={`flex items-center gap-2.5 px-4 py-2 rounded-full backdrop-blur-sm ${dark ? "bg-white/10 border border-white/20" : "bg-white/5 border border-white/10"}`}>
       <GoogleIcon className="w-5 h-5 flex-shrink-0" />
       <div className="flex items-center gap-1.5">
         <div className="flex items-center gap-0.5">
@@ -61,14 +61,14 @@ export const RatingBadges = ({ className = "" }: { className?: string }) => (
             <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
           ))}
         </div>
-        <span className="font-display text-sm font-bold text-foreground">
+        <span className={`font-display text-sm font-bold ${dark ? "text-white" : "text-foreground"}`}>
           5.0
         </span>
       </div>
     </div>
 
     {/* ProvenExpert Badge */}
-    <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+    <div className={`flex items-center gap-2.5 px-4 py-2 rounded-full backdrop-blur-sm ${dark ? "bg-white/10 border border-white/20" : "bg-white/5 border border-white/10"}`}>
       <ProvenExpertIcon className="w-5 h-5 flex-shrink-0" />
       <div className="flex items-center gap-1.5">
         <div className="flex items-center gap-0.5">
@@ -83,11 +83,11 @@ export const RatingBadges = ({ className = "" }: { className?: string }) => (
             />
           ))}
         </div>
-        <span className="font-display text-sm font-bold text-foreground">
+        <span className={`font-display text-sm font-bold ${dark ? "text-white" : "text-foreground"}`}>
           4.9
         </span>
       </div>
-      <span className="text-[10px] text-muted-foreground hidden sm:inline">
+      <span className={`text-[10px] hidden sm:inline ${dark ? "text-white/60" : "text-muted-foreground"}`}>
         ProvenExpert
       </span>
     </div>
@@ -95,8 +95,8 @@ export const RatingBadges = ({ className = "" }: { className?: string }) => (
 );
 
 /* ─── Award Badges ─── */
-export const AwardBadges = ({ className = "" }: { className?: string }) => (
-  <div className={`flex items-center justify-center gap-3 ${className}`}>
+export const AwardBadges = ({ className = "", dark = false }: { className?: string; dark?: boolean }) => (
+  <div className={`flex items-center justify-center gap-3 flex-wrap ${className}`}>
     {[
       { icon: Trophy, label: "Kreativpreisträger" },
       { icon: Award, label: "Greatest Talent Finalist" },
@@ -104,7 +104,7 @@ export const AwardBadges = ({ className = "" }: { className?: string }) => (
     ].map((a) => (
       <span
         key={a.label}
-        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-border/50 bg-muted/40 text-[10px] font-semibold tracking-wide uppercase text-muted-foreground"
+        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold tracking-wide uppercase ${dark ? "border border-white/20 bg-white/10 text-white/70" : "border border-border/50 bg-muted/40 text-muted-foreground"}`}
       >
         <a.icon className="w-3 h-3" />
         {a.label}
@@ -201,12 +201,12 @@ export const ClientLogos = ({
 };
 
 /* ─── Combined Trust Strip (compact, unter Hero) ─── */
-export const TrustStrip = ({ className = "" }: { className?: string }) => (
+export const TrustStrip = ({ className = "", dark = false }: { className?: string; dark?: boolean }) => (
   <div className={`py-6 ${className}`}>
     <div className="container px-6">
       <div className="flex flex-col items-center gap-3">
-        <RatingBadges />
-        <AwardBadges />
+        <RatingBadges dark={dark} />
+        <AwardBadges dark={dark} />
       </div>
     </div>
   </div>

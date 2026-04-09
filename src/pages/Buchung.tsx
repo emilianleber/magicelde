@@ -228,19 +228,13 @@ const FormSection = () => {
                 <option value="sonstiges">Sonstiges</option>
               </select>
 
-              <label className="relative block">
-                <span className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground/40 transition-opacity peer-[:not(:placeholder-shown)]:opacity-0" id="datumLabel">Wunschdatum</span>
-                <input
-                  type="date"
-                  name="datum"
-                  className={`${inputCls} min-h-[52px] peer`}
-                  onChange={(e) => {
-                    const label = document.getElementById("datumLabel");
-                    if (label) label.style.opacity = e.target.value ? "0" : "1";
-                  }}
-                  onFocus={(e) => { try { (e.target as any).showPicker?.(); } catch {} }}
-                />
-              </label>
+              <input
+                type="date"
+                name="datum"
+                placeholder="Wunschdatum"
+                className={`${inputCls} min-h-[52px]`}
+                onFocus={(e) => { try { (e.target as any).showPicker?.(); } catch {} }}
+              />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-5">
@@ -259,22 +253,18 @@ const FormSection = () => {
               />
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-5">
-              <select name="format" className={inputCls} defaultValue="">
-                <option value="" disabled>
-                  Gewünschtes Format
-                </option>
-                <option value="closeup">Close-Up Magie</option>
-                <option value="buehnenshow">Bühnenshow</option>
-                <option value="walking_act">Walking Act</option>
-                <option value="magic_dinner">Magic Dinner</option>
-                <option value="kombination">Kombination</option>
-                <option value="moderation">Moderation</option>
-                <option value="unsicher">Noch unsicher — berate mich</option>
-              </select>
-
-              <div className="hidden sm:block" />
-            </div>
+            <select name="format" className={inputCls} defaultValue="">
+              <option value="" disabled>
+                Gewünschtes Format
+              </option>
+              <option value="closeup">Close-Up Magie</option>
+              <option value="buehnenshow">Bühnenshow</option>
+              <option value="walking_act">Walking Act</option>
+              <option value="magic_dinner">Magic Dinner</option>
+              <option value="kombination">Kombination</option>
+              <option value="moderation">Moderation</option>
+              <option value="unsicher">Noch unsicher — berate mich</option>
+            </select>
 
             <textarea
               name="nachricht"

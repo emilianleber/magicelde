@@ -39,7 +39,7 @@ const UeberMichSection = () => {
                 die Menschen verbinden.
               </p>
               <p className="text-foreground font-medium">
-                Finalist bei Talents of Magic · 500+ Events · 10+ Jahre Bühnenerfahrung
+                Finalist bei Talents of Magic · 200+ Events · 10+ Jahre Bühnenerfahrung
               </p>
             </div>
             <Link to="/ueber-mich" className="btn-secondary mt-8 !px-0 text-accent hover:!text-accent/70">

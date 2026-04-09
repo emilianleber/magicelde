@@ -69,10 +69,10 @@ const KurzprofilSection = () => {
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {[
-                  { value: "500+", label: "Events" },
+                  { value: "200+", label: "Events" },
                   { value: "10+", label: "Jahre Erfahrung" },
                   { value: "5.0", label: "Google Sterne" },
-                  { value: "4.9", label: "ProvenExpert" },
+                  { value: "4.97", label: "ProvenExpert" },
                 ].map(s => (
                   <div key={s.label} className="text-center p-3 rounded-2xl bg-background border border-border/20">
                     <p className="font-display text-2xl font-bold text-foreground">{s.value}</p>
@@ -100,13 +100,13 @@ const AufritteSection = () => {
           <div className="divide-y divide-border">
             {[
               { icon: Trophy, title: "Kreativpreisträger", desc: "Ausgezeichnet für kreative und innovative Showkonzepte in der Zauberkunst.", year: "2024" },
-              { icon: Award, title: "Finalist — Greatest Talent / Talents of Magic", desc: "Einer der renommiertesten Nachwuchswettbewerbe für Zauberkunst in Deutschland.", year: "2024" },
-              { icon: Tv, title: "TV-Auftritte & Showformate", desc: "Verschiedene Fernsehformate, Showproduktionen und Medienauftritte.", year: "2023–2025" },
+              { icon: Award, title: "Finalist — Talents of Magic & Greatest Talent", desc: "Zwei der renommiertesten Nachwuchswettbewerbe für Zauberkunst in Deutschland.", year: "2024" },
+              { icon: Tv, title: "TV-Auftritte & Showformate", desc: "Talents of Magic, Greatest Talent und TVA Fernsehen", year: "2023–2025" },
               { icon: Mic, title: "Magic Dinner – eigene Showproduktion", desc: "Regelmäßige eigene Dinner-Show-Produktion mit Menü und abendfüllendem Programm.", year: "Laufend" },
-              { icon: Calendar, title: "500+ Live-Events", desc: "Auftritte bei DAX-Konzernen, auf Hochzeiten, Galas und exklusiven Privatevents.", year: "Laufend" },
+              { icon: Calendar, title: "200+ Live-Events", desc: "Auftritte bei DAX-Konzernen, auf Hochzeiten, Galas und exklusiven Privatevents.", year: "Laufend" },
               { icon: Users, title: "Firmenkunden", desc: "Regelmäßig gebucht von Sixt, STRABAG, Sparkasse, Versicherungskammer Bayern, Stadt Regensburg u.v.m.", year: "Laufend" },
-              { icon: Globe, title: "Deutschlandweite Buchungen", desc: "Von Regensburg bis Berlin – regelmäßig gebucht in ganz Deutschland und darüber hinaus.", year: "Laufend" },
-              { icon: Star, title: "Top-Bewertungen", desc: "Google 5.0 Sterne, ProvenExpert 4.9 Sterne – durchgehend exzellente Bewertungen von Kunden.", year: "Laufend" },
+              { icon: Globe, title: "Deutschlandweite Buchungen", desc: "Schwerpunkt Bayern — von Regensburg über München bis Nürnberg, sowie deutschlandweit buchbar.", year: "Laufend" },
+              { icon: Star, title: "Top-Bewertungen", desc: "Google 5.0 Sterne, ProvenExpert 4.97 Sterne – durchgehend exzellente Bewertungen von Kunden.", year: "Laufend" },
             ].map((item) => (
               <div key={item.title} className="py-8 flex items-start gap-5">
                 <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
@@ -128,6 +128,50 @@ const AufritteSection = () => {
   );
 };
 
+/* ── Presse-Artikel ── */
+const PresseArtikelSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section className="section-large section-alt" ref={ref}>
+      <div className="container px-6">
+        <div className={`max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-accent mb-8 inline-flex">In der Presse</span>
+          <h2 className="headline-section text-foreground mb-12">Berichterstattung.</h2>
+          <a
+            href="https://www.idowa.de/regionen/woerth-und-regensburg/regensburg/aus-kindertraum-wird-buehnenzauber-der-17-jaehrige-magier-emilian-leber-art-349796"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block rounded-2xl border border-border/20 bg-background p-6 md:p-8 hover:border-accent/30 transition-all"
+          >
+            <div className="flex items-start gap-5">
+              <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center shrink-0 group-hover:bg-accent/20 transition-colors">
+                <Newspaper className="w-6 h-6 text-accent" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">idowa.de · Larissa Axinja Lutz · 5. August 2025</p>
+                    <h3 className="font-display text-lg md:text-xl font-bold text-foreground group-hover:text-accent transition-colors">
+                      Aus Kindertraum wird Bühnenzauber: Der 17-jährige Magier Emilian Leber
+                    </h3>
+                  </div>
+                </div>
+                <p className="text-detail mt-3 max-w-2xl">
+                  Ausführliches Portrait über Emilians Werdegang — vom Zauberkasten an Weihnachten über YouTube-Tricks
+                  bis zu ausgebuchten Shows und TV-Auftritten. Mit Video und Fotos.
+                </p>
+                <span className="inline-flex items-center gap-1 mt-4 text-xs font-medium text-accent">
+                  Artikel lesen →
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 /* ── Pressezitate ── */
 const ZitateSection = () => {
   const { ref, isVisible } = useScrollReveal();
@@ -139,10 +183,9 @@ const ZitateSection = () => {
           <h2 className="headline-section text-foreground mb-12">Was andere sagen.</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {[
-              { quote: "Emilian Leber hat unser Firmenevent auf ein völlig neues Level gehoben. Standing Ovation von 300 Gästen!", author: "Dr. Stefan R.", context: "Firmenfeier STRABAG" },
-              { quote: "Professionell, charmant und unglaublich talentiert. Unsere Hochzeitsgäste sprechen heute noch davon.", author: "Lisa & Markus K.", context: "Hochzeit am Starnberger See" },
-              { quote: "Die perfekte Kombination aus Comedy und Zauberkunst. Emilian hat das Timing eines Profis.", author: "Event-Magazin", context: "Showcase Review" },
-              { quote: "Einer der vielversprechendsten jungen Zauberkünstler Deutschlands.", author: "Jury Talents of Magic", context: "Wettbewerb 2024" },
+              { quote: "Emilian hat unser Firmenevent bereichert — professionell, charmant und auf den Punkt.", author: "Jan von Lehmann", context: "Agenturgruppe Wächter" },
+              { quote: "Unsere Hochzeitsgäste sprechen heute noch von der Magie. Absolut empfehlenswert!", author: "Katrin Raß", context: "Hochzeit" },
+              { quote: "Das Magic Dinner war ein unvergesslicher Abend — perfekte Mischung aus Show und Genuss.", author: "Sophia Leber", context: "Wald & Wiese, Magic Dinner" },
             ].map((item, i) => (
               <div key={i} className="rounded-2xl border border-border/20 bg-background p-6 relative">
                 <Quote className="w-8 h-8 text-accent/20 absolute top-4 right-4" />
@@ -207,11 +250,11 @@ const DownloadsSection = () => {
                 ["Name", "Emilian Leber"],
                 ["Genre", "Moderner Comedy-Zauberer"],
                 ["Formate", "Close-Up, Bühnenshow, Magic Dinner, Moderation"],
-                ["Erfahrung", "10+ Jahre, 500+ Events"],
+                ["Erfahrung", "10+ Jahre, 200+ Events"],
                 ["Auszeichnungen", "Kreativpreisträger, Greatest Talent Finalist"],
                 ["Region", "Deutschlandweit & international buchbar"],
                 ["Basis", "Regensburg, Bayern"],
-                ["Bewertungen", "Google 5.0 ★ | ProvenExpert 4.9 ★"],
+                ["Bewertungen", "Google 5.0 ★ | ProvenExpert 4.97 ★"],
                 ["Web", "www.magicel.de"],
                 ["Kontakt", "el@magicel.de"],
               ].map(([label, value]) => (
@@ -292,6 +335,7 @@ const Presse = () => (
       <HeroPresse />
       <KurzprofilSection />
       <AufritteSection />
+      <PresseArtikelSection />
       <ZitateSection />
       <DownloadsSection />
       <FotosSection />

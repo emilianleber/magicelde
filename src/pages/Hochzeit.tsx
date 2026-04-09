@@ -1,6 +1,5 @@
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
-import ProcessSteps from "@/components/landing/ProcessSteps";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import { TrustStrip, ClientLogos } from "@/components/landing/TrustElements";
@@ -826,7 +825,6 @@ const Hochzeit = () => (
       <TippsSection />
       <StatsWedding />
       <FAQWedding />
-      <ProcessSteps />
       <BookingCTA
         headline={"Sichert euch euren\nHochzeitstermin."}
         subline="Termine sind begrenzt — frühzeitig anfragen lohnt sich. Ich berate euch persönlich und unverbindlich."

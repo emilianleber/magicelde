@@ -2,7 +2,6 @@ import { useParams, Navigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
-import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { staedte } from "@/data/staedte";
 import heroImg from "@/assets/hero-magic.jpg";
@@ -88,7 +87,6 @@ const StadtSeite = () => {
       {data.faq && data.faq.length > 0 && (
         <FAQSection name={data.name} faq={data.faq} />
       )}
-      <ProcessSteps />
       <BookingCTA headline={`Zauberer für\n${data.name}.`} subline={`Sichere dir deinen Termin in ${data.name} — ich berate dich persönlich und unverbindlich.`} />
       <WeitereStaedte current={data.slug} />
     </PageLayout>
@@ -283,26 +281,38 @@ const WarumSection = ({ name }: { name: string }) => {
   );
 };
 
-/* ─── Testimonial ─── */
+/* ─── Testimonials ─── */
+const realTestimonials = [
+  { quote: "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!", author: "Martina Senftl", role: "Hochzeit", source: "ProvenExpert" },
+  { quote: "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!", author: "Petra Zeitler", role: "Firmenfeier", source: "ProvenExpert" },
+  { quote: "Emilian hat unseren 50. Geburtstag unvergesslich gemacht. Die Mischung aus Close-Up und Bühnenshow war perfekt.", author: "Christina", role: "Geburtstagsfeier", source: "ProvenExpert" },
+];
+
 const TestimonialStadt = ({ name }: { name: string }) => {
   const { ref, isVisible } = useScrollReveal();
+  const picked = realTestimonials;
   return (
     <section className="section-large section-alt" ref={ref}>
       <div className="container px-6">
-        <div className={`max-w-2xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <blockquote>
-            <div className="flex gap-0.5 justify-center mb-6">
-              {[...Array(5)].map((_, j) => <Star key={j} className="w-5 h-5 fill-accent/70 text-accent/70" />)}
-            </div>
-            <p className="font-sans text-xl text-foreground leading-relaxed mb-8">
-              „Emilian hat unser Event in {name} unvergesslich gemacht. Professionell, charmant,
-              witzig und absolut verblüffend. Die Gäste reden heute noch davon — wir buchen ihn wieder!"
-            </p>
-            <footer>
-              <p className="font-sans text-base font-semibold text-foreground">Begeisterter Kunde</p>
-              <p className="font-sans text-sm text-muted-foreground">Event in {name}</p>
-            </footer>
-          </blockquote>
+        <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <h2 className="headline-section text-foreground">Das sagen Kunden.</h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {picked.map((t, i) => (
+            <blockquote key={i} className={`p-8 rounded-3xl bg-background border border-border/30 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}
+                </div>
+                <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/60">{t.source}</span>
+              </div>
+              <p className="font-sans text-sm text-foreground/80 leading-relaxed mb-5">„{t.quote}"</p>
+              <footer>
+                <p className="font-sans text-sm font-semibold text-foreground">{t.author}</p>
+                <p className="font-sans text-xs text-muted-foreground">{t.role}</p>
+              </footer>
+            </blockquote>
+          ))}
         </div>
       </div>
     </section>

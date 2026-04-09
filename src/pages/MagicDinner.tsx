@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
-import ProcessSteps from "@/components/landing/ProcessSteps";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -64,13 +63,13 @@ const WasIstSection = () => {
 const ErlebnisSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }} ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-gradient-subtle mb-8 inline-flex">Das Erlebnis</span>
-          <h2 className="headline-section text-foreground mb-6">Mehr als nur ein Abendessen.</h2>
+          <h2 className="headline-section mb-6">Mehr als nur ein <span className="text-gradient">Abendessen</span>.</h2>
           <p className="text-body max-w-xl mx-auto">
-            Ein Magic Dinner transformiert ein normales Dinner in ein multisensorisches Erlebnis — 
+            Ein Magic Dinner transformiert ein normales Dinner in ein multisensorisches Erlebnis —
             Genuss, Staunen, Lachen und Verbindung in einem Abend.
           </p>
         </div>
@@ -81,10 +80,10 @@ const ErlebnisSection = () => {
             { icon: Heart, title: "Verbindung", desc: "Gäste kommen ins Gespräch, Tischgruppen werden zu einer Gemeinschaft. Magie ist der ultimative Eisbrecher." },
             { icon: Sparkles, title: "Erinnerung", desc: "Ein Abend, über den noch Monate später gesprochen wird. Das ist der Unterschied zu einem normalen Dinner." },
           ].map((item) => (
-            <div key={item.title} className="p-8 rounded-3xl bg-background group hover:shadow-lg transition-all duration-300">
+            <div key={item.title} className="glass p-8 rounded-3xl group hover:shadow-lg transition-all duration-300">
               <item.icon className="w-7 h-7 text-accent mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="font-display text-lg font-bold text-foreground mb-3">{item.title}</h3>
-              <p className="text-detail text-sm">{item.desc}</p>
+              <h3 className="font-display text-lg font-bold mb-3">{item.title}</h3>
+              <p className="text-sm opacity-70">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -165,13 +164,13 @@ const WarumBesondersSection = () => {
 const AblaufSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "linear-gradient(135deg, #08080d 0%, #0f0a1e 50%, #08080d 100%)" }} ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-gradient mb-8 inline-flex">Ablauf</span>
-          <h2 className="headline-section text-foreground mb-6">So läuft ein Magic Dinner ab.</h2>
+          <h2 className="headline-section mb-6">So läuft ein Magic Dinner ab.</h2>
           <p className="text-body max-w-xl mx-auto">
-            Ein nahtloses Zusammenspiel aus Kulinarik und Zauberkunst — 
+            Ein nahtloses Zusammenspiel aus Kulinarik und Zauberkunst —
             perfekt getimed, ohne Hektik, ohne Unterbrechungen.
           </p>
         </div>
@@ -182,11 +181,11 @@ const AblaufSection = () => {
             { icon: Sparkles, num: "03", title: "Hauptgang", desc: "Die große Tischmagie — interaktiv, verblüffend, witzig. Jetzt hat sich die Dynamik aufgebaut und die Atmosphäre ist elektrisch." },
             { icon: Star, num: "04", title: "Finale", desc: "Ein magisches Finale, das den Abend krönt. Optional als Bühnenmoment für alle Gäste gleichzeitig — ein gemeinsamer Wow-Moment." },
           ].map((item) => (
-            <div key={item.title} className="p-8 rounded-3xl bg-background">
-              <span className="font-display text-5xl font-bold text-accent/10">{item.num}</span>
+            <div key={item.title} className="glass p-8 rounded-3xl">
+              <span className="font-display text-5xl font-bold text-gradient glow-number">{item.num}</span>
               <item.icon className="w-6 h-6 text-accent mt-2 mb-3" />
-              <h3 className="font-display text-lg font-bold text-foreground mb-3">{item.title}</h3>
-              <p className="text-detail text-sm">{item.desc}</p>
+              <h3 className="font-display text-lg font-bold mb-3">{item.title}</h3>
+              <p className="text-sm opacity-70">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -232,7 +231,7 @@ const KombinationSection = () => {
 const GaesteErlebnis = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }} ref={ref}>
       <div className="container px-6">
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
@@ -242,18 +241,18 @@ const GaesteErlebnis = () => {
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}>
             <span className="badge-gradient-subtle mb-8 inline-flex">Gäste-Perspektive</span>
-            <h2 className="headline-section text-foreground mb-6">Was deine Gäste erleben.</h2>
-            <div className="space-y-5 text-detail max-w-lg">
-              <p className="text-lg text-muted-foreground font-light leading-relaxed italic">
+            <h2 className="headline-section mb-6">Was deine Gäste erleben.</h2>
+            <div className="space-y-5 max-w-lg">
+              <p className="text-lg font-light leading-relaxed italic opacity-70">
                 „Der Zauberer kam an unseren Tisch und hat direkt in meinen Händen gezaubert.
                 Ich konnte es nicht erklären — und mein Mann konnte nicht aufhören zu lachen."
               </p>
-              <p>
+              <p className="opacity-60">
                 So oder so ähnlich beschreiben Gäste ihr Magic-Dinner-Erlebnis. Das Besondere:
                 Jeder Tisch bekommt sein eigenes, einzigartiges Programm. Keine Wiederholungen,
                 keine Routine — nur persönliche, magische Momente.
               </p>
-              <p>
+              <p className="opacity-60">
                 Die Atmosphäre am Tisch verändert sich innerhalb von Sekunden. Fremde werden zu Verbündeten,
                 Kollegen lachen gemeinsam wie alte Freunde, und das ganze Dinner bekommt eine Energie,
                 die mit keiner anderen Unterhaltung zu erreichen ist.
@@ -325,27 +324,27 @@ const GalerieSection = () => {
 const ReferenzenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "linear-gradient(135deg, #08080d 0%, #0f0a1e 50%, #08080d 100%)" }} ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex">Stimmen</span>
-          <h2 className="headline-section text-foreground mb-6">Was Gäste sagen.</h2>
+          <h2 className="headline-section mb-6">Was Gäste sagen.</h2>
         </div>
         <HorizontalSlider
           items={[
-            { quote: "Das Magic Dinner war das Highlight unseres Firmenjubiläums. Jeder Tisch hatte seinen eigenen magischen Moment — und am Ende haben alle darüber geredet.", author: "Dr. Stefan R.", role: "Geschäftsführer, Technologie" },
-            { quote: "Wir hatten Emilian für unser Weihnachtsdinner gebucht und es war unfassbar. Die Stimmung war sofort auf einem anderen Level.", author: "Julia K.", role: "Teamleiterin, Beratung" },
-            { quote: "Mein Mann und ich haben das Magic Dinner zu unserem 10. Hochzeitstag erlebt. Es war der schönste Abend seit langem.", author: "Marina L.", role: "Private Feier" },
+            { quote: "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!", author: "Martina Senftl", role: "Hochzeit · ProvenExpert" },
+            { quote: "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!", author: "Petra Zeitler", role: "Firmenfeier · ProvenExpert" },
+            { quote: "Emilian hat unseren 50. Geburtstag unvergesslich gemacht. Die Mischung aus Close-Up und Bühnenshow war perfekt.", author: "Christina", role: "Geburtstagsfeier · ProvenExpert" },
           ].map((t) => ({
             content: (
-              <blockquote className="p-8 rounded-3xl bg-muted/40 h-full flex flex-col">
+              <blockquote className="glass p-8 rounded-3xl h-full flex flex-col">
                 <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-accent/70 text-accent/70" />)}
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
                 </div>
-                <p className="font-sans text-base text-foreground leading-relaxed mb-6 flex-1">„{t.quote}"</p>
+                <p className="font-sans text-base leading-relaxed mb-6 flex-1">„{t.quote}"</p>
                 <footer>
-                  <p className="font-sans text-sm font-semibold text-foreground">{t.author}</p>
-                  <p className="font-sans text-xs text-muted-foreground">{t.role}</p>
+                  <p className="font-sans text-sm font-semibold">{t.author}</p>
+                  <p className="font-sans text-xs opacity-50">{t.role}</p>
                 </footer>
               </blockquote>
             ),
@@ -434,7 +433,7 @@ const FAQDinner = () => {
             <span className="badge-muted mb-8 inline-flex">FAQ</span>
             <h2 className="headline-section text-foreground">Häufige Fragen.</h2>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border/40">
             {[
               { q: "Was ist ein Magic Dinner genau?", a: "Ein mehrgängiges Dinner, bei dem zwischen den Gängen interaktive Tischmagie stattfindet. Jeder Tisch bekommt sein eigenes Erlebnis — keine Wiederholungen, keine Standard-Show." },
               { q: "Brauche ich ein spezielles Restaurant?", a: "Nein! Das Magic Dinner funktioniert in jeder Location mit Tischbestuhlung. Ob Restaurant, Hotel, Event-Location oder privater Rahmen." },
@@ -448,7 +447,7 @@ const FAQDinner = () => {
                   {faq.q}
                   <span className="text-muted-foreground group-open:rotate-45 transition-transform duration-300 text-xl">+</span>
                 </summary>
-                <p className="text-detail max-w-2xl mt-4">{faq.a}</p>
+                <p className="text-muted-foreground max-w-2xl mt-4">{faq.a}</p>
               </details>
             ))}
           </div>
@@ -501,7 +500,6 @@ const MagicDinner = () => (
     <UeberMichKurz />
     <DetailsSection />
     <FAQDinner />
-    <ProcessSteps />
     <BookingCTA headline={"Ein Abend zum Staunen."} subline="Plane dein Magic Dinner — ich berate dich persönlich und entwickle ein Konzept, das perfekt zu eurem Anlass passt." />
   </PageLayout>
   </>

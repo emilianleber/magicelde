@@ -68,7 +68,6 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display font-bold;
-    text-wrap: balance;
   }
 
   p {
@@ -124,15 +123,15 @@
 
   /* ─── Typography ─── */
   .headline-hero {
-    @apply font-display text-[2.75rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-black leading-[0.92] tracking-[-0.03em];
+    @apply font-display text-[2.75rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-black leading-[0.95] tracking-normal text-center;
   }
 
   .headline-section {
-    @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.05] tracking-[-0.02em];
+    @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.08] tracking-normal;
   }
 
   .headline-sub {
-    @apply font-display text-2xl md:text-3xl lg:text-4xl font-bold leading-[1.1] tracking-[-0.01em];
+    @apply font-display text-2xl md:text-3xl lg:text-4xl font-bold leading-[1.12] tracking-normal;
   }
 
   .text-body {

@@ -19,8 +19,37 @@
   <url><loc>https://www.magicel.de/datenschutz</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://www.magicel.de/impressum</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://www.magicel.de/agb</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <!-- Bayern - Städte -->
   <url><loc>https://www.magicel.de/zauberer/muenchen</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.magicel.de/zauberer/regensburg</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/regensburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.magicel.de/zauberer/nuernberg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.magicel.de/zauberer/augsburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/wuerzburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/ingolstadt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/passau</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/landshut</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/bamberg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/bayreuth</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/erlangen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/fuerth</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/rosenheim</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/kempten</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/aschaffenburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/straubing</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/freising</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <!-- Deutschland - weitere Städte -->
+  <url><loc>https://www.magicel.de/zauberer/berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/hamburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/frankfurt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/stuttgart</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/koeln</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/duesseldorf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/dresden</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/leipzig</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/hannover</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/dortmund</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/bremen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <!-- Österreich -->
+  <url><loc>https://www.magicel.de/zauberer/salzburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.magicel.de/zauberer/wien</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>

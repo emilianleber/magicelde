@@ -4,19 +4,19 @@ import { useCounter } from "@/hooks/useCounter";
 
 const testimonials = [
   {
-    quote: "Emilian hat unsere Firmenfeier zu einem unvergesslichen Abend gemacht. Die Gäste reden heute noch davon — und wir buchen ihn jedes Jahr wieder!",
-    author: "Thomas K.",
-    role: "Geschäftsführer, Automobilbranche",
+    quote: "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!",
+    author: "Martina Senftl",
+    role: "Hochzeit · ProvenExpert",
   },
   {
-    quote: "Cool, modern, witzig und absolut verblüffend. Kein verstaubter Zauberer, sondern echtes Premium-Entertainment.",
-    author: "Marc L.",
-    role: "Marketing Director",
+    quote: "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!",
+    author: "Petra Zeitler",
+    role: "Firmenfeier · ProvenExpert",
   },
   {
-    quote: "Die perfekte Balance zwischen Eleganz, Humor und Staunen. Emilian hat sich nahtlos in unseren Abend eingefügt.",
-    author: "Sarah M.",
-    role: "Eventmanagerin",
+    quote: "Emilian hat unseren 50. Geburtstag unvergesslich gemacht. Die Mischung aus Close-Up und Bühnenshow war perfekt.",
+    author: "Christina",
+    role: "Geburtstagsfeier · ProvenExpert",
   },
 ];
 
@@ -45,7 +45,7 @@ const ErfolgeSection = () => {
             Zahlen, die sprechen.
           </h2>
           <div className="flex flex-wrap justify-center gap-16 md:gap-24">
-            <StatItem end={500} suffix="+" label="Auftritte" />
+            <StatItem end={200} suffix="+" label="Auftritte" />
             <StatItem end={10} suffix="+" label="Jahre" />
             <StatItem end={100} suffix="%" label="Weiterempfehlung" />
           </div>

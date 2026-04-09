@@ -1,5 +1,6 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 const steps = [
   { num: "01", title: "Anfrage senden", desc: "Erzähl mir kurz von deinem Event — Datum, Anlass, Wünsche. Komplett unverbindlich und kostenlos." },
@@ -23,16 +24,17 @@ const ProcessSteps = () => {
         </div>
         <div className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
           {steps.map((s, i) => (
-            <div key={s.num} className="relative" style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
-              <span className="font-display text-6xl font-bold text-accent/10">{s.num}</span>
-              <h3 className="font-display text-lg font-bold text-foreground mt-1 mb-3">{s.title}</h3>
+            <div key={s.num} className="relative p-6 rounded-2xl bg-background hover:shadow-lg transition-all duration-300" style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+              <span className="font-display text-5xl font-bold text-accent/15">{s.num}</span>
+              <h3 className="font-display text-lg font-bold text-foreground mt-3 mb-3">{s.title}</h3>
               <p className="text-detail text-sm">{s.desc}</p>
             </div>
           ))}
         </div>
         <div className={`text-center mt-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.4s" }}>
-          <Link to="/buchung" className="btn-primary">
+          <Link to="/buchung" className="btn-primary group">
             Jetzt anfragen
+            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>

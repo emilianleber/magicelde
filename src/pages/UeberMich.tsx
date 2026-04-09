@@ -6,11 +6,9 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { AwardBadges } from "@/components/landing/TrustElements";
 import portraitImg from "@/assets/magician-portrait.jpg";
-import portraitKartenImg from "@/assets/portrait-karten.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
-import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
-import emotionenImg from "@/assets/emotionen.jpg";
+import audienceImg from "@/assets/audience-reactions.jpg";
 import { Laugh, Heart, Target, Award, Sparkles, Music } from "lucide-react";
 
 const HeroUeber = () => (
@@ -77,11 +75,15 @@ const StorySection = () => {
 const PhilosophieSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section
+      className="section-large section-dark"
+      ref={ref}
+      style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}
+    >
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex">Philosophie</span>
-          <h2 className="headline-section text-foreground mb-6">Was mich antreibt.</h2>
+          <h2 className="headline-section text-white mb-6">Was mich <span className="text-gradient">antreibt.</span></h2>
         </div>
         <div className={`grid md:grid-cols-3 gap-8 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
           {[
@@ -89,10 +91,10 @@ const PhilosophieSection = () => {
             { icon: Heart, title: "Erlebnis vor Trick", desc: "Mir geht es nicht um den Effekt — sondern um das, was er bei Menschen auslöst. Um das Lachen, das Staunen, die Verbindung. Die Magie passiert in den Köpfen." },
             { icon: Target, title: "Immer individuell", desc: "Jedes Event ist anders. Jede Show wird auf den Anlass, das Publikum und die Stimmung abgestimmt. Kein Auftritt gleicht dem anderen." },
           ].map((item, i) => (
-            <div key={item.title} className="p-8 rounded-3xl bg-background">
+            <div key={item.title} className="glass p-8 rounded-3xl">
               <item.icon className="w-8 h-8 text-accent mb-5" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-4">{item.title}</h3>
-              <p className="text-detail">{item.desc}</p>
+              <h3 className="font-display text-xl font-bold text-white mb-4">{item.title}</h3>
+              <p className="text-white/60">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -108,13 +110,8 @@ const WasAndersSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`order-2 md:order-1 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="rounded-3xl overflow-hidden">
-                <img src={buehneZuschauerImg} alt="Begeistertes Publikum" className="w-full h-[300px] object-cover object-top" loading="lazy" />
-              </div>
-              <div className="rounded-3xl overflow-hidden">
-                <img src={portraitKartenImg} alt="Emilian Leber mit Karten" className="w-full h-[300px] object-cover" loading="lazy" />
-              </div>
+            <div className="rounded-3xl overflow-hidden">
+              <img src={audienceImg} alt="Begeistertes Publikum" className="w-full h-[500px] object-cover" loading="lazy" />
             </div>
           </div>
           <div className={`order-1 md:order-2 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
@@ -157,8 +154,8 @@ const StatItem = ({ end, suffix, label }: { end: number; suffix: string; label: 
   const { count, ref } = useCounter(end);
   return (
     <div className="text-center" ref={ref}>
-      <p className="font-display text-5xl md:text-6xl font-bold text-foreground tabular-nums">{count}{suffix}</p>
-      <p className="font-sans text-xs uppercase tracking-widest text-muted-foreground mt-3">{label}</p>
+      <p className="font-display text-5xl md:text-6xl font-bold text-gradient glow-number tabular-nums">{count}{suffix}</p>
+      <p className="font-sans text-xs uppercase tracking-widest text-white/50 mt-3">{label}</p>
     </div>
   );
 };
@@ -166,27 +163,31 @@ const StatItem = ({ end, suffix, label }: { end: number; suffix: string; label: 
 const AuszeichnungenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section
+      className="section-large section-dark"
+      ref={ref}
+      style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}
+    >
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex">Erfahrung</span>
-          <h2 className="headline-section text-foreground mb-6">Highlights & Meilensteine.</h2>
+          <h2 className="headline-section text-white mb-6">Highlights & <span className="text-gradient">Meilensteine.</span></h2>
         </div>
         <div className="flex flex-wrap justify-center gap-16 md:gap-24 mb-20">
-          <StatItem end={500} suffix="+" label="Auftritte" />
+          <StatItem end={200} suffix="+" label="Auftritte" />
           <StatItem end={10} suffix="+" label="Jahre Erfahrung" />
           <StatItem end={100} suffix="%" label="Weiterempfehlung" />
         </div>
-        <div className={`max-w-3xl mx-auto divide-y divide-border ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+        <div className={`max-w-3xl mx-auto divide-y divide-white/10 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
           {[
             { title: "Finalist — Talents of Magic", desc: "Einer der renommiertesten Nachwuchswettbewerbe für Zauberkunst in Deutschland." },
             { title: "TV-Auftritte & Medien", desc: "Auftritte in verschiedenen Fernsehformaten und Showproduktionen." },
-            { title: "500+ erfolgreiche Events", desc: "Von der intimen Hochzeit bis zur Firmengala mit 500+ Gästen." },
+            { title: "200+ erfolgreiche Events", desc: "Von der intimen Hochzeit bis zur Firmengala mit 500+ Gästen." },
             { title: "Deutschlandweit gebucht", desc: "Von Regensburg bis Berlin — zuverlässig, professionell, immer persönlich." },
           ].map((item) => (
             <div key={item.title} className="py-6">
-              <h3 className="font-display text-lg font-bold text-foreground">{item.title}</h3>
-              <p className="text-detail mt-1">{item.desc}</p>
+              <h3 className="font-display text-lg font-bold text-white">{item.title}</h3>
+              <p className="text-white/60 mt-1">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -201,9 +202,9 @@ const GalerieSection = () => {
     <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div className={`grid md:grid-cols-2 gap-4 max-w-5xl mx-auto ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
-          {[stageImg, heroImg, emotionenImg, portraitImg].map((src, i) => (
+          {[stageImg, heroImg, audienceImg, portraitImg].map((src, i) => (
             <div key={i} className="rounded-3xl overflow-hidden aspect-[4/3] group">
-              <img src={src} alt="Performance" className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
+              <img src={src} alt="Performance" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
             </div>
           ))}
         </div>
@@ -218,20 +219,28 @@ const UeberMich = () => (
       <title>Über Emilian Leber – Zauberer &amp; Showkünstler</title>
       <meta
         name="description"
-        content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 500+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows."
+        content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 200+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows."
       />
       <link rel="canonical" href="https://www.magicel.de/ueber-mich" />
       <meta property="og:title" content="Über Emilian Leber – Zauberer & Showkünstler" />
-      <meta property="og:description" content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 500+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows." />
+      <meta property="og:description" content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 200+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows." />
       <meta property="og:url" content="https://www.magicel.de/ueber-mich" />
       <meta property="og:type" content="website" />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
       <meta property="og:locale" content="de_DE" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Über Emilian Leber – Zauberer & Showkünstler" />
-      <meta name="twitter:description" content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 500+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows." />
-        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
-        <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"Person","name":"Emilian Leber","jobTitle":"Zauberkünstler & Entertainer","url":"https://www.magicel.de/ueber-mich","knowsAbout":["Zauberkunst","Close-Up Magie","Bühnenshow","Event-Entertainment"]})}</script>
+      <meta name="twitter:description" content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 200+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows." />
+      <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Emilian Leber",
+        "jobTitle": "Zauberkünstler & Entertainer",
+        "url": "https://www.magicel.de/ueber-mich",
+        "sameAs": ["https://www.instagram.com/magicel.de"],
+        "knowsAbout": ["Zauberkunst", "Close-Up Magie", "Bühnenshow", "Event-Entertainment"]
+      })}</script>
     </Helmet>
     <PageLayout>
     <HeroUeber />

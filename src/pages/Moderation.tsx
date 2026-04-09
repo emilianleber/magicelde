@@ -3,7 +3,6 @@ import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
-import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
 import stageImg from "@/assets/stage-show.jpg";
@@ -52,11 +51,11 @@ const WasIstSection = () => {
 const VorteileSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" ref={ref} style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-gradient-subtle mb-8 inline-flex">Vorteile</span>
-          <h2 className="headline-section text-foreground mb-6">Warum Veranstalter profitieren.</h2>
+          <h2 className="headline-section text-white mb-6">Warum Veranstalter <span className="text-gradient">profitieren</span>.</h2>
         </div>
         <div className={`grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {[
@@ -65,12 +64,12 @@ const VorteileSection = () => {
             { icon: Heart, title: "Empathie", desc: "Das Publikum lesen und abholen. Ob Gala-Stimmung oder lockeres Teamevent — der richtige Ton trifft." },
             { icon: Clock, title: "Timing", desc: "Perfektes Zeitmanagement auf der Bühne. Der Abend läuft flüssig, ohne Leerlauf oder Hektik." },
             { icon: Sparkles, title: "Entertainment", desc: "Optional: Magische Einlagen zwischen den Programmpunkten. Der Mehrwert, den nur ein Showkünstler bieten kann." },
-            { icon: Award, title: "Erfahrung", desc: "Über 500 Events, Galas und Firmenfeiern. Professionelle Vorbereitung und zuverlässige Durchführung." },
+            { icon: Award, title: "Erfahrung", desc: "Über 200 Events, Galas und Firmenfeiern. Professionelle Vorbereitung und zuverlässige Durchführung." },
           ].map((item) => (
-            <div key={item.title} className="p-8 rounded-3xl bg-background group hover:shadow-lg transition-all duration-300">
+            <div key={item.title} className="p-8 rounded-3xl glass group hover:shadow-lg transition-all duration-300">
               <item.icon className="w-7 h-7 text-accent mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="font-display text-lg font-bold text-foreground mb-3">{item.title}</h3>
-              <p className="text-detail text-sm">{item.desc}</p>
+              <h3 className="font-display text-lg font-bold text-white mb-3">{item.title}</h3>
+              <p className="text-white/60 text-sm">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -112,7 +111,7 @@ const EventFormate = () => {
 const KombiSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" ref={ref} style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}>
       <div className="container px-6">
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
@@ -122,13 +121,13 @@ const KombiSection = () => {
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}>
             <span className="badge-gradient mb-8 inline-flex">Kombi-Paket</span>
-            <h2 className="headline-section text-foreground mb-6">Moderation + Entertainment.</h2>
-            <div className="space-y-5 text-detail max-w-lg">
-              <p className="text-lg text-muted-foreground font-light leading-relaxed">
+            <h2 className="headline-section text-white mb-6">Moderation + <span className="text-gradient">Entertainment</span>.</h2>
+            <div className="space-y-5 max-w-lg">
+              <p className="text-lg text-white/70 font-light leading-relaxed">
                 Das Besondere: Ich moderiere euer Event und sorge gleichzeitig für magische Highlights
                 zwischen den Programmpunkten. Zwei Dienstleistungen, ein Künstler — für ein nahtloses Erlebnis.
               </p>
-              <p>
+              <p className="text-white/60">
                 Statt einem Moderator UND einem Entertainer bucht ihr beides in einer Person.
                 Das spart Kosten, vereinfacht die Planung und sorgt für ein stimmiges Gesamtkonzept.
               </p>
@@ -136,7 +135,7 @@ const KombiSection = () => {
                 {["Nahtlose Übergänge zwischen Programm und Entertainment", "Ein Ansprechpartner für alles", "Magische Einlagen als Überraschungsmomente", "Kostenersparnis durch Kombi-Buchung"].map((p) => (
                   <div key={p} className="flex gap-3 items-start">
                     <Check className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                    <p className="text-sm text-foreground">{p}</p>
+                    <p className="text-sm text-white">{p}</p>
                   </div>
                 ))}
               </div>
@@ -151,14 +150,14 @@ const KombiSection = () => {
 const FAQModeration = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large" ref={ref}>
+    <section className="section-large section-dark" ref={ref} style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <div className="text-center mb-16">
             <span className="badge-muted mb-8 inline-flex">FAQ</span>
-            <h2 className="headline-section text-foreground">Häufige Fragen.</h2>
+            <h2 className="headline-section text-white">Häufige <span className="text-gradient">Fragen</span>.</h2>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-white/10">
             {[
               { q: "Moderierst du auch ohne Zaubershow?", a: "Ja, natürlich! Ich moderiere auch rein als Moderator — ohne magische Einlagen. Die Kombination ist optional, aber sehr beliebt." },
               { q: "Für wie viele Gäste moderierst du?", a: "Von intimen Runden mit 30 Gästen bis hin zu Galas mit 1.000+ Teilnehmern — ich passe mich dem Format an." },
@@ -166,11 +165,11 @@ const FAQModeration = () => {
               { q: "Brauchst du ein Script?", a: "Gerne — oder ich entwickle die Moderation frei nach Briefing. Beides funktioniert. Ich bin flexibel und erfahren genug für spontane Anpassungen." },
             ].map((faq) => (
               <details key={faq.q} className="group py-6">
-                <summary className="flex items-center justify-between cursor-pointer font-sans text-base md:text-lg font-medium text-foreground pr-8 hover:text-accent transition-colors list-none">
+                <summary className="flex items-center justify-between cursor-pointer font-sans text-base md:text-lg font-medium text-white pr-8 hover:text-accent transition-colors list-none">
                   {faq.q}
-                  <span className="text-muted-foreground group-open:rotate-45 transition-transform duration-300 text-xl">+</span>
+                  <span className="text-white/40 group-open:rotate-45 transition-transform duration-300 text-xl">+</span>
                 </summary>
-                <p className="text-detail max-w-2xl mt-4">{faq.a}</p>
+                <p className="text-white/60 max-w-2xl mt-4">{faq.a}</p>
               </details>
             ))}
           </div>
@@ -212,7 +211,6 @@ const Moderation = () => (
     <EventFormate />
     <KombiSection />
     <FAQModeration />
-    <ProcessSteps />
     <BookingCTA headline={"Euer Event verdient einen besonderen Moderator."} subline="Ich moderiere mit Persönlichkeit, Charme und optionaler Magie — für Events, die in Erinnerung bleiben." />
   </PageLayout>
   </>

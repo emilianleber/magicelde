@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
-import ProcessSteps from "@/components/landing/ProcessSteps";
 import AnimatedWords from "@/components/landing/AnimatedWords";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import VideoHero from "@/components/landing/VideoHero";
@@ -25,7 +24,7 @@ const WarumSection = () => {
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex">Warum Magie?</span>
-          <h2 className="headline-section text-foreground mb-8">Mehr als ein Geschenk.</h2>
+          <h2 className="headline-section text-foreground mb-8">Mehr als ein <span className="text-gradient">Geschenk</span>.</h2>
           <div className="space-y-5 text-detail max-w-xl">
             <p className="text-lg text-muted-foreground font-light leading-relaxed">
               Ein Zauberer auf dem Geburtstag ist nicht einfach nur Unterhaltung — es ist DAS Erlebnis,
@@ -49,7 +48,7 @@ const WarumSection = () => {
 const VorteileSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }} ref={ref}>
       <div className="container px-6">
         <div className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {[
@@ -58,10 +57,10 @@ const VorteileSection = () => {
             { icon: PartyPopper, title: "Star des Abends", desc: "Das Geburtstagskind steht im Mittelpunkt — als Teil einer persönlichen Show." },
             { icon: Music, title: "Kein Leerlauf", desc: "Perfekt für die Momente zwischen Essen, Reden und Tanzen." },
           ].map((item) => (
-            <div key={item.title} className="p-6 rounded-3xl bg-background group">
+            <div key={item.title} className="glass p-6 rounded-3xl group">
               <item.icon className="w-7 h-7 text-accent mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="font-display text-lg font-bold text-foreground mb-2">{item.title}</h3>
-              <p className="text-detail text-sm">{item.desc}</p>
+              <h3 className="font-display text-lg font-bold mb-2">{item.title}</h3>
+              <p className="text-sm opacity-70">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -106,11 +105,11 @@ const ErlebnisSection = () => {
 const KonzepteSlider = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "linear-gradient(135deg, #08080d 0%, #0f0a1e 50%, #08080d 100%)" }} ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex">Formate</span>
-          <h2 className="headline-section text-foreground mb-6">Drei Erlebnisse für deine Feier.</h2>
+          <h2 className="headline-section mb-6">Drei Erlebnisse für deine Feier.</h2>
         </div>
         <HorizontalSlider
           items={[
@@ -172,10 +171,10 @@ const BeispieleSection = () => {
         </div>
         <div className={`grid md:grid-cols-2 gap-8 max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {[
-            { title: "30. Geburtstag — München", gaeste: "40 Gäste", format: "Close-Up + Mini-Bühnenshow", highlight: "Überraschung perfekt geklappt — alle waren sprachlos!" },
-            { title: "50. Geburtstag — Regensburg", gaeste: "80 Gäste", format: "Bühnenshow 30 Min.", highlight: "Standing Ovation, Geburtstagskind als Star der Show" },
-            { title: "40. Geburtstag — Nürnberg", gaeste: "25 Gäste", format: "Close-Up am Tisch", highlight: "Intime Runde, jeder hat etwas erlebt" },
-            { title: "60. Geburtstag — Stuttgart", gaeste: "100 Gäste", format: "Walking Act + Bühne", highlight: "Jung und Alt gleichermaßen begeistert" },
+            { title: "50. Geburtstag — Nähe Regensburg", gaeste: "35 Gäste", format: "Close-Up + Bühnenshow", highlight: "Überraschung für alle — das Geburtstagskind war sprachlos!" },
+            { title: "Silberhochzeit — Mintraching", gaeste: "30 Gäste", format: "Close-Up Magie", highlight: "Intime Runde, jeder Gast wurde Teil der Magie" },
+            { title: "Silberhochzeit — Nähe Regensburg", gaeste: "40 Gäste", format: "Close-Up + Mini-Bühnenshow", highlight: "Überraschung perfekt geklappt — Standing Ovation!" },
+            { title: "Hochzeit — Steinberg am See", gaeste: "50 Gäste", format: "Close-Up Magie", highlight: "Perfekter Eisbrecher beim Sektempfang" },
           ].map((b) => (
             <div key={b.title} className="p-8 rounded-3xl bg-background">
               <h3 className="font-display text-lg font-bold text-foreground mb-2">{b.title}</h3>
@@ -192,26 +191,26 @@ const BeispieleSection = () => {
 const TestimonialsSlider = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }} ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="headline-section text-foreground">Was Gäste sagen.</h2>
+          <h2 className="headline-section">Was Gäste sagen.</h2>
         </div>
         <HorizontalSlider
           items={[
-            { quote: "Mein 30. war dank Emilian ein Abend, den keiner vergisst. Alle reden heute noch davon!", author: "Lisa R.", role: "30. Geburtstag in München" },
-            { quote: "Die Überraschung hat perfekt funktioniert — alle waren komplett sprachlos!", author: "Stefan K.", role: "50. Geburtstag" },
-            { quote: "Modern, witzig, absolut verblüffend. Genau das Richtige für unsere Feier.", author: "Sandra M.", role: "40. Geburtstag" },
+            { quote: "Emilian hat unseren 50. Geburtstag unvergesslich gemacht. Die Mischung aus Close-Up und Bühnenshow war perfekt.", author: "Christina", role: "Geburtstagsfeier · ProvenExpert" },
+            { quote: "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!", author: "Petra Zeitler", role: "Firmenfeier · ProvenExpert" },
+            { quote: "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!", author: "Martina Senftl", role: "Hochzeit · ProvenExpert" },
           ].map((t) => ({
             content: (
-              <blockquote className="p-8 rounded-3xl bg-muted/40 h-full flex flex-col">
+              <blockquote className="glass p-8 rounded-3xl h-full flex flex-col">
                 <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-accent/70 text-accent/70" />)}
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
                 </div>
-                <p className="font-sans text-base text-foreground leading-relaxed mb-6 flex-1">„{t.quote}"</p>
+                <p className="font-sans text-base leading-relaxed mb-6 flex-1">„{t.quote}"</p>
                 <footer>
-                  <p className="font-sans text-sm font-semibold text-foreground">{t.author}</p>
-                  <p className="font-sans text-xs text-muted-foreground">{t.role}</p>
+                  <p className="font-sans text-sm font-semibold">{t.author}</p>
+                  <p className="font-sans text-xs opacity-50">{t.role}</p>
                 </footer>
               </blockquote>
             ),
@@ -245,13 +244,13 @@ const GalerieSection = () => {
 const FAQBirthday = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large" ref={ref}>
+    <section className="section-large section-alt" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <div className="text-center mb-16">
             <h2 className="headline-section text-foreground mb-6">Häufige Fragen.</h2>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border/40">
             {[
               { q: "Ab wie vielen Gästen lohnt sich ein Zauberer?", a: "Schon ab 10 Gästen funktioniert Close-Up Magie perfekt. Für eine Bühnenshow empfehle ich mindestens 20–30 Gäste." },
               { q: "Kann ich das als Überraschung planen?", a: "Absolut! Die meisten Buchungen sind Überraschungen. Ich bin diskret, komme unauffällig und starte, wenn der Moment perfekt ist." },
@@ -263,7 +262,7 @@ const FAQBirthday = () => {
                   {faq.q}
                   <span className="text-muted-foreground group-open:rotate-45 transition-transform duration-300 text-xl">+</span>
                 </summary>
-                <p className="text-detail max-w-2xl mt-4">{faq.a}</p>
+                <p className="text-muted-foreground max-w-2xl mt-4">{faq.a}</p>
               </details>
             ))}
           </div>
@@ -334,7 +333,6 @@ const Geburtstage = () => (
     <GalerieSection />
     <FAQBirthday />
     <UeberMichKurz />
-    <ProcessSteps />
     <BookingCTA headline={"Mach deinen Geburtstag\nunvergesslich."} subline="Erzähl mir von deiner Feier — ich entwickle das passende Konzept aus Comedy, Magie und Interaktion." />
   </PageLayout>
   </>

@@ -6,36 +6,18 @@ import { Calendar, MapPin, Clock, Ticket, ArrowRight } from "lucide-react";
 import stageImg from "@/assets/stage-show.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 
+const waldWieseImg = "https://restaurant-waldwiese.de/wp-content/uploads/2026/03/WIESE.png";
+
 const shows = [
   {
-    title: "Magic Night Regensburg",
-    date: "12. April 2026",
-    time: "20:00 Uhr",
-    location: "Kolpinghaus Regensburg",
-    desc: "Ein Abend voller Staunen, Lachen und unmöglicher Momente. Die Zaubershow in ihrer vollen Pracht — 90 Minuten Comedy-Magie, die im Kopf bleibt.",
-    img: stageImg,
+    title: "Magic Dinner — Summer Edition",
+    date: "11. Juli 2026",
+    time: "Ab 17:00 Uhr",
+    location: "Wald & Wiese Restaurant, Sinzing bei Regensburg",
+    desc: "Ein Sommerabend voller Genuss und Magie. Genieße dein Dinner auf der Terrasse oder im Innenbereich, während faszinierende Close-Up-Magie direkt an deinem Tisch stattfindet. Optionales Magic Menü verfügbar.",
+    img: waldWieseImg,
     available: true,
-    ticketUrl: "#",
-  },
-  {
-    title: "Comedy Magic Special — München",
-    date: "3. Mai 2026",
-    time: "19:30 Uhr",
-    location: "Vereinsheim München",
-    desc: "Exklusives Showformat in intimer Club-Atmosphäre. Nur 60 Plätze — hautnah, persönlich und garantiert unvergesslich.",
-    img: heroImg,
-    available: true,
-    ticketUrl: "#",
-  },
-  {
-    title: "Magic Dinner — Nürnberg",
-    date: "24. Mai 2026",
-    time: "19:00 Uhr",
-    location: "Restaurant Essigbrätlein",
-    desc: "4-Gänge-Menü trifft Close-Up Magie. Ein exklusiver Abend für Genießer und Staunende — limitiert auf 30 Gäste.",
-    img: heroImg,
-    available: false,
-    ticketUrl: "#",
+    ticketUrl: "https://services.gastronovi.com/restaurants/108071/reservation/widget?event=135047",
   },
 ];
 
@@ -121,9 +103,9 @@ const TicketsPage = () => {
                     </div>
                     <p className="text-detail mb-8">{show.desc}</p>
                     {show.available ? (
-                      <a href={show.ticketUrl} className="btn-primary self-start group/btn">
+                      <a href={show.ticketUrl} target="_blank" rel="noopener noreferrer" className="btn-primary self-start group/btn">
                         <Ticket className="w-4 h-4 mr-2" />
-                        Tickets sichern
+                        Jetzt reservieren
                         <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                       </a>
                     ) : (

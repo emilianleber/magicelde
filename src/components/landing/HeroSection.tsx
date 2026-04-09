@@ -63,7 +63,7 @@ const HeroSection = () => {
           style={{ animationDelay: "1.1s" }}
         >
           {[
-            { value: "500+", label: "Events" },
+            { value: "200+", label: "Events" },
             { value: "10+", label: "Jahre Erfahrung" },
             { value: "Bekannt aus", label: "TV & Medien" },
           ].map((badge) => (

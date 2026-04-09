@@ -1,12 +1,12 @@
 {
-  "name": "Magicel – Emilian Leber",
-  "short_name": "Magicel",
+  "name": "Emilian Leber – Zauberer",
+  "short_name": "Emilian Leber",
   "description": "Zauberer für Events, Firmenfeiern & Hochzeiten",
-  "start_url": "/kundenportal",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a0a0a",
-  "theme_color": "#c4a45e",
+  "theme_color": "#0a0a0a",
   "icons": [
     {
       "src": "/apple-touch-icon.png",
@@ -14,10 +14,10 @@
       "type": "image/png"
     },
     {
-      "src": "/favicon.ico",
-      "sizes": "64x64",
-      "type": "image/x-icon"
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ],
-  "categories": ["business", "productivity"]
+  "categories": ["entertainment"]
 }

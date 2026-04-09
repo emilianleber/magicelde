@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
-import ProcessSteps from "@/components/landing/ProcessSteps";
 import AnimatedWords from "@/components/landing/AnimatedWords";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import VideoHero from "@/components/landing/VideoHero";
@@ -24,7 +23,7 @@ const WasIstSection = () => {
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex">Das Konzept</span>
-          <h2 className="headline-section text-foreground mb-8">Magie zum Anfassen.</h2>
+          <h2 className="headline-section text-foreground mb-8">Magie zum <span className="text-gradient">Anfassen</span>.</h2>
           <div className="space-y-5 text-detail max-w-xl">
             <p className="text-lg text-muted-foreground font-light leading-relaxed">
               Close-Up Magie ist die älteste und zugleich modernste Form der Zauberkunst:
@@ -49,7 +48,7 @@ const WasIstSection = () => {
 const FeaturesSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }} ref={ref}>
       <div className="container px-6">
         <div className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {[
@@ -58,10 +57,10 @@ const FeaturesSection = () => {
             { icon: MessageCircle, title: "Gesprächsstarter", desc: "Der ultimative Icebreaker — perfekt für Empfänge und Networking." },
             { icon: Zap, title: "Überall einsetzbar", desc: "Am Tisch, an der Bar, im Stehen — Close-Up funktioniert überall." },
           ].map((item) => (
-            <div key={item.title} className="p-6 rounded-3xl bg-background group">
+            <div key={item.title} className="glass p-6 rounded-3xl group">
               <item.icon className="w-7 h-7 text-accent mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="font-display text-lg font-bold text-foreground mb-2">{item.title}</h3>
-              <p className="text-detail text-sm">{item.desc}</p>
+              <h3 className="font-display text-lg font-bold mb-2">{item.title}</h3>
+              <p className="text-sm opacity-70">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -103,7 +102,7 @@ const EinsatzSlider = () => {
 const NaeheSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "linear-gradient(135deg, #08080d 0%, #0f0a1e 50%, #08080d 100%)" }} ref={ref}>
       <div className="container px-6">
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`order-2 md:order-1 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
@@ -113,17 +112,17 @@ const NaeheSection = () => {
           </div>
           <div className={`order-1 md:order-2 ${isVisible ? "animate-slide-right" : "opacity-0"}`}>
             <span className="badge-primary mb-8 inline-flex">Nähe & Interaktion</span>
-            <h2 className="headline-section text-foreground mb-6">Das macht Close-Up so besonders.</h2>
-            <div className="space-y-5 text-detail max-w-lg">
-              <p className="text-lg text-muted-foreground font-light leading-relaxed">
+            <h2 className="headline-section mb-6">Das macht Close-Up so <span className="text-gradient">besonders</span>.</h2>
+            <div className="space-y-5 max-w-lg">
+              <p className="text-lg font-light leading-relaxed opacity-70">
                 Du hältst eine Karte in der Hand. Du bist dir sicher, welche es ist.
                 Und dann — ist es eine andere. Unmöglich. Aber es passiert gerade. In deiner Hand.
               </p>
-              <p>
+              <p className="opacity-60">
                 Das ist der Moment, der Close-Up Magie so besonders macht: Du erlebst es nicht auf einer Bühne,
                 sondern direkt, persönlich, hautnah. Und genau deshalb ist die Wirkung so stark.
               </p>
-              <p>
+              <p className="opacity-60">
                 Deine Gäste werden den Rest des Abends darüber reden. „Hast du das gesehen?!"
                 wird zum meistgesagten Satz deiner Veranstaltung.
               </p>
@@ -166,10 +165,10 @@ const AblaufSection = () => {
 const BeispieleSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }} ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="headline-section text-foreground mb-6">Was passiert bei Close-Up Magie?</h2>
+          <h2 className="headline-section mb-6">Was passiert bei Close-Up Magie?</h2>
         </div>
         <div className={`grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {[
@@ -178,9 +177,9 @@ const BeispieleSection = () => {
             { title: "Münzmagie", desc: "Münzen durchdringen Tische, verschwinden und materialisieren sich in geschlossenen Händen." },
             { title: "Alltagsmagie", desc: "Handys, Uhren, Ringe — alltägliche Gegenstände werden zum Medium für verblüffende Effekte." },
           ].map((b) => (
-            <div key={b.title} className="p-8 rounded-3xl bg-background">
-              <h3 className="font-display text-lg font-bold text-foreground mb-3">{b.title}</h3>
-              <p className="text-detail">{b.desc}</p>
+            <div key={b.title} className="glass p-8 rounded-3xl">
+              <h3 className="font-display text-lg font-bold mb-3">{b.title}</h3>
+              <p className="opacity-60">{b.desc}</p>
             </div>
           ))}
         </div>
@@ -243,26 +242,26 @@ const VergleichSection = () => {
 const TestimonialsSlider = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large" ref={ref}>
+    <section className="section-large section-dark" style={{ background: "linear-gradient(135deg, #08080d 0%, #0f0a1e 50%, #08080d 100%)" }} ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="headline-section text-foreground">Stimmen von Gästen.</h2>
+          <h2 className="headline-section">Stimmen von Gästen.</h2>
         </div>
         <HorizontalSlider
           items={[
-            { quote: "So eine intime, verblüffende Magie habe ich noch nie erlebt. Emilian war der Gesprächsstarter des Abends!", author: "Sarah M.", role: "Eventmanagerin" },
-            { quote: "Die Close-Up Magie war perfekt für unseren Empfang. Jeder Gast war sofort in bester Stimmung.", author: "Lena & Markus", role: "Hochzeit" },
-            { quote: "Absolut verblüffend — und dabei so locker und witzig. Genau richtig.", author: "Thomas K.", role: "Firmenfeier" },
+            { quote: "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!", author: "Petra Zeitler", role: "Firmenfeier · ProvenExpert" },
+            { quote: "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!", author: "Martina Senftl", role: "Hochzeit · ProvenExpert" },
+            { quote: "Emilian hat unseren 50. Geburtstag unvergesslich gemacht. Die Mischung aus Close-Up und Bühnenshow war perfekt.", author: "Christina", role: "Geburtstagsfeier · ProvenExpert" },
           ].map((t) => ({
             content: (
-              <blockquote className="p-8 rounded-3xl bg-muted/40 h-full flex flex-col">
+              <blockquote className="glass p-8 rounded-3xl h-full flex flex-col">
                 <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-accent/70 text-accent/70" />)}
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
                 </div>
-                <p className="font-sans text-base text-foreground leading-relaxed mb-6 flex-1">„{t.quote}"</p>
+                <p className="font-sans text-base leading-relaxed mb-6 flex-1">„{t.quote}"</p>
                 <footer>
-                  <p className="font-sans text-sm font-semibold text-foreground">{t.author}</p>
-                  <p className="font-sans text-xs text-muted-foreground">{t.role}</p>
+                  <p className="font-sans text-sm font-semibold">{t.author}</p>
+                  <p className="font-sans text-xs opacity-50">{t.role}</p>
                 </footer>
               </blockquote>
             ),
@@ -282,7 +281,7 @@ const FAQCloseUp = () => {
           <div className="text-center mb-16">
             <h2 className="headline-section text-foreground">Häufige Fragen.</h2>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border/40">
             {[
               { q: "Wie lange dauert Close-Up Magie?", a: "Typischerweise 30–90 Minuten. Jede Gruppe erlebt ca. 5–10 Minuten Magie." },
               { q: "Brauche ich eine spezielle Vorbereitung?", a: "Nein! Ich brauche nur eure Gäste. Kein Tisch, keine Bühne, keine Technik." },
@@ -293,7 +292,7 @@ const FAQCloseUp = () => {
                   {faq.q}
                   <span className="text-muted-foreground group-open:rotate-45 transition-transform duration-300 text-xl">+</span>
                 </summary>
-                <p className="text-detail max-w-2xl mt-4">{faq.a}</p>
+                <p className="text-muted-foreground max-w-2xl mt-4">{faq.a}</p>
               </details>
             ))}
           </div>
@@ -340,7 +339,6 @@ const CloseUp = () => (
     <VergleichSection />
     <TestimonialsSlider />
     <FAQCloseUp />
-    <ProcessSteps />
     <BookingCTA headline={"Hautnah erleben."} subline="Close-Up Magie für dein Event — lass uns sprechen und das perfekte Konzept entwickeln." />
   </PageLayout>
   </>

@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
-import ProcessSteps from "@/components/landing/ProcessSteps";
 import AnimatedWords from "@/components/landing/AnimatedWords";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import VideoHero from "@/components/landing/VideoHero";
@@ -49,11 +48,11 @@ const WasIstSection = () => {
 const HighlightsSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark bg-gradient-to-b from-black via-zinc-950 to-black" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-muted mb-8 inline-flex">Highlights</span>
-          <h2 className="headline-section text-foreground mb-6">Was die Bühnenshow besonders macht.</h2>
+          <h2 className="headline-section text-white mb-6">Was die Bühnenshow <span className="text-gradient">besonders</span> macht.</h2>
         </div>
         <div className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {[
@@ -62,10 +61,10 @@ const HighlightsSection = () => {
             { icon: Sparkles, title: "Comedy-Elemente", desc: "Humor ist der rote Faden — witzig, charmant, nie platt." },
             { icon: Zap, title: "Wow-Momente", desc: "Effekte, die das ganze Publikum gleichzeitig zum Staunen bringen." },
           ].map((item) => (
-            <div key={item.title} className="p-6 rounded-3xl bg-background group">
+            <div key={item.title} className="glass p-6 rounded-3xl group">
               <item.icon className="w-7 h-7 text-accent mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="font-display text-lg font-bold text-foreground mb-2">{item.title}</h3>
-              <p className="text-detail text-sm">{item.desc}</p>
+              <h3 className="font-display text-lg font-bold text-white mb-2">{item.title}</h3>
+              <p className="text-zinc-400 text-sm">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -101,11 +100,11 @@ const FeaturesSection = () => {
 const DramaturgieSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark bg-gradient-to-b from-black via-zinc-950 to-black" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex">Dramaturgie</span>
-          <h2 className="headline-section text-foreground mb-6">Der Aufbau einer Show.</h2>
+          <h2 className="headline-section text-white mb-6">Der Aufbau einer <span className="text-gradient">Show</span>.</h2>
         </div>
         <div className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {[
@@ -114,10 +113,10 @@ const DramaturgieSection = () => {
             { num: "03", title: "Steigerung", desc: "Die Effekte werden größer, die Reaktionen stärker." },
             { num: "04", title: "Grand Finale", desc: "Ein Schlusspunkt, der alle von den Sitzen reißt." },
           ].map((s) => (
-            <div key={s.num} className="p-6 rounded-3xl bg-background">
-              <span className="font-display text-5xl font-bold text-accent/10">{s.num}</span>
-              <h3 className="font-display text-lg font-bold text-foreground mt-2 mb-3">{s.title}</h3>
-              <p className="text-detail text-sm">{s.desc}</p>
+            <div key={s.num} className="glass p-6 rounded-3xl">
+              <span className="font-display text-5xl font-bold text-gradient glow-number">{s.num}</span>
+              <h3 className="font-display text-lg font-bold text-white mt-2 mb-3">{s.title}</h3>
+              <p className="text-zinc-400 text-sm">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -221,26 +220,26 @@ const VergleichSection = () => {
 const TestimonialsSlider = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section className="section-large section-dark bg-gradient-to-b from-black via-zinc-950 to-black" ref={ref}>
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="headline-section text-foreground">Das sagen Veranstalter.</h2>
+          <h2 className="headline-section text-white">Das sagen Veranstalter.</h2>
         </div>
         <HorizontalSlider
           items={[
-            { quote: "Die Bühnenshow war das absolute Highlight unserer Firmenfeier. Standing Ovation von 300 Gästen!", author: "Thomas K.", role: "Geschäftsführer" },
-            { quote: "Professionell, witzig, verblüffend — und perfekt auf unseren Anlass abgestimmt.", author: "Katrin W.", role: "Head of Events" },
-            { quote: "Eine Show, die wirklich alle begeistert hat — vom Azubi bis zum Vorstand.", author: "Marc L.", role: "HR Director" },
+            { quote: "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!", author: "Martina Senftl", role: "Hochzeit · ProvenExpert" },
+            { quote: "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!", author: "Petra Zeitler", role: "Firmenfeier · ProvenExpert" },
+            { quote: "Emilian hat unseren 50. Geburtstag unvergesslich gemacht. Die Mischung aus Close-Up und Bühnenshow war perfekt.", author: "Christina", role: "Geburtstagsfeier · ProvenExpert" },
           ].map((t) => ({
             content: (
-              <blockquote className="p-8 rounded-3xl bg-background h-full flex flex-col">
+              <blockquote className="glass p-8 rounded-3xl h-full flex flex-col">
                 <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-accent/70 text-accent/70" />)}
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
                 </div>
-                <p className="font-sans text-base text-foreground leading-relaxed mb-6 flex-1">„{t.quote}"</p>
+                <p className="font-sans text-base text-white leading-relaxed mb-6 flex-1">„{t.quote}"</p>
                 <footer>
-                  <p className="font-sans text-sm font-semibold text-foreground">{t.author}</p>
-                  <p className="font-sans text-xs text-muted-foreground">{t.role}</p>
+                  <p className="font-sans text-sm font-semibold text-white">{t.author}</p>
+                  <p className="font-sans text-xs text-zinc-400">{t.role}</p>
                 </footer>
               </blockquote>
             ),
@@ -277,7 +276,7 @@ const FAQBuehne = () => {
           <div className="text-center mb-16">
             <h2 className="headline-section text-foreground">Häufige Fragen.</h2>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border/40">
             {[
               { q: "Wie lang ist die Bühnenshow?", a: "Flexibel von 15 bis 60 Minuten — je nach Event und Ablauf." },
               { q: "Brauche ich eine Bühne?", a: "Nicht zwingend. Eine erhöhte Fläche ist ideal, aber auch ohne Bühne funktioniert die Show." },
@@ -288,7 +287,7 @@ const FAQBuehne = () => {
                   {faq.q}
                   <span className="text-muted-foreground group-open:rotate-45 transition-transform duration-300 text-xl">+</span>
                 </summary>
-                <p className="text-detail max-w-2xl mt-4">{faq.a}</p>
+                <p className="text-muted-foreground max-w-2xl mt-4">{faq.a}</p>
               </details>
             ))}
           </div>
@@ -335,7 +334,6 @@ const Buehnenshow = () => (
     <TestimonialsSlider />
     <GalerieSection />
     <FAQBuehne />
-    <ProcessSteps />
     <BookingCTA headline={"Die Bühne gehört dir."} subline="Lass uns über dein Event sprechen — ich entwickle eine Show, die perfekt zu eurem Anlass passt." />
   </PageLayout>
   </>

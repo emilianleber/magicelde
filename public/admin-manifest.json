@@ -1,5 +1,5 @@
 {
-  "name": "MagicEL CRM",
+  "name": "Emilian Leber CRM",
   "short_name": "CRM",
   "description": "Emilian Leber – Admin & CRM",
   "start_url": "/admin/dashboard",
@@ -10,14 +10,9 @@
   "theme_color": "#0a0a0a",
   "icons": [
     {
-      "src": "/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
-    },
-    {
-      "src": "/favicon.ico",
-      "sizes": "64x64",
-      "type": "image/x-icon"
+      "src": "/icon-source.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ],
   "categories": ["business", "productivity"]

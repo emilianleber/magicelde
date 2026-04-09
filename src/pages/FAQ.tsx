@@ -46,13 +46,13 @@ const faqs = [
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-border">
+    <div className="border-b border-border/40">
       <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between py-6 text-left group">
         <h3 className="font-sans text-base md:text-lg font-medium text-foreground pr-8 group-hover:text-accent transition-colors">{q}</h3>
         <ChevronDown className={`w-5 h-5 text-muted-foreground shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
       </button>
       <div className={`overflow-hidden transition-all duration-300 ${open ? "max-h-[500px] pb-6" : "max-h-0"}`}>
-        <p className="text-detail max-w-2xl">{a}</p>
+        <p className="text-muted-foreground max-w-2xl">{a}</p>
       </div>
     </div>
   );
@@ -97,7 +97,7 @@ const FAQPage = () => {
               <span className="badge-accent mb-8 inline-flex">FAQ</span>
             </div>
             <h1 className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground" style={{ animationDelay: "0.3s" }}>
-              Häufige Fragen.
+              Häufige <span className="text-gradient">Fragen</span>.
             </h1>
             <p className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up" style={{ animationDelay: "0.5s" }}>
               Alles, was du wissen musst — kurz, klar und ehrlich beantwortet.
@@ -108,7 +108,7 @@ const FAQPage = () => {
       </section>
 
       {faqs.map((cat, ci) => (
-        <section key={cat.category} className={`${ci % 2 === 0 ? "" : "section-alt"} py-16 md:py-24`} ref={ci === 0 ? ref : undefined}>
+        <section key={cat.category} className={`py-16 md:py-24 ${ci % 2 === 0 ? "" : "section-alt"}`} ref={ci === 0 ? ref : undefined}>
           <div className="container px-6">
             <div className="max-w-3xl mx-auto">
               <h2 className={`font-display text-2xl md:text-3xl font-bold text-foreground mb-8 ${ci === 0 && isVisible ? "animate-fade-up" : ""}`}>{cat.category}</h2>
