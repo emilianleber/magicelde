@@ -40,7 +40,7 @@ const WasIstSection = () => {
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={heroImg} alt="Moderation auf der Bühne" className="w-full h-[500px] object-cover object-top" loading="lazy" />
+              <img src={stageImg} alt="Moderation auf der Bühne" className="w-full h-[500px] object-cover object-top" loading="lazy" />
             </div>
           </div>
         </div>
