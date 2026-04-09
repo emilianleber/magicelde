@@ -9,6 +9,7 @@ import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
+import birthdayHeroImg from "@/assets/hero-geburtstag-stock.jpg";
 import heroImg from "@/assets/emotionen.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
@@ -314,7 +315,7 @@ const Geburtstage = () => (
     </Helmet>
     <PageLayout>
     <BackgroundHero
-      imageSrc={heroImg}
+      imageSrc={birthdayHeroImg}
       badge="Zauberer für deinen Geburtstag"
       headline="Ein Geburtstag, der"
       animatedWords={["bleibt.", "überrascht.", "begeistert.", "verbindet."]}

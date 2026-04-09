@@ -8,7 +8,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import weddingHeroImg from "@/assets/schneider-weisse-closeup.jpg";
+import weddingHeroImg from "@/assets/hero-hochzeit-stock.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";

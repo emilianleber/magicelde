@@ -7,6 +7,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import corporateHeroImg from "@/assets/hero-firmenfeier-stock.jpg";
 import corporateImg from "@/assets/buehne-zuschauer.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import closeupImg from "@/assets/closeup.jpg";
@@ -34,7 +35,7 @@ import {
 /* 1. Hero */
 const HeroCorporate = () => (
   <BackgroundHero
-    imageSrc={corporateImg}
+    imageSrc={corporateHeroImg}
     badge="Zauberer für Firmenfeiern & Events"
     headline="Events, die"
     animatedWords={["wirken.", "verbinden.", "beeindrucken.", "bleiben."]}
