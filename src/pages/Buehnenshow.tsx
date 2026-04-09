@@ -10,9 +10,9 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
 import stageImg from "@/assets/hero-stage.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
+import audienceImg from "@/assets/zuschauer-blau.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
-import closeupImg from "@/assets/closeup-magic.jpg";
+import closeupImg from "@/assets/closeup.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import { ArrowRight, Users, Clock, Mic, Palette, Star, Zap, Theater, Sparkles, Eye } from "lucide-react";
 

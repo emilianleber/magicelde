@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import stageImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
-import heroImg from "@/assets/hero-magic.jpg";
+import heroImg from "@/assets/moderator-hero.jpg";
 import { Mic, Users, Sparkles, Star, ArrowRight, Zap, Heart, Check, Clock, Award, MessageCircle } from "lucide-react";
 
 const WasIstSection = () => {

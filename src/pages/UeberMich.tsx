@@ -6,6 +6,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { AwardBadges } from "@/components/landing/TrustElements";
 import portraitImg from "@/assets/magician-portrait.jpg";
+import portraitKartenImg from "@/assets/portrait-karten.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
@@ -106,8 +107,13 @@ const WasAndersSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`order-2 md:order-1 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="rounded-3xl overflow-hidden">
-              <img src={audienceImg} alt="Begeistertes Publikum" className="w-full h-[500px] object-cover" loading="lazy" />
+            <div className="grid grid-cols-1 gap-4">
+              <div className="rounded-3xl overflow-hidden">
+                <img src={audienceImg} alt="Begeistertes Publikum" className="w-full h-[300px] object-cover" loading="lazy" />
+              </div>
+              <div className="rounded-3xl overflow-hidden">
+                <img src={portraitKartenImg} alt="Emilian Leber mit Karten" className="w-full h-[300px] object-cover" loading="lazy" />
+              </div>
             </div>
           </div>
           <div className={`order-1 md:order-2 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>

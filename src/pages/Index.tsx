@@ -29,15 +29,18 @@ import {
 } from "lucide-react";
 
 import heroStartImg from "@/assets/hero-start.jpg";
-import audienceImg from "@/assets/bühne zuschauer.jpg";
-import closeupImg from "@/assets/cards.jpg";
+import audienceImg from "@/assets/buehne-zuschauer.jpg";
+import closeupImg from "@/assets/emilian-portrait-cards.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import weddingImg from "@/assets/wedding-magic.jpg";
-import corporateImg from "@/assets/corporate-event.jpg";
+import corporateImg from "@/assets/firmenfeier-hero.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
-import closeupWalkingImg from "@/assets/closeup.jpg";
+import closeupWalkingImg from "@/assets/schneider-weisse-closeup.jpg";
 import emotionenImg from "@/assets/emotionen.jpg";
-import magicDinnerBookImg from "@/assets/magicdinner book.jpeg";
+import magicDinnerBookImg from "@/assets/magicdinner-book.jpg";
+import moderatorImg from "@/assets/moderator-hero.jpg";
+import magicDinnerEventImg from "@/assets/emilian-magic-dinner.jpg";
+import buchImg from "@/assets/emilian-portrait-buch.jpg";
 
 /* ─── 1. Video Hero ─── */
 const VideoHeroSection = () => (
@@ -113,7 +116,7 @@ const ShowformateSlider = () => {
       link: "/close-up",
     },
     {
-      img: stageImg,
+      img: moderatorImg,
       imgClass: "object-[center_top]",
       title: "Bühnenshow",
       sub: "Das zentrale Highlight",
@@ -121,7 +124,7 @@ const ShowformateSlider = () => {
       link: "/buehnenshow",
     },
     {
-      img: portraitImg,
+      img: magicDinnerEventImg,
       imgClass: "object-[center_top]",
       title: "Magic Dinner",
       sub: "Kulinarik trifft Magie",

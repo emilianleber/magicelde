@@ -6,7 +6,7 @@ import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { staedte } from "@/data/staedte";
 import heroImg from "@/assets/hero-magic.jpg";
-import closeupImg from "@/assets/closeup-magic.jpg";
+import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 import { Star, ArrowRight, Users, Sparkles, Building2 } from "lucide-react";

@@ -5,7 +5,7 @@ import { blogPosts } from "@/data/blogPosts";
 import { ArrowLeft } from "lucide-react";
 import heroImg from "@/assets/hero-magic.jpg";
 import stageImg from "@/assets/stage-show.jpg";
-import closeupImg from "@/assets/closeup-magic.jpg";
+import closeupImg from "@/assets/closeup.jpg";
 import dinnerImg from "@/assets/hero-dinner.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 

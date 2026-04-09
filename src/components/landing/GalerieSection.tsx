@@ -1,8 +1,10 @@
 import heroImg from "@/assets/hero-magic.jpg";
-import staunenImg from "@/assets/staunen.jpeg";
+import staunenImg from "@/assets/staunen.jpg";
 import stageImg from "@/assets/stage-show.jpg";
-import buehneZuschauerImg from "@/assets/bühne zuschauer.jpg";
+import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
+import zuschBlauImg from "@/assets/zuschauer-blau.jpg";
+import dinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const images = [
@@ -35,6 +37,18 @@ const images = [
     alt: "Emilian Leber als Zauberer bei einem Event",
     className: "",
     imgClassName: "object-[center_top]",
+  },
+  {
+    src: zuschBlauImg,
+    alt: "Zuschauer in blauem Bühnenlicht",
+    className: "",
+    imgClassName: "object-center",
+  },
+  {
+    src: dinnerBuehneImg,
+    alt: "Magic Dinner Bühnenperformance",
+    className: "",
+    imgClassName: "object-center",
   },
 ];
 

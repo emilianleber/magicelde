@@ -6,7 +6,11 @@ import portraitImg from "@/assets/magician-portrait.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
-import closeupImg from "@/assets/closeup-magic.jpg";
+import closeupImg from "@/assets/closeup.jpg";
+import greatestTalentImg from "@/assets/greatest-talent-presse.jpg";
+import talentsTeamImg from "@/assets/talents-of-magic-team.jpg";
+import buehneDpsgImg from "@/assets/buehne-dpsg.jpg";
+import schneiderWeisseImg from "@/assets/schneider-weisse-closeup.jpg";
 import { Award, Tv, Calendar, Globe, Download, FileText, Image, Mail, Star, Users, Mic, Trophy, Newspaper, Quote } from "lucide-react";
 
 /* ── Hero ── */
@@ -244,6 +248,10 @@ const FotosSection = () => {
             { src: heroImg, label: "Performance" },
             { src: audienceImg, label: "Publikum" },
             { src: closeupImg, label: "Close-Up Magie" },
+            { src: greatestTalentImg, label: "Greatest Talent" },
+            { src: talentsTeamImg, label: "Talents of Magic Team" },
+            { src: buehneDpsgImg, label: "Bühne DPSG" },
+            { src: schneiderWeisseImg, label: "Schneider Weisse Close-Up" },
           ].map((img, i) => (
             <div key={i} className="group rounded-2xl overflow-hidden aspect-[4/3] relative">
               <img src={img.src} alt={`Pressefoto – ${img.label}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />

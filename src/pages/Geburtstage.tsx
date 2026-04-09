@@ -10,9 +10,9 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
 import heroImg from "@/assets/hero-birthday.jpg";
-import closeupImg from "@/assets/closeup-magic.jpg";
+import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
+import audienceImg from "@/assets/haende-interaktion.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import { Star, PartyPopper, Gift, Users, Music, ArrowRight, Heart, Sparkles, Check, MessageCircle } from "lucide-react";
 

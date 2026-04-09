@@ -1,4 +1,4 @@
-import closeupImg from "@/assets/closeup-magic.jpg";
+import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
 import { useScrollReveal } from "@/hooks/useScrollReveal";

@@ -8,8 +8,8 @@ import { Star } from "lucide-react";
 import heroImg from "@/assets/hero-magic.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 import stageImg from "@/assets/stage-show.jpg";
-import closeupImg from "@/assets/closeup-magic.jpg";
-import corporateImg from "@/assets/corporate-event.jpg";
+import closeupImg from "@/assets/schneider-weisse-closeup.jpg";
+import corporateImg from "@/assets/firmenfeier-hero.jpg";
 import weddingImg from "@/assets/wedding-magic.jpg";
 
 const StatItem = ({ end, suffix, label }: { end: number; suffix: string; label: string }) => {
