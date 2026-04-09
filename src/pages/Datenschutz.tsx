@@ -48,7 +48,7 @@ const Datenschutz = () => (
               Emilian Leber<br />
               MagicEL Entertainment<br />
               93047 Regensburg, Bayern<br />
-              E-Mail: kontakt@magicel.de<br />
+              E-Mail: el@magicel.de<br />
               Telefon: Auf Anfrage
             </p>
             <p>Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. Ä.) entscheidet.</p>
@@ -110,10 +110,10 @@ const Datenschutz = () => (
               <li><strong className="text-foreground">Recht auf Widerruf</strong> -- Erteilte Einwilligungen können Sie jederzeit mit Wirkung für die Zukunft widerrufen.</li>
               <li><strong className="text-foreground">Beschwerderecht</strong> -- Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Zuständig ist das Bayerische Landesamt für Datenschutzaufsicht (BayLDA).</li>
             </ul>
-            <p>Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: kontakt@magicel.de</p>
+            <p>Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: el@magicel.de</p>
 
             <h2 className="headline-sub text-foreground !mt-12">9. Widerruf Ihrer Einwilligung zur Datenverarbeitung</h2>
-            <p>Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt. Den Widerruf können Sie formlos per E-Mail an kontakt@magicel.de richten.</p>
+            <p>Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt. Den Widerruf können Sie formlos per E-Mail an el@magicel.de richten.</p>
 
             <h2 className="headline-sub text-foreground !mt-12">10. Aktualität und Änderung dieser Datenschutzerklärung</h2>
             <p>Diese Datenschutzerklärung ist aktuell gültig und hat den Stand April 2026. Durch die Weiterentwicklung unserer Website oder aufgrund geänderter gesetzlicher bzw. behördlicher Vorgaben kann es notwendig werden, diese Datenschutzerklärung anzupassen.</p>
