@@ -4,8 +4,8 @@ import PageLayout from "@/components/landing/PageLayout";
 const Impressum = () => (
   <>
     <Helmet>
-      <title>Impressum – Emilian Leber</title>
-      <meta name="description" content="Impressum von Emilian Leber, Zauberer und Showkünstler aus Regensburg. Angaben gemäß § 5 TMG." />
+      <title>Impressum – Emilian Leber | MagicEL Entertainment Regensburg</title>
+      <meta name="description" content="Impressum und Kontaktdaten von Emilian Leber / MagicEL Entertainment aus Regensburg. Angaben gemäß § 5 TMG für die Website magicel.de. Zauberer und Showkünstler." />
       <link rel="canonical" href="https://www.magicel.de/impressum" />
       <meta property="og:title" content="Impressum – Emilian Leber" />
       <meta property="og:description" content="Impressum von Emilian Leber, Zauberer und Showkünstler aus Regensburg. Angaben gemäß § 5 TMG." />
@@ -16,6 +16,7 @@ const Impressum = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Impressum – Emilian Leber" />
       <meta name="twitter:description" content="Impressum von Emilian Leber, Zauberer und Showkünstler aus Regensburg. Angaben gemäß § 5 TMG." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
     </Helmet>
     <PageLayout>
     <section className="min-h-screen">

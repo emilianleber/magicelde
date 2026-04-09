@@ -313,6 +313,8 @@ const Buehnenshow = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Bühnenshow Zauberer – Emilian Leber | Comedy-Zaubershow" />
       <meta name="twitter:description" content="Die Bühnenshow von Zauberer Emilian Leber: Comedy-Magie mit Dramaturgie, Publikumseinbindung und Wow-Momenten. Für Firmenfeiern, Galas und Events." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"Service","name":"Bühnenshow","provider":{"@type":"Person","name":"Emilian Leber","url":"https://www.magicel.de"},"description":"Comedy-Zaubershow mit Dramaturgie, Publikumseinbindung und Wow-Momenten für Firmenfeiern und Galas.","areaServed":{"@type":"Country","name":"Deutschland"},"url":"https://www.magicel.de/buehnenshow"})}</script>
     </Helmet>
     <PageLayout>
     <BackgroundHero

@@ -285,6 +285,8 @@ const Presse = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Presse – Emilian Leber | Pressekit & Medien" />
       <meta name="twitter:description" content="Presseinfos, Medienauftritte und Pressekit von Zauberer Emilian Leber. Portfolio-Download, Pressefotos und Infomaterial für Journalisten und Redaktionen." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"WebPage","name":"Presse & Medien – Emilian Leber","description":"Presseinfos, Medienauftritte und Pressekit von Zauberer Emilian Leber.","url":"https://www.magicel.de/presse"})}</script>
     </Helmet>
     <PageLayout>
       <HeroPresse />

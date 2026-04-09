@@ -733,6 +733,7 @@ const Firmenfeiern = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Firmenfeier Zauberer – Emilian Leber | Zauberer für Firmenfeiern & Events" />
       <meta name="twitter:description" content="Firmenfeier Zauberer Emilian Leber: interaktive Magie für Firmenfeier, Weihnachtsfeier, Gala & Kundenevent. Close-Up, Bühnenshow oder individuelles Konzept." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Service",

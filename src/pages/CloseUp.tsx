@@ -318,6 +318,8 @@ const CloseUp = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Close-Up Magie – Emilian Leber | Interaktive Zauberkunst" />
       <meta name="twitter:description" content="Close-Up Magie von Emilian Leber: interaktive Zauberkunst direkt in den Händen Ihrer Gäste. Perfekt für Empfänge, Dinner und Networking-Events." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"Service","name":"Close-Up Magie","provider":{"@type":"Person","name":"Emilian Leber","url":"https://www.magicel.de"},"description":"Interaktive Close-Up Zauberkunst direkt bei den Gästen. Perfekt für Empfänge, Dinner und Events.","areaServed":{"@type":"Country","name":"Deutschland"},"url":"https://www.magicel.de/close-up"})}</script>
     </Helmet>
     <PageLayout>
     <BackgroundHero

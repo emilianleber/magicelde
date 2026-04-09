@@ -637,6 +637,7 @@ const Index = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Zauberer für Hochzeiten & Events – Emilian Leber" />
         <meta name="twitter:description" content="Emilian Leber ist Ihr Zauberer für Hochzeiten, Firmenfeiern und Events. Interaktive Magie & Comedy – unvergesslich, professionell, deutschlandweit buchbar." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "LocalBusiness",

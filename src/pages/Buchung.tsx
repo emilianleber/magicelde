@@ -329,6 +329,7 @@ const Buchung = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Jetzt anfragen – Emilian Leber | Zauberer buchen" />
       <meta name="twitter:description" content="Jetzt Zauberer Emilian Leber buchen: unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event. Kostenlose Beratung, Antwort innerhalb 24 Stunden." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
     </Helmet>
     <PageLayout>
     <HeroBuchung />

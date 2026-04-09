@@ -25,6 +25,16 @@ const StadtSeite = () => {
           content={`Zauberer in ${data.name}: Emilian Leber begeistert mit interaktiver Magie & Comedy auf Hochzeiten, Firmenfeiern und Events. Jetzt unverbindlich anfragen!`}
         />
         <link rel="canonical" href={`https://www.magicel.de/zauberer/${data.slug}`} />
+        <meta property="og:title" content={`Zauberer ${data.name} – Emilian Leber`} />
+        <meta property="og:description" content={`Zauberer in ${data.name}: Emilian Leber begeistert mit interaktiver Magie & Comedy auf Hochzeiten, Firmenfeiern und Events.`} />
+        <meta property="og:url" content={`https://www.magicel.de/zauberer/${data.slug}`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+        <meta property="og:locale" content="de_DE" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`Zauberer ${data.name} – Emilian Leber`} />
+        <meta name="twitter:description" content={`Zauberer in ${data.name}: Emilian Leber begeistert mit interaktiver Magie & Comedy auf Hochzeiten, Firmenfeiern und Events.`} />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "LocalBusiness",

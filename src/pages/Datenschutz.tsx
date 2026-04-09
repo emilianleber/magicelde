@@ -4,8 +4,8 @@ import PageLayout from "@/components/landing/PageLayout";
 const Datenschutz = () => (
   <>
     <Helmet>
-      <title>Datenschutz – Emilian Leber</title>
-      <meta name="description" content="Datenschutzerklärung von Emilian Leber (MagicEL Entertainment). Informationen zur Verarbeitung personenbezogener Daten gemäß DSGVO." />
+      <title>Datenschutzerklärung – Emilian Leber | MagicEL Entertainment</title>
+      <meta name="description" content="Datenschutzerklärung von Emilian Leber / MagicEL Entertainment. Informationen zur Erhebung, Verarbeitung und Nutzung personenbezogener Daten auf magicel.de gemäß DSGVO." />
       <link rel="canonical" href="https://www.magicel.de/datenschutz" />
       <meta property="og:title" content="Datenschutz – Emilian Leber" />
       <meta property="og:description" content="Datenschutzerklärung von Emilian Leber (MagicEL Entertainment). Informationen zur Verarbeitung personenbezogener Daten gemäß DSGVO." />
@@ -16,6 +16,7 @@ const Datenschutz = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Datenschutz – Emilian Leber" />
       <meta name="twitter:description" content="Datenschutzerklärung von Emilian Leber (MagicEL Entertainment). Informationen zur Verarbeitung personenbezogener Daten gemäß DSGVO." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
     </Helmet>
     <PageLayout>
     <section className="min-h-screen">

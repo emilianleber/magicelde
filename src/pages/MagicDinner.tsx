@@ -476,6 +476,8 @@ const MagicDinner = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Magic Dinner – Zauberhafte Dinner-Show mit Emilian Leber" />
       <meta name="twitter:description" content="Das Magic Dinner von Emilian Leber verbindet Hochküche mit interaktiver Magie. Ein unvergessliches Erlebnis für besondere Abende und exklusive Firmenevents." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"Service","name":"Magic Dinner","provider":{"@type":"Person","name":"Emilian Leber","url":"https://www.magicel.de"},"description":"Zauberhafte Dinner-Show: Kulinarik und interaktive Magie verschmelzen zu einem unvergesslichen Erlebnis.","areaServed":{"@type":"Country","name":"Deutschland"},"url":"https://www.magicel.de/magic-dinner"})}</script>
     </Helmet>
     <PageLayout>
     <BackgroundHero

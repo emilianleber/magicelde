@@ -176,6 +176,7 @@ const Kontakt = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Kontakt & Anfrage – Zauberer Emilian Leber" />
       <meta name="twitter:description" content="Jetzt Kontakt aufnehmen mit Zauberer Emilian Leber. Unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event – Antwort innerhalb von 24 Stunden." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
     </Helmet>
     <PageLayout>
       <HeroKontakt />

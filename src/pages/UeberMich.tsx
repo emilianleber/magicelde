@@ -230,6 +230,8 @@ const UeberMich = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Über Emilian Leber – Zauberer & Showkünstler" />
       <meta name="twitter:description" content="Emilian Leber ist moderner Comedy-Zauberer mit über 10 Jahren Erfahrung und 500+ Events. Erfahre mehr über seinen Weg, seine Philosophie und seine Shows." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"Person","name":"Emilian Leber","jobTitle":"Zauberkünstler & Entertainer","url":"https://www.magicel.de/ueber-mich","knowsAbout":["Zauberkunst","Close-Up Magie","Bühnenshow","Event-Entertainment"]})}</script>
     </Helmet>
     <PageLayout>
     <HeroUeber />

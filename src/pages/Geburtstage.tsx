@@ -312,6 +312,8 @@ const Geburtstage = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Geburtstag Zauberer – Emilian Leber | Zaubershow für Geburtstage" />
       <meta name="twitter:description" content="Zauberer für Geburtstage: Emilian Leber macht deinen Geburtstag unvergesslich. Comedy-Magie als Überraschung für 30., 40., 50. oder 60. Geburtstag." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"Service","name":"Zauberer für Geburtstage","provider":{"@type":"Person","name":"Emilian Leber","url":"https://www.magicel.de"},"description":"Zaubershow für Geburtstage: Interaktive Magie, die das Geburtstagskind und alle Gäste begeistert.","areaServed":{"@type":"Country","name":"Deutschland"},"url":"https://www.magicel.de/geburtstage"})}</script>
     </Helmet>
     <PageLayout>
     <BackgroundHero

@@ -1,4 +1,5 @@
 import { useParams, Navigate, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import { blogPosts } from "@/data/blogPosts";
@@ -83,7 +84,35 @@ const BlogPost = () => {
   const content = blogContent[post.slug] || [];
   const image = blogImages[post.slug] || heroImg;
 
+  const description = post.excerpt.length > 160 ? post.excerpt.substring(0, 157) + "..." : post.excerpt;
+
   return (
+    <>
+    <Helmet>
+      <title>{post.title} | Emilian Leber Magazin</title>
+      <meta name="description" content={description} />
+      <link rel="canonical" href={`https://www.magicel.de/magazin/${slug}`} />
+      <meta property="og:title" content={post.title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={`https://www.magicel.de/magazin/${slug}`} />
+      <meta property="og:type" content="article" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={post.title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": post.title,
+        "description": description,
+        "datePublished": post.date,
+        "author": { "@type": "Person", "name": "Emilian Leber" },
+        "publisher": { "@type": "Organization", "name": "MagicEL Entertainment", "url": "https://www.magicel.de" },
+        "url": `https://www.magicel.de/magazin/${slug}`
+      })}</script>
+    </Helmet>
     <PageLayout>
       <article>
         {/* Hero */}
@@ -152,6 +181,7 @@ const BlogPost = () => {
 
       <BookingCTA headline={"Lust auf mehr?"} subline="Erlebe Comedy-Magie live auf deinem Event — oder lies weiter im Magazin." />
     </PageLayout>
+    </>
   );
 };
 

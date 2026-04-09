@@ -33,6 +33,7 @@ const Blog = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Magazin – Emilian Leber | Blog über Zauberkunst & Events" />
         <meta name="twitter:description" content="Tipps für Events, Einblicke hinter die Kulissen und alles rund um moderne Comedy-Magie. Der Blog von Zauberer Emilian Leber." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
       </Helmet>
       <PageLayout>
       {/* Hero */}

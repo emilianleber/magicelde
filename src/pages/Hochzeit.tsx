@@ -793,6 +793,7 @@ const Hochzeit = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Hochzeitszauberer – Emilian Leber | Zauberer für Hochzeiten" />
       <meta name="twitter:description" content="Emilian Leber ist Hochzeitszauberer und sorgt deutschlandweit mit moderner Zauberkunst für unvergessliche Momente auf Ihrer Hochzeit." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Service",

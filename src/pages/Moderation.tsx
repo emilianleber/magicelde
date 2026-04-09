@@ -195,6 +195,8 @@ const Moderation = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Event-Moderator – Emilian Leber | Moderation mit Magie" />
       <meta name="twitter:description" content="Event-Moderator Emilian Leber: Moderation mit Charme, Humor und optionaler Magie. Für Firmenfeiern, Galas, Award-Verleihungen und Messen." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"Service","name":"Event-Moderation","provider":{"@type":"Person","name":"Emilian Leber","url":"https://www.magicel.de"},"description":"Event-Moderation mit Charme, Humor und optionaler Magie für Firmenfeiern, Galas und Award-Verleihungen.","areaServed":{"@type":"Country","name":"Deutschland"},"url":"https://www.magicel.de/moderation"})}</script>
     </Helmet>
     <PageLayout>
     <BackgroundHero

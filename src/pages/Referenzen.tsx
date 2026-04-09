@@ -133,6 +133,7 @@ const Referenzen = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Referenzen & Bewertungen – Emilian Leber Zauberer" />
       <meta name="twitter:description" content="Über 500 Events, 4.9 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "LocalBusiness",

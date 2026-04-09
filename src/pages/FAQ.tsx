@@ -75,6 +75,7 @@ const FAQPage = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="FAQ – Häufige Fragen | Emilian Leber Zauberer" />
         <meta name="twitter:description" content="Häufige Fragen zu Buchung, Shows, Preisen und Technik. Alles, was du über Zauberer Emilian Leber und seine Shows wissen musst." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",

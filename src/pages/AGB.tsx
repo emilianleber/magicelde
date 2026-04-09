@@ -4,8 +4,8 @@ import PageLayout from "@/components/landing/PageLayout";
 const AGB = () => (
   <>
     <Helmet>
-      <title>AGB – Emilian Leber</title>
-      <meta name="description" content="Allgemeine Geschäftsbedingungen von Zauberer Emilian Leber. Informationen zu Buchung, Stornierung und Leistungsumfang." />
+      <title>Allgemeine Geschäftsbedingungen (AGB) – Emilian Leber Zauberer</title>
+      <meta name="description" content="Allgemeine Geschäftsbedingungen von Zauberer Emilian Leber. Informationen zu Buchungsbedingungen, Stornierung, Zahlungsmodalitäten und Leistungsumfang für Events." />
       <link rel="canonical" href="https://www.magicel.de/agb" />
       <meta property="og:title" content="AGB – Emilian Leber" />
       <meta property="og:description" content="Allgemeine Geschäftsbedingungen von Zauberer Emilian Leber. Informationen zu Buchung, Stornierung und Leistungsumfang." />
@@ -16,6 +16,7 @@ const AGB = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="AGB – Emilian Leber" />
       <meta name="twitter:description" content="Allgemeine Geschäftsbedingungen von Zauberer Emilian Leber. Informationen zu Buchung, Stornierung und Leistungsumfang." />
+        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
     </Helmet>
     <PageLayout>
     <section className="min-h-screen">
