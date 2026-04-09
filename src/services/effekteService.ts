@@ -14,6 +14,13 @@ const toEffekt = (row: Record<string, unknown>): Effekt => ({
   props: (row.props as string[]) || [],
   interneNotizen: (row.interne_notizen as string) || "",
   wiederholbar: row.wiederholbar as boolean,
+  // NEW fields
+  kategorie: (row.kategorie as string) || undefined,
+  wowRating: (row.wow_rating as number) ?? undefined,
+  setupZeit: (row.setup_zeit as number) ?? undefined,
+  videoUrl: (row.video_url as string) || undefined,
+  fotoUrls: (row.foto_urls as string[]) || undefined,
+  beschreibung: (row.beschreibung as string) || undefined,
   createdAt: row.created_at as string,
   updatedAt: row.updated_at as string,
 });
@@ -52,6 +59,12 @@ export const effekteService = {
         props: input.props,
         interne_notizen: input.interneNotizen,
         wiederholbar: input.wiederholbar,
+        kategorie: input.kategorie ?? null,
+        wow_rating: input.wowRating ?? null,
+        setup_zeit: input.setupZeit ?? null,
+        video_url: input.videoUrl ?? null,
+        foto_urls: input.fotoUrls ?? null,
+        beschreibung: input.beschreibung ?? null,
       })
       .select()
       .single();
@@ -71,6 +84,12 @@ export const effekteService = {
     if (input.props !== undefined) patch.props = input.props;
     if (input.interneNotizen !== undefined) patch.interne_notizen = input.interneNotizen;
     if (input.wiederholbar !== undefined) patch.wiederholbar = input.wiederholbar;
+    if (input.kategorie !== undefined) patch.kategorie = input.kategorie ?? null;
+    if (input.wowRating !== undefined) patch.wow_rating = input.wowRating ?? null;
+    if (input.setupZeit !== undefined) patch.setup_zeit = input.setupZeit ?? null;
+    if (input.videoUrl !== undefined) patch.video_url = input.videoUrl ?? null;
+    if (input.fotoUrls !== undefined) patch.foto_urls = input.fotoUrls ?? null;
+    if (input.beschreibung !== undefined) patch.beschreibung = input.beschreibung ?? null;
     patch.updated_at = new Date().toISOString();
 
     const { data, error } = await supabase

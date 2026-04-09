@@ -17,6 +17,10 @@ import {
   CalendarRange,
   Wand2,
   CheckSquare,
+  Sparkles,
+  Clapperboard,
+  Map,
+  MapPin,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -36,7 +40,7 @@ const mainNavItems = [
   { label: "Todos",               href: "/admin/todos",      icon: CheckSquare },
   { label: "Dokumente",           href: "/admin/dokumente",  icon: FileText },
   { label: "Mails",               href: "/admin/mails",      icon: Mail },
-  { label: "Mein Programm",       href: "/admin/programm",   icon: Wand2 },
+  { label: "Mein Programm",       href: "/admin/programm",   icon: Sparkles },
   { label: "Einstellungen",       href: "/admin/settings",   icon: Settings },
 ];
 
@@ -190,6 +194,15 @@ export const AdminPersistentShell = () => {
               <SubNavLink href="/admin/dokumente/rechnungen" label="Rechnungen" isActive={location.pathname.startsWith("/admin/dokumente/rechnungen")} onClick={onClose} />
               <SubNavLink href="/admin/dokumente/auftragsbestaetigung" label="Auftragsbestät." isActive={location.pathname.startsWith("/admin/dokumente/auftragsbestaetigung")} onClick={onClose} />
               <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
+            </div>
+          )}
+          {item.href === "/admin/programm" && location.pathname.startsWith("/admin/programm") && (
+            <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
+              <SubNavLink href="/admin/programm/shows" label="Shows" isActive={location.pathname.startsWith("/admin/programm/shows")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/touren" label="Tour-Planung" isActive={location.pathname.startsWith("/admin/programm/touren")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/effekte" label="Effekte" isActive={location.pathname.startsWith("/admin/programm/effekte")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/locations" label="Locations" isActive={location.pathname.startsWith("/admin/programm/locations")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/team" label="Team" isActive={location.pathname.startsWith("/admin/programm/team")} onClick={onClose} />
             </div>
           )}
         </React.Fragment>
@@ -396,6 +409,16 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
               <SubNavLink href="/admin/dokumente/rechnungen" label="Rechnungen" isActive={location.pathname.startsWith("/admin/dokumente/rechnungen")} onClick={onClose} />
               <SubNavLink href="/admin/dokumente/auftragsbestaetigung" label="Auftragsbestät." isActive={location.pathname.startsWith("/admin/dokumente/auftragsbestaetigung")} onClick={onClose} />
               <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
+            </div>
+          )}
+          {/* Mein Programm sub-links */}
+          {item.href === "/admin/programm" && location.pathname.startsWith("/admin/programm") && (
+            <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
+              <SubNavLink href="/admin/programm/shows" label="Shows" isActive={location.pathname.startsWith("/admin/programm/shows")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/touren" label="Tour-Planung" isActive={location.pathname.startsWith("/admin/programm/touren")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/effekte" label="Effekte" isActive={location.pathname.startsWith("/admin/programm/effekte")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/locations" label="Locations" isActive={location.pathname.startsWith("/admin/programm/locations")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/team" label="Team" isActive={location.pathname.startsWith("/admin/programm/team")} onClick={onClose} />
             </div>
           )}
         </React.Fragment>

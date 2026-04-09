@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { Show, ShowPhase } from "@/types/productions";
+import type { Show, ShowPhase, ShowTeamAssignment, TeamMember } from "@/types/productions";
 
 // DB row → TS interface
 const toShow = (row: Record<string, unknown>): Show => ({
@@ -15,8 +15,38 @@ const toShow = (row: Record<string, unknown>): Show => ({
   konzeptKundentext: (row.konzept_kundentext as string) || "",
   technischeAnforderungen: (row.technische_anforderungen as string) || "",
   status: row.status as Show["status"],
+  // NEW fields
+  beschreibung: (row.beschreibung as string) || undefined,
+  musikPlaylist: (row.musik_playlist as Show["musikPlaylist"]) || undefined,
+  texteScripts: (row.texte_scripts as Show["texteScripts"]) || undefined,
+  gemaDaten: (row.gema_daten as Show["gemaDaten"]) || undefined,
+  marketingAssets: (row.marketing_assets as Show["marketingAssets"]) || undefined,
+  budget: (row.budget as Record<string, any>) || undefined,
   createdAt: row.created_at as string,
   updatedAt: row.updated_at as string,
+});
+
+const toTeamMember = (row: Record<string, unknown>): TeamMember => ({
+  id: row.id as string,
+  name: row.name as string,
+  rolle: row.rolle as TeamMember["rolle"],
+  kontaktEmail: (row.kontakt_email as string) || undefined,
+  kontaktTel: (row.kontakt_tel as string) || undefined,
+  stundensatz: (row.stundensatz as number) ?? undefined,
+  tagessatz: (row.tagessatz as number) ?? undefined,
+  notizen: (row.notizen as string) || "",
+  createdAt: row.created_at as string,
+  updatedAt: row.updated_at as string,
+});
+
+const toShowTeamAssignment = (row: Record<string, unknown>): ShowTeamAssignment => ({
+  id: row.id as string,
+  showId: row.show_id as string,
+  teamMemberId: row.team_member_id as string,
+  teamMember: row.team_members
+    ? toTeamMember(row.team_members as Record<string, unknown>)
+    : undefined,
+  rolle: (row.rolle as string) || undefined,
 });
 
 export const showService = {
@@ -64,6 +94,12 @@ export const showService = {
         konzept_kundentext: input.konzeptKundentext,
         technische_anforderungen: input.technischeAnforderungen,
         status: input.status,
+        beschreibung: input.beschreibung ?? null,
+        musik_playlist: input.musikPlaylist ?? null,
+        texte_scripts: input.texteScripts ?? null,
+        gema_daten: input.gemaDaten ?? null,
+        marketing_assets: input.marketingAssets ?? null,
+        budget: input.budget ?? null,
       })
       .select()
       .single();
@@ -84,6 +120,12 @@ export const showService = {
     if (input.konzeptKundentext !== undefined) patch.konzept_kundentext = input.konzeptKundentext;
     if (input.technischeAnforderungen !== undefined) patch.technische_anforderungen = input.technischeAnforderungen;
     if (input.status !== undefined) patch.status = input.status;
+    if (input.beschreibung !== undefined) patch.beschreibung = input.beschreibung ?? null;
+    if (input.musikPlaylist !== undefined) patch.musik_playlist = input.musikPlaylist ?? null;
+    if (input.texteScripts !== undefined) patch.texte_scripts = input.texteScripts ?? null;
+    if (input.gemaDaten !== undefined) patch.gema_daten = input.gemaDaten ?? null;
+    if (input.marketingAssets !== undefined) patch.marketing_assets = input.marketingAssets ?? null;
+    if (input.budget !== undefined) patch.budget = input.budget ?? null;
     patch.updated_at = new Date().toISOString();
 
     const { data, error } = await supabase
@@ -98,6 +140,38 @@ export const showService = {
 
   async delete(id: string): Promise<void> {
     const { error } = await supabase.from("shows_intern").delete().eq("id", id);
+    if (error) throw error;
+  },
+
+  // ── Show Team ──────────────────────────────────────────────────────
+
+  async getShowTeam(showId: string): Promise<ShowTeamAssignment[]> {
+    const { data, error } = await supabase
+      .from("show_team")
+      .select("*, team_members(*)")
+      .eq("show_id", showId);
+    if (error) throw error;
+    return (data || []).map((row) => toShowTeamAssignment(row as unknown as Record<string, unknown>));
+  },
+
+  async assignTeamMember(
+    input: Omit<ShowTeamAssignment, "id" | "teamMember">
+  ): Promise<ShowTeamAssignment> {
+    const { data, error } = await supabase
+      .from("show_team")
+      .insert({
+        show_id: input.showId,
+        team_member_id: input.teamMemberId,
+        rolle: input.rolle ?? null,
+      })
+      .select("*, team_members(*)")
+      .single();
+    if (error) throw error;
+    return toShowTeamAssignment(data as unknown as Record<string, unknown>);
+  },
+
+  async removeTeamMember(id: string): Promise<void> {
+    const { error } = await supabase.from("show_team").delete().eq("id", id);
     if (error) throw error;
   },
 };
