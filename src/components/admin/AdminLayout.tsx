@@ -16,6 +16,11 @@ import {
   Mail,
   CalendarRange,
   Wand2,
+  CheckSquare,
+  Sparkles,
+  Clapperboard,
+  Map,
+  MapPin,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -32,9 +37,10 @@ const mainNavItems = [
   { label: "Anfragen & Buchungen", href: "/admin/bookings",  icon: MessageCircle,  badge: true },
   { label: "Kunden",              href: "/admin/customers",  icon: Users },
   { label: "Kalender",            href: "/admin/kalender",   icon: CalendarRange },
+  { label: "Todos",               href: "/admin/todos",      icon: CheckSquare },
   { label: "Dokumente",           href: "/admin/dokumente",  icon: FileText },
   { label: "Mails",               href: "/admin/mails",      icon: Mail },
-  { label: "Mein Programm",       href: "/admin/programm",   icon: Wand2 },
+  { label: "Mein Programm",       href: "/admin/programm",   icon: Sparkles },
   { label: "Einstellungen",       href: "/admin/settings",   icon: Settings },
 ];
 
@@ -190,6 +196,15 @@ export const AdminPersistentShell = () => {
               <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
             </div>
           )}
+          {item.href === "/admin/programm" && location.pathname.startsWith("/admin/programm") && (
+            <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
+              <SubNavLink href="/admin/programm/shows" label="Shows" isActive={location.pathname.startsWith("/admin/programm/shows")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/touren" label="Tour-Planung" isActive={location.pathname.startsWith("/admin/programm/touren")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/effekte" label="Effekte" isActive={location.pathname.startsWith("/admin/programm/effekte")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/locations" label="Locations" isActive={location.pathname.startsWith("/admin/programm/locations")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/team" label="Team" isActive={location.pathname.startsWith("/admin/programm/team")} onClick={onClose} />
+            </div>
+          )}
         </React.Fragment>
       ))}
     </nav>
@@ -228,7 +243,7 @@ export const AdminPersistentShell = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden fixed inset-0 z-50 flex">
             <div className="absolute inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
-            <aside className="relative w-[260px] flex flex-col bg-background border-r border-border/20 h-full z-10">
+            <aside className="relative w-[260px] flex flex-col bg-background border-r border-border/20 h-full z-10" style={{ paddingTop: "env(safe-area-inset-top)" }}>
               <div className="flex items-center justify-between px-5 py-5 border-b border-border/20">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-xl bg-foreground flex items-center justify-center shrink-0">
@@ -297,7 +312,7 @@ export const AdminPersistentShell = () => {
               <Link
                 key={item.href}
                 to={item.href}
-                className={`relative flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl transition-all ${active ? "text-foreground" : "text-muted-foreground"}`}
+                className={`relative flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl transition-all ${active ? "text-foreground" : "text-muted-foreground"}`}
               >
                 <item.icon className={`w-5 h-5 ${active ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
                 <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>{item.label}</span>
@@ -311,7 +326,7 @@ export const AdminPersistentShell = () => {
           })}
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl text-muted-foreground"
+            className="flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl text-muted-foreground"
           >
             <Menu className="w-5 h-5 stroke-[1.5]" />
             <span className="text-[10px] font-medium">Mehr</span>
@@ -396,6 +411,16 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
               <SubNavLink href="/admin/dokumente/mahnungen" label="Mahnungen" isActive={location.pathname.startsWith("/admin/dokumente/mahnungen")} onClick={onClose} />
             </div>
           )}
+          {/* Mein Programm sub-links */}
+          {item.href === "/admin/programm" && location.pathname.startsWith("/admin/programm") && (
+            <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
+              <SubNavLink href="/admin/programm/shows" label="Shows" isActive={location.pathname.startsWith("/admin/programm/shows")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/touren" label="Tour-Planung" isActive={location.pathname.startsWith("/admin/programm/touren")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/effekte" label="Effekte" isActive={location.pathname.startsWith("/admin/programm/effekte")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/locations" label="Locations" isActive={location.pathname.startsWith("/admin/programm/locations")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/team" label="Team" isActive={location.pathname.startsWith("/admin/programm/team")} onClick={onClose} />
+            </div>
+          )}
         </React.Fragment>
       ))}
     </nav>
@@ -431,7 +456,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
-          <aside className="relative w-[260px] flex flex-col bg-background border-r border-border/20 h-full z-10">
+          <aside className="relative w-[260px] flex flex-col bg-background border-r border-border/20 h-full z-10" style={{ paddingTop: "env(safe-area-inset-top)" }}>
             <div className="flex items-center justify-between px-5 py-5 border-b border-border/20">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-foreground flex items-center justify-center shrink-0">
@@ -494,7 +519,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
             <Link
               key={item.href}
               to={item.href}
-              className={`relative flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl transition-all ${active ? "text-foreground" : "text-muted-foreground"}`}
+              className={`relative flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl transition-all ${active ? "text-foreground" : "text-muted-foreground"}`}
             >
               <item.icon className={`w-5 h-5 ${active ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
               <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>{item.label}</span>
@@ -508,7 +533,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
         })}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="flex flex-col items-center gap-0.5 px-2 py-2.5 rounded-xl text-muted-foreground"
+          className="flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl text-muted-foreground"
         >
           <Menu className="w-5 h-5 stroke-[1.5]" />
           <span className="text-[10px] font-medium">Mehr</span>

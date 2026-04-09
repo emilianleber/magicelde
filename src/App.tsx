@@ -1,12 +1,6 @@
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminKalender from "@/pages/AdminKalender";
-import AdminEffekte from "@/pages/AdminEffekte";
-import AdminPakete from "@/pages/AdminPakete";
-import AdminShows from "@/pages/AdminShows";
-import AdminShowEditor from "@/pages/AdminShowEditor";
-import AdminProduktionen from "@/pages/AdminProduktionen";
 import AdminLocations from "@/pages/AdminLocations";
-import AdminPartner from "@/pages/AdminPartner";
 import AdminArtikel from "@/pages/AdminArtikel";
 import AdminRequests from "@/pages/AdminRequests";
 import AdminRequestDetail from "@/pages/AdminRequestDetail";
@@ -28,7 +22,13 @@ import AdminDokumentDetail from "@/pages/AdminDokumentDetail";
 import AdminDokumenteListe from "@/pages/AdminDokumenteListe";
 import AdminBookings from "@/pages/AdminBookings";
 import AdminBookingDetail from "@/pages/AdminBookingDetail";
-import AdminProgramm from "@/pages/AdminProgramm";
+import AdminProgrammHub from "@/pages/AdminProgrammHub";
+import AdminShowsList from "@/pages/AdminShowsList";
+import AdminShowDetail from "@/pages/AdminShowDetail";
+import AdminTouren from "@/pages/AdminTouren";
+import AdminTourDetail from "@/pages/AdminTourDetail";
+import AdminEffekteBibliothek from "@/pages/AdminEffekteBibliothek";
+import AdminTeam from "@/pages/AdminTeam";
 
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -142,14 +142,23 @@ const AdminRoutes = () => (
       <Route path="/admin/documents/*" element={<Navigate to="/admin/dokumente" replace />} />
 
       {/* Mein Programm */}
-      <Route path="/admin/programm" element={<AdminProgramm />} />
-      <Route path="/admin/effekte" element={<AdminEffekte />} />
-      <Route path="/admin/pakete" element={<AdminPakete />} />
-      <Route path="/admin/shows" element={<AdminShows />} />
-      <Route path="/admin/shows/:id" element={<AdminShowEditor />} />
-      <Route path="/admin/produktionen" element={<AdminProduktionen />} />
-      <Route path="/admin/locations" element={<AdminLocations />} />
-      <Route path="/admin/partner" element={<AdminPartner />} />
+      <Route path="/admin/programm" element={<AdminProgrammHub />} />
+      <Route path="/admin/programm/shows" element={<AdminShowsList />} />
+      <Route path="/admin/programm/shows/:id" element={<AdminShowDetail />} />
+      <Route path="/admin/programm/touren" element={<AdminTouren />} />
+      <Route path="/admin/programm/touren/:id" element={<AdminTourDetail />} />
+      <Route path="/admin/programm/effekte" element={<AdminEffekteBibliothek />} />
+      <Route path="/admin/programm/locations" element={<AdminLocations />} />
+      <Route path="/admin/programm/team" element={<AdminTeam />} />
+
+      {/* Old programm routes → redirect */}
+      <Route path="/admin/produktionen" element={<Navigate to="/admin/programm/touren" replace />} />
+      <Route path="/admin/partner" element={<Navigate to="/admin/programm/team" replace />} />
+      <Route path="/admin/effekte" element={<Navigate to="/admin/programm/effekte" replace />} />
+      <Route path="/admin/pakete" element={<Navigate to="/admin/programm/shows" replace />} />
+      <Route path="/admin/shows" element={<Navigate to="/admin/programm/shows" replace />} />
+      <Route path="/admin/shows/:id" element={<AdminShowDetail />} />
+      <Route path="/admin/locations" element={<Navigate to="/admin/programm/locations" replace />} />
 
       {/* Einstellungen */}
       <Route path="/admin/settings" element={<AdminSettings />} />
@@ -272,14 +281,23 @@ const App = () => (
               <Route path="/admin/documents" element={<Navigate to="/admin/dokumente" replace />} />
               <Route path="/admin/documents/*" element={<Navigate to="/admin/dokumente" replace />} />
               {/* Mein Programm */}
-              <Route path="/admin/programm" element={<AdminProgramm />} />
-              <Route path="/admin/effekte" element={<AdminEffekte />} />
-              <Route path="/admin/pakete" element={<AdminPakete />} />
-              <Route path="/admin/shows" element={<AdminShows />} />
-              <Route path="/admin/shows/:id" element={<AdminShowEditor />} />
-              <Route path="/admin/produktionen" element={<AdminProduktionen />} />
-              <Route path="/admin/locations" element={<AdminLocations />} />
-              <Route path="/admin/partner" element={<AdminPartner />} />
+              <Route path="/admin/programm" element={<AdminProgrammHub />} />
+              <Route path="/admin/programm/shows" element={<AdminShowsList />} />
+              <Route path="/admin/programm/shows/:id" element={<AdminShowDetail />} />
+              <Route path="/admin/programm/touren" element={<AdminTouren />} />
+              <Route path="/admin/programm/touren/:id" element={<AdminTourDetail />} />
+              <Route path="/admin/programm/effekte" element={<AdminEffekteBibliothek />} />
+              <Route path="/admin/programm/locations" element={<AdminLocations />} />
+              <Route path="/admin/programm/team" element={<AdminTeam />} />
+
+              {/* Old programm routes → redirect */}
+              <Route path="/admin/produktionen" element={<Navigate to="/admin/programm/touren" replace />} />
+              <Route path="/admin/partner" element={<Navigate to="/admin/programm/team" replace />} />
+              <Route path="/admin/effekte" element={<Navigate to="/admin/programm/effekte" replace />} />
+              <Route path="/admin/pakete" element={<Navigate to="/admin/programm/shows" replace />} />
+              <Route path="/admin/shows" element={<Navigate to="/admin/programm/shows" replace />} />
+              <Route path="/admin/shows/:id" element={<AdminShowDetail />} />
+              <Route path="/admin/locations" element={<Navigate to="/admin/programm/locations" replace />} />
               {/* Einstellungen */}
               <Route path="/admin/settings" element={<AdminSettings />} />
               <Route path="/admin/artikel" element={<AdminArtikel />} />

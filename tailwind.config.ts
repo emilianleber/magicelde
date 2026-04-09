@@ -107,6 +107,10 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
         },
+        "scroll-left": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -118,6 +122,7 @@ export default {
         "scale-up": "scale-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         "word-rotate": "word-rotate 10s cubic-bezier(0.16, 1, 0.3, 1) infinite",
         "float": "float 6s ease-in-out infinite",
+        "scroll-left": "scroll-left 30s linear infinite",
       },
     },
   },

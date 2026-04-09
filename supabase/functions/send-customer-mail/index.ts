@@ -62,7 +62,8 @@ serve(async (req) => {
       }
     }
 
-    // Wrap plain body in branded HTML shell
+    // Wrap plain body in clean professional HTML email
+    const FONT = `-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif`;
     const wrappedHtml = `<!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" style="color-scheme:light only;supported-color-schemes:light;">
 <head>
@@ -74,50 +75,58 @@ serve(async (req) => {
   <style>
     :root{color-scheme:light only!important;}
     html,body{background-color:#ffffff!important;margin:0!important;padding:0!important;}
-    @media(prefers-color-scheme:dark){html,body{background-color:#ffffff!important;color:#0a0a0a!important;}}
+    @media(prefers-color-scheme:dark){html,body{background-color:#ffffff!important;color:#1a1a1a!important;}}
   </style>
 </head>
-<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff!important;font-family:${FONT};">
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff!important;">
-  <tr><td align="center" bgcolor="#ffffff" style="padding:32px 16px;background-color:#ffffff!important;">
-    <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);border-collapse:separate;border:1px solid #e4e4e7;">
+  <tr><td style="padding:24px 16px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;">
+
+      <!-- Email body -->
       <tr>
-        <td bgcolor="#0a0a0a" style="background-color:#0a0a0a!important;padding:28px 36px 24px;border-radius:20px 20px 0 0;">
-          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;"><tr>
-            <td bgcolor="#0a0a0a" style="background-color:#0a0a0a!important;"><p style="margin:0;font-size:22px;font-weight:800;color:#ffffff!important;letter-spacing:-0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Emilian Leber</p></td>
-            <td bgcolor="#0a0a0a" style="text-align:right;background-color:#0a0a0a!important;"><p style="margin:0;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">Zauberer &amp; Showkünstler</p></td>
-          </tr></table>
-          <div style="margin-top:16px;height:2px;width:56px;background:linear-gradient(90deg,#3b82f6,#6366f1,#a855f7);border-radius:2px;"></div>
+        <td style="padding:0 0 28px;font-size:15px;line-height:1.8;color:#3f3f46;font-family:${FONT};">
+          ${mailBody.replace(/\n/g, "<br>")}
         </td>
       </tr>
+
+      <!-- Signature -->
       <tr>
-        <td bgcolor="#ffffff" style="padding:36px 36px 32px;background-color:#ffffff!important;">
-          <div style="font-size:15px;line-height:1.8;color:#52525b!important;">${mailBody.replace(/\n/g, "<br>")}</div>
-          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:24px;">
-            <tr><td colspan="2" style="padding-bottom:16px;"><div style="height:2px;background:linear-gradient(90deg,#6366f1 0%,#a855f7 40%,#e4e4e7 40%);border-radius:2px;"></div></td></tr>
+        <td style="padding:24px 0 0;border-top:1px solid #e4e4e7;">
+          <p style="margin:0 0 4px;font-size:14px;color:#3f3f46;font-family:${FONT};">Mit freundlichen Gr&uuml;&szlig;en</p>
+          <p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#0a0a0a;font-family:${FONT};">Emilian Leber</p>
+
+          <p style="margin:0 0 2px;font-size:13px;font-weight:600;color:#0a0a0a;font-family:${FONT};">MagicEL &ndash; Entertainment &amp; Zauberkunst</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:6px 0 12px;">
+            <tr><td style="padding:2px 0;font-size:12px;color:#71717a;font-family:${FONT};">Telefon:&nbsp;</td><td style="padding:2px 0;font-size:12px;font-family:${FONT};"><a href="tel:+4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td></tr>
+            <tr><td style="padding:2px 0;font-size:12px;color:#71717a;font-family:${FONT};">WhatsApp:&nbsp;</td><td style="padding:2px 0;font-size:12px;font-family:${FONT};"><a href="https://wa.me/4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td></tr>
+            <tr><td style="padding:2px 0;font-size:12px;color:#71717a;font-family:${FONT};">Web:&nbsp;</td><td style="padding:2px 0;font-size:12px;font-family:${FONT};"><a href="https://magicel.de" style="color:#3f3f46;text-decoration:none;">www.magicel.de</a></td></tr>
+          </table>
+
+          <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:8px 0 14px;">
             <tr>
-              <td style="width:64px;vertical-align:top;padding-right:18px;">
-                <img src="https://magicel.de/favicon.ico" alt="EL" width="48" height="48" style="border-radius:12px;display:block;" />
+              <td style="padding-right:16px;vertical-align:middle;">
+                <img src="https://magicel.de/favicon.ico" alt="MagicEL" width="40" height="40" style="border-radius:8px;display:block;" />
               </td>
-              <td style="vertical-align:top;">
-                <p style="margin:0;font-size:15px;font-weight:700;color:#18181b!important;">Emilian Leber</p>
-                <p style="margin:2px 0 0;font-size:10px;font-weight:600;color:#6366f1;text-transform:uppercase;letter-spacing:1px;">Zauberer &amp; Entertainer</p>
-                <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:8px;">
-                  <tr><td style="padding:2px 0;font-size:11px;color:#71717a;width:14px;">T</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="tel:+4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td></tr>
-                  <tr><td style="padding:2px 0;font-size:11px;color:#71717a;">E</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="mailto:el@magicel.de" style="color:#3f3f46;text-decoration:none;">el@magicel.de</a></td></tr>
-                  <tr><td style="padding:2px 0;font-size:11px;color:#71717a;">W</td><td style="padding:2px 0 2px 6px;font-size:11px;"><a href="https://magicel.de" style="color:#3f3f46;text-decoration:none;">www.magicel.de</a></td></tr>
-                </table>
-                <p style="margin:6px 0 0;font-size:10px;color:#a1a1aa;">Regensburg · Deutschland · <a href="https://wa.me/4915563744696" style="color:#a1a1aa;text-decoration:none;">WhatsApp</a></p>
+              <td style="vertical-align:middle;">
+                <p style="margin:0;font-size:12px;color:#71717a;font-family:${FONT};">
+                  &#9733; Google 5.0 &nbsp;|&nbsp; &#9733; ProvenExpert 4.9<br>
+                  Kreativpreistr&auml;ger &nbsp;|&nbsp; Greatest Talent Finalist
+                </p>
               </td>
             </tr>
           </table>
+
+          <!-- Datenschutz & Steuer -->
+          <div style="margin-top:16px;padding-top:12px;border-top:1px solid #e4e4e7;">
+            <p style="margin:0;font-size:10px;line-height:1.6;color:#a1a1aa;font-family:${FONT};">
+              <strong>Datenschutzhinweis:</strong> Diese E-Mail und ihre Anh&auml;nge sind vertraulich und ausschlie&szlig;lich f&uuml;r den/die genannten Empf&auml;nger bestimmt. Sollten Sie diese E-Mail irrt&uuml;mlich erhalten haben, informieren Sie bitte umgehend den Absender und l&ouml;schen Sie die E-Mail.<br>
+              Steuernummer: 244/229/80957
+            </p>
+          </div>
         </td>
       </tr>
-      <tr>
-        <td bgcolor="#f4f4f5" style="background-color:#f4f4f5!important;border-top:1px solid #e4e4e7;padding:16px 36px;text-align:center;border-radius:0 0 20px 20px;">
-          <p style="margin:0;font-size:12px;color:#a1a1aa!important;">&copy; 2026 Emilian Leber &middot; Regensburg &middot; <a href="https://magicel.de/datenschutz" style="color:#a1a1aa;text-decoration:none;">Datenschutz</a></p>
-        </td>
-      </tr>
+
     </table>
   </td></tr>
 </table>

@@ -465,6 +465,15 @@ const MagicDinner = () => (
         content="Das Magic Dinner von Emilian Leber verbindet Hochküche mit interaktiver Magie. Ein unvergessliches Erlebnis für besondere Abende und exklusive Firmenevents."
       />
       <link rel="canonical" href="https://www.magicel.de/magic-dinner" />
+      <meta property="og:title" content="Magic Dinner – Zauberhafte Dinner-Show mit Emilian Leber" />
+      <meta property="og:description" content="Das Magic Dinner von Emilian Leber verbindet Hochküche mit interaktiver Magie. Ein unvergessliches Erlebnis für besondere Abende und exklusive Firmenevents." />
+      <meta property="og:url" content="https://www.magicel.de/magic-dinner" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Magic Dinner – Zauberhafte Dinner-Show mit Emilian Leber" />
+      <meta name="twitter:description" content="Das Magic Dinner von Emilian Leber verbindet Hochküche mit interaktiver Magie. Ein unvergessliches Erlebnis für besondere Abende und exklusive Firmenevents." />
     </Helmet>
     <PageLayout>
     <BackgroundHero

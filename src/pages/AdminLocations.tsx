@@ -4,7 +4,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { locationService } from "@/services/locationService";
 import type { LocationVenue } from "@/types/productions";
-import { Plus, Search, X, MapPin, Users, ChevronRight } from "lucide-react";
+import { Plus, Search, X, MapPin, Users, ChevronRight, Zap, Globe, Car, Calendar } from "lucide-react";
 
 const TYP_MAP: Record<LocationVenue["typ"], [string, string]> = {
   theater:    ["Theater",    "bg-amber-100 text-amber-700"],
@@ -22,7 +22,7 @@ const TypBadge = ({ typ }: { typ: LocationVenue["typ"] }) => {
 
 const blankForm = (): Omit<LocationVenue, "id" | "createdAt" | "updatedAt"> => ({
   name: "",
-  typ: "eventlocation",
+  typ: "eventlocation" as LocationVenue["typ"],
   kapazitaet: 0,
   buehnenBreite: undefined,
   buehnenTiefe: undefined,
@@ -32,7 +32,21 @@ const blankForm = (): Omit<LocationVenue, "id" | "createdAt" | "updatedAt"> => (
   kontaktTel: undefined,
   notizen: "",
   adresse: "",
+  buehnenHoehe: undefined,
+  stromAnschluss: "",
+  lichtVorhanden: false,
+  tonVorhanden: false,
+  anfahrtHinweise: "",
+  parkplaetze: undefined,
+  website: undefined,
 });
+
+interface HistoryEvent {
+  id: string;
+  datum: string;
+  tourName: string;
+  status: string;
+}
 
 export default function AdminLocations() {
   const navigate = useNavigate();

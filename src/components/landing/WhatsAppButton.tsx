@@ -11,7 +11,7 @@ const WhatsAppButton = () => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center"
+      className="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] left-4 sm:left-6 z-50 w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center"
       aria-label="WhatsApp Kontakt"
     >
       <svg viewBox="0 0 32 32" className="w-7 h-7 fill-white" aria-hidden="true">

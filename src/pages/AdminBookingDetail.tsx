@@ -24,6 +24,10 @@ import {
   Eye,
   Send,
   Clock,
+  ChevronDown,
+  ChevronUp,
+  Minus,
+  Calculator,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -256,6 +260,11 @@ const AdminBookingDetail = () => {
   const [abschlagMode, setAbschlagMode] = useState<"prozent" | "fix">("prozent");
   const [abschlagWert, setAbschlagWert] = useState("50");
   const [abschlagCreating, setAbschlagCreating] = useState(false);
+  const [abschlagShowCalc, setAbschlagShowCalc] = useState(false);
+  const [abschlagCalcOps, setAbschlagCalcOps] = useState<{ label: string; amount: number }[]>([]);
+  const [abschlagCalcInput, setAbschlagCalcInput] = useState("");
+  const [abschlagCalcLabel, setAbschlagCalcLabel] = useState("");
+  const [angebotPositionen, setAngebotPositionen] = useState<{ bezeichnung: string; gesamt: number }[]>([]);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [dismissedWarnings, setDismissedWarnings] = useState<Set<string>>(new Set());
@@ -516,8 +525,68 @@ const AdminBookingDetail = () => {
     setConverting(false);
   };
 
+  /* ── Load Angebot positions when Abschlag dialog opens ── */
+  useEffect(() => {
+    if (!showAbschlagDialog) return;
+    const loadPositions = async () => {
+      const angebot = documents.find(d => (d as any).type === "Angebot");
+      if (!angebot?.id) { setAngebotPositionen([]); return; }
+      const { data: pos } = await supabase
+        .from("document_positions")
+        .select("*")
+        .eq("document_id", angebot.id)
+        .order("position");
+      if (pos && pos.length > 0) {
+        setAngebotPositionen(pos.map(p => ({
+          bezeichnung: p.bezeichnung || p.description || "",
+          gesamt: p.total || p.gesamt || 0,
+        })));
+      } else {
+        setAngebotPositionen([]);
+      }
+    };
+    loadPositions();
+    setAbschlagShowCalc(false);
+    setAbschlagCalcOps([]);
+    setAbschlagCalcInput("");
+    setAbschlagCalcLabel("");
+  }, [showAbschlagDialog]);
+
+  /* ── Auftragsbestätigung aus Angebot erstellen ── */
+  const createAuftragsbestaetigung = async () => {
+    if (!request || !customer) return;
+    try {
+      const angebot = documents.find(d => (d as any).type === "Angebot");
+      if (angebot?.id) {
+        const { data: pos } = await supabase
+          .from("document_positions")
+          .select("*")
+          .eq("document_id", angebot.id)
+          .order("position");
+        if (pos && pos.length > 0) {
+          const positions = pos.map(p => ({
+            id: crypto.randomUUID(),
+            typ: "leistung",
+            bezeichnung: p.bezeichnung || p.description || "",
+            beschreibung: p.beschreibung || "",
+            menge: p.quantity || p.menge || 1,
+            einheit: p.unit || p.einheit || "pauschal",
+            einzelpreis: p.unit_price || p.einzelpreis || 0,
+            gesamt: p.total || p.gesamt || 0,
+            optional: false,
+          }));
+          sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
+        }
+      }
+      const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
+      navigate(`/admin/dokumente/new?typ=auftragsbestaetigung${params}`);
+    } catch (err: any) {
+      setMessage("Fehler: " + (err.message || "Unbekannt"));
+    }
+  };
+
   /* ── Abschlagsrechnung erstellen ── */
-  const createAbschlagsrechnung = async () => {
+  const createAbschlagsrechnung = async (overrideBetrag?: number) => {
     if (!request || !customer) return;
     setAbschlagCreating(true);
     try {
@@ -526,7 +595,9 @@ const AdminBookingDetail = () => {
       const angebotTotal = angebot ? ((angebot as any).total || (angebot as any).amount || 0) : 0;
 
       let betrag = 0;
-      if (abschlagMode === "prozent") {
+      if (overrideBetrag !== undefined) {
+        betrag = overrideBetrag;
+      } else if (abschlagMode === "prozent") {
         betrag = Math.round(angebotTotal * (parseFloat(abschlagWert) || 0) / 100 * 100) / 100;
       } else {
         betrag = parseFloat(abschlagWert) || 0;
@@ -908,6 +979,44 @@ const AdminBookingDetail = () => {
         </div>
       </div>
 
+      {/* ── Quick Document Buttons ── */}
+      {(() => {
+        const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request?.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
+        const phase = event?.status || "";
+        const qBtnCls = "inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-3 py-2 text-xs font-medium hover:bg-muted/40 transition-colors";
+        const qPrimaryCls = "inline-flex items-center gap-1.5 rounded-xl bg-foreground text-background px-3 py-2 text-xs font-bold hover:bg-foreground/90 transition-colors";
+        const showAngebot = !event;
+        const showAB = !!event && phase === "in_planung";
+        const showAbschlag = !!event;
+        const showSchluss = !!event && (phase === "event_erfolgt" || phase === "abgeschlossen");
+        if (!showAngebot && !showAB && !showAbschlag && !showSchluss) return null;
+        return (
+          <div className="flex items-center gap-2 flex-wrap mb-5">
+            <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mr-1">Dokument erstellen:</span>
+            {showAngebot && (
+              <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={qPrimaryCls}>
+                <FileText className="w-3.5 h-3.5" /> Angebot
+              </Link>
+            )}
+            {showAB && (
+              <button onClick={createAuftragsbestaetigung} className={qBtnCls}>
+                <FileText className="w-3.5 h-3.5" /> Auftragsbestätigung
+              </button>
+            )}
+            {showAbschlag && (
+              <button onClick={() => setShowAbschlagDialog(true)} className={qBtnCls}>
+                <FileText className="w-3.5 h-3.5" /> Abschlagsrechnung
+              </button>
+            )}
+            {showSchluss && (
+              <button onClick={() => createSchlussrechnung(params)} className={qPrimaryCls}>
+                <FileText className="w-3.5 h-3.5" /> Schlussrechnung
+              </button>
+            )}
+          </div>
+        );
+      })()}
+
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-5 items-start">
         {/* ═══ LEFT COLUMN ═══ */}
         <div className="space-y-5">
@@ -1052,7 +1161,7 @@ const AdminBookingDetail = () => {
 
         {/* ── TAB NAVIGATION (volle Breite, nach Status via CSS order) ── */}
         <div className="lg:col-span-2 space-y-5 order-last">
-          <div className="flex items-center gap-1 bg-muted/30 rounded-xl p-1">
+          <div className="flex items-center gap-1 bg-muted/30 rounded-xl p-1 overflow-x-auto">
             {([
               { id: "konzept" as const, label: "🎭 Konzept" },
               { id: "dokumente" as const, label: "📄 Dokumente" },
@@ -1060,7 +1169,7 @@ const AdminBookingDetail = () => {
               { id: "nachrichten" as const, label: "✉️ Nachrichten" },
             ]).map((tab) => (
               <button key={tab.id} onClick={() => setActiveDetailTab(tab.id)}
-                className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all text-center ${activeDetailTab === tab.id ? "bg-foreground text-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all text-center whitespace-nowrap ${activeDetailTab === tab.id ? "bg-foreground text-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
               >{tab.label}</button>
             ))}
           </div>
@@ -1225,7 +1334,7 @@ const AdminBookingDetail = () => {
                     <>
                       {/* Nur kontextabhängige Buttons – keine doppelten */}
                       {!event && <Link to={`/admin/dokumente/new?typ=angebot${params}`} className={primaryCls}><FileText className="w-3 h-3" />Angebot</Link>}
-                      {event && phase === "in_planung" && <Link to={`/admin/dokumente/new?typ=auftragsbestaetigung${params}`} className={btnCls}><FileText className="w-3 h-3" />Auftragsbestätigung</Link>}
+                      {event && phase === "in_planung" && <button onClick={createAuftragsbestaetigung} className={btnCls}><FileText className="w-3 h-3" />Auftragsbestätigung</button>}
                       {event && phase === "in_planung" && <button onClick={() => setShowAbschlagDialog(true)} className={btnCls}><FileText className="w-3 h-3" />Abschlagsrechnung</button>}
                       {event && (phase === "event_erfolgt" || phase === "abgeschlossen") && (
                         <button onClick={() => createSchlussrechnung(params)} className={primaryCls}><FileText className="w-3 h-3" />Schlussrechnung</button>
@@ -1751,18 +1860,52 @@ const AdminBookingDetail = () => {
     {/* Abschlagsrechnung Dialog */}
     {showAbschlagDialog && (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowAbschlagDialog(false)}>
-        <div className="bg-background rounded-2xl shadow-2xl border border-border/30 p-6 w-full max-w-md mx-4" onClick={e => e.stopPropagation()}>
-          <h3 className="text-lg font-bold mb-1">Abschlagsrechnung erstellen</h3>
+        <div className="bg-background rounded-2xl shadow-2xl border border-border/30 p-6 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
           {(() => {
             const angebot = documents.find(d => (d as any).type === "Angebot");
             const angebotTotal = angebot ? ((angebot as any).total || (angebot as any).amount || 0) : 0;
             const angebotNr = angebot ? ((angebot as any).document_number || angebot.name) : "";
+            const existingAbschlaege = documents.filter(d =>
+              (d as any).type === "Abschlagsrechnung" || d.name?.toLowerCase().includes("abschlag")
+            );
+            const abschlagNummer = existingAbschlaege.length + 1;
             const betrag = abschlagMode === "prozent"
               ? Math.round(angebotTotal * (parseFloat(abschlagWert) || 0) / 100 * 100) / 100
               : parseFloat(abschlagWert) || 0;
+            const calcTotal = abschlagCalcOps.reduce((s, op) => s + op.amount, 0);
+            const finalBetrag = abschlagCalcOps.length > 0 ? calcTotal : betrag;
             return (
               <>
-                {angebotNr && <p className="text-xs text-muted-foreground mb-4">Basierend auf {angebotNr} · {angebotTotal.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>}
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="text-lg font-bold">Abschlagsrechnung erstellen</h3>
+                  <span className="text-xs font-semibold text-accent bg-accent/10 rounded-lg px-2.5 py-1">
+                    Abschlag {abschlagNummer}
+                  </span>
+                </div>
+                {angebotNr && (
+                  <p className="text-xs text-muted-foreground mb-4">
+                    Basierend auf {angebotNr} · {angebotTotal.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €
+                  </p>
+                )}
+
+                {/* Positionen aus Angebot */}
+                {angebotPositionen.length > 0 && (
+                  <div className="mb-4 rounded-xl border border-border/20 overflow-hidden">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold px-3 pt-2.5 pb-1.5">Positionen aus Angebot</p>
+                    <div className="divide-y divide-border/10">
+                      {angebotPositionen.map((pos, i) => (
+                        <div key={i} className="flex items-center justify-between px-3 py-2 text-sm">
+                          <span className="text-foreground truncate mr-3">{pos.bezeichnung}</span>
+                          <span className="text-muted-foreground font-medium shrink-0">{pos.gesamt.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between px-3 py-2 bg-muted/20 text-sm font-bold border-t border-border/20">
+                      <span>Gesamt</span>
+                      <span>{angebotTotal.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex gap-2 mb-4">
                   <button
@@ -1796,10 +1939,73 @@ const AdminBookingDetail = () => {
                   </div>
                 </div>
 
-                {betrag > 0 && (
+                {/* Collapsible Calculator */}
+                <div className="mb-4 rounded-xl border border-border/20 overflow-hidden">
+                  <button
+                    onClick={() => setAbschlagShowCalc(!abschlagShowCalc)}
+                    className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold text-muted-foreground hover:bg-muted/20 transition-colors"
+                  >
+                    <span className="flex items-center gap-1.5"><Calculator className="w-3.5 h-3.5" /> Rechner</span>
+                    {abschlagShowCalc ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  </button>
+                  {abschlagShowCalc && (
+                    <div className="px-3 pb-3 space-y-2 border-t border-border/10">
+                      {abschlagCalcOps.map((op, i) => (
+                        <div key={i} className="flex items-center gap-2 text-sm">
+                          <span className={`shrink-0 font-bold ${op.amount >= 0 ? "text-green-600" : "text-red-500"}`}>
+                            {op.amount >= 0 ? "+" : ""}{op.amount.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €
+                          </span>
+                          <span className="text-muted-foreground truncate">{op.label}</span>
+                          <button onClick={() => setAbschlagCalcOps(ops => ops.filter((_, j) => j !== i))} className="ml-auto p-0.5 text-muted-foreground hover:text-destructive">
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                      <div className="flex items-center gap-2 pt-1">
+                        <input
+                          type="text"
+                          placeholder="Bezeichnung"
+                          value={abschlagCalcLabel}
+                          onChange={e => setAbschlagCalcLabel(e.target.value)}
+                          className="flex-1 min-w-0 rounded-lg bg-muted/20 border border-border/30 px-2.5 py-1.5 text-xs"
+                        />
+                        <input
+                          type="number"
+                          placeholder="Betrag"
+                          value={abschlagCalcInput}
+                          onChange={e => setAbschlagCalcInput(e.target.value)}
+                          className="w-24 rounded-lg bg-muted/20 border border-border/30 px-2.5 py-1.5 text-xs"
+                          step="0.01"
+                        />
+                        <button
+                          onClick={() => {
+                            const val = parseFloat(abschlagCalcInput);
+                            if (!val) return;
+                            setAbschlagCalcOps(ops => [...ops, { label: abschlagCalcLabel || (val >= 0 ? "Zuschlag" : "Abzug"), amount: val }]);
+                            setAbschlagCalcInput("");
+                            setAbschlagCalcLabel("");
+                          }}
+                          className="shrink-0 inline-flex items-center gap-1 rounded-lg bg-foreground text-background px-2 py-1.5 text-xs font-medium"
+                        >
+                          <Plus className="w-3 h-3" />
+                        </button>
+                      </div>
+                      {abschlagCalcOps.length > 0 && (
+                        <div className="flex items-center justify-between pt-1 text-sm font-bold border-t border-border/10">
+                          <span>Summe Rechner</span>
+                          <span className={calcTotal >= 0 ? "text-green-600" : "text-red-500"}>
+                            {calcTotal.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {finalBetrag > 0 && (
                   <div className="rounded-xl bg-green-50 border border-green-200 p-3 mb-4 text-center">
-                    <p className="text-xs text-green-600 mb-0.5">Abschlagsbetrag</p>
-                    <p className="text-xl font-bold text-green-700">{betrag.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+                    <p className="text-xs text-green-600 mb-0.5">Abschlagsrechnung {abschlagNummer}</p>
+                    <p className="text-xl font-bold text-green-700">{finalBetrag.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
                   </div>
                 )}
 
@@ -1811,11 +2017,14 @@ const AdminBookingDetail = () => {
                     Abbrechen
                   </button>
                   <button
-                    onClick={createAbschlagsrechnung}
-                    disabled={abschlagCreating || betrag <= 0}
+                    onClick={() => {
+                      const override = abschlagCalcOps.length > 0 ? calcTotal : undefined;
+                      createAbschlagsrechnung(override);
+                    }}
+                    disabled={abschlagCreating || (abschlagCalcOps.length > 0 ? calcTotal <= 0 : betrag <= 0)}
                     className="flex-1 py-2.5 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-90 disabled:opacity-50"
                   >
-                    {abschlagCreating ? "Erstelle…" : "Erstellen"}
+                    {abschlagCreating ? "Erstelle..." : "Weiter"}
                   </button>
                 </div>
               </>

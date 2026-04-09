@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import ProcessSteps from "@/components/landing/ProcessSteps";
@@ -301,7 +302,22 @@ const FAQCloseUp = () => {
 };
 
 const CloseUp = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Close-Up Magie – Emilian Leber | Interaktive Zauberkunst</title>
+      <meta name="description" content="Close-Up Magie von Emilian Leber: interaktive Zauberkunst direkt in den Händen Ihrer Gäste. Perfekt für Empfänge, Dinner und Networking-Events." />
+      <link rel="canonical" href="https://www.magicel.de/close-up" />
+      <meta property="og:title" content="Close-Up Magie – Emilian Leber | Interaktive Zauberkunst" />
+      <meta property="og:description" content="Close-Up Magie von Emilian Leber: interaktive Zauberkunst direkt in den Händen Ihrer Gäste. Perfekt für Empfänge, Dinner und Networking-Events." />
+      <meta property="og:url" content="https://www.magicel.de/close-up" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Close-Up Magie – Emilian Leber | Interaktive Zauberkunst" />
+      <meta name="twitter:description" content="Close-Up Magie von Emilian Leber: interaktive Zauberkunst direkt in den Händen Ihrer Gäste. Perfekt für Empfänge, Dinner und Networking-Events." />
+    </Helmet>
+    <PageLayout>
     <BackgroundHero
       imageSrc={closeupImg}
       badge="Showkonzept"
@@ -323,6 +339,7 @@ const CloseUp = () => (
     <ProcessSteps />
     <BookingCTA headline={"Hautnah erleben."} subline="Close-Up Magie für dein Event — lass uns sprechen und das perfekte Konzept entwickeln." />
   </PageLayout>
+  </>
 );
 
 export default CloseUp;

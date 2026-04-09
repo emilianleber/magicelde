@@ -12,3 +12,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+Sitemap: https://www.magicel.de/sitemap.xml

@@ -723,6 +723,15 @@ const Firmenfeiern = () => (
         content="Firmenfeier Zauberer Emilian Leber: interaktive Magie für Firmenfeier, Weihnachtsfeier, Gala & Kundenevent. Close-Up, Bühnenshow oder individuelles Konzept – deutschlandweit buchbar."
       />
       <link rel="canonical" href="https://www.magicel.de/firmenfeiern" />
+      <meta property="og:title" content="Firmenfeier Zauberer – Emilian Leber | Zauberer für Firmenfeiern & Events" />
+      <meta property="og:description" content="Firmenfeier Zauberer Emilian Leber: interaktive Magie für Firmenfeier, Weihnachtsfeier, Gala & Kundenevent. Close-Up, Bühnenshow oder individuelles Konzept." />
+      <meta property="og:url" content="https://www.magicel.de/firmenfeiern" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Firmenfeier Zauberer – Emilian Leber | Zauberer für Firmenfeiern & Events" />
+      <meta name="twitter:description" content="Firmenfeier Zauberer Emilian Leber: interaktive Magie für Firmenfeier, Weihnachtsfeier, Gala & Kundenevent. Close-Up, Bühnenshow oder individuelles Konzept." />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Service",
@@ -743,6 +752,8 @@ const Firmenfeiern = () => (
     <PageLayout>
       <HeroCorporate />
       <TrustStrip />
+      <ClientLogos title="Bekannt von Events für Unternehmen, Veranstalter und Institutionen." />
+      <ReferenzenSlider />
       <WarumSection />
       <ProblemeSection />
       <LoesungSection />
@@ -750,8 +761,6 @@ const Firmenfeiern = () => (
       <ShowkonzepteCorporate />
       <AblaufSection />
       <MehrwertSection />
-      <ReferenzenSlider />
-      <ClientLogos title="Bekannt von Events für Unternehmen, Veranstalter und Institutionen." />
       <CaseStudies />
       <VergleichCorporate />
       <StatsCorporate />

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -314,11 +315,27 @@ const FormSection = () => {
 };
 
 const Buchung = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Jetzt anfragen – Emilian Leber | Zauberer buchen</title>
+      <meta name="description" content="Jetzt Zauberer Emilian Leber buchen: unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event. Kostenlose Beratung, Antwort innerhalb 24 Stunden." />
+      <link rel="canonical" href="https://www.magicel.de/buchung" />
+      <meta property="og:title" content="Jetzt anfragen – Emilian Leber | Zauberer buchen" />
+      <meta property="og:description" content="Jetzt Zauberer Emilian Leber buchen: unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event. Kostenlose Beratung, Antwort innerhalb 24 Stunden." />
+      <meta property="og:url" content="https://www.magicel.de/buchung" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Jetzt anfragen – Emilian Leber | Zauberer buchen" />
+      <meta name="twitter:description" content="Jetzt Zauberer Emilian Leber buchen: unverbindliche Anfrage für Hochzeit, Firmenfeier oder Event. Kostenlose Beratung, Antwort innerhalb 24 Stunden." />
+    </Helmet>
+    <PageLayout>
     <HeroBuchung />
     <FormSection />
     <ProcessSteps />
   </PageLayout>
+  </>
 );
 
 export default Buchung;

@@ -124,6 +124,15 @@ const Referenzen = () => (
       <title>Referenzen & Bewertungen – Emilian Leber Zauberer</title>
       <meta name="description" content="Über 500 Events, 4.9 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
       <link rel="canonical" href="https://www.magicel.de/referenzen" />
+      <meta property="og:title" content="Referenzen & Bewertungen – Emilian Leber Zauberer" />
+      <meta property="og:description" content="Über 500 Events, 4.9 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
+      <meta property="og:url" content="https://www.magicel.de/referenzen" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+      <meta property="og:locale" content="de_DE" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Referenzen & Bewertungen – Emilian Leber Zauberer" />
+      <meta name="twitter:description" content="Über 500 Events, 4.9 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
@@ -153,10 +162,10 @@ const Referenzen = () => (
     </Helmet>
     <HeroRef />
     <TrustStrip />
+    <ClientLogos />
+    <TestimonialsSection />
     <StatsSection />
     <TrustSection />
-    <TestimonialsSection />
-    <ClientLogos />
     <GalerieSection />
     <BookingCTA headline={"Überzeugt?"} subline="Werde Teil der Liste — erzähl mir von deinem Event und lass uns gemeinsam etwas Unvergessliches schaffen." />
   </PageLayout>

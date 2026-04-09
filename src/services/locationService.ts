@@ -15,6 +15,14 @@ const toLocation = (row: Record<string, unknown>): LocationVenue => ({
   kontaktTel: (row.kontakt_tel as string) || undefined,
   notizen: (row.notizen as string) || "",
   adresse: (row.adresse as string) || "",
+  // NEW fields
+  buehnenHoehe: (row.buehnen_hoehe as number) ?? undefined,
+  stromAnschluss: (row.strom_anschluss as string) || undefined,
+  lichtVorhanden: (row.licht_vorhanden as boolean) ?? undefined,
+  tonVorhanden: (row.ton_vorhanden as boolean) ?? undefined,
+  anfahrtHinweise: (row.anfahrt_hinweise as string) || undefined,
+  parkplaetze: (row.parkplaetze as number) ?? undefined,
+  website: (row.website as string) || undefined,
   createdAt: row.created_at as string,
   updatedAt: row.updated_at as string,
 });
@@ -54,6 +62,13 @@ export const locationService = {
         kontakt_tel: input.kontaktTel ?? null,
         notizen: input.notizen,
         adresse: input.adresse,
+        buehnen_hoehe: input.buehnenHoehe ?? null,
+        strom_anschluss: input.stromAnschluss ?? null,
+        licht_vorhanden: input.lichtVorhanden ?? null,
+        ton_vorhanden: input.tonVorhanden ?? null,
+        anfahrt_hinweise: input.anfahrtHinweise ?? null,
+        parkplaetze: input.parkplaetze ?? null,
+        website: input.website ?? null,
       })
       .select()
       .single();
@@ -74,6 +89,13 @@ export const locationService = {
     if (input.kontaktTel !== undefined) patch.kontakt_tel = input.kontaktTel ?? null;
     if (input.notizen !== undefined) patch.notizen = input.notizen;
     if (input.adresse !== undefined) patch.adresse = input.adresse;
+    if (input.buehnenHoehe !== undefined) patch.buehnen_hoehe = input.buehnenHoehe ?? null;
+    if (input.stromAnschluss !== undefined) patch.strom_anschluss = input.stromAnschluss ?? null;
+    if (input.lichtVorhanden !== undefined) patch.licht_vorhanden = input.lichtVorhanden ?? null;
+    if (input.tonVorhanden !== undefined) patch.ton_vorhanden = input.tonVorhanden ?? null;
+    if (input.anfahrtHinweise !== undefined) patch.anfahrt_hinweise = input.anfahrtHinweise ?? null;
+    if (input.parkplaetze !== undefined) patch.parkplaetze = input.parkplaetze ?? null;
+    if (input.website !== undefined) patch.website = input.website ?? null;
     patch.updated_at = new Date().toISOString();
 
     const { data, error } = await supabase

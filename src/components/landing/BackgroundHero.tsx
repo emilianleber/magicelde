@@ -67,7 +67,7 @@ const BackgroundHero = ({
               {ctaPrimary && (
                 <Link
                   to={ctaPrimary.to}
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-semibold text-black transition hover:scale-[1.02]"
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 sm:px-8 sm:py-4 text-base font-semibold text-black transition hover:scale-[1.02]"
                 >
                   {ctaPrimary.text}
                   <ArrowRight className="h-4 w-4" />
@@ -77,7 +77,7 @@ const BackgroundHero = ({
               {ctaSecondary && (
                 <a
                   href={ctaSecondary.href}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur-md transition hover:bg-white/15"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3.5 sm:px-8 sm:py-4 text-base font-semibold text-white backdrop-blur-md transition hover:bg-white/15"
                 >
                   {ctaSecondary.text}
                 </a>
