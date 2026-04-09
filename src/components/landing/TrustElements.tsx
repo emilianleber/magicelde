@@ -105,17 +105,23 @@ export const AwardBadges = ({ className = "" }: { className?: string }) => (
 
 /* ─── Client Logos ─── */
 const clientLogos: { name: string; logo?: string }[] = [
-  { name: "Schneider Weisse", logo: "/logos/schneider-weisse.svg" },
-  { name: "Sixt", logo: "/logos/sixt.svg" },
-  { name: "Sparkasse", logo: "/logos/sparkasse.svg" },
-  { name: "Versicherungskammer Bayern", logo: "/logos/vkb.svg" },
-  { name: "Wächter", logo: "/logos/waechter.svg" },
-  { name: "STRABAG", logo: "/logos/strabag.svg" },
-  { name: "Stadt Regensburg", logo: "/logos/stadt-regensburg.svg" },
-  { name: "DPSG", logo: "/logos/dpsg.svg" },
-  { name: "Steinhofer INGENIEURE", logo: "/logos/steinhofer.svg" },
-  { name: "Wald&Wiese", logo: "/logos/wald-wiese.svg" },
-  { name: "HEIM & HAUS", logo: "/logos/heim-haus.svg" },
+  { name: "HEIM & HAUS", logo: "/logos/heim-haus.png" },
+  { name: "STRABAG", logo: "/logos/strabag.png" },
+  { name: "Versicherungskammer Bayern", logo: "/logos/vkb.png" },
+  { name: "XXXLutz", logo: "/logos/xxxlutz.png" },
+  { name: "Sixt", logo: "/logos/sixt.png" },
+  { name: "Business Entertainment", logo: "/logos/business-entertainment.png" },
+  { name: "Drying Little Tears", logo: "/logos/drying-little-tears.png" },
+  { name: "Oktoberfest München", logo: "/logos/oktoberfest.png" },
+  { name: "Wächter", logo: "/logos/waechter.png" },
+  { name: "Sparkasse", logo: "/logos/sparkasse.png" },
+  { name: "DPSG", logo: "/logos/dpsg.png" },
+  { name: "Steinhofer Ingenieure", logo: "/logos/steinhofer.png" },
+  { name: "Schneider Weisse", logo: "/logos/schneider-weisse.png" },
+  { name: "Wald & Wiese", logo: "/logos/wald-wiese.png" },
+  { name: "The Greatest Talent", logo: "/logos/greatest-talent.png" },
+  { name: "Stadt Regensburg", logo: "/logos/stadt-regensburg.png" },
+  { name: "Turmtheater Regensburg", logo: "/logos/turmtheater.png" },
 ];
 
 /* Logo Item – zeigt Bild falls vorhanden, sonst Text */
