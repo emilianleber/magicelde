@@ -8,12 +8,13 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import weddingImg from "@/assets/emilian-magic-dinner.jpg";
+import weddingHeroImg from "@/assets/schneider-weisse-closeup.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
-import audienceImg from "@/assets/schneider-weisse-closeup.jpg";
+import audienceImg from "@/assets/staunen.jpg";
 import heroImg from "@/assets/hero-magic.jpg";
+import dinnerImg from "@/assets/emilian-magic-dinner.jpg";
 import {
   Check,
   X,
@@ -28,7 +29,7 @@ import {
 /* 1. Hero */
 const HeroWedding = () => (
   <BackgroundHero
-    imageSrc={weddingImg}
+    imageSrc={weddingHeroImg}
     badge="Zauberer für eure Hochzeit"
     headline="Magie für eure"
     animatedWords={["Hochzeit.", "Gäste.", "Liebe.", "Feier."]}
@@ -587,14 +588,15 @@ const GalerieWedding = () => {
         >
           {[
             {
-              src: weddingImg,
+              src: dinnerImg,
               alt: "Zauberer auf einer Hochzeit",
               className: "col-span-2 row-span-2",
+              pos: "object-top",
             },
-            { src: audienceImg, alt: "Staunende Gäste auf einer Hochzeit" },
-            { src: closeupImg, alt: "Close-Up Magie bei einer Hochzeit" },
-            { src: stageImg, alt: "Bühnenshow auf einer Hochzeit" },
-            { src: heroImg, alt: "Live-Performance bei einer Hochzeit" },
+            { src: audienceImg, alt: "Staunende Gäste auf einer Hochzeit", pos: "object-center" },
+            { src: closeupImg, alt: "Close-Up Magie bei einer Hochzeit", pos: "object-center" },
+            { src: stageImg, alt: "Bühnenshow auf einer Hochzeit", pos: "object-top" },
+            { src: heroImg, alt: "Live-Performance bei einer Hochzeit", pos: "object-top" },
           ].map((img, i) => (
             <div
               key={i}
@@ -603,7 +605,7 @@ const GalerieWedding = () => {
               <img
                 src={img.src}
                 alt={img.alt}
-                className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-700"
+                className={`w-full h-full object-cover ${img.pos} group-hover:scale-[1.04] transition-transform duration-700`}
                 loading="lazy"
               />
             </div>
