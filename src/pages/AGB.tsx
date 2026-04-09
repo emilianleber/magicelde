@@ -22,7 +22,7 @@ const AGB = () => (
       <div className="container px-6 pt-32 pb-24 md:pt-40">
         <div className="max-w-3xl mx-auto">
           <span className="badge-accent mb-8 inline-flex">Rechtliches</span>
-          <h1 className="headline-hero text-foreground mb-12">Allgemeine Geschäftsbedingungen.</h1>
+          <h1 className="headline-section text-foreground mb-12">Allgemeine Geschäftsbedingungen.</h1>
 
           <div className="prose prose-lg max-w-none space-y-8 text-detail">
             <h2 className="headline-sub text-foreground">§ 1 Geltungsbereich</h2>
