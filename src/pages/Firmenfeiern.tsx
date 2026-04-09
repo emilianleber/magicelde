@@ -7,7 +7,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import corporateImg from "@/assets/magicdinner-buehne.jpg";
+import corporateImg from "@/assets/buehne-zuschauer.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";

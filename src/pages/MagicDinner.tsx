@@ -237,7 +237,7 @@ const GaesteErlebnis = () => {
         <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
             <div className="rounded-3xl overflow-hidden">
-              <img src={haendeImg} alt="Interaktion beim Magic Dinner" className="w-full h-[500px] object-cover object-top" loading="lazy" />
+              <img src={haendeImg} alt="Interaktion beim Magic Dinner" className="w-full h-[500px] object-cover object-center" loading="lazy" />
             </div>
           </div>
           <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}>

@@ -195,7 +195,7 @@ const GalerieSection = () => {
     <section className="section-large" ref={ref}>
       <div className="container px-6">
         <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto ${isVisible ? "animate-fade-in" : "opacity-0"}`}>
-          {[closeupImg, schneiderWeisseImg, heroImg, stageImg, portraitImg, haendeImg].map((src, i) => (
+          {[closeupImg, staunenImg, heroImg, stageImg, portraitImg, haendeImg].map((src, i) => (
             <div key={i} className="rounded-2xl overflow-hidden aspect-square group">
               <img src={src} alt="Close-Up" className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-700" loading="lazy" />
             </div>
