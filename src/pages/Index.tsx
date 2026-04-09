@@ -690,14 +690,14 @@ const Index = () => {
         />
 
         <TrustStrip />
-        <ClientLogos />
-        <SocialProofSection />
-        <ReferenzenSlider />
         <USPSection />
         <ShowformateSlider />
+        <ClientLogos className="!py-8" />
         <AnlassSection />
+        <ReferenzenSlider />
         <ComedySection />
         <ErlebnisSection />
+        <SocialProofSection />
         <GalerieSection />
         <AblaufSection />
         <FuerWenSection />

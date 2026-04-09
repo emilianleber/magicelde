@@ -24,14 +24,24 @@ const GoogleIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
   </svg>
 );
 
-/* ─── ProvenExpert Checkmark Icon (brand green) ─── */
+/* ─── ProvenExpert Logo (orange seal with star) ─── */
 const ProvenExpertIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="11" fill="#00A960" />
+  <svg className={className} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    {/* Seal shape */}
+    <circle cx="100" cy="100" r="92" fill="#F26522" />
+    <circle cx="100" cy="100" r="78" fill="none" stroke="#fff" strokeWidth="3" />
+    {/* Star */}
+    <polygon
+      points="100,35 118,72 159,78 129,107 136,148 100,129 64,148 71,107 41,78 82,72"
+      fill="#fff"
+    />
+    {/* Inner circle of star for depth */}
+    <circle cx="100" cy="95" r="18" fill="#F26522" />
+    {/* Checkmark inside */}
     <path
-      d="M7 12.5l3 3 7-7"
-      stroke="white"
-      strokeWidth="2.5"
+      d="M91 95l6 6 14-14"
+      stroke="#fff"
+      strokeWidth="4"
       strokeLinecap="round"
       strokeLinejoin="round"
       fill="none"
