@@ -263,7 +263,7 @@ const ComedySection = () => {
               <img
                 src={magicDinnerBookImg}
                 alt="Zaubershow beim Magic Dinner"
-                className="w-full h-[500px] object-cover hover:scale-[1.02] transition-transform duration-700"
+                className="w-full h-[500px] object-cover object-center hover:scale-[1.02] transition-transform duration-700"
                 loading="lazy"
               />
             </div>
