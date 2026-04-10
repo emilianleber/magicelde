@@ -407,7 +407,7 @@ const AdminShowEditor = () => {
     }
   }, [allEffekte]);
 
-  const handleTopLevelDragEnd = useCallback((event: DragEndEvent) => {
+  const handleTopLevelDragEnd = (event: DragEndEvent) => {
     setDraggingSidebarEffekt(null);
     const { active, over } = event;
     if (!over) return;
@@ -419,7 +419,7 @@ const AdminShowEditor = () => {
       const phaseId = overId.replace("drop-phase-", "");
       addEffektToPhase(phaseId, effektId);
     }
-  }, []);
+  };
 
   const loadPhasePresets = (presets: { label: string; typ: ShowPhase["typ"] }[]) => {
     const now = Date.now();
