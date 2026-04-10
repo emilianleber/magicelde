@@ -39,22 +39,29 @@ import {
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const FORMAT_LABELS: Record<string, string> = {
-  buehnenshow: "Buhnenshow",
+  abendshow: "Bühnenshow / Abendshow",
+  "close-up": "Close-Up",
+  "magic-dinner": "Magic Dinner",
+  tourshow: "Tourshow",
+  kundenbuchung: "Kundenbuchung",
+  workshop: "Workshop",
+  // Legacy keys
+  buehnenshow: "Bühnenshow",
   closeup: "Close-Up",
   magic_dinner: "Magic Dinner",
-  walking_act: "Walking Act",
-  tourshow: "Tourshow",
-  corporate: "Corporate",
-  gala: "Gala",
-  hybrid: "Hybrid",
 };
 
 const FORMAT_COLORS: Record<string, string> = {
+  abendshow: "bg-purple-50 text-purple-700",
+  "close-up": "bg-blue-50 text-blue-700",
+  "magic-dinner": "bg-orange-50 text-orange-700",
+  tourshow: "bg-cyan-50 text-cyan-700",
+  kundenbuchung: "bg-green-50 text-green-700",
+  workshop: "bg-amber-50 text-amber-700",
+  // Legacy
   buehnenshow: "bg-purple-50 text-purple-700",
   closeup: "bg-blue-50 text-blue-700",
   magic_dinner: "bg-orange-50 text-orange-700",
-  walking_act: "bg-green-50 text-green-700",
-  tourshow: "bg-cyan-50 text-cyan-700",
   corporate: "bg-slate-50 text-slate-700",
   gala: "bg-amber-50 text-amber-700",
   hybrid: "bg-pink-50 text-pink-700",

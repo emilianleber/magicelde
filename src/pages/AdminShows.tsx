@@ -26,7 +26,13 @@ import { CSS } from "@dnd-kit/utilities";
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
-const FORMAT_LABELS: Record<ShowFormat, string> = {
+const FORMAT_LABELS: Record<string, string> = {
+  abendshow: "Bühnenshow / Abendshow",
+  "close-up": "Close-Up",
+  "magic-dinner": "Magic Dinner",
+  tourshow: "Tourshow",
+  kundenbuchung: "Kundenbuchung",
+  workshop: "Workshop",
   buehnenshow: "Bühnenshow",
   closeup: "Close-Up",
   magic_dinner: "Magic Dinner",
@@ -34,7 +40,13 @@ const FORMAT_LABELS: Record<ShowFormat, string> = {
   hybrid: "Hybrid",
 };
 
-const FORMAT_COLORS: Record<ShowFormat, string> = {
+const FORMAT_COLORS: Record<string, string> = {
+  abendshow: "bg-purple-50 text-purple-700",
+  "close-up": "bg-blue-50 text-blue-700",
+  "magic-dinner": "bg-orange-50 text-orange-700",
+  tourshow: "bg-cyan-50 text-cyan-700",
+  kundenbuchung: "bg-green-50 text-green-700",
+  workshop: "bg-amber-50 text-amber-700",
   buehnenshow: "bg-purple-50 text-purple-700",
   closeup: "bg-blue-50 text-blue-700",
   magic_dinner: "bg-orange-50 text-orange-700",
