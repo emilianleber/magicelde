@@ -307,6 +307,7 @@ const AdminShowEditor = () => {
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [quickAddName, setQuickAddName] = useState("");
   const [quickAddDauer, setQuickAddDauer] = useState(5);
+  const [quickAddKonzeptOnly, setQuickAddKonzeptOnly] = useState(false);
   const [quickAddSaving, setQuickAddSaving] = useState(false);
 
   // Show fields
@@ -348,7 +349,17 @@ const AdminShowEditor = () => {
       if (!session) { navigate("/admin/login"); return; }
 
       const effekte = await effekteService.getAll();
-      setAllEffekte(effekte);
+      // Also load konzept-only effects (not in normal library)
+      const { data: konzeptEffekte } = await supabase.from("effekte").select("*").eq("status", "konzept");
+      const merged = [...effekte];
+      if (konzeptEffekte) {
+        for (const ke of konzeptEffekte) {
+          if (!merged.find(e => e.id === ke.id)) {
+            merged.push({ id: ke.id, name: ke.name as string, typ: ke.typ as any, dauer: (ke.dauer as number) || 0, resetZeit: 0, schwierigkeit: 1, anlaesse: [], status: "aktiv" as any, props: [], interneNotizen: "", wiederholbar: true, kategorie: "", createdAt: "", updatedAt: "" });
+          }
+        }
+      }
+      setAllEffekte(merged);
 
       if (!isNew && id) {
         const show = await showService.getById(id);
@@ -484,7 +495,7 @@ const AdminShowEditor = () => {
   const assignedEffektIds = new Set(phasen.flatMap(p => p.effektIds));
 
   const filteredEffekte = allEffekte.filter(e => {
-    if (e.status !== "aktiv") return false;
+    if (e.status !== "aktiv" && e.status !== ("konzept" as any)) return false;
     // Hide already assigned effects
     if (assignedEffektIds.has(e.id)) return false;
     // Format-basierter Filter
@@ -618,14 +629,26 @@ const AdminShowEditor = () => {
         name: quickAddName.trim(),
         typ: defaultTyp,
         dauer: quickAddDauer,
-        status: "aktiv",
+        status: quickAddKonzeptOnly ? "konzept" : "aktiv",
       }).select().single();
       if (error) throw error;
-      const newEffekt = await effekteService.getAll();
-      setAllEffekte(newEffekt);
+      // Reload all effects including konzept ones
+      const all = await effekteService.getAll();
+      // Also include konzept effects (they're normally filtered out)
+      const { data: konzeptEffekte } = await supabase.from("effekte").select("*").eq("status", "konzept");
+      const merged = [...all];
+      if (konzeptEffekte) {
+        for (const ke of konzeptEffekte) {
+          if (!merged.find(e => e.id === ke.id)) {
+            merged.push({ id: ke.id, name: ke.name as string, typ: ke.typ as any, dauer: (ke.dauer as number) || 0, resetZeit: 0, schwierigkeit: 1, anlaesse: [], status: "aktiv" as any, props: [], interneNotizen: "", wiederholbar: true, kategorie: "", createdAt: "", updatedAt: "" });
+          }
+        }
+      }
+      setAllEffekte(merged);
       setShowQuickAdd(false);
       setQuickAddName("");
       setQuickAddDauer(5);
+      setQuickAddKonzeptOnly(false);
     } catch (err: any) {
       alert("Fehler: " + (err.message || "Unbekannt"));
     }
@@ -742,60 +765,64 @@ const AdminShowEditor = () => {
           {/* ══════════════════════════════════════════════════════════════════ */}
 
           {isCloseUp ? (
-            /* ── CLOSE-UP: Effekt-Pool ── */
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-sm font-bold text-foreground">Effekt-Pool</h2>
-                  <p className="text-xs text-muted-foreground">Effekte die du bei dieser Show dabei hast. Reihenfolge spontan.</p>
-                </div>
-              </div>
-
-              {phasen.length === 0 && (
-                <button onClick={() => {
-                  const newId = `phase-${Date.now()}`;
-                  setPhasen([{ _id: newId, label: "Meine Effekte", typ: "akt1", effektIds: [] }]);
-                  setExpandedPhase(newId);
-                }} className="w-full p-6 rounded-xl border-2 border-dashed border-border/30 text-center text-sm text-muted-foreground hover:border-accent/30 hover:text-accent transition-colors">
-                  + Effekt-Pool erstellen
-                </button>
-              )}
-
-              {phasen.map(phase => {
-                const phaseEffekte = phase.effektIds.map(eid => allEffekte.find(e => e.id === eid)).filter(Boolean) as Effekt[];
-                const grouped = {
-                  closeup: phaseEffekte.filter(e => e.typ === "closeup"),
-                  buehne: phaseEffekte.filter(e => e.typ === "buehne"),
-                  beides: phaseEffekte.filter(e => e.typ === "beides"),
-                };
+            /* ── CLOSE-UP: Single Effekt-Pool ── */
+            (() => {
+              // Consolidate all phase effects into one pool
+              const poolPhase = phasen[0];
+              const allPoolEffekte = phasen.flatMap(p => p.effektIds).map(eid => allEffekte.find(e => e.id === eid)).filter(Boolean) as Effekt[];
+              const grouped = {
+                closeup: allPoolEffekte.filter(e => e.typ === "closeup"),
+                buehne: allPoolEffekte.filter(e => e.typ === "buehne"),
+                beides: allPoolEffekte.filter(e => e.typ === "beides"),
+              };
+              // Ensure there's exactly one pool phase
+              if (phasen.length === 0) {
                 return (
-                  <div key={phase._id} className="space-y-3">
-                    {Object.entries(grouped).filter(([, effs]) => effs.length > 0).map(([typ, effs]) => (
-                      <div key={typ}>
-                        <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">{EFFEKT_TYP_LABELS[typ] || typ} ({effs.length})</p>
-                        <div className="grid sm:grid-cols-2 gap-2">
-                          {effs.map(eff => (
-                            <div key={eff.id} className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white border border-border/20 group">
-                              <Wand2 className="w-3.5 h-3.5 text-accent shrink-0" />
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium truncate">{eff.name}</p>
-                                <p className="text-[10px] text-muted-foreground">{eff.dauer} Min.</p>
-                              </div>
-                              <button onClick={() => removeEffektFromPhase(phase._id, eff.id)} className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-destructive transition-opacity">
-                                <X className="w-3 h-3" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    {phaseEffekte.length === 0 && (
-                      <p className="text-xs text-muted-foreground/50 italic py-4 text-center">Klicke auf Effekte in der Sidebar um sie hinzuzufügen</p>
-                    )}
+                  <div className="space-y-4">
+                    <div>
+                      <h2 className="text-sm font-bold text-foreground">Effekt-Pool</h2>
+                      <p className="text-xs text-muted-foreground">Klicke auf Effekte in der Sidebar oder ziehe sie hierher.</p>
+                    </div>
+                    <button onClick={() => {
+                      const newId = `phase-${Date.now()}`;
+                      setPhasen([{ _id: newId, label: "Meine Effekte", typ: "akt1", effektIds: [] }]);
+                      setExpandedPhase(newId);
+                    }} className="w-full p-6 rounded-xl border-2 border-dashed border-border/30 text-center text-sm text-muted-foreground hover:border-accent/30 hover:text-accent transition-colors">
+                      + Effekt-Pool erstellen
+                    </button>
                   </div>
                 );
-              })}
-            </div>
+              }
+              return (
+                <div className="space-y-4">
+                  <div>
+                    <h2 className="text-sm font-bold text-foreground">Effekt-Pool ({allPoolEffekte.length} Effekte)</h2>
+                    <p className="text-xs text-muted-foreground">Reihenfolge spontan — klicke oder ziehe Effekte aus der Sidebar.</p>
+                  </div>
+                  {allPoolEffekte.length === 0 ? (
+                    <p className="text-xs text-muted-foreground/50 italic py-6 text-center">Noch keine Effekte — klicke in der Sidebar auf + um Effekte hinzuzufügen</p>
+                  ) : Object.entries(grouped).filter(([, effs]) => effs.length > 0).map(([typ, effs]) => (
+                    <div key={typ}>
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">{EFFEKT_TYP_LABELS[typ] || typ} ({effs.length})</p>
+                      <div className="grid sm:grid-cols-2 gap-2">
+                        {effs.map(eff => (
+                          <div key={eff.id} className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white border border-border/20 group">
+                            <Wand2 className="w-3.5 h-3.5 text-accent shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium truncate">{eff.name}</p>
+                              <p className="text-[10px] text-muted-foreground">{eff.dauer} Min.</p>
+                            </div>
+                            <button onClick={() => removeEffektFromPhase(poolPhase._id, eff.id)} className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-destructive transition-opacity">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()
 
           ) : isWorkshop ? (
             /* ── WORKSHOP: Eigenständiger Editor ── */
@@ -1074,8 +1101,12 @@ const AdminShowEditor = () => {
                 <input type="number" value={quickAddDauer} onChange={e => setQuickAddDauer(Math.max(0, parseInt(e.target.value) || 0))}
                   className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
               </div>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={quickAddKonzeptOnly} onChange={e => setQuickAddKonzeptOnly(e.target.checked)} className="rounded" />
+                <span className="text-xs text-muted-foreground">Nur für dieses Konzept</span>
+              </label>
               <p className="text-[10px] text-muted-foreground">
-                Typ wird automatisch auf {isCloseUp ? "Close-Up" : isBuehne ? "Bühne" : "Beides"} gesetzt. Weitere Details kannst du in der Effekte-Bibliothek bearbeiten.
+                Typ: {isCloseUp ? "Close-Up" : isBuehne ? "Bühne" : "Beides"}{quickAddKonzeptOnly ? " · Erscheint nicht in der Effekte-Bibliothek" : ""}
               </p>
             </div>
             <div className="flex gap-2 mt-4">
