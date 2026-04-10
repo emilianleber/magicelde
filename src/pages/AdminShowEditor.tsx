@@ -164,6 +164,7 @@ interface PhaseProps {
   startTime: string;
   allEffekte: Effekt[];
   isExpanded: boolean;
+  isDraggingFromSidebar: boolean;
   onToggle: () => void;
   onRemove: () => void;
   onUpdate: (patch: Partial<ShowPhase>) => void;
@@ -173,7 +174,7 @@ interface PhaseProps {
   sensors: ReturnType<typeof useSensors>;
 }
 
-function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, onToggle, onRemove, onUpdate, onAddEffekt, onRemoveEffekt, onReorderEffekte, sensors }: PhaseProps) {
+function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, isDraggingFromSidebar, onToggle, onRemove, onUpdate, onAddEffekt, onRemoveEffekt, onReorderEffekte, sensors }: PhaseProps) {
   const phaseEffekte = phase.effektIds.map(eid => allEffekte.find(e => e.id === eid)).filter(Boolean) as Effekt[];
   const phaseDauer = phaseEffekte.reduce((s, e) => s + e.dauer, 0);
   const [musikNotiz, setMusikNotiz] = useState("");
@@ -193,7 +194,20 @@ function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, onToggle, on
   }, [phase.effektIds, onReorderEffekte]);
 
   return (
-    <div ref={setDropRef} className={`rounded-xl border-2 transition-colors bg-white overflow-hidden ${isOver ? "border-accent/50 bg-accent/5" : "border-border/30"}`}>
+    <div ref={setDropRef} className={`rounded-xl border-2 transition-all duration-200 bg-white overflow-hidden ${
+      isOver ? "border-accent shadow-lg shadow-accent/20 scale-[1.01]" :
+      isDraggingFromSidebar ? "border-accent/30 border-dashed" :
+      "border-border/30"
+    }`}>
+      {/* Drop zone indicator */}
+      {isDraggingFromSidebar && (
+        <div className={`flex items-center justify-center gap-2 py-2 text-xs font-medium transition-colors ${
+          isOver ? "bg-accent/15 text-accent" : "bg-accent/5 text-accent/50"
+        }`}>
+          <Plus className="w-3.5 h-3.5" />
+          {isOver ? "Loslassen zum Hinzufügen" : "Hier ablegen"}
+        </div>
+      )}
       {/* Phase header */}
       <div className="flex items-center gap-2 px-4 py-3 bg-muted/10">
         <GripVertical className="w-4 h-4 text-muted-foreground/40 cursor-grab" />
@@ -779,6 +793,7 @@ const AdminShowEditor = () => {
                           key={phase._id} phase={phase} idx={idx}
                           startTime={timelineItems[idx]?.startTime || "--:--"}
                           allEffekte={allEffekte} isExpanded={expandedPhase === phase._id}
+                          isDraggingFromSidebar={!!draggingSidebarEffekt}
                           onToggle={() => setExpandedPhase(expandedPhase === phase._id ? null : phase._id)}
                           onRemove={() => removePhase(phase._id)}
                           onUpdate={patch => updatePhase(phase._id, patch)}
@@ -831,6 +846,7 @@ const AdminShowEditor = () => {
                           key={phase._id} phase={phase} idx={idx}
                           startTime={timelineItems[idx]?.startTime || "--:--"}
                           allEffekte={allEffekte} isExpanded={expandedPhase === phase._id}
+                          isDraggingFromSidebar={!!draggingSidebarEffekt}
                           onToggle={() => setExpandedPhase(expandedPhase === phase._id ? null : phase._id)}
                           onRemove={() => removePhase(phase._id)}
                           onUpdate={patch => updatePhase(phase._id, patch)}
@@ -880,6 +896,7 @@ const AdminShowEditor = () => {
                           key={phase._id} phase={phase} idx={idx}
                           startTime={timelineItems[idx]?.startTime || "--:--"}
                           allEffekte={allEffekte} isExpanded={expandedPhase === phase._id}
+                          isDraggingFromSidebar={!!draggingSidebarEffekt}
                           onToggle={() => setExpandedPhase(expandedPhase === phase._id ? null : phase._id)}
                           onRemove={() => removePhase(phase._id)}
                           onUpdate={patch => updatePhase(phase._id, patch)}
@@ -969,7 +986,7 @@ const AdminShowEditor = () => {
       </div>
 
       {/* Drag Overlay — follows cursor during sidebar drag */}
-      <DragOverlay>
+      <DragOverlay dropAnimation={null}>
         {draggingSidebarEffekt && (
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-accent/10 border border-accent/30 shadow-lg">
             <Wand2 className="w-3.5 h-3.5 text-accent shrink-0" />
