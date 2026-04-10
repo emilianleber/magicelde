@@ -663,8 +663,10 @@ const AdminShowEditor = () => {
   const isBuehne = format === "abendshow" || format === "kundenbuchung" || (format === "magic-dinner" && dinnerMode === "gang");
   const isTourshow = format === "tourshow";
   const isWorkshop = format === "workshop";
-  const isHybrid = false; // future: format === "hybrid"
   const isDinner = format === "magic-dinner";
+
+  // Ensure there's at least one phase for Close-Up pool mode
+  const safePoolPhase = phasen[0] || { _id: "empty", label: "Pool", typ: "akt1" as const, effektIds: [] };
 
   return (
     <AdminLayout title={isNew ? "Neues Konzept" : name || "Konzept"} subtitle={FORMAT_OPTIONS.find(f => f.value === format)?.label || "Show-Ablauf planen"}>
