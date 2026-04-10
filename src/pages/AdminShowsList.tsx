@@ -188,7 +188,9 @@ const AdminShowsList = () => {
       // Navigate to editor
       navigate(`/admin/programm/shows/${data.id}/edit`);
     } catch (err: unknown) {
-      setPanelMsg({ type: "err", text: err instanceof Error ? err.message : "Fehler beim Anlegen." });
+      console.error("Show create error:", err);
+      const msg = err instanceof Error ? err.message : (err as any)?.message || JSON.stringify(err);
+      setPanelMsg({ type: "err", text: msg || "Fehler beim Anlegen." });
     }
     setSaving(false);
   };
