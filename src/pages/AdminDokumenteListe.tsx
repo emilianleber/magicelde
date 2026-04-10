@@ -514,14 +514,14 @@ export default function AdminDokumenteListe() {
                   const isBezahlt = doc.status === "bezahlt";
                   return (
                     <tr key={doc.id} onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
-                      className={`group border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30" : ""} ${isStorniert ? "opacity-50" : ""}`}>
-                      <td className="px-4 py-3"><StatusCell status={doc.status} /></td>
-                      <td className={`px-3 py-3 text-sm ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>{fmtDate(doc.faelligAm) || "–"}</td>
-                      <td className="px-3 py-3 font-mono text-sm text-muted-foreground">{doc.nummer || "–"}</td>
-                      <td className="px-3 py-3"><p className="truncate font-semibold text-sm">{contact}</p></td>
-                      <td className="px-3 py-3 text-sm text-muted-foreground">{fmtDate(doc.datum)}</td>
-                      <td className="px-3 py-3 text-right font-semibold tabular-nums text-sm">{fmt(doc.brutto)}</td>
-                      <td className={`px-3 py-3 text-right font-semibold tabular-nums text-sm ${isOverdue ? "text-red-600" : isBezahlt ? "text-green-600" : ""}`}>{fmt(doc.offenerBetrag)}</td>
+                      className={`group border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30" : ""}`}>
+                      <td className={`px-4 py-3 ${isStorniert ? "opacity-50" : ""}`}><StatusCell status={doc.status} /></td>
+                      <td className={`px-3 py-3 text-sm ${isStorniert ? "opacity-50" : ""} ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>{fmtDate(doc.faelligAm) || "–"}</td>
+                      <td className={`px-3 py-3 font-mono text-sm text-muted-foreground ${isStorniert ? "opacity-50" : ""}`}>{doc.nummer || "–"}</td>
+                      <td className={`px-3 py-3 ${isStorniert ? "opacity-50" : ""}`}><p className="truncate font-semibold text-sm">{contact}</p></td>
+                      <td className={`px-3 py-3 text-sm text-muted-foreground ${isStorniert ? "opacity-50" : ""}`}>{fmtDate(doc.datum)}</td>
+                      <td className={`px-3 py-3 text-right font-semibold tabular-nums text-sm ${isStorniert ? "opacity-50" : ""}`}>{fmt(doc.brutto)}</td>
+                      <td className={`px-3 py-3 text-right font-semibold tabular-nums text-sm ${isStorniert ? "opacity-50" : ""} ${isOverdue ? "text-red-600" : isBezahlt ? "text-green-600" : ""}`}>{fmt(doc.offenerBetrag)}</td>
                       <td className="px-4 py-2 relative" onClick={(e) => e.stopPropagation()}>
                         <div className={`flex items-center justify-end gap-1 transition-opacity ${showMenu ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
                           <button onClick={(e) => previewLoading === doc.id ? undefined : handlePreview(e, doc)} title="Vorschau" className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
@@ -597,15 +597,15 @@ export default function AdminDokumenteListe() {
                   const canAcceptReject = canAcceptRejectCheck(doc);
                   return (
                     <tr key={doc.id} onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
-                      className={`group border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30" : ""} ${isStorniert ? "opacity-50" : ""}`}>
-                      <td className="px-4 py-3"><StatusCell status={doc.status} /></td>
-                      <td className="px-3 py-3 font-mono text-sm text-muted-foreground">{doc.nummer || "– – –"}</td>
-                      <td className="px-3 py-3 min-w-0">
+                      className={`group border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30" : ""}`}>
+                      <td className={`px-4 py-3 ${isStorniert ? "opacity-50" : ""}`}><StatusCell status={doc.status} /></td>
+                      <td className={`px-3 py-3 font-mono text-sm text-muted-foreground ${isStorniert ? "opacity-50" : ""}`}>{doc.nummer || "– – –"}</td>
+                      <td className={`px-3 py-3 min-w-0 ${isStorniert ? "opacity-50" : ""}`}>
                         <p className="truncate font-semibold text-sm">{contact}</p>
                         <p className="truncate text-xs text-muted-foreground">{betreff}</p>
                       </td>
-                      <td className="px-3 py-3 text-sm text-muted-foreground">{fmtDate(doc.datum)}</td>
-                      <td className={`px-4 py-3 text-right font-semibold tabular-nums text-sm ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</td>
+                      <td className={`px-3 py-3 text-sm text-muted-foreground ${isStorniert ? "opacity-50" : ""}`}>{fmtDate(doc.datum)}</td>
+                      <td className={`px-4 py-3 text-right font-semibold tabular-nums text-sm ${isStorniert ? "opacity-50" : ""} ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</td>
                       <td className="px-4 py-2 relative" onClick={(e) => e.stopPropagation()}>
                         <div className={`flex items-center justify-end gap-1 transition-opacity ${showMenu ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
                           <button onClick={(e) => previewLoading === doc.id ? undefined : handlePreview(e, doc)} title="Vorschau" className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
