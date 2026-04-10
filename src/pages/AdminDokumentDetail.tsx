@@ -8,7 +8,7 @@ import html2canvas from "html2canvas";
 import {
   ArrowLeft, Pencil, Send, CheckCircle, XCircle, ArrowRight,
   Receipt, AlertTriangle, Plus, X, Clock, Trash2, Ban, MoreHorizontal,
-  Download, Globe, Mail, Loader2, Search, FileText,
+  Download, Globe, Mail, Loader2, Search, FileText, Calculator, ChevronUp, ChevronDown,
 } from "lucide-react";
 
 interface EmailSearchCustomer { id: string; name: string | null; email: string | null; company?: string | null; }
@@ -125,6 +125,15 @@ export default function AdminDokumentDetail() {
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const [deleting, setDeleting] = useState(false);
 
+  // Abschlagsrechnung modal
+  const [showAbschlagDialog, setShowAbschlagDialog] = useState(false);
+  const [abschlagMode, setAbschlagMode] = useState<"prozent" | "fix">("prozent");
+  const [abschlagWert, setAbschlagWert] = useState("50");
+  const [abschlagCreating, setAbschlagCreating] = useState(false);
+  const [abschlagShowCalc, setAbschlagShowCalc] = useState(false);
+  const [abschlagCalcExpr, setAbschlagCalcExpr] = useState("");
+  const [angebotPositionen, setAngebotPositionen] = useState<{ bezeichnung: string; gesamt: number }[]>([]);
+
   const [sendPanel, setSendPanel] = useState(false);
   const sendPanelAutoOpened = useRef(false); // verhindert Re-Open nach load()
   const [sendLoading, setSendLoading] = useState<"download" | "portal" | "email" | null>(null);
@@ -177,6 +186,91 @@ export default function AdminDokumentDetail() {
   };
 
   useEffect(() => { if (authChecked) load(); }, [authChecked, id]);
+
+  // Load positions when Abschlag dialog opens
+  useEffect(() => {
+    if (!showAbschlagDialog || !doc) return;
+    const loadPositions = async () => {
+      const { data: pos } = await supabase
+        .from("document_positions")
+        .select("*")
+        .eq("document_id", doc.id)
+        .order("position");
+      if (pos && pos.length > 0) {
+        setAngebotPositionen(pos.map(p => ({
+          bezeichnung: p.bezeichnung || p.description || "",
+          gesamt: p.total || p.gesamt || 0,
+        })));
+      } else {
+        setAngebotPositionen([]);
+      }
+    };
+    loadPositions();
+    setAbschlagShowCalc(false);
+    setAbschlagCalcExpr("");
+  }, [showAbschlagDialog]);
+
+  // Safe math expression evaluator (supports + - * / and parentheses)
+  const safeCalc = (expr: string): number | null => {
+    const cleaned = expr.replace(/,/g, ".").replace(/[^0-9+\-*/.() ]/g, "");
+    if (!cleaned.trim()) return null;
+    try {
+      // tokenize and evaluate safely
+      const result = Function(`"use strict"; return (${cleaned})`)();
+      return typeof result === "number" && isFinite(result) ? Math.round(result * 100) / 100 : null;
+    } catch { return null; }
+  };
+
+  const createAbschlagsrechnung = async (overrideBetrag?: number) => {
+    if (!doc || !id) return;
+    setAbschlagCreating(true);
+    try {
+      const angebotTotal = doc.brutto || 0;
+      let betrag = overrideBetrag ?? (
+        abschlagMode === "prozent"
+          ? Math.round(angebotTotal * (parseFloat(abschlagWert) || 0) / 100 * 100) / 100
+          : parseFloat(abschlagWert) || 0
+      );
+
+      if (betrag <= 0) {
+        setAbschlagCreating(false);
+        return;
+      }
+
+      const bezeichnung = doc.nummer
+        ? `Teilrechnung aus ${TYP_LABEL[doc.typ]} ${doc.nummer}`
+        : "Abschlagszahlung";
+      const beschreibung = abschlagMode === "prozent"
+        ? `${abschlagWert}% des Gesamtbetrags${doc.nummer ? ` (${doc.nummer})` : ""}`
+        : `Teilbetrag${doc.nummer ? ` aus ${doc.nummer}` : ""}`;
+
+      const positions = [{
+        id: crypto.randomUUID(),
+        typ: "leistung",
+        bezeichnung,
+        beschreibung,
+        menge: 1,
+        einheit: "pauschal",
+        einzelpreis: betrag,
+        gesamt: betrag,
+        optional: false,
+      }];
+
+      sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
+      const params = [
+        doc.customerId ? `&customerId=${doc.customerId}` : "",
+        doc.requestId ? `&requestId=${doc.requestId}` : "",
+        doc.eventId ? `&eventId=${doc.eventId}` : "",
+        `&quelldokumentId=${doc.id}`,
+        doc.nummer ? `&quelldokumentNummer=${encodeURIComponent(doc.nummer)}` : "",
+      ].join("");
+      setShowAbschlagDialog(false);
+      navigate(`/admin/dokumente/new?typ=abschlagsrechnung${params}`);
+    } catch (e: any) {
+      console.error("Abschlag error:", e);
+    }
+    setAbschlagCreating(false);
+  };
 
   // Send-Panel direkt öffnen wenn ?send=1 in der URL (kommt vom Editor-Versenden-Button)
   // useRef verhindert, dass das Panel nach load() erneut öffnet
@@ -257,6 +351,12 @@ export default function AdminDokumentDetail() {
     if (!doc || !id) return;
     const zielTyp = zielTypOverride || WORKFLOW[doc.typ];
     if (!zielTyp) return;
+    // Abschlagsrechnung → eigenes Modal
+    if (zielTyp === "abschlagsrechnung") {
+      setMoreMenuOpen(false);
+      setShowAbschlagDialog(true);
+      return;
+    }
     if (!confirm(`${TYP_LABEL[doc.typ]} in ${TYP_LABEL[zielTyp]} umwandeln?`)) return;
     setConverting(true);
     try { const neu = await dokumenteService.umwandeln(id, zielTyp); navigate(`/admin/dokumente/${neu.id}`); }
@@ -1378,6 +1478,133 @@ export default function AdminDokumentDetail() {
           </div>
         </>
       )}
+
+      {/* ── Abschlagsrechnung Modal ── */}
+      {showAbschlagDialog && doc && (() => {
+        const angebotTotal = doc.brutto || 0;
+        const betrag = abschlagMode === "prozent"
+          ? Math.round(angebotTotal * (parseFloat(abschlagWert) || 0) / 100 * 100) / 100
+          : parseFloat(abschlagWert) || 0;
+        const calcResult = safeCalc(abschlagCalcExpr);
+        const finalBetrag = calcResult != null && calcResult > 0 ? calcResult : betrag;
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowAbschlagDialog(false)}>
+            <div className="bg-background rounded-2xl shadow-2xl border border-border/30 p-6 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-lg font-bold">Abschlagsrechnung erstellen</h3>
+              </div>
+              {doc.nummer && (
+                <p className="text-xs text-muted-foreground mb-4">
+                  Basierend auf {doc.nummer} · {angebotTotal.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €
+                </p>
+              )}
+
+              {/* Positionen */}
+              {angebotPositionen.length > 0 && (
+                <div className="mb-4 rounded-xl border border-border/20 overflow-hidden">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold px-3 pt-2.5 pb-1.5">Positionen aus {TYP_LABEL[doc.typ]}</p>
+                  <div className="divide-y divide-border/10">
+                    {angebotPositionen.map((pos, i) => (
+                      <div key={i} className="flex items-center justify-between px-3 py-2 text-sm">
+                        <span className="text-foreground truncate mr-3">{pos.bezeichnung}</span>
+                        <span className="text-muted-foreground font-medium shrink-0">{pos.gesamt.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between px-3 py-2 bg-muted/20 text-sm font-bold border-t border-border/20">
+                    <span>Gesamt</span>
+                    <span>{angebotTotal.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Mode toggle */}
+              <div className="flex gap-2 mb-4">
+                <button onClick={() => setAbschlagMode("prozent")}
+                  className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${abschlagMode === "prozent" ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}>
+                  Prozentual
+                </button>
+                <button onClick={() => setAbschlagMode("fix")}
+                  className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${abschlagMode === "fix" ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}>
+                  Fixer Betrag
+                </button>
+              </div>
+
+              {/* Input */}
+              <div className="mb-4">
+                <label className="block text-xs font-semibold text-muted-foreground mb-1.5">
+                  {abschlagMode === "prozent" ? "Prozentsatz" : "Betrag (€)"}
+                </label>
+                <div className="flex items-center gap-2">
+                  <input type="number" value={abschlagWert} onChange={e => setAbschlagWert(e.target.value)}
+                    className="flex-1 rounded-xl bg-muted/20 border border-border/30 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
+                    min="0" step={abschlagMode === "prozent" ? "5" : "0.01"} />
+                  <span className="text-sm text-muted-foreground font-medium">{abschlagMode === "prozent" ? "%" : "€"}</span>
+                </div>
+              </div>
+
+              {/* Taschenrechner */}
+              <div className="mb-4 rounded-xl border border-border/20 overflow-hidden">
+                <button onClick={() => setAbschlagShowCalc(!abschlagShowCalc)}
+                  className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold text-muted-foreground hover:bg-muted/20 transition-colors">
+                  <span className="flex items-center gap-1.5"><Calculator className="w-3.5 h-3.5" /> Taschenrechner</span>
+                  {abschlagShowCalc ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                </button>
+                {abschlagShowCalc && (
+                  <div className="px-3 pb-3 space-y-2 border-t border-border/10">
+                    <p className="text-[10px] text-muted-foreground pt-1">Berechnung eingeben, z.B. <code className="bg-muted/30 px-1 rounded">945 * 0.5 + 13</code></p>
+                    <input
+                      type="text"
+                      placeholder="z.B. 958 * 0.5"
+                      value={abschlagCalcExpr}
+                      onChange={e => setAbschlagCalcExpr(e.target.value)}
+                      className="w-full rounded-lg bg-muted/20 border border-border/30 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-accent/20"
+                    />
+                    {abschlagCalcExpr && (
+                      <div className="flex items-center justify-between text-sm font-bold pt-1 border-t border-border/10">
+                        <span>Ergebnis</span>
+                        <span className={calcResult != null && calcResult > 0 ? "text-green-600" : "text-red-500"}>
+                          {calcResult != null ? `${calcResult.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €` : "Ungültig"}
+                        </span>
+                      </div>
+                    )}
+                    {calcResult != null && calcResult > 0 && (
+                      <button
+                        onClick={() => { setAbschlagMode("fix"); setAbschlagWert(String(calcResult)); setAbschlagShowCalc(false); }}
+                        className="w-full py-1.5 rounded-lg bg-green-50 border border-green-200 text-green-700 text-xs font-medium hover:bg-green-100 transition-colors"
+                      >
+                        {calcResult.toLocaleString("de-DE", { minimumFractionDigits: 2 })} € übernehmen
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Summary */}
+              {finalBetrag > 0 && (
+                <div className="rounded-xl bg-green-50 border border-green-200 p-3 mb-4 text-center">
+                  <p className="text-xs text-green-600 mb-0.5">Abschlagsrechnung</p>
+                  <p className="text-xl font-bold text-green-700">{finalBetrag.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+                </div>
+              )}
+
+              {/* Buttons */}
+              <div className="flex gap-2">
+                <button onClick={() => setShowAbschlagDialog(false)}
+                  className="flex-1 py-2.5 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/40">
+                  Abbrechen
+                </button>
+                <button
+                  onClick={() => createAbschlagsrechnung(calcResult != null && calcResult > 0 ? calcResult : undefined)}
+                  disabled={abschlagCreating || finalBetrag <= 0}
+                  className="flex-1 py-2.5 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-90 disabled:opacity-50">
+                  {abschlagCreating ? "Erstelle..." : "Weiter"}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
