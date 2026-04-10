@@ -18,33 +18,47 @@ import {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-const KATEGORIE_TABS = ["Alle", "Close-Up", "Buehne", "Mentalismus", "Comedy", "Manipulation", "Sonstiges"] as const;
-type KategorieTab = (typeof KATEGORIE_TABS)[number];
+// Hauptfilter: Typ
+const TYP_TABS = ["Alle", "closeup", "buehne", "beides"] as const;
+type TypTab = (typeof TYP_TABS)[number];
+const TYP_TAB_LABELS: Record<string, string> = { Alle: "Alle", closeup: "Close-Up", buehne: "Bühne", beides: "Beides" };
 
-const KATEGORIE_VALUES = ["Close-Up", "Buehne", "Mentalismus", "Comedy", "Manipulation", "Sonstiges"] as const;
+// Unterkategorien je nach Typ
+const KATEGORIE_BY_TYP: Record<string, string[]> = {
+  closeup: ["Karten", "Münzen", "Mental", "Visual", "Tool", "Sonstiges"],
+  buehne: ["Comedy", "Mental", "Escape", "Manipulation", "Sonstiges"],
+  beides: ["Karten", "Münzen", "Mental", "Visual", "Tool", "Comedy", "Escape", "Manipulation", "Sonstiges"],
+};
+const ALL_KATEGORIEN = ["Karten", "Münzen", "Mental", "Visual", "Tool", "Comedy", "Escape", "Manipulation", "Sonstiges"];
 
-const TYP_OPTIONS = [
-  "Karteneffekt", "Muenzeffekt", "Mentalismus", "Grossillusion",
-  "Close-Up", "Buehne", "Comedy", "Sonstiges",
-] as const;
+const TYP_OPTIONS = ["closeup", "buehne", "beides"] as const;
+const TYP_LABELS: Record<string, string> = { closeup: "Close-Up", buehne: "Bühne", beides: "Beides" };
 
-const STATUS_OPTIONS = ["Entwurf", "Aktiv", "Archiv"] as const;
+const STATUS_OPTIONS = ["aktiv", "entwicklung", "pausiert"] as const;
+const STATUS_LABELS: Record<string, string> = { aktiv: "Aktiv", entwicklung: "Entwurf", pausiert: "Pausiert" };
 
 const TYP_COLORS: Record<string, string> = {
-  Karteneffekt: "bg-blue-100 text-blue-700",
-  Muenzeffekt: "bg-amber-100 text-amber-700",
-  Mentalismus: "bg-purple-100 text-purple-700",
-  Grossillusion: "bg-red-100 text-red-700",
-  "Close-Up": "bg-teal-100 text-teal-700",
-  Buehne: "bg-indigo-100 text-indigo-700",
-  Comedy: "bg-pink-100 text-pink-700",
-  Sonstiges: "bg-gray-100 text-gray-500",
+  closeup: "bg-blue-100 text-blue-700",
+  buehne: "bg-purple-100 text-purple-700",
+  beides: "bg-teal-100 text-teal-700",
+};
+
+const KATEGORIE_COLORS: Record<string, string> = {
+  Karten: "bg-blue-50 text-blue-600",
+  "Münzen": "bg-amber-50 text-amber-600",
+  Mental: "bg-purple-50 text-purple-600",
+  Visual: "bg-green-50 text-green-600",
+  Tool: "bg-cyan-50 text-cyan-600",
+  Comedy: "bg-pink-50 text-pink-600",
+  Escape: "bg-red-50 text-red-600",
+  Manipulation: "bg-indigo-50 text-indigo-600",
+  Sonstiges: "bg-gray-50 text-gray-500",
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  Aktiv: "bg-green-100 text-green-700",
-  Entwurf: "bg-yellow-100 text-yellow-700",
-  Archiv: "bg-gray-100 text-gray-500",
+  aktiv: "bg-green-100 text-green-700",
+  entwicklung: "bg-yellow-100 text-yellow-700",
+  pausiert: "bg-gray-100 text-gray-500",
 };
 
 const WowStars = ({ rating, onClick }: { rating: number; onClick?: (v: number) => void }) => (
@@ -101,9 +115,9 @@ interface FormState {
 
 const defaultForm: FormState = {
   name: "",
-  typ: "Sonstiges",
-  kategorie: "Sonstiges",
-  status: "Entwurf",
+  typ: "closeup",
+  kategorie: "Karten",
+  status: "aktiv",
   wowRating: 0,
   dauer: 5,
   setupZeit: 0,
@@ -123,7 +137,7 @@ const AdminEffekteBibliothek = () => {
   const [effekte, setEffekte] = useState<EffektBib[]>([]);
 
   const [search, setSearch] = useState("");
-  const [kategorieTab, setKategorieTab] = useState<KategorieTab>("Alle");
+  const [typTab, setTypTab] = useState<TypTab>("Alle");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const [panelOpen, setPanelOpen] = useState(false);
@@ -173,11 +187,11 @@ const AdminEffekteBibliothek = () => {
 
   const filtered = useMemo(() => {
     return effekte.filter((e) => {
-      if (kategorieTab !== "Alle" && e.kategorie !== kategorieTab) return false;
+      if (typTab !== "Alle" && e.typ !== typTab) return false;
       if (search && !e.name.toLowerCase().includes(search.toLowerCase())) return false;
       return true;
     });
-  }, [effekte, kategorieTab, search]);
+  }, [effekte, typTab, search]);
 
   // ── Panel helpers ─────────────────────────────────────────────────────────
 
@@ -191,22 +205,22 @@ const AdminEffekteBibliothek = () => {
       { name: "Finding the Queen", typ: "closeup", kategorie: "Karten", wow_rating: 4, dauer: 5, setup_zeit: 0, requisiten: ["Kartendeck", "2 vorbereitete Karten (schwarze Asse / rote Damen)"], beschreibung: "Asse verwandeln sich visuell in rote Damen", notizen: "Immer einsetzbar", status: "aktiv" },
       { name: "Gegenseitiges Kartenfinden", typ: "closeup", kategorie: "Karten", wow_rating: 3, dauer: 5, setup_zeit: 0, requisiten: ["Kartendeck"], beschreibung: "Zuschauer und Magier finden gegenseitig Karten", notizen: "Fehleranfällig", status: "aktiv" },
       { name: "Out of this World", typ: "closeup", kategorie: "Karten", wow_rating: 5, dauer: 7, setup_zeit: 0, requisiten: ["Kartendeck"], beschreibung: "Zuschauer trennt Karten perfekt nach Farben", notizen: "Sehr stark", status: "aktiv" },
-      { name: "Draht verbiegen", typ: "closeup", kategorie: "Mentalismus", wow_rating: 4, dauer: 4, setup_zeit: 0, requisiten: ["Draht", "Feuerzeug", "Kartendeck"], beschreibung: "Draht wird zur gewählten Karte", notizen: "Perfekt für Hochzeit", status: "aktiv" },
+      { name: "Draht verbiegen", typ: "closeup", kategorie: "Mental", wow_rating: 4, dauer: 4, setup_zeit: 0, requisiten: ["Draht", "Feuerzeug", "Kartendeck"], beschreibung: "Draht wird zur gewählten Karte", notizen: "Perfekt für Hochzeit", status: "aktiv" },
       { name: "Gummiband Durchdringen", typ: "closeup", kategorie: "Close-Up", wow_rating: 4, dauer: 4, setup_zeit: 0, requisiten: ["Gummibänder"], beschreibung: "Gummis lösen sich visuell", notizen: "Kombinierbar", status: "aktiv" },
       { name: "Gummiband Verschwinden", typ: "closeup", kategorie: "Close-Up", wow_rating: 4, dauer: 4, setup_zeit: 0, requisiten: ["Gummibänder"], beschreibung: "Zwei werden zu einem / erscheinen wieder", notizen: "Teil Routine", status: "aktiv" },
       { name: "Invisible Deck", typ: "closeup", kategorie: "Karten", wow_rating: 4.5, dauer: 6, setup_zeit: 0, requisiten: ["Invisible Deck (Gimmick)"], beschreibung: "Gedachte Karte liegt umgedreht im Deck", notizen: "Closer", status: "aktiv" },
-      { name: "Peek Pad (Close-Up)", typ: "beides", kategorie: "Mentalismus", wow_rating: 0, dauer: 5, setup_zeit: 0, requisiten: [], beschreibung: "", notizen: "Entwurf", status: "entwicklung" },
-      { name: "Color Match (Stifte)", typ: "closeup", kategorie: "Mentalismus", wow_rating: 4, dauer: 10, setup_zeit: 0, requisiten: ["Gimmick-Stifte", "identische normale Stifte", "Auslese-Gerät"], beschreibung: "Gleiche Farbentscheidungen", notizen: "Selten genutzt", status: "aktiv" },
-      { name: "Sonore", typ: "closeup", kategorie: "Mentalismus", wow_rating: 4, dauer: 2, setup_zeit: 0, requisiten: ["Sonore Gimmick", "Handy", "Requisit je nach Effekt"], beschreibung: "Geräusche ohne Berührung", notizen: "Flexibel einsetzbar", status: "aktiv" },
+      { name: "Peek Pad (Close-Up)", typ: "beides", kategorie: "Mental", wow_rating: 0, dauer: 5, setup_zeit: 0, requisiten: [], beschreibung: "", notizen: "Entwurf", status: "entwicklung" },
+      { name: "Color Match (Stifte)", typ: "closeup", kategorie: "Mental", wow_rating: 4, dauer: 10, setup_zeit: 0, requisiten: ["Gimmick-Stifte", "identische normale Stifte", "Auslese-Gerät"], beschreibung: "Gleiche Farbentscheidungen", notizen: "Selten genutzt", status: "aktiv" },
+      { name: "Sonore", typ: "closeup", kategorie: "Mental", wow_rating: 4, dauer: 2, setup_zeit: 0, requisiten: ["Sonore Gimmick", "Handy", "Requisit je nach Effekt"], beschreibung: "Geräusche ohne Berührung", notizen: "Flexibel einsetzbar", status: "aktiv" },
       { name: "Phantom Deck", typ: "closeup", kategorie: "Karten", wow_rating: 5, dauer: 6, setup_zeit: 2, requisiten: ["Normales Deck", "Phantom Deck Gimmick"], beschreibung: "Ambitious Card Finale, alle Karten verschwinden außer eine", notizen: "Starker Closer", status: "aktiv" },
       { name: "Flite", typ: "closeup", kategorie: "Close-Up", wow_rating: 4, dauer: 3, setup_zeit: 0, requisiten: ["Flite Gimmick", "Schlüsselbund"], beschreibung: "Ring erscheint am Schlüsselbund", notizen: "Walkaround", status: "aktiv" },
       // Bühne
       { name: "Hände (Opener)", typ: "buehne", kategorie: "Comedy", wow_rating: 4, dauer: 5, setup_zeit: 0, requisiten: [], beschreibung: "Publikum scheitert an Handübung", notizen: "Fester Opener", status: "aktiv" },
-      { name: "Acronym", typ: "buehne", kategorie: "Mentalismus", wow_rating: 3, dauer: 7, setup_zeit: 3, requisiten: ["Handy (Wikipedia)", "Tafel", "Kreide"], beschreibung: "Wörter ergeben Namen", notizen: "Mittelteil", status: "aktiv" },
+      { name: "Acronym", typ: "buehne", kategorie: "Mental", wow_rating: 3, dauer: 7, setup_zeit: 3, requisiten: ["Handy (Wikipedia)", "Tafel", "Kreide"], beschreibung: "Wörter ergeben Namen", notizen: "Mittelteil", status: "aktiv" },
       { name: "Entfesslung", typ: "buehne", kategorie: "Comedy", wow_rating: 4, dauer: 7, setup_zeit: 0, requisiten: ["Seil", "Jacke oder Sakko"], beschreibung: "Befreiung mit Comedy Twist", notizen: "", status: "aktiv" },
-      { name: "Buchtest", typ: "buehne", kategorie: "Mentalismus", wow_rating: 5, dauer: 7, setup_zeit: 3, requisiten: ["Gimmick-Buch", "Umschlag mit Seite", "Gimmick-Karte", "Tafel", "Kreide"], beschreibung: "Gedanke erscheint im Umschlag", notizen: "Sehr stark", status: "aktiv" },
-      { name: "Letters", typ: "buehne", kategorie: "Mentalismus", wow_rating: 3, dauer: 5, setup_zeit: 2, requisiten: ["Letters-Setup (Stand, Buchstaben-Beutel)", "Vorhersage"], beschreibung: "Wort wird vorhergesagt", notizen: "Story wichtig", status: "aktiv" },
-      { name: "Peek Pad (Bühne)", typ: "buehne", kategorie: "Mentalismus", wow_rating: 0, dauer: 5, setup_zeit: 0, requisiten: [], beschreibung: "", notizen: "Entwurf", status: "entwicklung" },
+      { name: "Buchtest", typ: "buehne", kategorie: "Mental", wow_rating: 5, dauer: 7, setup_zeit: 3, requisiten: ["Gimmick-Buch", "Umschlag mit Seite", "Gimmick-Karte", "Tafel", "Kreide"], beschreibung: "Gedanke erscheint im Umschlag", notizen: "Sehr stark", status: "aktiv" },
+      { name: "Letters", typ: "buehne", kategorie: "Mental", wow_rating: 3, dauer: 5, setup_zeit: 2, requisiten: ["Letters-Setup (Stand, Buchstaben-Beutel)", "Vorhersage"], beschreibung: "Wort wird vorhergesagt", notizen: "Story wichtig", status: "aktiv" },
+      { name: "Peek Pad (Bühne)", typ: "buehne", kategorie: "Mental", wow_rating: 0, dauer: 5, setup_zeit: 0, requisiten: [], beschreibung: "", notizen: "Entwurf", status: "entwicklung" },
     ];
     try {
       const { data, error } = await supabase.from("effekte").insert(seed).select("id, name");
@@ -442,17 +456,17 @@ const AdminEffekteBibliothek = () => {
 
         {/* Category tabs */}
         <div className="flex items-center gap-1 bg-muted/40 rounded-xl p-1 overflow-x-auto">
-          {KATEGORIE_TABS.map((tab) => (
+          {TYP_TABS.map((tab) => (
             <button
               key={tab}
-              onClick={() => setKategorieTab(tab)}
+              onClick={() => setTypTab(tab)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
-                kategorieTab === tab
+                typTab === tab
                   ? "bg-foreground text-background shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tab}
+              {TYP_TAB_LABELS[tab] || tab}
             </button>
           ))}
         </div>
@@ -504,22 +518,14 @@ const AdminEffekteBibliothek = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-1 mb-2">
-                  <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                      TYP_COLORS[e.typ] || TYP_COLORS.Sonstiges
-                    }`}
-                  >
-                    {e.typ}
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${TYP_COLORS[e.typ] || "bg-gray-100 text-gray-500"}`}>
+                    {TYP_LABELS[e.typ] || e.typ}
                   </span>
-                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border/30">
+                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${KATEGORIE_COLORS[e.kategorie] || "bg-muted text-muted-foreground"}`}>
                     {e.kategorie}
                   </span>
-                  <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                      STATUS_COLORS[e.status] || STATUS_COLORS.Entwurf
-                    }`}
-                  >
-                    {e.status}
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${STATUS_COLORS[e.status] || "bg-gray-100 text-gray-500"}`}>
+                    {STATUS_LABELS[e.status] || e.status}
                   </span>
                 </div>
 
@@ -582,19 +588,11 @@ const AdminEffekteBibliothek = () => {
                   <p className="text-sm font-bold text-foreground truncate">
                     {e.name}
                   </p>
-                  <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${
-                      TYP_COLORS[e.typ] || TYP_COLORS.Sonstiges
-                    }`}
-                  >
-                    {e.typ}
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${TYP_COLORS[e.typ] || "bg-gray-100 text-gray-500"}`}>
+                    {TYP_LABELS[e.typ] || e.typ}
                   </span>
-                  <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${
-                      STATUS_COLORS[e.status] || STATUS_COLORS.Entwurf
-                    }`}
-                  >
-                    {e.status}
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${STATUS_COLORS[e.status] || "bg-gray-100 text-gray-500"}`}>
+                    {STATUS_LABELS[e.status] || e.status}
                   </span>
                 </div>
                 {e.beschreibung && (
@@ -673,25 +671,35 @@ const AdminEffekteBibliothek = () => {
             />
           </div>
 
-          {/* Typ */}
+          {/* Typ (Close-Up / Bühne / Beides) */}
           <div>
             <label className={labelCls}>Typ</label>
-            <select
-              value={form.typ}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, typ: e.target.value }))
-              }
-              className={inputCls}
-            >
+            <div className="flex gap-2">
               {TYP_OPTIONS.map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => {
+                    const newKategorien = KATEGORIE_BY_TYP[v] || ALL_KATEGORIEN;
+                    setForm((f) => ({
+                      ...f,
+                      typ: v,
+                      kategorie: newKategorien.includes(f.kategorie) ? f.kategorie : newKategorien[0],
+                    }));
+                  }}
+                  className={`flex-1 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                    form.typ === v
+                      ? "bg-foreground text-background border-foreground"
+                      : "border-border/30 text-muted-foreground hover:border-foreground/40 hover:text-foreground"
+                  }`}
+                >
+                  {TYP_LABELS[v]}
+                </button>
               ))}
-            </select>
+            </div>
           </div>
 
-          {/* Kategorie */}
+          {/* Kategorie (abhängig vom Typ) */}
           <div>
             <label className={labelCls}>Kategorie</label>
             <select
@@ -701,7 +709,7 @@ const AdminEffekteBibliothek = () => {
               }
               className={inputCls}
             >
-              {KATEGORIE_VALUES.map((v) => (
+              {(KATEGORIE_BY_TYP[form.typ] || ALL_KATEGORIEN).map((v) => (
                 <option key={v} value={v}>
                   {v}
                 </option>
@@ -724,7 +732,7 @@ const AdminEffekteBibliothek = () => {
                       : "border-border/30 text-muted-foreground hover:border-foreground/40 hover:text-foreground"
                   }`}
                 >
-                  {v}
+                  {STATUS_LABELS[v] || v}
                 </button>
               ))}
             </div>

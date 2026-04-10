@@ -85,7 +85,7 @@ const AdminProgrammHub = () => {
     },
     {
       label: "Locations",
-      description: "Veranstaltungsorte mit Technik und Buhnenmaßen.",
+      description: "Veranstaltungsorte mit Technik und Bühnenmaßen.",
       href: "/admin/programm/locations",
       icon: MapPin,
       stat: stats.locations,
