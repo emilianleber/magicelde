@@ -185,8 +185,8 @@ const AdminShowsList = () => {
         .select()
         .single();
       if (error) throw error;
-      // Navigate to detail page
-      navigate(`/admin/programm/shows/${data.id}`);
+      // Navigate to editor
+      navigate(`/admin/programm/shows/${data.id}/edit`);
     } catch (err: unknown) {
       setPanelMsg({ type: "err", text: err instanceof Error ? err.message : "Fehler beim Anlegen." });
     }
@@ -292,7 +292,7 @@ const AdminShowsList = () => {
             return (
               <div
                 key={s.id}
-                onClick={() => navigate(`/admin/programm/shows/${s.id}`)}
+                onClick={() => navigate(`/admin/programm/shows/${s.id}/edit`)}
                 className="relative p-5 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/30 hover:bg-muted/40 transition-all flex flex-col gap-3 cursor-pointer group"
               >
                 {/* Name */}

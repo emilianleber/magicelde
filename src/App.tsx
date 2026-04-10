@@ -25,6 +25,7 @@ import AdminBookingDetail from "@/pages/AdminBookingDetail";
 import AdminProgrammHub from "@/pages/AdminProgrammHub";
 import AdminShowsList from "@/pages/AdminShowsList";
 import AdminShowDetail from "@/pages/AdminShowDetail";
+import AdminShowEditor from "@/pages/AdminShowEditor";
 import AdminTouren from "@/pages/AdminTouren";
 import AdminTourDetail from "@/pages/AdminTourDetail";
 import AdminEffekteBibliothek from "@/pages/AdminEffekteBibliothek";
@@ -145,6 +146,7 @@ const AdminRoutes = () => (
       <Route path="/admin/programm" element={<AdminProgrammHub />} />
       <Route path="/admin/programm/shows" element={<AdminShowsList />} />
       <Route path="/admin/programm/shows/:id" element={<AdminShowDetail />} />
+      <Route path="/admin/programm/shows/:id/edit" element={<AdminShowEditor />} />
       <Route path="/admin/programm/touren" element={<AdminTouren />} />
       <Route path="/admin/programm/touren/:id" element={<AdminTourDetail />} />
       <Route path="/admin/programm/effekte" element={<AdminEffekteBibliothek />} />
@@ -284,6 +286,7 @@ const App = () => (
               <Route path="/admin/programm" element={<AdminProgrammHub />} />
               <Route path="/admin/programm/shows" element={<AdminShowsList />} />
               <Route path="/admin/programm/shows/:id" element={<AdminShowDetail />} />
+              <Route path="/admin/programm/shows/:id/edit" element={<AdminShowEditor />} />
               <Route path="/admin/programm/touren" element={<AdminTouren />} />
               <Route path="/admin/programm/touren/:id" element={<AdminTourDetail />} />
               <Route path="/admin/programm/effekte" element={<AdminEffekteBibliothek />} />
