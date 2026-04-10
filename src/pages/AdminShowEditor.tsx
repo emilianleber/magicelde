@@ -696,7 +696,7 @@ const AdminShowEditor = () => {
         <div className="space-y-5">
 
           {/* Meta-Felder */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div>
               <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Name</label>
               <input value={name} onChange={e => setName(e.target.value)} placeholder="z.B. Große Gala-Show" className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
@@ -716,10 +716,6 @@ const AdminShowEditor = () => {
                 <input type="number" value={zieldauerMax} onChange={e => { const v = Math.max(0, parseInt(e.target.value) || 0); setZieldauerMax(v); if (v < zieldauerMin) setZieldauerMin(v); }}
                   className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" placeholder="Max" />
               </div>
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Startzeit</label>
-              <input type="time" value={startzeit} onChange={e => setStartzeit(e.target.value)} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
             </div>
           </div>
 
@@ -827,7 +823,7 @@ const AdminShowEditor = () => {
             })()
 
           ) : isWorkshop ? (
-            /* ── WORKSHOP: Eigenständiger Editor ── */
+            /* ── WORKSHOP: Eigenständiger Editor mit Übungen ── */
             <div className="space-y-5">
               <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
                 <BookOpen className="w-4 h-4" /> Workshop-Planung
@@ -868,35 +864,101 @@ const AdminShowEditor = () => {
                   className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none" />
               </div>
 
-              {/* Workshop-Ablauf als Phasen */}
+              {/* Workshop-Ablauf: eigene Übungen */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">Ablauf / Übungen</h3>
-                  <button onClick={() => addPhase("Übung " + (phasen.length + 1))} className="inline-flex items-center gap-1 text-xs font-semibold text-accent hover:text-accent/80">
+                  <button onClick={() => {
+                    const newId = `phase-${Date.now()}`;
+                    setPhasen(prev => [...prev, { _id: newId, label: `Übung ${prev.length + 1}`, typ: "akt1", effektIds: [] }]);
+                    setExpandedPhase(newId);
+                  }} className="inline-flex items-center gap-1 text-xs font-semibold text-accent hover:text-accent/80">
                     <Plus className="w-3.5 h-3.5" /> Übung hinzufügen
                   </button>
                 </div>
-                {phasen.length === 0 ? (
-                  <button onClick={() => addPhase("Begrüßung & Einführung")} className="w-full p-6 rounded-xl border-2 border-dashed border-border/30 text-center text-sm text-muted-foreground hover:border-accent/30 hover:text-accent transition-colors">
-                    + Ersten Ablaufpunkt hinzufügen
-                  </button>
-                ) : (
-                    <SortableContext items={phasen.map(p => p._id)} strategy={verticalListSortingStrategy}>
-                      {phasen.map((phase, idx) => (
-                        <PhaseCard
-                          key={phase._id} phase={phase} idx={idx}
-                          startTime={timelineItems[idx]?.startTime || "--:--"}
-                          allEffekte={allEffekte} isExpanded={expandedPhase === phase._id}
-                          isDraggingFromSidebar={!!draggingSidebarEffekt}
-                          onToggle={() => setExpandedPhase(expandedPhase === phase._id ? null : phase._id)}
-                          onRemove={() => removePhase(phase._id)}
-                          onUpdate={patch => updatePhase(phase._id, patch)}
-                          onAddEffekt={eid => addEffektToPhase(phase._id, eid)}
-                          onRemoveEffekt={eid => removeEffektFromPhase(phase._id, eid)}
-                          onReorderEffekte={(o, n) => reorderEffekteInPhase(phase._id, o, n)}
-                          sensors={sensors}
-                        />
+
+                {/* Vorlagen-Buttons */}
+                {phasen.length === 0 && (
+                  <div className="space-y-2">
+                    <button onClick={() => {
+                      const now = Date.now();
+                      setPhasen([
+                        { _id: `p-${now}-0`, label: "Begrüßung & Einführung", typ: "akt1", effektIds: [] },
+                        { _id: `p-${now}-1`, label: "Trick 1: Einfacher Kartentrick", typ: "akt1", effektIds: [] },
+                        { _id: `p-${now}-2`, label: "Trick 2: Münze verschwinden", typ: "akt1", effektIds: [] },
+                        { _id: `p-${now}-3`, label: "Übungszeit & Fragen", typ: "akt1", effektIds: [] },
+                        { _id: `p-${now}-4`, label: "Abschluss & Vorführung", typ: "akt1", effektIds: [] },
+                      ]);
+                      setExpandedPhase(`p-${now}-0`);
+                    }} className="w-full p-4 rounded-xl border-2 border-dashed border-border/30 text-center text-sm text-muted-foreground hover:border-accent/30 hover:text-accent transition-colors">
+                      📋 Standard-Workshop-Vorlage laden
+                    </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { label: "Kartentrick-Workshop", uebungen: ["Begrüßung", "Grundgriffe lernen", "Trick: Ambitious Card", "Trick: Zuschauer findet Karte", "Üben & Vorführen"] },
+                        { label: "Mental-Workshop", uebungen: ["Begrüßung & Was ist Mentalismus?", "Übung: Zahlen vorhersagen", "Übung: Gedanken lesen", "Geheimnis der Körpersprache", "Vorführung"] },
+                        { label: "Close-Up-Workshop", uebungen: ["Begrüßung", "Münztrick lernen", "Gummiband-Magie", "Alltagsmagie", "Mini-Show der Teilnehmer"] },
+                        { label: "Teambuilding-Workshop", uebungen: ["Warm-Up & Kennenlernen", "Partner-Trick lernen", "Gruppen-Challenge", "Kreativ-Phase", "Finale Gruppenshow"] },
+                      ].map(vorlage => (
+                        <button key={vorlage.label} onClick={() => {
+                          const now = Date.now();
+                          setPhasen(vorlage.uebungen.map((u, i) => ({ _id: `p-${now}-${i}`, label: u, typ: "akt1" as const, effektIds: [] })));
+                          setExpandedPhase(`p-${now}-0`);
+                        }} className="p-3 rounded-xl border border-border/20 text-left hover:bg-muted/20 transition-colors">
+                          <p className="text-xs font-semibold">{vorlage.label}</p>
+                          <p className="text-[10px] text-muted-foreground">{vorlage.uebungen.length} Übungen</p>
+                        </button>
                       ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Übungen-Liste */}
+                {phasen.length > 0 && (
+                  <SortableContext items={phasen.map(p => p._id)} strategy={verticalListSortingStrategy}>
+                    {phasen.map((phase, idx) => (
+                      <div key={phase._id} className="rounded-xl border border-border/30 bg-white overflow-hidden">
+                        <div className="flex items-center gap-2 px-4 py-3 bg-muted/10">
+                          <GripVertical className="w-4 h-4 text-muted-foreground/40 cursor-grab" />
+                          <span className="text-xs font-mono text-accent font-bold w-6">{idx + 1}.</span>
+                          <input
+                            value={phase.label}
+                            onChange={e => updatePhase(phase._id, { label: e.target.value })}
+                            className="flex-1 bg-transparent text-sm font-semibold text-foreground outline-none"
+                            placeholder="Übungsname"
+                          />
+                          <button onClick={() => setExpandedPhase(expandedPhase === phase._id ? null : phase._id)} className="p-1 text-muted-foreground hover:text-foreground">
+                            {expandedPhase === phase._id ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                          </button>
+                          <button onClick={() => removePhase(phase._id)} className="p-1 text-muted-foreground hover:text-destructive">
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        {expandedPhase === phase._id && (
+                          <div className="px-4 py-3 border-t border-border/10 space-y-2">
+                            <textarea
+                              placeholder="Beschreibung, Anleitung, Tipps für diese Übung…"
+                              rows={3}
+                              className="w-full rounded-lg bg-muted/20 border border-border/20 px-3 py-2 text-xs resize-none"
+                            />
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                                  <Clock className="w-3 h-3" /> Dauer (Min.)
+                                </label>
+                                <input type="number" placeholder="10" className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs" />
+                              </div>
+                              <div>
+                                <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                                  <Wrench className="w-3 h-3" /> Material
+                                </label>
+                                <input placeholder="z.B. Kartendeck" className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs" />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
                     </SortableContext>
                 )}
               </div>
