@@ -24,11 +24,12 @@ const EFFEKT_TYP_COLORS: Record<string, string> = {
 };
 
 const FORMAT_OPTIONS = [
-  { value: "buehnenshow", label: "Bühnenshow" },
-  { value: "closeup", label: "Close-Up" },
-  { value: "magic_dinner", label: "Magic Dinner" },
-  { value: "walking_act", label: "Walking Act" },
-  { value: "hybrid", label: "Hybrid / Kombination" },
+  { value: "abendshow", label: "Bühnenshow / Abendshow" },
+  { value: "close-up", label: "Close-Up" },
+  { value: "magic-dinner", label: "Magic Dinner" },
+  { value: "tourshow", label: "Tourshow" },
+  { value: "kundenbuchung", label: "Kundenbuchung" },
+  { value: "workshop", label: "Workshop" },
 ];
 
 // ── Sortable Phase Item ───────────────────────────────────────────────────────
@@ -71,7 +72,7 @@ const AdminShowEditor = () => {
 
   // Show fields
   const [name, setName] = useState("");
-  const [format, setFormat] = useState("buehnenshow");
+  const [format, setFormat] = useState("abendshow");
   const [status, setStatus] = useState("entwurf");
   const [anlass, setAnlass] = useState("");
   const [zieldauer, setZieldauer] = useState(60);
@@ -221,7 +222,7 @@ const AdminShowEditor = () => {
 
   if (loading) return <div className="pt-28 text-center text-sm text-muted-foreground">Wird geladen…</div>;
 
-  const isCloseUp = format === "closeup";
+  const isCloseUp = format === "close-up";
 
   return (
     <AdminLayout title={isNew ? "Neues Konzept" : name || "Konzept"} subtitle="Show-Ablauf planen">

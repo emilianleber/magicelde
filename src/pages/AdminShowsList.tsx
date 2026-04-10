@@ -16,36 +16,30 @@ import {
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const FORMAT_OPTIONS = [
-  { value: "buehnenshow", label: "Buhnenshow" },
-  { value: "closeup", label: "Close-Up" },
-  { value: "magic_dinner", label: "Magic Dinner" },
-  { value: "walking_act", label: "Walking Act" },
+  { value: "abendshow", label: "Bühnenshow / Abendshow" },
+  { value: "close-up", label: "Close-Up" },
+  { value: "magic-dinner", label: "Magic Dinner" },
   { value: "tourshow", label: "Tourshow" },
-  { value: "corporate", label: "Corporate" },
-  { value: "gala", label: "Gala" },
-  { value: "hybrid", label: "Hybrid" },
+  { value: "kundenbuchung", label: "Kundenbuchung" },
+  { value: "workshop", label: "Workshop" },
 ] as const;
 
 const FORMAT_LABELS: Record<string, string> = {
-  buehnenshow: "Buhnenshow",
-  closeup: "Close-Up",
-  magic_dinner: "Magic Dinner",
-  walking_act: "Walking Act",
+  abendshow: "Bühnenshow",
+  "close-up": "Close-Up",
+  "magic-dinner": "Magic Dinner",
   tourshow: "Tourshow",
-  corporate: "Corporate",
-  gala: "Gala",
-  hybrid: "Hybrid",
+  kundenbuchung: "Kundenbuchung",
+  workshop: "Workshop",
 };
 
 const FORMAT_COLORS: Record<string, string> = {
-  buehnenshow: "bg-purple-50 text-purple-700",
-  closeup: "bg-blue-50 text-blue-700",
-  magic_dinner: "bg-orange-50 text-orange-700",
-  walking_act: "bg-green-50 text-green-700",
+  abendshow: "bg-purple-50 text-purple-700",
+  "close-up": "bg-blue-50 text-blue-700",
+  "magic-dinner": "bg-orange-50 text-orange-700",
   tourshow: "bg-cyan-50 text-cyan-700",
-  corporate: "bg-slate-50 text-slate-700",
-  gala: "bg-amber-50 text-amber-700",
-  hybrid: "bg-pink-50 text-pink-700",
+  kundenbuchung: "bg-green-50 text-green-700",
+  workshop: "bg-amber-50 text-amber-700",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -91,7 +85,7 @@ interface CreateFormState {
 
 const defaultForm: CreateFormState = {
   name: "",
-  format: "buehnenshow",
+  format: "abendshow",
   status: "entwurf",
   dauer: 45,
   beschreibung: "",
