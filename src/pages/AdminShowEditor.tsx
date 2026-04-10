@@ -303,12 +303,19 @@ const AdminShowEditor = () => {
   const [message, setMessage] = useState("");
   const [draggingSidebarEffekt, setDraggingSidebarEffekt] = useState<Effekt | null>(null);
 
+  // Quick-add effect popup
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [quickAddName, setQuickAddName] = useState("");
+  const [quickAddDauer, setQuickAddDauer] = useState(5);
+  const [quickAddSaving, setQuickAddSaving] = useState(false);
+
   // Show fields
   const [name, setName] = useState("");
   const [format, setFormat] = useState("abendshow");
   const [status, setStatus] = useState("entwurf");
   const [anlass, setAnlass] = useState("");
-  const [zieldauer, setZieldauer] = useState(60);
+  const [zieldauerMin, setZieldauerMin] = useState(30);
+  const [zieldauerMax, setZieldauerMax] = useState(45);
   const [konzeptKundentext, setKonzeptKundentext] = useState("");
   const [technischeAnforderungen, setTechnischeAnforderungen] = useState("");
   const [startzeit, setStartzeit] = useState("19:00");
@@ -350,7 +357,10 @@ const AdminShowEditor = () => {
           setFormat(show.format);
           setStatus(show.status);
           setAnlass(show.anlass);
-          setZieldauer(show.zieldauer);
+          // zieldauer kann als einzelner Wert oder als "min-max" gespeichert sein
+          const zd = show.zieldauer || 45;
+          setZieldauerMin(zd);
+          setZieldauerMax(zd);
           setKonzeptKundentext(show.konzeptKundentext);
           setTechnischeAnforderungen(show.technischeAnforderungen);
           setPhasen((show.phasen || []).map((p, i) => ({ ...p, _id: `phase-${i}-${Date.now()}` })));
@@ -441,7 +451,8 @@ const AdminShowEditor = () => {
   const totalEffektDauer = phasen.reduce((sum, p) =>
     sum + p.effektIds.reduce((s, eid) => s + (allEffekte.find(e => e.id === eid)?.dauer || 0), 0), 0);
 
-  const overZieldauer = totalEffektDauer > zieldauer;
+  const overZieldauer = totalEffektDauer > zieldauerMax;
+  const underZieldauer = totalEffektDauer < zieldauerMin && totalEffektDauer > 0;
 
   const timelineItems = useMemo(() => {
     const items: { label: string; startTime: string; dauer: number; effekte: Effekt[] }[] = [];
@@ -469,8 +480,13 @@ const AdminShowEditor = () => {
   // Typ-Filter Tabs: nur relevante anzeigen
   const availableTypFilters = ["alle", ...allowedTyps.filter(t => allEffekte.some(e => e.status === "aktiv" && e.typ === t))];
 
+  // Already assigned effect IDs
+  const assignedEffektIds = new Set(phasen.flatMap(p => p.effektIds));
+
   const filteredEffekte = allEffekte.filter(e => {
     if (e.status !== "aktiv") return false;
+    // Hide already assigned effects
+    if (assignedEffektIds.has(e.id)) return false;
     // Format-basierter Filter
     if (!allowedTyps.includes(e.typ)) return false;
     // Manueller Typ-Filter innerhalb der erlaubten Typen
@@ -487,16 +503,17 @@ const AdminShowEditor = () => {
     const uniqueEffekte = [...new Map(effekte.map(e => [e.id, e])).values()];
     const closeupEffekte = uniqueEffekte.filter(e => e.typ === "closeup" || e.typ === "beides");
     const buehneEffekte = uniqueEffekte.filter(e => e.typ === "buehne" || e.typ === "beides");
+    const dauerText = zieldauerMin === zieldauerMax ? `${zieldauerMax}-minütige` : `${zieldauerMin}–${zieldauerMax} Minuten`;
 
     const intros: Record<string, string> = {
-      "abendshow": `Erleben Sie eine ${zieldauer}-minütige Comedy-Zaubershow, die Ihr Publikum von der ersten bis zur letzten Minute in den Bann zieht.`,
-      "close-up": `Hautnah und direkt an Ihren Gästen — ${zieldauer} Minuten Close-Up-Zauberkunst, die für Staunen und beste Unterhaltung sorgt.`,
+      "abendshow": `Erleben Sie eine ${dauerText} Comedy-Zaubershow, die Ihr Publikum von der ersten bis zur letzten Minute in den Bann zieht.`,
+      "close-up": `Hautnah und direkt an Ihren Gästen — ${dauerText} Close-Up-Zauberkunst, die für Staunen und beste Unterhaltung sorgt.`,
       "magic-dinner": dinnerMode === "gang"
         ? `Zwischen den Gängen Ihres Dinners erleben Ihre Gäste faszinierende Zaubermomente, die den Abend unvergesslich machen.`
         : `Während Ihres Dinners bewegt sich der Zauberer zwischen den Tischen und sorgt für magische Momente direkt an jedem Tisch.`,
-      "tourshow": `Eine professionelle ${zieldauer}-minütige Bühnenshow mit durchkomponiertem Ablauf, perfekt für Ihre Veranstaltung.`,
-      "kundenbuchung": `${zieldauer} Minuten professionelle Zauberunterhaltung, individuell auf Ihre Veranstaltung abgestimmt.`,
-      "workshop": `In diesem ${zieldauer}-minütigen Workshop lernen die Teilnehmer selbst verblüffende Zaubertricks — Spaß und Teambuilding garantiert.`,
+      "tourshow": `Eine professionelle ${dauerText} Bühnenshow mit durchkomponiertem Ablauf, perfekt für Ihre Veranstaltung.`,
+      "kundenbuchung": `${dauerText} professionelle Zauberunterhaltung, individuell auf Ihre Veranstaltung abgestimmt.`,
+      "workshop": `In diesem ${dauerText} Workshop lernen die Teilnehmer selbst verblüffende Zaubertricks — Spaß und Teambuilding garantiert.`,
     };
 
     const highlights: string[] = [];
@@ -539,7 +556,7 @@ const AdminShowEditor = () => {
     try {
       const cleanPhasen: ShowPhase[] = phasen.map(({ _id, ...rest }) => rest);
       const payload = {
-        name: name.trim(), format, status, anlass: anlass.trim(), zieldauer,
+        name: name.trim(), format, status, anlass: anlass.trim(), zieldauer: zieldauerMax,
         konzeptKundentext: konzeptKundentext.trim(),
         technischeAnforderungen: technischeAnforderungen.trim(),
         phasen: cleanPhasen,
@@ -589,6 +606,30 @@ const AdminShowEditor = () => {
       const targetPhase = expandedPhase ? phasen.find(p => p._id === expandedPhase) : phasen[phasen.length - 1];
       if (targetPhase) addEffektToPhase(targetPhase._id, effektId);
     }
+  };
+
+  // Quick-add effect
+  const handleQuickAddEffekt = async () => {
+    if (!quickAddName.trim()) return;
+    setQuickAddSaving(true);
+    try {
+      const defaultTyp = isCloseUp ? "closeup" : isBuehne ? "buehne" : "beides";
+      const { data, error } = await supabase.from("effekte").insert({
+        name: quickAddName.trim(),
+        typ: defaultTyp,
+        dauer: quickAddDauer,
+        status: "aktiv",
+      }).select().single();
+      if (error) throw error;
+      const newEffekt = await effekteService.getAll();
+      setAllEffekte(newEffekt);
+      setShowQuickAdd(false);
+      setQuickAddName("");
+      setQuickAddDauer(5);
+    } catch (err: any) {
+      alert("Fehler: " + (err.message || "Unbekannt"));
+    }
+    setQuickAddSaving(false);
   };
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -642,8 +683,14 @@ const AdminShowEditor = () => {
               </select>
             </div>
             <div>
-              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Zieldauer (Min.)</label>
-              <input type="number" value={zieldauer} onChange={e => setZieldauer(Math.max(0, parseInt(e.target.value) || 0))} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
+              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Dauer (Min.)</label>
+              <div className="flex items-center gap-1.5">
+                <input type="number" value={zieldauerMin} onChange={e => { const v = Math.max(0, parseInt(e.target.value) || 0); setZieldauerMin(v); if (v > zieldauerMax) setZieldauerMax(v); }}
+                  className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" placeholder="Min" />
+                <span className="text-muted-foreground text-xs shrink-0">–</span>
+                <input type="number" value={zieldauerMax} onChange={e => { const v = Math.max(0, parseInt(e.target.value) || 0); setZieldauerMax(v); if (v < zieldauerMin) setZieldauerMin(v); }}
+                  className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" placeholder="Max" />
+              </div>
             </div>
             <div>
               <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Startzeit</label>
@@ -653,14 +700,19 @@ const AdminShowEditor = () => {
 
           {/* Dauer-Anzeige */}
           {!isWorkshop && (
-            <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${overZieldauer ? "bg-red-50 border-red-200" : "bg-green-50 border-green-200"}`}>
-              <Clock className={`w-4 h-4 ${overZieldauer ? "text-red-600" : "text-green-600"}`} />
-              <span className={`text-sm font-semibold ${overZieldauer ? "text-red-700" : "text-green-700"}`}>
-                {totalEffektDauer} / {zieldauer} Min.
+            <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${overZieldauer ? "bg-red-50 border-red-200" : underZieldauer ? "bg-amber-50 border-amber-200" : "bg-green-50 border-green-200"}`}>
+              <Clock className={`w-4 h-4 ${overZieldauer ? "text-red-600" : underZieldauer ? "text-amber-600" : "text-green-600"}`} />
+              <span className={`text-sm font-semibold ${overZieldauer ? "text-red-700" : underZieldauer ? "text-amber-700" : "text-green-700"}`}>
+                {totalEffektDauer} / {zieldauerMin === zieldauerMax ? `${zieldauerMax}` : `${zieldauerMin}–${zieldauerMax}`} Min.
               </span>
               {overZieldauer && (
                 <span className="text-xs text-red-600 flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3" /> {totalEffektDauer - zieldauer} Min. über Ziel
+                  <AlertTriangle className="w-3 h-3" /> {totalEffektDauer - zieldauerMax} Min. über Maximum
+                </span>
+              )}
+              {underZieldauer && (
+                <span className="text-xs text-amber-600 flex items-center gap-1">
+                  <AlertTriangle className="w-3 h-3" /> {zieldauerMin - totalEffektDauer} Min. unter Minimum
                 </span>
               )}
             </div>
@@ -668,7 +720,7 @@ const AdminShowEditor = () => {
 
           {/* Visuelle Zeitleiste */}
           {isBuehne && timelineItems.length > 0 && (
-            <TimelineBar items={timelineItems} zieldauer={zieldauer} />
+            <TimelineBar items={timelineItems} zieldauer={zieldauerMax} />
           )}
 
           {/* ── Magic Dinner: Mode Toggle ── */}
@@ -942,7 +994,12 @@ const AdminShowEditor = () => {
         {!isWorkshop && (
           <div className="lg:sticky lg:top-20 space-y-3">
             <div className="p-4 rounded-2xl bg-muted/20 border border-border/30">
-              <h3 className="text-xs font-bold text-foreground uppercase tracking-wider mb-1">Effekte</h3>
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">Effekte</h3>
+                <button onClick={() => setShowQuickAdd(true)} className="p-1 rounded-lg text-muted-foreground hover:text-accent hover:bg-accent/10 transition-colors" title="Neuen Effekt anlegen">
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+              </div>
               <p className="text-[10px] text-muted-foreground mb-3">
                 {format === "abendshow" || format === "tourshow" ? "Nur Bühnen-Effekte" :
                  format === "close-up" ? "Nur Close-Up-Effekte" :
@@ -999,6 +1056,37 @@ const AdminShowEditor = () => {
         )}
       </DragOverlay>
       </DndContext>
+
+      {/* Quick-Add Effect Popup */}
+      {showQuickAdd && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowQuickAdd(false)}>
+          <div className="bg-background rounded-2xl shadow-2xl border border-border/30 p-5 w-full max-w-sm mx-4" onClick={e => e.stopPropagation()}>
+            <h3 className="text-sm font-bold mb-3">Neuen Effekt anlegen</h3>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Name</label>
+                <input value={quickAddName} onChange={e => setQuickAddName(e.target.value)} placeholder="z.B. Kartentrick"
+                  className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" autoFocus
+                  onKeyDown={e => { if (e.key === "Enter") handleQuickAddEffekt(); }} />
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Dauer (Min.)</label>
+                <input type="number" value={quickAddDauer} onChange={e => setQuickAddDauer(Math.max(0, parseInt(e.target.value) || 0))}
+                  className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                Typ wird automatisch auf {isCloseUp ? "Close-Up" : isBuehne ? "Bühne" : "Beides"} gesetzt. Weitere Details kannst du in der Effekte-Bibliothek bearbeiten.
+              </p>
+            </div>
+            <div className="flex gap-2 mt-4">
+              <button onClick={() => setShowQuickAdd(false)} className="flex-1 py-2 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/40">Abbrechen</button>
+              <button onClick={handleQuickAddEffekt} disabled={quickAddSaving || !quickAddName.trim()} className="flex-1 py-2 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-90 disabled:opacity-50">
+                {quickAddSaving ? "Erstelle…" : "Anlegen"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 };
