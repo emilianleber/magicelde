@@ -8,7 +8,7 @@ import html2canvas from "html2canvas";
 import {
   ArrowLeft, Pencil, Send, CheckCircle, XCircle, ArrowRight,
   Receipt, AlertTriangle, Plus, X, Clock, Trash2, Ban, MoreHorizontal,
-  Download, Globe, Mail, Loader2, Search,
+  Download, Globe, Mail, Loader2, Search, FileText,
 } from "lucide-react";
 
 interface EmailSearchCustomer { id: string; name: string | null; email: string | null; company?: string | null; }
