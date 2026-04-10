@@ -410,14 +410,23 @@ const AdminShowEditor = () => {
   const handleTopLevelDragEnd = (event: DragEndEvent) => {
     setDraggingSidebarEffekt(null);
     const { active, over } = event;
-    if (!over) return;
+    if (!over || active.id === over.id) return;
     const activeId = String(active.id);
     const overId = String(over.id);
+
     // Sidebar effect → Phase drop
     if (activeId.startsWith("sidebar-") && overId.startsWith("drop-phase-")) {
       const effektId = activeId.replace("sidebar-", "");
       const phaseId = overId.replace("drop-phase-", "");
       addEffektToPhase(phaseId, effektId);
+      return;
+    }
+
+    // Phase reordering (sortable)
+    const oldIdx = phasen.findIndex(p => p._id === activeId);
+    const newIdx = phasen.findIndex(p => p._id === overId);
+    if (oldIdx >= 0 && newIdx >= 0) {
+      setPhasen(prev => arrayMove(prev, oldIdx, newIdx));
     }
   };
 
@@ -786,7 +795,6 @@ const AdminShowEditor = () => {
                     + Ersten Ablaufpunkt hinzufügen
                   </button>
                 ) : (
-                  <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handlePhaseDragEnd}>
                     <SortableContext items={phasen.map(p => p._id)} strategy={verticalListSortingStrategy}>
                       {phasen.map((phase, idx) => (
                         <PhaseCard
@@ -804,7 +812,6 @@ const AdminShowEditor = () => {
                         />
                       ))}
                     </SortableContext>
-                  </DndContext>
                 )}
               </div>
             </div>
@@ -839,7 +846,6 @@ const AdminShowEditor = () => {
                     + Standard-Ablauf laden oder Phase hinzufügen
                   </button>
                 ) : (
-                  <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handlePhaseDragEnd}>
                     <SortableContext items={phasen.map(p => p._id)} strategy={verticalListSortingStrategy}>
                       {phasen.map((phase, idx) => (
                         <PhaseCard
@@ -857,7 +863,6 @@ const AdminShowEditor = () => {
                         />
                       ))}
                     </SortableContext>
-                  </DndContext>
                 )}
               </div>
             </div>
@@ -888,7 +893,6 @@ const AdminShowEditor = () => {
                   + {isDinner ? "Gänge-Vorlage laden" : "Erste Phase hinzufügen"}
                 </button>
               ) : (
-                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handlePhaseDragEnd}>
                   <SortableContext items={phasen.map(p => p._id)} strategy={verticalListSortingStrategy}>
                     <div className="space-y-3">
                       {phasen.map((phase, idx) => (
@@ -908,7 +912,6 @@ const AdminShowEditor = () => {
                       ))}
                     </div>
                   </SortableContext>
-                </DndContext>
               )}
             </div>
           )}
