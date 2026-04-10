@@ -380,8 +380,25 @@ const AdminShowEditor = () => {
     return items;
   }, [phasen, allEffekte, startzeit]);
 
+  // Smart filter: Show-Format bestimmt welche Effekt-Typen sichtbar sind
+  const allowedTypsForFormat: Record<string, string[]> = {
+    "abendshow": ["buehne", "beides"],
+    "close-up": ["closeup", "beides"],
+    "magic-dinner": dinnerMode === "closeup" ? ["closeup", "beides"] : ["closeup", "buehne", "beides"],
+    "tourshow": ["buehne", "beides"],
+    "kundenbuchung": ["closeup", "buehne", "beides"],
+    "workshop": ["closeup", "buehne", "beides"],
+  };
+  const allowedTyps = allowedTypsForFormat[format] || ["closeup", "buehne", "beides"];
+
+  // Typ-Filter Tabs: nur relevante anzeigen
+  const availableTypFilters = ["alle", ...allowedTyps.filter(t => allEffekte.some(e => e.status === "aktiv" && e.typ === t))];
+
   const filteredEffekte = allEffekte.filter(e => {
     if (e.status !== "aktiv") return false;
+    // Format-basierter Filter
+    if (!allowedTyps.includes(e.typ)) return false;
+    // Manueller Typ-Filter innerhalb der erlaubten Typen
     if (effektTypFilter !== "alle" && e.typ !== effektTypFilter) return false;
     if (effektSearch && !e.name.toLowerCase().includes(effektSearch.toLowerCase())) return false;
     return true;
@@ -493,7 +510,7 @@ const AdminShowEditor = () => {
             </div>
             <div>
               <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Format</label>
-              <select value={format} onChange={e => setFormat(e.target.value)} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
+              <select value={format} onChange={e => { setFormat(e.target.value); setEffektTypFilter("alle"); }} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
                 {FORMAT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </div>
@@ -792,7 +809,13 @@ const AdminShowEditor = () => {
         {!isWorkshop && (
           <div className="lg:sticky lg:top-20 space-y-3">
             <div className="p-4 rounded-2xl bg-muted/20 border border-border/30">
-              <h3 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">Effekte</h3>
+              <h3 className="text-xs font-bold text-foreground uppercase tracking-wider mb-1">Effekte</h3>
+              <p className="text-[10px] text-muted-foreground mb-3">
+                {format === "abendshow" || format === "tourshow" ? "Nur Bühnen-Effekte" :
+                 format === "close-up" ? "Nur Close-Up-Effekte" :
+                 format === "magic-dinner" && dinnerMode === "closeup" ? "Nur Close-Up-Effekte" :
+                 "Alle Effekte"}
+              </p>
 
               {/* Search */}
               <div className="relative mb-2">
@@ -807,7 +830,7 @@ const AdminShowEditor = () => {
 
               {/* Type filter */}
               <div className="flex gap-1 mb-3">
-                {["alle", "closeup", "buehne", "beides"].map(t => (
+                {availableTypFilters.map(t => (
                   <button key={t} onClick={() => setEffektTypFilter(t)}
                     className={`px-2 py-1 rounded-lg text-[10px] font-medium ${effektTypFilter === t ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}
                   >
