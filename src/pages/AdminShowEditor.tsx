@@ -595,7 +595,7 @@ const AdminShowEditor = () => {
     try {
       const cleanPhasen: ShowPhase[] = phasen.map(({ _id, ...rest }) => rest);
       const created = await showService.create({
-        name: `${name.trim()} (Kopie)`, format, status: "entwurf", anlass, zieldauer,
+        name: `${name.trim()} (Kopie)`, format, status: "entwurf", anlass, zieldauer: zieldauerMax,
         konzeptKundentext, technischeAnforderungen, phasen: cleanPhasen,
       });
       navigate(`/admin/programm/shows/${created.id}/edit`);
@@ -844,8 +844,13 @@ const AdminShowEditor = () => {
                 </div>
                 <div>
                   <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Dauer (Min.)</label>
-                  <input type="number" value={zieldauer} onChange={e => setZieldauer(Math.max(0, parseInt(e.target.value) || 0))}
-                    className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
+                  <div className="flex items-center gap-1.5">
+                    <input type="number" value={zieldauerMin} onChange={e => { const v = Math.max(0, parseInt(e.target.value) || 0); setZieldauerMin(v); if (v > zieldauerMax) setZieldauerMax(v); }}
+                      className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" placeholder="Min" />
+                    <span className="text-muted-foreground text-xs shrink-0">–</span>
+                    <input type="number" value={zieldauerMax} onChange={e => { const v = Math.max(0, parseInt(e.target.value) || 0); setZieldauerMax(v); if (v < zieldauerMin) setZieldauerMin(v); }}
+                      className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" placeholder="Max" />
+                  </div>
                 </div>
               </div>
 
