@@ -181,6 +181,42 @@ const AdminEffekteBibliothek = () => {
 
   // ── Panel helpers ─────────────────────────────────────────────────────────
 
+  // ── Seed: Import all effects ──
+  const [seeding, setSeeding] = useState(false);
+  const seedEffekte = async () => {
+    setSeeding(true);
+    const seed = [
+      { name: "Holy Wood", typ: "closeup", kategorie: "Karten", wow_rating: 5, dauer: 5, setup_zeit: 1, requisiten: ["Spezial-Schachtel", "Holzblock", "Karten", "Deck", "Stift"], beschreibung: "Karte durchdringt Schachtel, am Ende Holzblock", notizen: "Aufwendig, sehr stark", status: "aktiv" },
+      { name: "Finding the Queen", typ: "closeup", kategorie: "Karten", wow_rating: 4, dauer: 5, setup_zeit: 0, requisiten: ["Deck"], beschreibung: "Asse verwandeln sich in rote Damen", notizen: "Immer einsetzbar", status: "aktiv" },
+      { name: "Gegenseitiges Kartenfinden", typ: "closeup", kategorie: "Karten", wow_rating: 3, dauer: 5, setup_zeit: 0, requisiten: ["Deck"], beschreibung: "Zuschauer und Magier finden gegenseitig Karten", notizen: "Fehleranfällig", status: "aktiv" },
+      { name: "Out of this World", typ: "closeup", kategorie: "Karten", wow_rating: 5, dauer: 7, setup_zeit: 0, requisiten: ["Deck"], beschreibung: "Zuschauer trennt Karten perfekt nach Farben", notizen: "Sehr stark", status: "aktiv" },
+      { name: "Draht verbiegen", typ: "closeup", kategorie: "Mentalismus", wow_rating: 4, dauer: 4, setup_zeit: 0, requisiten: ["Draht", "Kerze"], beschreibung: "Draht wird zur gewählten Karte", notizen: "Perfekt für Hochzeit", status: "aktiv" },
+      { name: "Gummiband Durchdringen", typ: "closeup", kategorie: "Close-Up", wow_rating: 4, dauer: 4, setup_zeit: 0, requisiten: ["Gummibänder"], beschreibung: "Gummis lösen sich visuell", notizen: "Kombinierbar", status: "aktiv" },
+      { name: "Gummiband Verschwinden", typ: "closeup", kategorie: "Close-Up", wow_rating: 4, dauer: 4, setup_zeit: 0, requisiten: ["Gummibänder"], beschreibung: "Zwei werden zu einem / erscheinen wieder", notizen: "Routine", status: "aktiv" },
+      { name: "Invisible Deck", typ: "closeup", kategorie: "Karten", wow_rating: 4.5, dauer: 6, setup_zeit: 0, requisiten: ["Invisible Deck"], beschreibung: "Gedachte Karte liegt umgedreht im Deck", notizen: "Closer", status: "aktiv" },
+      { name: "Peek Pad (Close-Up)", typ: "beides", kategorie: "Mentalismus", wow_rating: 0, dauer: 5, setup_zeit: 0, requisiten: ["Peek Pad"], beschreibung: "", notizen: "Entwurf", status: "entwicklung" },
+      { name: "Color Match (Stifte)", typ: "closeup", kategorie: "Mentalismus", wow_rating: 4, dauer: 10, setup_zeit: 0, requisiten: ["Stifte"], beschreibung: "Gleiche Farbentscheidungen", notizen: "Selten genutzt", status: "aktiv" },
+      { name: "Sonore", typ: "closeup", kategorie: "Mentalismus", wow_rating: 4, dauer: 2, setup_zeit: 0, requisiten: ["Gimmick"], beschreibung: "Geräusche ohne Berührung", notizen: "Opener", status: "aktiv" },
+      { name: "Phantom Deck", typ: "closeup", kategorie: "Karten", wow_rating: 5, dauer: 6, setup_zeit: 2, requisiten: ["Spezialdeck"], beschreibung: "Ambitious Card, alle Karten verschwinden außer eine", notizen: "Starker Closer", status: "aktiv" },
+      { name: "Flite", typ: "closeup", kategorie: "Close-Up", wow_rating: 4, dauer: 3, setup_zeit: 0, requisiten: ["Flite"], beschreibung: "Ring erscheint am Schlüsselbund", notizen: "Walkaround", status: "aktiv" },
+      { name: "Hände (Opener)", typ: "buehne", kategorie: "Comedy", wow_rating: 4, dauer: 5, setup_zeit: 0, requisiten: [], beschreibung: "Publikum scheitert an Handübung", notizen: "Fester Opener", status: "aktiv" },
+      { name: "Acronym", typ: "buehne", kategorie: "Mentalismus", wow_rating: 3, dauer: 7, setup_zeit: 3, requisiten: [], beschreibung: "Wörter ergeben Namen", notizen: "Mittelteil", status: "aktiv" },
+      { name: "Entfesslung", typ: "buehne", kategorie: "Comedy", wow_rating: 4, dauer: 7, setup_zeit: 0, requisiten: ["Seil", "Jacke"], beschreibung: "Befreiung mit Comedy Twist", notizen: "", status: "aktiv" },
+      { name: "Buchtest", typ: "buehne", kategorie: "Mentalismus", wow_rating: 5, dauer: 7, setup_zeit: 3, requisiten: ["Buch", "Umschlag"], beschreibung: "Gedanke erscheint im Umschlag", notizen: "Sehr stark", status: "aktiv" },
+      { name: "Letters", typ: "buehne", kategorie: "Mentalismus", wow_rating: 3, dauer: 5, setup_zeit: 2, requisiten: ["Buchstaben"], beschreibung: "Wort wird vorhergesagt", notizen: "Story wichtig", status: "aktiv" },
+      { name: "Peek Pad (Bühne)", typ: "buehne", kategorie: "Mentalismus", wow_rating: 0, dauer: 5, setup_zeit: 0, requisiten: [], beschreibung: "", notizen: "Entwurf", status: "entwicklung" },
+    ];
+    try {
+      const { data, error } = await supabase.from("effekte").insert(seed).select("id, name");
+      if (error) throw error;
+      alert(`${data.length} Effekte importiert!`);
+      loadData();
+    } catch (err: any) {
+      alert("Fehler: " + (err.message || "Unbekannt"));
+    }
+    setSeeding(false);
+  };
+
   const openNew = () => {
     setSelectedEffekt(null);
     setIsNew(true);
@@ -336,13 +372,24 @@ const AdminEffekteBibliothek = () => {
       title="Effekte-Bibliothek"
       subtitle={`${effekte.length} Effekte`}
       actions={
-        <button
-          onClick={openNew}
-          className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 transition-opacity"
-        >
-          <Plus className="w-4 h-4" />
-          Neuer Effekt
-        </button>
+        <div className="flex items-center gap-2">
+          {effekte.length === 0 && (
+            <button
+              onClick={seedEffekte}
+              disabled={seeding}
+              className="inline-flex items-center gap-2 rounded-xl border border-border/30 px-3 py-2 text-xs font-medium hover:bg-muted/40 disabled:opacity-50"
+            >
+              {seeding ? "Importiert…" : "19 Effekte importieren"}
+            </button>
+          )}
+          <button
+            onClick={openNew}
+            className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 transition-opacity"
+          >
+            <Plus className="w-4 h-4" />
+            Neuer Effekt
+          </button>
+        </div>
       }
     >
       {/* ── Filter bar ── */}
