@@ -227,9 +227,17 @@ export default function AdminDokumenteListe() {
 
   const handleStornieren = async (e: React.MouseEvent, doc: Dokument) => {
     e.stopPropagation();
-    if (!confirm(`${TYP_LABEL[doc.typ]} ${doc.nummer} stornieren?`)) return;
+    const isRechnung = ["rechnung", "abschlagsrechnung", "schlussrechnung"].includes(doc.typ);
+    const msg = isRechnung
+      ? `${TYP_LABEL[doc.typ]} ${doc.nummer} stornieren?\n\nEs wird automatisch eine Stornorechnung erstellt.`
+      : `${TYP_LABEL[doc.typ]} ${doc.nummer} stornieren?`;
+    if (!confirm(msg)) return;
     try {
-      await dokumenteService.setStatus(doc.id, "storniert");
+      const storno = await dokumenteService.stornieren(doc.id);
+      if (storno) {
+        navigate(`/admin/dokumente/${storno.id}`);
+        return;
+      }
       setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status: "storniert" as DokumentStatus } : d));
     } catch (err: unknown) {
       alert("Fehler beim Stornieren: " + ((err as any)?.message || String(err)));

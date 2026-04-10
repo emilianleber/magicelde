@@ -365,11 +365,21 @@ export default function AdminDokumentDetail() {
 
   const handleStornieren = async () => {
     if (!id || !doc) return;
-    if (!confirm(`${TYP_LABEL[doc.typ]} ${doc.nummer} stornieren?\n\nDas Dokument bleibt gespeichert, wird aber als "Storniert" markiert.`)) return;
+    const isRechnung = ["rechnung", "abschlagsrechnung", "schlussrechnung"].includes(doc.typ);
+    const msg = isRechnung
+      ? `${TYP_LABEL[doc.typ]} ${doc.nummer} stornieren?\n\nEs wird automatisch eine Stornorechnung mit negativen Beträgen erstellt.`
+      : `${TYP_LABEL[doc.typ]} ${doc.nummer} stornieren?\n\nDas Dokument bleibt gespeichert, wird aber als "Storniert" markiert.`;
+    if (!confirm(msg)) return;
     setStatusChanging(true);
     setMoreMenuOpen(false);
-    try { await dokumenteService.setStatus(id, "storniert"); await load(); }
-    finally { setStatusChanging(false); }
+    try {
+      const storno = await dokumenteService.stornieren(id);
+      if (storno) {
+        navigate(`/admin/dokumente/${storno.id}`);
+        return;
+      }
+      await load();
+    } finally { setStatusChanging(false); }
   };
 
   const handleDelete = async () => {

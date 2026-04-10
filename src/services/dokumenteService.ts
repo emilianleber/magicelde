@@ -410,6 +410,45 @@ export const dokumenteService = {
     if (error) throw error;
   },
 
+  // ── Stornieren (+ automatische Stornorechnung bei Rechnungen) ──────────────
+
+  async stornieren(id: string): Promise<Dokument | null> {
+    const doc = await this.getById(id);
+    if (!doc) throw new Error("Dokument nicht gefunden");
+
+    // Status auf storniert setzen
+    await this.setStatus(id, "storniert");
+
+    // Bei Rechnungen: Stornorechnung mit negativen Beträgen erstellen
+    const isRechnung = ["rechnung", "abschlagsrechnung", "schlussrechnung"].includes(doc.typ);
+    if (isRechnung && doc.positionen?.length > 0) {
+      const stornoPositionen = doc.positionen.map(p => ({
+        ...p,
+        einzelpreis: -Math.abs(p.einzelpreis),
+        gesamt: -Math.abs(p.gesamt),
+        bezeichnung: `Storno: ${p.bezeichnung}`,
+      }));
+      return this.create(
+        "stornorechnung",
+        {
+          datum: new Date().toISOString().split("T")[0],
+          status: "gesendet" as DokumentStatus,
+          customerId: doc.customerId,
+          eventId: doc.eventId,
+          requestId: doc.requestId,
+          quelldokumentId: doc.id,
+          quelldokumentNummer: doc.nummer,
+          empfaenger: doc.empfaenger,
+          absender: doc.absender,
+          kopftext: `Stornorechnung zu ${TYP_COLUMN[doc.typ]} ${doc.nummer}`,
+          fusstext: doc.fusstext,
+        },
+        stornoPositionen,
+      );
+    }
+    return null;
+  },
+
   // ── Umwandlung (Herzstück des Workflows) ──────────────────────────────────
 
   async umwandeln(quelleId: string, zielTyp: DokumentTyp): Promise<Dokument> {
