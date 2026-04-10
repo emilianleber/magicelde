@@ -78,7 +78,7 @@ const Footer = () => (
       </div>
 
       {/* Bottom */}
-      <div className="border-t border-border/50 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="border-t border-border/50 pt-8 pb-2 flex flex-col sm:flex-row justify-between items-center gap-4 pr-20">
         <p className="text-xs text-muted-foreground/50">
          © {new Date().getFullYear()} Emilian Leber. Alle Rechte vorbehalten.
         </p>
