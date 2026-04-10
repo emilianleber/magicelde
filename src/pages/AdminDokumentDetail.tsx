@@ -122,6 +122,7 @@ export default function AdminDokumentDetail() {
   const [statusChanging, setStatusChanging] = useState(false);
 
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
   const [deleting, setDeleting] = useState(false);
 
   const [sendPanel, setSendPanel] = useState(false);
@@ -147,6 +148,18 @@ export default function AdminDokumentDetail() {
     notiz: "",
   });
   const [zahlungSaving, setZahlungSaving] = useState(false);
+
+  // Close more-menu on click outside
+  useEffect(() => {
+    if (!moreMenuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) {
+        setMoreMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [moreMenuOpen]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -537,6 +550,13 @@ export default function AdminDokumentDetail() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+
+      // Status auf "gesendet" setzen wenn noch Entwurf
+      if (doc.status === "entwurf") {
+        await dokumenteService.setStatus(id!, "gesendet");
+        setDoc({ ...doc, status: "gesendet" });
+      }
+
       setSendMsg({ type: "ok", text: "PDF heruntergeladen" });
     } catch (e) {
       console.error("PDF error:", e);
@@ -845,7 +865,7 @@ export default function AdminDokumentDetail() {
             </button>
 
             {/* ── Mehr-Menü ── */}
-            <div className="relative">
+            <div className="relative" ref={moreMenuRef}>
               <button
                 onClick={() => setMoreMenuOpen((v) => !v)}
                 disabled={deleting || statusChanging}
@@ -854,8 +874,6 @@ export default function AdminDokumentDetail() {
                 <MoreHorizontal className="w-4 h-4" />
               </button>
               {moreMenuOpen && (
-                <>
-                  <div className="fixed inset-0 z-30" onClick={() => setMoreMenuOpen(false)} />
                   <div className="absolute right-0 top-full mt-1.5 z-40 w-56 bg-background border border-border/30 rounded-2xl shadow-xl overflow-hidden">
                     {/* Schnellzugriffe */}
                     {["angebot", "auftragsbestaetigung", "abschlagsrechnung"].includes(doc.typ) && (
@@ -897,7 +915,6 @@ export default function AdminDokumentDetail() {
                       <p className="font-medium">{deleting ? "Löschen…" : "Endgültig löschen"}</p>
                     </button>
                   </div>
-                </>
               )}
             </div>
           </div>
