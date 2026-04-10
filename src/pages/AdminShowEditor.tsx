@@ -11,7 +11,8 @@ import {
   UtensilsCrossed, Sparkles, Users, BookOpen, MapPin,
 } from "lucide-react";
 import {
-  DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent,
+  DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors,
+  useDroppable, useDraggable, DragOverlay, type DragEndEvent, type DragStartEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy,
@@ -75,6 +76,30 @@ function SortableEffektItem({ effekt, onRemove, phaseId }: { effekt: Effekt; onR
       <button onClick={onRemove} className="opacity-0 group-hover:opacity-100 p-0.5 text-muted-foreground hover:text-destructive transition-opacity">
         <X className="w-3 h-3" />
       </button>
+    </div>
+  );
+}
+
+// ── Draggable Sidebar Effect ─────────────────────────────────────────────────
+
+function DraggableSidebarEffekt({ effekt, onClick }: { effekt: Effekt; onClick: () => void }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: `sidebar-${effekt.id}` });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`w-full text-left flex items-center gap-2 px-2.5 py-2 rounded-lg hover:bg-muted/40 transition-colors group cursor-grab active:cursor-grabbing ${isDragging ? "opacity-30" : ""}`}
+      {...attributes}
+      {...listeners}
+      onClick={(e) => { e.preventDefault(); onClick(); }}
+    >
+      <GripVertical className="w-3 h-3 text-muted-foreground/20 group-hover:text-muted-foreground/50 shrink-0" />
+      <Wand2 className="w-3 h-3 text-muted-foreground/40 group-hover:text-accent shrink-0" />
+      <div className="flex-1 min-w-0">
+        <p className="text-xs font-medium truncate">{effekt.name}</p>
+        <p className="text-[9px] text-muted-foreground">{effekt.dauer} Min.</p>
+      </div>
+      <Plus className="w-3 h-3 text-muted-foreground/30 group-hover:text-accent" />
     </div>
   );
 }
@@ -154,6 +179,9 @@ function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, onToggle, on
   const [musikNotiz, setMusikNotiz] = useState("");
   const [technikNotiz, setTechnikNotiz] = useState("");
 
+  // Make phase a drop target for sidebar effects
+  const { setNodeRef: setDropRef, isOver } = useDroppable({ id: `drop-phase-${phase._id}` });
+
   const handleEffektDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -165,7 +193,7 @@ function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, onToggle, on
   }, [phase.effektIds, onReorderEffekte]);
 
   return (
-    <div className="rounded-xl border border-border/30 bg-white overflow-hidden">
+    <div ref={setDropRef} className={`rounded-xl border-2 transition-colors bg-white overflow-hidden ${isOver ? "border-accent/50 bg-accent/5" : "border-border/30"}`}>
       {/* Phase header */}
       <div className="flex items-center gap-2 px-4 py-3 bg-muted/10">
         <GripVertical className="w-4 h-4 text-muted-foreground/40 cursor-grab" />
@@ -259,6 +287,7 @@ const AdminShowEditor = () => {
   const [saving, setSaving] = useState(false);
   const [allEffekte, setAllEffekte] = useState<Effekt[]>([]);
   const [message, setMessage] = useState("");
+  const [draggingSidebarEffekt, setDraggingSidebarEffekt] = useState<Effekt | null>(null);
 
   // Show fields
   const [name, setName] = useState("");
@@ -355,6 +384,29 @@ const AdminShowEditor = () => {
     }
   }, []);
 
+  // Top-level drag handler for sidebar → phase drops
+  const handleTopLevelDragStart = useCallback((event: DragStartEvent) => {
+    const id = String(event.active.id);
+    if (id.startsWith("sidebar-")) {
+      const effektId = id.replace("sidebar-", "");
+      setDraggingSidebarEffekt(allEffekte.find(e => e.id === effektId) || null);
+    }
+  }, [allEffekte]);
+
+  const handleTopLevelDragEnd = useCallback((event: DragEndEvent) => {
+    setDraggingSidebarEffekt(null);
+    const { active, over } = event;
+    if (!over) return;
+    const activeId = String(active.id);
+    const overId = String(over.id);
+    // Sidebar effect → Phase drop
+    if (activeId.startsWith("sidebar-") && overId.startsWith("drop-phase-")) {
+      const effektId = activeId.replace("sidebar-", "");
+      const phaseId = overId.replace("drop-phase-", "");
+      addEffektToPhase(phaseId, effektId);
+    }
+  }, []);
+
   const loadPhasePresets = (presets: { label: string; typ: ShowPhase["typ"] }[]) => {
     const now = Date.now();
     setPhasen(presets.map((p, i) => ({ _id: `phase-${i}-${now}`, label: p.label, typ: p.typ, effektIds: [] })));
@@ -384,7 +436,7 @@ const AdminShowEditor = () => {
   const allowedTypsForFormat: Record<string, string[]> = {
     "abendshow": ["buehne", "beides"],
     "close-up": ["closeup", "beides"],
-    "magic-dinner": dinnerMode === "closeup" ? ["closeup", "beides"] : ["closeup", "buehne", "beides"],
+    "magic-dinner": dinnerMode === "closeup" ? ["closeup", "beides"] : ["buehne", "beides"],
     "tourshow": ["buehne", "beides"],
     "kundenbuchung": ["closeup", "buehne", "beides"],
     "workshop": ["closeup", "buehne", "beides"],
@@ -403,6 +455,57 @@ const AdminShowEditor = () => {
     if (effektSearch && !e.name.toLowerCase().includes(effektSearch.toLowerCase())) return false;
     return true;
   });
+
+  // ── Kundentext Generator ────────────────────────────────────────────────────
+
+  const generateKundentext = () => {
+    const formatLabel = FORMAT_OPTIONS.find(f => f.value === format)?.label || format;
+    const effekte = phasen.flatMap(p => p.effektIds.map(eid => allEffekte.find(e => e.id === eid)).filter(Boolean)) as Effekt[];
+    const uniqueEffekte = [...new Map(effekte.map(e => [e.id, e])).values()];
+    const closeupEffekte = uniqueEffekte.filter(e => e.typ === "closeup" || e.typ === "beides");
+    const buehneEffekte = uniqueEffekte.filter(e => e.typ === "buehne" || e.typ === "beides");
+
+    const intros: Record<string, string> = {
+      "abendshow": `Erleben Sie eine ${zieldauer}-minütige Comedy-Zaubershow, die Ihr Publikum von der ersten bis zur letzten Minute in den Bann zieht.`,
+      "close-up": `Hautnah und direkt an Ihren Gästen — ${zieldauer} Minuten Close-Up-Zauberkunst, die für Staunen und beste Unterhaltung sorgt.`,
+      "magic-dinner": dinnerMode === "gang"
+        ? `Zwischen den Gängen Ihres Dinners erleben Ihre Gäste faszinierende Zaubermomente, die den Abend unvergesslich machen.`
+        : `Während Ihres Dinners bewegt sich der Zauberer zwischen den Tischen und sorgt für magische Momente direkt an jedem Tisch.`,
+      "tourshow": `Eine professionelle ${zieldauer}-minütige Bühnenshow mit durchkomponiertem Ablauf, perfekt für Ihre Veranstaltung.`,
+      "kundenbuchung": `${zieldauer} Minuten professionelle Zauberunterhaltung, individuell auf Ihre Veranstaltung abgestimmt.`,
+      "workshop": `In diesem ${zieldauer}-minütigen Workshop lernen die Teilnehmer selbst verblüffende Zaubertricks — Spaß und Teambuilding garantiert.`,
+    };
+
+    const highlights: string[] = [];
+
+    if (buehneEffekte.length > 0 && (format === "abendshow" || format === "tourshow")) {
+      const mentalCount = buehneEffekte.filter(e => e.name.toLowerCase().includes("mental") || e.name.toLowerCase().includes("buchtest") || e.name.toLowerCase().includes("letters") || e.name.toLowerCase().includes("acronym")).length;
+      const comedyCount = buehneEffekte.filter(e => e.name.toLowerCase().includes("comedy") || e.name.toLowerCase().includes("entfess") || e.name.toLowerCase().includes("hände")).length;
+      if (mentalCount > 0) highlights.push("faszinierende Mentalmagie und Gedankenlesen");
+      if (comedyCount > 0) highlights.push("Comedy-Einlagen mit Publikumsinteraktion");
+      if (buehneEffekte.some(e => e.name.toLowerCase().includes("entfess"))) highlights.push("eine spektakuläre Entfesslungsnummer");
+    }
+
+    if (closeupEffekte.length > 0 && (format === "close-up" || format === "magic-dinner")) {
+      const kartenCount = closeupEffekte.filter(e => e.name.toLowerCase().includes("kart") || e.name.toLowerCase().includes("deck") || e.name.toLowerCase().includes("queen")).length;
+      if (kartenCount > 0) highlights.push("verblüffende Kartenkunststücke direkt in den Händen Ihrer Gäste");
+      if (closeupEffekte.some(e => e.name.toLowerCase().includes("draht"))) highlights.push("eine berührende Mentalismus-Vorführung");
+      if (closeupEffekte.some(e => e.name.toLowerCase().includes("gummi"))) highlights.push("visuelle Magie zum Anfassen");
+    }
+
+    const phasenInfo = phasen.length > 1
+      ? `\n\nDer Ablauf ist in ${phasen.length} ${format === "magic-dinner" ? "Gänge" : "Phasen"} gegliedert` +
+        (phasen.some(p => p.label) ? `: ${phasen.map(p => p.label).join(", ")}` : "") + "."
+      : "";
+
+    const intro = intros[format] || intros["kundenbuchung"];
+    const highlightText = highlights.length > 0
+      ? `\n\nFreuen Sie sich auf ${highlights.join(", ")}.`
+      : "";
+    const closing = "\n\nJeder Auftritt wird individuell auf Ihre Veranstaltung abgestimmt — für ein Erlebnis, das Ihre Gäste noch lange begeistert.";
+
+    return intro + highlightText + phasenInfo + closing;
+  };
 
   // ── Save ───────────────────────────────────────────────────────────────────
 
@@ -497,6 +600,7 @@ const AdminShowEditor = () => {
       </div>
 
       {/* ── MAIN LAYOUT ── */}
+      <DndContext sensors={sensors} onDragStart={handleTopLevelDragStart} onDragEnd={handleTopLevelDragEnd}>
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5">
 
         {/* ═══ LEFT: Editor ═══ */}
@@ -795,8 +899,17 @@ const AdminShowEditor = () => {
           {/* Beschreibungstexte */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Kundentext</label>
-              <textarea value={konzeptKundentext} onChange={e => setKonzeptKundentext(e.target.value)} rows={4} placeholder="Beschreibung für den Kunden…" className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none" />
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground">Kundentext</label>
+                <button
+                  type="button"
+                  onClick={() => setKonzeptKundentext(generateKundentext())}
+                  className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent hover:text-accent/80 transition-colors"
+                >
+                  <Sparkles className="w-3 h-3" /> Text generieren
+                </button>
+              </div>
+              <textarea value={konzeptKundentext} onChange={e => setKonzeptKundentext(e.target.value)} rows={6} placeholder="Beschreibung für den Kunden…" className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none" />
             </div>
             <div>
               <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Technische Anforderungen</label>
@@ -828,40 +941,44 @@ const AdminShowEditor = () => {
                 />
               </div>
 
-              {/* Type filter */}
-              <div className="flex gap-1 mb-3">
-                {availableTypFilters.map(t => (
-                  <button key={t} onClick={() => setEffektTypFilter(t)}
-                    className={`px-2 py-1 rounded-lg text-[10px] font-medium ${effektTypFilter === t ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}
-                  >
-                    {t === "alle" ? "Alle" : EFFEKT_TYP_LABELS[t] || t}
-                  </button>
-                ))}
-              </div>
+              {/* Type filter — only show when multiple types available */}
+              {availableTypFilters.length > 2 && (
+                <div className="flex gap-1 mb-3">
+                  {availableTypFilters.map(t => (
+                    <button key={t} onClick={() => setEffektTypFilter(t)}
+                      className={`px-2 py-1 rounded-lg text-[10px] font-medium ${effektTypFilter === t ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}
+                    >
+                      {t === "alle" ? "Alle" : EFFEKT_TYP_LABELS[t] || t}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-              {/* Effekte List */}
+              {/* Effekte List — draggable to phases */}
               <div className="space-y-1 max-h-[60vh] overflow-y-auto">
                 {filteredEffekte.length === 0 ? (
                   <p className="text-xs text-muted-foreground/50 italic py-4 text-center">Keine Effekte gefunden</p>
                 ) : filteredEffekte.map(eff => (
-                  <button
-                    key={eff.id}
-                    onClick={() => addEffektFromSidebar(eff.id)}
-                    className="w-full text-left flex items-center gap-2 px-2.5 py-2 rounded-lg hover:bg-muted/40 transition-colors group"
-                  >
-                    <Wand2 className="w-3 h-3 text-muted-foreground/40 group-hover:text-accent shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium truncate">{eff.name}</p>
-                      <p className="text-[9px] text-muted-foreground">{eff.dauer} Min.</p>
-                    </div>
-                    <Plus className="w-3 h-3 text-muted-foreground/30 group-hover:text-accent" />
-                  </button>
+                  <DraggableSidebarEffekt key={eff.id} effekt={eff} onClick={() => addEffektFromSidebar(eff.id)} />
                 ))}
               </div>
+              <p className="text-[9px] text-muted-foreground/40 mt-2 text-center">Klicken oder in Phase ziehen</p>
             </div>
           </div>
         )}
       </div>
+
+      {/* Drag Overlay — follows cursor during sidebar drag */}
+      <DragOverlay>
+        {draggingSidebarEffekt && (
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-accent/10 border border-accent/30 shadow-lg">
+            <Wand2 className="w-3.5 h-3.5 text-accent shrink-0" />
+            <span className="text-xs font-medium">{draggingSidebarEffekt.name}</span>
+            <span className="text-[9px] text-muted-foreground">{draggingSidebarEffekt.dauer} Min.</span>
+          </div>
+        )}
+      </DragOverlay>
+      </DndContext>
     </AdminLayout>
   );
 };

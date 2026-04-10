@@ -25,11 +25,11 @@ const TYP_TAB_LABELS: Record<string, string> = { Alle: "Alle", closeup: "Close-U
 
 // Unterkategorien je nach Typ
 const KATEGORIE_BY_TYP: Record<string, string[]> = {
-  closeup: ["Karten", "Münzen", "Mental", "Visual", "Tool", "Sonstiges"],
-  buehne: ["Comedy", "Mental", "Escape", "Manipulation", "Sonstiges"],
-  beides: ["Karten", "Münzen", "Mental", "Visual", "Tool", "Comedy", "Escape", "Manipulation", "Sonstiges"],
+  closeup: ["Karten", "Münzen", "Mental", "Visual", "Alltagsgegenstände", "Sonstiges"],
+  buehne: ["Comedy", "Mental", "Großillusion", "Entfesslung", "Manipulation", "Sonstiges"],
+  beides: ["Karten", "Münzen", "Mental", "Visual", "Alltagsgegenstände", "Comedy", "Großillusion", "Entfesslung", "Manipulation", "Sonstiges"],
 };
-const ALL_KATEGORIEN = ["Karten", "Münzen", "Mental", "Visual", "Tool", "Comedy", "Escape", "Manipulation", "Sonstiges"];
+const ALL_KATEGORIEN = ["Karten", "Münzen", "Mental", "Visual", "Alltagsgegenstände", "Comedy", "Großillusion", "Entfesslung", "Manipulation", "Sonstiges"];
 
 const TYP_OPTIONS = ["closeup", "buehne", "beides"] as const;
 const TYP_LABELS: Record<string, string> = { closeup: "Close-Up", buehne: "Bühne", beides: "Beides" };
@@ -48,9 +48,10 @@ const KATEGORIE_COLORS: Record<string, string> = {
   "Münzen": "bg-amber-50 text-amber-600",
   Mental: "bg-purple-50 text-purple-600",
   Visual: "bg-green-50 text-green-600",
-  Tool: "bg-cyan-50 text-cyan-600",
+  "Alltagsgegenstände": "bg-cyan-50 text-cyan-600",
   Comedy: "bg-pink-50 text-pink-600",
-  Escape: "bg-red-50 text-red-600",
+  "Großillusion": "bg-red-50 text-red-600",
+  "Entfesslung": "bg-orange-50 text-orange-600",
   Manipulation: "bg-indigo-50 text-indigo-600",
   Sonstiges: "bg-gray-50 text-gray-500",
 };
@@ -332,7 +333,7 @@ const AdminEffekteBibliothek = () => {
 
   const handleDelete = async () => {
     if (!selectedEffekt) return;
-    if (!window.confirm(`"${selectedEffekt.name}" wirklich loeschen?`)) return;
+    if (!window.confirm(`"${selectedEffekt.name}" wirklich löschen?`)) return;
     setSaving(true);
     try {
       const { error } = await supabase
@@ -343,7 +344,7 @@ const AdminEffekteBibliothek = () => {
       setEffekte((prev) => prev.filter((e) => e.id !== selectedEffekt.id));
       closePanel();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Fehler beim Loeschen.";
+      const msg = err instanceof Error ? err.message : "Fehler beim Löschen.";
       setPanelMsg({ type: "err", text: msg });
     }
     setSaving(false);
@@ -900,7 +901,7 @@ const AdminEffekteBibliothek = () => {
               disabled={saving}
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50 transition-colors"
             >
-              Loeschen
+              Löschen
             </button>
           )}
         </div>

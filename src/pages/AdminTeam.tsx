@@ -272,7 +272,7 @@ const AdminTeam = () => {
 
   const handleDelete = async () => {
     if (!selectedMember) return;
-    if (!window.confirm(`"${selectedMember.name}" wirklich loeschen?`)) return;
+    if (!window.confirm(`"${selectedMember.name}" wirklich löschen?`)) return;
     setSaving(true);
     try {
       const { error } = await supabase
@@ -283,7 +283,7 @@ const AdminTeam = () => {
       setMembers((prev) => prev.filter((m) => m.id !== selectedMember.id));
       closePanel();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Fehler beim Loeschen.";
+      const msg = err instanceof Error ? err.message : "Fehler beim Löschen.";
       setPanelMsg({ type: "err", text: msg });
     }
     setSaving(false);
@@ -631,7 +631,7 @@ const AdminTeam = () => {
               disabled={saving}
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50 transition-colors"
             >
-              Loeschen
+              Löschen
             </button>
           )}
         </div>
