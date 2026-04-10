@@ -14,8 +14,10 @@ const toShow = (row: Record<string, unknown>): Show => ({
   zieldauer: (row.zieldauer as number) ?? 60,
   konzeptKundentext: (row.konzept_kundentext as string) || "",
   technischeAnforderungen: (row.technische_anforderungen as string) || "",
+  showTyp: (row.show_typ as Show["showTyp"]) || "individuell",
+  preis: (row.preis as number) ?? undefined,
+  beschreibungKunde: (row.beschreibung_kunde as string) || undefined,
   status: row.status as Show["status"],
-  // NEW fields
   beschreibung: (row.beschreibung as string) || undefined,
   musikPlaylist: (row.musik_playlist as Show["musikPlaylist"]) || undefined,
   texteScripts: (row.texte_scripts as Show["texteScripts"]) || undefined,
@@ -93,6 +95,9 @@ export const showService = {
         zieldauer: input.zieldauer,
         konzept_kundentext: input.konzeptKundentext,
         technische_anforderungen: input.technischeAnforderungen,
+        show_typ: input.showTyp || "individuell",
+        preis: input.preis ?? null,
+        beschreibung_kunde: input.beschreibungKunde ?? null,
         status: input.status,
         beschreibung: input.beschreibung ?? null,
         musik_playlist: input.musikPlaylist ?? null,
@@ -119,6 +124,9 @@ export const showService = {
     if (input.zieldauer !== undefined) patch.zieldauer = input.zieldauer;
     if (input.konzeptKundentext !== undefined) patch.konzept_kundentext = input.konzeptKundentext;
     if (input.technischeAnforderungen !== undefined) patch.technische_anforderungen = input.technischeAnforderungen;
+    if (input.showTyp !== undefined) patch.show_typ = input.showTyp;
+    if (input.preis !== undefined) patch.preis = input.preis ?? null;
+    if (input.beschreibungKunde !== undefined) patch.beschreibung_kunde = input.beschreibungKunde ?? null;
     if (input.status !== undefined) patch.status = input.status;
     if (input.beschreibung !== undefined) patch.beschreibung = input.beschreibung ?? null;
     if (input.musikPlaylist !== undefined) patch.musik_playlist = input.musikPlaylist ?? null;

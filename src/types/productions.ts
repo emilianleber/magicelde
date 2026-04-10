@@ -70,20 +70,25 @@ export interface MarketingAsset {
   notizen?: string
 }
 
+export type ShowTyp = 'vorlage' | 'individuell' | 'eigenes-programm'
+
 export interface Show {
   id: string
   name: string
   anlass: string
   format: 'kundenbuchung' | 'abendshow' | 'magic-dinner' | 'tourshow' | 'close-up' | 'workshop'
+  showTyp: ShowTyp
   eventId?: string
   produktionId?: string
   basisPaketId?: string
   phasen: ShowPhase[]
   zieldauer: number
+  preis?: number
+  beschreibungKunde?: string
   konzeptKundentext: string
   technischeAnforderungen: string
   status: 'entwurf' | 'gesendet' | 'akzeptiert' | 'proben' | 'fertig' | 'archiviert'
-  // NEW fields
+  // Extended fields
   beschreibung?: string
   musikPlaylist?: MusikTrack[]
   texteScripts?: ShowScript[]

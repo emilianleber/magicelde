@@ -313,10 +313,13 @@ const AdminShowEditor = () => {
   // Show fields
   const [name, setName] = useState("");
   const [format, setFormat] = useState("abendshow");
+  const [showTyp, setShowTyp] = useState<"vorlage" | "individuell" | "eigenes-programm">("individuell");
   const [status, setStatus] = useState("entwurf");
   const [anlass, setAnlass] = useState("");
   const [zieldauerMin, setZieldauerMin] = useState(30);
   const [zieldauerMax, setZieldauerMax] = useState(45);
+  const [preis, setPreis] = useState<number | null>(null);
+  const [beschreibungKunde, setBeschreibungKunde] = useState("");
   const [konzeptKundentext, setKonzeptKundentext] = useState("");
   const [technischeAnforderungen, setTechnischeAnforderungen] = useState("");
   const [startzeit, setStartzeit] = useState("19:00");
@@ -366,8 +369,11 @@ const AdminShowEditor = () => {
         if (show) {
           setName(show.name);
           setFormat(show.format);
+          setShowTyp(show.showTyp || "individuell");
           setStatus(show.status);
           setAnlass(show.anlass);
+          setPreis(show.preis ?? null);
+          setBeschreibungKunde(show.beschreibungKunde || "");
           // zieldauer kann als einzelner Wert oder als "min-max" gespeichert sein
           const zd = show.zieldauer || 45;
           setZieldauerMin(zd);
@@ -567,7 +573,8 @@ const AdminShowEditor = () => {
     try {
       const cleanPhasen: ShowPhase[] = phasen.map(({ _id, ...rest }) => rest);
       const payload = {
-        name: name.trim(), format, status, anlass: anlass.trim(), zieldauer: zieldauerMax,
+        name: name.trim(), format, showTyp, status, anlass: anlass.trim(), zieldauer: zieldauerMax,
+        preis: preis ?? undefined, beschreibungKunde: beschreibungKunde.trim() || undefined,
         konzeptKundentext: konzeptKundentext.trim(),
         technischeAnforderungen: technischeAnforderungen.trim(),
         phasen: cleanPhasen,
@@ -595,7 +602,8 @@ const AdminShowEditor = () => {
     try {
       const cleanPhasen: ShowPhase[] = phasen.map(({ _id, ...rest }) => rest);
       const created = await showService.create({
-        name: `${name.trim()} (Kopie)`, format, status: "entwurf", anlass, zieldauer: zieldauerMax,
+        name: `${name.trim()} (Kopie)`, format, showTyp, status: "entwurf", anlass, zieldauer: zieldauerMax,
+        preis: preis ?? undefined, beschreibungKunde: beschreibungKunde || undefined,
         konzeptKundentext, technischeAnforderungen, phasen: cleanPhasen,
       });
       navigate(`/admin/programm/shows/${created.id}/edit`);
@@ -716,6 +724,28 @@ const AdminShowEditor = () => {
                 <input type="number" value={zieldauerMax} onChange={e => { const v = Math.max(0, parseInt(e.target.value) || 0); setZieldauerMax(v); if (v < zieldauerMin) setZieldauerMin(v); }}
                   className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" placeholder="Max" />
               </div>
+            </div>
+          </div>
+
+          {/* Show-Typ + Preis */}
+          <div className="grid sm:grid-cols-3 gap-3">
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Art</label>
+              <select value={showTyp} onChange={e => setShowTyp(e.target.value as any)} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
+                <option value="individuell">Individuelles Konzept</option>
+                <option value="vorlage">Vorlage (wiederverwendbar)</option>
+                <option value="eigenes-programm">Eigenes Programm</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Preis (€)</label>
+              <input type="number" value={preis ?? ""} onChange={e => setPreis(e.target.value ? parseFloat(e.target.value) : null)} placeholder="z.B. 950"
+                className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" step="0.01" min="0" />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Kundenbeschreibung (kurz)</label>
+              <input value={beschreibungKunde} onChange={e => setBeschreibungKunde(e.target.value)} placeholder="Für Angebote & Kunden…"
+                className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
             </div>
           </div>
 

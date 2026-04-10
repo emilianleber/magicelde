@@ -33,7 +33,8 @@ import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
 import DocumentCreator, { type DocumentData, type DocumentPosition } from "@/components/admin/DocumentCreator";
 import { paketeService } from "@/services/paketeService";
-import type { Paket } from "@/types/productions";
+import { showService } from "@/services/showService";
+import type { Paket, Show } from "@/types/productions";
 
 /* ── Types ──────────────────────────────────────────────────────────────────── */
 
@@ -283,6 +284,9 @@ const AdminBookingDetail = () => {
   const [showDocCreator, setShowDocCreator] = useState(false);
   const [allPakete, setAllPakete] = useState<Paket[]>([]);
   const [selectedPaket, setSelectedPaket] = useState<Paket | null>(null);
+  const [allShows, setAllShows] = useState<Show[]>([]);
+  const [selectedShow, setSelectedShow] = useState<Show | null>(null);
+  const [konzeptMode, setKonzeptMode] = useState<"paket" | "show">("paket");
   const [emailTemplates, setEmailTemplates] = useState<{ slug: string; name: string; kategorie: string }[]>([]);
   const [sendingTemplate, setSendingTemplate] = useState(false);
   const [showComposeEmail, setShowComposeEmail] = useState(false);
@@ -414,14 +418,21 @@ const AdminBookingDetail = () => {
         .order("sortierung", { ascending: true });
       setEmailTemplates(tpls || []);
 
-      // Pakete laden
+      // Pakete + Shows laden
       try {
         const pakete = await paketeService.getAll();
         setAllPakete(pakete);
+        const shows = await showService.getAll();
+        setAllShows(shows.filter(s => s.status !== "archiviert"));
         // Paket-Zuordnung wiederherstellen
         if (data.paket_id) {
           const p = pakete.find(pk => pk.id === data.paket_id);
           if (p) setSelectedPaket(p);
+        }
+        // Show-Zuordnung wiederherstellen
+        if (data.show_id) {
+          const s = shows.find(sh => sh.id === data.show_id);
+          if (s) { setSelectedShow(s); setKonzeptMode("show"); }
         }
       } catch {}
 
@@ -1255,53 +1266,125 @@ const AdminBookingDetail = () => {
                   <Sparkles className="w-4 h-4 text-accent" /> Paket / Konzept zuordnen
                 </h2>
               </div>
-              {selectedPaket ? (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-accent/10">
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">{selectedPaket.name}</p>
-                      <p className="text-xs text-muted-foreground">{selectedPaket.zieldauer} Min. · {selectedPaket.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
-                      {selectedPaket.beschreibungKunde && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{selectedPaket.beschreibungKunde}</p>}
+              {/* Toggle: Paket oder Show */}
+              <div className="flex gap-2 mb-3">
+                <button onClick={() => setKonzeptMode("paket")}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors ${konzeptMode === "paket" ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}>
+                  Paket
+                </button>
+                <button onClick={() => setKonzeptMode("show")}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors ${konzeptMode === "show" ? "bg-foreground text-background" : "bg-muted/40 text-muted-foreground"}`}>
+                  Show / Konzept
+                </button>
+              </div>
+
+              {konzeptMode === "paket" ? (
+                /* ── Paket-Auswahl ── */
+                selectedPaket ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-accent/10">
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{selectedPaket.name}</p>
+                        <p className="text-xs text-muted-foreground">{selectedPaket.zieldauer} Min. · {selectedPaket.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
+                        {selectedPaket.beschreibungKunde && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{selectedPaket.beschreibungKunde}</p>}
+                      </div>
+                      <button onClick={async () => {
+                        setSelectedPaket(null);
+                        await supabase.from("portal_requests").update({ paket_id: null }).eq("id", request.id);
+                      }} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
                     </div>
-                    <button onClick={async () => {
-                      setSelectedPaket(null);
-                      await supabase.from("portal_requests").update({ paket_id: null }).eq("id", request.id);
-                    }} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
+                    <button
+                      onClick={async () => {
+                        await supabase.auth.refreshSession();
+                        const { data: anfahrtArt } = await supabase.from("artikel_stamm").select("bezeichnung, beschreibung, preis, einheit").ilike("bezeichnung", "%anfahrt%").eq("aktiv", true).limit(1).maybeSingle();
+                        const positions = [
+                          { id: crypto.randomUUID(), typ: "leistung", bezeichnung: selectedPaket.name, beschreibung: selectedPaket.beschreibungKunde || "", menge: selectedPaket.zieldauer, einheit: "Min.", einzelpreis: Math.round((selectedPaket.preis / selectedPaket.zieldauer) * 100) / 100, gesamt: selectedPaket.preis, optional: false },
+                          { id: crypto.randomUUID(), typ: "leistung", bezeichnung: anfahrtArt?.bezeichnung || "Anfahrtspauschale", beschreibung: anfahrtArt?.beschreibung || "Anfahrt und Rückreise zum Veranstaltungsort", menge: 1, einheit: anfahrtArt?.einheit || "km", einzelpreis: anfahrtArt?.preis ?? 0, gesamt: anfahrtArt?.preis ?? 0, optional: false },
+                        ];
+                        sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
+                        const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
+                        navigate(`/admin/dokumente/new?typ=angebot${params}`);
+                      }}
+                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 transition-opacity"
+                    >
+                      <FileText className="w-4 h-4" /> Angebot aus Paket erstellen
+                    </button>
                   </div>
-                  <button
-                    onClick={async () => {
-                      await supabase.auth.refreshSession();
-                      const { data: anfahrtArt } = await supabase.from("artikel_stamm").select("bezeichnung, beschreibung, preis, einheit").ilike("bezeichnung", "%anfahrt%").eq("aktiv", true).limit(1).maybeSingle();
-                      const positions = [
-                        { id: crypto.randomUUID(), typ: "leistung", bezeichnung: selectedPaket.name, beschreibung: selectedPaket.beschreibungKunde || "", menge: selectedPaket.zieldauer, einheit: "Min.", einzelpreis: Math.round((selectedPaket.preis / selectedPaket.zieldauer) * 100) / 100, gesamt: selectedPaket.preis, optional: false },
-                        { id: crypto.randomUUID(), typ: "leistung", bezeichnung: anfahrtArt?.bezeichnung || "Anfahrtspauschale", beschreibung: anfahrtArt?.beschreibung || "Anfahrt und Rückreise zum Veranstaltungsort", menge: 1, einheit: anfahrtArt?.einheit || "km", einzelpreis: anfahrtArt?.preis ?? 0, gesamt: anfahrtArt?.preis ?? 0, optional: false },
-                      ];
-                      sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
-                      const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
-                      navigate(`/admin/dokumente/new?typ=angebot${params}`);
-                    }}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 transition-opacity"
-                  >
-                    <FileText className="w-4 h-4" /> Angebot aus Paket erstellen
-                  </button>
-                </div>
-              ) : (
-                <select
-                  value=""
-                  onChange={async (e) => {
+                ) : (
+                  <select value="" onChange={async (e) => {
                     const p = allPakete.find(pk => pk.id === e.target.value);
-                    if (p) {
-                      setSelectedPaket(p);
-                      await supabase.from("portal_requests").update({ paket_id: p.id }).eq("id", request.id);
-                    }
-                  }}
-                  className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-muted-foreground"
-                >
-                  <option value="">Paket auswählen…</option>
-                  {allPakete.map(p => (
-                    <option key={p.id} value={p.id}>{p.name} – {p.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })} ({p.zieldauer} Min.)</option>
-                  ))}
-                </select>
+                    if (p) { setSelectedPaket(p); await supabase.from("portal_requests").update({ paket_id: p.id }).eq("id", request.id); }
+                  }} className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-muted-foreground">
+                    <option value="">Paket auswählen…</option>
+                    {allPakete.map(p => (
+                      <option key={p.id} value={p.id}>{p.name} – {p.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })} ({p.zieldauer} Min.)</option>
+                    ))}
+                  </select>
+                )
+              ) : (
+                /* ── Show-Auswahl ── */
+                selectedShow ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-accent/10">
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{selectedShow.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {selectedShow.zieldauer} Min.
+                          {selectedShow.preis ? ` · ${selectedShow.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}` : ""}
+                        </p>
+                        {selectedShow.beschreibungKunde && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{selectedShow.beschreibungKunde}</p>}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => navigate(`/admin/programm/shows/${selectedShow.id}/edit`)}
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-accent hover:bg-accent/10" title="Im Editor bearbeiten">
+                          <Pencil className="w-3.5 h-3.5" />
+                        </button>
+                        <button onClick={async () => {
+                          setSelectedShow(null);
+                          await supabase.from("portal_requests").update({ show_id: null }).eq("id", request.id);
+                        }} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"><X className="w-3.5 h-3.5" /></button>
+                      </div>
+                    </div>
+                    {selectedShow.preis && selectedShow.preis > 0 ? (
+                      <button
+                        onClick={async () => {
+                          await supabase.auth.refreshSession();
+                          const { data: anfahrtArt } = await supabase.from("artikel_stamm").select("bezeichnung, beschreibung, preis, einheit").ilike("bezeichnung", "%anfahrt%").eq("aktiv", true).limit(1).maybeSingle();
+                          const positions = [
+                            { id: crypto.randomUUID(), typ: "leistung", bezeichnung: selectedShow.name, beschreibung: selectedShow.beschreibungKunde || selectedShow.konzeptKundentext || "", menge: 1, einheit: "pauschal", einzelpreis: selectedShow.preis!, gesamt: selectedShow.preis!, optional: false },
+                            { id: crypto.randomUUID(), typ: "leistung", bezeichnung: anfahrtArt?.bezeichnung || "Anfahrtspauschale", beschreibung: anfahrtArt?.beschreibung || "Anfahrt und Rückreise zum Veranstaltungsort", menge: 1, einheit: anfahrtArt?.einheit || "km", einzelpreis: anfahrtArt?.preis ?? 0, gesamt: anfahrtArt?.preis ?? 0, optional: false },
+                          ];
+                          sessionStorage.setItem("prefill_positionen", JSON.stringify(positions));
+                          const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
+                          navigate(`/admin/dokumente/new?typ=angebot${params}`);
+                        }}
+                        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 transition-opacity"
+                      >
+                        <FileText className="w-4 h-4" /> Angebot aus Show erstellen
+                      </button>
+                    ) : (
+                      <p className="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2">Kein Preis festgelegt — bitte im Show-Editor einen Preis eintragen.</p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <select value="" onChange={async (e) => {
+                      const s = allShows.find(sh => sh.id === e.target.value);
+                      if (s) { setSelectedShow(s); await supabase.from("portal_requests").update({ show_id: s.id }).eq("id", request.id); }
+                    }} className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-muted-foreground">
+                      <option value="">Show auswählen…</option>
+                      {allShows.map(s => (
+                        <option key={s.id} value={s.id}>{s.name}{s.preis ? ` – ${s.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}` : ""} ({s.zieldauer} Min.)</option>
+                      ))}
+                    </select>
+                    <button onClick={() => {
+                      const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request?.id ? `&requestId=${request.id}` : ""}`;
+                      navigate(`/admin/programm/shows`);
+                    }} className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border/30 px-3 py-2 text-xs font-medium text-muted-foreground hover:bg-muted/40">
+                      <Plus className="w-3.5 h-3.5" /> Neue Show erstellen
+                    </button>
+                  </div>
+                )
               )}
             </div>
           ) : selectedPaket ? (
