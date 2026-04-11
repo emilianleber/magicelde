@@ -11,6 +11,8 @@ import {
   Layers,
   Wand2,
   Video,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -288,11 +290,23 @@ const AdminShowsList = () => {
             return (
               <div
                 key={s.id}
-                onClick={() => navigate(`/admin/programm/shows/${s.id}/edit`)}
+                onClick={() => navigate(`/admin/programm/shows/${s.id}`)}
                 className="relative p-5 rounded-2xl bg-muted/20 border border-border/30 hover:border-accent/30 hover:bg-muted/40 transition-all flex flex-col gap-3 cursor-pointer group"
               >
+                {/* Hover-Actions */}
+                <div className="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={(e) => { e.stopPropagation(); navigate(`/admin/programm/shows/${s.id}/edit`); }}
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors" title="Bearbeiten">
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                  <button onClick={async (e) => { e.stopPropagation(); if (!confirm(`"${s.name}" wirklich löschen?`)) return; await supabase.from("shows_intern").delete().eq("id", s.id); setShows(prev => prev.filter(sh => sh.id !== s.id)); }}
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-red-50 transition-colors" title="Löschen">
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
                 {/* Name */}
-                <p className="text-sm font-bold text-foreground leading-tight line-clamp-1">
+                <p className="text-sm font-bold text-foreground leading-tight line-clamp-1 pr-16">
                   {s.name}
                 </p>
 
