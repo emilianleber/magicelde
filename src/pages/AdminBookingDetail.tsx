@@ -131,9 +131,9 @@ const OFF_RAMP_STATUSES = ["abgelehnt", "storniert"];
 
 const getCurrentPipelineStep = (status: string | null, eventId: string | null, eventStatus: string | null): PipelineStep => {
   if (OFF_RAMP_STATUSES.includes(status || "")) return "neu"; // handled separately
+  if (eventStatus === "abgeschlossen" || status === "archiviert") return "abgeschlossen";
   if (eventStatus === "event_erfolgt") return "durchgefuehrt";
   if (eventId || status === "bestätigt") return "gebucht";
-  if (status === "archiviert") return "abgeschlossen";
   for (const step of PIPELINE_STEPS) {
     if (step.requestStatus.includes(status || "")) return step.key;
   }
