@@ -69,8 +69,9 @@ serve(async (req) => {
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light">
 <style>:root{color-scheme:light only!important}html,body{background-color:#ffffff!important;margin:0!important;padding:0!important}@media(prefers-color-scheme:dark){html,body,.body-wrap{background-color:#ffffff!important;color:#1a1a1a!important}}</style>
 </head>
-<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff!important;font-family:${FONT};font-size:15px;line-height:1.7;color:#1a1a1a;">
-<div class="body-wrap" style="background-color:#ffffff!important;padding:20px;">
+<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff!important;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff!important;">
+<tr><td bgcolor="#ffffff" style="padding:24px;background-color:#ffffff!important;font-family:${FONT};font-size:15px;line-height:1.7;color:#1a1a1a!important;">
 
 ${mailBody.replace(/\n/g, "<br>")}
 
@@ -81,7 +82,7 @@ ${mailBody.replace(/\n/g, "<br>")}
 <span style="font-size:13px;color:#71717a!important;">MagicEL &ndash; Entertainment &amp; Zauberkunst</span><br><br>
 <span style="font-size:12px;color:#71717a!important;">T: <a href="tel:+4915563744696" style="color:#3f3f46!important;text-decoration:none;">+49 155 637 44 696</a> &nbsp;|&nbsp; W: <a href="https://wa.me/4915563744696" style="color:#3f3f46!important;text-decoration:none;">WhatsApp</a> &nbsp;|&nbsp; <a href="https://magicel.de" style="color:#3f3f46!important;text-decoration:none;">www.magicel.de</a></span>
 </div>
-</div>
+</td></tr></table>
 </body></html>`;
 
     await transporter.sendMail({
