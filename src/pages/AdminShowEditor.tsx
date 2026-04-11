@@ -214,8 +214,8 @@ function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, isDraggingFr
       isDraggingFromSidebar ? "border-accent/30 border-dashed" :
       "border-border/30"
     }`}>
-      {/* Drop zone indicator */}
-      {isDraggingFromSidebar && (
+      {/* Drop zone indicator — nur bei Show-Akt Phasen */}
+      {isDraggingFromSidebar && (phase.typ === "akt1" || phase.typ === "akt2") && (
         <div className={`flex items-center justify-center gap-2 py-2 text-xs font-medium transition-colors ${
           isOver ? "bg-accent/15 text-accent" : "bg-accent/5 text-accent/50"
         }`}>
@@ -233,7 +233,10 @@ function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, isDraggingFr
           className="flex-1 bg-transparent text-sm font-semibold text-foreground outline-none"
           placeholder="Phasenname"
         />
-        <span className="text-[10px] text-muted-foreground">{phaseDauer} Min. · {phaseEffekte.length} Effekte</span>
+        <span className="text-[10px] text-muted-foreground">
+          {phase.typ === "empfang" ? "Einlass" : phase.typ === "pause" ? "Pause" : phase.typ === "finale" ? "Sonstiges" : `${phaseEffekte.length} Effekte`}
+          {phaseDauer > 0 ? ` · ${phaseDauer} Min.` : ""}
+        </span>
         <button onClick={onToggle} className="p-1 text-muted-foreground hover:text-foreground">
           {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
         </button>
@@ -242,10 +245,28 @@ function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, isDraggingFr
         </button>
       </div>
 
-      {/* Expanded content */}
+      {/* Expanded content — Layout basiert auf Phase-Typ */}
       {isExpanded && (
         <div className="border-t border-border/10">
-          {/* Effekte mit Drag&Drop Sortierung */}
+          {/* Phase-Typ Auswahl */}
+          <div className="px-4 pt-3 pb-1">
+            <div className="flex gap-1">
+              {[
+                { value: "akt1", label: "Show-Akt" },
+                { value: "empfang", label: "Einlass/Empfang" },
+                { value: "pause", label: "Pause" },
+                { value: "finale", label: "Sonstiges" },
+              ].map(t => (
+                <button key={t.value} onClick={() => onUpdate({ typ: t.value as any })}
+                  className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition-colors ${phase.typ === t.value ? "bg-foreground text-background" : "bg-muted/30 text-muted-foreground hover:bg-muted/50"}`}>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Show-Akt: Effekte */}
+          {(phase.typ === "akt1" || phase.typ === "akt2") && (
           <div className="px-4 py-3 space-y-2">
             {phaseEffekte.length === 0 ? (
               <p className="text-xs text-muted-foreground/50 italic py-2">Effekte aus der Sidebar hinzufügen oder unten auswählen</p>
@@ -271,38 +292,40 @@ function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, isDraggingFr
               ))}
             </select>
           </div>
+          )}
 
-          {/* Musik & Technik Notizen */}
-          <div className="px-4 pb-3 grid grid-cols-2 gap-3 border-t border-border/10 pt-3">
-            <div>
-              <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                <Music className="w-3 h-3" /> Musik
-              </label>
-              {musikItems.length > 0 ? (
-                <select value="" onChange={e => { if (e.target.value) setMusikNotiz(prev => prev ? `${prev}, ${e.target.value}` : e.target.value); }}
-                  className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs mb-1">
-                  <option value="">Track hinzufügen…</option>
-                  {musikItems.map(m => <option key={m.id} value={m.titel}>{m.titel}{m.kuenstler ? ` – ${m.kuenstler}` : ""}</option>)}
-                </select>
-              ) : null}
-              <input
-                placeholder="Song / Playlist…"
-                value={musikNotiz}
-                onChange={e => setMusikNotiz(e.target.value)}
-                className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs"
-              />
+          {/* Einlass/Empfang + Pause: Nur Dauer-Info */}
+          {(phase.typ === "empfang" || phase.typ === "pause") && (
+            <div className="px-4 py-3">
+              <p className="text-xs text-muted-foreground">
+                {phase.typ === "empfang" ? "Hintergrundmusik während des Einlasses/Empfangs." : "Pause — keine Show-Elemente."}
+              </p>
             </div>
-            <div>
-              <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                <Wrench className="w-3 h-3" /> Technik
-              </label>
-              <input
-                placeholder="Licht, Ton, Requisiten…"
-                value={technikNotiz}
-                onChange={e => setTechnikNotiz(e.target.value)}
-                className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs"
-              />
+          )}
+
+          {/* Sonstiges: Freitext */}
+          {phase.typ === "finale" && (
+            <div className="px-4 py-3">
+              <textarea placeholder="Notizen für diese Phase…" rows={2}
+                className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs resize-none" />
             </div>
+          )}
+
+          {/* Musik — für alle Phasen-Typen */}
+          <div className="px-4 pb-3 border-t border-border/10 pt-3">
+            <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+              <Music className="w-3 h-3" /> Musik / Einspieler
+            </label>
+            {musikItems.length > 0 ? (
+              <select value="" onChange={e => { if (e.target.value) setMusikNotiz(prev => prev ? `${prev}, ${e.target.value}` : e.target.value); }}
+                className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs mb-1">
+                <option value="">Aus Bibliothek hinzufügen…</option>
+                {musikItems.map(m => <option key={m.id} value={m.titel}>{m.titel}{m.kuenstler ? ` – ${m.kuenstler}` : ""}</option>)}
+              </select>
+            ) : null}
+            <input placeholder="Song, Playlist oder Einspieler…" value={musikNotiz}
+              onChange={e => setMusikNotiz(e.target.value)}
+              className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs" />
           </div>
         </div>
       )}
@@ -962,9 +985,19 @@ const AdminShowEditor = () => {
                       </button>
                     </div>
                 ))}
-                  <button onClick={() => addPhase()} className="w-full py-2.5 rounded-xl border border-dashed border-border/30 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-accent/30 transition-colors">
-                    + Phase hinzufügen
-                  </button>
+                  <div className="flex gap-2">
+                    {[
+                      { label: "+ Show-Akt", typ: "akt1" as const },
+                      { label: "+ Einlass", typ: "empfang" as const },
+                      { label: "+ Pause", typ: "pause" as const },
+                      { label: "+ Sonstiges", typ: "finale" as const },
+                    ].map(btn => (
+                      <button key={btn.typ} onClick={() => addPhase(btn.label.replace("+ ", ""), btn.typ)}
+                        className="flex-1 py-2 rounded-xl border border-dashed border-border/30 text-[10px] font-medium text-muted-foreground hover:text-foreground hover:border-accent/30 transition-colors">
+                        {btn.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
