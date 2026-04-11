@@ -572,7 +572,7 @@ function DocumentPreview(props: PreviewProps) {
   // DIN 5008 Fußzeile – fix am Seitenende (842px)
   const renderDINFooter = (_pageNum: number) => (
     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, backgroundColor: "#fff" }}>
-      <div style={{ margin: `0 ${M}px`, borderTop: "0.5px solid #d4d4d8", paddingTop: 8, paddingBottom: 10 }}>
+      <div style={{ margin: `0 ${M}px`, paddingTop: 8, paddingBottom: 10 }}>
         {totalPages > 1 && (
           <div style={{ textAlign: "right", fontSize: 6.5, color: "#a1a1aa", marginBottom: 5 }}>
             Seite {pageNum} von {totalPages}

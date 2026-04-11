@@ -147,7 +147,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const footer = document.getElementById("pdf-footer") as HTMLElement;
       const tbodyTd = document.querySelector("tbody td") as HTMLElement;
       if (footer && tbodyTd) {
-        tbodyTd.style.paddingBottom = (footer.offsetHeight + 14) + "px";
+        tbodyTd.style.paddingBottom = (footer.offsetHeight + 76) + "px"; // +76px ≈ 2cm Abstand über Footer
       }
     });
 
