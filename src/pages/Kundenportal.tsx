@@ -3027,7 +3027,7 @@ const Kundenportal = () => {
             <div className="w-full max-w-md bg-white rounded-3xl border border-black/[0.1] shadow-2xl max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
               {/* Header */}
               <div className="bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-5 text-white relative overflow-hidden sticky top-0 z-10">
-                <button onClick={() => setPaymentDoc(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/20 transition-colors">
+                <button onClick={() => setPaymentDoc(null)} className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/20 transition-colors">
                   <X className="w-4 h-4" />
                 </button>
                 <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
