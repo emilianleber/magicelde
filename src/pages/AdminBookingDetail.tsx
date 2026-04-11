@@ -902,9 +902,11 @@ const AdminBookingDetail = () => {
         const archivLabel = isStorno ? "Storniert" : isAbgelehnt ? "Abgelehnt" : "Abgeschlossen";
         const archivColor = isStorno || isAbgelehnt ? "red" : "green";
 
-        // Umsatz berechnen
-        const totalBrutto = documents.reduce((s, d) => s + ((d as any).amount || (d as any).brutto || 0), 0);
-        const totalBezahlt = documents.reduce((s, d) => s + ((d as any).bezahlt_betrag || 0), 0);
+        // Umsatz: nur Rechnungen zählen (kein Angebot/AB)
+        const rechnungsTypen = ["rechnung", "abschlagsrechnung", "schlussrechnung", "stornorechnung", "Rechnung", "Abschlagsrechnung", "Schlussrechnung", "Stornorechnung"];
+        const rechnungen = documents.filter(d => rechnungsTypen.includes((d as any).type || (d as any).typ || ""));
+        const totalBrutto = rechnungen.reduce((s, d) => s + ((d as any).amount || (d as any).brutto || 0), 0);
+        const totalBezahlt = rechnungen.reduce((s, d) => s + ((d as any).bezahlt_betrag || 0), 0);
 
         return (
           <div className="space-y-5">
