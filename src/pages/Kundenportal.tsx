@@ -435,22 +435,14 @@ const Kundenportal = () => {
   // Refresh-Funktion (auch für manuellen Refresh-Button)
   const [refreshKey, setRefreshKey] = useState(0);
   const triggerRefresh = () => setRefreshKey(k => k + 1);
-  const [silentRefresh, setSilentRefresh] = useState(false);
 
-  // Daten neu laden wenn Tab wieder aktiv wird — OHNE Loading-Screen
-  useEffect(() => {
-    const onFocus = () => { if (user && !loading) { setSilentRefresh(true); setRefreshKey(k => k + 1); } };
-    window.addEventListener("focus", onFocus);
-    return () => window.removeEventListener("focus", onFocus);
-  }, [user, loading]);
-
-  const hasLoadedOnce = React.useRef(false);
+  // Kein automatischer Focus-Refresh — nur manuell über Button
 
   useEffect(() => {
     if (!user) return;
     const fetchData = async () => {
-      // Nur beim allerersten Load den Loading-Screen zeigen
-      if (!hasLoadedOnce.current) setLoading(true);
+      // Loading nur beim allerersten Laden oder manuellen Refresh
+      if (!customer) setLoading(true);
 
       if (previewCustomerId) {
         const { data: adminEntry } = await supabase.from("portal_admins").select("id").eq("email", user.email).maybeSingle();
@@ -577,8 +569,6 @@ const Kundenportal = () => {
       }
 
       setLoading(false);
-      hasLoadedOnce.current = true;
-      setSilentRefresh(false);
     };
     fetchData();
   }, [user, previewCustomerId, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -1919,11 +1909,24 @@ const Kundenportal = () => {
               </div>
             </div>
 
-            {/* Galerie — Drag-Slider */}
+            {/* Galerie — Drag-Slider mit Pfeilen */}
             <div className="space-y-3">
-              <h2 className="font-display text-base font-bold text-foreground">Impressionen</h2>
+              <div className="flex items-center justify-between">
+                <h2 className="font-display text-base font-bold text-foreground">Impressionen</h2>
+                <div className="flex items-center gap-1">
+                  <button onClick={() => { const el = document.getElementById("gallery-slider"); if (el) el.scrollBy({ left: -280, behavior: "smooth" }); }}
+                    className="w-8 h-8 rounded-full border border-border/30 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors">
+                    <ArrowLeft className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => { const el = document.getElementById("gallery-slider"); if (el) el.scrollBy({ left: 280, behavior: "smooth" }); }}
+                    className="w-8 h-8 rounded-full border border-border/30 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors">
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
               <div
-                className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 cursor-grab active:cursor-grabbing"
+                id="gallery-slider"
+                className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 cursor-grab active:cursor-grabbing scroll-smooth"
                 style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" } as any}
                 onMouseDown={(e) => {
                   const el = e.currentTarget;
