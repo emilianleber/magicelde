@@ -23,8 +23,8 @@ const STATUS_CONFIG: Record<DokumentStatus, { label: string; dot: string }> = {
 
 function StatusCell({ status, typ }: { status: DokumentStatus; typ?: string }) {
   const cfg = STATUS_CONFIG[status] ?? { label: status, dot: "bg-gray-300" };
-  // "Gesendet" ist grün bei AB, Abschlagsrechnung, Schlussrechnung, Rechnung (= finaler positiver Status)
-  const isSentFinal = status === "gesendet" && ["auftragsbestaetigung", "abschlagsrechnung", "schlussrechnung", "rechnung", "mahnung", "stornorechnung"].includes(typ || "");
+  // "Gesendet" ist grün nur bei AB und Mahnung (dort ist es der finale Status)
+  const isSentFinal = status === "gesendet" && ["auftragsbestaetigung", "mahnung"].includes(typ || "");
   const dot = isSentFinal ? "bg-green-500" : cfg.dot;
   return (
     <div className="flex items-center gap-2">
