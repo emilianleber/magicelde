@@ -281,6 +281,13 @@ export default function AdminDokumentDetail() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc, searchParams]);
 
+  // Auto-open Zahlung panel wenn ?zahlung=1
+  useEffect(() => {
+    if (!doc || !searchParams.get("zahlung")) return;
+    setZahlungForm(f => ({ ...f, betrag: doc.offenerBetrag || doc.brutto }));
+    setZahlungPanel(true);
+  }, [doc, searchParams]);
+
   // Customer email search for the send panel
   useEffect(() => {
     const q = emailSearchQuery.trim().toLowerCase();
@@ -1230,23 +1237,17 @@ export default function AdminDokumentDetail() {
               <div>
                 <p className="text-sm font-semibold">Zahlungseingang</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {doc.status === "bezahlt" ? (
-                    <span className="text-green-700 font-semibold">Vollständig bezahlt · {fmt(doc.brutto)}</span>
-                  ) : (
-                    <>Offen: <span className={doc.offenerBetrag > 0 ? "text-amber-700 font-semibold" : "text-green-700 font-semibold"}>{fmt(doc.offenerBetrag)}</span>
-                    {" · "}Bezahlt: <span className="font-semibold">{fmt(doc.bezahltBetrag)}</span></>
-                  )}
+                    Offen: <span className={doc.offenerBetrag > 0 ? "text-amber-700 font-semibold" : "text-green-700 font-semibold"}>{fmt(doc.offenerBetrag)}</span>
+                  {" · "}Bezahlt: <span className="font-semibold">{fmt(doc.bezahltBetrag)}</span>
                 </p>
               </div>
-              {doc.status !== "bezahlt" && (
               <button
                 onClick={() => { setZahlungForm(f => ({ ...f, betrag: doc.offenerBetrag })); setZahlungPanel(true); }}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-foreground text-background text-xs font-semibold hover:opacity-90"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Zahlung erfassen
-              </button>
-              )}
+              </button>}
             </div>
 
             {/* Progress bar */}

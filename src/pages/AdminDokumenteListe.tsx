@@ -562,8 +562,8 @@ export default function AdminDokumenteListe() {
                                   </button>
                                 ) : null; })()}
                                 {!isBezahlt && !isStorniert && ["rechnung", "abschlagsrechnung", "schlussrechnung", "mahnung"].includes(doc.typ) && (
-                                  <button onClick={(e) => handleStatusChange(e, doc, "bezahlt")} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-green-700 hover:bg-green-50 transition-colors text-left">
-                                    <CircleCheck className="w-3.5 h-3.5 shrink-0" /> Als bezahlt markieren
+                                  <button onClick={(e) => { e.stopPropagation(); navigate(`/admin/dokumente/${doc.id}?zahlung=1`); }} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-green-700 hover:bg-green-50 transition-colors text-left">
+                                    <CircleCheck className="w-3.5 h-3.5 shrink-0" /> Zahlung erfassen
                                   </button>
                                 )}
                                 {!isStorniert && (
