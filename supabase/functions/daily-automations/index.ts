@@ -142,7 +142,7 @@ serve(async (req) => {
       .select("*, customer:customer_id(id, name, email)")
       .eq("event_date", yesterdayStr)
       .is("deleted_at", null)
-      .neq("status", "storniert");
+      .not("status", "in", '("storniert","abgeschlossen")');
 
     for (const evt of completedEvents || []) {
       const customer = evt.customer as any;
@@ -188,8 +188,11 @@ serve(async (req) => {
         )
       );
 
-      // Event-Status auf event_erfolgt setzen
-      await supabase.from("portal_events").update({ status: "event_erfolgt" }).eq("id", evt.id);
+      // Event-Status auf event_erfolgt setzen — nur wenn noch nicht manuell weitergesetzt
+      const dontOverwrite = ["event_erfolgt", "abgeschlossen", "storniert"];
+      if (!dontOverwrite.includes(evt.status || "")) {
+        await supabase.from("portal_events").update({ status: "event_erfolgt" }).eq("id", evt.id);
+      }
 
       await logMail(customer.id, evt.id, null, mailKey, customer.email);
       results.push(`Danke-Mail: ${customer.email} (Event ${evt.id})`);
