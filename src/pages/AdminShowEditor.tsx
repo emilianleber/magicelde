@@ -801,9 +801,9 @@ const AdminShowEditor = () => {
                 className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" step="0.01" min="0" />
             </div>
             <div>
-              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Event verknüpfen</label>
-              <select value={eventId || ""} onChange={e => {
-                const eid = e.target.value || null;
+              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Event (optional)</label>
+              <select value={eventId || "none"} onChange={e => {
+                const eid = e.target.value === "none" ? null : e.target.value;
                 setEventId(eid);
                 // Gäste aus Event laden
                 if (eid) {
@@ -811,7 +811,7 @@ const AdminShowEditor = () => {
                   if (evt?.guests) { setCloseupGaeste(evt.guests); setCloseupGruppen(Math.ceil(evt.guests / closeupPersonenProGruppe)); }
                 }
               }} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
-                <option value="">Kein Event</option>
+                <option value="none">Kein Event</option>
                 {availableEvents.map(ev => (
                   <option key={ev.id} value={ev.id}>{ev.title}{ev.date ? ` (${new Date(ev.date + "T00:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "short" })})` : ""}{ev.guests ? ` · ${ev.guests} Gäste` : ""}</option>
                 ))}
