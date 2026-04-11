@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, type ReactNode } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
@@ -100,6 +100,23 @@ function DraggableSidebarEffekt({ effekt, onClick }: { effekt: Effekt; onClick: 
         <p className="text-[9px] text-muted-foreground">{effekt.dauer} Min.</p>
       </div>
       <Plus className="w-3 h-3 text-muted-foreground/30 group-hover:text-accent" />
+    </div>
+  );
+}
+
+// ── Drop Zone (for Close-Up pool etc.) ───────────────────────────────────────
+
+function PoolDropZone({ phaseId, isDraggingFromSidebar, children }: { phaseId: string; isDraggingFromSidebar: boolean; children: ReactNode }) {
+  const { setNodeRef, isOver } = useDroppable({ id: `drop-phase-${phaseId}` });
+  return (
+    <div ref={setNodeRef} className={`rounded-xl transition-all ${isDraggingFromSidebar ? (isOver ? "ring-2 ring-accent bg-accent/5" : "ring-1 ring-dashed ring-accent/30") : ""}`}>
+      {isDraggingFromSidebar && (
+        <div className={`flex items-center justify-center gap-2 py-2 text-xs font-medium transition-colors rounded-t-xl ${isOver ? "bg-accent/15 text-accent" : "bg-accent/5 text-accent/50"}`}>
+          <Plus className="w-3.5 h-3.5" />
+          {isOver ? "Loslassen zum Hinzufügen" : "Hier ablegen"}
+        </div>
+      )}
+      {children}
     </div>
   );
 }
@@ -869,7 +886,8 @@ const AdminShowEditor = () => {
                     </div>
                   </div>
 
-                  {/* Effekt-Pool */}
+                  {/* Effekt-Pool mit Drop-Zone */}
+                  <PoolDropZone phaseId={poolPhase?._id || "pool"} isDraggingFromSidebar={!!draggingSidebarEffekt}>
                   <div>
                     <div className="flex items-center justify-between mb-3">
                       <div>
@@ -879,7 +897,7 @@ const AdminShowEditor = () => {
                     </div>
 
                     {allPoolEffekte.length === 0 ? (
-                      <p className="text-xs text-muted-foreground/50 italic py-6 text-center rounded-xl border border-dashed border-border/30">Klicke in der Sidebar auf Effekte um sie zum Pool hinzuzufügen</p>
+                      <p className="text-xs text-muted-foreground/50 italic py-6 text-center rounded-xl border border-dashed border-border/30">Klicke in der Sidebar auf Effekte oder ziehe sie hierher</p>
                     ) : Object.entries(grouped).filter(([, effs]) => effs.length > 0).map(([typ, effs]) => (
                       <div key={typ} className="mb-3">
                         <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">{EFFEKT_TYP_LABELS[typ] || typ} ({effs.length})</p>
@@ -899,6 +917,7 @@ const AdminShowEditor = () => {
                       </div>
                     ))}
                   </div>
+                  </PoolDropZone>
                 </div>
               );
             })()
