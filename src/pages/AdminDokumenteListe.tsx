@@ -145,8 +145,13 @@ function getNextStep(doc: Dokument): { label: string; href: string } | null {
         return { label: "Abschlagsrechnung erstellen", href: `/admin/dokumente/new?typ=abschlagsrechnung&quelldokumentId=${doc.id}&quelldokumentNummer=${encodeURIComponent(doc.nummer)}` };
       return null;
     case "abschlagsrechnung":
-      if (doc.status === "bezahlt" || doc.status === "offen")
+      if (["gesendet", "offen", "bezahlt", "teilbezahlt"].includes(doc.status))
         return { label: "Schlussrechnung erstellen", href: `/admin/dokumente/new?typ=schlussrechnung&quelldokumentId=${doc.id}&quelldokumentNummer=${encodeURIComponent(doc.nummer)}` };
+      return null;
+    case "rechnung":
+    case "schlussrechnung":
+      if (["gesendet", "offen", "ueberfaellig"].includes(doc.status))
+        return { label: "Mahnung erstellen", href: `/admin/dokumente/new?typ=mahnung&quelldokumentId=${doc.id}&quelldokumentNummer=${encodeURIComponent(doc.nummer)}` };
       return null;
     default:
       return null;

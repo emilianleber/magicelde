@@ -1217,7 +1217,7 @@ export default function AdminDokumentDetail() {
         )}
 
         {/* Zahlungen — only for Rechnungen */}
-        {(doc.typ === "rechnung" || doc.typ === "abschlagsrechnung" || doc.typ === "mahnung") && (
+        {(doc.typ === "rechnung" || doc.typ === "abschlagsrechnung" || doc.typ === "schlussrechnung" || doc.typ === "mahnung") && (
           <div className="rounded-2xl border border-border/20 overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 bg-muted/5 border-b border-border/10">
               <div>

@@ -1568,6 +1568,7 @@ const AdminBookingDetail = () => {
                             "{{gaeste}}": gaeste || "",
                             "{{format}}": format ? getLabelOrCapitalize(formatOptions, format) : "",
                             "{{kundennummer}}": (customer as any)?.kundennummer || "",
+                            "{{tageszeit_gruss}}": (() => { const h = new Date().getHours(); return h < 12 ? "einen schönen Vormittag" : h < 17 ? "einen schönen Nachmittag" : "einen schönen Abend"; })(),
                           };
                           const fill = (text: string) => {
                             let result = text;

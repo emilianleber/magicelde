@@ -394,22 +394,9 @@ serve(async (req) => {
         { icon: "👥", label: "Gäste", value: String(request.gaeste ?? "–") },
       ];
 
-      const customerHtml = getEmailShell(
-        "Buchung",
-        "Ihr Event ist gebucht! 🎉",
-        `Hallo ${gruss}, herzlichen Glückwunsch – Ihre Buchung ist jetzt offiziell bestätigt! Ich freue mich sehr darauf, Ihr Event unvergesslich zu machen.`,
-        `${statusBadge("✦ Buchung bestätigt", "#15803d", "#f0fdf4")}${infoTable(eventRows)}
-        <p style="margin:0;font-size:15px;line-height:1.7;color:#52525b;font-family:${FONT};">
-          Alle weiteren Details und Ihre Auftragsbestätigung finden Sie in Ihrem <strong style="color:#0a0a0a;">Kundenportal</strong>. Bei Fragen stehe ich Ihnen jederzeit gerne zur Verfügung.
-        </p>`,
-        true
-      );
-
-      await sendMail(
-        customer.email,
-        "Ihr Event ist gebucht – Emilian Leber",
-        customerHtml
-      );
+      // Kunden-Mail bei Buchung deaktiviert — wird manuell gesendet
+      // const customerHtml = getEmailShell(...);
+      // await sendMail(customer.email, "Ihr Event ist gebucht", customerHtml);
 
       // 11. Send admin notification
       const adminHtml = `<p><strong>${customer.name || customer.email}</strong> hat das Angebot für <strong>${request.anlass || "Anfrage"}</strong> angenommen.</p>
