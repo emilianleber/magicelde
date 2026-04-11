@@ -1532,17 +1532,26 @@ const AdminBookingDetail = () => {
                 )
               )}
             </div>
-          ) : selectedPaket ? (
+          ) : selectedPaket || selectedShow ? (
             /* NACH BUCHUNG: Show/Programm anzeigen */
             <div className="p-5 rounded-2xl bg-gradient-to-br from-accent/5 to-purple-50/30 border border-accent/20">
               <h2 className="text-sm font-bold text-foreground flex items-center gap-2 mb-3">
-                <Sparkles className="w-4 h-4 text-accent" /> Show / Programm
+                <Sparkles className="w-4 h-4 text-accent" /> {selectedShow ? "Show / Konzept" : "Paket"}
               </h2>
               <div className="p-4 rounded-xl bg-white border border-accent/10">
-                <p className="text-base font-bold text-foreground">{selectedPaket.name}</p>
-                <p className="text-xs text-muted-foreground mt-1">{selectedPaket.zieldauer} Min. · {selectedPaket.preis.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</p>
-                {selectedPaket.beschreibungKunde && (
-                  <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{selectedPaket.beschreibungKunde}</p>
+                <p className="text-base font-bold text-foreground">{selectedShow?.name || selectedPaket?.name}</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {(selectedShow?.zieldauer || selectedPaket?.zieldauer || 0)} Min.
+                  {(selectedShow?.preis || selectedPaket?.preis) ? ` · ${(selectedShow?.preis || selectedPaket?.preis || 0).toLocaleString("de-DE", { style: "currency", currency: "EUR" })}` : ""}
+                </p>
+                {(selectedShow?.beschreibungKunde || selectedShow?.konzeptKundentext || selectedPaket?.beschreibungKunde) && (
+                  <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{selectedShow?.beschreibungKunde || selectedShow?.konzeptKundentext || selectedPaket?.beschreibungKunde}</p>
+                )}
+                {selectedShow && (
+                  <button onClick={() => navigate(`/admin/programm/shows/${selectedShow.id}/edit`)}
+                    className="mt-3 inline-flex items-center gap-1.5 text-xs text-accent font-medium hover:text-accent/80">
+                    <Pencil className="w-3 h-3" /> Im Editor bearbeiten
+                  </button>
                 )}
               </div>
             </div>
