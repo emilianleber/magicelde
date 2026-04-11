@@ -1230,10 +1230,15 @@ export default function AdminDokumentDetail() {
               <div>
                 <p className="text-sm font-semibold">Zahlungseingang</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Offen: <span className={doc.offenerBetrag > 0 ? "text-amber-700 font-semibold" : "text-green-700 font-semibold"}>{fmt(doc.offenerBetrag)}</span>
-                  {" · "}Bezahlt: <span className="font-semibold">{fmt(doc.bezahltBetrag)}</span>
+                  {doc.status === "bezahlt" ? (
+                    <span className="text-green-700 font-semibold">Vollständig bezahlt · {fmt(doc.brutto)}</span>
+                  ) : (
+                    <>Offen: <span className={doc.offenerBetrag > 0 ? "text-amber-700 font-semibold" : "text-green-700 font-semibold"}>{fmt(doc.offenerBetrag)}</span>
+                    {" · "}Bezahlt: <span className="font-semibold">{fmt(doc.bezahltBetrag)}</span></>
+                  )}
                 </p>
               </div>
+              {doc.status !== "bezahlt" && (
               <button
                 onClick={() => { setZahlungForm(f => ({ ...f, betrag: doc.offenerBetrag })); setZahlungPanel(true); }}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-foreground text-background text-xs font-semibold hover:opacity-90"
@@ -1241,6 +1246,7 @@ export default function AdminDokumentDetail() {
                 <Plus className="w-3.5 h-3.5" />
                 Zahlung erfassen
               </button>
+              )}
             </div>
 
             {/* Progress bar */}
