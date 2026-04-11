@@ -26,10 +26,36 @@ const addOneDay = (dateStr: string) => {
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
 };
 
-// Zeitformat mit TZID statt UTC — Zeiten sind in Europe/Berlin gespeichert
+// Zeitformat mit TZID — Zeiten können als UTC (TIMETZ) oder lokal (TEXT) gespeichert sein.
+// Falls TIMETZ: Supabase liefert UTC-normalisiert ("12:00:00+00") → muss nach Europe/Berlin konvertiert werden.
+// Falls TEXT: einfach "14:00" → direkt nutzen.
 const buildLocalDateTime = (dateStr: string, timeStr: string) => {
   const d = dateStr.replace(/-/g, "");
-  const t = timeStr.replace(/:/g, "").substring(0, 4) + "00";
+
+  // Prüfe ob Timezone-Offset vorhanden (z.B. "+00", "+02:00", "+0200")
+  const tzMatch = timeStr.match(/([+-])(\d{2}):?(\d{2})$/);
+  let hours: number;
+  let mins: number;
+  if (tzMatch) {
+    // TIMETZ: parse UTC time and convert to Europe/Berlin
+    const utcDate = new Date(`${dateStr}T${timeStr}`);
+    // Nutze Intl um die Europe/Berlin Stunde zu bekommen
+    const berlinParts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Berlin",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).formatToParts(utcDate);
+    hours = Number(berlinParts.find(p => p.type === "hour")?.value || "0");
+    mins = Number(berlinParts.find(p => p.type === "minute")?.value || "0");
+  } else {
+    // TEXT: "14:00" oder "14:00:00" — direkt nutzen
+    const parts = timeStr.split(":");
+    hours = Number(parts[0]);
+    mins = Number(parts[1] || "0");
+  }
+
+  const t = String(hours).padStart(2, "0") + String(mins).padStart(2, "0") + "00";
   return `${d}T${t}`;
 };
 
@@ -140,10 +166,11 @@ DTSTAMP:${formatUtcDateTime(new Date())}
 
     if (e.start_time) {
       const start = buildLocalDateTime(e.event_date, e.start_time);
-      // Default-Dauer: 60 Minuten (statt 3 Stunden)
-      const startHour = Number(e.start_time.split(":")[0]);
-      const startMin = Number(e.start_time.split(":")[1] || "0");
-      const endMinTotal = startHour * 60 + startMin + 60; // +60 Min Default
+      // Default-Dauer: 60 Minuten
+      const startMatch = start.match(/T(\d{2})(\d{2})/);
+      const startHour = Number(startMatch?.[1] || "0");
+      const startMin = Number(startMatch?.[2] || "0");
+      const endMinTotal = startHour * 60 + startMin + 60;
       const endH = String(Math.floor(endMinTotal / 60) % 24).padStart(2, "0");
       const endM = String(endMinTotal % 60).padStart(2, "0");
       const endTime = e.end_time || `${endH}:${endM}`;
