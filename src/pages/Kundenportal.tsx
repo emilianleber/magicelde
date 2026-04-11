@@ -1915,7 +1915,7 @@ const Kundenportal = () => {
             <div className="space-y-3">
               <h2 className="font-display text-base font-bold text-foreground">Show-Einblick</h2>
               <div className="aspect-video rounded-2xl overflow-hidden border border-black/[0.06] shadow-sm">
-                <iframe src="https://www.youtube.com/embed/R0_mXGxzC9E" title="Show-Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
+                <iframe src="https://www.youtube.com/embed/ZdIDq9VtqxU" title="Show-Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
               </div>
             </div>
 
