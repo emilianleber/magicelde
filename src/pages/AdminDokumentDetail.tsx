@@ -324,8 +324,10 @@ export default function AdminDokumentDetail() {
 
       // Sync: Wenn Rechnung auf "bezahlt" → Event-Status aktualisieren
       if (status === "bezahlt" && doc.eventId) {
+        // Schlussrechnung bezahlt → Event abgeschlossen
+        const newEventStatus = doc.typ === "schlussrechnung" ? "abgeschlossen" : "rechnung_bezahlt";
         await supabase.from("portal_events")
-          .update({ status: "rechnung_bezahlt", invoice_status: "erledigt" })
+          .update({ status: newEventStatus, invoice_status: "erledigt" })
           .eq("id", doc.eventId);
       }
 

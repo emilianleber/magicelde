@@ -226,7 +226,19 @@ export default function AdminDokumenteListe() {
     e.stopPropagation();
     try {
       await dokumenteService.setStatus(doc.id, status);
-      setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status } : d));
+
+      // Bei "bezahlt" → Zahlung erfassen (bezahlt_betrag = brutto)
+      if (status === "bezahlt" && ["rechnung", "abschlagsrechnung", "schlussrechnung", "mahnung"].includes(doc.typ)) {
+        await supabase.from("portal_documents").update({ bezahlt_betrag: doc.brutto, offener_betrag: 0 }).eq("id", doc.id);
+        setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status, bezahltBetrag: doc.brutto, offenerBetrag: 0 } as any : d));
+      } else {
+        setDokumente(prev => prev.map(d => d.id === doc.id ? { ...d, status } : d));
+      }
+
+      // Schlussrechnung bezahlt → Event auf abgeschlossen setzen
+      if (status === "bezahlt" && doc.typ === "schlussrechnung" && doc.eventId) {
+        await supabase.from("portal_events").update({ status: "abgeschlossen" }).eq("id", doc.eventId);
+      }
     } catch (err: unknown) {
       alert("Fehler beim Statuswechsel: " + ((err as any)?.message || String(err)));
     }
