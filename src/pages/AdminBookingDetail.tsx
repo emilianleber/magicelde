@@ -1547,9 +1547,14 @@ const AdminBookingDetail = () => {
                           const t = tpl as any;
                           // Platzhalter-Map
                           const kundenName = customer?.name || "";
-                          const anrede = customer?.anrede || (kundenName ? (kundenName.includes(" ") ? `Herr/Frau ${kundenName.split(" ").pop()}` : kundenName) : "");
+                          const nachname = kundenName.split(" ").slice(1).join(" ") || kundenName;
+                          const rawAnrede = (customer as any)?.anrede || "";
+                          // "Herr" → "Herr Müller", "Frau" → "Frau Müller"
+                          const begruessung = rawAnrede && nachname
+                            ? `${rawAnrede} ${nachname}`
+                            : kundenName || "Guten Tag";
                           const replacements: Record<string, string> = {
-                            "{{begruessung}}": anrede || "Guten Tag",
+                            "{{begruessung}}": begruessung,
                             "{{name}}": kundenName,
                             "{{vorname}}": kundenName.split(" ")[0] || "",
                             "{{nachname}}": kundenName.split(" ").slice(1).join(" ") || "",
@@ -1568,6 +1573,9 @@ const AdminBookingDetail = () => {
                             for (const [key, val] of Object.entries(replacements)) {
                               result = result.replaceAll(key, val);
                             }
+                            // Markdown **bold** → plain bold (wird in HTML als <b> gesendet)
+                            result = result.replace(/\*\*(.+?)\*\*/g, "$1");
+                            // Markdown • bullets sind OK, bleiben
                             return result;
                           };
                           setComposeSubject(fill(t.subject || t.betreff || t.name || ""));
