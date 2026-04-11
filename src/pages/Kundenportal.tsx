@@ -1861,7 +1861,7 @@ const Kundenportal = () => {
               return (
                 <div className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 overflow-hidden">
                   {/* Bild */}
-                  <img src={emotionenImg} alt="Show-Erlebnis" className="w-full h-48 object-cover object-center" />
+                  <img src="https://www.magicel.de/assets/zuschauer-blau-BGlgusZ0.jpg" alt="Show-Erlebnis" className="w-full h-48 object-cover object-center" />
                   <div className="p-6">
                     <p className="font-sans text-[10px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">Über Ihr Programm</p>
                     <p className="font-sans text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{combinedText}</p>
