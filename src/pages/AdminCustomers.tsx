@@ -74,11 +74,24 @@ const AdminCustomers = () => {
 
       const [custRes, reqRes, evtRes] = await Promise.all([
         supabase.from("portal_customers").select("*"),
-        supabase.from("portal_requests").select("customer_id, status").is("deleted_at", null),
+        supabase.from("portal_requests").select("id, customer_id, status, email").is("deleted_at", null),
         supabase.from("portal_events").select("customer_id, event_date, status").is("deleted_at", null),
       ]);
 
       if (!custRes.error) setCustomers(custRes.data || []);
+
+      // Auto-Verknüpfung: Anfragen ohne customer_id per Email zuordnen
+      const allCustomers = custRes.data || [];
+      const emailToCustomerId: Record<string, string> = {};
+      allCustomers.forEach((c: any) => { if (c.email) emailToCustomerId[c.email.toLowerCase()] = c.id; });
+      const unlinkedRequests = (reqRes.data || []).filter((r: any) => !r.customer_id && r.email);
+      for (const req of unlinkedRequests) {
+        const custId = emailToCustomerId[(req as any).email?.toLowerCase()];
+        if (custId) {
+          (req as any).customer_id = custId;
+          supabase.from("portal_requests").update({ customer_id: custId }).eq("id", (req as any).id).then(() => {});
+        }
+      }
 
       const rMap: Record<string, number> = {};
       (reqRes.data || []).forEach((r) => { if (r.customer_id) rMap[r.customer_id] = (rMap[r.customer_id] || 0) + 1; });
