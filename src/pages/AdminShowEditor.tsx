@@ -320,6 +320,10 @@ const AdminShowEditor = () => {
   const [message, setMessage] = useState("");
   const [draggingSidebarEffekt, setDraggingSidebarEffekt] = useState<Effekt | null>(null);
 
+  // Event/Request Verknüpfung
+  const [eventId, setEventId] = useState<string | null>(null);
+  const [availableEvents, setAvailableEvents] = useState<{ id: string; title: string; date: string; guests: number | null }[]>([]);
+
   // Quick-add effect popup
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [quickAddName, setQuickAddName] = useState("");
@@ -374,6 +378,10 @@ const AdminShowEditor = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate("/admin/login"); return; }
 
+      // Events laden für Verknüpfung
+      const { data: evts } = await supabase.from("portal_events").select("id, title, event_date, guests, status").is("deleted_at", null).neq("status", "storniert").order("event_date", { ascending: false });
+      setAvailableEvents((evts || []).map((e: any) => ({ id: e.id, title: e.title || "Event", date: e.event_date || "", guests: e.guests })));
+
       const effekte = await effekteService.getAll();
       // Also load konzept-only effects (not in normal library)
       const { data: konzeptEffekte } = await supabase.from("effekte").select("*").eq("status", "konzept");
@@ -393,6 +401,7 @@ const AdminShowEditor = () => {
           setName(show.name);
           setFormat(show.format);
           setShowTyp(show.showTyp || "individuell");
+          setEventId(show.eventId || null);
           setStatus(show.status);
           setAnlass(show.anlass);
           setPreis(show.preis ?? null);
@@ -406,7 +415,14 @@ const AdminShowEditor = () => {
           setPhasen((show.phasen || []).map((p, i) => ({ ...p, _id: `phase-${i}-${Date.now()}` })));
           if (show.phasen?.length) setExpandedPhase(`phase-0-${Date.now()}`);
 
-          // Gästeanzahl aus Event laden
+          // Close-Up Daten aus budget laden
+          const meta = show.budget as any;
+          if (meta?.closeupGaeste) setCloseupGaeste(meta.closeupGaeste);
+          if (meta?.closeupPersonenProGruppe) setCloseupPersonenProGruppe(meta.closeupPersonenProGruppe);
+          if (meta?.closeupGruppen) setCloseupGruppen(meta.closeupGruppen);
+          if (meta?.closeupDauerProGruppe) setCloseupDauerProGruppe(meta.closeupDauerProGruppe);
+
+          // Gästeanzahl aus Event laden (überschreibt gespeicherte wenn vorhanden)
           if (show.eventId) {
             const { data: evt } = await supabase.from("portal_events").select("guests").eq("id", show.eventId).maybeSingle();
             if (evt?.guests) {
@@ -610,12 +626,16 @@ const AdminShowEditor = () => {
     setMessage("");
     try {
       const cleanPhasen: ShowPhase[] = phasen.map(({ _id, ...rest }) => rest);
+      // Close-Up Meta-Daten als budget JSON speichern
+      const closeupMeta = isCloseUp ? { closeupGaeste, closeupPersonenProGruppe, closeupGruppen, closeupDauerProGruppe } : undefined;
       const payload = {
         name: name.trim(), format, showTyp, status, anlass: anlass.trim(), zieldauer: zieldauerMax,
         preis: preis ?? undefined, beschreibungKunde: konzeptKundentext.trim() || undefined,
         konzeptKundentext: konzeptKundentext.trim(),
         technischeAnforderungen: technischeAnforderungen.trim(),
         phasen: cleanPhasen,
+        eventId: eventId || undefined,
+        budget: closeupMeta as any,
       };
 
       if (isNew) {
@@ -765,8 +785,8 @@ const AdminShowEditor = () => {
             </div>
           </div>
 
-          {/* Show-Typ + Preis */}
-          <div className="grid sm:grid-cols-3 gap-3">
+          {/* Show-Typ + Preis + Event */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
               <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Art</label>
               <select value={showTyp} onChange={e => setShowTyp(e.target.value as any)} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
@@ -779,6 +799,23 @@ const AdminShowEditor = () => {
               <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Preis (€)</label>
               <input type="number" value={preis ?? ""} onChange={e => setPreis(e.target.value ? parseFloat(e.target.value) : null)} placeholder="z.B. 950"
                 className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" step="0.01" min="0" />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Event verknüpfen</label>
+              <select value={eventId || ""} onChange={e => {
+                const eid = e.target.value || null;
+                setEventId(eid);
+                // Gäste aus Event laden
+                if (eid) {
+                  const evt = availableEvents.find(ev => ev.id === eid);
+                  if (evt?.guests) { setCloseupGaeste(evt.guests); setCloseupGruppen(Math.ceil(evt.guests / closeupPersonenProGruppe)); }
+                }
+              }} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
+                <option value="">Kein Event</option>
+                {availableEvents.map(ev => (
+                  <option key={ev.id} value={ev.id}>{ev.title}{ev.date ? ` (${new Date(ev.date + "T00:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "short" })})` : ""}{ev.guests ? ` · ${ev.guests} Gäste` : ""}</option>
+                ))}
+              </select>
             </div>
           </div>
 
