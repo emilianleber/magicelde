@@ -499,12 +499,17 @@ const Kundenportal = () => {
         }
       }
 
-      // Anfragen laden (wird auch als Fallback für Profilname genutzt)
+      // Anfragen laden — per Email ODER per customer_id
+      const orFilters = [`email.ilike.${user.email}`];
+      if (cust?.id) orFilters.push(`customer_id.eq.${cust.id}`);
       const { data: requestsData } = await supabase
-        .from("portal_requests").select("*").eq("email", user.email).order("created_at", { ascending: false });
+        .from("portal_requests").select("*").or(orFilters.join(",")).order("created_at", { ascending: false });
       if (requestsData) {
-        setRequests(requestsData);
-        if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id);
+        // Deduplizieren (falls Email UND customer_id matchen)
+        const seen = new Set<string>();
+        const unique = requestsData.filter((r: any) => { if (seen.has(r.id)) return false; seen.add(r.id); return true; });
+        setRequests(unique);
+        if (unique.length > 0) setExpandedRequestId(unique[0].id);
       }
 
       const capW = (s?: string | null) => s ? s.replace(/(^|\s)\S/g, (c: string) => c.toUpperCase()) : null;
