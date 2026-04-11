@@ -1546,18 +1546,19 @@ const AdminBookingDetail = () => {
                         if (tpl) {
                           const t = tpl as any;
                           // Platzhalter-Map
-                          const kundenName = customer?.name || "";
+                          const kundenName = customer?.name || (request as any)?.name || "";
                           const nachname = kundenName.split(" ").slice(1).join(" ") || kundenName;
-                          const rawAnrede = (customer as any)?.anrede || "";
-                          // "Herr" → "Herr Müller", "Frau" → "Frau Müller"
+                          const vorname = kundenName.split(" ")[0] || "";
+                          const rawAnrede = (customer as any)?.anrede || (request as any)?.anrede || "";
+                          // "Herr" → "Herr Müller", "Frau" → "Frau Müller", fallback auf vollen Namen
                           const begruessung = rawAnrede && nachname
                             ? `${rawAnrede} ${nachname}`
                             : kundenName || "Guten Tag";
                           const replacements: Record<string, string> = {
                             "{{begruessung}}": begruessung,
                             "{{name}}": kundenName,
-                            "{{vorname}}": kundenName.split(" ")[0] || "",
-                            "{{nachname}}": kundenName.split(" ").slice(1).join(" ") || "",
+                            "{{vorname}}": vorname,
+                            "{{nachname}}": nachname,
                             "{{firma}}": (customer as any)?.company || "",
                             "{{email}}": customer?.email || "",
                             "{{anlass}}": anlass || "Veranstaltung",
