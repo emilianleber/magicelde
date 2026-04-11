@@ -372,10 +372,19 @@ const AdminBookingDetail = () => {
         setEvent(evt || null);
       }
 
-      // Load customer
+      // Load customer — oder per Email suchen und automatisch verknüpfen
       if (data.customer_id) {
         const { data: cust } = await supabase.from("portal_customers").select("*").eq("id", data.customer_id).maybeSingle();
         setCustomer(cust || null);
+      } else if (data.email) {
+        // Kein customer_id → per Email suchen und automatisch verknüpfen
+        const { data: found } = await supabase.from("portal_customers").select("*").ilike("email", data.email.trim()).limit(1).maybeSingle();
+        if (found) {
+          setCustomer(found);
+          // Verknüpfung in DB speichern
+          await supabase.from("portal_requests").update({ customer_id: found.id }).eq("id", data.id);
+          data.customer_id = found.id;
+        }
       }
 
       // Load documents (from both request and event)
