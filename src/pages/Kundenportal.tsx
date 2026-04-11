@@ -3036,9 +3036,6 @@ const Kundenportal = () => {
                     <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/50 mb-1">Zahlungsinformationen</p>
                     <h3 className="font-display text-lg font-bold">{rechnungsNr}</h3>
                   </div>
-                  <button onClick={() => setPaymentDoc(null)} className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all">
-                    <X className="w-4 h-4 text-white" />
-                  </button>
                 </div>
                 {betrag != null && (
                   <div className="mt-3">
