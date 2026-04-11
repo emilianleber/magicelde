@@ -34,6 +34,8 @@ import {
   Pencil,
   Check,
   ListOrdered,
+  LayoutDashboard,
+  Euro,
 } from "lucide-react";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -111,6 +113,7 @@ const TEAM_ROLLEN: Record<string, string> = {
 };
 
 type TabKey =
+  | "uebersicht"
   | "ablauf"
   | "effekte"
   | "texte"
@@ -121,6 +124,7 @@ type TabKey =
   | "gema";
 
 const TABS: { key: TabKey; label: string; icon: typeof ListOrdered }[] = [
+  { key: "uebersicht", label: "Übersicht", icon: LayoutDashboard },
   { key: "ablauf", label: "Ablauf", icon: ListOrdered },
   { key: "effekte", label: "Effekte", icon: Wand2 },
   { key: "texte", label: "Texte & Skripte", icon: FileText },
@@ -194,10 +198,14 @@ const AdminShowDetail = () => {
   // Show data
   const [showName, setShowName] = useState("");
   const [editingName, setEditingName] = useState(false);
-  const [format, setFormat] = useState("buehnenshow");
+  const [format, setFormat] = useState("abendshow");
+  const [showTyp, setShowTyp] = useState("individuell");
   const [status, setStatus] = useState("entwurf");
   const [dauer, setDauer] = useState(45);
+  const [preis, setPreis] = useState<number | null>(null);
+  const [beschreibungKunde, setBeschreibungKunde] = useState("");
   const [beschreibung, setBeschreibung] = useState("");
+  const [konzeptKundentext, setKonzeptKundentext] = useState("");
 
   // Phasen
   const [phasen, setPhasen] = useState<(ShowPhase & { _id: string })[]>([]);
@@ -227,7 +235,7 @@ const AdminShowDetail = () => {
   const [gemaDaten, setGemaDaten] = useState<(GemaDaten & { _id: string })[]>([]);
 
   // UI
-  const [activeTab, setActiveTab] = useState<TabKey>("ablauf");
+  const [activeTab, setActiveTab] = useState<TabKey>("uebersicht");
   const [menuOpen, setMenuOpen] = useState(false);
 
   // ── Load ────────────────────────────────────────────────────────────────
@@ -259,9 +267,13 @@ const AdminShowDetail = () => {
 
         const s = showData as any;
         setShowName(s.name || "");
-        setFormat(s.format || "buehnenshow");
+        setFormat(s.format || "abendshow");
+        setShowTyp(s.show_typ || "individuell");
         setStatus(s.status || "entwurf");
         setDauer(s.zieldauer ?? s.dauer ?? 45);
+        setPreis(s.preis ?? null);
+        setBeschreibungKunde(s.beschreibung_kunde || "");
+        setKonzeptKundentext(s.konzept_kundentext || "");
         setBeschreibung(s.beschreibung || s.konzept_kundentext || "");
 
         // Phasen
@@ -737,6 +749,96 @@ const AdminShowDetail = () => {
 
       {/* ── Tab content ── */}
       <div className="min-h-[400px]">
+        {/* ═══ TAB: Übersicht ═══ */}
+        {activeTab === "uebersicht" && (
+          <div className="space-y-5">
+            {/* Quick Actions */}
+            <div className="flex items-center gap-2">
+              <button onClick={() => navigate(`/admin/programm/shows/${id}/edit`)}
+                className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80">
+                <Pencil className="w-4 h-4" /> Im Editor bearbeiten
+              </button>
+            </div>
+
+            {/* Info-Karten */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="rounded-xl border border-border/20 p-4">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Format</p>
+                <p className="text-sm font-semibold">{FORMAT_LABELS[format] || format}</p>
+              </div>
+              <div className="rounded-xl border border-border/20 p-4">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Art</p>
+                <p className="text-sm font-semibold">{showTyp === "vorlage" ? "Vorlage" : showTyp === "eigenes-programm" ? "Eigenes Programm" : "Individuell"}</p>
+              </div>
+              <div className="rounded-xl border border-border/20 p-4">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Dauer</p>
+                <p className="text-sm font-semibold">{dauer} Min.</p>
+              </div>
+              <div className="rounded-xl border border-border/20 p-4">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Preis</p>
+                <p className="text-sm font-semibold">{preis ? `${preis.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €` : "Nicht festgelegt"}</p>
+              </div>
+            </div>
+
+            {/* Preis + Kundenbeschreibung bearbeiten */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className={labelCls}>Preis (€)</label>
+                <input type="number" value={preis ?? ""} onChange={e => setPreis(e.target.value ? parseFloat(e.target.value) : null)}
+                  placeholder="z.B. 950" step="0.01" min="0" className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Kundenbeschreibung (für Angebote)</label>
+                <input value={beschreibungKunde} onChange={e => setBeschreibungKunde(e.target.value)}
+                  placeholder="Kurze Beschreibung für den Kunden…" className={inputCls} />
+              </div>
+            </div>
+
+            {/* Kundentext */}
+            {konzeptKundentext && (
+              <div>
+                <label className={labelCls}>Kundentext</label>
+                <div className="rounded-xl bg-muted/20 border border-border/20 p-4 text-sm text-muted-foreground whitespace-pre-wrap">{konzeptKundentext}</div>
+              </div>
+            )}
+
+            {/* Effekte-Zusammenfassung */}
+            {phasen.length > 0 && (
+              <div>
+                <label className={labelCls}>Ablauf ({phasen.length} Phasen)</label>
+                <div className="space-y-1">
+                  {phasen.map((p, i) => {
+                    const effs = p.effektIds.map(eid => allEffekte.find(e => e.id === eid)).filter(Boolean) as Effekt[];
+                    return (
+                      <div key={p._id} className="flex items-center justify-between px-3 py-2 rounded-lg bg-muted/10">
+                        <span className="text-sm font-medium">{p.label}</span>
+                        <span className="text-xs text-muted-foreground">{effs.length} Effekte · {effs.reduce((s, e) => s + e.dauer, 0)} Min.</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Speichern */}
+            <button onClick={async () => {
+              setSaving(true);
+              try {
+                await supabase.from("shows_intern").update({
+                  preis: preis ?? null,
+                  beschreibung_kunde: beschreibungKunde || null,
+                  show_typ: showTyp,
+                  updated_at: new Date().toISOString(),
+                }).eq("id", id);
+                setMessage({ type: "ok", text: "Gespeichert!" });
+              } catch { setMessage({ type: "err", text: "Fehler beim Speichern" }); }
+              setSaving(false);
+            }} disabled={saving} className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 disabled:opacity-50">
+              <Save className="w-4 h-4" /> {saving ? "Speichert…" : "Speichern"}
+            </button>
+          </div>
+        )}
+
         {/* ═══ TAB: Ablauf ═══ */}
         {activeTab === "ablauf" && (
           <div className="space-y-4">

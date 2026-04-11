@@ -680,8 +680,8 @@ const AdminShowEditor = () => {
     <AdminLayout title={isNew ? "Neues Konzept" : name || "Konzept"} subtitle={FORMAT_OPTIONS.find(f => f.value === format)?.label || "Show-Ablauf planen"}>
       {/* Back + Actions */}
       <div className="flex items-center justify-between mb-5">
-        <Link to="/admin/programm/shows" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="w-4 h-4" /> Zurück
+        <Link to={isNew ? "/admin/programm/shows" : `/admin/programm/shows/${id}`} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="w-4 h-4" /> {isNew ? "Zurück" : "Zur Übersicht"}
         </Link>
         <div className="flex items-center gap-2">
           {message && <span className={`text-xs ${message.startsWith("Fehler") ? "text-destructive" : "text-green-600"}`}>{message}</span>}
