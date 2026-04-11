@@ -874,7 +874,7 @@ const AdminBookingDetail = () => {
   const isRejected = status === "abgelehnt" || event?.status === "storniert";
   const pipelineStep = getCurrentPipelineStep(status, request.event_id || null, event?.status || null);
   const pipelineIdx = getPipelineIndex(pipelineStep);
-  const isArchived = event?.status === "abgeschlossen" || status === "archiviert";
+  const isArchived = event?.status === "abgeschlossen" || event?.status === "storniert" || status === "archiviert" || status === "storniert" || status === "abgelehnt";
 
   return (
     <>
@@ -882,11 +882,21 @@ const AdminBookingDetail = () => {
       title={anlass || "Anfrage"}
       subtitle={displayFirma ? `${displayCustomerName} · ${displayFirma}` : displayCustomerName}
     >
-      {/* Archived banner */}
+      {/* Archived/Storniert banner */}
       {isArchived && (
-        <div className="mb-4 px-4 py-3 rounded-xl bg-muted/30 border border-border/20 text-sm text-muted-foreground flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-          Dieser Vorgang ist abgeschlossen und kann nur noch eingesehen werden.
+        <div className={`mb-4 px-4 py-3 rounded-xl border text-sm flex items-center gap-2 ${
+          event?.status === "storniert" || status === "storniert" || status === "abgelehnt"
+            ? "bg-red-50 border-red-200 text-red-700"
+            : "bg-muted/30 border-border/20 text-muted-foreground"
+        }`}>
+          <CheckCircle2 className={`w-4 h-4 shrink-0 ${
+            event?.status === "storniert" || status === "storniert" || status === "abgelehnt" ? "text-red-500" : "text-green-500"
+          }`} />
+          {event?.status === "storniert" || status === "storniert"
+            ? "Dieser Vorgang wurde storniert und kann nur noch eingesehen werden."
+            : status === "abgelehnt"
+            ? "Diese Anfrage wurde abgelehnt und kann nur noch eingesehen werden."
+            : "Dieser Vorgang ist abgeschlossen und kann nur noch eingesehen werden."}
         </div>
       )}
 

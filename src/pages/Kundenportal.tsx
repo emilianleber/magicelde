@@ -880,69 +880,8 @@ const Kundenportal = () => {
         </div>
       )}
 
-      {/* Portal tab bar — sticky below main site navigation */}
-      <div className="sticky top-16 z-30 bg-foreground/[0.97] backdrop-blur-xl border-b border-white/10 shadow-sm">
-        <div className="container px-4 sm:px-6 max-w-5xl mx-auto">
-          <div className="flex items-center justify-between gap-4 h-14">
-            {/* Customer info */}
-            <div className="flex items-center gap-2 shrink-0">
-              <AvatarDisplay name={displayName} avatarUrl={customer?.avatar_url} size="sm" />
-              <div className="hidden sm:block">
-                <p className="font-sans text-xs font-semibold text-white leading-none">{displayName}</p>
-                {kundennummer && <p className="font-sans text-[10px] text-white/40">#{kundennummer}</p>}
-              </div>
-            </div>
-
-            {/* Tab navigation — horizontal scroll on mobile */}
-            <nav className="flex items-center gap-1 overflow-x-auto flex-1 mx-2" style={{ scrollbarWidth: "none" }}>
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => { setActiveTab(tab.id); window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }); }}
-                  className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium whitespace-nowrap shrink-0 transition-all ${
-                    activeTab === tab.id
-                      ? "bg-white text-foreground"
-                      : "text-white/60 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  <tab.icon className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">{tab.label}</span>
-                  <span className="sm:hidden">{tab.label}</span>
-                  {tab.badge !== undefined && tab.badge > 0 && (
-                    <span className="min-w-[16px] h-4 rounded-full bg-accent text-[9px] font-bold text-white flex items-center justify-center px-1">
-                      {tab.badge > 9 ? "9+" : tab.badge}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </nav>
-
-            {/* Refresh */}
-            <button
-              onClick={triggerRefresh}
-              title="Inhalte aktualisieren"
-              className="shrink-0 flex items-center gap-1.5 font-sans text-xs text-white/50 hover:text-white transition-colors"
-            >
-              <RotateCcw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-              <span className="hidden sm:inline">Aktualisieren</span>
-            </button>
-
-            {/* Logout */}
-            {!isAdminPreview && (
-              <button
-                onClick={logout}
-                className="shrink-0 flex items-center gap-1.5 font-sans text-xs text-white/50 hover:text-white transition-colors"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Abmelden</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* Main content */}
-      <section className="relative min-h-screen pt-28 pb-20">
+      <section className="relative min-h-screen pt-24 pb-20">
         {/* Decorative background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/[0.06] blur-3xl" />
@@ -951,12 +890,81 @@ const Kundenportal = () => {
         </div>
         <div className="container px-4 sm:px-6 max-w-4xl mx-auto relative">
 
+          {/* ── Portal Header ── */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <AvatarDisplay name={displayName} avatarUrl={customer?.avatar_url} size="md" />
+              <div>
+                <h1 className="font-display text-lg font-bold text-foreground">{displayName}</h1>
+                {kundennummer && <p className="font-sans text-xs text-muted-foreground">Kundennr. {kundennummer}</p>}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={triggerRefresh} title="Aktualisieren"
+                className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors">
+                <RotateCcw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+              </button>
+              {!isAdminPreview && (
+                <button onClick={logout}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors">
+                  <LogOut className="w-3.5 h-3.5" /> Abmelden
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* ── Tab Navigation ── */}
+          <div className="flex items-center gap-1 bg-muted/40 rounded-2xl p-1.5 mb-6 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => { setActiveTab(tab.id); window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }); }}
+                className={`relative flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap shrink-0 transition-all ${
+                  activeTab === tab.id
+                    ? "bg-white text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <tab.icon className="w-3.5 h-3.5" />
+                {tab.label}
+                {tab.badge !== undefined && tab.badge > 0 && (
+                  <span className="min-w-[16px] h-4 rounded-full bg-accent text-[9px] font-bold text-white flex items-center justify-center px-1">
+                    {tab.badge > 9 ? "9+" : tab.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+
         {/* ── DASHBOARD ── */}
         {activeTab === "dashboard" && (
           <div className="space-y-5">
 
             {/* ── EVENT HERO ── */}
-            {currentEvent && currentEvent.status === "abgeschlossen" ? (
+            {currentEvent && currentEvent.status === "storniert" ? (
+              /* ── STORNIERT ── */
+              <div className="relative overflow-hidden rounded-3xl bg-[#08080d] p-6 sm:p-8 text-white">
+                <div className="relative z-10 text-center py-4">
+                  <div className="text-4xl mb-3">😔</div>
+                  <h1 className="font-display text-2xl sm:text-3xl font-bold mb-2 text-white">Event storniert</h1>
+                  <p className="font-sans text-sm text-white/60 mb-6 max-w-md mx-auto">
+                    Leider wurde dieses Event storniert. Falls Sie Fragen haben oder eine neue Anfrage stellen möchten, bin ich gerne für Sie da.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <Link to="/anfrage"
+                      className="inline-flex items-center gap-2 bg-accent text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity">
+                      <ArrowRight className="w-4 h-4" /> Neue Anfrage senden
+                    </Link>
+                    <a href="mailto:el@magicel.de"
+                      className="inline-flex items-center gap-2 bg-white/10 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-white/20 transition-colors">
+                      <Mail className="w-4 h-4" /> Kontakt aufnehmen
+                    </a>
+                  </div>
+                </div>
+                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-red-500/10 blur-3xl pointer-events-none" />
+              </div>
+
+            ) : currentEvent && currentEvent.status === "abgeschlossen" ? (
               /* ── ABGESCHLOSSEN: Danke + Bewertung + Neue Anfrage ── */
               <div className="relative overflow-hidden rounded-3xl bg-[#08080d] p-6 sm:p-8 text-white">
                 <div className="relative z-10 text-center py-4">
