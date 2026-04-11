@@ -44,7 +44,7 @@ const AdminCustomers = () => {
   const [activeCustomerIds, setActiveCustomerIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
-  const [viewFilter, setViewFilter] = useState<ViewFilter>("aktiv");
+  const [viewFilter, setViewFilter] = useState<ViewFilter>("alle");
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleting, setDeleting] = useState(false);
