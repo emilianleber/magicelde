@@ -683,12 +683,10 @@ const AdminShowDetail = () => {
             </span>
           )}
           <button
-            onClick={handleSave}
-            disabled={saving}
-            className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 disabled:opacity-50"
+            onClick={() => navigate(`/admin/programm/shows/${id}/edit`)}
+            className="inline-flex items-center gap-1.5 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 px-3 py-2 transition-colors"
           >
-            <Save className="w-4 h-4" />
-            {saving ? "Speichert..." : "Speichern"}
+            <Pencil className="w-3.5 h-3.5" /> Bearbeiten
           </button>
 
           {/* Three-dot menu */}
@@ -757,14 +755,6 @@ const AdminShowDetail = () => {
         {/* ═══ TAB: Übersicht ═══ */}
         {activeTab === "uebersicht" && (
           <div className="space-y-5">
-            {/* Quick Actions */}
-            <div className="flex items-center gap-2">
-              <button onClick={() => navigate(`/admin/programm/shows/${id}/edit`)}
-                className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80">
-                <Pencil className="w-4 h-4" /> Im Editor bearbeiten
-              </button>
-            </div>
-
             {/* Info-Karten */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="rounded-xl border border-border/20 p-4">
@@ -781,21 +771,7 @@ const AdminShowDetail = () => {
               </div>
               <div className="rounded-xl border border-border/20 p-4">
                 <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Preis</p>
-                <p className="text-sm font-semibold">{preis ? `${preis.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €` : "Nicht festgelegt"}</p>
-              </div>
-            </div>
-
-            {/* Preis + Kundenbeschreibung bearbeiten */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className={labelCls}>Preis (€)</label>
-                <input type="number" value={preis ?? ""} onChange={e => setPreis(e.target.value ? parseFloat(e.target.value) : null)}
-                  placeholder="z.B. 950" step="0.01" min="0" className={inputCls} />
-              </div>
-              <div>
-                <label className={labelCls}>Kundenbeschreibung (für Angebote)</label>
-                <input value={beschreibungKunde} onChange={e => setBeschreibungKunde(e.target.value)}
-                  placeholder="Kurze Beschreibung für den Kunden…" className={inputCls} />
+                <p className="text-sm font-semibold">{preis ? `${preis.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €` : "–"}</p>
               </div>
             </div>
 
@@ -826,21 +802,6 @@ const AdminShowDetail = () => {
             )}
 
             {/* Speichern */}
-            <button onClick={async () => {
-              setSaving(true);
-              try {
-                await supabase.from("shows_intern").update({
-                  preis: preis ?? null,
-                  beschreibung_kunde: beschreibungKunde || null,
-                  show_typ: showTyp,
-                  updated_at: new Date().toISOString(),
-                }).eq("id", id);
-                setMessage({ type: "ok", text: "Gespeichert!" });
-              } catch { setMessage({ type: "err", text: "Fehler beim Speichern" }); }
-              setSaving(false);
-            }} disabled={saving} className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 disabled:opacity-50">
-              <Save className="w-4 h-4" /> {saving ? "Speichert…" : "Speichern"}
-            </button>
           </div>
         )}
 
