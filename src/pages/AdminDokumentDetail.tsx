@@ -709,6 +709,7 @@ export default function AdminDokumentDetail() {
       const autoMailTypen = ["angebot", "abschlagsrechnung", "schlussrechnung", "rechnung", "mahnung"];
       const skipStatusMail = !autoMailTypen.includes(doc.typ);
 
+      // Request-Status aktualisieren (nur bei Angebot/AB)
       if (doc.requestId) {
         let reqStatus: string | null = null;
         if (doc.typ === "angebot") reqStatus = "angebot_gesendet";
@@ -721,15 +722,18 @@ export default function AdminDokumentDetail() {
             mailRecordId = doc.requestId;
           }
         }
-      } else if (doc.eventId) {
+      }
+
+      // Event-Status aktualisieren (bei Rechnungen, Mahnungen — auch wenn requestId existiert)
+      if (doc.eventId) {
         let eventStatus: string | null = null;
-        if (doc.typ === "auftragsbestaetigung") eventStatus = "vertrag_gesendet";
+        if (doc.typ === "auftragsbestaetigung" && !doc.requestId) eventStatus = "vertrag_gesendet";
         else if (doc.typ === "rechnung" || doc.typ === "abschlagsrechnung" || doc.typ === "schlussrechnung") eventStatus = "rechnung_gesendet";
         else if (doc.typ === "mahnung") eventStatus = "rechnung_faellig";
 
         if (eventStatus) {
           await supabase.from("portal_events").update({ status: eventStatus }).eq("id", doc.eventId);
-          if (!skipStatusMail) {
+          if (!skipStatusMail && !mailType) {
             mailType = "event";
             mailRecordId = doc.eventId;
           }
@@ -745,7 +749,7 @@ export default function AdminDokumentDetail() {
           if (token) {
             const mailRes = await supabase.functions.invoke("admin-send-status-mail", {
               headers: { Authorization: `Bearer ${token}` },
-              body: { type: mailType, recordId: mailRecordId, dokumentTyp: doc.typ },
+              body: { type: mailType, recordId: mailRecordId, dokumentTyp: doc.typ, faelligAm: doc.faelligAm, dokumentNummer: doc.nummer },
             });
             if (mailRes.error) console.warn("Status-Mail Fehler:", mailRes.error);
           }

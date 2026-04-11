@@ -432,14 +432,19 @@ const eventMailTemplate = (event: any, customerName: string, email: string, days
 
     case "rechnung_gesendet":
       if (dokumentTyp === "abschlagsrechnung") {
+        const faelligText = faelligAm ? `Bitte überweisen Sie den Betrag bis zum <strong>${fmtDatum(faelligAm)}</strong>.` : "Bitte überweisen Sie den Betrag innerhalb der angegebenen Frist.";
+        const nrText = dokumentNummer ? ` (${dokumentNummer})` : "";
         return {
           to: email,
-          subject: "Ihre Abschlagsrechnung ist bereit – Emilian Leber",
+          subject: `Ihre Abschlagsrechnung${nrText} ist bereit – Emilian Leber`,
           html: getEmailShell(
             "Abschlagsrechnung",
             "Ihre Abschlagsrechnung ist bereit.",
-            `Hallo ${gruss}, ich habe eine Abschlagsrechnung für Ihr Event erstellt. Diese steht in Ihrem Kundenportal zum Download bereit. Bitte überweisen Sie den Teilbetrag innerhalb der angegebenen Frist.`,
+            `Hallo ${gruss}, ich habe eine Abschlagsrechnung für Ihr Event erstellt. Diese steht in Ihrem Kundenportal zum Download bereit.`,
             `${statusBadge("✦ Abschlagsrechnung", "#2563eb", "#eff6ff")}${infoTable(rows)}
+            <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#52525b;font-family:${FONT};">
+              ${faelligText}
+            </p>
             <p style="margin:0;font-size:14px;line-height:1.75;color:#71717a;font-family:${FONT};">
               Die Schlussrechnung erhalten Sie nach dem Event.
             </p>`
@@ -617,7 +622,7 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const { type, recordId, customerId, changeRequestId, days, dokumentTyp, statusOverride } = body;
+    const { type, recordId, customerId, changeRequestId, days, dokumentTyp, statusOverride, faelligAm, dokumentNummer } = body;
 
     if (!type) {
       return new Response(JSON.stringify({ error: "type fehlt" }), {
