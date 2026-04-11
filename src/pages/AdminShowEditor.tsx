@@ -1475,7 +1475,7 @@ const AdminShowEditor = () => {
               </button>
             ) : (
               <button
-                onClick={async () => { await handleSave(); setMessage("Konzept gespeichert!"); }}
+                onClick={async () => { try { await handleSave(); } catch {} navigate(`/admin/programm/shows/${id}`); }}
                 disabled={saving}
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-bold hover:bg-green-700 disabled:opacity-50"
               >
