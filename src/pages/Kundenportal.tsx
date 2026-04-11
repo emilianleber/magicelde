@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
+import portraitImg from "@/assets/magician-portrait.jpg";
 import {
   Calendar,
   FileText,
@@ -859,15 +860,15 @@ const Kundenportal = () => {
       )}
 
       {/* Portal tab bar — sticky below main site navigation */}
-      <div className="sticky top-16 z-30 bg-white/90 backdrop-blur-xl border-b border-black/[0.06] shadow-sm">
+      <div className="sticky top-16 z-30 bg-foreground/[0.97] backdrop-blur-xl border-b border-white/10 shadow-sm">
         <div className="container px-4 sm:px-6 max-w-5xl mx-auto">
           <div className="flex items-center justify-between gap-4 h-14">
             {/* Customer info */}
             <div className="flex items-center gap-2 shrink-0">
               <AvatarDisplay name={displayName} avatarUrl={customer?.avatar_url} size="sm" />
               <div className="hidden sm:block">
-                <p className="font-sans text-xs font-semibold text-foreground leading-none">{displayName}</p>
-                {kundennummer && <p className="font-sans text-[10px] text-foreground/40">#{kundennummer}</p>}
+                <p className="font-sans text-xs font-semibold text-white leading-none">{displayName}</p>
+                {kundennummer && <p className="font-sans text-[10px] text-white/40">#{kundennummer}</p>}
               </div>
             </div>
 
@@ -879,8 +880,8 @@ const Kundenportal = () => {
                   onClick={() => { setActiveTab(tab.id); window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }); }}
                   className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium whitespace-nowrap shrink-0 transition-all ${
                     activeTab === tab.id
-                      ? "bg-accent text-white"
-                      : "text-foreground/60 hover:text-foreground hover:bg-black/[0.04]"
+                      ? "bg-white text-foreground"
+                      : "text-white/60 hover:text-white hover:bg-white/10"
                   }`}
                 >
                   <tab.icon className="w-3.5 h-3.5" />
@@ -899,7 +900,7 @@ const Kundenportal = () => {
             <button
               onClick={triggerRefresh}
               title="Inhalte aktualisieren"
-              className="shrink-0 flex items-center gap-1.5 font-sans text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="shrink-0 flex items-center gap-1.5 font-sans text-xs text-white/50 hover:text-white transition-colors"
             >
               <RotateCcw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
               <span className="hidden sm:inline">Aktualisieren</span>
@@ -909,7 +910,7 @@ const Kundenportal = () => {
             {!isAdminPreview && (
               <button
                 onClick={logout}
-                className="shrink-0 flex items-center gap-1.5 font-sans text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="shrink-0 flex items-center gap-1.5 font-sans text-xs text-white/50 hover:text-white transition-colors"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Abmelden</span>
@@ -935,10 +936,10 @@ const Kundenportal = () => {
 
             {/* ── EVENT HERO ── */}
             {currentEvent ? (
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 sm:p-8 text-white">
+              <div className="relative overflow-hidden rounded-3xl bg-[#08080d] p-6 sm:p-8 text-white">
                 <div className="relative z-10">
                   <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/50 mb-2">Ihr Event</p>
-                  <h1 className="font-display text-2xl sm:text-3xl font-bold">{currentEvent.title}</h1>
+                  <h1 className="font-display text-2xl sm:text-3xl font-bold"><span className="text-gradient">{currentEvent.title}</span></h1>
                   <div className="flex flex-wrap gap-x-5 gap-y-2 mt-3 text-sm text-white/70">
                     {currentEvent.event_date && (
                       <span className="flex items-center gap-1.5">
@@ -1546,21 +1547,21 @@ const Kundenportal = () => {
             })()}
 
             {/* Contact strip */}
-            <div className="rounded-2xl border border-black/[0.06] bg-white/80 shadow-sm p-5 flex items-center gap-4">
+            <div className="rounded-2xl bg-[#08080d] p-5 flex items-center gap-4">
               <img
-                src="https://www.magicel.de/assets/hero-magic-D6fUzBvI.jpg"
+                src={portraitImg}
                 alt="Emilian Leber"
-                className="w-11 h-11 rounded-full object-cover object-top shrink-0 ring-2 ring-accent/20"
+                className="w-12 h-12 rounded-full object-cover object-top shrink-0 ring-2 ring-white/20"
               />
               <div className="flex-1 min-w-0">
-                <p className="font-sans text-sm font-semibold text-foreground">Emilian Leber</p>
-                <p className="font-sans text-xs text-muted-foreground">Ihr persönlicher Ansprechpartner</p>
+                <p className="font-sans text-sm font-semibold text-white">Emilian Leber</p>
+                <p className="font-sans text-xs text-white/50">Ihr persönlicher Ansprechpartner</p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <a href="mailto:el@magicel.de" className="w-10 h-10 rounded-xl bg-black/[0.03] flex items-center justify-center text-muted-foreground hover:text-accent hover:bg-accent/10 transition-all active:scale-95">
+                <a href="mailto:el@magicel.de" className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/20 transition-all active:scale-95">
                   <Mail className="w-4 h-4" />
                 </a>
-                <a href="tel:+4915563744696" className="w-10 h-10 rounded-xl bg-black/[0.03] flex items-center justify-center text-muted-foreground hover:text-accent hover:bg-accent/10 transition-all active:scale-95">
+                <a href="tel:+4915563744696" className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/20 transition-all active:scale-95">
                   <Phone className="w-4 h-4" />
                 </a>
               </div>
@@ -2253,7 +2254,7 @@ const Kundenportal = () => {
                         {/* Header row - always visible */}
                         <div className="px-5 py-3.5 flex items-center gap-3">
                           {isFromAdmin ? (
-                            <img src="https://www.magicel.de/assets/hero-magic-D6fUzBvI.jpg" alt="EL" className="w-9 h-9 rounded-full object-cover object-top shrink-0" />
+                            <img src={portraitImg} alt="EL" className="w-9 h-9 rounded-full object-cover object-top shrink-0" />
                           ) : (
                             <div className="w-9 h-9 rounded-full bg-black/[0.04] text-muted-foreground flex items-center justify-center shrink-0 text-xs font-bold">
                               {customer?.name?.[0]?.toUpperCase() || "K"}
