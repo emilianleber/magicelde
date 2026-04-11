@@ -189,7 +189,7 @@ interface PhaseProps {
   sensors: ReturnType<typeof useSensors>;
 }
 
-function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, isDraggingFromSidebar, onToggle, onRemove, onUpdate, onAddEffekt, onRemoveEffekt, onReorderEffekte, sensors }: PhaseProps) {
+function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, isDraggingFromSidebar, musikItems, onToggle, onRemove, onUpdate, onAddEffekt, onRemoveEffekt, onReorderEffekte, sensors }: PhaseProps) {
   const phaseEffekte = phase.effektIds.map(eid => allEffekte.find(e => e.id === eid)).filter(Boolean) as Effekt[];
   const phaseDauer = phaseEffekte.reduce((s, e) => s + e.dauer, 0);
   const [musikNotiz, setMusikNotiz] = useState("");
