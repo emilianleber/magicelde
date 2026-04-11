@@ -383,8 +383,15 @@ const AdminShowEditor = () => {
     { num: 1, label: "Basis" },
     { num: 2, label: format === "close-up" ? "Einsatz" : format === "workshop" ? "Workshop" : "Planung" },
     { num: 3, label: format === "close-up" ? "Effekt-Pool" : format === "workshop" ? "Übungen" : "Ablauf" },
-    { num: 4, label: "Texte & Technik" },
+    { num: 4, label: "Texte" },
+    { num: 5, label: "Musik" },
+    { num: 6, label: "Kalkulation" },
+    { num: 7, label: "Team" },
   ];
+
+  // Kalkulation
+  const [kalkulationPositionen, setKalkulationPositionen] = useState<{ id: string; label: string; kategorie: string; betrag: number }[]>([]);
+  const KOSTEN_KATEGORIEN = ["Anfahrt", "GEMA", "Material", "Technik-Miete", "Helfer", "Requisiten", "Versicherung", "Sonstiges"];
 
   // Sidebar filter
   const [effektSearch, setEffektSearch] = useState("");
@@ -471,6 +478,7 @@ const AdminShowEditor = () => {
           // Close-Up Daten aus budget laden
           const meta = show.budget as any;
           if (meta?.selectedTechnik) setSelectedTechnik(meta.selectedTechnik);
+          if (meta?.kalkulationPositionen) setKalkulationPositionen(meta.kalkulationPositionen);
           // Musik wird pro Phase in PhaseCard verwaltet
           if (meta?.closeupGaeste) setCloseupGaeste(meta.closeupGaeste);
           if (meta?.closeupPersonenProGruppe) setCloseupPersonenProGruppe(meta.closeupPersonenProGruppe);
@@ -683,8 +691,8 @@ const AdminShowEditor = () => {
       const cleanPhasen: ShowPhase[] = phasen.map(({ _id, ...rest }) => rest);
       // Close-Up Meta-Daten als budget JSON speichern
       const closeupMeta = isCloseUp
-        ? { closeupGaeste, closeupPersonenProGruppe, closeupGruppen, closeupDauerProGruppe, selectedTechnik }
-        : { selectedTechnik };
+        ? { closeupGaeste, closeupPersonenProGruppe, closeupGruppen, closeupDauerProGruppe, selectedTechnik, kalkulationPositionen }
+        : { selectedTechnik, kalkulationPositionen };
       const payload = {
         name: name.trim(), format, showTyp, status, anlass: anlass.trim(), zieldauer: zieldauerMax,
         preis: preis ?? undefined, beschreibungKunde: konzeptKundentext.trim() || undefined,
@@ -1303,10 +1311,10 @@ const AdminShowEditor = () => {
           </div>
           )}
 
-          {/* ══ STEP 4: Texte & Technik ══ */}
+          {/* ══ STEP 4: Texte ══ */}
           {wizardStep === 4 && (
           <div className="space-y-5">
-          <h2 className="text-lg font-bold">Texte & Technik</h2>
+          <h2 className="text-lg font-bold">Texte & Beschreibungen</h2>
 
           {/* Beschreibungstexte */}
           <div className="grid sm:grid-cols-2 gap-4">
@@ -1364,6 +1372,150 @@ const AdminShowEditor = () => {
           </div>
           )}
 
+          {/* ══ STEP 5: Musik & GEMA ══ */}
+          {wizardStep === 5 && (
+          <div className="space-y-5">
+            <h2 className="text-lg font-bold">Musik & GEMA</h2>
+            <p className="text-xs text-muted-foreground">Musik-Tracks und Einspieler für diese Show. GEMA-pflichtige Titel hier dokumentieren.</p>
+
+            {musikItems.length > 0 ? (
+              <div className="space-y-2">
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Tracks aus Bibliothek</label>
+                <div className="space-y-1 max-h-64 overflow-y-auto rounded-xl bg-muted/10 border border-border/20 p-2">
+                  {musikItems.map(m => (
+                    <label key={m.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer hover:bg-muted/20">
+                      <Music className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                      <span className="text-xs font-medium flex-1">{m.titel}</span>
+                      {m.kuenstler && <span className="text-[10px] text-muted-foreground">{m.kuenstler}</span>}
+                      <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-muted/40 text-muted-foreground">{m.kategorie}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-border/30 p-6 text-center">
+                <Music className="w-6 h-6 text-muted-foreground/30 mx-auto mb-2" />
+                <p className="text-xs text-muted-foreground">Noch keine Tracks in der <a href="/admin/programm/musik" className="text-accent hover:text-accent/80">Musik-Bibliothek</a>.</p>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Zusätzliche Musik-Notizen</label>
+              <textarea rows={3} placeholder="Weitere Musik, Einspieler, Playlists…" className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none" />
+            </div>
+          </div>
+          )}
+
+          {/* ══ STEP 6: Kalkulation ══ */}
+          {wizardStep === 6 && (
+          <div className="space-y-5">
+            <h2 className="text-lg font-bold">Kalkulation</h2>
+
+            {/* Einnahmen */}
+            <div className="rounded-xl border border-green-200 bg-green-50/30 p-5">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-green-700 mb-3">Einnahmen</h3>
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Preis (Honorar)</label>
+                  <div className="flex items-center gap-2">
+                    <input type="number" value={preis ?? ""} onChange={e => setPreis(e.target.value ? parseFloat(e.target.value) : null)}
+                      placeholder="z.B. 950" step="0.01" min="0" className="w-40 rounded-xl bg-white border border-border/20 px-3 py-2 text-sm" />
+                    <span className="text-sm text-muted-foreground">€</span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] text-muted-foreground">Gesamt Einnahmen</p>
+                  <p className="text-2xl font-bold text-green-700">{(preis || 0).toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Ausgaben */}
+            <div className="rounded-xl border border-red-200 bg-red-50/30 p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-red-700">Ausgaben</h3>
+                <button onClick={() => setKalkulationPositionen(prev => [...prev, { id: crypto.randomUUID(), label: "", kategorie: "Sonstiges", betrag: 0 }])}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-red-600 hover:text-red-800">
+                  <Plus className="w-3.5 h-3.5" /> Position
+                </button>
+              </div>
+
+              {/* Vordefinierte Kategorien */}
+              <div className="space-y-2">
+                {kalkulationPositionen.map((pos, i) => (
+                  <div key={pos.id} className="flex items-center gap-2">
+                    <select value={pos.kategorie} onChange={e => setKalkulationPositionen(prev => prev.map(p => p.id === pos.id ? { ...p, kategorie: e.target.value } : p))}
+                      className="w-36 rounded-lg bg-white border border-border/20 px-2 py-1.5 text-xs">
+                      {KOSTEN_KATEGORIEN.map(k => <option key={k}>{k}</option>)}
+                    </select>
+                    <input value={pos.label} onChange={e => setKalkulationPositionen(prev => prev.map(p => p.id === pos.id ? { ...p, label: e.target.value } : p))}
+                      placeholder="Beschreibung" className="flex-1 rounded-lg bg-white border border-border/20 px-2 py-1.5 text-xs" />
+                    <input type="number" value={pos.betrag || ""} onChange={e => setKalkulationPositionen(prev => prev.map(p => p.id === pos.id ? { ...p, betrag: parseFloat(e.target.value) || 0 } : p))}
+                      placeholder="0" step="0.01" className="w-24 rounded-lg bg-white border border-border/20 px-2 py-1.5 text-xs text-right" />
+                    <span className="text-xs text-muted-foreground">€</span>
+                    <button onClick={() => setKalkulationPositionen(prev => prev.filter(p => p.id !== pos.id))}
+                      className="p-1 text-muted-foreground hover:text-destructive"><X className="w-3 h-3" /></button>
+                  </div>
+                ))}
+                {kalkulationPositionen.length === 0 && (
+                  <p className="text-xs text-muted-foreground/50 italic text-center py-3">Keine Ausgaben-Positionen — klicke + Position</p>
+                )}
+              </div>
+
+              <div className="flex justify-end mt-3 pt-3 border-t border-red-200">
+                <div className="text-right">
+                  <p className="text-[10px] text-muted-foreground">Gesamt Ausgaben</p>
+                  <p className="text-xl font-bold text-red-700">{kalkulationPositionen.reduce((s, p) => s + p.betrag, 0).toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Gewinn + Stundensatz */}
+            {(() => {
+              const einnahmen = preis || 0;
+              const ausgaben = kalkulationPositionen.reduce((s, p) => s + p.betrag, 0);
+              const gewinn = einnahmen - ausgaben;
+              const gesamtStunden = (zieldauerMax / 60) + 1 + 0.5; // Show + Anfahrt + Aufbau
+              const stundensatz = gesamtStunden > 0 ? gewinn / gesamtStunden : 0;
+              return (
+                <div className="grid sm:grid-cols-3 gap-3">
+                  <div className={`rounded-xl border p-4 ${gewinn >= 0 ? "border-green-200 bg-green-50/30" : "border-red-200 bg-red-50/30"}`}>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Gewinn</p>
+                    <p className={`text-2xl font-bold ${gewinn >= 0 ? "text-green-700" : "text-red-700"}`}>{gewinn.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+                  </div>
+                  <div className="rounded-xl border border-border/20 p-4">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Geschätzte Zeit</p>
+                    <p className="text-lg font-bold text-foreground">{gesamtStunden.toFixed(1)} Std.</p>
+                    <p className="text-[10px] text-muted-foreground">Show + Anfahrt + Aufbau</p>
+                  </div>
+                  <div className="rounded-xl border border-accent/20 bg-accent/5 p-4">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Stundensatz</p>
+                    <p className="text-2xl font-bold text-accent">{stundensatz.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+                    <p className="text-[10px] text-muted-foreground">Gewinn ÷ Stunden</p>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+          )}
+
+          {/* ══ STEP 7: Team ══ */}
+          {wizardStep === 7 && (
+          <div className="space-y-5">
+            <h2 className="text-lg font-bold">Team</h2>
+            <p className="text-xs text-muted-foreground">Techniker, Assistenten und andere Mitwirkende für diese Show. Team-Mitglieder werden über die <a href="/admin/programm/team" className="text-accent hover:text-accent/80">Team-Verwaltung</a> angelegt.</p>
+
+            <div className="rounded-xl border border-dashed border-border/30 p-8 text-center">
+              <Users className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">Team-Zuordnung kommt über die Detail-Seite → Team Tab</p>
+              <button onClick={() => navigate(`/admin/programm/shows/${id}`)}
+                className="mt-3 inline-flex items-center gap-1.5 text-xs text-accent font-medium hover:text-accent/80">
+                Zur Detail-Seite →
+              </button>
+            </div>
+          </div>
+          )}
+
           {/* ── Wizard Navigation ── */}
           <div className="flex items-center justify-between pt-4 border-t border-border/10">
             <button
@@ -1373,8 +1525,8 @@ const AdminShowEditor = () => {
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Zurück
             </button>
-            <span className="text-xs text-muted-foreground">Schritt {wizardStep} von 4</span>
-            {wizardStep < 4 ? (
+            <span className="text-xs text-muted-foreground">Schritt {wizardStep} von {WIZARD_STEPS.length}</span>
+            {wizardStep < 7 ? (
               <button
                 onClick={async () => { await handleSave(); setWizardStep(wizardStep + 1); }}
                 disabled={saving || (wizardStep === 1 && !name.trim())}
