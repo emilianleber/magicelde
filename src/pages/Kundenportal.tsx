@@ -435,18 +435,19 @@ const Kundenportal = () => {
   // Refresh-Funktion (auch für manuellen Refresh-Button)
   const [refreshKey, setRefreshKey] = useState(0);
   const triggerRefresh = () => setRefreshKey(k => k + 1);
+  const [silentRefresh, setSilentRefresh] = useState(false);
 
-  // Daten neu laden wenn Tab wieder aktiv wird (z.B. nach Admin-Publish in anderem Tab)
+  // Daten neu laden wenn Tab wieder aktiv wird — OHNE Loading-Screen
   useEffect(() => {
-    const onFocus = () => { if (user) triggerRefresh(); };
+    const onFocus = () => { if (user && !loading) { setSilentRefresh(true); setRefreshKey(k => k + 1); } };
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
-  }, [user]);
+  }, [user, loading]);
 
   useEffect(() => {
     if (!user) return;
     const fetchData = async () => {
-      setLoading(true);
+      if (!silentRefresh) setLoading(true);
 
       if (previewCustomerId) {
         const { data: adminEntry } = await supabase.from("portal_admins").select("id").eq("email", user.email).maybeSingle();
@@ -573,6 +574,7 @@ const Kundenportal = () => {
       }
 
       setLoading(false);
+      setSilentRefresh(false);
     };
     fetchData();
   }, [user, previewCustomerId, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -1865,7 +1867,7 @@ const Kundenportal = () => {
               return (
                 <div className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 overflow-hidden">
                   {/* Bild */}
-                  <img src={portraitImg} alt="Emilian Leber" className="w-full h-48 object-cover object-top" />
+                  <img src={closeupWalkingImg} alt="Emilian Leber bei einer Show" className="w-full h-48 object-cover object-center" />
                   <div className="p-6">
                     <p className="font-sans text-[10px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">Über Ihr Programm</p>
                     <p className="font-sans text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{combinedText}</p>
@@ -1909,7 +1911,7 @@ const Kundenportal = () => {
             <div className="space-y-3">
               <h2 className="font-display text-base font-bold text-foreground">Show-Einblick</h2>
               <div className="aspect-video rounded-2xl overflow-hidden border border-black/[0.06] shadow-sm">
-                <iframe src="https://www.youtube.com/embed/ZdIDq9VtqxU" title="Show-Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
+                <iframe src="https://www.youtube.com/embed/R0_mXGxzC9E" title="Show-Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
               </div>
             </div>
 
