@@ -256,6 +256,7 @@ const AdminBookingDetail = () => {
   const [loading, setLoading] = useState(true);
 
   const [activeDetailTab, setActiveDetailTab] = useState<"konzept" | "dokumente" | "planung" | "nachrichten">("konzept");
+  const [archivTab, setArchivTab] = useState<"dokumente" | "kommunikation">("dokumente");
   const [calendarConflicts, setCalendarConflicts] = useState<{ summary: string }[]>([]);
   // Abschlagsrechnung Dialog
   const [showAbschlagDialog, setShowAbschlagDialog] = useState(false);
@@ -894,23 +895,126 @@ const AdminBookingDetail = () => {
       title={anlass || "Anfrage"}
       subtitle={displayFirma ? `${displayCustomerName} · ${displayFirma}` : displayCustomerName}
     >
-      {/* Archived/Storniert banner */}
-      {isArchived && (
-        <div className={`mb-4 px-4 py-3 rounded-xl border text-sm flex items-center gap-2 ${
-          event?.status === "storniert" || status === "storniert" || status === "abgelehnt"
-            ? "bg-red-50 border-red-200 text-red-700"
-            : "bg-muted/30 border-border/20 text-muted-foreground"
-        }`}>
-          <CheckCircle2 className={`w-4 h-4 shrink-0 ${
-            event?.status === "storniert" || status === "storniert" || status === "abgelehnt" ? "text-red-500" : "text-green-500"
-          }`} />
-          {event?.status === "storniert" || status === "storniert"
-            ? "Dieser Vorgang wurde storniert und kann nur noch eingesehen werden."
-            : status === "abgelehnt"
-            ? "Diese Anfrage wurde abgelehnt und kann nur noch eingesehen werden."
-            : "Dieser Vorgang ist abgeschlossen und kann nur noch eingesehen werden."}
-        </div>
-      )}
+      {/* ═══ ARCHIV-ANSICHT für abgeschlossene/stornierte/abgelehnte ═══ */}
+      {isArchived && (() => {
+        const isStorno = event?.status === "storniert" || status === "storniert";
+        const isAbgelehnt = status === "abgelehnt";
+        const archivLabel = isStorno ? "Storniert" : isAbgelehnt ? "Abgelehnt" : "Abgeschlossen";
+        const archivColor = isStorno || isAbgelehnt ? "red" : "green";
+
+        // Umsatz berechnen
+        const totalBrutto = documents.reduce((s, d) => s + ((d as any).amount || (d as any).brutto || 0), 0);
+        const totalBezahlt = documents.reduce((s, d) => s + ((d as any).bezahlt_betrag || 0), 0);
+
+        return (
+          <div className="space-y-5">
+            {/* Status Banner */}
+            <div className={`px-5 py-4 rounded-2xl border flex items-center gap-3 ${
+              archivColor === "red" ? "bg-red-50 border-red-200" : "bg-green-50 border-green-200"
+            }`}>
+              <CheckCircle2 className={`w-5 h-5 shrink-0 ${archivColor === "red" ? "text-red-500" : "text-green-500"}`} />
+              <div>
+                <p className={`text-sm font-semibold ${archivColor === "red" ? "text-red-800" : "text-green-800"}`}>{archivLabel}</p>
+                <p className={`text-xs ${archivColor === "red" ? "text-red-600" : "text-green-600"}`}>Dieser Vorgang kann nur noch eingesehen werden.</p>
+              </div>
+            </div>
+
+            {/* Zusammenfassung */}
+            <div className="rounded-2xl border border-border/20 overflow-hidden">
+              <div className="px-5 py-4 bg-muted/5 border-b border-border/10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-foreground/10 flex items-center justify-center text-sm font-bold">
+                      {(displayCustomerName || "?")[0].toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-foreground">{displayCustomerName}</p>
+                      {displayFirma && <p className="text-xs text-muted-foreground">{displayFirma}</p>}
+                    </div>
+                  </div>
+                  {customer && (
+                    <button onClick={() => navigate(`/admin/customers/${customer.id}`)} className="text-xs text-accent hover:text-accent/80 font-medium">
+                      Kundenkonto →
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-border/10">
+                {[
+                  { label: "Anlass", value: anlass || "–" },
+                  { label: "Datum", value: datum ? new Date(datum + "T00:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "short", year: "numeric" }) : "–" },
+                  { label: "Ort", value: ort || "–" },
+                  { label: "Gäste", value: gaeste || "–" },
+                ].map((item, i) => (
+                  <div key={i} className="bg-background px-4 py-3">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">{item.label}</p>
+                    <p className="text-sm font-medium text-foreground mt-0.5">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Umsatz */}
+            <div className="grid sm:grid-cols-2 gap-3">
+              <div className="rounded-xl border border-border/20 px-5 py-4">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Gesamtbetrag</p>
+                <p className="text-xl font-bold text-foreground mt-1">{totalBrutto.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+              </div>
+              <div className="rounded-xl border border-border/20 px-5 py-4">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Bezahlt</p>
+                <p className={`text-xl font-bold mt-1 ${totalBezahlt >= totalBrutto ? "text-green-600" : "text-amber-600"}`}>
+                  {totalBezahlt.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €
+                </p>
+              </div>
+            </div>
+
+            {/* Tabs */}
+            <div className="flex gap-1 bg-muted/40 rounded-xl p-1">
+              {(["dokumente", "kommunikation"] as const).map(t => (
+                <button key={t} onClick={() => setArchivTab(t)}
+                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors ${archivTab === t ? "bg-background shadow-sm text-foreground" : "text-muted-foreground"}`}>
+                  {t === "dokumente" ? "Dokumente" : "Kommunikation"}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab Content */}
+            {archivTab === "dokumente" && (
+              <div className="space-y-2">
+                {documents.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-8">Keine Dokumente vorhanden</p>
+                ) : documents.map((doc) => (
+                  <div key={doc.id} onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border/20 hover:bg-muted/10 cursor-pointer transition-colors">
+                    <FileText className="w-4 h-4 text-muted-foreground shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{doc.name || (doc as any).document_number || "Dokument"}</p>
+                      <p className="text-xs text-muted-foreground">{new Date((doc as any).created_at || "").toLocaleDateString("de-DE")}</p>
+                    </div>
+                    <span className="text-sm font-semibold tabular-nums">{((doc as any).amount || 0).toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {archivTab === "kommunikation" && (
+              <div className="space-y-2">
+                {mailHistory.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-8">Keine Nachrichten</p>
+                ) : mailHistory.map((msg) => (
+                  <div key={msg.id} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border/20">
+                    <Mail className="w-4 h-4 text-green-500 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{msg.subject || "(Kein Betreff)"}</p>
+                      <p className="text-xs text-muted-foreground">An {msg.to_email} · {new Date(msg.created_at).toLocaleDateString("de-DE")}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })()}
 
       {/* Back */}
       <div className="mb-4">
@@ -918,6 +1022,10 @@ const AdminBookingDetail = () => {
           <ArrowLeft className="w-4 h-4" /> Zurück zu Anfragen & Buchungen
         </Link>
       </div>
+
+      {/* ── Normaler Content (nur wenn NICHT archiviert) ── */}
+      {!isArchived && (
+      <>
 
       {/* ── Pipeline Bar ── */}
       {!isRejected ? (
@@ -2014,6 +2122,9 @@ const AdminBookingDetail = () => {
           {/* Interne Notizen → jetzt unter Event-Details (links) */}
         </div>
       </div>
+
+      </>
+      )}
     </AdminLayout>
 
     {/* Abschlagsrechnung Dialog */}
