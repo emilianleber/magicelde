@@ -57,10 +57,10 @@ interface CustomerMini {
 
 /* ── Pipeline stages ────────────────────────────────────────────────────────── */
 
-type PipelineStage = "neu" | "in_bearbeitung" | "angebot" | "gebucht" | "durchgefuehrt" | "abgeschlossen" | "abgelehnt" | "alle";
+type PipelineStage = "neu" | "in_bearbeitung" | "angebot" | "gebucht" | "durchgefuehrt" | "abgeschlossen" | "abgelehnt" | "storniert" | "alle";
 
 const PIPELINE_TABS: { key: PipelineStage; label: string }[] = [
-  { key: "alle", label: "Alle" },
+  { key: "alle", label: "Aktive" },
   { key: "neu", label: "Neu" },
   { key: "in_bearbeitung", label: "In Bearbeitung" },
   { key: "angebot", label: "Angebot" },
@@ -68,11 +68,16 @@ const PIPELINE_TABS: { key: PipelineStage; label: string }[] = [
   { key: "durchgefuehrt", label: "Durchgeführt" },
   { key: "abgeschlossen", label: "Abgeschlossen" },
   { key: "abgelehnt", label: "Abgelehnt" },
+  { key: "storniert", label: "Storniert" },
 ];
 
 /** Map raw request status to pipeline stage */
-const requestToPipeline = (status: string | null, eventId: string | null): PipelineStage => {
-  if (eventId) return "gebucht"; // has event = booked
+const requestToPipeline = (status: string | null, eventId: string | null, eventStatus: string | null): PipelineStage => {
+  // Event-Status hat Vorrang wenn Event existiert
+  if (eventId && eventStatus) {
+    return eventToPipeline(eventStatus);
+  }
+  if (eventId) return "gebucht";
   switch (status) {
     case "neu": return "neu";
     case "in_bearbeitung":
@@ -81,6 +86,7 @@ const requestToPipeline = (status: string | null, eventId: string | null): Pipel
     case "warte_auf_kunde": return "angebot";
     case "bestätigt": return "gebucht";
     case "abgelehnt": return "abgelehnt";
+    case "storniert": return "storniert";
     case "archiviert": return "abgeschlossen";
     default: return "neu";
   }
@@ -96,7 +102,8 @@ const eventToPipeline = (status: string | null): PipelineStage => {
     case "rechnung_gesendet":
     case "rechnung_bezahlt": return "gebucht";
     case "event_erfolgt": return "durchgefuehrt";
-    case "storniert": return "abgelehnt";
+    case "abgeschlossen": return "abgeschlossen";
+    case "storniert": return "storniert";
     default: return "gebucht";
   }
 };
@@ -214,9 +221,14 @@ const AdminBookings = () => {
     const requestEventIds = new Set(requests.filter((r) => r.event_id).map((r) => r.event_id));
     const result: BookingRow[] = [];
 
+    // Build event status map
+    const eventStatusMap: Record<string, string> = {};
+    for (const ev of events) { eventStatusMap[ev.id] = ev.status || ""; }
+
     // Add all requests
     for (const req of requests) {
       const cust = req.customer_id ? customerMap[req.customer_id] : null;
+      const evStatus = req.event_id ? (eventStatusMap[req.event_id] || null) : null;
       result.push({
         id: `req-${req.id}`,
         type: "request",
@@ -230,7 +242,7 @@ const AdminBookings = () => {
         guests: req.gaeste,
         format: req.format,
         email: req.email,
-        pipeline: requestToPipeline(req.status, req.event_id || null),
+        pipeline: requestToPipeline(req.status, req.event_id || null, evStatus),
         rawStatus: req.status,
         createdAt: req.created_at,
         deletedAt: req.deleted_at || null,
@@ -275,6 +287,8 @@ const AdminBookings = () => {
   const filtered = useMemo(() => {
     return rows.filter((row) => {
       if (row.deletedAt) return false;
+      // "Aktive" Tab: Abgeschlossen, Abgelehnt, Storniert ausblenden
+      if (pipelineFilter === "alle" && ["abgeschlossen", "abgelehnt", "storniert"].includes(row.pipeline)) return false;
       if (pipelineFilter !== "alle" && row.pipeline !== pipelineFilter) return false;
       if (search) {
         const q = search.toLowerCase();

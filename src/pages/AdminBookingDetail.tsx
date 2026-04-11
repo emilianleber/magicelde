@@ -266,7 +266,9 @@ const AdminBookingDetail = () => {
   const [angebotPositionen, setAngebotPositionen] = useState<{ bezeichnung: string; gesamt: number }[]>([]);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [dismissedWarnings, setDismissedWarnings] = useState<Set<string>>(new Set());
+  const [dismissedWarnings, setDismissedWarnings] = useState<Set<string>>(() => {
+    try { const stored = sessionStorage.getItem(`dismissed_warnings_${id}`); return stored ? new Set(JSON.parse(stored)) : new Set(); } catch { return new Set(); }
+  });
   const [converting, setConverting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -1143,7 +1145,7 @@ const AdminBookingDetail = () => {
           {!uhrzeit && datum && !dismissedWarnings.has("uhrzeit") && (
             <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center gap-2 text-xs text-amber-700 font-medium">
               <span className="flex-1">⚠️ Uhrzeit fehlt – bitte mit Kunde klären</span>
-              <button onClick={() => setDismissedWarnings(prev => new Set(prev).add("uhrzeit"))} className="p-0.5 hover:text-amber-900"><X className="w-3.5 h-3.5" /></button>
+              <button onClick={() => { const next = new Set(dismissedWarnings).add("uhrzeit"); setDismissedWarnings(next); try { sessionStorage.setItem(`dismissed_warnings_${id}`, JSON.stringify([...next])); } catch {} }} className="p-0.5 hover:text-amber-900"><X className="w-3.5 h-3.5" /></button>
             </div>
           )}
 
@@ -1151,7 +1153,7 @@ const AdminBookingDetail = () => {
           {datum && calendarConflicts.length > 0 && !dismissedWarnings.has("konflikt") && (
             <div className="p-3 rounded-xl bg-red-50 border border-red-200 flex items-center gap-2 text-xs text-red-700 font-medium">
               <span className="flex-1">🚨 Terminkonflikt am {new Date(datum).toLocaleDateString("de-DE")}: {calendarConflicts.map(c => c.summary).join(", ")}</span>
-              <button onClick={() => setDismissedWarnings(prev => new Set(prev).add("konflikt"))} className="p-0.5 hover:text-red-900"><X className="w-3.5 h-3.5" /></button>
+              <button onClick={() => { const next = new Set(dismissedWarnings).add("konflikt"); setDismissedWarnings(next); try { sessionStorage.setItem(`dismissed_warnings_${id}`, JSON.stringify([...next])); } catch {} }} className="p-0.5 hover:text-red-900"><X className="w-3.5 h-3.5" /></button>
             </div>
           )}
 

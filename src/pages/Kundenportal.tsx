@@ -227,14 +227,18 @@ const buildTimeline = (request: BookingRequest | null, event: PortalEvent | null
     const eventDone = evSt === "event_erfolgt" || evSt === "abgeschlossen";
     steps.push({ label: "Event durchgeführt", done: eventDone });
 
-    // Nach Event: Schlussrechnung
-    if (eventDone) {
-      if (event.invoice_status === "gesendet") {
-        steps.push({ label: "Schlussrechnung offen", done: false });
-      } else if (event.invoice_status === "erledigt") {
-        steps.push({ label: "Schlussrechnung bezahlt", done: true });
+    // Nach Event: nur Rechnung zeigen
+    if (evSt === "event_erfolgt") {
+      if (event.invoice_status === "erledigt") {
+        steps.push({ label: "Rechnung bezahlt", done: true });
+      } else {
+        steps.push({ label: "Rechnung offen", done: false });
       }
-      steps.push({ label: "Abgeschlossen", done: evSt === "abgeschlossen" });
+    }
+
+    // Abgeschlossen
+    if (evSt === "abgeschlossen") {
+      steps.push({ label: "Abgeschlossen", done: true });
     }
   } else {
     steps.push({ label: "Buchung", done: false });
@@ -756,6 +760,9 @@ const Kundenportal = () => {
 
   const capWords = (s?: string | null) =>
     s ? s.replace(/_/g, " ").replace(/(^|\s)\S/g, (c) => c.toUpperCase()) : "";
+
+  // Feedback/Bewertung URL (Google Review oder eigene Seite)
+  const feedbackUrl = "https://g.page/r/CQ_REVIEW_LINK/review"; // TODO: Echten Google-Review-Link einsetzen
   // Fallback: Name aus neuester Anfrage wenn Profil noch leer
   const latestReqName = (requests[0] as any)?.name;
   const displayName = capWords(customer?.name) || capWords(latestReqName) || "Kunde";
@@ -935,7 +942,63 @@ const Kundenportal = () => {
           <div className="space-y-5">
 
             {/* ── EVENT HERO ── */}
-            {currentEvent ? (
+            {currentEvent && currentEvent.status === "abgeschlossen" ? (
+              /* ── ABGESCHLOSSEN: Danke + Bewertung + Neue Anfrage ── */
+              <div className="relative overflow-hidden rounded-3xl bg-[#08080d] p-6 sm:p-8 text-white">
+                <div className="relative z-10 text-center py-4">
+                  <div className="text-4xl mb-3">✨</div>
+                  <h1 className="font-display text-2xl sm:text-3xl font-bold mb-2">
+                    <span className="text-gradient">Vielen Dank!</span>
+                  </h1>
+                  <p className="font-sans text-sm text-white/60 mb-6 max-w-md mx-auto">
+                    Es war mir eine Freude, bei Ihrem Event dabei zu sein. Ich hoffe, die Show hat Ihnen und Ihren Gästen gefallen!
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    {feedbackUrl && (
+                      <a href={feedbackUrl} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-accent text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity">
+                        <Star className="w-4 h-4" /> Bewertung abgeben
+                      </a>
+                    )}
+                    <Link to="/anfrage"
+                      className="inline-flex items-center gap-2 bg-white/10 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-white/20 transition-colors">
+                      <ArrowRight className="w-4 h-4" /> Neue Anfrage senden
+                    </Link>
+                  </div>
+                </div>
+                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
+              </div>
+
+            ) : currentEvent && currentEvent.status === "event_erfolgt" ? (
+              /* ── DURCHGEFÜHRT: Danke + Bewertung + Rechnung-Info ── */
+              <div className="relative overflow-hidden rounded-3xl bg-[#08080d] p-6 sm:p-8 text-white">
+                <div className="relative z-10">
+                  <div className="flex items-start gap-4">
+                    <div className="text-3xl">🎉</div>
+                    <div>
+                      <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/50 mb-1">Event durchgeführt</p>
+                      <h1 className="font-display text-2xl sm:text-3xl font-bold">
+                        <span className="text-gradient">Vielen Dank für den tollen Abend!</span>
+                      </h1>
+                      <p className="font-sans text-sm text-white/60 mt-2">
+                        Ich hoffe, die Show hat Ihnen und Ihren Gästen gefallen. Über eine Bewertung würde ich mich sehr freuen!
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-3 mt-5">
+                    {feedbackUrl && (
+                      <a href={feedbackUrl} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-accent text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity">
+                        <Star className="w-4 h-4" /> Bewertung abgeben
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
+              </div>
+
+            ) : currentEvent ? (
+              /* ── NORMALER EVENT HERO (vor/während Event) ── */
               <div className="relative overflow-hidden rounded-3xl bg-[#08080d] p-6 sm:p-8 text-white">
                 <div className="relative z-10">
                   <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/50 mb-2">Ihr Event</p>
