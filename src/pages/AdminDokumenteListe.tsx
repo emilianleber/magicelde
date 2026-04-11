@@ -21,11 +21,14 @@ const STATUS_CONFIG: Record<DokumentStatus, { label: string; dot: string }> = {
   storniert:    { label: "Storniert",   dot: "bg-gray-300" },
 };
 
-function StatusCell({ status }: { status: DokumentStatus }) {
+function StatusCell({ status, typ }: { status: DokumentStatus; typ?: string }) {
   const cfg = STATUS_CONFIG[status] ?? { label: status, dot: "bg-gray-300" };
+  // "Gesendet" ist grün bei AB, Abschlagsrechnung, Schlussrechnung, Rechnung (= finaler positiver Status)
+  const isSentFinal = status === "gesendet" && ["auftragsbestaetigung", "abschlagsrechnung", "schlussrechnung", "rechnung", "mahnung", "stornorechnung"].includes(typ || "");
+  const dot = isSentFinal ? "bg-green-500" : cfg.dot;
   return (
     <div className="flex items-center gap-2">
-      <span className={`w-3 h-3 rounded-full shrink-0 ${cfg.dot}`} />
+      <span className={`w-3 h-3 rounded-full shrink-0 ${dot}`} />
       <span className="text-sm font-medium text-foreground">{cfg.label}</span>
     </div>
   );
@@ -473,7 +476,7 @@ export default function AdminDokumenteListe() {
                   </div>
                   <div className="shrink-0 text-right">
                     <p className={`text-sm font-bold tabular-nums ${isOverdue ? "text-red-600" : ""}`}>{fmt(doc.brutto)}</p>
-                    <div className="mt-1"><StatusCell status={doc.status} /></div>
+                    <div className="mt-1"><StatusCell status={doc.status} typ={doc.typ} /></div>
                   </div>
                 </div>
               );
@@ -520,7 +523,7 @@ export default function AdminDokumenteListe() {
                   return (
                     <tr key={doc.id} onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
                       className={`group border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30" : ""}`}>
-                      <td className={`px-4 py-3 ${isStorniert ? "opacity-50" : ""}`}><StatusCell status={doc.status} /></td>
+                      <td className={`px-4 py-3 ${isStorniert ? "opacity-50" : ""}`}><StatusCell status={doc.status} typ={doc.typ} /></td>
                       <td className={`px-3 py-3 text-sm ${isStorniert ? "opacity-50" : ""} ${isOverdue ? "text-red-600 font-semibold" : "text-muted-foreground"}`}>{fmtDate(doc.faelligAm) || "–"}</td>
                       <td className={`px-3 py-3 font-mono text-sm text-muted-foreground ${isStorniert ? "opacity-50" : ""}`}>{doc.nummer || "–"}</td>
                       <td className={`px-3 py-3 ${isStorniert ? "opacity-50" : ""}`}><p className="truncate font-semibold text-sm">{contact}</p></td>
@@ -603,7 +606,7 @@ export default function AdminDokumenteListe() {
                   return (
                     <tr key={doc.id} onClick={() => navigate(`/admin/dokumente/${doc.id}`)}
                       className={`group border-b border-border/10 last:border-0 transition-colors hover:bg-muted/20 cursor-pointer ${isOverdue ? "bg-red-50/30" : ""}`}>
-                      <td className={`px-4 py-3 ${isStorniert ? "opacity-50" : ""}`}><StatusCell status={doc.status} /></td>
+                      <td className={`px-4 py-3 ${isStorniert ? "opacity-50" : ""}`}><StatusCell status={doc.status} typ={doc.typ} /></td>
                       <td className={`px-3 py-3 font-mono text-sm text-muted-foreground ${isStorniert ? "opacity-50" : ""}`}>{doc.nummer || "– – –"}</td>
                       <td className={`px-3 py-3 min-w-0 ${isStorniert ? "opacity-50" : ""}`}>
                         <p className="truncate font-semibold text-sm">{contact}</p>
