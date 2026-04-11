@@ -737,14 +737,20 @@ const Kundenportal = () => {
     return <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20">Offen</span>;
   };
 
-  // Paket laden wenn Request eins hat (MUSS vor early return stehen!)
+  // Paket ODER Show laden wenn Request eins hat (MUSS vor early return stehen!)
   const paketId = requests[0] ? (requests[0] as any).paket_id || null : null;
+  const showId = requests[0] ? (requests[0] as any).show_id || null : null;
   useEffect(() => {
-    if (!paketId) return;
-    supabase.from("pakete").select("name, beschreibung_kunde, zieldauer, preis, format").eq("id", paketId).maybeSingle().then(({ data }) => {
-      if (data) setPaketInfo({ name: data.name, beschreibung: data.beschreibung_kunde || "", zieldauer: data.zieldauer, preis: data.preis, format: data.format || null });
-    });
-  }, [paketId]);
+    if (paketId) {
+      supabase.from("pakete").select("name, beschreibung_kunde, zieldauer, preis, format").eq("id", paketId).maybeSingle().then(({ data }) => {
+        if (data) setPaketInfo({ name: data.name, beschreibung: data.beschreibung_kunde || "", zieldauer: data.zieldauer, preis: data.preis, format: data.format || null });
+      });
+    } else if (showId) {
+      supabase.from("shows_intern").select("name, konzept_kundentext, zieldauer, preis, format").eq("id", showId).maybeSingle().then(({ data }) => {
+        if (data) setPaketInfo({ name: data.name, beschreibung: (data as any).konzept_kundentext || "", zieldauer: data.zieldauer || 0, preis: data.preis || 0, format: data.format || null });
+      });
+    }
+  }, [paketId, showId]);
 
   if (!user || loading) {
     return (
