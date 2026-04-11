@@ -327,6 +327,8 @@ const AdminShowEditor = () => {
   const [expandedPhase, setExpandedPhase] = useState<string | null>(null);
 
   // Close-Up specifics
+  const [closeupGaeste, setCloseupGaeste] = useState(0);
+  const [closeupPersonenProGruppe, setCloseupPersonenProGruppe] = useState(10);
   const [closeupGruppen, setCloseupGruppen] = useState(8);
   const [closeupDauerProGruppe, setCloseupDauerProGruppe] = useState(5);
 
@@ -811,28 +813,42 @@ const AdminShowEditor = () => {
 
               return (
                 <div className="space-y-5">
-                  {/* Gruppen-Planung */}
+                  {/* Einsatz-Planung */}
                   <div className="rounded-xl border border-border/20 p-4">
                     <h2 className="text-sm font-bold text-foreground mb-3">Einsatz-Planung</h2>
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       <div>
-                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Tischgruppen</label>
+                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Gäste</label>
+                        <input type="number" value={closeupGaeste || ""} onChange={e => {
+                          const g = Math.max(0, parseInt(e.target.value) || 0);
+                          setCloseupGaeste(g);
+                          if (g > 0 && closeupPersonenProGruppe > 0) setCloseupGruppen(Math.ceil(g / closeupPersonenProGruppe));
+                        }} min={0} placeholder="z.B. 120" className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Pers. / Gruppe</label>
+                        <input type="number" value={closeupPersonenProGruppe} onChange={e => {
+                          const p = Math.max(1, parseInt(e.target.value) || 1);
+                          setCloseupPersonenProGruppe(p);
+                          if (closeupGaeste > 0) setCloseupGruppen(Math.ceil(closeupGaeste / p));
+                        }} min={1} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Gruppen</label>
                         <input type="number" value={closeupGruppen} onChange={e => setCloseupGruppen(Math.max(1, parseInt(e.target.value) || 1))}
                           min={1} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
                       </div>
                       <div>
-                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Min. pro Gruppe</label>
+                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Min. / Gruppe</label>
                         <input type="number" value={closeupDauerProGruppe} onChange={e => setCloseupDauerProGruppe(Math.max(1, parseInt(e.target.value) || 1))}
                           min={1} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
                       </div>
-                      <div>
-                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Gesamt</label>
-                        <div className="rounded-xl bg-muted/10 border border-border/20 px-3 py-2 text-sm font-semibold text-foreground">
-                          ~{gesamtDauer} Min.
-                        </div>
-                      </div>
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-2">{closeupGruppen} Gruppen × {closeupDauerProGruppe} Min. = ca. {gesamtDauer} Minuten Close-Up</p>
+                    <div className="mt-3 px-3 py-2 rounded-lg bg-accent/5 border border-accent/10">
+                      <p className="text-xs text-foreground font-medium">
+                        {closeupGaeste > 0 ? `${closeupGaeste} Gäste ÷ ${closeupPersonenProGruppe} = ` : ""}{closeupGruppen} Gruppen × {closeupDauerProGruppe} Min. = <strong>ca. {gesamtDauer} Minuten</strong> Close-Up
+                      </p>
+                    </div>
                   </div>
 
                   {/* Effekt-Pool */}
