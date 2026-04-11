@@ -346,132 +346,53 @@ const AdminShowsList = () => {
         </div>
       )}
 
-      {/* ── Panel overlay ── */}
+      {/* ── Popup: Neue Show ── */}
       {panelOpen && (
-        <div className="fixed inset-0 bg-black/20 z-40" onClick={closePanel} />
-      )}
-
-      {/* ── Slide-in panel: Neue Show ── */}
-      <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-background border-l border-border/30 shadow-2xl z-50 flex flex-col transition-transform duration-300 ${
-          panelOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        {/* Panel header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border/20 shrink-0">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-              Neue Show
-            </p>
-            <h2 className="text-base font-bold text-foreground leading-tight">
-              Show anlegen
-            </h2>
-          </div>
-          <button
-            onClick={closePanel}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Panel body */}
-        <div className="flex-1 overflow-y-auto px-5 py-5 space-y-5">
-          {/* Name */}
-          <div>
-            <label className={labelCls}>
-              Name <span className="text-destructive">*</span>
-            </label>
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              placeholder="z.B. Grosse Gala-Show"
-              className={inputCls}
-            />
-          </div>
-
-          {/* Format */}
-          <div>
-            <label className={labelCls}>Format</label>
-            <select
-              value={form.format}
-              onChange={(e) => setForm((f) => ({ ...f, format: e.target.value }))}
-              className={inputCls}
-            >
-              {FORMAT_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Status */}
-          <div>
-            <label className={labelCls}>Status</label>
-            <select
-              value={form.status}
-              onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
-              className={inputCls}
-            >
-              <option value="entwurf">Entwurf</option>
-              <option value="aktiv">Aktiv</option>
-              <option value="archiv">Archiv</option>
-            </select>
-          </div>
-
-          {/* Duration */}
-          <div>
-            <label className={labelCls}>Dauer (Min.)</label>
-            <input
-              type="number"
-              min={0}
-              value={form.dauer}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, dauer: Math.max(0, parseInt(e.target.value) || 0) }))
-              }
-              className={inputCls}
-            />
-          </div>
-
-          {/* Description */}
-          <div>
-            <label className={labelCls}>Beschreibung</label>
-            <textarea
-              value={form.beschreibung}
-              onChange={(e) => setForm((f) => ({ ...f, beschreibung: e.target.value }))}
-              rows={4}
-              placeholder="Beschreibung der Show..."
-              className={`${inputCls} resize-none`}
-            />
-          </div>
-
-          {/* Message */}
-          {panelMsg && (
-            <div
-              className={`px-4 py-3 rounded-xl text-sm font-medium ${
-                panelMsg.type === "ok"
-                  ? "bg-green-50 text-green-700 border border-green-200"
-                  : "bg-destructive/5 text-destructive border border-destructive/20"
-              }`}
-            >
-              {panelMsg.text}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={closePanel}>
+          <div className="bg-background rounded-2xl shadow-2xl border border-border/30 p-6 w-full max-w-md mx-4" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg font-bold">Neue Show anlegen</h2>
+              <button onClick={closePanel} className="text-muted-foreground hover:text-foreground"><X className="w-5 h-5" /></button>
             </div>
-          )}
-        </div>
 
-        {/* Panel footer */}
-        <div className="shrink-0 px-5 py-4 border-t border-border/20 flex items-center gap-2">
-          <button
-            onClick={handleCreate}
-            disabled={saving}
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-foreground text-background px-4 py-2.5 text-sm font-bold hover:opacity-80 disabled:opacity-50 transition-opacity"
+            <div className="space-y-4">
+              <div>
+                <label className={labelCls}>Name <span className="text-destructive">*</span></label>
+                <input type="text" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  placeholder="z.B. Große Gala-Show" className={inputCls} autoFocus onKeyDown={e => { if (e.key === "Enter" && form.name.trim()) handleCreate(); }} />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={labelCls}>Format</label>
+                  <select value={form.format} onChange={(e) => setForm((f) => ({ ...f, format: e.target.value }))} className={inputCls}>
+                    {FORMAT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className={labelCls}>Dauer (Min.)</label>
+                  <input type="number" min={0} value={form.dauer} onChange={(e) => setForm((f) => ({ ...f, dauer: Math.max(0, parseInt(e.target.value) || 0) }))} className={inputCls} />
+                </div>
+              </div>
+
+              {panelMsg && (
+                <div className={`px-4 py-3 rounded-xl text-sm font-medium ${panelMsg.type === "ok" ? "bg-green-50 text-green-700 border border-green-200" : "bg-destructive/5 text-destructive border border-destructive/20"}`}>
+                  {panelMsg.text}
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-2 mt-5">
+              <button onClick={closePanel} className="flex-1 py-2.5 rounded-xl border border-border/30 text-sm font-medium hover:bg-muted/40">Abbrechen</button>
+              <button onClick={handleCreate} disabled={saving || !form.name.trim()}
+                className="flex-1 py-2.5 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-90 disabled:opacity-50"
           >
-            {saving ? "Wird angelegt..." : "Show anlegen"}
-          </button>
+              {saving ? "Wird angelegt..." : "Show anlegen"}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </AdminLayout>
   );
 };
