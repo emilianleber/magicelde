@@ -1915,51 +1915,32 @@ const Kundenportal = () => {
             <div className="space-y-3">
               <h2 className="font-display text-base font-bold text-foreground">Show-Einblick</h2>
               <div className="aspect-video rounded-2xl overflow-hidden border border-black/[0.06] shadow-sm">
-                <iframe src="https://www.youtube.com/embed/ZdIDq9VtqxU" title="Show-Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
+                <iframe src="https://www.youtube.com/embed/R0_mXGxzC9E" title="Show-Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
               </div>
             </div>
 
             {/* Galerie — Drag-Slider */}
             <div className="space-y-3">
               <h2 className="font-display text-base font-bold text-foreground">Impressionen</h2>
-              {(() => {
-                const sliderRef = React.useRef<HTMLDivElement>(null);
-                const [isDragging, setIsDragging] = React.useState(false);
-                const [startX, setStartX] = React.useState(0);
-                const [scrollLeft, setScrollLeftState] = React.useState(0);
-
-                const onMouseDown = (e: React.MouseEvent) => {
-                  if (!sliderRef.current) return;
-                  setIsDragging(true);
-                  setStartX(e.pageX - sliderRef.current.offsetLeft);
-                  setScrollLeftState(sliderRef.current.scrollLeft);
-                };
-                const onMouseMove = (e: React.MouseEvent) => {
-                  if (!isDragging || !sliderRef.current) return;
-                  e.preventDefault();
-                  const x = e.pageX - sliderRef.current.offsetLeft;
-                  sliderRef.current.scrollLeft = scrollLeft - (x - startX);
-                };
-                const onEnd = () => setIsDragging(false);
-
-                return (
-                  <div
-                    ref={sliderRef}
-                    onMouseDown={onMouseDown}
-                    onMouseMove={onMouseMove}
-                    onMouseUp={onEnd}
-                    onMouseLeave={onEnd}
-                    className={`flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
-                    style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
-                  >
-                    {[stageImg, closeupWalkingImg, magicDinnerEventImg, emotionenImg, closeupImg].map((src, i) => (
-                      <div key={i} className="w-64 h-40 rounded-xl overflow-hidden shrink-0 select-none">
-                        <img src={src} alt="" className="w-full h-full object-cover pointer-events-none" draggable={false} />
-                      </div>
-                    ))}
+              <div
+                className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 cursor-grab active:cursor-grabbing"
+                style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" } as any}
+                onMouseDown={(e) => {
+                  const el = e.currentTarget;
+                  const startX = e.pageX;
+                  const startScroll = el.scrollLeft;
+                  const onMove = (ev: MouseEvent) => { el.scrollLeft = startScroll - (ev.pageX - startX); };
+                  const onUp = () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
+                  window.addEventListener("mousemove", onMove);
+                  window.addEventListener("mouseup", onUp);
+                }}
+              >
+                {[stageImg, closeupWalkingImg, magicDinnerEventImg, emotionenImg, closeupImg].map((src, i) => (
+                  <div key={i} className="w-64 h-40 rounded-xl overflow-hidden shrink-0 select-none">
+                    <img src={src} alt="" className="w-full h-full object-cover pointer-events-none" draggable={false} />
                   </div>
-                );
-              })()}
+                ))}
+              </div>
             </div>
 
             {/* Contact */}
