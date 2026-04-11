@@ -182,6 +182,7 @@ interface PhaseProps {
   allEffekte: Effekt[];
   isExpanded: boolean;
   isDraggingFromSidebar: boolean;
+  musikItems: { id: string; titel: string; kuenstler: string; kategorie: string }[];
   onToggle: () => void;
   onRemove: () => void;
   onUpdate: (patch: Partial<ShowPhase>) => void;
@@ -280,6 +281,13 @@ function PhaseCard({ phase, idx, startTime, allEffekte, isExpanded, isDraggingFr
               <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
                 <Music className="w-3 h-3" /> Musik
               </label>
+              {musikItems.length > 0 ? (
+                <select value="" onChange={e => { if (e.target.value) setMusikNotiz(prev => prev ? `${prev}, ${e.target.value}` : e.target.value); }}
+                  className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs mb-1">
+                  <option value="">Track hinzufügen…</option>
+                  {musikItems.map(m => <option key={m.id} value={m.titel}>{m.titel}{m.kuenstler ? ` – ${m.kuenstler}` : ""}</option>)}
+                </select>
+              ) : null}
               <input
                 placeholder="Song / Playlist…"
                 value={musikNotiz}
@@ -319,6 +327,13 @@ const AdminShowEditor = () => {
   const [allEffekte, setAllEffekte] = useState<Effekt[]>([]);
   const [message, setMessage] = useState("");
   const [draggingSidebarEffekt, setDraggingSidebarEffekt] = useState<Effekt | null>(null);
+
+  // Technik-Inventar
+  const [technikItems, setTechnikItems] = useState<{ id: string; name: string; kategorie: string; menge: number }[]>([]);
+  const [selectedTechnik, setSelectedTechnik] = useState<Record<string, number>>({}); // id → menge
+
+  // Musik-Bibliothek (für Phase-Level Auswahl)
+  const [musikItems, setMusikItems] = useState<{ id: string; titel: string; kuenstler: string; kategorie: string }[]>([]);
 
   // Event/Request Verknüpfung
   const [eventId, setEventId] = useState<string | null>(null);
@@ -378,6 +393,12 @@ const AdminShowEditor = () => {
     const load = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate("/admin/login"); return; }
+
+      // Technik + Musik laden
+      const { data: techData } = await supabase.from("technik_inventar").select("id, name, kategorie, menge").order("kategorie, name");
+      const { data: musikData } = await supabase.from("musik_bibliothek").select("id, titel, kuenstler, kategorie").order("kategorie, titel");
+      setMusikItems((musikData || []).map((m: any) => ({ id: m.id, titel: m.titel, kuenstler: m.kuenstler || "", kategorie: m.kategorie || "Sonstiges" })));
+      setTechnikItems((techData || []).map((t: any) => ({ id: t.id, name: t.name, kategorie: t.kategorie || "Sonstiges", menge: t.menge || 1 })));
 
       // Buchungen laden für Verknüpfung (Events + Requests)
       const [evtRes, reqRes] = await Promise.all([
@@ -440,6 +461,8 @@ const AdminShowEditor = () => {
 
           // Close-Up Daten aus budget laden
           const meta = show.budget as any;
+          if (meta?.selectedTechnik) setSelectedTechnik(meta.selectedTechnik);
+          // Musik wird pro Phase in PhaseCard verwaltet
           if (meta?.closeupGaeste) setCloseupGaeste(meta.closeupGaeste);
           if (meta?.closeupPersonenProGruppe) setCloseupPersonenProGruppe(meta.closeupPersonenProGruppe);
           if (meta?.closeupGruppen) setCloseupGruppen(meta.closeupGruppen);
@@ -650,7 +673,9 @@ const AdminShowEditor = () => {
     try {
       const cleanPhasen: ShowPhase[] = phasen.map(({ _id, ...rest }) => rest);
       // Close-Up Meta-Daten als budget JSON speichern
-      const closeupMeta = isCloseUp ? { closeupGaeste, closeupPersonenProGruppe, closeupGruppen, closeupDauerProGruppe } : undefined;
+      const closeupMeta = isCloseUp
+        ? { closeupGaeste, closeupPersonenProGruppe, closeupGruppen, closeupDauerProGruppe, selectedTechnik }
+        : { selectedTechnik };
       const payload = {
         name: name.trim(), format, showTyp, status, anlass: anlass.trim(), zieldauer: zieldauerMax,
         preis: preis ?? undefined, beschreibungKunde: konzeptKundentext.trim() || undefined,
@@ -1165,6 +1190,7 @@ const AdminShowEditor = () => {
                           startTime={timelineItems[idx]?.startTime || "--:--"}
                           allEffekte={allEffekte} isExpanded={expandedPhase === phase._id}
                           isDraggingFromSidebar={!!draggingSidebarEffekt}
+                          musikItems={musikItems}
                           onToggle={() => setExpandedPhase(expandedPhase === phase._id ? null : phase._id)}
                           onRemove={() => removePhase(phase._id)}
                           onUpdate={patch => updatePhase(phase._id, patch)}
@@ -1213,6 +1239,7 @@ const AdminShowEditor = () => {
                           startTime={timelineItems[idx]?.startTime || "--:--"}
                           allEffekte={allEffekte} isExpanded={expandedPhase === phase._id}
                           isDraggingFromSidebar={!!draggingSidebarEffekt}
+                          musikItems={musikItems}
                           onToggle={() => setExpandedPhase(expandedPhase === phase._id ? null : phase._id)}
                           onRemove={() => removePhase(phase._id)}
                           onUpdate={patch => updatePhase(phase._id, patch)}
@@ -1244,8 +1271,40 @@ const AdminShowEditor = () => {
               <textarea value={konzeptKundentext} onChange={e => setKonzeptKundentext(e.target.value)} rows={6} placeholder="Beschreibung für den Kunden…" className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none" />
             </div>
             <div>
-              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Technische Anforderungen</label>
-              <textarea value={technischeAnforderungen} onChange={e => setTechnischeAnforderungen(e.target.value)} rows={4} placeholder="Bühne, Licht, Ton…" className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none" />
+              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Technik für diese Show</label>
+              {technikItems.length === 0 ? (
+                <p className="text-xs text-muted-foreground/50 italic">Noch kein Equipment im <a href="/admin/programm/technik" className="text-accent hover:text-accent/80">Technik-Inventar</a> angelegt.</p>
+              ) : (
+                <div className="space-y-1 max-h-48 overflow-y-auto rounded-xl bg-muted/10 border border-border/20 p-2">
+                  {Object.entries(
+                    technikItems.reduce((acc, t) => { (acc[t.kategorie] = acc[t.kategorie] || []).push(t); return acc; }, {} as Record<string, typeof technikItems>)
+                  ).map(([kat, items]) => (
+                    <div key={kat}>
+                      <p className="text-[9px] uppercase tracking-widest text-muted-foreground px-2 pt-1">{kat}</p>
+                      {items.map(t => {
+                        const isSelected = (selectedTechnik[t.id] || 0) > 0;
+                        return (
+                          <label key={t.id} className={`flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-colors ${isSelected ? "bg-accent/10" : "hover:bg-muted/20"}`}>
+                            <input type="checkbox" checked={isSelected} onChange={e => {
+                              setSelectedTechnik(prev => ({ ...prev, [t.id]: e.target.checked ? 1 : 0 }));
+                            }} className="rounded" />
+                            <span className="text-xs font-medium flex-1">{t.name}</span>
+                            {isSelected && (
+                              <input type="number" value={selectedTechnik[t.id] || 1} min={1} max={t.menge}
+                                onChange={e => setSelectedTechnik(prev => ({ ...prev, [t.id]: Math.max(1, parseInt(e.target.value) || 1) }))}
+                                onClick={e => e.stopPropagation()}
+                                className="w-12 rounded-lg bg-white border border-border/30 px-1.5 py-0.5 text-xs text-center" />
+                            )}
+                            <span className="text-[9px] text-muted-foreground">{t.menge}×</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* Freitext für Sonderbedarf */}
+              <textarea value={technischeAnforderungen} onChange={e => setTechnischeAnforderungen(e.target.value)} rows={2} placeholder="Sonstiger Bedarf (Bühne, Strom…)" className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none mt-2" />
             </div>
           </div>
         </div>
