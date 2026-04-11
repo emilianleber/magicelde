@@ -21,8 +21,6 @@ const FORMAT_OPTIONS = [
   { value: "abendshow", label: "Bühnenshow / Abendshow" },
   { value: "close-up", label: "Close-Up" },
   { value: "magic-dinner", label: "Magic Dinner" },
-  { value: "tourshow", label: "Tourshow" },
-  { value: "kundenbuchung", label: "Kundenbuchung" },
   { value: "workshop", label: "Workshop" },
 ] as const;
 

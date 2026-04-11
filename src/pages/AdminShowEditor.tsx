@@ -32,9 +32,6 @@ const FORMAT_OPTIONS = [
   { value: "abendshow", label: "Bühnenshow / Abendshow" },
   { value: "close-up", label: "Close-Up" },
   { value: "magic-dinner", label: "Magic Dinner" },
-  { value: "tourshow", label: "Tourshow" },
-  { value: "kundenbuchung", label: "Kundenbuchung" },
-  { value: "workshop", label: "Workshop" },
 ];
 
 const DINNER_PHASE_PRESETS = [
@@ -372,10 +369,6 @@ const AdminShowEditor = () => {
   // Magic Dinner mode toggle
   const [dinnerMode, setDinnerMode] = useState<"gang" | "closeup">("gang");
 
-  // Workshop fields
-  const [workshopTeilnehmer, setWorkshopTeilnehmer] = useState(10);
-  const [workshopMaterial, setWorkshopMaterial] = useState("");
-  const [workshopLernziele, setWorkshopLernziele] = useState("");
 
   // Wizard — Step aus sessionStorage laden
   const [wizardStep, setWizardStep] = useState(() => {
@@ -393,8 +386,8 @@ const AdminShowEditor = () => {
   }, [completedSteps, id]);
   const WIZARD_STEPS = [
     { num: 1, label: "Basis" },
-    { num: 2, label: format === "close-up" ? "Einsatz" : format === "workshop" ? "Workshop" : "Planung" },
-    { num: 3, label: format === "close-up" ? "Effekt-Pool" : format === "workshop" ? "Übungen" : "Ablauf" },
+    { num: 2, label: format === "close-up" ? "Einsatz" : "Planung" },
+    { num: 3, label: format === "close-up" ? "Effekt-Pool" : "Ablauf" },
     { num: 4, label: "Texte" },
     { num: 5, label: "Musik" },
     { num: 6, label: "Kalkulation" },
@@ -811,9 +804,7 @@ const AdminShowEditor = () => {
   if (loading) return <div className="pt-28 text-center text-sm text-muted-foreground">Wird geladen…</div>;
 
   const isCloseUp = format === "close-up" || (format === "magic-dinner" && dinnerMode === "closeup");
-  const isBuehne = format === "abendshow" || format === "kundenbuchung" || (format === "magic-dinner" && dinnerMode === "gang");
-  const isTourshow = format === "tourshow";
-  const isWorkshop = format === "workshop";
+  const isBuehne = format === "abendshow" || (format === "magic-dinner" && dinnerMode === "gang");
   const isDinner = format === "magic-dinner";
 
   // Ensure there's at least one phase for Close-Up pool mode
@@ -857,7 +848,7 @@ const AdminShowEditor = () => {
 
       {/* ── MAIN LAYOUT ── */}
       <DndContext sensors={sensors} onDragStart={handleTopLevelDragStart} onDragEnd={handleTopLevelDragEnd}>
-      <div className={`grid grid-cols-1 ${wizardStep === 3 && !isWorkshop ? "lg:grid-cols-[1fr_300px]" : ""} gap-5`}>
+      <div className={`grid grid-cols-1 ${wizardStep === 3 && true ? "lg:grid-cols-[1fr_300px]" : ""} gap-5`}>
 
         {/* ═══ LEFT: Editor ═══ */}
         <div className="space-y-5">
@@ -932,7 +923,7 @@ const AdminShowEditor = () => {
           {/* ══ STEP 2: Format-spezifische Planung ══ */}
           {wizardStep === 2 && (
           <div className="space-y-5">
-          <h2 className="text-lg font-bold">{isCloseUp ? "Einsatz-Planung" : isWorkshop ? "Workshop-Planung" : isDinner ? "Dinner-Planung" : "Show-Planung"}</h2>
+          <h2 className="text-lg font-bold">{isCloseUp ? "Einsatz-Planung" : isDinner ? "Dinner-Planung" : "Show-Planung"}</h2>
 
           {/* Bühnenshow / Tourshow / Kundenbuchung: Phasen-Verwaltung */}
           {isBuehne && (
@@ -1016,10 +1007,10 @@ const AdminShowEditor = () => {
           {/* ══ STEP 3: Effekte / Ablauf ══ */}
           {wizardStep === 3 && (
           <div className="space-y-5">
-          <h2 className="text-lg font-bold">{isCloseUp ? "Effekt-Pool" : isWorkshop ? "Übungen" : "Ablauf & Effekte"}</h2>
+          <h2 className="text-lg font-bold">{isCloseUp ? "Effekt-Pool" : "Ablauf & Effekte"}</h2>
 
           {/* Dauer-Anzeige */}
-          {!isWorkshop && !isCloseUp && (
+          {true && !isCloseUp && (
             <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${overZieldauer ? "bg-red-50 border-red-200" : underZieldauer ? "bg-amber-50 border-amber-200" : "bg-green-50 border-green-200"}`}>
               <Clock className={`w-4 h-4 ${overZieldauer ? "text-red-600" : underZieldauer ? "text-amber-600" : "text-green-600"}`} />
               <span className={`text-sm font-semibold ${overZieldauer ? "text-red-700" : underZieldauer ? "text-amber-700" : "text-green-700"}`}>
@@ -1133,192 +1124,8 @@ const AdminShowEditor = () => {
               );
             })()
 
-          ) : isWorkshop ? (
-            /* ── WORKSHOP: Eigenständiger Editor mit Übungen ── */
-            <div className="space-y-5">
-              <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <BookOpen className="w-4 h-4" /> Workshop-Planung
-              </h2>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Teilnehmeranzahl</label>
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-muted-foreground" />
-                    <input type="number" min={1} value={workshopTeilnehmer} onChange={e => setWorkshopTeilnehmer(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Lernziele / Themen</label>
-                <textarea value={workshopLernziele} onChange={e => setWorkshopLernziele(e.target.value)} rows={3}
-                  placeholder="Was sollen die Teilnehmer lernen? Welche Tricks werden beigebracht?"
-                  className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none" />
-              </div>
-
-              <div>
-                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Material / Requisiten</label>
-                <textarea value={workshopMaterial} onChange={e => setWorkshopMaterial(e.target.value)} rows={3}
-                  placeholder="Welches Material wird benötigt? Kartenspiele, Münzen, etc."
-                  className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none" />
-              </div>
-
-              {/* Workshop-Ablauf: eigene Übungen */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">Ablauf / Übungen</h3>
-                  <button onClick={() => {
-                    const newId = `phase-${Date.now()}`;
-                    setPhasen(prev => [...prev, { _id: newId, label: `Übung ${prev.length + 1}`, typ: "akt1", effektIds: [] }]);
-                    setExpandedPhase(newId);
-                  }} className="inline-flex items-center gap-1 text-xs font-semibold text-accent hover:text-accent/80">
-                    <Plus className="w-3.5 h-3.5" /> Übung hinzufügen
-                  </button>
-                </div>
-
-                {/* Vorlagen-Buttons */}
-                {phasen.length === 0 && (
-                  <div className="space-y-2">
-                    <button onClick={() => {
-                      const now = Date.now();
-                      setPhasen([
-                        { _id: `p-${now}-0`, label: "Begrüßung & Einführung", typ: "akt1", effektIds: [] },
-                        { _id: `p-${now}-1`, label: "Trick 1: Einfacher Kartentrick", typ: "akt1", effektIds: [] },
-                        { _id: `p-${now}-2`, label: "Trick 2: Münze verschwinden", typ: "akt1", effektIds: [] },
-                        { _id: `p-${now}-3`, label: "Übungszeit & Fragen", typ: "akt1", effektIds: [] },
-                        { _id: `p-${now}-4`, label: "Abschluss & Vorführung", typ: "akt1", effektIds: [] },
-                      ]);
-                      setExpandedPhase(`p-${now}-0`);
-                    }} className="w-full p-4 rounded-xl border-2 border-dashed border-border/30 text-center text-sm text-muted-foreground hover:border-accent/30 hover:text-accent transition-colors">
-                      📋 Standard-Workshop-Vorlage laden
-                    </button>
-                    <div className="grid grid-cols-2 gap-2">
-                      {[
-                        { label: "Kartentrick-Workshop", uebungen: ["Begrüßung", "Grundgriffe lernen", "Trick: Ambitious Card", "Trick: Zuschauer findet Karte", "Üben & Vorführen"] },
-                        { label: "Mental-Workshop", uebungen: ["Begrüßung & Was ist Mentalismus?", "Übung: Zahlen vorhersagen", "Übung: Gedanken lesen", "Geheimnis der Körpersprache", "Vorführung"] },
-                        { label: "Close-Up-Workshop", uebungen: ["Begrüßung", "Münztrick lernen", "Gummiband-Magie", "Alltagsmagie", "Mini-Show der Teilnehmer"] },
-                        { label: "Teambuilding-Workshop", uebungen: ["Warm-Up & Kennenlernen", "Partner-Trick lernen", "Gruppen-Challenge", "Kreativ-Phase", "Finale Gruppenshow"] },
-                      ].map(vorlage => (
-                        <button key={vorlage.label} onClick={() => {
-                          const now = Date.now();
-                          setPhasen(vorlage.uebungen.map((u, i) => ({ _id: `p-${now}-${i}`, label: u, typ: "akt1" as const, effektIds: [] })));
-                          setExpandedPhase(`p-${now}-0`);
-                        }} className="p-3 rounded-xl border border-border/20 text-left hover:bg-muted/20 transition-colors">
-                          <p className="text-xs font-semibold">{vorlage.label}</p>
-                          <p className="text-[10px] text-muted-foreground">{vorlage.uebungen.length} Übungen</p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Übungen-Liste */}
-                {phasen.length > 0 && (
-                  <SortableContext items={phasen.map(p => p._id)} strategy={verticalListSortingStrategy}>
-                    {phasen.map((phase, idx) => (
-                      <div key={phase._id} className="rounded-xl border border-border/30 bg-white overflow-hidden">
-                        <div className="flex items-center gap-2 px-4 py-3 bg-muted/10">
-                          <GripVertical className="w-4 h-4 text-muted-foreground/40 cursor-grab" />
-                          <span className="text-xs font-mono text-accent font-bold w-6">{idx + 1}.</span>
-                          <input
-                            value={phase.label}
-                            onChange={e => updatePhase(phase._id, { label: e.target.value })}
-                            className="flex-1 bg-transparent text-sm font-semibold text-foreground outline-none"
-                            placeholder="Übungsname"
-                          />
-                          <button onClick={() => setExpandedPhase(expandedPhase === phase._id ? null : phase._id)} className="p-1 text-muted-foreground hover:text-foreground">
-                            {expandedPhase === phase._id ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                          </button>
-                          <button onClick={() => removePhase(phase._id)} className="p-1 text-muted-foreground hover:text-destructive">
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                        {expandedPhase === phase._id && (
-                          <div className="px-4 py-3 border-t border-border/10 space-y-2">
-                            <textarea
-                              placeholder="Beschreibung, Anleitung, Tipps für diese Übung…"
-                              rows={3}
-                              className="w-full rounded-lg bg-muted/20 border border-border/20 px-3 py-2 text-xs resize-none"
-                            />
-                            <div className="grid grid-cols-2 gap-2">
-                              <div>
-                                <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                                  <Clock className="w-3 h-3" /> Dauer (Min.)
-                                </label>
-                                <input type="number" placeholder="10" className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs" />
-                              </div>
-                              <div>
-                                <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                                  <Wrench className="w-3 h-3" /> Material
-                                </label>
-                                <input placeholder="z.B. Kartendeck" className="w-full rounded-lg bg-muted/20 border border-border/20 px-2.5 py-1.5 text-xs" />
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                    </SortableContext>
-                )}
-              </div>
-            </div>
-
-          ) : isTourshow ? (
-            /* ── TOURSHOW: Tour-fokussierter Editor ── */
-            <div className="space-y-5">
-              <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <MapPin className="w-4 h-4" /> Tourshow-Planung
-              </h2>
-              <p className="text-xs text-muted-foreground">Plane den Ablauf deiner Tourshow. Die Tour-Termine und Locations werden über die Tour-Verwaltung zugewiesen.</p>
-
-              {/* Ablauf */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">Show-Ablauf</h3>
-                  <div className="flex items-center gap-2">
-                    {phasen.length === 0 && (
-                      <button onClick={() => loadPhasePresets(BUEHNE_PHASE_PRESETS)}
-                        className="text-[10px] text-accent hover:text-accent/80 font-medium">
-                        Standard-Vorlage laden
-                      </button>
-                    )}
-                    <button onClick={() => addPhase()} className="inline-flex items-center gap-1 text-xs font-semibold text-accent hover:text-accent/80">
-                      <Plus className="w-3.5 h-3.5" /> Phase
-                    </button>
-                  </div>
-                </div>
-
-                {phasen.length === 0 ? (
-                  <button onClick={() => loadPhasePresets(BUEHNE_PHASE_PRESETS)} className="w-full p-6 rounded-xl border-2 border-dashed border-border/30 text-center text-sm text-muted-foreground hover:border-accent/30 hover:text-accent transition-colors">
-                    + Standard-Ablauf laden oder Phase hinzufügen
-                  </button>
-                ) : (
-                    <SortableContext items={phasen.map(p => p._id)} strategy={verticalListSortingStrategy}>
-                      {phasen.map((phase, idx) => (
-                        <PhaseCard
-                          key={phase._id} phase={phase} idx={idx}
-                          startTime={timelineItems[idx]?.startTime || "--:--"}
-                          allEffekte={allEffekte} isExpanded={expandedPhase === phase._id}
-                          isDraggingFromSidebar={!!draggingSidebarEffekt}
-                          musikItems={musikItems}
-                          onToggle={() => setExpandedPhase(expandedPhase === phase._id ? null : phase._id)}
-                          onRemove={() => removePhase(phase._id)}
-                          onUpdate={patch => updatePhase(phase._id, patch)}
-                          onAddEffekt={eid => addEffektToPhase(phase._id, eid)}
-                          onRemoveEffekt={eid => removeEffektFromPhase(phase._id, eid)}
-                          onReorderEffekte={(o, n) => reorderEffekteInPhase(phase._id, o, n)}
-                          sensors={sensors}
-                        />
-                      ))}
-                    </SortableContext>
-                )}
-              </div>
-            </div>
-
           ) : (
-            /* ── BÜHNENSHOW / KUNDENBUCHUNG / MAGIC DINNER (Gänge): Linearer Ablauf ── */
+            /* ── BÜHNENSHOW / MAGIC DINNER (Gänge): Linearer Ablauf ── */
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-bold text-foreground">
@@ -1606,7 +1413,7 @@ const AdminShowEditor = () => {
         </div>
 
         {/* ═══ RIGHT: Effekte-Sidebar (nur in Step 3) ═══ */}
-        {wizardStep === 3 && !isWorkshop && (
+        {wizardStep === 3 && true && (
           <div className="lg:sticky lg:top-20 space-y-3">
             <div className="p-4 rounded-2xl bg-muted/20 border border-border/30">
               <div className="flex items-center justify-between mb-1">
