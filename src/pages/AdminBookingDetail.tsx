@@ -238,7 +238,7 @@ const eventChecklistByPhase: Record<string, CheckItem[]> = {
 const getLabelOrCapitalize = (options: { value: string; label: string }[], val?: string | null): string => {
   if (!val) return "";
   const match = options.find((o) => o.value.toLowerCase() === val.toLowerCase());
-  return match ? match.label : val.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/_/g, " ");
+  return match ? match.label : val.replace(/_/g, " ").replace(/(^|\s)\S/g, (c) => c.toUpperCase());
 };
 
 const inputCls =
@@ -1530,10 +1530,11 @@ const AdminBookingDetail = () => {
                         setComposeTemplateId(tplId);
                         if (!tplId) return;
                         // Vorlage laden und Betreff/Body füllen
-                        const { data: tpl } = await supabase.from("email_templates").select("name, subject, body_html").eq("slug", tplId).maybeSingle();
+                        const { data: tpl } = await supabase.from("email_templates").select("*").eq("slug", tplId).maybeSingle();
                         if (tpl) {
-                          setComposeSubject(tpl.subject || tpl.name || "");
-                          setComposeBody(tpl.body_html || "");
+                          const t = tpl as any;
+                          setComposeSubject(t.subject || t.betreff || t.name || "");
+                          setComposeBody(t.body_html || t.body || t.inhalt || t.text || "");
                         }
                       }}
                       className={inputCls}

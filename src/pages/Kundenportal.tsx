@@ -860,7 +860,7 @@ const Kundenportal = () => {
   const isEventDone = currentEvent?.status === "abgeschlossen" || currentEvent?.status === "storniert";
   const isRequestDone = !currentEvent && (currentRequest?.status === "abgelehnt" || currentRequest?.status === "storniert");
   const isDone = isEventDone || isRequestDone;
-  const hasKonzept = !!paketInfo || !!currentEvent?.format || !!currentRequest?.format;
+  const hasKonzept = !!paketInfo; // Meine Show nur wenn Paket/Konzept zugeordnet
 
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
     { id: "dashboard", label: "Übersicht", icon: LayoutDashboard },
@@ -1079,10 +1079,10 @@ const Kundenportal = () => {
 
             {/* Show/Konzept-Karte entfernt — Info ist jetzt im smarten Info-Block unten */}
 
-            {/* ── Smarter Info-Block: Anlass + Format/Konzept ── */}
-            {(() => {
+            {/* ── Smarter Info-Block: nur wenn Paket/Konzept zugeordnet ── */}
+            {hasKonzept && (() => {
               const anlass = currentRequest?.anlass || currentEvent?.title || "";
-              const fmt = paketInfo?.format || currentEvent?.format || currentRequest?.format || "";
+              const fmt = paketInfo?.format || currentEvent?.format || "";
               const paketName = paketInfo?.name || "";
               if (!anlass && !fmt) return null;
 
