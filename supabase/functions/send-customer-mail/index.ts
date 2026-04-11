@@ -62,74 +62,23 @@ serve(async (req) => {
       }
     }
 
-    // Wrap plain body in clean professional HTML email
+    // Normale E-Mail — kein fancy Design, wie eine echte persönliche Mail
     const FONT = `-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif`;
     const wrappedHtml = `<!DOCTYPE html>
-<html lang="de" xmlns="http://www.w3.org/1999/xhtml" style="color-scheme:light only;supported-color-schemes:light;">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="color-scheme" content="light only">
-  <meta name="supported-color-schemes" content="light">
-  <title>${subject}</title>
-  <style>
-    :root{color-scheme:light only!important;}
-    html,body{background-color:#ffffff!important;margin:0!important;padding:0!important;}
-    @media(prefers-color-scheme:dark){html,body{background-color:#ffffff!important;color:#1a1a1a!important;}}
-  </style>
-</head>
-<body bgcolor="#ffffff" style="margin:0;padding:0;background-color:#ffffff!important;font-family:${FONT};">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color:#ffffff!important;">
-  <tr><td style="padding:24px 16px;">
-    <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;">
+<html lang="de">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:20px;background:#fff;font-family:${FONT};font-size:15px;line-height:1.7;color:#1a1a1a;">
 
-      <!-- Email body -->
-      <tr>
-        <td style="padding:0 0 28px;font-size:15px;line-height:1.8;color:#3f3f46;font-family:${FONT};">
-          ${mailBody.replace(/\n/g, "<br>")}
-        </td>
-      </tr>
+${mailBody.replace(/\n/g, "<br>")}
 
-      <!-- Signature -->
-      <tr>
-        <td style="padding:24px 0 0;border-top:1px solid #e4e4e7;">
-          <p style="margin:0 0 4px;font-size:14px;color:#3f3f46;font-family:${FONT};">Mit freundlichen Gr&uuml;&szlig;en</p>
-          <p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#0a0a0a;font-family:${FONT};">Emilian Leber</p>
+<br><br>
+<div style="border-top:1px solid #e4e4e7;padding-top:16px;margin-top:8px;">
+<span style="font-size:14px;color:#3f3f46;">Mit freundlichen Gr&uuml;&szlig;en</span><br>
+<strong style="font-size:15px;color:#0a0a0a;">Emilian Leber</strong><br>
+<span style="font-size:13px;color:#71717a;">MagicEL &ndash; Entertainment &amp; Zauberkunst</span><br><br>
+<span style="font-size:12px;color:#71717a;">T: <a href="tel:+4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a> &nbsp;|&nbsp; W: <a href="https://wa.me/4915563744696" style="color:#3f3f46;text-decoration:none;">WhatsApp</a> &nbsp;|&nbsp; <a href="https://magicel.de" style="color:#3f3f46;text-decoration:none;">www.magicel.de</a></span>
+</div>
 
-          <p style="margin:0 0 2px;font-size:13px;font-weight:600;color:#0a0a0a;font-family:${FONT};">MagicEL &ndash; Entertainment &amp; Zauberkunst</p>
-          <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:6px 0 12px;">
-            <tr><td style="padding:2px 0;font-size:12px;color:#71717a;font-family:${FONT};">Telefon:&nbsp;</td><td style="padding:2px 0;font-size:12px;font-family:${FONT};"><a href="tel:+4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td></tr>
-            <tr><td style="padding:2px 0;font-size:12px;color:#71717a;font-family:${FONT};">WhatsApp:&nbsp;</td><td style="padding:2px 0;font-size:12px;font-family:${FONT};"><a href="https://wa.me/4915563744696" style="color:#3f3f46;text-decoration:none;">+49 155 637 44 696</a></td></tr>
-            <tr><td style="padding:2px 0;font-size:12px;color:#71717a;font-family:${FONT};">Web:&nbsp;</td><td style="padding:2px 0;font-size:12px;font-family:${FONT};"><a href="https://magicel.de" style="color:#3f3f46;text-decoration:none;">www.magicel.de</a></td></tr>
-          </table>
-
-          <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:8px 0 14px;">
-            <tr>
-              <td style="padding-right:16px;vertical-align:middle;">
-                <img src="https://magicel.de/favicon.ico" alt="MagicEL" width="40" height="40" style="border-radius:8px;display:block;" />
-              </td>
-              <td style="vertical-align:middle;">
-                <p style="margin:0;font-size:12px;color:#71717a;font-family:${FONT};">
-                  &#9733; Google 5.0 &nbsp;|&nbsp; &#9733; ProvenExpert 4.9<br>
-                  Kreativpreistr&auml;ger &nbsp;|&nbsp; Greatest Talent Finalist
-                </p>
-              </td>
-            </tr>
-          </table>
-
-          <!-- Datenschutz & Steuer -->
-          <div style="margin-top:16px;padding-top:12px;border-top:1px solid #e4e4e7;">
-            <p style="margin:0;font-size:10px;line-height:1.6;color:#a1a1aa;font-family:${FONT};">
-              <strong>Datenschutzhinweis:</strong> Diese E-Mail und ihre Anh&auml;nge sind vertraulich und ausschlie&szlig;lich f&uuml;r den/die genannten Empf&auml;nger bestimmt. Sollten Sie diese E-Mail irrt&uuml;mlich erhalten haben, informieren Sie bitte umgehend den Absender und l&ouml;schen Sie die E-Mail.<br>
-              Steuernummer: 244/229/80957
-            </p>
-          </div>
-        </td>
-      </tr>
-
-    </table>
-  </td></tr>
-</table>
 </body></html>`;
 
     await transporter.sendMail({
