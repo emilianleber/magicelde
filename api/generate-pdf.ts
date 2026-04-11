@@ -43,6 +43,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // Header = erstes Kind (Logo + Name + Adresse + Trennlinie)
       const headerEl = container.children[0] as HTMLElement;
       const headerHtml = headerEl ? headerEl.outerHTML : "";
+      const headerHeight = headerEl ? headerEl.offsetHeight : 0;
+
+      // Logo-Bild aus dem Header extrahieren
+      const logoImg = headerEl?.querySelector("img") as HTMLImageElement | null;
+      let logoSrc = "";
+      let logoW = 68;
+      let logoH = 68;
+      if (logoImg) {
+        logoSrc = logoImg.src;
+        logoW = logoImg.offsetWidth || 68;
+        logoH = logoImg.offsetHeight || 68;
+      }
 
       // Footer = IRGENDWO verschachtelter div mit position:absolute + bottom
       // (ist innerhalb des Body-Divs, nicht direkt ein Kind von container)
@@ -73,15 +85,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         contentParts.push((container.children[i] as HTMLElement).outerHTML);
       }
 
-      return { headerHtml, footerHtml, contentHtml: contentParts.join("") };
+      return { headerHtml, headerHeight, logoSrc, logoW, logoH, footerHtml, contentHtml: contentParts.join("") };
     });
 
     if (!parts) throw new Error("Could not extract document parts");
 
     // Schritt 2: Table-basiertes HTML bauen
-    // <thead> = Header (wird auf jeder Seite wiederholt)
-    // <tfoot> = Footer (wird auf jeder Seite wiederholt)
-    // <tbody> = Content (fließt natürlich über Seiten)
+    // <thead> = Mini-Header nur Logo (wird auf jeder Seite wiederholt)
+    // <tbody> = Voller Header (nur Seite 1) + Content (fließt natürlich über Seiten)
+    // Footer per position:fixed auf jeder Seite
+
+    // Mini-Header: nur Logo rechts oben, kein Name/Adresse/Linie
+    const miniHeaderHeight = 56;
+    const miniHeaderHtml = parts.logoSrc
+      ? `<div id="mini-header" style="position:relative;height:${miniHeaderHeight}px;padding:14px 40px 0;">
+           <img src="${parts.logoSrc}" style="position:absolute;top:14px;right:40px;width:${parts.logoW}px;height:${parts.logoH}px;object-fit:contain;border-radius:4px;display:block;" alt="Logo" />
+         </div>`
+      : `<div id="mini-header" style="height:${miniHeaderHeight}px;"></div>`;
+
     const tableHtml = `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -104,10 +125,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 <body>
   <!-- Footer: fixed am Seitenende jeder Seite -->
   <div id="pdf-footer">${parts.footerHtml}</div>
-  <!-- Table: thead wiederholt Header auf jeder Seite -->
+  <!-- Table: thead wiederholt Mini-Header (nur Logo) auf jeder Seite -->
   <table>
-    <thead><tr><td>${parts.headerHtml}</td></tr></thead>
-    <tbody><tr><td>${parts.contentHtml}</td></tr></tbody>
+    <thead><tr><td>${miniHeaderHtml}</td></tr></thead>
+    <tbody><tr><td>
+      <!-- Voller Header nur auf Seite 1, per negativem Margin über Mini-Header gezogen -->
+      <div id="full-header" style="margin-top:-${miniHeaderHeight}px;position:relative;z-index:2;">${parts.headerHtml}</div>
+      ${parts.contentHtml}
+    </td></tr></tbody>
   </table>
 </body>
 </html>`;
