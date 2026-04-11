@@ -833,20 +833,26 @@ const AdminShowEditor = () => {
             </div>
             <div>
               <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Buchung (optional)</label>
-              <select value={linkedBookingId || "none"} onChange={e => {
-                const bid = e.target.value === "none" ? null : e.target.value;
-                setLinkedBookingId(bid);
-                // Gäste laden
-                if (bid) {
-                  const booking = availableEvents.find(ev => ev.id === bid);
-                  if (booking?.guests) { setCloseupGaeste(booking.guests); setCloseupGruppen(Math.ceil(booking.guests / closeupPersonenProGruppe)); }
-                }
-              }} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
-                <option value="none">Keine Buchung</option>
-                {availableEvents.map(ev => (
-                  <option key={ev.id} value={ev.id}>{ev.title}{ev.date ? ` (${new Date(ev.date + "T00:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "short" })})` : ""}{ev.guests ? ` · ${ev.guests} Gäste` : ""}</option>
-                ))}
+              {linkedBookingId && availableEvents.find(ev => ev.id === linkedBookingId) ? (
+                <div className="flex items-center gap-2 rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
+                  <span className="flex-1 truncate">{(() => { const ev = availableEvents.find(e => e.id === linkedBookingId)!; return `${ev.title}${ev.date ? ` (${new Date(ev.date + "T00:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "short" })})` : ""}${ev.guests ? ` · ${ev.guests} Gäste` : ""}`; })()}</span>
+                  <button type="button" onClick={() => setLinkedBookingId(null)} className="text-muted-foreground hover:text-destructive shrink-0"><X className="w-3.5 h-3.5" /></button>
+                </div>
+              ) : (
+                <select value="none" onChange={e => {
+                  const bid = e.target.value === "none" ? null : e.target.value;
+                  setLinkedBookingId(bid);
+                  if (bid) {
+                    const booking = availableEvents.find(ev => ev.id === bid);
+                    if (booking?.guests) { setCloseupGaeste(booking.guests); setCloseupGruppen(Math.ceil(booking.guests / closeupPersonenProGruppe)); }
+                  }
+                }} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
+                  <option value="none">Buchung auswählen…</option>
+                  {availableEvents.map(ev => (
+                    <option key={ev.id} value={ev.id}>{ev.title}{ev.date ? ` (${new Date(ev.date + "T00:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "short" })})` : ""}{ev.guests ? ` · ${ev.guests} Gäste` : ""}</option>
+                  ))}
               </select>
+              )}
             </div>
           </div>
 
