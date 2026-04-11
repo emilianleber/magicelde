@@ -48,16 +48,16 @@ const WORKFLOW_STEPS: DokumentTyp[] = ["angebot", "auftragsbestaetigung", "absch
 
 // Mögliche Folgedokument-Typen pro Dokumenttyp
 const WORKFLOW_OPTIONS: Partial<Record<DokumentTyp, { typ: DokumentTyp; label: string }[]>> = {
-  angebot:              [{ typ: "auftragsbestaetigung", label: "→ Auftragsbestätigung" }],
+  angebot:              [{ typ: "auftragsbestaetigung", label: "Auftragsbestätigung" }],
   auftragsbestaetigung: [
-    { typ: "abschlagsrechnung", label: "→ Abschlagsrechnung" },
-    { typ: "rechnung", label: "→ Schlussrechnung" },
+    { typ: "abschlagsrechnung", label: "Abschlagsrechnung" },
+    { typ: "rechnung", label: "Schlussrechnung" },
   ],
   abschlagsrechnung:    [
-    { typ: "abschlagsrechnung", label: "→ Weitere Abschlagsrechnung" },
-    { typ: "rechnung", label: "→ Schlussrechnung" },
+    { typ: "abschlagsrechnung", label: "Weitere Abschlagsrechnung" },
+    { typ: "rechnung", label: "Schlussrechnung" },
   ],
-  rechnung:             [{ typ: "mahnung", label: "→ Mahnung" }],
+  rechnung:             [{ typ: "mahnung", label: "Mahnung" }],
 };
 
 // Legacy: erster Eintrag als Standard-Workflow
@@ -1247,7 +1247,7 @@ export default function AdminDokumentDetail() {
               >
                 <Plus className="w-3.5 h-3.5" />
                 Zahlung erfassen
-              </button>}
+              </button>
             </div>
 
             {/* Progress bar */}
