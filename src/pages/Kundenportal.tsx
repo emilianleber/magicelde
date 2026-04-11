@@ -761,6 +761,20 @@ const Kundenportal = () => {
   const capWords = (s?: string | null) =>
     s ? s.replace(/_/g, " ").replace(/(^|\s)\S/g, (c) => c.toUpperCase()) : "";
 
+  // Format-Label: DB-Werte in schöne Labels umwandeln
+  const formatLabel = (fmt?: string | null): string => {
+    if (!fmt) return "";
+    const map: Record<string, string> = {
+      magic_dinner: "Magic Dinner", "magic-dinner": "Magic Dinner",
+      buehnenshow: "Bühnenshow", abendshow: "Bühnenshow",
+      closeup: "Close-Up", "close-up": "Close-Up",
+      kombination: "Kombination", tourshow: "Tourshow",
+      kundenbuchung: "Kundenbuchung", workshop: "Workshop",
+      moderation: "Moderation",
+    };
+    return map[fmt] || capWords(fmt);
+  };
+
   // Feedback/Bewertung URL (Google Review oder eigene Seite)
   const feedbackUrl = "https://g.page/r/CQ_REVIEW_LINK/review"; // TODO: Echten Google-Review-Link einsetzen
   // Fallback: Name aus neuester Anfrage wenn Profil noch leer
@@ -1012,7 +1026,7 @@ const Kundenportal = () => {
                     )}
                     {currentEvent.location && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{currentEvent.location}</span>}
                     {currentEvent.guests && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5" />{currentEvent.guests} Gäste</span>}
-                    {currentEvent.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5" />{capWords(currentEvent.format)}</span>}
+                    {currentEvent.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5" />{formatLabel(currentEvent.format)}</span>}
                   </div>
                   {countdown !== null && countdown >= 0 && (
                     <div className="mt-4 inline-flex items-center gap-2 bg-white/10 backdrop-blur rounded-xl px-4 py-2.5">
@@ -1592,7 +1606,7 @@ const Kundenportal = () => {
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-x-5 gap-y-2 font-sans text-sm text-muted-foreground mb-4">
-                    {currentEvent.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{currentEvent.format}</span>}
+                    {currentEvent.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{formatLabel(currentEvent.format)}</span>}
                     {currentEvent.guests && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-accent" />{currentEvent.guests} Gäste</span>}
                   </div>
                   {currentEvent.event_date && (
@@ -1713,7 +1727,7 @@ const Kundenportal = () => {
                           </span>
                         )}
                         {e.location && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-accent" />{e.location}</span>}
-                        {e.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{e.format}</span>}
+                        {e.format && <span className="flex items-center gap-1.5"><Theater className="w-3.5 h-3.5 text-accent" />{formatLabel(e.format)}</span>}
                         {e.guests && <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-accent" />{e.guests} Gäste</span>}
                       </div>
 
@@ -2118,7 +2132,7 @@ const Kundenportal = () => {
                             { label: "Datum", icon: Calendar, value: r.datum ? new Date(r.datum).toLocaleDateString("de-DE") : "Nicht angegeben" },
                             { label: "Ort", icon: MapPin, value: capWords(r.ort) || "Nicht angegeben" },
                             { label: "Gäste", icon: Users, value: r.gaeste != null ? String(r.gaeste) : "Nicht angegeben" },
-                            { label: "Format", icon: Theater, value: capWords(r.format) || "Nicht angegeben" },
+                            { label: "Format", icon: Theater, value: formatLabel(r.format) || "Nicht angegeben" },
                             { label: "Telefon", icon: Phone, value: r.phone || "Nicht angegeben" },
                             { label: "E-Mail", icon: Mail, value: r.email },
                             ...(r.firma ? [{ label: "Firma", icon: Building2, value: r.firma }] : []),
