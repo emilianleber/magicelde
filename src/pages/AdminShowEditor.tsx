@@ -889,11 +889,6 @@ const AdminShowEditor = () => {
               </select>
             </div>
             <div>
-              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Preis (€)</label>
-              <input type="number" value={preis ?? ""} onChange={e => setPreis(e.target.value ? parseFloat(e.target.value) : null)} placeholder="z.B. 950"
-                className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" step="0.01" min="0" />
-            </div>
-            <div>
               <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Buchung (optional)</label>
               {linkedBookingId && availableEvents.find(ev => ev.id === linkedBookingId) ? (
                 <div className="flex items-center gap-2 rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
