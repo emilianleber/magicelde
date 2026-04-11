@@ -326,7 +326,7 @@ serve(async (req) => {
           type: "Auftragsbestätigung",
           document_number: nummer,
           document_date: today,
-          status: "entwurf",
+          status: "gesendet",
           customer_id: customer.id,
           event_id: newEvent.id,
           request_id: request_id,
