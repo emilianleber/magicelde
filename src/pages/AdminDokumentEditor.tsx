@@ -1906,7 +1906,7 @@ body > div {
                       placeholder="Bezeichnung oder Artikel suchen…"
                       value={artikelSuche[pos.id] ?? pos.bezeichnung}
                       onChange={(e) => searchArtikel(pos.id, e.target.value)}
-                      onBlur={() => { const q = artikelSuche[pos.id]; if (q !== undefined && q !== pos.bezeichnung) updatePosition(pos.id, { bezeichnung: q }); }}
+                      onBlur={() => { const q = artikelSuche[pos.id]; if (q !== undefined && q !== pos.bezeichnung) updatePosition(pos.id, { bezeichnung: q }); setTimeout(() => setArtikelSuggestions(prev => ({ ...prev, [pos.id]: [] })), 150); }}
                       className={`w-full px-3.5 py-2 ${inp}`}
                     />
                     {(artikelSuggestions[pos.id] || []).length > 0 && (
