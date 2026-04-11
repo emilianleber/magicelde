@@ -29,6 +29,8 @@ import AdminShowEditor from "@/pages/AdminShowEditor";
 import AdminTouren from "@/pages/AdminTouren";
 import AdminTourDetail from "@/pages/AdminTourDetail";
 import AdminEffekteBibliothek from "@/pages/AdminEffekteBibliothek";
+import AdminMusik from "@/pages/AdminMusik";
+import AdminTechnik from "@/pages/AdminTechnik";
 import AdminTeam from "@/pages/AdminTeam";
 
 import { useEffect } from "react";
@@ -150,6 +152,8 @@ const AdminRoutes = () => (
       <Route path="/admin/programm/touren" element={<AdminTouren />} />
       <Route path="/admin/programm/touren/:id" element={<AdminTourDetail />} />
       <Route path="/admin/programm/effekte" element={<AdminEffekteBibliothek />} />
+      <Route path="/admin/programm/musik" element={<AdminMusik />} />
+      <Route path="/admin/programm/technik" element={<AdminTechnik />} />
       <Route path="/admin/programm/locations" element={<AdminLocations />} />
       <Route path="/admin/programm/team" element={<AdminTeam />} />
 
@@ -290,6 +294,8 @@ const App = () => (
               <Route path="/admin/programm/touren" element={<AdminTouren />} />
               <Route path="/admin/programm/touren/:id" element={<AdminTourDetail />} />
               <Route path="/admin/programm/effekte" element={<AdminEffekteBibliothek />} />
+      <Route path="/admin/programm/musik" element={<AdminMusik />} />
+      <Route path="/admin/programm/technik" element={<AdminTechnik />} />
               <Route path="/admin/programm/locations" element={<AdminLocations />} />
               <Route path="/admin/programm/team" element={<AdminTeam />} />
 

@@ -201,6 +201,8 @@ export const AdminPersistentShell = () => {
               <SubNavLink href="/admin/programm/shows" label="Shows" isActive={location.pathname.startsWith("/admin/programm/shows")} onClick={onClose} />
               <SubNavLink href="/admin/programm/touren" label="Tour-Planung" isActive={location.pathname.startsWith("/admin/programm/touren")} onClick={onClose} />
               <SubNavLink href="/admin/programm/effekte" label="Effekte" isActive={location.pathname.startsWith("/admin/programm/effekte")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/musik" label="Musik & Einspieler" isActive={location.pathname.startsWith("/admin/programm/musik")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/technik" label="Technik-Inventar" isActive={location.pathname.startsWith("/admin/programm/technik")} onClick={onClose} />
               <SubNavLink href="/admin/programm/locations" label="Locations" isActive={location.pathname.startsWith("/admin/programm/locations")} onClick={onClose} />
               <SubNavLink href="/admin/programm/team" label="Team" isActive={location.pathname.startsWith("/admin/programm/team")} onClick={onClose} />
             </div>
@@ -417,6 +419,8 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
               <SubNavLink href="/admin/programm/shows" label="Shows" isActive={location.pathname.startsWith("/admin/programm/shows")} onClick={onClose} />
               <SubNavLink href="/admin/programm/touren" label="Tour-Planung" isActive={location.pathname.startsWith("/admin/programm/touren")} onClick={onClose} />
               <SubNavLink href="/admin/programm/effekte" label="Effekte" isActive={location.pathname.startsWith("/admin/programm/effekte")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/musik" label="Musik & Einspieler" isActive={location.pathname.startsWith("/admin/programm/musik")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/technik" label="Technik-Inventar" isActive={location.pathname.startsWith("/admin/programm/technik")} onClick={onClose} />
               <SubNavLink href="/admin/programm/locations" label="Locations" isActive={location.pathname.startsWith("/admin/programm/locations")} onClick={onClose} />
               <SubNavLink href="/admin/programm/team" label="Team" isActive={location.pathname.startsWith("/admin/programm/team")} onClick={onClose} />
             </div>
