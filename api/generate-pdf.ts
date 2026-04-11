@@ -96,7 +96,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Footer per position:fixed auf jeder Seite
 
     // Mini-Header: nur Logo rechts oben, kein Name/Adresse/Linie
-    const miniHeaderHeight = 56;
+    const miniHeaderHeight = 170; // ~4cm Abstand + Logo auf Folgeseiten
     const miniHeaderHtml = parts.logoSrc
       ? `<div id="mini-header" style="position:relative;height:${miniHeaderHeight}px;padding:14px 40px 0;">
            <img src="${parts.logoSrc}" style="position:absolute;top:14px;right:40px;width:${parts.logoW}px;height:${parts.logoH}px;object-fit:contain;border-radius:4px;display:block;" alt="Logo" />

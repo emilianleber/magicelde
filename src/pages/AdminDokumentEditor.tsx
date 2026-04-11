@@ -549,7 +549,7 @@ function DocumentPreview(props: PreviewProps) {
       {chunk.length === 0 ? (
         <div style={{ padding: "6px 8px", fontSize: 9, color: "#ccc", borderBottom: "0.5px solid #eee" }}>Noch keine Positionen</div>
       ) : chunk.map((pos, i) => (
-        <div key={pos.id}>
+        <div key={pos.id} style={{ breakInside: "avoid" }}>
           <div style={{ display: "flex", padding: "5px 8px", backgroundColor: i % 2 === 0 ? "#f8f8f8" : "#fff", fontSize: 9.5 }}>
             <span style={{ width: 30, color: pos.optional ? "#6b9bd2" : "#999" }}>{pos.optional ? "Opt." : `${globalOffset + i + 1}.`}</span>
             <div style={{ flex: 4 }}>
