@@ -32,6 +32,7 @@ import AdminEffekteBibliothek from "@/pages/AdminEffekteBibliothek";
 import AdminMusik from "@/pages/AdminMusik";
 import AdminTechnik from "@/pages/AdminTechnik";
 import AdminTeam from "@/pages/AdminTeam";
+import AdminPakete from "@/pages/AdminPakete";
 
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -175,7 +176,8 @@ const AdminRoutes = () => (
       <Route path="/admin/produktionen" element={<Navigate to="/admin/programm/touren" replace />} />
       <Route path="/admin/partner" element={<Navigate to="/admin/programm/team" replace />} />
       <Route path="/admin/effekte" element={<Navigate to="/admin/programm/effekte" replace />} />
-      <Route path="/admin/pakete" element={<Navigate to="/admin/programm/shows" replace />} />
+      <Route path="/admin/programm/pakete" element={<AdminPakete />} />
+      <Route path="/admin/pakete" element={<Navigate to="/admin/programm/pakete" replace />} />
       <Route path="/admin/shows" element={<Navigate to="/admin/programm/shows" replace />} />
       <Route path="/admin/shows/:id" element={<AdminShowDetail />} />
       <Route path="/admin/locations" element={<Navigate to="/admin/programm/locations" replace />} />
@@ -317,7 +319,8 @@ const App = () => (
               <Route path="/admin/produktionen" element={<Navigate to="/admin/programm/touren" replace />} />
               <Route path="/admin/partner" element={<Navigate to="/admin/programm/team" replace />} />
               <Route path="/admin/effekte" element={<Navigate to="/admin/programm/effekte" replace />} />
-              <Route path="/admin/pakete" element={<Navigate to="/admin/programm/shows" replace />} />
+              <Route path="/admin/programm/pakete" element={<AdminPakete />} />
+      <Route path="/admin/pakete" element={<Navigate to="/admin/programm/pakete" replace />} />
               <Route path="/admin/shows" element={<Navigate to="/admin/programm/shows" replace />} />
               <Route path="/admin/shows/:id" element={<AdminShowDetail />} />
               <Route path="/admin/locations" element={<Navigate to="/admin/programm/locations" replace />} />

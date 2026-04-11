@@ -57,12 +57,21 @@ const AdminProgrammHub = () => {
   const cards = [
     {
       label: "Shows",
-      description: "Show-Konzepte, Pakete und Ablaufplanung verwalten.",
+      description: "Show-Konzepte und Ablaufplanung verwalten.",
       href: "/admin/programm/shows",
       icon: Clapperboard,
       stat: stats.shows,
       statLabel: "Shows",
       accent: true,
+    },
+    {
+      label: "Pakete",
+      description: "Vordefinierte Showpakete mit Preis und Format.",
+      href: "/admin/programm/pakete",
+      icon: Sparkles,
+      stat: 0,
+      statLabel: "Pakete",
+      accent: false,
     },
     {
       label: "Tour-Planung",

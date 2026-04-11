@@ -922,6 +922,61 @@ const AdminShowEditor = () => {
           <div className="space-y-5">
           <h2 className="text-lg font-bold">{isCloseUp ? "Einsatz-Planung" : isWorkshop ? "Workshop-Planung" : isDinner ? "Dinner-Planung" : "Show-Planung"}</h2>
 
+          {/* Bühnenshow / Tourshow / Kundenbuchung: Phasen-Vorlagen */}
+          {isBuehne && phasen.length === 0 && (
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground">Wähle eine Vorlage als Startpunkt oder erstelle die Phasen manuell im nächsten Schritt.</p>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <button onClick={() => loadPhasePresets(BUEHNE_PHASE_PRESETS)}
+                  className="p-4 rounded-xl border border-border/20 text-left hover:bg-muted/20 transition-colors">
+                  <p className="text-sm font-semibold">Standard-Bühnenshow</p>
+                  <p className="text-xs text-muted-foreground mt-1">Empfang → Akt 1 → Pause → Akt 2 → Finale</p>
+                </button>
+                {isDinner && (
+                  <button onClick={() => loadPhasePresets(DINNER_PHASE_PRESETS)}
+                    className="p-4 rounded-xl border border-border/20 text-left hover:bg-muted/20 transition-colors">
+                    <p className="text-sm font-semibold">Magic Dinner (Gänge)</p>
+                    <p className="text-xs text-muted-foreground mt-1">Empfang → Gang 1-4 → Finale</p>
+                  </button>
+                )}
+                <button onClick={() => addPhase()}
+                  className="p-4 rounded-xl border border-dashed border-border/30 text-left hover:bg-muted/20 transition-colors">
+                  <p className="text-sm font-semibold text-muted-foreground">Manuell erstellen</p>
+                  <p className="text-xs text-muted-foreground mt-1">Eigene Phasen im nächsten Schritt hinzufügen</p>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Bühnenshow mit Phasen: Übersicht */}
+          {isBuehne && phasen.length > 0 && (
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground">{phasen.length} Phasen angelegt. Effekte werden im nächsten Schritt zugewiesen.</p>
+              <div className="space-y-1">
+                {phasen.map((p, i) => (
+                  <div key={p._id} className="flex items-center justify-between px-3 py-2 rounded-lg bg-muted/10">
+                    <span className="text-sm font-medium">{p.label}</span>
+                    <span className="text-xs text-muted-foreground">{p.effektIds.length} Effekte</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Magic Dinner: Modus-Toggle */}
+          {isDinner && (
+            <div className="flex gap-2">
+              <button onClick={() => setDinnerMode("gang")}
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors ${dinnerMode === "gang" ? "bg-foreground text-background" : "bg-muted/30 text-muted-foreground"}`}>
+                <UtensilsCrossed className="w-4 h-4" /> Gänge-Ablauf
+              </button>
+              <button onClick={() => setDinnerMode("closeup")}
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors ${dinnerMode === "closeup" ? "bg-foreground text-background" : "bg-muted/30 text-muted-foreground"}`}>
+                <Wand2 className="w-4 h-4" /> Close-Up Pool
+              </button>
+            </div>
+          )}
+
           {/* Dauer-Anzeige — nicht bei Close-Up (hat eigene Gruppen-Planung) und Workshop */}
           {!isWorkshop && !isCloseUp && (
             <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${overZieldauer ? "bg-red-50 border-red-200" : underZieldauer ? "bg-amber-50 border-amber-200" : "bg-green-50 border-green-200"}`}>

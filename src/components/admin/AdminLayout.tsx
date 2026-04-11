@@ -199,6 +199,7 @@ export const AdminPersistentShell = () => {
           {item.href === "/admin/programm" && location.pathname.startsWith("/admin/programm") && (
             <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
               <SubNavLink href="/admin/programm/shows" label="Shows" isActive={location.pathname.startsWith("/admin/programm/shows")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/pakete" label="Pakete" isActive={location.pathname.startsWith("/admin/programm/pakete")} onClick={onClose} />
               <SubNavLink href="/admin/programm/touren" label="Tour-Planung" isActive={location.pathname.startsWith("/admin/programm/touren")} onClick={onClose} />
               <SubNavLink href="/admin/programm/effekte" label="Effekte" isActive={location.pathname.startsWith("/admin/programm/effekte")} onClick={onClose} />
               <SubNavLink href="/admin/programm/musik" label="Musik & Einspieler" isActive={location.pathname.startsWith("/admin/programm/musik")} onClick={onClose} />
@@ -417,6 +418,7 @@ const StandaloneAdminLayout = ({ title, subtitle, actions, children }: AdminLayo
           {item.href === "/admin/programm" && location.pathname.startsWith("/admin/programm") && (
             <div className="ml-2 pl-3 border-l border-border/20 mt-0.5 mb-1 space-y-0.5">
               <SubNavLink href="/admin/programm/shows" label="Shows" isActive={location.pathname.startsWith("/admin/programm/shows")} onClick={onClose} />
+              <SubNavLink href="/admin/programm/pakete" label="Pakete" isActive={location.pathname.startsWith("/admin/programm/pakete")} onClick={onClose} />
               <SubNavLink href="/admin/programm/touren" label="Tour-Planung" isActive={location.pathname.startsWith("/admin/programm/touren")} onClick={onClose} />
               <SubNavLink href="/admin/programm/effekte" label="Effekte" isActive={location.pathname.startsWith("/admin/programm/effekte")} onClick={onClose} />
               <SubNavLink href="/admin/programm/musik" label="Musik & Einspieler" isActive={location.pathname.startsWith("/admin/programm/musik")} onClick={onClose} />
