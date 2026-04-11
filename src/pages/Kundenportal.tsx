@@ -131,7 +131,7 @@ interface PortalChangeRequest {
   event_id: string | null;
 }
 
-type Tab = "dashboard" | "events" | "documents" | "requests" | "nachrichten" | "einstellungen" | "kontakt" | "feedback";
+type Tab = "dashboard" | "meineshow" | "events" | "documents" | "requests" | "nachrichten" | "einstellungen" | "kontakt" | "feedback";
 
 const inputCls =
   "w-full rounded-xl bg-black/[0.02] border border-black/[0.1] px-4 py-3 text-sm text-foreground placeholder:text-black/25 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/30 transition-all";
@@ -856,10 +856,17 @@ const Kundenportal = () => {
     }
   };
 
+  const isEventDone = currentEvent?.status === "abgeschlossen" || currentEvent?.status === "storniert";
+  const isRequestDone = !currentEvent && (currentRequest?.status === "abgelehnt" || currentRequest?.status === "storniert");
+  const isDone = isEventDone || isRequestDone;
+  const hasKonzept = !!paketInfo;
+
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
     { id: "dashboard", label: "Übersicht", icon: LayoutDashboard },
+    // "Meine Show" nur wenn Konzept zugeordnet und nicht abgeschlossen/storniert
+    ...(hasKonzept && !isDone ? [{ id: "meineshow" as Tab, label: "Meine Show", icon: Sparkles }] : []),
     { id: "documents", label: "Dokumente", icon: FolderOpen },
-    { id: "kontakt", label: "Kontakt & Daten", icon: Phone },
+    ...(!isDone ? [{ id: "kontakt" as Tab, label: "Kontakt & Daten", icon: Phone }] : []),
   ];
 
   return (
@@ -1064,6 +1071,10 @@ const Kundenportal = () => {
                 </div>
               </div>
             )}
+
+            {/* ── Folgende Bereiche nur wenn nicht abgeschlossen/storniert ── */}
+            {!isDone && (
+            <>
 
             {/* ── SHOW/KONZEPT KARTE ── */}
             {paketInfo && (
@@ -1672,6 +1683,9 @@ const Kundenportal = () => {
               );
             })()}
 
+            </>
+            )}
+
             {/* Contact strip */}
             <div className="rounded-2xl bg-[#08080d] p-5 flex items-center gap-4">
               <img
@@ -1840,6 +1854,119 @@ const Kundenportal = () => {
         )}
 
         {/* ── DOKUMENTE ── */}
+        {/* ── TAB: MEINE SHOW ── */}
+        {activeTab === "meineshow" && paketInfo && (
+          <div className="space-y-8">
+            {/* Show Header */}
+            <div className="relative overflow-hidden rounded-3xl bg-[#08080d] p-6 sm:p-8 text-white">
+              <div className="relative z-10">
+                <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/50 mb-2">Ihr Showprogramm</p>
+                <h1 className="font-display text-2xl sm:text-3xl font-bold">
+                  <span className="text-gradient">{customerFriendlyPaketName(paketInfo.name, currentRequest?.anlass)}</span>
+                </h1>
+                <p className="font-sans text-sm text-white/60 mt-2">Bis zu {paketInfo.zieldauer} Minuten Showprogramm</p>
+              </div>
+              <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
+            </div>
+
+            {/* Beschreibung */}
+            {paketInfo.beschreibung && (
+              <div className="rounded-2xl bg-white border border-black/[0.06] p-6">
+                <h2 className="font-display text-base font-bold text-foreground mb-3">Über Ihre Show</h2>
+                <p className="font-sans text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{paketInfo.beschreibung}</p>
+              </div>
+            )}
+
+            {/* Format-Info */}
+            {(() => {
+              const fmt = paketInfo.format;
+              const infos: Record<string, { title: string; text: string; link: string }> = {
+                closeup: { title: "Was ist Close-Up Magie?", text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer, oft mit Alltagsgegenständen wie Karten, Münzen oder Ringen. Das macht Close-Up zur intimsten und persönlichsten Form der Zauberkunst.", link: "/close-up" },
+                "close-up": { title: "Was ist Close-Up Magie?", text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer, oft mit Alltagsgegenständen wie Karten, Münzen oder Ringen. Das macht Close-Up zur intimsten und persönlichsten Form der Zauberkunst.", link: "/close-up" },
+                buehnenshow: { title: "Was erwartet Sie bei der Bühnenshow?", text: "Eine Bühnenshow ist eine durchkomponierte Vorführung mit Dramaturgie, Comedy und Publikumsinteraktion. Die Show baut Spannung auf, überrascht und unterhält — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten. Ihre Gäste werden aktiv eingebunden und Teil des Erlebnisses.", link: "/buehnenshow" },
+                abendshow: { title: "Was erwartet Sie bei der Bühnenshow?", text: "Eine Bühnenshow ist eine durchkomponierte Vorführung mit Dramaturgie, Comedy und Publikumsinteraktion. Die Show baut Spannung auf, überrascht und unterhält — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten. Ihre Gäste werden aktiv eingebunden und Teil des Erlebnisses.", link: "/buehnenshow" },
+                magic_dinner: { title: "Was ist ein Magic Dinner?", text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit faszinierenden Zaubermomenten. Zwischen den Gängen bewegt sich der Zauberer an den Tischen und performt hautnah. Dazu gibt es Show-Einlagen auf einer kleinen Bühne — ein einzigartiges Gesamterlebnis für alle Sinne.", link: "/magic-dinner" },
+                "magic-dinner": { title: "Was ist ein Magic Dinner?", text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit faszinierenden Zaubermomenten. Zwischen den Gängen bewegt sich der Zauberer an den Tischen und performt hautnah. Dazu gibt es Show-Einlagen auf einer kleinen Bühne — ein einzigartiges Gesamterlebnis für alle Sinne.", link: "/magic-dinner" },
+                kombination: { title: "Das Beste aus beiden Welten", text: "Die Kombination aus Close-Up und Bühnenshow bietet maximale Unterhaltung. Erst bewegt sich der Zauberer zwischen Ihren Gästen, dann tritt er auf der Bühne auf. So wird der gesamte Abend magisch — vom Empfang bis zum Finale.", link: "/close-up" },
+              };
+              const info = fmt ? infos[fmt] : null;
+              if (!info) return null;
+              return (
+                <div className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 p-6">
+                  <h2 className="font-display text-base font-bold text-foreground mb-3">{info.title}</h2>
+                  <p className="font-sans text-sm text-foreground/70 leading-relaxed">{info.text}</p>
+                  <a href={`https://www.magicel.de${info.link}`} target="_blank" rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
+                    Mehr erfahren <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              );
+            })()}
+
+            {/* FAQ */}
+            <div className="rounded-2xl bg-white border border-black/[0.06] p-6">
+              <h2 className="font-display text-base font-bold text-foreground mb-4">Häufige Fragen</h2>
+              <div className="space-y-3">
+                {[
+                  { q: "Wie viel Platz wird benötigt?", a: "Für Close-Up brauche ich keinen extra Platz — ich komme zu Ihren Gästen. Für eine Bühnenshow reicht ein Bereich von ca. 3×2 Metern mit gutem Licht." },
+                  { q: "Kann die Show an unseren Zeitplan angepasst werden?", a: "Natürlich! Die Show wird genau in Ihren Ablauf integriert — ob zwischen den Gängen, nach dem Dessert oder zum Empfang." },
+                  { q: "Was passiert wenn etwas schiefgeht?", a: "Professionelle Improvisation gehört zum Handwerk. Jede Show wird flexibel an die Situation angepasst — das macht Live-Entertainment so besonders." },
+                  { q: "Werden die Gäste auf die Bühne geholt?", a: "Ja, aber immer freiwillig und respektvoll. Niemand wird bloßgestellt — die Freiwilligen werden zu Stars des Abends!" },
+                ].map((faq, i) => (
+                  <details key={i} className="group">
+                    <summary className="flex items-center justify-between cursor-pointer py-2 text-sm font-semibold text-foreground list-none">
+                      {faq.q}
+                      <ChevronDown className="w-4 h-4 text-muted-foreground group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <p className="text-sm text-foreground/60 leading-relaxed pb-2 pl-0">{faq.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+
+            {/* Video Section */}
+            <div className="rounded-2xl bg-[#08080d] p-6 text-white">
+              <h2 className="font-display text-base font-bold mb-4">Eindrücke aus vergangenen Shows</h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <a href="https://www.magicel.de/#videos" target="_blank" rel="noopener noreferrer"
+                  className="aspect-video rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/15 transition-colors group">
+                  <div className="text-center">
+                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-2 group-hover:bg-white/30 transition-colors">
+                      <ArrowRight className="w-5 h-5" />
+                    </div>
+                    <p className="text-xs text-white/60">Videos ansehen</p>
+                  </div>
+                </a>
+                <a href="https://www.magicel.de/#galerie" target="_blank" rel="noopener noreferrer"
+                  className="aspect-video rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/15 transition-colors group">
+                  <div className="text-center">
+                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-2 group-hover:bg-white/30 transition-colors">
+                      <ArrowRight className="w-5 h-5" />
+                    </div>
+                    <p className="text-xs text-white/60">Galerie ansehen</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            {/* Contact */}
+            <div className="rounded-2xl bg-[#08080d] p-5 flex items-center gap-4">
+              <img src={portraitImg} alt="Emilian Leber" className="w-12 h-12 rounded-full object-cover object-top shrink-0 ring-2 ring-white/20" />
+              <div className="flex-1 min-w-0">
+                <p className="font-sans text-sm font-semibold text-white">Fragen zum Programm?</p>
+                <p className="font-sans text-xs text-white/50">Ich berate Sie gerne persönlich</p>
+              </div>
+              <a href="mailto:el@magicel.de" className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/20 transition-all">
+                <Mail className="w-4 h-4" />
+              </a>
+              <a href="tel:+4915563744696" className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/20 transition-all">
+                <Phone className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        )}
+
+        {/* ── TAB: DOKUMENTE ── */}
         {activeTab === "documents" && (() => {
           const rechnungsTypen = ["Rechnung", "Abschlagsrechnung", "Schlussrechnung", "Mahnung"];
           const rechnungen = documents.filter(d => rechnungsTypen.includes(d.type || ""));
