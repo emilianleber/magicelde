@@ -36,6 +36,9 @@ import {
   ListOrdered,
   LayoutDashboard,
   Euro,
+  CalendarDays,
+  MapPin,
+  ExternalLink,
 } from "lucide-react";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -121,7 +124,8 @@ type TabKey =
   | "team"
   | "technik"
   | "budget"
-  | "gema";
+  | "gema"
+  | "planung";
 
 const TABS: { key: TabKey; label: string; icon: typeof ListOrdered }[] = [
   { key: "uebersicht", label: "Übersicht", icon: LayoutDashboard },
@@ -133,6 +137,7 @@ const TABS: { key: TabKey; label: string; icon: typeof ListOrdered }[] = [
   { key: "technik", label: "Technik", icon: Settings },
   { key: "budget", label: "Budget", icon: DollarSign },
   { key: "gema", label: "GEMA", icon: ClipboardCopy },
+  { key: "planung", label: "Planung", icon: CalendarDays },
 ];
 
 const inputCls =
@@ -728,7 +733,7 @@ const AdminShowDetail = () => {
 
       {/* ── Tab bar ── */}
       <div className="flex items-center gap-1 bg-muted/40 rounded-xl p-1 mb-6 overflow-x-auto">
-        {TABS.map((tab) => {
+        {TABS.filter(tab => tab.key !== "planung" || showTyp === "eigenes-programm").map((tab) => {
           const Icon = tab.icon;
           return (
             <button
@@ -1649,6 +1654,47 @@ const AdminShowDetail = () => {
                 </table>
               </div>
             )}
+          </div>
+        )}
+
+        {/* ═══ TAB: Planung (nur eigenes-programm) ═══ */}
+        {activeTab === "planung" && showTyp === "eigenes-programm" && (
+          <div className="space-y-5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-bold flex items-center gap-2">
+                <CalendarDays className="w-4 h-4" /> Eigene Veranstaltungsplanung
+              </h2>
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              Plane deine eigenen Auftritte — Termine, Locations und Organisation.
+            </p>
+
+            {/* Option 1: Tour verknüpfen */}
+            <div className="rounded-xl border border-border/20 p-5 space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tour-Planung</h3>
+              <p className="text-xs text-muted-foreground">
+                Verknüpfe diese Show mit einer Tour für Termine, Locations und Ticketing.
+              </p>
+              <button onClick={() => navigate("/admin/programm/touren")}
+                className="inline-flex items-center gap-2 rounded-xl border border-border/30 px-4 py-2 text-xs font-medium hover:bg-muted/40">
+                <MapPin className="w-3.5 h-3.5" /> Tour-Planung öffnen
+                <ExternalLink className="w-3 h-3 text-muted-foreground" />
+              </button>
+            </div>
+
+            {/* Option 2: Einzelne Termine */}
+            <div className="rounded-xl border border-border/20 p-5 space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Einzelne Auftritte</h3>
+              <p className="text-xs text-muted-foreground">
+                Für vereinzelte eigene Auftritte ohne Tour — erstelle Events direkt.
+              </p>
+              <button onClick={() => navigate("/admin/bookings")}
+                className="inline-flex items-center gap-2 rounded-xl border border-border/30 px-4 py-2 text-xs font-medium hover:bg-muted/40">
+                <CalendarDays className="w-3.5 h-3.5" /> Events & Buchungen
+                <ExternalLink className="w-3 h-3 text-muted-foreground" />
+              </button>
+            </div>
           </div>
         )}
       </div>
