@@ -859,7 +859,7 @@ const Kundenportal = () => {
   const isEventDone = currentEvent?.status === "abgeschlossen" || currentEvent?.status === "storniert";
   const isRequestDone = !currentEvent && (currentRequest?.status === "abgelehnt" || currentRequest?.status === "storniert");
   const isDone = isEventDone || isRequestDone;
-  const hasKonzept = !!paketInfo;
+  const hasKonzept = !!paketInfo || !!currentEvent?.format || !!currentRequest?.format;
 
   const tabs: { id: Tab; label: string; icon: React.ElementType; badge?: number }[] = [
     { id: "dashboard", label: "Übersicht", icon: LayoutDashboard },
@@ -1855,22 +1855,24 @@ const Kundenportal = () => {
 
         {/* ── DOKUMENTE ── */}
         {/* ── TAB: MEINE SHOW ── */}
-        {activeTab === "meineshow" && paketInfo && (
+        {activeTab === "meineshow" && hasKonzept && (
           <div className="space-y-8">
             {/* Show Header */}
             <div className="relative overflow-hidden rounded-3xl bg-[#08080d] p-6 sm:p-8 text-white">
               <div className="relative z-10">
                 <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/50 mb-2">Ihr Showprogramm</p>
                 <h1 className="font-display text-2xl sm:text-3xl font-bold">
-                  <span className="text-gradient">{customerFriendlyPaketName(paketInfo.name, currentRequest?.anlass)}</span>
+                  <span className="text-gradient">
+                    {paketInfo ? customerFriendlyPaketName(paketInfo.name, currentRequest?.anlass) : formatLabel(currentEvent?.format || currentRequest?.format)}
+                  </span>
                 </h1>
-                <p className="font-sans text-sm text-white/60 mt-2">Bis zu {paketInfo.zieldauer} Minuten Showprogramm</p>
+                {paketInfo?.zieldauer && <p className="font-sans text-sm text-white/60 mt-2">Bis zu {paketInfo.zieldauer} Minuten Showprogramm</p>}
               </div>
               <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
             </div>
 
             {/* Beschreibung */}
-            {paketInfo.beschreibung && (
+            {paketInfo?.beschreibung && (
               <div className="rounded-2xl bg-white border border-black/[0.06] p-6">
                 <h2 className="font-display text-base font-bold text-foreground mb-3">Über Ihre Show</h2>
                 <p className="font-sans text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{paketInfo.beschreibung}</p>
@@ -1890,7 +1892,7 @@ const Kundenportal = () => {
               };
 
               // Paket-Format (z.B. closeup) und Event-Format/Anlass (z.B. magic_dinner) können unterschiedlich sein
-              const paketFmt = paketInfo.format;
+              const paketFmt = paketInfo?.format;
               const eventFmt = currentEvent?.format || currentRequest?.format;
               const anlassFmt = currentRequest?.anlass?.toLowerCase();
 
