@@ -388,6 +388,21 @@ const AdminShowEditor = () => {
           setTechnischeAnforderungen(show.technischeAnforderungen);
           setPhasen((show.phasen || []).map((p, i) => ({ ...p, _id: `phase-${i}-${Date.now()}` })));
           if (show.phasen?.length) setExpandedPhase(`phase-0-${Date.now()}`);
+
+          // Gästeanzahl aus Event laden
+          if (show.eventId) {
+            const { data: evt } = await supabase.from("portal_events").select("guests").eq("id", show.eventId).maybeSingle();
+            if (evt?.guests) {
+              setCloseupGaeste(evt.guests);
+              setCloseupGruppen(Math.ceil(evt.guests / closeupPersonenProGruppe));
+            }
+          }
+          // Oder aus Request laden
+          const { data: reqs } = await supabase.from("portal_requests").select("gaeste").eq("show_id", id).limit(1);
+          if (!closeupGaeste && reqs?.[0]?.gaeste) {
+            setCloseupGaeste(reqs[0].gaeste);
+            setCloseupGruppen(Math.ceil(reqs[0].gaeste / closeupPersonenProGruppe));
+          }
         }
       }
       setLoading(false);
@@ -844,10 +859,13 @@ const AdminShowEditor = () => {
                           min={1} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
                       </div>
                     </div>
-                    <div className="mt-3 px-3 py-2 rounded-lg bg-accent/5 border border-accent/10">
-                      <p className="text-xs text-foreground font-medium">
-                        {closeupGaeste > 0 ? `${closeupGaeste} Gäste ÷ ${closeupPersonenProGruppe} = ` : ""}{closeupGruppen} Gruppen × {closeupDauerProGruppe} Min. = <strong>ca. {gesamtDauer} Minuten</strong> Close-Up
-                      </p>
+                    <div className="mt-3 px-4 py-3 rounded-xl bg-green-50 border border-green-200">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-green-800 font-medium">
+                          {closeupGaeste > 0 ? `${closeupGaeste} Gäste ÷ ${closeupPersonenProGruppe} = ` : ""}{closeupGruppen} Gruppen × {closeupDauerProGruppe} Min.
+                        </p>
+                        <p className="text-lg font-bold text-green-700">~{gesamtDauer} Min.</p>
+                      </div>
                     </div>
                   </div>
 
