@@ -1877,28 +1877,51 @@ const Kundenportal = () => {
               </div>
             )}
 
-            {/* Format-Info */}
+            {/* Format-Info — zeigt Info zu Paket-Format UND Event-Anlass wenn unterschiedlich */}
             {(() => {
-              const fmt = paketInfo.format;
               const infos: Record<string, { title: string; text: string; link: string }> = {
-                closeup: { title: "Was ist Close-Up Magie?", text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer, oft mit Alltagsgegenständen wie Karten, Münzen oder Ringen. Das macht Close-Up zur intimsten und persönlichsten Form der Zauberkunst.", link: "/close-up" },
-                "close-up": { title: "Was ist Close-Up Magie?", text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer, oft mit Alltagsgegenständen wie Karten, Münzen oder Ringen. Das macht Close-Up zur intimsten und persönlichsten Form der Zauberkunst.", link: "/close-up" },
-                buehnenshow: { title: "Was erwartet Sie bei der Bühnenshow?", text: "Eine Bühnenshow ist eine durchkomponierte Vorführung mit Dramaturgie, Comedy und Publikumsinteraktion. Die Show baut Spannung auf, überrascht und unterhält — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten. Ihre Gäste werden aktiv eingebunden und Teil des Erlebnisses.", link: "/buehnenshow" },
-                abendshow: { title: "Was erwartet Sie bei der Bühnenshow?", text: "Eine Bühnenshow ist eine durchkomponierte Vorführung mit Dramaturgie, Comedy und Publikumsinteraktion. Die Show baut Spannung auf, überrascht und unterhält — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten. Ihre Gäste werden aktiv eingebunden und Teil des Erlebnisses.", link: "/buehnenshow" },
-                magic_dinner: { title: "Was ist ein Magic Dinner?", text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit faszinierenden Zaubermomenten. Zwischen den Gängen bewegt sich der Zauberer an den Tischen und performt hautnah. Dazu gibt es Show-Einlagen auf einer kleinen Bühne — ein einzigartiges Gesamterlebnis für alle Sinne.", link: "/magic-dinner" },
-                "magic-dinner": { title: "Was ist ein Magic Dinner?", text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit faszinierenden Zaubermomenten. Zwischen den Gängen bewegt sich der Zauberer an den Tischen und performt hautnah. Dazu gibt es Show-Einlagen auf einer kleinen Bühne — ein einzigartiges Gesamterlebnis für alle Sinne.", link: "/magic-dinner" },
-                kombination: { title: "Das Beste aus beiden Welten", text: "Die Kombination aus Close-Up und Bühnenshow bietet maximale Unterhaltung. Erst bewegt sich der Zauberer zwischen Ihren Gästen, dann tritt er auf der Bühne auf. So wird der gesamte Abend magisch — vom Empfang bis zum Finale.", link: "/close-up" },
+                closeup: { title: "Close-Up Magie", text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer, oft mit Alltagsgegenständen wie Karten, Münzen oder Ringen.", link: "/close-up" },
+                "close-up": { title: "Close-Up Magie", text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer, oft mit Alltagsgegenständen wie Karten, Münzen oder Ringen.", link: "/close-up" },
+                buehnenshow: { title: "Bühnenshow", text: "Eine durchkomponierte Vorführung mit Dramaturgie, Comedy und Publikumsinteraktion. Die Show baut Spannung auf und unterhält — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten.", link: "/buehnenshow" },
+                abendshow: { title: "Bühnenshow", text: "Eine durchkomponierte Vorführung mit Dramaturgie, Comedy und Publikumsinteraktion. Die Show baut Spannung auf und unterhält — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten.", link: "/buehnenshow" },
+                magic_dinner: { title: "Magic Dinner", text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit Zaubermomenten. Zwischen den Gängen performt der Zauberer hautnah an den Tischen — ein einzigartiges Gesamterlebnis.", link: "/magic-dinner" },
+                "magic-dinner": { title: "Magic Dinner", text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit Zaubermomenten. Zwischen den Gängen performt der Zauberer hautnah an den Tischen — ein einzigartiges Gesamterlebnis.", link: "/magic-dinner" },
+                kombination: { title: "Kombination", text: "Die Kombination aus Close-Up und Bühnenshow bietet maximale Unterhaltung. Erst hautnah zwischen Ihren Gästen, dann auf der Bühne.", link: "/close-up" },
               };
-              const info = fmt ? infos[fmt] : null;
-              if (!info) return null;
+
+              // Paket-Format (z.B. closeup) und Event-Format/Anlass (z.B. magic_dinner) können unterschiedlich sein
+              const paketFmt = paketInfo.format;
+              const eventFmt = currentEvent?.format || currentRequest?.format;
+              const anlassFmt = currentRequest?.anlass?.toLowerCase();
+
+              // Sammle alle relevanten Format-Infos
+              const cards: { title: string; text: string; link: string }[] = [];
+              if (paketFmt && infos[paketFmt]) cards.push(infos[paketFmt]);
+              // Wenn Event-Format anders als Paket-Format → auch anzeigen
+              if (eventFmt && eventFmt !== paketFmt && infos[eventFmt] && !cards.find(c => c.title === infos[eventFmt].title)) {
+                cards.push(infos[eventFmt]);
+              }
+              // Wenn Anlass (z.B. "magic dinner") ein bekanntes Format hat und nicht schon angezeigt
+              if (anlassFmt) {
+                const anlassKey = anlassFmt.replace(/\s+/g, "_");
+                if (infos[anlassKey] && !cards.find(c => c.title === infos[anlassKey].title)) {
+                  cards.push(infos[anlassKey]);
+                }
+              }
+
+              if (cards.length === 0) return null;
               return (
-                <div className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 p-6">
-                  <h2 className="font-display text-base font-bold text-foreground mb-3">{info.title}</h2>
-                  <p className="font-sans text-sm text-foreground/70 leading-relaxed">{info.text}</p>
-                  <a href={`https://www.magicel.de${info.link}`} target="_blank" rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
-                    Mehr erfahren <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                <div className="space-y-4">
+                  {cards.map((info, i) => (
+                    <div key={i} className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 p-6">
+                      <h2 className="font-display text-base font-bold text-foreground mb-3">{i === 0 ? `Ihr Programm: ${info.title}` : `Über ${info.title}`}</h2>
+                      <p className="font-sans text-sm text-foreground/70 leading-relaxed">{info.text}</p>
+                      <a href={`https://www.magicel.de${info.link}`} target="_blank" rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
+                        Mehr über {info.title} erfahren <ArrowRight className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  ))}
                 </div>
               );
             })()}
