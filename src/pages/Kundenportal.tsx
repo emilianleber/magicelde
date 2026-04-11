@@ -461,7 +461,7 @@ const Kundenportal = () => {
             if (docsRes.data) setDocuments(docsRes.data);
             if (msgsRes.data) setMessages(msgsRes.data);
             if (imapRes.data) setImapMails(imapRes.data);
-            const { data: requestsData } = await supabase.from("portal_requests").select("*").eq("email", cust.email).order("created_at", { ascending: false });
+            const { data: requestsData } = await supabase.from("portal_requests").select("*").or(`email.ilike.${cust.email},customer_id.eq.${cust.id}`).order("created_at", { ascending: false });
             if (requestsData) {
               setRequests(requestsData);
               if (requestsData.length > 0) setExpandedRequestId(requestsData[0].id);
@@ -500,10 +500,15 @@ const Kundenportal = () => {
       }
 
       // Anfragen laden — per Email ODER per customer_id
-      const orFilters = [`email.ilike.${user.email}`];
-      if (cust?.id) orFilters.push(`customer_id.eq.${cust.id}`);
-      const { data: requestsData } = await supabase
-        .from("portal_requests").select("*").or(orFilters.join(",")).order("created_at", { ascending: false });
+      const custId = cust?.id;
+      let requestsData: any[] | null = null;
+      if (custId) {
+        const { data } = await supabase.from("portal_requests").select("*").or(`email.ilike.${user.email},customer_id.eq.${custId}`).order("created_at", { ascending: false });
+        requestsData = data;
+      } else {
+        const { data } = await supabase.from("portal_requests").select("*").ilike("email", user.email!).order("created_at", { ascending: false });
+        requestsData = data;
+      }
       if (requestsData) {
         // Deduplizieren (falls Email UND customer_id matchen)
         const seen = new Set<string>();
