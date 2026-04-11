@@ -319,7 +319,7 @@ const AdminShowEditor = () => {
   const [zieldauerMin, setZieldauerMin] = useState(30);
   const [zieldauerMax, setZieldauerMax] = useState(45);
   const [preis, setPreis] = useState<number | null>(null);
-  const [beschreibungKunde, setBeschreibungKunde] = useState("");
+  // beschreibungKunde wird automatisch aus konzeptKundentext befüllt
   const [konzeptKundentext, setKonzeptKundentext] = useState("");
   const [technischeAnforderungen, setTechnischeAnforderungen] = useState("");
   const [startzeit, setStartzeit] = useState("19:00");
@@ -377,7 +377,7 @@ const AdminShowEditor = () => {
           setStatus(show.status);
           setAnlass(show.anlass);
           setPreis(show.preis ?? null);
-          setBeschreibungKunde(show.beschreibungKunde || "");
+          // beschreibungKunde = konzeptKundentext (wird beim Save gesetzt)
           // zieldauer kann als einzelner Wert oder als "min-max" gespeichert sein
           const zd = show.zieldauer || 45;
           setZieldauerMin(zd);
@@ -578,7 +578,7 @@ const AdminShowEditor = () => {
       const cleanPhasen: ShowPhase[] = phasen.map(({ _id, ...rest }) => rest);
       const payload = {
         name: name.trim(), format, showTyp, status, anlass: anlass.trim(), zieldauer: zieldauerMax,
-        preis: preis ?? undefined, beschreibungKunde: beschreibungKunde.trim() || undefined,
+        preis: preis ?? undefined, beschreibungKunde: konzeptKundentext.trim() || undefined,
         konzeptKundentext: konzeptKundentext.trim(),
         technischeAnforderungen: technischeAnforderungen.trim(),
         phasen: cleanPhasen,
@@ -745,11 +745,6 @@ const AdminShowEditor = () => {
               <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Preis (€)</label>
               <input type="number" value={preis ?? ""} onChange={e => setPreis(e.target.value ? parseFloat(e.target.value) : null)} placeholder="z.B. 950"
                 className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" step="0.01" min="0" />
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Kundenbeschreibung (kurz)</label>
-              <input value={beschreibungKunde} onChange={e => setBeschreibungKunde(e.target.value)} placeholder="Für Angebote & Kunden…"
-                className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
             </div>
           </div>
 
