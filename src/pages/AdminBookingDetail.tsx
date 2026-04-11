@@ -282,7 +282,7 @@ const AdminBookingDetail = () => {
   const [crResponseText, setCrResponseText] = useState<Record<string, string>>({});
   const [crUpdating, setCrUpdating] = useState<Record<string, boolean>>({});
   const [crNotifyCustomer, setCrNotifyCustomer] = useState<Record<string, boolean>>({});
-  const [mailHistory, setMailHistory] = useState<Array<{ id: string; created_at: string; subject: string; to_email: string; status: string }>>([]);
+  const [mailHistory, setMailHistory] = useState<Array<{ id: string; created_at: string; subject: string; to_email: string; from_email?: string; status: string; body?: string }>>([]);
   const [mailSentAt, setMailSentAt] = useState<string | null>(null);
   const [showDocCreator, setShowDocCreator] = useState(false);
   const [allPakete, setAllPakete] = useState<Paket[]>([]);
@@ -405,12 +405,15 @@ const AdminBookingDetail = () => {
       setChangeRequests(crs || []);
 
       // Load mail history
+      const orFilters = [`request_id.eq.${id}`];
+      if (data.event_id) orFilters.push(`event_id.eq.${data.event_id}`);
+      if (data.customer_id) orFilters.push(`customer_id.eq.${data.customer_id}`);
       const { data: msgs } = await supabase
         .from("portal_messages")
-        .select("id, created_at, subject, to_email, status")
-        .or(`request_id.eq.${id}${data.event_id ? `,event_id.eq.${data.event_id}` : ""}`)
+        .select("id, created_at, subject, to_email, from_email, status, body")
+        .or(orFilters.join(","))
         .order("created_at", { ascending: false })
-        .limit(10);
+        .limit(20);
       setMailHistory(msgs || []);
 
       // E-Mail-Vorlagen laden
@@ -1529,12 +1532,37 @@ const AdminBookingDetail = () => {
                         const tplId = e.target.value;
                         setComposeTemplateId(tplId);
                         if (!tplId) return;
-                        // Vorlage laden und Betreff/Body füllen
+                        // Vorlage laden, Platzhalter ersetzen, Betreff/Body füllen
                         const { data: tpl } = await supabase.from("email_templates").select("*").eq("slug", tplId).maybeSingle();
                         if (tpl) {
                           const t = tpl as any;
-                          setComposeSubject(t.subject || t.betreff || t.name || "");
-                          setComposeBody(t.body_html || t.body || t.inhalt || t.text || "");
+                          // Platzhalter-Map
+                          const kundenName = customer?.name || "";
+                          const anrede = customer?.anrede || (kundenName ? (kundenName.includes(" ") ? `Herr/Frau ${kundenName.split(" ").pop()}` : kundenName) : "");
+                          const replacements: Record<string, string> = {
+                            "{{begruessung}}": anrede || "Guten Tag",
+                            "{{name}}": kundenName,
+                            "{{vorname}}": kundenName.split(" ")[0] || "",
+                            "{{nachname}}": kundenName.split(" ").slice(1).join(" ") || "",
+                            "{{firma}}": (customer as any)?.company || "",
+                            "{{email}}": customer?.email || "",
+                            "{{anlass}}": anlass || "Veranstaltung",
+                            "{{datum}}": datum ? new Date(datum + "T00:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" }) : "(Datum offen)",
+                            "{{uhrzeit}}": uhrzeit || "(Uhrzeit offen)",
+                            "{{ort}}": ort || "(Ort offen)",
+                            "{{gaeste}}": gaeste || "",
+                            "{{format}}": format ? getLabelOrCapitalize(formatOptions, format) : "",
+                            "{{kundennummer}}": (customer as any)?.kundennummer || "",
+                          };
+                          const fill = (text: string) => {
+                            let result = text;
+                            for (const [key, val] of Object.entries(replacements)) {
+                              result = result.replaceAll(key, val);
+                            }
+                            return result;
+                          };
+                          setComposeSubject(fill(t.subject || t.betreff || t.name || ""));
+                          setComposeBody(fill(t.body_html || t.body || t.inhalt || t.text || ""));
                         }
                       }}
                       className={inputCls}
