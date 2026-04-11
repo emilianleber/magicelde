@@ -1823,20 +1823,10 @@ const AdminBookingDetail = () => {
                 </div>
               )}
 
-              {/* Status-Mail + Feedback */}
-              <div className="p-5 rounded-2xl bg-muted/20 border border-border/30 space-y-3">
-                <p className="text-xs font-bold text-foreground mb-1">Aktionen</p>
-                <p className="text-xs text-muted-foreground">Empfänger: <strong>{customer?.email || "–"}</strong></p>
-                <button onClick={() => sendStatusMail()} disabled={sendingMail}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border/30 bg-background/60 px-4 py-2.5 text-sm font-medium hover:bg-muted/40 disabled:opacity-50 transition-colors">
-                  <Mail className="w-4 h-4" />
-                  {sendingMail ? "Sendet..." : "Status-Mail senden"}
-                </button>
-                {/* Feedback wird automatisch 1 Monat nach Event gesendet */}
-                {message && (
-                  <p className={`text-xs rounded-lg px-3 py-2 ${message.startsWith("Fehler") ? "bg-destructive/10 text-destructive" : "bg-green-50 text-green-700"}`}>{message}</p>
-                )}
-              </div>
+              {/* Status-Mails werden automatisch gesendet */}
+              {message && (
+                <p className={`text-xs rounded-lg px-3 py-2 ${message.startsWith("Fehler") ? "bg-destructive/10 text-destructive" : "bg-green-50 text-green-700"}`}>{message}</p>
+              )}
 
               {/* Mail History ist weiter unten im Nachrichten-Tab */}
             </div>
@@ -2115,10 +2105,6 @@ const AdminBookingDetail = () => {
               }} disabled={saving} className={`w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all disabled:opacity-50 ${saveSuccess ? "bg-green-600 text-white" : "bg-foreground text-background hover:opacity-80"}`}>
                 <Save className="w-4 h-4" /> {saving ? "Speichert..." : saveSuccess ? "Gespeichert ✓" : "Speichern"}
               </button>
-              <label className="flex items-center gap-2 px-1 cursor-pointer">
-                <input type="checkbox" checked={sendMailWithSave} onChange={(e) => setSendMailWithSave(e.target.checked)} className="h-3.5 w-3.5 rounded" />
-                <span className="text-xs text-muted-foreground">Status-Mail beim Speichern senden</span>
-              </label>
               {!request.event_id && status !== "abgelehnt" && (
                 <button onClick={convertToEvent} disabled={converting} className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-100 disabled:opacity-50 transition-colors">
                   <Sparkles className="w-4 h-4" /> {converting ? "Wird gebucht..." : "Als gebucht markieren"}
