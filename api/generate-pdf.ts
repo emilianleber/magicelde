@@ -130,7 +130,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     <thead><tr><td>${miniHeaderHtml}</td></tr></thead>
     <tbody><tr><td>
       <!-- Voller Header nur auf Seite 1, per negativem Margin über Mini-Header gezogen -->
-      <div id="full-header" style="margin-top:-${miniHeaderHeight}px;position:relative;z-index:2;">${parts.headerHtml}</div>
+      <div id="full-header" style="margin-top:-${miniHeaderHeight}px;position:relative;z-index:2;background:#fff;">${parts.headerHtml}</div>
       ${parts.contentHtml}
     </td></tr></tbody>
   </table>
