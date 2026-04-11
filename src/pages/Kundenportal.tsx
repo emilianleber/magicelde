@@ -1919,16 +1919,47 @@ const Kundenportal = () => {
               </div>
             </div>
 
-            {/* Galerie — horizontaler Slider */}
+            {/* Galerie — Drag-Slider */}
             <div className="space-y-3">
               <h2 className="font-display text-base font-bold text-foreground">Impressionen</h2>
-              <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1" style={{ scrollbarWidth: "none" }}>
-                {[stageImg, closeupWalkingImg, magicDinnerEventImg, emotionenImg].map((src, i) => (
-                  <div key={i} className="w-56 h-36 rounded-xl overflow-hidden shrink-0">
-                    <img src={src} alt="" className="w-full h-full object-cover" />
+              {(() => {
+                const sliderRef = React.useRef<HTMLDivElement>(null);
+                const [isDragging, setIsDragging] = React.useState(false);
+                const [startX, setStartX] = React.useState(0);
+                const [scrollLeft, setScrollLeftState] = React.useState(0);
+
+                const onMouseDown = (e: React.MouseEvent) => {
+                  if (!sliderRef.current) return;
+                  setIsDragging(true);
+                  setStartX(e.pageX - sliderRef.current.offsetLeft);
+                  setScrollLeftState(sliderRef.current.scrollLeft);
+                };
+                const onMouseMove = (e: React.MouseEvent) => {
+                  if (!isDragging || !sliderRef.current) return;
+                  e.preventDefault();
+                  const x = e.pageX - sliderRef.current.offsetLeft;
+                  sliderRef.current.scrollLeft = scrollLeft - (x - startX);
+                };
+                const onEnd = () => setIsDragging(false);
+
+                return (
+                  <div
+                    ref={sliderRef}
+                    onMouseDown={onMouseDown}
+                    onMouseMove={onMouseMove}
+                    onMouseUp={onEnd}
+                    onMouseLeave={onEnd}
+                    className={`flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+                    style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
+                  >
+                    {[stageImg, closeupWalkingImg, magicDinnerEventImg, emotionenImg, closeupImg].map((src, i) => (
+                      <div key={i} className="w-64 h-40 rounded-xl overflow-hidden shrink-0 select-none">
+                        <img src={src} alt="" className="w-full h-full object-cover pointer-events-none" draggable={false} />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                );
+              })()}
             </div>
 
             {/* Contact */}
