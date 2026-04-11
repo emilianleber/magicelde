@@ -1954,6 +1954,10 @@ const AdminBookingDetail = () => {
                         key={phase.value}
                         onClick={async () => {
                           if (isActive) return;
+                          // Hinweis bei "Event durchgeführt"
+                          if (phase.value === "event_erfolgt") {
+                            if (!confirm("Event als durchgeführt markieren?\n\nHinweis: Die automatische Danke- & Bewertungs-Mail wird am Tag nach dem Event-Datum gesendet (falls noch nicht geschehen). Du kannst auch manuell eine Bewertungsanfrage über die Vorlagen senden.")) return;
+                          }
                           setEvent((prev: any) => prev ? { ...prev, status: phase.value } : prev);
                           await supabase.from("portal_events").update({ status: phase.value }).eq("id", event.id);
                           setMessage(`Phase → ${phase.label}`);
@@ -1967,17 +1971,6 @@ const AdminBookingDetail = () => {
                     );
                   })}
                 </div>
-
-                {/* Hinweis bei Event durchgeführt */}
-                {event.status === "event_erfolgt" && (
-                  <div className="mb-4 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800 flex items-start gap-2">
-                    <Star className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold">Danke- & Bewertungs-Mail</p>
-                      <p className="text-xs text-amber-700 mt-0.5">Die automatische Danke-Mail mit Bewertungs-Links wurde am Tag nach dem Event gesendet. Prüfe ob der Kunde eine Bewertung abgegeben hat.</p>
-                    </div>
-                  </div>
-                )}
 
                 {/* Checkliste pro Event-Phase */}
                 {(eventChecklistByPhase[event.status || "in_planung"] || []).length > 0 && (
