@@ -1081,26 +1081,7 @@ const Kundenportal = () => {
             {!isDone && (
             <>
 
-            {/* ── SHOW/KONZEPT KARTE ── */}
-            {paketInfo && (
-              <div className="rounded-2xl bg-white border border-black/[0.06] shadow-sm overflow-hidden">
-                <div className="relative p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-purple-100 flex items-center justify-center shrink-0">
-                      <Sparkles className="w-7 h-7 text-accent" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-sans text-[10px] text-accent uppercase tracking-[0.2em] font-semibold mb-1">Ihre Show</p>
-                      <h2 className="font-display text-xl font-bold text-foreground">{customerFriendlyPaketName(paketInfo.name, currentRequest?.anlass)}</h2>
-                      <p className="font-sans text-sm text-muted-foreground mt-1">Bis zu {paketInfo.zieldauer} Minuten Showprogramm</p>
-                    </div>
-                  </div>
-                  {paketInfo.beschreibung && (
-                    <p className="font-sans text-sm text-foreground/70 mt-4 leading-relaxed border-t border-black/[0.05] pt-4">{paketInfo.beschreibung}</p>
-                  )}
-                </div>
-              </div>
-            )}
+            {/* Show/Konzept-Karte entfernt — Info ist jetzt im smarten Info-Block unten */}
 
             {/* ── Smarter Info-Block: Anlass + Format/Konzept ── */}
             {(() => {
@@ -1884,10 +1865,7 @@ const Kundenportal = () => {
               return (
                 <div className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 overflow-hidden">
                   {/* Bild */}
-                  <img
-                    src={primaryFmt?.includes("closeup") || primaryFmt?.includes("close") ? closeupWalkingImg : primaryFmt?.includes("dinner") || primaryFmt?.includes("magic") ? magicDinnerEventImg : stageImg}
-                    alt="" className="w-full h-40 object-cover"
-                  />
+                  <img src={portraitImg} alt="Emilian Leber" className="w-full h-48 object-cover object-top" />
                   <div className="p-6">
                     <p className="font-sans text-[10px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">Über Ihr Programm</p>
                     <p className="font-sans text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{combinedText}</p>
@@ -1927,26 +1905,21 @@ const Kundenportal = () => {
               </div>
             </div>
 
-            {/* Videos eingebettet */}
-            <div className="space-y-4">
-              <h2 className="font-display text-base font-bold text-foreground">Eindrücke aus vergangenen Shows</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="aspect-video rounded-2xl overflow-hidden border border-black/[0.06] shadow-sm">
-                  <iframe src="https://www.youtube.com/embed/ZdIDq9VtqxU" title="Show-Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
-                </div>
-                <div className="aspect-video rounded-2xl overflow-hidden border border-black/[0.06] shadow-sm">
-                  <iframe src="https://www.youtube.com/embed/R0_mXGxzC9E" title="Live-Auftritt" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
-                </div>
+            {/* Video */}
+            <div className="space-y-3">
+              <h2 className="font-display text-base font-bold text-foreground">Show-Einblick</h2>
+              <div className="aspect-video rounded-2xl overflow-hidden border border-black/[0.06] shadow-sm">
+                <iframe src="https://www.youtube.com/embed/ZdIDq9VtqxU" title="Show-Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
               </div>
             </div>
 
-            {/* Galerie */}
-            <div className="space-y-4">
-              <h2 className="font-display text-base font-bold text-foreground">Galerie</h2>
-              <div className="grid grid-cols-3 gap-2">
-                {[stageImg, closeupImg, emotionenImg, magicDinnerEventImg, closeupWalkingImg, portraitImg].map((src, i) => (
-                  <div key={i} className="aspect-square rounded-xl overflow-hidden">
-                    <img src={src} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+            {/* Galerie — horizontaler Slider */}
+            <div className="space-y-3">
+              <h2 className="font-display text-base font-bold text-foreground">Impressionen</h2>
+              <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1" style={{ scrollbarWidth: "none" }}>
+                {[stageImg, closeupWalkingImg, magicDinnerEventImg, emotionenImg].map((src, i) => (
+                  <div key={i} className="w-56 h-36 rounded-xl overflow-hidden shrink-0">
+                    <img src={src} alt="" className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
