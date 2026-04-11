@@ -29,6 +29,7 @@ import {
   Minus,
   Calculator,
   CheckCircle2,
+  Star,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -1966,6 +1967,17 @@ const AdminBookingDetail = () => {
                     );
                   })}
                 </div>
+
+                {/* Hinweis bei Event durchgeführt */}
+                {event.status === "event_erfolgt" && (
+                  <div className="mb-4 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800 flex items-start gap-2">
+                    <Star className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold">Danke- & Bewertungs-Mail</p>
+                      <p className="text-xs text-amber-700 mt-0.5">Die automatische Danke-Mail mit Bewertungs-Links wurde am Tag nach dem Event gesendet. Prüfe ob der Kunde eine Bewertung abgegeben hat.</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Checkliste pro Event-Phase */}
                 {(eventChecklistByPhase[event.status || "in_planung"] || []).length > 0 && (

@@ -704,9 +704,10 @@ export default function AdminDokumentDetail() {
       let mailType: string | null = null;
       let mailRecordId: string | null = null;
 
-      // Auftragsbestaetigung: Status aktualisieren, aber KEINE Statusmail senden
-      // (AB-Bestaetigungsmail wird separat verschickt)
-      const skipStatusMail = doc.typ === "auftragsbestaetigung";
+      // Auto-Mail bei: Angebot, Abschlagsrechnung, Schlussrechnung, Mahnung
+      // KEINE Auto-Mail bei: Auftragsbestätigung (wird manuell gesendet)
+      const autoMailTypen = ["angebot", "abschlagsrechnung", "schlussrechnung", "rechnung", "mahnung"];
+      const skipStatusMail = !autoMailTypen.includes(doc.typ);
 
       if (doc.requestId) {
         let reqStatus: string | null = null;
