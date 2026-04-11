@@ -549,7 +549,7 @@ export default function AdminDokumenteListe() {
                                     <ArrowRight className="w-3.5 h-3.5 shrink-0" /> {ns.label}
                                   </button>
                                 ) : null; })()}
-                                {!isBezahlt && !isStorniert && (
+                                {!isBezahlt && !isStorniert && ["rechnung", "abschlagsrechnung", "schlussrechnung", "mahnung"].includes(doc.typ) && (
                                   <button onClick={(e) => handleStatusChange(e, doc, "bezahlt")} className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-green-700 hover:bg-green-50 transition-colors text-left">
                                     <CircleCheck className="w-3.5 h-3.5 shrink-0" /> Als bezahlt markieren
                                   </button>
