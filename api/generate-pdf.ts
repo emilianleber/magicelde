@@ -96,7 +96,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Footer per position:fixed auf jeder Seite
 
     // Mini-Header: nur Logo rechts oben, kein Name/Adresse/Linie
-    const miniHeaderHeight = 170; // ~4cm Abstand + Logo auf Folgeseiten
+    const miniHeaderHeight = 132; // ~3cm Abstand + Logo auf Folgeseiten
     const miniHeaderHtml = parts.logoSrc
       ? `<div id="mini-header" style="position:relative;height:${miniHeaderHeight}px;padding:14px 40px 0;">
            <img src="${parts.logoSrc}" style="position:absolute;top:14px;right:40px;width:${parts.logoW}px;height:${parts.logoH}px;object-fit:contain;border-radius:4px;display:block;" alt="Logo" />
@@ -118,6 +118,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     thead td, tbody td { padding: 0; vertical-align: top; }
     thead { display: table-header-group; }
     tbody { display: table-row-group; }
+    /* Positionen nicht über Seitenumbruch aufteilen */
+    tbody td > div > div > div { break-inside: avoid; -webkit-column-break-inside: avoid; page-break-inside: avoid; }
     /* Footer per position:fixed → immer am Seitenende auf jeder Seite */
     #pdf-footer { position: fixed; bottom: 0; left: 0; right: 0; width: 595px; background: #fff; z-index: 10; }
   </style>
