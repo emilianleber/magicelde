@@ -1845,59 +1845,63 @@ const Kundenportal = () => {
               <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
             </div>
 
-            {/* Beschreibung */}
-            {paketInfo?.beschreibung && (
-              <div className="rounded-2xl bg-white border border-black/[0.06] p-6">
-                <h2 className="font-display text-base font-bold text-foreground mb-3">Über Ihre Show</h2>
-                <p className="font-sans text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{paketInfo.beschreibung}</p>
-              </div>
-            )}
-
-            {/* Format-Info — zeigt Info zu Paket-Format UND Event-Anlass wenn unterschiedlich */}
+            {/* ── Über Ihr Programm (1 Block, kombiniert Paket + Anlass + Format) ── */}
             {(() => {
-              const infos: Record<string, { title: string; text: string; link: string }> = {
-                closeup: { title: "Close-Up Magie", text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer, oft mit Alltagsgegenständen wie Karten, Münzen oder Ringen.", link: "/close-up" },
-                "close-up": { title: "Close-Up Magie", text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer, oft mit Alltagsgegenständen wie Karten, Münzen oder Ringen.", link: "/close-up" },
-                buehnenshow: { title: "Bühnenshow", text: "Eine durchkomponierte Vorführung mit Dramaturgie, Comedy und Publikumsinteraktion. Die Show baut Spannung auf und unterhält — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten.", link: "/buehnenshow" },
-                abendshow: { title: "Bühnenshow", text: "Eine durchkomponierte Vorführung mit Dramaturgie, Comedy und Publikumsinteraktion. Die Show baut Spannung auf und unterhält — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten.", link: "/buehnenshow" },
-                magic_dinner: { title: "Magic Dinner", text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit Zaubermomenten. Zwischen den Gängen performt der Zauberer hautnah an den Tischen — ein einzigartiges Gesamterlebnis.", link: "/magic-dinner" },
-                "magic-dinner": { title: "Magic Dinner", text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit Zaubermomenten. Zwischen den Gängen performt der Zauberer hautnah an den Tischen — ein einzigartiges Gesamterlebnis.", link: "/magic-dinner" },
-                kombination: { title: "Kombination", text: "Die Kombination aus Close-Up und Bühnenshow bietet maximale Unterhaltung. Erst hautnah zwischen Ihren Gästen, dann auf der Bühne.", link: "/close-up" },
+              const FORMAT_TEXTS: Record<string, { text: string; link: string }> = {
+                closeup: { text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer.", link: "/close-up" },
+                "close-up": { text: "Bei Close-Up Magie performt der Zauberer direkt an Ihren Gästen — im kleinen Kreis, am Tisch oder beim Empfang. Die Tricks passieren direkt in den Händen der Zuschauer.", link: "/close-up" },
+                buehnenshow: { text: "Eine durchkomponierte Show mit Dramaturgie, Comedy und Publikumsinteraktion — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten.", link: "/buehnenshow" },
+                abendshow: { text: "Eine durchkomponierte Show mit Dramaturgie, Comedy und Publikumsinteraktion — von Mentalismus über visuelle Magie bis hin zu Comedy-Momenten.", link: "/buehnenshow" },
+                magic_dinner: { text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit Zaubermomenten. Zwischen den Gängen performt der Zauberer hautnah an den Tischen.", link: "/magic-dinner" },
+                "magic-dinner": { text: "Beim Magic Dinner verschmelzen kulinarische Highlights mit Zaubermomenten. Zwischen den Gängen performt der Zauberer hautnah an den Tischen.", link: "/magic-dinner" },
+                kombination: { text: "Die Kombination aus Close-Up und Bühnenshow — erst hautnah zwischen Ihren Gästen, dann auf der Bühne.", link: "/close-up" },
               };
 
-              // Paket-Format (z.B. closeup) und Event-Format/Anlass (z.B. magic_dinner) können unterschiedlich sein
               const paketFmt = paketInfo?.format;
               const eventFmt = currentEvent?.format || currentRequest?.format;
-              const anlassFmt = currentRequest?.anlass?.toLowerCase();
+              const anlassRaw = currentRequest?.anlass?.toLowerCase().replace(/\s+/g, "_") || "";
+              // Bestimme das primäre Format und ein optionales zweites
+              const primaryFmt = paketFmt || eventFmt || anlassRaw;
+              const secondaryFmt = (eventFmt && eventFmt !== paketFmt) ? eventFmt : (anlassRaw && anlassRaw !== paketFmt) ? anlassRaw : null;
 
-              // Sammle alle relevanten Format-Infos
-              const cards: { title: string; text: string; link: string }[] = [];
-              if (paketFmt && infos[paketFmt]) cards.push(infos[paketFmt]);
-              // Wenn Event-Format anders als Paket-Format → auch anzeigen
-              if (eventFmt && eventFmt !== paketFmt && infos[eventFmt] && !cards.find(c => c.title === infos[eventFmt].title)) {
-                cards.push(infos[eventFmt]);
-              }
-              // Wenn Anlass (z.B. "magic dinner") ein bekanntes Format hat und nicht schon angezeigt
-              if (anlassFmt) {
-                const anlassKey = anlassFmt.replace(/\s+/g, "_");
-                if (infos[anlassKey] && !cards.find(c => c.title === infos[anlassKey].title)) {
-                  cards.push(infos[anlassKey]);
-                }
-              }
+              const primary = primaryFmt ? FORMAT_TEXTS[primaryFmt] : null;
+              const secondary = secondaryFmt ? FORMAT_TEXTS[secondaryFmt] : null;
 
-              if (cards.length === 0) return null;
+              // Beschreibung aus Paket oder aus Format-Text
+              const beschreibung = paketInfo?.beschreibung;
+              if (!primary && !beschreibung) return null;
+
+              // Einen kombinierten Text bauen
+              const combinedText = beschreibung
+                ? beschreibung + (secondary ? `\n\n${secondary.text}` : "")
+                : (primary?.text || "") + (secondary && secondary.text !== primary?.text ? `\n\n${secondary.text}` : "");
+
+              // Alle Links sammeln (dedupliziert)
+              const links: { label: string; url: string }[] = [];
+              if (primary?.link) links.push({ label: formatLabel(primaryFmt), url: primary.link });
+              if (secondary?.link && secondary.link !== primary?.link) links.push({ label: formatLabel(secondaryFmt), url: secondary.link });
+
               return (
-                <div className="space-y-4">
-                  {cards.map((info, i) => (
-                    <div key={i} className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 p-6">
-                      <h2 className="font-display text-base font-bold text-foreground mb-3">{i === 0 ? `Ihr Programm: ${info.title}` : `Über ${info.title}`}</h2>
-                      <p className="font-sans text-sm text-foreground/70 leading-relaxed">{info.text}</p>
-                      <a href={`https://www.magicel.de${info.link}`} target="_blank" rel="noopener noreferrer"
-                        className="mt-4 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
-                        Mehr über {info.title} erfahren <ArrowRight className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  ))}
+                <div className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 overflow-hidden">
+                  {/* Bild */}
+                  <img
+                    src={primaryFmt?.includes("closeup") || primaryFmt?.includes("close") ? closeupWalkingImg : primaryFmt?.includes("dinner") || primaryFmt?.includes("magic") ? magicDinnerEventImg : stageImg}
+                    alt="" className="w-full h-40 object-cover"
+                  />
+                  <div className="p-6">
+                    <p className="font-sans text-[10px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">Über Ihr Programm</p>
+                    <p className="font-sans text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{combinedText}</p>
+                    {links.length > 0 && (
+                      <div className="flex flex-wrap gap-4 mt-4">
+                        {links.map((l, i) => (
+                          <a key={i} href={`https://www.magicel.de${l.url}`} target="_blank" rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
+                            Mehr über {l.label} <ArrowRight className="w-3.5 h-3.5" />
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })()}
