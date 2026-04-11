@@ -75,6 +75,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         footerEl.style.bottom = "auto";
         footerEl.style.left = "auto";
         footerEl.style.right = "auto";
+        // Linie über Footer entfernen (borderTop von gespeichertem HTML)
+        const footerInner = footerEl.querySelector("div") as HTMLElement;
+        if (footerInner) footerInner.style.borderTop = "none";
         footerHtml = footerEl.outerHTML;
         footerEl.remove(); // Entfernen damit er nicht im Content erscheint
       }
