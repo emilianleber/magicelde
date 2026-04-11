@@ -1394,7 +1394,11 @@ const AdminShowEditor = () => {
             <span className="text-xs text-muted-foreground">Schritt {wizardStep} von {WIZARD_STEPS.length}</span>
             {wizardStep < 7 ? (
               <button
-                onClick={async () => { await handleSave(); setCompletedSteps(prev => new Set(prev).add(wizardStep)); setWizardStep(wizardStep + 1); }}
+                onClick={async () => {
+                  try { await handleSave(); } catch (e) { console.error("Save error:", e); }
+                  setCompletedSteps(prev => new Set(prev).add(wizardStep));
+                  setWizardStep(wizardStep + 1);
+                }}
                 disabled={saving || (wizardStep === 1 && !name.trim())}
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-80 disabled:opacity-50"
               >
