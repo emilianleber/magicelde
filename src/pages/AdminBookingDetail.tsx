@@ -28,6 +28,7 @@ import {
   ChevronUp,
   Minus,
   Calculator,
+  CheckCircle2,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -873,6 +874,7 @@ const AdminBookingDetail = () => {
   const isRejected = status === "abgelehnt" || event?.status === "storniert";
   const pipelineStep = getCurrentPipelineStep(status, request.event_id || null, event?.status || null);
   const pipelineIdx = getPipelineIndex(pipelineStep);
+  const isArchived = event?.status === "abgeschlossen" || status === "archiviert";
 
   return (
     <>
@@ -880,6 +882,14 @@ const AdminBookingDetail = () => {
       title={anlass || "Anfrage"}
       subtitle={displayFirma ? `${displayCustomerName} · ${displayFirma}` : displayCustomerName}
     >
+      {/* Archived banner */}
+      {isArchived && (
+        <div className="mb-4 px-4 py-3 rounded-xl bg-muted/30 border border-border/20 text-sm text-muted-foreground flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+          Dieser Vorgang ist abgeschlossen und kann nur noch eingesehen werden.
+        </div>
+      )}
+
       {/* Back */}
       <div className="mb-4">
         <Link to="/admin/bookings" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
@@ -999,7 +1009,7 @@ const AdminBookingDetail = () => {
       </div>
 
       {/* ── Quick Document Buttons ── */}
-      {(() => {
+      {!isArchived && (() => {
         const params = `${customer?.id ? `&customerId=${customer.id}` : ""}${request?.id ? `&requestId=${request.id}` : ""}${event?.id ? `&eventId=${event.id}` : ""}`;
         const phase = event?.status || "";
         const qBtnCls = "inline-flex items-center gap-1.5 rounded-xl border border-border/30 px-3 py-2 text-xs font-medium hover:bg-muted/40 transition-colors";

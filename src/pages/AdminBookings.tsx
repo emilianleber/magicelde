@@ -434,9 +434,7 @@ const AdminBookings = () => {
           </div>
         ) : (
           filtered.map((row) => {
-            const detailUrl = row.type === "request"
-              ? `/admin/bookings/${row.requestId}`
-              : `/admin/bookings/event/${row.eventId}`;
+            const detailUrl = `/admin/bookings/${row.requestId}`;
 
             return (
               <div

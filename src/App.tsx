@@ -35,7 +35,8 @@ import AdminTeam from "@/pages/AdminTeam";
 
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -73,6 +74,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { AdminPersistentShell } from "@/components/admin/AdminLayout";
 
 const queryClient = new QueryClient();
+
+// Redirect /admin/bookings/event/:id → /admin/bookings/:requestId
+const EventToBookingRedirect = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!id) { navigate("/admin/bookings", { replace: true }); return; }
+    supabase.from("portal_requests").select("id").eq("event_id", id).maybeSingle().then(({ data }) => {
+      navigate(data?.id ? `/admin/bookings/${data.id}` : "/admin/bookings", { replace: true });
+    });
+  }, [id, navigate]);
+  return <div className="pt-28 text-center text-sm text-muted-foreground">Weiterleitung…</div>;
+};
 
 // Hostname detection – admin.magicel.de = CRM only, magicel.de = public + portal
 const hostname = window.location.hostname;
@@ -116,15 +130,15 @@ const AdminRoutes = () => (
       <Route path="/admin/bookings" element={<AdminBookings />} />
       <Route path="/admin/bookings/new" element={<AdminNewRequest />} />
       <Route path="/admin/bookings/:id" element={<AdminBookingDetail />} />
-      <Route path="/admin/bookings/event/:id" element={<AdminEventDetail />} />
+      <Route path="/admin/bookings/event/:id" element={<EventToBookingRedirect />} />
 
       {/* Old routes → redirect */}
       <Route path="/admin/requests" element={<Navigate to="/admin/bookings" replace />} />
       <Route path="/admin/requests/new" element={<Navigate to="/admin/bookings/new" replace />} />
-      <Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
+      <Route path="/admin/requests/:id" element={<AdminBookingDetail />} />
       <Route path="/admin/events" element={<Navigate to="/admin/bookings" replace />} />
       <Route path="/admin/events/new" element={<AdminNewEvent />} />
-      <Route path="/admin/events/:id" element={<AdminEventDetail />} />
+      <Route path="/admin/events/:id" element={<EventToBookingRedirect />} />
       <Route path="/admin/new-request" element={<Navigate to="/admin/bookings/new" replace />} />
 
       {/* Kunden */}
@@ -264,14 +278,14 @@ const App = () => (
               <Route path="/admin/bookings" element={<AdminBookings />} />
               <Route path="/admin/bookings/new" element={<AdminNewRequest />} />
               <Route path="/admin/bookings/:id" element={<AdminBookingDetail />} />
-              <Route path="/admin/bookings/event/:id" element={<AdminEventDetail />} />
+              <Route path="/admin/bookings/event/:id" element={<EventToBookingRedirect />} />
               {/* Old routes redirect */}
               <Route path="/admin/requests" element={<Navigate to="/admin/bookings" replace />} />
               <Route path="/admin/requests/new" element={<Navigate to="/admin/bookings/new" replace />} />
-              <Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
+              <Route path="/admin/requests/:id" element={<AdminBookingDetail />} />
               <Route path="/admin/events" element={<Navigate to="/admin/bookings" replace />} />
               <Route path="/admin/events/new" element={<AdminNewEvent />} />
-              <Route path="/admin/events/:id" element={<AdminEventDetail />} />
+              <Route path="/admin/events/:id" element={<EventToBookingRedirect />} />
               <Route path="/admin/new-request" element={<Navigate to="/admin/bookings/new" replace />} />
               {/* Kunden */}
               <Route path="/admin/customers" element={<AdminCustomers />} />
