@@ -311,7 +311,7 @@ const AdminBookings = () => {
       if (row.deletedAt) continue;
       c[row.pipeline] = (c[row.pipeline] || 0) + 1;
     }
-    c.alle = rows.filter((r) => !r.deletedAt).length;
+    c.alle = rows.filter((r) => !r.deletedAt && !["abgeschlossen", "abgelehnt", "storniert"].includes(r.pipeline)).length;
     return c;
   }, [rows]);
 
