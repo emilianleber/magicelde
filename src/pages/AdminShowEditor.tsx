@@ -326,6 +326,10 @@ const AdminShowEditor = () => {
   const [phasen, setPhasen] = useState<(ShowPhase & { _id: string })[]>([]);
   const [expandedPhase, setExpandedPhase] = useState<string | null>(null);
 
+  // Close-Up specifics
+  const [closeupGruppen, setCloseupGruppen] = useState(8);
+  const [closeupDauerProGruppe, setCloseupDauerProGruppe] = useState(5);
+
   // Magic Dinner mode toggle
   const [dinnerMode, setDinnerMode] = useState<"gang" | "closeup">("gang");
 
@@ -749,8 +753,8 @@ const AdminShowEditor = () => {
             </div>
           </div>
 
-          {/* Dauer-Anzeige */}
-          {!isWorkshop && (
+          {/* Dauer-Anzeige — nicht bei Close-Up (hat eigene Gruppen-Planung) und Workshop */}
+          {!isWorkshop && !isCloseUp && (
             <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${overZieldauer ? "bg-red-50 border-red-200" : underZieldauer ? "bg-amber-50 border-amber-200" : "bg-green-50 border-green-200"}`}>
               <Clock className={`w-4 h-4 ${overZieldauer ? "text-red-600" : underZieldauer ? "text-amber-600" : "text-green-600"}`} />
               <span className={`text-sm font-semibold ${overZieldauer ? "text-red-700" : underZieldauer ? "text-amber-700" : "text-green-700"}`}>
@@ -793,9 +797,8 @@ const AdminShowEditor = () => {
           {/* ══════════════════════════════════════════════════════════════════ */}
 
           {isCloseUp ? (
-            /* ── CLOSE-UP: Single Effekt-Pool ── */
+            /* ── CLOSE-UP: Gruppen + Effekt-Pool ── */
             (() => {
-              // Consolidate all phase effects into one pool
               const poolPhase = phasen[0];
               const allPoolEffekte = phasen.flatMap(p => p.effektIds).map(eid => allEffekte.find(e => e.id === eid)).filter(Boolean) as Effekt[];
               const grouped = {
@@ -803,51 +806,70 @@ const AdminShowEditor = () => {
                 buehne: allPoolEffekte.filter(e => e.typ === "buehne"),
                 beides: allPoolEffekte.filter(e => e.typ === "beides"),
               };
-              // Ensure there's exactly one pool phase
+              const gesamtDauer = closeupGruppen * closeupDauerProGruppe;
+
+              // Auto-create pool phase if empty
               if (phasen.length === 0) {
-                return (
-                  <div className="space-y-4">
-                    <div>
-                      <h2 className="text-sm font-bold text-foreground">Effekt-Pool</h2>
-                      <p className="text-xs text-muted-foreground">Klicke auf Effekte in der Sidebar oder ziehe sie hierher.</p>
-                    </div>
-                    <button onClick={() => {
-                      const newId = `phase-${Date.now()}`;
-                      setPhasen([{ _id: newId, label: "Meine Effekte", typ: "akt1", effektIds: [] }]);
-                      setExpandedPhase(newId);
-                    }} className="w-full p-6 rounded-xl border-2 border-dashed border-border/30 text-center text-sm text-muted-foreground hover:border-accent/30 hover:text-accent transition-colors">
-                      + Effekt-Pool erstellen
-                    </button>
-                  </div>
-                );
+                const newId = `phase-${Date.now()}`;
+                setTimeout(() => { setPhasen([{ _id: newId, label: "Meine Effekte", typ: "akt1", effektIds: [] }]); setExpandedPhase(newId); }, 0);
               }
+
               return (
-                <div className="space-y-4">
-                  <div>
-                    <h2 className="text-sm font-bold text-foreground">Effekt-Pool ({allPoolEffekte.length} Effekte)</h2>
-                    <p className="text-xs text-muted-foreground">Reihenfolge spontan — klicke oder ziehe Effekte aus der Sidebar.</p>
-                  </div>
-                  {allPoolEffekte.length === 0 ? (
-                    <p className="text-xs text-muted-foreground/50 italic py-6 text-center">Noch keine Effekte — klicke in der Sidebar auf + um Effekte hinzuzufügen</p>
-                  ) : Object.entries(grouped).filter(([, effs]) => effs.length > 0).map(([typ, effs]) => (
-                    <div key={typ}>
-                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">{EFFEKT_TYP_LABELS[typ] || typ} ({effs.length})</p>
-                      <div className="grid sm:grid-cols-2 gap-2">
-                        {effs.map(eff => (
-                          <div key={eff.id} className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white border border-border/20 group">
-                            <Wand2 className="w-3.5 h-3.5 text-accent shrink-0" />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium truncate">{eff.name}</p>
-                              <p className="text-[10px] text-muted-foreground">{eff.dauer} Min.</p>
-                            </div>
-                            <button onClick={() => removeEffektFromPhase(poolPhase._id, eff.id)} className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-destructive transition-opacity">
-                              <X className="w-3 h-3" />
-                            </button>
-                          </div>
-                        ))}
+                <div className="space-y-5">
+                  {/* Gruppen-Planung */}
+                  <div className="rounded-xl border border-border/20 p-4">
+                    <h2 className="text-sm font-bold text-foreground mb-3">Einsatz-Planung</h2>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Tischgruppen</label>
+                        <input type="number" value={closeupGruppen} onChange={e => setCloseupGruppen(Math.max(1, parseInt(e.target.value) || 1))}
+                          min={1} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Min. pro Gruppe</label>
+                        <input type="number" value={closeupDauerProGruppe} onChange={e => setCloseupDauerProGruppe(Math.max(1, parseInt(e.target.value) || 1))}
+                          min={1} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Gesamt</label>
+                        <div className="rounded-xl bg-muted/10 border border-border/20 px-3 py-2 text-sm font-semibold text-foreground">
+                          ~{gesamtDauer} Min.
+                        </div>
                       </div>
                     </div>
-                  ))}
+                    <p className="text-[10px] text-muted-foreground mt-2">{closeupGruppen} Gruppen × {closeupDauerProGruppe} Min. = ca. {gesamtDauer} Minuten Close-Up</p>
+                  </div>
+
+                  {/* Effekt-Pool */}
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <h2 className="text-sm font-bold text-foreground">Effekt-Pool ({allPoolEffekte.length} Effekte)</h2>
+                        <p className="text-xs text-muted-foreground">Effekte die du dabei hast — Reihenfolge spontan je nach Situation.</p>
+                      </div>
+                    </div>
+
+                    {allPoolEffekte.length === 0 ? (
+                      <p className="text-xs text-muted-foreground/50 italic py-6 text-center rounded-xl border border-dashed border-border/30">Klicke in der Sidebar auf Effekte um sie zum Pool hinzuzufügen</p>
+                    ) : Object.entries(grouped).filter(([, effs]) => effs.length > 0).map(([typ, effs]) => (
+                      <div key={typ} className="mb-3">
+                        <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">{EFFEKT_TYP_LABELS[typ] || typ} ({effs.length})</p>
+                        <div className="grid sm:grid-cols-2 gap-2">
+                          {effs.map(eff => (
+                            <div key={eff.id} className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white border border-border/20 group">
+                              <Wand2 className="w-3.5 h-3.5 text-accent shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium truncate">{eff.name}</p>
+                              </div>
+                              <button onClick={() => poolPhase && removeEffektFromPhase(poolPhase._id, eff.id)} className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-destructive transition-opacity">
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               );
             })()
