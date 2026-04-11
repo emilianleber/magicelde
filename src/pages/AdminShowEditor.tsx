@@ -377,8 +377,20 @@ const AdminShowEditor = () => {
   const [workshopMaterial, setWorkshopMaterial] = useState("");
   const [workshopLernziele, setWorkshopLernziele] = useState("");
 
-  // Wizard
-  const [wizardStep, setWizardStep] = useState(1);
+  // Wizard — Step aus sessionStorage laden
+  const [wizardStep, setWizardStep] = useState(() => {
+    try { const s = sessionStorage.getItem(`wizard_step_${id}`); return s ? parseInt(s) : 1; } catch { return 1; }
+  });
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(() => {
+    try { const s = sessionStorage.getItem(`wizard_completed_${id}`); return s ? new Set(JSON.parse(s)) : new Set(); } catch { return new Set(); }
+  });
+  // Persist step changes
+  useEffect(() => {
+    try { sessionStorage.setItem(`wizard_step_${id}`, String(wizardStep)); } catch {}
+  }, [wizardStep, id]);
+  useEffect(() => {
+    try { sessionStorage.setItem(`wizard_completed_${id}`, JSON.stringify([...completedSteps])); } catch {}
+  }, [completedSteps, id]);
   const WIZARD_STEPS = [
     { num: 1, label: "Basis" },
     { num: 2, label: format === "close-up" ? "Einsatz" : format === "workshop" ? "Workshop" : "Planung" },
@@ -830,11 +842,11 @@ const AdminShowEditor = () => {
         {WIZARD_STEPS.map((step) => (
           <button key={step.num} onClick={() => setWizardStep(step.num)}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              wizardStep === step.num ? "bg-foreground text-background shadow-sm" : wizardStep > step.num ? "text-green-600" : "text-muted-foreground"
+              wizardStep === step.num ? "bg-foreground text-background shadow-sm" : completedSteps.has(step.num) ? "text-green-600" : "text-muted-foreground"
             }`}>
             <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-              wizardStep === step.num ? "bg-background text-foreground" : wizardStep > step.num ? "bg-green-100 text-green-600" : "bg-muted/60"
-            }`}>{wizardStep > step.num ? "✓" : step.num}</span>
+              wizardStep === step.num ? "bg-background text-foreground" : completedSteps.has(step.num) ? "bg-green-100 text-green-600" : "bg-muted/60"
+            }`}>{completedSteps.has(step.num) ? "✓" : step.num}</span>
             {step.label}
           </button>
         ))}
@@ -1579,7 +1591,7 @@ const AdminShowEditor = () => {
             <span className="text-xs text-muted-foreground">Schritt {wizardStep} von {WIZARD_STEPS.length}</span>
             {wizardStep < 7 ? (
               <button
-                onClick={async () => { await handleSave(); setWizardStep(wizardStep + 1); }}
+                onClick={async () => { await handleSave(); setCompletedSteps(prev => new Set(prev).add(wizardStep)); setWizardStep(wizardStep + 1); }}
                 disabled={saving || (wizardStep === 1 && !name.trim())}
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-80 disabled:opacity-50"
               >
