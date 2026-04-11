@@ -434,15 +434,11 @@ const AdminCustomers = () => {
                   </div>
                 </div>
 
-                {/* Counts */}
-                <div className="hidden sm:flex items-center gap-4 shrink-0">
+                {/* Buchungen-Zähler */}
+                <div className="hidden sm:flex items-center gap-2 shrink-0">
                   <div className="text-center">
-                    <p className="text-sm font-semibold text-foreground">{reqCountMap[customer.id] || 0}</p>
-                    <p className="text-[10px] text-muted-foreground flex items-center gap-1"><MessageCircle className="w-3 h-3" /> Anfragen</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm font-semibold text-foreground">{evtCountMap[customer.id] || 0}</p>
-                    <p className="text-[10px] text-muted-foreground flex items-center gap-1"><Calendar className="w-3 h-3" /> Events</p>
+                    <p className="text-sm font-semibold text-foreground">{(reqCountMap[customer.id] || 0) + (evtCountMap[customer.id] || 0)}</p>
+                    <p className="text-[10px] text-muted-foreground flex items-center gap-1"><Calendar className="w-3 h-3" /> Buchungen</p>
                   </div>
                 </div>
 
