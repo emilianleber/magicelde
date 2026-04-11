@@ -3,6 +3,11 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import portraitImg from "@/assets/magician-portrait.jpg";
+import stageImg from "@/assets/stage-show.jpg";
+import closeupImg from "@/assets/emilian-portrait-cards.jpg";
+import emotionenImg from "@/assets/emotionen.jpg";
+import magicDinnerEventImg from "@/assets/emilian-magic-dinner.jpg";
+import closeupWalkingImg from "@/assets/schneider-weisse-closeup.jpg";
 import {
   Calendar,
   FileText,
@@ -1097,73 +1102,42 @@ const Kundenportal = () => {
               </div>
             )}
 
-            {/* ── FORMAT-INFO BLOCK ── */}
+            {/* ── Smarter Info-Block: Anlass + Format/Konzept ── */}
             {(() => {
-              const fmt = paketInfo?.format || currentEvent?.format || currentRequest?.format;
-              if (!fmt) return null;
+              const anlass = currentRequest?.anlass || currentEvent?.title || "";
+              const fmt = paketInfo?.format || currentEvent?.format || currentRequest?.format || "";
+              const paketName = paketInfo?.name || "";
+              if (!anlass && !fmt) return null;
 
-              const FORMAT_INFO: Record<string, { title: string; text: string; link: string; linkLabel: string }> = {
-                closeup: {
-                  title: "Close-Up Zauberkunst",
-                  text: "Hautnah und direkt an Ihren Gästen — Close-Up Magie sorgt für intime Wow-Momente. Der Zauberer bewegt sich zwischen Ihren Gästen und performt verblüffende Kartentricks, Mentalismus und visuelle Magie direkt in den Händen der Zuschauer. Perfekt für Empfänge, Dinner und gesellige Anlässe.",
-                  link: "/close-up",
-                  linkLabel: "Mehr über Close-Up erfahren",
-                },
-                buehnenshow: {
-                  title: "Bühnenshow",
-                  text: "Eine durchkomponierte Comedy-Zaubershow mit Dramaturgie, Publikumseinbindung und Wow-Momenten. Von Mentalismus über Comedy bis hin zu visuellen Höhepunkten — Ihre Gäste werden Teil der Show und erleben einen unvergesslichen Abend.",
-                  link: "/buehnenshow",
-                  linkLabel: "Mehr über die Bühnenshow erfahren",
-                },
-                "close-up": {
-                  title: "Close-Up Zauberkunst",
-                  text: "Hautnah und direkt an Ihren Gästen — Close-Up Magie sorgt für intime Wow-Momente. Der Zauberer bewegt sich zwischen Ihren Gästen und performt verblüffende Kartentricks, Mentalismus und visuelle Magie direkt in den Händen der Zuschauer. Perfekt für Empfänge, Dinner und gesellige Anlässe.",
-                  link: "/close-up",
-                  linkLabel: "Mehr über Close-Up erfahren",
-                },
-                abendshow: {
-                  title: "Bühnenshow / Abendshow",
-                  text: "Eine durchkomponierte Comedy-Zaubershow mit Dramaturgie, Publikumseinbindung und Wow-Momenten. Von Mentalismus über Comedy bis hin zu visuellen Höhepunkten — Ihre Gäste werden Teil der Show und erleben einen unvergesslichen Abend.",
-                  link: "/buehnenshow",
-                  linkLabel: "Mehr über die Bühnenshow erfahren",
-                },
-                magic_dinner: {
-                  title: "Magic Dinner",
-                  text: "Magie zwischen den Gängen — beim Magic Dinner verschmelzen kulinarische Highlights mit faszinierenden Zaubermomenten. Zwischen den Gängen performt der Zauberer direkt an den Tischen und auf der kleinen Bühne. Ein einzigartiges Erlebnis für besondere Anlässe.",
-                  link: "/magic-dinner",
-                  linkLabel: "Mehr über Magic Dinner erfahren",
-                },
-                "magic-dinner": {
-                  title: "Magic Dinner",
-                  text: "Magie zwischen den Gängen — beim Magic Dinner verschmelzen kulinarische Highlights mit faszinierenden Zaubermomenten. Zwischen den Gängen performt der Zauberer direkt an den Tischen und auf der kleinen Bühne. Ein einzigartiges Erlebnis für besondere Anlässe.",
-                  link: "/magic-dinner",
-                  linkLabel: "Mehr über Magic Dinner erfahren",
-                },
-                kombination: {
-                  title: "Kombination: Close-Up & Bühne",
-                  text: "Das Beste aus beiden Welten — erst hautnah zwischen Ihren Gästen, dann auf der großen Bühne. Die Kombination sorgt für maximale Unterhaltung über den gesamten Abend hinweg.",
-                  link: "/close-up",
-                  linkLabel: "Mehr über Close-Up erfahren",
-                },
-              };
+              // Dynamischen Text generieren
+              const anlassLabel = anlass ? capWords(anlass) : "";
+              const fmtLabel = formatLabel(fmt);
+              const konzeptLabel = paketName ? customerFriendlyPaketName(paketName, anlass) : fmtLabel;
 
-              // Bei eigenem Konzept: Kundentext verwenden
-              const kundentext = paketInfo?.beschreibung;
-              const info = FORMAT_INFO[fmt];
-              if (!info && !kundentext) return null;
+              let text = "";
+              if (anlassLabel && fmtLabel && anlassLabel.toLowerCase() !== fmtLabel.toLowerCase()) {
+                // Anlass und Format sind unterschiedlich (z.B. Magic Dinner + Close-Up)
+                text = `Für Ihr ${anlassLabel} haben wir ein ${konzeptLabel}-Programm zusammengestellt. ${
+                  fmt.includes("closeup") || fmt.includes("close-up")
+                    ? "Der Zauberer bewegt sich zwischen Ihren Gästen und sorgt für magische Momente direkt an jedem Tisch."
+                    : fmt.includes("buehne") || fmt.includes("abendshow")
+                    ? "Eine durchkomponierte Show mit Comedy, Mentalismus und Publikumsinteraktion erwartet Ihre Gäste."
+                    : "Ein individuell auf Ihren Anlass abgestimmtes Showprogramm erwartet Sie und Ihre Gäste."
+                }`;
+              } else if (anlassLabel) {
+                text = `Für Ihr ${anlassLabel} erwartet Sie ein individuell abgestimmtes Showprogramm mit magischen Momenten und unvergesslicher Unterhaltung.`;
+              } else {
+                text = `${konzeptLabel} — ein professionelles Showprogramm, individuell auf Ihre Veranstaltung zugeschnitten.`;
+              }
 
               return (
-                <div className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 p-6">
-                  <p className="font-sans text-[10px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">Über Ihr Programm</p>
-                  <h3 className="font-display text-lg font-bold text-foreground mb-3">{info?.title || "Ihr individuelles Konzept"}</h3>
-                  <p className="font-sans text-sm text-foreground/70 leading-relaxed">
-                    {kundentext || info?.text || ""}
-                  </p>
-                  {info?.link && (
-                    <a href={`https://www.magicel.de${info.link}`} target="_blank" rel="noopener noreferrer"
-                      className="mt-4 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
-                      {info.linkLabel} <ArrowRight className="w-3.5 h-3.5" />
-                    </a>
+                <div className="rounded-2xl bg-gradient-to-br from-accent/5 via-purple-50/30 to-white border border-accent/10 p-5">
+                  <p className="font-sans text-sm text-foreground/70 leading-relaxed">{text}</p>
+                  {hasKonzept && (
+                    <button onClick={() => { setActiveTab("meineshow"); window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }); }}
+                      className="mt-3 inline-flex items-center gap-2 font-sans text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
+                      Mehr über Ihr Programm <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
                   )}
                 </div>
               );
@@ -1949,28 +1923,28 @@ const Kundenportal = () => {
               </div>
             </div>
 
-            {/* Video Section */}
-            <div className="rounded-2xl bg-[#08080d] p-6 text-white">
-              <h2 className="font-display text-base font-bold mb-4">Eindrücke aus vergangenen Shows</h2>
+            {/* Videos eingebettet */}
+            <div className="space-y-4">
+              <h2 className="font-display text-base font-bold text-foreground">Eindrücke aus vergangenen Shows</h2>
               <div className="grid sm:grid-cols-2 gap-4">
-                <a href="https://www.magicel.de/#videos" target="_blank" rel="noopener noreferrer"
-                  className="aspect-video rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/15 transition-colors group">
-                  <div className="text-center">
-                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-2 group-hover:bg-white/30 transition-colors">
-                      <ArrowRight className="w-5 h-5" />
-                    </div>
-                    <p className="text-xs text-white/60">Videos ansehen</p>
+                <div className="aspect-video rounded-2xl overflow-hidden border border-black/[0.06] shadow-sm">
+                  <iframe src="https://www.youtube.com/embed/ZdIDq9VtqxU" title="Show-Highlights" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
+                </div>
+                <div className="aspect-video rounded-2xl overflow-hidden border border-black/[0.06] shadow-sm">
+                  <iframe src="https://www.youtube.com/embed/R0_mXGxzC9E" title="Live-Auftritt" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full" />
+                </div>
+              </div>
+            </div>
+
+            {/* Galerie */}
+            <div className="space-y-4">
+              <h2 className="font-display text-base font-bold text-foreground">Galerie</h2>
+              <div className="grid grid-cols-3 gap-2">
+                {[stageImg, closeupImg, emotionenImg, magicDinnerEventImg, closeupWalkingImg, portraitImg].map((src, i) => (
+                  <div key={i} className="aspect-square rounded-xl overflow-hidden">
+                    <img src={src} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                   </div>
-                </a>
-                <a href="https://www.magicel.de/#galerie" target="_blank" rel="noopener noreferrer"
-                  className="aspect-video rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/15 transition-colors group">
-                  <div className="text-center">
-                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-2 group-hover:bg-white/30 transition-colors">
-                      <ArrowRight className="w-5 h-5" />
-                    </div>
-                    <p className="text-xs text-white/60">Galerie ansehen</p>
-                  </div>
-                </a>
+                ))}
               </div>
             </div>
 
