@@ -419,6 +419,9 @@ const AdminShowEditor = () => {
 
   // Kalkulation
   const [kalkulationPositionen, setKalkulationPositionen] = useState<{ id: string; label: string; kategorie: string; betrag: number }[]>([]);
+  const [zeitAnfahrt, setZeitAnfahrt] = useState(1);
+  const [zeitAufbau, setZeitAufbau] = useState(0.5);
+  const [zeitVorbereitung, setZeitVorbereitung] = useState(1);
   const KOSTEN_KATEGORIEN = ["Anfahrt", "GEMA", "Material", "Technik-Miete", "Helfer", "Requisiten", "Versicherung", "Sonstiges"];
 
   // Sidebar filter
@@ -507,6 +510,9 @@ const AdminShowEditor = () => {
           const meta = show.budget as any;
           if (meta?.selectedTechnik) setSelectedTechnik(meta.selectedTechnik);
           if (meta?.kalkulationPositionen) setKalkulationPositionen(meta.kalkulationPositionen);
+          if (meta?.zeitAnfahrt != null) setZeitAnfahrt(meta.zeitAnfahrt);
+          if (meta?.zeitAufbau != null) setZeitAufbau(meta.zeitAufbau);
+          if (meta?.zeitVorbereitung != null) setZeitVorbereitung(meta.zeitVorbereitung);
           // Musik wird pro Phase in PhaseCard verwaltet
           if (meta?.closeupGaeste) setCloseupGaeste(meta.closeupGaeste);
           if (meta?.closeupPersonenProGruppe) setCloseupPersonenProGruppe(meta.closeupPersonenProGruppe);
@@ -719,8 +725,8 @@ const AdminShowEditor = () => {
       const cleanPhasen: ShowPhase[] = phasen.map(({ _id, ...rest }) => rest);
       // Close-Up Meta-Daten als budget JSON speichern
       const closeupMeta = isCloseUp
-        ? { closeupGaeste, closeupPersonenProGruppe, closeupGruppen, closeupDauerProGruppe, selectedTechnik, kalkulationPositionen }
-        : { selectedTechnik, kalkulationPositionen };
+        ? { closeupGaeste, closeupPersonenProGruppe, closeupGruppen, closeupDauerProGruppe, selectedTechnik, kalkulationPositionen, zeitAnfahrt, zeitAufbau, zeitVorbereitung }
+        : { selectedTechnik, kalkulationPositionen, zeitAnfahrt, zeitAufbau, zeitVorbereitung };
       const payload = {
         name: name.trim(), format, showTyp, status, anlass: anlass.trim(), zieldauer: zieldauerMax,
         preis: preis ?? undefined, beschreibungKunde: konzeptKundentext.trim() || undefined,
@@ -1374,18 +1380,47 @@ const AdminShowEditor = () => {
               const einnahmen = preis || 0;
               const ausgaben = kalkulationPositionen.reduce((s, p) => s + p.betrag, 0);
               const gewinn = einnahmen - ausgaben;
-              const gesamtStunden = (zieldauerMax / 60) + 1 + 0.5; // Show + Anfahrt + Aufbau
+              const showStunden = zieldauerMax / 60;
+              const gesamtStunden = showStunden + zeitAnfahrt + zeitAufbau + zeitVorbereitung;
               const stundensatz = gesamtStunden > 0 ? gewinn / gesamtStunden : 0;
               return (
+                <>
+                {/* Zeitaufwand */}
+                <div className="rounded-xl border border-border/20 p-4">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Zeitaufwand</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div>
+                      <label className="block text-[10px] text-muted-foreground mb-1">Show</label>
+                      <div className="rounded-lg bg-muted/10 border border-border/20 px-3 py-2 text-sm font-medium">{showStunden.toFixed(1)} Std.</div>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] text-muted-foreground mb-1">Anfahrt (hin+rück)</label>
+                      <input type="number" value={zeitAnfahrt} onChange={e => setZeitAnfahrt(Math.max(0, parseFloat(e.target.value) || 0))}
+                        step="0.5" min="0" className="w-full rounded-lg bg-white border border-border/20 px-3 py-2 text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] text-muted-foreground mb-1">Auf-/Abbau</label>
+                      <input type="number" value={zeitAufbau} onChange={e => setZeitAufbau(Math.max(0, parseFloat(e.target.value) || 0))}
+                        step="0.5" min="0" className="w-full rounded-lg bg-white border border-border/20 px-3 py-2 text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] text-muted-foreground mb-1">Vorbereitung</label>
+                      <input type="number" value={zeitVorbereitung} onChange={e => setZeitVorbereitung(Math.max(0, parseFloat(e.target.value) || 0))}
+                        step="0.5" min="0" className="w-full rounded-lg bg-white border border-border/20 px-3 py-2 text-sm" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">Gesamt: <strong>{gesamtStunden.toFixed(1)} Std.</strong></p>
+                </div>
+
+                {/* Ergebnis */}
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div className={`rounded-xl border p-4 ${gewinn >= 0 ? "border-green-200 bg-green-50/30" : "border-red-200 bg-red-50/30"}`}>
                     <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Gewinn</p>
                     <p className={`text-2xl font-bold ${gewinn >= 0 ? "text-green-700" : "text-red-700"}`}>{gewinn.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
                   </div>
                   <div className="rounded-xl border border-border/20 p-4">
-                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Geschätzte Zeit</p>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Gesamtzeit</p>
                     <p className="text-lg font-bold text-foreground">{gesamtStunden.toFixed(1)} Std.</p>
-                    <p className="text-[10px] text-muted-foreground">Show + Anfahrt + Aufbau</p>
                   </div>
                   <div className="rounded-xl border border-accent/20 bg-accent/5 p-4">
                     <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Stundensatz</p>
@@ -1393,6 +1428,7 @@ const AdminShowEditor = () => {
                     <p className="text-[10px] text-muted-foreground">Gewinn ÷ Stunden</p>
                   </div>
                 </div>
+                </>
               );
             })()}
           </div>
