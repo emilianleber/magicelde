@@ -934,44 +934,48 @@ const AdminShowEditor = () => {
           <div className="space-y-5">
           <h2 className="text-lg font-bold">{isCloseUp ? "Einsatz-Planung" : isWorkshop ? "Workshop-Planung" : isDinner ? "Dinner-Planung" : "Show-Planung"}</h2>
 
-          {/* Bühnenshow / Tourshow / Kundenbuchung: Phasen-Vorlagen */}
-          {isBuehne && phasen.length === 0 && (
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">Wähle eine Vorlage als Startpunkt oder erstelle die Phasen manuell im nächsten Schritt.</p>
-              <div className="grid sm:grid-cols-2 gap-3">
-                <button onClick={() => loadPhasePresets(BUEHNE_PHASE_PRESETS)}
-                  className="p-4 rounded-xl border border-border/20 text-left hover:bg-muted/20 transition-colors">
-                  <p className="text-sm font-semibold">Standard-Bühnenshow</p>
-                  <p className="text-xs text-muted-foreground mt-1">Empfang → Akt 1 → Pause → Akt 2 → Finale</p>
-                </button>
-                {isDinner && (
-                  <button onClick={() => loadPhasePresets(DINNER_PHASE_PRESETS)}
-                    className="p-4 rounded-xl border border-border/20 text-left hover:bg-muted/20 transition-colors">
-                    <p className="text-sm font-semibold">Magic Dinner (Gänge)</p>
-                    <p className="text-xs text-muted-foreground mt-1">Empfang → Gang 1-4 → Finale</p>
-                  </button>
-                )}
-                <button onClick={() => addPhase()}
-                  className="p-4 rounded-xl border border-dashed border-border/30 text-left hover:bg-muted/20 transition-colors">
-                  <p className="text-sm font-semibold text-muted-foreground">Manuell erstellen</p>
-                  <p className="text-xs text-muted-foreground mt-1">Eigene Phasen im nächsten Schritt hinzufügen</p>
-                </button>
-              </div>
-            </div>
-          )}
+          {/* Bühnenshow / Tourshow / Kundenbuchung: Phasen-Verwaltung */}
+          {isBuehne && (
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">Lege die Phasen/Akte deiner Show fest. Effekte weist du im nächsten Schritt zu.</p>
 
-          {/* Bühnenshow mit Phasen: Übersicht */}
-          {isBuehne && phasen.length > 0 && (
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">{phasen.length} Phasen angelegt. Effekte werden im nächsten Schritt zugewiesen.</p>
-              <div className="space-y-1">
-                {phasen.map((p, i) => (
-                  <div key={p._id} className="flex items-center justify-between px-3 py-2 rounded-lg bg-muted/10">
-                    <span className="text-sm font-medium">{p.label}</span>
-                    <span className="text-xs text-muted-foreground">{p.effektIds.length} Effekte</span>
-                  </div>
+              {/* Vorlagen-Buttons wenn noch keine Phasen */}
+              {phasen.length === 0 && (
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <button onClick={() => loadPhasePresets(BUEHNE_PHASE_PRESETS)}
+                    className="p-4 rounded-xl border border-accent/20 bg-accent/5 text-left hover:bg-accent/10 transition-colors">
+                    <p className="text-sm font-semibold">Standard-Vorlage laden</p>
+                    <p className="text-xs text-muted-foreground mt-1">Empfang → Akt 1 → Pause → Akt 2 → Finale</p>
+                  </button>
+                  {isDinner && (
+                    <button onClick={() => loadPhasePresets(DINNER_PHASE_PRESETS)}
+                      className="p-4 rounded-xl border border-border/20 text-left hover:bg-muted/20 transition-colors">
+                      <p className="text-sm font-semibold">Magic Dinner Vorlage</p>
+                      <p className="text-xs text-muted-foreground mt-1">Empfang → Gang 1-4 → Finale</p>
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Phasen-Liste — bearbeitbar */}
+              {phasen.length > 0 && (
+                <div className="space-y-2">
+                  {phasen.map((p, i) => (
+                    <div key={p._id} className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white border border-border/20">
+                      <GripVertical className="w-4 h-4 text-muted-foreground/30 shrink-0" />
+                      <span className="text-xs font-mono text-accent font-bold w-6">{i + 1}.</span>
+                      <input value={p.label} onChange={e => updatePhase(p._id, { label: e.target.value })}
+                        className="flex-1 bg-transparent text-sm font-medium outline-none" placeholder="Phasenname" />
+                      <button onClick={() => removePhase(p._id)} className="p-1 text-muted-foreground hover:text-destructive">
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                 ))}
-              </div>
+                  <button onClick={() => addPhase()} className="w-full py-2.5 rounded-xl border border-dashed border-border/30 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-accent/30 transition-colors">
+                    + Phase hinzufügen
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -989,32 +993,9 @@ const AdminShowEditor = () => {
             </div>
           )}
 
-          {/* Dauer-Anzeige — nicht bei Close-Up (hat eigene Gruppen-Planung) und Workshop */}
-          {!isWorkshop && !isCloseUp && (
-            <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${overZieldauer ? "bg-red-50 border-red-200" : underZieldauer ? "bg-amber-50 border-amber-200" : "bg-green-50 border-green-200"}`}>
-              <Clock className={`w-4 h-4 ${overZieldauer ? "text-red-600" : underZieldauer ? "text-amber-600" : "text-green-600"}`} />
-              <span className={`text-sm font-semibold ${overZieldauer ? "text-red-700" : underZieldauer ? "text-amber-700" : "text-green-700"}`}>
-                {totalEffektDauer} / {zieldauerMin === zieldauerMax ? `${zieldauerMax}` : `${zieldauerMin}–${zieldauerMax}`} Min.
-              </span>
-              {overZieldauer && (
-                <span className="text-xs text-red-600 flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3" /> {totalEffektDauer - zieldauerMax} Min. über Maximum
-                </span>
-              )}
-              {underZieldauer && (
-                <span className="text-xs text-amber-600 flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3" /> {zieldauerMin - totalEffektDauer} Min. unter Minimum
-                </span>
-              )}
-            </div>
-          )}
+          {/* Dauer, Timeline, Dinner-Toggle → jetzt in Step 3 */}
 
-          {/* Visuelle Zeitleiste */}
-          {isBuehne && timelineItems.length > 0 && (
-            <TimelineBar items={timelineItems} zieldauer={zieldauerMax} />
-          )}
-
-          {/* ── Magic Dinner: Mode Toggle ── */}
+          {/* ── Magic Dinner: Mode Toggle (in Step 2 für Planung) ── */}
           {isDinner && (
             <div className="flex gap-2">
               <button onClick={() => setDinnerMode("gang")}
@@ -1036,6 +1017,21 @@ const AdminShowEditor = () => {
           {wizardStep === 3 && (
           <div className="space-y-5">
           <h2 className="text-lg font-bold">{isCloseUp ? "Effekt-Pool" : isWorkshop ? "Übungen" : "Ablauf & Effekte"}</h2>
+
+          {/* Dauer-Anzeige */}
+          {!isWorkshop && !isCloseUp && (
+            <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${overZieldauer ? "bg-red-50 border-red-200" : underZieldauer ? "bg-amber-50 border-amber-200" : "bg-green-50 border-green-200"}`}>
+              <Clock className={`w-4 h-4 ${overZieldauer ? "text-red-600" : underZieldauer ? "text-amber-600" : "text-green-600"}`} />
+              <span className={`text-sm font-semibold ${overZieldauer ? "text-red-700" : underZieldauer ? "text-amber-700" : "text-green-700"}`}>
+                {totalEffektDauer} / {zieldauerMin === zieldauerMax ? `${zieldauerMax}` : `${zieldauerMin}–${zieldauerMax}`} Min.
+              </span>
+              {overZieldauer && <span className="text-xs text-red-600 flex items-center gap-1"><AlertTriangle className="w-3 h-3" /> {totalEffektDauer - zieldauerMax} Min. über Maximum</span>}
+              {underZieldauer && <span className="text-xs text-amber-600 flex items-center gap-1"><AlertTriangle className="w-3 h-3" /> {zieldauerMin - totalEffektDauer} Min. unter Minimum</span>}
+            </div>
+          )}
+
+          {/* Visuelle Zeitleiste */}
+          {isBuehne && timelineItems.length > 0 && <TimelineBar items={timelineItems} zieldauer={zieldauerMax} />}
 
           {/* ── FORMAT-SPECIFIC EDITORS ── */}
           {/* ══════════════════════════════════════════════════════════════════ */}
