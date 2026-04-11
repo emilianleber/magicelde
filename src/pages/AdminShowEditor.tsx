@@ -322,7 +322,8 @@ const AdminShowEditor = () => {
 
   // Event/Request Verknüpfung
   const [eventId, setEventId] = useState<string | null>(null);
-  const [availableEvents, setAvailableEvents] = useState<{ id: string; title: string; date: string; guests: number | null }[]>([]);
+  const [linkedBookingId, setLinkedBookingId] = useState<string | null>(null);
+  const [availableEvents, setAvailableEvents] = useState<{ id: string; title: string; date: string; guests: number | null; type: string }[]>([]);
 
   // Quick-add effect popup
   const [showQuickAdd, setShowQuickAdd] = useState(false);
@@ -378,9 +379,24 @@ const AdminShowEditor = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate("/admin/login"); return; }
 
-      // Events laden für Verknüpfung
-      const { data: evts } = await supabase.from("portal_events").select("id, title, event_date, guests, status").is("deleted_at", null).neq("status", "storniert").order("event_date", { ascending: false });
-      setAvailableEvents((evts || []).map((e: any) => ({ id: e.id, title: e.title || "Event", date: e.event_date || "", guests: e.guests })));
+      // Buchungen laden für Verknüpfung (Events + Requests)
+      const [evtRes, reqRes] = await Promise.all([
+        supabase.from("portal_events").select("id, title, event_date, guests, status").is("deleted_at", null).neq("status", "storniert").order("event_date", { ascending: false }),
+        supabase.from("portal_requests").select("id, anlass, datum, gaeste, status, name, event_id").is("deleted_at", null).not("status", "in", '("abgelehnt","storniert","archiviert")').order("created_at", { ascending: false }),
+      ]);
+      const items: { id: string; title: string; date: string; guests: number | null; type: string }[] = [];
+      // Requests als Buchungen (primär)
+      for (const r of reqRes.data || []) {
+        items.push({ id: r.id, title: (r as any).anlass || (r as any).name || "Anfrage", date: (r as any).datum || "", guests: (r as any).gaeste, type: "request" });
+      }
+      // Events ohne Request (selten, aber möglich)
+      const reqEventIds = new Set((reqRes.data || []).map((r: any) => r.event_id).filter(Boolean));
+      for (const e of evtRes.data || []) {
+        if (!reqEventIds.has(e.id)) {
+          items.push({ id: e.id, title: e.title || "Event", date: e.event_date || "", guests: e.guests, type: "event" });
+        }
+      }
+      setAvailableEvents(items);
 
       const effekte = await effekteService.getAll();
       // Also load konzept-only effects (not in normal library)
@@ -402,6 +418,13 @@ const AdminShowEditor = () => {
           setFormat(show.format);
           setShowTyp(show.showTyp || "individuell");
           setEventId(show.eventId || null);
+          // Linked booking: suche Request der diese Show referenziert
+          const { data: linkedReq } = await supabase.from("portal_requests").select("id").eq("show_id", id).limit(1).maybeSingle();
+          if (linkedReq) setLinkedBookingId(linkedReq.id);
+          else if (show.eventId) {
+            const { data: linkedEvtReq } = await supabase.from("portal_requests").select("id").eq("event_id", show.eventId).limit(1).maybeSingle();
+            if (linkedEvtReq) setLinkedBookingId(linkedEvtReq.id);
+          }
           setStatus(show.status);
           setAnlass(show.anlass);
           setPreis(show.preis ?? null);
@@ -640,10 +663,18 @@ const AdminShowEditor = () => {
 
       if (isNew) {
         const created = await showService.create(payload);
+        // Buchung verknüpfen
+        if (linkedBookingId) {
+          await supabase.from("portal_requests").update({ show_id: created.id }).eq("id", linkedBookingId);
+        }
         setMessage("Konzept erstellt!");
         navigate(`/admin/programm/shows/${created.id}/edit`, { replace: true });
       } else if (id) {
         await showService.update(id, payload);
+        // Buchung verknüpfen
+        if (linkedBookingId) {
+          await supabase.from("portal_requests").update({ show_id: id }).eq("id", linkedBookingId);
+        }
         setMessage("Gespeichert!");
       }
     } catch (err: any) {
@@ -801,17 +832,17 @@ const AdminShowEditor = () => {
                 className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm" step="0.01" min="0" />
             </div>
             <div>
-              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Event (optional)</label>
-              <select value={eventId || "none"} onChange={e => {
-                const eid = e.target.value === "none" ? null : e.target.value;
-                setEventId(eid);
-                // Gäste aus Event laden
-                if (eid) {
-                  const evt = availableEvents.find(ev => ev.id === eid);
-                  if (evt?.guests) { setCloseupGaeste(evt.guests); setCloseupGruppen(Math.ceil(evt.guests / closeupPersonenProGruppe)); }
+              <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Buchung (optional)</label>
+              <select value={linkedBookingId || "none"} onChange={e => {
+                const bid = e.target.value === "none" ? null : e.target.value;
+                setLinkedBookingId(bid);
+                // Gäste laden
+                if (bid) {
+                  const booking = availableEvents.find(ev => ev.id === bid);
+                  if (booking?.guests) { setCloseupGaeste(booking.guests); setCloseupGruppen(Math.ceil(booking.guests / closeupPersonenProGruppe)); }
                 }
               }} className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm">
-                <option value="none">Kein Event</option>
+                <option value="none">Keine Buchung</option>
                 {availableEvents.map(ev => (
                   <option key={ev.id} value={ev.id}>{ev.title}{ev.date ? ` (${new Date(ev.date + "T00:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "short" })})` : ""}{ev.guests ? ` · ${ev.guests} Gäste` : ""}</option>
                 ))}
