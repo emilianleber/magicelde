@@ -377,6 +377,15 @@ const AdminShowEditor = () => {
   const [workshopMaterial, setWorkshopMaterial] = useState("");
   const [workshopLernziele, setWorkshopLernziele] = useState("");
 
+  // Wizard
+  const [wizardStep, setWizardStep] = useState(1);
+  const WIZARD_STEPS = [
+    { num: 1, label: "Basis" },
+    { num: 2, label: format === "close-up" ? "Einsatz" : format === "workshop" ? "Workshop" : "Planung" },
+    { num: 3, label: format === "close-up" ? "Effekt-Pool" : format === "workshop" ? "Übungen" : "Ablauf" },
+    { num: 4, label: "Texte & Technik" },
+  ];
+
   // Sidebar filter
   const [effektSearch, setEffektSearch] = useState("");
   const [effektTypFilter, setEffektTypFilter] = useState<string>("alle");
@@ -793,7 +802,7 @@ const AdminShowEditor = () => {
   return (
     <AdminLayout title={isNew ? "Neues Konzept" : name || "Konzept"} subtitle={FORMAT_OPTIONS.find(f => f.value === format)?.label || "Show-Ablauf planen"}>
       {/* Back + Actions */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-4">
         <Link to={isNew ? "/admin/programm/shows" : `/admin/programm/shows/${id}`} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="w-4 h-4" /> {isNew ? "Zurück" : "Zur Übersicht"}
         </Link>
@@ -804,18 +813,38 @@ const AdminShowEditor = () => {
               <Copy className="w-3.5 h-3.5" /> Duplizieren
             </button>
           )}
-          <button onClick={handleSave} disabled={saving} className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-bold hover:opacity-80 disabled:opacity-50">
-            <Save className="w-4 h-4" /> {saving ? "Speichert…" : "Speichern"}
-          </button>
         </div>
       </div>
 
+      {/* ── WIZARD STEPPER ── */}
+      <div className="flex items-center gap-1 bg-muted/40 rounded-2xl p-1.5 mb-5">
+        {WIZARD_STEPS.map((step) => (
+          <button key={step.num} onClick={() => setWizardStep(step.num)}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              wizardStep === step.num ? "bg-foreground text-background shadow-sm" : wizardStep > step.num ? "text-green-600" : "text-muted-foreground"
+            }`}>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+              wizardStep === step.num ? "bg-background text-foreground" : wizardStep > step.num ? "bg-green-100 text-green-600" : "bg-muted/60"
+            }`}>{wizardStep > step.num ? "✓" : step.num}</span>
+            {step.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── Wizard Navigation (unten) ── */}
+      {/* wird am Ende des Contents gerendert */}
+
       {/* ── MAIN LAYOUT ── */}
       <DndContext sensors={sensors} onDragStart={handleTopLevelDragStart} onDragEnd={handleTopLevelDragEnd}>
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5">
+      <div className={`grid grid-cols-1 ${wizardStep === 3 && !isWorkshop ? "lg:grid-cols-[1fr_300px]" : ""} gap-5`}>
 
         {/* ═══ LEFT: Editor ═══ */}
         <div className="space-y-5">
+
+          {/* ══ STEP 1: Basis-Infos ══ */}
+          {wizardStep === 1 && (
+          <div className="space-y-5">
+          <h2 className="text-lg font-bold">Basis-Informationen</h2>
 
           {/* Meta-Felder */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -881,6 +910,14 @@ const AdminShowEditor = () => {
             </div>
           </div>
 
+          </div>
+          )}
+
+          {/* ══ STEP 2: Format-spezifische Planung ══ */}
+          {wizardStep === 2 && (
+          <div className="space-y-5">
+          <h2 className="text-lg font-bold">{isCloseUp ? "Einsatz-Planung" : isWorkshop ? "Workshop-Planung" : isDinner ? "Dinner-Planung" : "Show-Planung"}</h2>
+
           {/* Dauer-Anzeige — nicht bei Close-Up (hat eigene Gruppen-Planung) und Workshop */}
           {!isWorkshop && !isCloseUp && (
             <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${overZieldauer ? "bg-red-50 border-red-200" : underZieldauer ? "bg-amber-50 border-amber-200" : "bg-green-50 border-green-200"}`}>
@@ -921,6 +958,14 @@ const AdminShowEditor = () => {
           )}
 
           {/* ══════════════════════════════════════════════════════════════════ */}
+          </div>
+          )}
+
+          {/* ══ STEP 3: Effekte / Ablauf ══ */}
+          {wizardStep === 3 && (
+          <div className="space-y-5">
+          <h2 className="text-lg font-bold">{isCloseUp ? "Effekt-Pool" : isWorkshop ? "Übungen" : "Ablauf & Effekte"}</h2>
+
           {/* ── FORMAT-SPECIFIC EDITORS ── */}
           {/* ══════════════════════════════════════════════════════════════════ */}
 
@@ -1255,6 +1300,14 @@ const AdminShowEditor = () => {
             </div>
           )}
 
+          </div>
+          )}
+
+          {/* ══ STEP 4: Texte & Technik ══ */}
+          {wizardStep === 4 && (
+          <div className="space-y-5">
+          <h2 className="text-lg font-bold">Texte & Technik</h2>
+
           {/* Beschreibungstexte */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
@@ -1307,10 +1360,42 @@ const AdminShowEditor = () => {
               <textarea value={technischeAnforderungen} onChange={e => setTechnischeAnforderungen(e.target.value)} rows={2} placeholder="Sonstiger Bedarf (Bühne, Strom…)" className="w-full rounded-xl bg-muted/30 border border-border/20 px-3 py-2 text-sm resize-none mt-2" />
             </div>
           </div>
+
+          </div>
+          )}
+
+          {/* ── Wizard Navigation ── */}
+          <div className="flex items-center justify-between pt-4 border-t border-border/10">
+            <button
+              onClick={() => { if (wizardStep > 1) setWizardStep(wizardStep - 1); }}
+              disabled={wizardStep === 1}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium border border-border/30 hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Zurück
+            </button>
+            <span className="text-xs text-muted-foreground">Schritt {wizardStep} von 4</span>
+            {wizardStep < 4 ? (
+              <button
+                onClick={async () => { await handleSave(); setWizardStep(wizardStep + 1); }}
+                disabled={saving || (wizardStep === 1 && !name.trim())}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-80 disabled:opacity-50"
+              >
+                {saving ? "Speichert…" : "Weiter"} <ArrowLeft className="w-3.5 h-3.5 rotate-180" />
+              </button>
+            ) : (
+              <button
+                onClick={async () => { await handleSave(); setMessage("Konzept gespeichert!"); }}
+                disabled={saving}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-bold hover:bg-green-700 disabled:opacity-50"
+              >
+                <Save className="w-3.5 h-3.5" /> {saving ? "Speichert…" : "Fertig & Speichern"}
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* ═══ RIGHT: Effekte-Sidebar ═══ */}
-        {!isWorkshop && (
+        {/* ═══ RIGHT: Effekte-Sidebar (nur in Step 3) ═══ */}
+        {wizardStep === 3 && !isWorkshop && (
           <div className="lg:sticky lg:top-20 space-y-3">
             <div className="p-4 rounded-2xl bg-muted/20 border border-border/30">
               <div className="flex items-center justify-between mb-1">
