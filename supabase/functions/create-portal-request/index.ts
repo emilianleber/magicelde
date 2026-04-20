@@ -126,15 +126,31 @@ serve(async (req) => {
 
     if (upsertError) {
       console.error("CUSTOMER UPSERT ERROR:", upsertError);
-      // Fallback: Nochmals per Email suchen (z.B. wenn unique index noch fehlt)
-      const { data: fallbackCustomers } = await supabase
+    } else if (upsertedCustomer) {
+      customerId = upsertedCustomer.id;
+    }
+
+    // Fallback falls UPSERT fehlschlug oder nichts zurückgab:
+    // find-or-insert per email, damit pro Anfrage GARANTIERT ein Kunde existiert (ohne Duplikate)
+    if (!customerId) {
+      const { data: existing } = await supabase
         .from("portal_customers")
         .select("id")
         .ilike("email", normalizedEmail)
         .limit(1);
-      customerId = fallbackCustomers?.[0]?.id || null;
-    } else if (upsertedCustomer) {
-      customerId = upsertedCustomer.id;
+      customerId = existing?.[0]?.id || null;
+
+      if (!customerId) {
+        const { data: created, error: createError } = await supabase
+          .from("portal_customers")
+          .insert(customerPayload)
+          .select("id")
+          .maybeSingle();
+        if (createError) {
+          console.error("CUSTOMER FALLBACK INSERT ERROR:", createError);
+        }
+        customerId = created?.id || null;
+      }
     }
 
     // 2) Anfrage speichern
