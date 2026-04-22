@@ -37,6 +37,8 @@ const BackgroundHero = ({
           alt=""
           className="h-full w-full object-cover scale-105"
           style={{ animation: "slowZoom 20s ease-in-out infinite alternate" }}
+          fetchPriority="high"
+          loading="eager"
         />
         <div className={`absolute inset-0 ${overlayClass}`} />
       </div>

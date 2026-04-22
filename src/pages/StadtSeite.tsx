@@ -9,7 +9,7 @@ import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/staunen.jpg";
 import dinnerImg from "@/assets/emilian-magic-dinner.jpg";
-import { Star, ArrowRight, Users, Sparkles, Building2, MapPin, Calendar, PartyPopper, Heart, Briefcase, Cake, GraduationCap, HelpCircle, ChevronDown, ChevronUp, CheckCircle2, Euro } from "lucide-react";
+import { Star, ArrowRight, Users, Sparkles, Building2, MapPin, Calendar, PartyPopper, Heart, Briefcase, Cake, GraduationCap, HelpCircle, ChevronDown, ChevronUp, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
 const StadtSeite = () => {
@@ -148,7 +148,7 @@ const HeroStadt = ({ name, intro, region }: { name: string; intro: string; regio
         </div>
       </div>
       <div className="relative rounded-3xl overflow-hidden max-w-5xl mx-auto mt-20 opacity-0 animate-scale-up" style={{ animationDelay: "0.85s" }}>
-        <img src={heroImg} alt={`Zauberer Emilian Leber auf einem Event in ${name}`} className="w-full h-[400px] md:h-[500px] object-cover object-top" />
+        <img src={heroImg} alt={`Zauberer Emilian Leber auf einem Event in ${name}`} className="w-full h-[400px] md:h-[500px] object-cover object-top" fetchPriority="high" loading="eager" />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/60 to-transparent p-8">
           <p className="font-sans text-sm text-background/80">Emilian Leber — Zauberkünstler & Entertainer für {name}</p>
         </div>
@@ -307,27 +307,25 @@ const WarumSection = ({ name }: { name: string }) => {
   );
 };
 
-/* ─── Preise ─── */
+/* ─── Pakete ─── */
 const PreisSection = ({ name }: { name: string }) => {
   const { ref, isVisible } = useScrollReveal();
   const pakete = [
     {
-      title: "Close-Up Magie",
-      price: "ab 800 €",
-      desc: `1–2 Stunden interaktive Tischzauberei für dein Event in ${name}. Perfekt für Empfänge, Dinner und Networking — direkt bei deinen Gästen.`,
-      features: ["1–2 Stunden", "Bis 200 Gäste", "Anfahrt inklusive"],
+      title: "Einstieg",
+      desc: `Kompaktes Showformat — ideal für kleinere Events und Geburtstage in ${name}. Bühnenshow mit Comedy-Zauberei.`,
+      features: ["15–20 Minuten", "Bühnenshow", "Bis 100 Gäste"],
     },
     {
-      title: "Bühnenshow",
-      price: "ab 1.200 €",
-      desc: `30–60 Minuten Comedy-Zaubershow für Firmenfeiern und Events in ${name}. Mit professionellem Ton- & Licht-Equipment buchbar.`,
-      features: ["30–60 Minuten", "Ab 30 Gäste", "Inkl. Technik-Absprache"],
+      title: "Klassiker",
+      badge: "Beliebteste Wahl",
+      desc: `Bewährtes Komplettformat für Firmenfeiern und Hochzeiten in ${name}. Bühne oder Close-Up — je nach Event.`,
+      features: ["30–45 Minuten", "Bühne oder Close-Up", "Bis 300 Gäste"],
     },
     {
-      title: "Magic Dinner",
-      price: "ab 2.500 €",
-      desc: `Dinner und Magie vereint — ein exklusiver Abend für besondere Anlässe in ${name}. Mehrere Showeinlagen durch das gesamte Dinner.`,
-      features: ["Kompletter Abend", "Dinner + Shows", "Exklusiv & intim"],
+      title: "Premium",
+      desc: `Exklusives Rundum-Paket für besondere Anlässe in ${name}. Bühnenshow und Close-Up-Magie kombiniert.`,
+      features: ["Bis 60 Minuten", "Bühne + Close-Up", "Individuelle Gestaltung"],
     },
   ];
   return (
@@ -335,18 +333,20 @@ const PreisSection = ({ name }: { name: string }) => {
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex items-center gap-2">
-            <Euro className="w-3.5 h-3.5" /> Kosten &amp; Preise
+            <Sparkles className="w-3.5 h-3.5" /> Showformate
           </span>
-          <h2 className="headline-section text-foreground">Was kostet ein Zauberer in {name}?</h2>
+          <h2 className="headline-section text-foreground">Das passende Format für dein Event in {name}.</h2>
           <p className="text-detail max-w-xl mx-auto mt-4">
-            Die Kosten für einen professionellen Zauberer in {name} richten sich nach Format, Dauer und Gästezahl.
-            Alle Preise verstehen sich inklusive Anfahrt nach {name} und persönlicher Beratung.
+            Jedes Event ist anders — ich passe das Programm individuell an deine Gästezahl, den Anlass und den Rahmen an.
+            Alle Pakete beinhalten persönliche Beratung und Anfahrt nach {name}.
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {pakete.map((p, i) => (
-            <div key={p.title} className={`p-8 rounded-3xl bg-background border border-border/30 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
-              <p className="font-display text-3xl font-bold text-accent mb-1">{p.price}</p>
+            <div key={p.title} className={`p-8 rounded-3xl bg-background border border-border/30 relative ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
+              {"badge" in p && p.badge && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">{p.badge}</span>
+              )}
               <h3 className="font-display text-xl font-bold text-foreground mb-4">{p.title}</h3>
               <p className="text-detail text-sm leading-relaxed mb-5">{p.desc}</p>
               <ul className="space-y-2">
@@ -361,7 +361,7 @@ const PreisSection = ({ name }: { name: string }) => {
         </div>
         <div className={`max-w-xl mx-auto text-center mt-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.4s" }}>
           <p className="text-detail text-sm">
-            Genaue Kosten hängen von deinem spezifischen Event in {name} ab.{" "}
+            Angebot und Konditionen auf Anfrage — ich erstelle dir ein individuelles Angebot für dein Event in {name}.{" "}
             <Link to="/buchung" className="text-accent hover:underline">Jetzt kostenlos anfragen →</Link>
           </p>
         </div>

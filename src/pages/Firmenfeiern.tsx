@@ -1,5 +1,6 @@
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
+import StadtLinks from "@/components/landing/StadtLinks";
 import HorizontalSlider from "@/components/landing/HorizontalSlider";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import { TrustStrip, ClientLogos } from "@/components/landing/TrustElements";
@@ -768,6 +769,7 @@ const Firmenfeiern = () => (
       <StatsCorporate />
       <FAQEntscheider />
       <UeberMichKurz />
+      <StadtLinks headline="Zauberer für Ihre Firmenfeier — bundesweit." />
       <BookingCTA
         headline={"Machen Sie Ihr Event\nunvergesslich."}
         subline="Individuelle Konzepte, professionelle Umsetzung. Lassen Sie uns über Ihr nächstes Event sprechen."
