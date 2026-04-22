@@ -3,6 +3,13 @@ export interface StadtFAQ {
   a: string;
 }
 
+export interface KollegenEmpfehlung {
+  prefix: string;
+  linkText: string;
+  linkHref: string;
+  suffix?: string;
+}
+
 export interface Stadt {
   slug: string;
   name: string;
@@ -13,6 +20,7 @@ export interface Stadt {
   bekannteLocations?: string[];
   faq?: StadtFAQ[];
   seoText?: string;
+  kollegenEmpfehlung?: KollegenEmpfehlung;
 }
 
 export const staedte: Stadt[] = [
@@ -381,6 +389,12 @@ export const staedte: Stadt[] = [
       { q: "Was kostet ein Zauberer in Hannover?", a: "Ich erstelle dir ein individuelles Angebot inklusive Anfahrt. Die Beratung ist kostenlos und unverbindlich." },
     ],
     seoText: "Zauberer Hannover: Emilian Leber begeistert als Zauberkünstler auf Events in Hannover. Close-Up Magie und Bühnenshow für Firmenfeiern, Messen und Hochzeiten in der Messestadt.",
+    kollegenEmpfehlung: {
+      prefix: "Für Veranstaltungen im Raum Hannover empfehle ich meinen Kollegen ",
+      linkText: "Zauberer Simabu aus Hannover",
+      linkHref: "https://www.simabu.com",
+      suffix: " – ein Zauberkünstler aus Hannover mit über 1.500 Auftritten auf Hochzeiten, Firmenfeiern etc. in Hannover und ganz Niedersachsen.",
+    },
   },
   {
     slug: "dortmund",

@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { staedte } from "@/data/staedte";
+import { staedte, type KollegenEmpfehlung } from "@/data/staedte";
 import heroImg from "@/assets/hero-magic.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
@@ -86,6 +86,9 @@ const StadtSeite = () => {
       <TestimonialStadt name={data.name} />
       {data.faq && data.faq.length > 0 && (
         <FAQSection name={data.name} faq={data.faq} />
+      )}
+      {data.kollegenEmpfehlung && (
+        <KollegenEmpfehlungSection empfehlung={data.kollegenEmpfehlung} />
       )}
       <BookingCTA headline={`Zauberer für\n${data.name}.`} subline={`Sichere dir deinen Termin in ${data.name} — ich berate dich persönlich und unverbindlich.`} />
       <WeitereStaedte current={data.slug} />
@@ -354,6 +357,31 @@ const FAQSection = ({ name, faq }: { name: string; faq: { q: string; a: string }
               )}
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─── Kollegen-Empfehlung (subtil, SEO-Link-Austausch) ─── */
+const KollegenEmpfehlungSection = ({ empfehlung }: { empfehlung: KollegenEmpfehlung }) => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section className="section-medium" ref={ref}>
+      <div className="container px-6">
+        <div className={`max-w-2xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-detail text-sm leading-relaxed text-muted-foreground text-center">
+            {empfehlung.prefix}
+            <a
+              href={empfehlung.linkHref}
+              target="_blank"
+              rel="noopener"
+              className="text-foreground underline decoration-border/60 underline-offset-4 hover:decoration-accent transition-colors"
+            >
+              {empfehlung.linkText}
+            </a>
+            {empfehlung.suffix}
+          </p>
         </div>
       </div>
     </section>
