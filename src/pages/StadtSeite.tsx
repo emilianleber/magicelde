@@ -9,7 +9,7 @@ import closeupImg from "@/assets/closeup.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/staunen.jpg";
 import dinnerImg from "@/assets/emilian-magic-dinner.jpg";
-import { Star, ArrowRight, Users, Sparkles, Building2, MapPin, Calendar, PartyPopper, Heart, Briefcase, Cake, GraduationCap, HelpCircle, ChevronDown, ChevronUp, CheckCircle2 } from "lucide-react";
+import { Star, ArrowRight, Users, Sparkles, Building2, MapPin, Calendar, PartyPopper, Heart, Briefcase, Cake, GraduationCap, HelpCircle, ChevronDown, ChevronUp, CheckCircle2, Euro } from "lucide-react";
 import { useState } from "react";
 
 const StadtSeite = () => {
@@ -48,7 +48,7 @@ const StadtSeite = () => {
         <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "LocalBusiness",
+          "@type": ["LocalBusiness", "EntertainmentBusiness"],
           "name": "Emilian Leber – Zauberer & Showkünstler",
           "url": `https://www.magicel.de/zauberer/${data.slug}`,
           "description": `Zauberer in ${data.name}: Interaktive Close-Up Magie, Bühnenshow & Magic Dinner auf Hochzeiten, Firmenfeiern und Events.`,
@@ -62,14 +62,34 @@ const StadtSeite = () => {
           "telephone": "+4915563744696",
           "email": "el@magicel.de",
           "image": "https://www.magicel.de/og-image.jpg",
-          "sameAs": [
-            "https://www.instagram.com/emilian.leber",
-          ],
-          "areaServed": {
-            "@type": "City",
-            "name": data.name
+          "sameAs": ["https://www.instagram.com/emilian.leber"],
+          "areaServed": { "@type": "City", "name": data.name },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "bestRating": "5",
+            "worstRating": "1",
+            "reviewCount": "34"
           },
-          "serviceType": ["Zauberer", "Close-Up Magie", "Bühnenshow", "Magic Dinner", "Entertainer", "Zauberkünstler"]
+          "serviceType": ["Zauberer", "Close-Up Magie", "Bühnenshow", "Magic Dinner", "Entertainer", "Zauberkünstler", "Hochzeitszauberer"]
+        })}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Startseite", "item": "https://www.magicel.de/" },
+            { "@type": "ListItem", "position": 2, "name": `Zauberer ${data.name}`, "item": `https://www.magicel.de/zauberer/${data.slug}` }
+          ]
+        })}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "VideoObject",
+          "name": `Zauberer ${data.name} – Emilian Leber Showreel`,
+          "description": `Emilian Leber als Zauberer auf Events in ${data.name} — Close-Up Magie, Bühnenshow und Magic Dinner.`,
+          "thumbnailUrl": "https://img.youtube.com/vi/ZdIDq9VtqxU/maxresdefault.jpg",
+          "uploadDate": "2024-06-01",
+          "embedUrl": "https://www.youtube.com/embed/ZdIDq9VtqxU",
+          "contentUrl": "https://www.youtube.com/watch?v=ZdIDq9VtqxU"
         })}</script>
         {faqSchema && (
           <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
@@ -83,6 +103,8 @@ const StadtSeite = () => {
         <LocationsSection name={data.name} locations={data.bekannteLocations} />
       )}
       <WarumSection name={data.name} />
+      <VideoSection name={data.name} />
+      <PreisSection name={data.name} />
       <TestimonialStadt name={data.name} />
       {data.faq && data.faq.length > 0 && (
         <FAQSection name={data.name} faq={data.faq} />
@@ -90,6 +112,7 @@ const StadtSeite = () => {
       {data.kollegenEmpfehlung && (
         <KollegenEmpfehlungSection empfehlung={data.kollegenEmpfehlung} />
       )}
+      {data.langText && <LangTextSection name={data.name} langText={data.langText} />}
       <BookingCTA headline={`Zauberer für\n${data.name}.`} subline={`Sichere dir deinen Termin in ${data.name} — ich berate dich persönlich und unverbindlich.`} />
       <WeitereStaedte current={data.slug} />
     </PageLayout>
@@ -284,6 +307,69 @@ const WarumSection = ({ name }: { name: string }) => {
   );
 };
 
+/* ─── Preise ─── */
+const PreisSection = ({ name }: { name: string }) => {
+  const { ref, isVisible } = useScrollReveal();
+  const pakete = [
+    {
+      title: "Close-Up Magie",
+      price: "ab 800 €",
+      desc: `1–2 Stunden interaktive Tischzauberei für dein Event in ${name}. Perfekt für Empfänge, Dinner und Networking — direkt bei deinen Gästen.`,
+      features: ["1–2 Stunden", "Bis 200 Gäste", "Anfahrt inklusive"],
+    },
+    {
+      title: "Bühnenshow",
+      price: "ab 1.200 €",
+      desc: `30–60 Minuten Comedy-Zaubershow für Firmenfeiern und Events in ${name}. Mit professionellem Ton- & Licht-Equipment buchbar.`,
+      features: ["30–60 Minuten", "Ab 30 Gäste", "Inkl. Technik-Absprache"],
+    },
+    {
+      title: "Magic Dinner",
+      price: "ab 2.500 €",
+      desc: `Dinner und Magie vereint — ein exklusiver Abend für besondere Anlässe in ${name}. Mehrere Showeinlagen durch das gesamte Dinner.`,
+      features: ["Kompletter Abend", "Dinner + Shows", "Exklusiv & intim"],
+    },
+  ];
+  return (
+    <section className="section-large section-alt" ref={ref}>
+      <div className="container px-6">
+        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-accent mb-8 inline-flex items-center gap-2">
+            <Euro className="w-3.5 h-3.5" /> Kosten &amp; Preise
+          </span>
+          <h2 className="headline-section text-foreground">Was kostet ein Zauberer in {name}?</h2>
+          <p className="text-detail max-w-xl mx-auto mt-4">
+            Die Kosten für einen professionellen Zauberer in {name} richten sich nach Format, Dauer und Gästezahl.
+            Alle Preise verstehen sich inklusive Anfahrt nach {name} und persönlicher Beratung.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          {pakete.map((p, i) => (
+            <div key={p.title} className={`p-8 rounded-3xl bg-background border border-border/30 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
+              <p className="font-display text-3xl font-bold text-accent mb-1">{p.price}</p>
+              <h3 className="font-display text-xl font-bold text-foreground mb-4">{p.title}</h3>
+              <p className="text-detail text-sm leading-relaxed mb-5">{p.desc}</p>
+              <ul className="space-y-2">
+                {p.features.map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-accent/70 flex-shrink-0" /> {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div className={`max-w-xl mx-auto text-center mt-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.4s" }}>
+          <p className="text-detail text-sm">
+            Genaue Kosten hängen von deinem spezifischen Event in {name} ab.{" "}
+            <Link to="/buchung" className="text-accent hover:underline">Jetzt kostenlos anfragen →</Link>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 /* ─── Testimonials ─── */
 const realTestimonials = [
   { quote: "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!", author: "Martina Senftl", role: "Hochzeit", source: "ProvenExpert" },
@@ -382,6 +468,86 @@ const KollegenEmpfehlungSection = ({ empfehlung }: { empfehlung: KollegenEmpfehl
             </a>
             {empfehlung.suffix}
           </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─── Video ─── */
+const VideoSection = ({ name }: { name: string }) => {
+  const { ref, isVisible } = useScrollReveal();
+  const [playing, setPlaying] = useState(false);
+  const videoId = "ZdIDq9VtqxU";
+  return (
+    <section className="section-large section-alt" ref={ref}>
+      <div className="container px-6">
+        <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span className="badge-accent mb-8 inline-flex items-center gap-2">
+            <Sparkles className="w-3.5 h-3.5" /> Zauberer in Aktion
+          </span>
+          <h2 className="headline-section text-foreground">Sieh dir die Show an.</h2>
+          <p className="text-detail max-w-xl mx-auto mt-4">
+            Einen ersten Eindruck von meiner Arbeit als Zauberer bekommst du am besten live — hier ein Vorgeschmack auf das, was deine Gäste in {name} erwartet.
+          </p>
+        </div>
+        <div className={`max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          <div className="relative aspect-video rounded-3xl overflow-hidden bg-muted">
+            {playing ? (
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+                title={`Zauberer ${name} – Emilian Leber Showreel`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <>
+                <img
+                  src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                  alt={`Zauberer ${name} – Emilian Leber Show Vorschau`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-foreground/40 flex items-center justify-center">
+                  <button
+                    onClick={() => setPlaying(true)}
+                    className="w-20 h-20 rounded-full bg-accent/90 hover:bg-accent transition-colors flex items-center justify-center shadow-2xl"
+                    aria-label="Video abspielen"
+                  >
+                    <svg className="w-8 h-8 text-white ml-1" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+          <p className="text-detail text-xs text-center mt-4 text-muted-foreground">
+            Auftritte von Emilian Leber auf Firmenfeiern, Hochzeiten und Events — auch in {name}.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─── Erweiterter SEO-Text ─── */
+const LangTextSection = ({ name, langText }: { name: string; langText: string }) => {
+  const { ref, isVisible } = useScrollReveal();
+  const paragraphs = langText.split("\n\n").filter(Boolean);
+  return (
+    <section className="section-large" ref={ref}>
+      <div className="container px-6">
+        <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <h2 className="headline-section text-foreground mb-10 text-center">
+            Zauberer in {name} buchen — alles was du wissen musst.
+          </h2>
+          <div className="space-y-5">
+            {paragraphs.map((p, i) => (
+              <p key={i} className="text-detail leading-relaxed">{p}</p>
+            ))}
+          </div>
         </div>
       </div>
     </section>

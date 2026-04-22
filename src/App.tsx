@@ -1,78 +1,75 @@
-import AdminDashboard from "@/pages/AdminDashboard";
-import AdminKalender from "@/pages/AdminKalender";
-import AdminLocations from "@/pages/AdminLocations";
-import AdminArtikel from "@/pages/AdminArtikel";
-import AdminRequests from "@/pages/AdminRequests";
-import AdminRequestDetail from "@/pages/AdminRequestDetail";
-import AdminEvents from "@/pages/AdminEvents";
-import AdminEventDetail from "@/pages/AdminEventDetail";
-import AdminNewRequest from "@/pages/AdminNewRequest";
-import AdminNewEvent from "@/pages/AdminNewEvent";
-import AdminMails from "@/pages/AdminMails";
-import AdminCustomers from "@/pages/AdminCustomers";
-import AdminCustomerDetail from "@/pages/AdminCustomerDetail";
-import AdminNewCustomer from "@/pages/AdminNewCustomer";
-import AdminSettings from "@/pages/AdminSettings";
-import AdminTodos from "@/pages/AdminTodos";
-import AdminDocuments from "@/pages/AdminDocuments";
-import AdminLogin from "@/pages/AdminLogin";
-import AdminPasswordReset from "@/pages/AdminPasswordReset";
-import AdminDokumentEditor from "@/pages/AdminDokumentEditor";
-import AdminDokumentDetail from "@/pages/AdminDokumentDetail";
-import AdminDokumenteListe from "@/pages/AdminDokumenteListe";
-import AdminBookings from "@/pages/AdminBookings";
-import AdminBookingDetail from "@/pages/AdminBookingDetail";
-import AdminProgrammHub from "@/pages/AdminProgrammHub";
-import AdminShowsList from "@/pages/AdminShowsList";
-import AdminShowDetail from "@/pages/AdminShowDetail";
-import AdminShowEditor from "@/pages/AdminShowEditor";
-import AdminTouren from "@/pages/AdminTouren";
-import AdminTourDetail from "@/pages/AdminTourDetail";
-import AdminEffekteBibliothek from "@/pages/AdminEffekteBibliothek";
-import AdminMusik from "@/pages/AdminMusik";
-import AdminTechnik from "@/pages/AdminTechnik";
-import AdminTeam from "@/pages/AdminTeam";
-import AdminPakete from "@/pages/AdminPakete";
-
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
-
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-
-import Index from "./pages/Index.tsx";
-import Hochzeit from "./pages/Hochzeit.tsx";
-import Firmenfeiern from "./pages/Firmenfeiern.tsx";
-import Geburtstage from "./pages/Geburtstage.tsx";
-import Buehnenshow from "./pages/Buehnenshow.tsx";
-import CloseUp from "./pages/CloseUp.tsx";
-import MagicDinner from "./pages/MagicDinner.tsx";
-import Moderation from "./pages/Moderation.tsx";
-import UeberMich from "./pages/UeberMich.tsx";
-import Referenzen from "./pages/Referenzen.tsx";
-import FAQPage from "./pages/FAQ.tsx";
-import Presse from "./pages/Presse.tsx";
-import Kontakt from "./pages/Kontakt.tsx";
-import Buchung from "./pages/Buchung.tsx";
-import Danke from "./pages/Danke.tsx";
-import Blog from "./pages/Blog.tsx";
-import BlogPost from "./pages/BlogPost.tsx";
-import Tickets from "./pages/Tickets.tsx";
-import Datenschutz from "./pages/Datenschutz.tsx";
-import Impressum from "./pages/Impressum.tsx";
-import AGB from "./pages/AGB.tsx";
-import StadtSeite from "./pages/StadtSeite.tsx";
-
-import KundenportalLogin from "./pages/KundenportalLogin.tsx";
-import Kundenportal from "./pages/Kundenportal.tsx";
-
-import NotFound from "./pages/NotFound.tsx";
-import ScrollToTop from "./components/ScrollToTop.tsx";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminPersistentShell } from "@/components/admin/AdminLayout";
+import ScrollToTop from "./components/ScrollToTop.tsx";
+
+// Admin pages — only loaded on admin.magicel.de / localhost
+const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
+const AdminKalender = lazy(() => import("@/pages/AdminKalender"));
+const AdminLocations = lazy(() => import("@/pages/AdminLocations"));
+const AdminArtikel = lazy(() => import("@/pages/AdminArtikel"));
+const AdminRequests = lazy(() => import("@/pages/AdminRequests"));
+const AdminRequestDetail = lazy(() => import("@/pages/AdminRequestDetail"));
+const AdminEvents = lazy(() => import("@/pages/AdminEvents"));
+const AdminEventDetail = lazy(() => import("@/pages/AdminEventDetail"));
+const AdminNewRequest = lazy(() => import("@/pages/AdminNewRequest"));
+const AdminNewEvent = lazy(() => import("@/pages/AdminNewEvent"));
+const AdminMails = lazy(() => import("@/pages/AdminMails"));
+const AdminCustomers = lazy(() => import("@/pages/AdminCustomers"));
+const AdminCustomerDetail = lazy(() => import("@/pages/AdminCustomerDetail"));
+const AdminNewCustomer = lazy(() => import("@/pages/AdminNewCustomer"));
+const AdminSettings = lazy(() => import("@/pages/AdminSettings"));
+const AdminTodos = lazy(() => import("@/pages/AdminTodos"));
+const AdminLogin = lazy(() => import("@/pages/AdminLogin"));
+const AdminPasswordReset = lazy(() => import("@/pages/AdminPasswordReset"));
+const AdminDokumentEditor = lazy(() => import("@/pages/AdminDokumentEditor"));
+const AdminDokumentDetail = lazy(() => import("@/pages/AdminDokumentDetail"));
+const AdminDokumenteListe = lazy(() => import("@/pages/AdminDokumenteListe"));
+const AdminBookings = lazy(() => import("@/pages/AdminBookings"));
+const AdminBookingDetail = lazy(() => import("@/pages/AdminBookingDetail"));
+const AdminProgrammHub = lazy(() => import("@/pages/AdminProgrammHub"));
+const AdminShowsList = lazy(() => import("@/pages/AdminShowsList"));
+const AdminShowDetail = lazy(() => import("@/pages/AdminShowDetail"));
+const AdminShowEditor = lazy(() => import("@/pages/AdminShowEditor"));
+const AdminTouren = lazy(() => import("@/pages/AdminTouren"));
+const AdminTourDetail = lazy(() => import("@/pages/AdminTourDetail"));
+const AdminEffekteBibliothek = lazy(() => import("@/pages/AdminEffekteBibliothek"));
+const AdminMusik = lazy(() => import("@/pages/AdminMusik"));
+const AdminTechnik = lazy(() => import("@/pages/AdminTechnik"));
+const AdminTeam = lazy(() => import("@/pages/AdminTeam"));
+const AdminPakete = lazy(() => import("@/pages/AdminPakete"));
+
+// Public pages — only loaded on www.magicel.de
+const Index = lazy(() => import("./pages/Index.tsx"));
+const Hochzeit = lazy(() => import("./pages/Hochzeit.tsx"));
+const Firmenfeiern = lazy(() => import("./pages/Firmenfeiern.tsx"));
+const Geburtstage = lazy(() => import("./pages/Geburtstage.tsx"));
+const Buehnenshow = lazy(() => import("./pages/Buehnenshow.tsx"));
+const CloseUp = lazy(() => import("./pages/CloseUp.tsx"));
+const MagicDinner = lazy(() => import("./pages/MagicDinner.tsx"));
+const Moderation = lazy(() => import("./pages/Moderation.tsx"));
+const UeberMich = lazy(() => import("./pages/UeberMich.tsx"));
+const Referenzen = lazy(() => import("./pages/Referenzen.tsx"));
+const FAQPage = lazy(() => import("./pages/FAQ.tsx"));
+const Presse = lazy(() => import("./pages/Presse.tsx"));
+const Kontakt = lazy(() => import("./pages/Kontakt.tsx"));
+const Buchung = lazy(() => import("./pages/Buchung.tsx"));
+const Danke = lazy(() => import("./pages/Danke.tsx"));
+const Blog = lazy(() => import("./pages/Blog.tsx"));
+const BlogPost = lazy(() => import("./pages/BlogPost.tsx"));
+const Tickets = lazy(() => import("./pages/Tickets.tsx"));
+const Datenschutz = lazy(() => import("./pages/Datenschutz.tsx"));
+const Impressum = lazy(() => import("./pages/Impressum.tsx"));
+const AGB = lazy(() => import("./pages/AGB.tsx"));
+const StadtSeite = lazy(() => import("./pages/StadtSeite.tsx"));
+const KundenportalLogin = lazy(() => import("./pages/KundenportalLogin.tsx"));
+const Kundenportal = lazy(() => import("./pages/Kundenportal.tsx"));
+const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
 
@@ -109,8 +106,6 @@ const AuthEventHandler = () => {
 };
 
 // ── Admin CRM routes (only on admin.magicel.de or localhost) ─────────────────
-// AdminPersistentShell wraps all sidebar-pages so the sidebar NEVER remounts.
-// Editor + Detail have their own full-screen UI → outside the shell.
 const AdminRoutes = () => (
   <Routes>
     {/* Login / Passwort – kein Sidebar */}
@@ -236,106 +231,107 @@ const App = () => (
       <BrowserRouter>
         <ScrollToTop />
         <AuthEventHandler />
-        {IS_ADMIN_DOMAIN ? <AdminRoutes /> : IS_DEV ? (
-          // localhost: beide Route-Sets verfügbar
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/hochzeit" element={<Hochzeit />} />
-            <Route path="/firmenfeiern" element={<Firmenfeiern />} />
-            <Route path="/geburtstage" element={<Geburtstage />} />
-            <Route path="/buehnenshow" element={<Buehnenshow />} />
-            <Route path="/close-up" element={<CloseUp />} />
-            <Route path="/magic-dinner" element={<MagicDinner />} />
-            <Route path="/moderation" element={<Moderation />} />
-            <Route path="/ueber-mich" element={<UeberMich />} />
-            <Route path="/referenzen" element={<Referenzen />} />
-            <Route path="/faq" element={<FAQPage />} />
-            <Route path="/presse" element={<Presse />} />
-            <Route path="/kontakt" element={<Kontakt />} />
-            <Route path="/buchung" element={<Buchung />} />
-            <Route path="/danke" element={<Danke />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/tickets" element={<Tickets />} />
-            <Route path="/datenschutz" element={<Datenschutz />} />
-            <Route path="/impressum" element={<Impressum />} />
-            <Route path="/agb" element={<AGB />} />
-            <Route path="/zauberer/:stadt" element={<StadtSeite />} />
-            <Route path="/kundenportal/login" element={<KundenportalLogin />} />
-            <Route path="/kundenportal" element={<Kundenportal />} />
+        <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a]" />}>
+          {IS_ADMIN_DOMAIN ? <AdminRoutes /> : IS_DEV ? (
+            // localhost: beide Route-Sets verfügbar
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/hochzeit" element={<Hochzeit />} />
+              <Route path="/firmenfeiern" element={<Firmenfeiern />} />
+              <Route path="/geburtstage" element={<Geburtstage />} />
+              <Route path="/buehnenshow" element={<Buehnenshow />} />
+              <Route path="/close-up" element={<CloseUp />} />
+              <Route path="/magic-dinner" element={<MagicDinner />} />
+              <Route path="/moderation" element={<Moderation />} />
+              <Route path="/ueber-mich" element={<UeberMich />} />
+              <Route path="/referenzen" element={<Referenzen />} />
+              <Route path="/faq" element={<FAQPage />} />
+              <Route path="/presse" element={<Presse />} />
+              <Route path="/kontakt" element={<Kontakt />} />
+              <Route path="/buchung" element={<Buchung />} />
+              <Route path="/danke" element={<Danke />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/tickets" element={<Tickets />} />
+              <Route path="/datenschutz" element={<Datenschutz />} />
+              <Route path="/impressum" element={<Impressum />} />
+              <Route path="/agb" element={<AGB />} />
+              <Route path="/zauberer/:stadt" element={<StadtSeite />} />
+              <Route path="/kundenportal/login" element={<KundenportalLogin />} />
+              <Route path="/kundenportal" element={<Kundenportal />} />
 
-            {/* Login / Passwort ohne Shell */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
+              {/* Login / Passwort ohne Shell */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/passwort-setzen" element={<AdminPasswordReset />} />
 
-            {/* Vollbild-Seiten ohne Shell */}
-            <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
-            <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
-            <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
+              {/* Vollbild-Seiten ohne Shell */}
+              <Route path="/admin/dokumente/new" element={<AdminDokumentEditor />} />
+              <Route path="/admin/dokumente/:id/bearbeiten" element={<AdminDokumentEditor />} />
+              <Route path="/admin/dokumente/:id" element={<AdminDokumentDetail />} />
 
-            {/* Persistente Shell */}
-            <Route element={<AdminPersistentShell />}>
-              <Route path="/admin" element={<AdminDashboard />} />
-              {/* Unified Bookings */}
-              <Route path="/admin/bookings" element={<AdminBookings />} />
-              <Route path="/admin/bookings/new" element={<AdminNewRequest />} />
-              <Route path="/admin/bookings/:id" element={<AdminBookingDetail />} />
-              <Route path="/admin/bookings/event/:id" element={<EventToBookingRedirect />} />
-              {/* Old routes redirect */}
-              <Route path="/admin/requests" element={<Navigate to="/admin/bookings" replace />} />
-              <Route path="/admin/requests/new" element={<Navigate to="/admin/bookings/new" replace />} />
-              <Route path="/admin/requests/:id" element={<AdminBookingDetail />} />
-              <Route path="/admin/events" element={<Navigate to="/admin/bookings" replace />} />
-              <Route path="/admin/events/new" element={<AdminNewEvent />} />
-              <Route path="/admin/events/:id" element={<EventToBookingRedirect />} />
-              <Route path="/admin/new-request" element={<Navigate to="/admin/bookings/new" replace />} />
-              {/* Kunden */}
-              <Route path="/admin/customers" element={<AdminCustomers />} />
-              <Route path="/admin/customers/:id" element={<AdminCustomerDetail />} />
-              <Route path="/admin/customers/new" element={<AdminNewCustomer />} />
-              {/* Kalender + Dokumente */}
-              <Route path="/admin/kalender" element={<AdminKalender />} />
-              <Route path="/admin/dokumente" element={<AdminDokumenteListe />} />
-              <Route path="/admin/dokumente/angebote" element={<AdminDokumenteListe />} />
-              <Route path="/admin/dokumente/rechnungen" element={<AdminDokumenteListe />} />
-              <Route path="/admin/dokumente/auftragsbestaetigung" element={<AdminDokumenteListe />} />
-              <Route path="/admin/dokumente/mahnungen" element={<AdminDokumenteListe />} />
-              <Route path="/admin/documents" element={<Navigate to="/admin/dokumente" replace />} />
-              <Route path="/admin/documents/*" element={<Navigate to="/admin/dokumente" replace />} />
-              {/* Mein Programm */}
-              <Route path="/admin/programm" element={<AdminProgrammHub />} />
-              <Route path="/admin/programm/shows" element={<AdminShowsList />} />
-              <Route path="/admin/programm/shows/:id" element={<AdminShowDetail />} />
-              <Route path="/admin/programm/shows/:id/edit" element={<AdminShowEditor />} />
-              <Route path="/admin/programm/touren" element={<AdminTouren />} />
-              <Route path="/admin/programm/touren/:id" element={<AdminTourDetail />} />
-              <Route path="/admin/programm/effekte" element={<AdminEffekteBibliothek />} />
-      <Route path="/admin/programm/musik" element={<AdminMusik />} />
-      <Route path="/admin/programm/technik" element={<AdminTechnik />} />
-              <Route path="/admin/programm/locations" element={<AdminLocations />} />
-              <Route path="/admin/programm/team" element={<AdminTeam />} />
+              {/* Persistente Shell */}
+              <Route element={<AdminPersistentShell />}>
+                <Route path="/admin" element={<AdminDashboard />} />
+                {/* Unified Bookings */}
+                <Route path="/admin/bookings" element={<AdminBookings />} />
+                <Route path="/admin/bookings/new" element={<AdminNewRequest />} />
+                <Route path="/admin/bookings/:id" element={<AdminBookingDetail />} />
+                <Route path="/admin/bookings/event/:id" element={<EventToBookingRedirect />} />
+                {/* Old routes redirect */}
+                <Route path="/admin/requests" element={<Navigate to="/admin/bookings" replace />} />
+                <Route path="/admin/requests/new" element={<Navigate to="/admin/bookings/new" replace />} />
+                <Route path="/admin/requests/:id" element={<AdminBookingDetail />} />
+                <Route path="/admin/events" element={<Navigate to="/admin/bookings" replace />} />
+                <Route path="/admin/events/new" element={<AdminNewEvent />} />
+                <Route path="/admin/events/:id" element={<EventToBookingRedirect />} />
+                <Route path="/admin/new-request" element={<Navigate to="/admin/bookings/new" replace />} />
+                {/* Kunden */}
+                <Route path="/admin/customers" element={<AdminCustomers />} />
+                <Route path="/admin/customers/:id" element={<AdminCustomerDetail />} />
+                <Route path="/admin/customers/new" element={<AdminNewCustomer />} />
+                {/* Kalender + Dokumente */}
+                <Route path="/admin/kalender" element={<AdminKalender />} />
+                <Route path="/admin/dokumente" element={<AdminDokumenteListe />} />
+                <Route path="/admin/dokumente/angebote" element={<AdminDokumenteListe />} />
+                <Route path="/admin/dokumente/rechnungen" element={<AdminDokumenteListe />} />
+                <Route path="/admin/dokumente/auftragsbestaetigung" element={<AdminDokumenteListe />} />
+                <Route path="/admin/dokumente/mahnungen" element={<AdminDokumenteListe />} />
+                <Route path="/admin/documents" element={<Navigate to="/admin/dokumente" replace />} />
+                <Route path="/admin/documents/*" element={<Navigate to="/admin/dokumente" replace />} />
+                {/* Mein Programm */}
+                <Route path="/admin/programm" element={<AdminProgrammHub />} />
+                <Route path="/admin/programm/shows" element={<AdminShowsList />} />
+                <Route path="/admin/programm/shows/:id" element={<AdminShowDetail />} />
+                <Route path="/admin/programm/shows/:id/edit" element={<AdminShowEditor />} />
+                <Route path="/admin/programm/touren" element={<AdminTouren />} />
+                <Route path="/admin/programm/touren/:id" element={<AdminTourDetail />} />
+                <Route path="/admin/programm/effekte" element={<AdminEffekteBibliothek />} />
+                <Route path="/admin/programm/musik" element={<AdminMusik />} />
+                <Route path="/admin/programm/technik" element={<AdminTechnik />} />
+                <Route path="/admin/programm/locations" element={<AdminLocations />} />
+                <Route path="/admin/programm/team" element={<AdminTeam />} />
+                {/* Old programm routes → redirect */}
+                <Route path="/admin/produktionen" element={<Navigate to="/admin/programm/touren" replace />} />
+                <Route path="/admin/partner" element={<Navigate to="/admin/programm/team" replace />} />
+                <Route path="/admin/effekte" element={<Navigate to="/admin/programm/effekte" replace />} />
+                <Route path="/admin/programm/pakete" element={<AdminPakete />} />
+                <Route path="/admin/pakete" element={<Navigate to="/admin/programm/pakete" replace />} />
+                <Route path="/admin/shows" element={<Navigate to="/admin/programm/shows" replace />} />
+                <Route path="/admin/shows/:id" element={<AdminShowDetail />} />
+                <Route path="/admin/locations" element={<Navigate to="/admin/programm/locations" replace />} />
+                {/* Einstellungen */}
+                <Route path="/admin/settings" element={<AdminSettings />} />
+                <Route path="/admin/artikel" element={<AdminArtikel />} />
+                {/* Mails & Todos */}
+                <Route path="/admin/mails" element={<AdminMails />} />
+                <Route path="/admin/todos" element={<AdminTodos />} />
+                <Route path="*" element={<Navigate to="/admin" replace />} />
+              </Route>
 
-              {/* Old programm routes → redirect */}
-              <Route path="/admin/produktionen" element={<Navigate to="/admin/programm/touren" replace />} />
-              <Route path="/admin/partner" element={<Navigate to="/admin/programm/team" replace />} />
-              <Route path="/admin/effekte" element={<Navigate to="/admin/programm/effekte" replace />} />
-              <Route path="/admin/programm/pakete" element={<AdminPakete />} />
-      <Route path="/admin/pakete" element={<Navigate to="/admin/programm/pakete" replace />} />
-              <Route path="/admin/shows" element={<Navigate to="/admin/programm/shows" replace />} />
-              <Route path="/admin/shows/:id" element={<AdminShowDetail />} />
-              <Route path="/admin/locations" element={<Navigate to="/admin/programm/locations" replace />} />
-              {/* Einstellungen */}
-              <Route path="/admin/settings" element={<AdminSettings />} />
-              <Route path="/admin/artikel" element={<AdminArtikel />} />
-              {/* Mails & Todos */}
-              <Route path="/admin/mails" element={<AdminMails />} />
-              <Route path="/admin/todos" element={<AdminTodos />} />
-              <Route path="*" element={<Navigate to="/admin" replace />} />
-            </Route>
-
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        ) : <PublicRoutes />}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          ) : <PublicRoutes />}
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

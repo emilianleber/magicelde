@@ -20,6 +20,7 @@ export interface Stadt {
   bekannteLocations?: string[];
   faq?: StadtFAQ[];
   seoText?: string;
+  langText?: string;
   kollegenEmpfehlung?: KollegenEmpfehlung;
 }
 
@@ -38,6 +39,15 @@ export const staedte: Stadt[] = [
       { q: "Wie weit im Voraus sollte ich einen Zauberer in Regensburg buchen?", a: "Je früher, desto besser — besonders für Wochenendtermine empfehle ich 4-8 Wochen Vorlauf. Kurzfristige Anfragen sind aber auch möglich." },
     ],
     seoText: "Du suchst einen Zauberer in Regensburg? Emilian Leber ist der Zauberkünstler für dein Event in der Domstadt. Mit interaktiver Close-Up Magie, einer mitreißenden Bühnenshow oder einem exklusiven Magic Dinner wird deine Veranstaltung in Regensburg unvergesslich. Als Regensburger Zauberer bin ich in wenigen Minuten bei dir — ob Altstadt, Stadtamhof oder Prüfening.",
+    langText: `Als Zauberer aus Regensburg bin ich in meiner Heimatstadt zuhause — das bedeutet maximale Flexibilität, kurze Wege und volle Verfügbarkeit für dein Event. Ob Firmenfeier im Salzstadel, Hochzeit in der Alten Mälzerei oder Geburtstagsparty im historischen Gewölbekeller — ich kenne Regensburg wie meine Westentasche.
+
+Regensburg ist eine UNESCO-Welterbestadt mit einer lebendigen Eventszene. Die Kombination aus historischen Locations und modernem Eventflair macht jede Veranstaltung besonders — und professionelle Zauberkunst setzt das perfekte Highlight.
+
+Kosten für einen Zauberer in Regensburg: Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Als Regensburger Zauberer entfällt die Anfahrtspauschale vollständig — du profitierst von maximaler Verfügbarkeit und kurzen Reaktionszeiten.
+
+Von der Altstadt bis Stadtamhof, von Prüfening bis Lappersdorf — ich komme zu dir, egal wo in Regensburg dein Event stattfindet. Neben dem eigentlichen Auftritt bekommst du auch eine kostenlose persönliche Beratung, bei der wir gemeinsam das optimale Showkonzept für deinen Anlass entwickeln.
+
+Ruf mich an oder schreib mir — als lokaler Zauberer in Regensburg bin ich schnell erreichbar und freue mich auf deine Anfrage.`,
   },
   {
     slug: "muenchen",
@@ -54,6 +64,17 @@ export const staedte: Stadt[] = [
       { q: "Wie lange dauert die Anfahrt nach München?", a: "Von Regensburg nach München sind es nur ca. 1,5 Stunden. Die Anfahrt ist im Preis inbegriffen." },
     ],
     seoText: "Zauberer München gesucht? Emilian Leber ist dein Zauberkünstler für Events in München und ganz Oberbayern. Als professioneller Entertainer begeistere ich auf Firmenfeiern, Hochzeiten, Geburtstagen und Galas in München mit moderner Close-Up Magie und Comedy-Zaubershow. Von Bogenhausen bis Sendling, von der Isar bis zum Englischen Garten — ich komme zu dir.",
+    langText: `Als Zauberer für München kenne ich die Erwartungen des anspruchsvollsten Eventpublikums Bayerns genau. Von der Weihnachtsfeier im Paulaner am Nockherberg über die Gala in der BMW Welt bis zur Hochzeit am Starnberger See — ich bringe professionelle Close-Up Magie und Comedy-Bühnenshow direkt zu dir.
+
+München ist eine Weltklasse-Eventstadt, und das spürt man bei jedem Auftritt: Das Publikum ist anspruchsvoll, die Locations sind außergewöhnlich und die Erwartungen hoch. Genau deshalb liefere ich in München Entertainment auf Premium-Niveau — interaktiv, überraschend und unvergesslich.
+
+Einen Zauberer in München zu buchen bedeutet: Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Die Anfahrt von Regensburg nach München ist immer inklusive — du bezahlst für Qualität und bekommst sie.
+
+Als Hochzeitszauberer in München sorge ich beim Sektempfang für Staunen, während des Dinners für magische Tischmomente und in der Partyphase für eine Bühnenshow, die deine Gäste noch Wochen danach beschäftigt. Besonders beliebt in München: die Kombination aus 45 Minuten Close-Up beim Empfang und einer 30-minütigen Bühnenshow nach dem Essen.
+
+Für Firmenfeiern in München — ob DAX-Konzern oder aufstrebendes Startup — ist modernes Zauberkünstler-Entertainment das perfekte Programm für Mitarbeiterveranstaltungen. Weihnachtsfeier in der Alten Kongresshalle, Sommerfest in Schwabing oder Jubiläum auf Schloss Nymphenburg — ich passe mein Showkonzept immer dem Anlass und dem Publikum an.
+
+Kontaktiere mich jetzt für ein unverbindliches Beratungsgespräch. Ich antworte innerhalb von 24 Stunden und entwickle gemeinsam mit dir das optimale Showkonzept für dein Event in München.`,
   },
   {
     slug: "nuernberg",
@@ -69,6 +90,13 @@ export const staedte: Stadt[] = [
       { q: "Kann der Zauberer auch auf der NürnbergMesse auftreten?", a: "Ja, Messeauftritte gehören zu meinem Repertoire. Ich ziehe Besucher an euren Stand und sorge für bleibende Eindrücke." },
     ],
     seoText: "Zauberer Nürnberg: Emilian Leber ist dein Entertainer für Events in Nürnberg und der Metropolregion. Ob Firmenfeier, Hochzeit, Weihnachtsfeier oder Messeauftritt — mit professioneller Zauberkunst wird dein Event in Nürnberg zum Highlight.",
+    langText: `Als Zauberer für Nürnberg bin ich in Frankens pulsierender Metropole regelmäßig unterwegs — von Firmenevents auf der NürnbergMesse bis zur Hochzeit im historischen Rathaussaal. Nürnberg ist eine Stadt mit starker Wirtschaft, tiefer Geschichte und einer wachsenden Eventkultur.
+
+Ob du einen Zauberer für eine Firmenfeier in Nürnberg suchst — Weihnachtsfeier, Jubiläum oder Teambuilding-Event — oder für eine Hochzeit oder einen Geburtstag: Ich liefere das passende Programm. Interaktiv, modern und immer auf hohem Niveau.
+
+Preise Zauberer Nürnberg: Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Nürnberg ist inklusive — keine Überraschungen bei der Abrechnung.
+
+Neben Nürnberg bediene ich die gesamte Metropolregion — Fürth, Erlangen, Schwabach und Umgebung. Als Zauberkünstler für Nürnberg kenne ich die Locations, das Publikum und was einen Abend wirklich unvergesslich macht. Kontaktiere mich jetzt für dein Event.`,
   },
   {
     slug: "augsburg",
@@ -83,6 +111,13 @@ export const staedte: Stadt[] = [
       { q: "Für welche Anlässe kann ich einen Zauberer in Augsburg buchen?", a: "Firmenfeiern, Hochzeiten, Geburtstage, Weihnachtsfeiern, Jubiläen, Messen — ich passe mein Programm an jeden Anlass an." },
     ],
     seoText: "Zauberer Augsburg: Emilian Leber begeistert als Zauberkünstler und Entertainer auf Events in Augsburg. Close-Up Magie, Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und private Feiern in der Fuggerstadt.",
+    langText: `Augsburg — Fuggerstadt, drittgrößte Stadt Bayerns und aufstrebender Eventstandort zwischen München und Stuttgart. Als Zauberer für Augsburg bringe ich modernes Entertainment zu Firmenfeiern im Kongress am Park, Hochzeiten im Goldenen Saal und Events in der lebendigsten Stadt Schwabens.
+
+Das Augsburger Publikum schätzt Entertainment, das unterhaltsam und professionell zugleich ist — kein Lametta, keine Klischees, sondern echte Magie mit echtem Humor. Genau das ist mein Stil.
+
+Kosten für einen Zauberer in Augsburg: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Augsburg ist immer inklusive. Beratung kostenlos und unverbindlich.
+
+Neben Augsburg trete ich in ganz Schwaben auf — Kaufbeuren, Memmingen, Neu-Ulm und Umgebung. Als Zauberer für Augsburg bin ich ein verlässlicher Partner für Events aller Art. Kontaktiere mich — ich erstelle dir innerhalb von 24 Stunden ein individuelles Angebot.`,
   },
   {
     slug: "wuerzburg",
@@ -97,6 +132,13 @@ export const staedte: Stadt[] = [
       { q: "Kommt der Zauberer auch nach Unterfranken?", a: "Ja, ich trete in ganz Unterfranken auf — Würzburg, Aschaffenburg, Schweinfurt und Umgebung." },
     ],
     seoText: "Zauberer Würzburg gesucht? Emilian Leber ist dein Zauberkünstler für Events in Würzburg und Unterfranken. Professionelle Zaubershow, Close-Up Magie und Magic Dinner für Firmenfeiern, Hochzeiten und Geburtstage.",
+    langText: `Würzburg — die Mainmetropole Unterfrankens mit Residenz, Weinkultur und einer einzigartigen Eventatmosphäre. Als Zauberer für Würzburg liefere ich Entertainment, das zu diesem besonderen Flair passt — elegant, interaktiv und unvergesslich.
+
+Ob Weinprobe-Gala im Bürgerspital, Firmenfeier im Congress Centrum oder Hochzeit in der Residenz — Würzburg bietet traumhafte Locations. Mein Programm passt sich dem stilvollen Ambiente der Barockstadt an.
+
+Preise Zauberer Würzburg: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Würzburg inklusive. Kostenlose Erstberatung möglich.
+
+Von Würzburg aus bediene ich ganz Unterfranken — Aschaffenburg, Schweinfurt, Bad Kissingen und Umgebung. Als Zauberkünstler für Würzburg kenne ich die Franken als herzliches und anspruchsvolles Publikum. Ich freue mich auf deine Anfrage.`,
   },
   {
     slug: "ingolstadt",
@@ -111,6 +153,13 @@ export const staedte: Stadt[] = [
       { q: "Was kostet ein Zauberer in Ingolstadt?", a: "Die Kosten richten sich nach Format und Dauer. Ich berate dich gerne kostenlos und unverbindlich." },
     ],
     seoText: "Zauberer Ingolstadt: Emilian Leber begeistert als professioneller Zauberkünstler auf Events in Ingolstadt. Moderne Zauberkunst für Firmenfeiern, Audi-Events, Hochzeiten und Geburtstage in der Donaustadt.",
+    langText: `Als Zauberer für Ingolstadt verbinde ich Innovation und Magie — passend zur Stadt, die als Heimat von Audi für Spitzenleistung steht. Mein Entertainment ist genauso präzise und beeindruckend wie die Ingenieurskunst aus der Donaustadt.
+
+Firmenfeiern im Audi Forum, Weihnachtsfeiern für Automobilzulieferer oder Galas im Stadttheater — Ingolstadt bietet großartige Eventlocations. Als Zauberer für Ingolstadt entwickle ich für jede Veranstaltung das passende Showprogramm.
+
+Zauberer Ingolstadt Kosten: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Ingolstadt inklusive. Beratung kostenlos.
+
+Ingolstadt liegt zentral zwischen München und Nürnberg — kurze Wege für schnelle Verfügbarkeit. Als Zauberer für die Donaustadt trete ich regelmäßig auf Events in der Region auf. Schreib mir und ich entwickle das optimale Konzept für dein Ingolstädter Event.`,
   },
   {
     slug: "passau",
@@ -125,6 +174,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch in Österreich auf?", a: "Ja! Von Passau aus bin ich schnell in Linz, Salzburg und Wien — ich trete regelmäßig auch in Österreich auf." },
     ],
     seoText: "Zauberer Passau: Emilian Leber ist dein Entertainer für Events in Passau und Niederbayern. Professionelle Zaubershow und Close-Up Magie für Firmenfeiern, Hochzeiten und besondere Anlässe in der Dreiflüssestadt.",
+    langText: `Passau — die malerische Dreiflüssestadt an Donau, Inn und Ilz. Als Zauberer für Passau bringe ich moderne Magie in eine der schönsten Städte Deutschlands. Von Firmenfeiern in der Dreiländerhalle bis zu Hochzeiten auf der Veste Oberhaus.
+
+Passaus einzigartiges Flair aus Geschichte, Wasser und Kultur macht jedes Event besonders. Als Zauberkünstler für Passau schaffe ich Momente, die zu dieser einzigartigen Kulisse passen — überraschend, interaktiv und stimmungsvoll.
+
+Kosten Zauberer Passau: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Passau von Regensburg aus inklusive. Kostenlose Beratung.
+
+Von Passau aus bin ich auch in Österreich (Linz, Salzburg) schnell erreichbar. Als Zauberer für Passau und Niederbayern bin ich der richtige Partner für grenzüberschreitende Events. Kontaktiere mich für ein individuelles Angebot.`,
   },
   {
     slug: "landshut",
@@ -139,6 +195,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch auf der Landshuter Hochzeit auf?", a: "Mittelalterliche Feste und historische Events sind ein besonderes Highlight — ich passe mein Programm gerne an den Rahmen an." },
     ],
     seoText: "Zauberer Landshut: Emilian Leber begeistert als Zauberkünstler auf Events in Landshut. Close-Up Magie, Bühnenshow und Comedy-Zaubershow für Firmenfeiern, Hochzeiten und Geburtstage in Niederbayern.",
+    langText: `Landshut — die historische Hauptstadt Niederbayerns mit Burg Trausnitz und dem prachtvollen Rathaussaal. Als Zauberer für Landshut bringe ich moderne Magie in die Herzogstadt — für Firmenfeiern, Hochzeiten und besondere Anlässe.
+
+Die historischen Locations in Landshut bieten eine traumhafte Kulisse für Events, die in Erinnerung bleiben. Mein Programm passt sich dem besonderen Ambiente an — ob elegante Gala auf der Burg oder lebhafte Firmenfeier im Bernlochner.
+
+Preise Zauberer Landshut: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Nur 45 Minuten von Regensburg — Anfahrt inklusive. Beratung kostenlos.
+
+Neben Landshut trete ich in ganz Niederbayern auf — Dingolfing, Straubing, Deggendorf und Umgebung. Als Zauberkünstler für Landshut kenne ich das bajuwarische Publikum und weiß, wie man einen Abend unvergesslich macht.`,
   },
   {
     slug: "bamberg",
@@ -153,6 +216,13 @@ export const staedte: Stadt[] = [
       { q: "Eignet sich ein Zauberer für eine Brauereiführung oder ein Bierfest?", a: "Absolut! Close-Up Magie passt perfekt zu geselligen Anlässen — ich sorge für Staunen zwischen den Bierkrügen." },
     ],
     seoText: "Zauberer Bamberg: Emilian Leber ist dein Zauberkünstler für Events in Bamberg und Oberfranken. Professionelle Zaubershow und Close-Up Magie für Firmenfeiern, Hochzeiten und besondere Anlässe in der Welterbestadt.",
+    langText: `Bamberg — UNESCO-Welterbestadt, Bierhauptstadt Frankens und eine der schönsten Städte Deutschlands. Als Zauberer für Bamberg bringe ich moderne Magie in historische Gewölbe und elegante Eventlocations der oberfränkischen Kaiserstadt.
+
+Von Brauereiführungen mit Zauberei-Einlagen über Firmenfeiern in der Konzert- und Kongresshalle bis zu Hochzeiten im Böttingerhaus — Bamberg bietet einzigartige Locations, die durch professionelle Zauberkunst noch unvergesslicher werden.
+
+Kosten Zauberer Bamberg: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bamberg inklusive. Kostenlose Erstberatung möglich.
+
+Neben Bamberg trete ich in ganz Oberfranken auf — Coburg, Kulmbach, Lichtenfels und Umgebung. Fränkische Gastfreundschaft trifft moderne Zauberkunst — das ist die Formel für Events, die begeistern. Kontaktiere mich jetzt für dein Event in Bamberg.`,
   },
   {
     slug: "bayreuth",
@@ -167,6 +237,13 @@ export const staedte: Stadt[] = [
       { q: "Kann der Zauberer auch im Rahmen der Festspiele auftreten?", a: "Side-Events und Rahmenprogramme rund um die Festspiele sind eine großartige Gelegenheit — ich passe mein Programm gerne an." },
     ],
     seoText: "Zauberer Bayreuth: Emilian Leber begeistert als professioneller Entertainer auf Events in Bayreuth und Oberfranken. Moderne Zauberkunst für Firmenfeiern, Galas, Hochzeiten und kulturelle Events.",
+    langText: `Bayreuth — die Weltkulturhauptstadt des Wagnererbes und eine Stadt, die Kultur auf höchstem Niveau lebt. Als Zauberer für Bayreuth liefere ich Entertainment, das diesem kulturellen Anspruch gerecht wird — professionell, stilsicher und unvergesslich.
+
+Firmenfeiern in der Stadthalle Bayreuth, Side-Events rund um die Festspiele oder elegante Galas in der Eremitage — das anspruchsvolle Bayreuther Publikum verdient Entertainment auf Top-Niveau.
+
+Preise Zauberer Bayreuth: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bayreuth inklusive. Kostenlose und unverbindliche Beratung.
+
+Neben Bayreuth bediene ich ganz Oberfranken — Hof, Kulmbach, Rehau und Umgebung. Als Zauberkünstler für Bayreuth kenne ich die kulturelle Tiefe dieser Stadt und bringe Entertainment, das ihr gerecht wird. Schreib mir für ein individuelles Angebot.`,
   },
   {
     slug: "erlangen",
@@ -181,6 +258,13 @@ export const staedte: Stadt[] = [
       { q: "Was kostet ein Zauberer in Erlangen?", a: "Die Kosten hängen vom Format ab. Ich berate dich gerne kostenlos und erstelle ein individuelles Angebot." },
     ],
     seoText: "Zauberer Erlangen: Emilian Leber ist dein Zauberkünstler für Events in Erlangen. Professionelle Close-Up Magie und Bühnenshow für Firmenfeiern, Siemens-Events, Hochzeiten und Geburtstage in der Wissenschaftsstadt.",
+    langText: `Erlangen — Siemens-Heimat, Universitätsstadt und Innovationszentrum Mittelfrankens. Als Zauberer für Erlangen verbinde ich technologische Präzision mit kreativer Magie — passend zu einer Stadt, die Innovation in der DNA trägt.
+
+Corporate Events im Siemens Campus, Weihnachtsfeiern für Technologieunternehmen oder Hochzeiten in der historischen Orangerie — ich entwickle für jede Veranstaltung das optimale Showkonzept.
+
+Kosten Zauberer Erlangen: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Erlangen inklusive. Kostenlose Beratung.
+
+Als Teil der Metropolregion Nürnberg bin ich in Erlangen, Fürth und Nürnberg gleichermaßen präsent. Technologieaffines Publikum schätzt modernes Entertainment — meine Magie überrascht auch die kritischsten Köpfe. Kontaktiere mich für ein unverbindliches Gespräch.`,
   },
   {
     slug: "fuerth",
@@ -195,6 +279,13 @@ export const staedte: Stadt[] = [
       { q: "Kann der Zauberer auch in der Metropolregion Nürnberg auftreten?", a: "Selbstverständlich! Ich trete in Fürth, Nürnberg, Erlangen und der gesamten Metropolregion auf." },
     ],
     seoText: "Zauberer Fürth: Emilian Leber begeistert als Entertainer auf Events in Fürth und der Metropolregion Nürnberg. Zaubershow, Close-Up Magie und Comedy für Firmenfeiern, Hochzeiten und Geburtstage.",
+    langText: `Fürth — die Kleeblattstadt direkt neben Nürnberg, mit eigenem Charakter und einer lebendigen Eventszene. Als Zauberer für Fürth bin ich schnell vor Ort und kenne die lokalen Locations bestens — von der Stadthalle über das Kulturforum bis zu historischen Locations im Stadtpark.
+
+Firmenfeiern in Fürth, Hochzeiten in Schloss Burgfarrnbach oder Geburtstage im Grünen Brauhaus — ich passe mein Programm immer dem Ort und dem Publikum an. Moderner Zauberkünstler-Stil, der begeistert und unterhält.
+
+Preise Zauberer Fürth: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Fürth inklusive. Kostenlose Beratung möglich.
+
+Fürth, Nürnberg und Erlangen bilden ein dynamisches Dreieck — ich trete in allen drei Städten regelmäßig auf und kenne das Publikum der gesamten Metropolregion. Kontaktiere mich jetzt für dein Event in Fürth.`,
   },
   {
     slug: "rosenheim",
@@ -209,6 +300,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch am Chiemsee auf?", a: "Ja! Events am Chiemsee, in Prien, auf der Herreninsel oder im gesamten Chiemgau gehören zu meinem Einzugsgebiet." },
     ],
     seoText: "Zauberer Rosenheim: Emilian Leber ist dein Zauberkünstler für Events in Rosenheim und dem Chiemgau. Close-Up Magie, Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und Geburtstage in Oberbayern.",
+    langText: `Rosenheim — das Tor zum Chiemgau, eingebettet zwischen Inn und Alpen. Als Zauberer für Rosenheim bringe ich modernes Entertainment in eine Stadt, die oberbayerische Gemütlichkeit mit starker Wirtschaft verbindet.
+
+Von der Inntalhalle über das Kultur + Kongress Zentrum bis zu rustikalen Almhütten im Chiemgau — die Region bietet außergewöhnliche Event-Locations, die durch professionelle Zauberkunst noch unvergesslicher werden.
+
+Kosten Zauberer Rosenheim: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Rosenheim inklusive. Beratung kostenlos.
+
+Neben Rosenheim trete ich im gesamten Chiemgau auf — Prien am Chiemsee, Bad Aibling, Wasserburg und Umgebung. Als Zauberkünstler für Rosenheim und Oberbayern bin ich der richtige Partner für Events, die in Erinnerung bleiben.`,
   },
   {
     slug: "kempten",
@@ -223,6 +321,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch in Oberstdorf oder Füssen auf?", a: "Ja, ich trete im gesamten Allgäu auf — von Kempten über Oberstdorf bis Füssen und Umgebung." },
     ],
     seoText: "Zauberer Kempten: Emilian Leber begeistert als Zauberkünstler im Allgäu. Professionelle Zaubershow und Close-Up Magie für Firmenfeiern, Hochzeiten und Events in Kempten und dem gesamten Allgäu.",
+    langText: `Kempten — die älteste Stadt Deutschlands und Hauptstadt des Allgäus. Als Zauberer für Kempten bringe ich moderne Magie ins Allgäu — von Firmenfeiern in der bigBOX über Hochzeiten auf Schloss Hopferau bis zu Galas im Kornhaus.
+
+Das Allgäu steht für Genuss, Natur und Gastfreundschaft — meine Zauberkunst ergänzt dieses besondere Lebensgefühl perfekt. Ob traditionelles Allgäuer Event oder moderner Corporate Abend — ich passe mein Programm dem Charakter des Anlasses an.
+
+Preise Zauberer Kempten: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Kempten inklusive. Kostenlose Erstberatung.
+
+Von Kempten aus trete ich im gesamten Allgäu auf — Oberstdorf, Füssen, Memmingen, Kaufbeuren und Umgebung. Als Zauberkünstler für das Allgäu kenne ich die Region und das Publikum bestens. Schreib mir für ein individuelles Angebot.`,
   },
   {
     slug: "aschaffenburg",
@@ -237,6 +342,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch im Rhein-Main-Gebiet auf?", a: "Ja! Von Aschaffenburg aus bediene ich auch Frankfurt, Darmstadt, Hanau und das gesamte Rhein-Main-Gebiet." },
     ],
     seoText: "Zauberer Aschaffenburg: Emilian Leber ist dein Entertainer für Events in Aschaffenburg und Unterfranken. Zaubershow, Close-Up Magie und Magic Dinner für Firmenfeiern, Hochzeiten und besondere Anlässe.",
+    langText: `Aschaffenburg — das bayerische Nizza am Main, nahe dem Rhein-Main-Gebiet. Als Zauberer für Aschaffenburg bringe ich modernes Entertainment in die Schlossstadt Unterfrankens — für Firmenfeiern, Hochzeiten und Galas.
+
+Von Firmenevents in der Stadthalle am Schloss über Hochzeiten im Hotel Wilder Mann bis zu privaten Feiern im Schloss Johannisburg-Umfeld — Aschaffenburg bietet tolle Locations, und ich liefere das passende Showkonzept.
+
+Kosten Zauberer Aschaffenburg: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Aschaffenburg inklusive. Kostenlose Beratung.
+
+Von Aschaffenburg aus bin ich auch im Rhein-Main-Gebiet präsent — Frankfurt, Darmstadt, Hanau und Umgebung. Als Zauberkünstler für Aschaffenburg und Unterfranken bin ich ein verlässlicher Partner. Kontaktiere mich jetzt.`,
   },
   {
     slug: "straubing",
@@ -251,6 +363,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch beim Gäubodenvolksfest auf?", a: "Side-Events und VIP-Zelte auf dem Volksfest sind eine großartige Gelegenheit — ich bin gerne dabei!" },
     ],
     seoText: "Zauberer Straubing: Emilian Leber begeistert als Zauberkünstler auf Events in Straubing und dem Gäuboden. Close-Up Magie und Bühnenshow für Firmenfeiern, Hochzeiten und Feste in Niederbayern.",
+    langText: `Straubing — Gäuboden-Metropole und Heimat des berühmten Gäubodenvolksfestes. Als Zauberer für Straubing bringe ich moderne Magie in die niederbayerische Donaustadt — nur 40 Minuten von Regensburg, mit kurzen Wegen und voller Verfügbarkeit.
+
+Von Firmenevents in der Fraunhofer-Halle über Hochzeiten im Hotel Asam bis zu Side-Events beim Volksfest — Straubing bietet vielfältige Eventmöglichkeiten, für die ich das passende Programm entwickle.
+
+Preise Zauberer Straubing: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Straubing von Regensburg aus inklusive. Kostenlose Beratung.
+
+Neben Straubing trete ich in ganz Niederbayern auf — Deggendorf, Landshut, Dingolfing und Umgebung. Als Zauberkünstler für die Region kenne ich das bajuwarische Publikum und weiß, was einen Abend unvergesslich macht.`,
   },
   {
     slug: "freising",
@@ -265,6 +384,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch bei Flughafen-Events auf?", a: "Ja! Events am Münchner Flughafen, Konferenzen und internationale Galas gehören zu meinem Repertoire." },
     ],
     seoText: "Zauberer Freising: Emilian Leber ist dein Zauberkünstler für Events in Freising und am Münchner Flughafen. Professionelle Zaubershow für Firmenfeiern, Konferenzen und Hochzeiten.",
+    langText: `Freising — die älteste Stadt an der Isar, direkt am Münchner Flughafen und mit dem weltbekannten Weihenstephan. Als Zauberer für Freising bringe ich professionelles Entertainment zu Firmenfeiern, Konferenzen und Galas in unmittelbarer Flughafennähe.
+
+Events am Münchner Flughafen, internationale Konferenzen in den Flughafenhotels oder Hochzeiten am historischen Domberg — Freising bietet eine einzigartige Mischung aus internationaler Erreichbarkeit und bayerischem Charme.
+
+Kosten Zauberer Freising: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Freising und zum Münchner Flughafen inklusive. Beratung kostenlos.
+
+Freising liegt ideal zwischen München und Ingolstadt. Als Zauberkünstler für Freising und die Flughafenregion bin ich erfahren im Umgang mit internationalem Publikum — Magie überwindet jede Sprachbarriere.`,
   },
   // Überregional
   {
@@ -280,6 +406,17 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer regelmäßig in Berlin auf?", a: "Ja, ich bin mehrmals im Jahr für Events in Berlin — von Firmenfeiern bis zu privaten Feiern." },
     ],
     seoText: "Zauberer Berlin: Emilian Leber begeistert als professioneller Zauberkünstler auf Events in Berlin. Close-Up Magie, Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und Galas in der Hauptstadt.",
+    langText: `Berlin ist die Hauptstadt der Kreativität, der großen Shows und der unvergesslichen Events. Als Zauberer für Berlin begeistere ich auf Firmenfeiern in Mitte, Hochzeiten in Charlottenburg und Galas am Potsdamer Platz — mit moderner Magie, die zur Energie dieser Stadt passt.
+
+Close-Up Magie direkt bei deinen Gästen, eine durchkomponierte Bühnenshow oder ein exklusives Magic Dinner — in Berlin setze ich alle drei Formate regelmäßig um. Das Berliner Publikum liebt Unterhaltung, die überrascht und gleichzeitig intelligent ist. Genau das liefere ich.
+
+Einen Zauberer für Berlin buchen: Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt und ggf. Übernachtung sind inklusive — keine versteckten Kosten.
+
+Ob Startup-Party in Kreuzberg, Gala im Adlon oder Mittelstand-Weihnachtsfeier in Prenzlauer Berg: Ich kenne das Berliner Eventpublikum und passe mein Programm entsprechend an. Von Techunternehmen in Mitte bis zu Kulturfirmen in Friedrichshain — moderner Zauberkünstler-Stil, der zum urbanen Berliner Lebensgefühl passt.
+
+Für Hochzeiten in Berlin — ob klassisch in Charlottenburg oder industrial-chic in Treptow — sorge ich beim Sektempfang und während des Dinners für magische Momente, die deine Gäste nie vergessen werden. Als Hochzeitszauberer für Berlin bin ich ein erfahrener Partner.
+
+Jetzt unverbindlich anfragen: Ich antworte innerhalb von 24 Stunden und entwickle gemeinsam mit dir das perfekte Showkonzept für dein Event in Berlin.`,
   },
   {
     slug: "hamburg",
@@ -294,6 +431,13 @@ export const staedte: Stadt[] = [
       { q: "Wie buche ich einen Zauberer für eine Firmenfeier in Hamburg?", a: "Einfach über mein Kontaktformular anfragen — ich melde mich innerhalb von 24 Stunden mit einem individuellen Angebot." },
     ],
     seoText: "Zauberer Hamburg: Emilian Leber ist dein Entertainer für Events in Hamburg. Professionelle Zaubershow, Close-Up Magie und Comedy für Firmenfeiern, Hochzeiten und Galas in der Hansestadt.",
+    langText: `Hamburg — die Hansestadt an der Elbe, Deutschlands Tor zur Welt und eine der schönsten Städte des Landes. Als Zauberer für Hamburg verbinde ich hanseatische Eleganz mit moderner Zauberkunst, die überrascht und begeistert.
+
+Firmenfeiern in der Speicherstadt, Galas in der Elbphilharmonie-Umgebung, Hochzeiten in der HafenCity — Hamburg bietet Weltklasse-Locations für Weltklasse-Entertainment. Ich liefere genau das: professionell, charmant und unvergesslich.
+
+Kosten Zauberer Hamburg: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt und Übernachtung bei Hamburg-Events inklusive. Keine versteckten Kosten.
+
+Als Hochzeitszauberer für Hamburg sorge ich beim Sektempfang für Staunen und während des Dinners für Tischmomente, die deine Gäste nie vergessen. Für Firmenfeiern in Hamburg setze ich auf die Kombination aus interaktiver Close-Up Magie und professioneller Bühnenshow. Kontaktiere mich für ein unverbindliches Angebot — ich antworte innerhalb von 24 Stunden.`,
   },
   {
     slug: "frankfurt",
@@ -308,6 +452,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch auf Messen in Frankfurt auf?", a: "Ja! Messeauftritte gehören zu meinem Kerngeschäft — ich ziehe Besucher an euren Stand und mache eure Marke unvergesslich." },
     ],
     seoText: "Zauberer Frankfurt: Emilian Leber begeistert als Zauberkünstler auf Events in Frankfurt am Main. Close-Up Magie und Bühnenshow für Firmenfeiern, Messen, Hochzeiten und Galas in der Mainmetropole.",
+    langText: `Frankfurt am Main — das wirtschaftliche Herz Deutschlands, Finanzmetropole und internationale Messestadt. Als Zauberer für Frankfurt liefere ich Entertainment auf dem Niveau, das diese Stadt und ihre anspruchsvollen Events verlangen.
+
+Von Messeauftritten auf der Frankfurter Messe über Bankenjubiläen in der Alten Oper bis zu exklusiven Galas in der Palmengarten-Orangerie — Frankfurt bietet die wichtigsten Event-Locations Deutschlands, und ich bin dort regelmäßig präsent.
+
+Preise Zauberer Frankfurt: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Frankfurt inklusive. Kostenlose Erstberatung.
+
+Als Zauberer für Messeauftritte in Frankfurt bin ich spezialisiert auf Standprogramme und B2B-Entertainment — Magie, die Besucher anzieht und Marken unvergesslich macht. Für Hochzeiten im Rhein-Main-Gebiet sorge ich für magische Sektempfänge und Dinnereinlagen. Schreib mir für ein individuelles Konzept.`,
   },
   {
     slug: "stuttgart",
@@ -322,6 +473,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch bei Automotive-Events auf?", a: "Ja, Corporate Events für Automobilunternehmen sind einer meiner Schwerpunkte — professionell und auf hohem Niveau." },
     ],
     seoText: "Zauberer Stuttgart: Emilian Leber ist dein Entertainer für Events in Stuttgart und Baden-Württemberg. Professionelle Zaubershow für Firmenfeiern, Hochzeiten und Corporate Events in der Schwabenmetropole.",
+    langText: `Stuttgart — die schwäbische Metropole, Stadt der Automobil-Ikonen und des kreativen Unternehmertums. Als Zauberer für Stuttgart verbinde ich technische Präzision mit kreativer Magie — für Firmenfeiern, Hochzeiten und Galas in der Schwabenmetropole.
+
+Automotive-Events bei Porsche oder Mercedes, Weihnachtsfeiern im Wizemann, Hochzeiten im Schlosspark oder Galas in der Liederhalle — Stuttgart bietet erstklassige Eventlocations. Mein Programm passt sich dem jeweiligen Stil perfekt an.
+
+Kosten Zauberer Stuttgart: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Stuttgart inklusive. Kostenlose Beratung.
+
+Neben Stuttgart trete ich in ganz Baden-Württemberg auf — Karlsruhe, Heilbronn, Tübingen, Ulm und Umgebung. Das schwäbische Publikum schätzt Qualität und Verlässlichkeit — beides bringe ich mit. Kontaktiere mich jetzt für ein unverbindliches Erstgespräch.`,
   },
   {
     slug: "koeln",
@@ -336,6 +494,13 @@ export const staedte: Stadt[] = [
       { q: "Eignet sich ein Zauberer für Karneval-Events?", a: "Absolut! Ob Karnevalssitzung, After-Party oder Firmen-Karneval — Magie passt perfekt zum Kölner Karneval." },
     ],
     seoText: "Zauberer Köln: Emilian Leber begeistert als Zauberkünstler auf Events in Köln. Close-Up Magie, Bühnenshow und Comedy für Firmenfeiern, Hochzeiten und Galas am Rhein.",
+    langText: `Köln — Dom, Rhein und das herzlichste Publikum Deutschlands. Als Zauberer für Köln passe ich mich der besonderen Energie dieser rheinischen Metropole an — direkt, herzlich, humorvoll und auf Augenhöhe mit dem kölschen Lebensgefühl.
+
+Vom Karneval-Event über die Weihnachtsfeier im Gürzenich bis zur Hochzeit in der Wolkenburg — Köln bietet wunderbare Locations für Events, die in Erinnerung bleiben. Als Zauberer für Köln bringe ich Close-Up Magie und Bühnenshow, die perfekt zum rheinischen Spirit passen.
+
+Preise Zauberer Köln: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Köln inklusive. Kostenlose und unverbindliche Beratung.
+
+Neben Köln trete ich in der gesamten Rheinschiene auf — Bonn, Leverkusen, Bergisch Gladbach und Umgebung. Als Hochzeitszauberer für Köln sorge ich für unvergessliche Sektempfänge und Dinner-Momente. Schreib mir — ich freue mich auf deine Anfrage.`,
   },
   {
     slug: "duesseldorf",
@@ -350,6 +515,13 @@ export const staedte: Stadt[] = [
       { q: "Tritt der Zauberer auch auf der Düsseldorfer Messe auf?", a: "Ja, Messeauftritte und Standprogramme gehören zu meinem Kerngeschäft." },
     ],
     seoText: "Zauberer Düsseldorf: Emilian Leber ist dein Entertainer für Events in Düsseldorf. Professionelle Zaubershow für Firmenfeiern, Messen, Hochzeiten und Galas in der Landeshauptstadt.",
+    langText: `Düsseldorf — Mode-Metropole am Rhein und internationaler Messestandort. Als Zauberer für Düsseldorf liefere ich Premium-Entertainment für exklusive Events, die dem gehobenen Anspruch dieser Stadt entsprechen.
+
+Von Messeauftritten auf dem Düsseldorfer Messegelände über Fashion-Events in der Altstadt bis zu Hochzeiten in Schloss Benrath — Düsseldorf bietet erstklassige Locations. Als Zauberer für Düsseldorf bringe ich das passende Showkonzept dazu.
+
+Kosten Zauberer Düsseldorf: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Düsseldorf inklusive. Kostenlose Erstberatung.
+
+Als Zauberer für Messauftritte in Düsseldorf — ob MEDICA, interpack oder drupa — bin ich erfahren im Standprogramm-Entertainment. Für Firmenfeiern und Hochzeiten in Düsseldorf sorge ich für Momente, die weit über den Abend hinaus in Erinnerung bleiben.`,
   },
   {
     slug: "dresden",
@@ -360,9 +532,18 @@ export const staedte: Stadt[] = [
     einwohner: "560.000",
     bekannteLocations: ["Taschenbergpalais Kempinski", "Albertinum", "Residenzschloss", "Messe Dresden", "Bülow Palais"],
     faq: [
-      { q: "Was kostet ein Zauberer in Dresden?", a: "Ich erstelle dir ein individuelles Angebot inklusive Anfahrt. Die Beratung ist kostenlos." },
+      { q: "Was kostet ein Zauberer in Dresden?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Dresden inklusive. Beratung kostenlos und unverbindlich." },
+      { q: "Eignet sich ein Zauberer für Galas und Kulturevents in Dresden?", a: "Absolut! Dresden ist eine Kulturstadt — elegante Magie, die sich nahtlos in das stilvolle Ambiente der Elbestadt einfügt. Galas, Charity-Events und Firmenfeiern sind meine Spezialität." },
+      { q: "Tritt der Zauberer auch in Meißen und ganz Sachsen auf?", a: "Ja, ich trete in ganz Sachsen auf — Dresden, Meißen, Pirna und die gesamte Region sind mein Einzugsgebiet." },
     ],
     seoText: "Zauberer Dresden: Emilian Leber begeistert als Zauberkünstler auf Events in Dresden. Close-Up Magie und Bühnenshow für Firmenfeiern, Hochzeiten und kulturelle Events in Elbflorenz.",
+    langText: `Dresden — die Elbflorenz, eine der kulturreichsten Städte Deutschlands. Als Zauberer für Dresden liefere ich elegante Magie, die sich nahtlos in das stilvolle Ambiente einfügt — für Galas, Firmenfeiern und Hochzeiten.
+
+Von Galas im Taschenbergpalais über Firmenfeiern im Albertinum bis zu Hochzeiten im Residenzschloss-Umfeld — Dresden bietet grandiose Locations. Mein Programm passt sich dem kulturellen Anspruch der Elbestadt an.
+
+Preise Zauberer Dresden: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Dresden inklusive. Kostenlose Beratung.
+
+Neben Dresden trete ich in ganz Sachsen auf — Meißen, Pirna, Chemnitz und Umgebung. Als Zauberkünstler für Kulturevents in Dresden bin ich ein erfahrener Partner für Galas, Charity-Events und Firmenveranstaltungen auf höchstem Niveau.`,
   },
   {
     slug: "leipzig",
@@ -373,9 +554,18 @@ export const staedte: Stadt[] = [
     einwohner: "600.000",
     bekannteLocations: ["Gewandhaus", "Kongresshalle am Zoo", "Spinnerei", "Eventpalast", "Westin Leipzig"],
     faq: [
-      { q: "Was kostet ein Zauberer in Leipzig?", a: "Die Kosten richten sich nach Format. Kontaktiere mich für ein individuelles Angebot inklusive Anfahrt." },
+      { q: "Was kostet ein Zauberer in Leipzig?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Leipzig inklusive. Kontaktiere mich für ein individuelles Angebot." },
+      { q: "Eignet sich ein Zauberer für Firmenfeiern in Leipzig?", a: "Ja! Leipzig ist eine aufstrebende Wirtschaftsmetropole — Corporate Events, Weihnachtsfeiern und Firmenjubiläen sind einer meiner Schwerpunkte." },
+      { q: "Tritt der Zauberer auch in Halle und ganz Sachsen auf?", a: "Ja, ich trete in Leipzig, Halle (Saale) und der gesamten Region Sachsen auf." },
     ],
     seoText: "Zauberer Leipzig: Emilian Leber ist dein Entertainer für Events in Leipzig. Professionelle Zaubershow und Close-Up Magie für Firmenfeiern, Hochzeiten und Galas in der sächsischen Metropole.",
+    langText: `Leipzig — kreativ, jung, aufstrebend. Als Zauberer für Leipzig passe ich mich dem besonderen Spirit dieser sächsischen Metropole an — überraschend, interaktiv und auf dem Puls der Zeit.
+
+Firmenfeiern im Tapetenwerk, Hochzeiten in der Spinnerei oder Galas im Gewandhaus — Leipzig bietet außergewöhnliche Eventlocations mit Charakter. Das Leipziger Publikum liebt Entertainment, das bewegt.
+
+Kosten Zauberer Leipzig: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Leipzig inklusive. Transparente Preise ohne Überraschungen.
+
+Neben Leipzig bediene ich auch Halle (Saale), Erfurt und ganz Mitteldeutschland. Als Zauberer für die wachsende Kreativwirtschaft Leipzigs bin ich ein Partner für Events, die aus der Masse herausstechen. Kontaktiere mich für ein unverbindliches Angebot.`,
   },
   {
     slug: "hannover",
@@ -386,9 +576,18 @@ export const staedte: Stadt[] = [
     einwohner: "535.000",
     bekannteLocations: ["Hannover Messe", "HCC Hannover Congress Centrum", "Herrenhäuser Gärten", "GOP Varieté-Theater", "Schloss Marienburg"],
     faq: [
-      { q: "Was kostet ein Zauberer in Hannover?", a: "Ich erstelle dir ein individuelles Angebot inklusive Anfahrt. Die Beratung ist kostenlos und unverbindlich." },
+      { q: "Was kostet ein Zauberer in Hannover?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt inklusive, Beratung kostenlos und unverbindlich." },
+      { q: "Tritt der Zauberer auch auf Messen in Hannover auf?", a: "Ja! Die Hannover Messe ist eine der wichtigsten Messen der Welt — Messeauftritte und Standprogramme gehören zu meinen Kernleistungen." },
+      { q: "Eignet sich ein Zauberer für Kongresse in Hannover?", a: "Absolut. B2B-Events, Kongresse und Gala-Abende im HCC Hannover Congress Centrum sind ideale Formate für professionelle Zauberkunst." },
     ],
     seoText: "Zauberer Hannover: Emilian Leber begeistert als Zauberkünstler auf Events in Hannover. Close-Up Magie und Bühnenshow für Firmenfeiern, Messen und Hochzeiten in der Messestadt.",
+    langText: `Hannover — die Messestadt schlechthin und Tor zum Norden. Als Zauberer für Hannover bringe ich professionelles Entertainment für B2B-Events, Kongresse und Firmenfeiern in Niedersachsens Landeshauptstadt.
+
+Messeauftritte auf der Hannover Messe, Kongress-Entertainment im HCC oder Galas in den Herrenhäuser Gärten — Hannover ist ein Top-Eventstandort, und ich liefere das passende Showkonzept. Professionell, interaktiv und unvergesslich.
+
+Preise Zauberer Hannover: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Hannover inklusive. Kostenlose Erstberatung.
+
+Als Messestand-Zauberer für Hannover bin ich spezialisiert auf B2B-Entertainment, das Besucher anzieht und Marken unvergesslich macht. Für Hochzeiten in Hannover und Umgebung sorge ich für magische Sektempfänge und Dinner-Einlagen.
     kollegenEmpfehlung: {
       prefix: "Für Veranstaltungen im Raum Hannover empfehle ich meinen Kollegen ",
       linkText: "Zauberer Simabu aus Hannover",
@@ -405,9 +604,18 @@ export const staedte: Stadt[] = [
     einwohner: "590.000",
     bekannteLocations: ["Westfalenhallen", "Signal Iduna Park Logen", "DASA", "View Skylounge", "Steigenberger Dortmund"],
     faq: [
-      { q: "Was kostet ein Zauberer in Dortmund?", a: "Die Kosten richten sich nach Format und Dauer. Kontaktiere mich für ein kostenloses Angebot." },
+      { q: "Was kostet ein Zauberer in Dortmund?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Dortmund inklusive. Beratung kostenlos." },
+      { q: "Eignet sich ein Zauberer für Betriebsfeiern im Ruhrgebiet?", a: "Absolut! Betriebsfeiern, Weihnachtsfeiern und Firmenjubiläen im Ruhrgebiet sind einer meiner Schwerpunkte — professionell und modern." },
+      { q: "Tritt der Zauberer auch in Essen, Bochum und dem Ruhrgebiet auf?", a: "Ja, ich trete im gesamten Ruhrgebiet auf — Dortmund, Essen, Bochum, Gelsenkirchen und Umgebung." },
     ],
     seoText: "Zauberer Dortmund: Emilian Leber ist dein Entertainer für Events in Dortmund und dem Ruhrgebiet. Zaubershow und Close-Up Magie für Firmenfeiern, Hochzeiten und Galas.",
+    langText: `Dortmund — Herz des Ruhrgebiets, Fußball-Hochburg und aufstrebender Wirtschaftsstandort. Als Zauberer für Dortmund bringe ich moderne Magie, die genauso direkt und kraftvoll ist wie die Stadt selbst.
+
+Von Firmenfeiern in den Westfalenhallen über Betriebsevents in der DASA bis zu Hochzeiten in der View Skylounge — Dortmund bietet starke Eventlocations, und ich liefere Entertainment, das das Ruhrgebiets-Publikum begeistert.
+
+Kosten Zauberer Dortmund: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Dortmund inklusive. Kostenlose Beratung.
+
+Neben Dortmund trete ich im gesamten Ruhrgebiet auf — Essen, Bochum, Herne, Gelsenkirchen und Umgebung. Echte Magie für echte Menschen — das ist mein Versprechen für Events im Ruhrgebiet.`,
   },
   {
     slug: "bremen",
@@ -418,9 +626,18 @@ export const staedte: Stadt[] = [
     einwohner: "570.000",
     bekannteLocations: ["Atlantic Grand Hotel", "Übersee-Museum", "Schlachte", "Weser-Stadion Logen", "BLG-Forum"],
     faq: [
-      { q: "Was kostet ein Zauberer in Bremen?", a: "Ich erstelle dir ein individuelles Angebot inklusive Anfahrt. Die Beratung ist kostenlos." },
+      { q: "Was kostet ein Zauberer in Bremen?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bremen inklusive. Beratung kostenlos." },
+      { q: "Eignet sich ein Zauberer für Firmenfeiern in Bremen?", a: "Ja! Bremen ist ein starker Wirtschaftsstandort — Firmenfeiern, Weihnachtsfeiern und Corporate Events gehören zu meinen Spezialitäten." },
+      { q: "Tritt der Zauberer auch in Bremerhaven und Niedersachsen auf?", a: "Ja, von Bremen aus bin ich in Bremerhaven, Oldenburg und der gesamten Region schnell erreichbar." },
     ],
     seoText: "Zauberer Bremen: Emilian Leber begeistert als Zauberkünstler auf Events in Bremen. Close-Up Magie und Bühnenshow für Firmenfeiern, Hochzeiten und besondere Anlässe in der Hansestadt.",
+    langText: `Bremen — die alte Hansestadt an der Weser, mit Stadtmusikanten-Charme und norddeutscher Herzlichkeit. Als Zauberer für Bremen bringe ich modernes Entertainment zu Firmenfeiern, Hochzeiten und Events in der kleinsten deutschen Großstadt.
+
+Von Events im Übersee-Museum über Firmenfeiern im BLG-Forum bis zu Hochzeiten am Schlachte-Ufer — Bremen bietet einzigartige Locations mit hanseatischem Flair. Mein Programm passt sich dieser besonderen Atmosphäre an.
+
+Preise Zauberer Bremen: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bremen inklusive. Kostenlose Beratung.
+
+Von Bremen aus bin ich auch in Bremerhaven, Oldenburg und ganz Nordwestdeutschland präsent. Als Zauberkünstler für Bremen kenne ich das norddeutsche Publikum — herzlich, direkt und offen für echtes Entertainment.`,
   },
   {
     slug: "salzburg",
@@ -431,9 +648,18 @@ export const staedte: Stadt[] = [
     einwohner: "155.000",
     bekannteLocations: ["Schloss Mirabell", "Salzburg Congress", "Hotel Sacher Salzburg", "Stiftskeller St. Peter", "Hangar-7"],
     faq: [
-      { q: "Was kostet ein Zauberer in Salzburg?", a: "Die Kosten richten sich nach Format und Dauer. Anfahrt nach Salzburg ist inklusive." },
+      { q: "Was kostet ein Zauberer in Salzburg?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Salzburg inklusive. Kostenlose Beratung möglich." },
+      { q: "Eignet sich ein Zauberer für Events im Rahmen der Salzburger Festspiele?", a: "Perfekt! Side-Events und Rahmenprogramme rund um die Festspiele sind eine großartige Gelegenheit — ich passe mein Programm dem kulturellen Rahmen an." },
+      { q: "Tritt der Zauberer auch in Linz und Österreich auf?", a: "Ja, ich bin österreichweit buchbar — Salzburg, Linz, Wien und weitere Städte gehören zu meinem Einzugsgebiet." },
     ],
     seoText: "Zauberer Salzburg: Emilian Leber begeistert als Zauberkünstler auf Events in Salzburg. Close-Up Magie und Bühnenshow für Firmenfeiern, Hochzeiten und Galas in der Mozartstadt.",
+    langText: `Salzburg — Mozarts Geburtsstadt, Festspielmetropole und eine der schönsten Städte Europas. Als Zauberer für Salzburg liefere ich Entertainment, das dem kulturellen Anspruch dieser besonderen österreichischen Stadt entspricht — elegant, professionell und unvergesslich.
+
+Side-Events zu den Festspielen, Firmenfeiern in Schloss Mirabell oder Hochzeiten im Hotel Sacher — Salzburg bietet Weltklasse-Locations, und ich bringe das passende Showkonzept. Das Salzburger Publikum ist kulturaffin und anspruchsvoll — das schätze ich.
+
+Kosten Zauberer Salzburg: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Salzburg von Regensburg aus inklusive. Kostenlose Beratung.
+
+Von Salzburg aus bediene ich ganz Österreich — Wien, Linz, Graz und Umgebung. Als Zauberkünstler für Salzburg bin ich international erfahren und sprachlich flexibel.`,
   },
   {
     slug: "wien",
@@ -444,8 +670,347 @@ export const staedte: Stadt[] = [
     einwohner: "1.900.000",
     bekannteLocations: ["Hofburg Wien", "Palais Liechtenstein", "Hotel Sacher Wien", "Museumsquartier", "Kursalon Wien"],
     faq: [
-      { q: "Was kostet ein Zauberer in Wien?", a: "Ich erstelle dir ein individuelles Angebot inklusive Anfahrt und ggf. Übernachtung." },
+      { q: "Was kostet ein Zauberer in Wien?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt und ggf. Übernachtung sind inklusive. Kostenlose Beratung möglich." },
+      { q: "Eignet sich ein Zauberer für Wiener Bälle und Galas?", a: "Absolut! Wien ist die Stadt der Bälle — elegante Magie, die zum kaiserlichen Ambiente passt. Ob Opernball-Umfeld, Charity-Gala oder Firmenball." },
+      { q: "Kann ich den Zauberer für eine Hochzeit in Wien buchen?", a: "Ja! Hochzeiten in Wien, ob Schloss Schönbrunn, Palais Liechtenstein oder Kursalon — ich sorge für unvergessliche magische Momente." },
     ],
     seoText: "Zauberer Wien: Emilian Leber begeistert als Zauberkünstler auf Events in Wien. Professionelle Zaubershow und Close-Up Magie für Firmenfeiern, Bälle, Hochzeiten und Galas in der Kaiserstadt.",
+    langText: `Wien — kaiserliche Weltstadt, Kulturzentrum Europas und eine der lebenswertesten Städte der Welt. Als Zauberer für Wien bringe ich moderne Magie, die dem einzigartigen Wiener Charme gerecht wird — für Galas, Bälle, Firmenfeiern und Hochzeiten.
+
+Von Bällen in der Hofburg über Charity-Galas im Palais Liechtenstein bis zu Firmenfeiern im Museumsquartier — Wien bietet grandioseste Locations, und mein Programm hebt jedes Event auf ein neues Niveau.
+
+Preise Zauberer Wien: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt und Übernachtung für Wien-Events inklusive. Kostenlose Erstberatung.
+
+Als Zauberer für Wiener Bälle und Galas verstehe ich das kaiserliche Ambiente und liefere Magie, die dazu passt. Für Hochzeiten in Wien — ob Schloss Schönbrunn-Umfeld, Kursalon oder Palais — sorge ich für unvergessliche magische Momente.`,
+  },
+  {
+    slug: "muenster",
+    name: "Münster",
+    region: "Nordrhein-Westfalen",
+    intro: "Münster — Universitätsstadt, Fahrradhauptstadt und kulturelles Zentrum Westfalens. Als Zauberer für Münster bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der lebenswertesten Stadt Deutschlands. Von der historischen Innenstadt bis ins Münsterland.",
+    highlight: "Münster verbindet studentisches Flair, Wirtschaftsstärke und westfälische Gastfreundschaft — die perfekte Bühne für unvergessliche Events mit professioneller Zauberkunst.",
+    einwohner: "315.000",
+    bekannteLocations: ["Halle Münsterland", "Schloss Münster", "Rathaus Münster", "Jovel Music Hall", "Steigenberger Hotel Münster"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Münster?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Münster inklusive. Kostenlose und unverbindliche Beratung." },
+      { q: "Für welche Events in Münster eignet sich ein Zauberer?", a: "Firmenfeiern, Hochzeiten, Geburtstage, Universitätsfeste, Weihnachtsfeiern, Galas — ich passe mein Programm individuell an deinen Anlass in Münster an." },
+      { q: "Tritt der Zauberer auch im Münsterland auf?", a: "Ja! Ich trete in Münster und dem gesamten Münsterland auf — von Warendorf über Coesfeld bis Steinfurt." },
+    ],
+    seoText: "Zauberer Münster gesucht? Emilian Leber ist dein professioneller Zauberkünstler für Events in Münster und Westfalen. Mit interaktiver Close-Up Magie, einer begeisternden Bühnenshow oder einem exklusiven Magic Dinner wird deine Veranstaltung in Münster unvergesslich.",
+    langText: `Münster — Universitätsstadt, Fahrradhauptstadt und eine der lebenswertesten Städte Deutschlands. Als Zauberer für Münster bringe ich modernes Entertainment zu Firmenfeiern, Hochzeiten und Events in der westfälischen Metropole.
+
+Von Firmenevents in der Halle Münsterland über Hochzeiten im Schloss Münster bis zu Galas im historischen Rathaus — Münster bietet tolle Locations für Events, die begeistern. Das Münsteraner Publikum ist weltoffen und entertainment-begeistert.
+
+Kosten Zauberer Münster: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Münster inklusive. Kostenlose Beratung.
+
+Neben Münster trete ich im gesamten Münsterland auf — Warendorf, Coesfeld, Steinfurt und Umgebung. Als Zauberkünstler für Münster kenne ich die westfälische Eventszene bestens und freue mich auf deine Anfrage.`,
+  },
+  {
+    slug: "bochum",
+    name: "Bochum",
+    region: "Nordrhein-Westfalen",
+    intro: "Bochum — Kulturstadt im Herzen des Ruhrgebiets. Von der Jahrhunderthalle bis zum RuhrCongress: Als Zauberer für Bochum bringe ich moderne Magie, die genauso überraschend und kraftvoll ist wie die Ruhrgebietskultur selbst.",
+    highlight: "Das Ruhrgebiet hat Feuer — und Bochum ist eines seiner hellsten Lichter. Modernes Entertainment für eine Stadt, die sich neu erfindet.",
+    einwohner: "365.000",
+    bekannteLocations: ["RuhrCongress Bochum", "Jahrhunderthalle", "Bermuda3Eck", "Zeiss Planetarium Bochum", "BO-Sporthalle"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Bochum?", a: "Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bochum inklusive, Beratung kostenlos." },
+      { q: "Eignet sich ein Zauberer für Betriebsfeiern im Ruhrgebiet?", a: "Absolut! Betriebsfeiern, Firmenjubiläen und Corporate Events sind eine meiner Spezialitäten. Erfahrung mit Events aller Branchen im Ruhrgebiet." },
+      { q: "Tritt der Zauberer auch in Essen und Herne auf?", a: "Ja, ich trete im gesamten Ruhrgebiet auf — Bochum, Essen, Herne, Gelsenkirchen, Witten und Umgebung." },
+    ],
+    seoText: "Zauberer Bochum: Emilian Leber begeistert als Zauberkünstler auf Events in Bochum und dem Ruhrgebiet. Close-Up Magie, Bühnenshow und Comedy für Firmenfeiern, Hochzeiten und Galas in der Kulturstadt.",
+    langText: `Bochum — Kulturstadt im Herzen des Ruhrgebiets, Heimat von Musiklegenden und aufstrebendem Unternehmertum. Als Zauberer für Bochum bringe ich modernes Entertainment, das zum kreativen und kraftvollen Spirit dieser Stadt passt.
+
+Von Firmenfeiern im RuhrCongress über Events in der Jahrhunderthalle bis zu Hochzeiten in stylischen Bochumer Locations — ich kenne das Ruhrgebiets-Publikum und liefere Shows, die begeistern und verbinden.
+
+Preise Zauberer Bochum: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bochum inklusive. Kostenlose Erstberatung.
+
+Neben Bochum trete ich in Essen, Herne, Witten und dem gesamten westlichen Ruhrgebiet auf. Als Zauberkünstler für das Ruhrgebiet bin ich ein verlässlicher Partner für Betriebsfeiern, Galas und Hochzeiten jeder Größe.`,
+  },
+  {
+    slug: "bielefeld",
+    name: "Bielefeld",
+    region: "Nordrhein-Westfalen",
+    intro: "Bielefeld — Wirtschaftsstandort in Ostwestfalen-Lippe und Heimat namhafter Unternehmen. Als Zauberer für Bielefeld bringe ich professionelles Entertainment zu Firmenfeiern, Hochzeiten und Events — für eine Stadt, die definitiv existiert.",
+    highlight: "Bielefeld ist mehr als ein Mythos — starke Wirtschaft, lebhafte Eventszene und moderne Locations machen die Stadt zu einem Top-Standort für unvergessliche Events.",
+    einwohner: "340.000",
+    bekannteLocations: ["Stadthalle Bielefeld", "Rudolf-Oetker-Halle", "Sparrenburg", "Bauenhagen Bielefeld", "Wyndham Bielefeld Loom"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Bielefeld?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bielefeld inklusive. Kostenlose Beratung möglich." },
+      { q: "Tritt der Zauberer auch bei Firmenfeiern in Bielefeld auf?", a: "Ja! Bielefeld ist ein starker Wirtschaftsstandort — ich habe Erfahrung mit Corporate Events für mittelständische und große Unternehmen in OWL." },
+      { q: "Für welche Anlässe kann ich einen Zauberer in Bielefeld buchen?", a: "Firmenfeiern, Weihnachtsfeiern, Hochzeiten, Geburtstage, Jubiläen, Messen — für jeden Anlass das passende Showformat." },
+    ],
+    seoText: "Zauberer Bielefeld: Emilian Leber ist dein Zauberkünstler für Events in Bielefeld und Ostwestfalen-Lippe. Professionelle Zaubershow, Close-Up Magie und Comedy für Firmenfeiern, Hochzeiten und Geburtstage.",
+    langText: `Bielefeld — die Stadt, die definitiv existiert, mit einer lebhaften Eventszene in Ostwestfalen. Als Zauberer für Bielefeld bringe ich professionelles Entertainment zu Firmenfeiern, Hochzeiten und Events in der OWL-Region.
+
+Von Firmenfeiern in der Stadthalle Bielefeld über Hochzeiten in der Rudolf-Oetker-Halle bis zu Events auf der Sparrenburg — Bielefeld bietet starke Locations, und ich entwickle das passende Showkonzept für jede Veranstaltung.
+
+Kosten Zauberer Bielefeld: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bielefeld inklusive. Kostenlose Beratung.
+
+Von Bielefeld aus bediene ich ganz Ostwestfalen-Lippe — Paderborn, Herford, Gütersloh und Umgebung. Das OWL-Publikum schätzt Qualität und Verlässlichkeit — beides garantiere ich bei jedem Auftritt.`,
+  },
+  {
+    slug: "bonn",
+    name: "Bonn",
+    region: "Nordrhein-Westfalen",
+    intro: "Bonn — Beethovens Geburtsstadt und einstige Bundeshauptstadt am Rhein. Als Zauberer für Bonn liefere ich Entertainment, das dem kulturellen Anspruch dieser besonderen Stadt entspricht — für Firmenfeiern, Hochzeiten und Galas.",
+    highlight: "Beethoven, einstiger Bundestag und Rheinromantik — Bonn verbindet Geschichte, Kultur und internationales Flair. Der perfekte Rahmen für magische Events.",
+    einwohner: "330.000",
+    bekannteLocations: ["World Conference Center Bonn", "Beethovenhalle", "Poppelsdorfer Schloss", "Hotel Kameha Grand Bonn", "Altes Rathaus Bonn"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Bonn?", a: "Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bonn inklusive. Kontaktiere mich für ein individuelles Angebot." },
+      { q: "Tritt der Zauberer auch auf internationalen Events in Bonn auf?", a: "Ja! Bonn ist ein internationaler Standort — ich habe Erfahrung mit multilingualen Events. Magie überwindet Sprachgrenzen." },
+      { q: "Kann ich einen Zauberer für eine Hochzeit in Bonn buchen?", a: "Absolut! Hochzeiten in Bonn und dem Rheinland gehören zu meinen beliebtesten Formaten. Beim Sektempfang, Dinner oder der Party — magische Momente garantiert." },
+    ],
+    seoText: "Zauberer Bonn: Emilian Leber begeistert als Zauberkünstler auf Events in Bonn und der Rheinregion. Close-Up Magie, Bühnenshow und Comedy für Firmenfeiern, Hochzeiten und Galas in der Beethovenstadt.",
+    langText: `Bonn — Beethovens Geburtsstadt, einstige Bundeshauptstadt und internationale Stadt am Rhein. Als Zauberer für Bonn liefere ich Entertainment, das dem kulturellen und internationalen Anspruch dieser besonderen Stadt entspricht.
+
+Von internationalen Konferenzen im World Conference Center über Galas in der Beethovenhalle bis zu Hochzeiten am Rhein — Bonn bietet besondere Eventlocations, für die ich das passende Showprogramm entwickle.
+
+Preise Zauberer Bonn: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Bonn inklusive. Kostenlose Erstberatung.
+
+Als Zauberer für internationale Events in Bonn bin ich sprachlich flexibel — Magie überwindet Sprachgrenzen. Neben Bonn trete ich in der gesamten Rheinschiene auf — Köln, Leverkusen, Bad Godesberg und Umgebung.`,
+  },
+  {
+    slug: "wuppertal",
+    name: "Wuppertal",
+    region: "Nordrhein-Westfalen",
+    intro: "Wuppertal — Stadt der Schwebebahn, der Kunst und der überraschenden Momente. Als Zauberer für Wuppertal bringe ich Entertainment, das genauso verblüffend ist wie die berühmte Schwebebahn selbst. Firmenfeiern, Hochzeiten und Events im Bergischen Land.",
+    highlight: "Wuppertal steht für Außergewöhnliches — die Schwebebahn, das Tanztheater Pina Bausch, der Skulpturenpark. Meine Magie fügt sich perfekt in diesen Spirit ein.",
+    einwohner: "355.000",
+    bekannteLocations: ["Historische Stadthalle Wuppertal", "Skulpturenpark Waldfrieden", "Kunstmuseum Wuppertal", "Opernhaus Wuppertal", "Hotel zur Post Wuppertal"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Wuppertal?", a: "Kosten je nach Format: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Wuppertal inklusive, Beratung kostenlos." },
+      { q: "Eignet sich ein Zauberer für kreative Events in Wuppertal?", a: "Perfekt! Wuppertal ist eine Kulturstadt — moderne, interaktive Zauberkunst passt ideal zu kreativen, anspruchsvollen Events." },
+      { q: "Tritt der Zauberer auch in Solingen und Remscheid auf?", a: "Ja! Von Wuppertal aus bediene ich das gesamte Bergische Land — Solingen, Remscheid und Umgebung." },
+    ],
+    seoText: "Zauberer Wuppertal: Emilian Leber begeistert als Zauberkünstler auf Events in Wuppertal und dem Bergischen Land. Professionelle Zaubershow und Close-Up Magie für Firmenfeiern, Hochzeiten und kulturelle Events.",
+    langText: `Wuppertal — Stadt der Schwebebahn, des Tanztheaters Pina Bausch und der überraschenden Momente. Als Zauberer für Wuppertal bringe ich Entertainment, das genauso außergewöhnlich ist wie die Stadt selbst — überraschend, kreativ und unvergesslich.
+
+Von Firmenfeiern in der historischen Stadthalle über Kulturevents im Skulpturenpark Waldfrieden bis zu Hochzeiten in stylischen Locations — ich kenne die besondere Atmosphäre Wuppertals und passe mein Programm entsprechend an.
+
+Kosten Zauberer Wuppertal: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Wuppertal inklusive. Kostenlose Beratung.
+
+Neben Wuppertal trete ich im gesamten Bergischen Land auf — Solingen, Remscheid, Haan und Umgebung. Wuppertal steht für das Außergewöhnliche — ich passe dazu.`,
+  },
+  {
+    slug: "mannheim",
+    name: "Mannheim",
+    region: "Baden-Württemberg",
+    intro: "Mannheim — die Quadratestadt an Rhein und Neckar. Als Zauberer für Mannheim bringe ich modernes Entertainment zu Firmenfeiern, Galas und Hochzeiten in einer der dynamischsten Städte Baden-Württembergs. Von der SAP Arena bis zum Rosengarten.",
+    highlight: "Mannheim ist Wirtschaftsstandort, Kulturzentrum und Musikstadt in einem — ideale Bühne für professionelle Zauberkunst auf höchstem Niveau.",
+    einwohner: "315.000",
+    bekannteLocations: ["SAP Arena Mannheim", "Rosengarten Mannheim", "Altes Rathaus Mannheim", "Technoseum", "Maritim Parkhotel Mannheim"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Mannheim?", a: "Close-Up Magie ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Mannheim inklusive. Kostenlose und unverbindliche Beratung." },
+      { q: "Tritt der Zauberer auch in Heidelberg und Ludwigshafen auf?", a: "Ja! Die Rhein-Neckar-Region ist mein Einzugsgebiet — Mannheim, Heidelberg, Ludwigshafen und die gesamte Metropolregion." },
+      { q: "Eignet sich ein Zauberer für Firmenfeiern in Mannheim?", a: "Absolut — Mannheim ist ein starker Unternehmensstandort. Ich habe Erfahrung mit Corporate Events für Unternehmen aller Größen." },
+    ],
+    seoText: "Zauberer Mannheim: Emilian Leber ist dein Entertainer für Events in Mannheim und der Rhein-Neckar-Region. Professionelle Zaubershow für Firmenfeiern, Hochzeiten und Galas in der Quadratestadt.",
+    langText: `Mannheim — die Quadratestadt an Rhein und Neckar, Wirtschaftszentrum und Musikstadt. Als Zauberer für Mannheim bringe ich modernes Entertainment für Firmenfeiern, Galas und Hochzeiten in der dynamischen Metropolregion Rhein-Neckar.
+
+Von Firmenfeiern in der SAP Arena über Galas im Rosengarten bis zu Hochzeiten in stylischen Mannheimer Locations — ich entwickle für jede Veranstaltung das optimale Showkonzept. Modern, interaktiv und auf hohem Niveau.
+
+Preise Zauberer Mannheim: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Mannheim inklusive. Kostenlose Erstberatung.
+
+Von Mannheim aus bediene ich die gesamte Metropolregion Rhein-Neckar — Heidelberg, Ludwigshafen, Speyer und Umgebung. Als Zauberkünstler für Mannheim kenne ich die vielfältige Eventszene der Region bestens.`,
+  },
+  {
+    slug: "karlsruhe",
+    name: "Karlsruhe",
+    region: "Baden-Württemberg",
+    intro: "Karlsruhe — die Fächerstadt, Sitz des Bundesverfassungsgerichts und Technologiestandort am Rhein. Als Zauberer für Karlsruhe verbinde ich technische Präzision mit kreativer Magie — für Firmenfeiern, Konferenzen und Events.",
+    highlight: "Karlsruhe steht für Innovation, Technologie und kreatives Denken — moderne Zauberkunst trifft genau diesen Geist.",
+    einwohner: "310.000",
+    bekannteLocations: ["Schwarzwaldhalle Karlsruhe", "Konzerthaus Karlsruhe", "Schloss Karlsruhe", "ZKM Karlsruhe", "Messe Karlsruhe"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Karlsruhe?", a: "Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Alle Preise inklusive Anfahrt nach Karlsruhe. Kostenlose Beratung." },
+      { q: "Tritt der Zauberer auch auf IT- und Technologie-Events in Karlsruhe auf?", a: "Ja! Karlsruhe ist ein wichtiger Technologiestandort — Corporate Events und Tech-Konferenzen gehören zu meinem Repertoire." },
+      { q: "Eignet sich ein Zauberer für Events am KIT oder der Dualen Hochschule?", a: "Auf jeden Fall — Hochschul-Events, Absolventenfeiern und Campus-Events sind ideale Formate für interaktive Zauberkunst." },
+    ],
+    seoText: "Zauberer Karlsruhe: Emilian Leber begeistert als Zauberkünstler auf Events in Karlsruhe und der Technologieregion. Close-Up Magie, Bühnenshow und Comedy für Firmenfeiern, Hochzeiten und Kongresse in der Fächerstadt.",
+    langText: `Karlsruhe — die Fächerstadt, IT-Hochburg und Sitz des Bundesverfassungsgerichts. Als Zauberer für Karlsruhe verbinde ich technologische Präzision mit kreativer Magie — für Firmenfeiern, Kongresse und Events in der Technologieregion am Rhein.
+
+Von IT-Events im ZKM über Firmenfeiern in der Schwarzwaldhalle bis zu Hochzeiten im Schlosspark — Karlsruhe bietet moderne Eventlocations, für die ich passende Showkonzepte entwickle.
+
+Kosten Zauberer Karlsruhe: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Karlsruhe inklusive. Kostenlose Beratung.
+
+Von Karlsruhe aus bediene ich ganz Baden — Pforzheim, Rastatt, Baden-Baden und Umgebung. Das technikaffine Karlsruher Publikum schätzt Entertainment, das überrascht und professionell ist — genau das liefere ich.`,
+  },
+  {
+    slug: "wiesbaden",
+    name: "Wiesbaden",
+    region: "Hessen",
+    intro: "Wiesbaden — elegante Kurstadt, hessische Landeshauptstadt und Stadt der Villen. Als Zauberer für Wiesbaden bringe ich Entertainment, das dem exklusiven Ambiente dieser besonderen Stadt entspricht — für Galas, Firmenfeiern und Hochzeiten.",
+    highlight: "Wiesbaden steht für Eleganz, Stil und besondere Anlässe — professionelle Zauberkunst, die genau diesem Anspruch gerecht wird.",
+    einwohner: "280.000",
+    bekannteLocations: ["Kurhaus Wiesbaden", "Hessisches Staatstheater Wiesbaden", "Bowling Green Wiesbaden", "Hotel Nassauer Hof", "Casinogesellschaft Wiesbaden"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Wiesbaden?", a: "Kosten je nach Format: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Wiesbaden inklusive. Kostenlose Beratung." },
+      { q: "Tritt der Zauberer auch auf Galas und exklusiven Events in Wiesbaden auf?", a: "Ja! Galas, Charity-Events und exklusive Dinner in Wiesbaden sind ideale Formate für professionelle Zauberkunst auf hohem Niveau." },
+      { q: "Kann ich einen Zauberer für eine Hochzeit in Wiesbaden buchen?", a: "Absolut! Hochzeiten in Wiesbaden und dem Rhein-Main-Gebiet gehören zu meinen beliebtesten Formaten — elegant, interaktiv und unvergesslich." },
+    ],
+    seoText: "Zauberer Wiesbaden: Emilian Leber ist dein Entertainer für Events in Wiesbaden. Professionelle Zaubershow für Galas, Firmenfeiern und Hochzeiten in der hessischen Landeshauptstadt.",
+    langText: `Wiesbaden — elegante Kurstadt, hessische Landeshauptstadt und Stadt der Villen. Als Zauberer für Wiesbaden liefere ich Entertainment, das dem exklusiven Ambiente dieser besonderen Stadt entspricht — stilsicher, professionell und unvergesslich.
+
+Von Galas im Kurhaus über Charity-Events in eleganten Wiesbadener Villen bis zu Hochzeiten im Hotel Nassauer Hof — Wiesbaden bietet die vornehmsten Eventlocations Hessens, und mein Programm passt sich dem Niveau entsprechend an.
+
+Preise Zauberer Wiesbaden: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Wiesbaden inklusive. Kostenlose Erstberatung.
+
+Neben Wiesbaden trete ich im gesamten Rhein-Main-Gebiet auf — Frankfurt, Mainz, Darmstadt und Umgebung. Als Zauberkünstler für gehobene Events in Wiesbaden bin ich der richtige Partner für Veranstaltungen, bei denen Qualität an erster Stelle steht.`,
+  },
+  {
+    slug: "mainz",
+    name: "Mainz",
+    region: "Rheinland-Pfalz",
+    intro: "Mainz — Karnevalshauptstadt, Medienstadt und Weinstadt am Rhein. Als Zauberer für Mainz bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der rheinland-pfälzischen Landeshauptstadt.",
+    highlight: "Mainz verbindet Feierlaune, Weinkultur und Medienstandort — die perfekte Stadt für Events, die in Erinnerung bleiben.",
+    einwohner: "220.000",
+    bekannteLocations: ["Rheingoldhalle Mainz", "Kurfürstliches Schloss Mainz", "Staatstheater Mainz", "Gutenberg-Museum Mainz", "Hilton Mainz City"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Mainz?", a: "Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Mainz inklusive. Kostenlose Beratung und unverbindliches Angebot." },
+      { q: "Eignet sich ein Zauberer für Karneval-Events in Mainz?", a: "Perfekt! Mainz ist eine der größten Karnevalsstädte Deutschlands — ob Sitzung, Firmen-Karneval oder Rosenmontagsfeier, ich passe mein Programm an." },
+      { q: "Tritt der Zauberer auch in Wiesbaden und dem Rhein-Main-Gebiet auf?", a: "Ja! Von Mainz aus bediene ich das gesamte Rhein-Main-Gebiet — Wiesbaden, Frankfurt, Darmstadt und Umgebung." },
+    ],
+    seoText: "Zauberer Mainz: Emilian Leber begeistert als Zauberkünstler auf Events in Mainz. Close-Up Magie, Bühnenshow und Comedy für Firmenfeiern, Hochzeiten und Galas in der Landeshauptstadt Rheinland-Pfalz.",
+    langText: `Mainz — Karnevalshauptstadt, Medienstandort und Weinstadt am Rhein. Als Zauberer für Mainz bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der rheinland-pfälzischen Landeshauptstadt.
+
+Von Karneval-Events in der Rheingoldhalle über Medienfirmen-Feiern bis zu Hochzeiten im Kurfürstlichen Schloss — Mainz verbindet Feierlaune und Stil. Als Zauberer für Mainz passe ich mein Programm genau diesem Spirit an.
+
+Kosten Zauberer Mainz: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Mainz inklusive. Kostenlose Beratung.
+
+Von Mainz aus bediene ich das gesamte Rhein-Main-Gebiet — Wiesbaden, Frankfurt, Ingelheim und Umgebung. Als Zauberkünstler für Mainz kenne ich die rheinische Lebensfreude und bringe genau das Entertainment, das dazu passt.`,
+  },
+  {
+    slug: "magdeburg",
+    name: "Magdeburg",
+    region: "Sachsen-Anhalt",
+    intro: "Magdeburg — Elbe-Metropole, Landeshauptstadt Sachsen-Anhalts und Stadt Otto des Großen. Als Zauberer für Magdeburg bringe ich modernes Entertainment zu Firmenfeiern, Hochzeiten und Events an der Elbe.",
+    highlight: "Magdeburg wächst und entwickelt sich — eine aufstrebende Stadt mit vielen Eventmöglichkeiten und einem Publikum, das echtes Entertainment zu schätzen weiß.",
+    einwohner: "240.000",
+    bekannteLocations: ["Festung Mark Magdeburg", "GETEC Arena Magdeburg", "Kulturforum Magdeburg", "Maritim Hotel Magdeburg", "Kloster Unser Lieben Frauen"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Magdeburg?", a: "Kosten je nach Format: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Magdeburg inklusive. Kostenlose Beratung." },
+      { q: "Tritt der Zauberer auch in Halle (Saale) und der Region auf?", a: "Ja! Von Magdeburg aus bediene ich ganz Sachsen-Anhalt — Halle (Saale), Dessau, Stendal und Umgebung." },
+      { q: "Eignet sich ein Zauberer für Firmenfeiern in Magdeburg?", a: "Absolut! Firmenfeiern, Weihnachtsfeiern und Corporate Events in Magdeburg — modernes Entertainment, das in Erinnerung bleibt." },
+    ],
+    seoText: "Zauberer Magdeburg: Emilian Leber ist dein Entertainer für Events in Magdeburg und Sachsen-Anhalt. Professionelle Zaubershow und Close-Up Magie für Firmenfeiern, Hochzeiten und Galas in der Elbestadt.",
+    langText: `Magdeburg — Elbe-Metropole, Landeshauptstadt Sachsen-Anhalts und aufstrebender Wirtschaftsstandort. Als Zauberer für Magdeburg bringe ich modernes Entertainment zu Firmenfeiern, Hochzeiten und Events in der Stadt Otto des Großen.
+
+Von Firmenfeiern in der Festung Mark über Galas in der GETEC Arena bis zu Hochzeiten im Kloster Unser Lieben Frauen — Magdeburg bietet eindrucksvolle Locations für Events mit Charakter.
+
+Preise Zauberer Magdeburg: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Magdeburg inklusive. Kostenlose Erstberatung.
+
+Von Magdeburg aus trete ich in ganz Sachsen-Anhalt auf — Halle (Saale), Dessau, Stendal und Umgebung. Als Zauberkünstler für Magdeburg und die Region bin ich ein verlässlicher Partner für Events jeder Art.`,
+  },
+  {
+    slug: "erfurt",
+    name: "Erfurt",
+    region: "Thüringen",
+    intro: "Erfurt — Thüringens Landeshauptstadt mit Domberg, Krämerbrücke und einer lebendigen Eventszene. Als Zauberer für Erfurt bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und besonderen Anlässen in der grünen Mitte Deutschlands.",
+    highlight: "Erfurt liegt geografisch im Herzen Deutschlands — ideale Bühne für Events, die von überall gut erreichbar sind. Historisch, gastfreundlich und magisch.",
+    einwohner: "215.000",
+    bekannteLocations: ["Messe Erfurt", "Kaisersaal Erfurt", "Krämerbrücke Erfurt", "Erfurter Dom", "Radisson Blu Hotel Erfurt"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Erfurt?", a: "Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Erfurt inklusive. Kostenlose und unverbindliche Beratung." },
+      { q: "Tritt der Zauberer auch in Weimar und Jena auf?", a: "Ja! Ich trete in ganz Thüringen auf — Erfurt, Weimar, Jena, Gotha und Umgebung. Die kurzen Wege in Thüringen machen das möglich." },
+      { q: "Eignet sich ein Zauberer für die Messe Erfurt?", a: "Perfekt! Messeauftritte, Standprogramme und Kongress-Entertainment auf der Messe Erfurt gehören zu meinem Repertoire." },
+    ],
+    seoText: "Zauberer Erfurt: Emilian Leber begeistert als Zauberkünstler auf Events in Erfurt und Thüringen. Close-Up Magie, Bühnenshow und Comedy für Firmenfeiern, Hochzeiten und Messen in der Landeshauptstadt.",
+    langText: `Erfurt — die grüne Mitte Deutschlands, Thüringens Landeshauptstadt und eine der ältesten Städte Deutschlands. Als Zauberer für Erfurt bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der blumenreichen Domstadt.
+
+Von Messeauftritten auf der Messe Erfurt über Galas im Kaisersaal bis zu Hochzeiten an der historischen Krämerbrücke — Erfurt bietet eindrucksvolle Locations im Herzen Deutschlands.
+
+Kosten Zauberer Erfurt: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Erfurt inklusive. Kostenlose Beratung.
+
+Erfurts zentrale Lage macht es ideal für Events mit Gästen aus ganz Deutschland. Von Erfurt aus bediene ich ganz Thüringen — Weimar, Jena, Gotha und Umgebung. Als Zauberkünstler für die grüne Mitte Deutschlands bin ich gerne dabei.`,
+  },
+  {
+    slug: "freiburg",
+    name: "Freiburg",
+    region: "Baden-Württemberg",
+    intro: "Freiburg im Breisgau — Schwarzwaldtor, Solarstadt und eine der lebenswertesten Städte Deutschlands. Als Zauberer für Freiburg bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der südlichsten Großstadt Deutschlands.",
+    highlight: "Freiburg verbindet Lebensqualität, studentisches Flair und Nähe zur Natur — ideale Kulisse für Events mit magischer Unterhaltung.",
+    einwohner: "230.000",
+    bekannteLocations: ["Konzerthaus Freiburg", "Messe Freiburg", "Historisches Kaufhaus Freiburg", "Hotel Colombi Freiburg", "Münsterforum Freiburg"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Freiburg?", a: "Kosten je nach Format: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Freiburg inklusive. Kostenlose Beratung." },
+      { q: "Tritt der Zauberer auch in Basel und dem Elsass auf?", a: "Ja! Von Freiburg aus bin ich schnell in der Schweiz (Basel) und in Frankreich (Straßburg, Elsass) — Magie kennt keine Grenzen." },
+      { q: "Eignet sich ein Zauberer für Hochzeiten im Schwarzwald?", a: "Absolut! Hochzeiten im Schwarzwald und der Region Freiburg sind traumhaft schön — ich sorge für magische Momente, die zur einzigartigen Kulisse passen." },
+    ],
+    seoText: "Zauberer Freiburg: Emilian Leber ist dein Entertainer für Events in Freiburg im Breisgau. Professionelle Zaubershow für Firmenfeiern, Hochzeiten und Galas in der Schwarzwaldmetropole.",
+    langText: `Freiburg im Breisgau — die solarste Stadt Deutschlands, Tor zum Schwarzwald und studentisches Kulturzentrum. Als Zauberer für Freiburg bringe ich modernes Entertainment in die südlichste Großstadt Deutschlands.
+
+Von Firmenfeiern im Konzerthaus über Hochzeiten im Historischen Kaufhaus bis zu Events in der Messe Freiburg — Freiburg verbindet Lebensqualität und Gastfreundschaft. Als Zauberer für Freiburg passe ich mein Programm dem lebensfrohen Spirit der Stadt an.
+
+Preise Zauberer Freiburg: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Freiburg inklusive. Kostenlose Erstberatung.
+
+Von Freiburg aus bin ich auch in der Schweiz (Basel) und im Elsass (Straßburg) präsent. Für Hochzeiten im Schwarzwald sorge ich für magische Momente in einzigartiger Kulisse.`,
+  },
+  {
+    slug: "luebeck",
+    name: "Lübeck",
+    region: "Schleswig-Holstein",
+    intro: "Lübeck — die Königin der Hanse, Marzipanstadt und UNESCO-Weltkulturerbe. Als Zauberer für Lübeck bringe ich moderne Magie zu Events in einer der schönsten Altstädte Deutschlands. Vom Holstentor bis zur Musik- und Kongresshalle.",
+    highlight: "Lübeck verbindet hanseatische Eleganz, reiche Geschichte und norddeutsche Herzlichkeit — der perfekte Rahmen für Events mit professioneller Zauberkunst.",
+    einwohner: "217.000",
+    bekannteLocations: ["Musik- und Kongresshalle Lübeck", "Buddenbrookhaus", "Atlantic Hotel Lübeck", "Strandhalle Travemünde", "Radisson Blu Senator Hotel Lübeck"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Lübeck?", a: "Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Lübeck inklusive. Kostenlose und unverbindliche Beratung." },
+      { q: "Tritt der Zauberer auch in Travemünde und Ostholstein auf?", a: "Ja! Von Lübeck aus bin ich in Travemünde, Bad Schwartau und ganz Ostholstein schnell vor Ort." },
+      { q: "Eignet sich ein Zauberer für Events in der Lübecker Altstadt?", a: "Perfekt! Die historische Altstadt mit ihren einzigartigen Locations bietet eine traumhafte Kulisse für magische Events." },
+    ],
+    seoText: "Zauberer Lübeck: Emilian Leber begeistert als Zauberkünstler auf Events in Lübeck. Close-Up Magie, Bühnenshow und Comedy für Firmenfeiern, Hochzeiten und besondere Anlässe in der Hansestadt.",
+    langText: `Lübeck — Königin der Hanse, Marzipanstadt und UNESCO-Weltkulturerbe. Als Zauberer für Lübeck bringe ich moderne Magie in eine der schönsten Altstädte Deutschlands — für Firmenfeiern, Hochzeiten und besondere Events.
+
+Von Firmenevents in der Musik- und Kongresshalle über Galas im Buddenbrookhaus bis zu Hochzeiten im Atlantic Hotel — Lübeck bietet einzigartige Locations mit hanseatischem Flair und historischem Charme.
+
+Kosten Zauberer Lübeck: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Lübeck inklusive. Kostenlose Beratung.
+
+Von Lübeck aus bin ich auch in Travemünde, Bad Schwartau und Ostholstein schnell vor Ort. Die historische Kulisse Lübecks macht jedes Event besonders — und professionelle Zauberkunst macht es unvergesslich.`,
+  },
+  {
+    slug: "kiel",
+    name: "Kiel",
+    region: "Schleswig-Holstein",
+    intro: "Kiel — Landeshauptstadt Schleswig-Holsteins, Marinestadt und Gastgeber der weltbekannten Kieler Woche. Als Zauberer für Kiel bringe ich professionelles Entertainment zu Firmenfeiern, Hochzeiten und Events an der Förde.",
+    highlight: "Kiel verbindet maritimes Flair, Wirtschaftsstärke und norddeutsche Offenheit — die ideale Bühne für Events, die in Erinnerung bleiben.",
+    einwohner: "246.000",
+    bekannteLocations: ["Sparkassen Arena Kiel", "Kieler Schloss", "Ostseekai Kiel", "Hotel Kieler Kaufmann", "Kieler Woche Gelände"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Kiel?", a: "Kosten je nach Format: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Kiel inklusive. Kostenlose Beratung." },
+      { q: "Tritt der Zauberer auch während der Kieler Woche auf?", a: "Ja! Die Kieler Woche bietet großartige Möglichkeiten für Side-Events, VIP-Formate und Firmen-Hospitality — ich bin dabei." },
+      { q: "Eignet sich ein Zauberer für maritime Events und Schiffs-Partys?", a: "Absolut! Events auf Schiffen oder in Hafenlocations sind besonders stimmungsvoll — Close-Up Magie passt perfekt dazu." },
+    ],
+    seoText: "Zauberer Kiel: Emilian Leber ist dein Entertainer für Events in Kiel. Professionelle Zaubershow und Close-Up Magie für Firmenfeiern, Hochzeiten und Galas in der schleswig-holsteinischen Landeshauptstadt.",
+    langText: `Kiel — Landeshauptstadt Schleswig-Holsteins, Marinestadt und Gastgeber der weltbekannten Kieler Woche. Als Zauberer für Kiel bringe ich professionelles Entertainment an die Förde — für Firmenfeiern, Hochzeiten und maritime Events.
+
+Von Kieler Woche-Events über Firmenfeiern in der Sparkassen Arena bis zu Hochzeiten im Kieler Schloss — Kiel bietet maritime Locations mit norddeutschem Charme. Das offene und herzliche Kieler Publikum liebt Entertainment mit echtem Wow-Faktor.
+
+Preise Zauberer Kiel: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Kiel inklusive. Kostenlose Erstberatung.
+
+Neben Kiel trete ich in ganz Schleswig-Holstein auf — Neumünster, Flensburg, Lübeck und Umgebung. Maritime Events und Schiffs-Partys sind eine besondere Spezialität — Close-Up Magie auf dem Wasser ist einfach unvergesslich.`,
+  },
+  {
+    slug: "braunschweig",
+    name: "Braunschweig",
+    region: "Niedersachsen",
+    intro: "Braunschweig — die Löwenstadt Niedersachsens im Herzen Deutschlands. Als Zauberer für Braunschweig bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der traditionsreichen Stadt zwischen Harz und Heide.",
+    highlight: "Braunschweig ist Wirtschaftsstandort, Universitätsstadt und Kulturzentrum — ideal für Events, die professionelles Entertainment verdienen.",
+    einwohner: "250.000",
+    bekannteLocations: ["Stadthalle Braunschweig", "Volkswagen Halle Braunschweig", "Schloss Braunschweig", "Haus der Kulturen Braunschweig", "Steigenberger Hotel Braunschweig"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Braunschweig?", a: "Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Braunschweig inklusive. Kostenlose und unverbindliche Beratung." },
+      { q: "Tritt der Zauberer auch auf VW-Events und Automotive-Firmenfeiern auf?", a: "Ja! Braunschweig ist eng mit dem Volkswagen-Konzern verbunden — Corporate Events in diesem Umfeld gehören zu meinen Spezialitäten." },
+      { q: "Tritt der Zauberer auch in Wolfsburg und Göttingen auf?", a: "Ja, ich trete in ganz Niedersachsen auf — von Braunschweig über Wolfsburg bis Göttingen und Hildesheim." },
+    ],
+    seoText: "Zauberer Braunschweig: Emilian Leber begeistert als Zauberkünstler auf Events in Braunschweig. Close-Up Magie, Bühnenshow und Comedy für Firmenfeiern, Hochzeiten und Galas in der Löwenstadt.",
+    langText: `Braunschweig — die Löwenstadt Niedersachsens, VW-Standort und Universitätsstadt. Als Zauberer für Braunschweig bringe ich professionelles Entertainment zu Firmenfeiern, Hochzeiten und Events in der traditionsreichen Stadt zwischen Harz und Heide.
+
+Von Corporate Events im Volkswagen Halle-Umfeld über Firmenfeiern in der Stadthalle bis zu Hochzeiten in historischen Braunschweiger Locations — ich entwickle für jede Veranstaltung das optimale Showkonzept.
+
+Kosten Zauberer Braunschweig: Close-Up ab 800 €, Bühnenshow ab 1.200 €, Magic Dinner ab 2.500 €. Anfahrt nach Braunschweig inklusive. Kostenlose Beratung.
+
+Von Braunschweig aus trete ich in ganz Niedersachsen auf — Wolfsburg, Salzgitter, Göttingen, Hildesheim und Umgebung. Als Zauberkünstler für Braunschweig und die Region bin ich ein verlässlicher Partner für Events aller Größenordnungen.`,
   },
 ];

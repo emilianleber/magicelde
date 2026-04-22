@@ -13,6 +13,15 @@
       "permanent": true
     },
 
+    { "source": "/firmenfeier", "destination": "/firmenfeiern", "permanent": true },
+    { "source": "/firmenfeier/", "destination": "/firmenfeiern", "permanent": true },
+    { "source": "/sommerfeste", "destination": "/firmenfeiern", "permanent": true },
+    { "source": "/sommerfeste/", "destination": "/firmenfeiern", "permanent": true },
+    { "source": "/zauberer-fuer-hochzeit", "destination": "/hochzeit", "permanent": true },
+    { "source": "/zauberer-fuer-hochzeit/", "destination": "/hochzeit", "permanent": true },
+    { "source": "/zauberer-woerth-an-der-donau", "destination": "/zauberer/regensburg", "permanent": true },
+    { "source": "/zauberer-woerth-an-der-donau/", "destination": "/zauberer/regensburg", "permanent": true },
+
     { "source": "/about", "destination": "/ueber-mich", "permanent": true },
     { "source": "/about/", "destination": "/ueber-mich", "permanent": true },
     { "source": "/private-feier", "destination": "/geburtstage", "permanent": true },
@@ -113,6 +122,34 @@
     { "source": "/buchung/", "destination": "/buchung", "permanent": true },
     { "source": "/presse/", "destination": "/presse", "permanent": true },
     { "source": "/tickets/", "destination": "/tickets", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*\\.js|.*\\.css|.*\\.woff2?|.*\\.ttf)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*\\.jpg|.*\\.jpeg|.*\\.png|.*\\.webp|.*\\.gif|.*\\.svg|.*\\.ico|.*\\.avif)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
   ],
   "rewrites": [
     {

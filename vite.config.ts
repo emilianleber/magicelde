@@ -18,4 +18,19 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (!id.includes('node_modules')) return;
+          if (id.includes('@supabase')) return 'supabase';
+          if (id.includes('recharts') || id.includes('d3-') || id.includes('victory-')) return 'recharts';
+          if (id.includes('framer-motion')) return 'framer-motion';
+          if (id.includes('jspdf') || id.includes('html2canvas')) return 'pdf';
+          if (id.includes('@radix-ui')) return 'radix-ui';
+          if (id.includes('react-dom') || id.includes('react-router') || id.includes('scheduler')) return 'react-vendor';
+        },
+      },
+    },
+  },
 }));
