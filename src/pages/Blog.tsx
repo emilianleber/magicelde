@@ -7,16 +7,19 @@ import { ArrowRight } from "lucide-react";
 import heroImg from "@/assets/hero-magic.jpg";
 import stageImg from "@/assets/stage-show.jpg";
 
-const categories = ["Alle", "Entertainment", "Hochzeiten", "Business", "Konzepte", "Behind the Scenes"];
+const categories = ["Alle", "Firmenfeiern", "Hochzeit", "Städte", "Magic Dinner", "Close-Up", "Geburtstage", "Ratgeber"];
+
+const today = new Date().toISOString().split("T")[0];
+const publishedPosts = blogPosts.filter((p) => p.date <= today);
 
 const Blog = () => {
   const [activeCategory, setActiveCategory] = useState("Alle");
   const { ref, isVisible } = useScrollReveal();
 
-  const featured = blogPosts.filter((p) => p.featured);
+  const featured = publishedPosts.filter((p) => p.featured);
   const filtered = activeCategory === "Alle"
-    ? blogPosts.filter((p) => !p.featured)
-    : blogPosts.filter((p) => p.category === activeCategory && !p.featured);
+    ? publishedPosts.filter((p) => !p.featured)
+    : publishedPosts.filter((p) => p.category === activeCategory && !p.featured);
 
   return (
     <>
@@ -84,6 +87,7 @@ const Blog = () => {
                       src={i === 0 ? heroImg : stageImg}
                       alt={post.title}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/30 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-8">

@@ -78,6 +78,7 @@ const TicketsPage = () => {
                       src={show.img}
                       alt={show.title}
                       className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                      loading="lazy"
                     />
                   </div>
                   <div className="p-8 md:p-10 flex flex-col justify-center">

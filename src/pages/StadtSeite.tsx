@@ -71,7 +71,8 @@ const StadtSeite = () => {
             "worstRating": "1",
             "reviewCount": "34"
           },
-          "serviceType": ["Zauberer", "Close-Up Magie", "Bühnenshow", "Magic Dinner", "Entertainer", "Zauberkünstler", "Hochzeitszauberer"]
+          "serviceType": ["Zauberer", "Close-Up Magie", "Bühnenshow", "Magic Dinner", "Entertainer", "Zauberkünstler", "Hochzeitszauberer"],
+          "dateModified": new Date().toISOString().split("T")[0]
         })}</script>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
@@ -124,9 +125,12 @@ const HeroStadt = ({ name, intro, region }: { name: string; intro: string; regio
   <section className="relative min-h-[70vh] flex flex-col justify-center overflow-hidden">
     <div className="container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
       <div className="max-w-5xl mx-auto text-center">
-        <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+        <div className="opacity-0 animate-fade-up flex flex-wrap justify-center gap-3" style={{ animationDelay: "0.1s" }}>
           <span className="badge-accent mb-8 inline-flex items-center gap-2">
             <MapPin className="w-3.5 h-3.5" /> Zauberer {name}
+          </span>
+          <span className="mb-8 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-green-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" /> Termine 2026 verfügbar
           </span>
         </div>
         <h1 className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground" style={{ animationDelay: "0.3s" }}>

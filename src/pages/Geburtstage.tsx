@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
+import StadtLinks from "@/components/landing/StadtLinks";
 import AnimatedWords from "@/components/landing/AnimatedWords";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import VideoHero from "@/components/landing/VideoHero";
@@ -333,6 +334,7 @@ const Geburtstage = () => (
     <GalerieSection />
     <FAQBirthday />
     <UeberMichKurz />
+    <StadtLinks headline="Zauberer für Geburtstage in deiner Stadt." />
     <BookingCTA headline={"Mach deinen Geburtstag\nunvergesslich."} subline="Erzähl mir von deiner Feier — ich entwickle das passende Konzept aus Comedy, Magie und Interaktion." />
   </PageLayout>
   </>

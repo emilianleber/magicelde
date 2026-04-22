@@ -146,6 +146,7 @@ const LogoItem = ({ name, logo }: { name: string; logo?: string }) => {
         title={name}
         onError={() => setImgError(true)}
         className="h-8 md:h-10 w-auto max-w-[140px] object-contain opacity-40 hover:opacity-70 transition-opacity duration-300 grayscale hover:grayscale-0 select-none"
+        loading="lazy"
       />
     );
   }

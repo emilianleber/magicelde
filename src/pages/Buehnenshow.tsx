@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
+import StadtLinks from "@/components/landing/StadtLinks";
 import AnimatedWords from "@/components/landing/AnimatedWords";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import VideoHero from "@/components/landing/VideoHero";
@@ -334,6 +335,7 @@ const Buehnenshow = () => (
     <TestimonialsSlider />
     <GalerieSection />
     <FAQBuehne />
+    <StadtLinks headline="Bühnenshow in deiner Stadt buchen." />
     <BookingCTA headline={"Die Bühne gehört dir."} subline="Lass uns über dein Event sprechen — ich entwickle eine Show, die perfekt zu eurem Anlass passt." />
   </PageLayout>
   </>

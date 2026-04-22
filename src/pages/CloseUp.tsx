@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import BookingCTA from "@/components/landing/BookingCTA";
+import StadtLinks from "@/components/landing/StadtLinks";
 import AnimatedWords from "@/components/landing/AnimatedWords";
 import BackgroundHero from "@/components/landing/BackgroundHero";
 import VideoHero from "@/components/landing/VideoHero";
@@ -339,6 +340,7 @@ const CloseUp = () => (
     <VergleichSection />
     <TestimonialsSlider />
     <FAQCloseUp />
+    <StadtLinks headline="Close-Up Magie in deiner Stadt." />
     <BookingCTA headline={"Hautnah erleben."} subline="Close-Up Magie für dein Event — lass uns sprechen und das perfekte Konzept entwickeln." />
   </PageLayout>
   </>
