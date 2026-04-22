@@ -74,18 +74,20 @@ const statusEmoji = (status: string | null): string => {
 };
 
 serve(async () => {
-  // Events mit Kundennamen laden
+  // Events mit Kundennamen laden (ohne stornierte/abgelehnte)
   const { data: events, error: eventsError } = await supabase
     .from("portal_events")
     .select("*, customer:customer_id(name, company, email, phone)")
-    .is("deleted_at", null);
+    .is("deleted_at", null)
+    .not("status", "in", "(storniert,abgelehnt)");
 
-  // Nur offene Anfragen (ohne event_id = noch nicht gebucht)
+  // Nur offene Anfragen (ohne event_id = noch nicht gebucht, ohne stornierte/abgelehnte)
   const { data: requests, error: requestsError } = await supabase
     .from("portal_requests")
     .select("*")
     .is("deleted_at", null)
-    .is("event_id", null);
+    .is("event_id", null)
+    .not("status", "in", "(storniert,abgelehnt)");
 
   // ToDos mit Datum
   const { data: todos } = await supabase

@@ -107,8 +107,8 @@ export default function AdminKalender() {
     const load = async () => {
       setLoading(true);
       const [evtRes, reqRes, ownRes, srcRes, todoRes] = await Promise.all([
-        supabase.from("portal_events").select("id,title,event_date,start_time,location,status,guests,format,customer_id").order("event_date", { ascending: true }),
-        supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id,email,telefon,gaeste,nachricht").is("event_id", null).order("datum", { ascending: true }),
+        supabase.from("portal_events").select("id,title,event_date,start_time,location,status,guests,format,customer_id").not("status", "in", "(storniert,abgelehnt)").order("event_date", { ascending: true }),
+        supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id,email,telefon,gaeste,nachricht").is("event_id", null).not("status", "in", "(storniert,abgelehnt)").order("datum", { ascending: true }),
         supabase.from("calendar_events_cache").select("id,summary,start_date,start_time,end_date,end_time,all_day,source_id,location,description").order("start_date", { ascending: true }),
         supabase.from("calendar_sources").select("id,name,color"),
         supabase.from("portal_todos").select("id,title,due_date,status,priority").not("due_date", "is", null).neq("status", "erledigt").order("due_date"),
