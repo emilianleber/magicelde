@@ -115,7 +115,10 @@ Neben Nürnberg bediene ich die gesamte Metropolregion — Fürth, Erlangen, Sch
 
 Das Augsburger Publikum schätzt Entertainment, das unterhaltsam und professionell zugleich ist — kein Lametta, keine Klischees, sondern echte Magie mit echtem Humor. Genau das ist mein Stil.
 
-Kosten für einen Zauberer in Augsburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."wuerzburg",
+Kosten für einen Zauberer in Augsburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "wuerzburg",
     name: "Würzburg",
     region: "Bayern",
     intro: "Würzburg — die Stadt der Residenz, des Weins und unvergesslicher Events. Als Zauberer für Würzburg bringe ich moderne Magie in die Mainmetropole Unterfrankens. Von der Weinfest-Gala bis zur Firmenfeier im Residenzschloss.",
@@ -131,7 +134,10 @@ Kosten für einen Zauberer in Augsburg: Meine Pakete beginnen ab 395 €. Kontak
 
 Ob Weinprobe-Gala im Bürgerspital, Firmenfeier im Congress Centrum oder Hochzeit in der Residenz — Würzburg bietet traumhafte Locations. Mein Programm passt sich dem stilvollen Ambiente der Barockstadt an.
 
-Preise Zauberer Würzburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."ingolstadt",
+Preise Zauberer Würzburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "ingolstadt",
     name: "Ingolstadt",
     region: "Bayern",
     intro: "In der Audi-Stadt Ingolstadt bringe ich Innovation und Magie zusammen. Als Zauberer für Ingolstadt liefere ich modernes Entertainment für Corporate Events, Firmenfeiern und private Feiern — perfekt für eine Stadt, die Innovation lebt.",
@@ -147,7 +153,10 @@ Preise Zauberer Würzburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Firmenfeiern im Audi Forum, Weihnachtsfeiern für Automobilzulieferer oder Galas im Stadttheater — Ingolstadt bietet großartige Eventlocations. Als Zauberer für Ingolstadt entwickle ich für jede Veranstaltung das passende Showprogramm.
 
-Zauberer Ingolstadt Kosten: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."passau",
+Zauberer Ingolstadt Kosten: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "passau",
     name: "Passau",
     region: "Bayern",
     intro: "Die Dreiflüssestadt Passau bietet einzigartige Locations für Events, die mit moderner Magie gekrönt werden. Als Zauberer für Passau bringe ich Close-Up Magie und Bühnenshow an den Zusammenfluss von Donau, Inn und Ilz.",
@@ -163,7 +172,10 @@ Zauberer Ingolstadt Kosten: Meine Pakete beginnen ab 395 €. Kontaktiere mich f
 
 Passaus einzigartiges Flair aus Geschichte, Wasser und Kultur macht jedes Event besonders. Als Zauberkünstler für Passau schaffe ich Momente, die zu dieser einzigartigen Kulisse passen — überraschend, interaktiv und stimmungsvoll.
 
-Kosten Zauberer Passau: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."landshut",
+Kosten Zauberer Passau: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "landshut",
     name: "Landshut",
     region: "Bayern",
     intro: "Landshut — die Stadt der Landshuter Hochzeit — verdient Magie, die begeistert. Als Zauberer für Landshut bringe ich modernes Entertainment zu Firmenfeiern, Hochzeiten und Geburtstagen in der niederbayerischen Hauptstadt.",
@@ -179,7 +191,10 @@ Kosten Zauberer Passau: Meine Pakete beginnen ab 395 €. Kontaktiere mich für 
 
 Die historischen Locations in Landshut bieten eine traumhafte Kulisse für Events, die in Erinnerung bleiben. Mein Programm passt sich dem besonderen Ambiente an — ob elegante Gala auf der Burg oder lebhafte Firmenfeier im Bernlochner.
 
-Preise Zauberer Landshut: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."bamberg",
+Preise Zauberer Landshut: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "bamberg",
     name: "Bamberg",
     region: "Bayern",
     intro: "Bamberg — UNESCO-Welterbestadt und Bierhauptstadt Frankens — bietet den perfekten Rahmen für magische Events. Als Zauberer für Bamberg bringe ich moderne Zauberkunst in historische Gewölbe, Brauereien und elegante Eventlocations.",
@@ -195,7 +210,10 @@ Preise Zauberer Landshut: Meine Pakete beginnen ab 395 €. Kontaktiere mich fü
 
 Von Brauereiführungen mit Zauberei-Einlagen über Firmenfeiern in der Konzert- und Kongresshalle bis zu Hochzeiten im Böttingerhaus — Bamberg bietet einzigartige Locations, die durch professionelle Zauberkunst noch unvergesslicher werden.
 
-Kosten Zauberer Bamberg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."bayreuth",
+Kosten Zauberer Bamberg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "bayreuth",
     name: "Bayreuth",
     region: "Bayern",
     intro: "Bayreuth — die Stadt Richard Wagners — steht für Kultur auf höchstem Niveau. Als Zauberer für Bayreuth liefere ich Entertainment, das diesem Anspruch gerecht wird. Von der Firmenfeier bis zur Gala im Festspielhaus-Umfeld.",
@@ -211,7 +229,10 @@ Kosten Zauberer Bamberg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für
 
 Firmenfeiern in der Stadthalle Bayreuth, Side-Events rund um die Festspiele oder elegante Galas in der Eremitage — das anspruchsvolle Bayreuther Publikum verdient Entertainment auf Top-Niveau.
 
-Preise Zauberer Bayreuth: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."erlangen",
+Preise Zauberer Bayreuth: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "erlangen",
     name: "Erlangen",
     region: "Bayern",
     intro: "Erlangen — Siemens-Stadt, Universitätsstadt und Innovationsstandort. Als Zauberer für Erlangen bringe ich moderne Magie zu Corporate Events, Firmenfeiern und privaten Feiern in der Wissenschaftsstadt Mittelfrankens.",
@@ -227,7 +248,10 @@ Preise Zauberer Bayreuth: Meine Pakete beginnen ab 395 €. Kontaktiere mich fü
 
 Corporate Events im Siemens Campus, Weihnachtsfeiern für Technologieunternehmen oder Hochzeiten in der historischen Orangerie — ich entwickle für jede Veranstaltung das optimale Showkonzept.
 
-Kosten Zauberer Erlangen: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."fuerth",
+Kosten Zauberer Erlangen: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "fuerth",
     name: "Fürth",
     region: "Bayern",
     intro: "Fürth — die Kleeblattstadt direkt neben Nürnberg — bietet mit ihren historischen Locations und modernen Eventspaces den perfekten Rahmen für magische Unterhaltung. Als Zauberer für Fürth bin ich schnell vor Ort.",
@@ -243,7 +267,10 @@ Kosten Zauberer Erlangen: Meine Pakete beginnen ab 395 €. Kontaktiere mich fü
 
 Firmenfeiern in Fürth, Hochzeiten in Schloss Burgfarrnbach oder Geburtstage im Grünen Brauhaus — ich passe mein Programm immer dem Ort und dem Publikum an. Moderner Zauberkünstler-Stil, der begeistert und unterhält.
 
-Preise Zauberer Fürth: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."rosenheim",
+Preise Zauberer Fürth: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "rosenheim",
     name: "Rosenheim",
     region: "Bayern",
     intro: "Rosenheim — das Tor zum Chiemgau — verbindet oberbayerische Gemütlichkeit mit modernem Eventflair. Als Zauberer für Rosenheim bringe ich professionelle Magie zu Firmenfeiern, Hochzeiten und besonderen Anlässen zwischen Inn und Alpen.",
@@ -259,7 +286,10 @@ Preise Zauberer Fürth: Meine Pakete beginnen ab 395 €. Kontaktiere mich für 
 
 Von der Inntalhalle über das Kultur + Kongress Zentrum bis zu rustikalen Almhütten im Chiemgau — die Region bietet außergewöhnliche Event-Locations, die durch professionelle Zauberkunst noch unvergesslicher werden.
 
-Kosten Zauberer Rosenheim: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."kempten",
+Kosten Zauberer Rosenheim: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "kempten",
     name: "Kempten",
     region: "Bayern",
     intro: "Kempten — die Hauptstadt des Allgäus — ist einer der ältesten Städte Deutschlands und ein starker Eventstandort. Als Zauberer für Kempten bringe ich moderne Magie ins Allgäu — von der Firmenfeier bis zur Hochzeit mit Bergpanorama.",
@@ -275,7 +305,10 @@ Kosten Zauberer Rosenheim: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Das Allgäu steht für Genuss, Natur und Gastfreundschaft — meine Zauberkunst ergänzt dieses besondere Lebensgefühl perfekt. Ob traditionelles Allgäuer Event oder moderner Corporate Abend — ich passe mein Programm dem Charakter des Anlasses an.
 
-Preise Zauberer Kempten: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."aschaffenburg",
+Preise Zauberer Kempten: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "aschaffenburg",
     name: "Aschaffenburg",
     region: "Bayern",
     intro: "Aschaffenburg — das bayerische Nizza am Main — bietet mit Schloss Johannisburg und zahlreichen Eventlocations den perfekten Rahmen für magische Events. Als Zauberer für Aschaffenburg bringe ich modernes Entertainment nach Unterfranken.",
@@ -291,7 +324,10 @@ Preise Zauberer Kempten: Meine Pakete beginnen ab 395 €. Kontaktiere mich für
 
 Von Firmenevents in der Stadthalle am Schloss über Hochzeiten im Hotel Wilder Mann bis zu privaten Feiern im Schloss Johannisburg-Umfeld — Aschaffenburg bietet tolle Locations, und ich liefere das passende Showkonzept.
 
-Kosten Zauberer Aschaffenburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."straubing",
+Kosten Zauberer Aschaffenburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "straubing",
     name: "Straubing",
     region: "Bayern",
     intro: "Straubing — die Gäuboden-Metropole — ist bekannt für das Gäubodenvolksfest und eine lebendige Eventszene. Als Zauberer für Straubing bringe ich moderne Magie in die niederbayerische Stadt an der Donau.",
@@ -307,7 +343,10 @@ Kosten Zauberer Aschaffenburg: Meine Pakete beginnen ab 395 €. Kontaktiere mic
 
 Von Firmenevents in der Fraunhofer-Halle über Hochzeiten im Hotel Asam bis zu Side-Events beim Volksfest — Straubing bietet vielfältige Eventmöglichkeiten, für die ich das passende Programm entwickle.
 
-Preise Zauberer Straubing: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."freising",
+Preise Zauberer Straubing: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "freising",
     name: "Freising",
     region: "Bayern",
     intro: "Freising — die älteste Stadt an der Isar und direkt am Münchner Flughafen gelegen — ist ein idealer Standort für Events mit internationalem Flair. Als Zauberer für Freising bringe ich professionelle Magie zu Firmenfeiern, Hochzeiten und Galas.",
@@ -323,7 +362,10 @@ Preise Zauberer Straubing: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Events am Münchner Flughafen, internationale Konferenzen in den Flughafenhotels oder Hochzeiten am historischen Domberg — Freising bietet eine einzigartige Mischung aus internationaler Erreichbarkeit und bayerischem Charme.
 
-Kosten Zauberer Freising: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."berlin",
+Kosten Zauberer Freising: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "berlin",
     name: "Berlin",
     region: "Berlin",
     intro: "Berlin ist die Stadt der Events und der großen Bühnen. Als Zauberer für Berlin bringe ich moderne Zauberkunst in die Hauptstadt — von Corporate Events in Mitte über Hochzeiten in Charlottenburg bis zu Galas am Potsdamer Platz.",
@@ -364,7 +406,10 @@ Jetzt unverbindlich anfragen: Ich antworte innerhalb von 24 Stunden und entwickl
 
 Firmenfeiern in der Speicherstadt, Galas in der Elbphilharmonie-Umgebung, Hochzeiten in der HafenCity — Hamburg bietet Weltklasse-Locations für Weltklasse-Entertainment. Ich liefere genau das: professionell, charmant und unvergesslich.
 
-Kosten Zauberer Hamburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."frankfurt",
+Kosten Zauberer Hamburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "frankfurt",
     name: "Frankfurt",
     region: "Hessen",
     intro: "Frankfurt — die Finanz- und Messestadt am Main — braucht Entertainment auf höchstem Niveau. Als Zauberer für Frankfurt liefere ich genau das: Premium Close-Up Magie, Bühnenshow und Magic Dinner für Corporate Events, Messen und private Feiern.",
@@ -380,7 +425,10 @@ Kosten Zauberer Hamburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für
 
 Von Messeauftritten auf der Frankfurter Messe über Bankenjubiläen in der Alten Oper bis zu exklusiven Galas in der Palmengarten-Orangerie — Frankfurt bietet die wichtigsten Event-Locations Deutschlands, und ich bin dort regelmäßig präsent.
 
-Preise Zauberer Frankfurt: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."stuttgart",
+Preise Zauberer Frankfurt: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "stuttgart",
     name: "Stuttgart",
     region: "Baden-Württemberg",
     intro: "Stuttgart — die Stadt der Ingenieure und Innovationen — verdient Entertainment, das genauso präzise und beeindruckend ist. Als Zauberer für Stuttgart bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events im Schwabenland.",
@@ -396,7 +444,10 @@ Preise Zauberer Frankfurt: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Automotive-Events bei Porsche oder Mercedes, Weihnachtsfeiern im Wizemann, Hochzeiten im Schlosspark oder Galas in der Liederhalle — Stuttgart bietet erstklassige Eventlocations. Mein Programm passt sich dem jeweiligen Stil perfekt an.
 
-Kosten Zauberer Stuttgart: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."koeln",
+Kosten Zauberer Stuttgart: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "koeln",
     name: "Köln",
     region: "Nordrhein-Westfalen",
     intro: "Kölner lieben gute Unterhaltung — und genau die bringe ich mit. Als Zauberer für Köln begeistere ich mit moderner Close-Up Magie und Comedy-Zaubershow auf Firmenfeiern, Hochzeiten und Events am Rhein.",
@@ -412,7 +463,10 @@ Kosten Zauberer Stuttgart: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Vom Karneval-Event über die Weihnachtsfeier im Gürzenich bis zur Hochzeit in der Wolkenburg — Köln bietet wunderbare Locations für Events, die in Erinnerung bleiben. Als Zauberer für Köln bringe ich Close-Up Magie und Bühnenshow, die perfekt zum rheinischen Spirit passen.
 
-Preise Zauberer Köln: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."duesseldorf",
+Preise Zauberer Köln: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "duesseldorf",
     name: "Düsseldorf",
     region: "Nordrhein-Westfalen",
     intro: "Düsseldorf als Mode- und Messestadt verlangt nach hochwertigem Entertainment. Als Zauberer für Düsseldorf liefere ich professionelle Magie für Corporate Events, Galas und exklusive Feiern in der Landeshauptstadt.",
@@ -428,7 +482,10 @@ Preise Zauberer Köln: Meine Pakete beginnen ab 395 €. Kontaktiere mich für e
 
 Von Messeauftritten auf dem Düsseldorfer Messegelände über Fashion-Events in der Altstadt bis zu Hochzeiten in Schloss Benrath — Düsseldorf bietet erstklassige Locations. Als Zauberer für Düsseldorf bringe ich das passende Showkonzept dazu.
 
-Kosten Zauberer Düsseldorf: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."dresden",
+Kosten Zauberer Düsseldorf: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "dresden",
     name: "Dresden",
     region: "Sachsen",
     intro: "Dresden vereint Eleganz und Kultur wie kaum eine andere deutsche Stadt. Als Zauberer für Dresden bringe ich moderne Magie, die sich nahtlos in dieses besondere Ambiente einfügt — von der Semperoper bis zur Frauenkirche.",
@@ -445,7 +502,10 @@ Kosten Zauberer Düsseldorf: Meine Pakete beginnen ab 395 €. Kontaktiere mich 
 
 Von Galas im Taschenbergpalais über Firmenfeiern im Albertinum bis zu Hochzeiten im Residenzschloss-Umfeld — Dresden bietet grandiose Locations. Mein Programm passt sich dem kulturellen Anspruch der Elbestadt an.
 
-Preise Zauberer Dresden: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."leipzig",
+Preise Zauberer Dresden: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "leipzig",
     name: "Leipzig",
     region: "Sachsen",
     intro: "Leipzig ist jung, kreativ und voller Energie — perfekt für moderne Zauberkunst, die überrascht und begeistert. Als Zauberer für Leipzig bringe ich Entertainment zu Events in Sachsens aufstrebender Metropole.",
@@ -462,7 +522,10 @@ Preise Zauberer Dresden: Meine Pakete beginnen ab 395 €. Kontaktiere mich für
 
 Firmenfeiern im Tapetenwerk, Hochzeiten in der Spinnerei oder Galas im Gewandhaus — Leipzig bietet außergewöhnliche Eventlocations mit Charakter. Das Leipziger Publikum liebt Entertainment, das bewegt.
 
-Kosten Zauberer Leipzig: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."hannover",
+Kosten Zauberer Leipzig: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "hannover",
     name: "Hannover",
     region: "Niedersachsen",
     intro: "Als Messestadt Nummer eins bietet Hannover zahlreiche Gelegenheiten für professionelles Event-Entertainment. Als Zauberer für Hannover liefere ich Close-Up Magie, Bühnenshow und Magic Dinner auf höchstem Niveau.",
@@ -479,7 +542,9 @@ Kosten Zauberer Leipzig: Meine Pakete beginnen ab 395 €. Kontaktiere mich für
 
 Messeauftritte auf der Hannover Messe, Kongress-Entertainment im HCC oder Galas in den Herrenhäuser Gärten — Hannover ist ein Top-Eventstandort, und ich liefere das passende Showkonzept. Professionell, interaktiv und unvergesslich.
 
-Preise Zauberer Hannover: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."Für Veranstaltungen im Raum Hannover empfehle ich meinen Kollegen ",
+Preise Zauberer Hannover: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+    kollegenEmpfehlung: {
+      prefix: "Für Veranstaltungen im Raum Hannover empfehle ich meinen Kollegen ",
       linkText: "Zauberer Simabu aus Hannover",
       linkHref: "https://www.simabu.com",
       suffix: " – ein Zauberkünstler aus Hannover mit über 1.500 Auftritten auf Hochzeiten, Firmenfeiern etc. in Hannover und ganz Niedersachsen.",
@@ -503,7 +568,10 @@ Preise Zauberer Hannover: Meine Pakete beginnen ab 395 €. Kontaktiere mich fü
 
 Von Firmenfeiern in den Westfalenhallen über Betriebsevents in der DASA bis zu Hochzeiten in der View Skylounge — Dortmund bietet starke Eventlocations, und ich liefere Entertainment, das das Ruhrgebiets-Publikum begeistert.
 
-Kosten Zauberer Dortmund: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."bremen",
+Kosten Zauberer Dortmund: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "bremen",
     name: "Bremen",
     region: "Bremen",
     intro: "Von der Schlachte bis zum Ratskeller — in Bremen liefere ich Magie, die zur Hansestadt passt. Als Zauberer für Bremen begeistere ich auf Firmenfeiern, Hochzeiten und Events im hohen Norden.",
@@ -520,7 +588,10 @@ Kosten Zauberer Dortmund: Meine Pakete beginnen ab 395 €. Kontaktiere mich fü
 
 Von Events im Übersee-Museum über Firmenfeiern im BLG-Forum bis zu Hochzeiten am Schlachte-Ufer — Bremen bietet einzigartige Locations mit hanseatischem Flair. Mein Programm passt sich dieser besonderen Atmosphäre an.
 
-Preise Zauberer Bremen: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."salzburg",
+Preise Zauberer Bremen: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "salzburg",
     name: "Salzburg",
     region: "Österreich",
     intro: "Auch international buchbar — in der Mozartstadt Salzburg bringe ich moderne Magie auf die Bühne. Als Zauberer für Salzburg liefere ich Entertainment für Events zwischen Festung und Mirabell.",
@@ -537,7 +608,10 @@ Preise Zauberer Bremen: Meine Pakete beginnen ab 395 €. Kontaktiere mich für 
 
 Side-Events zu den Festspielen, Firmenfeiern in Schloss Mirabell oder Hochzeiten im Hotel Sacher — Salzburg bietet Weltklasse-Locations, und ich bringe das passende Showkonzept. Das Salzburger Publikum ist kulturaffin und anspruchsvoll — das schätze ich.
 
-Kosten Zauberer Salzburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."wien",
+Kosten Zauberer Salzburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "wien",
     name: "Wien",
     region: "Österreich",
     intro: "Wien als Kulturhauptstadt verdient Entertainment auf Weltklasse-Niveau. Als Zauberer für Wien bringe ich moderne Magie, die zum Wiener Charme passt — von der Hofburg bis zum Palais Liechtenstein.",
@@ -554,7 +628,10 @@ Kosten Zauberer Salzburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich fü
 
 Von Bällen in der Hofburg über Charity-Galas im Palais Liechtenstein bis zu Firmenfeiern im Museumsquartier — Wien bietet grandioseste Locations, und mein Programm hebt jedes Event auf ein neues Niveau.
 
-Preise Zauberer Wien: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."muenster",
+Preise Zauberer Wien: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "muenster",
     name: "Münster",
     region: "Nordrhein-Westfalen",
     intro: "Münster — Universitätsstadt, Fahrradhauptstadt und kulturelles Zentrum Westfalens. Als Zauberer für Münster bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der lebenswertesten Stadt Deutschlands. Von der historischen Innenstadt bis ins Münsterland.",
@@ -571,7 +648,10 @@ Preise Zauberer Wien: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ei
 
 Von Firmenevents in der Halle Münsterland über Hochzeiten im Schloss Münster bis zu Galas im historischen Rathaus — Münster bietet tolle Locations für Events, die begeistern. Das Münsteraner Publikum ist weltoffen und entertainment-begeistert.
 
-Kosten Zauberer Münster: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."bochum",
+Kosten Zauberer Münster: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "bochum",
     name: "Bochum",
     region: "Nordrhein-Westfalen",
     intro: "Bochum — Kulturstadt im Herzen des Ruhrgebiets. Von der Jahrhunderthalle bis zum RuhrCongress: Als Zauberer für Bochum bringe ich moderne Magie, die genauso überraschend und kraftvoll ist wie die Ruhrgebietskultur selbst.",
@@ -588,7 +668,10 @@ Kosten Zauberer Münster: Meine Pakete beginnen ab 395 €. Kontaktiere mich fü
 
 Von Firmenfeiern im RuhrCongress über Events in der Jahrhunderthalle bis zu Hochzeiten in stylischen Bochumer Locations — ich kenne das Ruhrgebiets-Publikum und liefere Shows, die begeistern und verbinden.
 
-Preise Zauberer Bochum: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."bielefeld",
+Preise Zauberer Bochum: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "bielefeld",
     name: "Bielefeld",
     region: "Nordrhein-Westfalen",
     intro: "Bielefeld — Wirtschaftsstandort in Ostwestfalen-Lippe und Heimat namhafter Unternehmen. Als Zauberer für Bielefeld bringe ich professionelles Entertainment zu Firmenfeiern, Hochzeiten und Events — für eine Stadt, die definitiv existiert.",
@@ -605,7 +688,10 @@ Preise Zauberer Bochum: Meine Pakete beginnen ab 395 €. Kontaktiere mich für 
 
 Von Firmenfeiern in der Stadthalle Bielefeld über Hochzeiten in der Rudolf-Oetker-Halle bis zu Events auf der Sparrenburg — Bielefeld bietet starke Locations, und ich entwickle das passende Showkonzept für jede Veranstaltung.
 
-Kosten Zauberer Bielefeld: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."bonn",
+Kosten Zauberer Bielefeld: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "bonn",
     name: "Bonn",
     region: "Nordrhein-Westfalen",
     intro: "Bonn — Beethovens Geburtsstadt und einstige Bundeshauptstadt am Rhein. Als Zauberer für Bonn liefere ich Entertainment, das dem kulturellen Anspruch dieser besonderen Stadt entspricht — für Firmenfeiern, Hochzeiten und Galas.",
@@ -622,7 +708,10 @@ Kosten Zauberer Bielefeld: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Von internationalen Konferenzen im World Conference Center über Galas in der Beethovenhalle bis zu Hochzeiten am Rhein — Bonn bietet besondere Eventlocations, für die ich das passende Showprogramm entwickle.
 
-Preise Zauberer Bonn: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."wuppertal",
+Preise Zauberer Bonn: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "wuppertal",
     name: "Wuppertal",
     region: "Nordrhein-Westfalen",
     intro: "Wuppertal — Stadt der Schwebebahn, der Kunst und der überraschenden Momente. Als Zauberer für Wuppertal bringe ich Entertainment, das genauso verblüffend ist wie die berühmte Schwebebahn selbst. Firmenfeiern, Hochzeiten und Events im Bergischen Land.",
@@ -639,7 +728,10 @@ Preise Zauberer Bonn: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ei
 
 Von Firmenfeiern in der historischen Stadthalle über Kulturevents im Skulpturenpark Waldfrieden bis zu Hochzeiten in stylischen Locations — ich kenne die besondere Atmosphäre Wuppertals und passe mein Programm entsprechend an.
 
-Kosten Zauberer Wuppertal: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."mannheim",
+Kosten Zauberer Wuppertal: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "mannheim",
     name: "Mannheim",
     region: "Baden-Württemberg",
     intro: "Mannheim — die Quadratestadt an Rhein und Neckar. Als Zauberer für Mannheim bringe ich modernes Entertainment zu Firmenfeiern, Galas und Hochzeiten in einer der dynamischsten Städte Baden-Württembergs. Von der SAP Arena bis zum Rosengarten.",
@@ -656,7 +748,10 @@ Kosten Zauberer Wuppertal: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Von Firmenfeiern in der SAP Arena über Galas im Rosengarten bis zu Hochzeiten in stylischen Mannheimer Locations — ich entwickle für jede Veranstaltung das optimale Showkonzept. Modern, interaktiv und auf hohem Niveau.
 
-Preise Zauberer Mannheim: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."karlsruhe",
+Preise Zauberer Mannheim: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "karlsruhe",
     name: "Karlsruhe",
     region: "Baden-Württemberg",
     intro: "Karlsruhe — die Fächerstadt, Sitz des Bundesverfassungsgerichts und Technologiestandort am Rhein. Als Zauberer für Karlsruhe verbinde ich technische Präzision mit kreativer Magie — für Firmenfeiern, Konferenzen und Events.",
@@ -673,7 +768,10 @@ Preise Zauberer Mannheim: Meine Pakete beginnen ab 395 €. Kontaktiere mich fü
 
 Von IT-Events im ZKM über Firmenfeiern in der Schwarzwaldhalle bis zu Hochzeiten im Schlosspark — Karlsruhe bietet moderne Eventlocations, für die ich passende Showkonzepte entwickle.
 
-Kosten Zauberer Karlsruhe: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."wiesbaden",
+Kosten Zauberer Karlsruhe: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "wiesbaden",
     name: "Wiesbaden",
     region: "Hessen",
     intro: "Wiesbaden — elegante Kurstadt, hessische Landeshauptstadt und Stadt der Villen. Als Zauberer für Wiesbaden bringe ich Entertainment, das dem exklusiven Ambiente dieser besonderen Stadt entspricht — für Galas, Firmenfeiern und Hochzeiten.",
@@ -690,7 +788,10 @@ Kosten Zauberer Karlsruhe: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Von Galas im Kurhaus über Charity-Events in eleganten Wiesbadener Villen bis zu Hochzeiten im Hotel Nassauer Hof — Wiesbaden bietet die vornehmsten Eventlocations Hessens, und mein Programm passt sich dem Niveau entsprechend an.
 
-Preise Zauberer Wiesbaden: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."mainz",
+Preise Zauberer Wiesbaden: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "mainz",
     name: "Mainz",
     region: "Rheinland-Pfalz",
     intro: "Mainz — Karnevalshauptstadt, Medienstadt und Weinstadt am Rhein. Als Zauberer für Mainz bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der rheinland-pfälzischen Landeshauptstadt.",
@@ -707,7 +808,10 @@ Preise Zauberer Wiesbaden: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Von Karneval-Events in der Rheingoldhalle über Medienfirmen-Feiern bis zu Hochzeiten im Kurfürstlichen Schloss — Mainz verbindet Feierlaune und Stil. Als Zauberer für Mainz passe ich mein Programm genau diesem Spirit an.
 
-Kosten Zauberer Mainz: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."magdeburg",
+Kosten Zauberer Mainz: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "magdeburg",
     name: "Magdeburg",
     region: "Sachsen-Anhalt",
     intro: "Magdeburg — Elbe-Metropole, Landeshauptstadt Sachsen-Anhalts und Stadt Otto des Großen. Als Zauberer für Magdeburg bringe ich modernes Entertainment zu Firmenfeiern, Hochzeiten und Events an der Elbe.",
@@ -724,7 +828,10 @@ Kosten Zauberer Mainz: Meine Pakete beginnen ab 395 €. Kontaktiere mich für e
 
 Von Firmenfeiern in der Festung Mark über Galas in der GETEC Arena bis zu Hochzeiten im Kloster Unser Lieben Frauen — Magdeburg bietet eindrucksvolle Locations für Events mit Charakter.
 
-Preise Zauberer Magdeburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."erfurt",
+Preise Zauberer Magdeburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "erfurt",
     name: "Erfurt",
     region: "Thüringen",
     intro: "Erfurt — Thüringens Landeshauptstadt mit Domberg, Krämerbrücke und einer lebendigen Eventszene. Als Zauberer für Erfurt bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und besonderen Anlässen in der grünen Mitte Deutschlands.",
@@ -741,7 +848,10 @@ Preise Zauberer Magdeburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
 
 Von Messeauftritten auf der Messe Erfurt über Galas im Kaisersaal bis zu Hochzeiten an der historischen Krämerbrücke — Erfurt bietet eindrucksvolle Locations im Herzen Deutschlands.
 
-Kosten Zauberer Erfurt: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."freiburg",
+Kosten Zauberer Erfurt: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "freiburg",
     name: "Freiburg",
     region: "Baden-Württemberg",
     intro: "Freiburg im Breisgau — Schwarzwaldtor, Solarstadt und eine der lebenswertesten Städte Deutschlands. Als Zauberer für Freiburg bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der südlichsten Großstadt Deutschlands.",
@@ -758,7 +868,10 @@ Kosten Zauberer Erfurt: Meine Pakete beginnen ab 395 €. Kontaktiere mich für 
 
 Von Firmenfeiern im Konzerthaus über Hochzeiten im Historischen Kaufhaus bis zu Events in der Messe Freiburg — Freiburg verbindet Lebensqualität und Gastfreundschaft. Als Zauberer für Freiburg passe ich mein Programm dem lebensfrohen Spirit der Stadt an.
 
-Preise Zauberer Freiburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."luebeck",
+Preise Zauberer Freiburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "luebeck",
     name: "Lübeck",
     region: "Schleswig-Holstein",
     intro: "Lübeck — die Königin der Hanse, Marzipanstadt und UNESCO-Weltkulturerbe. Als Zauberer für Lübeck bringe ich moderne Magie zu Events in einer der schönsten Altstädte Deutschlands. Vom Holstentor bis zur Musik- und Kongresshalle.",
@@ -775,7 +888,10 @@ Preise Zauberer Freiburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich fü
 
 Von Firmenevents in der Musik- und Kongresshalle über Galas im Buddenbrookhaus bis zu Hochzeiten im Atlantic Hotel — Lübeck bietet einzigartige Locations mit hanseatischem Flair und historischem Charme.
 
-Kosten Zauberer Lübeck: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."kiel",
+Kosten Zauberer Lübeck: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "kiel",
     name: "Kiel",
     region: "Schleswig-Holstein",
     intro: "Kiel — Landeshauptstadt Schleswig-Holsteins, Marinestadt und Gastgeber der weltbekannten Kieler Woche. Als Zauberer für Kiel bringe ich professionelles Entertainment zu Firmenfeiern, Hochzeiten und Events an der Förde.",
@@ -792,7 +908,10 @@ Kosten Zauberer Lübeck: Meine Pakete beginnen ab 395 €. Kontaktiere mich für
 
 Von Kieler Woche-Events über Firmenfeiern in der Sparkassen Arena bis zu Hochzeiten im Kieler Schloss — Kiel bietet maritime Locations mit norddeutschem Charme. Das offene und herzliche Kieler Publikum liebt Entertainment mit echtem Wow-Faktor.
 
-Preise Zauberer Kiel: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot."braunschweig",
+Preise Zauberer Kiel: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "braunschweig",
     name: "Braunschweig",
     region: "Niedersachsen",
     intro: "Braunschweig — die Löwenstadt Niedersachsens im Herzen Deutschlands. Als Zauberer für Braunschweig bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events in der traditionsreichen Stadt zwischen Harz und Heide.",
