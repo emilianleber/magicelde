@@ -9,6 +9,11 @@ import stageImg from "@/assets/stage-show.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import dinnerImg from "@/assets/hero-dinner.jpg";
 import audienceImg from "@/assets/staunen.jpg";
+import firmenfeierImg from "@/assets/hero-firmenfeier-stock.jpg";
+import hochzeitImg from "@/assets/wedding-magic.jpg";
+import haendeImg from "@/assets/haende-interaktion.jpg";
+import heroStageImg from "@/assets/hero-stage.jpg";
+import audienceReactionsImg from "@/assets/audience-reactions.jpg";
 
 const blogImages: Record<string, string> = {
   "warum-zauberkunst-event-unvergesslich-macht": audienceImg,
@@ -33,6 +38,31 @@ const blogImages: Record<string, string> = {
   "hochzeit-unterhaltung-2026": audienceImg,
   "sommerfest-ideen-unternehmen-2026": closeupImg,
   "zauberer-frankfurt-business-events": stageImg,
+};
+
+const blogMidImages: Record<string, string> = {
+  "warum-zauberkunst-event-unvergesslich-macht": heroStageImg,
+  "magic-dinner-was-gaeste-begeistert": heroImg,
+  "close-up-oder-buehnenshow-welches-konzept": haendeImg,
+  "warum-comedy-magie-besser-funktioniert": audienceReactionsImg,
+  "zauberer-hochzeit-tipps": hochzeitImg,
+  "firmenfeier-entertainment-ideen": firmenfeierImg,
+  "zauberer-firmenfeier-buchen-2026": firmenfeierImg,
+  "hochzeitszauberer-wann-richtig": hochzeitImg,
+  "zauberer-muenchen-event-tipps": firmenfeierImg,
+  "magic-dinner-planen-tipps": heroImg,
+  "zauberer-weihnachtsfeier-2026": firmenfeierImg,
+  "teamevent-magie-teambuilding": haendeImg,
+  "zauberer-hamburg-event": heroStageImg,
+  "geburtstag-ideen-erwachsene-zauberer": heroImg,
+  "close-up-oder-buehnenshow-2026": haendeImg,
+  "zauberer-berlin-entertainment": heroStageImg,
+  "zauberer-kosten-was-kostet": audienceReactionsImg,
+  "firmen-gala-planen-tipps": firmenfeierImg,
+  "zauberer-koeln-rhein-events": heroStageImg,
+  "hochzeit-unterhaltung-2026": hochzeitImg,
+  "sommerfest-ideen-unternehmen-2026": haendeImg,
+  "zauberer-frankfurt-business-events": firmenfeierImg,
 };
 
 const blogContent: Record<string, string[]> = {
@@ -266,6 +296,7 @@ const BlogPost = () => {
 
   const content = blogContent[post.slug] || [];
   const image = blogImages[post.slug] || heroImg;
+  const midImage = blogMidImages[post.slug] || closeupImg;
 
   const description = post.excerpt.length > 160 ? post.excerpt.substring(0, 157) + "..." : post.excerpt;
 
@@ -361,7 +392,7 @@ const BlogPost = () => {
           {/* Full-bleed mid-article image */}
           {content.length > 2 && (
             <div className="my-14 overflow-hidden">
-              <img src={image} alt="" className="w-full h-64 md:h-[30rem] object-cover object-top" />
+              <img src={midImage} alt="" className="w-full h-64 md:h-[30rem] object-cover object-top" />
             </div>
           )}
 
