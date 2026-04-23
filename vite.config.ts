@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('framer-motion')) return 'framer-motion';
           if (id.includes('jspdf') || id.includes('html2canvas')) return 'pdf';
           if (id.includes('@radix-ui')) return 'radix-ui';
-          if (id.includes('react-dom') || id.includes('react-router') || id.includes('scheduler')) return 'react-vendor';
+          if (id.includes('/node_modules/react/') || id.includes('/node_modules/react-dom/') || id.includes('react-router') || id.includes('scheduler')) return 'react-vendor';
         },
       },
     },
