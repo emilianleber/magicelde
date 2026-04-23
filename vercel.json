@@ -32,8 +32,7 @@
     { "source": "/tischzauberei/", "destination": "/close-up", "permanent": true },
     { "source": "/ploetzlich-magie", "destination": "/", "permanent": true },
     { "source": "/ploetzlich-magie/", "destination": "/", "permanent": true },
-    { "source": "/blog", "destination": "/", "permanent": true },
-    { "source": "/blog/", "destination": "/", "permanent": true },
+
     { "source": "/ask-for-tickets", "destination": "/tickets", "permanent": true },
     { "source": "/ask-for-tickets/", "destination": "/tickets", "permanent": true },
     { "source": "/ask-for-a-show-2", "destination": "/buchung", "permanent": true },

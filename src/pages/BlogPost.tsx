@@ -274,10 +274,10 @@ const BlogPost = () => {
     <Helmet>
       <title>{post.title} | Emilian Leber Magazin</title>
       <meta name="description" content={description} />
-      <link rel="canonical" href={`https://www.magicel.de/magazin/${slug}`} />
+      <link rel="canonical" href={`https://www.magicel.de/blog/${slug}`} />
       <meta property="og:title" content={post.title} />
       <meta property="og:description" content={description} />
-      <meta property="og:url" content={`https://www.magicel.de/magazin/${slug}`} />
+      <meta property="og:url" content={`https://www.magicel.de/blog/${slug}`} />
       <meta property="og:type" content="article" />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
       <meta property="og:locale" content="de_DE" />
@@ -293,7 +293,7 @@ const BlogPost = () => {
         "datePublished": post.date,
         "author": { "@type": "Person", "name": "Emilian Leber" },
         "publisher": { "@type": "Organization", "name": "MagicEL Entertainment", "url": "https://www.magicel.de" },
-        "url": `https://www.magicel.de/magazin/${slug}`
+        "url": `https://www.magicel.de/blog/${slug}`
       })}</script>
     </Helmet>
     <PageLayout>
