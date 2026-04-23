@@ -53,8 +53,8 @@ const HeroSection = () => {
             src={heroImg}
             alt="MagicEL — Comedy-Zauberer Emilian Leber bei einer Live-Performance"
             className="w-full h-[400px] md:h-[560px] object-cover"
-            fetchPriority="high"
-            loading="eager"
+           
+           
           />
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/10 via-transparent to-transparent" />
         </div>

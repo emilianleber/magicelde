@@ -19,8 +19,8 @@ const VideoHero = ({ posterSrc, videoUrl, alt, className = "" }: VideoHeroProps)
             src={posterSrc}
             alt={alt}
             className="w-full h-[400px] md:h-[560px] lg:h-[640px] object-cover"
-            fetchPriority="high"
-            loading="eager"
+           
+           
           />
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 via-transparent to-transparent" />
           {videoUrl && (

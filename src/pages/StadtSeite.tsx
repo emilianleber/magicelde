@@ -152,7 +152,7 @@ const HeroStadt = ({ name, intro, region }: { name: string; intro: string; regio
         </div>
       </div>
       <div className="relative rounded-3xl overflow-hidden max-w-5xl mx-auto mt-20 opacity-0 animate-scale-up" style={{ animationDelay: "0.85s" }}>
-        <img src={heroImg} alt={`Zauberer Emilian Leber auf einem Event in ${name}`} className="w-full h-[400px] md:h-[500px] object-cover object-top" fetchPriority="high" loading="eager" />
+        <img src={heroImg} alt={`Zauberer Emilian Leber auf einem Event in ${name}`} className="w-full h-[400px] md:h-[500px] object-cover object-top" />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/60 to-transparent p-8">
           <p className="font-sans text-sm text-background/80">Emilian Leber — Zauberkünstler & Entertainer für {name}</p>
         </div>
