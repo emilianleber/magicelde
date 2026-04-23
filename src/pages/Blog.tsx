@@ -3,7 +3,6 @@ import PageLayout from "@/components/landing/PageLayout";
 import { blogPosts } from "@/data/blogPosts";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImg from "@/assets/hero-magic.jpg";
 import stageImg from "@/assets/stage-show.jpg";
@@ -45,10 +44,9 @@ const Blog = () => {
   const [activeCategory, setActiveCategory] = useState("Alle");
   const { ref, isVisible } = useScrollReveal();
 
-  const featured = publishedPosts.filter((p) => p.featured);
   const filtered = activeCategory === "Alle"
-    ? publishedPosts.filter((p) => !p.featured)
-    : publishedPosts.filter((p) => p.category === activeCategory && !p.featured);
+    ? publishedPosts
+    : publishedPosts.filter((p) => p.category === activeCategory);
 
   return (
     <>
@@ -69,13 +67,13 @@ const Blog = () => {
       </Helmet>
       <PageLayout>
       {/* Hero */}
-      <section className="relative min-h-[60vh] flex flex-col justify-center overflow-hidden">
-        <div className="container px-6 pt-28 pb-16 md:pt-36 md:pb-24">
+      <section className="relative min-h-[40vh] flex flex-col justify-center overflow-hidden">
+        <div className="container px-6 pt-28 pb-12 md:pt-36 md:pb-16">
           <div className="max-w-5xl mx-auto text-center">
             <div className="opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
               <span className="badge-accent mb-8 inline-flex">Magazin</span>
             </div>
-            <h1 className="headline-hero mb-8 opacity-0 animate-fade-up text-foreground" style={{ animationDelay: "0.3s" }}>
+            <h1 className="headline-hero mb-6 opacity-0 animate-fade-up text-foreground" style={{ animationDelay: "0.3s" }}>
               Insights & Inspirationen.
             </h1>
             <p className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up" style={{ animationDelay: "0.5s" }}>
@@ -86,14 +84,10 @@ const Blog = () => {
         </div>
       </section>
 
-      {blogPosts.length === 0 ? (
-        /* Empty State */
+      {publishedPosts.length === 0 ? (
         <section className="pb-24">
           <div className="container px-6">
             <div className="max-w-2xl mx-auto text-center py-16">
-              <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-8">
-                <span className="text-2xl">&#10024;</span>
-              </div>
               <p className="font-sans text-lg text-muted-foreground leading-relaxed">
                 Bald erscheinen hier spannende Beitr&auml;ge rund um Zauberkunst &amp; Entertainment.
               </p>
@@ -101,90 +95,55 @@ const Blog = () => {
           </div>
         </section>
       ) : (
-        <>
-          {/* Featured Articles */}
-          <section className="pb-20" ref={ref}>
-            <div className="container px-6">
-              <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-                {featured.map((post, i) => (
-                  <Link
-                    key={post.slug}
-                    to={`/blog/${post.slug}`}
-                    className={`group relative rounded-3xl overflow-hidden aspect-[4/3] block ${isVisible ? "animate-fade-up" : "opacity-0"}`}
-                    style={{ animationDelay: `${0.1 + i * 0.1}s` }}
-                  >
-                    <img
-                      src={blogImages[post.slug] ?? (i === 0 ? heroImg : stageImg)}
-                      alt={post.title}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/30 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-8">
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="badge-gradient text-[10px]">{post.category}</span>
-                        <span className="font-sans text-xs text-background/50">{post.readTime}</span>
-                      </div>
-                      <h2 className="font-display text-xl md:text-2xl font-bold text-background mb-3 leading-tight group-hover:underline underline-offset-2">{post.title}</h2>
-                      <p className="font-sans text-sm text-background/60 leading-relaxed line-clamp-2">{post.excerpt}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+        <section className="pb-24" ref={ref}>
+          <div className="container px-6">
+            {/* Category Tabs */}
+            <div className="flex flex-wrap gap-3 justify-center mb-12">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-5 py-2.5 rounded-full font-sans text-sm font-medium transition-all duration-200 ${
+                    activeCategory === cat
+                      ? "bg-foreground text-background"
+                      : "bg-muted text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
-          </section>
 
-          {/* Category Filter */}
-          <section className="section-large section-alt">
-            <div className="container px-6">
-              <div className="flex flex-wrap gap-3 justify-center mb-16">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-5 py-2.5 rounded-full font-sans text-sm font-medium transition-all duration-200 ${
-                      activeCategory === cat
-                        ? "bg-foreground text-background"
-                        : "bg-background text-muted-foreground hover:text-foreground hover:bg-background/80"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                {filtered.map((post) => (
-                  <Link key={post.slug} to={`/blog/${post.slug}`} className="group block">
-                    <div className="rounded-3xl overflow-hidden bg-background h-full flex flex-col hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={blogImages[post.slug] ?? heroImg}
-                          alt={post.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div className="p-7 flex flex-col flex-1">
-                        <div className="flex items-center gap-3 mb-4">
-                          <span className="badge-accent text-[10px]">{post.category}</span>
-                          <span className="font-sans text-xs text-muted-foreground">{post.readTime}</span>
-                        </div>
-                        <h3 className="font-display text-lg font-bold text-foreground mb-3 leading-tight group-hover:text-accent transition-colors">
-                          {post.title}
-                        </h3>
-                        <p className="text-detail text-sm flex-1 mb-5">{post.excerpt}</p>
-                        <div className="flex items-center gap-1 text-accent font-sans text-sm font-medium group-hover:gap-2 transition-all">
-                          Weiterlesen <ArrowRight className="w-4 h-4" />
-                        </div>
-                      </div>
+            {/* Post Grid — all cards full-image style */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {filtered.map((post, i) => (
+                <Link
+                  key={post.slug}
+                  to={`/blog/${post.slug}`}
+                  className={`group relative rounded-3xl overflow-hidden aspect-[4/3] block ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+                  style={{ animationDelay: `${0.05 + i * 0.05}s` }}
+                >
+                  <img
+                    src={blogImages[post.slug] ?? heroImg}
+                    alt={post.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="badge-gradient text-[10px]">{post.category}</span>
+                      <span className="font-sans text-xs text-white/50">{post.readTime}</span>
                     </div>
-                  </Link>
-                ))}
-              </div>
+                    <h2 className="font-display text-base md:text-lg font-bold text-white leading-tight group-hover:underline underline-offset-2">
+                      {post.title}
+                    </h2>
+                  </div>
+                </Link>
+              ))}
             </div>
-          </section>
-        </>
+          </div>
+        </section>
       )}
 
       {/* Newsletter CTA */}
