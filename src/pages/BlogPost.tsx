@@ -303,7 +303,7 @@ const BlogPost = () => {
           <img
             src={image}
             alt={post.title}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-top"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
