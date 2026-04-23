@@ -330,47 +330,103 @@ const BlogPost = () => {
 
         {/* Content */}
         <section className="py-16 md:py-24">
+
+          {/* Intro — first 2 paragraphs */}
+          <div className="container px-6 mb-0">
+            <div className="max-w-2xl mx-auto">
+              {content.slice(0, 2).map((paragraph, i) => {
+                const colonIdx = paragraph.indexOf(': ');
+                const isH = colonIdx > 0 && colonIdx < 55 && paragraph.substring(0, colonIdx).split(' ').length <= 7;
+                if (i === 0) {
+                  return (
+                    <p key={i} className="font-sans text-lg md:text-xl font-medium text-foreground leading-relaxed mb-10 pl-5 border-l-4 border-accent">
+                      {paragraph}
+                    </p>
+                  );
+                }
+                if (isH) {
+                  return (
+                    <div key={i} className="mt-10 mb-6">
+                      <div className="w-8 h-[3px] bg-accent rounded-full mb-4" />
+                      <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-3">{paragraph.substring(0, colonIdx)}</h2>
+                      <p className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed">{paragraph.substring(colonIdx + 2)}</p>
+                    </div>
+                  );
+                }
+                return <p key={i} className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed mb-6">{paragraph}</p>;
+              })}
+            </div>
+          </div>
+
+          {/* Full-bleed mid-article image */}
+          {content.length > 2 && (
+            <div className="my-14 overflow-hidden">
+              <img src={image} alt="" className="w-full h-64 md:h-[30rem] object-cover object-top" />
+            </div>
+          )}
+
+          {/* Rest of content */}
           <div className="container px-6">
             <div className="max-w-2xl mx-auto">
-              {content.map((paragraph, i) => {
-                const colonIdx = paragraph.indexOf(': ');
-                const isHeading = colonIdx > 0 && colonIdx < 55 && paragraph.substring(0, colonIdx).split(' ').length <= 7;
-                if (isHeading) {
-                  const heading = paragraph.substring(0, colonIdx);
-                  const body = paragraph.substring(colonIdx + 2);
-                  return (
-                    <div key={i} className={i === 0 ? "mb-8" : "mt-12 mb-6"}>
-                      <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-3 flex items-start gap-3">
-                        <span className="mt-1 w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
-                          <span className="w-2 h-2 rounded-full bg-accent block" />
-                        </span>
-                        {heading}
-                      </h2>
-                      <p className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed pl-8">
-                        {body}
-                      </p>
-                    </div>
-                  );
-                }
-                if (i === Math.floor(content.length / 2)) {
-                  return (
-                    <div key={i}>
-                      <blockquote className="my-10 px-6 py-6 rounded-2xl bg-accent/8 border-l-4 border-accent">
-                        <p className="font-display text-lg md:text-xl font-semibold text-foreground leading-snug italic">
-                          {paragraph.length > 180 ? paragraph.slice(0, 180).trimEnd() + ' …' : paragraph}
-                        </p>
-                      </blockquote>
-                    </div>
-                  );
-                }
-                return (
-                  <p key={i} className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed mb-6">
-                    {paragraph}
-                  </p>
-                );
-              })}
+              {(() => {
+                let headingCount = 0;
+                const elements: React.ReactNode[] = [];
 
-              {/* CTA box mid-article */}
+                content.slice(2).forEach((paragraph, idx) => {
+                  const i = idx + 2;
+                  const colonIdx = paragraph.indexOf(': ');
+                  const isHeading = colonIdx > 0 && colonIdx < 55 && paragraph.substring(0, colonIdx).split(' ').length <= 7;
+                  const heading = isHeading ? paragraph.substring(0, colonIdx) : '';
+                  const body = isHeading ? paragraph.substring(colonIdx + 2) : paragraph;
+                  const isFazit = isHeading && heading.toLowerCase().startsWith('fazit');
+
+                  if (isHeading) headingCount++;
+                  const hNum = headingCount;
+                  const isCallout = hNum % 3 === 0;
+
+                  // Fazit — dark inverted card
+                  if (isFazit) {
+                    elements.push(
+                      <div key={i} className="mt-14 rounded-2xl bg-foreground p-6 md:p-10">
+                        <p className="font-sans text-xs font-bold uppercase tracking-widest text-background/40 mb-4">Fazit</p>
+                        <p className="font-sans text-base md:text-lg text-background/80 leading-relaxed">{body}</p>
+                      </div>
+                    );
+                    return;
+                  }
+
+                  // Callout card (every 3rd heading) — accent left border
+                  if (isHeading && isCallout) {
+                    elements.push(
+                      <div key={i} className="mt-12 mb-6 rounded-2xl bg-muted/40 border-l-[3px] border-accent pl-6 pr-6 py-6">
+                        <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-3">{heading}</h2>
+                        <p className="font-sans text-base text-muted-foreground leading-relaxed">{body}</p>
+                      </div>
+                    );
+                    return;
+                  }
+
+                  // Regular heading section — small accent line + h2
+                  if (isHeading) {
+                    elements.push(
+                      <div key={i} className="mt-12 mb-6">
+                        <div className="w-8 h-[3px] bg-accent rounded-full mb-4" />
+                        <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-3">{heading}</h2>
+                        <p className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed">{body}</p>
+                      </div>
+                    );
+                    return;
+                  }
+
+                  elements.push(
+                    <p key={i} className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed mb-6">{paragraph}</p>
+                  );
+                });
+
+                return elements;
+              })()}
+
+              {/* CTA box */}
               <div className="mt-14 rounded-3xl overflow-hidden relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-accent via-purple-600 to-pink-600 opacity-90" />
                 <div className="relative z-10 p-8 md:p-10 text-center">
