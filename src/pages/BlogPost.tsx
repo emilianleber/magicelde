@@ -298,62 +298,126 @@ const BlogPost = () => {
     </Helmet>
     <PageLayout>
       <article>
-        {/* Hero */}
-        <section className="pt-28 pb-8 md:pt-36">
-          <div className="container px-6">
-            <div className="max-w-3xl mx-auto">
-              <Link to="/blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent transition-colors mb-8">
-                <ArrowLeft className="w-4 h-4" /> Zurück zum Magazin
-              </Link>
-              <div className="flex items-center gap-3 mb-6">
-                <span className="badge-gradient text-[10px]">{post.category}</span>
-                <span className="font-sans text-xs text-muted-foreground">{post.readTime}</span>
-                <span className="font-sans text-xs text-muted-foreground">·</span>
-                <span className="font-sans text-xs text-muted-foreground">
-                  {new Date(post.date).toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" })}
-                </span>
-              </div>
-              <h1 className="headline-section text-foreground mb-8">{post.title}</h1>
-              <p className="text-body mb-12">{post.excerpt}</p>
+        {/* Full-bleed Hero */}
+        <div className="relative min-h-[70vh] overflow-hidden">
+          <img
+            src={image}
+            alt={post.title}
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+          <div className="relative z-10 flex flex-col justify-end min-h-[70vh] pb-12 md:pb-20 px-6 md:px-12 max-w-4xl mx-auto">
+            <Link to="/blog" className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors mb-8 mt-28">
+              <ArrowLeft className="w-4 h-4" /> Magazin
+            </Link>
+            <div className="flex items-center gap-3 mb-5">
+              <span className="badge-gradient text-[10px]">{post.category}</span>
+              <span className="font-sans text-xs text-white/50">{post.readTime}</span>
+              <span className="font-sans text-xs text-white/30">·</span>
+              <span className="font-sans text-xs text-white/50">
+                {new Date(post.date).toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" })}
+              </span>
             </div>
+            <h1 className="font-display text-3xl md:text-5xl font-bold text-white leading-tight mb-6 max-w-3xl">
+              {post.title}
+            </h1>
+            <p className="font-sans text-base md:text-lg text-white/70 max-w-2xl leading-relaxed">
+              {post.excerpt}
+            </p>
           </div>
-        </section>
-
-        {/* Image */}
-        <section className="pb-16">
-          <div className="container px-6">
-            <div className="max-w-4xl mx-auto rounded-3xl overflow-hidden">
-              <img src={image} alt={post.title} className="w-full h-[300px] md:h-[480px] object-cover" loading="lazy" />
-            </div>
-          </div>
-        </section>
+        </div>
 
         {/* Content */}
-        <section className="pb-24">
+        <section className="py-16 md:py-24">
           <div className="container px-6">
-            <div className="max-w-3xl mx-auto space-y-6">
-              {content.map((paragraph, i) => (
-                <p key={i} className="text-detail text-base md:text-lg leading-relaxed">
-                  {paragraph}
-                </p>
-              ))}
+            <div className="max-w-2xl mx-auto">
+              {content.map((paragraph, i) => {
+                const colonIdx = paragraph.indexOf(': ');
+                const isHeading = colonIdx > 0 && colonIdx < 55 && paragraph.substring(0, colonIdx).split(' ').length <= 7;
+                if (isHeading) {
+                  const heading = paragraph.substring(0, colonIdx);
+                  const body = paragraph.substring(colonIdx + 2);
+                  return (
+                    <div key={i} className={i === 0 ? "mb-8" : "mt-12 mb-6"}>
+                      <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-3 flex items-start gap-3">
+                        <span className="mt-1 w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
+                          <span className="w-2 h-2 rounded-full bg-accent block" />
+                        </span>
+                        {heading}
+                      </h2>
+                      <p className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed pl-8">
+                        {body}
+                      </p>
+                    </div>
+                  );
+                }
+                if (i === Math.floor(content.length / 2)) {
+                  return (
+                    <div key={i}>
+                      <blockquote className="my-10 px-6 py-6 rounded-2xl bg-accent/8 border-l-4 border-accent">
+                        <p className="font-display text-lg md:text-xl font-semibold text-foreground leading-snug italic">
+                          {paragraph.length > 180 ? paragraph.slice(0, 180).trimEnd() + ' …' : paragraph}
+                        </p>
+                      </blockquote>
+                    </div>
+                  );
+                }
+                return (
+                  <p key={i} className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed mb-6">
+                    {paragraph}
+                  </p>
+                );
+              })}
+
+              {/* CTA box mid-article */}
+              <div className="mt-14 rounded-3xl overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-accent via-purple-600 to-pink-600 opacity-90" />
+                <div className="relative z-10 p-8 md:p-10 text-center">
+                  <p className="font-sans text-xs font-semibold uppercase tracking-widest text-white/60 mb-3">Interesse geweckt?</p>
+                  <h3 className="font-display text-2xl md:text-3xl font-bold text-white mb-4 leading-tight">
+                    Jetzt unverbindlich anfragen.
+                  </h3>
+                  <p className="font-sans text-sm text-white/70 mb-6 max-w-sm mx-auto">
+                    Ich berate dich kostenlos und finde das passende Konzept für dein Event.
+                  </p>
+                  <Link
+                    to="/buchung"
+                    className="inline-flex items-center gap-2 bg-white text-foreground font-sans font-semibold text-sm px-7 py-3.5 rounded-full hover:scale-[1.02] transition-transform"
+                  >
+                    Anfrage stellen <ArrowLeft className="w-4 h-4 rotate-180" />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Related */}
-        <section className="section-large section-alt">
+        {/* Related Posts */}
+        <section className="pb-24 section-alt pt-16">
           <div className="container px-6">
-            <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="headline-sub text-foreground">Weitere Artikel.</h2>
-            </div>
-            <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              {blogPosts.filter((p) => p.slug !== slug).slice(0, 2).map((p) => (
-                <Link key={p.slug} to={`/blog/${p.slug}`} className="group">
-                  <div className="rounded-3xl bg-background p-8 hover:shadow-lg transition-shadow duration-300">
-                    <span className="badge-gradient text-[10px] mb-4 inline-flex">{p.category}</span>
-                    <h3 className="font-display text-lg font-bold text-foreground mb-3 group-hover:text-accent transition-colors">{p.title}</h3>
-                    <p className="text-detail text-sm line-clamp-2">{p.excerpt}</p>
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground text-center mb-10">
+              Weitere Artikel.
+            </h2>
+            <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+              {blogPosts.filter((p) => p.slug !== slug).slice(0, 3).map((p) => (
+                <Link
+                  key={p.slug}
+                  to={`/blog/${p.slug}`}
+                  className="group relative rounded-3xl overflow-hidden aspect-[4/3] block"
+                >
+                  <img
+                    src={blogImages[p.slug] ?? image}
+                    alt={p.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <span className="badge-gradient text-[10px] mb-2 inline-flex">{p.category}</span>
+                    <h3 className="font-display text-sm font-bold text-white leading-tight group-hover:underline underline-offset-2">
+                      {p.title}
+                    </h3>
                   </div>
                 </Link>
               ))}
