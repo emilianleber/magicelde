@@ -195,7 +195,7 @@ for (const route of staticRoutes) {
 for (const city of cities) {
   const canonical = `${BASE}/zauberer/${city.slug}`;
   const title = `Zauberer ${city.name} – Emilian Leber | Zaubershow, Close-Up & Magic Dinner`;
-  const description = `Zauberer in ${city.name}: Emilian Leber begeistert mit interaktiver Close-Up Magie, Comedy-Zaubershow & Magic Dinner auf Hochzeiten, Firmenfeiern und Events in ${city.name}. Preise ab 800 € – jetzt unverbindlich anfragen!`;
+  const description = `Zauberer in ${city.name}: Emilian Leber begeistert mit interaktiver Close-Up Magie, Comedy-Zaubershow & Magic Dinner auf Hochzeiten, Firmenfeiern und Events in ${city.name}. Jetzt unverbindlich anfragen!`;
   const html = injectMeta(baseHtml, { title, description, canonical, ogTitle: `Zauberer ${city.name} – Emilian Leber` });
   const dir = join('dist', 'zauberer', city.slug);
   mkdirSync(dir, { recursive: true });

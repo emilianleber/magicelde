@@ -4,8 +4,37 @@ import { blogPosts } from "@/data/blogPosts";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImg from "@/assets/hero-magic.jpg";
 import stageImg from "@/assets/stage-show.jpg";
+import firmenfeierImg from "@/assets/hero-firmenfeier-stock.jpg";
+import hochzeitImg from "@/assets/wedding-magic.jpg";
+import dinnerImg from "@/assets/emilian-magic-dinner.jpg";
+import closeupImg from "@/assets/hero-closeup.jpg";
+import birthdayImg from "@/assets/hero-birthday.jpg";
+import audienceImg from "@/assets/audience-reactions.jpg";
+import staunenImg from "@/assets/staunen.jpg";
+import haendeImg from "@/assets/haende-interaktion.jpg";
+import heroStageImg from "@/assets/hero-stage.jpg";
+
+const blogImages: Record<string, string> = {
+  "zauberer-firmenfeier-buchen-2026": firmenfeierImg,
+  "hochzeitszauberer-wann-richtig": hochzeitImg,
+  "zauberer-muenchen-event-tipps": heroImg,
+  "magic-dinner-planen-tipps": dinnerImg,
+  "zauberer-weihnachtsfeier-2026": stageImg,
+  "teamevent-magie-teambuilding": haendeImg,
+  "zauberer-hamburg-event": heroImg,
+  "geburtstag-ideen-erwachsene-zauberer": birthdayImg,
+  "close-up-oder-buehnenshow-2026": closeupImg,
+  "zauberer-berlin-entertainment": stageImg,
+  "zauberer-kosten-was-kostet": staunenImg,
+  "firmen-gala-planen-tipps": audienceImg,
+  "zauberer-koeln-rhein-events": heroImg,
+  "hochzeit-unterhaltung-2026": hochzeitImg,
+  "sommerfest-ideen-unternehmen-2026": firmenfeierImg,
+  "zauberer-frankfurt-business-events": heroStageImg,
+};
 
 const categories = ["Alle", "Firmenfeiern", "Hochzeit", "Städte", "Magic Dinner", "Close-Up", "Geburtstage", "Ratgeber"];
 
@@ -78,13 +107,14 @@ const Blog = () => {
             <div className="container px-6">
               <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
                 {featured.map((post, i) => (
-                  <article
+                  <Link
                     key={post.slug}
-                    className={`group relative rounded-3xl overflow-hidden aspect-[4/3] ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+                    to={`/blog/${post.slug}`}
+                    className={`group relative rounded-3xl overflow-hidden aspect-[4/3] block ${isVisible ? "animate-fade-up" : "opacity-0"}`}
                     style={{ animationDelay: `${0.1 + i * 0.1}s` }}
                   >
                     <img
-                      src={i === 0 ? heroImg : stageImg}
+                      src={blogImages[post.slug] ?? (i === 0 ? heroImg : stageImg)}
                       alt={post.title}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
@@ -95,10 +125,10 @@ const Blog = () => {
                         <span className="badge-gradient text-[10px]">{post.category}</span>
                         <span className="font-sans text-xs text-background/50">{post.readTime}</span>
                       </div>
-                      <h2 className="font-display text-xl md:text-2xl font-bold text-background mb-3 leading-tight">{post.title}</h2>
+                      <h2 className="font-display text-xl md:text-2xl font-bold text-background mb-3 leading-tight group-hover:underline underline-offset-2">{post.title}</h2>
                       <p className="font-sans text-sm text-background/60 leading-relaxed line-clamp-2">{post.excerpt}</p>
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -124,22 +154,32 @@ const Blog = () => {
               </div>
 
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                {(filtered.length > 0 ? filtered : blogPosts.filter((p) => !p.featured)).map((post) => (
-                  <article key={post.slug} className="group">
-                    <div className="rounded-3xl bg-background p-8 h-full flex flex-col hover:shadow-lg transition-shadow duration-300">
-                      <div className="flex items-center gap-3 mb-5">
-                        <span className="badge-accent text-[10px]">{post.category}</span>
-                        <span className="font-sans text-xs text-muted-foreground">{post.readTime}</span>
+                {filtered.map((post) => (
+                  <Link key={post.slug} to={`/blog/${post.slug}`} className="group block">
+                    <div className="rounded-3xl overflow-hidden bg-background h-full flex flex-col hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                      <div className="relative h-48 overflow-hidden">
+                        <img
+                          src={blogImages[post.slug] ?? heroImg}
+                          alt={post.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
                       </div>
-                      <h3 className="font-display text-lg font-bold text-foreground mb-3 leading-tight group-hover:text-accent transition-colors">
-                        {post.title}
-                      </h3>
-                      <p className="text-detail text-sm flex-1 mb-6">{post.excerpt}</p>
-                      <div className="flex items-center gap-1 text-accent font-sans text-sm font-medium group-hover:gap-2 transition-all">
-                        Weiterlesen <ArrowRight className="w-4 h-4" />
+                      <div className="p-7 flex flex-col flex-1">
+                        <div className="flex items-center gap-3 mb-4">
+                          <span className="badge-accent text-[10px]">{post.category}</span>
+                          <span className="font-sans text-xs text-muted-foreground">{post.readTime}</span>
+                        </div>
+                        <h3 className="font-display text-lg font-bold text-foreground mb-3 leading-tight group-hover:text-accent transition-colors">
+                          {post.title}
+                        </h3>
+                        <p className="text-detail text-sm flex-1 mb-5">{post.excerpt}</p>
+                        <div className="flex items-center gap-1 text-accent font-sans text-sm font-medium group-hover:gap-2 transition-all">
+                          Weiterlesen <ArrowRight className="w-4 h-4" />
+                        </div>
                       </div>
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             </div>
