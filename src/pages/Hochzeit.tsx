@@ -599,80 +599,69 @@ const BuchungsFlowSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const steps = [
     {
-      icon: Phone,
       num: "01",
-      title: "Anfragen",
-      desc: "Schickt mir Datum, Ort und ungefähre Gästezahl. Ich melde mich innerhalb 24h persönlich bei euch.",
-      time: "2 Min",
+      tag: "Heute",
+      title: "Schickt mir eine kurze Anfrage.",
+      desc: "Datum, Ort, ungefähre Gästezahl — mehr braucht es nicht. Antwort innerhalb 24h, persönlich, kein Formular-Bot.",
     },
     {
-      icon: ClipboardList,
       num: "02",
-      title: "Konzept",
-      desc: "Wir besprechen euren Tag in 30 Min am Telefon. Ihr bekommt einen schriftlichen Vorschlag mit Slot, Format und Preis.",
-      time: "30 Min Call",
+      tag: "Innerhalb 1 Woche",
+      title: "30-Minuten-Call zum Tagesablauf.",
+      desc: "Wir gehen euren Tag durch — Trauung, Empfang, Dinner. Ich höre Insider-Anekdoten, ihr bekommt einen schriftlichen Vorschlag mit Slot, Format, Preis.",
     },
     {
-      icon: PartyPopper,
       num: "03",
-      title: "Hochzeit",
-      desc: "Am Tag bin ich pünktlich da, baue alles in Ruhe auf. Ihr genießt euren Tag — ich kümmere mich um den Rest.",
-      time: "Euer großer Tag",
+      tag: "Eurer Hochzeitstag",
+      title: "Ich bin pünktlich da. Ihr genießt.",
+      desc: "Anreise mit Pufferzeit, Aufbau in Ruhe. Während ihr Fotos macht, unterhalte ich eure Gäste. Ihr müsst nichts vorbereiten — ich kümmere mich um den Rest.",
     },
   ];
   return (
     <section ref={ref} className="bg-white section-large border-y border-foreground/8">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            So einfach
+        <div className={`max-w-3xl mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">
+            Vom Erstkontakt bis zur Trauung
           </p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
-            Drei Schritte zur{" "}
+            Drei Schritte,{" "}
             <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              perfekten Hochzeit
+              kein Stress
             </span>
             .
           </h2>
         </div>
-        <div className={`relative ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {/* Single continuous connector line behind the circles */}
+
+        {/* Vertical timeline mit durchgehender Linie links */}
+        <div className={`relative max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {/* Continuous gradient line on left */}
           <div
             aria-hidden
-            className="hidden md:block absolute top-8 left-[16.66%] right-[16.66%] h-px z-0"
-            style={{
-              background:
-                "linear-gradient(90deg, hsl(220 85% 65% / 0.5), hsl(255 75% 65% / 0.7), hsl(285 80% 65% / 0.5))",
-            }}
+            className="absolute left-5 md:left-7 top-3 bottom-3 w-px"
+            style={{ background: "linear-gradient(180deg, hsl(220 85% 65% / 0.6), hsl(255 75% 65% / 0.7), hsl(285 80% 65% / 0.4))" }}
           />
-          <div className="relative z-10 grid md:grid-cols-3 gap-y-10 md:gap-x-8">
-          {steps.map((s) => (
-            <div key={s.num} className="flex flex-col items-start md:items-center text-left md:text-center">
+          <div className="space-y-12 md:space-y-16">
+            {steps.map((s) => (
+              <div key={s.num} className="relative pl-16 md:pl-20">
+                {/* Number bubble on the line */}
                 <div
-                  className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 bg-white"
-                  style={{
-                    background: "white",
-                    boxShadow: "0 0 0 1px rgba(0,0,0,0.06), 0 10px 30px hsl(255 75% 55% / 0.15)",
-                  }}
+                  className="absolute left-0 top-0 w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center font-display font-black text-white text-sm md:text-base shadow-lg"
+                  style={{ background: GRADIENT, boxShadow: "0 0 0 4px white, 0 10px 25px hsl(255 75% 55% / 0.3)" }}
                 >
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center"
-                    style={{ background: GRADIENT }}
-                  >
-                    <s.icon className="w-5 h-5 text-white" />
-                  </div>
+                  {s.num}
                 </div>
-                <p className="text-[11px] tracking-[0.2em] uppercase text-foreground/45 mb-2 font-semibold">
-                  Schritt {s.num} · {s.time}
+                <p className="text-[11px] tracking-[0.22em] uppercase text-foreground/45 mb-2 font-semibold">
+                  {s.tag}
                 </p>
-                <h3 className="font-display text-xl md:text-2xl font-black text-foreground mb-3 leading-tight">
+                <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-[1.25] mb-3">
                   {s.title}
                 </h3>
-                <p className="text-sm md:text-[15px] text-foreground/65 leading-[1.55]">
+                <p className="text-base md:text-[17px] text-foreground/70 leading-[1.65] max-w-xl">
                   {s.desc}
                 </p>
               </div>
-          ))}
+            ))}
           </div>
         </div>
       </div>

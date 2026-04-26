@@ -850,39 +850,75 @@ const MoeglichkeitenSection = () => {
 };
 
 /* 13 · BUCHUNGS-FLOW */
+/* BuchungsFlow als Procurement-Process-Tabelle */
 const BuchungsFlowSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const steps = [
-    { icon: Phone, num: "01", title: "Anfragen", desc: "Schickt mir Datum, Ort, Anlass und ungefähre Gästezahl. Antwort innerhalb 24h.", time: "2 Min" },
-    { icon: ClipboardList, num: "02", title: "Konzept & Angebot", desc: "30-Min-Call: Ablauf, Branche, Markenbotschaft, Tech-Rider. Anschließend schriftliches Angebot mit klar definierten Leistungen.", time: "30 Min" },
-    { icon: PartyPopper, num: "03", title: "Event", desc: "Pünktliche Anreise mit Pufferzeit, eigene Requisiten und Backup-Equipment. Im Anschluss Rechnung mit USt-Ausweis.", time: "Euer Eventtag" },
+  const phasen = [
+    {
+      num: "01",
+      titel: "Anfrage",
+      lead: "2 Min · ihr schickt",
+      output: "Datum, Ort, Anlass, Gästezahl",
+      response: "Antwort innerhalb 24h, persönlich",
+    },
+    {
+      num: "02",
+      titel: "Konzept & Angebot",
+      lead: "30 Min · Call mit mir",
+      output: "Schriftliches Angebot, Tech-Rider, Vertrag",
+      response: "Bei Bedarf Rahmenvertrag & individuelle Konditionen",
+    },
+    {
+      num: "03",
+      titel: "Eventtag",
+      lead: "Pünktlich vor Ort",
+      output: "Show, Backup-Equipment, Notfallnummer",
+      response: "Anschließend Rechnung mit USt-Ausweis",
+    },
   ];
   return (
-    <section ref={ref} className="bg-white section-large border-y border-foreground/8">
+    <section ref={ref} className="bg-foreground/[0.02] section-large border-y border-foreground/8">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">So einfach</p>
+        <div className={`max-w-3xl mb-12 md:mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">Procurement-Prozess</p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
-            Drei Schritte zur{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>perfekten Firmenfeier</span>.
+            Drei Phasen,{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>klare Outputs</span>.
           </h2>
         </div>
-        <div className={`relative ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          <div aria-hidden className="hidden md:block absolute top-8 left-[16.66%] right-[16.66%] h-px z-0" style={{ background: "linear-gradient(90deg, hsl(220 85% 65% / 0.5), hsl(255 75% 65% / 0.7), hsl(285 80% 65% / 0.5))" }} />
-          <div className="relative z-10 grid md:grid-cols-3 gap-y-10 md:gap-x-8">
-            {steps.map((s) => (
-              <div key={s.num} className="flex flex-col items-start md:items-center text-left md:text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 bg-white" style={{ background: "white", boxShadow: "0 0 0 1px rgba(0,0,0,0.06), 0 10px 30px hsl(255 75% 55% / 0.15)" }}>
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: GRADIENT }}>
-                    <s.icon className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-                <p className="text-[11px] tracking-[0.2em] uppercase text-foreground/45 mb-2 font-semibold">Schritt {s.num} · {s.time}</p>
-                <h3 className="font-display text-xl md:text-2xl font-black text-foreground mb-3 leading-tight">{s.title}</h3>
-                <p className="text-sm md:text-[15px] text-foreground/65 leading-[1.55]">{s.desc}</p>
-              </div>
-            ))}
+        {/* B2B-Process-Table mit Spalten Phase / Lead-Time / Output / Antwort */}
+        <div className={`max-w-5xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className="grid grid-cols-12 pb-3 mb-2 border-b-2 border-foreground/15 text-[10px] md:text-xs tracking-[0.2em] uppercase text-foreground/55 font-semibold">
+            <p className="col-span-3 md:col-span-2">Phase</p>
+            <p className="col-span-9 md:col-span-3">Lead-Time</p>
+            <p className="hidden md:block md:col-span-4">Output</p>
+            <p className="hidden md:block md:col-span-3">Antwort</p>
           </div>
+          {phasen.map((p) => (
+            <div key={p.num} className="grid grid-cols-12 gap-y-2 py-7 md:py-8 border-b border-foreground/8 last:border-0 items-start">
+              <div className="col-span-3 md:col-span-2">
+                <p className="font-display text-2xl md:text-3xl font-black leading-none" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                  {p.num}
+                </p>
+                <p className="font-display text-sm md:text-base font-bold text-foreground mt-2">{p.titel}</p>
+              </div>
+              <div className="col-span-9 md:col-span-3">
+                <p className="text-sm md:text-[15px] text-foreground/75 leading-[1.5]">{p.lead}</p>
+              </div>
+              <div className="col-span-12 md:col-span-4 md:hidden">
+                <p className="text-[10px] tracking-[0.18em] uppercase text-foreground/45 mt-3 mb-1 font-semibold">Output</p>
+                <p className="text-sm md:text-[15px] text-foreground/75 leading-[1.5]">{p.output}</p>
+                <p className="text-[10px] tracking-[0.18em] uppercase text-foreground/45 mt-3 mb-1 font-semibold">Antwort</p>
+                <p className="text-sm md:text-[15px] text-foreground/65 leading-[1.5]">{p.response}</p>
+              </div>
+              <div className="hidden md:block md:col-span-4">
+                <p className="text-sm md:text-[15px] text-foreground/75 leading-[1.5]">{p.output}</p>
+              </div>
+              <div className="hidden md:block md:col-span-3">
+                <p className="text-sm md:text-[15px] text-foreground/65 leading-[1.5]">{p.response}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
