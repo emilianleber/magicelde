@@ -1,669 +1,639 @@
-import PageLayout from "@/components/landing/PageLayout";
-import BookingCTA from "@/components/landing/BookingCTA";
-import StadtLinks from "@/components/landing/StadtLinks";
-import HorizontalSlider from "@/components/landing/HorizontalSlider";
-import BackgroundHero from "@/components/landing/BackgroundHero";
-import { TrustStrip, ClientLogos } from "@/components/landing/TrustElements";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { useCounter } from "@/hooks/useCounter";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import corporateHeroImg from "@/assets/hero-firmenfeier-stock.jpg";
-import corporateImg from "@/assets/buehne-zuschauer.jpg";
-import portraitImg from "@/assets/magician-portrait.jpg";
-import closeupImg from "@/assets/closeup.jpg";
-import stageImg from "@/assets/stage-show.jpg";
-import audienceImg from "@/assets/schneider-weisse-closeup.jpg";
-import heroImg from "@/assets/hero-magic.jpg";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
-  Check,
-  X,
-  Star,
-  TrendingUp,
-  Users,
-  Briefcase,
-  Target,
   ArrowRight,
-  Building2,
-  Shield,
-  Lightbulb,
-  MessageCircle,
-  Award,
-  Zap,
+  ArrowUpRight,
+  Star,
+  Users,
   Sparkles,
+  Wine,
+  Mic2,
+  Check,
+  Phone,
+  ClipboardList,
+  PartyPopper,
+  RotateCcw,
+  Building2,
+  Briefcase,
+  Award,
+  TrendingUp,
 } from "lucide-react";
 
-/* 1. Hero */
-const HeroCorporate = () => (
-  <BackgroundHero
-    imageSrc={corporateHeroImg}
-    badge="Zauberer für Firmenfeiern & Events"
-    headline="Events, die"
-    animatedWords={["wirken.", "verbinden.", "beeindrucken.", "bleiben."]}
-    subline="Professionelles Entertainment für Firmenfeiern, Kundenevents und Galas — modern, interaktiv und mit echtem Mehrwert für Gäste, Teams und Unternehmen."
-    ctaPrimary={{ text: "Event anfragen", to: "/buchung" }}
-    ctaSecondary={{ text: "Konzepte ansehen ↓", href: "#showkonzepte" }}
-  />
-);
+import Navigation from "@/components/landing/Navigation";
+import Footer from "@/components/landing/Footer";
+import Chatbot from "@/components/landing/Chatbot";
+import WhatsAppButton from "@/components/landing/WhatsAppButton";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useCounter } from "@/hooks/useCounter";
 
-/* 2. Warum Magie für Firmen */
-const WarumSection = () => {
-  const { ref, isVisible } = useScrollReveal();
+import firmenHeroImg from "@/assets/hero-firmenfeier-stock.jpg";
+import audienceImg from "@/assets/audience-reactions.jpg";
+import staunenImg from "@/assets/staunen.jpg";
+import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
+import moderatorImg from "@/assets/moderator-hero.jpg";
+import buehneDpsgImg from "@/assets/buehne-dpsg.jpg";
+import stageShowImg from "@/assets/stage-show.jpg";
+import emotionenImg from "@/assets/emotionen.jpg";
+import haendeInteraktionImg from "@/assets/haende-interaktion.jpg";
+import closeupImg from "@/assets/closeup.jpg";
+import portraitImg from "@/assets/magician-portrait.jpg";
 
-  return (
-    <section className="section-large" ref={ref}>
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-accent mb-8 inline-flex">Das Problem</span>
-          <h2 className="headline-section text-foreground mb-8">
-            Warum viele Firmenevents austauschbar bleiben.
-          </h2>
-          <div className="space-y-5 text-detail max-w-xl">
-            <p className="text-lg text-muted-foreground font-light leading-relaxed">
-              Hand aufs Herz: Viele Firmenfeiern sind nett organisiert, aber am nächsten Tag
-              schon wieder vergessen.
-            </p>
-            <p>
-              Oft fehlt ein gemeinsames Erlebnis — etwas, das Mitarbeiter, Kunden und Partner
-              gleichzeitig abholt, zum Lachen bringt und ins Gespräch bringt.
-            </p>
-            <p>
-              Genau hier entsteht der Unterschied: Ein Zauberer auf der Firmenfeier ist nicht
-              nur Unterhaltung, sondern ein echter Katalysator für Atmosphäre, Gespräche und
-              bleibende Erinnerungen.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+const GRADIENT =
+  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)";
+const GRADIENT_LIGHT =
+  "linear-gradient(100deg, hsl(220 95% 78%) 0%, hsl(255 85% 78%) 50%, hsl(285 90% 78%) 100%)";
 
-/* 3. Typische Probleme */
-const ProblemeSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  return (
-    <section className="section-large section-alt" ref={ref}>
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="headline-section text-foreground mb-6">Kennen Sie das?</h2>
-        </div>
-        <div
-          className={`grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.15s" }}
-        >
-          {[
-            "Gäste bleiben in ihren Gruppen — kein echtes Networking",
-            "Das Programm ist nett, aber kein echtes Highlight",
-            "Mitarbeiter aus verschiedenen Abteilungen kommen nicht ins Gespräch",
-            "Die Weihnachtsfeier fühlt sich jedes Jahr ähnlich an",
-            "Kundenevents hinterlassen keinen bleibenden Eindruck",
-            "Es fehlt der Moment, über den alle reden",
-          ].map((problem) => (
-            <div key={problem} className="p-6 rounded-3xl bg-background flex items-start gap-3">
-              <X className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
-              <p className="font-sans text-sm text-foreground">{problem}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 4. Lösung */
-const LoesungSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  return (
-    <section className="section-large" ref={ref}>
-      <div className="container px-6">
-        <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
-          <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <span className="badge-accent mb-8 inline-flex">Die Lösung</span>
-            <h2 className="headline-section text-foreground mb-6">
-              Entertainment mit echtem Mehrwert.
-            </h2>
-            <div className="space-y-5 text-detail max-w-lg">
-              <p className="text-lg text-muted-foreground font-light leading-relaxed">
-                Ein Zauberer ist der unterschätzte Gamechanger für Business-Events.
-              </p>
-              <p>
-                Stellen Sie sich vor: Ihre Gäste stehen beim Empfang, und innerhalb von Sekunden
-                lachen alle zusammen, staunen und kommen ganz natürlich ins Gespräch.
-              </p>
-              <p>
-                Genau das ist professionelle Eventmagie: nicht zufällig, sondern gezielt eingesetzt,
-                um Hierarchien aufzulösen, Kommunikation zu fördern und Ihr Event spürbar aufzuwerten.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-10">
-              {[
-                { icon: Users, label: "Networking-Booster" },
-                { icon: TrendingUp, label: "Event-Aufwertung" },
-                { icon: Target, label: "Hohe Erinnerung" },
-                { icon: Briefcase, label: "Professionell" },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center gap-2">
-                  <item.icon className="w-5 h-5 text-accent" />
-                  <span className="font-display text-sm font-bold text-foreground">{item.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
-            <div className="rounded-3xl overflow-hidden">
-              <img
-                src={audienceImg}
-                alt="Begeisterte Gäste bei einem Firmenevent"
-                className="w-full h-[500px] object-cover object-top"
-                loading="lazy"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 5. Einsatzbereiche Slider */
-const EinsatzSlider = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  const bereiche = [
-    {
-      title: "Firmenfeiern & Jahresabschlüsse",
-      desc: "Das Highlight, auf das sich alle freuen — und über das noch Monate gesprochen wird.",
-      icon: Building2,
-    },
-    {
-      title: "Galas & Awards",
-      desc: "Elegantes Entertainment auf höchstem Niveau — passend für anspruchsvolle Events.",
-      icon: Award,
-    },
-    {
-      title: "Messen & Promotions",
-      desc: "Magie, die Aufmerksamkeit erzeugt und Menschen an Ihren Stand zieht.",
-      icon: Target,
-    },
-    {
-      title: "Produktpräsentationen",
-      desc: "Ihre Botschaft, inszeniert mit Staunen und bleibender Wirkung.",
-      icon: Lightbulb,
-    },
-    {
-      title: "Teamevents & Incentives",
-      desc: "Gemeinsames Staunen verbindet und schafft echte Gespräche zwischen Kollegen.",
-      icon: Users,
-    },
-    {
-      title: "Weihnachtsfeiern",
-      desc: "Die Firmenfeier, die endlich anders ist als alle anderen.",
-      icon: Sparkles,
-    },
-  ];
-
-  return (
-    <section className="section-large section-alt" ref={ref}>
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-muted mb-8 inline-flex">Einsatzbereiche</span>
-          <h2 className="headline-section text-foreground mb-6">Vielseitig einsetzbar.</h2>
-        </div>
-        <HorizontalSlider
-          items={bereiche.map((b) => ({
-            content: (
-              <div className="p-8 rounded-3xl bg-background h-full">
-                <b.icon className="w-8 h-8 text-accent mb-5" />
-                <h3 className="font-display text-xl font-bold text-foreground mb-3">{b.title}</h3>
-                <p className="text-detail">{b.desc}</p>
-              </div>
-            ),
-          }))}
-        />
-      </div>
-    </section>
-  );
-};
-
-/* 6. Showformate */
-const ShowkonzepteCorporate = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  return (
-    <section id="showkonzepte" className="section-large" ref={ref}>
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-accent mb-8 inline-flex">Showkonzepte</span>
-          <h2 className="headline-section text-foreground mb-6">Drei Formate für Ihr Event.</h2>
-          <p className="text-body max-w-xl mx-auto">
-            Jedes Format wird individuell auf Anlass, Publikum und Ziel Ihres Events abgestimmt.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            {
-              img: closeupImg,
-              title: "Close-Up Magie",
-              sub: "Empfang & Networking",
-              desc: "Direkt bei Ihren Gästen — interaktive Magie, die Gespräche entfacht und Menschen verbindet.",
-              link: "/close-up",
-            },
-            {
-              img: stageImg,
-              title: "Bühnenshow",
-              sub: "Zentrales Highlight",
-              desc: "Strukturiert, mitreißend und unterhaltsam — die Show für den großen Moment.",
-              link: "/buehnenshow",
-            },
-            {
-              img: heroImg,
-              title: "Individuelles Konzept",
-              sub: "Maßgeschneidert",
-              desc: "Angepasst auf Ihre Marke, Ihre Botschaft und Ihren Anlass — inklusive Einbindung von Firmeninhalten.",
-              link: "/buchung",
-            },
-          ].map((k, i) => (
-            <Link
-              to={k.link}
-              key={k.title}
-              className={`group relative rounded-3xl overflow-hidden aspect-[3/4] ${
-                isVisible ? "animate-fade-up" : "opacity-0"
-              }`}
-              style={{ animationDelay: `${0.15 + i * 0.12}s` }}
-            >
-              <img
-                src={k.img}
-                alt={k.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-8">
-                <p className="font-sans text-[10px] font-bold uppercase tracking-[0.15em] text-background/50 mb-3">
-                  {k.sub}
-                </p>
-                <h3 className="font-display text-2xl md:text-3xl font-bold text-background mb-3">
-                  {k.title}
-                </h3>
-                <p className="font-sans text-sm text-background/70 leading-relaxed max-w-xs">
-                  {k.desc}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 7. Ablauf */
-const AblaufSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  return (
-    <section className="section-large section-alt" ref={ref}>
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-muted mb-8 inline-flex">Ablauf</span>
-          <h2 className="headline-section text-foreground mb-6">So läuft Ihr Event ab.</h2>
-        </div>
-        <div
-          className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-        >
-          {[
-            {
-              num: "01",
-              title: "Briefing",
-              desc: "Wir besprechen Anlass, Ziele, Gästestruktur und Ablauf. Ich berate Sie individuell.",
-            },
-            {
-              num: "02",
-              title: "Konzept",
-              desc: "Sie erhalten ein maßgeschneidertes Angebot mit klarem Konzept und transparenter Planung.",
-            },
-            {
-              num: "03",
-              title: "Vorbereitung",
-              desc: "Ich stimme mich mit Ihrem Team ab und passe die Show an Ihr Event an.",
-            },
-            {
-              num: "04",
-              title: "Performance",
-              desc: "Am Event-Tag bin ich pünktlich vor Ort und sorge für das Entertainment-Highlight.",
-            },
-          ].map((s) => (
-            <div key={s.num} className="p-6 rounded-3xl bg-background">
-              <span className="font-display text-5xl font-bold text-accent/10">{s.num}</span>
-              <h3 className="font-display text-lg font-bold text-foreground mt-2 mb-3">{s.title}</h3>
-              <p className="text-detail text-sm">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 8. Mehrwert für Unternehmen */
-const MehrwertSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  return (
-    <section className="section-large section-dark" ref={ref} style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}>
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-accent mb-8 inline-flex">Mehrwert</span>
-          <h2 className="headline-section text-white mb-6">Mehr als nur <span className="text-gradient">Unterhaltung</span>.</h2>
-        </div>
-        <div
-          className={`grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.15s" }}
-        >
-          {[
-            {
-              icon: Users,
-              title: "Stärkt Kommunikation",
-              desc: "Magie bringt Menschen aus verschiedenen Teams und Abteilungen ganz natürlich ins Gespräch.",
-            },
-            {
-              icon: TrendingUp,
-              title: "Wertet Events auf",
-              desc: "Ihre Veranstaltung wird vom netten Abend zum echten Highlight.",
-            },
-            {
-              icon: Target,
-              title: "Hohe Erinnerungswirkung",
-              desc: "Emotionale Erlebnisse bleiben länger im Gedächtnis — auch für Kunden und Partner.",
-            },
-            {
-              icon: MessageCircle,
-              title: "Networking-Effekt",
-              desc: "Zauberkunst ist der perfekte Gesprächsstarter für Empfänge und Business-Events.",
-            },
-            {
-              icon: Shield,
-              title: "Zuverlässige Planung",
-              desc: "Professionelle Abwicklung, pünktlich und souverän — ohne Mehraufwand für Ihr Team.",
-            },
-            {
-              icon: Zap,
-              title: "Emotionale Markenbindung",
-              desc: "Positive Emotionen verbinden sich direkt mit Ihrem Unternehmen und Ihrem Event.",
-            },
-          ].map((item) => (
-            <div key={item.title} className="p-6 rounded-3xl glass transition-all duration-300 group">
-              <item.icon className="w-7 h-7 text-accent mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="font-display text-lg font-bold text-white mb-2">{item.title}</h3>
-              <p className="text-white/60 text-sm">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 9. Bewertungen */
-const ReferenzenSlider = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  const testimonials = [
-    {
-      quote:
-        "Wir hatten Emilian - den jungen Magier - für unsere 20er-Jahre-Party auf der Donau gebucht, und er war einfach großartig! Mit seinen beeindruckenden Kartentricks und anderen kleinen Zaubereien hat er die Gäste an den Tischen immer wieder überrascht und begeistert. Besonders schön war, wie er alle aktiv in seine Tricks eingebunden hat – das hat für eine tolle Atmosphäre gesorgt. Hut ab, wenn man bedenkt, dass er noch so jung ist. Absolute Empfehlung für jede Veranstaltung, die etwas Magisches braucht!",
-      author: "Christian Schürmann",
-      role: "Local Guide · 8 Rezensionen · 13 Fotos · vor einem Jahr",
-    },
-    {
-      quote:
-        "Die Agenturgruppe Wächter aus München bedankt sich vielmals bei Emilian, der rund 200 geladene Gäste eines Bayerischen Versicherungsunternehmens mit einer eigens entwickelten Zaubertrickshow in einem inszenierten Magic Camp begeistert hat - es war einfach Mega!",
-      author: "Jan von Lehmann",
-      role: "1 Rezension · vor 8 Monaten",
-    },
-    {
-      quote:
-        "Lieber Emilian, vielen Dank für den gelungenen Abend bei unserem Magic Dinner im Wald & Wiese. Die Show war professionell, unterhaltsam und bei unseren Gästen durchweg sehr gut angekommen. Die Stimmung im Restaurant war hervorragend und das Feedback zum gesamten Event äußerst positiv. Auch die Zusammenarbeit und Abstimmung im Vorfeld sowie während des Abends war zuverlässig und angenehm. Wir freuen uns auf weitere gemeinsame Veranstaltungen.",
-      author: "Sophia Leber",
-      role: "3 Rezensionen · vor einem Monat",
-    },
-  ];
-
-  return (
-    <section className="section-large section-dark" ref={ref} style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(225 80% 20% / 0.5) 0%, #08080d 70%)" }}>
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="headline-section text-white">Was Kunden <span className="text-gradient">sagen</span>.</h2>
-        </div>
-        <HorizontalSlider
-          items={testimonials.map((t) => ({
-            content: (
-              <blockquote className="p-8 rounded-3xl glass h-full flex flex-col">
-                <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <p className="font-sans text-base text-white/80 leading-relaxed mb-6 flex-1">
-                  „{t.quote}"
-                </p>
-                <footer>
-                  <p className="font-sans text-sm font-semibold text-white">{t.author}</p>
-                  <p className="font-sans text-xs text-white/40">{t.role}</p>
-                </footer>
-              </blockquote>
-            ),
-          }))}
-        />
-      </div>
-    </section>
-  );
-};
-
-/* 10. Case Studies */
-const CaseStudies = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  return (
-    <section className="section-large" ref={ref}>
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span className="badge-accent mb-8 inline-flex">Beispiele</span>
-          <h2 className="headline-section text-foreground mb-6">So setze ich Events um.</h2>
-        </div>
-        <div
-          className={`grid md:grid-cols-2 gap-8 max-w-4xl mx-auto ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.15s" }}
-        >
-          {[
-            {
-              title: "Weihnachtsfeier · 100 Gäste",
-              company: "STRABAG",
-              format: "Close-Up zur Begrüßung + Bühnenshow",
-              result: "Begeisterte Zuschauer und eine unvergessliche Firmenfeier mit starker gemeinsamer Atmosphäre.",
-            },
-            {
-              title: "Jahresabschlussfeier · 150 Gäste",
-              company: "HEIM & HAUS",
-              format: "Close-Up",
-              result: "Magische Connections und ein entspannter, besonderer Ausklang für die Mitarbeiter.",
-            },
-            {
-              title: "Einweihung einer Jugendeinrichtung · 100 Gäste",
-              company: "Stadt Regensburg",
-              format: "Bühnenshow",
-              result: "Standing Ovations und starke Rückmeldungen von Gästen und Verantwortlichen.",
-            },
-            {
-              title: "Charity Event auf dem Oktoberfest · 600 Gäste",
-              company: "Sixt",
-              format: "Close-Up",
-              result: "Begeisterte Gäste, prominente Besucher und eine außergewöhnliche Eventatmosphäre.",
-            },
-          ].map((c) => (
-            <div key={c.title} className="p-8 rounded-3xl bg-muted/40">
-              <h3 className="font-display text-lg font-bold text-foreground mb-2">{c.title}</h3>
-              <p className="font-sans text-xs text-muted-foreground mb-4">{c.company}</p>
-              <div className="space-y-2 text-detail text-sm">
-                <p>
-                  <strong className="text-foreground">Format:</strong> {c.format}
-                </p>
-                <p>
-                  <strong className="text-foreground">Ergebnis:</strong> {c.result}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 11. Vergleich */
-const VergleichCorporate = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  return (
-    <section className="section-large section-alt" ref={ref}>
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <h2 className="headline-section text-foreground mb-6">
-            Nicht irgendein Programmpunkt.
-          </h2>
-        </div>
-        <div
-          className={`grid md:grid-cols-2 gap-12 max-w-4xl mx-auto ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.15s" }}
-        >
-          <div className="p-8 rounded-3xl bg-background border border-border/50">
-            <p className="font-display text-sm font-bold uppercase tracking-widest text-muted-foreground/40 mb-8">
-              Standard-Entertainment
-            </p>
-            <ul className="space-y-5">
-              {[
-                "Klassisch, vorhersehbar, austauschbar",
-                "Wenig Bezug zum Unternehmen",
-                "Reine Unterhaltung ohne Mehrwert",
-                "Kein echter Networking-Effekt",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <X className="w-4 h-4 text-muted-foreground/30 shrink-0 mt-1" />
-                  <span className="text-detail">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="p-8 rounded-3xl bg-accent/5 border border-accent/10">
-            <p className="font-display text-sm font-bold uppercase tracking-widest text-accent mb-8">
-              Emilian Leber
-            </p>
-            <ul className="space-y-5">
-              {[
-                "Modern, souverän und passend für Business-Events",
-                "Individuell auf Unternehmen und Anlass abgestimmt",
-                "Entertainment mit echtem Gesprächs- und Networking-Effekt",
-                "Professionell geplant und zuverlässig umgesetzt",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <Check className="w-4 h-4 text-accent shrink-0 mt-1" />
-                  <span className="font-sans text-sm md:text-base text-foreground">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 12. Stats */
-const StatItem = ({ end, suffix, label }: { end: number; suffix: string; label: string }) => {
-  const { count, ref } = useCounter(end);
-
-  return (
-    <div className="text-center" ref={ref}>
-      <p className="font-display text-5xl md:text-6xl font-bold text-foreground tabular-nums">
-        {count}
-        {suffix}
-      </p>
-      <p className="font-sans text-xs uppercase tracking-widest text-muted-foreground mt-3">
-        {label}
-      </p>
+/* 1 · HERO */
+const Hero = () => (
+  <section className="relative min-h-screen overflow-hidden text-white flex flex-col bg-[#0f0a19]">
+    <div className="absolute inset-0">
+      <img src={firmenHeroImg} alt="" className="h-full w-full object-cover" />
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(100deg, rgba(15,10,25,0.82) 0%, rgba(15,10,25,0.6) 40%, rgba(15,10,25,0.2) 80%, rgba(15,10,25,0.05) 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-48"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent, rgba(15,10,25,0.55))",
+        }}
+      />
     </div>
-  );
-};
 
-const StatsCorporate = () => (
-  <section className="section-medium">
-    <div className="container px-6">
-      <div className="flex flex-wrap justify-center gap-16 md:gap-24">
-        <StatItem end={200} suffix="+" label="Events" />
-        <StatItem end={100} suffix="%" label="Weiterempfehlung" />
-        <StatItem end={10} suffix="+" label="Jahre Erfahrung" />
+    <div className="relative z-10 container px-6 flex-1 flex items-center pt-32 md:pt-36 pb-20 md:pb-24">
+      <div className="w-full max-w-3xl">
+        <div
+          className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-8 opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.1s" }}
+        >
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-amber-300 text-amber-300" />
+              ))}
+            </div>
+            <span className="text-sm text-white/90">
+              <strong className="font-semibold text-white">5,0</strong>
+              <span className="text-white/60"> · 30+ Bewertungen</span>
+            </span>
+          </div>
+          <span aria-hidden className="hidden md:block h-4 w-px bg-white/20" />
+          <span className="text-sm text-white/85">
+            Kunden: <strong className="font-semibold text-white">STRABAG, Sixt, VKB</strong>
+          </span>
+        </div>
+
+        <h1
+          className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,5.6vw,5.25rem)] opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.25s" }}
+        >
+          Macht eure Firmenfeier zum{" "}
+          <span
+            style={{
+              background: GRADIENT_LIGHT,
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Gesprächsstoff
+          </span>
+          .
+        </h1>
+
+        <p
+          className="mt-8 max-w-xl text-lg md:text-xl leading-[1.55] text-white/85 font-light opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.4s" }}
+        >
+          Ihr plant ein Sommerfest, eine Weihnachtsfeier oder ein Kunden-Event?
+          Magie verbindet Abteilungen, bricht Hierarchien auf und liefert den
+          Moment, über den am Montag noch geredet wird.
+        </p>
+
+        <div
+          className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5 opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.55s" }}
+        >
+          <a
+            href="#empfehlung"
+            className="group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[15px] font-semibold text-[#0f0a19] bg-white hover:bg-white/95 transition-transform hover:scale-[1.01] shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
+          >
+            <span>30 Sek: Was passt zum Event?</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </a>
+          <Link
+            to="/buchung"
+            className="inline-flex items-center gap-2 font-display font-semibold text-white/85 hover:text-white border-b-2 border-white/25 hover:border-white pb-1 transition-colors"
+          >
+            Direkt anfragen
+            <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        <p
+          className="mt-4 text-xs md:text-sm text-white/55 opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.7s" }}
+        >
+          Kostenlos · Unverbindlich · Antwort innerhalb 24h · Rechnungsstellung
+        </p>
       </div>
     </div>
   </section>
 );
 
-/* 13. FAQ */
-const FAQEntscheider = () => {
-  const { ref, isVisible } = useScrollReveal();
+/* 2 · QUIZ */
+type Antwort = "klein" | "mittel" | "groß" | "casual" | "formal" | "highend" | "team" | "kunden" | "extern";
 
-  const faqs = [
-    {
-      q: "Wie viel Budget sollten wir einplanen?",
-      a: "Die Investition hängt von Format, Dauer und Umfang ab. Ich erstelle Ihnen nach einem kurzen Briefing ein transparentes, individuelles Angebot — komplett unverbindlich.",
-    },
-    {
-      q: "Können Sie sich an unsere Corporate Identity anpassen?",
-      a: "Absolut. Ich stimme mich auf Ihre Marke, Ihre Botschaft und den Ton Ihres Events ab. Auch die Integration von Firmeninhalten in die Show ist möglich.",
-    },
-    {
-      q: "Wie planen wir das am besten in unseren Ablauf ein?",
-      a: "Ich berate Sie persönlich zum optimalen Timing und Format. Close-Up eignet sich perfekt für Empfang und Networking, die Bühnenshow als zentrales Highlight.",
-    },
-    {
-      q: "Können wir Sie vorab kennenlernen?",
-      a: "Selbstverständlich — ein persönliches Kennenlerngespräch per Video oder Telefon ist Teil meines Services.",
-    },
-  ];
+const QuizSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const [step, setStep] = useState(0);
+  const [groesse, setGroesse] = useState<Antwort | null>(null);
+  const [stil, setStil] = useState<Antwort | null>(null);
+  const [zielgruppe, setZielgruppe] = useState<Antwort | null>(null);
+
+  const reset = () => { setStep(0); setGroesse(null); setStil(null); setZielgruppe(null); };
+
+  const empfehlung = (() => {
+    if (!groesse || !stil || !zielgruppe) return null;
+    if (zielgruppe === "kunden") {
+      return {
+        format: "Bühnenshow als Show-Highlight",
+        sub: "15–60 Min · vor oder nach dem Dinner",
+        why: "Bei Kunden-Events zählt der Wow-Effekt. Eine durchkomponierte Show — abgestimmt auf eure Branche, mit eingebauter Markenbotschaft — bleibt lange in Erinnerung.",
+        link: "/buehnenshow",
+      };
+    }
+    if (zielgruppe === "team") {
+      return {
+        format: "Close-Up beim Networking",
+        sub: "20–70 Min · während Empfang & Häppchen",
+        why: "Mitarbeiter aus verschiedenen Abteilungen kommen ins Gespräch. Magie ist der natürlichste Eisbrecher — danach reden alle miteinander, nicht nur in der eigenen Bubble.",
+        link: "/close-up",
+      };
+    }
+    if (zielgruppe === "extern") {
+      return {
+        format: "Komplett-Begleitung",
+        sub: "Empfang + Show + Walking-Act",
+        why: "Wenn externe Gäste, Partner und Mitarbeiter zusammenkommen, braucht ihr durchgehende Highlights. Magie als roter Faden über den ganzen Abend.",
+        link: "/buchung",
+      };
+    }
+    return null;
+  })();
+
+  const Step = ({ title, options, onChoice, selected }: { title: string; options: { value: Antwort; label: string; sub?: string }[]; onChoice: (v: Antwort) => void; selected: Antwort | null }) => (
+    <div>
+      <p className="font-display text-xl md:text-2xl font-bold text-foreground mb-6 leading-tight">{title}</p>
+      <div className="grid sm:grid-cols-3 gap-3">
+        {options.map((o) => (
+          <button
+            key={o.value}
+            onClick={() => onChoice(o.value)}
+            className={`text-left p-5 transition-all ${selected === o.value ? "bg-foreground text-white" : "bg-foreground/[0.04] hover:bg-foreground/[0.08] text-foreground"}`}
+            style={{ borderRadius: "0.6rem" }}
+          >
+            <p className="font-display text-base md:text-lg font-bold leading-tight mb-1">{o.label}</p>
+            {o.sub && (
+              <p className="text-[12px] leading-snug" style={{ color: selected === o.value ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.55)" }}>
+                {o.sub}
+              </p>
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
-    <section className="section-large section-alt" ref={ref}>
+    <section id="empfehlung" ref={ref} className="bg-white section-large border-y border-foreground/8">
       <div className="container px-6">
-        <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <div className="text-center mb-16">
-            <span className="badge-muted mb-8 inline-flex">FAQ</span>
-            <h2 className="headline-section text-foreground mb-6">Fragen von Entscheidern.</h2>
+        <div className={`max-w-3xl mb-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            In 30 Sekunden zur Empfehlung
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Was passt zu{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              eurer Firmenfeier
+            </span>
+            ?
+          </h2>
+        </div>
+        <div className={`max-w-4xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s", background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "1rem" }}>
+          <div className="px-7 md:px-9 pt-7 pb-3 flex items-center gap-3 border-b border-foreground/8">
+            <div className="flex items-center gap-2">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="h-1.5 rounded-full transition-all" style={{ width: step >= i ? "32px" : "8px", background: step >= i ? "linear-gradient(90deg, hsl(220 85% 55%), hsl(255 75% 55%), hsl(285 85% 55%))" : "rgba(0,0,0,0.12)" }} />
+              ))}
+            </div>
+            <span className="text-[11px] uppercase tracking-wider text-foreground/45 ml-2">{step < 3 ? `Frage ${step + 1} von 3` : "Eure Empfehlung"}</span>
+            {step > 0 && (
+              <button onClick={reset} className="ml-auto inline-flex items-center gap-1 text-xs text-foreground/55 hover:text-foreground transition-colors">
+                <RotateCcw className="w-3 h-3" />Neu starten
+              </button>
+            )}
           </div>
-          <div className="divide-y divide-border/40">
-            {faqs.map((faq) => (
-              <details key={faq.q} className="group py-6">
-                <summary className="flex items-center justify-between cursor-pointer font-sans text-base md:text-lg font-medium text-foreground pr-8 hover:text-accent transition-colors list-none">
-                  {faq.q}
-                  <span className="text-muted-foreground group-open:rotate-45 transition-transform duration-300 text-xl">
-                    +
+          <div className="p-7 md:p-9">
+            {step === 0 && <Step title="Wie groß ist euer Event?" selected={groesse} onChoice={(v) => { setGroesse(v); setStep(1); }} options={[
+              { value: "klein", label: "Bis 50", sub: "Kleines Team-Event" },
+              { value: "mittel", label: "50 – 200", sub: "Abteilungs-/Firmenfest" },
+              { value: "groß", label: "200+", sub: "Großes Corporate-Event" },
+            ]} />}
+            {step === 1 && <Step title="Wie ist der Stil?" selected={stil} onChoice={(v) => { setStil(v); setStep(2); }} options={[
+              { value: "casual", label: "Locker", sub: "Sommerfest, Team-Building" },
+              { value: "formal", label: "Business", sub: "Weihnachtsfeier, Galaabend" },
+              { value: "highend", label: "Premium", sub: "Kunden-Event, Award-Show" },
+            ]} />}
+            {step === 2 && <Step title="Wer ist eingeladen?" selected={zielgruppe} onChoice={(v) => { setZielgruppe(v); setStep(3); }} options={[
+              { value: "team", label: "Eigene Mitarbeiter", sub: "Team-Verbindung im Fokus" },
+              { value: "kunden", label: "Kunden / Partner", sub: "Wow-Effekt für externe Gäste" },
+              { value: "extern", label: "Mix aus beiden", sub: "Networking-Event" },
+            ]} />}
+            {step === 3 && empfehlung && (
+              <div className="animate-fade-up">
+                <p className="text-[11px] tracking-[0.2em] uppercase mb-4 font-semibold" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                  Eure Empfehlung
+                </p>
+                <h3 className="font-display text-3xl md:text-4xl font-black text-foreground mb-3 leading-[1.1]">{empfehlung.format}</h3>
+                <p className="text-sm text-foreground/55 mb-6">{empfehlung.sub}</p>
+                <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6] mb-8 max-w-2xl">{empfehlung.why}</p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link to="/buchung" className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01]" style={{ background: GRADIENT, boxShadow: "0 10px 30px hsl(255 75% 55% / 0.3)" }}>
+                    Jetzt anfragen<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                  <Link to={empfehlung.link} className="inline-flex items-center gap-2 font-display font-bold text-foreground border-b-2 border-foreground/30 hover:border-foreground pb-1 transition-colors self-start py-3.5">
+                    Mehr zum Format<ArrowUpRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 3 · 3 OPTIONEN */
+const OptionenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const optionen = [
+    { icon: Wine, time: "Empfang", title: "Close-Up Magie", desc: "Während Begrüßung, Sektempfang oder Steh-Empfang. Mitarbeiter verschiedener Abteilungen kommen ins Gespräch.", duration: "20–70 Min", passt: "Wenn Networking im Fokus steht" },
+    { icon: Sparkles, time: "Show-Slot", title: "Bühnenshow", desc: "Zentrales Highlight nach Reden oder vor dem freien Teil. Mit eingebauter Markenbotschaft auf Wunsch.", duration: "15–60 Min", passt: "Wenn ihr einen klaren Wow-Moment für alle wollt", featured: true },
+    { icon: Mic2, time: "Komplett", title: "Voll-Begleitung", desc: "Empfang + Show + Walking-Act. Ein roter Faden über das ganze Event hinweg.", duration: "ganzer Abend", passt: "Wenn Magie das Leitthema sein soll" },
+  ];
+  return (
+    <section ref={ref} className="bg-white section-large">
+      <div className="container px-6">
+        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Eure 3 Optionen</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            So <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>entscheidet ihr</span>.
+          </h2>
+        </div>
+        <div className={`grid md:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {optionen.map((o) => (
+            <div key={o.title} className={`relative p-7 md:p-8 flex flex-col ${o.featured ? "text-white" : "text-foreground"}`} style={{
+              background: o.featured ? "linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)" : "rgba(0,0,0,0.02)",
+              border: o.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.06)",
+              borderRadius: "0.75rem",
+              boxShadow: o.featured ? "0 30px 70px -20px rgba(60, 30, 80, 0.4)" : "none",
+            }}>
+              {o.featured && <span className="absolute -top-3 left-7 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" style={{ background: GRADIENT_LIGHT, color: "#0f0a19" }}>Beliebt</span>}
+              <div className="inline-flex items-center justify-center w-11 h-11 rounded-full mb-5" style={{ background: o.featured ? "rgba(255,255,255,0.12)" : "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}>
+                <o.icon className="w-5 h-5" style={{ color: o.featured ? "white" : "hsl(255 60% 40%)" }} />
+              </div>
+              <p className="text-[10px] tracking-[0.2em] uppercase font-semibold mb-2" style={o.featured ? { background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" } : { background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                {o.time} · {o.duration}
+              </p>
+              <h3 className="font-display text-2xl md:text-3xl font-black mb-3 leading-[1.1]">{o.title}</h3>
+              <p className={`text-sm md:text-[15px] leading-[1.55] mb-5 ${o.featured ? "text-white/85" : "text-foreground/70"}`}>{o.desc}</p>
+              <p className={`text-xs leading-[1.5] mt-auto pt-4 border-t ${o.featured ? "text-white/70 border-white/15" : "text-foreground/55 border-foreground/10"}`}>
+                <strong className={o.featured ? "text-white" : "text-foreground"}>Passt</strong>, wenn: {o.passt}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 4 · DREI SEKUNDEN */
+const DreiSekundenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-white section-large">
+      <div className="container px-6">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          <div className={`lg:col-span-6 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
+            <div className="relative overflow-hidden" style={{ borderRadius: "0.75rem", aspectRatio: "4 / 5", boxShadow: "0 40px 80px -25px rgba(40, 20, 60, 0.3), 0 0 0 1px rgba(0,0,0,0.05)" }}>
+              <img src={staunenImg} alt="" className="w-full h-full object-cover" loading="lazy" />
+            </div>
+          </div>
+          <div className={`lg:col-span-6 lg:pl-6 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Der Moment</p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+              Der CEO trifft die Praktikantin —{" "}
+              <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>und beide staunen</span>.
+            </h2>
+            <p className="mt-7 text-lg md:text-xl leading-[1.55] text-foreground/75 font-light">
+              Eine Karte, die vor Sekunden noch in der Hand des Vorstandsvorsitzenden lag, taucht plötzlich in der Brieftasche der neuen Kollegin auf.
+            </p>
+            <p className="mt-5 text-base md:text-[17px] leading-[1.65] text-foreground/65">
+              In dem Moment, in dem alle gemeinsam staunen, verschwinden Hierarchien. Genau das ist der Effekt, den ihr für eure Firmenfeier wollt — Verbindung über Abteilungen hinweg.
+            </p>
+            <div className="mt-8 flex items-center gap-3">
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (<Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />))}
+              </div>
+              <p className="text-sm text-foreground/60">
+                <strong className="text-foreground">200+ Firmenfeiern</strong> haben diesen Moment erlebt — durchgehend 5,0 Sterne.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 5 · BEISPIEL */
+const BeispielSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-white section-large border-y border-foreground/8">
+      <div className="container px-6">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          <div className={`lg:col-span-5 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
+            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Echtes Beispiel</p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
+              Wie eine echte Firmenfeier{" "}
+              <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>ablaufen kann</span>.
+            </h2>
+            <p className="mt-6 text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
+              Damit ihr ein konkretes Bild habt, hier der Ablauf eines Magic Camps für 200 Kunden eines bayerischen Versicherers.
+            </p>
+            <div className="relative overflow-hidden mt-8" style={{ borderRadius: "0.5rem", aspectRatio: "4 / 5", boxShadow: "0 30px 60px -20px rgba(40, 20, 60, 0.25)" }}>
+              <img src={moderatorImg} alt="Firmenfeier-Szene" className="w-full h-full object-cover" loading="lazy" />
+            </div>
+          </div>
+          <div className={`lg:col-span-7 lg:pl-6 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+            <div className="space-y-5">
+              {[
+                { time: "17:30", text: "Ankunft & Setup. Kurze Abstimmung mit Eventmanagern. Briefing zur Branche und einigen Insider-Themen." },
+                { time: "18:00", text: "Empfang. 200 Kunden trudeln ein. Close-Up zwischen den Stehtischen — Eisbrecher zwischen Kollegen unterschiedlicher Filialen." },
+                { time: "19:30", text: "Dinner. Während des Hauptgangs Tisch-zu-Tisch, 5–7 Min pro Tisch. Persönliche Magie für jede Runde." },
+                { time: "21:00", text: "Bühnenshow. 30 Min mit eingebauter Branchenanekdote und einem versteckten Markenbezug. Standing Ovations." },
+                { time: "22:00", text: "Nachklang. Kunden bleiben länger als geplant. Viele fragen nach Visitenkarten und buchen für ihre Privatevents." },
+              ].map((e) => (
+                <div key={e.time} className="flex items-start gap-5">
+                  <span className="font-display text-base md:text-lg font-black tabular-nums shrink-0 leading-none mt-1 px-3 py-1.5 rounded-md" style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))", color: "hsl(255 60% 40%)" }}>
+                    {e.time}
                   </span>
-                </summary>
-                <p className="text-muted-foreground max-w-2xl mt-4">{faq.a}</p>
-              </details>
+                  <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6] flex-1 pt-1">{e.text}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 pt-6 border-t border-foreground/10">
+              <p className="text-sm text-foreground/55 italic">Magic Camp · Bayerischer Versicherer · 200 Kunden · 2024</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 6 · MEGA QUOTE — Jan von Lehmann (Wächter Agentur, echte Bewertung) */
+const MegaQuoteSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="relative overflow-hidden py-28 md:py-36">
+      <div aria-hidden className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full opacity-50 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(285 80% 88%) 0%, transparent 70%)", filter: "blur(70px)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-40 w-[700px] h-[700px] rounded-full opacity-50 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(220 95% 88%) 0%, transparent 70%)", filter: "blur(70px)" }} />
+      <div className="container px-6 relative z-10">
+        <div className={`max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <span aria-hidden className="block font-display font-black leading-none mb-[-2.5rem] md:mb-[-4rem] select-none" style={{ fontSize: "clamp(8rem, 16vw, 16rem)", background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent", opacity: 0.7 }}>"</span>
+          <blockquote>
+            <p className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
+              200 geladene Gäste eines bayerischen Versicherungsunternehmens hat Emilian mit einer eigens entwickelten Zaubertrickshow begeistert —{" "}
+              <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>es war einfach Mega!</span>
+            </p>
+            <footer className="mt-10 flex items-center gap-4">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center font-display font-black text-white text-xl" style={{ background: "linear-gradient(135deg, hsl(220 70% 55%), hsl(255 70% 55%))" }}>J</div>
+              <div>
+                <p className="font-display font-bold text-foreground text-base">Jan von Lehmann</p>
+                <p className="text-sm text-foreground/55">Eventmanagement Wächter Agentur · Google-Bewertung</p>
+              </div>
+              <div className="ml-auto flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (<Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />))}
+              </div>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 7 · STIMMEN */
+const StimmenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const reviews = [
+    { quote: "Es war einfach Mega! 200 Gäste eines bayerischen Versicherungsunternehmens — Emilian hat mit seiner eigens entwickelten Zaubertrickshow alle begeistert.", author: "Jan von Lehmann", anlass: "Wächter Agentur · Firmenfeier", initial: "J", tint: "hsl(220 70% 55%)" },
+    { quote: "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt. Abwicklung sehr professionell.", author: "Martina Senftl", anlass: "Eventkundin · Google-Bewertung", initial: "M", tint: "hsl(285 70% 55%)" },
+    { quote: "Charmant, witzig, professionell — alle Kollegen sprachen am Montag noch davon. Definitiv wieder.", author: "Sales-Team", anlass: "Vertriebsfeier · 80 Mitarbeiter", initial: "S", tint: "hsl(255 70% 55%)" },
+  ];
+  return (
+    <section ref={ref} className="bg-white section-large">
+      <div className="container px-6">
+        <div className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Bewertungen</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
+            Stimmen aus dem{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Business</span>.
+          </h2>
+        </div>
+        <div className={`grid md:grid-cols-3 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {reviews.map((r) => (
+            <article key={r.author} className="relative bg-white p-7 md:p-8 flex flex-col h-full" style={{ borderRadius: "0.75rem", boxShadow: "0 20px 50px -25px rgba(40, 20, 60, 0.2), 0 0 0 1px rgba(0,0,0,0.05)" }}>
+              <div aria-hidden className="absolute top-0 left-7 right-7 h-[2px] rounded-full" style={{ background: "linear-gradient(90deg, hsl(220 85% 65%), hsl(255 75% 65%), hsl(285 80% 65%))" }} />
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, j) => (<Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />))}
+              </div>
+              <p className="text-[15px] leading-[1.6] text-foreground/85 flex-1">„{r.quote}"</p>
+              <footer className="mt-6 pt-6 border-t border-foreground/8 flex items-center gap-3">
+                <div className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center font-display font-black text-white text-lg" style={{ background: `linear-gradient(135deg, ${r.tint}, hsl(255 70% 55%))` }}>{r.initial}</div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-display font-bold text-foreground text-sm">{r.author}</p>
+                  <p className="text-[12px] text-foreground/55 truncate">{r.anlass}</p>
+                </div>
+              </footer>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 8 · GALERIE */
+const GalerieSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const photos = [
+    { img: stageShowImg, span: "lg:col-span-2 lg:row-span-2", pos: "object-center" },
+    { img: closeupImg, span: "", pos: "object-center" },
+    { img: haendeInteraktionImg, span: "", pos: "object-center" },
+    { img: emotionenImg, span: "", pos: "object-center" },
+    { img: portraitImg, span: "", pos: "object-top" },
+  ];
+  return (
+    <section ref={ref} className="bg-white section-large">
+      <div className="container px-6">
+        <div className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Impressionen</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Echte{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Firmenevents</span>.
+          </h2>
+        </div>
+        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-[180px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          {photos.map((p, i) => (
+            <div key={i} className={`${p.span} overflow-hidden group relative`} style={{ borderRadius: "0.5rem" }}>
+              <img src={p.img} alt="" className={`w-full h-full object-cover ${p.pos} group-hover:scale-[1.04] transition-transform duration-700`} loading="lazy" />
+              <div aria-hidden className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: "linear-gradient(135deg, hsl(220 85% 50% / 0.2), hsl(285 80% 50% / 0.2))", mixBlendMode: "overlay" }} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 9 · ZAHLEN */
+const StatBlock = ({ end, suffix, label, desc }: { end: number; suffix: string; label: string; desc: string }) => {
+  const { count, ref } = useCounter(end);
+  return (
+    <div ref={ref}>
+      <p className="font-display font-black leading-none tabular-nums tracking-[-0.02em] text-[clamp(3rem,6vw,5.5rem)]" style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+        {count}{suffix}
+      </p>
+      <p className="text-[11px] tracking-[0.18em] uppercase text-white/55 mt-4">{label}</p>
+      <p className="mt-3 text-sm text-white/65 max-w-[220px] leading-relaxed">{desc}</p>
+    </div>
+  );
+};
+
+const ZahlenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="relative overflow-hidden text-white py-24 md:py-32 lg:py-40 bg-[#0f0a19]">
+      <div className="absolute inset-0">
+        <img src={buehneZuschauerImg} alt="" className="w-full h-full object-cover" />
+        <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(110deg, rgba(15,10,25,0.92) 0%, rgba(30,15,45,0.85) 50%, rgba(15,10,25,0.7) 100%)" }} />
+      </div>
+      <div className="relative z-10 container px-6">
+        <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-white/55 mb-6">Erfahrung in Zahlen</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,5vw,4.75rem)]">
+            Was{" "}
+            <span style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>200+ Firmenfeiern</span>{" "}
+            ausmachen.
+          </h2>
+        </div>
+        <div className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <StatBlock end={200} suffix="+" label="Firmenfeiern" desc="Vom Sommerfest bis zur Galaveranstaltung." />
+          <StatBlock end={10} suffix="+" label="Jahre Routine" desc="Auch wenn der Zeitplan kippt — ich liefere." />
+          <StatBlock end={5} suffix=",0" label="Sterne Bewertung" desc="Top-Bewertungen von Eventmanagern und HR." />
+          <StatBlock end={24} suffix="h" label="Antwortzeit" desc="Persönliche Rückmeldung garantiert — auch im B2B-Tempo." />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 10 · MÖGLICHKEITEN */
+const MoeglichkeitenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const moments = [
+    { icon: Briefcase, title: "Markenbezug in der Show", desc: "Ein Firmensymbol erscheint plötzlich da, wo niemand es vermutet hätte. Markenbotschaft eingebaut — subtil, nicht plakativ." },
+    { icon: Users, title: "Sales-Kick-Off Highlight", desc: "Vor oder nach dem CEO-Talk: Magie als Energizer, der die Stimmung im Raum dreht und die Botschaft bleibt." },
+    { icon: Award, title: "Award-Show / Gala", desc: "Zwischen Preisverleihungen ein Magie-Slot als Atempause. Comedy hält die Spannung, Wow hält die Aufmerksamkeit." },
+    { icon: Wine, title: "Walking-Magic im Empfang", desc: "Während Networking-Smalltalk besuche ich Gruppen — perfekter Eisbrecher für Mitarbeiter aus verschiedenen Standorten." },
+    { icon: Mic2, title: "Moderation & Magie", desc: "Auf Wunsch übernehme ich auch die Moderation — eine Person, ein roter Faden, weniger Setup-Stress." },
+    { icon: TrendingUp, title: "Kunden-Event-Aktivierung", desc: "Bei Roadshows, Messeständen oder Kundentagen: Magie als Magnet, der die Aufmerksamkeit ans Team holt." },
+  ];
+  return (
+    <section ref={ref} className="bg-white section-large border-y border-foreground/8">
+      <div className="container px-6">
+        <div className={`max-w-3xl mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Eure Möglichkeiten</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Was Magie auf eurer{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Firmenfeier</span>{" "}
+            bewirkt.
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Eine Firmenfeier ist mehr als Catering und Reden. Hier konkrete Möglichkeiten, wie ihr Zauberkunst einsetzen könnt — kombinierbar oder einzeln.
+          </p>
+        </div>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {moments.map((m, i) => (
+            <div key={m.title} className="p-7 md:p-8" style={{ background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "0.75rem", animationDelay: `${0.1 + i * 0.06}s` }}>
+              <div className="inline-flex items-center justify-center w-11 h-11 rounded-full mb-5" style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}>
+                <m.icon className="w-5 h-5" style={{ color: "hsl(255 60% 40%)" }} />
+              </div>
+              <h3 className="font-display text-lg md:text-xl font-black mb-3 text-foreground leading-[1.2]">{m.title}</h3>
+              <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/65">{m.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 11 · BUCHUNGS-FLOW */
+const BuchungsFlowSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const steps = [
+    { icon: Phone, num: "01", title: "Anfragen", desc: "Schickt mir Datum, Ort, Anlass und ungefähre Gästezahl. Antwort innerhalb 24h.", time: "2 Min" },
+    { icon: ClipboardList, num: "02", title: "Konzept", desc: "30-Min-Call: Wir besprechen Ablauf, Branche, Wünsche. Ihr bekommt einen schriftlichen Vorschlag.", time: "30 Min" },
+    { icon: PartyPopper, num: "03", title: "Event", desc: "Pünktliche Anreise, eigene Technik & Requisiten — ihr müsst nichts vorbereiten. Inkl. Rechnung mit USt-Ausweis.", time: "Euer großes Event" },
+  ];
+  return (
+    <section ref={ref} className="bg-white section-large border-y border-foreground/8">
+      <div className="container px-6">
+        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">So einfach</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
+            Drei Schritte zur{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>perfekten Firmenfeier</span>.
+          </h2>
+        </div>
+        <div className={`relative ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div aria-hidden className="hidden md:block absolute top-8 left-[16.66%] right-[16.66%] h-px z-0" style={{ background: "linear-gradient(90deg, hsl(220 85% 65% / 0.5), hsl(255 75% 65% / 0.7), hsl(285 80% 65% / 0.5))" }} />
+          <div className="relative z-10 grid md:grid-cols-3 gap-y-10 md:gap-x-8">
+            {steps.map((s) => (
+              <div key={s.num} className="flex flex-col items-start md:items-center text-left md:text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 bg-white" style={{ background: "white", boxShadow: "0 0 0 1px rgba(0,0,0,0.06), 0 10px 30px hsl(255 75% 55% / 0.15)" }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: GRADIENT }}>
+                    <s.icon className="w-5 h-5 text-white" />
+                  </div>
+                </div>
+                <p className="text-[11px] tracking-[0.2em] uppercase text-foreground/45 mb-2 font-semibold">Schritt {s.num} · {s.time}</p>
+                <h3 className="font-display text-xl md:text-2xl font-black text-foreground mb-3 leading-tight">{s.title}</h3>
+                <p className="text-sm md:text-[15px] text-foreground/65 leading-[1.55]">{s.desc}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -672,44 +642,75 @@ const FAQEntscheider = () => {
   );
 };
 
-/* 14. Über mich kurz */
-const UeberMichKurz = () => {
+/* 12 · FAQ */
+const FAQ = () => {
   const { ref, isVisible } = useScrollReveal();
-
+  const faqs = [
+    { q: "Was kostet eine Show für Firmenfeiern?", a: "Pakete starten ab 395€. Endgültiger Preis hängt von Format, Dauer, Anreise und Gästezahl ab. Nach der Anfrage bekommt ihr ein verbindliches Angebot ohne versteckte Kosten — inkl. USt-Ausweis." },
+    { q: "Wie weit im Voraus sollten wir buchen?", a: "Sommerfeste & Weihnachtsfeiern: 3–6 Monate Vorlauf ist ideal. Spontane Slots gehen auch — einfach trotzdem fragen." },
+    { q: "Bei welcher Mitarbeiter-/Gästezahl funktioniert es?", a: "Von 20 bis 500+ Gästen alles möglich. Bei Close-Up erreiche ich auch große Gruppen durch Tisch-zu-Tisch-Magie." },
+    { q: "Können wir die Markenbotschaft einbauen?", a: "Ja, sehr gern. Ein Firmensymbol, ein Slogan oder eine Insider-Anekdote kann subtil in die Show eingewebt werden — nicht plakativ, sondern als Highlight." },
+    { q: "Tritt ihr auch außerhalb Bayerns auf?", a: "Schwerpunkt Bayern und Süddeutschland. Deutschlandweit und auch international buchbar — Anreise wird transparent abgerechnet." },
+    { q: "Erhalten wir eine Rechnung mit USt-Ausweis?", a: "Selbstverständlich. Vollständige Rechnung mit USt-Ausweis, Lieferanschrift und Anlass — vorbereitet für eure Buchhaltung." },
+  ];
   return (
-    <section className="section-large" ref={ref}>
+    <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
-          <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="rounded-3xl overflow-hidden">
-              <img
-                src={portraitImg}
-                alt="Emilian Leber als Zauberer"
-                className="w-full h-auto object-cover"
-                loading="lazy"
-              />
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
+          <div className={`lg:col-span-4 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
+            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">FAQ</p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4vw,3.5rem)] text-foreground">
+              Häufige <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Fragen</span>.
+            </h2>
+          </div>
+          <div className={`lg:col-span-8 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+            <div className="divide-y divide-foreground/10 border-y border-foreground/10">
+              {faqs.map((faq) => (
+                <details key={faq.q} className="group py-6">
+                  <summary className="flex items-center justify-between cursor-pointer font-display text-lg md:text-xl font-bold text-foreground pr-8 list-none hover:text-foreground/70 transition-colors">
+                    {faq.q}
+                    <span className="text-foreground/30 group-open:rotate-45 transition-transform duration-300 text-2xl shrink-0">+</span>
+                  </summary>
+                  <p className="mt-4 text-base leading-[1.65] text-foreground/65 max-w-2xl">{faq.a}</p>
+                </details>
+              ))}
             </div>
           </div>
-          <div
-            className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}
-            style={{ animationDelay: "0.15s" }}
-          >
-            <span className="badge-accent mb-8 inline-flex">Ihr Entertainer</span>
-            <h2 className="headline-sub text-foreground mb-6">Emilian Leber.</h2>
-            <div className="space-y-5 text-detail max-w-lg">
-              <p className="text-lg text-muted-foreground font-light leading-relaxed">
-                Moderner Zauberer mit über 200 Events — von intimen Dinnerformaten bis zu großen Galas.
-              </p>
-              <p>
-                Mein Stil: souverän, humorvoll und professionell. Ich passe mich an jedes Publikum an
-                und sorge dafür, dass Ihr Event das Entertainment-Highlight bekommt, das es verdient.
-              </p>
-            </div>
-            <Link to="/ueber-mich" className="btn-secondary mt-8 group">
-              Mehr erfahren{" "}
-              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 13 · FINAL CTA */
+const FinalCTA = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="relative overflow-hidden text-white py-28 md:py-36 bg-[#0f0a19]">
+      <div className="absolute inset-0">
+        <img src={audienceImg} alt="" className="w-full h-full object-cover" />
+        <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(15,10,25,0.86) 0%, rgba(15,10,25,0.7) 50%, rgba(15,10,25,0.55) 100%)" }} />
+      </div>
+      <div className="relative z-10 container px-6">
+        <div className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] tracking-[0.18em] uppercase text-white/60 mb-8">Euer großes Event</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.02] text-[clamp(2.25rem,5vw,4.75rem)] text-white">
+            Macht euer Event zum{" "}
+            <span style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Gesprächsstoff</span>.
+          </h2>
+          <p className="mt-6 max-w-xl text-lg md:text-xl leading-[1.55] text-white/80 font-light">
+            Schickt mir Datum, Ort und ungefähre Gästezahl — Antwort innerhalb 24h.
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <Link to="/buchung" className="group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[15px] font-semibold text-[#0f0a19] bg-white hover:bg-white/95 transition-transform hover:scale-[1.01] shadow-[0_12px_40px_rgba(0,0,0,0.25)]">
+              <span>Termin sichern</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
+            <a href="tel:+4915563744696" className="inline-flex items-center gap-2 font-display font-semibold text-white/85 hover:text-white border-b-2 border-white/25 hover:border-white pb-1 transition-colors">
+              Direkt anrufen
+            </a>
           </div>
+          <p className="mt-4 text-sm text-white/55">Kostenlos · Unverbindlich · Antwort innerhalb 24h · Rechnung mit USt-Ausweis</p>
         </div>
       </div>
     </section>
@@ -719,62 +720,29 @@ const UeberMichKurz = () => {
 const Firmenfeiern = () => (
   <>
     <Helmet>
-      <title>Firmenfeier Zauberer – Emilian Leber | Zauberer für Firmenfeiern &amp; Events</title>
-      <meta
-        name="description"
-        content="Firmenfeier Zauberer Emilian Leber: interaktive Magie für Firmenfeier, Weihnachtsfeier, Gala & Kundenevent. Close-Up, Bühnenshow oder individuelles Konzept – deutschlandweit buchbar."
-      />
+      <title>Zauberer für Firmenfeiern — Networking, Wow-Effekt, Markenbezug | Emilian Leber</title>
+      <meta name="description" content="Zauberer für Firmenfeiern, Sommerfeste & Weihnachtsfeiern. STRABAG, Sixt, VKB & 200+ Firmenkunden. Magie als Eisbrecher und Show-Highlight — deutschlandweit buchbar." />
       <link rel="canonical" href="https://www.magicel.de/firmenfeiern" />
-      <meta property="og:title" content="Firmenfeier Zauberer – Emilian Leber | Zauberer für Firmenfeiern & Events" />
-      <meta property="og:description" content="Firmenfeier Zauberer Emilian Leber: interaktive Magie für Firmenfeier, Weihnachtsfeier, Gala & Kundenevent. Close-Up, Bühnenshow oder individuelles Konzept." />
-      <meta property="og:url" content="https://www.magicel.de/firmenfeiern" />
-      <meta property="og:type" content="website" />
-      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
-      <meta property="og:locale" content="de_DE" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Firmenfeier Zauberer – Emilian Leber | Zauberer für Firmenfeiern & Events" />
-      <meta name="twitter:description" content="Firmenfeier Zauberer Emilian Leber: interaktive Magie für Firmenfeier, Weihnachtsfeier, Gala & Kundenevent. Close-Up, Bühnenshow oder individuelles Konzept." />
-        <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
-      <script type="application/ld+json">{JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Service",
-        "name": "Zauberer für Firmenfeiern – Emilian Leber",
-        "url": "https://www.magicel.de/firmenfeiern",
-        "description": "Firmenfeier Zauberer Emilian Leber: Close-Up Magie und Bühnenshow für Firmenfeiern, Galas, Weihnachtsfeiern und Kundenevents – deutschlandweit.",
-        "serviceType": "Firmenfeier Zauberer",
-        "areaServed": ["München", "Berlin", "Hamburg", "Frankfurt", "Köln", "Deutschland"],
-        "provider": {
-          "@type": "Person",
-          "name": "Emilian Leber",
-          "jobTitle": "Zauberer & Showkünstler",
-          "url": "https://www.magicel.de"
-        }
-      })}</script>
     </Helmet>
-
-    <PageLayout>
-      <HeroCorporate />
-      <TrustStrip />
-      <ClientLogos title="Bekannt von Events für Unternehmen, Veranstalter und Institutionen." />
-      <ReferenzenSlider />
-      <WarumSection />
-      <ProblemeSection />
-      <LoesungSection />
-      <EinsatzSlider />
-      <ShowkonzepteCorporate />
-      <AblaufSection />
-      <MehrwertSection />
-      <CaseStudies />
-      <VergleichCorporate />
-      <StatsCorporate />
-      <FAQEntscheider />
-      <UeberMichKurz />
-      <StadtLinks headline="Zauberer für Ihre Firmenfeier — bundesweit." />
-      <BookingCTA
-        headline={"Machen Sie Ihr Event\nunvergesslich."}
-        subline="Individuelle Konzepte, professionelle Umsetzung. Lassen Sie uns über Ihr nächstes Event sprechen."
-      />
-    </PageLayout>
+    <Navigation />
+    <main>
+      <Hero />
+      <QuizSection />
+      <OptionenSection />
+      <DreiSekundenSection />
+      <BeispielSection />
+      <MegaQuoteSection />
+      <StimmenSection />
+      <GalerieSection />
+      <ZahlenSection />
+      <MoeglichkeitenSection />
+      <BuchungsFlowSection />
+      <FAQ />
+      <FinalCTA />
+    </main>
+    <Footer />
+    <Chatbot />
+    <WhatsAppButton />
   </>
 );
 
