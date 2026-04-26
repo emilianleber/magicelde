@@ -1008,11 +1008,16 @@ const FAQ = () => {
       ],
     },
   ];
+  const gruppenIcons: Record<string, any> = {
+    "Preis & Vertrag": Briefcase,
+    "Logistik & Technik": ClipboardList,
+    "Show & Briefing": Sparkles,
+  };
   return (
     <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
         <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">FAQ für Entscheider</p>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">FAQ für Entscheider</p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
             Was Eventmanager{" "}
             <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
@@ -1021,25 +1026,44 @@ const FAQ = () => {
             wollen.
           </h2>
         </div>
-        <div className={`max-w-5xl space-y-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {gruppen.map((gruppe) => (
-            <div key={gruppe.label}>
-              <p className="text-[11px] tracking-[0.22em] uppercase font-bold mb-5" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                {gruppe.label}
-              </p>
-              <div className="divide-y divide-foreground/10 border-y border-foreground/10">
-                {gruppe.faqs.map((faq) => (
-                  <details key={faq.q} className="group py-5">
-                    <summary className="flex items-center justify-between cursor-pointer font-display text-base md:text-lg font-bold text-foreground pr-8 list-none hover:text-foreground/70 transition-colors">
-                      {faq.q}
-                      <span className="text-foreground/30 group-open:rotate-45 transition-transform duration-300 text-2xl shrink-0">+</span>
-                    </summary>
-                    <p className="mt-3 text-sm md:text-base leading-[1.65] text-foreground/65 max-w-3xl">{faq.a}</p>
-                  </details>
-                ))}
+        <div className={`grid lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {gruppen.map((gruppe) => {
+            const Icon = gruppenIcons[gruppe.label] || Sparkles;
+            return (
+              <div
+                key={gruppe.label}
+                className="bg-white p-6 md:p-7"
+                style={{
+                  border: "1px solid rgba(0,0,0,0.06)",
+                  borderRadius: "1rem",
+                  boxShadow: "0 20px 50px -25px rgba(40, 20, 60, 0.18)",
+                }}
+              >
+                <div className="flex items-center gap-3 mb-6 pb-5 border-b border-foreground/8">
+                  <span
+                    className="inline-flex items-center justify-center w-10 h-10 rounded-lg"
+                    style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}
+                  >
+                    <Icon className="w-4 h-4" style={{ color: "hsl(255 60% 40%)" }} />
+                  </span>
+                  <p className="font-display text-sm md:text-base font-black text-foreground">
+                    {gruppe.label}
+                  </p>
+                </div>
+                <div className="divide-y divide-foreground/8 -mx-1">
+                  {gruppe.faqs.map((faq) => (
+                    <details key={faq.q} className="group py-4 px-1">
+                      <summary className="flex items-start justify-between cursor-pointer font-display text-sm md:text-[15px] font-bold text-foreground list-none hover:text-foreground/70 transition-colors gap-3">
+                        <span className="flex-1">{faq.q}</span>
+                        <span className="text-foreground/30 group-open:rotate-45 transition-transform duration-300 text-xl shrink-0 leading-none">+</span>
+                      </summary>
+                      <p className="mt-3 text-[13px] md:text-sm leading-[1.6] text-foreground/65">{faq.a}</p>
+                    </details>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
