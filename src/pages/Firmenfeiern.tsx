@@ -787,26 +787,32 @@ const MoeglichkeitenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const wirkungen = [
     {
+      icon: Users,
       effekt: "Eisbrecher zwischen Abteilungen",
       mechanismus: "Close-Up beim Empfang. Mitarbeiter aus verschiedenen Standorten haben binnen 5 Sek. ein gemeinsames Gesprächsthema.",
     },
     {
+      icon: TrendingUp,
       effekt: "Hierarchien lösen sich auf",
       mechanismus: "CEO und Praktikantin staunen gemeinsam über denselben Trick. Nach so einem Moment reden sie auch nach dem Event anders miteinander.",
     },
     {
+      icon: Briefcase,
       effekt: "Markenbotschaft bleibt hängen",
       mechanismus: "Firmensymbol oder Insider-Anekdote subtil in die Show eingebaut — kein Werbespot, sondern ein Magic-Moment, der die Botschaft transportiert.",
     },
     {
+      icon: Zap,
       effekt: "Aufmerksamkeitskurve dreht",
       mechanismus: "Energizer-Slot zwischen Vortragsblöcken bei Strategie-Kickoffs. Aufmerksamkeit zurück auf 100 % für die Nachmittagssession.",
     },
     {
+      icon: Award,
       effekt: "Kunden-Event wird memorabel",
       mechanismus: "Bühnenshow als Highlight bei Roadshows oder Galaabenden. Kunden erinnern sich Wochen später noch — und buchen weitere Termine direkt vor Ort.",
     },
     {
+      icon: Sparkles,
       effekt: "Gespräch am Montag",
       mechanismus: "Eine Karte, die vom CEO in die Brieftasche der Praktikantin wandert, hält länger als jede HR-Kampagne.",
     },
@@ -815,7 +821,7 @@ const MoeglichkeitenSection = () => {
     <section ref={ref} className="bg-white section-large border-y border-foreground/8">
       <div className="container px-6">
         <div className={`max-w-3xl mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Wirkung im Unternehmen</p>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">Wirkung im Unternehmen</p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
             Was Magie{" "}
             <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>konkret bewirkt</span>.
@@ -824,24 +830,39 @@ const MoeglichkeitenSection = () => {
             Sechs konkrete Effekte, die ihr nach der Firmenfeier wirklich messt — und der jeweilige Mechanismus dahinter.
           </p>
         </div>
-        {/* Tabular B2B layout: Effekt | Mechanismus */}
-        <div className={`max-w-5xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          <div className="grid grid-cols-12 pb-4 border-b-2 border-foreground/15 mb-2">
-            <p className="col-span-5 md:col-span-4 text-[10px] md:text-xs tracking-[0.2em] uppercase text-foreground/55 font-semibold">Effekt</p>
-            <p className="col-span-7 md:col-span-8 text-[10px] md:text-xs tracking-[0.2em] uppercase text-foreground/55 font-semibold">Mechanismus</p>
-          </div>
-          {wirkungen.map((w) => (
-            <div
+        {/* B2B Cards mit Effekt + Mechanismus + Icon, ohne Tabelle */}
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {wirkungen.map((w, i) => (
+            <article
               key={w.effekt}
-              className="grid grid-cols-12 gap-4 md:gap-8 py-7 md:py-8 border-b border-foreground/8 last:border-0"
+              className="relative p-7 md:p-8 flex flex-col bg-white transition-all hover:scale-[1.01]"
+              style={{
+                border: "1px solid rgba(0,0,0,0.08)",
+                borderRadius: "1rem",
+                boxShadow: "0 20px 50px -25px rgba(40, 20, 60, 0.2)",
+                animationDelay: `${0.1 + i * 0.05}s`,
+              }}
             >
-              <p className="col-span-5 md:col-span-4 font-display text-base md:text-lg font-bold text-foreground leading-[1.25]">
+              <div
+                aria-hidden
+                className="absolute top-0 left-7 right-7 h-[3px] rounded-full"
+                style={{ background: GRADIENT }}
+              />
+              <span
+                className="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-5"
+                style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}
+              >
+                <w.icon className="w-5 h-5" style={{ color: "hsl(255 60% 40%)" }} />
+              </span>
+              <p className="text-[10px] tracking-[0.22em] uppercase text-foreground/45 mb-2 font-semibold">Effekt</p>
+              <h3 className="font-display text-lg md:text-xl font-black text-foreground leading-[1.2] mb-5">
                 {w.effekt}
-              </p>
-              <p className="col-span-7 md:col-span-8 text-sm md:text-[15px] text-foreground/70 leading-[1.65]">
-                {w.mechanismus}
-              </p>
-            </div>
+              </h3>
+              <div className="pt-4 mt-auto border-t border-foreground/8">
+                <p className="text-[10px] tracking-[0.22em] uppercase text-foreground/45 mb-2 font-semibold">Mechanismus</p>
+                <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/70">{w.mechanismus}</p>
+              </div>
+            </article>
           ))}
         </div>
       </div>

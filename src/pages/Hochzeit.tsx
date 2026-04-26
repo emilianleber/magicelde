@@ -796,47 +796,56 @@ const MegaQuoteSection = () => {
    ═══════════════════════════════════════════════════════════ */
 const GalerieSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const photos = [
-    { img: weddingMagicImg, span: "lg:col-span-2 lg:row-span-2", pos: "object-center" },
-    { img: closeupImg, span: "", pos: "object-center" },
-    { img: haendeInteraktionImg, span: "", pos: "object-center" },
-    { img: heroMagicImg, span: "", pos: "object-center" },
-    { img: portraitImg, span: "", pos: "object-top" },
+  /* Drei Photos als editorial Triptychon, asymmetrische Aspect Ratios */
+  const triptychon = [
+    { img: weddingMagicImg, label: "Sektempfang", aspect: "3 / 4" },
+    { img: haendeInteraktionImg, label: "Tisch zu Tisch", aspect: "3 / 4" },
+    { img: closeupImg, label: "Show vor dem Tanz", aspect: "3 / 4" },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            Impressionen
+        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">
+            Hochzeitsmomente
           </p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Echte{" "}
+            Eine Hochzeit in{" "}
             <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              Hochzeitsmomente
+              drei Bildern
             </span>
             .
           </h2>
         </div>
-        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-[180px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-          {photos.map((p, i) => (
-            <div key={i} className={`${p.span} overflow-hidden group relative`} style={{ borderRadius: "0.5rem" }}>
-              <img
-                src={p.img}
-                alt=""
-                className={`w-full h-full object-cover ${p.pos} group-hover:scale-[1.04] transition-transform duration-700`}
-                loading="lazy"
-              />
+        <div className={`grid md:grid-cols-3 gap-4 md:gap-6 ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          {triptychon.map((t, i) => (
+            <figure
+              key={i}
+              className="relative overflow-hidden group"
+              style={{ borderRadius: "0.5rem", boxShadow: "0 30px 60px -25px rgba(40, 20, 60, 0.25)" }}
+            >
+              <div style={{ aspectRatio: t.aspect }}>
+                <img
+                  src={t.img}
+                  alt={t.label}
+                  className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                  loading="lazy"
+                />
+              </div>
               <div
                 aria-hidden
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{
-                  background:
-                    "linear-gradient(135deg, hsl(220 85% 50% / 0.2), hsl(285 80% 50% / 0.2))",
-                  mixBlendMode: "overlay",
-                }}
+                className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+                style={{ background: "linear-gradient(to top, rgba(15,10,25,0.6), transparent)" }}
               />
-            </div>
+              <figcaption className="absolute bottom-4 left-5 right-5">
+                <p className="text-[10px] tracking-[0.22em] uppercase text-white/75 font-semibold mb-1">
+                  Akt {String(i + 1).padStart(2, "0")}
+                </p>
+                <p className="font-display text-lg md:text-xl font-bold text-white leading-tight">
+                  {t.label}
+                </p>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </div>
@@ -918,31 +927,38 @@ const MoeglichkeitenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const ideen = [
     {
+      icon: Users,
       phase: "Trauzeugen-Briefing",
       title: "Ein Insider-Witz wird zum Trick.",
       desc: "Im Vorfeld stimme ich mit Trauzeugen ein Detail ab — eine Schul-Anekdote, ein Kosename, eine alte Wette. Mitten in der Show taucht das Detail plötzlich auf einer unmöglichen Karte auf.",
     },
     {
+      icon: Camera,
       phase: "Während der Fotosession",
       title: "30 Min, in denen niemand wartet.",
       desc: "Statt Gäste in der Lobby stehen zu lassen, übernehme ich die Zeit. Karten zwischen den Tischen, Münzen aus dem Nichts — und alle haben ein Gesprächsthema, wenn das Brautpaar zurück ist.",
+      featured: true,
     },
     {
+      icon: Heart,
       phase: "Trauring-Moment",
       title: "Ein Ring auf Reisen.",
       desc: "Der Trauring verschwindet aus der Hand des Brautvaters und taucht beim Trauzeugen auf — als Show-Höhepunkt direkt vor dem Hochzeitstanz. Personalisiert, vorher abgestimmt, sicher zurück.",
     },
     {
+      icon: Cake,
       phase: "Tisch-zu-Tisch",
       title: "Jeder Tisch, eine eigene Show.",
       desc: "Zwischen Vorspeise und Hauptgang besuche ich jeden Tisch. Trauzeugen, Eltern, Schulfreunde — keiner wird übergangen, jeder Tisch erlebt 5 Minuten Magie zum Anfassen.",
     },
     {
+      icon: Mic2,
       phase: "Vor dem Tanz",
       title: "Show als Vorprogramm.",
       desc: "20–45 Min Bühnenshow nach dem Dinner und vor dem Eröffnungstanz. Alle sind versammelt, satt, bereit für den Höhepunkt. Standing Ovations vor dem ersten Walzer.",
     },
     {
+      icon: Music2,
       phase: "Letzte Stunde",
       title: "Magie unter müden Gästen.",
       desc: "Wenn die Tanzfläche pulsiert, mische ich mich nochmal unter Gäste an den Stehtischen. Ein letzter Wow-Moment, der manche länger bleiben lässt als geplant.",
@@ -953,7 +969,7 @@ const MoeglichkeitenSection = () => {
     <section ref={ref} className="bg-white section-large border-y border-foreground/8">
       <div className="container px-6">
         <div className={`max-w-3xl mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">
             Sechs Ideen
           </p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
@@ -967,33 +983,60 @@ const MoeglichkeitenSection = () => {
             Sechs konkrete Momente — vom Trauzeugen-Briefing bis zur letzten Stunde. Kombinierbar oder einzeln.
           </p>
         </div>
-        {/* Editorial vertical list with dividers and large numerals */}
-        <div className={`max-w-4xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
           {ideen.map((idee, i) => (
-            <div
+            <article
               key={idee.phase}
-              className={`grid md:grid-cols-12 gap-6 md:gap-10 py-9 md:py-11 ${i > 0 ? "border-t border-foreground/8" : ""}`}
+              className={`relative p-7 md:p-8 flex flex-col group transition-all hover:scale-[1.01] ${idee.featured ? "text-white" : "text-foreground"}`}
+              style={{
+                background: idee.featured
+                  ? "linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)"
+                  : "white",
+                border: idee.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.06)",
+                borderRadius: "1rem",
+                boxShadow: idee.featured
+                  ? "0 30px 70px -20px rgba(60, 30, 80, 0.4)"
+                  : "0 20px 50px -25px rgba(40, 20, 60, 0.18)",
+                animationDelay: `${0.1 + i * 0.06}s`,
+              }}
             >
-              <div className="md:col-span-3">
+              <div
+                aria-hidden
+                className="absolute top-0 left-7 right-7 h-[2px] rounded-full"
+                style={{ background: idee.featured ? "rgba(255,255,255,0.4)" : "linear-gradient(90deg, hsl(220 85% 65%), hsl(255 75% 65%), hsl(285 80% 65%))" }}
+              />
+              <div className="flex items-start justify-between mb-5">
                 <span
-                  className="font-display font-black leading-none text-[clamp(2.5rem,4.5vw,4rem)] block"
-                  style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                  className="inline-flex items-center justify-center w-12 h-12 rounded-xl"
+                  style={{
+                    background: idee.featured
+                      ? "rgba(255,255,255,0.12)"
+                      : "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))",
+                  }}
+                >
+                  <idee.icon className="w-5 h-5" style={{ color: idee.featured ? "white" : "hsl(255 60% 40%)" }} />
+                </span>
+                <span
+                  className="font-display font-black leading-none text-3xl md:text-4xl tabular-nums"
+                  style={
+                    idee.featured
+                      ? { background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }
+                      : { background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }
+                  }
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <p className="text-[11px] tracking-[0.2em] uppercase text-foreground/45 mt-3 font-semibold">
-                  {idee.phase}
-                </p>
               </div>
-              <div className="md:col-span-9">
-                <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-[1.25] mb-3">
-                  {idee.title}
-                </h3>
-                <p className="text-base md:text-[17px] text-foreground/70 leading-[1.65] max-w-xl">
-                  {idee.desc}
-                </p>
-              </div>
-            </div>
+              <p className={`text-[10px] tracking-[0.22em] uppercase font-semibold mb-3 ${idee.featured ? "text-white/55" : "text-foreground/45"}`}>
+                {idee.phase}
+              </p>
+              <h3 className="font-display text-lg md:text-xl font-black mb-3 leading-[1.2]">
+                {idee.title}
+              </h3>
+              <p className={`text-sm md:text-[15px] leading-[1.6] ${idee.featured ? "text-white/75" : "text-foreground/65"}`}>
+                {idee.desc}
+              </p>
+            </article>
           ))}
         </div>
       </div>
