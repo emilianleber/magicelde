@@ -1,6 +1,5 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -10,11 +9,17 @@ import {
   Sparkles,
   Wine,
   Mic2,
-  Check,
   Phone,
   ClipboardList,
   PartyPopper,
-  RotateCcw,
+  Cake,
+  Music2,
+  Camera,
+  Flame,
+  Gem,
+  TreePine,
+  Sun,
+  Smile,
 } from "lucide-react";
 
 import Navigation from "@/components/landing/Navigation";
@@ -22,6 +27,7 @@ import Footer from "@/components/landing/Footer";
 import Chatbot from "@/components/landing/Chatbot";
 import WhatsAppButton from "@/components/landing/WhatsAppButton";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { QuizWizardInline, QuizConfig } from "@/components/landing/QuizWizard";
 
 import weddingHeroImg from "@/assets/hero-hochzeit-stock.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
@@ -148,249 +154,172 @@ const Hero = () => (
 );
 
 /* ═══════════════════════════════════════════════════════════
-   2 · INTERAKTIVES QUIZ — "Was passt zu eurer Hochzeit?"
+   2 · QUIZ — Hochzeits-spezifischer Format-Finder, inline
    ═══════════════════════════════════════════════════════════ */
-type Antwort = "klein" | "mittel" | "groß" | "ruhig" | "lustig" | "spektakulaer" | "eisbrecher" | "highlight" | "abend";
-
-const QuizSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const [step, setStep] = useState(0);
-  const [groesse, setGroesse] = useState<Antwort | null>(null);
-  const [stil, setStil] = useState<Antwort | null>(null);
-  const [ziel, setZiel] = useState<Antwort | null>(null);
-
-  const reset = () => {
-    setStep(0);
-    setGroesse(null);
-    setStil(null);
-    setZiel(null);
-  };
-
-  // Empfehlung berechnen
-  const empfehlung = (() => {
-    if (!groesse || !stil || !ziel) return null;
-    if (ziel === "eisbrecher") {
+const hochzeitQuizConfig: QuizConfig = {
+  anlass: "Hochzeit",
+  sectionEyebrow: "Format-Finder",
+  sectionTitle: (
+    <>
+      Findet euren{" "}
+      <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+        Magie-Moment
+      </span>
+      .
+    </>
+  ),
+  sectionDesc:
+    "Fünf Fragen, eine Empfehlung — abgestimmt auf den Tagesablauf, eure Gäste-Mischung und die Stimmung, die ihr euch wünscht. Wenn ihr wollt, könnt ihr direkt absenden, ohne Daten doppelt einzutippen.",
+  questions: [
+    {
+      id: "groesse",
+      shortLabel: "Hochzeitsgröße",
+      title: (
+        <>
+          Wie{" "}
+          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            groß
+          </span>{" "}
+          wird eure Hochzeit?
+        </>
+      ),
+      hint: "Bei kleinen Runden funktioniert intime Tisch-Magie, bei größeren Hochzeiten lohnt sich auch eine Show vor allen Gästen.",
+      cols: { md: 3 },
+      options: [
+        { value: "intim", label: "bis 40 Gäste", sub: "Engster Kreis · Familie + Trauzeugen" },
+        { value: "mittel", label: "40 – 120 Gäste", sub: "Klassische Hochzeitsfeier" },
+        { value: "groß", label: "120+ Gäste", sub: "Große Feier mit beiden Seiten" },
+      ],
+    },
+    {
+      id: "schwerpunkt",
+      shortLabel: "Magie-Moment",
+      title: (
+        <>
+          Wann soll die{" "}
+          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            Magie
+          </span>{" "}
+          passieren?
+        </>
+      ),
+      hint: "Jeder Moment der Hochzeit hat eine andere Energie — wo wollt ihr den Magic-Moment platzieren?",
+      cols: { md: 2, lg: 4 },
+      options: [
+        { value: "trauung", label: "Vor / nach der Trauung", sub: "Stille Magie als emotionaler Anker", icon: Flame },
+        { value: "empfang", label: "Sektempfang & Fotosession", sub: "Während ihr Fotos macht — Eisbrecher für die Gäste", icon: Camera },
+        { value: "dinner", label: "Beim Hochzeitsdinner", sub: "Tisch-zu-Tisch zwischen den Gängen", icon: Cake },
+        { value: "abend", label: "Abendprogramm vor dem Tanz", sub: "Show-Highlight nach dem Dinner", icon: Music2 },
+      ],
+    },
+    {
+      id: "stil",
+      shortLabel: "Hochzeitsstil",
+      title: (
+        <>
+          Wie ist der{" "}
+          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            Stil
+          </span>{" "}
+          eurer Hochzeit?
+        </>
+      ),
+      hint: "Damit der Auftritt zur Atmosphäre passt — von Scheunenfest bis Schloss.",
+      cols: { md: 3 },
+      options: [
+        { value: "rustikal", label: "Rustikal-locker", sub: "Scheune, Garten, Festzelt — entspannt", icon: TreePine },
+        { value: "klassisch", label: "Klassisch-elegant", sub: "Saal, weiße Tischdecken, festlich", icon: Gem },
+        { value: "boho", label: "Boho / Sommer", sub: "Outdoor, Sonnenuntergang, locker-warm", icon: Sun },
+      ],
+    },
+    {
+      id: "gaeste",
+      shortLabel: "Gästemix",
+      title: (
+        <>
+          Wer sind eure{" "}
+          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            Gäste
+          </span>
+          ?
+        </>
+      ),
+      hint: "Damit ich Magie wähle, die alle einbindet — egal ob Oma oder Trauzeuge.",
+      cols: { md: 3 },
+      options: [
+        { value: "familien", label: "Familien-Fokus", sub: "Verwandte beider Seiten, alle Altersgruppen", icon: Heart },
+        { value: "freunde", label: "Freunde-Fokus", sub: "Eure Crew, viele unter 40", icon: Users },
+        { value: "mix", label: "Bunt gemischt", sub: "Familie, Freunde, Kollegen — alles dabei", icon: Smile },
+      ],
+    },
+    {
+      id: "wunsch",
+      shortLabel: "Wunsch",
+      title: (
+        <>
+          Was ist euch{" "}
+          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            wichtig
+          </span>
+          ?
+        </>
+      ),
+      hint: "Was zählt für euch als gelungener Hochzeitstag?",
+      cols: { md: 2 },
+      options: [
+        { value: "verbinden", label: "Familienseiten verbinden", sub: "Zwei Familien lernen sich kennen", icon: Users },
+        { value: "ruhe", label: "Ruhige, emotionale Momente", sub: "Nichts Lautes — kleine, stille Wunder", icon: Flame },
+        { value: "wow", label: "Ein Wow-Moment für alle", sub: "Eine zentrale Show, die alle gemeinsam erleben", icon: Sparkles },
+        { value: "rotfaden", label: "Magie über den ganzen Tag", sub: "Vom Sektempfang bis zum Tanz", icon: Music2 },
+      ],
+    },
+  ],
+  buildEmpfehlung: (a) => {
+    const { schwerpunkt, gaeste, wunsch } = a;
+    if (schwerpunkt === "trauung" || wunsch === "ruhe") {
       return {
-        format: "Close-Up beim Sektempfang",
-        sub: "20–70 Min · während Sektempfang & Fotosession",
-        why: "Während ihr Fotos macht, unterhalte ich eure Gäste mit Magie zum Anfassen — Karten, Münzen, kleine Wunder direkt vor ihren Augen. Familien, die sich noch nicht kennen, haben sofort ein Gesprächsthema.",
+        format: "Stille Magie zur Trauung",
+        sub: "Kleine Wunder ohne Lärm · während Sektempfang oder Anstoßen",
+        why: "Ruhige, emotionale Magie passend zum Moment — kein Showrummel, sondern intime Effekte, die zur Stimmung der Trauung passen. Karten, Münzen, ein verschwindender Trauring — kleine Wunder, die in Erinnerung bleiben.",
         link: "/close-up",
       };
     }
-    if (ziel === "highlight") {
+    if (schwerpunkt === "empfang" || wunsch === "verbinden" || gaeste === "familien") {
       return {
-        format: stil === "spektakulaer" ? "Bühnenshow als Tanz-Vorprogramm" : "Bühnenshow nach dem Dinner",
-        sub: "15–60 Min · ein zentraler Show-Moment",
-        why: "Eine durchkomponierte Show — abgestimmt auf eure Story, mit eingebauten persönlichen Anekdoten. Genau dann zünden, wenn alle satt sind und auf den Hochzeitstanz warten.",
+        format: "Close-Up beim Sektempfang",
+        sub: "20–70 Min · während ihr Fotos macht",
+        why: "Während Brautpaar und Fotograf unterwegs sind, unterhalte ich eure Gäste. Familie deiner Seite und seine — sofort haben alle ein Gesprächsthema. Magie ist der natürlichste Eisbrecher zwischen Menschen, die sich erst kennenlernen.",
+        link: "/close-up",
+      };
+    }
+    if (schwerpunkt === "dinner") {
+      return {
+        format: "Tisch-zu-Tisch beim Dinner",
+        sub: "5–7 Min pro Tisch · zwischen den Gängen",
+        why: "Während des Hauptgangs gehe ich von Tisch zu Tisch — jeder Tisch bekommt seine eigene Mini-Show. Trauzeugen, Eltern, alte Schulfreunde — alle haben gleich viel von der Magie, niemand wird übergangen.",
+        link: "/close-up",
+      };
+    }
+    if (schwerpunkt === "abend" || wunsch === "wow") {
+      return {
+        format: "Bühnenshow vor dem Hochzeitstanz",
+        sub: "15–60 Min · nach dem Dinner, vor dem Eröffnungstanz",
+        why: "Eine durchkomponierte Show, abgestimmt auf eure Story — mit eingebauten Anekdoten, vielleicht einem Trauring-Moment, der alle zum Staunen bringt. Genau dann zünden, wenn alle satt sind und auf den Tanz warten.",
         link: "/buehnenshow",
       };
     }
-    if (ziel === "abend") {
-      return {
-        format: "Komplett-Begleitung",
-        sub: "Empfang + Dinner + Show-Slot",
-        why: "Ein roter Faden über den ganzen Abend: Close-Up beim Empfang, Tisch-zu-Tisch im Dinner, große Show vor dem Tanz. Maximaler Wow-Effekt.",
-        link: "/buchung",
-      };
-    }
-    return null;
-  })();
-
-  const Step = ({
-    title,
-    options,
-    onChoice,
-    selected,
-  }: {
-    title: string;
-    options: { value: Antwort; label: string; sub?: string }[];
-    onChoice: (v: Antwort) => void;
-    selected: Antwort | null;
-  }) => (
-    <div>
-      <p className="font-display text-xl md:text-2xl font-bold text-foreground mb-6 leading-tight">
-        {title}
-      </p>
-      <div className="grid sm:grid-cols-3 gap-3">
-        {options.map((o) => (
-          <button
-            key={o.value}
-            onClick={() => onChoice(o.value)}
-            className={`text-left p-5 transition-all ${
-              selected === o.value
-                ? "bg-foreground text-white"
-                : "bg-foreground/[0.04] hover:bg-foreground/[0.08] text-foreground"
-            }`}
-            style={{ borderRadius: "0.6rem" }}
-          >
-            <p className="font-display text-base md:text-lg font-bold leading-tight mb-1">
-              {o.label}
-            </p>
-            {o.sub && (
-              <p
-                className="text-[12px] leading-snug"
-                style={{ color: selected === o.value ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.55)" }}
-              >
-                {o.sub}
-              </p>
-            )}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-
-  return (
-    <section id="empfehlung" ref={ref} className="bg-white section-large border-y border-foreground/8">
-      <div className="container px-6">
-        <div className={`max-w-3xl mb-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            In 30 Sekunden zur Empfehlung
-          </p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Was passt zu{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              eurer Hochzeit
-            </span>
-            ?
-          </h2>
-          <p className="mt-5 max-w-xl text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
-            Drei Fragen, eine konkrete Empfehlung — damit ihr genau wisst, was
-            ihr braucht.
-          </p>
-        </div>
-
-        <div
-          className={`max-w-4xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}
-          style={{
-            animationDelay: "0.1s",
-            background: "rgba(0,0,0,0.02)",
-            border: "1px solid rgba(0,0,0,0.06)",
-            borderRadius: "1rem",
-          }}
-        >
-          {/* Progress */}
-          <div className="px-7 md:px-9 pt-7 pb-3 flex items-center gap-3 border-b border-foreground/8">
-            <div className="flex items-center gap-2">
-              {[0, 1, 2].map((i) => (
-                <div
-                  key={i}
-                  className="h-1.5 rounded-full transition-all"
-                  style={{
-                    width: step >= i ? "32px" : "8px",
-                    background:
-                      step >= i
-                        ? "linear-gradient(90deg, hsl(220 85% 55%), hsl(255 75% 55%), hsl(285 85% 55%))"
-                        : "rgba(0,0,0,0.12)",
-                  }}
-                />
-              ))}
-            </div>
-            <span className="text-[11px] uppercase tracking-wider text-foreground/45 ml-2">
-              {step < 3 ? `Frage ${step + 1} von 3` : "Eure Empfehlung"}
-            </span>
-            {step > 0 && (
-              <button
-                onClick={reset}
-                className="ml-auto inline-flex items-center gap-1 text-xs text-foreground/55 hover:text-foreground transition-colors"
-              >
-                <RotateCcw className="w-3 h-3" />
-                Neu starten
-              </button>
-            )}
-          </div>
-
-          <div className="p-7 md:p-9">
-            {step === 0 && (
-              <Step
-                title="Wie viele Gäste habt ihr?"
-                selected={groesse}
-                onChoice={(v) => {
-                  setGroesse(v);
-                  setStep(1);
-                }}
-                options={[
-                  { value: "klein", label: "Bis 50", sub: "Kleine Runde" },
-                  { value: "mittel", label: "50 – 150", sub: "Mittelgroße Hochzeit" },
-                  { value: "groß", label: "Über 150", sub: "Große Feier" },
-                ]}
-              />
-            )}
-            {step === 1 && (
-              <Step
-                title="Wie wollt ihr eure Hochzeit?"
-                selected={stil}
-                onChoice={(v) => {
-                  setStil(v);
-                  setStep(2);
-                }}
-                options={[
-                  { value: "ruhig", label: "Elegant & ruhig", sub: "Persönlich, wenig Spektakel" },
-                  { value: "lustig", label: "Locker & lustig", sub: "Comedy-Anteil hoch" },
-                  { value: "spektakulaer", label: "Spektakulär", sub: "Show-Highlight für alle" },
-                ]}
-              />
-            )}
-            {step === 2 && (
-              <Step
-                title="Was ist euch wichtig?"
-                selected={ziel}
-                onChoice={(v) => {
-                  setZiel(v);
-                  setStep(3);
-                }}
-                options={[
-                  { value: "eisbrecher", label: "Eisbrecher", sub: "Gäste verbinden, Smalltalk lockern" },
-                  { value: "highlight", label: "Highlight-Moment", sub: "Eine zentrale Show, die alle zusammenbringt" },
-                  { value: "abend", label: "Roter Faden", sub: "Magie über den ganzen Abend verteilt" },
-                ]}
-              />
-            )}
-            {step === 3 && empfehlung && (
-              <div className="animate-fade-up">
-                <p
-                  className="text-[11px] tracking-[0.2em] uppercase mb-4 font-semibold"
-                  style={{
-                    background: GRADIENT,
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  Eure Empfehlung
-                </p>
-                <h3 className="font-display text-3xl md:text-4xl font-black text-foreground mb-3 leading-[1.1]">
-                  {empfehlung.format}
-                </h3>
-                <p className="text-sm text-foreground/55 mb-6">{empfehlung.sub}</p>
-                <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6] mb-8 max-w-2xl">
-                  {empfehlung.why}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Link
-                    to="/buchung"
-                    className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01]"
-                    style={{ background: GRADIENT, boxShadow: "0 10px 30px hsl(255 75% 55% / 0.3)" }}
-                  >
-                    Jetzt anfragen
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                  <Link
-                    to={empfehlung.link}
-                    className="inline-flex items-center gap-2 font-display font-bold text-foreground border-b-2 border-foreground/30 hover:border-foreground pb-1 transition-colors self-start py-3.5"
-                  >
-                    Mehr zum Format
-                    <ArrowUpRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+    return {
+      format: "Magie über den ganzen Hochzeitstag",
+      sub: "Sektempfang + Dinner + Show vor dem Tanz",
+      why: "Ein roter Faden über euren Tag: Close-Up beim Empfang, Tisch-zu-Tisch im Dinner, eine kompakte Bühnenshow vor dem Tanz. Eure Gäste reden noch Wochen später davon.",
+      link: "/buchung",
+    };
+  },
+  gaesteFromAnswers: (a) =>
+    a.groesse === "intim" ? 30 : a.groesse === "mittel" ? 80 : a.groesse === "groß" ? 150 : null,
 };
+
+const QuizSection = () => <QuizWizardInline config={hochzeitQuizConfig} />;
 
 /* ═══════════════════════════════════════════════════════════
    3 · DREI OPTIONEN — kompakte Übersicht
