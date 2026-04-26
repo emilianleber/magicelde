@@ -549,7 +549,7 @@ const BeispielSection = () => {
               {[
                 { time: "16:30", text: "Ankunft. Ich baue auf, während das Brautpaar noch fotografiert. Kurzes Briefing mit der Hochzeitsplanerin." },
                 { time: "17:00", text: "Sektempfang. 80 Gäste, viele kennen sich nicht. Ich bin mittendrin — Karten, Münzen, kleine Wow-Momente. Familien lachen zusammen." },
-                { time: "18:00", text: "Dinner. Während des Apéros besuche ich jeden Tisch. 5–7 Min pro Tisch. Jeder hat seine eigene Geschichte zu erzählen." },
+                { time: "18:00", text: "Dinner. Zwischen den Gängen besuche ich jeden Tisch — 5–7 Min pro Tisch. Jeder bekommt seine eigene kleine Show." },
                 { time: "21:30", text: "Show-Slot vor dem Hochzeitstanz. 22 Min Bühnenshow mit eingebauter Anekdote über das Brautpaar. Standing Ovations." },
                 { time: "22:30", text: "Tanzfläche brennt. Ich verabschiede mich, viele Gäste fragen nach Visitenkarten." },
               ].map((e) => (
@@ -770,14 +770,6 @@ const DreiSekundenSection = () => {
               }}
             >
               <img src={staunenImg} alt="Staunende Hochzeitsgäste" className="w-full h-full object-cover" loading="lazy" />
-              {/* Sticker bottom-right: gradient quote */}
-              <div
-                className="absolute bottom-5 right-5 px-4 py-2.5 rounded-full backdrop-blur-md text-white text-sm font-semibold flex items-center gap-2"
-                style={{ background: "rgba(15,10,25,0.55)" }}
-              >
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: GRADIENT_LIGHT }} />
-                Hochzeit · München · 2024
-              </div>
             </div>
           </div>
           <div className={`lg:col-span-6 lg:pl-6 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
@@ -801,21 +793,14 @@ const DreiSekundenSection = () => {
               zehn Jahren noch erinnern.
             </p>
             <div className="mt-8 flex items-center gap-3">
-              <div className="flex -space-x-2">
-                {[
-                  "hsl(340 75% 55%)",
-                  "hsl(255 70% 55%)",
-                  "hsl(220 70% 55%)",
-                ].map((tint, i) => (
-                  <div
-                    key={i}
-                    className="w-9 h-9 rounded-full border-2 border-white"
-                    style={{ background: `linear-gradient(135deg, ${tint}, hsl(255 70% 55%))` }}
-                  />
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
               <p className="text-sm text-foreground/60">
-                <strong className="text-foreground">100+ Brautpaare</strong> haben diesen Moment schon erlebt.
+                <strong className="text-foreground">100+ Brautpaare</strong> haben
+                diesen Moment schon erlebt — durchgehend 5,0 Sterne.
               </p>
             </div>
           </div>
