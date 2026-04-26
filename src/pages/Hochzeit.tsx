@@ -172,7 +172,7 @@ const QuizSection = () => {
     if (ziel === "eisbrecher") {
       return {
         format: "Close-Up beim Sektempfang",
-        sub: "60–90 Min · während Sektempfang & Fotosession",
+        sub: "20–70 Min · während Sektempfang & Fotosession",
         why: "Während ihr Fotos macht, unterhalte ich eure Gäste mit Magie zum Anfassen — Karten, Münzen, kleine Wunder direkt vor ihren Augen. Familien, die sich noch nicht kennen, haben sofort ein Gesprächsthema.",
         link: "/close-up",
       };
@@ -180,7 +180,7 @@ const QuizSection = () => {
     if (ziel === "highlight") {
       return {
         format: stil === "spektakulaer" ? "Bühnenshow als Tanz-Vorprogramm" : "Bühnenshow nach dem Dinner",
-        sub: "20–30 Min · ein zentraler Show-Moment",
+        sub: "15–60 Min · ein zentraler Show-Moment",
         why: "Eine durchkomponierte Show — abgestimmt auf eure Story, mit eingebauten persönlichen Anekdoten. Genau dann zünden, wenn alle satt sind und auf den Hochzeitstanz warten.",
         link: "/buehnenshow",
       };
@@ -403,7 +403,7 @@ const OptionenSection = () => {
       time: "Sektempfang",
       title: "Close-Up Magie",
       desc: "Während ihr Fotos macht, mische ich mich unter eure Gäste. Der perfekte Eisbrecher zwischen Familien.",
-      duration: "60–90 Min",
+      duration: "20–70 Min",
       passt: "Wenn ihr viele Gäste habt, die sich nicht kennen",
     },
     {
@@ -411,7 +411,7 @@ const OptionenSection = () => {
       time: "Show-Slot",
       title: "Bühnenshow",
       desc: "Eine durchkomponierte Show als zentrales Highlight — meist vor dem Hochzeitstanz.",
-      duration: "20–30 Min",
+      duration: "15–60 Min",
       passt: "Wenn ihr einen klaren Wow-Moment für alle wollt",
       featured: true,
     },
@@ -501,31 +501,33 @@ const OptionenSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   4 · ECHTES BEISPIEL — eine Hochzeit erzählt
+   4 · ECHTES BEISPIEL — Headline oben, Photo+Timeline split
    ═══════════════════════════════════════════════════════════ */
 const BeispielSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
     <section ref={ref} className="bg-white section-large border-y border-foreground/8">
       <div className="container px-6">
+        <div className={`max-w-3xl mb-12 md:mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Echte Hochzeit
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            So lief eine{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              echte Hochzeit
+            </span>{" "}
+            ab.
+          </h2>
+          <p className="mt-5 max-w-2xl text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
+            Damit ihr ein konkretes Bild habt, wie es bei euch aussehen könnte —
+            hier eine reale Hochzeit, Stunde für Stunde.
+          </p>
+        </div>
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          <div className={`lg:col-span-5 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-              Echte Hochzeit
-            </p>
-            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
-              Wie eine echte Hochzeit{" "}
-              <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                ablaufen kann
-              </span>
-              .
-            </h2>
-            <p className="mt-6 text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
-              Damit ihr ein konkretes Bild habt, wie es bei euch aussehen
-              könnte — hier ein echtes Beispiel.
-            </p>
+          <div className={`lg:col-span-5 ${isVisible ? "animate-slide-left" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
             <div
-              className="relative overflow-hidden mt-8"
+              className="relative overflow-hidden lg:sticky lg:top-24"
               style={{
                 borderRadius: "0.5rem",
                 aspectRatio: "4 / 5",
@@ -533,12 +535,19 @@ const BeispielSection = () => {
               }}
             >
               <img src={emotionenImg} alt="Hochzeitsszene" className="w-full h-full object-cover" loading="lazy" />
+              <div
+                className="absolute bottom-5 left-5 px-3.5 py-1.5 rounded-full backdrop-blur-md text-white text-[11px] font-semibold flex items-center gap-2"
+                style={{ background: "rgba(15,10,25,0.55)" }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: GRADIENT_LIGHT }} />
+                Hochzeit Zeitler · München · 2024
+              </div>
             </div>
           </div>
-          <div className={`lg:col-span-7 lg:pl-6 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`lg:col-span-7 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
             <div className="space-y-5">
               {[
-                { time: "16:30", text: "Ankunft. Ich baue auf, während ihr noch fotografiert. Kurzes Briefing mit der Hochzeitsplanerin." },
+                { time: "16:30", text: "Ankunft. Ich baue auf, während das Brautpaar noch fotografiert. Kurzes Briefing mit der Hochzeitsplanerin." },
                 { time: "17:00", text: "Sektempfang. 80 Gäste, viele kennen sich nicht. Ich bin mittendrin — Karten, Münzen, kleine Wow-Momente. Familien lachen zusammen." },
                 { time: "18:00", text: "Dinner. Während des Apéros besuche ich jeden Tisch. 5–7 Min pro Tisch. Jeder hat seine eigene Geschichte zu erzählen." },
                 { time: "21:30", text: "Show-Slot vor dem Hochzeitstanz. 22 Min Bühnenshow mit eingebauter Anekdote über das Brautpaar. Standing Ovations." },
@@ -560,11 +569,6 @@ const BeispielSection = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-8 pt-6 border-t border-foreground/10">
-              <p className="text-sm text-foreground/55 italic">
-                Hochzeit Müller-Schmidt · 80 Gäste · München · 2024
-              </p>
-            </div>
           </div>
         </div>
       </div>
@@ -579,24 +583,27 @@ const StimmenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const reviews = [
     {
-      quote: "Absolutes Highlight unserer Hochzeit. Alle Gäste sprechen noch Wochen danach davon!",
-      author: "Katrin & Markus",
-      anlass: "Hochzeit · München · 2024",
+      quote:
+        "Ich durfte eine Hochzeit planen, bei der Emilian als Zauberer aufgetreten ist — und es war wirklich großartig! Er hat sich auf unsere Idee eingelassen, den Bräutigam zu überraschen, und mit viel Charme und Witz mitgespielt. Eine tolle Ergänzung für jeden besonderen Anlass!",
+      author: "Katrin Raß",
+      anlass: "Hochzeitsplanerin",
       initial: "K",
       tint: "hsl(340 75% 55%)",
     },
     {
-      quote: "Charmant, persönlich, jeder Gast hat es geliebt. Beste Buchung für unseren Tag.",
-      author: "Lisa & Tobias",
-      anlass: "Hochzeit · Regensburg · 2023",
-      initial: "L",
+      quote:
+        "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!",
+      author: "Petra Zeitler",
+      anlass: "Brautpaar",
+      initial: "P",
       tint: "hsl(255 70% 55%)",
     },
     {
-      quote: "Wir hatten Sorge, dass es zu viel sein könnte — war es absolut nicht. Subtil und unvergesslich.",
-      author: "Anna & Felix",
-      anlass: "Hochzeit · Augsburg · 2024",
-      initial: "A",
+      quote:
+        "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt. Abwicklung sehr professionell. Gerne wieder!",
+      author: "Martina Senftl",
+      anlass: "Hochzeitskundin",
+      initial: "M",
       tint: "hsl(220 70% 55%)",
     },
   ];
@@ -699,26 +706,32 @@ const BuchungsFlowSection = () => {
             .
           </h2>
         </div>
-        <div className={`grid md:grid-cols-3 gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {steps.map((s, i) => (
-            <div key={s.num} className="relative">
-              {/* Connector line desktop */}
-              {i < steps.length - 1 && (
+        <div className={`relative ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {/* Single continuous connector line behind the circles */}
+          <div
+            aria-hidden
+            className="hidden md:block absolute top-8 left-[16.66%] right-[16.66%] h-px z-0"
+            style={{
+              background:
+                "linear-gradient(90deg, hsl(220 85% 65% / 0.5), hsl(255 75% 65% / 0.7), hsl(285 80% 65% / 0.5))",
+            }}
+          />
+          <div className="relative z-10 grid md:grid-cols-3 gap-y-10 md:gap-x-8">
+          {steps.map((s) => (
+            <div key={s.num} className="flex flex-col items-start md:items-center text-left md:text-center">
                 <div
-                  aria-hidden
-                  className="hidden md:block absolute top-8 left-full w-full h-px -translate-x-3 z-0"
+                  className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 bg-white"
                   style={{
-                    background:
-                      "linear-gradient(90deg, hsl(220 85% 65% / 0.4), hsl(255 75% 65% / 0.6), hsl(285 80% 65% / 0.4))",
+                    background: "white",
+                    boxShadow: "0 0 0 1px rgba(0,0,0,0.06), 0 10px 30px hsl(255 75% 55% / 0.15)",
                   }}
-                />
-              )}
-              <div className="relative z-10 flex flex-col">
-                <div
-                  className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6"
-                  style={{ background: GRADIENT, boxShadow: "0 10px 30px hsl(255 75% 55% / 0.25)" }}
                 >
-                  <s.icon className="w-6 h-6 text-white" />
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center"
+                    style={{ background: GRADIENT }}
+                  >
+                    <s.icon className="w-5 h-5 text-white" />
+                  </div>
                 </div>
                 <p className="text-[11px] tracking-[0.2em] uppercase text-foreground/45 mb-2 font-semibold">
                   Schritt {s.num} · {s.time}
@@ -730,8 +743,8 @@ const BuchungsFlowSection = () => {
                   {s.desc}
                 </p>
               </div>
-            </div>
           ))}
+          </div>
         </div>
       </div>
     </section>
@@ -855,23 +868,22 @@ const MegaQuoteSection = () => {
           </span>
           <blockquote>
             <p className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
-              Wir hatten Sorge, dass es zu viel sein könnte. Es war absolut
-              nicht zu viel — es war{" "}
+              Emilian, du warst{" "}
               <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                der schönste Moment
+                der absolute Höhepunkt
               </span>{" "}
-              unserer Hochzeit.
+              unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!
             </p>
             <footer className="mt-10 flex items-center gap-4">
               <div
                 className="w-14 h-14 rounded-full flex items-center justify-center font-display font-black text-white text-xl"
                 style={{ background: "linear-gradient(135deg, hsl(340 75% 55%), hsl(255 70% 55%))" }}
               >
-                A
+                M
               </div>
               <div>
-                <p className="font-display font-bold text-foreground text-base">Anna & Felix</p>
-                <p className="text-sm text-foreground/55">Hochzeit · Augsburg · 2024 · 120 Gäste</p>
+                <p className="font-display font-bold text-foreground text-base">Martina Senftl</p>
+                <p className="text-sm text-foreground/55">Brautpaar · Google-Bewertung</p>
               </div>
               <div className="ml-auto flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
@@ -997,6 +1009,99 @@ const ZahlenSection = () => {
           <StatBlock end={10} suffix="+" label="Jahre Routine" desc="Auch wenn der Zeitplan kippt — ich liefere." />
           <StatBlock end={5} suffix=",0" label="Sterne Bewertung" desc="Top-Bewertungen auf Google & ProvenExpert." />
           <StatBlock end={24} suffix="h" label="Antwortzeit" desc="Persönliche Rückmeldung garantiert." />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   NEU · MÖGLICHKEITEN — was Magie auf einer Hochzeit besonders macht
+   ═══════════════════════════════════════════════════════════ */
+const MoeglichkeitenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const moments = [
+    {
+      icon: Heart,
+      title: "Personalisierte Trauring-Routine",
+      desc: "Ein scheinbar verlorener Trauring taucht plötzlich an einer unmöglichen Stelle wieder auf — als Highlight in der Show.",
+    },
+    {
+      icon: Users,
+      title: "Trauzeugen-Überraschung",
+      desc: "Im Vorfeld stimme ich mit den Trauzeugen ein Insider-Detail ab. Die Show bekommt einen Moment, der nur euch gilt.",
+    },
+    {
+      icon: Sparkles,
+      title: "Stille Phasen aufladen",
+      desc: "Während der Foto-Session der Brautleute warten Gäste oft 30–60 Min. Die nutze ich — keiner langweilt sich, alle verbinden sich.",
+    },
+    {
+      icon: Wine,
+      title: "Tisch-zu-Tisch beim Dinner",
+      desc: "Zwischen den Gängen besuche ich jeden Tisch. 5–10 Min pro Tisch. Jeder bekommt seine eigene kleine Show.",
+    },
+    {
+      icon: Mic2,
+      title: "Show als Tanz-Vorprogramm",
+      desc: "20–45 Min Bühnenshow direkt vor dem Hochzeitstanz. Alle sind versammelt — Standing Ovations garantiert.",
+    },
+    {
+      icon: PartyPopper,
+      title: "Walking-Magic später am Abend",
+      desc: "Wenn die Tanzfläche pulsiert, mische ich mich nochmal unter müde gewordene Gäste — letzter Wow-Moment vor dem Aufbruch.",
+    },
+  ];
+
+  return (
+    <section ref={ref} className="bg-white section-large border-y border-foreground/8">
+      <div className="container px-6">
+        <div className={`max-w-3xl mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Eure Möglichkeiten
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Was Magie auf{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              eurer Hochzeit
+            </span>{" "}
+            besonders macht.
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Eine Hochzeit ist kein normales Event. Hier ein paar konkrete
+            Möglichkeiten, wie ihr Zauberkunst in eure Hochzeit einbauen könnt
+            — kombinierbar oder einzeln.
+          </p>
+        </div>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {moments.map((m, i) => (
+            <div
+              key={m.title}
+              className="p-7 md:p-8"
+              style={{
+                background: "rgba(0,0,0,0.02)",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: "0.75rem",
+                animationDelay: `${0.1 + i * 0.06}s`,
+              }}
+            >
+              <div
+                className="inline-flex items-center justify-center w-11 h-11 rounded-full mb-5"
+                style={{
+                  background:
+                    "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))",
+                }}
+              >
+                <m.icon className="w-5 h-5" style={{ color: "hsl(255 60% 40%)" }} />
+              </div>
+              <h3 className="font-display text-lg md:text-xl font-black mb-3 text-foreground leading-[1.2]">
+                {m.title}
+              </h3>
+              <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/65">
+                {m.desc}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -1133,6 +1238,7 @@ const Hochzeit = () => (
       <StimmenSection />
       <GalerieSection />
       <ZahlenSection />
+      <MoeglichkeitenSection />
       <BuchungsFlowSection />
       <FAQ />
       <FinalCTA />
