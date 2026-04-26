@@ -83,19 +83,71 @@ const EngagementPopup = () => {
   useEffect(() => {
     if (alreadyShown || isSuppressed) return;
 
+    // 2.5 min inactivity timer
     const timer = setTimeout(() => {
       if (!triggered.current) trigger();
     }, TIME_TO_TRIGGER_MS);
 
-    const handleExit = (e: MouseEvent) => {
+    // Desktop exit intent — mouse leaves the top of the viewport
+    const handleMouseLeave = (e: MouseEvent) => {
       if (triggered.current) return;
-      if (e.clientY <= 0) trigger();
+      // Mouse moved towards top (address bar / tab close)
+      if (e.clientY < 20) trigger();
     };
-    document.addEventListener("mouseleave", handleExit);
+
+    // Catch the case where mouse exits the document entirely (relatedTarget = null)
+    const handleMouseOut = (e: MouseEvent) => {
+      if (triggered.current) return;
+      const to = (e as any).relatedTarget || (e as any).toElement;
+      if (!to && e.clientY < 50) trigger();
+    };
+
+    // Mobile / tab-switch — fires when user backgrounds the tab or switches apps
+    let visibilityArmed = false;
+    const armVisibility = setTimeout(() => {
+      visibilityArmed = true;
+    }, 8000); // ignore the very first second of page load
+    const handleVisibility = () => {
+      if (triggered.current || !visibilityArmed) return;
+      if (document.visibilityState === "hidden") trigger();
+    };
+
+    // Scroll-up after substantial scroll-down — back-to-top intent
+    let maxScroll = 0;
+    let scrollUpStart: number | null = null;
+    const handleScroll = () => {
+      if (triggered.current) return;
+      const y = window.scrollY;
+      if (y > maxScroll) {
+        maxScroll = y;
+        scrollUpStart = null;
+      } else if (maxScroll > 1500 && y < maxScroll - 200) {
+        // user scrolled back up significantly after going deep
+        if (scrollUpStart === null) scrollUpStart = Date.now();
+        if (Date.now() - scrollUpStart > 600 && y < 400) trigger();
+      }
+    };
+
+    // Mobile back navigation
+    const handlePopState = () => {
+      if (triggered.current) return;
+      trigger();
+    };
+
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseout", handleMouseOut);
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("popstate", handlePopState);
 
     return () => {
       clearTimeout(timer);
-      document.removeEventListener("mouseleave", handleExit);
+      clearTimeout(armVisibility);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseout", handleMouseOut);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("popstate", handlePopState);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuppressed]);

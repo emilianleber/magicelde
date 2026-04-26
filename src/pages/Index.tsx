@@ -605,26 +605,25 @@ const VideoSection = () => {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden text-white py-24 md:py-32 lg:py-40"
-      style={{ background: "#0f0a19" }}
+      className="relative overflow-hidden bg-white py-24 md:py-32 lg:py-40"
     >
-      {/* Subtle gradient blob in background */}
+      {/* Soft pastel washes for hint of colour */}
       <div
         aria-hidden
-        className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-25"
+        className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-50 pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, hsl(340 85% 55%) 0%, transparent 70%)",
-          filter: "blur(80px)",
+            "radial-gradient(circle, hsl(340 85% 88%) 0%, transparent 70%)",
+          filter: "blur(60px)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full opacity-20"
+        className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full opacity-45 pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, hsl(225 85% 55%) 0%, transparent 70%)",
-          filter: "blur(80px)",
+            "radial-gradient(circle, hsl(225 85% 88%) 0%, transparent 70%)",
+          filter: "blur(70px)",
         }}
       />
 
@@ -636,15 +635,15 @@ const VideoSection = () => {
               isVisible ? "animate-slide-left" : "opacity-0"
             }`}
           >
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-white/60 mb-6">
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6">
               Live gesehen
             </p>
-            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)]">
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
               Glaubst du nicht?{" "}
               <span
                 style={{
                   background:
-                    "linear-gradient(100deg, hsl(225 95% 78%) 0%, hsl(285 85% 78%) 50%, hsl(340 95% 78%) 100%)",
+                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -653,7 +652,7 @@ const VideoSection = () => {
                 Sieh selbst.
               </span>
             </h2>
-            <p className="mt-6 text-base md:text-lg leading-[1.6] text-white/75 font-light">
+            <p className="mt-6 text-base md:text-lg leading-[1.6] text-foreground/65 font-light">
               Zwei Minuten aus einer echten Show. Keine Montage, keine Tricks
               mit der Kamera — einfach die Reaktionen, wie sie sind.
             </p>
@@ -667,16 +666,16 @@ const VideoSection = () => {
               ].map((s) => (
                 <div
                   key={s.l}
-                  className="rounded-xl p-3 backdrop-blur-sm"
+                  className="rounded-xl p-3"
                   style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    background: "rgba(0,0,0,0.025)",
+                    border: "1px solid rgba(0,0,0,0.06)",
                   }}
                 >
-                  <p className="font-display text-lg font-black tabular-nums">
+                  <p className="font-display text-lg font-black tabular-nums text-foreground">
                     {s.v}
                   </p>
-                  <p className="text-[10px] uppercase tracking-wider text-white/50 mt-0.5">
+                  <p className="text-[10px] uppercase tracking-wider text-foreground/50 mt-0.5">
                     {s.l}
                   </p>
                 </div>
@@ -695,10 +694,10 @@ const VideoSection = () => {
               {/* Subtle gradient glow behind video */}
               <div
                 aria-hidden
-                className="absolute -inset-4 rounded-[1rem] opacity-50 blur-2xl"
+                className="absolute -inset-4 rounded-[1rem] opacity-30 blur-2xl pointer-events-none"
                 style={{
                   background:
-                    "linear-gradient(135deg, hsl(225 85% 55% / 0.5), hsl(275 75% 55% / 0.5), hsl(345 85% 55% / 0.5))",
+                    "linear-gradient(135deg, hsl(225 85% 65% / 0.5), hsl(275 75% 65% / 0.5), hsl(345 85% 65% / 0.5))",
                 }}
               />
               <div
@@ -706,7 +705,7 @@ const VideoSection = () => {
                 style={{
                   borderRadius: "0.75rem",
                   boxShadow:
-                    "0 40px 80px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)",
+                    "0 40px 80px -20px rgba(40,20,60,0.25), 0 0 0 1px rgba(0,0,0,0.05)",
                 }}
               >
                 <iframe
@@ -718,14 +717,14 @@ const VideoSection = () => {
                 />
               </div>
               {/* Caption strip */}
-              <div className="mt-4 flex items-center justify-between text-[11px] tracking-[0.18em] uppercase text-white/55">
+              <div className="mt-4 flex items-center justify-between text-[11px] tracking-[0.18em] uppercase text-foreground/50">
                 <span>Live-Auftritt · Magic Camp</span>
                 <span
                   aria-hidden
                   className="flex-1 mx-4 h-px"
                   style={{
                     background:
-                      "linear-gradient(90deg, hsl(225 78% 52% / 0.4), hsl(275 65% 52% / 0.6), hsl(345 75% 52% / 0.4))",
+                      "linear-gradient(90deg, hsl(225 78% 60% / 0.4), hsl(275 65% 60% / 0.6), hsl(345 75% 60% / 0.4))",
                   }}
                 />
                 <span>200 Gäste · 2024</span>
