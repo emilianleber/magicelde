@@ -1788,195 +1788,150 @@ const SorgenSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   NEU · Investment — Soft pricing transparency
-   Story: Bevor wir uns festlegen — hier eine Größenordnung.
+   NEU · Preise — transparent statt fixe Pakete
+   Story: Du hast Format und Ablauf gesehen. Frage offen: Was kostet das?
+   Antwort: keine Festpreise, aber klar welche Faktoren reinspielen.
    ═══════════════════════════════════════════════════════════ */
-const InvestmentSection = () => {
+const PreisSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const pakete = [
+  const faktoren = [
     {
-      title: "Close-Up Set",
-      price: "ab 395 €",
-      ideal: "Für kleine Runden",
-      includes: [
-        "30–60 Min Close-Up Magie",
-        "An- & Abreise (Bayern)",
-        "Persönliches Briefing",
-      ],
-      featured: false,
+      label: "Anlass & Format",
+      desc: "Close-Up, Bühnenshow, Magic Dinner oder Moderation — jedes Format hat seinen eigenen Aufwand.",
     },
     {
-      title: "Bühnen-Show",
-      price: "ab 850 €",
-      ideal: "Für 50+ Gäste",
-      includes: [
-        "20–45 Min Bühnenshow",
-        "Comedy & Interaktion",
-        "Eigene Technik & Requisiten",
-        "Maßgeschneidertes Konzept",
-      ],
-      featured: true,
+      label: "Dauer",
+      desc: "30 Minuten Walking-Act oder kompletter Show-Abend? Der Umfang bestimmt mit.",
     },
     {
-      title: "Komplettpaket",
-      price: "ab 1.500 €",
-      ideal: "Für ganze Abende",
-      includes: [
-        "Empfang + Bühnenshow",
-        "Walking-Act im Dinner",
-        "Optional Moderation",
-        "Volle Begleitung des Events",
-      ],
-      featured: false,
+      label: "Gäste & Location",
+      desc: "Intime Runde am Tisch oder 500 Leute auf der Bühne — die Setup-Anforderungen ändern sich.",
     },
+    {
+      label: "Anreise",
+      desc: "Bayern und Süddeutschland sind mein Schwerpunkt. Bundesweit und international auf Anfrage.",
+    },
+  ];
+  const garantien = [
+    "Kostenfreies & unverbindliches Angebot",
+    "Transparent — keine versteckten Kosten",
+    "Antwort innerhalb 24 Stunden",
+    "Eigene Technik & Requisiten inklusive",
   ];
 
   return (
     <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div
-          className={`max-w-3xl mb-14 md:mb-16 ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-        >
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            Investment
-          </p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Transparente{" "}
-            <span
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Left intro */}
+          <div
+            className={`lg:col-span-5 lg:sticky lg:top-24 ${
+              isVisible ? "animate-slide-left" : "opacity-0"
+            }`}
+          >
+            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+              Was kostet das?
+            </p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
+              Faire Preise.{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Keine Tricks.
+              </span>
+            </h2>
+            <p className="mt-6 max-w-md text-lg leading-[1.55] text-foreground/65 font-light">
+              Jedes Event ist anders, deshalb gibt's keinen Festpreis — sondern
+              ein faires Angebot, das exakt zu dir passt. Im Schnitt starten
+              kleine Auftritte ab ca. 395 €, größere Show-Abende deutlich
+              höher.
+            </p>
+
+            <div className="mt-8 space-y-3">
+              {garantien.map((g) => (
+                <div key={g} className="flex items-center gap-3">
+                  <div
+                    className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, hsl(225 85% 55%), hsl(275 75% 55%), hsl(345 85% 55%))",
+                    }}
+                  >
+                    <Check className="w-3 h-3 text-white" />
+                  </div>
+                  <p className="text-sm md:text-[15px] text-foreground/80">
+                    {g}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <Link
+              to="/buchung"
+              className="group mt-10 inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.02]"
               style={{
                 background:
-                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                  "linear-gradient(135deg, hsl(225 85% 55%) 0%, hsl(275 75% 55%) 50%, hsl(345 85% 55%) 100%)",
+                boxShadow: "0 10px 30px hsl(275 75% 55% / 0.3)",
               }}
             >
-              Pakete
-            </span>
-            .
-          </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
-            Damit du eine Größenordnung hast — die genauen Kosten hängen vom
-            Anlass, der Dauer und dem Aufwand ab. Du bekommst nach deiner
-            Anfrage ein verbindliches Angebot ohne versteckte Kosten.
-          </p>
-        </div>
+              Kostenloses Angebot anfragen
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
 
-        <div
-          className={`grid md:grid-cols-3 gap-5 ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.1s" }}
-        >
-          {pakete.map((p) => (
-            <div
-              key={p.title}
-              className={`relative p-7 md:p-8 flex flex-col h-full ${
-                p.featured ? "text-white" : "text-foreground"
-              }`}
-              style={{
-                background: p.featured
-                  ? "linear-gradient(135deg, hsl(225 50% 18%) 0%, hsl(280 45% 22%) 50%, hsl(340 50% 22%) 100%)"
-                  : "rgba(0,0,0,0.02)",
-                border: p.featured
-                  ? "1px solid rgba(255,255,255,0.1)"
-                  : "1px solid rgba(0,0,0,0.06)",
-                borderRadius: "0.75rem",
-                boxShadow: p.featured
-                  ? "0 30px 70px -20px rgba(60, 30, 80, 0.4)"
-                  : "none",
-              }}
-            >
-              {p.featured && (
-                <span
-                  className="absolute -top-3 left-7 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+          {/* Right: factors */}
+          <div
+            className={`lg:col-span-7 ${
+              isVisible ? "animate-slide-right" : "opacity-0"
+            }`}
+            style={{ animationDelay: "0.1s" }}
+          >
+            <p className="text-[11px] tracking-[0.18em] uppercase text-foreground/45 mb-6">
+              Wovon der Preis abhängt
+            </p>
+            <div className="space-y-3">
+              {faktoren.map((f, i) => (
+                <div
+                  key={f.label}
+                  className="flex items-start gap-5 p-6 md:p-7"
                   style={{
-                    background:
-                      "linear-gradient(135deg, hsl(225 95% 68%), hsl(285 85% 68%), hsl(340 95% 68%))",
-                    color: "#0f0a19",
+                    background: "rgba(0,0,0,0.02)",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    borderRadius: "0.75rem",
                   }}
                 >
-                  Beliebt
-                </span>
-              )}
-              <p
-                className={`text-[11px] tracking-[0.18em] uppercase mb-3 ${
-                  p.featured ? "text-white/55" : "text-foreground/55"
-                }`}
-              >
-                {p.ideal}
-              </p>
-              <h3
-                className={`font-display text-2xl md:text-3xl font-black mb-3 leading-[1.1] ${
-                  p.featured ? "text-white" : "text-foreground"
-                }`}
-              >
-                {p.title}
-              </h3>
-              <p
-                className="font-display text-3xl md:text-4xl font-black mb-6"
-                style={
-                  p.featured
-                    ? {
-                        background:
-                          "linear-gradient(100deg, hsl(225 95% 78%), hsl(285 85% 78%), hsl(340 95% 78%))",
-                        WebkitBackgroundClip: "text",
-                        backgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                      }
-                    : {
-                        background:
-                          "linear-gradient(100deg, hsl(225 78% 50%), hsl(275 65% 50%), hsl(345 75% 50%))",
-                        WebkitBackgroundClip: "text",
-                        backgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                      }
-                }
-              >
-                {p.price}
-              </p>
-              <ul
-                className={`space-y-2.5 text-sm leading-relaxed flex-1 ${
-                  p.featured ? "text-white/85" : "text-foreground/75"
-                }`}
-              >
-                {p.includes.map((line) => (
-                  <li key={line} className="flex items-start gap-2.5">
-                    <Check
-                      className={`w-4 h-4 shrink-0 mt-0.5 ${
-                        p.featured ? "text-white/70" : "text-foreground/50"
-                      }`}
-                    />
-                    <span>{line}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/buchung"
-                className={`mt-7 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all hover:scale-[1.01] justify-center ${
-                  p.featured
-                    ? "bg-white text-[#0f0a19]"
-                    : "border border-foreground/20 text-foreground hover:bg-foreground hover:text-white"
-                }`}
-              >
-                Anfrage starten
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+                  <span
+                    className="font-display text-2xl font-black shrink-0 tabular-nums leading-none mt-0.5"
+                    style={{
+                      background:
+                        "linear-gradient(100deg, hsl(225 88% 60%), hsl(285 78% 60%), hsl(340 90% 60%))",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="flex-1">
+                    <h3 className="font-display text-lg md:text-xl font-bold text-foreground mb-1.5">
+                      {f.label}
+                    </h3>
+                    <p className="text-sm md:text-[15px] text-foreground/65 leading-relaxed">
+                      {f.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
-
-        <p
-          className={`mt-8 text-center text-sm text-foreground/50 ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.4s" }}
-        >
-          Alle Preise zzgl. Anreise außerhalb Bayerns. Individuelle Pakete auf
-          Anfrage.
-        </p>
       </div>
     </section>
   );
@@ -2070,9 +2025,9 @@ const Index = () => {
         <SectionDivider />
         <AblaufSection />
 
-        {/* 14. NEU: Investment-Pakete */}
+        {/* 14. NEU: Preise — transparent, keine Festpakete */}
         <SectionDivider />
-        <InvestmentSection />
+        <PreisSection />
 
         {/* 15. FAQ */}
         <SectionDivider />
