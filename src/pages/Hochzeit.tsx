@@ -37,6 +37,8 @@ import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 import haendeInteraktionImg from "@/assets/haende-interaktion.jpg";
 import closeupImg from "@/assets/closeup.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
+import heroMagicImg from "@/assets/hero-magic.jpg";
+import dinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
 
 const GRADIENT =
   "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)";
@@ -100,12 +102,11 @@ const Hero = () => (
         </div>
 
         <h1
-          className="font-display font-black tracking-[-0.02em] leading-[1] text-[clamp(2.5rem,5.8vw,5.5rem)] opacity-0 animate-fade-up"
+          className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,5.6vw,5.25rem)] opacity-0 animate-fade-up"
           style={{ animationDelay: "0.25s" }}
         >
-          <span className="block">Magie für</span>
+          Magie für{" "}
           <span
-            className="block mt-1"
             style={{
               background: GRADIENT_LIGHT,
               WebkitBackgroundClip: "text",
@@ -113,8 +114,9 @@ const Hero = () => (
               WebkitTextFillColor: "transparent",
             }}
           >
-            eure Hochzeit.
+            eure Hochzeit
           </span>
+          .
         </h1>
 
         <p
@@ -159,51 +161,56 @@ const Hero = () => (
 );
 
 /* ═══════════════════════════════════════════════════════════
-   2 · DER MOMENT — full-bleed cinematic statement
+   2 · DER MOMENT — typografisches Statement, kein Bild
    ═══════════════════════════════════════════════════════════ */
 const MomentSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section
-      ref={ref}
-      className="relative overflow-hidden text-white py-32 md:py-40"
-    >
-      <div className="absolute inset-0">
-        <img src={staunenImg} alt="" className="w-full h-full object-cover scale-105" />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(110deg, rgba(15,10,25,0.85) 0%, rgba(30,15,45,0.7) 50%, rgba(15,10,25,0.4) 100%)",
-          }}
-        />
-      </div>
+    <section ref={ref} className="relative overflow-hidden bg-white py-28 md:py-36 lg:py-44">
+      {/* Soft pastel washes for texture */}
+      <div
+        aria-hidden
+        className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full opacity-50 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, hsl(285 80% 88%) 0%, transparent 70%)",
+          filter: "blur(70px)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-40 -left-40 w-[700px] h-[700px] rounded-full opacity-50 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, hsl(220 95% 88%) 0%, transparent 70%)",
+          filter: "blur(70px)",
+        }}
+      />
       <div className="relative z-10 container px-6">
-        <div className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] tracking-[0.22em] uppercase text-white/60 mb-8">
+        <div className={`max-w-4xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] tracking-[0.22em] uppercase text-foreground/45 mb-8">
             Der Moment
           </p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5rem)]">
-            Wenn fremde Gäste{" "}
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+            Wenn fremde Gäste plötzlich{" "}
             <span
               style={{
-                background: GRADIENT_LIGHT,
+                background: GRADIENT,
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
             >
-              plötzlich zusammen lachen
+              zusammen lachen
             </span>
             .
           </h2>
-          <p className="mt-8 max-w-xl text-lg md:text-xl leading-[1.55] text-white/80 font-light">
+          <p className="mt-10 max-w-2xl text-lg md:text-xl leading-[1.55] text-foreground/70 font-light">
             Die Cousine der Braut trifft auf den Kollegen des Bräutigams. Drei
-            Sekunden später teilen sie einen Moment, den keiner vergisst —
-            und reden den ganzen Abend miteinander.
+            Sekunden später teilen sie einen Moment, den keiner vergisst — und
+            reden den ganzen Abend miteinander.
           </p>
-          <p className="mt-5 text-base md:text-lg text-white/65 max-w-xl">
+          <p className="mt-5 text-base md:text-lg text-foreground/55 max-w-2xl">
             Genau das ist die Magie auf einer Hochzeit: Gäste, die sich vorher
             nicht kannten, werden plötzlich zur Familie.
           </p>
@@ -245,7 +252,7 @@ const ZeitstrahlSection = () => {
       time: "Tanzfläche",
       title: "Walking-Magic später",
       desc: "Wenn die Tanzfläche brennt, mische ich mich nochmal unter müde gewordene Gäste mit einem letzten Wow-Moment vor dem Aufbruch.",
-      img: audienceImg,
+      img: buehneZuschauerImg,
       duration: "30–45 Min",
     },
   ];
@@ -582,79 +589,129 @@ const StimmenSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   6 · WAS DABEI IST — inkludiert
+   6 · WAS BEKOMMT IHR KONKRET — 3 Phasen
    ═══════════════════════════════════════════════════════════ */
-const InklusiveSection = () => {
+const WasBekommtIhrSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const items = [
-    "Persönliches Vorgespräch und Konzeptabstimmung",
-    "Anpassung an euren Tagesablauf und Location",
-    "Eigene Technik & Requisiten — ihr müsst nichts vorbereiten",
-    "Anreise innerhalb Bayerns inklusive",
-    "Nach-Show-Smalltalk mit den Gästen",
-    "Kostenlose Beratung zum perfekten Slot",
+  const phasen = [
+    {
+      phase: "Vor dem Tag",
+      icon: PhoneCall,
+      title: "Vorbereitung",
+      items: [
+        "30-min Kennenlern-Call",
+        "Schriftlicher Konzept-Vorschlag",
+        "Persönliche Anekdoten-Ideen",
+        "Abstimmung mit Eventplanern / Location",
+      ],
+    },
+    {
+      phase: "Am Tag",
+      icon: Sparkles,
+      title: "Live bei eurer Hochzeit",
+      items: [
+        "Pünktliche Anreise & Setup",
+        "Zauber-Slots nach eurem Ablauf",
+        "Eigene Technik & Requisiten",
+        "Persönliche Show mit eurer Story",
+      ],
+      featured: true,
+    },
+    {
+      phase: "Nach dem Tag",
+      icon: Heart,
+      title: "Wie's nachklingt",
+      items: [
+        "Smalltalk mit Gästen nach der Show",
+        "Foto-Abstimmung mit eurem Fotografen",
+        "Optional: Anekdoten-Mail nach der Hochzeit",
+        "Empfehlung an Freunde mit Bonus",
+      ],
+    },
   ];
   return (
     <section ref={ref} className="bg-white section-large border-y border-foreground/8">
       <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          <div
-            className={`lg:col-span-5 lg:sticky lg:top-24 ${
-              isVisible ? "animate-slide-left" : "opacity-0"
-            }`}
-          >
-            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-              Was dabei ist
-            </p>
-            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
-              Alles{" "}
-              <span
+        <div className={`max-w-3xl mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Was ihr bekommt
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Drei Phasen,{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              alles inklusive
+            </span>
+            .
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Keine versteckten Kosten, keine Überraschungen. Was ihr bucht, ist
+            alles drin — von der Vorbereitung bis lange nach dem Tanz.
+          </p>
+        </div>
+
+        <div className={`grid md:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {phasen.map((p) => (
+            <div
+              key={p.phase}
+              className={`relative p-7 md:p-8 ${p.featured ? "text-white" : "text-foreground"}`}
+              style={{
+                background: p.featured
+                  ? "linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)"
+                  : "rgba(0,0,0,0.02)",
+                border: p.featured
+                  ? "1px solid rgba(255,255,255,0.1)"
+                  : "1px solid rgba(0,0,0,0.06)",
+                borderRadius: "0.75rem",
+                boxShadow: p.featured
+                  ? "0 30px 70px -20px rgba(60, 30, 80, 0.4)"
+                  : "none",
+              }}
+            >
+              <div
+                className="inline-flex items-center justify-center w-11 h-11 rounded-full mb-5"
                 style={{
-                  background: GRADIENT,
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  background: p.featured
+                    ? "rgba(255,255,255,0.12)"
+                    : "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))",
                 }}
               >
-                inklusive
-              </span>
-              .
-            </h2>
-            <p className="mt-6 max-w-md text-lg leading-[1.55] text-foreground/65 font-light">
-              Keine versteckten Kosten, keine Last-Minute-Überraschungen. Was
-              du bei mir buchst, ist alles drin.
-            </p>
-          </div>
-          <div
-            className={`lg:col-span-7 ${
-              isVisible ? "animate-slide-right" : "opacity-0"
-            }`}
-            style={{ animationDelay: "0.1s" }}
-          >
-            <ul className="space-y-3">
-              {items.map((it) => (
-                <li
-                  key={it}
-                  className="flex items-start gap-4 p-5 md:p-6"
-                  style={{
-                    background: "rgba(0,0,0,0.02)",
-                    border: "1px solid rgba(0,0,0,0.06)",
-                    borderRadius: "0.75rem",
-                  }}
-                >
-                  <div
-                    className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-0.5"
-                    style={{ background: GRADIENT }}
-                  >
-                    <Check className="w-3.5 h-3.5 text-white" />
-                  </div>
-                  <p className="text-base md:text-[17px] text-foreground font-medium leading-[1.5]">
-                    {it}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
+                <p.icon className="w-5 h-5" style={{ color: p.featured ? "white" : "hsl(255 60% 40%)" }} />
+              </div>
+              <p
+                className={`text-[10px] tracking-[0.2em] uppercase mb-2 font-semibold ${
+                  p.featured ? "" : ""
+                }`}
+                style={
+                  p.featured
+                    ? {
+                        background: GRADIENT_LIGHT,
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }
+                    : {
+                        background: GRADIENT,
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }
+                }
+              >
+                {p.phase}
+              </p>
+              <h3 className={`font-display text-xl md:text-2xl font-black mb-5 leading-tight ${p.featured ? "text-white" : "text-foreground"}`}>
+                {p.title}
+              </h3>
+              <ul className={`space-y-2.5 text-sm ${p.featured ? "text-white/85" : "text-foreground/70"}`}>
+                {p.items.map((it) => (
+                  <li key={it} className="flex items-start gap-2.5 leading-[1.5]">
+                    <Check className={`w-4 h-4 shrink-0 mt-0.5 ${p.featured ? "text-white/80" : "text-foreground/55"}`} />
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -860,11 +917,11 @@ const ZahlenHochzeitSection = () => {
 const GalerieSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const photos = [
-    { img: weddingMagicImg, span: "lg:col-span-2 lg:row-span-2", pos: "object-center" },
-    { img: emotionenImg, span: "", pos: "object-center" },
-    { img: staunenImg, span: "", pos: "object-top" },
-    { img: audienceImg, span: "", pos: "object-center" },
+    { img: heroMagicImg, span: "lg:col-span-2 lg:row-span-2", pos: "object-center" },
+    { img: closeupImg, span: "", pos: "object-center" },
     { img: haendeInteraktionImg, span: "", pos: "object-center" },
+    { img: portraitImg, span: "", pos: "object-top" },
+    { img: dinnerBuehneImg, span: "", pos: "object-center" },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
@@ -1055,7 +1112,7 @@ const FinalCTA = () => {
   return (
     <section ref={ref} className="relative overflow-hidden text-white py-28 md:py-36">
       <div className="absolute inset-0">
-        <img src={emotionenImg} alt="" className="w-full h-full object-cover" />
+        <img src={audienceImg} alt="" className="w-full h-full object-cover" />
         <div
           aria-hidden
           className="absolute inset-0"
@@ -1133,7 +1190,7 @@ const Hochzeit = () => (
       <VergleichSection />
       <ZahlenHochzeitSection />
       <StimmenSection />
-      <InklusiveSection />
+      <WasBekommtIhrSection />
       <TippsSection />
       <GalerieSection />
       <BriefingSection />
