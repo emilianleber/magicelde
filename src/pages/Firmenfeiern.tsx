@@ -18,18 +18,13 @@ import {
   Briefcase,
   Award,
   TrendingUp,
-  FileText,
-  ShieldCheck,
-  Receipt,
-  Lock,
-  Handshake,
-  Palette,
 } from "lucide-react";
 
 import Navigation from "@/components/landing/Navigation";
 import Footer from "@/components/landing/Footer";
 import Chatbot from "@/components/landing/Chatbot";
 import WhatsAppButton from "@/components/landing/WhatsAppButton";
+import { ClientLogos } from "@/components/landing/TrustElements";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 
@@ -92,7 +87,7 @@ const Hero = () => (
           </div>
           <span aria-hidden className="hidden md:block h-4 w-px bg-white/20" />
           <span className="text-sm text-white/85">
-            Kunden: <strong className="font-semibold text-white">STRABAG, Sixt, VKB</strong>
+            Für <strong className="font-semibold text-white">Eventmanager, HR & Geschäftsführung</strong>
           </span>
         </div>
 
@@ -154,64 +149,7 @@ const Hero = () => (
   </section>
 );
 
-/* 2 · LOGO WALL — Trust-Stripe direkt unter Hero */
-const LogoWallSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const kunden = [
-    "STRABAG",
-    "Sixt",
-    "VKB",
-    "Sparkasse",
-    "Allianz",
-    "Stadtwerke",
-    "DPSG",
-    "Wächter Agentur",
-  ];
-  return (
-    <section ref={ref} className="bg-white py-16 md:py-20 border-b border-foreground/8">
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-10 md:mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.2em] uppercase text-foreground/45 font-semibold">
-            Vertrauen von 200+ Firmenkunden
-          </p>
-          <p className="mt-4 font-display text-base md:text-lg text-foreground/65 font-light">
-            Auswahl an Auftraggebern aus den letzten Jahren — Konzerne, Mittelstand, Agenturen.
-          </p>
-        </div>
-        <div className={`flex flex-wrap items-center justify-center gap-x-10 gap-y-5 md:gap-x-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {kunden.map((k) => (
-            <span
-              key={k}
-              className="font-display font-bold tracking-[-0.01em] text-foreground/35 hover:text-foreground/70 transition-colors text-xl md:text-2xl"
-            >
-              {k}
-            </span>
-          ))}
-        </div>
-        <div className={`mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
-          <div className="flex items-center gap-2 text-sm text-foreground/65">
-            <Check className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
-            Rechnung mit USt-Ausweis
-          </div>
-          <div className="flex items-center gap-2 text-sm text-foreground/65">
-            <Check className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
-            Berufshaftpflicht versichert
-          </div>
-          <div className="flex items-center gap-2 text-sm text-foreground/65">
-            <Check className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
-            DSGVO-konform
-          </div>
-          <div className="flex items-center gap-2 text-sm text-foreground/65">
-            <Check className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
-            10+ Jahre Routine
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 3 · QUIZ */
+/* 2 · QUIZ */
 type Antwort = "klein" | "mittel" | "groß" | "casual" | "formal" | "highend" | "team" | "kunden" | "extern";
 
 const QuizSection = () => {
@@ -705,84 +643,13 @@ const MoeglichkeitenSection = () => {
   );
 };
 
-/* 13 · WAS FIRMEN BEKOMMEN — formale Procurement-Anforderungen */
-const WasFirmenBekommenSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const items = [
-    {
-      icon: Receipt,
-      title: "Rechnung mit USt-Ausweis",
-      desc: "Vollständige Rechnung mit USt, Lieferanschrift und Anlass — vorbereitet für eure Buchhaltung.",
-    },
-    {
-      icon: ShieldCheck,
-      title: "Berufshaftpflicht",
-      desc: "Vorhanden und auf Anfrage nachweisbar. Keine Hürde im Einkauf, keine Diskussion mit der Rechtsabteilung.",
-    },
-    {
-      icon: Lock,
-      title: "DSGVO-konform",
-      desc: "Keine Datenweitergabe, signierte Auftragsverarbeitung auf Wunsch. Bilder und Daten nur nach Freigabe.",
-    },
-    {
-      icon: Handshake,
-      title: "Rahmenvertrag möglich",
-      desc: "Für Konzerne und Agenturen: Rahmenvertrag mit festen Konditionen — schneller Auftrag pro Event ohne neuen Vertragsweg.",
-    },
-    {
-      icon: Palette,
-      title: "Branding einbaubar",
-      desc: "Firmensymbol, Slogan oder Insider-Anekdote werden subtil in die Show integriert — nicht plakativ, sondern als Highlight.",
-    },
-    {
-      icon: FileText,
-      title: "Schriftliches Angebot",
-      desc: "Festes Angebot innerhalb 24h — Leistungen klar definiert, keine versteckten Kosten, keine Ausreden hinterher.",
-    },
-  ];
-  return (
-    <section ref={ref} className="bg-foreground/[0.02] section-large border-y border-foreground/8">
-      <div className="container px-6">
-        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            Procurement-Ready
-          </p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Was Firmen bei mir{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              bekommen
-            </span>
-            .
-          </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
-            Außer der Show: alles, was eure Buchhaltung, Rechtsabteilung und der Einkauf brauchen — damit die Buchung nicht im Workflow stecken bleibt.
-          </p>
-        </div>
-        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {items.map((it) => (
-            <div key={it.title} className="flex gap-5">
-              <div className="shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-full" style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}>
-                <it.icon className="w-5 h-5" style={{ color: "hsl(255 60% 40%)" }} />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-display text-lg md:text-xl font-black mb-2 text-foreground leading-[1.2]">{it.title}</h3>
-                <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/65">{it.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 14 · BUCHUNGS-FLOW */
+/* 13 · BUCHUNGS-FLOW */
 const BuchungsFlowSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const steps = [
     { icon: Phone, num: "01", title: "Anfragen", desc: "Schickt mir Datum, Ort, Anlass und ungefähre Gästezahl. Antwort innerhalb 24h.", time: "2 Min" },
-    { icon: ClipboardList, num: "02", title: "Konzept", desc: "30-Min-Call: Wir besprechen Ablauf, Branche, Wünsche. Ihr bekommt einen schriftlichen Vorschlag.", time: "30 Min" },
-    { icon: PartyPopper, num: "03", title: "Event", desc: "Pünktliche Anreise, eigene Technik & Requisiten — ihr müsst nichts vorbereiten. Inkl. Rechnung mit USt-Ausweis.", time: "Euer großes Event" },
+    { icon: ClipboardList, num: "02", title: "Konzept & Angebot", desc: "30-Min-Call: Ablauf, Branche, Markenbotschaft, Tech-Rider. Anschließend schriftliches Angebot mit klar definierten Leistungen.", time: "30 Min" },
+    { icon: PartyPopper, num: "03", title: "Event", desc: "Pünktliche Anreise mit Pufferzeit, eigene Requisiten und Backup-Equipment. Im Anschluss Rechnung mit USt-Ausweis.", time: "Euer Eventtag" },
   ];
   return (
     <section ref={ref} className="bg-white section-large border-y border-foreground/8">
@@ -820,12 +687,18 @@ const BuchungsFlowSection = () => {
 const FAQ = () => {
   const { ref, isVisible } = useScrollReveal();
   const faqs = [
-    { q: "Was kostet eine Show für Firmenfeiern?", a: "Pakete starten ab 395€. Endgültiger Preis hängt von Format, Dauer, Anreise und Gästezahl ab. Nach der Anfrage bekommt ihr ein verbindliches Angebot ohne versteckte Kosten — inkl. USt-Ausweis." },
+    { q: "Was kostet eine Show für Firmenfeiern?", a: "Pakete starten ab 395€. Endgültiger Preis hängt von Format, Dauer, Anreise und Gästezahl ab. Nach der Anfrage bekommt ihr ein verbindliches schriftliches Angebot ohne versteckte Kosten." },
     { q: "Wie weit im Voraus sollten wir buchen?", a: "Sommerfeste & Weihnachtsfeiern: 3–6 Monate Vorlauf ist ideal. Spontane Slots gehen auch — einfach trotzdem fragen." },
-    { q: "Bei welcher Mitarbeiter-/Gästezahl funktioniert es?", a: "Von 20 bis 500+ Gästen alles möglich. Bei Close-Up erreiche ich auch große Gruppen durch Tisch-zu-Tisch-Magie." },
-    { q: "Können wir die Markenbotschaft einbauen?", a: "Ja, sehr gern. Ein Firmensymbol, ein Slogan oder eine Insider-Anekdote kann subtil in die Show eingewebt werden — nicht plakativ, sondern als Highlight." },
+    { q: "Bei welcher Mitarbeiter-/Gästezahl funktioniert es?", a: "Von 20 bis 500+ Gästen alles möglich. Bei Close-Up erreiche ich auch große Gruppen durch Tisch-zu-Tisch-Magie. Bei der Bühnenshow ist die nötige Bühnen- und Tongröße entscheidender als die Gästezahl." },
+    { q: "Können wir die Markenbotschaft einbauen?", a: "Ja. Ein Firmensymbol, ein Slogan oder eine Insider-Anekdote kann subtil in die Show eingewebt werden — nicht plakativ, sondern als Highlight. Briefing erfolgt im Vorgespräch." },
+    { q: "Welche Technik wird gebraucht?", a: "Bei Close-Up nichts — eigene Requisiten, kein Strom, kein Mikro nötig. Bei der Bühnenshow reicht ein Funkmikro und Spotlight; Anforderungen schicke ich rechtzeitig als Tech-Rider an euren Veranstalter." },
+    { q: "Was, wenn der Termin verschoben werden muss?", a: "Bis 14 Tage vor dem Event kostenlose Verschiebung auf einen Ersatztermin im selben Jahr — auch ohne Begründung. Danach individuell." },
+    { q: "Gibt es einen Plan B, falls etwas schiefgeht?", a: "Anreise mit Pufferzeit, Backup-Equipment für Mikro und Requisiten, Notfallnummer am Eventtag. Ich bin in 10+ Jahren noch nie zu spät gekommen — aber wenn der Zeitplan kippt, improvisiere ich." },
+    { q: "Ist die Show in Englisch möglich?", a: "Ja. Bühnenshow und Close-Up sind komplett auf Englisch buchbar — sinnvoll bei internationalen Kunden-Events oder Konzern-Töchtern." },
+    { q: "Was muss ich als Eventmanager vorab liefern?", a: "Datum, Ort, ungefähre Gästezahl, Anlass und Branche. Im 30-Min-Call klären wir Ablauf, Kontaktperson vor Ort und ob Markenbotschaft eingebaut werden soll. Mehr braucht es nicht." },
     { q: "Tritt ihr auch außerhalb Bayerns auf?", a: "Schwerpunkt Bayern und Süddeutschland. Deutschlandweit und auch international buchbar — Anreise wird transparent abgerechnet." },
-    { q: "Erhalten wir eine Rechnung mit USt-Ausweis?", a: "Selbstverständlich. Vollständige Rechnung mit USt-Ausweis, Lieferanschrift und Anlass — vorbereitet für eure Buchhaltung." },
+    { q: "Erhalten wir eine Rechnung mit USt-Ausweis?", a: "Selbstverständlich. Vollständige Rechnung mit USt-Ausweis, Lieferanschrift und Anlass — vorbereitet für eure Buchhaltung. Auch Rahmenverträge mit festen Konditionen sind möglich." },
+    { q: "Was ist mit GEMA und Urheberrechten?", a: "Eigene Musik ist GEMA-frei oder lizenziert. Alle Tricks und Routinen sind selbst entwickelt oder lizenziert — keine rechtlichen Stolperfallen für euch." },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
@@ -901,7 +774,7 @@ const Firmenfeiern = () => (
     <Navigation />
     <main>
       <Hero />
-      <LogoWallSection />
+      <ClientLogos title="Vertrauen von 200+ Firmenkunden" />
       <QuizSection />
       <OptionenSection />
       <DreiSekundenSection />
@@ -911,7 +784,6 @@ const Firmenfeiern = () => (
       <GalerieSection />
       <ZahlenSection />
       <MoeglichkeitenSection />
-      <WasFirmenBekommenSection />
       <BuchungsFlowSection />
       <FAQ />
       <FinalCTA />
