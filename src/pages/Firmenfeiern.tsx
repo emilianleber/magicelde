@@ -892,43 +892,67 @@ const BuchungsFlowSection = () => {
 /* 12 · FAQ */
 const FAQ = () => {
   const { ref, isVisible } = useScrollReveal();
-  const faqs = [
-    { q: "Was kostet eine Show für Firmenfeiern?", a: "Pakete starten ab 395€. Endgültiger Preis hängt von Format, Dauer, Anreise und Gästezahl ab. Nach der Anfrage bekommt ihr ein verbindliches schriftliches Angebot ohne versteckte Kosten." },
-    { q: "Wie weit im Voraus sollten wir buchen?", a: "Sommerfeste & Weihnachtsfeiern: 3–6 Monate Vorlauf ist ideal. Spontane Slots gehen auch — einfach trotzdem fragen." },
-    { q: "Bei welcher Mitarbeiter-/Gästezahl funktioniert es?", a: "Von 20 bis 500+ Gästen alles möglich. Bei Close-Up erreiche ich auch große Gruppen durch Tisch-zu-Tisch-Magie. Bei der Bühnenshow ist die nötige Bühnen- und Tongröße entscheidender als die Gästezahl." },
-    { q: "Können wir die Markenbotschaft einbauen?", a: "Ja. Ein Firmensymbol, ein Slogan oder eine Insider-Anekdote kann subtil in die Show eingewebt werden — nicht plakativ, sondern als Highlight. Briefing erfolgt im Vorgespräch." },
-    { q: "Welche Technik wird gebraucht?", a: "Bei Close-Up nichts — eigene Requisiten, kein Strom, kein Mikro nötig. Bei der Bühnenshow reicht ein Funkmikro und Spotlight; Anforderungen schicke ich rechtzeitig als Tech-Rider an euren Veranstalter." },
-    { q: "Was, wenn der Termin verschoben werden muss?", a: "Bis 14 Tage vor dem Event kostenlose Verschiebung auf einen Ersatztermin im selben Jahr — auch ohne Begründung. Danach individuell." },
-    { q: "Gibt es einen Plan B, falls etwas schiefgeht?", a: "Anreise mit Pufferzeit, Backup-Equipment für Mikro und Requisiten, Notfallnummer am Eventtag. Ich bin in 10+ Jahren noch nie zu spät gekommen — aber wenn der Zeitplan kippt, improvisiere ich." },
-    { q: "Ist die Show in Englisch möglich?", a: "Ja. Bühnenshow und Close-Up sind komplett auf Englisch buchbar — sinnvoll bei internationalen Kunden-Events oder Konzern-Töchtern." },
-    { q: "Was muss ich als Eventmanager vorab liefern?", a: "Datum, Ort, ungefähre Gästezahl, Anlass und Branche. Im 30-Min-Call klären wir Ablauf, Kontaktperson vor Ort und ob Markenbotschaft eingebaut werden soll. Mehr braucht es nicht." },
-    { q: "Tritt ihr auch außerhalb Bayerns auf?", a: "Schwerpunkt Bayern und Süddeutschland. Deutschlandweit und auch international buchbar — Anreise wird transparent abgerechnet." },
-    { q: "Erhalten wir eine Rechnung mit USt-Ausweis?", a: "Selbstverständlich. Vollständige Rechnung mit USt-Ausweis, Lieferanschrift und Anlass — vorbereitet für eure Buchhaltung. Auch Rahmenverträge mit festen Konditionen sind möglich." },
-    { q: "Was ist mit GEMA und Urheberrechten?", a: "Eigene Musik ist GEMA-frei oder lizenziert. Alle Tricks und Routinen sind selbst entwickelt oder lizenziert — keine rechtlichen Stolperfallen für euch." },
+  const gruppen = [
+    {
+      label: "Preis & Vertrag",
+      faqs: [
+        { q: "Was kostet eine Show für Firmenfeiern?", a: "Pakete starten ab 395€. Endgültiger Preis hängt von Format, Dauer, Anreise und Gästezahl ab. Nach der Anfrage bekommt ihr ein verbindliches schriftliches Angebot ohne versteckte Kosten." },
+        { q: "Erhalten wir eine Rechnung mit USt-Ausweis?", a: "Selbstverständlich. Vollständige Rechnung mit USt-Ausweis, Lieferanschrift und Anlass — vorbereitet für eure Buchhaltung. Auch Rahmenverträge mit festen Konditionen sind möglich." },
+        { q: "Was ist mit GEMA und Urheberrechten?", a: "Eigene Musik ist GEMA-frei oder lizenziert. Alle Tricks und Routinen sind selbst entwickelt oder lizenziert — keine rechtlichen Stolperfallen für euch." },
+      ],
+    },
+    {
+      label: "Logistik & Technik",
+      faqs: [
+        { q: "Wie weit im Voraus sollten wir buchen?", a: "Sommerfeste & Weihnachtsfeiern: 3–6 Monate Vorlauf ist ideal. Spontane Slots gehen auch — einfach trotzdem fragen." },
+        { q: "Welche Technik wird gebraucht?", a: "Bei Close-Up nichts — eigene Requisiten, kein Strom, kein Mikro nötig. Bei der Bühnenshow reicht ein Funkmikro und Spotlight; Anforderungen schicke ich rechtzeitig als Tech-Rider an euren Veranstalter." },
+        { q: "Tritt ihr auch außerhalb Bayerns auf?", a: "Schwerpunkt Bayern und Süddeutschland. Deutschlandweit und auch international buchbar — Anreise wird transparent abgerechnet." },
+        { q: "Was, wenn der Termin verschoben werden muss?", a: "Bis 14 Tage vor dem Event kostenlose Verschiebung auf einen Ersatztermin im selben Jahr — auch ohne Begründung. Danach individuell." },
+      ],
+    },
+    {
+      label: "Show & Briefing",
+      faqs: [
+        { q: "Bei welcher Mitarbeiter-/Gästezahl funktioniert es?", a: "Von 20 bis 500+ Gästen alles möglich. Bei Close-Up erreiche ich auch große Gruppen durch Tisch-zu-Tisch-Magie. Bei der Bühnenshow ist die nötige Bühnen- und Tongröße entscheidender als die Gästezahl." },
+        { q: "Können wir die Markenbotschaft einbauen?", a: "Ja. Ein Firmensymbol, ein Slogan oder eine Insider-Anekdote kann subtil in die Show eingewebt werden — nicht plakativ, sondern als Highlight. Briefing erfolgt im Vorgespräch." },
+        { q: "Ist die Show in Englisch möglich?", a: "Ja. Bühnenshow und Close-Up sind komplett auf Englisch buchbar — sinnvoll bei internationalen Kunden-Events oder Konzern-Töchtern." },
+        { q: "Was muss ich als Eventmanager vorab liefern?", a: "Datum, Ort, ungefähre Gästezahl, Anlass und Branche. Im 30-Min-Call klären wir Ablauf, Kontaktperson vor Ort und ob Markenbotschaft eingebaut werden soll. Mehr braucht es nicht." },
+        { q: "Gibt es einen Plan B, falls etwas schiefgeht?", a: "Anreise mit Pufferzeit, Backup-Equipment für Mikro und Requisiten, Notfallnummer am Eventtag. Ich bin in 10+ Jahren noch nie zu spät gekommen — aber wenn der Zeitplan kippt, improvisiere ich." },
+      ],
+    },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
-          <div className={`lg:col-span-4 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">FAQ</p>
-            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4vw,3.5rem)] text-foreground">
-              Häufige <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Fragen</span>.
-            </h2>
-          </div>
-          <div className={`lg:col-span-8 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-            <div className="divide-y divide-foreground/10 border-y border-foreground/10">
-              {faqs.map((faq) => (
-                <details key={faq.q} className="group py-6">
-                  <summary className="flex items-center justify-between cursor-pointer font-display text-lg md:text-xl font-bold text-foreground pr-8 list-none hover:text-foreground/70 transition-colors">
-                    {faq.q}
-                    <span className="text-foreground/30 group-open:rotate-45 transition-transform duration-300 text-2xl shrink-0">+</span>
-                  </summary>
-                  <p className="mt-4 text-base leading-[1.65] text-foreground/65 max-w-2xl">{faq.a}</p>
-                </details>
-              ))}
+        <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">FAQ für Entscheider</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
+            Was Eventmanager{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              vorab klären
+            </span>{" "}
+            wollen.
+          </h2>
+        </div>
+        <div className={`max-w-5xl space-y-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {gruppen.map((gruppe) => (
+            <div key={gruppe.label}>
+              <p className="text-[11px] tracking-[0.22em] uppercase font-bold mb-5" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                {gruppe.label}
+              </p>
+              <div className="divide-y divide-foreground/10 border-y border-foreground/10">
+                {gruppe.faqs.map((faq) => (
+                  <details key={faq.q} className="group py-5">
+                    <summary className="flex items-center justify-between cursor-pointer font-display text-base md:text-lg font-bold text-foreground pr-8 list-none hover:text-foreground/70 transition-colors">
+                      {faq.q}
+                      <span className="text-foreground/30 group-open:rotate-45 transition-transform duration-300 text-2xl shrink-0">+</span>
+                    </summary>
+                    <p className="mt-3 text-sm md:text-base leading-[1.65] text-foreground/65 max-w-3xl">{faq.a}</p>
+                  </details>
+                ))}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

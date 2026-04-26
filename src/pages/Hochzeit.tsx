@@ -1014,45 +1014,48 @@ const MoeglichkeitenSection = () => {
 const FAQ = () => {
   const { ref, isVisible } = useScrollReveal();
   const faqs = [
-    { q: "Was kostet ein Auftritt?", a: "Hochzeitspakete starten ab 395€. Endgültiger Preis hängt von Format, Dauer und Anreise ab. Ihr bekommt nach der Anfrage ein verbindliches Angebot ohne versteckte Kosten." },
+    { q: "Was kostet ein Auftritt zur Hochzeit?", a: "Hochzeitspakete starten ab 395€. Endgültiger Preis hängt von Format, Dauer und Anreise ab. Ihr bekommt nach der Anfrage ein verbindliches Angebot ohne versteckte Kosten." },
     { q: "Wie weit im Voraus sollten wir buchen?", a: "Ideal sind 6–12 Monate Vorlauf. Bei kurzfristigen Anfragen einfach trotzdem fragen — manchmal geht's noch." },
     { q: "Bei welcher Gästezahl funktioniert es?", a: "Von 20 bis 300+ Gästen alles möglich. Bei Close-Up erreiche ich auch große Gruppen durch Tisch-zu-Tisch-Magie." },
     { q: "Was, wenn unsere Gäste sehr seriös sind?", a: "Genau die haben oft am meisten Spaß. Vorstandsvorsitzende, Anwälte, Großeltern — alle staunen, sobald die erste Karte verschwindet." },
     { q: "Wie ist es mit Kindern?", a: "Funktioniert wunderbar. Magie ist altersübergreifend — vom 6-Jährigen bis zur 90-jährigen Oma." },
+    { q: "Können wir Insider-Anekdoten einbauen?", a: "Ja, sehr gern. Schickt mir vorab ein paar Details über euch — ich baue sie subtil in die Show ein, sodass nur ihr und eure engsten Freunde es bemerken." },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
-          <div className={`lg:col-span-4 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-              FAQ
-            </p>
-            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4vw,3.5rem)] text-foreground">
-              Häufige{" "}
-              <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                Fragen
+        <div className={`max-w-3xl mx-auto text-center mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">
+            Häufige Fragen
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4rem)] text-foreground">
+            Was Brautpaare{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              vor der Buchung
+            </span>{" "}
+            fragen.
+          </h2>
+        </div>
+        {/* Open Q&A grid - kein Accordion, alle Antworten direkt sichtbar */}
+        <div className={`grid md:grid-cols-2 gap-x-10 gap-y-10 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {faqs.map((faq, i) => (
+            <div key={faq.q} className="flex gap-5">
+              <span
+                className="shrink-0 font-display font-black text-2xl md:text-3xl leading-none mt-0.5"
+                style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}
+              >
+                {String(i + 1).padStart(2, "0")}
               </span>
-              .
-            </h2>
-          </div>
-          <div className={`lg:col-span-8 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-            <div className="divide-y divide-foreground/10 border-y border-foreground/10">
-              {faqs.map((faq) => (
-                <details key={faq.q} className="group py-6">
-                  <summary className="flex items-center justify-between cursor-pointer font-display text-lg md:text-xl font-bold text-foreground pr-8 list-none hover:text-foreground/70 transition-colors">
-                    {faq.q}
-                    <span className="text-foreground/30 group-open:rotate-45 transition-transform duration-300 text-2xl shrink-0">
-                      +
-                    </span>
-                  </summary>
-                  <p className="mt-4 text-base leading-[1.65] text-foreground/65 max-w-2xl">
-                    {faq.a}
-                  </p>
-                </details>
-              ))}
+              <div>
+                <h3 className="font-display text-base md:text-lg font-bold text-foreground leading-[1.3] mb-3">
+                  {faq.q}
+                </h3>
+                <p className="text-sm md:text-[15px] leading-[1.65] text-foreground/65">
+                  {faq.a}
+                </p>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
