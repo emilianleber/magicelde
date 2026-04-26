@@ -159,7 +159,21 @@ const QuizSection = () => {
   const [stil, setStil] = useState<Antwort | null>(null);
   const [zielgruppe, setZielgruppe] = useState<Antwort | null>(null);
 
-  const reset = () => { setStep(0); setGroesse(null); setStil(null); setZielgruppe(null); };
+  const [firma, setFirma] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [datum, setDatum] = useState("");
+  const [sending, setSending] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const reset = () => {
+    setStep(0);
+    setGroesse(null); setStil(null); setZielgruppe(null);
+    setFirma(""); setName(""); setEmail(""); setPhone(""); setDatum("");
+    setSuccess(false); setErrorMsg("");
+  };
 
   const empfehlung = (() => {
     if (!groesse || !stil || !zielgruppe) return null;
@@ -189,6 +203,66 @@ const QuizSection = () => {
     }
     return null;
   })();
+
+  const groesseLabel = { klein: "bis 50 Gäste", mittel: "50–200 Gäste", "groß": "200+ Gäste" } as const;
+  const stilLabel = { casual: "locker / Sommerfest", formal: "Business / Weihnachtsfeier", highend: "Premium / Kunden-Event" } as const;
+  const zielgruppeLabel = { team: "eigene Mitarbeiter", kunden: "Kunden / Partner", extern: "Mix aus beiden" } as const;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!empfehlung || !groesse || !stil || !zielgruppe) return;
+    setSending(true);
+    setErrorMsg("");
+
+    const nachricht = [
+      "Anfrage über Quiz auf /firmenfeiern",
+      `Empfehlung: ${empfehlung.format} (${empfehlung.sub})`,
+      `Eventgröße: ${groesseLabel[groesse as keyof typeof groesseLabel]}`,
+      `Stil: ${stilLabel[stil as keyof typeof stilLabel]}`,
+      `Zielgruppe: ${zielgruppeLabel[zielgruppe as keyof typeof zielgruppeLabel]}`,
+    ].join("\n");
+
+    const payload = {
+      anrede: null,
+      vorname: name.trim().split(" ")[0] || name.trim(),
+      nachname: name.trim().split(" ").slice(1).join(" ") || "",
+      name: name.trim(),
+      firma: firma.trim() || null,
+      email: email.trim(),
+      phone: phone.trim(),
+      anlass: "Firmenfeier",
+      datum: datum.trim(),
+      ort: "",
+      gaeste: groesse === "klein" ? 30 : groesse === "mittel" ? 100 : 250,
+      format: empfehlung.format,
+      nachricht,
+    };
+
+    try {
+      const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const res = await fetch(
+        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/create-portal-request",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: publishableKey,
+            Authorization: `Bearer ${publishableKey}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || `Fehler ${res.status}`);
+      }
+      setSuccess(true);
+    } catch (err: any) {
+      setErrorMsg(err?.message || "Beim Absenden ist ein Fehler aufgetreten.");
+    } finally {
+      setSending(false);
+    }
+  };
 
   const Step = ({ title, options, onChoice, selected }: { title: string; options: { value: Antwort; label: string; sub?: string }[]; onChoice: (v: Antwort) => void; selected: Antwort | null }) => (
     <div>
@@ -258,22 +332,97 @@ const QuizSection = () => {
               { value: "kunden", label: "Kunden / Partner", sub: "Wow-Effekt für externe Gäste" },
               { value: "extern", label: "Mix aus beiden", sub: "Networking-Event" },
             ]} />}
-            {step === 3 && empfehlung && (
+            {step === 3 && empfehlung && !success && (
               <div className="animate-fade-up">
                 <p className="text-[11px] tracking-[0.2em] uppercase mb-4 font-semibold" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   Eure Empfehlung
                 </p>
                 <h3 className="font-display text-3xl md:text-4xl font-black text-foreground mb-3 leading-[1.1]">{empfehlung.format}</h3>
                 <p className="text-sm text-foreground/55 mb-6">{empfehlung.sub}</p>
-                <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6] mb-8 max-w-2xl">{empfehlung.why}</p>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Link to="/buchung" className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01]" style={{ background: GRADIENT, boxShadow: "0 10px 30px hsl(255 75% 55% / 0.3)" }}>
-                    Jetzt anfragen<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                  <Link to={empfehlung.link} className="inline-flex items-center gap-2 font-display font-bold text-foreground border-b-2 border-foreground/30 hover:border-foreground pb-1 transition-colors self-start py-3.5">
-                    Mehr zum Format<ArrowUpRight className="w-4 h-4" />
-                  </Link>
+                <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6] mb-7 max-w-2xl">{empfehlung.why}</p>
+
+                <div className="border-t border-foreground/10 pt-7 mt-2">
+                  <p className="font-display text-lg md:text-xl font-bold text-foreground mb-1">Anfrage in 30 Sekunden</p>
+                  <p className="text-sm text-foreground/55 mb-6">
+                    Eure Quiz-Antworten werden mitgeschickt — ich melde mich innerhalb 24h mit einem Vorschlag.
+                  </p>
+
+                  <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Firma"
+                      value={firma}
+                      onChange={(e) => setFirma(e.target.value)}
+                      className="bg-white border border-foreground/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Name *"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="bg-white border border-foreground/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors"
+                    />
+                    <input
+                      type="email"
+                      placeholder="E-Mail *"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="bg-white border border-foreground/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors"
+                    />
+                    <input
+                      type="tel"
+                      placeholder="Telefon *"
+                      required
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="bg-white border border-foreground/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors"
+                    />
+                    <input
+                      type="date"
+                      placeholder="Eventdatum (optional)"
+                      value={datum}
+                      onChange={(e) => setDatum(e.target.value)}
+                      className="bg-white border border-foreground/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors sm:col-span-2"
+                    />
+                    {errorMsg && (
+                      <p className="text-sm text-red-600 sm:col-span-2">{errorMsg}</p>
+                    )}
+                    <div className="sm:col-span-2 flex flex-col sm:flex-row gap-3 mt-2 items-start sm:items-center">
+                      <button
+                        type="submit"
+                        disabled={sending}
+                        className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed"
+                        style={{ background: GRADIENT, boxShadow: "0 10px 30px hsl(255 75% 55% / 0.3)" }}
+                      >
+                        {sending ? "Wird gesendet…" : <>Anfrage senden<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></>}
+                      </button>
+                      <Link to={empfehlung.link} className="inline-flex items-center gap-2 font-display font-semibold text-foreground/70 hover:text-foreground border-b-2 border-foreground/20 hover:border-foreground/60 pb-1 transition-colors self-start sm:self-center">
+                        Erst mehr zum Format<ArrowUpRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                    <p className="text-xs text-foreground/50 sm:col-span-2">
+                      Kostenlos · unverbindlich · Antwort innerhalb 24h
+                    </p>
+                  </form>
                 </div>
+              </div>
+            )}
+            {step === 3 && success && (
+              <div className="animate-fade-up text-center py-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6" style={{ background: GRADIENT }}>
+                  <Check className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="font-display text-2xl md:text-3xl font-black text-foreground mb-3 leading-[1.1]">
+                  Danke — eure Anfrage ist da.
+                </h3>
+                <p className="text-base text-foreground/65 max-w-lg mx-auto mb-6">
+                  Ihr bekommt gleich eine Bestätigungs-E-Mail. Ich melde mich innerhalb 24h persönlich mit einem konkreten Vorschlag für eure Empfehlung „{empfehlung.format}".
+                </p>
+                <button onClick={reset} className="inline-flex items-center gap-1 text-sm text-foreground/55 hover:text-foreground transition-colors">
+                  <RotateCcw className="w-3 h-3" />Neu starten
+                </button>
               </div>
             )}
           </div>
