@@ -847,60 +847,64 @@ const GalerieSection = () => {
 /* ═══════════════════════════════════════════════════════════
    NEU · ZAHLEN-SECTION dunkel mit Bild
    ═══════════════════════════════════════════════════════════ */
-const StatBlock = ({ end, suffix, label, desc }: { end: number; suffix: string; label: string; desc: string }) => {
-  const { count, ref } = useCounter(end);
-  return (
-    <div ref={ref}>
-      <p
-        className="font-display font-black leading-none tabular-nums tracking-[-0.02em] text-[clamp(3rem,6vw,5.5rem)]"
-        style={{
-          background: GRADIENT_LIGHT,
-          WebkitBackgroundClip: "text",
-          backgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-        }}
-      >
-        {count}{suffix}
-      </p>
-      <p className="text-[11px] tracking-[0.18em] uppercase text-white/55 mt-4">{label}</p>
-      <p className="mt-3 text-sm text-white/65 max-w-[220px] leading-relaxed">{desc}</p>
-    </div>
-  );
-};
-
 const ZahlenSection = () => {
   const { ref, isVisible } = useScrollReveal();
+  const { count: hochzeiten, ref: hochzeitenRef } = useCounter(100);
+  const { count: jahre, ref: jahreRef } = useCounter(10);
+  const { count: stunden, ref: stundenRef } = useCounter(24);
+  /* Asymmetrisches Hero-Statement-Layout, hell, editorial */
   return (
-    <section ref={ref} className="relative overflow-hidden text-white py-24 md:py-32 lg:py-40">
-      <div className="absolute inset-0">
-        <img src={buehneZuschauerImg} alt="" className="w-full h-full object-cover" />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(110deg, rgba(15,10,25,0.92) 0%, rgba(30,15,45,0.85) 50%, rgba(15,10,25,0.7) 100%)",
-          }}
-        />
-      </div>
-      <div className="relative z-10 container px-6">
+    <section ref={ref} className="bg-white section-large border-y border-foreground/8">
+      <div className="container px-6">
         <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-white/55 mb-6">
-            Erfahrung in Zahlen
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">
+            Was Brautpaare bekommen
           </p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,5vw,4.75rem)]">
-            Was{" "}
-            <span style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              100+ Hochzeiten
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Über{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              100 Hochzeiten
             </span>{" "}
-            ausmachen.
+            an Erfahrung — und 5,0 Sterne.
           </h2>
         </div>
-        <div className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          <StatBlock end={100} suffix="+" label="Hochzeiten" desc="Vom Standesamt bis zur 300-Gäste-Trauung." />
-          <StatBlock end={10} suffix="+" label="Jahre Routine" desc="Auch wenn der Zeitplan kippt — ich liefere." />
-          <StatBlock end={5} suffix=",0" label="Sterne Bewertung" desc="Top-Bewertungen auf Google & ProvenExpert." />
-          <StatBlock end={24} suffix="h" label="Antwortzeit" desc="Persönliche Rückmeldung garantiert." />
+        {/* Hero-Stat: einzelne große Zahl + 3 kleinere unten */}
+        <div className={`grid lg:grid-cols-12 gap-y-12 lg:gap-x-14 items-end ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className="lg:col-span-7" ref={hochzeitenRef}>
+            <p
+              className="font-display font-black leading-[0.85] tracking-[-0.04em] tabular-nums text-[clamp(7rem,18vw,18rem)]"
+              style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}
+            >
+              {hochzeiten}
+              <span className="text-[clamp(4rem,10vw,10rem)] align-top">+</span>
+            </p>
+            <p className="text-base md:text-lg text-foreground/65 leading-[1.55] max-w-md mt-3">
+              Hochzeiten begleitet — vom Standesamt mit 30 Personen bis zur Schloss-Hochzeit mit 300 Gästen.
+            </p>
+          </div>
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-6 md:gap-8">
+            <div ref={jahreRef} className="border-t border-foreground/15 pt-4">
+              <p className="font-display font-black text-foreground tabular-nums leading-none text-3xl md:text-4xl">
+                {jahre}+
+              </p>
+              <p className="text-[11px] tracking-[0.2em] uppercase text-foreground/55 mt-3 font-semibold">Jahre Routine</p>
+              <p className="text-sm text-foreground/65 leading-snug mt-2">Auch wenn der Zeitplan kippt — ich liefere.</p>
+            </div>
+            <div className="border-t border-foreground/15 pt-4">
+              <p className="font-display font-black text-foreground tabular-nums leading-none text-3xl md:text-4xl">
+                5,0 ★
+              </p>
+              <p className="text-[11px] tracking-[0.2em] uppercase text-foreground/55 mt-3 font-semibold">Bewertung</p>
+              <p className="text-sm text-foreground/65 leading-snug mt-2">Top-Reviews auf Google &amp; ProvenExpert.</p>
+            </div>
+            <div ref={stundenRef} className="border-t border-foreground/15 pt-4">
+              <p className="font-display font-black text-foreground tabular-nums leading-none text-3xl md:text-4xl">
+                {stunden}h
+              </p>
+              <p className="text-[11px] tracking-[0.2em] uppercase text-foreground/55 mt-3 font-semibold">Antwortzeit</p>
+              <p className="text-sm text-foreground/65 leading-snug mt-2">Persönlich, kein Bot, kein Formular-Throwback.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
