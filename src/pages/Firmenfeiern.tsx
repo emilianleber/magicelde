@@ -871,11 +871,12 @@ const MoeglichkeitenSection = () => {
 };
 
 /* 13 · BUCHUNGS-FLOW */
-/* BuchungsFlow als Procurement-Process-Tabelle */
+/* BuchungsFlow als 3 Procurement-Cards mit Lead-Time, Output, Antwort */
 const BuchungsFlowSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const phasen = [
     {
+      icon: Phone,
       num: "01",
       titel: "Anfrage",
       lead: "2 Min · ihr schickt",
@@ -883,13 +884,16 @@ const BuchungsFlowSection = () => {
       response: "Antwort innerhalb 24h, persönlich",
     },
     {
+      icon: ClipboardList,
       num: "02",
       titel: "Konzept & Angebot",
       lead: "30 Min · Call mit mir",
       output: "Schriftliches Angebot, Tech-Rider, Vertrag",
       response: "Bei Bedarf Rahmenvertrag & individuelle Konditionen",
+      featured: true,
     },
     {
+      icon: PartyPopper,
       num: "03",
       titel: "Eventtag",
       lead: "Pünktlich vor Ort",
@@ -907,38 +911,64 @@ const BuchungsFlowSection = () => {
             <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>klare Outputs</span>.
           </h2>
         </div>
-        {/* B2B-Process-Table mit Spalten Phase / Lead-Time / Output / Antwort */}
-        <div className={`max-w-5xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          <div className="grid grid-cols-12 pb-3 mb-2 border-b-2 border-foreground/15 text-[10px] md:text-xs tracking-[0.2em] uppercase text-foreground/55 font-semibold">
-            <p className="col-span-3 md:col-span-2">Phase</p>
-            <p className="col-span-9 md:col-span-3">Lead-Time</p>
-            <p className="hidden md:block md:col-span-4">Output</p>
-            <p className="hidden md:block md:col-span-3">Antwort</p>
-          </div>
-          {phasen.map((p) => (
-            <div key={p.num} className="grid grid-cols-12 gap-y-2 py-7 md:py-8 border-b border-foreground/8 last:border-0 items-start">
-              <div className="col-span-3 md:col-span-2">
-                <p className="font-display text-2xl md:text-3xl font-black leading-none" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+        <div className={`grid md:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {phasen.map((p, i) => (
+            <article
+              key={p.num}
+              className={`relative p-7 md:p-8 flex flex-col transition-all hover:scale-[1.01] ${p.featured ? "text-white" : "text-foreground"}`}
+              style={{
+                background: p.featured
+                  ? "linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)"
+                  : "white",
+                border: p.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)",
+                borderRadius: "1rem",
+                boxShadow: p.featured
+                  ? "0 30px 70px -20px rgba(60, 30, 80, 0.4)"
+                  : "0 20px 50px -25px rgba(40, 20, 60, 0.18)",
+                animationDelay: `${0.1 + i * 0.06}s`,
+              }}
+            >
+              <div className="flex items-start justify-between mb-6">
+                <span
+                  className="inline-flex items-center justify-center w-12 h-12 rounded-xl"
+                  style={{
+                    background: p.featured
+                      ? "rgba(255,255,255,0.12)"
+                      : "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))",
+                  }}
+                >
+                  <p.icon className="w-5 h-5" style={{ color: p.featured ? "white" : "hsl(255 60% 40%)" }} />
+                </span>
+                <span
+                  className="font-display font-black leading-none text-3xl md:text-4xl tabular-nums"
+                  style={
+                    p.featured
+                      ? { background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }
+                      : { background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }
+                  }
+                >
                   {p.num}
+                </span>
+              </div>
+              <h3 className="font-display text-xl md:text-2xl font-black leading-tight mb-2">{p.titel}</h3>
+              <p className={`text-[13px] md:text-sm font-medium mb-5 ${p.featured ? "text-white/70" : "text-foreground/55"}`}>
+                {p.lead}
+              </p>
+              <div className={`pt-5 border-t ${p.featured ? "border-white/15" : "border-foreground/10"}`}>
+                <p className={`text-[10px] tracking-[0.22em] uppercase mb-1.5 font-semibold ${p.featured ? "text-white/55" : "text-foreground/45"}`}>
+                  Output
                 </p>
-                <p className="font-display text-sm md:text-base font-bold text-foreground mt-2">{p.titel}</p>
+                <p className={`text-sm leading-[1.55] mb-4 ${p.featured ? "text-white/85" : "text-foreground/75"}`}>
+                  {p.output}
+                </p>
+                <p className={`text-[10px] tracking-[0.22em] uppercase mb-1.5 font-semibold ${p.featured ? "text-white/55" : "text-foreground/45"}`}>
+                  Antwort
+                </p>
+                <p className={`text-sm leading-[1.55] ${p.featured ? "text-white/75" : "text-foreground/65"}`}>
+                  {p.response}
+                </p>
               </div>
-              <div className="col-span-9 md:col-span-3">
-                <p className="text-sm md:text-[15px] text-foreground/75 leading-[1.5]">{p.lead}</p>
-              </div>
-              <div className="col-span-12 md:col-span-4 md:hidden">
-                <p className="text-[10px] tracking-[0.18em] uppercase text-foreground/45 mt-3 mb-1 font-semibold">Output</p>
-                <p className="text-sm md:text-[15px] text-foreground/75 leading-[1.5]">{p.output}</p>
-                <p className="text-[10px] tracking-[0.18em] uppercase text-foreground/45 mt-3 mb-1 font-semibold">Antwort</p>
-                <p className="text-sm md:text-[15px] text-foreground/65 leading-[1.5]">{p.response}</p>
-              </div>
-              <div className="hidden md:block md:col-span-4">
-                <p className="text-sm md:text-[15px] text-foreground/75 leading-[1.5]">{p.output}</p>
-              </div>
-              <div className="hidden md:block md:col-span-3">
-                <p className="text-sm md:text-[15px] text-foreground/65 leading-[1.5]">{p.response}</p>
-              </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>

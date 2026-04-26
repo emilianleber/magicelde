@@ -1072,25 +1072,40 @@ const FAQ = () => {
             fragen.
           </h2>
         </div>
-        {/* Open Q&A grid - kein Accordion, alle Antworten direkt sichtbar */}
-        <div className={`grid md:grid-cols-2 gap-x-10 gap-y-10 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+        {/* Q&A Cards - jede Frage in eigener Card mit Schatten + Gradient-Bar */}
+        <div className={`grid md:grid-cols-2 gap-5 md:gap-6 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
           {faqs.map((faq, i) => (
-            <div key={faq.q} className="flex gap-5">
-              <span
-                className="shrink-0 font-display font-black text-2xl md:text-3xl leading-none mt-0.5"
-                style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <h3 className="font-display text-base md:text-lg font-bold text-foreground leading-[1.3] mb-3">
-                  {faq.q}
-                </h3>
-                <p className="text-sm md:text-[15px] leading-[1.65] text-foreground/65">
-                  {faq.a}
-                </p>
+            <article
+              key={faq.q}
+              className="relative p-6 md:p-7 bg-white transition-all hover:scale-[1.01]"
+              style={{
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: "1rem",
+                boxShadow: "0 18px 45px -25px rgba(40, 20, 60, 0.18)",
+              }}
+            >
+              <div
+                aria-hidden
+                className="absolute top-0 left-6 right-6 h-[2px] rounded-full"
+                style={{ background: "linear-gradient(90deg, hsl(220 85% 65%), hsl(255 75% 65%), hsl(285 80% 65%))" }}
+              />
+              <div className="flex items-start gap-4">
+                <span
+                  className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg font-display font-black text-white text-sm"
+                  style={{ background: GRADIENT }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 className="font-display text-base md:text-lg font-bold text-foreground leading-[1.3] mb-2.5">
+                    {faq.q}
+                  </h3>
+                  <p className="text-sm md:text-[15px] leading-[1.65] text-foreground/65">
+                    {faq.a}
+                  </p>
+                </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
