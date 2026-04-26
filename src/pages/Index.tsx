@@ -17,6 +17,9 @@ import {
   Check,
   X as XIcon,
   Award,
+  Mic2,
+  Wine,
+  Music2,
 } from "lucide-react";
 
 import Navigation from "@/components/landing/Navigation";
@@ -25,6 +28,7 @@ import LandingHero from "@/components/landing/LandingHero";
 import Chatbot from "@/components/landing/Chatbot";
 import WhatsAppButton from "@/components/landing/WhatsAppButton";
 import { ClientLogos } from "@/components/landing/TrustElements";
+import { QuizWizardModal, QuizConfig } from "@/components/landing/QuizWizard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
 
@@ -96,6 +100,177 @@ const InlineCTA = ({
       </div>
     </section>
   );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   Universaler Format-Finder als Popup-Modal (auf Index)
+   Anlass-basiert, leitet zur passenden Landingpage weiter
+   ═══════════════════════════════════════════════════════════ */
+const GRADIENT_INDEX =
+  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)";
+
+const indexQuizConfig: QuizConfig = {
+  anlass: "Allgemein",
+  sectionEyebrow: "Format-Finder",
+  sectionTitle: (
+    <>
+      Welches Format passt zu{" "}
+      <span style={{ background: GRADIENT_INDEX, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+        deinem Event
+      </span>
+      ?
+    </>
+  ),
+  sectionDesc:
+    "Vier Fragen, eine konkrete Empfehlung. Wenn du willst, kannst du am Ende direkt absenden — deine Antworten gehen automatisch mit.",
+  triggerEyebrow: "Berater · 4 Fragen · ca. 60 Sek",
+  triggerTitle: "Finde dein passendes Format.",
+  triggerDesc:
+    "Egal ob Hochzeit, Firmenfeier oder Geburtstag — vier Fragen reichen, damit ich dir das passende Format und Setup empfehlen kann.",
+  triggerCtaLabel: "Format finden",
+  questions: [
+    {
+      id: "anlass",
+      shortLabel: "Anlass",
+      title: (
+        <>
+          Was für ein{" "}
+          <span style={{ background: GRADIENT_INDEX, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            Anlass
+          </span>{" "}
+          ist es?
+        </>
+      ),
+      hint: "Damit ich Tonalität und Format-Mix richtig wählen kann — eine Hochzeit braucht andere Magie als eine Sales-Konferenz.",
+      cols: { md: 2, lg: 3 },
+      options: [
+        { value: "hochzeit", label: "Hochzeit", sub: "Trauung, Empfang, Hochzeitsfeier", icon: Heart },
+        { value: "firmenfeier", label: "Firmenfeier", sub: "Sommerfest, Weihnachten, Kunden-Event", icon: Building2 },
+        { value: "geburtstag", label: "Geburtstag", sub: "40er, 50er, Jubiläum, Familienfeier", icon: PartyPopper },
+        { value: "gala", label: "Gala / Award-Show", sub: "Premium, formaler Rahmen", icon: Trophy },
+        { value: "private", label: "Private Feier", sub: "Familienfest, Reunion, Sonderanlass", icon: Users },
+        { value: "anders", label: "Etwas anderes", sub: "Messe, Roadshow, Sonderformat", icon: Sparkles },
+      ],
+    },
+    {
+      id: "groesse",
+      shortLabel: "Größe",
+      title: (
+        <>
+          Wie{" "}
+          <span style={{ background: GRADIENT_INDEX, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            groß
+          </span>{" "}
+          wird euer Event?
+        </>
+      ),
+      hint: "Bei kleinen Runden funktioniert intime Magie zum Anfassen, bei großen Events braucht's eine Bühne.",
+      cols: { md: 3 },
+      options: [
+        { value: "klein", label: "bis 40 Gäste", sub: "Kleine Runde · intim" },
+        { value: "mittel", label: "40 – 150 Gäste", sub: "Klassisches Event" },
+        { value: "groß", label: "150+ Gäste", sub: "Großveranstaltung" },
+      ],
+    },
+    {
+      id: "wann",
+      shortLabel: "Magie-Moment",
+      title: (
+        <>
+          Wann soll die{" "}
+          <span style={{ background: GRADIENT_INDEX, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            Magie
+          </span>{" "}
+          passieren?
+        </>
+      ),
+      hint: "Wo wollt ihr den Magic-Moment platzieren?",
+      cols: { md: 2, lg: 4 },
+      options: [
+        { value: "empfang", label: "Beim Empfang", sub: "Walk-around · Eisbrecher", icon: Wine },
+        { value: "dinner", label: "Beim Dinner", sub: "Tisch-zu-Tisch · zwischen Gängen", icon: Sparkles },
+        { value: "show", label: "Show-Highlight", sub: "Eine zentrale Bühnenshow", icon: Mic2 },
+        { value: "ganzeabend", label: "Ganzer Abend", sub: "Roter Faden über das Event", icon: Music2 },
+      ],
+    },
+    {
+      id: "wert",
+      shortLabel: "Wertfokus",
+      title: (
+        <>
+          Worauf legt ihr{" "}
+          <span style={{ background: GRADIENT_INDEX, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            Wert
+          </span>
+          ?
+        </>
+      ),
+      hint: "Was zählt für euch als Erfolg?",
+      cols: { md: 2 },
+      options: [
+        { value: "wow", label: "Wow-Effekt", sub: "Ein Moment, über den noch lange geredet wird", icon: Sparkles },
+        { value: "verbindung", label: "Gäste verbinden", sub: "Eisbrecher zwischen Familien / Abteilungen", icon: Users },
+        { value: "emotional", label: "Emotionaler Moment", sub: "Ruhige, persönliche Magie", icon: Heart },
+        { value: "energie", label: "Stimmung & Energie", sub: "Push für die Tanzfläche oder Programm", icon: PartyPopper },
+      ],
+    },
+  ],
+  buildEmpfehlung: (a) => {
+    const { anlass, wann, wert } = a;
+    /* Erst nach Anlass leiten, dann nach wann/wert verfeinern */
+    if (anlass === "hochzeit") {
+      if (wann === "empfang" || wert === "verbindung") {
+        return {
+          format: "Close-Up beim Sektempfang",
+          sub: "20–70 Min · während Fotosession",
+          why: "Während ihr Fotos macht, unterhalte ich eure Gäste — Familien beider Seiten lernen sich kennen, Magie ist der natürlichste Eisbrecher. Mehr Infos auf der Hochzeits-Seite.",
+          link: "/hochzeit",
+        };
+      }
+      if (wann === "show" || wert === "wow") {
+        return {
+          format: "Bühnenshow vor dem Hochzeitstanz",
+          sub: "15–60 Min · zentraler Show-Moment",
+          why: "Eine durchkomponierte Show, abgestimmt auf eure Story — mit Anekdoten, einem Trauring-Moment, der alle zum Staunen bringt. Mehr Infos auf der Hochzeits-Seite.",
+          link: "/hochzeit",
+        };
+      }
+      return { format: "Hochzeitsmagie", sub: "Sektempfang · Dinner · Show", why: "Weiter zur Hochzeits-Seite — dort findet ihr den Hochzeits-Format-Finder mit fünf detaillierten Fragen.", link: "/hochzeit" };
+    }
+    if (anlass === "firmenfeier" || anlass === "gala") {
+      if (wert === "wow" || anlass === "gala") {
+        return {
+          format: "Bühnenshow als Show-Highlight",
+          sub: "15–60 Min · vor oder nach dem Dinner",
+          why: "Eine durchkomponierte Show, abgestimmt auf eure Branche, optional mit Markenbotschaft. Mehr Infos auf der Firmenfeiern-Seite.",
+          link: "/firmenfeiern",
+        };
+      }
+      if (wert === "verbindung" || wann === "empfang") {
+        return {
+          format: "Close-Up im Empfang",
+          sub: "20–70 Min · Eisbrecher zwischen Abteilungen",
+          why: "Mitarbeiter aus verschiedenen Standorten kommen ins Gespräch — Magie zum Anfassen direkt vor ihren Augen. Mehr Infos auf der Firmenfeiern-Seite.",
+          link: "/firmenfeiern",
+        };
+      }
+      return { format: "B2B-Event mit Magie", sub: "Format-Finder mit B2B-Detailfragen", why: "Weiter zur Firmenfeiern-Seite — dort gibt's den B2B-Format-Finder mit fünf detaillierten Fragen.", link: "/firmenfeiern" };
+    }
+    if (anlass === "geburtstag" || anlass === "private") {
+      return {
+        format: "Mix aus Close-Up und Bühnenshow",
+        sub: "Empfang · Tisch-zu-Tisch · Show-Slot",
+        why: "Bei Geburtstagen und Familienfesten ist der Mix aus interaktiver Tisch-Magie und einer kompakten Bühnenshow am stärksten — Großeltern und Enkel haben gleich viel davon.",
+        link: "/buchung",
+      };
+    }
+    return {
+      format: "Individuelles Format",
+      sub: "Auf euer Event abgestimmt",
+      why: "Bei Sonderformaten wie Messe, Roadshow oder Aktivierung lohnt sich ein kurzer Call. Schickt mir eine Anfrage mit Datum und Setting — ich mache einen passenden Vorschlag.",
+      link: "/buchung",
+    };
+  },
 };
 
 /* ═══════════════════════════════════════════════════════════
@@ -1988,6 +2163,10 @@ const Index = () => {
         {/* 2. Relevanz — Anlass-Selbst-Selektion */}
         <SectionDivider />
         <AnlassSection />
+
+        {/* 3. Format-Finder — universaler Quiz als Popup */}
+        <SectionDivider />
+        <QuizWizardModal config={indexQuizConfig} />
 
         {/* 3. Emotionaler Hook */}
         <SectionDivider />
