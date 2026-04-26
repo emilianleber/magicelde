@@ -259,7 +259,6 @@ const FormSection = () => {
               </option>
               <option value="closeup">Close-Up Magie</option>
               <option value="buehnenshow">Bühnenshow</option>
-              <option value="walking_act">Walking Act</option>
               <option value="magic_dinner">Magic Dinner</option>
               <option value="kombination">Kombination</option>
               <option value="moderation">Moderation</option>

@@ -71,8 +71,8 @@ const KurzprofilSection = () => {
                 {[
                   { value: "200+", label: "Events" },
                   { value: "10+", label: "Jahre Erfahrung" },
-                  { value: "5.0", label: "Google Sterne" },
-                  { value: "4.97", label: "ProvenExpert" },
+                  { value: "5,0", label: "Google Sterne" },
+                  { value: "5,0", label: "ProvenExpert" },
                 ].map(s => (
                   <div key={s.label} className="text-center p-3 rounded-2xl bg-background border border-border/20">
                     <p className="font-display text-2xl font-bold text-foreground">{s.value}</p>
@@ -106,7 +106,7 @@ const AufritteSection = () => {
               { icon: Calendar, title: "200+ Live-Events", desc: "Auftritte bei DAX-Konzernen, auf Hochzeiten, Galas und exklusiven Privatevents.", year: "Laufend" },
               { icon: Users, title: "Firmenkunden", desc: "Regelmäßig gebucht von Sixt, STRABAG, Sparkasse, Versicherungskammer Bayern, Stadt Regensburg u.v.m.", year: "Laufend" },
               { icon: Globe, title: "Deutschlandweite Buchungen", desc: "Schwerpunkt Bayern — von Regensburg über München bis Nürnberg, sowie deutschlandweit buchbar.", year: "Laufend" },
-              { icon: Star, title: "Top-Bewertungen", desc: "Google 5.0 Sterne, ProvenExpert 4.97 Sterne – durchgehend exzellente Bewertungen von Kunden.", year: "Laufend" },
+              { icon: Star, title: "Top-Bewertungen", desc: "Google 5,0 Sterne, ProvenExpert 5,0 Sterne – durchgehend exzellente Bewertungen von Kunden.", year: "Laufend" },
             ].map((item) => (
               <div key={item.title} className="py-8 flex items-start gap-5">
                 <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
@@ -254,7 +254,7 @@ const DownloadsSection = () => {
                 ["Auszeichnungen", "Kreativpreisträger, Greatest Talent Finalist"],
                 ["Region", "Deutschlandweit & international buchbar"],
                 ["Basis", "Regensburg, Bayern"],
-                ["Bewertungen", "Google 5.0 ★ | ProvenExpert 4.97 ★"],
+                ["Bewertungen", "Google 5,0 ★ | ProvenExpert 5,0 ★"],
                 ["Web", "www.magicel.de"],
                 ["Kontakt", "el@magicel.de"],
               ].map(([label, value]) => (

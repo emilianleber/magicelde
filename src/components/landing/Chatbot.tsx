@@ -72,7 +72,7 @@ const faqAnswers: { keywords: string[]; answer: string; buttons?: { label: strin
 
   // Erfahrung & Qualität
   { keywords: ["erfahrung", "referenz", "bewertung", "rezension", "gut", "qualität", "professionell", "seriös"],
-    answer: "Meine Credentials:\n\n⭐ Google: 5.0 Sterne\n⭐ ProvenExpert: 4.9 Sterne\n🏆 Kreativpreisträger\n🏆 Greatest Talent Finalist\n📊 200+ erfolgreiche Events\n🏢 Kunden: Sixt, STRABAG, Sparkasse u.v.m.\n\nJeder Auftritt wird individuell vorbereitet – das macht den Unterschied!",
+    answer: "Meine Credentials:\n\n⭐ Google: 5,0 Sterne\n⭐ ProvenExpert: 5,0 Sterne\n🏆 Kreativpreisträger\n🏆 Greatest Talent Finalist\n📊 200+ erfolgreiche Events\n🏢 Kunden: Sixt, STRABAG, Sparkasse u.v.m.\n\nJeder Auftritt wird individuell vorbereitet – das macht den Unterschied!",
     buttons: [{ label: "Referenzen ansehen", value: "referenzen" }] },
 
   // Moderation

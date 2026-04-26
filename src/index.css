@@ -202,6 +202,160 @@
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, hsl(210, 100%, 70%), hsl(225, 80%, 56%));
   }
+
+  /* ─── NEW: Editorial Typography ─── */
+  .text-lead {
+    @apply font-sans text-xl md:text-2xl lg:text-[1.75rem] font-light leading-[1.45] text-foreground;
+  }
+
+  .text-pullquote {
+    @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-foreground;
+  }
+
+  .headline-xl {
+    @apply font-display text-[3rem] sm:text-[4rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem] font-black leading-[0.9] tracking-[-0.03em];
+  }
+
+  .eyebrow {
+    @apply inline-block font-sans text-[10px] md:text-xs font-bold uppercase tracking-[0.22em] text-muted-foreground/80;
+  }
+
+  .eyebrow-gradient {
+    @apply inline-block font-sans text-[10px] md:text-xs font-bold uppercase tracking-[0.22em] bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(225, 80%, 56%), hsl(340, 75%, 50%));
+  }
+
+  /* ─── NEW: Section Variants (all light, but distinct) ─── */
+  .section-tinted-blue {
+    background:
+      radial-gradient(ellipse at 10% 20%, hsl(225 80% 56% / 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, hsl(260 70% 55% / 0.05) 0%, transparent 55%),
+      #ffffff;
+  }
+
+  .section-tinted-warm {
+    background:
+      radial-gradient(ellipse at 80% 10%, hsl(340 75% 50% / 0.06) 0%, transparent 55%),
+      radial-gradient(ellipse at 20% 90%, hsl(260 70% 55% / 0.04) 0%, transparent 50%),
+      #ffffff;
+  }
+
+  .section-gradient-wash {
+    background: linear-gradient(135deg,
+      hsl(225 80% 56% / 0.04) 0%,
+      hsl(260 70% 55% / 0.05) 40%,
+      hsl(340 75% 50% / 0.04) 100%
+    );
+  }
+
+  .section-gradient-bold {
+    background: linear-gradient(135deg,
+      hsl(230, 65%, 48%) 0%,
+      hsl(280, 55%, 45%) 50%,
+      hsl(345, 70%, 42%) 100%
+    );
+    color: #ffffff;
+  }
+
+  /* ─── NEW: Gradient Blob (animated background element) ─── */
+  .gradient-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .gradient-blob-blue {
+    background: radial-gradient(circle, hsl(225 80% 56% / 0.7) 0%, transparent 70%);
+  }
+
+  .gradient-blob-purple {
+    background: radial-gradient(circle, hsl(280 70% 55% / 0.6) 0%, transparent 70%);
+  }
+
+  .gradient-blob-pink {
+    background: radial-gradient(circle, hsl(340 75% 55% / 0.6) 0%, transparent 70%);
+  }
+
+  @keyframes blob-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -40px) scale(1.1); }
+    66% { transform: translate(-30px, 30px) scale(0.95); }
+  }
+
+  .animate-blob {
+    animation: blob-float 18s ease-in-out infinite;
+  }
+  .animate-blob-slow {
+    animation: blob-float 25s ease-in-out infinite;
+  }
+
+  /* ─── NEW: Gradient Divider ─── */
+  .divider-gradient {
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      hsl(225 80% 56% / 0.4) 20%,
+      hsl(280 70% 55% / 0.6) 50%,
+      hsl(340 75% 55% / 0.4) 80%,
+      transparent 100%
+    );
+  }
+
+  /* ─── NEW: Gradient Border Card ─── */
+  .gradient-border-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 1.5rem;
+  }
+  .gradient-border-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1.5px;
+    border-radius: 1.5rem;
+    background: linear-gradient(135deg, hsl(225 80% 56%), hsl(280 70% 55%), hsl(340 75% 55%));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* ─── NEW: Drop Cap for editorial paragraphs ─── */
+  .drop-cap::first-letter {
+    @apply font-display font-black;
+    float: left;
+    font-size: 5rem;
+    line-height: 0.85;
+    padding-right: 0.75rem;
+    padding-top: 0.3rem;
+    background: linear-gradient(135deg, hsl(225, 80%, 56%), hsl(260, 70%, 55%), hsl(340, 75%, 50%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ─── NEW: Giant number with gradient ─── */
+  .number-xl {
+    @apply font-display font-black leading-none tracking-[-0.04em];
+    font-size: clamp(5rem, 14vw, 12rem);
+    background: linear-gradient(135deg, hsl(225, 80%, 56%) 0%, hsl(260, 70%, 55%) 50%, hsl(340, 75%, 50%) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ─── NEW: Quote marks giant ─── */
+  .quote-mark {
+    @apply font-display font-black leading-none;
+    font-size: clamp(6rem, 16vw, 14rem);
+    background: linear-gradient(135deg, hsl(225, 80%, 56%), hsl(280, 70%, 55%), hsl(340, 75%, 50%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 /* ─── Dark Sections (Apple-Style) — outside @layer for specificity ─── */

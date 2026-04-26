@@ -110,13 +110,12 @@ const KonzepteSlider = () => {
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <span className="badge-accent mb-8 inline-flex">Formate</span>
-          <h2 className="headline-section mb-6">Drei Erlebnisse für deine Feier.</h2>
+          <h2 className="headline-section mb-6">Zwei Erlebnisse für deine Feier.</h2>
         </div>
         <HorizontalSlider
           items={[
             { img: closeupImg, title: "Close-Up Magie", desc: "Interaktive Magie für kleine und große Runden — perfekt als Eisbrecher und Unterhaltung." },
             { img: stageImg, title: "Bühnenshow", desc: "Eine durchkomponierte Show mit Comedy und Staunen — das Highlight des Abends." },
-            { img: heroImg, title: "Walking Act", desc: "Magie zwischen den Gästen — locker, witzig und spontan." },
           ].map((k) => ({
             content: (
               <div className="rounded-3xl overflow-hidden aspect-[3/4] relative group">

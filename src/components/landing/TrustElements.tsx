@@ -75,16 +75,12 @@ export const RatingBadges = ({ className = "", dark = false }: { className?: str
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
-              className={`w-3.5 h-3.5 ${
-                i < 4
-                  ? "fill-amber-400 text-amber-400"
-                  : "fill-amber-400/80 text-amber-400/80"
-              }`}
+              className="w-3.5 h-3.5 fill-amber-400 text-amber-400"
             />
           ))}
         </div>
         <span className={`font-display text-sm font-bold ${dark ? "text-white" : "text-foreground"}`}>
-          4.9
+          5.0
         </span>
       </div>
       <span className={`text-[10px] hidden sm:inline ${dark ? "text-white/60" : "text-muted-foreground"}`}>

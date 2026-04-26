@@ -66,7 +66,7 @@ const StadtSeite = () => {
           "areaServed": { "@type": "City", "name": data.name },
           "aggregateRating": {
             "@type": "AggregateRating",
-            "ratingValue": "4.9",
+            "ratingValue": "5.0",
             "bestRating": "5",
             "worstRating": "1",
             "reviewCount": "34"

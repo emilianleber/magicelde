@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminPersistentShell } from "@/components/admin/AdminLayout";
 import ScrollToTop from "./components/ScrollToTop.tsx";
+import EngagementPopup from "./components/landing/EngagementPopup.tsx";
 
 // Admin pages — only loaded on admin.magicel.de / localhost
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
@@ -232,6 +233,7 @@ const App = () => (
         <ScrollToTop />
         <AuthEventHandler />
         <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a]" />}>
+          {!IS_ADMIN_DOMAIN && <EngagementPopup />}
           {IS_ADMIN_DOMAIN ? <AdminRoutes /> : IS_DEV ? (
             // localhost: beide Route-Sets verfügbar
             <Routes>

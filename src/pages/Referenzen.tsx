@@ -33,7 +33,7 @@ const HeroRef = () => (
           Das sagen <span className="text-gradient">Kunden</span>.
         </h1>
         <p className="text-body max-w-2xl mx-auto opacity-0 animate-fade-up text-white/70" style={{ animationDelay: "0.5s" }}>
-          Über 200 Events, 4.9 Sterne Durchschnitt und 100% Weiterempfehlung.
+          Über 200 Events, 5,0 Sterne Durchschnitt und 100% Weiterempfehlung.
           Echte Stimmen von echten Kunden — ungefiltert und authentisch.
         </p>
       </div>
@@ -122,17 +122,17 @@ const Referenzen = () => (
   <PageLayout>
     <Helmet>
       <title>Referenzen & Bewertungen – Emilian Leber Zauberer</title>
-      <meta name="description" content="Über 200 Events, 4.9 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
+      <meta name="description" content="Über 200 Events, 5,0 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
       <link rel="canonical" href="https://www.magicel.de/referenzen" />
       <meta property="og:title" content="Referenzen & Bewertungen – Emilian Leber Zauberer" />
-      <meta property="og:description" content="Über 200 Events, 4.9 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
+      <meta property="og:description" content="Über 200 Events, 5,0 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
       <meta property="og:url" content="https://www.magicel.de/referenzen" />
       <meta property="og:type" content="website" />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
       <meta property="og:locale" content="de_DE" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Referenzen & Bewertungen – Emilian Leber Zauberer" />
-      <meta name="twitter:description" content="Über 200 Events, 4.9 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
+      <meta name="twitter:description" content="Über 200 Events, 5,0 Sterne Durchschnitt. Echte Bewertungen von Hochzeiten, Firmenfeiern und Events." />
         <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
@@ -143,7 +143,7 @@ const Referenzen = () => (
         "email": "el@magicel.de",
         "aggregateRating": {
           "@type": "AggregateRating",
-          "ratingValue": "4.9",
+          "ratingValue": "5.0",
           "bestRating": "5",
           "worstRating": "1",
           "reviewCount": "34"

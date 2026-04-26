@@ -1,323 +1,735 @@
 import { Helmet } from "react-helmet-async";
-import Navigation from "@/components/landing/Navigation";
-import USPSection from "@/components/landing/USPSection";
-import AnlassSection from "@/components/landing/AnlassSection";
-import UeberMichSection from "@/components/landing/UeberMichSection";
-import GalerieSection from "@/components/landing/GalerieSection";
-import CTASection from "@/components/landing/CTASection";
-import Footer from "@/components/landing/Footer";
-import HorizontalSlider from "@/components/landing/HorizontalSlider";
-import BackgroundHero from "@/components/landing/BackgroundHero";
-import Chatbot from "@/components/landing/Chatbot";
-import WhatsAppButton from "@/components/landing/WhatsAppButton";
-import VideoHero from "@/components/landing/VideoHero";
-import { TrustStrip, ClientLogos } from "@/components/landing/TrustElements";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { useCounter } from "@/hooks/useCounter";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
-  Laugh,
-  Wand2,
-  Zap,
-  Star,
-  Users,
+  ArrowRight,
+  ArrowUpRight,
+  Building2,
   Heart,
-  Sparkles,
-  MessageCircle,
-  Shield,
-  Clock,
+  PartyPopper,
+  Trophy,
+  Presentation,
+  Star,
 } from "lucide-react";
 
-import heroStartImg from "@/assets/hero-start.jpg";
-import audienceImg from "@/assets/buehne-zuschauer.jpg";
-import closeupImg from "@/assets/emilian-portrait-cards.jpg";
-import stageImg from "@/assets/stage-show.jpg";
-import portraitImg from "@/assets/magician-portrait.jpg";
-import closeupWalkingImg from "@/assets/schneider-weisse-closeup.jpg";
-import emotionenImg from "@/assets/emotionen.jpg";
-import magicDinnerBookImg from "@/assets/magicdinner-book.jpg";
-import moderatorImg from "@/assets/moderator-hero.jpg";
-import magicDinnerEventImg from "@/assets/emilian-magic-dinner.jpg";
-import buchImg from "@/assets/emilian-portrait-buch.jpg";
+import Navigation from "@/components/landing/Navigation";
+import Footer from "@/components/landing/Footer";
+import LandingHero from "@/components/landing/LandingHero";
+import Chatbot from "@/components/landing/Chatbot";
+import WhatsAppButton from "@/components/landing/WhatsAppButton";
+import { ClientLogos } from "@/components/landing/TrustElements";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useCounter } from "@/hooks/useCounter";
 
-/* ─── 1. Video Hero ─── */
-const VideoHeroSection = () => (
+import heroStageImg from "@/assets/hero-stage.jpg";
+import heroCloseupImg from "@/assets/hero-closeup.jpg";
+import heroDinnerImg from "@/assets/hero-dinner.jpg";
+import moderatorImg from "@/assets/moderator-hero.jpg";
+import magicDinnerBookImg from "@/assets/magicdinner-book.jpg";
+import portraitImg from "@/assets/magician-portrait.jpg";
+import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
+import weddingImg from "@/assets/wedding-magic.jpg";
+import firmenfeierImg from "@/assets/hero-firmenfeier-stock.jpg";
+import geburtstagImg from "@/assets/hero-birthday.jpg";
+import hochzeitStockImg from "@/assets/hero-hochzeit-stock.jpg";
+import staunenImg from "@/assets/staunen.jpg";
+import audienceImg from "@/assets/audience-reactions.jpg";
+
+/* ═══════════════════════════════════════════════════════════
+   Utility: Section divider matching hero style
+   ═══════════════════════════════════════════════════════════ */
+const SectionDivider = () => (
   <div
-    className="opacity-0 animate-scale-up max-w-5xl mx-auto mt-20"
-    style={{ animationDelay: "0.85s" }}
-  >
-    <VideoHero
-      posterSrc={heroStartImg}
-      videoUrl="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-      alt="Emilian Leber live auf der Bühne"
-    />
-  </div>
+    aria-hidden
+    className="h-px w-full"
+    style={{
+      background:
+        "linear-gradient(90deg, transparent 0%, hsl(280 30% 70% / 0.3) 50%, transparent 100%)",
+    }}
+  />
 );
 
-/* ─── 3. Social Proof / Zahlen (Dark Section) ─── */
-const StatItem = ({
-  end,
-  suffix,
-  label,
+/* ═══════════════════════════════════════════════════════════
+   Inline mid-scroll CTA — small, between major sections
+   ═══════════════════════════════════════════════════════════ */
+const InlineCTA = ({
+  headline,
+  label = "Jetzt anfragen",
+  to = "/buchung",
 }: {
-  end: number;
-  suffix: string;
-  label: string;
+  headline: string;
+  label?: string;
+  to?: string;
 }) => {
-  const { count, ref } = useCounter(end);
-
-  return (
-    <div className="text-center" ref={ref}>
-      <p className="font-display text-6xl md:text-7xl lg:text-8xl font-black tabular-nums text-gradient glow-number">
-        {count}
-        {suffix}
-      </p>
-      <p className="font-sans text-xs uppercase tracking-[0.2em] text-white/40 mt-4">
-        {label}
-      </p>
-    </div>
-  );
-};
-
-const SocialProofSection = () => {
   const { ref, isVisible } = useScrollReveal();
-
   return (
-    <section className="section-dark section-large" ref={ref}>
-      <div className="container px-6">
+    <section ref={ref} className="bg-white">
+      <div className="container px-6 py-14 md:py-16">
         <div
-          className={`max-w-3xl mx-auto text-center mb-20 ${
+          className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <h2 className="headline-section">
-            Zahlen, die <span className="text-gradient">sprechen</span>.
-          </h2>
-        </div>
-        <div
-          className={`flex flex-wrap justify-center gap-16 md:gap-24 ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.15s" }}
-        >
-          <StatItem end={200} suffix="+" label="Events" />
-          <StatItem end={10} suffix="+" label="Jahre Erfahrung" />
-          <StatItem end={100} suffix="%" label="Weiterempfehlung" />
-          <StatItem end={30} suffix="+" label="Bewertungen" />
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ─── Video Section (Dark) ─── */
-const VideoSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  return (
-    <section className="section-dark section-large" ref={ref}>
-      <div className="container px-6">
-        <div
-          className={`max-w-3xl mx-auto text-center mb-16 ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-        >
-          <span className="badge-accent mb-8 inline-flex">Live erleben</span>
-          <h2 className="headline-section mb-6">
-            Magie in <span className="text-gradient">Aktion</span>.
-          </h2>
-          <p className="text-lg text-white/50 max-w-xl mx-auto">
-            Ein Ausschnitt aus einer Live-Performance — erlebe die Energie, die
-            Reaktionen und die Momente, die ein Event unvergesslich machen.
+          <p className="font-display text-xl md:text-2xl lg:text-[1.75rem] font-bold leading-[1.25] tracking-[-0.01em] text-foreground max-w-2xl">
+            {headline}
           </p>
-        </div>
-        <div
-          className={`max-w-4xl mx-auto ${
-            isVisible ? "animate-scale-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.2s" }}
-        >
-          <div className="video-container rounded-3xl overflow-hidden glow-accent">
-            <iframe
-              src="https://www.youtube.com/embed/ZdIDq9VtqxU"
-              title="Emilian Leber — Live Performance"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-            />
-          </div>
+          <Link
+            to={to}
+            className="group shrink-0 inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.02]"
+            style={{
+              background:
+                "linear-gradient(135deg, hsl(225 85% 55%) 0%, hsl(275 75% 55%) 50%, hsl(345 85% 55%) 100%)",
+              boxShadow: "0 10px 30px hsl(275 75% 55% / 0.3)",
+            }}
+          >
+            {label}
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
       </div>
     </section>
   );
 };
 
-/* ─── 5. Showformate Slider ─── */
-const ShowformateSlider = () => {
+/* ═══════════════════════════════════════════════════════════
+   1 · SHOWFORMATE — Editorial magazine layout
+   ═══════════════════════════════════════════════════════════ */
+/* Story: Du weißt was dich erwartet. Jetzt wird's konkret —
+   welches Format passt zu deinem Event?
+   Übergang zu Comedy: "Alle vier haben eines gemeinsam: Es ist anders als du denkst" */
+const ShowformateSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   const formate = [
     {
-      img: closeupImg,
-      imgClass: "object-[center_20%]",
-      title: "Close-Up Magie",
+      img: heroStageImg,
+      title: "Bühnenshow",
+      sub: "Das zentrale Highlight",
+      desc: "Eine durchkomponierte Performance mit Comedy, Staunen und Momenten für das gesamte Publikum.",
+      link: "/buehnenshow",
+      objectPos: "object-[center_25%]",
+      duration: "15–60 Min",
+    },
+    {
+      img: heroCloseupImg,
+      title: "Close-Up",
       sub: "Direkt bei deinen Gästen",
-      desc: "Interaktive Magie zum Anfassen — perfekt als Eisbreaker bei Empfängen, Networking-Events und Dinner-Begleitung.",
+      desc: "Zauberkunst zum Anfassen — bei Empfängen, Dinner oder zwischendurch.",
       link: "/close-up",
+      objectPos: "object-[center_30%]",
+      duration: "30–90 Min",
+    },
+    {
+      img: heroDinnerImg,
+      title: "Magic Dinner",
+      sub: "Kulinarik trifft Magie",
+      desc: "Zwischen den Gängen wird gezaubert — direkt am Tisch. Jeder Gang wird zum Event.",
+      link: "/magic-dinner",
+      objectPos: "object-[center_40%]",
+      duration: "2–3 Stunden",
     },
     {
       img: moderatorImg,
-      imgClass: "object-[center_15%]",
-      title: "Bühnenshow",
-      sub: "Das zentrale Highlight",
-      desc: "Eine durchkomponierte Performance mit Dramaturgie, Comedy und Momenten, die ein ganzes Publikum gleichzeitig zum Staunen bringen.",
-      link: "/buehnenshow",
-    },
-    {
-      img: magicDinnerEventImg,
-      imgClass: "object-[center_25%]",
-      title: "Magic Dinner",
-      sub: "Kulinarik trifft Magie",
-      desc: "Zwischen den Gängen wird gezaubert — direkt am Tisch, persönlich und exklusiv. Jeder Gang wird zum Event.",
-      link: "/magic-dinner",
-    },
-    {
-      img: closeupWalkingImg,
-      imgClass: "object-[center_20%]",
-      title: "Walking Act",
-      sub: "Frei & spontan",
-      desc: "Magie zwischen den Gästen — locker, witzig und der perfekte Gesprächsstarter für jede Veranstaltung.",
-      link: "/buchung",
-    },
-    {
-      img: emotionenImg,
-      imgClass: "object-[center_30%]",
-      title: "Individuelles Konzept",
-      sub: "Maßgeschneidert",
-      desc: "Angepasst auf eure Marke, eure Botschaft, euer Event — inklusive Einbindung von Firmeninhalten und persönlichen Elementen.",
-      link: "/buchung",
+      title: "Moderation",
+      sub: "Durch den Abend",
+      desc: "Ich führe deine Gäste charmant durch Programm, Reden und Show-Highlights.",
+      link: "/moderation",
+      objectPos: "object-[center_15%]",
+      duration: "nach Absprache",
     },
   ];
 
   return (
-    <section id="showkonzepte" className="section-large" ref={ref}>
+    <section id="showkonzepte" ref={ref} className="bg-white section-large">
       <div className="container px-6">
         <div
-          className={`max-w-3xl mx-auto text-center mb-16 ${
+          className={`max-w-3xl mb-14 md:mb-20 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <span className="badge-accent mb-8 inline-flex">Showkonzepte</span>
-          <h2 className="headline-section text-foreground mb-6">
-            Fünf Formate. Ein Versprechen.
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Dein Format
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            So können wir's{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              umsetzen
+            </span>
+            .
           </h2>
-          <p className="text-body max-w-xl mx-auto">
-            Jedes Showformat ist einzigartig — und wird individuell auf dein
-            Event abgestimmt. Vom intimen Tischmoment bis zur großen
-            Bühnenperformance.
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Je nach Anlass und Ablauf passt ein anderes Format. Keine Sorge —
+            wenn du unsicher bist, besprechen wir das gemeinsam. Hier ein
+            Überblick:
           </p>
         </div>
 
-        <HorizontalSlider
-          items={formate.map((f) => ({
-            content: (
-              <Link to={f.link} className="group block">
-                <div className="rounded-3xl overflow-hidden aspect-[3/4] relative">
-                  <img
-                    src={f.img}
-                    alt={f.title}
-                    className={`absolute inset-0 w-full h-full object-cover ${f.imgClass} transition-transform duration-700 group-hover:scale-105`}
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <p className="font-sans text-[10px] font-bold uppercase tracking-[0.15em] text-background/50 mb-3">
-                      {f.sub}
-                    </p>
-                    <h3 className="font-display text-2xl font-bold text-background mb-3">
-                      {f.title}
-                    </h3>
-                    <p className="font-sans text-sm text-background/70 leading-relaxed">
-                      {f.desc}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            ),
-          }))}
-        />
+        <ShowformateTabs formate={formate} isVisible={isVisible} />
       </div>
     </section>
   );
 };
 
-/* ─── 7. Comedy + Magie ─── */
-const ComedySection = () => {
+/* Interactive format switcher — tabs on top, ONE big visual below that swaps */
+const ShowformateTabs = ({
+  formate,
+  isVisible,
+}: {
+  formate: {
+    img: string;
+    title: string;
+    sub: string;
+    desc: string;
+    link: string;
+    objectPos: string;
+    duration: string;
+  }[];
+  isVisible: boolean;
+}) => {
+  const [active, setActive] = useState(0);
+  const f = formate[active];
+  return (
+    <div
+      className={`${
+        isVisible ? "animate-fade-up" : "opacity-0"
+      }`}
+      style={{ animationDelay: "0.1s" }}
+    >
+      {/* Tabs */}
+      <div className="flex flex-wrap gap-2 mb-6 md:mb-8">
+        {formate.map((fmt, i) => (
+          <button
+            key={fmt.title}
+            onClick={() => setActive(i)}
+            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
+              active === i
+                ? "text-white"
+                : "text-foreground/70 hover:text-foreground bg-foreground/[0.04] hover:bg-foreground/[0.08]"
+            }`}
+            style={
+              active === i
+                ? {
+                    background:
+                      "linear-gradient(135deg, hsl(225 85% 55%) 0%, hsl(275 75% 55%) 50%, hsl(345 85% 55%) 100%)",
+                    boxShadow: "0 8px 24px hsl(275 75% 55% / 0.3)",
+                  }
+                : undefined
+            }
+          >
+            {fmt.title}
+          </button>
+        ))}
+      </div>
+
+      {/* Showcase panel — big photo left, rich text right */}
+      <div
+        className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-stretch overflow-hidden"
+        style={{ borderRadius: "0.75rem" }}
+      >
+        {/* Image */}
+        <div className="lg:col-span-7 relative aspect-[4/3] lg:aspect-auto lg:min-h-[500px] overflow-hidden">
+          <img
+            key={f.img}
+            src={f.img}
+            alt={f.title}
+            className={`absolute inset-0 w-full h-full object-cover ${f.objectPos} animate-fade-in`}
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 opacity-60"
+            style={{
+              background:
+                "radial-gradient(ellipse at 100% 0%, hsl(340 85% 55% / 0.3) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, hsl(225 85% 50% / 0.25) 0%, transparent 55%)",
+              mixBlendMode: "screen",
+            }}
+          />
+          {/* Duration badge */}
+          <div
+            className="absolute top-5 left-5 px-3.5 py-1.5 rounded-full backdrop-blur-md border border-white/20 text-[11px] tracking-[0.1em] uppercase text-white font-semibold"
+            style={{ background: "rgba(0,0,0,0.4)" }}
+          >
+            {f.duration}
+          </div>
+        </div>
+
+        {/* Text content */}
+        <div className="lg:col-span-5 flex flex-col justify-between bg-foreground/[0.02] p-8 md:p-10">
+          <div>
+            <p
+              className="text-[11px] tracking-[0.2em] uppercase mb-4 font-semibold"
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 78% 45%), hsl(275 65% 45%), hsl(345 75% 45%))",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              {f.sub}
+            </p>
+            <h3
+              key={f.title}
+              className="font-display text-3xl md:text-4xl lg:text-5xl font-black leading-[1.05] text-foreground mb-5 animate-fade-in"
+            >
+              {f.title}
+            </h3>
+            <p className="text-base md:text-lg text-foreground/70 leading-[1.6]">
+              {f.desc}
+            </p>
+          </div>
+
+          <Link
+            to={f.link}
+            className="group mt-8 inline-flex items-center gap-2 font-display font-bold text-foreground border-b-2 border-foreground/30 hover:border-foreground pb-1 transition-colors self-start"
+          >
+            Details zu {f.title}
+            <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   2 · ANLASS — Photo grid: "Dein Event"
+   Story: Von Hero kommend — "Welcher Anlass ist deiner?"
+   Übergang zu Moment: "Und so fühlt es sich an, egal welchen du wählst"
+   ═══════════════════════════════════════════════════════════ */
+const AnlassSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
+  const anlaesse = [
+    {
+      img: hochzeitStockImg,
+      icon: Heart,
+      title: "Hochzeiten",
+      desc: "Der Moment, der eure Feier zum Tagesgespräch macht.",
+      link: "/hochzeit",
+      pos: "object-[center_30%]",
+    },
+    {
+      img: firmenfeierImg,
+      icon: Building2,
+      title: "Firmenfeiern",
+      desc: "Entertainment, das Gäste verbindet — nicht langweilt.",
+      link: "/firmenfeiern",
+      pos: "object-[center_40%]",
+    },
+    {
+      img: geburtstagImg,
+      icon: PartyPopper,
+      title: "Geburtstage",
+      desc: "Das Highlight, das deine Feier von allen anderen unterscheidet.",
+      link: "/geburtstage",
+      pos: "object-[center_40%]",
+    },
+    {
+      img: heroStageImg,
+      icon: Trophy,
+      title: "Galas & Awards",
+      desc: "Elegantes Entertainment auf höchstem Niveau.",
+      link: "/buchung",
+      pos: "object-[center_35%]",
+    },
+    {
+      img: audienceImg,
+      icon: Presentation,
+      title: "Messen & Promotions",
+      desc: "Magie, die Aufmerksamkeit erzeugt — euer Stand zum Magneten.",
+      link: "/buchung",
+      pos: "object-[center_40%]",
+    },
+    {
+      img: weddingImg,
+      icon: Heart,
+      title: "Private Feiern",
+      desc: "Vom Jubiläum bis zum Abschied — persönlich und unvergesslich.",
+      link: "/buchung",
+      pos: "object-[center_35%]",
+    },
+  ];
+
   return (
-    <section className="section-large" ref={ref}>
+    <section id="anlaesse" ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
-          <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <span className="badge-primary mb-8 inline-flex">
-              Comedy + Magie
+        <div
+          className={`max-w-3xl mb-14 md:mb-16 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Dein Event
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Fangen wir mit{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              dir an
             </span>
-            <h2 className="headline-section text-foreground mb-6">
-              Warum Zauberer mit Comedy so gut funktionieren.
-            </h2>
+            .
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Welchen Anlass planst du? Such dir deinen raus — die Liste links
+            zeigt rechts, wie's bei dir aussehen könnte.
+          </p>
+        </div>
 
-            <div className="space-y-5 text-detail max-w-lg">
-              <p className="text-lg text-muted-foreground font-light leading-relaxed">
-                Die Kombination aus moderner Zauberkunst und cleverem Humor
-                erzeugt eine einzigartige Dynamik: Deine Gäste staunen UND
-                lachen.
-              </p>
-              <p>
-                Das ist der Unterschied zu klassischen Zauberern — bei Emilian
-                Leber geht es nicht nur um den Trick, sondern um das Erlebnis.
-                Um die Reaktion. Um den Moment, in dem ein ganzer Raum
-                gleichzeitig lacht und staunt.
-              </p>
-              <p>
-                Diese Art von Zaubershow funktioniert bei jedem Publikum, in
-                jeder Situation — weil Humor und Staunen universelle Sprachen
-                sind. Vom CEO bis zum Hochzeitsgast: Alle werden Teil der Show.
-              </p>
-              <p>
-                Erlebnisse, die Emotionen kombinieren — wie Lachen und Staunen —
-                bleiben besonders lange im Gedächtnis. Genau das ist der Ansatz
-                hinter den Shows von Emilian Leber.
-              </p>
+        <AnlassInteractive items={anlaesse} isVisible={isVisible} />
+      </div>
+    </section>
+  );
+};
+
+/* Interactive list: hover changes the single big image on the right */
+const AnlassInteractive = ({
+  items,
+  isVisible,
+}: {
+  items: {
+    img: string;
+    icon: any;
+    title: string;
+    desc: string;
+    link: string;
+    pos: string;
+  }[];
+  isVisible: boolean;
+}) => {
+  const [active, setActive] = useState(0);
+  const a = items[active];
+  return (
+    <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      {/* Left: editorial list */}
+      <div
+        className={`lg:col-span-7 ${
+          isVisible ? "animate-slide-left" : "opacity-0"
+        }`}
+      >
+        {items.map((item, i) => (
+          <Link
+            key={item.title}
+            to={item.link}
+            onMouseEnter={() => setActive(i)}
+            onFocus={() => setActive(i)}
+            className={`group block border-t border-foreground/10 last:border-b py-6 md:py-7 -mx-4 px-4 transition-all duration-300 ${
+              active === i
+                ? "bg-foreground/[0.03]"
+                : "hover:bg-foreground/[0.02]"
+            }`}
+          >
+            <div className="flex items-start gap-5">
+              <span
+                className={`font-mono text-[11px] pt-2 w-8 tabular-nums transition-colors ${
+                  active === i ? "text-foreground" : "text-foreground/40"
+                }`}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <item.icon
+                className={`w-6 h-6 shrink-0 mt-0.5 transition-colors ${
+                  active === i ? "text-foreground" : "text-foreground/60"
+                }`}
+              />
+              <div className="flex-1">
+                <h3
+                  className={`font-display text-xl md:text-2xl font-bold mb-1 transition-colors ${
+                    active === i ? "text-foreground" : "text-foreground/85"
+                  }`}
+                >
+                  {item.title}
+                </h3>
+                <p className="text-sm md:text-[15px] text-foreground/60 leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+              <ArrowUpRight
+                className={`w-5 h-5 shrink-0 mt-1 transition-all ${
+                  active === i
+                    ? "text-foreground translate-x-0.5 -translate-y-0.5"
+                    : "text-foreground/25 group-hover:text-foreground/70"
+                }`}
+              />
             </div>
+          </Link>
+        ))}
+      </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 mt-10">
+      {/* Right: single big image that swaps based on active */}
+      <div
+        className={`lg:col-span-5 lg:sticky lg:top-24 ${
+          isVisible ? "animate-slide-right" : "opacity-0"
+        }`}
+        style={{ animationDelay: "0.15s" }}
+      >
+        <div
+          className="relative aspect-[4/5] overflow-hidden"
+          style={{ borderRadius: "0.5rem" }}
+        >
+          <img
+            key={a.img}
+            src={a.img}
+            alt={a.title}
+            className={`absolute inset-0 w-full h-full object-cover ${a.pos} animate-fade-in`}
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(15,10,25,0.7) 0%, rgba(15,10,25,0.1) 50%, transparent 80%)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 opacity-50"
+            style={{
+              background:
+                "radial-gradient(ellipse at 85% 15%, hsl(340 85% 55% / 0.4) 0%, transparent 55%), radial-gradient(ellipse at 10% 90%, hsl(225 85% 50% / 0.3) 0%, transparent 55%)",
+              mixBlendMode: "screen",
+            }}
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-7 text-white">
+            <p className="text-[11px] tracking-[0.2em] uppercase text-white/70 mb-2 font-semibold">
+              {String(active + 1).padStart(2, "0")} · Dein Anlass
+            </p>
+            <h4 className="font-display text-2xl md:text-3xl font-black leading-[1.1]">
+              {a.title}
+            </h4>
+          </div>
+          <div
+            aria-hidden
+            className="absolute left-6 right-6 bottom-0 h-[2px]"
+            style={{
+              background:
+                "linear-gradient(90deg, hsl(225 85% 65%), hsl(280 75% 65%), hsl(340 90% 65%))",
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   3 · MOMENT — Quiet editorial statement
+   ═══════════════════════════════════════════════════════════ */
+/* Full-bleed, cinematic. Story: Nach Selbst-Selektion zeigt diese Section
+   was bei ALLEN Anlässen das Gemeinsame ist — der Moment.
+   Übergang zum Video: "Glaubst du nicht? Sieh selbst." */
+const MomentSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      className="relative overflow-hidden py-32 md:py-44 lg:py-52 text-white"
+    >
+      {/* Full-bleed bg — staunende Gäste */}
+      <div className="absolute inset-0">
+        <img
+          src={staunenImg}
+          alt=""
+          className="w-full h-full object-cover object-center scale-105"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(110deg, rgba(15,10,25,0.86) 0%, rgba(30,15,45,0.7) 50%, rgba(15,10,25,0.4) 100%)",
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 container px-6">
+        <div
+          className={`max-w-3xl ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-white/60 mb-8">
+            Was dann passiert
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.02] text-[clamp(2.25rem,6vw,5.5rem)]">
+            Ein Moment — und alle{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 95% 78%) 0%, hsl(285 85% 78%) 50%, hsl(340 95% 78%) 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              reden darüber
+            </span>
+            .
+          </h2>
+          <p className="mt-8 max-w-xl text-lg md:text-xl leading-[1.55] text-white/80 font-light">
+            Etwas passiert direkt vor ihren Augen, das sie sich nicht erklären
+            können. Alle schauen sich an, lachen, schütteln den Kopf. Und ab
+            diesem Moment ist klar: Diesen Abend vergessen sie nicht.
+          </p>
+          <p className="mt-5 text-base md:text-lg text-white/65 max-w-xl">
+            Nicht vergleichbar mit einer Show aus dem Fernsehen. Das passiert
+            live. Mit ihnen. Mit ihren Händen.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   4 · VIDEO — Restrained frame, no glow
+   ═══════════════════════════════════════════════════════════ */
+/* Story: Du kannst dir das vorstellen — aber sehen ist besser. Hier zwei Minuten.
+   Übergang zu Formate: "Das war ein Format. Welches passt zu dir?" */
+const VideoSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      className="relative overflow-hidden text-white py-24 md:py-32 lg:py-40"
+      style={{ background: "#0f0a19" }}
+    >
+      {/* Subtle gradient blob in background */}
+      <div
+        aria-hidden
+        className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-25"
+        style={{
+          background:
+            "radial-gradient(circle, hsl(340 85% 55%) 0%, transparent 70%)",
+          filter: "blur(80px)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full opacity-20"
+        style={{
+          background:
+            "radial-gradient(circle, hsl(225 85% 55%) 0%, transparent 70%)",
+          filter: "blur(80px)",
+        }}
+      />
+
+      <div className="relative z-10 container px-6">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          {/* Left: text + stat cards */}
+          <div
+            className={`lg:col-span-4 ${
+              isVisible ? "animate-slide-left" : "opacity-0"
+            }`}
+          >
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-white/60 mb-6">
+              Live gesehen
+            </p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)]">
+              Glaubst du nicht?{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(100deg, hsl(225 95% 78%) 0%, hsl(285 85% 78%) 50%, hsl(340 95% 78%) 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Sieh selbst.
+              </span>
+            </h2>
+            <p className="mt-6 text-base md:text-lg leading-[1.6] text-white/75 font-light">
+              Zwei Minuten aus einer echten Show. Keine Montage, keine Tricks
+              mit der Kamera — einfach die Reaktionen, wie sie sind.
+            </p>
+
+            {/* Mini stat cards */}
+            <div className="mt-8 grid grid-cols-3 gap-3">
               {[
-                { icon: Laugh, label: "Humor" },
-                { icon: Wand2, label: "Zauberkunst" },
-                { icon: Zap, label: "Wow-Effekt" },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center gap-2">
-                  <item.icon className="w-5 h-5 text-accent" />
-                  <span className="font-display text-sm font-bold text-foreground">
-                    {item.label}
-                  </span>
+                { v: "2:14", l: "Min" },
+                { v: "100%", l: "echt" },
+                { v: "0", l: "Cuts" },
+              ].map((s) => (
+                <div
+                  key={s.l}
+                  className="rounded-xl p-3 backdrop-blur-sm"
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <p className="font-display text-lg font-black tabular-nums">
+                    {s.v}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-wider text-white/50 mt-0.5">
+                    {s.l}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
 
+          {/* Right: video with gradient frame */}
           <div
-            className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}
-            style={{ animationDelay: "0.2s" }}
+            className={`lg:col-span-8 ${
+              isVisible ? "animate-scale-up" : "opacity-0"
+            }`}
+            style={{ animationDelay: "0.15s" }}
           >
-            <div className="rounded-3xl overflow-hidden">
-              <img
-                src={magicDinnerBookImg}
-                alt="Zaubershow beim Magic Dinner"
-                className="w-full h-[500px] object-cover object-center hover:scale-[1.02] transition-transform duration-700"
-                loading="lazy"
+            <div className="relative">
+              {/* Subtle gradient glow behind video */}
+              <div
+                aria-hidden
+                className="absolute -inset-4 rounded-[1rem] opacity-50 blur-2xl"
+                style={{
+                  background:
+                    "linear-gradient(135deg, hsl(225 85% 55% / 0.5), hsl(275 75% 55% / 0.5), hsl(345 85% 55% / 0.5))",
+                }}
               />
+              <div
+                className="relative video-container overflow-hidden"
+                style={{
+                  borderRadius: "0.75rem",
+                  boxShadow:
+                    "0 40px 80px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)",
+                }}
+              >
+                <iframe
+                  src="https://www.youtube.com/embed/ZdIDq9VtqxU"
+                  title="Emilian Leber — Live Performance"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </div>
+              {/* Caption strip */}
+              <div className="mt-4 flex items-center justify-between text-[11px] tracking-[0.18em] uppercase text-white/55">
+                <span>Live-Auftritt · Magic Camp</span>
+                <span
+                  aria-hidden
+                  className="flex-1 mx-4 h-px"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, hsl(225 78% 52% / 0.4), hsl(275 65% 52% / 0.6), hsl(345 75% 52% / 0.4))",
+                  }}
+                />
+                <span>200 Gäste · 2024</span>
+              </div>
             </div>
           </div>
         </div>
@@ -326,146 +738,365 @@ const ComedySection = () => {
   );
 };
 
-/* ─── 8. Live-Erlebnis ─── */
-const ErlebnisSection = () => {
+/* ═══════════════════════════════════════════════════════════
+   5 · ZAHLEN — editorial, not dashboard
+   ═══════════════════════════════════════════════════════════ */
+const StatBlock = ({
+  end,
+  suffix,
+  label,
+  desc,
+}: {
+  end: number;
+  suffix: string;
+  label: string;
+  desc: string;
+}) => {
+  const { count, ref } = useCounter(end);
+  return (
+    <div ref={ref}>
+      <p className="font-display font-black leading-none tabular-nums text-foreground text-[clamp(3rem,6vw,5.5rem)] tracking-[-0.02em]">
+        {count}
+        {suffix}
+      </p>
+      <p className="text-[11px] tracking-[0.18em] uppercase text-foreground/50 mt-4">
+        {label}
+      </p>
+      <p className="mt-3 text-sm text-foreground/60 max-w-[220px] leading-relaxed">
+        {desc}
+      </p>
+    </div>
+  );
+};
+
+const ZahlenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-white section-large border-y border-foreground/8">
+      <div className="container px-6">
+        <div
+          className={`max-w-2xl mb-14 md:mb-16 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Fakten
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
+            Zahlen, die{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              sprechen
+            </span>
+            .
+          </h2>
+        </div>
+        <div
+          className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+          style={{ animationDelay: "0.1s" }}
+        >
+          <StatBlock
+            end={200}
+            suffix="+"
+            label="Events"
+            desc="Auftritte auf Bühnen jeder Größe, seit 2014."
+          />
+          <StatBlock
+            end={10}
+            suffix="+"
+            label="Jahre Erfahrung"
+            desc="Über zehn Jahre Routine — auch unter Druck."
+          />
+          <StatBlock
+            end={100}
+            suffix="%"
+            label="Weiterempfehlung"
+            desc="Fast jeder Kunde empfiehlt mich direkt weiter."
+          />
+          <StatBlock
+            end={30}
+            suffix="+"
+            label="5★ Bewertungen"
+            desc="Durchgehend Top-Bewertungen auf Google & ProvenExpert."
+          />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   6 · COMEDY + MAGIE — editorial split, no drop-cap
+   ═══════════════════════════════════════════════════════════ */
+const ComedySection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-white section-large">
+      <div className="container px-6">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div
+            className={`lg:col-span-5 ${
+              isVisible ? "animate-slide-left" : "opacity-0"
+            }`}
+          >
+            <div
+              className="relative overflow-hidden"
+              style={{
+                borderRadius: "0.5rem",
+                aspectRatio: "4 / 5",
+                boxShadow:
+                  "0 40px 80px -30px rgba(40, 20, 60, 0.2), 0 0 0 1px rgba(0,0,0,0.04)",
+              }}
+            >
+              <img
+                src={magicDinnerBookImg}
+                alt="Zaubershow beim Magic Dinner"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          <div
+            className={`lg:col-span-7 lg:pl-6 ${
+              isVisible ? "animate-slide-right" : "opacity-0"
+            }`}
+            style={{ animationDelay: "0.1s" }}
+          >
+            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+              Der Unterschied
+            </p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground">
+              Moderne Zauberkunst.{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Mit Humor.
+              </span>
+            </h2>
+            <p className="mt-7 text-lg md:text-xl leading-[1.55] text-foreground/80 font-light max-w-2xl">
+              Interaktiv, persönlich und auf Augenhöhe mit den Gästen.
+            </p>
+            <p className="mt-5 text-base leading-[1.7] text-foreground/65 max-w-2xl">
+              Deine Gäste sind nicht Zuschauer, sondern Teil der Show.
+              Sie mischen Karten, halten Objekte in der Hand, wählen frei
+              aus — und erleben genau dabei den Moment, den sie sich nicht
+              erklären können.
+            </p>
+            <p className="mt-5 text-base leading-[1.7] text-foreground/65 max-w-2xl">
+              Dazu kommt Comedy. Nicht als Gag zwischendurch, sondern als Teil
+              der Performance. Gelacht wird über die Situation, nicht über
+              einzelne Gäste — niemand wird vorgeführt.
+            </p>
+            <p className="mt-5 text-base leading-[1.7] text-foreground/65 max-w-2xl">
+              Das funktioniert bei jedem Publikum, in jeder Altersgruppe.
+              Staunen ist eine universelle Sprache.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   7 · STIMMEN — Pull quote hero + logo wall
+   ═══════════════════════════════════════════════════════════ */
+/* Story: Genug von mir geredet. Was sagen die, die schon dabei waren?
+   Übergang zu Über mich: "Und der Mensch dahinter — wer ist das?" */
+const StimmenSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
-  const moments = [
+  const reviews = [
     {
-      title: "Der erste Staunen-Moment",
-      desc: "Wenn eine Karte, die gerade noch in deiner Hand war, plötzlich in der Tasche deines Nachbarn auftaucht — und alle gleichzeitig lachen.",
+      quote:
+        "Es war einfach Mega! 200 Gäste eines bayerischen Versicherungsunternehmens — Emilian hat mit seiner eigens entwickelten Zaubertrickshow alle begeistert.",
+      author: "Jan von Lehmann",
+      role: "Wächter Agentur",
+      anlass: "Firmenfeier · 200 Gäste",
+      initial: "J",
+      tint: "hsl(225 70% 55%)",
     },
     {
-      title: "Das gemeinsame Erleben",
-      desc: "Fremde Gäste, die sich gerade erst vorgestellt haben, erleben zusammen etwas Unmögliches — und reden den Rest des Abends darüber.",
+      quote:
+        "Wirklich großartig! Mit viel Charme und Witz hat er alle Hochzeitsgäste begeistert. Eine tolle Ergänzung für jeden besonderen Anlass.",
+      author: "Katrin Raß",
+      role: "Hochzeitsplanerin",
+      anlass: "Hochzeit · München",
+      initial: "K",
+      tint: "hsl(340 75% 55%)",
     },
     {
-      title: "Der Gesprächsstarter",
-      desc: "‚Hast du das gesehen?!' — Zauberkunst bricht das Eis schneller als jeder Small Talk und schafft sofort eine Verbindung.",
-    },
-    {
-      title: "Die Erinnerung",
-      desc: "Wochen später erzählen deine Gäste noch davon. Nicht vom Essen, nicht von der Deko — sondern vom Moment, der sie sprachlos gemacht hat.",
+      quote:
+        "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt. Abwicklung sehr professionell. Gerne wieder!",
+      author: "Martina Senftl",
+      role: "Eventkundin",
+      anlass: "Privatfeier",
+      initial: "M",
+      tint: "hsl(280 70% 55%)",
     },
   ];
 
   return (
-    <section className="section-dark section-large" ref={ref} style={{ background: "radial-gradient(ellipse at 50% 100%, hsl(260 70% 15% / 0.3) 0%, #08080d 70%)" }}>
+    <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
+        {/* Hero rating block */}
         <div
-          className={`max-w-3xl mx-auto text-center mb-20 ${
+          className={`flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14 md:mb-16 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <span className="badge-accent mb-8 inline-flex">Das Erlebnis</span>
-          <h2 className="headline-section mb-6">
-            Was deine Gäste <span className="text-gradient">erleben</span>.
-          </h2>
-          <p className="text-lg text-white/50 max-w-xl mx-auto leading-relaxed">
-            Es geht nicht um Tricks. Es geht um die Momente dazwischen — um
-            Staunen, Lachen und das Gefühl, etwas Besonderes erlebt zu haben.
-          </p>
+          <div className="max-w-3xl">
+            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+              Echte Stimmen
+            </p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+              Genug von mir.{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Hör sie selbst.
+              </span>
+            </h2>
+          </div>
+
+          {/* Big rating block */}
+          <div className="flex items-center gap-5 shrink-0">
+            <div>
+              <div className="flex items-center gap-1 mb-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="w-5 h-5 fill-amber-400 text-amber-400"
+                  />
+                ))}
+              </div>
+              <p className="text-sm text-foreground/65">
+                <strong className="font-display text-2xl text-foreground tracking-[-0.02em] tabular-nums">
+                  5,0
+                </strong>{" "}
+                · 30+ Bewertungen
+              </p>
+            </div>
+            <div className="h-12 w-px bg-foreground/10" />
+            <div className="text-sm text-foreground/65">
+              <p className="font-semibold text-foreground">Google</p>
+              <p>ProvenExpert</p>
+            </div>
+          </div>
         </div>
 
-        <div
-          className={`grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.15s" }}
-        >
-          {moments.map((m, i) => (
-            <div
-              key={m.title}
-              className="p-8 rounded-3xl glass-light hover:bg-white/10 transition-all duration-500"
-              style={{ animationDelay: `${0.2 + i * 0.08}s` }}
+        {/* Review cards grid */}
+        <div className="grid md:grid-cols-3 gap-5 md:gap-6">
+          {reviews.map((r, i) => (
+            <article
+              key={r.author}
+              className={`relative bg-white p-7 md:p-8 flex flex-col h-full ${
+                isVisible ? "animate-fade-up" : "opacity-0"
+              }`}
+              style={{
+                animationDelay: `${0.15 + i * 0.1}s`,
+                borderRadius: "0.75rem",
+                boxShadow:
+                  "0 20px 50px -25px rgba(40, 20, 60, 0.2), 0 0 0 1px rgba(0,0,0,0.05)",
+              }}
             >
-              <h3 className="font-display text-lg font-bold text-white mb-3">
-                {m.title}
-              </h3>
-              <p className="text-sm text-white/50 leading-relaxed">{m.desc}</p>
-            </div>
+              {/* Top accent gradient line */}
+              <div
+                aria-hidden
+                className="absolute top-0 left-7 right-7 h-[2px] rounded-full"
+                style={{
+                  background:
+                    "linear-gradient(90deg, hsl(225 85% 65%), hsl(280 75% 65%), hsl(340 90% 65%))",
+                }}
+              />
+
+              {/* Stars */}
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, j) => (
+                  <Star
+                    key={j}
+                    className="w-4 h-4 fill-amber-400 text-amber-400"
+                  />
+                ))}
+              </div>
+
+              {/* Quote */}
+              <p className="text-[15px] md:text-base leading-[1.6] text-foreground/85 flex-1">
+                „{r.quote}"
+              </p>
+
+              {/* Footer with avatar */}
+              <footer className="mt-6 pt-6 border-t border-foreground/8 flex items-center gap-3">
+                <div
+                  className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center font-display font-black text-white text-lg"
+                  style={{
+                    background: `linear-gradient(135deg, ${r.tint}, hsl(280 70% 55%))`,
+                  }}
+                >
+                  {r.initial}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-display font-bold text-foreground text-sm">
+                    {r.author}
+                  </p>
+                  <p className="text-[12px] text-foreground/55 truncate">
+                    {r.anlass}
+                  </p>
+                </div>
+              </footer>
+            </article>
           ))}
         </div>
-      </div>
-    </section>
-  );
-};
 
-/* ─── 9. Referenzen Slider ─── */
-const ReferenzenSlider = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  const testimonials = [
-    {
-      quote:
-        "Ich durfte eine Hochzeit planen, bei der Emilian als Zauberer aufgetreten ist – und es war wirklich großartig! Er hat sich auf unsere Idee eingelassen, den Bräutigam zu überraschen, und mit viel Charme und Witz mitgespielt. Es war unterhaltsam, sympathisch und Emilian hat alle Gäste begeistert. Eine tolle Ergänzung für jeden besonderen Anlass!",
-      author: "Katrin Raß",
-      role: "5 Sterne",
-    },
-    {
-      quote:
-        "Die Agenturgruppe Wächter aus München bedankt sich vielmals bei Emilian, der rund 200 geladene Gäste eines Bayerischen Versicherungsunternehmens mit einer eigens entwickelten Zaubertrickshow in einem inszenierten Magic Camp begeistert hat - es war einfach Mega!",
-      author: "Jan von Lehmann",
-      role: "Eventmanagement Wächter Agentur · 5 Sterne",
-    },
-    {
-      quote:
-        "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt. Abwicklung des Auftrages sehr professionell. Gerne wieder!",
-      author: "Martina Senftl",
-      role: "5 Sterne",
-    },
-  ];
-
-  return (
-    <section className="section-dark section-large overflow-hidden" ref={ref} style={{ background: "linear-gradient(135deg, #08080d 0%, #0f0a1e 50%, #08080d 100%)" }}>
-      <div className="container px-6">
-        <div
-          className={`max-w-3xl mx-auto text-center mb-16 ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-        >
-          <span className="badge-accent mb-8 inline-flex">Bewertungen</span>
-          <h2 className="headline-section mb-6">
-            Was Kunden <span className="text-gradient">sagen</span>.
-          </h2>
+        {/* CTA to all reviews */}
+        <div className="mt-12 flex justify-center">
+          <Link
+            to="/referenzen"
+            className="group inline-flex items-center gap-2 font-display text-sm font-bold text-foreground border-b-2 border-foreground/30 hover:border-foreground pb-1 transition-colors"
+          >
+            Alle 30+ Bewertungen ansehen
+            <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
         </div>
 
-        <HorizontalSlider
-          items={testimonials.map((t) => ({
-            content: (
-              <blockquote className="p-8 rounded-3xl glass-light h-full flex flex-col">
-                <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, j) => (
-                    <Star
-                      key={j}
-                      className="w-4 h-4 fill-yellow-400/80 text-yellow-400/80"
-                    />
-                  ))}
-                </div>
-                <p className="font-sans text-base text-white/85 leading-relaxed mb-6 flex-1">
-                  „{t.quote}"
-                </p>
-                <footer>
-                  <p className="font-sans text-sm font-semibold text-white">
-                    {t.author}
-                  </p>
-                  <p className="font-sans text-xs text-white/40">
-                    {t.role}
-                  </p>
-                </footer>
-              </blockquote>
-            ),
-          }))}
-        />
+        {/* Logo wall as footer of trust */}
+        <div className="mt-20 pt-10 border-t border-foreground/8">
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/40 mb-6 text-center">
+            Vertrauen namhafter Kunden
+          </p>
+        </div>
       </div>
+      <ClientLogos title="" className="!py-0 -mt-2" />
     </section>
   );
 };
 
-/* ─── 11. Ablauf eines Events ─── */
+/* ═══════════════════════════════════════════════════════════
+   8 · ABLAUF — Editorial numbered steps
+   ═══════════════════════════════════════════════════════════ */
 const AblaufSection = () => {
   const { ref, isVisible } = useScrollReveal();
-
   const steps = [
     {
       num: "01",
@@ -490,127 +1121,181 @@ const AblaufSection = () => {
   ];
 
   return (
-    <section className="section-large" ref={ref}>
+    <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
         <div
-          className={`max-w-3xl mx-auto text-center mb-20 ${
+          className={`max-w-2xl mb-14 md:mb-20 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <span className="badge-accent mb-8 inline-flex">Ablauf</span>
-          <h2 className="headline-section text-foreground mb-6">
-            So einfach geht&apos;s.
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Ablauf
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
+            So{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              einfach
+            </span>{" "}
+            ist das.
           </h2>
-          <p className="text-body max-w-xl mx-auto">
-            Von der ersten Anfrage bis zum großen Auftritt — in vier einfachen
-            Schritten zu deinem unvergesslichen Event.
+          <p className="mt-6 max-w-xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Kein Aufwand für dich. Ich bringe Technik, Requisiten und
+            Erfahrung mit. Du schickst eine Anfrage und genießt den Abend.
           </p>
         </div>
 
         <div
-          className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto ${
+          className={`grid md:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
-          style={{ animationDelay: "0.15s" }}
+          style={{ animationDelay: "0.1s" }}
         >
           {steps.map((s, i) => (
-            <div
-              key={s.num}
-              className="p-6 rounded-3xl bg-muted/40 hover:bg-muted/60 transition-all duration-300 group"
-              style={{ animationDelay: `${0.2 + i * 0.1}s` }}
-            >
-              <span className="font-display text-5xl font-bold text-accent/10 group-hover:text-accent/20 transition-colors">
+            <div key={s.num} className="relative">
+              <p className="font-display text-5xl font-black text-foreground/15 tabular-nums mb-4">
                 {s.num}
-              </span>
-              <h3 className="font-display text-lg font-bold text-foreground mt-2 mb-3">
+              </p>
+              <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-3">
                 {s.title}
               </h3>
-              <p className="text-detail text-sm">{s.desc}</p>
+              <p className="text-sm md:text-base text-foreground/65 leading-relaxed max-w-[280px]">
+                {s.desc}
+              </p>
             </div>
           ))}
+        </div>
+
+        <div
+          className={`mt-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          style={{ animationDelay: "0.4s" }}
+        >
+          <Link
+            to="/buchung"
+            className="inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[15px] font-semibold text-white bg-foreground hover:bg-foreground/90 transition-transform hover:scale-[1.01]"
+          >
+            Jetzt Anfrage starten
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>
   );
 };
 
-/* ─── 12. Für wen geeignet ─── */
-const FuerWenSection = () => {
+/* ═══════════════════════════════════════════════════════════
+   9 · ÜBER MICH — editorial split
+   ═══════════════════════════════════════════════════════════ */
+const UeberMichSection = () => {
   const { ref, isVisible } = useScrollReveal();
-
   return (
-    <section className="section-large" ref={ref}>
+    <section id="ueber-mich" ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div
-          className={`max-w-3xl mx-auto text-center mb-20 ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-        >
-          <span className="badge-accent mb-8 inline-flex">Zielgruppen</span>
-          <h2 className="headline-section text-foreground mb-6">
-            Für wen ist ein Zauberer perfekt?
-          </h2>
-        </div>
-
-        <div
-          className={`grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-          style={{ animationDelay: "0.15s" }}
-        >
-          {[
-            {
-              icon: Users,
-              title: "Eventplaner & Agenturen",
-              desc: "Du suchst ein Entertainment-Highlight, das zuverlässig funktioniert und deine Kunden begeistert.",
-            },
-            {
-              icon: Heart,
-              title: "Brautpaare",
-              desc: "Ihr wollt eure Hochzeit mit einem Erlebnis krönen, das eure Gäste nie vergessen werden.",
-            },
-            {
-              icon: Sparkles,
-              title: "Unternehmen",
-              desc: "Sie möchten Ihre Firmenfeier, Messe oder Kundenevent auf ein Premium-Level heben.",
-            },
-            {
-              icon: MessageCircle,
-              title: "Privatfeiern",
-              desc: "Du planst einen runden Geburtstag oder eine besondere Feier, die anders sein soll als alle anderen.",
-            },
-            {
-              icon: Shield,
-              title: "Gastronomen",
-              desc: "Du bietest Magic Dinner an und suchst einen professionellen Partner für exklusive Erlebnisse.",
-            },
-            {
-              icon: Clock,
-              title: "Messeorganisatoren",
-              desc: "Sie brauchen einen Eyecatcher, der Besucher anzieht und an Ihrem Stand hält.",
-            },
-          ].map((item) => (
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div
+            className={`lg:col-span-5 ${
+              isVisible ? "animate-slide-left" : "opacity-0"
+            }`}
+          >
             <div
-              key={item.title}
-              className="p-6 rounded-3xl bg-muted/40 hover:bg-muted/60 transition-all duration-300 group"
+              className="relative overflow-hidden"
+              style={{
+                borderRadius: "0.5rem",
+                aspectRatio: "4 / 5",
+                boxShadow:
+                  "0 40px 80px -30px rgba(40, 20, 60, 0.2), 0 0 0 1px rgba(0,0,0,0.04)",
+              }}
             >
-              <item.icon className="w-7 h-7 text-accent mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="font-display text-lg font-bold text-foreground mb-2">
-                {item.title}
-              </h3>
-              <p className="text-detail text-sm">{item.desc}</p>
+              <img
+                src={portraitImg}
+                alt="Emilian Leber — Zauberer & Showkünstler"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
             </div>
-          ))}
+          </div>
+
+          <div
+            className={`lg:col-span-7 lg:pl-6 ${
+              isVisible ? "animate-slide-right" : "opacity-0"
+            }`}
+            style={{ animationDelay: "0.1s" }}
+          >
+            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+              Über mich
+            </p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground">
+              Hi, ich bin{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Emilian
+              </span>
+              .
+            </h2>
+            <p className="mt-7 text-lg md:text-xl leading-[1.55] text-foreground/80 font-light max-w-2xl">
+              Moderner Zauberer, Showkünstler und kreativer Kopf hinter MagicEL.
+            </p>
+            <p className="mt-5 text-base leading-[1.7] text-foreground/65 max-w-2xl">
+              Seit über zehn Jahren bringe ich Menschen zum Staunen — und zum
+              Lachen. Nicht mit Zylinder und Kaninchen, sondern mit einer
+              einzigartigen Mischung aus moderner Zauberkunst, Psychologie und
+              Comedy.
+            </p>
+            <p className="mt-5 text-base leading-[1.7] text-foreground/65 max-w-2xl">
+              Für mich ist jeder Auftritt eine Geschichte, die ich gemeinsam mit
+              dem Publikum erzähle. Interaktiv, persönlich und immer mit dem
+              Ziel, Momente zu schaffen, die Menschen verbinden.
+            </p>
+
+            <div className="flex flex-wrap gap-2 mt-8">
+              {[
+                "Finalist Talents of Magic",
+                "200+ Events",
+                "10+ Jahre Bühne",
+                "TV & Medien",
+              ].map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-medium border border-foreground/15 text-foreground/80"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <Link
+              to="/ueber-mich"
+              className="mt-8 inline-flex items-center gap-2 font-display font-bold text-foreground border-b-2 border-foreground/30 hover:border-foreground pb-1 transition-colors group"
+            >
+              Mehr über mich
+              <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>
   );
 };
 
-/* ─── 13. FAQ integriert ─── */
-const FAQIntegrated = () => {
+/* ═══════════════════════════════════════════════════════════
+   10 · FAQ — clean accordion
+   ═══════════════════════════════════════════════════════════ */
+const FAQSection = () => {
   const { ref, isVisible } = useScrollReveal();
-
   const faqs = [
     {
       q: "Was kostet ein Auftritt?",
@@ -631,79 +1316,65 @@ const FAQIntegrated = () => {
   ];
 
   return (
-    <section className="section-dark section-large" ref={ref}>
+    <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div
-          className={`max-w-3xl mx-auto ${
-            isVisible ? "animate-fade-up" : "opacity-0"
-          }`}
-        >
-          <div className="text-center mb-16">
-            <span className="badge-accent mb-8 inline-flex">FAQ</span>
-            <h2 className="headline-section mb-6">
-              Häufige Fragen.
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
+          <div
+            className={`lg:col-span-4 ${
+              isVisible ? "animate-slide-left" : "opacity-0"
+            }`}
+          >
+            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+              FAQ
+            </p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(2rem,4vw,3.5rem)] text-foreground">
+              Häufige{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Fragen
+              </span>
+              .
             </h2>
-          </div>
-
-          <div className="divide-y divide-white/10">
-            {faqs.map((faq) => (
-              <details key={faq.q} className="group py-6">
-                <summary className="flex items-center justify-between cursor-pointer font-sans text-base md:text-lg font-medium text-white/90 pr-8 hover:text-white transition-colors list-none">
-                  {faq.q}
-                  <span className="text-white/30 group-open:rotate-45 transition-transform duration-300 text-xl">
-                    +
-                  </span>
-                </summary>
-                <p className="text-white/50 max-w-2xl mt-4 text-sm leading-relaxed">{faq.a}</p>
-              </details>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link to="/faq" className="inline-flex items-center gap-2 text-sm font-medium text-white/50 hover:text-white transition-colors">
-              Alle Fragen ansehen →
+            <p className="mt-6 text-base leading-[1.6] text-foreground/65 max-w-sm">
+              Du hast eine andere Frage? Schreib mir — ich antworte persönlich
+              innerhalb von 24h.
+            </p>
+            <Link
+              to="/faq"
+              className="mt-6 inline-flex items-center gap-2 font-display font-bold text-foreground border-b-2 border-foreground/30 hover:border-foreground pb-1 transition-colors group"
+            >
+              Alle Fragen
+              <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-};
 
-/* ─── Interview Section ─── */
-const InterviewSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-
-  return (
-    <section className="section-large" ref={ref}>
-      <div className="container px-6">
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center max-w-5xl mx-auto">
-          <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <span className="badge-accent mb-8 inline-flex">Interview</span>
-            <h2 className="headline-section text-foreground mb-6">
-              Die Person hinter der <span className="text-gradient">Magie</span>.
-            </h2>
-            <p className="text-body max-w-lg mb-6">
-              Was treibt einen modernen Zauberer an? Wie entsteht eine Show?
-              In diesem Interview gibt Emilian einen ehrlichen Blick hinter die Kulissen.
-            </p>
-            <p className="text-detail max-w-lg">
-              Über den Weg vom Hobby zur Profession, über die Philosophie hinter
-              moderner Zauberkunst und warum Comedy und Magie die perfekte Kombination sind.
-            </p>
-          </div>
           <div
-            className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}
-            style={{ animationDelay: "0.2s" }}
+            className={`lg:col-span-8 ${
+              isVisible ? "animate-slide-right" : "opacity-0"
+            }`}
+            style={{ animationDelay: "0.1s" }}
           >
-            <div className="video-container rounded-3xl overflow-hidden shadow-2xl">
-              <iframe
-                src="https://www.youtube.com/embed/R0_mXGxzC9E"
-                title="Emilian Leber — Interview"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                loading="lazy"
-              />
+            <div className="divide-y divide-foreground/10 border-y border-foreground/10">
+              {faqs.map((faq) => (
+                <details key={faq.q} className="group py-6">
+                  <summary className="flex items-center justify-between cursor-pointer font-display text-lg md:text-xl font-bold text-foreground pr-8 list-none hover:text-foreground/70 transition-colors">
+                    {faq.q}
+                    <span className="text-foreground/30 group-open:rotate-45 transition-transform duration-300 text-2xl shrink-0">
+                      +
+                    </span>
+                  </summary>
+                  <p className="mt-4 text-base leading-[1.65] text-foreground/65 max-w-2xl">
+                    {faq.a}
+                  </p>
+                </details>
+              ))}
             </div>
           </div>
         </div>
@@ -712,6 +1383,90 @@ const InterviewSection = () => {
   );
 };
 
+/* ═══════════════════════════════════════════════════════════
+   11 · FINAL CTA — full-bleed image + dark overlay (matches hero)
+   ═══════════════════════════════════════════════════════════ */
+const FinalCTA = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      className="relative overflow-hidden text-white py-28 md:py-36 lg:py-44"
+    >
+      <div className="absolute inset-0">
+        <img
+          src={buehneZuschauerImg}
+          alt=""
+          className="h-full w-full object-cover"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(120deg, rgba(15,10,25,0.88) 0%, rgba(15,10,25,0.7) 50%, rgba(15,10,25,0.55) 100%)",
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 container px-6">
+        <div
+          className={`max-w-3xl ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-white/60 mb-8">
+            Bereit?
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.02] text-[clamp(2.5rem,6vw,5.5rem)] text-white">
+            Mach dein Event{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 95% 75%) 0%, hsl(285 85% 75%) 50%, hsl(340 95% 75%) 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              unvergesslich
+            </span>
+            .
+          </h2>
+          <p className="mt-8 max-w-xl text-lg md:text-xl leading-[1.55] text-white/80 font-light">
+            Erzähl mir in 2 Minuten von deinem Event. Ich melde mich innerhalb
+            24h mit einem konkreten Vorschlag — kostenlos, unverbindlich. Kein
+            Vertrag, kein Druck. Nur Magie, wenn es passt.
+          </p>
+
+          <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <Link
+              to="/buchung"
+              className="group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[15px] font-semibold text-[#0f0a19] bg-white hover:bg-white/95 transition-transform hover:scale-[1.01] shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
+            >
+              <span>Jetzt anfragen</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <a
+              href="tel:+4915563744696"
+              className="inline-flex items-center gap-2 font-display font-semibold text-white/85 hover:text-white border-b-2 border-white/25 hover:border-white pb-1 transition-colors"
+            >
+              Direkt anrufen
+            </a>
+          </div>
+
+          <p className="mt-4 text-sm text-white/55">
+            Kostenlos · Unverbindlich · Antwort innerhalb von 24h
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   INDEX
+   ═══════════════════════════════════════════════════════════ */
 const Index = () => {
   return (
     <>
@@ -740,69 +1495,59 @@ const Index = () => {
           "description": "Zauberer für Hochzeiten, Firmenfeiern und Events. Interaktive Magie & Comedy – deutschlandweit buchbar.",
           "telephone": "+4915563744696",
           "email": "el@magicel.de",
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "DE"
-          },
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "bestRating": "5",
-            "worstRating": "1",
-            "reviewCount": "34"
-          },
-          "review": [
-            {
-              "@type": "Review",
-              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-              "author": { "@type": "Person", "name": "Martina Senftl" },
-              "reviewBody": "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!"
-            },
-            {
-              "@type": "Review",
-              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-              "author": { "@type": "Person", "name": "Petra Zeitler" },
-              "reviewBody": "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!"
-            },
-            {
-              "@type": "Review",
-              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-              "author": { "@type": "Person", "name": "Christina" },
-              "reviewBody": "Emilian hat unseren 50. Geburtstag unvergesslich gemacht. Die Mischung aus Close-Up und Bühnenshow war perfekt."
-            }
-          ]
+          "address": { "@type": "PostalAddress", "addressCountry": "DE" },
+          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "bestRating": "5", "worstRating": "1", "reviewCount": "34" },
         })}</script>
       </Helmet>
-      <Navigation />
-      <main>
-        <BackgroundHero
-          imageSrc={heroStartImg}
-          badge="Zauberer · Showkünstler · Performer"
-          headline="Magie, die"
-          animatedWords={["begeistert.", "verbindet.", "überrascht.", "bewegt.", "bleibt."]}
-          subline="Ich bin Emilian Leber und sorge mit moderner Zauberkunst für Momente, über die deine Gäste noch lange sprechen."
-          ctaPrimary={{ text: "Jetzt anfragen", to: "/buchung" }}
-          ctaSecondary={{ text: "Showkonzepte ansehen", href: "#showkonzepte" }}
-        />
 
-        <TrustStrip />
-        <USPSection />
-        <ShowformateSlider />
-        <ClientLogos className="!py-8" />
+      <Navigation />
+
+      <main>
+        <LandingHero />
+        {/* 2. Relevanz — Anlass (Selbst-Selektion) */}
+        <SectionDivider />
         <AnlassSection />
-        <ReferenzenSlider />
-        <ComedySection />
+
+        {/* 3. Emotionaler Hook */}
+        <SectionDivider />
+        <MomentSection />
+
+        {/* 4. Beweis durch sehen */}
+        <SectionDivider />
         <VideoSection />
-        <ErlebnisSection />
-        <SocialProofSection />
-        <GalerieSection />
-        <AblaufSection />
-        <FuerWenSection />
-        <FAQIntegrated />
+
+        {/* 5. Formate — Auswahl */}
+        <SectionDivider />
+        <ShowformateSection />
+
+        {/* 6. Differenzierung */}
+        <SectionDivider />
+        <ComedySection />
+
+        {/* 7. Hard Proof */}
+        <SectionDivider />
+        <ZahlenSection />
+
+        {/* 8. Soft Proof — Stimmen + Logos */}
+        <SectionDivider />
+        <StimmenSection />
+
+        {/* 9. Vertrauen — Person */}
+        <SectionDivider />
         <UeberMichSection />
-        <InterviewSection />
-        <CTASection />
+
+        {/* 10. Prozess — enthält bereits CTA-Button am Ende */}
+        <SectionDivider />
+        <AblaufSection />
+
+        {/* 11. Einwände abbauen */}
+        <SectionDivider />
+        <FAQSection />
+
+        {/* 12. Final */}
+        <FinalCTA />
       </main>
+
       <Footer />
       <Chatbot />
       <WhatsAppButton />
