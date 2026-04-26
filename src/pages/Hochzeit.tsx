@@ -99,7 +99,7 @@ const Hero = () => (
           className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,5.6vw,5.25rem)] opacity-0 animate-fade-up"
           style={{ animationDelay: "0.25s" }}
         >
-          Macht eure Hochzeit zum{" "}
+          Magie zwischen Ja-Wort und{" "}
           <span
             style={{
               background: GRADIENT_LIGHT,
@@ -108,7 +108,7 @@ const Hero = () => (
               WebkitTextFillColor: "transparent",
             }}
           >
-            Tagesgespräch
+            Mitternacht
           </span>
           .
         </h1>
@@ -117,9 +117,9 @@ const Hero = () => (
           className="mt-8 max-w-xl text-lg md:text-xl leading-[1.55] text-white/85 font-light opacity-0 animate-fade-up"
           style={{ animationDelay: "0.4s" }}
         >
-          Ihr plant eure Hochzeit und sucht das eine Highlight, das eure Gäste
-          vereint und sprachlos macht? Sag mir kurz, wie eure Hochzeit
-          aussieht — ich finde mit dir das passende Format.
+          Ein verschwindender Trauring beim Empfang. Magie zwischen den Tischen
+          während des Dinners. Eine Show vor dem Eröffnungstanz. Eure Gäste
+          reden noch Wochen später davon.
         </p>
 
         <div

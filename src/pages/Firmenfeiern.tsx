@@ -101,7 +101,7 @@ const Hero = () => (
           className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,5.6vw,5.25rem)] opacity-0 animate-fade-up"
           style={{ animationDelay: "0.25s" }}
         >
-          Macht eure Firmenfeier zum{" "}
+          Magie, über die am{" "}
           <span
             style={{
               background: GRADIENT_LIGHT,
@@ -110,7 +110,7 @@ const Hero = () => (
               WebkitTextFillColor: "transparent",
             }}
           >
-            Gesprächsstoff
+            Montag noch geredet wird
           </span>
           .
         </h1>
@@ -119,9 +119,9 @@ const Hero = () => (
           className="mt-8 max-w-xl text-lg md:text-xl leading-[1.55] text-white/85 font-light opacity-0 animate-fade-up"
           style={{ animationDelay: "0.4s" }}
         >
-          Ihr plant ein Sommerfest, eine Weihnachtsfeier oder ein Kunden-Event?
-          Magie verbindet Abteilungen, bricht Hierarchien auf und liefert den
-          Moment, über den am Montag noch geredet wird.
+          Eine Karte, die vor Sekunden noch beim CEO war, taucht plötzlich bei
+          der Praktikantin auf. In dem Moment, in dem alle gemeinsam staunen,
+          verschwinden Hierarchien — und der Smalltalk ist beendet.
         </p>
 
         <div
