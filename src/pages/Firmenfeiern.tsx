@@ -1,8 +1,9 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ArrowRight,
+  ArrowLeft,
   ArrowUpRight,
   Star,
   Users,
@@ -18,6 +19,15 @@ import {
   Briefcase,
   Award,
   TrendingUp,
+  X,
+  Snowflake,
+  Sun,
+  Leaf,
+  Flower2,
+  Trophy,
+  Zap,
+  Target,
+  Lightbulb,
 } from "lucide-react";
 
 import Navigation from "@/components/landing/Navigation";
@@ -149,77 +159,217 @@ const Hero = () => (
   </section>
 );
 
-/* 2 · QUIZ */
-type Antwort = "klein" | "mittel" | "groß" | "casual" | "formal" | "highend" | "team" | "kunden" | "extern";
+/* 2 · QUIZ — Wizard-Modal mit 6 Steps */
+type Anlasstyp = "sommerfest" | "weihnachten" | "kunden" | "gala" | "kickoff" | "sonstiges";
+type Groesse = "klein" | "mittel" | "groß";
+type Saison = "q1" | "q2" | "q3" | "q4";
+type Stil = "casual" | "formal" | "highend";
+type Wertfokus = "wow" | "networking" | "branding" | "energizer";
+
+const ANLASS_OPTIONS: { value: Anlasstyp; label: string; sub: string; icon: any }[] = [
+  { value: "sommerfest", label: "Sommerfest", sub: "Locker, draußen, Mitarbeiter & Familien", icon: Sun },
+  { value: "weihnachten", label: "Weihnachtsfeier", sub: "Jahresabschluss, festliche Stimmung", icon: Snowflake },
+  { value: "kunden", label: "Kunden-Event", sub: "Externe Gäste, Wow-Faktor", icon: Building2 },
+  { value: "gala", label: "Gala / Award-Show", sub: "Premium, formaler Rahmen", icon: Trophy },
+  { value: "kickoff", label: "Strategie-Kickoff", sub: "Energizer zwischen Vorträgen", icon: Lightbulb },
+  { value: "sonstiges", label: "Etwas anderes", sub: "Jubiläum, Messe, Sonderformat", icon: Sparkles },
+];
+
+const GROESSE_OPTIONS: { value: Groesse; label: string; sub: string }[] = [
+  { value: "klein", label: "bis 50 Gäste", sub: "Kleines Team-Event, Führungskreis" },
+  { value: "mittel", label: "50 – 200 Gäste", sub: "Abteilungs- oder Firmenfest" },
+  { value: "groß", label: "200+ Gäste", sub: "Großes Corporate-Event" },
+];
+
+const SAISON_OPTIONS: { value: Saison; label: string; sub: string; icon: any }[] = [
+  { value: "q1", label: "Jan – März", sub: "Strategie-Kickoffs, Kamingespräche", icon: Snowflake },
+  { value: "q2", label: "Apr – Juni", sub: "Sommerfeste, Open-Air-Events", icon: Flower2 },
+  { value: "q3", label: "Juli – Sep", sub: "Sommerfest-Saison, Outdoor", icon: Sun },
+  { value: "q4", label: "Okt – Dez", sub: "Weihnachtsfeiern (oft 6+ Mon. Vorlauf)", icon: Leaf },
+];
+
+const STIL_OPTIONS: { value: Stil; label: string; sub: string }[] = [
+  { value: "casual", label: "Locker", sub: "Polo & Jeans-Niveau, Stehtisch-Stimmung" },
+  { value: "formal", label: "Business", sub: "Anzug, Eventlocation, klassisch" },
+  { value: "highend", label: "Premium", sub: "Black Tie, Hotel-Gala, internationale Gäste" },
+];
+
+const WERTFOKUS_OPTIONS: { value: Wertfokus; label: string; sub: string; icon: any }[] = [
+  { value: "wow", label: "Wow-Effekt", sub: "Der Moment, über den am Montag noch geredet wird", icon: Sparkles },
+  { value: "networking", label: "Networking", sub: "Eisbrecher zwischen Abteilungen / Standorten", icon: Users },
+  { value: "branding", label: "Markenbotschaft", sub: "Subtiler Brand-Bezug in der Show", icon: Target },
+  { value: "energizer", label: "Energizer", sub: "Stimmung dreht zwischen Reden / Programm", icon: Zap },
+];
+
+type EmpfehlungT = { format: string; sub: string; why: string; link: string };
+
+function buildEmpfehlung(args: { anlass: Anlasstyp; groesse: Groesse; stil: Stil; wert: Wertfokus }): EmpfehlungT {
+  const { anlass, stil, wert } = args;
+  if (wert === "wow" || stil === "highend" || anlass === "gala" || anlass === "kunden") {
+    return {
+      format: "Bühnenshow als Show-Highlight",
+      sub: "15–60 Min · vor oder nach dem Dinner",
+      why: "Eine durchkomponierte Show — abgestimmt auf eure Branche, optional mit eingebauter Markenbotschaft. Bei Kunden- und Premium-Events der stärkste Hebel für den Wow-Effekt.",
+      link: "/buehnenshow",
+    };
+  }
+  if (wert === "networking" || anlass === "sommerfest") {
+    return {
+      format: "Close-Up beim Empfang",
+      sub: "20–70 Min · während Empfang, Häppchen oder Catering",
+      why: "Mitarbeiter aus verschiedenen Abteilungen kommen ins Gespräch — Magie ist der natürlichste Eisbrecher. Tisch-zu-Tisch oder im freien Raum.",
+      link: "/close-up",
+    };
+  }
+  if (wert === "branding") {
+    return {
+      format: "Branded Bühnenshow",
+      sub: "20–40 Min · mit eingebautem Markenbezug",
+      why: "Firmensymbol, Slogan oder Insider-Anekdote werden subtil in die Show integriert — keine plakative Werbung, sondern ein Magic-Moment, der die Botschaft transportiert.",
+      link: "/buehnenshow",
+    };
+  }
+  if (wert === "energizer" || anlass === "kickoff") {
+    return {
+      format: "Kompakter Show-Slot als Energizer",
+      sub: "15–25 Min · zwischen Programmblöcken",
+      why: "Wenn die Aufmerksamkeitskurve kippt: ein klar getakteter Show-Slot dreht die Stimmung im Raum und gibt frische Energie für den Rest des Tages.",
+      link: "/buehnenshow",
+    };
+  }
+  return {
+    format: "Komplett-Begleitung",
+    sub: "Close-Up im Empfang + Bühnenshow als Highlight",
+    why: "Wenn Gäste, Partner und Mitarbeiter zusammenkommen, braucht ihr durchgehende Highlights. Magie als roter Faden über den ganzen Abend.",
+    link: "/buchung",
+  };
+}
 
 const QuizSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const [step, setStep] = useState(0);
-  const [groesse, setGroesse] = useState<Antwort | null>(null);
-  const [stil, setStil] = useState<Antwort | null>(null);
-  const [zielgruppe, setZielgruppe] = useState<Antwort | null>(null);
+  const [open, setOpen] = useState(false);
+  return (
+    <section id="empfehlung" ref={ref} className="bg-white section-large border-y border-foreground/8">
+      <div className="container px-6">
+        <div className={`max-w-3xl mb-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            In 90 Sekunden zur Empfehlung
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Was passt zu{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              eurer Firmenfeier
+            </span>
+            ?
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Sechs Fragen, eine konkrete Empfehlung — abgestimmt auf Anlass, Größe, Saison, Stil und worauf ihr Wert legt. Am Ende könnt ihr direkt anfragen, eure Antworten gehen automatisch mit.
+          </p>
+        </div>
+        <div className={`max-w-4xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <button
+            onClick={() => setOpen(true)}
+            className="group w-full text-left p-7 md:p-10 transition-all hover:scale-[1.005]"
+            style={{ background: "linear-gradient(135deg, hsl(220 50% 16%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)", borderRadius: "1rem", boxShadow: "0 30px 70px -25px rgba(60, 30, 80, 0.5)" }}
+          >
+            <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
+              <div className="flex-1">
+                <p className="text-[11px] tracking-[0.2em] uppercase font-semibold mb-3" style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                  Event-Berater · 6 Fragen
+                </p>
+                <h3 className="font-display text-2xl md:text-3xl font-black text-white leading-[1.15] mb-3">
+                  Welches Format passt zu eurer Feier?
+                </h3>
+                <p className="text-white/70 text-base md:text-[17px] leading-[1.55] max-w-xl">
+                  Ich frage nach Anlass, Größe, Saison, Stil und Wertfokus — und gebe euch eine konkrete Empfehlung mit Briefing-Vorschlag. Direkte Anfrage am Ende, eure Antworten gehen automatisch mit.
+                </p>
+              </div>
+              <div className="shrink-0 inline-flex items-center gap-2 rounded-full px-7 py-4 text-[15px] font-semibold text-[#0f0a19] bg-white group-hover:bg-white transition-all">
+                Berater starten
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+            <div className="mt-7 pt-6 border-t border-white/10 flex flex-wrap items-center gap-x-7 gap-y-2 text-[13px] text-white/55">
+              <span>· ca. 90 Sek</span>
+              <span>· kein Login, kein Cookie</span>
+              <span>· direkter Anfrage-Versand am Ende</span>
+              <span>· DSGVO-konform</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <QuizWizardModal open={open} onClose={() => setOpen(false)} />
+    </section>
+  );
+};
+
+const QuizWizardModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+  const TOTAL_STEPS = 6;
+  const [step, setStep] = useState(1);
+  const [anlass, setAnlass] = useState<Anlasstyp | null>(null);
+  const [groesse, setGroesse] = useState<Groesse | null>(null);
+  const [saison, setSaison] = useState<Saison | null>(null);
+  const [stil, setStil] = useState<Stil | null>(null);
+  const [wert, setWert] = useState<Wertfokus | null>(null);
 
   const [firma, setFirma] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [datum, setDatum] = useState("");
+  const [ort, setOrt] = useState("");
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  useEffect(() => {
+    if (!open) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = original; window.removeEventListener("keydown", onKey); };
+  }, [open, onClose]);
+
   const reset = () => {
-    setStep(0);
-    setGroesse(null); setStil(null); setZielgruppe(null);
-    setFirma(""); setName(""); setEmail(""); setPhone(""); setDatum("");
+    setStep(1);
+    setAnlass(null); setGroesse(null); setSaison(null); setStil(null); setWert(null);
+    setFirma(""); setName(""); setEmail(""); setPhone(""); setDatum(""); setOrt("");
     setSuccess(false); setErrorMsg("");
   };
 
-  const empfehlung = (() => {
-    if (!groesse || !stil || !zielgruppe) return null;
-    if (zielgruppe === "kunden") {
-      return {
-        format: "Bühnenshow als Show-Highlight",
-        sub: "15–60 Min · vor oder nach dem Dinner",
-        why: "Bei Kunden-Events zählt der Wow-Effekt. Eine durchkomponierte Show — abgestimmt auf eure Branche, mit eingebauter Markenbotschaft — bleibt lange in Erinnerung.",
-        link: "/buehnenshow",
-      };
-    }
-    if (zielgruppe === "team") {
-      return {
-        format: "Close-Up beim Networking",
-        sub: "20–70 Min · während Empfang & Häppchen",
-        why: "Mitarbeiter aus verschiedenen Abteilungen kommen ins Gespräch. Magie ist der natürlichste Eisbrecher — danach reden alle miteinander, nicht nur in der eigenen Bubble.",
-        link: "/close-up",
-      };
-    }
-    if (zielgruppe === "extern") {
-      return {
-        format: "Komplett-Begleitung",
-        sub: "Close-Up im Empfang + Bühnenshow",
-        why: "Wenn externe Gäste, Partner und Mitarbeiter zusammenkommen, braucht ihr durchgehende Highlights. Magie als roter Faden über den ganzen Abend.",
-        link: "/buchung",
-      };
-    }
-    return null;
-  })();
+  const empfehlung: EmpfehlungT | null = (anlass && groesse && stil && wert) ? buildEmpfehlung({ anlass, groesse, stil, wert }) : null;
 
-  const groesseLabel = { klein: "bis 50 Gäste", mittel: "50–200 Gäste", "groß": "200+ Gäste" } as const;
-  const stilLabel = { casual: "locker / Sommerfest", formal: "Business / Weihnachtsfeier", highend: "Premium / Kunden-Event" } as const;
-  const zielgruppeLabel = { team: "eigene Mitarbeiter", kunden: "Kunden / Partner", extern: "Mix aus beiden" } as const;
+  const stepCompleted: Record<number, boolean> = {
+    1: !!anlass, 2: !!groesse, 3: !!saison, 4: !!stil, 5: !!wert, 6: false,
+  };
+
+  const stepLabel: Record<number, string> = {
+    1: "Anlass", 2: "Größe", 3: "Zeitraum", 4: "Stil", 5: "Wertfokus", 6: "Empfehlung",
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!empfehlung || !groesse || !stil || !zielgruppe) return;
+    if (!empfehlung || !anlass || !groesse || !saison || !stil || !wert) return;
     setSending(true);
     setErrorMsg("");
 
+    const anlassText = ANLASS_OPTIONS.find(o => o.value === anlass)?.label || anlass;
+    const saisonText = SAISON_OPTIONS.find(o => o.value === saison)?.label || saison;
+    const stilText = STIL_OPTIONS.find(o => o.value === stil)?.label || stil;
+    const wertText = WERTFOKUS_OPTIONS.find(o => o.value === wert)?.label || wert;
+    const groesseText = GROESSE_OPTIONS.find(o => o.value === groesse)?.label || groesse;
+
     const nachricht = [
-      "Anfrage über Quiz auf /firmenfeiern",
+      "Anfrage über Event-Berater auf /firmenfeiern",
       `Empfehlung: ${empfehlung.format} (${empfehlung.sub})`,
-      `Eventgröße: ${groesseLabel[groesse as keyof typeof groesseLabel]}`,
-      `Stil: ${stilLabel[stil as keyof typeof stilLabel]}`,
-      `Zielgruppe: ${zielgruppeLabel[zielgruppe as keyof typeof zielgruppeLabel]}`,
+      "",
+      `Anlass: ${anlassText}`,
+      `Eventgröße: ${groesseText}`,
+      `Zeitraum: ${saisonText}`,
+      `Stil: ${stilText}`,
+      `Wertfokus: ${wertText}`,
     ].join("\n");
 
     const payload = {
@@ -232,7 +382,7 @@ const QuizSection = () => {
       phone: phone.trim(),
       anlass: "Firmenfeier",
       datum: datum.trim(),
-      ort: "",
+      ort: ort.trim(),
       gaeste: groesse === "klein" ? 30 : groesse === "mittel" ? 100 : 250,
       format: empfehlung.format,
       nachricht,
@@ -264,87 +414,246 @@ const QuizSection = () => {
     }
   };
 
-  const Step = ({ title, options, onChoice, selected }: { title: string; options: { value: Antwort; label: string; sub?: string }[]; onChoice: (v: Antwort) => void; selected: Antwort | null }) => (
-    <div>
-      <p className="font-display text-xl md:text-2xl font-bold text-foreground mb-6 leading-tight">{title}</p>
-      <div className="grid sm:grid-cols-3 gap-3">
-        {options.map((o) => (
-          <button
-            key={o.value}
-            onClick={() => onChoice(o.value)}
-            className={`text-left p-5 transition-all ${selected === o.value ? "bg-foreground text-white" : "bg-foreground/[0.04] hover:bg-foreground/[0.08] text-foreground"}`}
-            style={{ borderRadius: "0.6rem" }}
-          >
-            <p className="font-display text-base md:text-lg font-bold leading-tight mb-1">{o.label}</p>
-            {o.sub && (
-              <p className="text-[12px] leading-snug" style={{ color: selected === o.value ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.55)" }}>
-                {o.sub}
-              </p>
-            )}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
+  if (!open) return null;
+
+  const cardOptionCls = (selected: boolean) =>
+    `text-left p-5 md:p-6 transition-all border-2 rounded-xl ${selected
+      ? "border-transparent text-white"
+      : "border-foreground/10 hover:border-foreground/30 bg-white text-foreground"}`;
+
+  const cardOptionStyle = (selected: boolean) => selected
+    ? { background: GRADIENT, boxShadow: "0 12px 30px hsl(255 75% 55% / 0.3)" }
+    : {};
 
   return (
-    <section id="empfehlung" ref={ref} className="bg-white section-large border-y border-foreground/8">
-      <div className="container px-6">
-        <div className={`max-w-3xl mb-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            In 30 Sekunden zur Empfehlung
-          </p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Was passt zu{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              eurer Firmenfeier
-            </span>
-            ?
-          </h2>
-        </div>
-        <div className={`max-w-4xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s", background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "1rem" }}>
-          <div className="px-7 md:px-9 pt-7 pb-3 flex items-center gap-3 border-b border-foreground/8">
-            <div className="flex items-center gap-2">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="h-1.5 rounded-full transition-all" style={{ width: step >= i ? "32px" : "8px", background: step >= i ? "linear-gradient(90deg, hsl(220 85% 55%), hsl(255 75% 55%), hsl(285 85% 55%))" : "rgba(0,0,0,0.12)" }} />
+    <div className="fixed inset-0 z-[100] bg-[#0f0a19]/85 backdrop-blur-sm overflow-y-auto" onClick={onClose}>
+      <div className="min-h-screen flex items-stretch md:items-center justify-center p-0 md:p-6">
+        <div
+          className="w-full md:max-w-4xl bg-white md:rounded-3xl flex flex-col min-h-screen md:min-h-0 md:max-h-[92vh]"
+          onClick={(e) => e.stopPropagation()}
+          style={{ boxShadow: "0 50px 120px -30px rgba(0,0,0,0.5)" }}
+        >
+          {/* Header */}
+          <header className="flex items-center gap-4 px-6 md:px-9 py-5 border-b border-foreground/8 sticky top-0 bg-white md:rounded-t-3xl z-10">
+            <p className="font-display font-bold text-foreground text-sm md:text-base">
+              Event-Berater
+            </p>
+            <span className="hidden md:inline text-foreground/30">·</span>
+            <p className="hidden md:block text-sm text-foreground/55">
+              Schritt {Math.min(step, TOTAL_STEPS)} von {TOTAL_STEPS} — {stepLabel[Math.min(step, TOTAL_STEPS)]}
+            </p>
+            <button onClick={onClose} className="ml-auto inline-flex items-center justify-center w-10 h-10 rounded-full bg-foreground/[0.05] hover:bg-foreground/10 transition-colors" aria-label="Berater schließen">
+              <X className="w-4 h-4 text-foreground" />
+            </button>
+          </header>
+
+          {/* Progress */}
+          <div className="px-6 md:px-9 pt-4">
+            <div className="flex items-center gap-1.5">
+              {[1,2,3,4,5,6].map((i) => (
+                <div key={i} className="flex-1 h-1 rounded-full transition-all" style={{
+                  background: i < step
+                    ? "linear-gradient(90deg, hsl(220 85% 55%), hsl(255 75% 55%), hsl(285 85% 55%))"
+                    : i === step
+                      ? "linear-gradient(90deg, hsl(220 85% 55%), hsl(255 75% 55%), hsl(285 85% 55%))"
+                      : "rgba(0,0,0,0.08)",
+                  opacity: i <= step ? 1 : 0.6,
+                }} />
               ))}
             </div>
-            <span className="text-[11px] uppercase tracking-wider text-foreground/45 ml-2">{step < 3 ? `Frage ${step + 1} von 3` : "Eure Empfehlung"}</span>
-            {step > 0 && (
-              <button onClick={reset} className="ml-auto inline-flex items-center gap-1 text-xs text-foreground/55 hover:text-foreground transition-colors">
-                <RotateCcw className="w-3 h-3" />Neu starten
-              </button>
-            )}
+            <p className="md:hidden mt-3 text-xs text-foreground/55">Schritt {Math.min(step, TOTAL_STEPS)} von {TOTAL_STEPS} — {stepLabel[Math.min(step, TOTAL_STEPS)]}</p>
           </div>
-          <div className="p-7 md:p-9">
-            {step === 0 && <Step title="Wie groß ist euer Event?" selected={groesse} onChoice={(v) => { setGroesse(v); setStep(1); }} options={[
-              { value: "klein", label: "Bis 50", sub: "Kleines Team-Event" },
-              { value: "mittel", label: "50 – 200", sub: "Abteilungs-/Firmenfest" },
-              { value: "groß", label: "200+", sub: "Großes Corporate-Event" },
-            ]} />}
-            {step === 1 && <Step title="Wie ist der Stil?" selected={stil} onChoice={(v) => { setStil(v); setStep(2); }} options={[
-              { value: "casual", label: "Locker", sub: "Sommerfest, Team-Building" },
-              { value: "formal", label: "Business", sub: "Weihnachtsfeier, Galaabend" },
-              { value: "highend", label: "Premium", sub: "Kunden-Event, Award-Show" },
-            ]} />}
-            {step === 2 && <Step title="Wer ist eingeladen?" selected={zielgruppe} onChoice={(v) => { setZielgruppe(v); setStep(3); }} options={[
-              { value: "team", label: "Eigene Mitarbeiter", sub: "Team-Verbindung im Fokus" },
-              { value: "kunden", label: "Kunden / Partner", sub: "Wow-Effekt für externe Gäste" },
-              { value: "extern", label: "Mix aus beiden", sub: "Networking-Event" },
-            ]} />}
-            {step === 3 && empfehlung && !success && (
+
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto px-6 md:px-12 py-8 md:py-12">
+            {step === 1 && (
               <div className="animate-fade-up">
-                <p className="text-[11px] tracking-[0.2em] uppercase mb-4 font-semibold" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                <p className="text-[11px] md:text-xs tracking-[0.2em] uppercase text-foreground/45 mb-4 font-semibold">Frage 1 von 6</p>
+                <h3 className="font-display text-3xl md:text-5xl font-black text-foreground leading-[1.05] mb-4">
+                  Welcher <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Anlass</span> ist es?
+                </h3>
+                <p className="text-foreground/60 text-base md:text-lg mb-8 max-w-2xl">
+                  Damit ich die richtige Format-Mischung empfehlen kann — jeder Anlass hat andere Aufmerksamkeitskurven und Erwartungshaltungen.
+                </p>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {ANLASS_OPTIONS.map((o) => {
+                    const selected = anlass === o.value;
+                    return (
+                      <button
+                        key={o.value}
+                        onClick={() => { setAnlass(o.value); setStep(2); }}
+                        className={cardOptionCls(selected)}
+                        style={cardOptionStyle(selected)}
+                      >
+                        <div className="flex items-start gap-3">
+                          <span className={`shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg ${selected ? "bg-white/15" : "bg-foreground/[0.05]"}`}>
+                            <o.icon className={`w-4 h-4 ${selected ? "text-white" : "text-foreground/55"}`} />
+                          </span>
+                          <div>
+                            <p className="font-display text-base md:text-lg font-bold leading-tight mb-1">{o.label}</p>
+                            <p className={`text-[12px] leading-snug ${selected ? "text-white/75" : "text-foreground/55"}`}>{o.sub}</p>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="animate-fade-up">
+                <p className="text-[11px] md:text-xs tracking-[0.2em] uppercase text-foreground/45 mb-4 font-semibold">Frage 2 von 6</p>
+                <h3 className="font-display text-3xl md:text-5xl font-black text-foreground leading-[1.05] mb-4">
+                  Wie <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>groß</span> wird die Feier?
+                </h3>
+                <p className="text-foreground/60 text-base md:text-lg mb-8 max-w-2xl">
+                  Bei kleinen Gruppen funktioniert Close-Up am besten, bei großen Gruppen braucht's eine Bühne mit Mikrofon und Spotlight.
+                </p>
+                <div className="grid md:grid-cols-3 gap-3">
+                  {GROESSE_OPTIONS.map((o) => {
+                    const selected = groesse === o.value;
+                    return (
+                      <button
+                        key={o.value}
+                        onClick={() => { setGroesse(o.value); setStep(3); }}
+                        className={cardOptionCls(selected)}
+                        style={cardOptionStyle(selected)}
+                      >
+                        <p className="font-display text-2xl md:text-3xl font-black leading-tight mb-2">{o.label}</p>
+                        <p className={`text-sm leading-snug ${selected ? "text-white/75" : "text-foreground/55"}`}>{o.sub}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="animate-fade-up">
+                <p className="text-[11px] md:text-xs tracking-[0.2em] uppercase text-foreground/45 mb-4 font-semibold">Frage 3 von 6</p>
+                <h3 className="font-display text-3xl md:text-5xl font-black text-foreground leading-[1.05] mb-4">
+                  In welchem <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Zeitraum</span>?
+                </h3>
+                <p className="text-foreground/60 text-base md:text-lg mb-8 max-w-2xl">
+                  Hauptsaison Q4 ist meistens 6 Monate vorher gebucht — je früher ich Bescheid weiß, desto eher kann ich Slots reservieren.
+                </p>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {SAISON_OPTIONS.map((o) => {
+                    const selected = saison === o.value;
+                    return (
+                      <button
+                        key={o.value}
+                        onClick={() => { setSaison(o.value); setStep(4); }}
+                        className={cardOptionCls(selected)}
+                        style={cardOptionStyle(selected)}
+                      >
+                        <span className={`inline-flex items-center justify-center w-10 h-10 rounded-lg mb-3 ${selected ? "bg-white/15" : "bg-foreground/[0.05]"}`}>
+                          <o.icon className={`w-4 h-4 ${selected ? "text-white" : "text-foreground/55"}`} />
+                        </span>
+                        <p className="font-display text-lg md:text-xl font-bold leading-tight mb-1">{o.label}</p>
+                        <p className={`text-[12px] leading-snug ${selected ? "text-white/75" : "text-foreground/55"}`}>{o.sub}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {step === 4 && (
+              <div className="animate-fade-up">
+                <p className="text-[11px] md:text-xs tracking-[0.2em] uppercase text-foreground/45 mb-4 font-semibold">Frage 4 von 6</p>
+                <h3 className="font-display text-3xl md:text-5xl font-black text-foreground leading-[1.05] mb-4">
+                  Wie ist der <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Stil</span> des Events?
+                </h3>
+                <p className="text-foreground/60 text-base md:text-lg mb-8 max-w-2xl">
+                  Damit ich Show-Tonalität, Outfit und Sprache (Du/Sie) abstimmen kann — ein Sommerfest-Auftritt ist anders als eine Award-Show.
+                </p>
+                <div className="grid md:grid-cols-3 gap-3">
+                  {STIL_OPTIONS.map((o) => {
+                    const selected = stil === o.value;
+                    return (
+                      <button
+                        key={o.value}
+                        onClick={() => { setStil(o.value); setStep(5); }}
+                        className={cardOptionCls(selected)}
+                        style={cardOptionStyle(selected)}
+                      >
+                        <p className="font-display text-2xl md:text-3xl font-black leading-tight mb-2">{o.label}</p>
+                        <p className={`text-sm leading-snug ${selected ? "text-white/75" : "text-foreground/55"}`}>{o.sub}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {step === 5 && (
+              <div className="animate-fade-up">
+                <p className="text-[11px] md:text-xs tracking-[0.2em] uppercase text-foreground/45 mb-4 font-semibold">Frage 5 von 6</p>
+                <h3 className="font-display text-3xl md:text-5xl font-black text-foreground leading-[1.05] mb-4">
+                  Worauf legt ihr <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Wert</span>?
+                </h3>
+                <p className="text-foreground/60 text-base md:text-lg mb-8 max-w-2xl">
+                  Was zählt für euch als Erfolg? Wählt das, was am wichtigsten ist — die Empfehlung wird darauf zugeschnitten.
+                </p>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {WERTFOKUS_OPTIONS.map((o) => {
+                    const selected = wert === o.value;
+                    return (
+                      <button
+                        key={o.value}
+                        onClick={() => { setWert(o.value); setStep(6); }}
+                        className={cardOptionCls(selected)}
+                        style={cardOptionStyle(selected)}
+                      >
+                        <div className="flex items-start gap-4">
+                          <span className={`shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-lg ${selected ? "bg-white/15" : "bg-foreground/[0.05]"}`}>
+                            <o.icon className={`w-5 h-5 ${selected ? "text-white" : "text-foreground/55"}`} />
+                          </span>
+                          <div>
+                            <p className="font-display text-xl md:text-2xl font-black leading-tight mb-1">{o.label}</p>
+                            <p className={`text-sm leading-snug ${selected ? "text-white/75" : "text-foreground/55"}`}>{o.sub}</p>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {step === 6 && empfehlung && !success && (
+              <div className="animate-fade-up">
+                <p className="text-[11px] md:text-xs tracking-[0.2em] uppercase mb-4 font-semibold" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   Eure Empfehlung
                 </p>
-                <h3 className="font-display text-3xl md:text-4xl font-black text-foreground mb-3 leading-[1.1]">{empfehlung.format}</h3>
-                <p className="text-sm text-foreground/55 mb-6">{empfehlung.sub}</p>
-                <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6] mb-7 max-w-2xl">{empfehlung.why}</p>
+                <h3 className="font-display text-3xl md:text-5xl font-black text-foreground mb-3 leading-[1.05]">{empfehlung.format}</h3>
+                <p className="text-sm md:text-base text-foreground/55 mb-6">{empfehlung.sub}</p>
+                <p className="text-base md:text-lg text-foreground/75 leading-[1.65] mb-8 max-w-2xl">{empfehlung.why}</p>
 
-                <div className="border-t border-foreground/10 pt-7 mt-2">
-                  <p className="font-display text-lg md:text-xl font-bold text-foreground mb-1">Anfrage in 30 Sekunden</p>
-                  <p className="text-sm text-foreground/55 mb-6">
-                    Eure Quiz-Antworten werden mitgeschickt — ich melde mich innerhalb 24h mit einem Vorschlag.
+                <div className="rounded-2xl p-5 md:p-6 mb-8 bg-foreground/[0.03] border border-foreground/8">
+                  <p className="text-[11px] tracking-[0.18em] uppercase text-foreground/45 mb-3 font-semibold">Eure Antworten</p>
+                  <dl className="grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+                    {[
+                      ["Anlass", ANLASS_OPTIONS.find(o => o.value === anlass)?.label],
+                      ["Größe", GROESSE_OPTIONS.find(o => o.value === groesse)?.label],
+                      ["Zeitraum", SAISON_OPTIONS.find(o => o.value === saison)?.label],
+                      ["Stil", STIL_OPTIONS.find(o => o.value === stil)?.label],
+                      ["Wertfokus", WERTFOKUS_OPTIONS.find(o => o.value === wert)?.label],
+                    ].map(([k, v]) => (
+                      <div key={k} className="flex justify-between gap-3 py-1 border-b border-foreground/5 last:border-0">
+                        <dt className="text-foreground/55">{k}</dt>
+                        <dd className="text-foreground font-medium text-right">{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+
+                <div className="border-t border-foreground/10 pt-7">
+                  <p className="font-display text-xl md:text-2xl font-black text-foreground mb-1">Direkt anfragen</p>
+                  <p className="text-sm md:text-base text-foreground/55 mb-6">
+                    Eure Antworten werden mitgeschickt — Antwort innerhalb 24h mit konkretem Vorschlag.
                   </p>
 
                   <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-3">
@@ -380,11 +689,17 @@ const QuizSection = () => {
                       className="bg-white border border-foreground/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors"
                     />
                     <input
+                      type="text"
+                      placeholder="Ort / Location (optional)"
+                      value={ort}
+                      onChange={(e) => setOrt(e.target.value)}
+                      className="bg-white border border-foreground/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors"
+                    />
+                    <input
                       type="date"
-                      placeholder="Eventdatum (optional)"
                       value={datum}
                       onChange={(e) => setDatum(e.target.value)}
-                      className="bg-white border border-foreground/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors sm:col-span-2"
+                      className="bg-white border border-foreground/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors"
                     />
                     {errorMsg && (
                       <p className="text-sm text-red-600 sm:col-span-2">{errorMsg}</p>
@@ -398,37 +713,66 @@ const QuizSection = () => {
                       >
                         {sending ? "Wird gesendet…" : <>Anfrage senden<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></>}
                       </button>
-                      <Link to={empfehlung.link} className="inline-flex items-center gap-2 font-display font-semibold text-foreground/70 hover:text-foreground border-b-2 border-foreground/20 hover:border-foreground/60 pb-1 transition-colors self-start sm:self-center">
+                      <Link to={empfehlung.link} onClick={onClose} className="inline-flex items-center gap-2 font-display font-semibold text-foreground/70 hover:text-foreground border-b-2 border-foreground/20 hover:border-foreground/60 pb-1 transition-colors self-start sm:self-center">
                         Erst mehr zum Format<ArrowUpRight className="w-4 h-4" />
                       </Link>
                     </div>
                     <p className="text-xs text-foreground/50 sm:col-span-2">
-                      Kostenlos · unverbindlich · Antwort innerhalb 24h
+                      Kostenlos · unverbindlich · Antwort innerhalb 24h · DSGVO-konform
                     </p>
                   </form>
                 </div>
               </div>
             )}
-            {step === 3 && success && (
-              <div className="animate-fade-up text-center py-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6" style={{ background: GRADIENT }}>
-                  <Check className="w-7 h-7 text-white" />
+
+            {step === 6 && success && empfehlung && (
+              <div className="animate-fade-up text-center py-8 max-w-xl mx-auto">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-7" style={{ background: GRADIENT }}>
+                  <Check className="w-9 h-9 text-white" />
                 </div>
-                <h3 className="font-display text-2xl md:text-3xl font-black text-foreground mb-3 leading-[1.1]">
+                <h3 className="font-display text-3xl md:text-4xl font-black text-foreground mb-4 leading-[1.1]">
                   Danke — eure Anfrage ist da.
                 </h3>
-                <p className="text-base text-foreground/65 max-w-lg mx-auto mb-6">
+                <p className="text-base md:text-lg text-foreground/65 mb-8 leading-[1.6]">
                   Ihr bekommt gleich eine Bestätigungs-E-Mail. Ich melde mich innerhalb 24h persönlich mit einem konkreten Vorschlag für eure Empfehlung „{empfehlung.format}".
                 </p>
-                <button onClick={reset} className="inline-flex items-center gap-1 text-sm text-foreground/55 hover:text-foreground transition-colors">
-                  <RotateCcw className="w-3 h-3" />Neu starten
-                </button>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button onClick={onClose} className="rounded-full px-7 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01]" style={{ background: GRADIENT }}>
+                    Schließen
+                  </button>
+                  <button onClick={reset} className="inline-flex items-center justify-center gap-1 text-sm text-foreground/55 hover:text-foreground transition-colors">
+                    <RotateCcw className="w-3 h-3" />Berater neu starten
+                  </button>
+                </div>
               </div>
             )}
           </div>
+
+          {/* Footer */}
+          <footer className="px-6 md:px-9 py-4 border-t border-foreground/8 flex items-center gap-3 sticky bottom-0 bg-white md:rounded-b-3xl">
+            {step > 1 && step <= TOTAL_STEPS && !success && (
+              <button onClick={() => setStep(step - 1)} className="inline-flex items-center gap-2 text-sm font-semibold text-foreground/70 hover:text-foreground transition-colors">
+                <ArrowLeft className="w-4 h-4" />Zurück
+              </button>
+            )}
+            {step < 6 && (
+              <button onClick={reset} className="ml-auto inline-flex items-center gap-1 text-xs text-foreground/45 hover:text-foreground transition-colors">
+                <RotateCcw className="w-3 h-3" />Neu starten
+              </button>
+            )}
+            {step < 6 && stepCompleted[step] && (
+              <button
+                onClick={() => setStep(step + 1)}
+                className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.01]"
+                style={{ background: GRADIENT }}
+              >
+                Weiter<ArrowRight className="w-4 h-4" />
+              </button>
+            )}
+          </footer>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
