@@ -8,6 +8,7 @@ import {
   Sparkles,
   Wine,
   Mic2,
+  Check,
   Phone,
   ClipboardList,
   PartyPopper,
@@ -423,38 +424,79 @@ const OptionenSection = () => {
   );
 };
 
-/* 4 · DREI SEKUNDEN */
+/* 4 · DREI SEKUNDEN — Vor / Nach Vergleich */
 const DreiSekundenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
     <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          <div className={`lg:col-span-6 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div className="relative overflow-hidden" style={{ borderRadius: "0.75rem", aspectRatio: "4 / 5", boxShadow: "0 40px 80px -25px rgba(40, 20, 60, 0.3), 0 0 0 1px rgba(0,0,0,0.05)" }}>
-              <img src={staunenImg} alt="" className="w-full h-full object-cover" loading="lazy" />
-            </div>
+        <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Der Effekt</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Vom Smalltalk zum{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              gemeinsamen Staunen
+            </span>
+            .
+          </h2>
+          <p className="mt-5 max-w-2xl text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
+            Was passiert in den drei Sekunden, in denen aus zwei fremden Kollegen ein gemeinsames Erlebnis wird.
+          </p>
+        </div>
+
+        {/* Vor / Nach Vergleichs-Layout, B2B-orientiert */}
+        <div className={`grid md:grid-cols-2 gap-0 max-w-5xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s", border: "1px solid rgba(0,0,0,0.08)", borderRadius: "1rem", overflow: "hidden" }}>
+          {/* VORHER */}
+          <div className="p-7 md:p-9 bg-foreground/[0.02] border-b md:border-b-0 md:border-r border-foreground/8">
+            <p className="text-[10px] tracking-[0.22em] uppercase text-foreground/45 font-semibold mb-5">Vorher</p>
+            <p className="font-display text-xl md:text-2xl font-bold text-foreground leading-[1.3] mb-5">
+              Smalltalk im Stehen.
+            </p>
+            <ul className="space-y-2.5 text-sm md:text-[15px] text-foreground/65 leading-[1.55]">
+              <li className="flex gap-2">
+                <span className="text-foreground/30">·</span>
+                Vertrieb redet mit Vertrieb.
+              </li>
+              <li className="flex gap-2">
+                <span className="text-foreground/30">·</span>
+                IT bleibt unter sich.
+              </li>
+              <li className="flex gap-2">
+                <span className="text-foreground/30">·</span>
+                Standorte vermischen sich nicht.
+              </li>
+              <li className="flex gap-2">
+                <span className="text-foreground/30">·</span>
+                CEO begrüßt nur, wen er kennt.
+              </li>
+            </ul>
           </div>
-          <div className={`lg:col-span-6 lg:pl-6 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Der Moment</p>
-            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-              Der CEO trifft die Praktikantin —{" "}
-              <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>und beide staunen</span>.
-            </h2>
-            <p className="mt-7 text-lg md:text-xl leading-[1.55] text-foreground/75 font-light">
-              Eine Karte, die vor Sekunden noch in der Hand des Vorstandsvorsitzenden lag, taucht plötzlich in der Brieftasche der neuen Kollegin auf.
+          {/* NACHHER */}
+          <div className="p-7 md:p-9 text-white" style={{ background: "linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)" }}>
+            <p className="text-[10px] tracking-[0.22em] uppercase font-semibold mb-5" style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              Nach 3 Sekunden Magie
             </p>
-            <p className="mt-5 text-base md:text-[17px] leading-[1.65] text-foreground/65">
-              In dem Moment, in dem alle gemeinsam staunen, verschwinden Hierarchien. Genau das ist der Effekt, den ihr für eure Firmenfeier wollt — Verbindung über Abteilungen hinweg.
+            <p className="font-display text-xl md:text-2xl font-bold leading-[1.3] mb-5">
+              CEO und Praktikantin staunen zusammen.
             </p>
-            <div className="mt-8 flex items-center gap-3">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (<Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />))}
-              </div>
-              <p className="text-sm text-foreground/60">
-                <strong className="text-foreground">200+ Firmenfeiern</strong> haben diesen Moment erlebt — durchgehend 5,0 Sterne.
-              </p>
-            </div>
+            <ul className="space-y-2.5 text-sm md:text-[15px] text-white/75 leading-[1.55]">
+              <li className="flex gap-2">
+                <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "hsl(255 75% 75%)" }} />
+                Gespräche zwischen Abteilungen entstehen.
+              </li>
+              <li className="flex gap-2">
+                <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "hsl(255 75% 75%)" }} />
+                Hierarchien lösen sich für den Moment auf.
+              </li>
+              <li className="flex gap-2">
+                <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "hsl(255 75% 75%)" }} />
+                Standorte mischen sich, weil alle dasselbe gesehen haben.
+              </li>
+              <li className="flex gap-2">
+                <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "hsl(255 75% 75%)" }} />
+                Am Montag wird über das Erlebnis geredet.
+              </li>
+            </ul>
           </div>
         </div>
       </div>

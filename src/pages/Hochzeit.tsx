@@ -686,52 +686,41 @@ const BuchungsFlowSection = () => {
 const DreiSekundenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-white section-large">
+    <section ref={ref} className="bg-foreground/[0.02] section-large border-y border-foreground/8">
       <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          <div className={`lg:col-span-6 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <div
-              className="relative overflow-hidden"
-              style={{
-                borderRadius: "0.75rem",
-                aspectRatio: "4 / 5",
-                boxShadow: "0 40px 80px -25px rgba(40, 20, 60, 0.3), 0 0 0 1px rgba(0,0,0,0.05)",
-              }}
-            >
-              <img src={staunenImg} alt="Staunende Hochzeitsgäste" className="w-full h-full object-cover" loading="lazy" />
-            </div>
-          </div>
-          <div className={`lg:col-span-6 lg:pl-6 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-              Der Moment
+        {/* Editorial centered headline + supporting paragraph */}
+        <div className={`max-w-3xl mx-auto text-center mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">
+            Drei Sekunden
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.02] text-[clamp(2.25rem,5.2vw,5rem)] text-foreground">
+            … und der Tisch ist{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              still
+            </span>
+            .
+          </h2>
+        </div>
+
+        {/* Wide editorial photo */}
+        <div className={`relative overflow-hidden mb-14 max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ borderRadius: "0.75rem", boxShadow: "0 40px 90px -25px rgba(40, 20, 60, 0.35)", animationDelay: "0.1s" }}>
+          <img src={staunenImg} alt="Staunende Hochzeitsgäste" className="w-full object-cover" style={{ aspectRatio: "16 / 9" }} loading="lazy" />
+        </div>
+
+        {/* Pull-quote block, magazine-style */}
+        <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          <div className="relative pl-7 md:pl-10">
+            <span
+              aria-hidden
+              className="absolute left-0 top-0 bottom-0 w-1 rounded-full"
+              style={{ background: GRADIENT }}
+            />
+            <p className="font-display text-xl md:text-2xl text-foreground/85 leading-[1.55] font-light">
+              Eine Karte, die vor Sekunden noch in der Hand der Trauzeugin lag, taucht plötzlich in der Geldbörse des Brautvaters auf. Der ganze Tisch hält den Atem an. Eine halbe Sekunde später lacht die ganze Tafel.
             </p>
-            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-              Drei Sekunden — und es ist{" "}
-              <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                still
-              </span>
-              .
-            </h2>
-            <p className="mt-7 text-lg md:text-xl leading-[1.55] text-foreground/75 font-light">
-              Eine Karte, die vor Sekunden noch in der Hand der Trauzeugin lag,
-              taucht plötzlich in der Geldbörse des Brautvaters auf.
+            <p className="mt-6 text-base md:text-[17px] text-foreground/60 leading-[1.65]">
+              Genau das ist der Moment, an den sich eure Gäste in zehn Jahren noch erinnern. Nicht das Catering. Nicht die Sitzordnung. Diesen einen gemeinsamen Augenblick.
             </p>
-            <p className="mt-5 text-base md:text-[17px] leading-[1.65] text-foreground/65">
-              Der ganze Tisch hält den Atem an. Eine halbe Sekunde später lacht
-              die ganze Tafel. Das ist der Moment, an den sich eure Gäste in
-              zehn Jahren noch erinnern.
-            </p>
-            <div className="mt-8 flex items-center gap-3">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-sm text-foreground/60">
-                <strong className="text-foreground">100+ Brautpaare</strong> haben
-                diesen Moment schon erlebt — durchgehend 5,0 Sterne.
-              </p>
-            </div>
           </div>
         </div>
       </div>
