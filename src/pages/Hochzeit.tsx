@@ -853,22 +853,23 @@ const MegaQuoteSection = () => {
           </span>
           <blockquote>
             <p className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
-              Emilian, du warst{" "}
+              Ich durfte eine Hochzeit planen, bei der Emilian als Zauberer
+              aufgetreten ist — und es war{" "}
               <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                der absolute Höhepunkt
-              </span>{" "}
-              unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!
+                wirklich großartig
+              </span>
+              ! Mit viel Charme und Witz hat er alle Gäste begeistert.
             </p>
             <footer className="mt-10 flex items-center gap-4">
               <div
                 className="w-14 h-14 rounded-full flex items-center justify-center font-display font-black text-white text-xl"
                 style={{ background: "linear-gradient(135deg, hsl(340 75% 55%), hsl(255 70% 55%))" }}
               >
-                M
+                K
               </div>
               <div>
-                <p className="font-display font-bold text-foreground text-base">Martina Senftl</p>
-                <p className="text-sm text-foreground/55">Brautpaar · Google-Bewertung</p>
+                <p className="font-display font-bold text-foreground text-base">Katrin Raß</p>
+                <p className="text-sm text-foreground/55">Hochzeitsplanerin · Google-Bewertung</p>
               </div>
               <div className="ml-auto flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
@@ -894,7 +895,6 @@ const GalerieSection = () => {
     { img: haendeInteraktionImg, span: "", pos: "object-center" },
     { img: heroMagicImg, span: "", pos: "object-center" },
     { img: portraitImg, span: "", pos: "object-top" },
-    { img: dinnerBuehneImg, span: "lg:col-span-2", pos: "object-center" },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
