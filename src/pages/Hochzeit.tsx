@@ -426,71 +426,79 @@ const OptionenSection = () => {
    ═══════════════════════════════════════════════════════════ */
 const BeispielSection = () => {
   const { ref, isVisible } = useScrollReveal();
+  const phasen = [
+    {
+      label: "Phase 1",
+      title: "Bevor das Brautpaar eintrifft.",
+      text: "Aufbau im Empfangsbereich, kurzes Briefing mit der Hochzeitsplanerin über Sitzordnung und Insider-Anekdoten.",
+    },
+    {
+      label: "Phase 2",
+      title: "Sektempfang — 80 Gäste, viele fremd.",
+      text: "Ich mische mich unter die Gäste während Brautpaar und Fotograf unterwegs sind. Karten, Münzen, kleine Wow-Momente. Familien beider Seiten lachen das erste Mal zusammen.",
+    },
+    {
+      label: "Phase 3",
+      title: "Beim Dinner — Tisch für Tisch.",
+      text: "Während der Hauptgang serviert wird, gehe ich von Tisch zu Tisch. 5–7 Min, jeder Tisch bekommt seine eigene Mini-Show. Trauzeugen, Eltern, Schulfreunde — niemand wird übergangen.",
+    },
+    {
+      label: "Phase 4",
+      title: "Show-Slot vor dem Hochzeitstanz.",
+      text: "22 Min Bühnenshow mit eingebauter Anekdote über das Brautpaar. Standing Ovations und ein Trauring-Moment, der alle zum Staunen bringt.",
+    },
+    {
+      label: "Phase 5",
+      title: "Bis Mitternacht.",
+      text: "Tanzfläche füllt sich, ich verabschiede mich. Viele Gäste fragen nach Visitenkarten — nicht für sich selbst, sondern für anstehende Hochzeiten.",
+    },
+  ];
   return (
     <section ref={ref} className="bg-white section-large border-y border-foreground/8">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 md:mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            Echte Hochzeit
+            Eine reale Hochzeit
           </p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            So lief eine{" "}
+            Fünf Phasen,{" "}
             <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              echte Hochzeit
-            </span>{" "}
-            ab.
+              ein perfekter Tag
+            </span>
+            .
           </h2>
           <p className="mt-5 max-w-2xl text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
-            Damit ihr ein konkretes Bild habt, wie es bei euch aussehen könnte —
-            hier eine reale Hochzeit, Stunde für Stunde.
+            Wie es bei einer echten Hochzeit verläuft — keine Stunden-Tabelle, sondern fünf Momente, in denen Magie ihre Wirkung entfaltet.
           </p>
         </div>
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          <div className={`lg:col-span-5 ${isVisible ? "animate-slide-left" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-            <div
-              className="relative overflow-hidden lg:sticky lg:top-24"
-              style={{
-                borderRadius: "0.5rem",
-                aspectRatio: "4 / 5",
-                boxShadow: "0 30px 60px -20px rgba(40, 20, 60, 0.25)",
-              }}
-            >
-              <img src={emotionenImg} alt="Hochzeitsszene" className="w-full h-full object-cover" loading="lazy" />
-              <div
-                className="absolute bottom-5 left-5 px-3.5 py-1.5 rounded-full backdrop-blur-md text-white text-[11px] font-semibold flex items-center gap-2"
-                style={{ background: "rgba(15,10,25,0.55)" }}
+
+        {/* Editorial Hero-Photo, full bleed */}
+        <div className={`relative overflow-hidden mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ borderRadius: "0.75rem", boxShadow: "0 40px 80px -25px rgba(40, 20, 60, 0.3)", animationDelay: "0.1s" }}>
+          <img src={emotionenImg} alt="Reale Hochzeit" className="w-full object-cover" style={{ aspectRatio: "21 / 9" }} loading="lazy" />
+          <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(15,10,25,0.5) 100%)" }} />
+          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white">
+            <p className="text-[10px] md:text-xs tracking-[0.2em] uppercase text-white/75 mb-1 font-semibold">Reportage</p>
+            <p className="font-display text-xl md:text-2xl font-bold">Eine bayerische Hochzeit · 80 Gäste · zweite Saisonhälfte</p>
+          </div>
+        </div>
+
+        {/* Phasen als Magazine-Spread (kein Timeline-Stamp, kein Photo-Sticky) */}
+        <div className={`grid md:grid-cols-2 gap-y-12 gap-x-14 max-w-5xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+          {phasen.map((p, i) => (
+            <div key={p.label} className="relative">
+              <span
+                className="font-display text-[clamp(3rem,5vw,4rem)] font-black leading-none block mb-3"
+                style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}
               >
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: GRADIENT_LIGHT }} />
-                Hochzeit Zeitler · München · 2024
-              </div>
+                0{i + 1}
+              </span>
+              <p className="text-[10px] tracking-[0.22em] uppercase text-foreground/45 mb-3 font-semibold">{p.label}</p>
+              <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-[1.2] mb-3">
+                {p.title}
+              </h3>
+              <p className="text-base text-foreground/70 leading-[1.65] max-w-md">{p.text}</p>
             </div>
-          </div>
-          <div className={`lg:col-span-7 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-            <div className="space-y-5">
-              {[
-                { time: "16:30", text: "Ankunft. Ich baue auf, während das Brautpaar noch fotografiert. Kurzes Briefing mit der Hochzeitsplanerin." },
-                { time: "17:00", text: "Sektempfang. 80 Gäste, viele kennen sich nicht. Ich bin mittendrin — Karten, Münzen, kleine Wow-Momente. Familien lachen zusammen." },
-                { time: "18:00", text: "Dinner. Zwischen den Gängen besuche ich jeden Tisch — 5–7 Min pro Tisch. Jeder bekommt seine eigene kleine Show." },
-                { time: "21:30", text: "Show-Slot vor dem Hochzeitstanz. 22 Min Bühnenshow mit eingebauter Anekdote über das Brautpaar. Standing Ovations." },
-                { time: "22:30", text: "Tanzfläche brennt. Ich verabschiede mich, viele Gäste fragen nach Visitenkarten." },
-              ].map((e) => (
-                <div key={e.time} className="flex items-start gap-5">
-                  <span
-                    className="font-display text-base md:text-lg font-black tabular-nums shrink-0 leading-none mt-1 px-3 py-1.5 rounded-md"
-                    style={{
-                      background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))",
-                      color: "hsl(255 60% 40%)",
-                    }}
-                  >
-                    {e.time}
-                  </span>
-                  <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6] flex-1 pt-1">
-                    {e.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

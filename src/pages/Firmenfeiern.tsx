@@ -462,47 +462,90 @@ const DreiSekundenSection = () => {
   );
 };
 
-/* 5 · BEISPIEL */
+/* 5 · BEISPIEL — Case-Study mit Specs-Block, kein Timeline-Layout */
 const BeispielSection = () => {
   const { ref, isVisible } = useScrollReveal();
+  const specs = [
+    { label: "Branche", value: "Versicherung" },
+    { label: "Anlass", value: "Magic Camp · Galaabend" },
+    { label: "Gäste", value: "200 Kunden" },
+    { label: "Format", value: "Close-Up + 30-Min-Bühnenshow" },
+    { label: "Vorlauf", value: "5 Monate" },
+    { label: "Ort", value: "Tagungshotel Bayern" },
+  ];
+  const stats = [
+    { num: "200", suffix: "", label: "Gäste" },
+    { num: "30", suffix: " Min", label: "Show-Slot" },
+    { num: "5,0", suffix: "★", label: "Bewertung" },
+  ];
+  const punkte = [
+    "Briefing-Call mit Eventmanagern 4 Wochen vorab — inkl. Branchen-Insider und Insidertheme",
+    "Show enthielt eingebauten Markenbezug, der nicht plakativ wirkte — sondern als Magic-Moment",
+    "Kunden blieben länger als geplant; mehrere fragten nach Privat-Events für ihre eigenen Familien",
+  ];
   return (
-    <section ref={ref} className="bg-white section-large border-y border-foreground/8">
+    <section ref={ref} className="bg-foreground/[0.02] section-large border-y border-foreground/8">
       <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          <div className={`lg:col-span-5 ${isVisible ? "animate-slide-left" : "opacity-0"}`}>
-            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Echtes Beispiel</p>
-            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
-              Wie eine echte Firmenfeier{" "}
-              <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>ablaufen kann</span>.
-            </h2>
-            <p className="mt-6 text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
-              Damit ihr ein konkretes Bild habt, hier der Ablauf eines Magic Camps für 200 Kunden eines bayerischen Versicherers.
-            </p>
-            <div className="relative overflow-hidden mt-8" style={{ borderRadius: "0.5rem", aspectRatio: "4 / 5", boxShadow: "0 30px 60px -20px rgba(40, 20, 60, 0.25)" }}>
-              <img src={moderatorImg} alt="Firmenfeier-Szene" className="w-full h-full object-cover" loading="lazy" />
+        <div className={`max-w-4xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">
+            Case Study · 2024
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
+            Magic Camp für einen{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              bayerischen Versicherer
+            </span>
+            .
+          </h2>
+        </div>
+
+        {/* Specs + Photo */}
+        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className="lg:col-span-5">
+            <div className="bg-white p-7 md:p-8" style={{ borderRadius: "0.75rem", border: "1px solid rgba(0,0,0,0.06)" }}>
+              <p className="text-[10px] tracking-[0.22em] uppercase text-foreground/45 mb-5 font-semibold">Eckdaten</p>
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-5">
+                {specs.map((s) => (
+                  <div key={s.label}>
+                    <dt className="text-[11px] tracking-[0.15em] uppercase text-foreground/45 mb-1">{s.label}</dt>
+                    <dd className="font-display text-base md:text-[17px] font-bold text-foreground leading-tight">{s.value}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
-          <div className={`lg:col-span-7 lg:pl-6 ${isVisible ? "animate-slide-right" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-            <div className="space-y-5">
-              {[
-                { time: "17:30", text: "Ankunft & Setup. Kurze Abstimmung mit Eventmanagern. Briefing zur Branche und einigen Insider-Themen." },
-                { time: "18:00", text: "Empfang. 200 Kunden trudeln ein. Close-Up zwischen den Stehtischen — Eisbrecher zwischen Kollegen unterschiedlicher Filialen." },
-                { time: "19:30", text: "Dinner. Während des Hauptgangs Tisch-zu-Tisch, 5–7 Min pro Tisch. Persönliche Magie für jede Runde." },
-                { time: "21:00", text: "Bühnenshow. 30 Min mit eingebauter Branchenanekdote und einem versteckten Markenbezug. Standing Ovations." },
-                { time: "22:00", text: "Nachklang. Kunden bleiben länger als geplant. Viele fragen nach Visitenkarten und buchen für ihre Privatevents." },
-              ].map((e) => (
-                <div key={e.time} className="flex items-start gap-5">
-                  <span className="font-display text-base md:text-lg font-black tabular-nums shrink-0 leading-none mt-1 px-3 py-1.5 rounded-md" style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))", color: "hsl(255 60% 40%)" }}>
-                    {e.time}
-                  </span>
-                  <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6] flex-1 pt-1">{e.text}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-8 pt-6 border-t border-foreground/10">
-              <p className="text-sm text-foreground/55 italic">Magic Camp · Bayerischer Versicherer · 200 Kunden · 2024</p>
+          <div className="lg:col-span-7">
+            <div className="relative overflow-hidden h-full min-h-[300px]" style={{ borderRadius: "0.75rem", boxShadow: "0 30px 60px -20px rgba(40, 20, 60, 0.25)" }}>
+              <img src={moderatorImg} alt="Magic Camp" className="w-full h-full object-cover absolute inset-0" loading="lazy" />
             </div>
           </div>
+        </div>
+
+        {/* Stats Bar */}
+        <div className={`grid grid-cols-3 gap-0 mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s", border: "1px solid rgba(0,0,0,0.08)", borderRadius: "0.75rem", overflow: "hidden", background: "white" }}>
+          {stats.map((s, i) => (
+            <div key={s.label} className={`p-7 md:p-8 text-center ${i < stats.length - 1 ? "border-r border-foreground/8" : ""}`}>
+              <p className="font-display text-3xl md:text-5xl font-black leading-none tabular-nums" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                {s.num}<span className="text-2xl md:text-3xl">{s.suffix}</span>
+              </p>
+              <p className="text-[11px] tracking-[0.18em] uppercase text-foreground/55 mt-3 font-semibold">{s.label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Bullets — Was anders war */}
+        <div className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+          <p className="text-[10px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-5 font-semibold">Was den Unterschied gemacht hat</p>
+          <ul className="space-y-4">
+            {punkte.map((p, i) => (
+              <li key={i} className="flex gap-4">
+                <span className="shrink-0 mt-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-white text-[11px] font-bold" style={{ background: GRADIENT }}>
+                  {i + 1}
+                </span>
+                <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6]">{p}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
