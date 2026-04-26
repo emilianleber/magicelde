@@ -234,7 +234,7 @@ const App = () => (
       <BrowserRouter>
         <ScrollToTop />
         <AuthEventHandler />
-        <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a]" />}>
+        <Suspense fallback={<div className="min-h-screen bg-white" />}>
           {!IS_ADMIN_DOMAIN && <EngagementPopup />}
           {IS_ADMIN_DOMAIN ? <AdminRoutes /> : IS_DEV ? (
             // localhost: beide Route-Sets verfügbar

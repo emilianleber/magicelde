@@ -45,7 +45,7 @@ const GRADIENT_LIGHT =
    1 · HERO — direkter Brautpaar-Hook
    ═══════════════════════════════════════════════════════════ */
 const Hero = () => (
-  <section className="relative min-h-screen overflow-hidden text-white flex flex-col">
+  <section className="relative min-h-screen overflow-hidden text-white flex flex-col bg-[#0f0a19]">
     <div className="absolute inset-0">
       <img src={weddingHeroImg} alt="" className="h-full w-full object-cover" />
       <div
