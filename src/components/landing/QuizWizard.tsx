@@ -109,28 +109,20 @@ export const QuizWizardInline = ({ config }: { config: QuizConfig }) => {
     );
   }
 
-  /* Full-bleed full-screen variant for primary anlass pages */
+  /* Full-bleed page-like variant for primary anlass pages.
+     No card chrome — Wizard reads as the page itself. */
   return (
     <section
       id="empfehlung"
-      className="relative bg-foreground/[0.02] border-y border-foreground/8 min-h-screen flex flex-col"
+      className="relative bg-white border-y border-foreground/8 min-h-screen"
     >
-      <div className="px-6 md:px-10 lg:px-16 pt-16 md:pt-20 pb-8">
+      <div className="px-6 md:px-10 lg:px-16 pt-16 md:pt-20 pb-10">
         <div className="max-w-6xl mx-auto">
           <SectionHead config={config} />
         </div>
       </div>
-      <div className="px-6 md:px-10 lg:px-16 pb-20 flex-1 flex">
-        <div
-          className="w-full max-w-6xl mx-auto bg-white flex flex-col overflow-hidden"
-          style={{
-            border: "1px solid rgba(0,0,0,0.08)",
-            borderRadius: "1.5rem",
-            boxShadow: "0 40px 100px -30px rgba(40, 20, 60, 0.3)",
-          }}
-        >
-          <WizardBody config={config} fullBleed />
-        </div>
+      <div className="pb-32 md:pb-40">
+        <WizardBody config={config} fullBleed pageMode />
       </div>
     </section>
   );
@@ -206,14 +198,14 @@ export const QuizWizardModal = ({ config }: { config: QuizConfig }) => {
 
       {open && (
         <ModalShell onClose={() => setOpen(false)}>
-          <WizardBody config={config} onClose={() => setOpen(false)} />
+          <WizardBody config={config} onClose={() => setOpen(false)} fullBleed pageMode />
         </ModalShell>
       )}
     </section>
   );
 };
 
-/* ─── Modal shell (locks scroll, handles ESC + click outside) ─── */
+/* ─── Modal shell: fullscreen page-like, X to close, locks body scroll ─── */
 const ModalShell = ({ children, onClose }: { children: ReactNode; onClose: () => void }) => {
   useEffect(() => {
     const original = document.body.style.overflow;
@@ -229,31 +221,22 @@ const ModalShell = ({ children, onClose }: { children: ReactNode; onClose: () =>
   }, [onClose]);
 
   return (
-    <div
-      className="fixed inset-0 z-[100] bg-[#0f0a19]/85 backdrop-blur-sm overflow-y-auto"
-      onClick={onClose}
-    >
-      <div className="min-h-screen flex items-stretch md:items-center justify-center p-0 md:p-6">
-        <div
-          className="w-full md:max-w-4xl bg-white md:rounded-3xl flex flex-col min-h-screen md:min-h-0 md:max-h-[92vh]"
-          onClick={(e) => e.stopPropagation()}
-          style={{ boxShadow: "0 50px 120px -30px rgba(0,0,0,0.5)" }}
-        >
-          <header className="flex items-center gap-4 px-6 md:px-9 py-5 border-b border-foreground/8 sticky top-0 bg-white md:rounded-t-3xl z-10">
-            <p className="font-display font-bold text-foreground text-sm md:text-base">
-              Format-Finder
-            </p>
-            <button
-              onClick={onClose}
-              className="ml-auto inline-flex items-center justify-center w-10 h-10 rounded-full bg-foreground/[0.05] hover:bg-foreground/10 transition-colors"
-              aria-label="Berater schließen"
-            >
-              <X className="w-4 h-4 text-foreground" />
-            </button>
-          </header>
-          {children}
+    <div className="fixed inset-0 z-[200] bg-white overflow-y-auto">
+      <header className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-foreground/8">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-4 flex items-center gap-4">
+          <p className="font-display font-bold text-foreground text-sm md:text-base">
+            Format-Finder
+          </p>
+          <button
+            onClick={onClose}
+            className="ml-auto inline-flex items-center justify-center w-10 h-10 rounded-full bg-foreground/[0.05] hover:bg-foreground/10 transition-colors"
+            aria-label="Schließen"
+          >
+            <X className="w-4 h-4 text-foreground" />
+          </button>
         </div>
-      </div>
+      </header>
+      <div className="pb-32 md:pb-40">{children}</div>
     </div>
   );
 };
@@ -263,10 +246,12 @@ const WizardBody = ({
   config,
   onClose,
   fullBleed = false,
+  pageMode = false,
 }: {
   config: QuizConfig;
   onClose?: () => void;
   fullBleed?: boolean;
+  pageMode?: boolean;
 }) => {
   const total = config.questions.length;
   const RECOMMENDATION_STEP = total + 1;
@@ -396,7 +381,7 @@ const WizardBody = ({
   return (
     <>
       {/* Progress */}
-      <div className={`${fullBleed ? "px-8 md:px-14 lg:px-20" : "px-6 md:px-9"} pt-5 md:pt-6 pb-2 border-b border-foreground/8`}>
+      <div className={`${pageMode ? "px-6 md:px-10 lg:px-16 max-w-6xl mx-auto" : fullBleed ? "px-8 md:px-14 lg:px-20" : "px-6 md:px-9"} pt-5 md:pt-6 pb-2 ${pageMode ? "" : "border-b border-foreground/8"}`}>
         <div className="flex items-center gap-3 mb-3">
           <p className="text-[11px] uppercase tracking-wider text-foreground/45 font-semibold">
             {stepLabel}
@@ -428,7 +413,7 @@ const WizardBody = ({
         </div>
       </div>
 
-      <div className={fullBleed ? "px-8 md:px-14 lg:px-20 py-12 md:py-16 flex-1" : "px-6 md:px-9 lg:px-12 py-7 md:py-10"}>
+      <div className={pageMode ? "px-6 md:px-10 lg:px-16 py-12 md:py-16 max-w-6xl mx-auto" : fullBleed ? "px-8 md:px-14 lg:px-20 py-12 md:py-16 flex-1" : "px-6 md:px-9 lg:px-12 py-7 md:py-10"}>
         {currentQuestion && (
           <div className="animate-fade-up">
             <p className="text-[11px] md:text-xs tracking-[0.2em] uppercase text-foreground/45 mb-5 font-semibold">
@@ -671,7 +656,8 @@ const WizardBody = ({
       </div>
 
       {/* Footer with Back / Next */}
-      <footer className={`${fullBleed ? "px-8 md:px-14 lg:px-20" : "px-6 md:px-9"} py-4 border-t border-foreground/8 flex items-center gap-3 bg-white`}>
+      <footer className={`${pageMode ? "fixed bottom-0 left-0 right-0 px-6 md:px-10 lg:px-16 z-20 bg-white/95 backdrop-blur-sm" : fullBleed ? "px-8 md:px-14 lg:px-20" : "px-6 md:px-9"} py-4 border-t border-foreground/8 flex items-center gap-3 ${pageMode ? "" : "bg-white"}`}>
+        <div className={pageMode ? "max-w-6xl mx-auto w-full flex items-center gap-3" : "contents"}>
         {step > 1 && step <= RECOMMENDATION_STEP && !success && (
           <button
             onClick={() => setStep(step - 1)}
@@ -693,6 +679,7 @@ const WizardBody = ({
               <ArrowRight className="w-4 h-4" />
             </button>
           )}
+        </div>
       </footer>
     </>
   );
