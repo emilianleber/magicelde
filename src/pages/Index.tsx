@@ -10,6 +10,13 @@ import {
   Trophy,
   Presentation,
   Star,
+  Clock,
+  Users,
+  Sparkles,
+  MessageCircle,
+  Check,
+  X as XIcon,
+  Award,
 } from "lucide-react";
 
 import Navigation from "@/components/landing/Navigation";
@@ -636,10 +643,10 @@ const VideoSection = () => {
             }`}
           >
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6">
-              Live gesehen
+              Im TV
             </p>
             <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
-              Glaubst du nicht?{" "}
+              Wer steht{" "}
               <span
                 style={{
                   background:
@@ -649,20 +656,21 @@ const VideoSection = () => {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                Sieh selbst.
+                hier vor dir?
               </span>
             </h2>
             <p className="mt-6 text-base md:text-lg leading-[1.6] text-foreground/65 font-light">
-              Zwei Minuten aus einer echten Show. Keine Montage, keine Tricks
-              mit der Kamera — einfach die Reaktionen, wie sie sind.
+              Ein TV-Interview, das einen ehrlichen Blick hinter die Kulissen
+              gibt — über Magie, Comedy und warum diese Kombination so gut
+              funktioniert.
             </p>
 
-            {/* Mini stat cards */}
+            {/* Context tags */}
             <div className="mt-8 grid grid-cols-3 gap-3">
               {[
-                { v: "2:14", l: "Min" },
-                { v: "100%", l: "echt" },
-                { v: "0", l: "Cuts" },
+                { v: "TV", l: "Format" },
+                { v: "2024", l: "Jahr" },
+                { v: "Live", l: "Aufnahme" },
               ].map((s) => (
                 <div
                   key={s.l}
@@ -709,8 +717,8 @@ const VideoSection = () => {
                 }}
               >
                 <iframe
-                  src="https://www.youtube.com/embed/ZdIDq9VtqxU"
-                  title="Emilian Leber — Live Performance"
+                  src="https://www.youtube.com/embed/R0_mXGxzC9E"
+                  title="Emilian Leber — TV-Interview"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   loading="lazy"
@@ -718,7 +726,7 @@ const VideoSection = () => {
               </div>
               {/* Caption strip */}
               <div className="mt-4 flex items-center justify-between text-[11px] tracking-[0.18em] uppercase text-foreground/50">
-                <span>Live-Auftritt · Magic Camp</span>
+                <span>TV-Interview</span>
                 <span
                   aria-hidden
                   className="flex-1 mx-4 h-px"
@@ -727,7 +735,7 @@ const VideoSection = () => {
                       "linear-gradient(90deg, hsl(225 78% 60% / 0.4), hsl(275 65% 60% / 0.6), hsl(345 75% 60% / 0.4))",
                   }}
                 />
-                <span>200 Gäste · 2024</span>
+                <span>Talents of Magic · 2024</span>
               </div>
             </div>
           </div>
@@ -961,10 +969,10 @@ const StimmenSection = () => {
         >
           <div className="max-w-3xl">
             <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-              Echte Stimmen
+              Bewertungen
             </p>
             <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-              Genug von mir.{" "}
+              Stimmen aus dem{" "}
               <span
                 style={{
                   background:
@@ -974,8 +982,9 @@ const StimmenSection = () => {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                Hör sie selbst.
+                Publikum
               </span>
+              .
             </h2>
           </div>
 
@@ -1464,6 +1473,516 @@ const FinalCTA = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   NEU · So läuft es ab — Edukation für Laien
+   Story: User hat den Moment gesehen — wie genau passiert das jetzt bei seinem Event?
+   Übergang zu Video: "...und so sieht das in Echt aus"
+   ═══════════════════════════════════════════════════════════ */
+const SoLaeuftEsAbSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const steps = [
+    {
+      icon: Clock,
+      time: "Vor dem Event",
+      title: "Ankunft & Setup",
+      desc: "Ich komme rechtzeitig, oft schon 1–2 Stunden vor Showbeginn. Du musst nichts vorbereiten — Technik, Requisiten, alles ist dabei.",
+    },
+    {
+      icon: Users,
+      time: "Empfang",
+      title: "Mingle & Close-Up",
+      desc: "Während Sekt fließt und Gäste ankommen, mische ich mich unters Publikum. Kleine Wunder direkt vor ihren Augen — der perfekte Eisbrecher.",
+    },
+    {
+      icon: Sparkles,
+      time: "Höhepunkt",
+      title: "Showtime",
+      desc: "Bühnenshow, Tisch-Magie zwischen den Gängen oder Walking-Act — je nach Format. Hier passieren die Momente, von denen alle reden werden.",
+    },
+    {
+      icon: MessageCircle,
+      time: "Nach der Show",
+      title: "Der Nachklang",
+      desc: "Ich bleibe noch da. Gäste haben Fragen, wollen Fotos, erzählen sich gegenseitig was passiert ist. Der Abend bekommt seinen Soundtrack.",
+    },
+  ];
+
+  return (
+    <section ref={ref} className="bg-white section-large">
+      <div className="container px-6">
+        <div
+          className={`max-w-3xl mb-14 md:mb-16 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            So läuft es ab
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Was bei deinem Event{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              wirklich passiert
+            </span>
+            .
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Damit du genau weißt, was dich erwartet — hier der typische Ablauf
+            eines Auftritts. Keine Überraschungen, keine versteckten
+            Anforderungen.
+          </p>
+        </div>
+
+        <div
+          className={`grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-5 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+          style={{ animationDelay: "0.1s" }}
+        >
+          {steps.map((s, i) => (
+            <div
+              key={s.title}
+              className="relative p-7 md:p-8"
+              style={{
+                background: "rgba(0,0,0,0.02)",
+                border: "1px solid rgba(0,0,0,0.05)",
+                borderRadius: "0.75rem",
+              }}
+            >
+              <div
+                className="inline-flex items-center justify-center w-11 h-11 rounded-full mb-5"
+                style={{
+                  background:
+                    "linear-gradient(135deg, hsl(225 78% 92%), hsl(280 70% 92%), hsl(340 80% 92%))",
+                }}
+              >
+                <s.icon
+                  className="w-5 h-5"
+                  style={{ color: "hsl(280 60% 40%)" }}
+                />
+              </div>
+              <p
+                className="text-[10px] tracking-[0.2em] uppercase font-semibold mb-2"
+                style={{
+                  background:
+                    "linear-gradient(100deg, hsl(225 78% 50%), hsl(275 65% 50%), hsl(345 75% 50%))",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                {s.time}
+              </p>
+              <h3 className="font-display text-xl md:text-2xl font-black mb-3 text-foreground leading-[1.15]">
+                {s.title}
+              </h3>
+              <p className="text-sm leading-[1.6] text-foreground/65">
+                {s.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   NEU · Bekannt aus — Authority via Presse/TV/Awards
+   Story: Andere haben mich schon gesehen, das gibt dir Sicherheit.
+   ═══════════════════════════════════════════════════════════ */
+const BekanntAusSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const items = [
+    { label: "The Greatest Talent", sub: "Kabel Eins · Finalist" },
+    { label: "Talents of Magic", sub: "Finalist · Wettbewerb" },
+    { label: "Kreativpreis", sub: "Preisträger" },
+    { label: "Süddeutsche Zeitung", sub: "Feature · 2024" },
+    { label: "Bayerisches Fernsehen", sub: "TV-Auftritt" },
+    { label: "Oktoberfest München", sub: "Auftritt · 2023" },
+  ];
+
+  return (
+    <section ref={ref} className="bg-white section-medium border-y border-foreground/8">
+      <div className="container px-6">
+        <div
+          className={`flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <div>
+            <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-4">
+              Bekannt aus
+            </p>
+            <h2 className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(1.75rem,3.5vw,2.5rem)] text-foreground max-w-2xl">
+              In{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                TV, Presse & Wettbewerben
+              </span>{" "}
+              gewesen.
+            </h2>
+          </div>
+          <Link
+            to="/presse"
+            className="group shrink-0 inline-flex items-center gap-2 font-display text-sm font-bold text-foreground border-b-2 border-foreground/30 hover:border-foreground pb-1 transition-colors self-start md:self-end"
+          >
+            Pressebereich
+            <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+
+        <div
+          className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+          style={{ animationDelay: "0.1s" }}
+        >
+          {items.map((item) => (
+            <div
+              key={item.label}
+              className="p-5 flex flex-col justify-center transition-all hover:bg-foreground/[0.02]"
+              style={{
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: "0.5rem",
+                minHeight: "100px",
+              }}
+            >
+              <Award className="w-4 h-4 text-foreground/40 mb-3" />
+              <p className="font-display text-sm font-bold text-foreground leading-tight">
+                {item.label}
+              </p>
+              <p className="text-[11px] text-foreground/55 mt-1 leading-tight">
+                {item.sub}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   NEU · Sorgen — und Antworten · Einwand-Behandlung
+   Story: Ich kenne deine Bedenken. Hier ist was wirklich passiert.
+   ═══════════════════════════════════════════════════════════ */
+const SorgenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const items = [
+    {
+      sorge: "Unsere Gäste sind zu seriös für sowas.",
+      antwort:
+        "Erfahrungsgemäß sind das die, die am meisten Spaß haben. Vorstandsvorsitzende, Anwälte, Ärzte — alle staunen, sobald die erste Karte verschwindet.",
+    },
+    {
+      sorge: "Wir haben keine Bühne.",
+      antwort:
+        "Brauchst du nicht. Close-Up funktioniert direkt am Tisch, am Empfang, in der Lobby. Ich passe mich jeder Location an.",
+    },
+    {
+      sorge: "Bei uns ist es eher ruhig & elegant.",
+      antwort:
+        "Perfekt. Genau dafür ist Close-Up Magie gemacht. Subtil, persönlich, ohne dass die ganze Stimmung gestört wird.",
+    },
+    {
+      sorge: "Wir haben gemischtes Publikum.",
+      antwort:
+        "Genau dann funktioniert Magie am besten. Vom 8-jährigen Enkel bis zum 80-jährigen Großvater — alle reagieren gleichermaßen begeistert.",
+    },
+  ];
+  return (
+    <section ref={ref} className="bg-white section-large">
+      <div className="container px-6">
+        <div
+          className={`max-w-3xl mb-14 md:mb-16 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Häufige Sorgen
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Was viele denken —{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              und was wirklich passiert
+            </span>
+            .
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Du bist nicht allein mit deinen Bedenken. Hier die häufigsten —
+            und meine ehrliche Antwort darauf.
+          </p>
+        </div>
+
+        <div
+          className={`grid md:grid-cols-2 gap-5 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+          style={{ animationDelay: "0.1s" }}
+        >
+          {items.map((it) => (
+            <div
+              key={it.sorge}
+              className="p-7 md:p-8"
+              style={{
+                background: "rgba(0,0,0,0.02)",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: "0.75rem",
+              }}
+            >
+              {/* Sorge */}
+              <div className="flex items-start gap-3 mb-5">
+                <div
+                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-0.5"
+                  style={{ background: "rgba(0,0,0,0.06)" }}
+                >
+                  <XIcon className="w-3.5 h-3.5 text-foreground/55" />
+                </div>
+                <p className="font-display text-lg md:text-xl font-bold text-foreground/55 line-through-subtle leading-snug">
+                  „{it.sorge}"
+                </p>
+              </div>
+              {/* Antwort */}
+              <div className="flex items-start gap-3">
+                <div
+                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-0.5"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, hsl(225 85% 55%), hsl(275 75% 55%), hsl(345 85% 55%))",
+                  }}
+                >
+                  <Check className="w-3.5 h-3.5 text-white" />
+                </div>
+                <p className="font-display text-base md:text-lg font-medium text-foreground leading-[1.5]">
+                  {it.antwort}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   NEU · Investment — Soft pricing transparency
+   Story: Bevor wir uns festlegen — hier eine Größenordnung.
+   ═══════════════════════════════════════════════════════════ */
+const InvestmentSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const pakete = [
+    {
+      title: "Close-Up Set",
+      price: "ab 395 €",
+      ideal: "Für kleine Runden",
+      includes: [
+        "30–60 Min Close-Up Magie",
+        "An- & Abreise (Bayern)",
+        "Persönliches Briefing",
+      ],
+      featured: false,
+    },
+    {
+      title: "Bühnen-Show",
+      price: "ab 850 €",
+      ideal: "Für 50+ Gäste",
+      includes: [
+        "20–45 Min Bühnenshow",
+        "Comedy & Interaktion",
+        "Eigene Technik & Requisiten",
+        "Maßgeschneidertes Konzept",
+      ],
+      featured: true,
+    },
+    {
+      title: "Komplettpaket",
+      price: "ab 1.500 €",
+      ideal: "Für ganze Abende",
+      includes: [
+        "Empfang + Bühnenshow",
+        "Walking-Act im Dinner",
+        "Optional Moderation",
+        "Volle Begleitung des Events",
+      ],
+      featured: false,
+    },
+  ];
+
+  return (
+    <section ref={ref} className="bg-white section-large">
+      <div className="container px-6">
+        <div
+          className={`max-w-3xl mb-14 md:mb-16 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Investment
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Transparente{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Pakete
+            </span>
+            .
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Damit du eine Größenordnung hast — die genauen Kosten hängen vom
+            Anlass, der Dauer und dem Aufwand ab. Du bekommst nach deiner
+            Anfrage ein verbindliches Angebot ohne versteckte Kosten.
+          </p>
+        </div>
+
+        <div
+          className={`grid md:grid-cols-3 gap-5 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+          style={{ animationDelay: "0.1s" }}
+        >
+          {pakete.map((p) => (
+            <div
+              key={p.title}
+              className={`relative p-7 md:p-8 flex flex-col h-full ${
+                p.featured ? "text-white" : "text-foreground"
+              }`}
+              style={{
+                background: p.featured
+                  ? "linear-gradient(135deg, hsl(225 50% 18%) 0%, hsl(280 45% 22%) 50%, hsl(340 50% 22%) 100%)"
+                  : "rgba(0,0,0,0.02)",
+                border: p.featured
+                  ? "1px solid rgba(255,255,255,0.1)"
+                  : "1px solid rgba(0,0,0,0.06)",
+                borderRadius: "0.75rem",
+                boxShadow: p.featured
+                  ? "0 30px 70px -20px rgba(60, 30, 80, 0.4)"
+                  : "none",
+              }}
+            >
+              {p.featured && (
+                <span
+                  className="absolute -top-3 left-7 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, hsl(225 95% 68%), hsl(285 85% 68%), hsl(340 95% 68%))",
+                    color: "#0f0a19",
+                  }}
+                >
+                  Beliebt
+                </span>
+              )}
+              <p
+                className={`text-[11px] tracking-[0.18em] uppercase mb-3 ${
+                  p.featured ? "text-white/55" : "text-foreground/55"
+                }`}
+              >
+                {p.ideal}
+              </p>
+              <h3
+                className={`font-display text-2xl md:text-3xl font-black mb-3 leading-[1.1] ${
+                  p.featured ? "text-white" : "text-foreground"
+                }`}
+              >
+                {p.title}
+              </h3>
+              <p
+                className="font-display text-3xl md:text-4xl font-black mb-6"
+                style={
+                  p.featured
+                    ? {
+                        background:
+                          "linear-gradient(100deg, hsl(225 95% 78%), hsl(285 85% 78%), hsl(340 95% 78%))",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }
+                    : {
+                        background:
+                          "linear-gradient(100deg, hsl(225 78% 50%), hsl(275 65% 50%), hsl(345 75% 50%))",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }
+                }
+              >
+                {p.price}
+              </p>
+              <ul
+                className={`space-y-2.5 text-sm leading-relaxed flex-1 ${
+                  p.featured ? "text-white/85" : "text-foreground/75"
+                }`}
+              >
+                {p.includes.map((line) => (
+                  <li key={line} className="flex items-start gap-2.5">
+                    <Check
+                      className={`w-4 h-4 shrink-0 mt-0.5 ${
+                        p.featured ? "text-white/70" : "text-foreground/50"
+                      }`}
+                    />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/buchung"
+                className={`mt-7 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all hover:scale-[1.01] justify-center ${
+                  p.featured
+                    ? "bg-white text-[#0f0a19]"
+                    : "border border-foreground/20 text-foreground hover:bg-foreground hover:text-white"
+                }`}
+              >
+                Anfrage starten
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          ))}
+        </div>
+
+        <p
+          className={`mt-8 text-center text-sm text-foreground/50 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+          style={{ animationDelay: "0.4s" }}
+        >
+          Alle Preise zzgl. Anreise außerhalb Bayerns. Individuelle Pakete auf
+          Anfrage.
+        </p>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
    INDEX
    ═══════════════════════════════════════════════════════════ */
 const Index = () => {
@@ -1503,7 +2022,8 @@ const Index = () => {
 
       <main>
         <LandingHero />
-        {/* 2. Relevanz — Anlass (Selbst-Selektion) */}
+
+        {/* 2. Relevanz — Anlass-Selbst-Selektion */}
         <SectionDivider />
         <AnlassSection />
 
@@ -1511,39 +2031,54 @@ const Index = () => {
         <SectionDivider />
         <MomentSection />
 
-        {/* 4. Beweis durch sehen */}
+        {/* 4. NEU: Edukation — was passiert konkret */}
+        <SectionDivider />
+        <SoLaeuftEsAbSection />
+
+        {/* 5. Beweis durch sehen — TV-Interview */}
         <SectionDivider />
         <VideoSection />
 
-        {/* 5. Formate — Auswahl */}
+        {/* 6. Auswahl — Formate */}
         <SectionDivider />
         <ShowformateSection />
 
-        {/* 6. Differenzierung */}
+        {/* 7. Differenzierung */}
         <SectionDivider />
         <ComedySection />
 
-        {/* 7. Hard Proof */}
+        {/* 8. NEU: Authority — TV/Presse/Awards */}
+        <BekanntAusSection />
+
+        {/* 9. Hard Proof — Zahlen */}
         <SectionDivider />
         <ZahlenSection />
 
-        {/* 8. Soft Proof — Stimmen + Logos */}
+        {/* 10. Soft Proof — Stimmen + Logos */}
         <SectionDivider />
         <StimmenSection />
 
-        {/* 9. Vertrauen — Person */}
+        {/* 11. NEU: Einwand-Behandlung — Sorgen + Antworten */}
+        <SectionDivider />
+        <SorgenSection />
+
+        {/* 12. Person hinter der Show */}
         <SectionDivider />
         <UeberMichSection />
 
-        {/* 10. Prozess — enthält bereits CTA-Button am Ende */}
+        {/* 13. Prozess */}
         <SectionDivider />
         <AblaufSection />
 
-        {/* 11. Einwände abbauen */}
+        {/* 14. NEU: Investment-Pakete */}
+        <SectionDivider />
+        <InvestmentSection />
+
+        {/* 15. FAQ */}
         <SectionDivider />
         <FAQSection />
 
-        {/* 12. Final */}
+        {/* 16. Final */}
         <FinalCTA />
       </main>
 

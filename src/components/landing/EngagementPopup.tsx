@@ -14,8 +14,9 @@ import { ArrowRight, ArrowLeft, X, Sparkles, Check } from "lucide-react";
 
 const SESSION_KEY_SHOWN = "magicel:popup:shown";
 const SESSION_KEY_PAGES = "magicel:popup:pagecount";
-const TIME_TO_TRIGGER_MS = 150_000; // 2.5 minutes
+const TIME_TO_TRIGGER_MS = 120_000; // 2 minutes
 const PAGES_TO_TRIGGER = 3;
+const DEBUG = false; // set true to log triggers in console
 
 const SUPPRESS_PATHS = [
   "/buchung",
@@ -69,85 +70,126 @@ const EngagementPopup = () => {
       parseInt(sessionStorage.getItem(SESSION_KEY_PAGES) || "0", 10) + 1;
     sessionStorage.setItem(SESSION_KEY_PAGES, String(count));
 
+    const isShown = sessionStorage.getItem(SESSION_KEY_SHOWN) === "1";
+    if (DEBUG)
+      console.log(
+        "[Popup] pageview",
+        location.pathname,
+        "count=",
+        count,
+        "shown=",
+        isShown,
+        "suppressed=",
+        isSuppressed
+      );
+
     if (
       !triggered.current &&
-      !alreadyShown &&
+      !isShown &&
       !isSuppressed &&
       count >= PAGES_TO_TRIGGER
     ) {
+      if (DEBUG) console.log("[Popup] page-count trigger");
       trigger();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   useEffect(() => {
-    if (alreadyShown || isSuppressed) return;
+    if (isSuppressed) {
+      if (DEBUG) console.log("[Popup] suppressed on", location.pathname);
+      return;
+    }
+    // Re-read each time — sessionStorage state shouldn't be captured stale
+    const checkAlreadyShown = () =>
+      typeof window !== "undefined" &&
+      sessionStorage.getItem(SESSION_KEY_SHOWN) === "1";
 
-    // 2.5 min inactivity timer
+    if (checkAlreadyShown()) {
+      if (DEBUG) console.log("[Popup] already shown this session");
+      return;
+    }
+
+    if (DEBUG)
+      console.log("[Popup] arming triggers · timer=", TIME_TO_TRIGGER_MS / 1000, "s");
+
+    // 2 min inactivity timer
     const timer = setTimeout(() => {
-      if (!triggered.current) trigger();
+      if (DEBUG) console.log("[Popup] timer fired");
+      if (!triggered.current && !checkAlreadyShown()) trigger();
     }, TIME_TO_TRIGGER_MS);
 
-    // Desktop exit intent — mouse leaves the top of the viewport
-    const handleMouseLeave = (e: MouseEvent) => {
+    // 1) Desktop — mouse leaves window entirely (relatedTarget null)
+    const handleDocMouseOut = (e: MouseEvent) => {
       if (triggered.current) return;
-      // Mouse moved towards top (address bar / tab close)
-      if (e.clientY < 20) trigger();
-    };
-
-    // Catch the case where mouse exits the document entirely (relatedTarget = null)
-    const handleMouseOut = (e: MouseEvent) => {
-      if (triggered.current) return;
-      const to = (e as any).relatedTarget || (e as any).toElement;
-      if (!to && e.clientY < 50) trigger();
-    };
-
-    // Mobile / tab-switch — fires when user backgrounds the tab or switches apps
-    let visibilityArmed = false;
-    const armVisibility = setTimeout(() => {
-      visibilityArmed = true;
-    }, 8000); // ignore the very first second of page load
-    const handleVisibility = () => {
-      if (triggered.current || !visibilityArmed) return;
-      if (document.visibilityState === "hidden") trigger();
-    };
-
-    // Scroll-up after substantial scroll-down — back-to-top intent
-    let maxScroll = 0;
-    let scrollUpStart: number | null = null;
-    const handleScroll = () => {
-      if (triggered.current) return;
-      const y = window.scrollY;
-      if (y > maxScroll) {
-        maxScroll = y;
-        scrollUpStart = null;
-      } else if (maxScroll > 1500 && y < maxScroll - 200) {
-        // user scrolled back up significantly after going deep
-        if (scrollUpStart === null) scrollUpStart = Date.now();
-        if (Date.now() - scrollUpStart > 600 && y < 400) trigger();
+      const to = (e as any).relatedTarget;
+      if (!to) {
+        if (DEBUG) console.log("[Popup] mouseout — no related target", e.clientY);
+        trigger();
       }
     };
 
-    // Mobile back navigation
-    const handlePopState = () => {
+    // 2) Desktop — mouse moves into top zone (toolbar/tab area)
+    let topZoneEnter: number | null = null;
+    const handleMouseMove = (e: MouseEvent) => {
       if (triggered.current) return;
+      if (e.clientY <= 10) {
+        if (topZoneEnter === null) topZoneEnter = Date.now();
+        // If mouse stays in top 10px for >150ms → exit intent
+        if (Date.now() - topZoneEnter > 150) {
+          if (DEBUG) console.log("[Popup] top-zone exit intent");
+          trigger();
+        }
+      } else {
+        topZoneEnter = null;
+      }
+    };
+
+    // 3) Visibility-change (tab switch / mobile background)
+    let visibilityArmed = false;
+    const armVisibility = setTimeout(() => {
+      visibilityArmed = true;
+    }, 5000);
+    const handleVisibility = () => {
+      if (triggered.current || !visibilityArmed) return;
+      if (document.visibilityState === "hidden") {
+        if (DEBUG) console.log("[Popup] visibility hidden");
+        trigger();
+      }
+    };
+
+    // 4) Window blur — losing focus to other window
+    let blurArmed = false;
+    const armBlur = setTimeout(() => {
+      blurArmed = true;
+    }, 5000);
+    const handleBlur = () => {
+      if (triggered.current || !blurArmed) return;
+      if (DEBUG) console.log("[Popup] window blur");
       trigger();
     };
 
-    document.addEventListener("mouseleave", handleMouseLeave);
-    document.addEventListener("mouseout", handleMouseOut);
+    // 5) beforeunload as fallback (some browsers cancel the popup but it covers some)
+    const handleBeforeUnload = () => {
+      // We can't actually show the popup here, but mark intent so on next page-show it shows
+      if (DEBUG) console.log("[Popup] beforeunload");
+    };
+
+    document.addEventListener("mouseout", handleDocMouseOut);
+    document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("visibilitychange", handleVisibility);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("blur", handleBlur);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
       clearTimeout(timer);
       clearTimeout(armVisibility);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      document.removeEventListener("mouseout", handleMouseOut);
+      clearTimeout(armBlur);
+      document.removeEventListener("mouseout", handleDocMouseOut);
+      document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("visibilitychange", handleVisibility);
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuppressed]);
