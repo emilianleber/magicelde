@@ -162,7 +162,7 @@ const ShowformateSection = () => {
             <span
               style={{
                 background:
-                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -381,7 +381,7 @@ const AnlassSection = () => {
             <span
               style={{
                 background:
-                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -650,7 +650,7 @@ const VideoSection = () => {
               <span
                 style={{
                   background:
-                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                    "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -794,7 +794,7 @@ const ZahlenSection = () => {
             <span
               style={{
                 background:
-                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -886,7 +886,7 @@ const ComedySection = () => {
               <span
                 style={{
                   background:
-                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                    "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -913,6 +913,13 @@ const ComedySection = () => {
               Das funktioniert bei jedem Publikum, in jeder Altersgruppe.
               Staunen ist eine universelle Sprache.
             </p>
+            <Link
+              to="/comedy-zauberei"
+              className="group mt-8 inline-flex items-center gap-2 font-display font-bold text-foreground border-b-2 border-foreground/30 hover:border-foreground pb-1 transition-colors"
+            >
+              Mehr über Comedy-Zauberei
+              <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
         </div>
       </div>
@@ -976,7 +983,7 @@ const StimmenSection = () => {
               <span
                 style={{
                   background:
-                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                    "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -1144,7 +1151,7 @@ const AblaufSection = () => {
             <span
               style={{
                 background:
-                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -1244,7 +1251,7 @@ const UeberMichSection = () => {
               <span
                 style={{
                   background:
-                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                    "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -1340,7 +1347,7 @@ const FAQSection = () => {
               <span
                 style={{
                   background:
-                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                    "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -1431,7 +1438,7 @@ const FinalCTA = () => {
             <span
               style={{
                 background:
-                  "linear-gradient(100deg, hsl(225 95% 75%) 0%, hsl(285 85% 75%) 50%, hsl(340 95% 75%) 100%)",
+                  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -1522,7 +1529,7 @@ const SoLaeuftEsAbSection = () => {
             <span
               style={{
                 background:
-                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -1603,7 +1610,7 @@ const BekanntAusSection = () => {
     { label: "The Greatest Talent", sub: "Kabel Eins · Finalist" },
     { label: "Talents of Magic", sub: "Finalist · Wettbewerb" },
     { label: "Kreativpreis", sub: "Preisträger" },
-    { label: "Süddeutsche Zeitung", sub: "Feature · 2024" },
+    { label: "idowa", sub: "Feature · 2024" },
     { label: "Bayerisches Fernsehen", sub: "TV-Auftritt" },
     { label: "Oktoberfest München", sub: "Auftritt · 2023" },
   ];
@@ -1625,15 +1632,15 @@ const BekanntAusSection = () => {
               <span
                 style={{
                   background:
-                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                    "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}
               >
                 TV, Presse & Wettbewerben
-              </span>{" "}
-              gewesen.
+              </span>
+              .
             </h2>
           </div>
           <Link
@@ -1720,7 +1727,7 @@ const SorgenSection = () => {
             <span
               style={{
                 background:
-                  "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -1837,7 +1844,7 @@ const PreisSection = () => {
               <span
                 style={{
                   background:
-                    "linear-gradient(100deg, hsl(225 95% 68%) 0%, hsl(285 85% 68%) 50%, hsl(340 95% 68%) 100%)",
+                    "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",

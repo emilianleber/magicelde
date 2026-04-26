@@ -54,6 +54,7 @@ const Buehnenshow = lazy(() => import("./pages/Buehnenshow.tsx"));
 const CloseUp = lazy(() => import("./pages/CloseUp.tsx"));
 const MagicDinner = lazy(() => import("./pages/MagicDinner.tsx"));
 const Moderation = lazy(() => import("./pages/Moderation.tsx"));
+const ComedyZauberei = lazy(() => import("./pages/ComedyZauberei.tsx"));
 const UeberMich = lazy(() => import("./pages/UeberMich.tsx"));
 const Referenzen = lazy(() => import("./pages/Referenzen.tsx"));
 const FAQPage = lazy(() => import("./pages/FAQ.tsx"));
@@ -202,6 +203,7 @@ const PublicRoutes = () => (
     <Route path="/close-up" element={<CloseUp />} />
     <Route path="/magic-dinner" element={<MagicDinner />} />
     <Route path="/moderation" element={<Moderation />} />
+    <Route path="/comedy-zauberei" element={<ComedyZauberei />} />
     <Route path="/ueber-mich" element={<UeberMich />} />
     <Route path="/referenzen" element={<Referenzen />} />
     <Route path="/faq" element={<FAQPage />} />
@@ -245,6 +247,7 @@ const App = () => (
               <Route path="/close-up" element={<CloseUp />} />
               <Route path="/magic-dinner" element={<MagicDinner />} />
               <Route path="/moderation" element={<Moderation />} />
+    <Route path="/comedy-zauberei" element={<ComedyZauberei />} />
               <Route path="/ueber-mich" element={<UeberMich />} />
               <Route path="/referenzen" element={<Referenzen />} />
               <Route path="/faq" element={<FAQPage />} />

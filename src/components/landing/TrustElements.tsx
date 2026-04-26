@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Star, Award, Trophy } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -141,7 +142,7 @@ const LogoItem = ({ name, logo }: { name: string; logo?: string }) => {
         alt={name}
         title={name}
         onError={() => setImgError(true)}
-        className="h-8 md:h-10 w-auto max-w-[140px] object-contain opacity-40 hover:opacity-70 transition-opacity duration-300 grayscale hover:grayscale-0 select-none"
+        className="h-12 md:h-16 w-auto max-w-[200px] object-contain opacity-50 hover:opacity-100 transition-all duration-300 grayscale hover:grayscale-0 select-none"
         loading="lazy"
       />
     );
@@ -150,7 +151,7 @@ const LogoItem = ({ name, logo }: { name: string; logo?: string }) => {
   return (
     <span
       title={name}
-      className="font-display text-lg md:text-xl font-bold text-muted-foreground/20 hover:text-muted-foreground/40 transition-colors duration-300 select-none whitespace-nowrap"
+      className="font-display text-xl md:text-2xl font-bold text-muted-foreground/30 hover:text-foreground transition-colors duration-300 select-none whitespace-nowrap"
     >
       {name}
     </span>
@@ -178,16 +179,21 @@ export const ClientLogos = ({
             </p>
           )}
           {/* Scrolling Logo Carousel */}
-          <div className="relative w-full overflow-hidden">
+          <div className="relative w-full overflow-hidden group">
             {/* Fade edges */}
-            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-background to-transparent z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-background to-transparent z-10" />
-            {/* Scrolling track */}
-            <div className="flex items-center gap-12 md:gap-16 animate-scroll-left">
+            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+            {/* Scrolling track — pauses on hover */}
+            <div className="flex items-center gap-12 md:gap-16 animate-scroll-left group-hover:[animation-play-state:paused]">
               {doubled.map((item, i) => (
-                <div key={`${item.name}-${i}`} className="shrink-0">
+                <Link
+                  key={`${item.name}-${i}`}
+                  to="/referenzen"
+                  className="shrink-0 cursor-pointer"
+                  aria-label={`Referenz: ${item.name}`}
+                >
                   <LogoItem name={item.name} logo={item.logo} />
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -247,14 +253,19 @@ export const TrustSection = ({ className = "" }: { className?: string }) => {
             <p className="font-sans text-xs font-bold uppercase tracking-[0.15em] text-muted-foreground/40 text-center mb-8">
               Bekannt von Events für
             </p>
-            <div className="relative w-full overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-background to-transparent z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-background to-transparent z-10" />
-              <div className="flex items-center gap-12 md:gap-16 animate-scroll-left">
+            <div className="relative w-full overflow-hidden group">
+              <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+              <div className="flex items-center gap-12 md:gap-16 animate-scroll-left group-hover:[animation-play-state:paused]">
                 {[...clientLogos, ...clientLogos].map((item, i) => (
-                  <div key={`${item.name}-${i}`} className="shrink-0">
+                  <Link
+                    key={`${item.name}-${i}`}
+                    to="/referenzen"
+                    className="shrink-0 cursor-pointer"
+                    aria-label={`Referenz: ${item.name}`}
+                  >
                     <LogoItem name={item.name} logo={item.logo} />
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
