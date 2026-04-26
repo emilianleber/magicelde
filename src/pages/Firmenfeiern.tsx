@@ -18,6 +18,12 @@ import {
   Briefcase,
   Award,
   TrendingUp,
+  FileText,
+  ShieldCheck,
+  Receipt,
+  Lock,
+  Handshake,
+  Palette,
 } from "lucide-react";
 
 import Navigation from "@/components/landing/Navigation";
@@ -148,7 +154,64 @@ const Hero = () => (
   </section>
 );
 
-/* 2 · QUIZ */
+/* 2 · LOGO WALL — Trust-Stripe direkt unter Hero */
+const LogoWallSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const kunden = [
+    "STRABAG",
+    "Sixt",
+    "VKB",
+    "Sparkasse",
+    "Allianz",
+    "Stadtwerke",
+    "DPSG",
+    "Wächter Agentur",
+  ];
+  return (
+    <section ref={ref} className="bg-white py-16 md:py-20 border-b border-foreground/8">
+      <div className="container px-6">
+        <div className={`max-w-3xl mx-auto text-center mb-10 md:mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.2em] uppercase text-foreground/45 font-semibold">
+            Vertrauen von 200+ Firmenkunden
+          </p>
+          <p className="mt-4 font-display text-base md:text-lg text-foreground/65 font-light">
+            Auswahl an Auftraggebern aus den letzten Jahren — Konzerne, Mittelstand, Agenturen.
+          </p>
+        </div>
+        <div className={`flex flex-wrap items-center justify-center gap-x-10 gap-y-5 md:gap-x-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {kunden.map((k) => (
+            <span
+              key={k}
+              className="font-display font-bold tracking-[-0.01em] text-foreground/35 hover:text-foreground/70 transition-colors text-xl md:text-2xl"
+            >
+              {k}
+            </span>
+          ))}
+        </div>
+        <div className={`mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+          <div className="flex items-center gap-2 text-sm text-foreground/65">
+            <Check className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
+            Rechnung mit USt-Ausweis
+          </div>
+          <div className="flex items-center gap-2 text-sm text-foreground/65">
+            <Check className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
+            Berufshaftpflicht versichert
+          </div>
+          <div className="flex items-center gap-2 text-sm text-foreground/65">
+            <Check className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
+            DSGVO-konform
+          </div>
+          <div className="flex items-center gap-2 text-sm text-foreground/65">
+            <Check className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
+            10+ Jahre Routine
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 3 · QUIZ */
 type Antwort = "klein" | "mittel" | "groß" | "casual" | "formal" | "highend" | "team" | "kunden" | "extern";
 
 const QuizSection = () => {
@@ -181,7 +244,7 @@ const QuizSection = () => {
     if (zielgruppe === "extern") {
       return {
         format: "Komplett-Begleitung",
-        sub: "Empfang + Show + Walking-Act",
+        sub: "Close-Up im Empfang + Bühnenshow",
         why: "Wenn externe Gäste, Partner und Mitarbeiter zusammenkommen, braucht ihr durchgehende Highlights. Magie als roter Faden über den ganzen Abend.",
         link: "/buchung",
       };
@@ -288,7 +351,7 @@ const OptionenSection = () => {
   const optionen = [
     { icon: Wine, time: "Empfang", title: "Close-Up Magie", desc: "Während Begrüßung, Sektempfang oder Steh-Empfang. Mitarbeiter verschiedener Abteilungen kommen ins Gespräch.", duration: "20–70 Min", passt: "Wenn Networking im Fokus steht" },
     { icon: Sparkles, time: "Show-Slot", title: "Bühnenshow", desc: "Zentrales Highlight nach Reden oder vor dem freien Teil. Mit eingebauter Markenbotschaft auf Wunsch.", duration: "15–60 Min", passt: "Wenn ihr einen klaren Wow-Moment für alle wollt", featured: true },
-    { icon: Mic2, time: "Komplett", title: "Voll-Begleitung", desc: "Empfang + Show + Walking-Act. Ein roter Faden über das ganze Event hinweg.", duration: "ganzer Abend", passt: "Wenn Magie das Leitthema sein soll" },
+    { icon: Mic2, time: "Komplett", title: "Voll-Begleitung", desc: "Close-Up im Empfang + Bühnenshow als Highlight. Ein roter Faden über das ganze Event hinweg.", duration: "ganzer Abend", passt: "Wenn Magie das Leitthema sein soll" },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
@@ -445,41 +508,81 @@ const MegaQuoteSection = () => {
   );
 };
 
-/* 7 · STIMMEN */
-const StimmenSection = () => {
+/* 8 · BRANCHEN-CASES — was funktioniert in welcher Branche */
+const BranchenCasesSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const reviews = [
-    { quote: "Es war einfach Mega! 200 Gäste eines bayerischen Versicherungsunternehmens — Emilian hat mit seiner eigens entwickelten Zaubertrickshow alle begeistert.", author: "Jan von Lehmann", anlass: "Wächter Agentur · Firmenfeier", initial: "J", tint: "hsl(220 70% 55%)" },
-    { quote: "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt. Abwicklung sehr professionell.", author: "Martina Senftl", anlass: "Eventkundin · Google-Bewertung", initial: "M", tint: "hsl(285 70% 55%)" },
-    { quote: "Charmant, witzig, professionell — alle Kollegen sprachen am Montag noch davon. Definitiv wieder.", author: "Sales-Team", anlass: "Vertriebsfeier · 80 Mitarbeiter", initial: "S", tint: "hsl(255 70% 55%)" },
+  const cases = [
+    {
+      branche: "Versicherung",
+      gaeste: "200 Kunden",
+      anlass: "Magic Camp · Galaabend",
+      what: "Bühnenshow mit eingebauter Branchenanekdote, Close-Up beim Empfang. Hierarchien gelöst, Kunden blieben länger als geplant.",
+    },
+    {
+      branche: "IT-Konzern",
+      gaeste: "500 Mitarbeiter",
+      anlass: "Sommerfest · Firmengelände",
+      what: "Tisch-zu-Tisch-Magie während des Caterings. Mitarbeiter aus verschiedenen Standorten kamen ins Gespräch — der CEO mehrfach genannt im Feedback-Bogen.",
+    },
+    {
+      branche: "Sparkasse",
+      gaeste: "80 Führungskräfte",
+      anlass: "Strategie-Meeting · Tagungshotel",
+      what: "Magie als Energizer zwischen Strategieblöcken. Aufmerksamkeitskurve gerettet, Stimmung gedreht — und ein Zaubertrick mit Filialnummern eingebaut.",
+    },
+    {
+      branche: "Bauunternehmen",
+      gaeste: "120 Gäste",
+      anlass: "Weihnachtsfeier · Eventlocation",
+      what: "Kombi aus Close-Up im Empfang und 30-Min-Bühnenshow nach dem Hauptgang. Mitarbeiter und Familie gemeinsam — alle Altersgruppen mitgenommen.",
+    },
+    {
+      branche: "Mittelständler",
+      gaeste: "60 Stammkunden",
+      anlass: "Kunden-Event · Ausstellungshalle",
+      what: "Close-Up während Werksführung, Show als Abschluss. Kunden buchten direkt vor Ort weitere Termine.",
+    },
+    {
+      branche: "Agentur",
+      gaeste: "40 Mitarbeiter",
+      anlass: "Team-Event · Restaurant",
+      what: "Magic Dinner zwischen den Gängen. Kreatives Team, wollte Inspiration — hat funktioniert: anschließend Brainstorming bis 1 Uhr nachts.",
+    },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Bewertungen</p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
-            Stimmen aus dem{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Business</span>.
+        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Branchen-Cases</p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Was in welcher{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Branche</span>{" "}
+            funktioniert.
           </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Sechs echte Beispiele aus den letzten Saisons — verschiedene Größen, verschiedene Anlässe, verschiedene Erkenntnisse.
+          </p>
         </div>
-        <div className={`grid md:grid-cols-3 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {reviews.map((r) => (
-            <article key={r.author} className="relative bg-white p-7 md:p-8 flex flex-col h-full" style={{ borderRadius: "0.75rem", boxShadow: "0 20px 50px -25px rgba(40, 20, 60, 0.2), 0 0 0 1px rgba(0,0,0,0.05)" }}>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {cases.map((c) => (
+            <article key={c.branche} className="relative p-7 md:p-8 flex flex-col bg-white" style={{ borderRadius: "0.75rem", boxShadow: "0 20px 50px -25px rgba(40, 20, 60, 0.2), 0 0 0 1px rgba(0,0,0,0.06)" }}>
               <div aria-hidden className="absolute top-0 left-7 right-7 h-[2px] rounded-full" style={{ background: "linear-gradient(90deg, hsl(220 85% 65%), hsl(255 75% 65%), hsl(285 80% 65%))" }} />
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, j) => (<Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />))}
+              <div className="flex items-center gap-2 mb-5">
+                <Building2 className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
+                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                  {c.branche}
+                </p>
               </div>
-              <p className="text-[15px] leading-[1.6] text-foreground/85 flex-1">„{r.quote}"</p>
-              <footer className="mt-6 pt-6 border-t border-foreground/8 flex items-center gap-3">
-                <div className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center font-display font-black text-white text-lg" style={{ background: `linear-gradient(135deg, ${r.tint}, hsl(255 70% 55%))` }}>{r.initial}</div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-display font-bold text-foreground text-sm">{r.author}</p>
-                  <p className="text-[12px] text-foreground/55 truncate">{r.anlass}</p>
-                </div>
-              </footer>
+              <h3 className="font-display text-2xl md:text-[1.6rem] font-black mb-1 text-foreground leading-[1.1]">{c.gaeste}</h3>
+              <p className="text-sm text-foreground/55 mb-5">{c.anlass}</p>
+              <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/75">{c.what}</p>
             </article>
           ))}
+        </div>
+        <div className={`mt-12 max-w-2xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+          <p className="text-sm text-foreground/55 italic">
+            Anonymisiert auf Wunsch der Kunden — Referenzen mit Namen und Kontakt auf Anfrage.
+          </p>
         </div>
       </div>
     </section>
@@ -568,7 +671,7 @@ const MoeglichkeitenSection = () => {
     { icon: Briefcase, title: "Markenbezug in der Show", desc: "Ein Firmensymbol erscheint plötzlich da, wo niemand es vermutet hätte. Markenbotschaft eingebaut — subtil, nicht plakativ." },
     { icon: Users, title: "Sales-Kick-Off Highlight", desc: "Vor oder nach dem CEO-Talk: Magie als Energizer, der die Stimmung im Raum dreht und die Botschaft bleibt." },
     { icon: Award, title: "Award-Show / Gala", desc: "Zwischen Preisverleihungen ein Magie-Slot als Atempause. Comedy hält die Spannung, Wow hält die Aufmerksamkeit." },
-    { icon: Wine, title: "Walking-Magic im Empfang", desc: "Während Networking-Smalltalk besuche ich Gruppen — perfekter Eisbrecher für Mitarbeiter aus verschiedenen Standorten." },
+    { icon: Wine, title: "Close-Up im Empfang", desc: "Während Networking-Smalltalk besuche ich Gruppen — perfekter Eisbrecher für Mitarbeiter aus verschiedenen Standorten." },
     { icon: Mic2, title: "Moderation & Magie", desc: "Auf Wunsch übernehme ich auch die Moderation — eine Person, ein roter Faden, weniger Setup-Stress." },
     { icon: TrendingUp, title: "Kunden-Event-Aktivierung", desc: "Bei Roadshows, Messeständen oder Kundentagen: Magie als Magnet, der die Aufmerksamkeit ans Team holt." },
   ];
@@ -602,7 +705,78 @@ const MoeglichkeitenSection = () => {
   );
 };
 
-/* 11 · BUCHUNGS-FLOW */
+/* 13 · WAS FIRMEN BEKOMMEN — formale Procurement-Anforderungen */
+const WasFirmenBekommenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const items = [
+    {
+      icon: Receipt,
+      title: "Rechnung mit USt-Ausweis",
+      desc: "Vollständige Rechnung mit USt, Lieferanschrift und Anlass — vorbereitet für eure Buchhaltung.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Berufshaftpflicht",
+      desc: "Vorhanden und auf Anfrage nachweisbar. Keine Hürde im Einkauf, keine Diskussion mit der Rechtsabteilung.",
+    },
+    {
+      icon: Lock,
+      title: "DSGVO-konform",
+      desc: "Keine Datenweitergabe, signierte Auftragsverarbeitung auf Wunsch. Bilder und Daten nur nach Freigabe.",
+    },
+    {
+      icon: Handshake,
+      title: "Rahmenvertrag möglich",
+      desc: "Für Konzerne und Agenturen: Rahmenvertrag mit festen Konditionen — schneller Auftrag pro Event ohne neuen Vertragsweg.",
+    },
+    {
+      icon: Palette,
+      title: "Branding einbaubar",
+      desc: "Firmensymbol, Slogan oder Insider-Anekdote werden subtil in die Show integriert — nicht plakativ, sondern als Highlight.",
+    },
+    {
+      icon: FileText,
+      title: "Schriftliches Angebot",
+      desc: "Festes Angebot innerhalb 24h — Leistungen klar definiert, keine versteckten Kosten, keine Ausreden hinterher.",
+    },
+  ];
+  return (
+    <section ref={ref} className="bg-foreground/[0.02] section-large border-y border-foreground/8">
+      <div className="container px-6">
+        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Procurement-Ready
+          </p>
+          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+            Was Firmen bei mir{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              bekommen
+            </span>
+            .
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
+            Außer der Show: alles, was eure Buchhaltung, Rechtsabteilung und der Einkauf brauchen — damit die Buchung nicht im Workflow stecken bleibt.
+          </p>
+        </div>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {items.map((it) => (
+            <div key={it.title} className="flex gap-5">
+              <div className="shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-full" style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}>
+                <it.icon className="w-5 h-5" style={{ color: "hsl(255 60% 40%)" }} />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-display text-lg md:text-xl font-black mb-2 text-foreground leading-[1.2]">{it.title}</h3>
+                <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/65">{it.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* 14 · BUCHUNGS-FLOW */
 const BuchungsFlowSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const steps = [
@@ -727,15 +901,17 @@ const Firmenfeiern = () => (
     <Navigation />
     <main>
       <Hero />
+      <LogoWallSection />
       <QuizSection />
       <OptionenSection />
       <DreiSekundenSection />
       <BeispielSection />
       <MegaQuoteSection />
-      <StimmenSection />
+      <BranchenCasesSection />
       <GalerieSection />
       <ZahlenSection />
       <MoeglichkeitenSection />
+      <WasFirmenBekommenSection />
       <BuchungsFlowSection />
       <FAQ />
       <FinalCTA />
