@@ -743,36 +743,62 @@ const ZahlenSection = () => {
 /* 10 · MÖGLICHKEITEN */
 const MoeglichkeitenSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const moments = [
-    { icon: Briefcase, title: "Markenbezug in der Show", desc: "Ein Firmensymbol erscheint plötzlich da, wo niemand es vermutet hätte. Markenbotschaft eingebaut — subtil, nicht plakativ." },
-    { icon: Users, title: "Sales-Kick-Off Highlight", desc: "Vor oder nach dem CEO-Talk: Magie als Energizer, der die Stimmung im Raum dreht und die Botschaft bleibt." },
-    { icon: Award, title: "Award-Show / Gala", desc: "Zwischen Preisverleihungen ein Magie-Slot als Atempause. Comedy hält die Spannung, Wow hält die Aufmerksamkeit." },
-    { icon: Wine, title: "Close-Up im Empfang", desc: "Während Networking-Smalltalk besuche ich Gruppen — perfekter Eisbrecher für Mitarbeiter aus verschiedenen Standorten." },
-    { icon: Mic2, title: "Moderation & Magie", desc: "Auf Wunsch übernehme ich auch die Moderation — eine Person, ein roter Faden, weniger Setup-Stress." },
-    { icon: TrendingUp, title: "Kunden-Event-Aktivierung", desc: "Bei Roadshows, Messeständen oder Kundentagen: Magie als Magnet, der die Aufmerksamkeit ans Team holt." },
+  const wirkungen = [
+    {
+      effekt: "Eisbrecher zwischen Abteilungen",
+      mechanismus: "Close-Up beim Empfang. Mitarbeiter aus verschiedenen Standorten haben binnen 5 Sek. ein gemeinsames Gesprächsthema.",
+    },
+    {
+      effekt: "Hierarchien lösen sich auf",
+      mechanismus: "CEO und Praktikantin staunen gemeinsam über denselben Trick. Nach so einem Moment reden sie auch nach dem Event anders miteinander.",
+    },
+    {
+      effekt: "Markenbotschaft bleibt hängen",
+      mechanismus: "Firmensymbol oder Insider-Anekdote subtil in die Show eingebaut — kein Werbespot, sondern ein Magic-Moment, der die Botschaft transportiert.",
+    },
+    {
+      effekt: "Aufmerksamkeitskurve dreht",
+      mechanismus: "Energizer-Slot zwischen Vortragsblöcken bei Strategie-Kickoffs. Aufmerksamkeit zurück auf 100 % für die Nachmittagssession.",
+    },
+    {
+      effekt: "Kunden-Event wird memorabel",
+      mechanismus: "Bühnenshow als Highlight bei Roadshows oder Galaabenden. Kunden erinnern sich Wochen später noch — und buchen weitere Termine direkt vor Ort.",
+    },
+    {
+      effekt: "Gespräch am Montag",
+      mechanismus: "Eine Karte, die vom CEO in die Brieftasche der Praktikantin wandert, hält länger als jede HR-Kampagne.",
+    },
   ];
   return (
     <section ref={ref} className="bg-white section-large border-y border-foreground/8">
       <div className="container px-6">
         <div className={`max-w-3xl mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Eure Möglichkeiten</p>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Wirkung im Unternehmen</p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Was Magie auf eurer{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Firmenfeier</span>{" "}
-            bewirkt.
+            Was Magie{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>konkret bewirkt</span>.
           </h2>
           <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
-            Eine Firmenfeier ist mehr als Catering und Reden. Hier konkrete Möglichkeiten, wie ihr Zauberkunst einsetzen könnt — kombinierbar oder einzeln.
+            Sechs konkrete Effekte, die ihr nach der Firmenfeier wirklich messt — und der jeweilige Mechanismus dahinter.
           </p>
         </div>
-        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {moments.map((m, i) => (
-            <div key={m.title} className="p-7 md:p-8" style={{ background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "0.75rem", animationDelay: `${0.1 + i * 0.06}s` }}>
-              <div className="inline-flex items-center justify-center w-11 h-11 rounded-full mb-5" style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}>
-                <m.icon className="w-5 h-5" style={{ color: "hsl(255 60% 40%)" }} />
-              </div>
-              <h3 className="font-display text-lg md:text-xl font-black mb-3 text-foreground leading-[1.2]">{m.title}</h3>
-              <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/65">{m.desc}</p>
+        {/* Tabular B2B layout: Effekt | Mechanismus */}
+        <div className={`max-w-5xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className="grid grid-cols-12 pb-4 border-b-2 border-foreground/15 mb-2">
+            <p className="col-span-5 md:col-span-4 text-[10px] md:text-xs tracking-[0.2em] uppercase text-foreground/55 font-semibold">Effekt</p>
+            <p className="col-span-7 md:col-span-8 text-[10px] md:text-xs tracking-[0.2em] uppercase text-foreground/55 font-semibold">Mechanismus</p>
+          </div>
+          {wirkungen.map((w) => (
+            <div
+              key={w.effekt}
+              className="grid grid-cols-12 gap-4 md:gap-8 py-7 md:py-8 border-b border-foreground/8 last:border-0"
+            >
+              <p className="col-span-5 md:col-span-4 font-display text-base md:text-lg font-bold text-foreground leading-[1.25]">
+                {w.effekt}
+              </p>
+              <p className="col-span-7 md:col-span-8 text-sm md:text-[15px] text-foreground/70 leading-[1.65]">
+                {w.mechanismus}
+              </p>
             </div>
           ))}
         </div>

@@ -934,36 +934,36 @@ const ZahlenSection = () => {
    ═══════════════════════════════════════════════════════════ */
 const MoeglichkeitenSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const moments = [
+  const ideen = [
     {
-      icon: Heart,
-      title: "Personalisierte Trauring-Routine",
-      desc: "Ein scheinbar verlorener Trauring taucht plötzlich an einer unmöglichen Stelle wieder auf — als Highlight in der Show.",
+      phase: "Trauzeugen-Briefing",
+      title: "Ein Insider-Witz wird zum Trick.",
+      desc: "Im Vorfeld stimme ich mit Trauzeugen ein Detail ab — eine Schul-Anekdote, ein Kosename, eine alte Wette. Mitten in der Show taucht das Detail plötzlich auf einer unmöglichen Karte auf.",
     },
     {
-      icon: Users,
-      title: "Trauzeugen-Überraschung",
-      desc: "Im Vorfeld stimme ich mit den Trauzeugen ein Insider-Detail ab. Die Show bekommt einen Moment, der nur euch gilt.",
+      phase: "Während der Fotosession",
+      title: "30 Min, in denen niemand wartet.",
+      desc: "Statt Gäste in der Lobby stehen zu lassen, übernehme ich die Zeit. Karten zwischen den Tischen, Münzen aus dem Nichts — und alle haben ein Gesprächsthema, wenn das Brautpaar zurück ist.",
     },
     {
-      icon: Sparkles,
-      title: "Stille Phasen aufladen",
-      desc: "Während der Foto-Session der Brautleute warten Gäste oft 30–60 Min. Die nutze ich — keiner langweilt sich, alle verbinden sich.",
+      phase: "Trauring-Moment",
+      title: "Ein Ring auf Reisen.",
+      desc: "Der Trauring verschwindet aus der Hand des Brautvaters und taucht beim Trauzeugen auf — als Show-Höhepunkt direkt vor dem Hochzeitstanz. Personalisiert, vorher abgestimmt, sicher zurück.",
     },
     {
-      icon: Wine,
-      title: "Tisch-zu-Tisch beim Dinner",
-      desc: "Zwischen den Gängen besuche ich jeden Tisch. 5–10 Min pro Tisch. Jeder bekommt seine eigene kleine Show.",
+      phase: "Tisch-zu-Tisch",
+      title: "Jeder Tisch, eine eigene Show.",
+      desc: "Zwischen Vorspeise und Hauptgang besuche ich jeden Tisch. Trauzeugen, Eltern, Schulfreunde — keiner wird übergangen, jeder Tisch erlebt 5 Minuten Magie zum Anfassen.",
     },
     {
-      icon: Mic2,
-      title: "Show als Tanz-Vorprogramm",
-      desc: "20–45 Min Bühnenshow direkt vor dem Hochzeitstanz. Alle sind versammelt — Standing Ovations garantiert.",
+      phase: "Vor dem Tanz",
+      title: "Show als Vorprogramm.",
+      desc: "20–45 Min Bühnenshow nach dem Dinner und vor dem Eröffnungstanz. Alle sind versammelt, satt, bereit für den Höhepunkt. Standing Ovations vor dem ersten Walzer.",
     },
     {
-      icon: PartyPopper,
-      title: "Walking-Magic später am Abend",
-      desc: "Wenn die Tanzfläche pulsiert, mische ich mich nochmal unter müde gewordene Gäste — letzter Wow-Moment vor dem Aufbruch.",
+      phase: "Letzte Stunde",
+      title: "Magie unter müden Gästen.",
+      desc: "Wenn die Tanzfläche pulsiert, mische ich mich nochmal unter Gäste an den Stehtischen. Ein letzter Wow-Moment, der manche länger bleiben lässt als geplant.",
     },
   ];
 
@@ -972,48 +972,45 @@ const MoeglichkeitenSection = () => {
       <div className="container px-6">
         <div className={`max-w-3xl mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            Eure Möglichkeiten
+            Sechs Ideen
           </p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Was Magie auf{" "}
+            Wie Magie in eure{" "}
             <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              eurer Hochzeit
+              Hochzeit
             </span>{" "}
-            besonders macht.
+            passt.
           </h2>
           <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
-            Eine Hochzeit ist kein normales Event. Hier ein paar konkrete
-            Möglichkeiten, wie ihr Zauberkunst in eure Hochzeit einbauen könnt
-            — kombinierbar oder einzeln.
+            Sechs konkrete Momente — vom Trauzeugen-Briefing bis zur letzten Stunde. Kombinierbar oder einzeln.
           </p>
         </div>
-        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {moments.map((m, i) => (
+        {/* Editorial vertical list with dividers and large numerals */}
+        <div className={`max-w-4xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          {ideen.map((idee, i) => (
             <div
-              key={m.title}
-              className="p-7 md:p-8"
-              style={{
-                background: "rgba(0,0,0,0.02)",
-                border: "1px solid rgba(0,0,0,0.06)",
-                borderRadius: "0.75rem",
-                animationDelay: `${0.1 + i * 0.06}s`,
-              }}
+              key={idee.phase}
+              className={`grid md:grid-cols-12 gap-6 md:gap-10 py-9 md:py-11 ${i > 0 ? "border-t border-foreground/8" : ""}`}
             >
-              <div
-                className="inline-flex items-center justify-center w-11 h-11 rounded-full mb-5"
-                style={{
-                  background:
-                    "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))",
-                }}
-              >
-                <m.icon className="w-5 h-5" style={{ color: "hsl(255 60% 40%)" }} />
+              <div className="md:col-span-3">
+                <span
+                  className="font-display font-black leading-none text-[clamp(2.5rem,4.5vw,4rem)] block"
+                  style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <p className="text-[11px] tracking-[0.2em] uppercase text-foreground/45 mt-3 font-semibold">
+                  {idee.phase}
+                </p>
               </div>
-              <h3 className="font-display text-lg md:text-xl font-black mb-3 text-foreground leading-[1.2]">
-                {m.title}
-              </h3>
-              <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/65">
-                {m.desc}
-              </p>
+              <div className="md:col-span-9">
+                <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-[1.25] mb-3">
+                  {idee.title}
+                </h3>
+                <p className="text-base md:text-[17px] text-foreground/70 leading-[1.65] max-w-xl">
+                  {idee.desc}
+                </p>
+              </div>
             </div>
           ))}
         </div>
