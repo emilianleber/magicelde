@@ -324,43 +324,97 @@ const firmenfeiernQuizConfig: QuizConfig = {
 
 const QuizSection = () => <QuizWizardInline config={firmenfeiernQuizConfig} />;
 
-/* 3 · 3 OPTIONEN */
+/* 3 · EVENTJAHR — Saisonkalender, kein Card-Stack */
 const OptionenSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const optionen = [
-    { icon: Wine, time: "Empfang", title: "Close-Up Magie", desc: "Während Begrüßung, Sektempfang oder Steh-Empfang. Mitarbeiter verschiedener Abteilungen kommen ins Gespräch.", duration: "20–70 Min", passt: "Wenn Networking im Fokus steht" },
-    { icon: Sparkles, time: "Show-Slot", title: "Bühnenshow", desc: "Zentrales Highlight nach Reden oder vor dem freien Teil. Mit eingebauter Markenbotschaft auf Wunsch.", duration: "15–60 Min", passt: "Wenn ihr einen klaren Wow-Moment für alle wollt", featured: true },
-    { icon: Mic2, time: "Komplett", title: "Voll-Begleitung", desc: "Close-Up im Empfang + Bühnenshow als Highlight. Ein roter Faden über das ganze Event hinweg.", duration: "ganzer Abend", passt: "Wenn Magie das Leitthema sein soll" },
+  const quartale = [
+    {
+      q: "Q1",
+      monate: "Jan – Mär",
+      icon: Snowflake,
+      tone: "hsl(220 70% 55%)",
+      anlaesse: ["Strategie-Kickoffs", "Kamingespräche", "Neujahrsempfänge"],
+      pick: "Energizer-Show als Auflockerung zwischen Vortragsblöcken — kompakt, 15–25 Min.",
+    },
+    {
+      q: "Q2",
+      monate: "Apr – Jun",
+      icon: Flower2,
+      tone: "hsl(255 70% 55%)",
+      anlaesse: ["Sommerfeste outdoor", "Sales-Kick-Offs", "Kunden-Roadshows"],
+      pick: "Close-Up im Empfang, Mitarbeiter mischen sich beim Stehtisch.",
+    },
+    {
+      q: "Q3",
+      monate: "Jul – Sep",
+      icon: Sun,
+      tone: "hsl(285 70% 55%)",
+      anlaesse: ["Open-Air-Sommerfeste", "Familientage", "Standort-Jubiläen"],
+      pick: "Walking-Magie über das Gelände + kompakter Showblock am Abend.",
+    },
+    {
+      q: "Q4",
+      monate: "Okt – Dez",
+      icon: Leaf,
+      tone: "hsl(220 70% 45%)",
+      anlaesse: ["Weihnachtsfeiern", "Gala-Abende", "Award-Shows"],
+      pick: "Bühnenshow als Show-Highlight — 6+ Mon. Vorlauf empfohlen.",
+      featured: true,
+    },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
         <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Eure 3 Optionen</p>
+          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
+            Euer Eventjahr
+          </p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            So <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>entscheidet ihr</span>.
+            Was wann{" "}
+            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              gebucht wird
+            </span>
+            .
           </h2>
+          <p className="mt-5 max-w-2xl text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
+            Jedes Quartal hat seine eigenen Anlässe — und die brauchen jeweils andere Magie. Hier ein Überblick, was im Eventjahr typisch passiert.
+          </p>
         </div>
-        <div className={`grid md:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {optionen.map((o) => (
-            <div key={o.title} className={`relative p-7 md:p-8 flex flex-col ${o.featured ? "text-white" : "text-foreground"}`} style={{
-              background: o.featured ? "linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)" : "rgba(0,0,0,0.02)",
-              border: o.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.06)",
-              borderRadius: "0.75rem",
-              boxShadow: o.featured ? "0 30px 70px -20px rgba(60, 30, 80, 0.4)" : "none",
-            }}>
-              {o.featured && <span className="absolute -top-3 left-7 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" style={{ background: GRADIENT_LIGHT, color: "#0f0a19" }}>Beliebt</span>}
-              <div className="inline-flex items-center justify-center w-11 h-11 rounded-full mb-5" style={{ background: o.featured ? "rgba(255,255,255,0.12)" : "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}>
-                <o.icon className="w-5 h-5" style={{ color: o.featured ? "white" : "hsl(255 60% 40%)" }} />
+        <div className={`grid md:grid-cols-2 lg:grid-cols-4 gap-0 border border-foreground/10 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s", borderRadius: "1rem", overflow: "hidden" }}>
+          {quartale.map((q, i) => (
+            <div
+              key={q.q}
+              className={`relative p-6 md:p-7 flex flex-col ${
+                i < quartale.length - 1 ? "lg:border-r border-foreground/10" : ""
+              } ${i < 2 ? "md:border-b lg:border-b-0 border-foreground/10" : ""} ${
+                i === 1 ? "lg:border-b-0" : ""
+              }`}
+              style={{ background: q.featured ? "rgba(0,0,0,0.02)" : "white" }}
+            >
+              <div className="flex items-baseline gap-3 mb-1">
+                <p className="font-display text-3xl md:text-4xl font-black leading-none" style={{ color: q.tone }}>
+                  {q.q}
+                </p>
+                <q.icon className="w-4 h-4" style={{ color: q.tone, opacity: 0.6 }} />
               </div>
-              <p className="text-[10px] tracking-[0.2em] uppercase font-semibold mb-2" style={o.featured ? { background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" } : { background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                {o.time} · {o.duration}
-              </p>
-              <h3 className="font-display text-2xl md:text-3xl font-black mb-3 leading-[1.1]">{o.title}</h3>
-              <p className={`text-sm md:text-[15px] leading-[1.55] mb-5 ${o.featured ? "text-white/85" : "text-foreground/70"}`}>{o.desc}</p>
-              <p className={`text-xs leading-[1.5] mt-auto pt-4 border-t ${o.featured ? "text-white/70 border-white/15" : "text-foreground/55 border-foreground/10"}`}>
-                <strong className={o.featured ? "text-white" : "text-foreground"}>Passt</strong>, wenn: {o.passt}
-              </p>
+              <p className="text-xs text-foreground/45 mb-5 font-medium tracking-wide uppercase">{q.monate}</p>
+              <ul className="space-y-1.5 mb-6">
+                {q.anlaesse.map((a) => (
+                  <li key={a} className="text-sm text-foreground/75 leading-snug flex items-start gap-2">
+                    <span className="mt-2 w-1 h-1 rounded-full bg-foreground/30 shrink-0" />
+                    {a}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto pt-5 border-t border-foreground/10">
+                <p className="text-[10px] tracking-[0.2em] uppercase text-foreground/45 mb-2 font-semibold">Empfehlung</p>
+                <p className="text-[13px] leading-[1.55] text-foreground/85 font-medium">{q.pick}</p>
+              </div>
+              {q.featured && (
+                <span className="absolute top-4 right-4 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-white" style={{ background: GRADIENT }}>
+                  Hoch-Saison
+                </span>
+              )}
             </div>
           ))}
         </div>

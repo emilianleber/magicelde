@@ -322,107 +322,99 @@ const hochzeitQuizConfig: QuizConfig = {
 const QuizSection = () => <QuizWizardInline config={hochzeitQuizConfig} />;
 
 /* ═══════════════════════════════════════════════════════════
-   3 · DREI OPTIONEN — kompakte Übersicht
+   3 · DREI AKTE EINER HOCHZEIT — alternierendes Storytelling
    ═══════════════════════════════════════════════════════════ */
 const OptionenSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const optionen = [
+  const akte = [
     {
-      icon: Wine,
-      time: "Sektempfang",
-      title: "Close-Up Magie",
-      desc: "Während ihr Fotos macht, mische ich mich unter eure Gäste. Der perfekte Eisbrecher zwischen Familien.",
-      duration: "20–70 Min",
-      passt: "Wenn ihr viele Gäste habt, die sich nicht kennen",
+      nr: "I",
+      label: "Erster Akt",
+      time: "Trauung & Sektempfang",
+      title: "Während ihr Fotos macht.",
+      desc: "Die Trauung ist vorbei, ihr seid mit dem Fotografen unterwegs — und die 80 Gäste stehen ratlos im Foyer. Genau hier mische ich mich unter eure Gäste mit Karten, Münzen, kleinen Wundern. Familie deiner Seite und seine — sofort haben alle ein Gesprächsthema.",
+      img: weddingMagicImg,
     },
     {
-      icon: Sparkles,
-      time: "Show-Slot",
-      title: "Bühnenshow",
-      desc: "Eine durchkomponierte Show als zentrales Highlight — meist vor dem Hochzeitstanz.",
-      duration: "15–60 Min",
-      passt: "Wenn ihr einen klaren Wow-Moment für alle wollt",
-      featured: true,
+      nr: "II",
+      label: "Zweiter Akt",
+      time: "Hochzeitsdinner",
+      title: "Zwischen den Gängen.",
+      desc: "Während der Hauptgang serviert wird: Tisch-zu-Tisch-Magie, 5–7 Min pro Tisch. Trauzeugen, Eltern, alte Schulfreunde — jeder Tisch bekommt seine eigene Mini-Show. Niemand wird übergangen, alle haben gleich viel davon.",
+      img: closeupImg,
     },
     {
-      icon: Mic2,
-      time: "Komplett",
-      title: "Voll-Begleitung",
-      desc: "Empfang + Tisch-zu-Tisch + Bühnenshow. Ein roter Faden über den ganzen Abend.",
-      duration: "ganzer Abend",
-      passt: "Wenn Magie das Leitthema eurer Hochzeit sein soll",
+      nr: "III",
+      label: "Dritter Akt",
+      time: "Vor dem Hochzeitstanz",
+      title: "Der große Moment.",
+      desc: "Alle sind satt, der Eröffnungstanz steht bevor — der perfekte Slot für eine kompakte Bühnenshow. 15–30 Min, abgestimmt auf eure Story, vielleicht mit einem Trauring-Moment, der alle zum Staunen bringt. Standing Ovations vor dem Tanzparkett.",
+      img: dinnerBuehneImg,
     },
   ];
   return (
     <section ref={ref} className="bg-white section-large">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mb-16 md:mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            Eure 3 Optionen
+            In drei Akten
           </p>
           <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            So{" "}
+            Eure Hochzeit als{" "}
             <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              entscheidet ihr
+              dreigeteilte Bühne
             </span>
             .
           </h2>
+          <p className="mt-5 max-w-2xl text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
+            Eine Hochzeit hat drei sehr unterschiedliche Energien — Empfang, Dinner und Abend. Magie passt in jede Phase, aber jeweils anders.
+          </p>
         </div>
-        <div className={`grid md:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {optionen.map((o) => (
-            <div
-              key={o.title}
-              className={`relative p-7 md:p-8 flex flex-col ${o.featured ? "text-white" : "text-foreground"}`}
-              style={{
-                background: o.featured
-                  ? "linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)"
-                  : "rgba(0,0,0,0.02)",
-                border: o.featured
-                  ? "1px solid rgba(255,255,255,0.1)"
-                  : "1px solid rgba(0,0,0,0.06)",
-                borderRadius: "0.75rem",
-                boxShadow: o.featured ? "0 30px 70px -20px rgba(60, 30, 80, 0.4)" : "none",
-              }}
-            >
-              {o.featured && (
-                <span
-                  className="absolute -top-3 left-7 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
-                  style={{ background: GRADIENT_LIGHT, color: "#0f0a19" }}
-                >
-                  Beliebt
-                </span>
-              )}
+        <div className="space-y-20 md:space-y-28">
+          {akte.map((a, i) => {
+            const reverse = i % 2 === 1;
+            return (
               <div
-                className="inline-flex items-center justify-center w-11 h-11 rounded-full mb-5"
-                style={{
-                  background: o.featured
-                    ? "rgba(255,255,255,0.12)"
-                    : "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))",
-                }}
+                key={a.nr}
+                className={`grid lg:grid-cols-12 gap-8 lg:gap-14 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+                style={{ animationDelay: `${0.1 + i * 0.1}s` }}
               >
-                <o.icon className="w-5 h-5" style={{ color: o.featured ? "white" : "hsl(255 60% 40%)" }} />
+                <div className={`lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}>
+                  <div
+                    className="relative overflow-hidden"
+                    style={{
+                      borderRadius: "0.75rem",
+                      aspectRatio: "16 / 11",
+                      boxShadow: "0 40px 80px -25px rgba(40, 20, 60, 0.3), 0 0 0 1px rgba(0,0,0,0.05)",
+                    }}
+                  >
+                    <img src={a.img} alt={a.title} className="w-full h-full object-cover" loading="lazy" />
+                    <span
+                      aria-hidden
+                      className="absolute top-5 left-5 inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full backdrop-blur-md font-display font-black text-2xl md:text-3xl text-white"
+                      style={{ background: "rgba(15,10,25,0.4)", border: "1px solid rgba(255,255,255,0.2)" }}
+                    >
+                      {a.nr}
+                    </span>
+                  </div>
+                </div>
+                <div className={`lg:col-span-5 ${reverse ? "lg:order-1 lg:pr-6" : "lg:pl-6"}`}>
+                  <p
+                    className="text-[11px] tracking-[0.2em] uppercase font-semibold mb-3"
+                    style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                  >
+                    {a.label} · {a.time}
+                  </p>
+                  <h3 className="font-display text-3xl md:text-4xl font-black text-foreground leading-[1.1] mb-5">
+                    {a.title}
+                  </h3>
+                  <p className="text-base md:text-lg text-foreground/70 leading-[1.65]">
+                    {a.desc}
+                  </p>
+                </div>
               </div>
-              <p
-                className="text-[10px] tracking-[0.2em] uppercase font-semibold mb-2"
-                style={
-                  o.featured
-                    ? { background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }
-                    : { background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }
-                }
-              >
-                {o.time} · {o.duration}
-              </p>
-              <h3 className="font-display text-2xl md:text-3xl font-black mb-3 leading-[1.1]">
-                {o.title}
-              </h3>
-              <p className={`text-sm md:text-[15px] leading-[1.55] mb-5 ${o.featured ? "text-white/85" : "text-foreground/70"}`}>
-                {o.desc}
-              </p>
-              <p className={`text-xs leading-[1.5] mt-auto pt-4 border-t ${o.featured ? "text-white/70 border-white/15" : "text-foreground/55 border-foreground/10"}`}>
-                <strong className={o.featured ? "text-white" : "text-foreground"}>Passt</strong>, wenn: {o.passt}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
