@@ -16,7 +16,12 @@ const SESSION_KEY_SHOWN = "magicel:popup:shown";
 const SESSION_KEY_PAGES = "magicel:popup:pagecount";
 const TIME_TO_TRIGGER_MS = 120_000; // 2 minutes
 const PAGES_TO_TRIGGER = 3;
-const DEBUG = false; // set true to log triggers in console
+// Debug logs visible in browser console (helps verify which trigger fired)
+const DEBUG =
+  typeof window !== "undefined" &&
+  (window.location.search.includes("popupdebug=1") ||
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
 
 const SUPPRESS_PATHS = [
   "/buchung",
@@ -66,6 +71,24 @@ const EngagementPopup = () => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    // Debug helpers — only mounted in DEBUG mode
+    if (DEBUG) {
+      // Reset via URL: ?popupreset=1
+      if (window.location.search.includes("popupreset=1")) {
+        sessionStorage.removeItem(SESSION_KEY_SHOWN);
+        sessionStorage.removeItem(SESSION_KEY_PAGES);
+        triggered.current = false;
+        console.log("[Popup] reset via ?popupreset=1");
+      }
+      // Manual trigger via window.__popup()
+      (window as any).__popup = () => {
+        sessionStorage.removeItem(SESSION_KEY_SHOWN);
+        triggered.current = false;
+        trigger();
+      };
+    }
+
     const count =
       parseInt(sessionStorage.getItem(SESSION_KEY_PAGES) || "0", 10) + 1;
     sessionStorage.setItem(SESSION_KEY_PAGES, String(count));
@@ -119,25 +142,37 @@ const EngagementPopup = () => {
       if (!triggered.current && !checkAlreadyShown()) trigger();
     }, TIME_TO_TRIGGER_MS);
 
-    // 1) Desktop — mouse leaves window entirely (relatedTarget null)
-    const handleDocMouseOut = (e: MouseEvent) => {
+    // 1) Robust exit-intent: mouse leaves through TOP of viewport
+    //    Bind on <html> so we catch the actual viewport exit (not iframe/widget)
+    const handleHtmlMouseLeave = (e: MouseEvent) => {
       if (triggered.current) return;
-      const to = (e as any).relatedTarget;
-      if (!to) {
-        if (DEBUG) console.log("[Popup] mouseout — no related target", e.clientY);
+      // Browsers fire mouseleave on <html> when cursor exits the window.
+      // clientY <= 0 means exit through top edge (toolbar / tab close target).
+      if (e.clientY <= 0) {
+        if (DEBUG) console.log("[Popup] html mouseleave top exit", e.clientY);
         trigger();
       }
     };
 
-    // 2) Desktop — mouse moves into top zone (toolbar/tab area)
+    // 2) Mouseout-fallback: relatedTarget = null means cursor left the page entirely
+    const handleDocMouseOut = (e: MouseEvent) => {
+      if (triggered.current) return;
+      const to = (e as any).relatedTarget;
+      if (!to && (e.clientY < 30 || e.clientY > window.innerHeight - 10)) {
+        if (DEBUG)
+          console.log("[Popup] mouseout no-related-target", e.clientY);
+        trigger();
+      }
+    };
+
+    // 3) Top-zone dwell: mouse stays in top 10px for >100ms (toolbar hover)
     let topZoneEnter: number | null = null;
     const handleMouseMove = (e: MouseEvent) => {
       if (triggered.current) return;
       if (e.clientY <= 10) {
         if (topZoneEnter === null) topZoneEnter = Date.now();
-        // If mouse stays in top 10px for >150ms → exit intent
-        if (Date.now() - topZoneEnter > 150) {
-          if (DEBUG) console.log("[Popup] top-zone exit intent");
+        if (Date.now() - topZoneEnter > 100) {
+          if (DEBUG) console.log("[Popup] top-zone dwell trigger");
           trigger();
         }
       } else {
@@ -175,6 +210,8 @@ const EngagementPopup = () => {
       if (DEBUG) console.log("[Popup] beforeunload");
     };
 
+    const html = document.documentElement;
+    html.addEventListener("mouseleave", handleHtmlMouseLeave);
     document.addEventListener("mouseout", handleDocMouseOut);
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("visibilitychange", handleVisibility);
@@ -185,6 +222,7 @@ const EngagementPopup = () => {
       clearTimeout(timer);
       clearTimeout(armVisibility);
       clearTimeout(armBlur);
+      html.removeEventListener("mouseleave", handleHtmlMouseLeave);
       document.removeEventListener("mouseout", handleDocMouseOut);
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("visibilitychange", handleVisibility);
