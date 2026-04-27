@@ -656,7 +656,7 @@ const WizardBody = ({
       </div>
 
       {/* Footer with Back / Next */}
-      <footer className={`${pageMode ? "fixed bottom-0 left-0 right-0 px-6 md:px-10 lg:px-16 z-20 bg-white/95 backdrop-blur-sm" : fullBleed ? "px-8 md:px-14 lg:px-20" : "px-6 md:px-9"} py-4 border-t border-foreground/8 flex items-center gap-3 ${pageMode ? "" : "bg-white"}`}>
+      <footer className={`${pageMode ? "sticky bottom-0 px-6 md:px-10 lg:px-16 z-20 bg-white/95 backdrop-blur-sm" : fullBleed ? "px-8 md:px-14 lg:px-20" : "px-6 md:px-9"} py-4 border-t border-foreground/8 flex items-center gap-3 ${pageMode ? "" : "bg-white"}`}>
         <div className={pageMode ? "max-w-6xl mx-auto w-full flex items-center gap-3" : "contents"}>
         {step > 1 && step <= RECOMMENDATION_STEP && !success && (
           <button
