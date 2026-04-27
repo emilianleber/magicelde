@@ -40,6 +40,14 @@ import stageImg from "@/assets/stage-show.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import dinnerImg from "@/assets/emilian-magic-dinner.jpg";
 import buehneImg from "@/assets/buehne-zuschauer.jpg";
+import galBuehneDpsg from "@/assets/buehne-dpsg.jpg";
+import galHeroBirthday from "@/assets/hero-birthday.jpg";
+import galHeroCloseup from "@/assets/hero-closeup.jpg";
+import galMagicdinnerBook from "@/assets/magicdinner-book.jpg";
+import galMagicdinnerBuehne from "@/assets/magicdinner-buehne.jpg";
+import galPortraitKarten from "@/assets/portrait-karten.jpg";
+import galSchneiderCloseup from "@/assets/schneider-weisse-closeup.jpg";
+import galZuschauerBlau from "@/assets/zuschauer-blau.jpg";
 
 const GRADIENT =
   "linear-gradient(100deg, hsl(225 80% 60%) 0%, hsl(265 70% 62%) 100%)";
@@ -792,14 +800,14 @@ const AblaufSection = () => {
 const GalerieSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const images = [
-    { src: emotionenImg, alt: "Begeisterte Gäste" },
-    { src: closeupImg, alt: "Close-Up Moment" },
-    { src: audienceImg, alt: "Lachende Runde" },
-    { src: haendeImg, alt: "Karten-Magie aus der Nähe" },
-    { src: dinnerImg, alt: "Magic Dinner Atmosphäre" },
-    { src: stageImg, alt: "Bühnenshow als Highlight" },
-    { src: staunenImg, alt: "Gemeinsames Staunen" },
-    { src: buehneImg, alt: "Bühne mit Publikum" },
+    { src: galHeroBirthday, alt: "Geburtstagsfeier" },
+    { src: galPortraitKarten, alt: "Karten-Moment" },
+    { src: galSchneiderCloseup, alt: "Close-Up im Restaurant" },
+    { src: galMagicdinnerBook, alt: "Magic Dinner Buch-Effekt" },
+    { src: galZuschauerBlau, alt: "Begeistertes Publikum" },
+    { src: galHeroCloseup, alt: "Close-Up nah" },
+    { src: galMagicdinnerBuehne, alt: "Magic Dinner Bühne" },
+    { src: galBuehneDpsg, alt: "Bühnenshow groß" },
   ];
   return (
     <section ref={ref} className="bg-foreground/[0.02] py-24 md:py-32 border-y border-foreground/8">
@@ -861,14 +869,30 @@ const BuchungsFlowSection = () => {
           {steps.map((s, i) => (
             <div
               key={s.title}
-              className={`relative p-6 rounded-2xl bg-foreground/[0.025] border border-foreground/8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`relative p-6 rounded-2xl bg-white border border-foreground/10 hover:border-foreground/25 transition-colors overflow-hidden ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.05 + i * 0.06}s` }}
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "rgba(0,0,0,0.05)" }}>
-                  <s.icon className="w-4 h-4 text-foreground/70" />
+              <div
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-[3px]"
+                style={{ background: GRADIENT }}
+              />
+              <div className="flex items-center justify-between mb-4">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-[0_6px_18px_-6px_rgba(80,60,180,0.45)]"
+                  style={{ background: GRADIENT }}
+                >
+                  <s.icon className="w-4 h-4" />
                 </div>
-                <span className="text-[11px] tracking-[0.18em] uppercase text-foreground/35 font-semibold">
+                <span
+                  className="font-display font-black text-2xl md:text-3xl tracking-[-0.02em]"
+                  style={{
+                    background: GRADIENT,
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
                   {String(i + 1).padStart(2, "0")}
                 </span>
               </div>
@@ -1074,6 +1098,7 @@ const Geburtstage = () => (
       <TrustStrip />
       <QuizSection />
       <DerMomentSection />
+      <UeberMichKurz />
       <GenerationenSection />
       <SettingSection />
       <StorySection />
@@ -1082,7 +1107,6 @@ const Geburtstage = () => (
       <GalerieSection />
       <BuchungsFlowSection />
       <FAQ />
-      <UeberMichKurz />
       <FinalCTA />
     </main>
     <Footer />
