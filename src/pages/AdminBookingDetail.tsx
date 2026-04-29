@@ -34,6 +34,7 @@ import {
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
 import DocumentCreator, { type DocumentData, type DocumentPosition } from "@/components/admin/DocumentCreator";
+import CustomerMailHistory from "@/components/admin/CustomerMailHistory";
 import { paketeService } from "@/services/paketeService";
 import { showService } from "@/services/showService";
 import type { Paket, Show } from "@/types/productions";
@@ -526,27 +527,59 @@ const AdminBookingDetail = () => {
     if (!request) return;
     setConverting(true); setMessage("");
     try {
-      const { data: newEvent, error: insertError } = await supabase.from("portal_events").insert({
-        request_id: request.id,
-        customer_id: request.customer_id || null,
-        title: anlass.trim() || "Event",
-        event_date: datum.trim() || null,
-        start_time: uhrzeit.trim() || null,
-        location: ort.trim() || null,
-        format: format || null,
-        guests: gaeste ? Number(gaeste) : null,
-        status: "in_planung",
-      }).select("*").single();
-      if (insertError) throw insertError;
+      // Wenn ein offenes (oder akzeptiertes) Angebot existiert: Edge Function — erzeugt AB + Event automatisch
+      const { data: angebotCheck } = await supabase
+        .from("portal_documents")
+        .select("id, status")
+        .eq("request_id", request.id)
+        .eq("type", "Angebot")
+        .in("status", ["entwurf", "gesendet", "akzeptiert"])
+        .limit(1)
+        .maybeSingle();
 
-      await supabase.from("portal_requests").update({ event_id: newEvent?.id, status: "bestätigt" }).eq("id", request.id);
+      if (angebotCheck) {
+        const { data, error } = await supabase.functions.invoke("portal-offer-action", {
+          body: { action: "accept", request_id: request.id },
+        });
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
 
-      setRequest({ ...request, event_id: newEvent?.id, status: "bestätigt" });
-      setEvent(newEvent || null);
-      setStatus("bestätigt");
-      setMessage("Gebucht! Event wurde erstellt.");
-    } catch (err) {
-      setMessage("Fehler beim Konvertieren.");
+        // State refresh: Event + Request neu laden
+        const { data: refreshedEvent } = await supabase
+          .from("portal_events")
+          .select("*")
+          .eq("id", data?.event_id)
+          .maybeSingle();
+        if (refreshedEvent) setEvent(refreshedEvent);
+        setRequest({ ...request, event_id: refreshedEvent?.id ?? request.event_id, status: "gebucht" });
+        setStatus("gebucht");
+        setMessage(data?.already_existed
+          ? `AB ${data.ab_nummer} existiert bereits.`
+          : `Gebucht! AB ${data?.ab_number} wurde automatisch erstellt.`);
+      } else {
+        // Kein Angebot vorhanden → klassischer Pfad: nur Event erstellen
+        const { data: newEvent, error: insertError } = await supabase.from("portal_events").insert({
+          request_id: request.id,
+          customer_id: request.customer_id || null,
+          title: anlass.trim() || "Event",
+          event_date: datum.trim() || null,
+          start_time: uhrzeit.trim() || null,
+          location: ort.trim() || null,
+          format: format || null,
+          guests: gaeste ? Number(gaeste) : null,
+          status: "in_planung",
+        }).select("*").single();
+        if (insertError) throw insertError;
+
+        await supabase.from("portal_requests").update({ event_id: newEvent?.id, status: "bestätigt" }).eq("id", request.id);
+
+        setRequest({ ...request, event_id: newEvent?.id, status: "bestätigt" });
+        setEvent(newEvent || null);
+        setStatus("bestätigt");
+        setMessage("Gebucht! Event wurde erstellt.");
+      }
+    } catch (err: any) {
+      setMessage("Fehler beim Konvertieren: " + (err?.message || String(err)));
     }
     setConverting(false);
   };
@@ -1001,19 +1034,7 @@ const AdminBookingDetail = () => {
             )}
 
             {archivTab === "kommunikation" && (
-              <div className="space-y-2">
-                {mailHistory.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-8">Keine Nachrichten</p>
-                ) : mailHistory.map((msg) => (
-                  <div key={msg.id} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border/20">
-                    <Mail className="w-4 h-4 text-green-500 shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{msg.subject || "(Kein Betreff)"}</p>
-                      <p className="text-xs text-muted-foreground">An {msg.to_email} · {new Date(msg.created_at).toLocaleDateString("de-DE")}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <CustomerMailHistory customerEmail={customer?.email} customerId={customer?.id} />
             )}
           </div>
         );
@@ -1623,9 +1644,11 @@ const AdminBookingDetail = () => {
                           {doc.document_number}
                         </Link>
                       )}
-                      {doc.file_url && (
+                      {doc.file_url ? (
                         <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="text-xs text-accent hover:text-accent/80">Öffnen</a>
-                      )}
+                      ) : doc.document_number ? (
+                        <Link to={`/admin/dokumente/${doc.id}`} className="text-xs text-accent hover:text-accent/80">Öffnen</Link>
+                      ) : null}
                     </div>
                   </div>
                 ))
@@ -1758,30 +1781,9 @@ const AdminBookingDetail = () => {
                 </div>
               )}
 
-              {/* Mail-History */}
-              {mailHistory.length > 0 ? (
-                <div className="space-y-2">
-                  {mailHistory.map((msg) => (
-                    <div key={msg.id} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-muted/10 border border-border/20">
-                      <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center shrink-0">
-                        <Mail className="w-3.5 h-3.5 text-green-600" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground truncate">{msg.subject || "(Kein Betreff)"}</p>
-                        <p className="text-[11px] text-muted-foreground">
-                          An {msg.to_email} · {new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "short" })} {new Date(msg.created_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
-                        </p>
-                      </div>
-                      <span className="text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-full border border-green-200 bg-green-50 text-green-700 shrink-0">Gesendet</span>
-                    </div>
-                  ))}
-                </div>
-              ) : !showComposeEmail && (
-                <div className="p-8 rounded-xl bg-muted/10 border border-border/20 text-center">
-                  <Mail className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">Noch keine Nachrichten gesendet</p>
-                </div>
-              )}
+              {/* Mail-History (kombiniert: empfangen + gesendet + system, mit Body, Realtime) */}
+              <CustomerMailHistory customerEmail={customer?.email} customerId={customer?.id} />
+
 
               {message && (
                 <p className={`text-xs rounded-lg px-3 py-2 ${message.startsWith("Fehler") ? "bg-destructive/10 text-destructive" : "bg-green-50 text-green-700"}`}>{message}</p>
@@ -1904,24 +1906,13 @@ const AdminBookingDetail = () => {
             </div>
           )}
 
-          {/* ── Mail History ── */}
-          {mailHistory.length > 0 && (
+          {/* ── Mail History (alte Sektion entfernt — neue CustomerMailHistory oben deckt alles ab) ── */}
+          {false && (
             <div className="p-5 rounded-2xl bg-muted/20 border border-border/30">
               <h2 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
                 <Mail className="w-4 h-4 text-muted-foreground" /> Kommunikation
               </h2>
               <div className="space-y-2">
-                {mailHistory.map((msg) => (
-                  <div key={msg.id} className="flex items-start justify-between gap-3 p-3 rounded-xl bg-background/60 border border-border/20">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium text-foreground truncate">{msg.subject}</p>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">
-                        {msg.to_email} · {new Date(msg.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "short" })} {new Date(msg.created_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
-                      </p>
-                    </div>
-                    <span className="text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-full border border-green-200 bg-green-50 text-green-700 shrink-0">✓</span>
-                  </div>
-                ))}
               </div>
             </div>
           )}

@@ -193,7 +193,7 @@ serve(async (req) => {
     });
 
   try {
-    // ── Auth: verify customer JWT ──────────────────────────────────────────────
+    // ── Auth: verify JWT (Customer ODER Admin) ─────────────────────────────────
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) return json({ error: "Nicht autorisiert" }, 401);
 
@@ -201,14 +201,25 @@ serve(async (req) => {
     const { data: { user }, error: authError } = await anonSupabase.auth.getUser(token);
     if (authError || !user?.id) return json({ error: "Ungültige Session" }, 401);
 
-    // Look up portal_customer by user_id
-    const { data: customer, error: custError } = await adminSupabase
-      .from("portal_customers")
-      .select("*")
-      .eq("user_id", user.id)
+    // Admin-Check: ist der eingeloggte User in portal_admins?
+    const { data: adminEntry } = await adminSupabase
+      .from("portal_admins")
+      .select("id")
+      .eq("email", user.email)
       .maybeSingle();
+    const isAdmin = !!adminEntry;
 
-    if (custError || !customer) return json({ error: "Kunde nicht gefunden" }, 403);
+    // Customer nur fürs Kunden-Mode laden
+    let customer: any = null;
+    if (!isAdmin) {
+      const { data: c, error: custError } = await adminSupabase
+        .from("portal_customers")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (custError || !c) return json({ error: "Kunde nicht gefunden" }, 403);
+      customer = c;
+    }
 
     // ── Parse body ─────────────────────────────────────────────────────────────
     const body = await req.json();
@@ -220,12 +231,14 @@ serve(async (req) => {
     if (!request_id) return json({ error: "request_id fehlt" }, 400);
 
     // ── Find the Angebot ───────────────────────────────────────────────────────
+    // Admin: auch bereits "akzeptierte" Angebote zulassen (z.B. wenn Status manuell gesetzt wurde, aber AB fehlt)
+    const angebotStatusFilter = isAdmin ? ["entwurf", "gesendet", "akzeptiert"] : ["entwurf", "gesendet"];
     const { data: angebot, error: angebotError } = await adminSupabase
       .from("portal_documents")
       .select("*")
       .eq("request_id", request_id)
       .eq("type", "Angebot")
-      .in("status", ["entwurf", "gesendet"])
+      .in("status", angebotStatusFilter)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -234,16 +247,42 @@ serve(async (req) => {
       return json({ error: "Kein offenes Angebot gefunden" }, 404);
     }
 
-    // ── Find the request (verify ownership) ───────────────────────────────────
-    const { data: request, error: requestError } = await adminSupabase
+    // ── Find the request (Admin: ohne Ownership-Check) ─────────────────────────
+    const requestQuery = adminSupabase
       .from("portal_requests")
       .select("*")
-      .eq("id", request_id)
-      .eq("customer_id", customer.id)
-      .maybeSingle();
+      .eq("id", request_id);
+    if (!isAdmin) requestQuery.eq("customer_id", customer.id);
+    const { data: request, error: requestError } = await requestQuery.maybeSingle();
 
     if (requestError || !request) {
       return json({ error: "Anfrage nicht gefunden" }, 404);
+    }
+
+    // Admin-Mode: Customer aus dem Request laden (für AB-Erstellung)
+    if (isAdmin && request.customer_id) {
+      const { data: c } = await adminSupabase
+        .from("portal_customers")
+        .select("*")
+        .eq("id", request.customer_id)
+        .maybeSingle();
+      if (c) customer = c;
+    }
+    if (!customer) {
+      return json({ error: "Anfrage hat keinen verknüpften Kunden — Kunde zuerst zuordnen" }, 400);
+    }
+
+    // Admin-Mode: prüfen ob bereits eine AB existiert (Idempotenz)
+    if (isAdmin) {
+      const { data: existingAB } = await adminSupabase
+        .from("portal_documents")
+        .select("id, document_number")
+        .eq("request_id", request_id)
+        .eq("type", "Auftragsbestätigung")
+        .maybeSingle();
+      if (existingAB) {
+        return json({ ok: true, ab_id: existingAB.id, ab_nummer: existingAB.document_number, already_existed: true });
+      }
     }
 
     // ══════════════════════════════════════════════════════════════════════════

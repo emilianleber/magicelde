@@ -187,6 +187,8 @@ export default function AdminDokumentDetail() {
 
   useEffect(() => { if (authChecked) load(); }, [authChecked, id]);
 
+  const autoDownloadTriggered = useRef(false);
+
   // Load positions when Abschlag dialog opens
   useEffect(() => {
     if (!showAbschlagDialog || !doc) return;
@@ -338,11 +340,19 @@ export default function AdminDokumentDetail() {
           .eq("id", doc.eventId);
       }
 
-      // Sync: Angebot akzeptiert → Request-Status aktualisieren
+      // Sync: Angebot akzeptiert → Edge Function ruft auto-AB-Flow auf
+      // (gleicher Code-Pfad wie Customer-Annahme: erzeugt AB + Event, setzt Request auf "gebucht")
       if (status === "akzeptiert" && doc.typ === "angebot" && doc.requestId) {
-        await supabase.from("portal_requests")
-          .update({ status: "bestätigt" })
-          .eq("id", doc.requestId);
+        const { data: actionData, error: actionError } = await supabase.functions.invoke("portal-offer-action", {
+          body: { action: "accept", request_id: doc.requestId },
+        });
+        if (actionError || actionData?.error) {
+          // Fallback: zumindest Request-Status aktualisieren
+          await supabase.from("portal_requests")
+            .update({ status: "bestätigt" })
+            .eq("id", doc.requestId);
+          console.warn("Auto-AB Erstellung fehlgeschlagen:", actionError || actionData?.error);
+        }
       }
 
       // Sync: Angebot abgelehnt → Request-Status aktualisieren
@@ -643,7 +653,8 @@ export default function AdminDokumentDetail() {
 
     const html = doc.previewHtml;
     if (!html) {
-      setSendMsg({ type: "err", text: "Kein Preview vorhanden. Bitte Dokument zuerst im Editor speichern." });
+      setSendMsg({ type: "ok", text: "Vorschau wird im Editor erzeugt …" });
+      navigate(`/admin/dokumente/${id}/bearbeiten?autoSave=1&returnTo=download`);
       return;
     }
 
@@ -684,6 +695,16 @@ export default function AdminDokumentDetail() {
       setSendLoading(null);
     }
   };
+
+  // Auto-Download nach Editor-Roundtrip (?autoDownload=1) — nur einmal pro Mount
+  useEffect(() => {
+    if (autoDownloadTriggered.current) return;
+    if (!doc || loading) return;
+    if (searchParams.get("autoDownload") !== "1") return;
+    if (!doc.previewHtml) return;
+    autoDownloadTriggered.current = true;
+    handleDownload();
+  }, [doc, loading, searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePublishPortal = async () => {
     if (!doc || !id) return;
@@ -798,7 +819,8 @@ export default function AdminDokumentDetail() {
   const handleSendEmail = async () => {
     if (!doc || !id || !emailTo) return;
     if (!doc.previewHtml) {
-      setSendMsg({ type: "err", text: "Kein Preview vorhanden – bitte Dokument im Editor öffnen und einmal speichern." });
+      setSendMsg({ type: "ok", text: "Vorschau wird im Editor erzeugt …" });
+      navigate(`/admin/dokumente/${id}/bearbeiten?autoSave=1&returnTo=detail`);
       return;
     }
     setSendLoading("email"); setSendMsg(null);
