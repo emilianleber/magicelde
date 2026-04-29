@@ -1,16 +1,26 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import PageLayout from "@/components/landing/PageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { Lock, Mail, Eye, EyeOff } from "lucide-react";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const next = searchParams.get("next");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Sicherheit: nur same-origin paths erlauben (kein offenes Redirect)
+  const safeNext = (() => {
+    if (!next) return null;
+    if (next.startsWith("/") && !next.startsWith("//")) return next;
+    return null;
+  })();
+  const target = safeNext || "/admin";
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -20,9 +30,9 @@ const AdminLogin = () => {
         .select("id")
         .eq("email", session.user.email)
         .maybeSingle();
-      if (admin) navigate("/admin");
+      if (admin) navigate(target, { replace: true });
     });
-  }, [navigate]);
+  }, [navigate, target]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +63,7 @@ const AdminLogin = () => {
       return;
     }
 
-    navigate("/admin");
+    navigate(target, { replace: true });
   };
 
   return (
