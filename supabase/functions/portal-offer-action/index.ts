@@ -433,38 +433,8 @@ serve(async (req) => {
         { icon: "👥", label: "Gäste", value: String(request.gaeste ?? "–") },
       ];
 
-      // 10b. Customer-Mail "Auftragsbestätigung bereit" senden + loggen
-      const customerSubject = "Ihre Auftragsbestätigung von Emilian Leber liegt bereit 📄";
-      const customerHtml = getEmailShell(
-        "Auftragsbestätigung",
-        "Ihre Auftragsbestätigung ist fertig!",
-        `Hallo ${gruss}, vielen Dank für Ihre Buchung! Ihre <strong>Auftragsbestätigung ${nummer}</strong> mit allen Details zu Ihrem Event liegt jetzt in Ihrem Kundenportal zum Download bereit.`,
-        `${infoTable(eventRows)}
-        <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#52525b;font-family:'Inter','Segoe UI',Helvetica,Arial,sans-serif;">
-          Bitte prüfen Sie die Auftragsbestätigung und melden Sie sich bei mir, falls Änderungen gewünscht sind.
-        </p>
-        <div style="text-align:center;margin:8px 0 16px;">
-          <a href="https://www.magicel.de/kundenportal/login"
-             style="display:inline-block;background-color:#15803d;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:14px;font-size:15px;font-weight:700;letter-spacing:0.3px;font-family:'Inter','Segoe UI',Helvetica,Arial,sans-serif;">
-            📄 Auftragsbestätigung ansehen
-          </a>
-        </div>`,
-        false
-      );
-
-      await sendMail(customer.email, customerSubject, customerHtml);
-
-      adminSupabase.from("portal_messages").insert({
-        customer_id: customer.id,
-        request_id: request_id,
-        event_id: newEvent.id,
-        subject: customerSubject,
-        body: customerHtml,
-        from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
-        to_email: customer.email,
-        status: "sent",
-        read_by_customer: false,
-      }).then(() => {}).catch(() => {});
+      // Kunden-AB-Mail wird NICHT automatisch gesendet — Admin schickt manuell.
+      // (Sobald gesendet, wird sie via send-customer-mail / admin-send-status-mail geloggt.)
 
       // 11. Send admin notification
       const adminHtml = `<p><strong>${customer.name || customer.email}</strong> hat das Angebot für <strong>${request.anlass || "Anfrage"}</strong> angenommen.</p>
