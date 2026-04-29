@@ -22,11 +22,20 @@ class SimpleImap {
   }
 
   async list(): Promise<string[]> {
+    // IMAP LIST liefert Zeilen wie:
+    //   * LIST (\HasNoChildren) "." "INBOX"
+    //   * LIST (\HasChildren \Noselect) NIL "INBOX"
+    //   * LIST (\HasNoChildren) "/" "Gesendete Objekte"
+    // Strato/Outlook nutzen oft "." als Delimiter und Subfolder wie "INBOX.Sent".
     const res = await this.cmd('LIST "" "*"');
     const folders: string[] = [];
     for (const line of res) {
-      const m = line.match(/\) "?" "?([^"]+)"?$/);
-      if (m) folders.push(m[1].trim());
+      if (!line.startsWith("* LIST")) continue;
+      // Folder-Name ist der letzte Token (entweder quoted oder unquoted)
+      const quoted = line.match(/\)\s+(?:"[^"]*"|NIL|\S+)\s+"([^"]+)"\s*$/);
+      const unquoted = !quoted ? line.match(/\)\s+(?:"[^"]*"|NIL|\S+)\s+(\S+)\s*$/) : null;
+      const name = (quoted?.[1] || unquoted?.[1] || "").trim();
+      if (name && name !== "NIL") folders.push(name);
     }
     return folders;
   }
