@@ -90,47 +90,82 @@ class SimpleImap {
   }
 }
 
+// Robuster MIME-Parser: behandelt verschachteltes Multipart + UTF-8
+function decodeBase64Utf8(s: string): string {
+  try {
+    const cleaned = s.replace(/\s+/g, "");
+    const bytes = Uint8Array.from(atob(cleaned), c => c.charCodeAt(0));
+    return new TextDecoder("utf-8").decode(bytes);
+  } catch { return s; }
+}
+function decodeQP(s: string): string {
+  // First decode UTF-8 byte sequences from =XX encoded text
+  const collapsed = s.replace(/=\r?\n/g, "");
+  // Convert =XX hex sequences to bytes, then decode whole as UTF-8
+  const bytes: number[] = [];
+  let i = 0;
+  while (i < collapsed.length) {
+    if (collapsed[i] === "=" && i + 2 < collapsed.length && /[0-9A-Fa-f]{2}/.test(collapsed.slice(i + 1, i + 3))) {
+      bytes.push(parseInt(collapsed.slice(i + 1, i + 3), 16));
+      i += 3;
+    } else {
+      bytes.push(collapsed.charCodeAt(i));
+      i += 1;
+    }
+  }
+  try {
+    return new TextDecoder("utf-8").decode(Uint8Array.from(bytes));
+  } catch { return collapsed; }
+}
+function decodeTransferEncoding(headers: string, body: string): string {
+  const enc = (headers.match(/content-transfer-encoding:\s*(\S+)/i)?.[1] || "").toLowerCase().trim();
+  if (enc === "base64") return decodeBase64Utf8(body);
+  if (enc === "quoted-printable") return decodeQP(body);
+  return body;
+}
+
 function extractTextFromRaw(raw: string): { text: string; html: string | null } {
-  // Find boundary if multipart
-  const boundaryMatch = raw.match(/boundary="?([^"\r\n;]+)"?/i);
-  if (boundaryMatch) {
-    const boundary = boundaryMatch[1];
-    const parts = raw.split(`--${boundary}`);
-    let text = "";
-    let html = "";
-    for (const part of parts) {
-      if (part.toLowerCase().includes("content-type: text/html")) {
-        const body = part.split("\r\n\r\n").slice(1).join("\r\n\r\n");
-        html = decodeTransferEncoding(part, body);
-      } else if (part.toLowerCase().includes("content-type: text/plain")) {
-        const body = part.split("\r\n\r\n").slice(1).join("\r\n\r\n");
-        text = decodeTransferEncoding(part, body);
+  // ALLE Boundaries finden (auch bei verschachteltem multipart)
+  const boundaries = [...raw.matchAll(/boundary\s*=\s*"?([^"\s;\r\n]+)/gi)].map(m => m[1]);
+
+  let html = "";
+  let text = "";
+
+  if (boundaries.length > 0) {
+    // Über jede Boundary splitten und Parts sammeln
+    const seenParts = new Set<string>();
+    for (const b of boundaries) {
+      const re = new RegExp(`--${b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:--)?`, "g");
+      const segments = raw.split(re);
+      for (const seg of segments) {
+        const trimmed = seg.replace(/^\r?\n/, "").replace(/\r?\n$/, "");
+        if (!trimmed || seenParts.has(trimmed.slice(0, 200))) continue;
+        seenParts.add(trimmed.slice(0, 200));
+        // Header/Body separator
+        const sep = trimmed.search(/\r?\n\r?\n/);
+        if (sep < 0) continue;
+        const headerBlock = trimmed.slice(0, sep);
+        const body = trimmed.slice(sep).replace(/^\r?\n\r?\n/, "");
+        const ctMatch = headerBlock.match(/Content-Type\s*:\s*([^;\r\n]+)/i);
+        const ct = (ctMatch?.[1] || "").trim().toLowerCase();
+        if (ct === "text/html" && !html) {
+          html = decodeTransferEncoding(headerBlock, body);
+        } else if (ct === "text/plain" && !text) {
+          text = decodeTransferEncoding(headerBlock, body);
+        }
       }
     }
     return { text: text.trim(), html: html.trim() || null };
   }
 
-  // Simple: everything after headers
-  const bodyStart = raw.indexOf("\r\n\r\n");
+  // Single-Part: alles nach Headern
+  const bodyStart = raw.search(/\r?\n\r?\n/);
   if (bodyStart >= 0) {
-    const body = raw.slice(bodyStart + 4);
+    const body = raw.slice(bodyStart).replace(/^\r?\n\r?\n/, "");
     const decoded = decodeTransferEncoding(raw.slice(0, bodyStart), body);
     return { text: decoded.trim(), html: null };
   }
   return { text: raw.trim(), html: null };
-}
-
-function decodeTransferEncoding(headers: string, body: string): string {
-  const enc = (headers.match(/content-transfer-encoding:\s*(\S+)/i)?.[1] || "").toLowerCase();
-  if (enc === "base64") {
-    try { return atob(body.replace(/\s+/g, "")); } catch (_) {}
-  }
-  if (enc === "quoted-printable") {
-    return body
-      .replace(/=\r\n/g, "")
-      .replace(/=([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
-  }
-  return body;
 }
 
 const FOLDER_MAP: Record<string, string[]> = {

@@ -189,7 +189,7 @@ serve(async (req) => {
       logs.push(`${actualFolder}: ${count} messages`);
       if (count === 0) continue;
 
-      const from = Math.max(1, count - 49);
+      const from = Math.max(1, count - 499);
       const headers = await imap.fetchHeaders(from, count);
       logs.push(`Fetched ${headers.length} headers from ${actualFolder}`);
 

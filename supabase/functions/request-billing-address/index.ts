@@ -1,5 +1,7 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 // @ts-ignore
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// @ts-ignore
 import nodemailer from "npm:nodemailer";
 
 const FONT = "'Inter','Segoe UI',Helvetica,Arial,sans-serif";
@@ -9,13 +11,18 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const adminSupabase = createClient(
+  Deno.env.get("SUPABASE_URL") || "",
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "",
+);
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    const { customer_name, customer_email, customer_anrede, customer_nachname } = await req.json();
+    const { customer_id, customer_name, customer_email, customer_anrede, customer_nachname, request_id, event_id } = await req.json();
     if (!customer_email) {
       return new Response(JSON.stringify({ error: "E-Mail fehlt" }), { status: 400, headers: corsHeaders });
     }
@@ -63,12 +70,26 @@ Vielen Dank!
 </td></tr></table>
 </body></html>`;
 
+    const subject = "Kurze Bitte: Rechnungsadresse hinterlegen";
     await transporter.sendMail({
       from: `"Emilian Leber" <${smtpUser}>`,
       to: customer_email,
-      subject: "Kurze Bitte: Rechnungsadresse hinterlegen",
+      subject,
       html,
     });
+
+    // In portal_messages loggen für Mail-History
+    adminSupabase.from("portal_messages").insert({
+      customer_id: customer_id || null,
+      request_id: request_id || null,
+      event_id: event_id || null,
+      subject,
+      body: html,
+      from_email: smtpUser,
+      to_email: customer_email,
+      status: "sent",
+      read_by_customer: false,
+    }).then(() => {}).catch((e: unknown) => console.error("portal_messages insert failed:", e));
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -215,7 +215,10 @@ export default function CustomerMailHistory({ customerEmail, customerId, message
   const toggle = async (mail: UnifiedMail) => {
     const willExpand = !expanded[mail.id];
     setExpanded((p) => ({ ...p, [mail.id]: willExpand }));
-    if (willExpand && mail.source !== "system" && !mail.body_html && !mail.body_text && mail.uid) {
+    // Re-fetch wenn body fehlt ODER body wie roher MIME-Source aussieht (alter Cache)
+    const bodyIsBroken = (mail.body_html && looksLikeRawMime(mail.body_html))
+      || (mail.body_text && looksLikeRawMime(mail.body_text));
+    if (willExpand && mail.source !== "system" && (bodyIsBroken || (!mail.body_html && !mail.body_text)) && mail.uid) {
       // Lazy-load via fetch-mail-body
       setLoadingBody(mail.id);
       try {

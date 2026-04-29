@@ -319,6 +319,7 @@ const AdminCustomerDetail = () => {
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
           },
           body: JSON.stringify({
+            customer_id: customer.id,
             customer_name: customer.name,
             customer_email: customer.email,
             customer_anrede: (customer as any).anrede || "",
