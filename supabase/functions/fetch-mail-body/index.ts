@@ -33,8 +33,11 @@ class SimpleImap {
     const res = await this.cmd('LIST "" "*"');
     const folders: string[] = [];
     for (const line of res) {
-      const m = line.match(/\) "?" "?([^"]+)"?$/);
-      if (m) folders.push(m[1].trim());
+      if (!line.startsWith("* LIST")) continue;
+      const quoted = line.match(/\)\s+(?:"[^"]*"|NIL|\S+)\s+"([^"]+)"\s*$/);
+      const unquoted = !quoted ? line.match(/\)\s+(?:"[^"]*"|NIL|\S+)\s+(\S+)\s*$/) : null;
+      const name = (quoted?.[1] || unquoted?.[1] || "").trim();
+      if (name && name !== "NIL") folders.push(name);
     }
     return folders;
   }
