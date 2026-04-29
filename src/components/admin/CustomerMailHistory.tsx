@@ -122,13 +122,13 @@ export default function CustomerMailHistory({ customerEmail, customerId, message
     setLoading(true);
     const queries: Promise<{ data: unknown[] | null; error: unknown }>[] = [];
 
-    // 1. portal_inbox_mails (eingehend + ausgehend) — gefiltert über from_email/to_email = customer email
+    // 1. portal_inbox_mails (eingehend + ausgehend) — Substring-Match weil to_email mehrere Empfänger enthalten kann (TO + CC kommasepariert)
     if (lcEmail) {
       queries.push(
         supabase
           .from("portal_inbox_mails")
           .select("id, uid, subject, received_at, from_email, to_email, body_html, body_text, folder, is_deleted")
-          .or(`from_email.ilike.${lcEmail},to_email.ilike.${lcEmail}`)
+          .or(`from_email.ilike.*${lcEmail}*,to_email.ilike.*${lcEmail}*`)
           .eq("is_deleted", false)
           .order("received_at", { ascending: false })
           .limit(500),

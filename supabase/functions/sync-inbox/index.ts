@@ -152,6 +152,13 @@ function parseFrom(from: string): { name: string | null; address: string | null 
   return { name: null, address: null };
 }
 
+// Alle E-Mail-Adressen aus einem Header extrahieren (TO/CC können mehrere enthalten).
+function extractAllEmails(header: string): string[] {
+  if (!header) return [];
+  const matches = header.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g);
+  return matches ? matches.map(e => e.toLowerCase()) : [];
+}
+
 const FOLDER_TARGETS = [
   // Mehrere Varianten pro Folder-Typ als eigene Targets, damit ALLE existierenden Folder synchronisiert werden
   // (Outlook=Gesendet/Archiv/Gelöscht, Apple Mail=Sent Items/Archive/Trash, etc.)
@@ -212,20 +219,24 @@ serve(async (req) => {
       const headers = await imap.fetchHeaders(from, count);
       logs.push(`Fetched ${headers.length} headers from ${actualFolder}`);
 
-      const mails = headers.map(({ uid, headers: h }) => ({
-        // UID enthält den ECHTEN Folder-Namen — sonst kollidieren UIDs aus parallelen Sent-Folder ("Sent Items" + "Gesendet")
-        uid: `${actualFolder}:${uid}`,
-        folder: target.internal,
-        from_name: parseFrom(h.from || "").name,
-        from_email: parseFrom(h.from || "").address,
-        to_email: parseFrom(h.to || "").address,
-        subject: decodeRFC2047(h.subject || "(Kein Betreff)"),
-        body_html: null,
-        body_text: null,
-        received_at: h.date ? new Date(h.date).toISOString() : new Date().toISOString(),
-        is_read: false,
-        is_starred: false,
-      }));
+      const mails = headers.map(({ uid, headers: h }) => {
+        // Alle Empfänger (TO + CC) sammeln, kommasepariert speichern — sonst werden CC-Mails nicht für Kunden gefunden
+        const allRecipients = [...extractAllEmails(h.to || ""), ...extractAllEmails(h.cc || "")];
+        const uniqRecipients = [...new Set(allRecipients)];
+        return {
+          uid: `${actualFolder}:${uid}`,
+          folder: target.internal,
+          from_name: parseFrom(h.from || "").name,
+          from_email: parseFrom(h.from || "").address,
+          to_email: uniqRecipients.join(", ") || parseFrom(h.to || "").address,
+          subject: decodeRFC2047(h.subject || "(Kein Betreff)"),
+          body_html: null,
+          body_text: null,
+          received_at: h.date ? new Date(h.date).toISOString() : new Date().toISOString(),
+          is_read: false,
+          is_starred: false,
+        };
+      });
 
       const { error } = await supabase
         .from("portal_inbox_mails")
