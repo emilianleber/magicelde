@@ -148,14 +148,23 @@ serve(async (req) => {
     const matched = SUBJECT_TO_STATUS.find(s => s.pattern.test(msg.subject || ""));
     if (!matched) throw new Error(`Kein Template für Subject "${msg.subject}"`);
 
-    // Request laden + status überschreiben
-    if (!msg.request_id) throw new Error("Mail hat keine request_id, Regenerierung nicht möglich");
-    const { data: request, error: reqErr } = await supabase
-      .from("portal_requests")
-      .select("*")
-      .eq("id", msg.request_id)
-      .single();
-    if (reqErr || !request) throw new Error("Request nicht gefunden");
+    // Request laden — bevorzugt msg.request_id, sonst neueste Request des Customers
+    let request: any = null;
+    if (msg.request_id) {
+      const { data } = await supabase.from("portal_requests").select("*").eq("id", msg.request_id).maybeSingle();
+      request = data;
+    }
+    if (!request && msg.customer_id) {
+      const { data } = await supabase
+        .from("portal_requests")
+        .select("*")
+        .eq("customer_id", msg.customer_id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      request = data;
+    }
+    if (!request) throw new Error("Weder request_id noch customer_id mit Request gefunden");
 
     // Status aus Subject ableiten (überschreibt aktuellen request.status für Template)
     const tmplRequest = { ...request, status: matched.status };
