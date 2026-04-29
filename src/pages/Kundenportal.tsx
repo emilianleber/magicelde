@@ -415,27 +415,31 @@ const Kundenportal = () => {
   const [fbError, setFbError] = useState("");
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        // Preview ohne Session → zum Admin-Login mit Rückkehr-URL
-        if (previewCustomerId) {
-          navigate(`/admin/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
-        } else {
-          navigate("/kundenportal/login");
-        }
-        return;
+    // Wenn der Preview-Link auf der Public-Domain (www.magicel.de) geöffnet wurde,
+    // direkt zur Admin-Domain umleiten — Supabase-Session ist per Origin gespeichert,
+    // ein Login auf www kann den Admin-Status nicht erkennen.
+    const host = window.location.hostname;
+    const isPublicHost = host === "www.magicel.de" || host === "magicel.de";
+    if (previewCustomerId && isPublicHost) {
+      window.location.replace(`https://admin.magicel.de${window.location.pathname}${window.location.search}`);
+      return;
+    }
+
+    const handleNoSession = () => {
+      if (previewCustomerId) {
+        // Auf Admin-Domain (oder localhost): zum Admin-Login mit Rückkehr-URL
+        navigate(`/admin/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+      } else {
+        navigate("/kundenportal/login");
       }
+    };
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) { handleNoSession(); return; }
       setUser(session.user);
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        if (previewCustomerId) {
-          navigate(`/admin/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
-        } else {
-          navigate("/kundenportal/login");
-        }
-        return;
-      }
+      if (!session) { handleNoSession(); return; }
       setUser(session.user);
     });
     return () => subscription.unsubscribe();
