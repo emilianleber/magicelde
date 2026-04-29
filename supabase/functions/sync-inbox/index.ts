@@ -135,10 +135,30 @@ function parseHeaders(lines: string[]): Record<string, string> {
 }
 
 function decodeRFC2047(str: string): string {
-  return str.replace(/=\?([^?]+)\?([BbQq])\?([^?]*)\?=/g, (_, _charset, enc, text) => {
+  return str.replace(/=\?([^?]+)\?([BbQq])\?([^?]*)\?=/g, (_, charset, enc, text) => {
     try {
-      if (enc.toUpperCase() === "B") return atob(text);
-      if (enc.toUpperCase() === "Q") return text.replace(/_/g, " ").replace(/=([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
+      const charsetLower = (charset || "utf-8").toLowerCase();
+      if (enc.toUpperCase() === "B") {
+        // Base64 → bytes → korrekte Charset-Dekodierung (utf-8 default)
+        const bytes = Uint8Array.from(atob(text), c => c.charCodeAt(0));
+        return new TextDecoder(charsetLower).decode(bytes);
+      }
+      if (enc.toUpperCase() === "Q") {
+        // Quoted-printable → bytes → Charset-Dekodierung
+        const bytes: number[] = [];
+        const collapsed = text.replace(/_/g, " ");
+        let i = 0;
+        while (i < collapsed.length) {
+          if (collapsed[i] === "=" && i + 2 < collapsed.length && /[0-9A-Fa-f]{2}/.test(collapsed.slice(i + 1, i + 3))) {
+            bytes.push(parseInt(collapsed.slice(i + 1, i + 3), 16));
+            i += 3;
+          } else {
+            bytes.push(collapsed.charCodeAt(i));
+            i += 1;
+          }
+        }
+        return new TextDecoder(charsetLower).decode(Uint8Array.from(bytes));
+      }
     } catch (_) {}
     return text;
   });
