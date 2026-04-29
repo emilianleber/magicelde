@@ -107,16 +107,16 @@ export default function AdminKalender() {
     const load = async () => {
       setLoading(true);
       const [evtRes, reqRes, ownRes, srcRes, todoRes] = await Promise.all([
-        supabase.from("portal_events").select("id,title,event_date,start_time,location,status,guests,format,customer_id").order("event_date", { ascending: true }),
-        supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id,email,telefon,gaeste,nachricht").is("event_id", null).order("datum", { ascending: true }),
+        supabase.from("portal_events").select("id,title,event_date,start_time,location,status,guests,format,customer_id,deleted_at").is("deleted_at", null).order("event_date", { ascending: true }),
+        supabase.from("portal_requests").select("id,name,anlass,datum,ort,status,event_id,email,telefon,gaeste,nachricht,deleted_at").is("event_id", null).is("deleted_at", null).order("datum", { ascending: true }),
         supabase.from("calendar_events_cache").select("id,summary,start_date,start_time,end_date,end_time,all_day,source_id,location,description").order("start_date", { ascending: true }),
         supabase.from("calendar_sources").select("id,name,color"),
         supabase.from("portal_todos").select("id,title,due_date,status,priority").not("due_date", "is", null).neq("status", "erledigt").order("due_date"),
       ]);
-      // Client-side filter: storniert/abgelehnt ausblenden (NULL-status bleibt sichtbar)
-      const HIDDEN = new Set(["storniert", "abgelehnt"]);
-      if (!evtRes.error) setEvents((evtRes.data || []).filter((e: { status: string | null }) => !HIDDEN.has(e.status || "")));
-      if (!reqRes.error) setRequests((reqRes.data || []).filter((r: { status: string | null }) => !HIDDEN.has(r.status || "")));
+      // Client-side filter: storniert/abgelehnt/archiviert ausblenden (NULL-status bleibt sichtbar = neu/in_planung etc.)
+      const HIDDEN_STATUS = new Set(["storniert", "abgelehnt", "archiviert"]);
+      if (!evtRes.error) setEvents((evtRes.data || []).filter((e: { status: string | null }) => !HIDDEN_STATUS.has(e.status || "")));
+      if (!reqRes.error) setRequests((reqRes.data || []).filter((r: { status: string | null }) => !HIDDEN_STATUS.has(r.status || "")));
       if (!ownRes.error) setOwnEvents(ownRes.data || []);
       if (!todoRes.error) setTodos(todoRes.data || []);
       if (!srcRes.error && srcRes.data) {
