@@ -97,7 +97,9 @@ const parseMimeRaw = (raw: string): { html?: string; text?: string } => {
   return { html, text };
 };
 
-// Sehr leichter Sanitizer: <script>, <style>, on*-Handler + nicht-ladbare cid: Bilder entfernen.
+// Sehr leichter Sanitizer: <script>, <style>, on*-Handler entfernen.
+// cid:-Bilder werden im Edge Function fetch-mail-body durch data:-URLs ersetzt — falls nicht (z.B. Cache),
+// fallen wir hier auf Platzhalter zurück, damit kein Browser-Fehler erscheint.
 const sanitize = (html: string): string => {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, "")
@@ -105,8 +107,8 @@ const sanitize = (html: string): string => {
     .replace(/\son\w+\s*=\s*"[^"]*"/gi, "")
     .replace(/\son\w+\s*=\s*'[^']*'/gi, "")
     .replace(/\son\w+\s*=\s*[^\s>]+/gi, "")
-    // Inline-Bilder per Content-ID werden vom Browser nicht geladen — durch Platzhalter ersetzen
-    .replace(/<img[^>]*\ssrc\s*=\s*["']?cid:[^"'\s>]+["']?[^>]*>/gi, '<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:#f4f4f5;color:#71717a;font-size:11px;font-family:monospace;">📎 Inline-Bild</span>');
+    // cid: Bilder die der Edge-Parser noch nicht inline aufgelöst hat → Platzhalter (sonst Browser-Console-Fehler)
+    .replace(/<img[^>]*\ssrc\s*=\s*["']?cid:[^"'\s>]+["']?[^>]*>/gi, '<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:#f4f4f5;color:#71717a;font-size:11px;font-family:monospace;">📎 Bild (nicht geladen)</span>');
 };
 
 export default function CustomerMailHistory({ customerEmail, customerId, messagesOrFilter }: Props) {

@@ -127,15 +127,29 @@ function decodeTransferEncoding(headers: string, body: string): string {
   return body;
 }
 
+// Inline-Image extraktion: Roh-Body bleibt base64 — wird unten als data: URL eingebettet
+function extractInlineImage(headerBlock: string, body: string): { cid: string; mime: string; base64: string } | null {
+  const ctMatch = headerBlock.match(/Content-Type\s*:\s*([^;\r\n]+)/i);
+  const ct = (ctMatch?.[1] || "").trim().toLowerCase();
+  if (!ct.startsWith("image/")) return null;
+  const cidMatch = headerBlock.match(/Content-ID\s*:\s*<?([^>\r\n]+)>?/i);
+  const cid = cidMatch?.[1]?.trim();
+  if (!cid) return null;
+  const enc = (headerBlock.match(/Content-Transfer-Encoding\s*:\s*(\S+)/i)?.[1] || "").toLowerCase().trim();
+  if (enc !== "base64") return null;
+  const cleaned = body.replace(/\s+/g, "");
+  return { cid, mime: ct, base64: cleaned };
+}
+
 function extractTextFromRaw(raw: string): { text: string; html: string | null } {
   // ALLE Boundaries finden (auch bei verschachteltem multipart)
   const boundaries = [...raw.matchAll(/boundary\s*=\s*"?([^"\s;\r\n]+)/gi)].map(m => m[1]);
 
   let html = "";
   let text = "";
+  const inlineImages: { cid: string; mime: string; base64: string }[] = [];
 
   if (boundaries.length > 0) {
-    // Über jede Boundary splitten und Parts sammeln
     const seenParts = new Set<string>();
     for (const b of boundaries) {
       const re = new RegExp(`--${b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:--)?`, "g");
@@ -144,7 +158,6 @@ function extractTextFromRaw(raw: string): { text: string; html: string | null } 
         const trimmed = seg.replace(/^\r?\n/, "").replace(/\r?\n$/, "");
         if (!trimmed || seenParts.has(trimmed.slice(0, 200))) continue;
         seenParts.add(trimmed.slice(0, 200));
-        // Header/Body separator
         const sep = trimmed.search(/\r?\n\r?\n/);
         if (sep < 0) continue;
         const headerBlock = trimmed.slice(0, sep);
@@ -155,7 +168,18 @@ function extractTextFromRaw(raw: string): { text: string; html: string | null } 
           html = decodeTransferEncoding(headerBlock, body);
         } else if (ct === "text/plain" && !text) {
           text = decodeTransferEncoding(headerBlock, body);
+        } else if (ct.startsWith("image/")) {
+          const img = extractInlineImage(headerBlock, body);
+          if (img) inlineImages.push(img);
         }
+      }
+    }
+    // cid: Referenzen im HTML durch data: URLs ersetzen
+    if (html && inlineImages.length > 0) {
+      for (const img of inlineImages) {
+        const escaped = img.cid.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const re = new RegExp(`cid:${escaped}`, "gi");
+        html = html.replace(re, `data:${img.mime};base64,${img.base64}`);
       }
     }
     return { text: text.trim(), html: html.trim() || null };
