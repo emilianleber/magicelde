@@ -417,14 +417,23 @@ const Kundenportal = () => {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
-        if (!previewCustomerId) navigate("/kundenportal/login");
+        // Preview ohne Session → zum Admin-Login mit Rückkehr-URL
+        if (previewCustomerId) {
+          navigate(`/admin/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+        } else {
+          navigate("/kundenportal/login");
+        }
         return;
       }
       setUser(session.user);
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
-        if (!previewCustomerId) navigate("/kundenportal/login");
+        if (previewCustomerId) {
+          navigate(`/admin/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+        } else {
+          navigate("/kundenportal/login");
+        }
         return;
       }
       setUser(session.user);
@@ -446,6 +455,13 @@ const Kundenportal = () => {
 
       if (previewCustomerId) {
         const { data: adminEntry } = await supabase.from("portal_admins").select("id").eq("email", user.email).maybeSingle();
+        if (!adminEntry) {
+          // Kein Admin → Preview-Modus nicht erlaubt, zum normalen Portal weiterleiten
+          alert("Kein Admin-Zugriff. Bitte normales Kundenportal nutzen.");
+          navigate("/kundenportal", { replace: true });
+          setLoading(false);
+          return;
+        }
         if (adminEntry) {
           setIsAdminPreview(true);
           const { data: cust } = await supabase.from("portal_customers").select("*").eq("id", previewCustomerId).maybeSingle();

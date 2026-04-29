@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import AdminLayout from "@/components/admin/AdminLayout";
+import CustomerMailHistory from "@/components/admin/CustomerMailHistory";
 
 interface PortalCustomer {
   id: string;
@@ -758,63 +759,7 @@ const AdminCustomerDetail = () => {
 
         {/* MAILS */}
         {activeTab === "mails" && (
-          <div>
-            {customerMails.length === 0 ? (
-              <div className="p-10 rounded-2xl bg-muted/20 border border-border/30 text-center">
-                <Mail className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground mb-3">Kein Mailverkehr mit diesem Kunden.</p>
-                <button
-                  onClick={() => setShowCompose(true)}
-                  className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm font-semibold hover:opacity-80 transition-opacity"
-                >
-                  <Send className="w-4 h-4" /> Erste Mail senden
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-1">
-                {customerMails.map((mail) => {
-                  const isExpanded = expandedMailId === mail.id;
-                  const date = new Date(mail._date).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
-                  const isSent = mail._type === "sent";
-                  return (
-                    <div key={mail.id} className="rounded-xl border border-border/30 overflow-hidden">
-                      <button
-                        className="w-full flex items-center gap-3 px-4 py-3 bg-background/40 hover:bg-muted/30 transition-colors text-left"
-                        onClick={() => {
-                          const newId = isExpanded ? null : mail.id;
-                          setExpandedMailId(newId);
-                          if (newId) fetchMailBody(mail);
-                        }}
-                      >
-                        <div className={`shrink-0 w-1.5 h-1.5 rounded-full ${isSent ? "bg-accent" : "bg-blue-400"}`} />
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className={`text-[10px] uppercase tracking-widest font-semibold ${isSent ? "text-accent" : "text-blue-500"}`}>
-                              {isSent ? "Gesendet" : "Empfangen"}
-                            </span>
-                            <span className="text-xs text-muted-foreground">{date}</span>
-                          </div>
-                          <p className="text-sm font-medium text-foreground truncate">{mail.subject || "(Kein Betreff)"}</p>
-                        </div>
-                        <span className="shrink-0 text-muted-foreground text-xs">{isExpanded ? "▲" : "▼"}</span>
-                      </button>
-                      {isExpanded && (
-                        <div className="px-4 py-4 bg-background/20 border-t border-border/20">
-                          {loadingMailBody === mail.id ? (
-                            <p className="text-sm text-muted-foreground animate-pulse">Lädt…</p>
-                          ) : mail.body_html ? (
-                            <div className="prose prose-sm max-w-none text-foreground" dangerouslySetInnerHTML={{ __html: mail.body_html }} />
-                          ) : (
-                            <pre className="text-sm text-foreground whitespace-pre-wrap">{mail.body_text || mail.body || "Kein Inhalt."}</pre>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          <CustomerMailHistory customerEmail={customer?.email} customerId={customer?.id} />
         )}
       </div>
     </AdminLayout>

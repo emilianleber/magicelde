@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -1043,6 +1043,30 @@ export default function AdminDokumentEditor() {
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [authChecked, isNew, id, navigate]);
+
+  // Auto-Save Flow: Editor wurde mit ?autoSave=1 geöffnet (von Detail wenn preview_html fehlt)
+  // → einmal speichern (erzeugt preview_html aus DOM-Capture) und zurück zur Detail-Seite
+  const autoSaveTriggered = useRef(false);
+  useEffect(() => {
+    if (autoSaveTriggered.current) return;
+    if (loading || isNew || !id) return;
+    if (searchParams.get("autoSave") !== "1") return;
+    autoSaveTriggered.current = true;
+    // 2 Frames warten, damit DocumentPreview gerendert wurde
+    requestAnimationFrame(() => {
+      requestAnimationFrame(async () => {
+        try {
+          await handleSave();
+        } finally {
+          const returnTo = searchParams.get("returnTo");
+          const target = returnTo === "download"
+            ? `/admin/dokumente/${id}?autoDownload=1`
+            : `/admin/dokumente/${id}`;
+          navigate(target, { replace: true });
+        }
+      });
+    });
+  }, [loading, isNew, id, navigate, searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Summen
   const summen = useMemo(() => {
