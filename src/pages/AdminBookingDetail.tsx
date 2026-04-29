@@ -1128,6 +1128,9 @@ const AdminBookingDetail = () => {
                     method: "POST",
                     headers: { "Content-Type": "application/json", apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session?.access_token}` },
                     body: JSON.stringify({
+                      customer_id: customer.id,
+                      request_id: request?.id || null,
+                      event_id: event?.id || null,
                       customer_name: customer.name || request?.name || "",
                       customer_email: customer.email || request?.email || "",
                       customer_anrede: (customer as any).anrede || null,
