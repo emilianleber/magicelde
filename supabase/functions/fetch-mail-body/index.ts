@@ -173,9 +173,9 @@ function extractTextFromRaw(raw: string): { text: string; html: string | null } 
 
 const FOLDER_MAP: Record<string, string[]> = {
   INBOX: ["INBOX"],
-  Sent:  ["Sent", "Sent Items", "Gesendete Objekte", "INBOX.Sent"],
+  Sent:  ["Sent Items", "Sent", "Gesendet", "Gesendete Objekte", "Gesendete Elemente", "INBOX.Sent"],
   Spam:  ["Spam", "Junk", "INBOX.Spam", "INBOX.Junk"],
-  Trash: ["Trash", "Deleted", "Gelöscht", "INBOX.Trash"],
+  Trash: ["Trash", "Gelöscht", "Gel&APY-scht", "Papierkorb", "INBOX.Trash"],
 };
 
 serve(async (req) => {

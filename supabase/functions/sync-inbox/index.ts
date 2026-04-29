@@ -153,10 +153,17 @@ function parseFrom(from: string): { name: string | null; address: string | null 
 }
 
 const FOLDER_TARGETS = [
+  // Mehrere Sent-Varianten als eigene Targets, damit ALLE existierenden Sent-Folder synchronisiert werden
+  // (Outlook=Gesendet, Apple Mail=Sent Items, etc.)
   { internal: "INBOX", candidates: ["INBOX"] },
-  { internal: "Sent",  candidates: ["Sent", "Sent Items", "Gesendete Objekte", "Gesendete Elemente", "INBOX.Sent"] },
-  { internal: "Spam",  candidates: ["Spam", "Junk", "Junk E-Mail", "INBOX.Spam", "INBOX.Junk"] },
-  { internal: "Trash", candidates: ["Trash", "Deleted", "Gelöscht", "Papierkorb", "INBOX.Trash"] },
+  { internal: "Sent",          candidates: ["Sent Items", "Sent"] },
+  { internal: "Sent",          candidates: ["Gesendet"] },
+  { internal: "Sent",          candidates: ["Gesendete Objekte", "Gesendete Elemente"] },
+  { internal: "Sent",          candidates: ["INBOX.Sent"] },
+  { internal: "Spam",          candidates: ["Spam", "Junk", "Junk E-Mail", "INBOX.Spam", "INBOX.Junk"] },
+  { internal: "Trash",         candidates: ["Trash"] },
+  { internal: "Trash",         candidates: ["Gelöscht", "Gel&APY-scht", "Papierkorb"] },
+  { internal: "Trash",         candidates: ["INBOX.Trash"] },
 ];
 
 serve(async (req) => {
@@ -198,12 +205,13 @@ serve(async (req) => {
       logs.push(`${actualFolder}: ${count} messages`);
       if (count === 0) continue;
 
-      const from = Math.max(1, count - 499);
+      const from = Math.max(1, count - 1999);
       const headers = await imap.fetchHeaders(from, count);
       logs.push(`Fetched ${headers.length} headers from ${actualFolder}`);
 
       const mails = headers.map(({ uid, headers: h }) => ({
-        uid: `${target.internal}:${uid}`,
+        // UID enthält den ECHTEN Folder-Namen — sonst kollidieren UIDs aus parallelen Sent-Folder ("Sent Items" + "Gesendet")
+        uid: `${actualFolder}:${uid}`,
         folder: target.internal,
         from_name: parseFrom(h.from || "").name,
         from_email: parseFrom(h.from || "").address,
