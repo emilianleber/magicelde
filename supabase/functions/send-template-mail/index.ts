@@ -295,7 +295,7 @@ serve(async (req) => {
         request_id: requestId || null,
         event_id: eventId || null,
         subject,
-        body: body.slice(0, 500),
+        body: html,
         from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
         to_email: toEmail,
         status: "sent",

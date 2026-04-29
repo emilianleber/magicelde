@@ -26,15 +26,75 @@ type Props = {
   messagesOrFilter?: string;
 };
 
-// Naive HTML-Detection: wenn der String wie Roh-MIME oder reiner Code aussieht, lieber als Text rendern.
-const looksLikeRawCode = (html: string): boolean => {
-  const s = html.trim();
-  if (!s) return false;
-  // Wenn keine bekannten HTML-Tags vorkommen → kein echtes HTML
-  if (!/<\s*(html|body|div|p|br|span|table|h\d|a|img|ul|ol|li|strong|em|b|i)\b/i.test(s)) return true;
-  // MIME-Header (Content-Type, Content-Transfer-Encoding) am Anfang → roh
-  if (/^(Content-Type|Content-Transfer-Encoding|MIME-Version):/im.test(s.slice(0, 200))) return true;
+// Detection: roher RFC822/MIME-Source statt eigentlichem HTML/Text.
+const looksLikeRawMime = (s: string): boolean => {
+  const head = s.trim().slice(0, 800);
+  if (!head) return false;
+  // Typische Mail-Header am Anfang
+  if (/^(X-Envelope-From|Return-Path|Received|MIME-Version|Content-Type|Content-Transfer-Encoding|ARC-Seal|Authentication-Results|Message-ID|X-RZG|X-UID):/im.test(head)) return true;
   return false;
+};
+
+// Naive HTML-Detection
+const looksLikeHtml = (s: string): boolean => {
+  return /<\s*(html|body|div|p|br|span|table|h\d|a|img|ul|ol|li|strong|em|b|i)\b/i.test(s);
+};
+
+// MIME-Parser (light): extrahiert text/html oder text/plain Part aus Roh-Source.
+const decodeBase64Utf8 = (s: string): string => {
+  try {
+    const cleaned = s.replace(/\s+/g, "");
+    const bytes = Uint8Array.from(atob(cleaned), c => c.charCodeAt(0));
+    return new TextDecoder("utf-8").decode(bytes);
+  } catch { return s; }
+};
+const decodeQuotedPrintable = (s: string): string => {
+  return s
+    .replace(/=\r?\n/g, "")
+    .replace(/=([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
+};
+type ParsedMimePart = { contentType: string; encoding: string; body: string };
+const parseMimeRaw = (raw: string): { html?: string; text?: string } => {
+  // Boundary aus Content-Type holen (auch verschachtelt — wir suchen alle vorkommenden boundaries)
+  const boundaryMatches = [...raw.matchAll(/boundary\s*=\s*"?([^"\s;]+)/gi)].map(m => m[1]);
+  if (boundaryMatches.length === 0) {
+    // Kein Multipart → versuche den Body als Ganzes zurückzugeben (nach den Headern)
+    const sep = raw.indexOf("\n\n");
+    const body = sep >= 0 ? raw.slice(sep + 2) : raw;
+    return { text: body.trim() };
+  }
+  // Splitte über jede Boundary, sammle alle Parts
+  const parts: ParsedMimePart[] = [];
+  for (const b of boundaryMatches) {
+    const re = new RegExp(`--${b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:--)?`, "g");
+    const segments = raw.split(re);
+    for (const seg of segments) {
+      const trimmed = seg.trim();
+      if (!trimmed) continue;
+      // Header/Body trennen
+      const headerEnd = trimmed.search(/\r?\n\r?\n/);
+      if (headerEnd < 0) continue;
+      const headerBlock = trimmed.slice(0, headerEnd);
+      const body = trimmed.slice(headerEnd).replace(/^\r?\n\r?\n/, "");
+      const ctMatch = headerBlock.match(/Content-Type\s*:\s*([^;\r\n]+)/i);
+      const encMatch = headerBlock.match(/Content-Transfer-Encoding\s*:\s*([^;\r\n]+)/i);
+      const ct = (ctMatch?.[1] || "").trim().toLowerCase();
+      const enc = (encMatch?.[1] || "7bit").trim().toLowerCase();
+      if (ct.startsWith("text/")) {
+        parts.push({ contentType: ct, encoding: enc, body });
+      }
+    }
+  }
+  // Decode parts
+  const decoded = parts.map(p => {
+    let out = p.body;
+    if (p.encoding === "base64") out = decodeBase64Utf8(p.body);
+    else if (p.encoding === "quoted-printable") out = decodeQuotedPrintable(p.body);
+    return { ...p, body: out };
+  });
+  const html = decoded.find(p => p.contentType === "text/html")?.body;
+  const text = decoded.find(p => p.contentType === "text/plain")?.body;
+  return { html, text };
 };
 
 // Sehr leichter Sanitizer: <script>, <style>, on*-Handler entfernen.
@@ -222,13 +282,33 @@ export default function CustomerMailHistory({ customerEmail, customerId, message
                 {loadingBody === m.id ? (
                   <div className="flex items-center text-sm text-muted-foreground"><Loader2 className="w-3.5 h-3.5 animate-spin mr-2" /> Lade Inhalt…</div>
                 ) : (() => {
-                  const html = m.body_html || "";
-                  if (html && !looksLikeRawCode(html)) {
+                  const rawHtml = m.body_html || "";
+                  const rawText = m.body_text || "";
+
+                  // 1. Prüfen ob body_html ein roher MIME-Source ist → parsen
+                  let html = rawHtml;
+                  let text = rawText;
+                  if (rawHtml && looksLikeRawMime(rawHtml)) {
+                    const parsed = parseMimeRaw(rawHtml);
+                    html = parsed.html || "";
+                    text = parsed.text || text;
+                  } else if (rawText && looksLikeRawMime(rawText) && !rawHtml) {
+                    const parsed = parseMimeRaw(rawText);
+                    html = parsed.html || "";
+                    text = parsed.text || "";
+                  }
+
+                  // 2. HTML rendern wenn echtes HTML
+                  if (html && looksLikeHtml(html)) {
                     return <div className="prose prose-sm max-w-none text-sm text-foreground [&_a]:text-accent [&_a]:underline" dangerouslySetInnerHTML={{ __html: sanitize(html) }} />;
                   }
-                  const text = m.body_text || (html && looksLikeRawCode(html) ? html : "");
+                  // 3. Plain text fallback
                   if (text) {
                     return <pre className="whitespace-pre-wrap font-sans text-sm text-foreground/90 leading-relaxed">{text}</pre>;
+                  }
+                  // 4. Wenn rawHtml zwar da ist aber ungeparst MIME — als pre rendern statt rohes HTML
+                  if (rawHtml) {
+                    return <pre className="whitespace-pre-wrap font-mono text-xs text-foreground/70 leading-relaxed">{rawHtml.slice(0, 2000)}</pre>;
                   }
                   return <p className="text-sm text-muted-foreground italic">Kein Inhalt vorhanden.</p>;
                 })()}

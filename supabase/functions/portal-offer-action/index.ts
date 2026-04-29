@@ -494,6 +494,18 @@ serve(async (req) => {
         customerHtml
       );
 
+      // Log in portal_messages für Admin-Mail-History
+      adminSupabase.from("portal_messages").insert({
+        customer_id: customer.id,
+        request_id: request_id,
+        subject: "Update zu Ihrer Anfrage – Emilian Leber",
+        body: customerHtml,
+        from_email: Deno.env.get("SMTP_USER") || "el@magicel.de",
+        to_email: customer.email,
+        status: "sent",
+        read_by_customer: false,
+      }).then(() => {}).catch(() => {});
+
       // 6. Send admin notification
       const adminHtml = `<p><strong>${customer.name || customer.email}</strong> hat das Angebot für <strong>${request.anlass || "Anfrage"}</strong> abgelehnt.</p>
       <p><a href="https://magicel.de/admin/requests/${request_id}" style="display:inline-block;background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:bold;">Anfrage im CRM öffnen →</a></p>`;

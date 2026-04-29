@@ -102,7 +102,7 @@ ${mailBody.replace(/\n/g, "<br>")}
         request_id: request_id || null,
         event_id: event_id || null,
         subject,
-        body: mailBody,
+        body: wrappedHtml,
         from_email: smtpUser,
         to_email,
         status: "sent",
