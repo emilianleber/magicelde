@@ -74,20 +74,23 @@ const statusEmoji = (status: string | null): string => {
 };
 
 serve(async () => {
-  // Events mit Kundennamen laden (ohne stornierte/abgelehnte)
-  const { data: events, error: eventsError } = await supabase
+  // Events laden — alle ohne Soft-Delete; storniert/abgelehnt/archiviert wird clientseitig gefiltert
+  // (server-side `NOT IN` schließt NULL-status fälschlich aus → "normale" Events fehlen sonst)
+  const HIDDEN_STATUS = new Set(["storniert", "abgelehnt", "archiviert"]);
+
+  const { data: eventsRaw, error: eventsError } = await supabase
     .from("portal_events")
     .select("*, customer:customer_id(name, company, email, phone)")
-    .is("deleted_at", null)
-    .not("status", "in", "(storniert,abgelehnt)");
+    .is("deleted_at", null);
+  const events = (eventsRaw || []).filter((e: { status: string | null }) => !HIDDEN_STATUS.has(e.status || ""));
 
-  // Nur offene Anfragen (ohne event_id = noch nicht gebucht, ohne stornierte/abgelehnte)
-  const { data: requests, error: requestsError } = await supabase
+  // Nur offene Anfragen (ohne event_id = noch nicht gebucht)
+  const { data: requestsRaw, error: requestsError } = await supabase
     .from("portal_requests")
     .select("*")
     .is("deleted_at", null)
-    .is("event_id", null)
-    .not("status", "in", "(storniert,abgelehnt)");
+    .is("event_id", null);
+  const requests = (requestsRaw || []).filter((r: { status: string | null }) => !HIDDEN_STATUS.has(r.status || ""));
 
   // ToDos mit Datum
   const { data: todos } = await supabase
