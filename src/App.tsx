@@ -187,6 +187,10 @@ const AdminRoutes = () => (
       <Route path="/admin/mails" element={<AdminMails />} />
       <Route path="/admin/todos" element={<AdminTodos />} />
 
+      {/* Kundenportal (Admin-Preview-Modus) — Admin sieht Portal aus Kundensicht */}
+      <Route path="/kundenportal" element={<Kundenportal />} />
+      <Route path="/kundenportal/login" element={<KundenportalLogin />} />
+
       <Route path="*" element={<Navigate to="/admin" replace />} />
     </Route>
   </Routes>
