@@ -153,17 +153,20 @@ function parseFrom(from: string): { name: string | null; address: string | null 
 }
 
 const FOLDER_TARGETS = [
-  // Mehrere Sent-Varianten als eigene Targets, damit ALLE existierenden Sent-Folder synchronisiert werden
-  // (Outlook=Gesendet, Apple Mail=Sent Items, etc.)
-  { internal: "INBOX", candidates: ["INBOX"] },
-  { internal: "Sent",          candidates: ["Sent Items", "Sent"] },
-  { internal: "Sent",          candidates: ["Gesendet"] },
-  { internal: "Sent",          candidates: ["Gesendete Objekte", "Gesendete Elemente"] },
-  { internal: "Sent",          candidates: ["INBOX.Sent"] },
-  { internal: "Spam",          candidates: ["Spam", "Junk", "Junk E-Mail", "INBOX.Spam", "INBOX.Junk"] },
-  { internal: "Trash",         candidates: ["Trash"] },
-  { internal: "Trash",         candidates: ["Gelöscht", "Gel&APY-scht", "Papierkorb"] },
-  { internal: "Trash",         candidates: ["INBOX.Trash"] },
+  // Mehrere Varianten pro Folder-Typ als eigene Targets, damit ALLE existierenden Folder synchronisiert werden
+  // (Outlook=Gesendet/Archiv/Gelöscht, Apple Mail=Sent Items/Archive/Trash, etc.)
+  { internal: "INBOX",   candidates: ["INBOX"] },
+  { internal: "Sent",    candidates: ["Sent Items", "Sent"] },
+  { internal: "Sent",    candidates: ["Gesendet"] },
+  { internal: "Sent",    candidates: ["Gesendete Objekte", "Gesendete Elemente"] },
+  { internal: "Sent",    candidates: ["INBOX.Sent"] },
+  { internal: "Archive", candidates: ["Archive"] },
+  { internal: "Archive", candidates: ["Archiv"] },
+  { internal: "Archive", candidates: ["INBOX.Archive"] },
+  { internal: "Spam",    candidates: ["Spam", "Junk", "Junk E-Mail", "INBOX.Spam", "INBOX.Junk"] },
+  { internal: "Trash",   candidates: ["Trash"] },
+  { internal: "Trash",   candidates: ["Gelöscht", "Gel&APY-scht", "Papierkorb"] },
+  { internal: "Trash",   candidates: ["INBOX.Trash"] },
 ];
 
 serve(async (req) => {
@@ -205,7 +208,7 @@ serve(async (req) => {
       logs.push(`${actualFolder}: ${count} messages`);
       if (count === 0) continue;
 
-      const from = Math.max(1, count - 1999);
+      const from = Math.max(1, count - 4999);
       const headers = await imap.fetchHeaders(from, count);
       logs.push(`Fetched ${headers.length} headers from ${actualFolder}`);
 
