@@ -274,7 +274,7 @@ const STATIONS = [
     Icon: Tv,
     name: "TVA Fernsehen",
     sub: "TV-Auftritt · Bayerisches Regional-TV",
-    body: "Erste eigene TV-Sendung mit 21 Jahren — zehn Jahre nach dem ersten Trick. Studio-Aufzeichnung, Live-Routine vor laufender Kamera, eingebauter Karten-Test mit dem Moderator. Vollständiger Mitschnitt auf YouTube und in der TVA-Mediathek.",
+    body: "TV-Interview mit 16 Jahren — zehn Jahre nach dem ersten Trick. Studio-Aufzeichnung, Live-Routine vor laufender Kamera, eingebauter Karten-Test mit dem Moderator. Vollständiger Mitschnitt auf YouTube und in der TVA-Mediathek.",
     accent: "spotlight",
   },
   {
@@ -331,7 +331,7 @@ const BekanntAusSection = () => {
           </div>
           <div className="md:col-span-5 md:pt-8">
             <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Fünf Stationen, die euer Press-Briefing tragen: TV-Auftritt 2025,
+              Fünf Stationen, die euer Press-Briefing tragen: TV-Interview 2023,
               Talents of Magic Finalist plus Kreativpreis, Greatest-Talent-Finale,
               Deutsche Jugendmeisterschaft Top 30 — und 5,0 Sterne auf
               ProvenExpert über mehrere Jahre.
@@ -519,13 +519,13 @@ const PMS = [
     kicker: "Premiere · Tour 2026",
     title: "Plötzlich Magie — Magic Meets Comedy.",
     excerpt:
-      "Emilian Leber präsentiert ab Frühjahr 2026 seine erste abendfüllende Tour-Show: 90 Minuten Mentalmagie, Karten-Routinen und Comedy-Pointen. Premiere im Restaurant Wald & Wiese in Sinzing bei Regensburg, anschließend Tour durch bayerische Theater und Saalbühnen.",
+      "Emilian Leber präsentiert ab Frühjahr 2026 seine erste abendfüllende Tour-Show: 90 Minuten Mentalmagie, Karten-Routinen und Comedy-Pointen. Premiere am 22.02.2026 in der Alten Mälzerei Regensburg, anschließend Tour durch bayerische Theater und Saalbühnen.",
     tag: "Show-Premiere",
   },
   {
     date: "28. November 2025",
     kicker: "Fernsehen · TVA Bayern",
-    title: "Erste eigene TV-Sendung mit 21 Jahren auf TVA.",
+    title: "TV-Interview mit 16 Jahren auf TVA.",
     excerpt:
       "Studioaufzeichnung mit Live-Routine vor TV-Kamera, eingebauter Karten-Test mit dem Moderator, Mentaleffekt mit Studio-Publikum. Komplett-Mitschnitt in der TVA-Mediathek und auf YouTube. Zehn Jahre nach dem ersten Trick.",
     tag: "TV-Auftritt",
@@ -896,7 +896,7 @@ const PHOTOS = [
   {
     src: magicDinnerImg,
     label: "Magic Dinner",
-    caption: "Live · Wald & Wiese Sinzing · 2025",
+    caption: "Alte Mälzerei Regensburg · 22.02.2026",
     span: "md:col-span-4",
     h: "h-[300px] md:h-[310px]",
   },
@@ -910,7 +910,7 @@ const PHOTOS = [
   {
     src: buehneZuschauerImg,
     label: "Bühne mit Publikum",
-    caption: "Live · DPSG · 2024",
+    caption: "Alte Mälzerei · DPSG · 2024",
     span: "md:col-span-4",
     h: "h-[260px] md:h-[300px]",
   },
@@ -1120,13 +1120,13 @@ const PressefotosSection = () => {
    BOILERPLATE — 3 Längen mit Copy-Button
    ═══════════════════════════════════════════════════════════ */
 const BIO_KURZ =
-  "Emilian Leber ist Zauberkünstler und Comedy-Magier aus Bayern. Mit über 200 Live-Auftritten seit 2016, TV-Stationen bei TVA und Greatest Talent sowie dem Kreativpreis bei Talents of Magic 2024 zählt er zu den profiliertesten jungen Magiern Deutschlands. 5,0 Sterne bei ProvenExpert.";
+  "Emilian Leber ist Zauberkünstler und Comedy-Magier aus Bayern. Mit über 200 Live-Auftritten seit 2016, TV-Interview bei TVA und Greatest Talent sowie dem Kreativpreis bei Talents of Magic 2024 zählt er zu den profiliertesten jungen Magiern Deutschlands. 5,0 Sterne bei ProvenExpert.";
 
 const BIO_MITTEL =
-  "Emilian Leber (geb. 2004) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Über 200 Live-Auftritte seit 2016 — vom privaten Magic Dinner über Galaabende bis zu Versicherungs-Konzern-Events mit 200 Gästen. 2023 Finalist bei Greatest Talent, 2024 Finalist und Kreativpreisträger bei Talents of Magic, 2024 Top 30 bei der Deutschen Jugendmeisterschaft, 2025 erster eigener TV-Auftritt auf TVA. Hauspartner-Restaurant für die Magic-Dinner-Reihe: Wald & Wiese in Sinzing bei Regensburg. 2026 Tour-Premiere der abendfüllenden Show Plötzlich Magie — Magic Meets Comedy.";
+  "Emilian Leber (geb. 2007) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Über 200 Live-Auftritte seit 2016 — vom privaten Magic Dinner über Galaabende bis zu Versicherungs-Konzern-Events mit 200 Gästen. 2023 Finalist bei Greatest Talent, 2024 Finalist und Kreativpreisträger bei Talents of Magic, 2024 Top 30 bei der Deutschen Jugendmeisterschaft, 2023 TV-Interview im Bayerischen Regional-TV (TVA). Hauspartner-Restaurant für die Magic-Dinner-Reihe: Wald & Wiese in Sinzing bei Regensburg. 2026 Tour-Premiere der abendfüllenden Show Plötzlich Magie — Magic Meets Comedy.";
 
 const BIO_LANG =
-  "Emilian Leber (geb. 2004) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Erste Tricks mit acht Jahren am heimischen Wohnzimmertisch, erster bezahlter Auftritt mit zwölf, erste abendfüllende Show 2023 — kurz darauf das Finale bei Greatest Talent (TV-Wettbewerb mit über 400 Bewerbungen). 2024 folgte das Finale bei Talents of Magic mit zusätzlichem Kreativpreis für eine eigens konzipierte Routine aus Mentalmagie und Comedy-Storytelling. Im selben Jahr Top 30 bei der Deutschen Jugendmeisterschaft der Zauberkunst des Magischen Zirkels Deutschland. 2025 der erste eigene TV-Auftritt auf TVA Bayern mit Studio-Aufzeichnung, Karten-Test mit dem Moderator und Mentaleffekt mit dem Studio-Publikum. Seit 2016 über 200 Live-Auftritte — Spannbreite von privaten Hochzeiten und Magic-Dinner-Abenden im Hauspartner-Restaurant Wald & Wiese (Sinzing bei Regensburg) bis zu DAX-Konzern-Galas für Versicherungskammer Bayern, STRABAG, Sixt und Sparkasse. 5,0 Sterne auf ProvenExpert und Google über mehr als dreißig verifizierte Bewertungen. Im Frühjahr 2026 Premiere der abendfüllenden Tour-Show Plötzlich Magie — Magic Meets Comedy mit anschließender Tour durch bayerische Theater. Bayern primär, deutschlandweit buchbar.";
+  "Emilian Leber (geb. 2007) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Erste Tricks mit acht Jahren am heimischen Wohnzimmertisch, erster bezahlter Auftritt mit zwölf, erste abendfüllende Show 2023 — kurz darauf das Finale bei Greatest Talent (TV-Wettbewerb mit über 400 Bewerbungen). 2024 folgte das Finale bei Talents of Magic mit zusätzlichem Kreativpreis für eine eigens konzipierte Routine aus Mentalmagie und Comedy-Storytelling. Im selben Jahr Top 30 bei der Deutschen Jugendmeisterschaft der Zauberkunst des Magischen Zirkels Deutschland. 2023 TV-Interview im Bayerischen Regional-TV (TVA) als 16-Jähriger, Karten-Test mit dem Moderator und Mentaleffekt mit dem Studio-Publikum. Seit 2016 über 200 Live-Auftritte — Spannbreite von privaten Hochzeiten und Magic-Dinner-Abenden im Hauspartner-Restaurant Wald & Wiese (Sinzing bei Regensburg) bis zu DAX-Konzern-Galas für Versicherungskammer Bayern, STRABAG, Sixt und Sparkasse. 5,0 Sterne auf ProvenExpert und Google über mehr als dreißig verifizierte Bewertungen. Im Frühjahr 2026 Premiere der abendfüllenden Tour-Show Plötzlich Magie — Magic Meets Comedy mit anschließender Tour durch bayerische Theater. Bayern primär, deutschlandweit buchbar.";
 
 const BIOS = [
   {
@@ -1333,7 +1333,7 @@ const PloetzlichMagieSection = () => {
             </h2>
             <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-5 max-w-xl">
               Neunzig Minuten Bühne — Mentalmagie, Karten-Routinen, Comedy-Storytelling.
-              Premiere im Frühjahr 2026 im Hauspartner-Restaurant Wald & Wiese
+              Premiere am 22.02.2026 in der Alten Mälzerei Regensburg
               in Sinzing bei Regensburg, anschließend Tour durch bayerische
               Theater und Saal-Bühnen.
             </p>
@@ -1390,7 +1390,7 @@ const PloetzlichMagieSection = () => {
             >
               <img
                 src={magicDinnerImg}
-                alt="Plötzlich Magie 2026 — Emilian Leber Tour-Show Premiere im Restaurant Wald & Wiese Sinzing"
+                alt="Plötzlich Magie 2026 — Emilian Leber Tour-Show Premiere in der Alten Mälzerei Regensburg"
                 className="w-full h-[480px] md:h-[600px] object-cover"
                 loading="lazy"
               />
@@ -1424,10 +1424,10 @@ const PloetzlichMagieSection = () => {
                   </span>
                 </div>
                 <p className="font-display text-base md:text-lg font-bold leading-tight mb-1">
-                  Restaurant Wald & Wiese
+                  Alte Mälzerei Regensburg
                 </p>
                 <p className={`${SERIF_ITALIC} text-sm text-white/70`}>
-                  Sinzing bei Regensburg · Hauspartner
+                  22.02.2026 · Tour-Premiere
                 </p>
               </div>
             </div>
@@ -1446,7 +1446,7 @@ const QUOTES = [
     quote:
       "Die schönste Reaktion ist nicht der Applaus. Es sind die drei Sekunden Stille davor, in denen alle gleichzeitig die Luft anhalten.",
     context: "Über den Moment vor dem Applaus",
-    source: "Interview · TVA-Studio 2025",
+    source: "Interview · TVA · 2023",
   },
   {
     quote:
@@ -1587,12 +1587,12 @@ const PullQuoteSection = () => {
         />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
-            Erste TV-Sendung{" "}
+            Erstes TV-Interview{" "}
             <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
-              mit 21
+              mit 16
             </span>
             .<br />
-            Zehn Jahre nach dem{" "}
+            Acht Jahre nach dem{" "}
             <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
               ersten Trick
             </span>
@@ -1601,7 +1601,7 @@ const PullQuoteSection = () => {
           <footer className="mt-10 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-white/25" aria-hidden />
             <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}>
-              TVA Bayern · November 2025
+              TVA Bayern · 2023
             </span>
             <span className="h-px w-12 bg-white/25" aria-hidden />
           </footer>
@@ -1624,7 +1624,7 @@ const VideoSection = () => {
             <p
               className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
             >
-              Video-Mitschnitt · TVA 2025.
+              Video-Mitschnitt · TVA 2023.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               TV-Auftritt{" "}
@@ -1655,7 +1655,7 @@ const VideoSection = () => {
           <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
             <iframe
               src={`https://www.youtube.com/embed/${TVA_VIDEO_ID}?rel=0&modestbranding=1`}
-              title="TVA TV-Auftritt 2025 — Emilian Leber"
+              title="TVA TV-Interview 2023 — Emilian Leber"
               loading="lazy"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

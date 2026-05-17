@@ -290,7 +290,7 @@ const GrosseLogoCloud = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               Siebzehn von zweihundert.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"Wer mich "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 gebucht hat
@@ -678,7 +678,7 @@ const StatsEditorialSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               Was zehn Jahre auf der Bühne zusammenrechnen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"Was ich seit 2016 "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 gebaut habe
@@ -937,7 +937,7 @@ const CaseStudiesSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               Drei Top-Referenzen, in der Tiefe.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"VKB."}{" "}STRABAG.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 XXXLutz.
@@ -1121,7 +1121,7 @@ const BranchenListeSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               Sechzehn Branchen, ein Ansprechpartner.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"Quer durch "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 die Branchen
@@ -1214,7 +1214,7 @@ const StimmenSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               Drei Stimmen, ungekürzt.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"Was Kunden "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 sagen
@@ -1444,7 +1444,7 @@ const ZeitleisteSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               Zehn Jahre, in sieben Stationen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"2016 — "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 Heute
@@ -1567,7 +1567,7 @@ const FAQSection = () => {
           <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
             Häufige Fragen zu Referenzen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground pr-4 break-words">
             Was vorher{" "}
             <span className={SERIF_ITALIC}>gefragt wird</span>.
           </h2>
