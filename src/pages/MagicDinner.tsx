@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
 import { QuizWizardInline, QuizConfig } from "@/components/landing/QuizWizard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { ArrowRight, ArrowUpRight, Star, Trophy, Award, Medal, Tv } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Star, Trophy, Award, Medal, Tv, Sparkles } from "lucide-react";
 
 import heroDinnerImg from "@/assets/hero-dinner.jpg";
 import tischmagieImg from "@/assets/emilian-magic-dinner.jpg";
@@ -3010,6 +3010,370 @@ const breadcrumbSchema = {
   ],
 };
 
+/* ═══════════════════════════════════════════════════════════
+   AUDIENCE-SECTION — Für wen ist Magic Dinner?
+   Klärt direkt: 5 Buyer-Personas mit Links zu passenden Pages
+   ═══════════════════════════════════════════════════════════ */
+const AUDIENCES = [
+  {
+    role: "Privat-Anfrage",
+    eyebrow: "Geburtstag · Hochzeit · Familienfest",
+    body: "Ihr feiert eine private Anlass und wollt das Magic Dinner als Highlight des Abends. Direkt anfragen oder per Quiz das passende Format finden.",
+    cta: "Privat anfragen",
+    href: "/buchung?anlass=Magic+Dinner",
+    color: ACCENT,
+  },
+  {
+    role: "Firmen-Anfrage",
+    eyebrow: "Vorstand · Kunden · Team-Event",
+    body: "Ihr plant ein Vorstandsdinner, Kundenabend, Mitarbeiterfeier oder Galaabend. Geschäftsrechnung, Versicherung, AVV — alles dabei.",
+    cta: "Firmen-Seite ansehen",
+    href: "/firmenfeiern",
+    color: ACCENT,
+  },
+  {
+    role: "Restaurant-Partner",
+    eyebrow: "Magic Dinner als eigene Veranstaltung",
+    body: "Ihr seid Restaurant und wollt Magic Dinner als eigene Veranstaltungsreihe etablieren. Konzept, Ticket-Verkauf, Kooperationsmodell.",
+    cta: "Restaurant-Modell unten",
+    href: "#restaurant-partner",
+    color: "#1f5e3f",
+  },
+  {
+    role: "Eventagentur",
+    eyebrow: "Schnellangebot · White-Label",
+    body: "Ihr bucht im Auftrag eures Kunden. Schnellangebot in 8 Stunden, AVV, Versicherung, optional White-Label im Auftritt.",
+    cta: "Agency-Seite",
+    href: "/event-agenturen",
+    color: ACCENT_DEEP,
+  },
+  {
+    role: "Ticket-Käufer",
+    eyebrow: "Öffentliche Magic-Dinner-Shows",
+    body: "Ihr wollt selbst Tickets für eine öffentliche Magic-Dinner-Show kaufen. Termine in Wald & Wiese und weiteren Locations.",
+    cta: "Tickets ansehen",
+    href: "/tickets",
+    color: AMBER_MID,
+  },
+];
+
+const AudienceSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-white py-24 md:py-36 border-b border-foreground/10">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+              Fünf Zielgruppen. Eine Seite.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Magic Dinner — für{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                wen?
+              </span>
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Diese Seite richtet sich an verschiedene Zielgruppen — von der
+              Privat-Anfrage über Restaurant-Partner bis zur Eventagentur.
+              Wählt euren Pfad:
+            </p>
+          </div>
+        </div>
+
+        <div className={`grid md:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          {AUDIENCES.map((a, i) => (
+            <a
+              key={a.role}
+              href={a.href}
+              className="group relative bg-white p-6 md:p-7 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_50px_-20px_rgba(0,0,0,0.18)]"
+              style={{
+                borderRadius: "1rem",
+                boxShadow: "0 15px 30px -20px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                borderTop: `3px solid ${a.color}`,
+                animationDelay: `${0.1 + i * 0.06}s`,
+              }}
+            >
+              <p
+                className="text-[10px] tracking-[0.18em] uppercase font-semibold mb-3"
+                style={{ color: a.color }}
+              >
+                {a.role}
+              </p>
+              <h3 className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/85 leading-tight mb-3`}>
+                {a.eyebrow}
+              </h3>
+              <p className="text-sm text-foreground/65 leading-[1.6] mb-5 flex-1">
+                {a.body}
+              </p>
+              <span
+                className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.08em] uppercase font-bold transition-all group-hover:translate-x-1 mt-auto"
+                style={{ color: a.color }}
+              >
+                {a.cta}
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   RESTAURANT-PARTNER-SECTION
+   Für Restaurants die Magic Dinner als eigene Veranstaltung etablieren
+   ═══════════════════════════════════════════════════════════ */
+const RestaurantPartnerSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      id="restaurant-partner"
+      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+    >
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+              Für Restaurants.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Magic Dinner als{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                eure Veranstaltungsreihe
+              </span>
+              .
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Restaurants buchen mich nicht nur für einzelne Privat-Events —
+              sondern etablieren Magic Dinner als wiederkehrende Veranstaltung
+              im eigenen Programm. Ein neues Marketing-Standbein für euer Haus.
+            </p>
+          </div>
+        </div>
+
+        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 items-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          {/* LEFT — Vorteile */}
+          <div className="lg:col-span-7">
+            <ul className="space-y-7">
+              {[
+                {
+                  title: "Ausverkaufte Abende statt halb leerer Restaurants.",
+                  body:
+                    "Magic-Dinner-Abende sind ein anderes Produkt als ein gewöhnliches Abendessen — ihr verkauft Tickets statt einzelner Tische. Eure leeren Tuesday- oder Wednesday-Slots werden zum Premium-Event.",
+                },
+                {
+                  title: "Höhere Marge pro Gast.",
+                  body:
+                    "Bei einem Ticket-Preis von 95–145 EUR pro Person (inkl. Drei-Gang-Menü und Show) liegt eure Marge pro Gast deutlich über der eines normalen À-la-carte-Abends. Trinkgeld und Folge-Reservierungen kommen on top.",
+                },
+                {
+                  title: "Marketing-Hook, der euch hervorhebt.",
+                  body:
+                    "[Magic-Dinner-Abend im Restaurant XY] ist eine Geschichte, die durch lokale Presse, Instagram und Empfehlung läuft. Ihr werdet zur Adresse, an die Menschen denken, wenn jemand sagt: [Lasst uns mal was Besonderes machen].",
+                },
+                {
+                  title: "Wiederkehrendes Format ohne Aufwand.",
+                  body:
+                    "Wir entwickeln gemeinsam einen monatlichen oder zweimonatlichen Rhythmus. Ich bringe die Show, ihr bringt Küche und Service. Eure Stammgäste bekommen ein neues Wiederkehr-Erlebnis.",
+                },
+              ].map((it) => (
+                <li key={it.title} className="grid grid-cols-[36px_1fr] md:grid-cols-[44px_1fr] gap-4 items-start">
+                  <span
+                    className="inline-flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full shrink-0"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
+                      border: "1px solid rgba(154,38,64,0.22)",
+                    }}
+                  >
+                    <Sparkles className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
+                  </span>
+                  <div>
+                    <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-2">
+                      {it.title}
+                    </h3>
+                    <p className="text-base text-foreground/65 leading-[1.65] max-w-xl">
+                      {it.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* RIGHT — Kooperations-Modell */}
+          <div className="lg:col-span-5">
+            <div
+              className="relative bg-white p-7 md:p-9"
+              style={{
+                borderRadius: "1.25rem",
+                boxShadow:
+                  "0 50px 100px -30px rgba(40,20,40,0.35), 0 15px 35px -15px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
+              }}
+            >
+              <p className={`${SERIF_ITALIC} text-base text-foreground/55 mb-2`}>
+                Kooperations-Modell.
+              </p>
+              <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-tight mb-6">
+                Drei Wege, wie wir zusammenarbeiten.
+              </h3>
+
+              <ol className="space-y-5 mb-7">
+                {[
+                  {
+                    label: "Modell A · Festpreis",
+                    body: "Ihr zahlt mir einen festen Tagessatz, ihr verkauft Tickets und behaltet komplette Marge.",
+                  },
+                  {
+                    label: "Modell B · Profit-Sharing",
+                    body: "Reduzierter Tagessatz plus Anteil am Ticket-Erlös. Geringeres Risiko für euch, ihr testet das Format.",
+                  },
+                  {
+                    label: "Modell C · Vollständige Show",
+                    body: "Ich vermarkte selbst, ihr stellt Location plus Catering. Ihr seid Sub-Auftragnehmer.",
+                  },
+                ].map((m, i) => (
+                  <li key={m.label} className="flex items-start gap-3">
+                    <span
+                      className={`${SERIF_ITALIC} text-2xl leading-none shrink-0`}
+                      style={{ color: ACCENT }}
+                    >
+                      0{i + 1}
+                    </span>
+                    <div>
+                      <p
+                        className="text-[11px] tracking-[0.16em] uppercase font-semibold mb-1"
+                        style={{ color: ACCENT }}
+                      >
+                        {m.label}
+                      </p>
+                      <p className="text-sm text-foreground/70 leading-[1.6]">
+                        {m.body}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              <div className="pt-6 border-t border-foreground/10 mb-6">
+                <p className={`${SERIF_ITALIC} text-xs text-foreground/55 mb-3`}>
+                  Beispiel-Hauspartner.
+                </p>
+                <p className="font-display text-base font-bold text-foreground leading-tight mb-1.5">
+                  Restaurant Wald & Wiese · Sinzing bei Regensburg
+                </p>
+                <p className="text-sm text-foreground/65 leading-[1.55]">
+                  Drei Magic-Dinner-Termine pro Jahr seit 2024 — beide Seiten
+                  ausgebucht, Stammgäste-Slot in der eigenen Veranstaltungs-Reihe.
+                </p>
+              </div>
+
+              <a
+                href="mailto:hello@magicel.de?subject=Restaurant-Partnerschaft%20Magic%20Dinner"
+                className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white w-full justify-center"
+                style={{
+                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+                }}
+              >
+                Restaurant-Anfrage starten
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              <p className="mt-4 text-[11px] text-foreground/45 text-center">
+                Persönliche Antwort innerhalb 24 h · NDA möglich · Konzept-Pitch vor Ort
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   TICKET-EVENT-SECTION — öffentliche Magic-Dinner-Shows
+   ═══════════════════════════════════════════════════════════ */
+const TicketEventSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} id="tickets" className="bg-white py-24 md:py-36">
+      <div className="container px-6">
+        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            Für Ticket-Käufer.
+          </p>
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground mb-8">
+            Öffentliche{" "}
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              Magic-Dinner-Termine
+            </span>
+            .
+          </h2>
+          <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-2xl mx-auto mb-10">
+            Wer Magic Dinner einmal selbst erleben möchte, ohne ein eigenes
+            Event zu planen: in Wald & Wiese und weiteren Restaurants gibt es
+            mehrmals jährlich öffentliche Magic-Dinner-Abende mit
+            Drei-Gang-Menü und kompletter Show — Tickets buchbar im
+            Ticket-Shop.
+          </p>
+
+          <div className="grid sm:grid-cols-3 gap-4 md:gap-5 max-w-3xl mx-auto mb-10">
+            {[
+              { num: "95 – 145 €", label: "pro Ticket · Menü inkl." },
+              { num: "25 – 60", label: "Gäste pro Abend" },
+              { num: "3 – 5×", label: "öffentliche Termine pro Jahr" },
+            ].map((s) => (
+              <div
+                key={s.label}
+                className="bg-[hsl(36,30%,97%)] rounded-2xl px-5 py-6 border border-foreground/8"
+              >
+                <p
+                  className="font-display text-2xl md:text-3xl font-black tabular-nums leading-none"
+                  style={{ color: ACCENT }}
+                >
+                  {s.num}
+                </p>
+                <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-2`}>
+                  {s.label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              to="/tickets"
+              className="hero-cta group inline-flex items-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
+              style={{
+                background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+                boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+              }}
+            >
+              Aktuelle Termine ansehen
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <a
+              href="https://restaurant-waldwiese.de"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-foreground/65 hover:text-foreground"
+            >
+              Wald &amp; Wiese ansehen
+              <ArrowUpRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const MagicDinner = () => (
   <>
     <Helmet>
@@ -3074,6 +3438,7 @@ const MagicDinner = () => (
     <PageLayout>
       <main>
         <Hero />
+        <AudienceSection />
         <TrustStrip />
         <KundenReferenzenSection />
         <PullQuoteSection />
@@ -3086,6 +3451,8 @@ const MagicDinner = () => (
         <QuizSection />
         <AnlaesseSection />
         <WaldUndWieseSection />
+        <RestaurantPartnerSection />
+        <TicketEventSection />
         <StimmenSection />
         <ZahlenInlineSection />
         <FAQSection />
