@@ -380,10 +380,10 @@ const KonzeptIntroSection = () => {
                   <p
                     className={`${SERIF_ITALIC} text-[11px] md:text-xs text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
-                    Seit 2017.
+                    Seit 2016.
                   </p>
                   <p className="font-display text-base md:text-lg font-black text-white leading-tight mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
-                    10 Jahre. <span style={{ color: "#f3d9a8" }}>200+ Events.</span>
+                    Zehn Jahre. <span style={{ color: "#f3d9a8" }}>200+ Events.</span>
                   </p>
                 </div>
               </div>

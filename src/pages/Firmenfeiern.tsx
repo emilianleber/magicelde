@@ -1905,6 +1905,45 @@ const Firmenfeiern = () => (
     <PageLayout>
       <main>
         <Hero />
+
+        {/* Agency-Banner: Hinweis für Eventagenturen */}
+        <section className="bg-[hsl(36,30%,97%)] border-b border-foreground/10">
+          <div className="container px-6 py-5 md:py-6">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-6">
+              <div className="flex items-center gap-3">
+                <span
+                  className="inline-flex items-center justify-center w-9 h-9 rounded-full shrink-0"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
+                    border: "1px solid rgba(154,38,64,0.22)",
+                  }}
+                >
+                  <Briefcase className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
+                </span>
+                <div>
+                  <p
+                    className="text-[11px] tracking-[0.16em] uppercase font-semibold"
+                    style={{ color: ACCENT }}
+                  >
+                    Eventagentur · Veranstaltungsplanung
+                  </p>
+                  <p className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/70`}>
+                    Bucht ihr im Auftrag eures Kunden? Dann gibt's hier den passenden Bereich.
+                  </p>
+                </div>
+              </div>
+              <Link
+                to="/event-agenturen"
+                className="md:ml-auto inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] uppercase font-bold transition-colors border-b-2 pb-0.5"
+                style={{ color: ACCENT, borderColor: ACCENT }}
+              >
+                Agency-Seite ansehen
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <AnlaesseSection />
         <FormatOptionenSection />
         <RoiSection />

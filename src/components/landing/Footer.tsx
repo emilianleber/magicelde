@@ -14,6 +14,8 @@ const FOOTER_COLS = [
       { to: "/hochzeit", label: "Hochzeit" },
       { to: "/firmenfeiern", label: "Firmenfeier" },
       { to: "/geburtstage", label: "Geburtstag · Jubiläum" },
+      { to: "/event-agenturen", label: "Event-Agenturen" },
+      { to: "/messe-magier", label: "Messe · Roadshow" },
     ],
   },
   {

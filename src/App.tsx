@@ -49,6 +49,8 @@ const AdminPakete = lazy(() => import("@/pages/AdminPakete"));
 const Index = lazy(() => import("./pages/Index.tsx"));
 const Hochzeit = lazy(() => import("./pages/Hochzeit.tsx"));
 const Firmenfeiern = lazy(() => import("./pages/Firmenfeiern.tsx"));
+const EventAgenturen = lazy(() => import("./pages/EventAgenturen.tsx"));
+const MesseMagier = lazy(() => import("./pages/MesseMagier.tsx"));
 const Geburtstage = lazy(() => import("./pages/Geburtstage.tsx"));
 const Buehnenshow = lazy(() => import("./pages/Buehnenshow.tsx"));
 const CloseUp = lazy(() => import("./pages/CloseUp.tsx"));
@@ -202,6 +204,8 @@ const PublicRoutes = () => (
     <Route path="/" element={<Index />} />
     <Route path="/hochzeit" element={<Hochzeit />} />
     <Route path="/firmenfeiern" element={<Firmenfeiern />} />
+    <Route path="/event-agenturen" element={<EventAgenturen />} />
+    <Route path="/messe-magier" element={<MesseMagier />} />
     <Route path="/geburtstage" element={<Geburtstage />} />
     <Route path="/buehnenshow" element={<Buehnenshow />} />
     <Route path="/close-up" element={<CloseUp />} />
@@ -246,6 +250,8 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/hochzeit" element={<Hochzeit />} />
               <Route path="/firmenfeiern" element={<Firmenfeiern />} />
+              <Route path="/event-agenturen" element={<EventAgenturen />} />
+              <Route path="/messe-magier" element={<MesseMagier />} />
               <Route path="/geburtstage" element={<Geburtstage />} />
               <Route path="/buehnenshow" element={<Buehnenshow />} />
               <Route path="/close-up" element={<CloseUp />} />

@@ -12,6 +12,8 @@ const ANLAESSE = [
   { to: "/hochzeit", label: "Hochzeit", sub: "Drei Akte Magie" },
   { to: "/firmenfeiern", label: "Firmenfeier", sub: "Vorstand, Kunden, Team" },
   { to: "/geburtstage", label: "Geburtstag · Jubiläum", sub: "Persönliche Magie" },
+  { to: "/event-agenturen", label: "Event-Agenturen", sub: "Schnellangebot · White-Label" },
+  { to: "/messe-magier", label: "Messe · Roadshow", sub: "Lead-Generator am Stand" },
 ];
 
 const KONZEPTE = [
