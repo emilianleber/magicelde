@@ -244,7 +244,7 @@ const Hero = () => {
                 style={{ animationDelay: `${0.3 + i * 0.08}s` }}
               >
                 {w}
-                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+                {i < HEADLINE_SANS.length - 1 ? " " : ""}
               </span>
             ))}
             <br className="hidden sm:block" />
@@ -259,7 +259,7 @@ const Hero = () => {
                 }}
               >
                 {w}
-                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
               </span>
             ))}
           </h1>
@@ -383,7 +383,7 @@ const KonzeptIntroSection = () => {
                     Seit 2017.
                   </p>
                   <p className="font-display text-base md:text-lg font-black text-white leading-tight mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
-                    8 Jahre. <span style={{ color: "#f3d9a8" }}>200+ Events.</span>
+                    10 Jahre. <span style={{ color: "#f3d9a8" }}>200+ Events.</span>
                   </p>
                 </div>
               </div>
@@ -433,10 +433,11 @@ const KonzeptIntroSection = () => {
             </h2>
             <div className="mt-8 space-y-5 text-base md:text-lg leading-[1.7] text-foreground/65">
               <p>
-                Ich bin Zauberkünstler aus Bayern und arbeite seit acht Jahren
-                bundesweit. Aufgewachsen am Pass eines bayerischen Gasthauses
-                kenne ich Service-Takt und Abendregie aus erster Hand — und
-                baue Magie dort ein, wo sie wirklich Wirkung hat.
+                Ich bin Zauberkünstler aus Bayern und arbeite seit 2016
+                bundesweit — also zehn Jahre. Aufgewachsen am Pass eines
+                bayerischen Gasthauses, kenne ich Service-Takt und
+                Abendregie aus erster Hand — und baue Magie dort ein, wo
+                sie wirklich Wirkung hat.
               </p>
               <p>
                 Drei Formate, drei Wege: eine <strong>Bühnenshow</strong> für
@@ -455,7 +456,7 @@ const KonzeptIntroSection = () => {
 
             <div className="mt-10 md:mt-12 grid grid-cols-3 gap-4 pt-8 border-t border-foreground/12">
               {[
-                { num: "8 J.", sub: "Bühnen-Erfahrung", accent: false },
+                { num: "10 J.", sub: "Bühnen-Erfahrung", accent: false },
                 { num: "3", sub: "TV-Stationen", accent: true },
                 { num: "5,0 ★", sub: "30+ Bewertungen", accent: false },
               ].map((s) => (
@@ -1007,60 +1008,60 @@ const FirmenfeierBookingCard = () => (
         "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
     }}
   >
-    {/* Animiertes Booking-Confirmation-Mockup */}
-    <div className="relative flex-[1.5] p-4 md:p-5 flex items-center justify-center bg-foreground/[0.03] overflow-hidden">
+    {/* Animiertes Booking-Confirmation-Mockup — kompakter mit mehr Padding */}
+    <div className="relative flex-[1.5] px-5 py-8 md:px-7 md:py-10 flex items-center justify-center bg-foreground/[0.03] overflow-hidden">
       <div
-        className="w-full max-w-[340px] rounded-2xl bg-white p-4 md:p-5 transition-transform duration-500 group-hover:-translate-y-1"
+        className="w-full max-w-[260px] rounded-xl bg-white px-3.5 py-3 md:px-4 md:py-3.5 transition-transform duration-500 group-hover:-translate-y-1"
         style={{
           boxShadow:
             "0 24px 50px -20px rgba(0,0,0,0.25), 0 4px 12px -4px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(0,0,0,0.04)",
         }}
       >
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center gap-1.5">
             <span
-              className="relative w-2 h-2 rounded-full"
+              className="relative w-1.5 h-1.5 rounded-full"
               style={{
                 background: "#1f8f5f",
-                boxShadow: "0 0 0 4px rgba(31,143,95,0.15)",
+                boxShadow: "0 0 0 3px rgba(31,143,95,0.15)",
                 animation: "fbBookingPulse 2s ease-in-out infinite",
               }}
             />
-            <span className="text-[10px] tracking-[0.14em] uppercase font-bold text-foreground/65">
+            <span className="text-[9px] tracking-[0.14em] uppercase font-bold text-foreground/65">
               Bestätigt
             </span>
           </div>
-          <span className={`${SERIF_ITALIC} text-[11px] text-foreground/45`}>
+          <span className={`${SERIF_ITALIC} text-[10px] text-foreground/45`}>
             #2024-118
           </span>
         </div>
-        <p className="font-display text-base font-bold text-foreground leading-tight mb-0.5">
+        <p className="font-display text-sm font-bold text-foreground leading-tight mb-0.5">
           Vorstandsdinner
         </p>
-        <p className={`${SERIF_ITALIC} text-xs text-foreground/55 mb-3`}>
+        <p className={`${SERIF_ITALIC} text-[11px] text-foreground/55 mb-2.5`}>
           Fr · 14. März · 19:00
         </p>
-        <div className="flex items-center gap-1 mb-3">
+        <div className="flex items-center gap-0.5 mb-2.5">
           {["Empfang", "Vorspeise", "Hauptgang", "Finale"].map((s, i) => (
-            <div key={s} className="flex-1 flex flex-col items-center gap-1">
+            <div key={s} className="flex-1 flex flex-col items-center gap-0.5">
               <div
-                className="w-full h-1 rounded-full transition-colors"
+                className="w-full h-[3px] rounded-full transition-colors"
                 style={{
                   background: i < 2 ? ACCENT : "rgba(0,0,0,0.08)",
                 }}
               />
-              <span className="text-[8px] tracking-[0.06em] uppercase text-foreground/45 font-semibold">
+              <span className="text-[7px] tracking-[0.06em] uppercase text-foreground/45 font-semibold">
                 {s}
               </span>
             </div>
           ))}
         </div>
-        <div className="flex items-center justify-between pt-2.5 border-t border-foreground/8">
-          <span className="text-xs text-foreground/55">
+        <div className="flex items-center justify-between pt-2 border-t border-foreground/8">
+          <span className="text-[10px] text-foreground/55">
             <strong className="font-display font-bold text-foreground">60</strong> Gäste
           </span>
           <span
-            className="text-[10px] tracking-[0.1em] uppercase font-bold px-2 py-1 rounded"
+            className="text-[9px] tracking-[0.1em] uppercase font-bold px-1.5 py-0.5 rounded"
             style={{
               color: ACCENT,
               background: "rgba(154,38,64,0.08)",
@@ -1072,8 +1073,8 @@ const FirmenfeierBookingCard = () => (
       </div>
       <style>{`
         @keyframes fbBookingPulse {
-          0%, 100% { transform: scale(1); box-shadow: 0 0 0 4px rgba(31,143,95,0.15); }
-          50% { transform: scale(1.2); box-shadow: 0 0 0 8px rgba(31,143,95,0.08); }
+          0%, 100% { transform: scale(1); box-shadow: 0 0 0 3px rgba(31,143,95,0.15); }
+          50% { transform: scale(1.25); box-shadow: 0 0 0 6px rgba(31,143,95,0.08); }
         }
       `}</style>
     </div>
@@ -1675,7 +1676,7 @@ const UeberMichSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.2vw,5rem)] text-foreground">
               Magie seit{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                acht Jahren
+                zehn Jahren
               </span>
               .
             </h2>
@@ -1696,7 +1697,7 @@ const UeberMichSection = () => {
 
             <div className="mt-10 flex flex-wrap gap-3">
               {[
-                "8 Jahre Zauberei",
+                "10 Jahre Zauberei",
                 "200+ Events",
                 "Bayern · DE",
                 "TV: TVA, Greatest Talent",
@@ -1741,7 +1742,7 @@ const ZahlenInlineSection = () => {
     { num: "100+", label: "Hochzeiten" },
     { num: "5,0 ★", label: "30+ Bewertungen" },
     { num: "24 h", label: "Antwortzeit" },
-    { num: "8 J.", label: "Erfahrung" },
+    { num: "10 J.", label: "Erfahrung" },
   ];
   return (
     <section

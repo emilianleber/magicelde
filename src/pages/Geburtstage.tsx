@@ -213,14 +213,14 @@ const Hero = () => {
             {HEADLINE_SANS.map((w, i) => (
               <span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
                 {w}
-                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+                {i < HEADLINE_SANS.length - 1 ? " " : ""}
               </span>
             ))}
             <br className="hidden sm:block" />
             {HEADLINE_ITALIC.map((w, i) => (
               <span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>
                 {w}
-                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
               </span>
             ))}
           </h1>

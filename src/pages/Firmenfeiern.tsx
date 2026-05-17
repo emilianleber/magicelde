@@ -225,7 +225,7 @@ const Hero = () => {
                 style={{ animationDelay: `${0.3 + i * 0.08}s` }}
               >
                 {w}
-                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+                {i < HEADLINE_SANS.length - 1 ? " " : ""}
               </span>
             ))}
             <br className="hidden sm:block" />
@@ -240,7 +240,7 @@ const Hero = () => {
                 }}
               >
                 {w}
-                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
               </span>
             ))}
           </h1>
@@ -848,95 +848,503 @@ const VorstandCounterSection = () => {
 /* ═══════════════════════════════════════════════════════════
    6 · CASE-STUDY — Jan von Lehmann XL-Quote
    ═══════════════════════════════════════════════════════════ */
-const CaseStudyQuoteSection = () => {
+/* ═══════════════════════════════════════════════════════════
+   6 · CASE-STUDIES — Zwei detaillierte Reportagen
+   Page-eigener Twist: Statt einem XL-Quote zwei echte Case-Studies
+   mit Prozess-Details (Anfrage → Konzept → Vorbereitung → Ausführung)
+   ═══════════════════════════════════════════════════════════ */
+const CASE_STUDIES = [
+  {
+    nr: "01",
+    branche: "Versicherungs-Konzern",
+    teaser: "Magic Camp · 200 Gäste · Nähe Ingolstadt",
+    title: "Vom Workshop-Wunsch zum 200-Personen-Konzept.",
+    rolle: "Konzept-Entwicklung + Pitch + Magic Camp",
+    photo: buehneZuschauerImg,
+    steps: [
+      {
+        label: "Anfrage",
+        body: "Bayerisches Versicherungsunternehmen sucht ein neuartiges Mitarbeiter-Event nahe Ingolstadt — 200 Gäste, der Wunsch: ein Zauber-Workshop für Kleingruppen.",
+      },
+      {
+        label: "Konzept",
+        body: "Komplett neu geplant: Magic Camp mit rotierenden Workshop-Stationen, kombiniert mit zentraler Bühnen-Show als roter Faden. Mehrere Telefon-Meetings zur Feinabstimmung.",
+      },
+      {
+        label: "Pitch vor Ort",
+        body: "Konzept-Präsentation als Pitch im Hause der Firma. Genaue Absprache, schriftlicher Vertrag, gemeinsames Briefing aller beteiligten Mitarbeiter und Trainer.",
+      },
+      {
+        label: "Ausführung",
+        body: "Workshop-Stationen für Kleingruppen, jeder Gast lernt selbst ein, zwei Effekte. Zum Abschluss große Bühnenshow für alle gleichzeitig — der Wow-Moment des Abends.",
+      },
+    ],
+    pull: "Es war einfach Mega! Alle Gäste begeistert.",
+    pullAuthor: "Jan von Lehmann · Eventleitung",
+    tint: "rose",
+  },
+  {
+    nr: "02",
+    branche: "STRABAG",
+    teaser: "Weihnachtsfeier · 80 Gäste · Regensburg",
+    title: "Aus [Bühnenshow] wurde [beides] — wegen Raumgröße.",
+    rolle: "Beratung + Format-Anpassung + Combo-Programm",
+    photo: emotionenImg,
+    steps: [
+      {
+        label: "Anfrage",
+        body: "Anfrage einer netten Mitarbeiterin der STRABAG für die Weihnachtsfeier in Regensburg, ca. 80 Gäste in einem Restaurant. Ursprünglicher Wunsch: Bühnenshow.",
+      },
+      {
+        label: "Beratung",
+        body: "Nach genauer Raum-Analyse Empfehlung von mir: zusätzlich Close-Up beim Glühweinempfang — bei der Raumgröße und Tisch-Anordnung passt das besser als reine Bühne.",
+      },
+      {
+        label: "Vorbereitung",
+        body: "Detailabsprachen per E-Mail (Ablauf, Gästezahl, Service-Takt), per Telefon (Parken, Anreise, Technik-Optionen). Vor Ort mit dem Restaurant-Chef Bühne und Technik final geplant.",
+      },
+      {
+        label: "Ausführung",
+        body: "Beim Glühweinempfang Close-Up unter den Gästen — einzelne Gruppen angesprochen, alle vereint, auf Magie eingestimmt. Während des Essens am Tisch dabei. Nach dem Essen Bühnenshow für alle, mit selbst mitgebrachter Technik. Einzigartiges Erlebnis von Empfang bis Tanzfläche.",
+      },
+    ],
+    pull: "Alles wurde angepasst — von der Bühnenshow zum vollen Abend-Programm.",
+    pullAuthor: "STRABAG · Weihnachtsfeier 2024",
+    tint: "amber",
+  },
+] as const;
+
+const CaseStudiesSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-28 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+              Zwei echte Beispiele aus dem letzten Jahr.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Wie zwei Firmen{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                ihren Abend
+              </span>{" "}
+              geplant haben.
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Nicht das Endergebnis ist interessant, sondern der Weg dahin —
+              wie aus einer ersten Anfrage ein abgestimmtes Konzept wird, mit
+              Pitch, Vertrag, Briefing und Anpassungen unterwegs.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-12 md:space-y-16">
+          {CASE_STUDIES.map((cs, i) => (
+            <article
+              key={cs.nr}
+              className={`relative grid lg:grid-cols-12 gap-8 lg:gap-12 items-start ${
+                isVisible ? "animate-fade-up" : "opacity-0"
+              }`}
+              style={{ animationDelay: `${0.1 + i * 0.15}s` }}
+            >
+              {/* Photo Side */}
+              <div className={`lg:col-span-5 ${i % 2 === 1 ? "lg:order-2" : ""}`}>
+                <div
+                  className="relative overflow-hidden h-[320px] md:h-[460px] lg:h-[560px]"
+                  style={{
+                    borderRadius: "1.25rem",
+                    boxShadow:
+                      "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2)",
+                  }}
+                >
+                  <img
+                    src={cs.photo}
+                    alt={`${cs.branche} — ${cs.title}`}
+                    className="w-full h-full object-cover object-center"
+                    loading="lazy"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        cs.tint === "rose"
+                          ? "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(154,38,64,0.35) 70%, rgba(92,22,34,0.7) 100%)"
+                          : "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(199,144,66,0.35) 70%, rgba(138,90,20,0.7) 100%)",
+                    }}
+                  />
+                  {/* Nr.-Marker */}
+                  <span
+                    className={`${SERIF_ITALIC} absolute top-6 left-6 md:top-8 md:left-8 leading-none text-white`}
+                    style={{
+                      fontSize: "clamp(4rem, 8vw, 7rem)",
+                      textShadow: "0 8px 30px rgba(0,0,0,0.45)",
+                    }}
+                  >
+                    {cs.nr}
+                  </span>
+                  {/* Branche-Glass */}
+                  <div className="absolute bottom-5 left-5 right-5 md:bottom-7 md:left-7 md:right-7">
+                    <div
+                      className="relative rounded-2xl px-5 py-4 overflow-hidden"
+                      style={{
+                        background:
+                          "linear-gradient(155deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0.04) 100%)",
+                        backdropFilter: "blur(34px) saturate(170%)",
+                        WebkitBackdropFilter: "blur(34px) saturate(170%)",
+                        border: "1px solid rgba(255,255,255,0.22)",
+                        boxShadow:
+                          "0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.45)",
+                      }}
+                    >
+                      <p
+                        className={`${SERIF_ITALIC} text-white/80 text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                      >
+                        {cs.branche}
+                      </p>
+                      <p className="font-display text-base font-bold text-white leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
+                        {cs.teaser}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Text Side */}
+              <div className={`lg:col-span-7 ${i % 2 === 1 ? "lg:order-1" : ""}`}>
+                <p
+                  className="text-[11px] md:text-xs tracking-[0.18em] uppercase font-semibold mb-4"
+                  style={{ color: ACCENT }}
+                >
+                  Case-Study {cs.nr} · {cs.rolle}
+                </p>
+                <h3 className="font-display font-black tracking-[-0.015em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.75rem)] text-foreground mb-8">
+                  {cs.title}
+                </h3>
+
+                <div className="space-y-5 mb-8">
+                  {cs.steps.map((step, idx) => (
+                    <div
+                      key={step.label}
+                      className="grid grid-cols-[28px_1fr] md:grid-cols-[36px_1fr] gap-4 items-start"
+                    >
+                      <span
+                        className="inline-flex items-center justify-center w-7 h-7 md:w-9 md:h-9 rounded-full shrink-0 font-display font-bold text-white text-xs md:text-sm"
+                        style={{
+                          background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
+                          boxShadow: "0 6px 14px -4px rgba(154,38,64,0.45)",
+                        }}
+                      >
+                        {idx + 1}
+                      </span>
+                      <div>
+                        <p
+                          className="text-[11px] tracking-[0.16em] uppercase font-bold mb-1.5"
+                          style={{ color: ACCENT }}
+                        >
+                          {step.label}
+                        </p>
+                        <p className="text-base text-foreground/75 leading-[1.65]">
+                          {step.body}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div
+                  className="relative pl-5 md:pl-6 mt-7"
+                  style={{ borderLeft: `2px solid ${ACCENT}` }}
+                >
+                  <p
+                    className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/85 leading-[1.45] mb-1.5`}
+                  >
+                    „{cs.pull}"
+                  </p>
+                  <p className="text-xs text-foreground/55 tracking-[0.06em]">
+                    — {cs.pullAuthor}
+                  </p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   6b · FORMAT-OPTIONEN FÜR B2B
+   Page-eigener Twist: 4 Format-Optionen mit B2B-Fokus,
+   sodass Eventplaner sehen welche Formate für Firma X passen
+   ═══════════════════════════════════════════════════════════ */
+const FORMAT_OPTIONS = [
+  {
+    title: "Close-Up am Tisch",
+    eyebrow: "Walk-Around · Tisch-zu-Tisch",
+    body:
+      "Klassisch für Firmen-Dinner und Kundenabende. Ich bewege mich zwischen den Tischen, jeder Gast erlebt Magie in der eigenen Hand. Kein Mikro, kein Aufbau, eingebettet in den Service.",
+    bullets: ["Vorstandsdinner · 8–25 Pers", "Mitarbeiterfeier · 40–200 Pers", "Empfangs-Aktivierung"],
+    href: "/close-up",
+  },
+  {
+    title: "Bühnenshow",
+    eyebrow: "15 – 60 Min · für alle gleichzeitig",
+    body:
+      "Durchkomponierte Show mit Drama-Kurve und Standing-Ovation-Finale. Eingebaute Firmen-Bezüge, Mentaleffekte, Comedy-Pointen. Headset und Sound bringe ich mit, wenn nichts da ist.",
+    bullets: ["Galaabend · 60–300 Pers", "Konferenz-Energizer · 5–20 Min", "Award-Show-Highlight"],
+    href: "/buehnenshow",
+  },
+  {
+    title: "Magic Dinner — Tisch + Bühne",
+    eyebrow: "Ganzer Abend · roter Faden",
+    body:
+      "Empfang per Walk-Around, Tisch-zu-Tisch zwischen den Gängen, Bühnenshow zum Dessert. Erzählbogen über den Abend, sodass niemand übergangen wird und alle den finalen Wow-Moment teilen.",
+    bullets: ["Vorstandsdinner mit Bühnen-Höhepunkt", "Galaabend ab 60 Pers", "Eingebettet in Service-Takt"],
+    href: "/magic-dinner",
+  },
+  {
+    title: "Comedy & Zauberei",
+    eyebrow: "Lachen + Staunen gleichzeitig",
+    body:
+      "Comedy ist nicht die Beilage, sondern Bestandteil. Mit Stand-Up-Background — Lacher und Staunen am selben Tisch, in derselben Sekunde. Besonders geeignet für lockerere B2B-Settings.",
+    bullets: ["Mitarbeiterfeier · 40+ Pers", "Sommer- / Weihnachtsfeier", "Award-Verleihung mit Moderation"],
+    href: "/comedy-zauberei",
+  },
+];
+
+const FormatOptionenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-white py-24 md:py-36">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+              Vier Formate, kombinierbar.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Welches Format wollt ihr{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                buchen
+              </span>
+              ?
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Für B2B-Events steht jedes Format einzeln zur Verfügung oder als
+              Kombination. Quiz weiter unten gibt eine konkrete Empfehlung —
+              hier nochmal die vier Bausteine im Überblick.
+            </p>
+          </div>
+        </div>
+
         <div
-          className={`max-w-4xl mx-auto ${
+          className={`grid md:grid-cols-2 gap-5 md:gap-6 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <div className="grid md:grid-cols-12 gap-x-10 gap-y-6 items-start mb-10">
-            <div className="md:col-span-7">
-              <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-4`}>
-                Case-Study · 200 Gäste, Versicherungs-Konzern.
-              </p>
-              <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
-                Eine Firmenfeier,{" "}
-                <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                  ein Maßstab
-                </span>
-                .
-              </h2>
-            </div>
-            <div className="md:col-span-5 md:pt-4">
-              <div className="flex flex-wrap items-baseline gap-x-5 gap-y-2 text-foreground/55">
-                <span className="text-sm">
-                  <strong className="text-foreground font-bold">200</strong> Gäste
-                </span>
-                <span aria-hidden className="text-foreground/20">·</span>
-                <span className="text-sm">
-                  <strong className="text-foreground font-bold">3</strong> h Programm
-                </span>
-                <span aria-hidden className="text-foreground/20">·</span>
-                <span className="text-sm">
-                  <strong className="text-foreground font-bold">VKB</strong>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <span
-            aria-hidden
-            className={`${SERIF_ITALIC} block leading-none mb-[-1.5rem] md:mb-[-3rem] select-none`}
-            style={{
-              fontSize: "clamp(6rem, 14vw, 13rem)",
-              color: ACCENT,
-              opacity: 0.55,
-            }}
-          >
-            “
-          </span>
-
-          <blockquote>
-            <p className="font-display font-black tracking-[-0.015em] leading-[1.1] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
-              Es war einfach{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Mega
-              </span>
-              ! 200 Gäste eines bayerischen Versicherungsunternehmens — Emilian
-              hat mit seiner eigens entwickelten Zaubertrickshow alle begeistert.
-            </p>
-            <footer className="mt-10 flex items-center gap-4">
-              <div
-                className="w-14 h-14 rounded-full flex items-center justify-center font-display font-bold text-white text-xl"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                }}
+          {FORMAT_OPTIONS.map((f, i) => (
+            <Link
+              key={f.title}
+              to={f.href}
+              className="group relative bg-white p-7 md:p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-25px_rgba(0,0,0,0.18)] block"
+              style={{
+                borderRadius: "1.25rem",
+                boxShadow:
+                  "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
+              }}
+            >
+              <span
+                className={`${SERIF_ITALIC} text-3xl md:text-4xl leading-none mb-5 block`}
+                style={{ color: ACCENT }}
               >
-                J
-              </div>
-              <div>
-                <p className="font-display font-bold text-foreground text-base">
-                  Jan von Lehmann
-                </p>
-                <p className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
-                  Firmenfeier · 200 Gäste · Versicherungskammer Bayern
-                </p>
-              </div>
-              <div aria-hidden className="hidden md:block ml-4 h-8 w-px bg-foreground/15" />
-              <div className="hidden md:flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                0{i + 1}
+              </span>
+              <p
+                className="text-[11px] tracking-[0.16em] uppercase font-semibold mb-3"
+                style={{ color: ACCENT }}
+              >
+                {f.eyebrow}
+              </p>
+              <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight mb-4">
+                {f.title}
+              </h3>
+              <p className="text-base text-foreground/65 leading-[1.65] mb-6">
+                {f.body}
+              </p>
+              <ul className="space-y-2 mb-6">
+                {f.bullets.map((b) => (
+                  <li
+                    key={b}
+                    className={`${SERIF_ITALIC} text-sm text-foreground/55 leading-snug`}
+                  >
+                    · {b}
+                  </li>
                 ))}
+              </ul>
+              <span
+                className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] uppercase font-bold transition-all group-hover:translate-x-1"
+                style={{ color: ACCENT }}
+              >
+                Format ansehen
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   6c · BUCHUNGS-ABLAUF — Detaillierter B2B-Prozess
+   Page-eigener Twist: 5-Step Process speziell für Eventplaner
+   ═══════════════════════════════════════════════════════════ */
+const ABLAUF_STEPS = [
+  {
+    num: "01",
+    tag: "Heute",
+    title: "Eure Anfrage.",
+    body:
+      "Per Formular oder Direkt-Anruf. Erste Eckpunkte (Datum, Ort, Gästezahl, Anlass). Innerhalb 24 Stunden persönliche Antwort mit groben Format-Vorschlägen.",
+  },
+  {
+    num: "02",
+    tag: "Innerhalb 1 Woche",
+    title: "30-Minuten-Briefing-Call.",
+    body:
+      "Telefon-Call zur Feinabstimmung: Tonalität, Tagesablauf, Service-Takt, Locations-Details, No-Gos. Bei Bedarf Mitabsprache mit Eventagentur oder Hotel-Direktion.",
+  },
+  {
+    num: "03",
+    tag: "Eine Woche nach Briefing",
+    title: "Schriftliches Angebot + Vertrag.",
+    body:
+      "Verbindliches Angebot mit allen Positionen offen, Mehrwertsteuer ausgewiesen, Zahlungsziel 14 Tage. Auf Wunsch Pitch-Präsentation vor Ort beim Auftraggeber.",
+  },
+  {
+    num: "04",
+    tag: "Eine Woche vor dem Tag",
+    title: "Final-Briefing + Anekdoten.",
+    body:
+      "Letzte Abstimmung mit Service, Eventagentur, Hotel-Technik. Anekdoten und Personalisierungen vom Auftraggeber. Schriftliches Briefing-Dokument an alle Beteiligten.",
+  },
+  {
+    num: "05",
+    tag: "Euer Eventtag",
+    title: "Aufbau + Show + Rechnung.",
+    body:
+      "Anreise mit Pufferzeit. Service-Check mit Restaurant-/Hotel-Team. Show wie abgestimmt. Geschäftsrechnung in den darauffolgenden Tagen mit ausgewiesener USt.",
+  },
+];
+
+const BuchungsAblaufSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+    >
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+              Buchungs-Ablauf für Eventplanerinnen.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Fünf Schritte.{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                Schriftlich. Sauber.
+              </span>
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Damit ihr genau wisst, was wann passiert und was wann an den
+              Vorstand oder ans Controlling weitergereicht werden muss.
+              Schriftlich, ohne Smalltalk-Versprechen.
+            </p>
+          </div>
+        </div>
+
+        <div
+          className={`grid md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          {ABLAUF_STEPS.map((s, i) => (
+            <article
+              key={s.num}
+              className="relative bg-white p-6 md:p-7 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_50px_-20px_rgba(0,0,0,0.18)]"
+              style={{
+                borderRadius: "1rem",
+                boxShadow:
+                  "0 15px 30px -20px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                animationDelay: `${0.1 + i * 0.06}s`,
+              }}
+            >
+              <div className="flex items-baseline gap-3 mb-5">
+                <span
+                  className={`${SERIF_ITALIC} text-3xl md:text-4xl leading-none`}
+                  style={{ color: ACCENT }}
+                >
+                  {s.num}
+                </span>
               </div>
-            </footer>
-          </blockquote>
+              <p
+                className="text-[10px] tracking-[0.16em] uppercase font-bold mb-2"
+                style={{ color: ACCENT }}
+              >
+                {s.tag}
+              </p>
+              <h3 className="font-display text-base md:text-lg font-bold text-foreground leading-tight mb-3">
+                {s.title}
+              </h3>
+              <p className="text-sm text-foreground/65 leading-[1.6]">
+                {s.body}
+              </p>
+            </article>
+          ))}
+        </div>
+
+        {/* Rand-Details */}
+        <div className={`mt-14 grid md:grid-cols-3 gap-3 md:gap-4 max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.4s" }}>
+          {[
+            { label: "Versicherung", value: "Berufshaftpflicht inkl." },
+            { label: "Rechnung", value: "GoBD-konform · 14 d Ziel" },
+            { label: "DSGVO", value: "AVV auf Anfrage" },
+            { label: "Technik", value: "Headset + Sound mitgebracht" },
+            { label: "Anreise", value: "Bayern · DE · pauschal" },
+            { label: "Vertrag", value: "Schriftlich · zwei Seiten" },
+          ].map((d) => (
+            <div
+              key={d.label}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-foreground/8"
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full shrink-0"
+                style={{ background: ACCENT }}
+              />
+              <div className="flex-1 min-w-0">
+                <p className={`${SERIF_ITALIC} text-[11px] text-foreground/45 leading-tight`}>
+                  {d.label}
+                </p>
+                <p className="font-display font-bold text-foreground text-xs leading-tight">
+                  {d.value}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -1498,10 +1906,12 @@ const Firmenfeiern = () => (
       <main>
         <Hero />
         <AnlaesseSection />
+        <FormatOptionenSection />
         <RoiSection />
         <IndustriesSection />
         <VorstandCounterSection />
-        <CaseStudyQuoteSection />
+        <CaseStudiesSection />
+        <BuchungsAblaufSection />
         <CustomQuizSection config={firmenfeiernQuizConfig} />
         <StimmenSection />
         <TrustZahlenSection />
