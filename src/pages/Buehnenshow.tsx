@@ -19,10 +19,20 @@ import {
   Lightbulb,
   Music,
   Cable,
+  Sparkles,
+  Brain,
+  Quote,
+  Clock,
+  Building2,
+  Heart,
+  PartyPopper,
+  Drama,
 } from "lucide-react";
 
 import heroStageImg from "@/assets/hero-stage.jpg";
 import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
+import buehneDpsgImg from "@/assets/buehne-dpsg.jpg";
+import stageShowImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 
 const SERIF_ITALIC =
@@ -238,6 +248,357 @@ const DramaKurveSection = () => {
               <p className="text-sm text-foreground/65 leading-[1.6]">{d.body}</p>
             </article>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   FORMAT-VARIANTEN — drei Show-Längen als asymmetrische Editorial-Liste
+   Layout: links Sticky-Headline, rechts Magazin-Liste mit Zeit-Markern
+   ═══════════════════════════════════════════════════════════ */
+const FORMAT_VARIANTEN = [
+  {
+    range: "10 – 20 Min",
+    label: "Highlight-Slot",
+    sub: "Programmübergang · Award-Verleihung · Sektempfangs-Closer",
+    body: "Verdichtet auf das Wesentliche. Ein Hook, ein Mentaleffekt mit Publikumsbeteiligung, eine Pointe zum Übergeben. Funktioniert perfekt, wenn ihr im Programmplan einen Akzent setzen wollt — vor oder nach der Geschäftsleitung, zwischen Buffet und Tanz, als Überraschung kurz vor Mitternacht.",
+    highlight: "1 Hook · 1 Wow · 1 Übergabe",
+    setting: "Mikrofon optional · Bühnenfläche 2×1,5 m",
+  },
+  {
+    range: "25 – 40 Min",
+    label: "Hauptshow",
+    sub: "Galadinner · Firmenabend · Hochzeit vor dem Tanz",
+    body: "Das Standardformat für Abendprogramme. Mit Drama-Kurve: Hook, Aufbau, zwei Peaks, Auflockerung mit Comedy, Climax, Übergabe. Eingebaute Anekdote vom Auftraggeber, Mentaleffekt mit Brautpaar oder Vorstand, Karten-Routine die im Saal endet. Standing-Ovation-Finale.",
+    highlight: "Hook · 2 Peaks · Comedy-Block · Climax",
+    setting: "Headset empfohlen · Soundcheck 30 Min",
+  },
+  {
+    range: "45 – 60 Min +",
+    label: "Abendprogramm",
+    sub: "Theater-Slot · Galaabend · große Firmenfeier",
+    body: "Komplettes Bühnen-Set mit dramaturgischem Bogen über fast eine Stunde, Pause optional. Mehr Routinen, größere Bilder, längere Spannungsbögen. Auch für TV-Aufzeichnungen und reine Magie-Abende — wenn ich der Programmpunkt bin, nicht das Highlight zwischen anderen.",
+    highlight: "4 Akte · Pause optional · Encore",
+    setting: "Volle Bühne · Eigene Tontechnik · Vorab-Probe möglich",
+  },
+];
+
+const FormatVariantenSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+      <div className="container px-6">
+        <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10">
+          <div className={`lg:col-span-4 lg:sticky lg:top-24 lg:self-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Drei Längen, drei Bögen.</p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-7">
+              Welche Show{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>passt</span>{" "}
+              zu eurem Slot?
+            </h2>
+            <p className="text-base md:text-lg text-foreground/65 leading-[1.7] max-w-md">
+              Highlight, Hauptshow oder Abendprogramm. Der Unterschied ist
+              nicht „mehr Tricks" — es ist die Dramaturgie. Drei Längen,
+              drei verschiedene Spannungsbögen.
+            </p>
+            <div className="mt-8 flex items-center gap-2 text-[12px] tracking-[0.16em] uppercase font-semibold" style={{ color: ACCENT }}>
+              <Drama className="w-4 h-4" strokeWidth={1.75} />
+              <span>Live abgestimmt aufs Programm</span>
+            </div>
+          </div>
+          <div className="lg:col-span-8">
+            <ol className="divide-y divide-foreground/10 border-y border-foreground/10">
+              {FORMAT_VARIANTEN.map((f, i) => (
+                <li key={f.label} className={`grid grid-cols-1 md:grid-cols-[140px_1fr] gap-x-8 gap-y-3 py-10 md:py-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+                  <div>
+                    <span className="block text-[10px] tracking-[0.18em] uppercase font-bold mb-2" style={{ color: ACCENT }}>{String(i + 1).padStart(2, "0")} · Variante</span>
+                    <span className="font-display font-black text-foreground text-xl md:text-2xl tabular-nums leading-tight block">{f.range}</span>
+                    <span className={`${SERIF_ITALIC} text-base text-foreground/55 mt-1 block`}>{f.label}</span>
+                  </div>
+                  <div>
+                    <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-3`}>{f.sub}</p>
+                    <p className="text-base md:text-lg text-foreground/75 leading-[1.65] mb-5 max-w-2xl">{f.body}</p>
+                    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] tracking-[0.04em]">
+                      <span className="inline-flex items-center gap-2 font-semibold text-foreground/80">
+                        <span className="w-2 h-2 rounded-full" style={{ background: ACCENT }} aria-hidden />
+                        {f.highlight}
+                      </span>
+                      <span aria-hidden className="text-foreground/25">·</span>
+                      <span className="text-foreground/55">{f.setting}</span>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   BEISPIEL-SHOW — narrative Magazin-Story mit Zeit-Marken + Pull-Notes
+   Layout: editorial 5fr/7fr split, lange Story-Spalte + seitliche italic-Notes
+   ═══════════════════════════════════════════════════════════ */
+const BEISPIEL_AKTE = [
+  {
+    t: "0:00",
+    akt: "Akt I — Auftritt",
+    title: "Drei Sekunden, bis es im Saal still ist.",
+    body: "Ich komme nicht angekündigt rein. Kein Mikro-Test, kein [Achtung Achtung]. Stattdessen: Licht runter, ein einzelner Spot, ein gewählter Gast aus dem Publikum hält schon eine Karte in der Hand — ohne zu wissen warum. Erste fünfzehn Sekunden gehören dieser einen Person. Danach kennt mich der ganze Saal.",
+    aside: "[Wer ist der Typ?] — das soll man denken. Dann: [Wie hat er das gemacht?]",
+  },
+  {
+    t: "4:00",
+    akt: "Akt II — Aufbau",
+    title: "Anekdote aus dem Briefing wird Teil der Show.",
+    body: "Was die Geschäftsleitung mir vorab erzählt hat, kommt zurück. Eine Insider-Story über den letzten Firmen-Ausflug, der Name vom Hund des Brautpaars, das Lieblingsbier eines Kollegen — eingebaut in einen Mentaleffekt, der nur in diesem Saal funktioniert. Erste echte Reaktionen, halb Lachen, halb Stirnrunzeln.",
+    aside: "Personalisierung kostet Stunden Vorbereitung. Sie macht den Unterschied zwischen [guter Show] und [nie vergessen].",
+  },
+  {
+    t: "10:00",
+    akt: "Akt III — Climax",
+    title: "Ein Mentaleffekt, der das Programm kippt.",
+    body: "Mitten in der Show: eine Vorhersage, die zwanzig Minuten früher im Saal hinterlegt wurde — von einem Gast, den ich nicht angefasst habe. Wird live aufgemacht. Drei Sekunden Stille. Dann atmet der ganze Saal aus und applaudiert. Selbst die Skeptiker. Selbst die Vorstandsvorsitzenden.",
+    aside: "Diese drei Sekunden Stille sind das, was Gastgeber später beschreiben — bevor sie über die Tricks reden.",
+  },
+  {
+    t: "17:00",
+    akt: "Akt IV — Übergabe",
+    title: "Standing Ovation, dann zurück zum Programm.",
+    body: "Die letzte Routine baut auf der ersten auf — die Karte aus Sekunde drei taucht im verschlossenen Briefumschlag des Vorstands wieder auf, unterschrieben. Standing-Ovation-Finale. Ich übergebe nicht an Stille, sondern an die nächste Programm-Phase — Tanz, DJ, Übergabe-Rede. Der Saal bleibt im Modus [heute Abend war besonders].",
+    aside: "Wenn die nächste Rede danach kommt, ist die Zuhörer-Bereitschaft auf Maximum.",
+  },
+];
+
+const BeispielShowSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-white py-24 md:py-36">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Eine 20-Min-Show, von innen.</p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Vier Akte.{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Ein Saal.</span>
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Nicht „Trick A, dann Trick B". Sondern ein erzählerischer Bogen
+              mit Auftritt, Aufbau, Climax und Übergabe. So liest sich eine
+              typische 20-Minuten-Show aus dem Publikum.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-16 md:space-y-20">
+          {BEISPIEL_AKTE.map((b, i) => (
+            <article key={b.akt} className={`grid lg:grid-cols-12 gap-8 lg:gap-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+              <header className="lg:col-span-3">
+                <div className="flex items-baseline gap-3 mb-3">
+                  <Clock className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={2} />
+                  <span className={`${SERIF_ITALIC} text-3xl md:text-4xl tabular-nums`} style={{ color: ACCENT }}>{b.t}</span>
+                </div>
+                <p className="text-[11px] tracking-[0.18em] uppercase font-bold mb-2" style={{ color: ACCENT }}>{b.akt}</p>
+              </header>
+              <div className="lg:col-span-6">
+                <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-tight mb-5">{b.title}</h3>
+                <p className="text-base md:text-lg text-foreground/75 leading-[1.7]">{b.body}</p>
+              </div>
+              <aside className="lg:col-span-3 lg:pl-7 lg:border-l" style={{ borderColor: `${ACCENT}30` }}>
+                <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/65 leading-[1.5]`}>{b.aside}</p>
+              </aside>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   PULL-QUOTE — black full-bleed
+   ═══════════════════════════════════════════════════════════ */
+const PullQuoteSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden">
+      <div className="absolute inset-0 opacity-30">
+        <img src={stageShowImg} alt="" className="w-full h-full object-cover" loading="lazy" />
+        <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.6) 0%, rgba(8,6,12,0.95) 70%)" }} />
+      </div>
+      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)" }} />
+      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.7), transparent 65%)" }} />
+      <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
+        <blockquote className="max-w-5xl mx-auto text-center">
+          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
+            Standing Ovation.{" "}
+            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+              Drei Sekunden Stille
+            </span>{" "}
+            davor.
+          </p>
+          <footer className="mt-10 flex items-center justify-center gap-4">
+            <span className="h-px w-12 bg-white/25" aria-hidden />
+            <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}>Das, was nach jeder Show passiert.</span>
+            <span className="h-px w-12 bg-white/25" aria-hidden />
+          </footer>
+        </blockquote>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   EFFEKT-HIGHLIGHTS — asymmetrisches Bento, 1 large + 3 small
+   ═══════════════════════════════════════════════════════════ */
+const HIGHLIGHTS = [
+  {
+    Icon: Brain,
+    kicker: "Routine 01 · Headliner",
+    title: "Die verschlossene Vorhersage.",
+    body: "Zu Beginn der Show übergebe ich einem Gast einen verschlossenen Umschlag. Zwanzig Minuten später entscheidet der ganze Saal gemeinsam — Zahl, Farbe, Wort, Bild. Der Umschlag bleibt unangetastet auf der Bühne. Wird live aufgemacht: alles drin, was gewählt wurde. Drei Sekunden Stille.",
+    accent: "spotlight",
+  },
+  { Icon: Sparkles, kicker: "Routine 02", title: "Karten-Cascade", body: "Eine signierte Karte aus dem Publikum wandert in ein verschlossenes Glas, einen verschlossenen Geldbeutel, einen versiegelten Brief.", accent: "default" },
+  { Icon: Drama, kicker: "Routine 03", title: "Mentale Wahl", body: "Drei Gäste aus drei Reihen denken an je ein Wort, eine Farbe, eine Zahl. Ich nenne alle drei vor der Pause — keine Hilfsmittel.", accent: "default" },
+  { Icon: Mic2, kicker: "Routine 04", title: "Anekdoten-Eskalation", body: "Persönliche Story vom Auftraggeber wird zur Comedy-Routine — Pointe aus seinem eigenen Briefing. Nur im Saal des Auftraggebers spielbar.", accent: "default" },
+];
+
+const EffektHighlightsSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const headliner = HIGHLIGHTS[0];
+  const rest = HIGHLIGHTS.slice(1);
+  return (
+    <section ref={ref} className="bg-white py-24 md:py-36">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Vier Bühnen-Highlights aus dem Repertoire.</p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Routinen, die{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>im Kopf bleiben</span>.
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Keine Trick-Liste. Ein Auszug der Routinen, die in einer
+              25–40-Min-Show typischerweise vorkommen — angepasst auf
+              Anlass, Publikum und gewünschten Ton.
+            </p>
+          </div>
+        </div>
+
+        <div className={`grid lg:grid-cols-12 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          {/* Headliner — 7 cols, dark gradient */}
+          <article className="lg:col-span-7 relative p-8 md:p-12 flex flex-col text-white overflow-hidden" style={{ borderRadius: "1.25rem", background: `linear-gradient(150deg, ${ACCENT_DEEP} 0%, #08060c 65%, #08060c 100%)`, minHeight: "420px", boxShadow: "0 40px 80px -30px rgba(40,20,40,0.45)" }}>
+            <div aria-hidden className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.7), transparent 70%)" }} />
+            <div className="relative z-10 flex flex-col h-full">
+              <div className="flex items-center gap-3 mb-7">
+                <span className="inline-flex items-center justify-center w-12 h-12 rounded-full" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}>
+                  <headliner.Icon className="w-5 h-5" style={{ color: "#f3d9a8" }} strokeWidth={1.75} />
+                </span>
+                <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-white/75">{headliner.kicker}</span>
+              </div>
+              <h3 className="font-display text-3xl md:text-4xl font-black leading-[1.05] mb-6 max-w-md">
+                {headliner.title.split(".")[0]}.{" "}
+                <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>Live entschieden.</span>
+              </h3>
+              <p className="text-base md:text-lg text-white/75 leading-[1.65] max-w-lg mt-auto">{headliner.body}</p>
+              <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] tracking-[0.04em] text-white/65">
+                <span className="inline-flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full" style={{ background: "#f3d9a8" }} aria-hidden />Saal-Routine</span>
+                <span aria-hidden className="text-white/25">·</span>
+                <span>20 Min Spannung · 3 Sek Stille</span>
+              </div>
+            </div>
+          </article>
+
+          {/* 3 kleinere Cards rechts in Spalte */}
+          <div className="lg:col-span-5 grid grid-cols-1 gap-5 md:gap-7">
+            {rest.map((h) => (
+              <article key={h.title} className="relative bg-[hsl(36,30%,97%)] p-6 md:p-7 flex gap-5 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
+                <span className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+                  <h.Icon className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
+                </span>
+                <div>
+                  <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-1.5" style={{ color: ACCENT }}>{h.kicker}</p>
+                  <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-snug mb-2">{h.title}</h3>
+                  <p className="text-sm text-foreground/65 leading-[1.6]">{h.body}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   ANLASS-MIX — wann passt eine Bühnenshow
+   Layout: 5 Anlässe als typografische Magazin-Liste mit Foto-Sticky links
+   ═══════════════════════════════════════════════════════════ */
+const ANLAESSE = [
+  { Icon: Trophy, label: "Galaabend", note: "Black-Tie · 200–500 Gäste", body: "Premium-Tonalität, Mentaleffekte mit Veranstalter-Bezug, Standing-Ovation-Finale vor dem Tanz." },
+  { Icon: Award, label: "Award-Show", note: "Verleihung · Live-TV-Vibe", body: "Highlight-Slot zwischen den Preiskategorien — verdichtete 15 Minuten, professioneller Moderationston." },
+  { Icon: Heart, label: "Hochzeit vor dem Tanz", note: "Bühne · 80–250 Gäste", body: "Romantischer Bogen, Brautpaar-Anekdote eingebaut, Übergabe zum DJ. Tonalität warm-verbindend." },
+  { Icon: Building2, label: "Firmen-Großevent", note: "Kongress · Mitarbeiterfeier", body: "Insider-Briefing vom Vorstand fließt in die Show. Comedy-Anteil hoch, Pointen aus dem Unternehmensalltag." },
+  { Icon: PartyPopper, label: "Theater-Slot", note: "Variety · 45–60 Min", body: "Volles Abendprogramm mit vier Akten, Pause optional. Für reine Magie-Abende oder Variety-Shows." },
+];
+
+const AnlassMixSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+      <div className="container px-6">
+        <div className="grid lg:grid-cols-12 gap-x-14 gap-y-12">
+          <div className={`lg:col-span-5 lg:sticky lg:top-24 lg:self-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Wann eine Bühne den Abend trägt.</p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-8">
+              Fünf Anlässe.{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Bühne</span>.
+            </h2>
+            <div className="relative overflow-hidden" style={{ borderRadius: "1.25rem" }}>
+              <img src={buehneDpsgImg} alt="Bühnenshow Emilian Leber — Publikum reagiert" className="w-full h-[340px] md:h-[420px] object-cover" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)" }} />
+              <div aria-hidden className="absolute inset-x-0 bottom-0 h-32" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.55))" }} />
+              <div className="absolute bottom-5 left-5 right-5 text-white">
+                <p className={`${SERIF_ITALIC} text-base md:text-lg leading-snug`}>„Volle Bühne, volles Publikum — funktioniert von 80 bis 500 Gästen."</p>
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-7">
+            <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
+              {ANLAESSE.map((a, i) => (
+                <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[56px_1fr_auto] items-baseline gap-4 md:gap-6 py-7 md:py-9 group ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
+                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+                    <a.Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
+                  </span>
+                  <div>
+                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
+                      <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight">{a.label}</h3>
+                      <span className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55`}>{a.note}</span>
+                    </div>
+                    <p className="text-base text-foreground/65 leading-[1.65] max-w-2xl">{a.body}</p>
+                  </div>
+                  <span className="hidden md:inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-500 group-hover:bg-[#9a2640] group-hover:text-white text-foreground/30 self-start mt-1" aria-hidden>
+                    <ArrowUpRight className="w-4 h-4" />
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-10 flex items-center gap-3">
+              <Link to="/buchung?format=Bühnenshow" className="hero-cta inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
+                Anlass besprechen<ArrowRight className="w-4 h-4" />
+              </Link>
+              <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>Antwort innerhalb 24 h</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -529,6 +890,11 @@ const Buehnenshow = () => (
       <main>
         <Hero />
         <DramaKurveSection />
+        <FormatVariantenSection />
+        <BeispielShowSection />
+        <PullQuoteSection />
+        <EffektHighlightsSection />
+        <AnlassMixSection />
         <TechRiderSection />
         <CustomQuizSection config={buehneQuizConfig} />
         <StimmenSection />
