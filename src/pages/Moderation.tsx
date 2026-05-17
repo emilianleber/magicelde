@@ -7,10 +7,31 @@ import {
   CustomQuizConfig,
 } from "@/components/landing/CustomQuiz";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { ArrowRight, ArrowUpRight, Star, Trophy, Award, Medal, Tv } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Star,
+  Trophy,
+  Award,
+  Medal,
+  Tv,
+  Mic2,
+  Music,
+  Lightbulb,
+  Sparkles,
+  Smile,
+  Building2,
+  Heart,
+  PartyPopper,
+  Quote,
+  FileText,
+} from "lucide-react";
+import { useState } from "react";
 
 import moderatorImg from "@/assets/moderator-hero.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
+import stageShowImg from "@/assets/stage-show.jpg";
+import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 
 const SERIF_ITALIC =
   "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
@@ -239,6 +260,448 @@ const PhasenSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   KOMBI-USP — Drei Disziplinen, ein Auftritt
+   Layout: drei überlappende Pillar-Cards + großer Headline-Block
+   ═══════════════════════════════════════════════════════════ */
+const DISZIPLINEN = [
+  { Icon: Mic2, label: "Moderation", body: "Klare Sprache, präzises Time-Keeping, eingearbeitete Anekdoten aus dem Briefing. Award-Vergaben, Reden anmoderiert, Auf- und Abgänge — der ganze Abend hat eine Hand.", tag: "Hauptdisziplin" },
+  { Icon: Sparkles, label: "Zauberei", body: "Eingebaute Magie-Bridges zwischen den Programmpunkten — 30-Sekunden-Effekte, wenn der nächste Award noch nicht fertig ist. Mentaleffekte als Akzent zu Reden. Karten-Routinen vor dem Tanz.", tag: "Brücken-Element" },
+  { Icon: Smile, label: "Comedy", body: "Pointen aus dem Briefing der Geschäftsleitung oder dem Brautpaar. Comedy-Anteil dosierbar von [dezenter Witz] bis [eigener Stand-Up-Slot]. Tonalität immer ans Publikum angepasst.", tag: "Tonalitäts-Boost" },
+];
+
+const KombiUSPSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Drei Disziplinen. Ein Auftritt.</p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Moderation, Magie und{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Comedy</span>{" "}
+              aus einer Hand.
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Andere Moderatoren können nicht zaubern. Andere Magier können
+              keinen Award-Block übergeben. Der USP ist nicht eine Disziplin —
+              sondern die Kombination, die einen Abend zusammenhält.
+            </p>
+          </div>
+        </div>
+
+        <div className={`grid md:grid-cols-3 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          {DISZIPLINEN.map((d, i) => (
+            <article key={d.label} className={`relative p-7 md:p-9 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 ${i === 1 ? "text-white" : ""}`} style={{
+              borderRadius: "1.25rem",
+              background: i === 1 ? `linear-gradient(160deg, ${ACCENT_DEEP} 0%, #08060c 100%)` : "white",
+              boxShadow: i === 1 ? "0 35px 70px -30px rgba(40,20,40,0.45)" : "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
+              minHeight: "360px",
+              transform: i === 1 ? "translateY(-12px)" : undefined,
+            }}>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="inline-flex items-center justify-center w-12 h-12 rounded-full" style={{
+                  background: i === 1 ? "rgba(255,255,255,0.08)" : "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
+                  border: i === 1 ? "1px solid rgba(255,255,255,0.18)" : "1px solid rgba(154,38,64,0.22)",
+                }}>
+                  <d.Icon className="w-5 h-5" style={{ color: i === 1 ? "#f3d9a8" : ACCENT }} strokeWidth={1.75} />
+                </span>
+                <span className="text-[10px] tracking-[0.18em] uppercase font-bold" style={{ color: i === 1 ? "rgba(255,255,255,0.65)" : ACCENT }}>{d.tag}</span>
+              </div>
+              <h3 className={`font-display text-2xl md:text-3xl font-black leading-tight mb-5 ${i === 1 ? "" : "text-foreground"}`}>{d.label}.</h3>
+              <p className={`text-base leading-[1.7] flex-1 ${i === 1 ? "text-white/80" : "text-foreground/75"}`}>{d.body}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className={`mt-12 md:mt-16 max-w-4xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <p className={`${SERIF_ITALIC} text-xl md:text-3xl text-foreground/75 leading-snug`}>
+            Drei Disziplinen — aber keine Übergaben zwischen Künstlern.{" "}
+            <span style={{ color: ACCENT }}>Ein Auftritt, ein Honorar, ein Briefing.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   SHOW-BEISPIELE — drei reale Event-Stories
+   Layout: editorial Reportage mit Foto-Inset + Story-Text
+   ═══════════════════════════════════════════════════════════ */
+const BEISPIELE = [
+  {
+    image: stageShowImg,
+    kicker: "STRABAG · 80 Gäste · Regensburg",
+    title: "Weihnachtsfeier mit Geschäftsführer-Übergabe.",
+    body: "Restaurant-Saal in Regensburg, 80 Gäste. Moderation des Abends inklusive Geschäftsführer-Rede, Auszeichnungen für langjährige Mitarbeiter und Übergabe an die Tanzfläche. Comedy-Anteil dezent — Insider-Pointen aus dem Briefing der Geschäftsleitung. Magie-Bridges während des Service zwischen den Tischen. Übergabe an DJ in unter 60 Sekunden, kein Stimmungs-Loch.",
+    tags: ["3 h Moderation", "Magie-Bridges", "Insider-Comedy"],
+  },
+  {
+    image: buehneZuschauerImg,
+    kicker: "Hochzeit · 120 Gäste · Bayern",
+    title: "Vom Sektempfang bis zum Eröffnungstanz.",
+    body: "Hochzeitsmoderation komplett: Sektempfang-Begrüßung, Anmoderation der Trauzeugen-Reden, Spiele-Übergaben, Eröffnungstanz-Ankündigung. Brautpaar-Anekdoten in Mentaleffekte eingebaut. Bei einer Rede die zu lang wurde: Magie-Bridge zum Eltern-Tisch, dann sauberer Übergang zur nächsten Rede.",
+    tags: ["4 h Moderation", "Brautpaar-Anekdoten", "Charmant"],
+  },
+  {
+    image: audienceImg,
+    kicker: "Award-Show · Versicherungs-Konzern · 200 Gäste",
+    title: "Premium-Tonalität, präzises Time-Keeping.",
+    body: "Galaabend mit Award-Vergaben in vier Kategorien. Klassische Award-Show-Moderation in Premium-Tonalität, mit zwei eingebauten Mentaleffekten als Spannungs-Anker zwischen den Kategorien. Vorstandsvorsitzender hat die Karten 3 Minuten nach Übergabe selbst gezückt. Comedy-Anteil minimal, dafür hohe Verbindlichkeit und sauberes Time-Keeping.",
+    tags: ["TV-Stil", "Award-Übergaben", "Premium-Ton"],
+  },
+];
+
+const ShowBeispieleSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-white py-24 md:py-36">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-16 md:mb-24">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Drei reale Abende.</p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Aus dem{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Moderations-Archiv</span>.
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Keine Stockfotos — drei tatsächliche Abende der letzten Saison.
+              Was moderiert wurde, wie der Magie-Anteil dosiert war, wo die
+              Comedy-Pointen lagen.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-20 md:space-y-28">
+          {BEISPIELE.map((b, i) => (
+            <article key={b.kicker} className={`grid lg:grid-cols-12 gap-8 lg:gap-14 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
+              <div className={`lg:col-span-6 ${i % 2 === 1 ? "lg:order-2" : ""}`}>
+                <div className="relative group overflow-hidden" style={{ borderRadius: "1.25rem" }}>
+                  <img src={b.image} alt={`Moderation — ${b.kicker}`} className="w-full h-[300px] md:h-[440px] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)" }} />
+                  <div aria-hidden className="absolute inset-x-0 bottom-0 h-32" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.55))" }} />
+                  <span className={`absolute top-5 ${i % 2 === 1 ? "right-5" : "left-5"} inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white`} style={{ background: "rgba(8,6,12,0.6)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)" }}>
+                    Beispiel {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+              </div>
+              <div className={`lg:col-span-6 ${i % 2 === 1 ? "lg:order-1" : ""}`}>
+                <p className="text-[11px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: ACCENT }}>{b.kicker}</p>
+                <h3 className="font-display text-2xl md:text-4xl font-black text-foreground leading-[1.05] mb-5">{b.title}</h3>
+                <p className="text-base md:text-lg text-foreground/75 leading-[1.7] mb-6">{b.body}</p>
+                <div className="flex flex-wrap gap-2">
+                  {b.tags.map((t) => (
+                    <span key={t} className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(36,30%,97%)] border border-foreground/10">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   PULL-QUOTE — black full-bleed
+   ═══════════════════════════════════════════════════════════ */
+const PullQuoteSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden">
+      <div className="absolute inset-0 opacity-25">
+        <img src={moderatorImg} alt="" className="w-full h-full object-cover" loading="lazy" />
+        <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.55) 0%, rgba(8,6,12,0.95) 70%)" }} />
+      </div>
+      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)" }} />
+      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.7), transparent 65%)" }} />
+      <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
+        <blockquote className="max-w-5xl mx-auto text-center">
+          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
+            Wenn die Rede{" "}
+            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>doppelt so lang</span>{" "}
+            wird, hat niemand ein Loch.
+          </p>
+          <footer className="mt-10 flex items-center justify-center gap-4">
+            <span className="h-px w-12 bg-white/25" aria-hidden />
+            <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}>Was Moderation + Magie ausmacht.</span>
+            <span className="h-px w-12 bg-white/25" aria-hidden />
+          </footer>
+        </blockquote>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   ANLASS-MATRIX — wann moderieren, mit welchem Magie/Comedy-Mix
+   Layout: 5 Anlässe als asymmetrische Magazin-Liste mit Mix-Visualizer
+   ═══════════════════════════════════════════════════════════ */
+type AnlassMatrix = {
+  Icon: typeof Trophy;
+  label: string;
+  sub: string;
+  body: string;
+  mix: { mod: number; mag: number; com: number };
+};
+
+const ANLASS_MATRIX: AnlassMatrix[] = [
+  { Icon: Trophy, label: "Galaabend", sub: "Black-Tie · 200–500 Gäste", body: "Premium-Tonalität, präzises Time-Keeping, Magie als Spannungs-Akzent zwischen Kategorien.", mix: { mod: 70, mag: 25, com: 5 } },
+  { Icon: Award, label: "Award-Show", sub: "Live · TV-Vibe", body: "Award-Vergaben moderieren, Übergaben verbindlich. Magie nur als Pause-Filler, Comedy minimal.", mix: { mod: 75, mag: 20, com: 5 } },
+  { Icon: Heart, label: "Hochzeit", sub: "Brautpaar im Mittelpunkt", body: "Charmant-persönlich. Brautpaar-Anekdoten in Mentaleffekte eingebaut, Comedy dosiert.", mix: { mod: 50, mag: 30, com: 20 } },
+  { Icon: Building2, label: "Firmen-Event", sub: "Vorstand · Sales-Kickoff", body: "Insider-Pointen aus Briefing, Magie-Bridges zwischen Vorstand und Mitarbeitern. Tonalität ans Unternehmen angepasst.", mix: { mod: 55, mag: 25, com: 20 } },
+  { Icon: PartyPopper, label: "Comedy-Show / Variety", sub: "Eigene Slots · Stand-Up möglich", body: "Comedy-Anteil hochgefahren, eigene Pointen-Sets, Magie als visuelles Highlight. Moderation als Anker zwischen den Acts.", mix: { mod: 35, mag: 30, com: 35 } },
+];
+
+const AnlassMatrixSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Fünf Anlässe, fünf Mischverhältnisse.</p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Anlass.{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Tonalität.</span>{" "}
+              Mix.
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Galaabend braucht andere Anteile als Comedy-Show. Hier die
+              typischen Mischverhältnisse aus Moderation, Magie und Comedy —
+              vorab abgestimmt.
+            </p>
+          </div>
+        </div>
+
+        <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
+          {ANLASS_MATRIX.map((a, i) => (
+            <li key={a.label} className={`grid grid-cols-1 md:grid-cols-[56px_2fr_3fr] gap-x-8 gap-y-4 py-8 md:py-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
+              <span className="inline-flex items-center justify-center w-12 h-12 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+                <a.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
+              </span>
+              <div>
+                <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight mb-1.5">{a.label}</h3>
+                <span className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55 block mb-3`}>{a.sub}</span>
+                <p className="text-base text-foreground/65 leading-[1.65] max-w-md">{a.body}</p>
+              </div>
+              <div className="md:pt-2">
+                <div className="flex gap-2 mb-3">
+                  {[
+                    { label: "Mod", val: a.mix.mod, color: ACCENT },
+                    { label: "Mag", val: a.mix.mag, color: "#c79042" },
+                    { label: "Com", val: a.mix.com, color: "#1f5e3f" },
+                  ].map((m) => (
+                    <div key={m.label} className="flex-1">
+                      <div className="flex items-baseline justify-between mb-1.5">
+                        <span className="text-[10px] tracking-[0.16em] uppercase font-bold text-foreground/55">{m.label}</span>
+                        <span className="font-display text-sm font-black tabular-nums" style={{ color: m.color }}>{m.val}%</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-foreground/[0.06] overflow-hidden">
+                        <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${m.val}%`, background: m.color }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   COMEDY-ANTEIL-VISUALIZER — interaktiver Slider mit 3 Modi
+   ═══════════════════════════════════════════════════════════ */
+const MODI = [
+  {
+    key: "pur" as const,
+    label: "Pure Moderation",
+    sub: "Klassisch · ohne Magie",
+    desc: "Klassische Abend-Moderation ohne Magie-Anteil. Wenn der Anlass es verlangt — Vorstandsabend mit eindeutig konservativer Tonalität, Hauptversammlung, Trauerfeier. Anekdoten und persönlicher Bezug ja, Magie nein.",
+    stats: { mod: 100, mag: 0, com: 5 },
+    tag: "Selten gewählt",
+  },
+  {
+    key: "bridge" as const,
+    label: "Moderation + Magie-Bridges",
+    sub: "Empfohlen · der Standard",
+    desc: "Moderation mit eingebauten 30-Sekunden-Effekten zwischen Programmpunkten. Magie überbrückt Reden, die zu lang werden, oder Wartezeiten auf den nächsten Award. Comedy dosiert, Pointen aus Briefing.",
+    stats: { mod: 60, mag: 30, com: 15 },
+    tag: "80% aller Buchungen",
+  },
+  {
+    key: "comedy" as const,
+    label: "Comedy-Heavy",
+    sub: "Eigene Pointen-Slots",
+    desc: "Comedy-Anteil hochgefahren. Eigene Comedy-Slots zwischen Programmpunkten, Stand-Up-artige Mini-Sets, Magie als visuelles Highlight für Pointen. Funktioniert auf Comedy-Shows, Variety-Abenden oder bei jüngerem Publikum.",
+    stats: { mod: 35, mag: 30, com: 40 },
+    tag: "Für Comedy-Shows",
+  },
+];
+
+const ComedyAnteilSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const [active, setActive] = useState<"pur" | "bridge" | "comedy">("bridge");
+  const current = MODI.find((m) => m.key === active)!;
+  return (
+    <section ref={ref} className="bg-white py-24 md:py-36">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Wie viel Comedy ist drin?</p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Drei{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Modus-Schalter</span>.
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Comedy-Anteil ist nicht eingebaut — sondern wählbar. Vorab im
+              Briefing abgestimmt, je nach Publikum und Anlass dosiert.
+            </p>
+          </div>
+        </div>
+
+        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          {/* LEFT — Mode-Switcher */}
+          <div className="lg:col-span-5 space-y-3">
+            {MODI.map((m, i) => {
+              const isActive = m.key === active;
+              return (
+                <button
+                  key={m.key}
+                  type="button"
+                  onClick={() => setActive(m.key)}
+                  onMouseEnter={() => setActive(m.key)}
+                  className="block w-full text-left rounded-2xl transition-all duration-500"
+                  style={{
+                    background: isActive ? "white" : "hsl(36,30%,97%)",
+                    border: isActive ? `1px solid ${ACCENT}40` : "1px solid rgba(0,0,0,0.08)",
+                    borderLeftWidth: isActive ? "4px" : "1px",
+                    borderLeftColor: isActive ? ACCENT : "rgba(0,0,0,0.08)",
+                    boxShadow: isActive ? "0 30px 60px -30px rgba(154,38,64,0.25)" : "none",
+                    padding: "1.5rem 1.75rem",
+                    transform: isActive ? "scale(1.02)" : "scale(1)",
+                  }}
+                >
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className={`${SERIF_ITALIC} text-2xl md:text-3xl tabular-nums`} style={{ color: isActive ? ACCENT : "rgba(0,0,0,0.3)" }}>{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-display text-lg md:text-xl font-bold text-foreground leading-snug">{m.label}</span>
+                  </div>
+                  <p className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55 mb-2`}>{m.sub}</p>
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] tracking-[0.14em] uppercase font-bold" style={{ background: isActive ? `${ACCENT}14` : "rgba(0,0,0,0.04)", color: isActive ? ACCENT : "rgba(0,0,0,0.55)" }}>{m.tag}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* RIGHT — sticky Mode-Detail */}
+          <div className="lg:col-span-7 lg:sticky lg:top-24 lg:self-start">
+            <div className="relative p-8 md:p-10 text-white overflow-hidden" style={{ borderRadius: "1.5rem", background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, #08060c 100%)`, boxShadow: "0 50px 100px -30px rgba(40,20,40,0.4)" }}>
+              <div aria-hidden className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.6), transparent 70%)" }} />
+
+              <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: "#f3d9a8" }}>Aktiver Modus</p>
+              <h3 className="relative font-display text-2xl md:text-4xl font-black leading-[1.1] mb-5">{current.label}.</h3>
+              <p className="relative text-base md:text-lg text-white/80 leading-[1.7] mb-8 max-w-lg">{current.desc}</p>
+
+              <div className="relative space-y-4">
+                {[
+                  { label: "Moderations-Anteil", val: current.stats.mod, color: "#f3d9a8" },
+                  { label: "Magie-Anteil", val: current.stats.mag, color: "#c79042" },
+                  { label: "Comedy-Anteil", val: current.stats.com, color: "#86d29a" },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <div className="flex items-baseline justify-between mb-2">
+                      <span className="text-[11px] tracking-[0.16em] uppercase font-bold text-white/70">{s.label}</span>
+                      <span className="font-display text-lg font-black tabular-nums" style={{ color: s.color }}>{s.val}%</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-white/[0.08] overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-700 ease-out" style={{ width: `${s.val}%`, background: s.color }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   TECH-RIDER — Moderations-Briefing-Anforderungen
+   ═══════════════════════════════════════════════════════════ */
+const TECH_RIDER = [
+  { Icon: Mic2, label: "Mikrofon", brauche: "Headset-Mikrofon oder Handheld mit XLR. Bei Galaabenden: Reserve-Mikro auf der Bühne.", bringe: "Eigenes Headset Sennheiser EW-Serie, falls vor Ort nichts vorhanden." },
+  { Icon: Music, label: "Sound", brauche: "Soundsystem mit klarem Mid/High-Bereich für Sprache. Bei größeren Hallen: Monitorlautsprecher auf der Bühne.", bringe: "Bei kleineren Räumen Mini-PA bis 80 Gäste, Backing-Track für Magie-Slots." },
+  { Icon: Lightbulb, label: "Licht", brauche: "Frontspot oder allgemeines Saal-Licht zur Moderationsposition. Spezielle Programmierung nicht nötig.", bringe: "Bei Bedarf Akku-LED-Spot für Magie-Bridges." },
+  { Icon: FileText, label: "Briefing-Material", brauche: "Programm-Ablauf, Sprecher-Liste, gewünschte Insider/Tabus, Special-Asks (Award-Liste, Brautpaar-Story).", bringe: "30-Min Briefing-Call vorab, ausgearbeitetes Moderations-Skript zur Freigabe." },
+];
+
+const TechRiderSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+      <div className="container px-6">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          <div className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Für die Eventplanung.</p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
+              Tech-Rider.{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Plus Briefing-Liste.</span>
+            </h2>
+            <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-8 max-w-md">
+              Was Eventagentur und Location wissen müssen — Technik plus
+              Briefing-Material. Saubere Übergaben starten beim Vorab-Call.
+            </p>
+            <a href="mailto:el@magicel.de?subject=Tech-Rider%20Moderation" className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
+              Tech-Rider als PDF<ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+
+          <div className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+            <div className="bg-white p-7 md:p-9" style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(40,20,40,0.25), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
+              {TECH_RIDER.map((row, i) => (
+                <div key={row.label} className={`grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_1fr] gap-4 ${i > 0 ? "border-t border-foreground/10 pt-5 mt-5" : ""}`}>
+                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+                    <row.Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
+                  </span>
+                  <div className="col-span-1 md:col-span-1">
+                    <p className="text-[10px] tracking-[0.16em] uppercase font-bold mb-1.5" style={{ color: ACCENT }}>{row.label} — brauche</p>
+                    <p className="text-sm text-foreground/75 leading-[1.55]">{row.brauche}</p>
+                  </div>
+                  <div className="col-span-2 md:col-span-1 md:border-l md:border-foreground/10 md:pl-4">
+                    <p className={`${SERIF_ITALIC} text-[10px] tracking-[0.16em] uppercase font-semibold mb-1.5 text-foreground/55`}>bringe selbst</p>
+                    <p className="text-sm text-foreground/70 leading-[1.55]">{row.bringe}</p>
+                  </div>
+                </div>
+              ))}
+              <div className="mt-7 pt-5 border-t border-foreground/10 flex flex-wrap gap-2">
+                {["30 Min Briefing-Call", "Skript zur Freigabe", "Soundcheck 30 Min", "Versichert (5 Mio)", "TV-erfahren"].map((t) => (
+                  <span key={t} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-foreground/65 bg-foreground/[0.04] border border-foreground/8">{t}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
    QUIZ — Moderation-Empfehlung
    ═══════════════════════════════════════════════════════════ */
 const modQuizConfig: CustomQuizConfig = {
@@ -435,7 +898,13 @@ const Moderation = () => (
     <PageLayout>
       <main>
         <Hero />
+        <KombiUSPSection />
         <PhasenSection />
+        <ShowBeispieleSection />
+        <PullQuoteSection />
+        <AnlassMatrixSection />
+        <ComedyAnteilSection />
+        <TechRiderSection />
         <CustomQuizSection config={modQuizConfig} />
         <StimmenSection />
         <TrustSection />
