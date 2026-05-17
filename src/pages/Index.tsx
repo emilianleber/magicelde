@@ -6,7 +6,9 @@ import {
   CustomQuizSection,
   CustomQuizConfig,
 } from "@/components/landing/CustomQuiz";
+import LogoMarquee from "@/components/landing/LogoMarquee";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { TVA_VIDEO_ID } from "@/lib/videos";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -820,6 +822,87 @@ const KundenSection = () => {
               />
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   5b · VIDEO — TVA-Auftritt
+   ═══════════════════════════════════════════════════════════ */
+const VideoSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const [playing, setPlaying] = useState(false);
+  return (
+    <section
+      ref={ref}
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
+    >
+      <div className="container px-6">
+        <div className={`grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+              TV-Auftritt · TVA 2025.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+              Sieh dir die{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                Show im Fernsehen
+              </span>{" "}
+              an.
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Auftritt im TVA (TV Aktuell) — drei Minuten Live-Magie aus dem
+              Studio, mit Moderator-Reaktion. Ein direkter Eindruck, wie sich
+              eine Show vor laufender Kamera spielt.
+            </p>
+          </div>
+        </div>
+        <div
+          className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          style={{ animationDelay: "0.15s" }}
+        >
+          <div
+            className="relative aspect-video overflow-hidden bg-foreground/5"
+            style={{ borderRadius: "1.5rem", boxShadow: "0 50px 100px -30px rgba(0,0,0,0.35)" }}
+          >
+            {playing ? (
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src={`https://www.youtube.com/embed/${TVA_VIDEO_ID}?autoplay=1&rel=0`}
+                title="TVA TV-Auftritt — Emilian Leber"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <>
+                <img
+                  src={`https://img.youtube.com/vi/${TVA_VIDEO_ID}/maxresdefault.jpg`}
+                  alt="TVA TV-Auftritt — Emilian Leber Showreel"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <button
+                    onClick={() => setPlaying(true)}
+                    className="w-20 h-20 md:w-24 md:h-24 rounded-full hover:scale-110 transition-transform flex items-center justify-center shadow-2xl"
+                    style={{ background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})` }}
+                    aria-label="TVA TV-Auftritt abspielen"
+                  >
+                    <svg className="w-9 h-9 text-white ml-1" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                </div>
+                <span className="absolute top-5 left-5 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white" style={{ background: "rgba(8,6,12,0.6)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)" }}>
+                  TVA · 2025
+                </span>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </section>
@@ -2023,10 +2106,16 @@ const Index = () => (
     <PageLayout>
       <main>
         <Hero />
+        <LogoMarquee
+          eyebrow="200+ Events. Auftritte für."
+          variant="cream"
+          compact
+        />
         <KonzeptIntroSection />
         <FormateSection />
         <TrustStrip />
         <KundenSection />
+        <VideoSection />
         <PullQuoteSection />
         <AnlaesseSection />
         <ComedyZaubereiSection />

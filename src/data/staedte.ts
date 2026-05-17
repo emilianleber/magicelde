@@ -365,6 +365,576 @@ Events am Münchner Flughafen, internationale Konferenzen in den Flughafenhotels
 Kosten Zauberer Freising: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
   },
   {
+    slug: "schweinfurt",
+    name: "Schweinfurt",
+    region: "Bayern",
+    intro: "Schweinfurt — Industriemetropole am Main mit starker Eventkultur. Als Zauberer für Schweinfurt bringe ich Close-Up Magie, Bühnenshow und Magic Dinner zu Firmenfeiern, Hochzeiten und Galas in Unterfranken — modern, interaktiv und mit echtem Wow-Faktor.",
+    highlight: "Schweinfurt ist Mittelfrankens Industriezentrum mit starkem Mittelstand. Vom Vorstandsdinner bis zur Mitarbeiter-Weihnachtsfeier — ich liefere das passende Entertainment-Konzept.",
+    einwohner: "54.000",
+    bekannteLocations: ["Stadthalle Schweinfurt", "Konferenzzentrum Maininsel", "Kulturzentrum Disharmonie", "Mercure Hotel Schweinfurt"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Schweinfurt?", a: "Die Preise hängen vom Format und der Dauer ab. Close-Up startet im mittleren dreistelligen Bereich, Komplettpakete höher. Ich erstelle ein individuelles Angebot, kostenlos und unverbindlich." },
+      { q: "Tritt der Zauberer auch in Industriebetrieben in Schweinfurt auf?", a: "Ja — Firmenevents bei großen Schweinfurter Industriebetrieben, Werks-Weihnachtsfeiern und Konferenzen gehören zu meinen häufigsten Anlässen. Tonalität passe ich der Unternehmenskultur an." },
+    ],
+    seoText: "Zauberer Schweinfurt: Emilian Leber begeistert als Zauberkünstler auf Firmenfeiern, Hochzeiten und Geburtstagen in Schweinfurt und Unterfranken. Close-Up, Bühnenshow und Magic Dinner mit modernem Profil.",
+    langText: `Als Zauberer für Schweinfurt bediene ich Industrie, Mittelstand und Privatkunden in einer der wichtigsten Wirtschaftsstädte Frankens. Vom Werks-Sommerfest großer Schweinfurter Industriebetriebe bis zur Hochzeit im historischen Stadtkern — die Bandbreite ist groß, mein Anspruch konstant: modernes Comedy-Zauberer-Entertainment mit echtem Wow-Faktor.
+
+Schweinfurt liegt verkehrsgünstig zwischen Würzburg und Bamberg — schnell erreichbar, mit kurzen Wegen zu Veranstaltungsorten in der Region. Auch Events in Haßfurt, Bad Kissingen oder Volkach betreue ich gern als Zauberer für die Schweinfurter Region.
+
+Kosten für einen Zauberer in Schweinfurt: Meine Pakete beginnen ab 395 €, Anfahrt ist im Angebot inklusive. Kontaktiere mich für ein unverbindliches Beratungsgespräch — Antwort innerhalb 24 Stunden.`,
+  },
+  {
+    slug: "memmingen",
+    name: "Memmingen",
+    region: "Bayern",
+    intro: "Memmingen — das Tor zum Allgäu, mit historischer Altstadt und internationalem Flughafen. Als Zauberer für Memmingen sorge ich auf Hochzeiten, Firmenfeiern und Galas in Schwaben für magische Momente — Close-Up Magie, Bühnenshow oder Magic Dinner.",
+    highlight: "Memmingen verbindet historisches Allgäu-Flair mit moderner Wirtschaft und Flughafenanbindung. Ideal für Events mit überregionalen Gästen.",
+    einwohner: "44.000",
+    bekannteLocations: ["Stadthalle Memmingen", "Memminger Hof", "Allgäu Airport Memmingen", "Memminger Stadttheater", "BBZ Memmingen"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Memmingen?", a: "Die Preise variieren je nach Format. Ich erstelle dir ein individuelles Angebot — kostenlos und unverbindlich, mit Anfahrt nach Memmingen inklusive." },
+      { q: "Eignet sich der Zauberer für Events am Allgäu Airport?", a: "Ja, Events in Flughafennähe und Konferenzen mit internationalen Gästen funktionieren bestens. Magie überwindet jede Sprachbarriere." },
+    ],
+    seoText: "Zauberer Memmingen: Emilian Leber bringt Close-Up Magie, Bühnenshow und Magic Dinner zu Events in Memmingen und im Allgäu. Hochzeit, Firmenfeier, Geburtstag — modernes Entertainment für Schwaben.",
+    langText: `Memmingen ist die historische Reichsstadt im Allgäu und ein wichtiger Wirtschaftsstandort in Schwaben. Als Zauberer für Memmingen bringe ich modernes Entertainment zu Hochzeiten in Altstadt-Locations, Firmenfeiern in der Stadthalle und Galas im Memminger Hof.
+
+Mit dem Allgäu Airport hat Memmingen außerdem direkte Flughafenanbindung — was die Stadt zum idealen Veranstaltungsort für Konferenzen, Tagungen und Corporate Events mit überregionalen Gästen macht. Auch hier liefere ich das passende Format: Mentaleffekte, Comedy-Bühnenshow oder Close-Up zwischen den Gängen.
+
+Kosten Zauberer Memmingen: Pakete ab 395 €, Anfahrt inklusive. Kontaktiere mich für ein kostenloses Angebot.`,
+  },
+  {
+    slug: "amberg",
+    name: "Amberg",
+    region: "Bayern",
+    intro: "Amberg — das Herz der Oberpfalz mit über 1000 Jahren Stadtgeschichte. Als Zauberer für Amberg bringe ich Close-Up Magie, Bühnenshow und Magic Dinner in historische Locations und moderne Eventhallen der Kurfürstenstadt.",
+    highlight: "Amberg ist Oberpfälzer Kulturmetropole und nur eine Stunde von Regensburg entfernt — kurze Wege, volle Verfügbarkeit, echte Lokal-Kenntnis.",
+    einwohner: "42.000",
+    bekannteLocations: ["Stadttheater Amberg", "Congress Centrum Amberg (ACC)", "Stadthalle Amberg", "Maltesergebäude", "Hotel Drahthammer Schlößl"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Amberg?", a: "Die Preise hängen von Format und Dauer ab. Individuelles Angebot kostenlos und unverbindlich auf Anfrage." },
+      { q: "Tritt der Zauberer auch im ACC Amberg auf?", a: "Ja, das Congress Centrum Amberg und andere Eventlocations in der Stadt gehören zu meinem regulären Einsatzgebiet. Ich kenne die Räume und passe das Programm an." },
+    ],
+    seoText: "Zauberer Amberg: Emilian Leber begeistert als Zauberkünstler auf Events in Amberg und der Oberpfalz. Hochzeit, Firmenfeier, Geburtstag — Close-Up, Bühnenshow und Magic Dinner mit modernem Stil.",
+    langText: `Als Zauberer für Amberg bin ich in der Oberpfalz zuhause — Regensburg ist nur eine Autostunde entfernt, was kurze Anfahrtswege und volle Verfügbarkeit bedeutet. Ob Firmenfeier im Congress Centrum Amberg, Hochzeit in einer der historischen Altstadt-Locations oder Geburtstag im Hotel — ich liefere das passende Format.
+
+Amberg ist eine Stadt mit reicher Geschichte und lebendiger Eventkultur. Das Stadttheater, das Maltesergebäude und die zahlreichen historischen Säle bieten einzigartige Rahmen für besondere Anlässe — und professionelle Zauberkunst setzt das Highlight.
+
+Kosten Zauberer Amberg: Pakete ab 395 €, Anfahrt aus Regensburg ist im Angebot inklusive.`,
+  },
+  {
+    slug: "neuburg-an-der-donau",
+    name: "Neuburg an der Donau",
+    region: "Bayern",
+    intro: "Neuburg an der Donau — Renaissance-Juwel mit dem prächtigen Schloss über dem Donautal. Als Zauberer für Neuburg bringe ich Magie zu Hochzeiten im Schlossambiente, Firmenfeiern und Galas in einer der historisch schönsten Städte Bayerns.",
+    highlight: "Das Schloss Neuburg und die Renaissance-Altstadt machen jede Hochzeit zum Märchen — und mit Close-Up Magie wird sie unvergesslich.",
+    einwohner: "30.000",
+    bekannteLocations: ["Schloss Neuburg", "Kongregationssaal", "Stadttheater Neuburg", "Hofapotheke (Eventbereich)", "Hotel Bergbauer"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Neuburg an der Donau?", a: "Die Preise hängen vom Format ab. Ich erstelle ein individuelles Angebot mit transparenter Kostenstruktur, Anfahrt aus Regensburg inklusive." },
+      { q: "Tritt der Zauberer im Schloss Neuburg auf?", a: "Ja, Schloss-Hochzeiten und Galas im Schloss Neuburg gehören zu meinen schönsten Auftritten. Das Renaissance-Ambiente passt perfekt zu meiner eleganten Tonalität." },
+    ],
+    seoText: "Zauberer Neuburg an der Donau: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in der Renaissance-Stadt — auch im Schloss Neuburg.",
+    langText: `Neuburg an der Donau ist mit dem prächtigen Renaissance-Schloss eine der schönsten historischen Städte Bayerns — und ein gefragter Hochzeitsort für Brautpaare, die das Besondere suchen. Als Zauberer für Neuburg bringe ich Close-Up Magie beim Sektempfang im Schlosshof, Bühnenshow im großen Saal und Tisch-zu-Tisch-Magie beim Hochzeitsdinner.
+
+Auch Firmenfeiern und Galas profitieren vom außergewöhnlichen Rahmen — und einem Entertainer, der die Tonalität dem Ambiente anpasst. Mentaleffekte, Comedy-Pointen und Standing-Ovation-Finale für den großen Moment.
+
+Kosten Zauberer Neuburg: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "weiden-in-der-oberpfalz",
+    name: "Weiden in der Oberpfalz",
+    region: "Bayern",
+    intro: "Weiden — die Stadt des Glases, ein wichtiger Wirtschafts- und Kulturstandort in der nördlichen Oberpfalz. Als Zauberer für Weiden bringe ich moderne Zauberkunst zu Firmenfeiern, Hochzeiten und Galas in Stadt und Region.",
+    highlight: "Weiden ist Wirtschaftsmetropole der nördlichen Oberpfalz — starke Industrie, lebendiges Kulturleben und ideale Bedingungen für Corporate Events.",
+    einwohner: "42.000",
+    bekannteLocations: ["Max-Reger-Halle Weiden", "Stadttheater Weiden", "Neue Welt", "Hotel Admira", "Stadthalle"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Weiden?", a: "Die Preise variieren je nach Format und Dauer. Anfrage kostenlos und unverbindlich, individuelles Angebot innerhalb 24 Stunden." },
+      { q: "Eignet sich ein Zauberer für eine Weihnachtsfeier in Weiden?", a: "Sehr gut — Weihnachtsfeiern für Weidener Unternehmen sind einer meiner häufigsten Einsätze in der Region. Tonalität immer auf die Unternehmenskultur abgestimmt." },
+    ],
+    seoText: "Zauberer Weiden in der Oberpfalz: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und Galas in Weiden und der nördlichen Oberpfalz.",
+    langText: `Als Zauberer für Weiden in der Oberpfalz bediene ich Industrie, Mittelstand und Privatkunden in einer der wichtigsten Wirtschaftsstädte Ostbayerns. Vom Sommerfest großer Weidener Industriebetriebe bis zur Hochzeit in historischen Altstadt-Locations — ich liefere das passende Konzept für jeden Anlass.
+
+Weiden ist über Regensburg in rund 90 Minuten erreichbar, was kurze Wege und kurze Reaktionszeiten bedeutet. Auch Events in Tirschenreuth, Marktredwitz oder Vohenstrauß betreue ich gerne mit.
+
+Kosten Zauberer Weiden: Pakete ab 395 €, Anfahrt inklusive. Kontaktiere mich für ein kostenloses Beratungsgespräch.`,
+  },
+  {
+    slug: "coburg",
+    name: "Coburg",
+    region: "Bayern",
+    intro: "Coburg — die fränkische Residenzstadt mit der mächtigen Veste über der Altstadt. Als Zauberer für Coburg bringe ich Close-Up Magie, Bühnenshow und Magic Dinner zu Firmenfeiern, Hochzeiten und Galas in Oberfranken.",
+    highlight: "Coburg ist Konzernsitz von HUK-Coburg und eine historisch reiche Residenzstadt — perfektes Setting für Corporate Events und Hochzeiten mit Niveau.",
+    einwohner: "41.000",
+    bekannteLocations: ["Veste Coburg", "Schloss Ehrenburg", "HUK-Coburg-Halle (Umfeld)", "Hotel Goldene Traube", "Kongresshaus Rosengarten"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Coburg?", a: "Die Preise hängen vom Format ab. Kostenloses Angebot auf Anfrage, individuell auf dein Event zugeschnitten." },
+      { q: "Tritt der Zauberer auch auf Großveranstaltungen in Coburg auf?", a: "Ja — Firmenfeiern bei Coburger Konzernen, Galas im Kongresshaus Rosengarten und private Anlässe in der Altstadt gehören zu meinem Einsatzgebiet." },
+    ],
+    seoText: "Zauberer Coburg: Emilian Leber begeistert als Zauberkünstler auf Events in Coburg und Oberfranken — Hochzeit, Firmenfeier, Geburtstag mit Close-Up Magie und Bühnenshow.",
+    langText: `Coburg verbindet königliche Geschichte mit moderner Wirtschaftskraft. Die Residenzstadt ist Sitz von HUK-Coburg und einem starken Mittelstand — was eine lebendige Eventkultur mit anspruchsvollem Publikum bedeutet. Als Zauberer für Coburg liefere ich entsprechend: modern, präzise, mit klarer Tonalität für Premium-Anlässe.
+
+Von der Hochzeit auf der Veste Coburg über die Firmenfeier im Kongresshaus Rosengarten bis zum Galaabend im Schloss Ehrenburg — Coburg bietet Locations mit Charakter. Mein Programm passt sich dem Rahmen an: Mentaleffekte, eingebaute Anekdoten, Standing-Ovation-Finale.
+
+Kosten Zauberer Coburg: Pakete ab 395 €, Anfahrt aus Regensburg ca. 2 Stunden, im Angebot inklusive.`,
+  },
+  {
+    slug: "hof",
+    name: "Hof",
+    region: "Bayern",
+    intro: "Hof — die fränkische Saalestadt im Bayerischen Vogtland. Als Zauberer für Hof bringe ich modernes Comedy-Zauberkünstler-Entertainment zu Firmenfeiern, Hochzeiten und Galas im nördlichsten Zipfel Bayerns.",
+    highlight: "Hof ist Universitätsstandort und wichtiger Wirtschaftsraum im Vogtland — perfekt für Corporate Events, Hochschulgalas und private Feiern mit Niveau.",
+    einwohner: "46.000",
+    bekannteLocations: ["Freiheitshalle Hof", "Theater Hof", "Hochschule Hof (Eventbereich)", "Hotel Strauss", "Saaleterassen"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Hof?", a: "Die Preise variieren je nach Format. Kostenloses Angebot auf Anfrage, Antwort innerhalb 24 Stunden." },
+      { q: "Tritt der Zauberer auch an der Hochschule Hof auf?", a: "Ja, Universitäts- und Hochschulgalas, Absolventenfeiern und Studierenden-Events sind ein regelmäßiger Teil meiner Auftritte." },
+    ],
+    seoText: "Zauberer Hof: Emilian Leber begeistert als Zauberkünstler auf Events in Hof und im Vogtland. Firmenfeier, Hochzeit, Geburtstag — moderne Zauberkunst mit Comedy-Anteil.",
+    langText: `Als Zauberer für Hof bediene ich Oberfrankens nördlichste Großstadt mit professionellem Entertainment für jeden Anlass. Die Freiheitshalle, das Theater Hof und zahlreiche Hotels bieten den Rahmen — ich liefere das Programm.
+
+Hof ist Universitätsstandort und wichtiger Wirtschaftsraum im Vogtland. Firmenfeiern, Hochschulgalas und Hochzeiten profitieren von einem modernen Zauberer, der die Tonalität ans Publikum anpasst — von der akademischen Feier bis zur Werks-Weihnachtsfeier.
+
+Kosten Zauberer Hof: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "deggendorf",
+    name: "Deggendorf",
+    region: "Bayern",
+    intro: "Deggendorf — das Tor zum Bayerischen Wald an der Donau. Als Zauberer für Deggendorf bringe ich Close-Up Magie, Bühnenshow und Magic Dinner zu Hochzeiten, Firmenfeiern und Galas in Niederbayern.",
+    highlight: "Deggendorf ist Hochschulstadt, Wirtschaftszentrum und Eingangstor zum Bayerischen Wald — perfekte Mischung aus Tradition und moderner Eventkultur.",
+    einwohner: "33.000",
+    bekannteLocations: ["Stadthalle Deggendorf", "Donau-Wald-Halle", "Hotel Deggenhof", "Eventhotel Pullman City Nähe", "Kapuzinerstadl"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Deggendorf?", a: "Die Preise hängen von Format und Dauer ab. Anfahrt von Regensburg ca. 40 Minuten, im Angebot inklusive. Individuelles Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auch in Locations im Bayerischen Wald auf?", a: "Ja, Hochzeiten in Hotels und Schlossanlagen im Bayerischen Wald betreue ich regelmäßig — Anfahrt nach Deggendorf und Umgebung ist im Angebot kalkuliert." },
+    ],
+    seoText: "Zauberer Deggendorf: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Events in Deggendorf, im Bayerischen Wald und in Niederbayern.",
+    langText: `Als Zauberer für Deggendorf bin ich regelmäßig in Niederbayern unterwegs. Die Donaustadt ist nur 40 Minuten von Regensburg entfernt — kurze Wege, volle Verfügbarkeit. Von der Werksfeier in der Stadthalle bis zur Hochzeit im Hotel mit Donaublick — ich liefere das passende Showkonzept.
+
+Deggendorf ist außerdem Eingangstor zum Bayerischen Wald — eine Region mit zahlreichen Hochzeits-Locations in Hotels, Schlossanlagen und auf dem Land. Auch hier bin ich als Zauberer für Deggendorf und Umgebung schnell vor Ort.
+
+Kosten Zauberer Deggendorf: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "garmisch-partenkirchen",
+    name: "Garmisch-Partenkirchen",
+    region: "Bayern",
+    intro: "Garmisch-Partenkirchen — Alpenresort am Fuße der Zugspitze, weltbekannt für Wintersport und Premium-Tourismus. Als Zauberer für Garmisch bringe ich Close-Up Magie, Bühnenshow und Magic Dinner zu Hochzeiten in Alpenhotels und Galas mit Bergpanorama.",
+    highlight: "Garmisch-Partenkirchen ist Premium-Destination für Hochzeiten und Corporate Retreats — Alpenkulisse trifft Top-Hotels. Entertainment muss mithalten.",
+    einwohner: "26.000",
+    bekannteLocations: ["Kongresshaus Garmisch-Partenkirchen", "Hotel Riessersee", "Edelweiss Lodge & Resort", "Olympia-Skistadion (Eventbereich)", "Atlas Grand Hotel"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Garmisch-Partenkirchen?", a: "Die Preise hängen vom Format und der Übernachtungs-Logistik ab. Bei mehrtägigen Events oder Übernachtung kalkuliere ich transparent. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer in Alpenhotels in Garmisch auf?", a: "Ja, Premium-Hotels in Garmisch-Partenkirchen und der gesamten Zugspitz-Region sind ein häufiger Einsatzort für Hochzeiten, Corporate Retreats und Galas." },
+    ],
+    seoText: "Zauberer Garmisch-Partenkirchen: Emilian Leber bringt Premium-Entertainment zu Hochzeiten, Firmen-Retreats und Galas in der Zugspitz-Region — Close-Up, Bühnenshow, Magic Dinner.",
+    langText: `Garmisch-Partenkirchen ist Premium-Destination für Hochzeiten, Corporate Retreats und exklusive Events — die Kombination aus Alpenkulisse und Top-Hotels macht jede Veranstaltung besonders. Als Zauberer für Garmisch liefere ich Entertainment auf entsprechendem Niveau: ruhig-elegant beim Sektempfang, dramaturgisch beim Dinner, mit Standing-Ovation-Finale vor dem Tanz.
+
+Vom Hotel Riessersee mit Seeblick über das Edelweiss Lodge & Resort bis zum Atlas Grand Hotel — Garmisch bietet außergewöhnliche Locations für besondere Anlässe. Ich bringe das passende Showkonzept mit.
+
+Kosten Zauberer Garmisch-Partenkirchen: Pakete ab 395 €, Anfahrt aus Regensburg bzw. München im Angebot kalkuliert.`,
+  },
+  {
+    slug: "bad-toelz",
+    name: "Bad Tölz",
+    region: "Bayern",
+    intro: "Bad Tölz — Kur- und Marktstadt im oberbayerischen Voralpenland. Als Zauberer für Bad Tölz bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in Kurhotels, Firmen-Retreats und Galas mit Alpenflair.",
+    highlight: "Bad Tölz verbindet bayerische Tradition mit Kurort-Eleganz — ideal für Hochzeiten mit besonderem Charakter und Firmen-Off-Sites im Voralpenland.",
+    einwohner: "19.000",
+    bekannteLocations: ["Kurhaus Bad Tölz", "Hotel Bayerischer Hof", "Schlosshotel Köllnerhof", "Tölzer Marktstraße (Eventbereich)", "Bauernsilberkammer"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Bad Tölz?", a: "Die Preise variieren je nach Format. Anfahrt aus Regensburg ca. 2,5 Stunden, im Angebot inklusive. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer in Kurhotels in Bad Tölz auf?", a: "Ja, Hochzeiten und Galas in den traditionsreichen Kurhotels von Bad Tölz und Umgebung betreue ich regelmäßig — passender Stil für klassisch-elegante Settings." },
+    ],
+    seoText: "Zauberer Bad Tölz: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in Bad Tölz und im oberbayerischen Voralpenland.",
+    langText: `Bad Tölz ist Kur- und Marktstadt mit bayerisch-eleganter Atmosphäre — ideal für Hochzeiten mit Charakter und Corporate Retreats abseits der Großstadt. Als Zauberer für Bad Tölz bringe ich Entertainment, das zur Stadt passt: ruhig, präzise, mit echtem Wow-Faktor.
+
+Vom Kurhaus Bad Tölz über das Hotel Bayerischer Hof bis zu den charaktervollen Locations entlang der Marktstraße — die Stadt bietet Settings mit Geschichte. Ich liefere die Magie, die zum Rahmen passt.
+
+Kosten Zauberer Bad Tölz: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "berchtesgaden",
+    name: "Berchtesgaden",
+    region: "Bayern",
+    intro: "Berchtesgaden — Alpenresort am Königssee, eine der spektakulärsten Eventdestinationen Bayerns. Als Zauberer für Berchtesgaden bringe ich Close-Up Magie, Bühnenshow und Magic Dinner zu Hochzeiten am See, Galas in Premium-Hotels und Corporate Retreats mit Watzmann-Blick.",
+    highlight: "Berchtesgaden ist Top-Destination für Premium-Hochzeiten und Corporate-Off-Sites — Watzmann, Königssee, Kempinski. Entertainment muss dem Niveau entsprechen.",
+    einwohner: "8.000",
+    bekannteLocations: ["Kempinski Hotel Berchtesgaden", "InterContinental Resort Berchtesgaden", "Kongresshaus Berchtesgaden", "Stiftung Königssee (Eventbereich)", "Salzbergwerk-Erlebniswelt"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Berchtesgaden?", a: "Die Preise hängen vom Format und der Logistik ab. Bei Übernachtung kalkuliere ich transparent. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer im Kempinski Berchtesgaden auf?", a: "Ja, Premium-Hotels in Berchtesgaden gehören zu meinem Repertoire. Hochzeiten und Corporate Retreats in der Region sind ein regelmäßiger Teil meines Kalenders." },
+    ],
+    seoText: "Zauberer Berchtesgaden: Emilian Leber bringt Premium-Entertainment zu Hochzeiten, Galas und Corporate Retreats am Königssee und im Berchtesgadener Land.",
+    langText: `Berchtesgaden ist Premium-Destination für Hochzeiten und Corporate Retreats — die Kombination aus spektakulärer Alpenkulisse und Top-Hotels macht jede Veranstaltung außergewöhnlich. Als Zauberer für Berchtesgaden bringe ich Entertainment, das mit dem Setting mithält.
+
+Vom Kempinski Hotel mit Watzmann-Blick über das InterContinental Resort bis zu privaten Schloss-Locations am Königssee — Berchtesgaden bietet einzigartige Rahmen. Mein Programm passt sich an: ruhig-elegant, mit Mentaleffekten und Standing-Ovation-Finale.
+
+Kosten Zauberer Berchtesgaden: Pakete ab 395 €, Anfahrt und ggf. Übernachtung transparent kalkuliert.`,
+  },
+  {
+    slug: "lindau",
+    name: "Lindau am Bodensee",
+    region: "Bayern",
+    intro: "Lindau — Inselstadt am Bodensee, Bayerns westlichster Außenposten und Premium-Eventdestination. Als Zauberer für Lindau bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten am See, Galas im Bayerischen Hof und Corporate Events mit Drei-Länder-Blick.",
+    highlight: "Lindau ist Drei-Länder-Eck und eine der schönsten Bodensee-Städte — historische Insel, Premium-Hotels, internationales Publikum.",
+    einwohner: "26.000",
+    bekannteLocations: ["Inselhalle Lindau", "Bayerischer Hof Lindau", "Reutemann Hotel", "Hotel Bad Schachen", "Hafen Lindau (Eventbereich)"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Lindau?", a: "Die Preise variieren je nach Format. Aufgrund der Distanz nach Bayern-Ostbayern kalkuliere ich Anfahrt und ggf. Übernachtung transparent. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auch bei Drei-Länder-Events in Lindau auf?", a: "Ja, Lindau zieht oft internationales Publikum aus Deutschland, Österreich und der Schweiz an — Magie funktioniert über Sprachgrenzen hinweg. Programm anpassbar." },
+    ],
+    seoText: "Zauberer Lindau am Bodensee: Emilian Leber bringt Premium-Entertainment zu Hochzeiten, Firmenfeiern und Galas in Lindau und am Bayerischen Bodensee.",
+    langText: `Lindau am Bodensee ist eine der schönsten Eventdestinationen Bayerns — historische Inselstadt mit Premium-Hotels, internationalem Publikum und einzigartigem Drei-Länder-Blick. Als Zauberer für Lindau bringe ich Entertainment, das zum Niveau passt.
+
+Vom Bayerischen Hof Lindau mit Seeblick über das Reutemann Hotel bis zum Hafenviertel — Lindau bietet außergewöhnliche Rahmen für Hochzeiten, Galas und Corporate Events. Mein Programm passe ich ans internationale Publikum an, das hier oft zusammenkommt.
+
+Kosten Zauberer Lindau: Pakete ab 395 €, Anfahrt und ggf. Übernachtung transparent kalkuliert.`,
+  },
+  {
+    slug: "fuessen",
+    name: "Füssen",
+    region: "Bayern",
+    intro: "Füssen — Allgäuer Königsstadt, Eingangstor zu Schloss Neuschwanstein und eine der romantischsten Eventdestinationen Bayerns. Als Zauberer für Füssen bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in Schloss-Nähe, Galas in Premium-Hotels und Corporate Retreats.",
+    highlight: "Füssen ist Märchenkulisse — Schloss Neuschwanstein, Forggensee, Allgäuer Alpen. Hochzeitsdestination mit Premium-Anspruch.",
+    einwohner: "16.000",
+    bekannteLocations: ["Festsaal Hohes Schloss Füssen", "Hotel Sonne", "Kurhaus Füssen", "Schlossbrauhaus Schwangau (Umfeld)", "Festspielhaus Neuschwanstein"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Füssen?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg ca. 3 Stunden, im Angebot transparent kalkuliert. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten in Schloss-Nähe auf?", a: "Ja, Hochzeiten rund um Schloss Neuschwanstein und Hohenschwangau sind eine meiner schönsten Disziplinen. Märchenhafte Kulisse, magische Show." },
+    ],
+    seoText: "Zauberer Füssen: Emilian Leber bringt Premium-Entertainment zu Hochzeiten und Galas in Füssen, Schwangau und der Region Schloss Neuschwanstein im Allgäu.",
+    langText: `Füssen ist Allgäuer Königsstadt und Eingangstor zu Schloss Neuschwanstein — eine der romantischsten Hochzeitsdestinationen Europas. Als Zauberer für Füssen bringe ich Entertainment, das zur Märchenkulisse passt: elegant, persönlich, mit eingebauten Brautpaar-Anekdoten.
+
+Vom Festsaal Hohes Schloss über das Hotel Sonne bis zum Kurhaus Füssen — die Stadt bietet außergewöhnliche Settings. Auch Hochzeiten in Schwangau, am Forggensee oder in nahegelegenen Schlössern betreue ich gerne als Zauberer für Füssen.
+
+Kosten Zauberer Füssen: Pakete ab 395 €, Anfahrt und ggf. Übernachtung transparent kalkuliert.`,
+  },
+  {
+    slug: "oberammergau",
+    name: "Oberammergau",
+    region: "Bayern",
+    intro: "Oberammergau — weltbekannt für die Passionsspiele und eine der spektakulärsten Eventdestinationen im oberbayerischen Alpenraum. Als Zauberer für Oberammergau bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Galas und Corporate Retreats.",
+    highlight: "Oberammergau ist weltweit bekannt für die Passionsspiele — und ein wachsender Standort für Premium-Events im Alpenvorland.",
+    einwohner: "5.500",
+    bekannteLocations: ["Passionstheater Oberammergau (Umfeld)", "Hotel Maximilian", "Hotel Wittelsbach", "Eiblerhof", "Kurhaus Oberammergau"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Oberammergau?", a: "Die Preise hängen vom Format und der Logistik ab. Anfahrt transparent kalkuliert, kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auch in Hotels in Oberammergau auf?", a: "Ja, Premium-Hotels und Eventlocations in Oberammergau betreue ich gerne — vor allem für Hochzeiten und Corporate Retreats in der Region." },
+    ],
+    seoText: "Zauberer Oberammergau: Emilian Leber bringt Premium-Entertainment zu Hochzeiten, Galas und Events im Ammergau und im oberbayerischen Alpenvorland.",
+    langText: `Oberammergau ist weltweit bekannt für die Passionsspiele und ein wachsender Standort für Premium-Hochzeiten und Corporate Retreats. Als Zauberer für Oberammergau bringe ich Entertainment, das zur besonderen Atmosphäre dieser Alpengemeinde passt.
+
+Von Hotels mit Bergblick bis zu Hochzeiten in historischen Sälen — Oberammergau bietet außergewöhnliche Rahmen. Auch Events in Garmisch, Ettal oder Mittenwald betreue ich als Zauberer für die Ammergau-Region.
+
+Kosten Zauberer Oberammergau: Pakete ab 395 €, Anfahrt transparent kalkuliert.`,
+  },
+  {
+    slug: "traunstein",
+    name: "Traunstein",
+    region: "Bayern",
+    intro: "Traunstein — Hauptstadt des Chiemgaus und Wirtschaftszentrum im südöstlichen Oberbayern. Als Zauberer für Traunstein bringe ich Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und Galas im Chiemgauer Land.",
+    highlight: "Traunstein ist Tor zum Chiemgau, Hochzeitsregion und Wirtschaftszentrum für Mittelstand und Tourismus.",
+    einwohner: "21.000",
+    bekannteLocations: ["Kulturzentrum Traunstein", "Park Hotel Traunsteiner Hof", "Stadtsaal Traunstein", "Hotel Rosenheimer Hof", "Festsaal Maxlrainer Hof"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Traunstein?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg ca. 2 Stunden, im Angebot inklusive. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auch in Chiemgau-Locations auf?", a: "Ja, Hochzeiten und Firmenfeiern in Chiemgau-Hotels, am Chiemsee und in umliegenden Gemeinden gehören zu meinem regulären Einsatzgebiet." },
+    ],
+    seoText: "Zauberer Traunstein: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in Traunstein und im Chiemgau.",
+    langText: `Traunstein ist Hauptstadt des Chiemgaus und ein wichtiges Wirtschaftszentrum im südöstlichen Oberbayern. Als Zauberer für Traunstein bringe ich modernes Entertainment zu Hochzeiten, Firmenfeiern und Galas in der Chiemgauer Region.
+
+Von der Stadthalle Traunstein über den Park Hotel Traunsteiner Hof bis zu Hochzeits-Locations am Chiemsee — die Region bietet vielfältige Eventmöglichkeiten. Ich liefere das passende Showkonzept für jeden Anlass.
+
+Kosten Zauberer Traunstein: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "burghausen",
+    name: "Burghausen",
+    region: "Bayern",
+    intro: "Burghausen — Heimat der längsten Burg Europas und Industriestadt im Salzachtal. Als Zauberer für Burghausen bringe ich Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und Galas in einer der historisch reichsten Städte Bayerns.",
+    highlight: "Burghausen ist Industriestandort (Wacker Chemie) und Touristen-Magnet mit der längsten Burg Europas — ideal für Corporate Events und Hochzeiten mit Geschichte.",
+    einwohner: "19.000",
+    bekannteLocations: ["Burg Burghausen (längste Burg Europas)", "Stadtsaal Burghausen", "Hotel Bayerische Alm", "Hotel Glöcklhofer", "Mautnerschloss"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Burghausen?", a: "Die Preise variieren je nach Format. Anfahrt transparent kalkuliert, kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer bei Firmenfeiern in Burghausen auf?", a: "Ja, Firmenfeiern für Wacker Chemie und andere große Burghausener Unternehmen gehören zu meinen Einsätzen. Tonalität immer auf die Unternehmenskultur abgestimmt." },
+    ],
+    seoText: "Zauberer Burghausen: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und Galas in Burghausen und dem Salzachtal.",
+    langText: `Burghausen ist eine der historisch reichsten Städte Bayerns — bekannt für die längste Burg Europas und als wichtiger Industriestandort (Wacker Chemie). Als Zauberer für Burghausen bediene ich beide Welten: Corporate Events bei den großen Industriebetrieben und Hochzeiten in historischen Locations.
+
+Von der Burg Burghausen über den Stadtsaal bis zum Mautnerschloss — die Stadt bietet einzigartige Eventlocations. Ich liefere das passende Showkonzept für jeden Anlass.
+
+Kosten Zauberer Burghausen: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
+  {
+    slug: "altoetting",
+    name: "Altötting",
+    region: "Bayern",
+    intro: "Altötting — das Herz Bayerns und einer der bedeutendsten Wallfahrtsorte Europas. Als Zauberer für Altötting bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Familienfeiern und Galas in der traditionsreichen Wallfahrtsstadt.",
+    highlight: "Altötting ist Bayerns spirituelles Zentrum und ein bedeutender Pilgerort — ideale Kulisse für besondere Hochzeiten und Familienfeiern mit Bedeutung.",
+    einwohner: "13.000",
+    bekannteLocations: ["Stadtsaal Altötting", "Hotel Zur Post", "Maximilianeum (Eventbereich)", "Gnadenkapelle (Umfeld)", "Festsaal Bauer"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Altötting?", a: "Die Preise hängen vom Format ab. Kostenloses Angebot auf Anfrage, individuelles Konzept für deinen Anlass." },
+      { q: "Tritt der Zauberer auch bei Hochzeiten nach kirchlicher Trauung auf?", a: "Ja, Hochzeiten nach kirchlicher Trauung in Altötting sind ein häufiger Einsatzort. Tonalität festlich-warm, passend zum besonderen Tag." },
+    ],
+    seoText: "Zauberer Altötting: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Familienfeiern und Galas in Altötting und im südöstlichen Oberbayern.",
+    langText: `Altötting ist Bayerns spirituelles Zentrum und einer der bedeutendsten Wallfahrtsorte Europas. Als Zauberer für Altötting bringe ich Entertainment, das zur besonderen Atmosphäre der Stadt passt — festlich-warm, mit Augenmaß für den Anlass.
+
+Von Hochzeiten nach kirchlicher Trauung in der Stiftspfarrkirche bis zu Familienfeiern in den historischen Sälen der Altstadt — Altötting bietet Settings mit Bedeutung. Mein Programm passe ich entsprechend an.
+
+Kosten Zauberer Altötting: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
+  {
+    slug: "erding",
+    name: "Erding",
+    region: "Bayern",
+    intro: "Erding — Therme-Stadt nahe München und Flughafen-Standort. Als Zauberer für Erding bringe ich Close-Up Magie, Bühnenshow und Magic Dinner zu Firmenfeiern, Hochzeiten und Galas im Münchner Norden.",
+    highlight: "Erding liegt zwischen München und Flughafen — perfekt für Corporate Events mit internationalen Gästen und Hochzeiten mit Therme-Anschluss.",
+    einwohner: "37.000",
+    bekannteLocations: ["Stadthalle Erding", "Therme Erding (Eventbereich)", "Hotel Mercure Erding", "Erdinger Brauerei (Veranstaltungsbereich)", "Sixtkeller"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Erding?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg ca. 1,5 Stunden, im Angebot inklusive. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer bei Brauerei-Events in Erding auf?", a: "Ja, Brauerei-Events, Sommerfeste und Firmenfeiern in Erding gehören zu meinem Repertoire. Bayerische Tonalität, modernes Entertainment." },
+    ],
+    seoText: "Zauberer Erding: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und Galas in Erding und im Münchner Norden.",
+    langText: `Erding ist Therme-Stadt und Flughafen-Standort — eine Kombination, die Erding zum interessanten Eventort macht. Als Zauberer für Erding bringe ich modernes Entertainment zu Firmenfeiern, Hochzeiten und Galas in der wachsenden Stadt im Münchner Norden.
+
+Von der Stadthalle Erding über die Erdinger Brauerei mit ihren Veranstaltungsräumen bis zu Hochzeits-Hotels in Flughafennähe — Erding bietet vielfältige Möglichkeiten. Ich liefere das passende Showkonzept.
+
+Kosten Zauberer Erding: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "dachau",
+    name: "Dachau",
+    region: "Bayern",
+    intro: "Dachau — Schlossstadt und Künstlerort nahe München. Als Zauberer für Dachau bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten im Schloss-Ambiente, Firmenfeiern und privaten Anlässen im Münchner Norden.",
+    highlight: "Dachau ist Schloss-Stadt mit lebendiger Kunstszene und nur 20 Minuten von München entfernt — Hochzeiten und Firmenfeiern profitieren vom historischen Rahmen.",
+    einwohner: "48.000",
+    bekannteLocations: ["Schloss Dachau", "Ludwig-Thoma-Haus", "Hotel Zieglerbräu", "Schlossbrauerei Dachau", "ASTOR Hotel Dachau"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Dachau?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg ca. 1,5 Stunden, im Angebot inklusive. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten in Schloss Dachau auf?", a: "Ja, Hochzeiten im Schloss Dachau und im Schlossgarten sind eine meiner schönsten Einsatzorte. Renaissance-Ambiente passt perfekt zu eleganter Zauberkunst." },
+    ],
+    seoText: "Zauberer Dachau: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten im Schloss Dachau, Firmenfeiern und privaten Anlässen im Münchner Norden.",
+    langText: `Dachau ist Schlossstadt und Künstlerort mit reicher Geschichte und lebendiger Kulturszene — und nur 20 Minuten von München entfernt. Als Zauberer für Dachau bringe ich Entertainment zu Hochzeiten im Schloss Dachau, Firmenfeiern in den Stadtlocations und privaten Anlässen.
+
+Von der Schlossbrauerei über das Ludwig-Thoma-Haus bis zu modernen Hotels — Dachau bietet eine Mischung aus Tradition und Moderne. Ich liefere das passende Programm für jeden Anlass.
+
+Kosten Zauberer Dachau: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
+  {
+    slug: "starnberg",
+    name: "Starnberg",
+    region: "Bayern",
+    intro: "Starnberg — Premium-Adresse am Starnberger See, südwestlich von München. Als Zauberer für Starnberg bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in Seevillen, Firmen-Retreats und Galas mit Alpenblick.",
+    highlight: "Starnberg ist Premium-Wohnort und Hochzeitsdestination am See — Bavaria's Mietpreis-Spitze trifft Veranstaltungs-Anspruch.",
+    einwohner: "23.000",
+    bekannteLocations: ["Schloss Possenhofen (Umfeld)", "Hotel Vier Jahreszeiten Starnberg", "Schlosshotel Tutzing", "Undosa am See", "Seehotel Leoni"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Starnberg?", a: "Die Preise hängen vom Format ab. Premium-Locations rund um den Starnberger See bekommen Premium-Programme. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten am Starnberger See auf?", a: "Ja, Seevilla-Hochzeiten und Galas am See sind eine meiner schönsten Disziplinen. Premium-Tonalität, eingebaute Anekdoten, eleganter Stil." },
+    ],
+    seoText: "Zauberer Starnberg: Emilian Leber bringt Premium-Entertainment zu Hochzeiten am Starnberger See, Firmen-Retreats und Galas im Fünf-Seen-Land.",
+    langText: `Starnberg ist Premium-Adresse am Starnberger See — Mietpreis-Spitze trifft Premium-Eventkultur. Als Zauberer für Starnberg bringe ich Entertainment, das zum Anspruch der Region passt: ruhig-elegant, mit Mentaleffekten und Standing-Ovation-Finale.
+
+Von Seevilla-Hochzeiten in Possenhofen über Galas im Hotel Vier Jahreszeiten bis zu Corporate-Off-Sites am Seeufer — Starnberg bietet außergewöhnliche Rahmen. Auch Events in Tutzing, Berg oder Feldafing betreue ich gerne im Fünf-Seen-Land.
+
+Kosten Zauberer Starnberg: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "bad-reichenhall",
+    name: "Bad Reichenhall",
+    region: "Bayern",
+    intro: "Bad Reichenhall — bayerischer Kurort und Salzstadt im Berchtesgadener Land. Als Zauberer für Bad Reichenhall bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in Kurhotels, Galas und Premium-Events mit Alpenpanorama.",
+    highlight: "Bad Reichenhall ist klassischer Premium-Kurort mit Alpenflair — ideale Kulisse für gehobene Hochzeiten und Corporate Events.",
+    einwohner: "18.000",
+    bekannteLocations: ["Kurhaus Bad Reichenhall", "Steigenberger Hotel Bad Reichenhall", "Predigtstuhlbahn (Eventbereich)", "Kurpark-Pavillon", "Hotel Bayerischer Hof Bad Reichenhall"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Bad Reichenhall?", a: "Die Preise hängen vom Format und der Logistik ab. Bei Übernachtung kalkuliere ich transparent. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer in Kurhotels in Bad Reichenhall auf?", a: "Ja, traditionsreiche Kurhotels und Premium-Locations in Bad Reichenhall betreue ich regelmäßig — passender Stil für klassisch-elegante Settings." },
+    ],
+    seoText: "Zauberer Bad Reichenhall: Emilian Leber bringt Premium-Entertainment zu Hochzeiten, Galas und Events in Bad Reichenhall und dem Berchtesgadener Land.",
+    langText: `Bad Reichenhall ist traditionsreicher Premium-Kurort mit Alpenflair — ideale Kulisse für gehobene Hochzeiten und Corporate-Events. Als Zauberer für Bad Reichenhall bringe ich Entertainment, das zum Niveau der Stadt passt.
+
+Vom Kurhaus über das Steigenberger Hotel bis zu privaten Schloss-Locations in der Umgebung — Bad Reichenhall und das Berchtesgadener Land bieten einzigartige Settings. Ich liefere das passende Showkonzept.
+
+Kosten Zauberer Bad Reichenhall: Pakete ab 395 €, Anfahrt und ggf. Übernachtung transparent kalkuliert.`,
+  },
+  {
+    slug: "eichstaett",
+    name: "Eichstätt",
+    region: "Bayern",
+    intro: "Eichstätt — barocke Bischofsstadt und Universitätsstadt im Naturpark Altmühltal. Als Zauberer für Eichstätt bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in historischen Sälen, Universitätsgalas und Firmenfeiern.",
+    highlight: "Eichstätt ist Universitätsstadt mit barocker Altstadt — ideal für Hochschulgalas, Hochzeiten mit Kultur und Firmen-Events mit Charakter.",
+    einwohner: "13.000",
+    bekannteLocations: ["Residenzplatz Eichstätt", "Hotel Sonne", "Sommerresidenz (Eventbereich)", "Wirtschaftsschule (Veranstaltungsräume)", "Domplatz Eichstätt"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Eichstätt?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg ca. 1,5 Stunden, im Angebot inklusive. Kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochschul-Events in Eichstätt auf?", a: "Ja, Universitätsgalas, Absolventenfeiern und Hochschul-Events der Katholischen Universität Eichstätt-Ingolstadt gehören zu meinen Einsätzen." },
+    ],
+    seoText: "Zauberer Eichstätt: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Hochschulgalas und Firmenfeiern in Eichstätt und im Altmühltal.",
+    langText: `Eichstätt ist barocke Bischofsstadt und Universitätsstandort im Naturpark Altmühltal. Als Zauberer für Eichstätt bringe ich Entertainment zu Hochzeiten in historischen Sälen, Hochschulgalas der KU Eichstätt-Ingolstadt und Firmenfeiern.
+
+Vom Residenzplatz über die Sommerresidenz bis zu Hochzeits-Locations im Altmühltal — Eichstätt und die Region bieten einzigartige Rahmen für besondere Anlässe.
+
+Kosten Zauberer Eichstätt: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "pfaffenhofen-an-der-ilm",
+    name: "Pfaffenhofen an der Ilm",
+    region: "Bayern",
+    intro: "Pfaffenhofen an der Ilm — Hauptstadt der Hallertau und Hopfenanbaugebiet zwischen München und Ingolstadt. Als Zauberer für Pfaffenhofen bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Brauerei-Events und Firmenfeiern.",
+    highlight: "Pfaffenhofen liegt zwischen München und Ingolstadt — Hallertau, Hopfen und Hofbrauereien machen die Region zu einer einzigartigen Event-Destination.",
+    einwohner: "27.000",
+    bekannteLocations: ["Festhalle Pfaffenhofen", "Stockerhof", "Schloss Scheyern (Umgebung)", "Hofbrauhaus (Veranstaltungsbereich)", "Hauptplatz Pfaffenhofen"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Pfaffenhofen?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg ca. 1 Stunde, im Angebot inklusive." },
+      { q: "Tritt der Zauberer in Brauereien in der Hallertau auf?", a: "Ja, Brauerei-Events, Sommerfeste und Hochzeiten in Brauerei-Sälen der Hallertau gehören zu meinem Repertoire. Bayerische Tonalität, modernes Entertainment." },
+    ],
+    seoText: "Zauberer Pfaffenhofen an der Ilm: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Brauerei-Events und Firmenfeiern in der Hallertau.",
+    langText: `Pfaffenhofen an der Ilm ist Hauptstadt der Hallertau — der größte Hopfenanbauregion der Welt. Als Zauberer für Pfaffenhofen bringe ich Entertainment zu Hochzeiten, Brauerei-Events und Firmenfeiern in einer einzigartigen Eventregion.
+
+Von der Festhalle über das Schloss Scheyern bis zu Hochzeits-Locations in den umliegenden Brauerei-Sälen — die Hallertau bietet außergewöhnliche Settings mit bayerischem Charme.
+
+Kosten Zauberer Pfaffenhofen: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "kelheim",
+    name: "Kelheim",
+    region: "Bayern",
+    intro: "Kelheim — Donau-Altmühl-Stadt mit der weithin sichtbaren Befreiungshalle. Als Zauberer für Kelheim bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas im Naturpark Altmühltal.",
+    highlight: "Kelheim liegt am Zusammenfluss von Donau und Altmühl — historisch reich, landschaftlich spektakulär. Tor zur Weltenburger Donauenge.",
+    einwohner: "16.000",
+    bekannteLocations: ["Befreiungshalle Kelheim", "Hotel zur Post Kelheim", "Klosterschenke Weltenburg", "Schiffsanlegestelle Kelheim", "Festsaal Schwanenkeller"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Kelheim?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg ca. 30 Minuten, im Angebot inklusive." },
+      { q: "Tritt der Zauberer auf Hochzeiten am Kloster Weltenburg auf?", a: "Ja, Hochzeiten in Weltenburg und Kelheim gehören zu meinen häufigeren Auftritten in der Region. Kurze Anfahrt aus Regensburg, volle Verfügbarkeit." },
+    ],
+    seoText: "Zauberer Kelheim: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Events in Kelheim, Weltenburg und im Altmühltal.",
+    langText: `Kelheim ist Donau-Altmühl-Stadt mit reicher Geschichte und spektakulärer Landschaft — die Befreiungshalle, die Weltenburger Donauenge und das Kloster Weltenburg machen die Region einzigartig. Als Zauberer für Kelheim bin ich nur 30 Minuten aus Regensburg vor Ort.
+
+Von der Klosterschenke Weltenburg über das Hotel zur Post bis zu Hochzeits-Locations im Altmühltal — Kelheim und die Region bieten außergewöhnliche Rahmen für besondere Anlässe.
+
+Kosten Zauberer Kelheim: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "neumarkt-in-der-oberpfalz",
+    name: "Neumarkt in der Oberpfalz",
+    region: "Bayern",
+    intro: "Neumarkt in der Oberpfalz — Wirtschaftsstadt zwischen Nürnberg und Regensburg. Als Zauberer für Neumarkt bringe ich Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und Galas im Bayerischen Jura.",
+    highlight: "Neumarkt ist Wirtschaftsstandort mit starkem Mittelstand und einer der wachsenden Eventstandorte im Bayerischen Jura.",
+    einwohner: "40.000",
+    bekannteLocations: ["Reitstadion Neumarkt", "Stadthalle Neumarkt", "Hotel-Restaurant Neumarkter Lammsbräu", "Residenzplatz", "Schlossanlage Neumarkt"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Neumarkt in der Oberpfalz?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg ca. 45 Minuten, im Angebot inklusive." },
+      { q: "Tritt der Zauberer bei Firmenfeiern in Neumarkt auf?", a: "Ja, Firmenfeiern für Neumarkter Unternehmen — von Mittelstand bis großem Industriebetrieb — gehören zu meinen regelmäßigen Einsätzen." },
+    ],
+    seoText: "Zauberer Neumarkt in der Oberpfalz: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und Galas in Neumarkt und der Oberpfalz.",
+    langText: `Neumarkt in der Oberpfalz ist Wirtschaftsstadt mit starkem Mittelstand zwischen Nürnberg und Regensburg. Als Zauberer für Neumarkt bringe ich modernes Entertainment zu Firmenfeiern, Hochzeiten und Galas — schnell erreichbar aus Regensburg.
+
+Von der Stadthalle über den Residenzplatz bis zu Hotels und Hochzeits-Locations im Umland — Neumarkt bietet vielfältige Möglichkeiten. Auch Events in Berching, Parsberg oder Velburg betreue ich als Zauberer für die Region.
+
+Kosten Zauberer Neumarkt: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "kulmbach",
+    name: "Kulmbach",
+    region: "Bayern",
+    intro: "Kulmbach — die fränkische Bierhauptstadt mit der Plassenburg über der Altstadt. Als Zauberer für Kulmbach bringe ich Close-Up Magie und Bühnenshow zu Brauerei-Events, Hochzeiten und Firmenfeiern in Oberfranken.",
+    highlight: "Kulmbach ist Frankens Bierhauptstadt — Mönchshof, Kulmbacher Bier, Plassenburg. Eventkultur mit fränkischem Charakter.",
+    einwohner: "26.000",
+    bekannteLocations: ["Plassenburg Kulmbach", "Kulmbacher Mönchshof", "Stadthalle Kulmbach", "Brauereigasthof Goller", "Bayerisches Brauereimuseum (Eventbereich)"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Kulmbach?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg ca. 2 Stunden, im Angebot inklusive." },
+      { q: "Tritt der Zauberer bei Brauerei-Events in Kulmbach auf?", a: "Ja, Brauerei-Events, Bierfeste und Firmenfeiern in Kulmbach gehören zu meinem Repertoire. Fränkische Tonalität, modernes Entertainment." },
+    ],
+    seoText: "Zauberer Kulmbach: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Brauerei-Events, Hochzeiten und Firmenfeiern in Kulmbach und Oberfranken.",
+    langText: `Kulmbach ist Frankens Bierhauptstadt und Heimat traditionsreicher Brauereien wie Mönchshof und Kulmbacher. Als Zauberer für Kulmbach bringe ich Entertainment zu Brauerei-Events, Hochzeiten in der Plassenburg-Region und Firmenfeiern.
+
+Von der Plassenburg über den Kulmbacher Mönchshof bis zu Hochzeits-Locations in oberfränkischen Hotels — Kulmbach bietet Settings mit Charakter. Mein Programm passe ich der bayerisch-fränkischen Tonalität an.
+
+Kosten Zauberer Kulmbach: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
+  {
+    slug: "ansbach",
+    name: "Ansbach",
+    region: "Bayern",
+    intro: "Ansbach — barocke Markgrafenstadt und Regierungssitz Mittelfrankens. Als Zauberer für Ansbach bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in Residenzräumen, Firmenfeiern und Galas in einer der schönsten Barockstädte Bayerns.",
+    highlight: "Ansbach ist Markgrafenstadt mit barocker Altstadt und Residenzcharakter — perfekte Kulisse für gehobene Hochzeiten und Premium-Events.",
+    einwohner: "42.000",
+    bekannteLocations: ["Markgrafenschloss Ansbach", "Hofgarten Ansbach (Eventbereich)", "Onoldsaal", "Hotel Zur Windmühle", "Reitschule (Veranstaltungsraum)"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Ansbach?", a: "Die Preise hängen vom Format ab. Kostenloses Angebot auf Anfrage, individuell auf dein Event zugeschnitten." },
+      { q: "Tritt der Zauberer im Markgrafenschloss Ansbach auf?", a: "Ja, Schloss-Hochzeiten und Galas im Markgrafenschloss gehören zu meinen schönsten Auftritten. Barockes Ambiente, elegante Tonalität." },
+    ],
+    seoText: "Zauberer Ansbach: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten im Markgrafenschloss, Firmenfeiern und Galas in Ansbach und Mittelfranken.",
+    langText: `Ansbach ist barocke Markgrafenstadt mit Residenzcharakter und Regierungssitz Mittelfrankens. Als Zauberer für Ansbach bringe ich Entertainment zu Hochzeiten im Markgrafenschloss, Galas im Onoldsaal und Firmenfeiern in den schönen Hotels der Stadt.
+
+Von der barocken Altstadt über die Reitschule bis zu Hochzeits-Locations im Hofgarten — Ansbach bietet außergewöhnliche Rahmen für besondere Anlässe. Mein Programm passe ich an: ruhig-elegant, mit eingebauten Anekdoten.
+
+Kosten Zauberer Ansbach: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
+  {
+    slug: "rothenburg-ob-der-tauber",
+    name: "Rothenburg ob der Tauber",
+    region: "Bayern",
+    intro: "Rothenburg ob der Tauber — eine der besterhaltenen mittelalterlichen Städte Europas. Als Zauberer für Rothenburg bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in der Altstadt, Galas in historischen Hotels und Premium-Events mit Märchenkulisse.",
+    highlight: "Rothenburg ist mittelalterliches Juwel an der Romantischen Straße — Touristenmagnet weltweit und einzigartige Hochzeitsdestination.",
+    einwohner: "11.000",
+    bekannteLocations: ["Hotel Eisenhut", "Reichsstadt-Festhalle Rothenburg", "Hotel Burg-Hotel Rothenburg", "Ratstrinkstube (Eventbereich)", "Schrannenscheune"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Rothenburg ob der Tauber?", a: "Die Preise hängen vom Format ab. Anfahrt transparent kalkuliert, kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf internationalen Hochzeiten in Rothenburg auf?", a: "Ja, Rothenburg zieht internationale Hochzeitsgäste an — Magie funktioniert über Sprachgrenzen hinweg. Programm anpassbar mit englischen Moderations-Elementen." },
+    ],
+    seoText: "Zauberer Rothenburg ob der Tauber: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten in der mittelalterlichen Altstadt, Galas und Premium-Events.",
+    langText: `Rothenburg ob der Tauber ist eine der besterhaltenen mittelalterlichen Städte Europas und zieht Hochzeitspaare aus aller Welt an. Als Zauberer für Rothenburg bringe ich Entertainment, das zur Märchenkulisse passt — elegant, persönlich, mit eingebauten Anekdoten.
+
+Vom Hotel Eisenhut über die Reichsstadt-Festhalle bis zu Hochzeiten in historischen Sälen der Altstadt — Rothenburg bietet einzigartige Settings. Auch englischsprachige Moderation und internationale Hochzeitsgäste sind kein Problem.
+
+Kosten Zauberer Rothenburg: Pakete ab 395 €, Anfahrt und ggf. Übernachtung transparent kalkuliert.`,
+  },
+  {
+    slug: "noerdlingen",
+    name: "Nördlingen",
+    region: "Bayern",
+    intro: "Nördlingen — mittelalterliche Reichsstadt im Ries-Krater, eine der besterhaltenen historischen Städte Süddeutschlands. Als Zauberer für Nördlingen bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in der Altstadt, Galas und Firmenfeiern.",
+    highlight: "Nördlingen liegt im Ries-Meteoritenkrater und ist eine der schönsten mittelalterlichen Städte Bayerns — historischer Rahmen mit Hollywood-Aura.",
+    einwohner: "20.000",
+    bekannteLocations: ["Daniel-Turm (Eventbereich)", "Festsaal Klösterle", "Hotel Sonne Nördlingen", "Kaisersaal", "Rieskrater-Museum (Umfeld)"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Nördlingen?", a: "Die Preise hängen vom Format ab. Anfahrt transparent kalkuliert, kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten in der Altstadt Nördlingen auf?", a: "Ja, Hochzeiten in den historischen Sälen Nördlingens gehören zu meinen schönsten Auftritten. Mittelalterliches Ambiente, elegante moderne Show." },
+    ],
+    seoText: "Zauberer Nördlingen: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten in der mittelalterlichen Altstadt, Galas und Firmenfeiern im Ries.",
+    langText: `Nördlingen ist eine der schönsten mittelalterlichen Städte Süddeutschlands — im Zentrum des Ries-Meteoritenkraters gelegen, mit komplett erhaltener Stadtmauer und historischer Altstadt. Als Zauberer für Nördlingen bringe ich Entertainment, das zum besonderen Rahmen passt.
+
+Vom Festsaal Klösterle über den Kaisersaal bis zum Daniel-Turm — Nördlingen bietet einzigartige Locations. Ich liefere das passende Programm für Hochzeiten, Galas und Firmenfeiern in der Reichsstadt.
+
+Kosten Zauberer Nördlingen: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
+  {
+    slug: "donauwoerth",
+    name: "Donauwörth",
+    region: "Bayern",
+    intro: "Donauwörth — Reichsstadt an der Romantischen Straße, am Zusammenfluss von Donau und Wörnitz. Als Zauberer für Donauwörth bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas im schwäbisch-bayerischen Donau-Ries.",
+    highlight: "Donauwörth liegt an der Romantischen Straße — historisches Stadtbild, lebendige Eventkultur, schwäbisch-bayerische Tradition.",
+    einwohner: "20.000",
+    bekannteLocations: ["Tanzhaus Donauwörth", "Reichsstraße Donauwörth", "Hotel Goldener Hirsch", "Schloss Leitheim (Umgebung)", "Liebfrauenmünster (Umfeld)"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Donauwörth?", a: "Die Preise hängen vom Format ab. Anfahrt aus Regensburg transparent kalkuliert, kostenloses Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten in Schlössern bei Donauwörth auf?", a: "Ja, Schloss-Hochzeiten in der Region — z. B. Schloss Leitheim und andere Premium-Locations — gehören zu meinen schönsten Auftritten." },
+    ],
+    seoText: "Zauberer Donauwörth: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in Donauwörth und im Donau-Ries.",
+    langText: `Donauwörth ist historische Reichsstadt an der Romantischen Straße — am Zusammenfluss von Donau und Wörnitz gelegen. Als Zauberer für Donauwörth bringe ich Entertainment zu Hochzeiten in der Altstadt, Galas im Tanzhaus und Firmenfeiern in der schwäbisch-bayerischen Region.
+
+Von Reichsstraße-Locations über das Hotel Goldener Hirsch bis zu Schloss-Hochzeiten in der Umgebung — Donauwörth und das Donau-Ries bieten vielfältige Settings.
+
+Kosten Zauberer Donauwörth: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
+  {
     slug: "berlin",
     name: "Berlin",
     region: "Berlin",

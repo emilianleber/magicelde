@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
+import LogoMarquee from "@/components/landing/LogoMarquee";
 import { QuizWizardInline, QuizConfig } from "@/components/landing/QuizWizard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import {
@@ -2112,6 +2113,7 @@ const Hochzeit = () => (
     <PageLayout>
       <main>
         <Hero />
+        <LogoMarquee eyebrow="100+ Hochzeiten. Auch für." variant="cream" compact />
         <DreiAkteSection />
         <PolaroidWall />
         <QuizSection />

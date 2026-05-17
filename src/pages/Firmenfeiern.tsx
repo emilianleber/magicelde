@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
+import LogoMarquee from "@/components/landing/LogoMarquee";
 import {
   CustomQuizSection,
   CustomQuizConfig,
@@ -1905,6 +1906,7 @@ const Firmenfeiern = () => (
     <PageLayout>
       <main>
         <Hero />
+        <LogoMarquee eyebrow="100+ Firmen-Engagements." variant="cream" compact />
 
         {/* Agency-Banner: Hinweis für Eventagenturen */}
         <section className="bg-[hsl(36,30%,97%)] border-b border-foreground/10">

@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import PageLayout from "@/components/landing/PageLayout";
+import LogoMarquee from "@/components/landing/LogoMarquee";
 import {
   CustomQuizSection,
   CustomQuizConfig,
@@ -670,7 +671,7 @@ const TechRiderSection = () => {
                 </div>
               ))}
               <div className="mt-7 pt-5 border-t border-foreground/10 flex flex-wrap gap-2">
-                {["2 × 1,5 m Bühne", "30 Min Setup", "30 Min Soundcheck", "Versichert (5 Mio)", "DSGVO + AVV"].map((t) => (
+                {["2 × 1,5 m Bühne", "30 Min Setup", "30 Min Soundcheck", "Berufshaftpflicht", "DSGVO + AVV"].map((t) => (
                   <span key={t} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-foreground/65 bg-foreground/[0.04] border border-foreground/8">
                     {t}
                   </span>
@@ -904,6 +905,7 @@ const Buehnenshow = () => (
     <PageLayout>
       <main>
         <Hero />
+        <LogoMarquee eyebrow="200+ Bühnen-Auftritte. Für." variant="cream" compact />
         <DramaKurveSection />
         <FormatVariantenSection />
         <BeispielShowSection />

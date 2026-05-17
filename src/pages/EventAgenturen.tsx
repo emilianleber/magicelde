@@ -555,7 +555,7 @@ const agenturFaqs = [
   { q: "Wie schnell bekommen wir ein Erstangebot?", a: "Innerhalb von 8 Stunden Werktag eine Angebots-Skizze mit Preis-Range, Format-Empfehlung und freier Tagen-Liste. Verbindliches Detail-Angebot folgt nach kurzem Briefing-Call." },
   { q: "Tretet ihr unter unserer Marke auf (White-Label)?", a: "Auf Wunsch ja. Kein Eigen-Logo auf der Bühne, keine Kommunikation an euren Endkunden vor oder nach dem Event ohne eure Freigabe. Im Vertrag schriftlich fixiert." },
   { q: "AVV und DSGVO?", a: "Auftragsverarbeitungs-Vertrag (AVV) auf Anfrage sofort verfügbar, DSGVO-konforme Datenverarbeitung. Auf Wunsch unterschrieben zurück innerhalb desselben Werktages." },
-  { q: "Wie ist es mit Versicherung?", a: "Berufshaftpflicht in Höhe von 5 Mio EUR, Versicherungs-Nachweis auf Anfrage. Für besondere Locations (Pyrotechnik / besondere Effekte) sprechen wir gesondert." },
+  { q: "Wie ist es mit Versicherung?", a: "Standard-Berufshaftpflicht für Künstler, Versicherungs-Nachweis auf Anfrage. Für besondere Locations (Pyrotechnik / besondere Effekte) sprechen wir gesondert." },
   { q: "Frame-Agreements bei mehreren Buchungen?", a: "Ab drei geplanten Events pro Jahr bieten wir Rahmenvertrag mit Vorzugskonditionen, Kontingent-Reservierung und vereinfachtem Abruf-Prozess. Sprecht uns direkt darauf an." },
   { q: "Cancellation-Konditionen?", a: "Stornofreie Buchung bis 14 Tage vor dem Event, danach gestaffelt (50 % bis 7 Tage, 75 % bis 48 h, 100 % am Eventtag). Bei Verschiebung im selben Quartal nur Bearbeitungsgebühr." },
 ];

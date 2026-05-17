@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
+import LogoMarquee from "@/components/landing/LogoMarquee";
 import {
   CustomQuizSection,
   CustomQuizConfig,
@@ -1035,6 +1036,7 @@ const Geburtstage = () => (
     <PageLayout>
       <main>
         <Hero />
+        <LogoMarquee eyebrow="80+ Geburtstage. Auftritte für." variant="cream" compact />
         <AgeGeneratorSection />
         <MemoryLaneSection />
         <PullQuoteSection />

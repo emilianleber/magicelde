@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import PageLayout from "@/components/landing/PageLayout";
+import LogoMarquee from "@/components/landing/LogoMarquee";
 import {
   CustomQuizSection,
   CustomQuizConfig,
@@ -1001,6 +1002,7 @@ const CloseUp = () => (
     <PageLayout>
       <main>
         <Hero />
+        <LogoMarquee eyebrow="100+ Close-Up-Engagements. Für." variant="cream" compact />
         <HollywoodSequenzSection />
         <SettingsVariantenSection />
         <TypischerAbendSection />

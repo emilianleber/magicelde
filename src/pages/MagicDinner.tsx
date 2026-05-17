@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
+import LogoMarquee from "@/components/landing/LogoMarquee";
 import { QuizWizardInline, QuizConfig } from "@/components/landing/QuizWizard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { ArrowRight, ArrowUpRight, Star, Trophy, Award, Medal, Tv, Sparkles } from "lucide-react";
@@ -3467,6 +3468,7 @@ const MagicDinner = () => (
     <PageLayout>
       <main>
         <Hero />
+        <LogoMarquee eyebrow="10+ Magic Dinners · Restaurant-Partner & Hosts." variant="cream" compact />
         <AudienceSection />
         <TrustStrip />
         <KundenReferenzenSection />

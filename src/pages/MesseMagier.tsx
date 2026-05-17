@@ -466,7 +466,7 @@ const faqs = [
   { q: "Klappt das in lauten Messehallen?", a: "Ja — meine Tricks sind sichtbar statt akustisch. Ein verschwindender Würfel, eine wandernde Karte, ein Münzen-Vanish brauchen kein Mikrofon. Auf großen Bühnen-Slots im Messe-Forum nutze ich Headset." },
   { q: "Kann ich euer Logo / Produkt einbauen?", a: "Ja, sehr gern. Karten mit eurem Logo, ein Mentaleffekt mit eurer Produkt-USP, ein Trick mit eurem Slogan als Pointe. Vorab-Briefing und Test, damit es professionell wirkt." },
   { q: "Was wenn der Stand leer ist?", a: "Dann wechsele ich in den \"Pull\"-Modus: stelle mich an die Standkante, fange Passanten ab. Erfahrungsgemäß ist die erste Mittagsstunde am leersten — dafür haben wir eine Routine, um Traffic zu ziehen." },
-  { q: "Wie ist das mit Versicherung und Rechnung?", a: "Berufshaftpflicht 5 Mio EUR, GoBD-konforme Geschäftsrechnung mit ausgewiesener USt, Zahlungsziel 14 Tage. AVV und Versicherungsnachweis auf Anfrage sofort verfügbar." },
+  { q: "Wie ist das mit Versicherung und Rechnung?", a: "Standard-Berufshaftpflicht für Künstler, GoBD-konforme Geschäftsrechnung mit ausgewiesener USt, Zahlungsziel 14 Tage. AVV und Versicherungsnachweis auf Anfrage sofort verfügbar." },
 ];
 
 const FAQSection = () => {

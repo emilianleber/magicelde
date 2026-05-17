@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import PageLayout from "@/components/landing/PageLayout";
+import LogoMarquee from "@/components/landing/LogoMarquee";
 import {
   CustomQuizSection,
   CustomQuizConfig,
@@ -687,7 +688,7 @@ const TechRiderSection = () => {
                 </div>
               ))}
               <div className="mt-7 pt-5 border-t border-foreground/10 flex flex-wrap gap-2">
-                {["30 Min Briefing-Call", "Skript zur Freigabe", "Soundcheck 30 Min", "Versichert (5 Mio)", "TV-erfahren"].map((t) => (
+                {["30 Min Briefing-Call", "Skript zur Freigabe", "Soundcheck 30 Min", "Berufshaftpflicht", "TV-erfahren"].map((t) => (
                   <span key={t} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-foreground/65 bg-foreground/[0.04] border border-foreground/8">{t}</span>
                 ))}
               </div>
@@ -896,6 +897,7 @@ const Moderation = () => (
     <PageLayout>
       <main>
         <Hero />
+        <LogoMarquee eyebrow="Galas, TV-Stationen und Konzerne — auch moderiert für." variant="cream" compact />
         <KombiUSPSection />
         <PhasenSection />
         <ShowBeispieleSection />
