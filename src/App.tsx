@@ -242,7 +242,17 @@ const App = () => (
       <BrowserRouter>
         <ScrollToTop />
         <AuthEventHandler />
-        <Suspense fallback={<div className="min-h-screen bg-white" />}>
+        <Suspense
+          fallback={
+            <div className="min-h-screen flex items-center justify-center bg-white">
+              <div
+                className="w-10 h-10 rounded-full border-2 border-foreground/15 border-t-[#9a2640] animate-spin"
+                aria-label="Lade"
+                role="status"
+              />
+            </div>
+          }
+        >
           {!IS_ADMIN_DOMAIN && <EngagementPopup />}
           {IS_ADMIN_DOMAIN ? <AdminRoutes /> : IS_DEV ? (
             // localhost: beide Route-Sets verfügbar
