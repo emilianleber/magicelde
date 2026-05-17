@@ -57,70 +57,69 @@ const AMBER_SOFT = "#f0d8a8";
 const CREAM = "#f5ecdc";
 
 /* ═══════════════════════════════════════════════════════════
-   1 · HERO — Save-the-Date-zentriert, wie eine Einladungskarte
-   Anders als Magic Dinner (left-aligned word-by-word):
-   – mittig
-   – italic-serif Eyebrow als „Einladungs-Zeile"
-   – Sans-Hauptzeile + serif-italic Akzent
-   – feine Trennlinien wie auf einer Hochzeitseinladung
-   – Bokeh mit burgundy-rose tinge (statt amber wie Dinner)
+   1 · HERO — identisches Pattern wie Magic Dinner
+   Vollbild dark backdrop · word-by-word reveal · warmes Amber-Bokeh
+   · Scroll-Parallax · Star-Pulse · KPI-Strip mit Overshoot
+   Konsistent über alle Hauptseiten — nur Inhalt page-spezifisch.
    ═══════════════════════════════════════════════════════════ */
 const HeroKeyframes = () => (
   <style>{`
-    @keyframes hzHeroWordIn {
-      from { opacity: 0; transform: translateY(48px) scale(0.96); filter: blur(8px); }
-      to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    @keyframes heroWordIn {
+      from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); }
+      to   { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); }
     }
-    @keyframes hzHeroFade {
-      from { opacity: 0; transform: translateY(20px); }
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    @keyframes hzHeroZoom {
-      from { transform: scale(1.16); opacity: 0.35; filter: blur(8px); }
-      to   { transform: scale(1.01); opacity: 1; filter: blur(0); }
+    @keyframes heroZoomIn {
+      from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); }
+      to   { transform: scale(1.02); opacity: 1; filter: blur(0); }
     }
-    @keyframes hzPetalDrift {
-      0%   { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 0.15; }
-      25%  { opacity: 0.85; }
-      75%  { opacity: 0.55; }
-      100% { transform: translateY(-160px) translateX(-22px) rotate(160deg) scale(0.92); opacity: 0; }
+    @keyframes heroBokehDrift {
+      0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; }
+      30%  { opacity: 1; }
+      70%  { opacity: 1; }
+      100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; }
     }
-    @keyframes hzDividerGrow {
-      from { transform: scaleX(0); }
-      to   { transform: scaleX(1); }
+    @keyframes heroOvershoot {
+      0%   { opacity: 0; transform: translateY(60px) scale(0.88); }
+      55%  { opacity: 1; transform: translateY(-10px) scale(1.04); }
+      80%  { transform: translateY(2px) scale(0.99); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
-    @keyframes hzStarPulse {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(228,184,192,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(228,184,192,0.6)); }
+    @keyframes heroStarPulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); }
     }
-    .hz-word { display: inline-block; opacity: 0; animation: hzHeroWordIn 0.95s cubic-bezier(0.16,1,0.3,1) forwards; will-change: transform, opacity, filter; }
-    .hz-fade { opacity: 0; animation: hzHeroFade 0.85s cubic-bezier(0.22,1,0.36,1) forwards; }
-    .hz-zoom { animation: hzHeroZoom 1.8s cubic-bezier(0.16,1,0.3,1) forwards; transform-origin: center 35%; }
-    .hz-petal { opacity: 0; animation-name: hzPetalDrift; animation-timing-function: cubic-bezier(0.4,0,0.6,1); animation-iteration-count: infinite; will-change: transform, opacity; }
-    .hz-divider { transform-origin: center; opacity: 0; animation: hzDividerGrow 1.2s cubic-bezier(0.16,1,0.3,1) forwards, hzHeroFade 0.8s cubic-bezier(0.22,1,0.36,1) forwards; }
-    .hz-star { animation: hzStarPulse 2.4s ease-in-out infinite; }
-    .hz-cta { transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, background-color .3s, color .3s; }
-    .hz-cta:hover { transform: translateY(-2px) scale(1.025); }
-    .hz-cta:active { transform: translateY(0) scale(0.97); }
-    .hz-hero-photo { transform: translateY(var(--hz-hero-parallax, 0px)); transition: transform 0.05s linear; }
+    .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
+    .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
+    .hero-bokeh { opacity: 0; animation-name: heroBokehDrift; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); animation-iteration-count: infinite; will-change: transform, opacity; }
+    .hero-overshoot { opacity: 0; animation: heroOvershoot 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .hero-star { animation: heroStarPulse 2.4s ease-in-out infinite; }
+    .hero-cta { transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, background-color .3s, color .3s; }
+    .hero-cta:hover { transform: translateY(-2px) scale(1.035); }
+    .hero-cta:active { transform: translateY(0) scale(0.97); }
+    .hero-photo-wrap { transform: translateY(var(--hero-parallax, 0px)); transition: transform 0.05s linear; }
   `}</style>
 );
 
-const HEAD_SANS = ["Tagesgespräch"];
-const HEAD_ITALIC = ["in", "zehn", "Jahren."];
+const HEADLINE_SANS = ["Magie", "zwischen"];
+const HEADLINE_ITALIC = ["Ja-Wort", "und", "Mitternacht."];
 
-// Burgundy/rose Bokeh — Blütenblatt-Anmutung statt Kerzenlicht
-const PETALS = [
-  { size: 16, left: "10%", top: "30%", dur: 16, delay: 0, hue: 340 },
-  { size: 12, left: "18%", top: "62%", dur: 19, delay: 2.5, hue: 350 },
-  { size: 20, left: "78%", top: "20%", dur: 17, delay: 1, hue: 340 },
-  { size: 14, left: "86%", top: "52%", dur: 22, delay: 3.5, hue: 0 },
-  { size: 10, left: "62%", top: "78%", dur: 14, delay: 4.5, hue: 350 },
-  { size: 18, left: "92%", top: "82%", dur: 18, delay: 1.8, hue: 340 },
-  { size: 9, left: "32%", top: "84%", dur: 20, delay: 6, hue: 350 },
-  { size: 14, left: "48%", top: "14%", dur: 23, delay: 5, hue: 0 },
-  { size: 16, left: "70%", top: "40%", dur: 16, delay: 7.5, hue: 350 },
-  { size: 11, left: "22%", top: "46%", dur: 22, delay: 8.5, hue: 340 },
+// Bokeh — warme Kerzenlicht-Partikel, identisch zu Magic Dinner
+const BOKEH = [
+  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
+  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
+  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
+  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
+  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
+  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
+  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
+  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
+  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
+  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
 ];
 
 const Hero = () => {
@@ -137,7 +136,7 @@ const Hero = () => {
       raf = requestAnimationFrame(() => {
         const el = photoRef.current;
         if (el && y < window.innerHeight * 1.4) {
-          el.style.setProperty("--hz-hero-parallax", `${Math.min(y * 0.18, 80)}px`);
+          el.style.setProperty("--hero-parallax", `${Math.min(y * 0.18, 80)}px`);
         }
         raf = 0;
       });
@@ -153,10 +152,10 @@ const Hero = () => {
     <section className="relative bg-[#08060c] text-white min-h-screen overflow-hidden">
       <HeroKeyframes />
 
-      {/* Vollbild Wedding-Backdrop, sehr dezent (Einladungs-Wirkung) */}
+      {/* Vollbild Hochzeits-Backdrop mit Zoom-In Entrance */}
       <div
         ref={photoRef}
-        className="absolute inset-0 hz-hero-photo hz-zoom"
+        className="absolute inset-0 hero-photo-wrap hero-zoom"
         style={{ willChange: "transform" }}
       >
         <img
@@ -164,8 +163,8 @@ const Hero = () => {
           alt="Hochzeit mit Zauberkünstler Emilian Leber — Magie zwischen Ja-Wort und Mitternacht"
           className="absolute inset-0 w-full h-full object-cover"
           style={{
-            objectPosition: "center 30%",
-            filter: "saturate(0.88) contrast(1.05) brightness(0.55)",
+            objectPosition: "center 25%",
+            filter: "saturate(0.92) contrast(1.08) brightness(0.72)",
           }}
           loading="eager"
         />
@@ -174,196 +173,164 @@ const Hero = () => {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(8,6,12,0.7) 0%, rgba(8,6,12,0.55) 30%, rgba(8,6,12,0.6) 70%, rgba(8,6,12,0.92) 100%)",
+              "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)",
           }}
         />
-        {/* Sanfter Burgundy-Glow Mitte */}
         <div
           aria-hidden
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[840px] h-[840px] rounded-full blur-3xl pointer-events-none"
+          className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(circle, rgba(154,38,64,0.22) 0%, rgba(154,38,64,0) 60%)",
+              "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)",
           }}
         />
-        {/* Warmer Pastell-Schimmer rechts unten */}
         <div
           aria-hidden
-          className="absolute -bottom-32 right-0 w-[520px] h-[520px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(228,184,192,0.22) 0%, rgba(228,184,192,0) 70%)",
+              "radial-gradient(circle, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
           }}
         />
       </div>
 
-      {/* Blütenblatt-Bokeh */}
+      {/* Bokeh — warme Kerzenlicht-Partikel */}
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
-        {PETALS.map((p, i) => (
+        {BOKEH.map((b, i) => (
           <div
             key={i}
-            className="absolute rounded-full hz-petal"
+            className="absolute rounded-full hero-bokeh"
             style={{
-              width: p.size,
-              height: p.size,
-              left: p.left,
-              top: p.top,
-              background: `radial-gradient(circle, hsla(${p.hue},65%,82%,0.7) 0%, hsla(${p.hue},65%,80%,0.25) 45%, transparent 75%)`,
+              width: b.size,
+              height: b.size,
+              left: b.left,
+              top: b.top,
+              background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
               filter: "blur(2px)",
-              animationDuration: `${p.dur}s`,
-              animationDelay: `${p.delay}s`,
+              animationDuration: `${b.dur}s`,
+              animationDelay: `${b.delay}s`,
             }}
           />
         ))}
       </div>
 
-      {/* Zentrierter Einladungs-Hero */}
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col items-center justify-center text-center pt-32 pb-24 md:pt-36 md:pb-28">
-        {/* Top-Crest: Stars + Pill */}
-        <div
-          className="hz-fade flex flex-wrap items-center justify-center gap-x-5 gap-y-3 mb-12 md:mb-14"
-          style={{ animationDelay: "0.1s" }}
-        >
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-3.5 h-3.5 fill-[#e4b8c0] text-[#e4b8c0] hz-star"
-                  style={{ animationDelay: `${i * 0.12}s` }}
-                />
-              ))}
+      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+        <div className="max-w-5xl">
+          <div
+            className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade"
+            style={{ animationDelay: "0.05s" }}
+          >
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="w-4 h-4 fill-amber-300 text-amber-300 hero-star"
+                    style={{ animationDelay: `${i * 0.12}s` }}
+                  />
+                ))}
+              </div>
+              <span className="text-sm text-white/85">
+                <strong className="font-semibold text-white">5,0</strong>
+                <span className="text-white/60"> · 30+ Bewertungen</span>
+              </span>
             </div>
-            <span className="text-xs md:text-sm text-white/85 tracking-wide">
-              <strong className="font-semibold text-white">5,0</strong>
-              <span className="text-white/55"> · 30+ Bewertungen</span>
+            <span aria-hidden className="hidden md:block h-4 w-px bg-white/25" />
+            <span className="text-sm text-white/80">
+              <strong className="font-semibold text-white">100+ Hochzeiten</strong> begleitet
             </span>
           </div>
-          <span aria-hidden className="hidden md:block h-3 w-px bg-white/20" />
-          <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/80`}>
-            Über 100 Hochzeiten.
-          </span>
-        </div>
 
-        {/* Decorative thin divider — wie eine Einladungs-Trennlinie */}
-        <div
-          className="hz-divider mb-7 md:mb-9 flex items-center gap-4"
-          style={{ animationDelay: "0.35s" }}
-        >
-          <span aria-hidden className="block h-px w-12 md:w-20 bg-white/35" />
-          <span
-            aria-hidden
-            className="block w-1.5 h-1.5 rounded-full"
-            style={{ background: ACCENT_SOFT }}
-          />
-          <span aria-hidden className="block h-px w-12 md:w-20 bg-white/35" />
-        </div>
-
-        {/* Eyebrow — wie „Wir laden ein zu" */}
-        <p
-          className={`${SERIF_ITALIC} text-xl md:text-2xl lg:text-3xl text-white/75 mb-7 md:mb-9 hz-fade`}
-          style={{ animationDelay: "0.5s" }}
-        >
-          Eine Hochzeit. Drei Akte Magie.
-        </p>
-
-        {/* Main Headline */}
-        <h1 className="font-display font-black tracking-[-0.025em] leading-[0.96] text-[clamp(2.5rem,8vw,8rem)] text-white max-w-5xl mx-auto">
-          {HEAD_SANS.map((w, i) => (
-            <span
-              key={`s-${i}`}
-              className="hz-word"
-              style={{ animationDelay: `${0.7 + i * 0.1}s` }}
-            >
-              {w}
-            </span>
-          ))}
-          <br />
-          {HEAD_ITALIC.map((w, i) => (
-            <span
-              key={`i-${i}`}
-              className={`hz-word ${SERIF_ITALIC}`}
-              style={{
-                animationDelay: `${0.7 + (HEAD_SANS.length + i) * 0.1}s`,
-                paddingRight: "0.18em",
-                color: "#e4b8c0",
-              }}
-            >
-              {w}
-            </span>
-          ))}
-        </h1>
-
-        {/* Decorative divider closing the headline */}
-        <div
-          className="hz-divider mt-8 md:mt-10 flex items-center gap-4"
-          style={{ animationDelay: "1.4s" }}
-        >
-          <span aria-hidden className="block h-px w-10 md:w-16 bg-white/30" />
-          <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}>
-            Sektempfang · Dinner · vor dem Tanz
-          </span>
-          <span aria-hidden className="block h-px w-10 md:w-16 bg-white/30" />
-        </div>
-
-        {/* Body */}
-        <p
-          className="mt-10 max-w-xl mx-auto text-base md:text-lg leading-[1.65] text-white/75 font-light hz-fade"
-          style={{ animationDelay: "1.6s" }}
-        >
-          Wir machen aus eurem Tag einen Tag, an den sich eure Gäste in zehn
-          Jahren noch erinnern. Mit Magie, die sich nahtlos in euren Ablauf
-          einfügt — vom Sektempfang über das Dinner bis zum Hochzeitstanz.
-        </p>
-
-        {/* CTAs */}
-        <div
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 hz-fade"
-          style={{ animationDelay: "1.8s" }}
-        >
-          <a
-            href="#empfehlung"
-            className="hz-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95 shadow-[0_15px_40px_rgba(0,0,0,0.35)]"
+          <p
+            className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
+            style={{ animationDelay: "0.18s" }}
           >
-            Findet euren Moment
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </a>
-          <Link
-            to="/buchung"
-            className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
+            Eine Hochzeit. Drei Akte Magie.
+          </p>
+
+          <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
+            {HEADLINE_SANS.map((w, i) => (
+              <span
+                key={`s-${i}`}
+                className="hero-word"
+                style={{ animationDelay: `${0.3 + i * 0.08}s` }}
+              >
+                {w}
+                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+              </span>
+            ))}
+            <br className="hidden sm:block" />
+            {HEADLINE_ITALIC.map((w, i) => (
+              <span
+                key={`i-${i}`}
+                className={`hero-word ${SERIF_ITALIC}`}
+                style={{
+                  animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`,
+                  paddingRight: "0.15em",
+                  color: "#f3d9a8",
+                }}
+              >
+                {w}
+                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+              </span>
+            ))}
+          </h1>
+
+          <p
+            className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade"
+            style={{ animationDelay: "1.05s" }}
           >
-            Direkt anfragen
-            <ArrowUpRight className="w-4 h-4" />
-          </Link>
+            Drei Akte über euren Hochzeitstag: Karten beim Sektempfang,
+            Tisch-zu-Tisch beim Dinner, eine kompakte Show vor dem Tanz. Eure
+            Gäste reden noch in zehn Jahren davon.
+          </p>
+
+          <div
+            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 hero-fade"
+            style={{ animationDelay: "1.2s" }}
+          >
+            <a
+              href="#empfehlung"
+              className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"
+            >
+              Format-Finder
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <Link
+              to="/buchung"
+              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
+            >
+              Direkt anfragen
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
 
-        {/* Bottom-Inline Stats */}
-        <div
-          className="hz-fade mt-14 md:mt-20 inline-flex flex-wrap items-baseline justify-center gap-x-5 md:gap-x-7 gap-y-2 text-white/80 text-xs md:text-sm"
-          style={{ animationDelay: "2.0s" }}
-        >
-          <span className="inline-flex items-baseline gap-1.5">
-            <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-              100+
-            </strong>
-            <span className="text-white/60">Hochzeiten</span>
-          </span>
-          <span aria-hidden className="text-white/30">·</span>
-          <span className="inline-flex items-baseline gap-1.5">
-            <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-              200+
-            </strong>
-            <span className="text-white/60">Events gesamt</span>
-          </span>
-          <span aria-hidden className="text-white/30">·</span>
-          <span className="inline-flex items-baseline gap-1.5">
-            <strong className="font-display font-bold text-white text-base md:text-lg">
-              24 h
-            </strong>
-            <span className="text-white/60">Antwort</span>
-          </span>
-          <span aria-hidden className="text-white/30">·</span>
-          <span className="text-white/60">Bayern · deutschlandweit</span>
+        {/* Hero KPI-Strip — minimal inline */}
+        <div className="relative mt-20 md:mt-28">
+          <div
+            className="hero-overshoot inline-flex flex-wrap items-baseline gap-x-5 md:gap-x-7 gap-y-2 text-white/85 text-xs md:text-sm tracking-[0.04em]"
+            style={{ animationDelay: "2.0s" }}
+          >
+            <span className="inline-flex items-baseline gap-1.5">
+              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">100+</strong>
+              <span className="text-white/65">Hochzeiten</span>
+            </span>
+            <span aria-hidden className="text-white/30">·</span>
+            <span className="inline-flex items-baseline gap-1.5">
+              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">200+</strong>
+              <span className="text-white/65">Events gesamt</span>
+            </span>
+            <span aria-hidden className="text-white/30">·</span>
+            <span className="inline-flex items-baseline gap-1.5">
+              <strong className="font-display font-bold text-white text-base md:text-lg">24 h</strong>
+              <span className="text-white/65">Antwort</span>
+            </span>
+            <span aria-hidden className="text-white/30">·</span>
+            <span className="inline-flex items-baseline gap-1.5">
+              <span className="text-white/65">Bayern · deutschlandweit</span>
+            </span>
+          </div>
         </div>
       </div>
     </section>
