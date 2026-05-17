@@ -9,10 +9,17 @@ import {
   RotateCcw,
 } from "lucide-react";
 
+/* CI v3 Tokens — Burgunder als Akzent, Amber/Cream für Light-Variante */
+const ACCENT = "#9a2640";
+const ACCENT_DEEP = "#5c1622";
+const AMBER_SOFT = "#f0d8a8";
+const AMBER_MID = "#c79042";
+const ACCENT_SOFT = "#e4b8c0";
+
 const GRADIENT =
-  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)";
+  `linear-gradient(100deg, ${ACCENT_DEEP} 0%, ${ACCENT} 55%, ${AMBER_MID} 100%)`;
 const GRADIENT_LIGHT =
-  "linear-gradient(100deg, hsl(220 95% 78%) 0%, hsl(255 85% 78%) 50%, hsl(285 90% 78%) 100%)";
+  `linear-gradient(100deg, ${AMBER_SOFT} 0%, ${ACCENT_SOFT} 100%)`;
 
 export type QuizOption = {
   value: string;
@@ -149,7 +156,7 @@ export const QuizWizardModal = ({ config }: { config: QuizConfig }) => {
             }`}
             style={{
               background:
-                "linear-gradient(135deg, hsl(220 50% 16%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)",
+                `linear-gradient(135deg, ${ACCENT_DEEP} 0%, #2a0a12 50%, #1a0608 100%)`,
               borderRadius: "1rem",
               boxShadow: "0 30px 70px -25px rgba(60, 30, 80, 0.5)",
             }}
@@ -362,7 +369,7 @@ const WizardBody = ({
 
   const cardOptionStyle = (selected: boolean) =>
     selected
-      ? { background: GRADIENT, boxShadow: "0 12px 30px hsl(255 75% 55% / 0.3)" }
+      ? { background: GRADIENT, boxShadow: "0 12px 30px rgba(154,38,64,0.35)" }
       : {};
 
   const currentQuestion = step <= total ? config.questions[step - 1] : null;
@@ -404,7 +411,7 @@ const WizardBody = ({
               style={{
                 background:
                   i <= step
-                    ? "linear-gradient(90deg, hsl(220 85% 55%), hsl(255 75% 55%), hsl(285 85% 55%))"
+                    ? `linear-gradient(90deg, ${ACCENT_DEEP}, ${ACCENT}, ${AMBER_MID})`
                     : "rgba(0,0,0,0.08)",
                 opacity: i <= step ? 1 : 0.6,
               }}
@@ -588,7 +595,7 @@ const WizardBody = ({
                     className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{
                       background: GRADIENT,
-                      boxShadow: "0 10px 30px hsl(255 75% 55% / 0.3)",
+                      boxShadow: "0 10px 30px rgba(154,38,64,0.35)",
                     }}
                   >
                     {sending ? (
