@@ -295,7 +295,7 @@ const Hero = () => {
             className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
             style={{ animationDelay: "0.18s" }}
           >
-            Tischmagie zwischen den Gängen.
+            Tisch und Bühne zwischen den Gängen.
           </p>
 
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
@@ -330,8 +330,9 @@ const Hero = () => {
             className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade"
             style={{ animationDelay: "1.05s" }}
           >
-            Ich komme zwischen den Gängen an euren Tisch. Karten in eurer Hand,
-            ein Ring der wandert, ein Trick, der nur für diese Tafel passiert.
+            Zwei Formate, ein Abend: Tisch-zu-Tisch zwischen den Gängen und
+            eine kompakte Bühnenshow zum Dessert — einzeln oder kombiniert.
+            Karten in eurer Hand am Tisch, eine gemeinsame Pointe für alle.
             Eure Gäste reden noch beim Espresso davon.
           </p>
 
@@ -2964,10 +2965,10 @@ const SITE_URL = "https://www.magicel.de/magic-dinner";
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
-  serviceType: "Magic Dinner — Tischmagie zwischen den Gängen",
+  serviceType: "Magic Dinner — Tisch und Bühne zwischen den Gängen",
   name: "Magic Dinner mit Zauberkünstler Emilian Leber",
   description:
-    "Magic Dinner mit Zauberkünstler Emilian Leber: interaktive Tisch-zu-Tisch-Magie zwischen den Gängen, eingebettet in den Service-Takt. Aus einer Gastronomiefamilie. Bayern & deutschlandweit.",
+    "Magic Dinner mit Zauberkünstler Emilian Leber: Tisch-zu-Tisch und Bühnenshow zwischen den Gängen — einzeln oder kombiniert. Aus einer Gastronomiefamilie. Bayern & deutschlandweit.",
   provider: {
     "@type": "Person",
     name: "Emilian Leber",
@@ -3014,11 +3015,11 @@ const MagicDinner = () => (
     <Helmet>
       <html lang="de" />
       <title>
-        Magic Dinner buchen — Tischmagie zwischen den Gängen | Emilian Leber
+        Magic Dinner buchen — Tisch und Bühne zwischen den Gängen | Emilian Leber
       </title>
       <meta
         name="description"
-        content="Magic Dinner mit Zauberkünstler Emilian Leber: interaktive Tisch-zu-Tisch-Magie zwischen den Gängen, eingebettet in den Service-Takt. Bayern & deutschlandweit. 5,0★ bei 30+ Bewertungen. Kostenlos & unverbindlich anfragen."
+        content="Magic Dinner mit Zauberkünstler Emilian Leber: Tisch-zu-Tisch und Bühnenshow zwischen den Gängen — einzeln oder kombiniert. Bayern & deutschlandweit. 5,0★ bei 30+ Bewertungen. Kostenlos & unverbindlich anfragen."
       />
       <meta
         name="keywords"
@@ -3035,11 +3036,11 @@ const MagicDinner = () => (
       <meta property="og:url" content={SITE_URL} />
       <meta
         property="og:title"
-        content="Magic Dinner buchen — Tischmagie zwischen den Gängen | Emilian Leber"
+        content="Magic Dinner buchen — Tisch und Bühne zwischen den Gängen | Emilian Leber"
       />
       <meta
         property="og:description"
-        content="Magic Dinner mit Zauberkünstler Emilian Leber: interaktive Tischmagie zwischen den Gängen. Aus einer Gastronomiefamilie. Bayern & deutschlandweit. 5,0★ bei 30+ Bewertungen."
+        content="Magic Dinner mit Zauberkünstler Emilian Leber: Tisch-zu-Tisch und Bühnenshow zwischen den Gängen — einzeln oder kombiniert. Bayern & deutschlandweit. 5,0★ bei 30+ Bewertungen."
       />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
       <meta property="og:image:alt" content="Magic Dinner mit Emilian Leber — Tischmagie beim Abendessen" />
@@ -3048,11 +3049,11 @@ const MagicDinner = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta
         name="twitter:title"
-        content="Magic Dinner buchen — Tischmagie zwischen den Gängen | Emilian Leber"
+        content="Magic Dinner buchen — Tisch und Bühne zwischen den Gängen | Emilian Leber"
       />
       <meta
         name="twitter:description"
-        content="Magic Dinner mit Zauberkünstler Emilian Leber: interaktive Tischmagie zwischen den Gängen. Bayern & deutschlandweit. 5,0★."
+        content="Magic Dinner mit Zauberkünstler Emilian Leber: Tisch und Bühne zwischen den Gängen — einzeln oder kombiniert. Bayern & deutschlandweit. 5,0★."
       />
       <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
 

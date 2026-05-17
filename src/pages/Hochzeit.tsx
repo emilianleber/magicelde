@@ -280,9 +280,10 @@ const Hero = () => {
             className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade"
             style={{ animationDelay: "1.05s" }}
           >
-            Drei Akte über euren Hochzeitstag: Karten beim Sektempfang,
-            Tisch-zu-Tisch beim Dinner, eine kompakte Show vor dem Tanz. Eure
-            Gäste reden noch in zehn Jahren davon.
+            Magie zwischen euren Gästen während Sektempfang und Dinner, eine
+            moderierte Bühnenshow vor dem Tanz — einzeln buchbar, kombiniert
+            oder als roter Faden über den ganzen Tag. Eure Gäste reden noch
+            in zehn Jahren davon.
           </p>
 
           <div
@@ -367,13 +368,13 @@ const AKTE = [
     time: "Hochzeitsdinner",
     title: "Zwischen den Gängen.",
     body:
-      "Während der Hauptgang serviert wird, gehe ich von Tisch zu Tisch. Fünf bis sieben Minuten pro Runde, getaktet mit dem Service. Trauzeugen-Tisch, Eltern-Tisch, alte Schulfreunde — jeder Tisch bekommt seine eigene kleine Show.",
-    pull: "Niemand am Tisch wird übergangen. Jeder erlebt seine eigene Pointe.",
+      "Zwei Wege: Tisch-zu-Tisch fünf bis sieben Minuten pro Runde, getaktet mit dem Service — Trauzeugen-Tisch, Eltern-Tisch, alte Schulfreunde, jeder bekommt seine eigene kleine Show. Oder eine moderierte Bühnen-Einlage zwischen den Gängen, einmal für alle gleichzeitig. Welcher Weg passt, hängt von Gästezahl und Tischanordnung ab.",
+    pull: "Tisch-zu-Tisch oder Bühne — entscheidet ihr nach Gästemix.",
     img: closeupImg,
     imgAlt:
-      "Tisch-zu-Tisch-Magie beim Hochzeitsdinner — Close-Up Karten direkt am Tisch",
-    duration: "5 – 7 Min pro Tisch",
-    badge: "Tisch-zu-Tisch",
+      "Magie beim Hochzeitsdinner — Tisch-zu-Tisch oder Bühnen-Einlage zwischen den Gängen",
+    duration: "5 – 25 Min",
+    badge: "Tisch oder Bühne",
     glow: "rgba(199,144,66,0.4)", // amber
   },
   {
@@ -415,7 +416,8 @@ const DreiAkteSection = () => {
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Eine Hochzeit hat drei sehr unterschiedliche Stimmungen — vom
               gespannten Sektempfang bis zur ausgelassenen Tanzfläche. Magie
-              passt in jeden dieser Akte. Jeweils anders.
+              passt in jeden Akt — als Close-Up zwischen euren Gästen, als
+              moderierte Bühnenshow oder als Mix aus beidem.
             </p>
           </div>
         </div>
@@ -561,7 +563,7 @@ const POLAROIDS = [
     img: emotionenImg,
     alt: "Insider-Karte mit Anekdote — Hochzeitsmagie",
     title: "Eine Karte mit eurem Geheimnis.",
-    note: "Schul-Anekdote, Kosename, alte Wette — taucht mitten in der Show auf einer unmöglichen Karte auf.",
+    note: "Schul-Anekdote, Kosename, alte Wette — taucht auf einer Karte direkt am Tisch oder live auf der Bühne auf. Nur ihr und eure engsten Freunde verstehen den Witz.",
     tag: "Insider-Witz",
     tilt: 5,
   },
@@ -590,11 +592,11 @@ const POLAROIDS = [
     tilt: -3,
   },
   {
-    img: staunenImg,
-    alt: "Hochzeitsgäste reagieren auf Magie-Moment",
-    title: "Magie unter müden Gästen.",
-    note: "Letzte Stunde, Tanzfläche pulsiert. Ein Walk-Around an den Stehtischen, und ein paar Gäste bleiben länger als geplant.",
-    tag: "Letzte Stunde",
+    img: buehneShowImg,
+    alt: "Bühnen-Einlage zwischen den Gängen beim Hochzeitsdinner",
+    title: "Eine Bühne zwischen den Gängen.",
+    note: "Alternative zur Tisch-zu-Tisch: 10–15 Min moderierte Bühnen-Einlage während der Pause zwischen Vorspeise und Hauptgang. Eine Tafel, eine gemeinsame Pointe.",
+    tag: "Dinner-Bühne",
     tilt: 6,
   },
 ];
@@ -626,9 +628,9 @@ const PolaroidWall = () => {
           </div>
           <div className="md:col-span-5 md:pt-8">
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Damit ihr nicht abstrakt überlegen müsst: sechs Highlights, die
-              auf Hochzeiten regelmäßig passieren. Einzeln buchbar oder
-              kombiniert — euer Tag bestimmt den Mix.
+              Damit ihr nicht abstrakt überlegen müsst: sechs Highlights aus
+              echten Hochzeiten — als Close-Up unter euren Gästen, als
+              Bühnen-Moment für alle, oder kombiniert. Euer Tag bestimmt den Mix.
             </p>
           </div>
         </div>
