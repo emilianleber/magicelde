@@ -523,7 +523,7 @@ const PMS = [
     tag: "Show-Premiere",
   },
   {
-    date: "28. November 2025",
+    date: "28. November 2024",
     kicker: "Fernsehen · TVA Bayern",
     title: "TV-Interview mit 16 Jahren auf TVA.",
     excerpt:
@@ -1123,10 +1123,10 @@ const BIO_KURZ =
   "Emilian Leber ist Zauberkünstler und Comedy-Magier aus Bayern. Mit über 200 Live-Auftritten seit 2016, TV-Interview bei TVA und Greatest Talent sowie dem Kreativpreis bei Talents of Magic 2024 zählt er zu den profiliertesten jungen Magiern Deutschlands. 5,0 Sterne bei ProvenExpert.";
 
 const BIO_MITTEL =
-  "Emilian Leber (geb. 2007) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Über 200 Live-Auftritte seit 2016 — vom privaten Magic Dinner über Galaabende bis zu Versicherungs-Konzern-Events mit 200 Gästen. 2023 Finalist bei Greatest Talent, 2024 Finalist und Kreativpreisträger bei Talents of Magic, 2024 Top 30 bei der Deutschen Jugendmeisterschaft, 2023 TV-Interview im Bayerischen Regional-TV (TVA). Hauspartner-Restaurant für die Magic-Dinner-Reihe: Wald & Wiese in Sinzing bei Regensburg. 2026 Tour-Premiere der abendfüllenden Show Plötzlich Magie — Magic Meets Comedy.";
+  "Emilian Leber (geb. 2008) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Über 200 Live-Auftritte seit 2016 — vom privaten Magic Dinner über Galaabende bis zu Versicherungs-Konzern-Events mit 200 Gästen. 2023 Finalist bei Greatest Talent, 2024 Finalist und Kreativpreisträger bei Talents of Magic, 2024 Top 30 bei der Deutschen Jugendmeisterschaft, 2024 TV-Interview im Bayerischen Regional-TV (TVA). Hauspartner-Restaurant für die Magic-Dinner-Reihe: Wald & Wiese in Sinzing bei Regensburg. 2026 Tour-Premiere der abendfüllenden Show Plötzlich Magie — Magic Meets Comedy.";
 
 const BIO_LANG =
-  "Emilian Leber (geb. 2007) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Erste Tricks mit acht Jahren am heimischen Wohnzimmertisch, erster bezahlter Auftritt mit zwölf, erste abendfüllende Show 2023 — kurz darauf das Finale bei Greatest Talent (TV-Wettbewerb mit über 400 Bewerbungen). 2024 folgte das Finale bei Talents of Magic mit zusätzlichem Kreativpreis für eine eigens konzipierte Routine aus Mentalmagie und Comedy-Storytelling. Im selben Jahr Top 30 bei der Deutschen Jugendmeisterschaft der Zauberkunst des Magischen Zirkels Deutschland. 2023 TV-Interview im Bayerischen Regional-TV (TVA) als 16-Jähriger, Karten-Test mit dem Moderator und Mentaleffekt mit dem Studio-Publikum. Seit 2016 über 200 Live-Auftritte — Spannbreite von privaten Hochzeiten und Magic-Dinner-Abenden im Hauspartner-Restaurant Wald & Wiese (Sinzing bei Regensburg) bis zu DAX-Konzern-Galas für Versicherungskammer Bayern, STRABAG, Sixt und Sparkasse. 5,0 Sterne auf ProvenExpert und Google über mehr als dreißig verifizierte Bewertungen. Im Frühjahr 2026 Premiere der abendfüllenden Tour-Show Plötzlich Magie — Magic Meets Comedy mit anschließender Tour durch bayerische Theater. Bayern primär, deutschlandweit buchbar.";
+  "Emilian Leber (geb. 2008) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Erste Tricks mit acht Jahren am heimischen Wohnzimmertisch, erster bezahlter Auftritt mit zwölf, erste abendfüllende Show 2023 — kurz darauf das Finale bei Greatest Talent (TV-Wettbewerb mit über 400 Bewerbungen). 2024 folgte das Finale bei Talents of Magic mit zusätzlichem Kreativpreis für eine eigens konzipierte Routine aus Mentalmagie und Comedy-Storytelling. Im selben Jahr Top 30 bei der Deutschen Jugendmeisterschaft der Zauberkunst des Magischen Zirkels Deutschland. 2024 TV-Interview im Bayerischen Regional-TV (TVA) als 16-Jähriger, Karten-Test mit dem Moderator und Mentaleffekt mit dem Studio-Publikum. Seit 2016 über 200 Live-Auftritte — Spannbreite von privaten Hochzeiten und Magic-Dinner-Abenden im Hauspartner-Restaurant Wald & Wiese (Sinzing bei Regensburg) bis zu DAX-Konzern-Galas für Versicherungskammer Bayern, STRABAG, Sixt und Sparkasse. 5,0 Sterne auf ProvenExpert und Google über mehr als dreißig verifizierte Bewertungen. Im Frühjahr 2026 Premiere der abendfüllenden Tour-Show Plötzlich Magie — Magic Meets Comedy mit anschließender Tour durch bayerische Theater. Bayern primär, deutschlandweit buchbar.";
 
 const BIOS = [
   {
@@ -1446,7 +1446,7 @@ const QUOTES = [
     quote:
       "Die schönste Reaktion ist nicht der Applaus. Es sind die drei Sekunden Stille davor, in denen alle gleichzeitig die Luft anhalten.",
     context: "Über den Moment vor dem Applaus",
-    source: "Interview · TVA · 2023",
+    source: "Interview · TVA · 2024",
   },
   {
     quote:
@@ -1601,7 +1601,7 @@ const PullQuoteSection = () => {
           <footer className="mt-10 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-white/25" aria-hidden />
             <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}>
-              TVA Bayern · 2023
+              TVA Bayern · 2024
             </span>
             <span className="h-px w-12 bg-white/25" aria-hidden />
           </footer>
@@ -1624,7 +1624,7 @@ const VideoSection = () => {
             <p
               className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
             >
-              Video-Mitschnitt · TVA 2023.
+              Video-Mitschnitt · TVA 2024.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               TV-Auftritt{" "}

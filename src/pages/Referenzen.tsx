@@ -678,12 +678,12 @@ const StatsEditorialSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               Was zehn Jahre auf der Bühne zusammenrechnen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
-              {"Was ich seit 2016 "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
-                gebaut habe
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground">
+              Was ich seit 2016
+              <br />
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                gebaut habe.
               </span>
-              .
             </h2>
           </div>
           <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
@@ -937,9 +937,10 @@ const CaseStudiesSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               Drei Top-Referenzen, in der Tiefe.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
-              {"VKB."}{" "}STRABAG.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground">
+              VKB. STRABAG.
+              <br />
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 XXXLutz.
               </span>
             </h2>
@@ -1613,8 +1614,9 @@ const FinalCTA = () => {
           <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>
             Diskret. Persönlich. Mit Branchen-Match.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
-            {"Schreib mir — ich nenne dir "}
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)]">
+            Schreib mir.
+            <br />
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               Referenzen
             </span>{" "}aus deiner Branche.
