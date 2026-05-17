@@ -462,13 +462,13 @@ const HIGHLIGHTS = [
   {
     Icon: Brain,
     kicker: "Routine 01 · Headliner",
-    title: "Die verschlossene Vorhersage.",
-    body: "Zu Beginn der Show übergebe ich einem Gast einen verschlossenen Umschlag. Zwanzig Minuten später entscheidet der ganze Saal gemeinsam — Zahl, Farbe, Wort, Bild. Der Umschlag bleibt unangetastet auf der Bühne. Wird live aufgemacht: alles drin, was gewählt wurde. Drei Sekunden Stille.",
+    title: "Der Buch-Test.",
+    body: "Ein Gast aus dem Publikum bekommt ein Buch in die Hand, schlägt es an einer freien Stelle auf, merkt sich Seitenzahl und ein Wort. Ich lese die Gedanken laut vor. Dann verschwindet die Seite aus dem Buch — und taucht zusammengefaltet in einem versiegelten Umschlag wieder auf, der die ganze Zeit auf der Bühne lag. Im Buch: die Seite ist herausgerissen.",
     accent: "spotlight",
   },
-  { Icon: Sparkles, kicker: "Routine 02", title: "Karten-Cascade", body: "Eine signierte Karte aus dem Publikum wandert in ein verschlossenes Glas, einen verschlossenen Geldbeutel, einen versiegelten Brief.", accent: "default" },
-  { Icon: Drama, kicker: "Routine 03", title: "Mentale Wahl", body: "Drei Gäste aus drei Reihen denken an je ein Wort, eine Farbe, eine Zahl. Ich nenne alle drei vor der Pause — keine Hilfsmittel.", accent: "default" },
-  { Icon: Mic2, kicker: "Routine 04", title: "Anekdoten-Eskalation", body: "Persönliche Story vom Auftraggeber wird zur Comedy-Routine — Pointe aus seinem eigenen Briefing. Nur im Saal des Auftraggebers spielbar.", accent: "default" },
+  { Icon: Sparkles, kicker: "Routine 02", title: "Karten-Finder.", body: "Mehrere Gäste wählen frei ihre Karten, mischen sie zurück. Ich finde jede einzelne wieder — auf eine andere unmögliche Art. Jede Pointe stärker als die vorherige.", accent: "default" },
+  { Icon: Drama, kicker: "Routine 03", title: "Die Entfesselung.", body: "Comedy-Routine, besonders bei Geburtstagen und Hochzeiten: Ich lasse mich vom Publikum fesseln — Seile, Schloss, alles fest. Innerhalb von Sekunden bin ich frei. Pointe inklusive.", accent: "default" },
+  { Icon: Mic2, kicker: "Routine 04 · Teaser", title: "Mehr im Live-Set.", body: "Mentale Vorhersagen, Anekdoten-Routinen aus eurem Briefing, eingebaute Insider — den Rest sehe ich live im Saal entscheiden. Nicht jede Pointe gehört auf eine Webseite.", accent: "default" },
 ];
 
 const EffektHighlightsSection = () => {
@@ -507,14 +507,14 @@ const EffektHighlightsSection = () => {
                 <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-white/75">{headliner.kicker}</span>
               </div>
               <h3 className="font-display text-3xl md:text-4xl font-black leading-[1.05] mb-6 max-w-md">
-                {headliner.title.split(".")[0]}.{" "}
-                <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>Live entschieden.</span>
+                {headliner.title.replace(".", "")}.{" "}
+                <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>Eine Seite zu viel.</span>
               </h3>
               <p className="text-base md:text-lg text-white/75 leading-[1.65] max-w-lg mt-auto">{headliner.body}</p>
               <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] tracking-[0.04em] text-white/65">
-                <span className="inline-flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full" style={{ background: "#f3d9a8" }} aria-hidden />Saal-Routine</span>
+                <span className="inline-flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full" style={{ background: "#f3d9a8" }} aria-hidden />Mentaleffekt + sichtbarer Beweis</span>
                 <span aria-hidden className="text-white/25">·</span>
-                <span>20 Min Spannung · 3 Sek Stille</span>
+                <span>Buch · Umschlag · zerrissene Seite</span>
               </div>
             </div>
           </article>
@@ -557,48 +557,63 @@ const AnlassMixSection = () => {
   return (
     <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-x-14 gap-y-12">
-          <div className={`lg:col-span-5 lg:sticky lg:top-24 lg:self-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        {/* Foto oben — full-width Banner */}
+        <div className={`relative overflow-hidden mb-14 md:mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ borderRadius: "1.5rem" }}>
+          <img src={buehneDpsgImg} alt="Bühnenshow Emilian Leber — Publikum reagiert" className="w-full h-[280px] md:h-[420px] object-cover" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)", objectPosition: "center 25%" }} />
+          <div aria-hidden className="absolute inset-x-0 bottom-0 h-40" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.65))" }} />
+          <div aria-hidden className="absolute -top-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)" }} />
+          <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-10 md:right-10 text-white flex flex-wrap items-end justify-between gap-4">
+            <p className={`${SERIF_ITALIC} text-lg md:text-2xl leading-snug max-w-xl`}>„Volle Bühne, volles Publikum — funktioniert von 80 bis 500 Gästen."</p>
+            <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white" style={{ background: "rgba(8,6,12,0.5)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.18)" }}>
+              200+ Bühnen-Slots
+            </span>
+          </div>
+        </div>
+
+        {/* Headline */}
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
+          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Wann eine Bühne den Abend trägt.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Anlässe.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Bühne</span>.
             </h2>
-            <div className="relative overflow-hidden" style={{ borderRadius: "1.25rem" }}>
-              <img src={buehneDpsgImg} alt="Bühnenshow Emilian Leber — Publikum reagiert" className="w-full h-[340px] md:h-[420px] object-cover" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)" }} />
-              <div aria-hidden className="absolute inset-x-0 bottom-0 h-32" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.55))" }} />
-              <div className="absolute bottom-5 left-5 right-5 text-white">
-                <p className={`${SERIF_ITALIC} text-base md:text-lg leading-snug`}>„Volle Bühne, volles Publikum — funktioniert von 80 bis 500 Gästen."</p>
+          </div>
+          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Die Bühne ist nicht für jede Feier nötig — aber wenn der Anlass
+              passt, trägt sie den ganzen Abend. Fünf Settings, in denen das
+              regelmäßig der Fall ist.
+            </p>
+          </div>
+        </div>
+
+        {/* Liste — full-width */}
+        <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
+          {ANLAESSE.map((a, i) => (
+            <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[68px_1fr_auto] items-baseline gap-4 md:gap-8 py-7 md:py-10 group ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.15 + i * 0.06}s` }}>
+              <span className="inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+                <a.Icon className="w-4 h-4 md:w-6 md:h-6" style={{ color: ACCENT }} strokeWidth={1.75} />
+              </span>
+              <div className="grid md:grid-cols-[1fr_2fr] gap-x-8 gap-y-2 items-baseline">
+                <div>
+                  <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight mb-1">{a.label}</h3>
+                  <span className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55`}>{a.note}</span>
+                </div>
+                <p className="text-base text-foreground/65 leading-[1.65]">{a.body}</p>
               </div>
-            </div>
-          </div>
-          <div className="lg:col-span-7">
-            <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
-              {ANLAESSE.map((a, i) => (
-                <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[56px_1fr_auto] items-baseline gap-4 md:gap-6 py-7 md:py-9 group ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
-                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
-                    <a.Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
-                  </span>
-                  <div>
-                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
-                      <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight">{a.label}</h3>
-                      <span className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55`}>{a.note}</span>
-                    </div>
-                    <p className="text-base text-foreground/65 leading-[1.65] max-w-2xl">{a.body}</p>
-                  </div>
-                  <span className="hidden md:inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-500 group-hover:bg-[#9a2640] group-hover:text-white text-foreground/30 self-start mt-1" aria-hidden>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-10 flex items-center gap-3">
-              <Link to="/buchung?format=Bühnenshow" className="hero-cta inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
-                Anlass besprechen<ArrowRight className="w-4 h-4" />
-              </Link>
-              <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>Antwort innerhalb 24 h</span>
-            </div>
-          </div>
+              <span className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-500 group-hover:bg-[#9a2640] group-hover:text-white text-foreground/30 self-start mt-1" aria-hidden>
+                <ArrowUpRight className="w-4 h-4" />
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-12 flex flex-wrap items-center gap-4">
+          <Link to="/buchung?format=Bühnenshow" className="hero-cta inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
+            Anlass besprechen<ArrowRight className="w-4 h-4" />
+          </Link>
+          <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>Antwort innerhalb 24 h</span>
         </div>
       </div>
     </section>
