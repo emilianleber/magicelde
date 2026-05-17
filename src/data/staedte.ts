@@ -934,6 +934,637 @@ Von Reichsstraße-Locations über das Hotel Goldener Hirsch bis zu Schloss-Hochz
 
 Kosten Zauberer Donauwörth: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
   },
+  /* ═══════════════════════════════════════════════════════════
+     ORTE RUND UM REGENSBURG (Landkreis Regensburg + Nachbarlandkreise)
+     Anfahrt typisch 10–45 Min aus Regensburg — kurze Wege, hohe Verfügbarkeit.
+     ═══════════════════════════════════════════════════════════ */
+  {
+    slug: "neutraubling",
+    name: "Neutraubling",
+    region: "Bayern",
+    intro: "Neutraubling — die jüngste Stadt im Landkreis Regensburg, östlich der Domstadt gelegen. Als Zauberer für Neutraubling bin ich in 15 Minuten vor Ort — Close-Up Magie, Bühnenshow und Magic Dinner für Hochzeiten, Firmenfeiern und Geburtstage.",
+    highlight: "Neutraubling ist direkter Nachbar von Regensburg — Anfahrt unter 15 Minuten, volle Verfügbarkeit auch kurzfristig.",
+    einwohner: "13.500",
+    bekannteLocations: ["Hammerschmiede Neutraubling", "Stadtsaal Neutraubling", "Hotel Schreiner", "Industriegebiet Neutraubling (Veranstaltungsräume)"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Neutraubling?", a: "Anfahrt aus Regensburg unter 15 Minuten — keine zusätzliche Anfahrtspauschale. Kostenloses Angebot je nach Format auf Anfrage." },
+      { q: "Tritt der Zauberer auch in Industriebetrieben in Neutraubling auf?", a: "Ja, Firmenfeiern bei Neutraublinger Unternehmen — vom Mittelstand bis zu größeren Industriebetrieben — gehören zu meinen regulären Einsätzen." },
+    ],
+    seoText: "Zauberer Neutraubling: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Geburtstagen in Neutraubling und im Landkreis Regensburg.",
+    langText: `Als Zauberer für Neutraubling bin ich aus Regensburg in 15 Minuten vor Ort — kurze Anfahrt, volle Verfügbarkeit, auch kurzfristige Termine möglich. Von der Hammerschmiede über den Stadtsaal bis zu Hochzeits-Locations in der Region.
+
+Neutraubling ist Industriestandort mit starkem Mittelstand — Firmenfeiern, Weihnachtsfeiern und Jubiläen sind häufige Anlässe. Mein Programm passt sich der Unternehmenskultur an.
+
+Kosten Zauberer Neutraubling: Pakete ab 395 €, keine zusätzliche Anfahrt aus Regensburg.`,
+  },
+  {
+    slug: "lappersdorf",
+    name: "Lappersdorf",
+    region: "Bayern",
+    intro: "Lappersdorf — direkt nördlich an Regensburg angrenzend. Als Zauberer für Lappersdorf bin ich in 10 Minuten bei dir — Close-Up Magie, Bühnenshow und Magic Dinner für jeden Anlass im Landkreis Regensburg.",
+    highlight: "Lappersdorf ist Vorort-Gemeinde nördlich von Regensburg — kürzester Anfahrtsweg, volle Flexibilität.",
+    einwohner: "13.000",
+    bekannteLocations: ["Bürgerhaus Lappersdorf", "Gemeindezentrum", "Schlosshotel Lappersdorf-Umgebung", "Gasthof Pirzer"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Lappersdorf?", a: "Anfahrt aus Regensburg in 10 Minuten — keine separate Anreisepauschale. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Eignet sich der Zauberer für Vereinsfeste in Lappersdorf?", a: "Ja, Vereinsjubiläen, Schützenfeste und größere Privatfeiern in Lappersdorf betreue ich regelmäßig." },
+    ],
+    seoText: "Zauberer Lappersdorf: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und privaten Anlässen in Lappersdorf und im Landkreis Regensburg.",
+    langText: `Lappersdorf grenzt direkt an Regensburg an — als Zauberer für Lappersdorf bin ich in 10 Minuten vor Ort. Hochzeiten im Schlosshotel-Umfeld, Firmenfeiern im Bürgerhaus oder Vereinsjubiläen im Gemeindezentrum.
+
+Als Zauberer aus Regensburg kenne ich Lappersdorf und seine Veranstaltungs-Logistik genau. Kurze Anfahrt, volle Verfügbarkeit, auch für kurzfristige Termine.
+
+Kosten Zauberer Lappersdorf: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "wenzenbach",
+    name: "Wenzenbach",
+    region: "Bayern",
+    intro: "Wenzenbach — Gemeinde nordöstlich von Regensburg, idyllische Lage. Als Zauberer für Wenzenbach bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Privatanlässen im Landkreis Regensburg.",
+    highlight: "Wenzenbach liegt 15 Minuten nordöstlich von Regensburg — Bürgerhaus, Gasthöfe und Hochzeits-Locations im ländlichen Umfeld.",
+    einwohner: "8.500",
+    bekannteLocations: ["Bürgerhaus Wenzenbach", "Gasthof Heitzer", "Pfarrheim Wenzenbach", "Landhotel-Umfeld"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Wenzenbach?", a: "Anfahrt aus Regensburg unter 20 Minuten — Format-abhängiges Angebot auf Anfrage, ohne Aufschlag." },
+      { q: "Tritt der Zauberer auch auf Landhochzeiten in Wenzenbach auf?", a: "Ja, Landhochzeiten mit bayerischer Tonalität sind eine meiner schönsten Disziplinen. Tisch-zu-Tisch beim Dinner, Bühne vor dem Tanz." },
+    ],
+    seoText: "Zauberer Wenzenbach: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und privaten Anlässen in Wenzenbach und im Landkreis Regensburg.",
+    langText: `Wenzenbach ist ländliche Gemeinde 15 Minuten nordöstlich von Regensburg. Als Zauberer für Wenzenbach bringe ich modernes Entertainment zu Landhochzeiten, Vereinsfeiern und privaten Anlässen — bayerische Tonalität, eleganter Stil.
+
+Vom Bürgerhaus über das Pfarrheim bis zu Landgasthöfen — Wenzenbach bietet authentische Settings für besondere Anlässe. Kurze Anfahrt aus Regensburg, volle Verfügbarkeit.
+
+Kosten Zauberer Wenzenbach: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
+  {
+    slug: "donaustauf",
+    name: "Donaustauf",
+    region: "Bayern",
+    intro: "Donaustauf — Markt östlich von Regensburg, weltbekannt für die Walhalla über der Donau. Als Zauberer für Donaustauf bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten an der Walhalla, Firmenfeiern und Galas mit Donaupanorama.",
+    highlight: "Donaustauf ist mit Walhalla und Burgruine eine der schönsten Eventdestinationen im Regensburger Umland — Hochzeiten mit Donaublick.",
+    einwohner: "4.000",
+    bekannteLocations: ["Walhalla (Umfeld)", "Burgruine Donaustauf", "Gasthof Maxhütte Donaustauf", "Landhotel Forstpark", "Hotel-Restaurant am Donaupark"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Donaustauf?", a: "Anfahrt aus Regensburg 15 Minuten — keine zusätzliche Anfahrt. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten an der Walhalla auf?", a: "Ja, Hochzeiten mit Walhalla-Ambiente und Donaublick gehören zu meinen schönsten Auftritten in der Region. Historische Kulisse, elegante moderne Show." },
+    ],
+    seoText: "Zauberer Donaustauf: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten an der Walhalla, Firmenfeiern und Galas im Landkreis Regensburg.",
+    langText: `Donaustauf ist mit der Walhalla eine der bekanntesten Eventdestinationen im Regensburger Umland. Als Zauberer für Donaustauf bringe ich Entertainment zu Walhalla-Hochzeiten, Galas mit Donaublick und Firmenfeiern im historischen Markt.
+
+Vom Gasthof Maxhütte über das Landhotel Forstpark bis zu Hochzeits-Locations am Donauufer — Donaustauf bietet einzigartige Settings. Mein Programm passt sich an: ruhig-elegant, mit Mentaleffekten und Standing-Ovation-Finale.
+
+Kosten Zauberer Donaustauf: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "tegernheim",
+    name: "Tegernheim",
+    region: "Bayern",
+    intro: "Tegernheim — Gemeinde direkt östlich von Regensburg an der Donau. Als Zauberer für Tegernheim bin ich in 15 Minuten bei dir — Close-Up Magie, Bühnenshow und Magic Dinner.",
+    highlight: "Tegernheim liegt direkt an Regensburgs Stadtgrenze — schnelle Anfahrt, ideale Verfügbarkeit auch kurzfristig.",
+    einwohner: "5.500",
+    bekannteLocations: ["Bürgerhaus Tegernheim", "Pfarrheim St. Vitus", "Gasthof Bäuml", "Donau-Eventbereich"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Tegernheim?", a: "Anfahrt aus Regensburg unter 15 Minuten — keine Aufschläge. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer bei Familienfeiern in Tegernheim auf?", a: "Ja, Geburtstage, Hochzeiten und Jubiläen in Tegernheim betreue ich gerne — bayerische Tonalität, moderne Show." },
+    ],
+    seoText: "Zauberer Tegernheim: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Geburtstagen und Familienfeiern in Tegernheim und im Landkreis Regensburg.",
+    langText: `Tegernheim grenzt direkt an Regensburg an — als Zauberer für Tegernheim bin ich in 15 Minuten vor Ort. Vom Bürgerhaus über das Pfarrheim bis zu Privatfeiern in der Gemeinde.
+
+Tegernheim ist ein gefragter Hochzeits- und Geburtstagsort im direkten Regensburger Umland. Kurze Wege, volle Verfügbarkeit, eingespielte Logistik.
+
+Kosten Zauberer Tegernheim: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "barbing",
+    name: "Barbing",
+    region: "Bayern",
+    intro: "Barbing — Gemeinde südöstlich von Regensburg, an der Donau gelegen. Als Zauberer für Barbing bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Vereinsjubiläen.",
+    highlight: "Barbing ist Wirtschaftsstandort südöstlich von Regensburg — kurze Anfahrt, idealer Ort für Firmenfeiern und Hochzeiten.",
+    einwohner: "5.500",
+    bekannteLocations: ["Mehrzweckhalle Barbing", "Pfarrheim Barbing", "Gewerbegebiet Barbing", "Landgasthof Hofbräu"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Barbing?", a: "Anfahrt aus Regensburg unter 20 Minuten — kein Aufschlag. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer bei Firmenfeiern in Barbing auf?", a: "Ja, Firmenfeiern für Barbinger Unternehmen — Weihnachtsfeiern, Sommerfeste, Jubiläen — betreue ich regelmäßig." },
+    ],
+    seoText: "Zauberer Barbing: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und Vereinsjubiläen in Barbing und im Landkreis Regensburg.",
+    langText: `Barbing ist eine Wirtschaftsgemeinde südöstlich von Regensburg. Als Zauberer für Barbing bringe ich modernes Entertainment zu Firmenfeiern in der Mehrzweckhalle, Hochzeiten im Landgasthof Hofbräu und Vereinsjubiläen.
+
+Kurze Anfahrt aus Regensburg, volle Verfügbarkeit, eingespielte Logistik mit Locations vor Ort.
+
+Kosten Zauberer Barbing: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "pentling",
+    name: "Pentling",
+    region: "Bayern",
+    intro: "Pentling — Gemeinde südwestlich von Regensburg, direkt an der A93. Als Zauberer für Pentling bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Privatanlässen.",
+    highlight: "Pentling ist Vorort südwestlich von Regensburg — Wirtschafts- und Wohnstandort mit aktiver Vereinskultur.",
+    einwohner: "9.000",
+    bekannteLocations: ["Bürgerhaus Pentling", "Gewerbegebiet Pentling", "Gasthof Brauerei Pentling", "Pfarrheim"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Pentling?", a: "Anfahrt aus Regensburg unter 15 Minuten — kein Aufschlag. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auch in Firmen im Gewerbegebiet Pentling auf?", a: "Ja, Firmenfeiern für Pentlinger Unternehmen — Weihnachtsfeiern, Jubiläen, Mitarbeiter-Events — gehören zu meinen regulären Einsätzen." },
+    ],
+    seoText: "Zauberer Pentling: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und privaten Anlässen in Pentling und im Landkreis Regensburg.",
+    langText: `Pentling ist Vorort südwestlich von Regensburg, direkt an der A93. Als Zauberer für Pentling betreue ich Firmenfeiern im Gewerbegebiet, Hochzeiten im Bürgerhaus und private Anlässe in Gasthöfen.
+
+Kurze Anfahrt aus Regensburg, volle Verfügbarkeit. Ideales Einzugsgebiet für Weihnachtsfeiern Pentlinger Unternehmen.
+
+Kosten Zauberer Pentling: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "sinzing",
+    name: "Sinzing",
+    region: "Bayern",
+    intro: "Sinzing — Gemeinde westlich von Regensburg an der Donau. Heimat des Restaurant Wald & Wiese, meinem Magic-Dinner-Hauspartner. Als Zauberer für Sinzing bringe ich Magie direkt in die Gemeinde — Close-Up, Bühnenshow und Magic Dinner.",
+    highlight: "Sinzing ist Heimat des Restaurants Wald & Wiese — meinem Magic-Dinner-Hauspartner. Hier finden regelmäßig Magic-Dinner-Abende statt.",
+    einwohner: "6.000",
+    bekannteLocations: ["Restaurant Wald & Wiese Sinzing", "Klosterkirche Sinzing", "Bürgerhaus Sinzing", "Schloss Eilsbrunn"],
+    faq: [
+      { q: "Findet das Magic Dinner in Sinzing statt?", a: "Ja — das Restaurant Wald & Wiese in Sinzing ist mein Hauspartner für Magic-Dinner-Abende. Ticket-Events und private Magic Dinners regelmäßig hier." },
+      { q: "Tritt der Zauberer auch auf Privatfeiern in Sinzing auf?", a: "Selbstverständlich — Hochzeiten, Geburtstage und Jubiläen in Sinzing und Umgebung betreue ich regelmäßig." },
+    ],
+    seoText: "Zauberer Sinzing: Emilian Leber bringt Magic Dinner, Close-Up Magie und Bühnenshow zu Events in Sinzing — auch im Restaurant Wald & Wiese, meinem Hauspartner.",
+    langText: `Sinzing ist Heimat des Restaurant Wald & Wiese — meinem Magic-Dinner-Hauspartner. Hier finden regelmäßig öffentliche Magic-Dinner-Ticketabende statt, ebenso Privatbuchungen. Als Zauberer für Sinzing bin ich aus Regensburg in 20 Minuten vor Ort.
+
+Neben dem Magic Dinner im Wald & Wiese betreue ich in Sinzing auch Hochzeiten, Geburtstage und Firmenfeiern — vom Bürgerhaus bis zu Hochzeits-Locations am Donauufer.
+
+Kosten Zauberer Sinzing: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "pielenhofen",
+    name: "Pielenhofen",
+    region: "Bayern",
+    intro: "Pielenhofen — Klostergemeinde im Naabtal nordwestlich von Regensburg. Als Zauberer für Pielenhofen bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in Klosteranlagen, Firmenfeiern und privaten Anlässen.",
+    highlight: "Pielenhofen ist mit dem Kloster und der historischen Klosterkirche eine der schönsten Hochzeitsdestinationen im Regensburger Umland.",
+    einwohner: "3.000",
+    bekannteLocations: ["Kloster Pielenhofen", "Klosterkirche Pielenhofen", "Naabtal-Hotels", "Schloss-Naab-Umfeld"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Pielenhofen?", a: "Anfahrt aus Regensburg ca. 30 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten im Kloster Pielenhofen auf?", a: "Ja, Klosterhochzeiten gehören zu meinen schönsten Auftritten — historisches Ambiente, festliche Tonalität, elegante moderne Show." },
+    ],
+    seoText: "Zauberer Pielenhofen: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten am Kloster Pielenhofen und im Naabtal.",
+    langText: `Pielenhofen im Naabtal ist mit dem Kloster und der Klosterkirche eine der romantischsten Hochzeitsdestinationen im Regensburger Umland. Als Zauberer für Pielenhofen bringe ich Entertainment, das zur klösterlichen Atmosphäre passt — festlich-warm, mit Augenmaß.
+
+Vom Kloster Pielenhofen über Hotels im Naabtal bis zu Hochzeits-Locations rund um die Klosterkirche — die Region bietet einzigartige Settings.
+
+Kosten Zauberer Pielenhofen: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "pettendorf",
+    name: "Pettendorf",
+    region: "Bayern",
+    intro: "Pettendorf — Gemeinde nordwestlich von Regensburg im Naabtal. Als Zauberer für Pettendorf bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Vereinsanlässen.",
+    highlight: "Pettendorf liegt 15 Minuten nordwestlich von Regensburg — ländliches Umfeld mit aktiver Vereinskultur.",
+    einwohner: "5.500",
+    bekannteLocations: ["Bürgerhaus Pettendorf", "Pfarrheim St. Peter und Paul", "Sportgaststätte Pettendorf", "Landgasthof Umgebung"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Pettendorf?", a: "Anfahrt aus Regensburg unter 20 Minuten — kein Aufschlag. Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auch auf Vereinsjubiläen in Pettendorf auf?", a: "Ja, Vereinsfeste, Sportlerfeiern und Schützenjubiläen in Pettendorf gehören zu meinen Einsätzen." },
+    ],
+    seoText: "Zauberer Pettendorf: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Vereinsfesten in Pettendorf im Landkreis Regensburg.",
+    langText: `Pettendorf ist eine ländliche Gemeinde nordwestlich von Regensburg. Als Zauberer für Pettendorf bringe ich modernes Entertainment zu Landhochzeiten, Vereinsjubiläen und Privatfeiern im Bürgerhaus und in Gasthöfen der Region.
+
+Kurze Anfahrt aus Regensburg, eingespielte Logistik, bayerische Tonalität.
+
+Kosten Zauberer Pettendorf: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "zeitlarn",
+    name: "Zeitlarn",
+    region: "Bayern",
+    intro: "Zeitlarn — Gemeinde nördlich von Regensburg. Als Zauberer für Zeitlarn bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und privaten Anlässen im Landkreis Regensburg.",
+    highlight: "Zeitlarn ist direkter Nordnachbar von Regensburg — 10 Minuten Anfahrt, ideale Verfügbarkeit.",
+    einwohner: "8.000",
+    bekannteLocations: ["Bürgerhaus Zeitlarn", "Pfarrheim", "Gewerbegebiet Zeitlarn", "Landgasthof Schreiner"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Zeitlarn?", a: "Anfahrt aus Regensburg ca. 10 Minuten — keine Aufschläge. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten in Zeitlarn auf?", a: "Ja, Hochzeiten und Privatfeiern in Zeitlarn betreue ich regelmäßig — Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner, Bühne vor dem Tanz." },
+    ],
+    seoText: "Zauberer Zeitlarn: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und privaten Anlässen in Zeitlarn und im Landkreis Regensburg.",
+    langText: `Zeitlarn ist direkter Nordnachbar von Regensburg — Anfahrt in 10 Minuten. Als Zauberer für Zeitlarn betreue ich Hochzeiten, Firmenfeiern und Vereinsjubiläen vom Bürgerhaus bis zu Gasthöfen in der Gemeinde.
+
+Kurze Wege, volle Verfügbarkeit, auch kurzfristig buchbar.
+
+Kosten Zauberer Zeitlarn: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "obertraubling",
+    name: "Obertraubling",
+    region: "Bayern",
+    intro: "Obertraubling — Gemeinde südlich von Regensburg mit eigenem Bahnhof. Als Zauberer für Obertraubling bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Geburtstagen.",
+    highlight: "Obertraubling liegt direkt südlich von Regensburg an der Bahn — schnelle Anfahrt, gute Erreichbarkeit für überregionale Gäste.",
+    einwohner: "10.500",
+    bekannteLocations: ["Mehrzweckhalle Obertraubling", "Bürgerhaus", "Gasthof zur Post", "Gewerbegebiet"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Obertraubling?", a: "Anfahrt aus Regensburg unter 15 Minuten — kein Aufschlag. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Firmenfeiern in Obertraubling auf?", a: "Ja, Firmenfeiern für Obertraublinger Unternehmen gehören zu meinen Einsätzen — Mittelstand und Industrie." },
+    ],
+    seoText: "Zauberer Obertraubling: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Geburtstagen in Obertraubling und im Landkreis Regensburg.",
+    langText: `Obertraubling ist Industriegemeinde südlich von Regensburg. Als Zauberer für Obertraubling betreue ich Firmenfeiern in der Mehrzweckhalle, Hochzeiten im Gasthof zur Post und Familienfeiern in Privatlocations.
+
+Kurze Anfahrt aus Regensburg, volle Verfügbarkeit.
+
+Kosten Zauberer Obertraubling: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "alteglofsheim",
+    name: "Alteglofsheim",
+    region: "Bayern",
+    intro: "Alteglofsheim — Gemeinde südlich von Regensburg mit barockem Schloss. Als Zauberer für Alteglofsheim bringe ich Close-Up Magie und Bühnenshow zu Schloss-Hochzeiten, Firmenfeiern und Galas.",
+    highlight: "Alteglofsheim ist mit dem barocken Schloss ein gefragter Hochzeits- und Eventort südlich von Regensburg.",
+    einwohner: "3.000",
+    bekannteLocations: ["Schloss Alteglofsheim", "Bürgerhaus Alteglofsheim", "Schlossgarten (Eventbereich)", "Gasthof Alteglofsheim"],
+    faq: [
+      { q: "Tritt der Zauberer auf Schloss-Hochzeiten in Alteglofsheim auf?", a: "Ja, Hochzeiten im Schloss Alteglofsheim gehören zu meinen schönsten Auftritten in der Region. Barockes Ambiente, elegante moderne Show." },
+      { q: "Was kostet ein Zauberer in Alteglofsheim?", a: "Anfahrt aus Regensburg unter 20 Minuten — kein Aufschlag. Format-abhängiges Angebot auf Anfrage." },
+    ],
+    seoText: "Zauberer Alteglofsheim: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Schloss-Hochzeiten in Alteglofsheim und im Landkreis Regensburg.",
+    langText: `Alteglofsheim ist mit dem barocken Schloss eine der schönsten Hochzeitsdestinationen südlich von Regensburg. Als Zauberer für Alteglofsheim bringe ich Entertainment, das zur barocken Kulisse passt — festlich, eingebaute Anekdoten, Standing-Ovation-Finale.
+
+Vom Schloss bis zum Bürgerhaus — Alteglofsheim bietet Hochzeits- und Eventsettings mit Charakter.
+
+Kosten Zauberer Alteglofsheim: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "mintraching",
+    name: "Mintraching",
+    region: "Bayern",
+    intro: "Mintraching — Gemeinde südöstlich von Regensburg im Donautal. Als Zauberer für Mintraching bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und privaten Anlässen.",
+    highlight: "Mintraching liegt im Donautal südöstlich von Regensburg — bayerisch-ländliches Eventumfeld.",
+    einwohner: "4.500",
+    bekannteLocations: ["Bürgerhaus Mintraching", "Pfarrheim", "Sportgaststätte", "Landhotel Umgebung"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Mintraching?", a: "Anfahrt aus Regensburg ca. 20 Minuten — kein Aufschlag. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Landhochzeiten in Mintraching auf?", a: "Ja, Hochzeiten und Familienfeiern in Mintraching betreue ich regelmäßig — bayerische Tonalität, moderne Show." },
+    ],
+    seoText: "Zauberer Mintraching: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Familienfeiern in Mintraching und im Landkreis Regensburg.",
+    langText: `Mintraching ist bayerisch-ländliche Gemeinde im Donautal südöstlich von Regensburg. Als Zauberer für Mintraching betreue ich Landhochzeiten, Vereinsjubiläen und private Anlässe in Bürgerhaus, Pfarrheim und Landgasthöfen.
+
+Kurze Anfahrt aus Regensburg, eingespielte Logistik.
+
+Kosten Zauberer Mintraching: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "woerth-an-der-donau",
+    name: "Wörth an der Donau",
+    region: "Bayern",
+    intro: "Wörth an der Donau — Marktgemeinde östlich von Regensburg mit historischem Schloss. Als Zauberer für Wörth bringe ich Close-Up Magie und Bühnenshow zu Schloss-Hochzeiten, Firmenfeiern und Galas.",
+    highlight: "Wörth an der Donau ist mit dem Schloss und der Altstadt eine schöne Eventdestination östlich von Regensburg.",
+    einwohner: "5.000",
+    bekannteLocations: ["Schloss Wörth", "Bürgerhaus Wörth", "Donau-Eventbereich", "Gasthof Schwarzfischer"],
+    faq: [
+      { q: "Tritt der Zauberer auf Hochzeiten im Schloss Wörth auf?", a: "Ja, Schloss-Hochzeiten in Wörth an der Donau gehören zu meinen schönsten Auftritten östlich von Regensburg." },
+      { q: "Was kostet ein Zauberer in Wörth an der Donau?", a: "Anfahrt aus Regensburg ca. 25 Minuten — Format-abhängiges Angebot auf Anfrage." },
+    ],
+    seoText: "Zauberer Wörth an der Donau: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Schloss-Hochzeiten, Firmenfeiern und Galas in Wörth.",
+    langText: `Wörth an der Donau ist Marktgemeinde mit historischem Schloss östlich von Regensburg. Als Zauberer für Wörth bringe ich Entertainment zu Schloss-Hochzeiten, Galas im Bürgerhaus und Firmenfeiern.
+
+Vom Schloss Wörth bis zu Hochzeits-Locations am Donauufer — die Region bietet schöne Settings.
+
+Kosten Zauberer Wörth an der Donau: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "bad-abbach",
+    name: "Bad Abbach",
+    region: "Bayern",
+    intro: "Bad Abbach — Markt südlich von Regensburg an der Donau, traditionsreicher Kurort. Als Zauberer für Bad Abbach bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in Kurhotels, Firmenfeiern und privaten Anlässen.",
+    highlight: "Bad Abbach ist Kurort mit langer Tradition und gefragter Hochzeitsort südlich von Regensburg.",
+    einwohner: "12.500",
+    bekannteLocations: ["Kurhaus Bad Abbach", "Kaiserthermen Bad Abbach (Eventbereich)", "Hotel Falter", "Bürgerhaus"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Bad Abbach?", a: "Anfahrt aus Regensburg unter 20 Minuten — kein Aufschlag. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer in Kurhotels in Bad Abbach auf?", a: "Ja, Hochzeiten in Kurhotels und Premium-Locations in Bad Abbach betreue ich regelmäßig — passender Stil für klassisch-elegante Settings." },
+    ],
+    seoText: "Zauberer Bad Abbach: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Kur-Galas und Firmenfeiern in Bad Abbach und im Landkreis Kelheim.",
+    langText: `Bad Abbach ist traditionsreicher Kurort südlich von Regensburg. Als Zauberer für Bad Abbach bringe ich Entertainment zu Hochzeiten in den Kurhotels, Galas im Kurhaus und Firmenfeiern in den schönen Locations der Marktgemeinde.
+
+Kurze Anfahrt aus Regensburg, eingespielte Logistik.
+
+Kosten Zauberer Bad Abbach: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "beratzhausen",
+    name: "Beratzhausen",
+    region: "Bayern",
+    intro: "Beratzhausen — Markt westlich von Regensburg im Labertal. Als Zauberer für Beratzhausen bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Familienfeiern.",
+    highlight: "Beratzhausen liegt im Labertal westlich von Regensburg — ländliches Eventumfeld mit aktiver Gastronomie.",
+    einwohner: "5.500",
+    bekannteLocations: ["Bürgerhaus Beratzhausen", "Marktplatz (Eventbereich)", "Brauereigasthof Beratzhausen", "Pfarrheim"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Beratzhausen?", a: "Anfahrt aus Regensburg ca. 25 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer bei Brauerei-Hochzeiten in Beratzhausen auf?", a: "Ja, Hochzeiten im Brauereigasthof und privaten Locations in Beratzhausen betreue ich gerne — bayerische Tonalität." },
+    ],
+    seoText: "Zauberer Beratzhausen: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Familienfeiern in Beratzhausen und im Labertal.",
+    langText: `Beratzhausen ist Markt im Labertal westlich von Regensburg. Als Zauberer für Beratzhausen bringe ich Entertainment zu Landhochzeiten, Brauereifeiern und privaten Anlässen.
+
+Vom Marktplatz über den Brauereigasthof bis zum Bürgerhaus — Beratzhausen bietet authentische bayerische Settings.
+
+Kosten Zauberer Beratzhausen: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "hemau",
+    name: "Hemau",
+    region: "Bayern",
+    intro: "Hemau — Stadt im Labertal westlich von Regensburg. Als Zauberer für Hemau bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas.",
+    highlight: "Hemau ist die [Tangrintler Stadt] westlich von Regensburg — mit lebendiger Eventkultur und aktiver Gastronomie.",
+    einwohner: "9.500",
+    bekannteLocations: ["Tangrintl-Halle Hemau", "Stadthalle Hemau", "Brauereigasthof Pürner", "Marktplatz Hemau"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Hemau?", a: "Anfahrt aus Regensburg ca. 30 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Vereinsjubiläen in Hemau auf?", a: "Ja, Vereinsfeste, Schützenjubiläen und größere Privatfeiern in Hemau gehören zu meinen Einsätzen." },
+    ],
+    seoText: "Zauberer Hemau: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Vereinsfeiern in Hemau und im Tangrintler Land.",
+    langText: `Hemau ist die Tangrintler Stadt westlich von Regensburg im Labertal. Als Zauberer für Hemau bringe ich Entertainment zu Hochzeiten in der Tangrintl-Halle, Firmenfeiern in der Stadthalle und Brauereifeiern im Brauereigasthof Pürner.
+
+Kurze Anfahrt aus Regensburg, eingespielte Logistik.
+
+Kosten Zauberer Hemau: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "riedenburg",
+    name: "Riedenburg",
+    region: "Bayern",
+    intro: "Riedenburg — historische Stadt im Naturpark Altmühltal, südwestlich von Regensburg. Als Zauberer für Riedenburg bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in Burg-Locations, Firmenfeiern und Galas mit Altmühltal-Flair.",
+    highlight: "Riedenburg ist mit Burg Rosenburg und Altmühltal-Lage eine der romantischsten Eventorte südwestlich von Regensburg.",
+    einwohner: "6.000",
+    bekannteLocations: ["Burg Rosenburg Riedenburg", "Stadthalle Riedenburg", "Hotel-Restaurant Altes Rathaus", "Brauereigasthof"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Riedenburg?", a: "Anfahrt aus Regensburg ca. 45 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Burg-Hochzeiten in Riedenburg auf?", a: "Ja, Hochzeiten auf der Burg Rosenburg und in historischen Locations Riedenburgs gehören zu meinen Auftritten." },
+    ],
+    seoText: "Zauberer Riedenburg: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Burg-Hochzeiten, Firmenfeiern und Galas in Riedenburg und im Altmühltal.",
+    langText: `Riedenburg ist historische Stadt im Altmühltal mit Burg Rosenburg über dem Tal. Als Zauberer für Riedenburg bringe ich Entertainment zu Burg-Hochzeiten, Galas in der Stadthalle und Firmenfeiern in den Hotels der Region.
+
+Vom Naturpark-Ambiente bis zur historischen Altstadt — Riedenburg bietet einzigartige Settings.
+
+Kosten Zauberer Riedenburg: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "schierling",
+    name: "Schierling",
+    region: "Bayern",
+    intro: "Schierling — Markt südlich von Regensburg im Labertal. Als Zauberer für Schierling bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Vereinsanlässen.",
+    highlight: "Schierling liegt zwischen Regensburg und Landshut — gut erreichbar, aktive Gastronomie und Vereinskultur.",
+    einwohner: "8.500",
+    bekannteLocations: ["Mehrzweckhalle Schierling", "Bürgerhaus", "Marktplatz Schierling", "Landgasthof Umgebung"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Schierling?", a: "Anfahrt aus Regensburg ca. 25 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer bei Vereinsfesten in Schierling auf?", a: "Ja, Vereinsjubiläen, Schützenfeste und Privatfeiern in Schierling betreue ich regelmäßig." },
+    ],
+    seoText: "Zauberer Schierling: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Vereinsanlässen in Schierling und im Landkreis Regensburg.",
+    langText: `Schierling ist Markt zwischen Regensburg und Landshut. Als Zauberer für Schierling betreue ich Hochzeiten, Vereinsjubiläen und Firmenfeiern in der Mehrzweckhalle, im Bürgerhaus und in Landgasthöfen der Umgebung.
+
+Kurze Anfahrt aus Regensburg, eingespielte Logistik.
+
+Kosten Zauberer Schierling: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "burglengenfeld",
+    name: "Burglengenfeld",
+    region: "Bayern",
+    intro: "Burglengenfeld — Stadt im Naabtal nördlich von Regensburg. Als Zauberer für Burglengenfeld bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas.",
+    highlight: "Burglengenfeld ist Wirtschafts- und Eventstandort im Naabtal — Anfahrt aus Regensburg in 25 Minuten.",
+    einwohner: "13.500",
+    bekannteLocations: ["Stadthalle Burglengenfeld", "Stadtmuseum (Eventbereich)", "Schlossberg-Ruine", "Hotel-Restaurant Naabbrücke"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Burglengenfeld?", a: "Anfahrt aus Regensburg ca. 25 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Firmenfeiern in Burglengenfeld auf?", a: "Ja, Firmenfeiern für Burglengenfelder Unternehmen — Mittelstand und Industrie — gehören zu meinen Einsätzen." },
+    ],
+    seoText: "Zauberer Burglengenfeld: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in Burglengenfeld im Naabtal.",
+    langText: `Burglengenfeld ist Stadt im Naabtal nördlich von Regensburg. Als Zauberer für Burglengenfeld bringe ich Entertainment zu Hochzeiten in der Stadthalle, Firmenfeiern bei Burglengenfelder Unternehmen und Galas im Stadtmuseum.
+
+Kurze Anfahrt aus Regensburg, eingespielte Logistik.
+
+Kosten Zauberer Burglengenfeld: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "maxhuette-haidhof",
+    name: "Maxhütte-Haidhof",
+    region: "Bayern",
+    intro: "Maxhütte-Haidhof — Industriestadt im Landkreis Schwandorf nördlich von Regensburg. Als Zauberer für Maxhütte-Haidhof bringe ich Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und privaten Anlässen.",
+    highlight: "Maxhütte-Haidhof ist Industriestandort mit starkem Mittelstand — Firmenfeiern und Weihnachtsfeiern häufige Anlässe.",
+    einwohner: "11.000",
+    bekannteLocations: ["Stadthalle Maxhütte-Haidhof", "Bürgerhaus", "Pfarrheim St. Barbara", "Gewerbegebiet (Eventbereich)"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Maxhütte-Haidhof?", a: "Anfahrt aus Regensburg ca. 30 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer in Industriebetrieben in Maxhütte-Haidhof auf?", a: "Ja, Firmenfeiern für Maxhütter Unternehmen, Werks-Weihnachtsfeiern und Mitarbeiter-Events sind regelmäßige Einsätze." },
+    ],
+    seoText: "Zauberer Maxhütte-Haidhof: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Firmenfeiern, Hochzeiten und Privatfeiern in Maxhütte-Haidhof.",
+    langText: `Maxhütte-Haidhof ist Industriestadt im Landkreis Schwandorf nördlich von Regensburg. Als Zauberer für Maxhütte-Haidhof betreue ich Firmenfeiern, Werks-Weihnachtsfeiern und private Anlässe in der Stadthalle, im Bürgerhaus und in Privatlocations.
+
+Kurze Anfahrt aus Regensburg, eingespielte Logistik mit Industriebetrieben der Region.
+
+Kosten Zauberer Maxhütte-Haidhof: Pakete ab 395 €, Anfahrt inklusive.`,
+  },
+  {
+    slug: "nittenau",
+    name: "Nittenau",
+    region: "Bayern",
+    intro: "Nittenau — Stadt im Regental im Landkreis Schwandorf. Als Zauberer für Nittenau bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Familienfeiern im Regental.",
+    highlight: "Nittenau liegt im Regental nordöstlich von Regensburg — landschaftlich schön, mit aktiver Gastronomie.",
+    einwohner: "8.500",
+    bekannteLocations: ["Stadthalle Nittenau", "Bürgerhaus", "Marktplatz Nittenau", "Hotel-Restaurant Regen"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Nittenau?", a: "Anfahrt aus Regensburg ca. 40 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten in Nittenau auf?", a: "Ja, Hochzeiten in Nittenau und im Regental betreue ich regelmäßig — Walk-Around, Tisch-zu-Tisch und Bühne." },
+    ],
+    seoText: "Zauberer Nittenau: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Familienfeiern in Nittenau und im Regental.",
+    langText: `Nittenau ist Stadt im landschaftlich schönen Regental nordöstlich von Regensburg. Als Zauberer für Nittenau bringe ich Entertainment zu Hochzeiten in der Stadthalle, Firmenfeiern im Bürgerhaus und privaten Anlässen in den schönen Locations der Region.
+
+Kosten Zauberer Nittenau: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "roding",
+    name: "Roding",
+    region: "Bayern",
+    intro: "Roding — Stadt im Regental im Landkreis Cham. Als Zauberer für Roding bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Veranstaltungen im Bayerischen Wald.",
+    highlight: "Roding ist Wirtschafts- und Eventstandort im Regental östlich von Regensburg — Eingangstor zum Bayerischen Wald.",
+    einwohner: "12.000",
+    bekannteLocations: ["Stadthalle Roding", "Schloss Roding-Umfeld", "Hotel zur Post Roding", "Landhotel Regental"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Roding?", a: "Anfahrt aus Regensburg ca. 45 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Bayerwald-Hochzeiten in Roding auf?", a: "Ja, Hochzeiten in Roding und Bayerwald-Hotels gehören zu meinen Auftritten. Bayerische Tonalität, moderne Show." },
+    ],
+    seoText: "Zauberer Roding: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in Roding und im Bayerischen Wald.",
+    langText: `Roding ist Stadt im Regental im Landkreis Cham — Eingangstor zum Bayerischen Wald. Als Zauberer für Roding bringe ich Entertainment zu Hochzeiten in der Stadthalle, Firmenfeiern bei Rodinger Unternehmen und Bayerwald-Hochzeiten in der Region.
+
+Kosten Zauberer Roding: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "cham",
+    name: "Cham",
+    region: "Bayern",
+    intro: "Cham — Kreisstadt im Bayerischen Wald, östlich von Regensburg. Als Zauberer für Cham bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas im Bayerwald.",
+    highlight: "Cham ist Kreisstadt und Wirtschaftszentrum des Bayerischen Waldes — kurze Anfahrt aus Regensburg, vielfältige Eventkultur.",
+    einwohner: "17.000",
+    bekannteLocations: ["Stadttheater Cham", "Stadtsaal Cham", "Hotel Randsbergerhof", "Schloss Thierlstein (Umgebung)"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Cham?", a: "Anfahrt aus Regensburg ca. 45 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Firmenfeiern in Cham auf?", a: "Ja, Firmenfeiern für Chamer Unternehmen und Werks-Weihnachtsfeiern gehören zu meinen Einsätzen." },
+    ],
+    seoText: "Zauberer Cham: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in Cham und im Bayerischen Wald.",
+    langText: `Cham ist Kreisstadt und Wirtschaftszentrum des Bayerischen Waldes östlich von Regensburg. Als Zauberer für Cham bringe ich Entertainment zu Hochzeiten im Stadttheater, Firmenfeiern im Stadtsaal und Galas in Hotels der Region.
+
+Vom Stadttheater über das Hotel Randsbergerhof bis zu Schloss-Locations in der Umgebung — Cham und der Bayerische Wald bieten vielfältige Eventsettings.
+
+Kosten Zauberer Cham: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "bogen",
+    name: "Bogen",
+    region: "Bayern",
+    intro: "Bogen — Stadt im Landkreis Straubing-Bogen, an der Donau gelegen. Als Zauberer für Bogen bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in Niederbayern.",
+    highlight: "Bogen ist Donaustadt mit historischer Wallfahrtskirche auf dem Bogenberg — Hochzeitsdestination mit Niederbayern-Flair.",
+    einwohner: "10.500",
+    bekannteLocations: ["Bogenberg (Eventbereich)", "Stadthalle Bogen", "Hotel-Restaurant Donaurausch", "Bürgerhaus Bogen"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Bogen?", a: "Anfahrt aus Regensburg ca. 45 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten in Bogen auf?", a: "Ja, Hochzeiten in Bogen und am Bogenberg gehören zu meinen Auftritten in Niederbayern." },
+    ],
+    seoText: "Zauberer Bogen: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in Bogen und im Landkreis Straubing-Bogen.",
+    langText: `Bogen ist Donaustadt im Landkreis Straubing-Bogen mit Wallfahrtsberg. Als Zauberer für Bogen bringe ich Entertainment zu Hochzeiten in der Stadthalle, Firmenfeiern bei Bogener Unternehmen und Veranstaltungen am Bogenberg.
+
+Kosten Zauberer Bogen: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "mallersdorf-pfaffenberg",
+    name: "Mallersdorf-Pfaffenberg",
+    region: "Bayern",
+    intro: "Mallersdorf-Pfaffenberg — Markt im Landkreis Straubing-Bogen zwischen Regensburg und Landshut. Als Zauberer für Mallersdorf bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Vereinsanlässen.",
+    highlight: "Mallersdorf-Pfaffenberg ist Wirtschaftsstandort und Eventort im niederbayerischen Hügelland — gut erreichbar aus Regensburg.",
+    einwohner: "7.500",
+    bekannteLocations: ["Bürgerhaus Mallersdorf", "Klosteranlage Mallersdorf", "Mehrzweckhalle Pfaffenberg", "Brauereigasthof"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Mallersdorf-Pfaffenberg?", a: "Anfahrt aus Regensburg ca. 35 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Klosterhochzeiten in Mallersdorf auf?", a: "Ja, Hochzeiten am Kloster Mallersdorf und in der Region betreue ich gerne." },
+    ],
+    seoText: "Zauberer Mallersdorf-Pfaffenberg: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Vereinsfeiern in Mallersdorf-Pfaffenberg.",
+    langText: `Mallersdorf-Pfaffenberg ist Markt im Landkreis Straubing-Bogen. Als Zauberer für Mallersdorf bringe ich Entertainment zu Klosterhochzeiten, Firmenfeiern in der Mehrzweckhalle und Vereinsfeiern.
+
+Kosten Zauberer Mallersdorf-Pfaffenberg: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "mainburg",
+    name: "Mainburg",
+    region: "Bayern",
+    intro: "Mainburg — Stadt im Landkreis Kelheim in der Hallertau. Als Zauberer für Mainburg bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Brauerei-Events und Firmenfeiern.",
+    highlight: "Mainburg ist Hallertauer Hopfenstadt — Brauereien, Hopfenbauern und aktive Eventkultur.",
+    einwohner: "15.000",
+    bekannteLocations: ["Stadthalle Mainburg", "Brauereigasthof", "Hopfenmuseum (Umgebung)", "Hotel-Restaurant Mainburg"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Mainburg?", a: "Anfahrt aus Regensburg ca. 1 Stunde — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Brauerei-Hochzeiten in Mainburg auf?", a: "Ja, Hochzeiten und Brauereifeiern in Mainburg und der Hallertau gehören zu meinen Auftritten." },
+    ],
+    seoText: "Zauberer Mainburg: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Brauerei-Events und Firmenfeiern in Mainburg und der Hallertau.",
+    langText: `Mainburg ist die Hallertauer Hopfenstadt im Landkreis Kelheim. Als Zauberer für Mainburg bringe ich Entertainment zu Hochzeiten in der Stadthalle, Brauerei-Events bei Hallertauer Brauereien und Firmenfeiern.
+
+Kosten Zauberer Mainburg: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "parsberg",
+    name: "Parsberg",
+    region: "Bayern",
+    intro: "Parsberg — Stadt im Landkreis Neumarkt zwischen Regensburg und Nürnberg. Als Zauberer für Parsberg bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten in der Burg, Firmenfeiern und Galas.",
+    highlight: "Parsberg ist mit der Burg Parsberg eine schöne Hochzeitsdestination zwischen Regensburg und Nürnberg.",
+    einwohner: "7.500",
+    bekannteLocations: ["Burg Parsberg", "Stadthalle Parsberg", "Hotel-Restaurant Burg-Café", "Bürgerhaus"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Parsberg?", a: "Anfahrt aus Regensburg ca. 35 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten in der Burg Parsberg auf?", a: "Ja, Burg-Hochzeiten in Parsberg gehören zu meinen schönsten Auftritten — historisches Ambiente, elegante moderne Show." },
+    ],
+    seoText: "Zauberer Parsberg: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Burg-Hochzeiten, Firmenfeiern und Galas in Parsberg im Landkreis Neumarkt.",
+    langText: `Parsberg ist Stadt im Landkreis Neumarkt zwischen Regensburg und Nürnberg. Als Zauberer für Parsberg bringe ich Entertainment zu Burg-Hochzeiten, Firmenfeiern in der Stadthalle und Galas im Burg-Café.
+
+Kosten Zauberer Parsberg: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  {
+    slug: "velburg",
+    name: "Velburg",
+    region: "Bayern",
+    intro: "Velburg — Stadt im Landkreis Neumarkt im Bayerischen Jura. Als Zauberer für Velburg bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas im Juraland.",
+    highlight: "Velburg ist Stadt im Bayerischen Jura zwischen Regensburg und Nürnberg — landschaftlich schön mit Burg.",
+    einwohner: "5.000",
+    bekannteLocations: ["Burg Velburg", "Stadthalle Velburg", "Brauereigasthof Velburg", "Marktplatz (Eventbereich)"],
+    faq: [
+      { q: "Was kostet ein Zauberer in Velburg?", a: "Anfahrt aus Regensburg ca. 40 Minuten — Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Hochzeiten im Bayerischen Jura auf?", a: "Ja, Hochzeiten in Velburg und im Bayerischen Jura gehören zu meinen Auftritten." },
+    ],
+    seoText: "Zauberer Velburg: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in Velburg und im Bayerischen Jura.",
+    langText: `Velburg ist Stadt im Bayerischen Jura im Landkreis Neumarkt. Als Zauberer für Velburg bringe ich Entertainment zu Burg-Hochzeiten, Firmenfeiern in der Stadthalle und Brauereifeiern.
+
+Kosten Zauberer Velburg: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.`,
+  },
+  /* Landkreise als eigene SEO-Pages */
+  {
+    slug: "landkreis-regensburg",
+    name: "Landkreis Regensburg",
+    region: "Bayern",
+    intro: "Landkreis Regensburg — 41 Gemeinden rund um die Domstadt. Als Zauberer für den Landkreis Regensburg betreue ich Hochzeiten, Firmenfeiern und Galas in allen Gemeinden — von Lappersdorf bis Wörth, von Neutraubling bis Hemau.",
+    highlight: "Der Landkreis Regensburg ist mein Kerngebiet — von der Domstadt aus erreiche ich jede Gemeinde in unter 45 Minuten.",
+    einwohner: "200.000",
+    bekannteLocations: ["Lappersdorf", "Neutraubling", "Donaustauf", "Wörth a. d. Donau", "Hemau", "Sinzing (Wald & Wiese)", "Alteglofsheim", "Wenzenbach"],
+    faq: [
+      { q: "Was kostet ein Zauberer im Landkreis Regensburg?", a: "Innerhalb des Landkreises ist die Anfahrt aus Regensburg im Angebot inklusive — keine Aufschläge. Format-abhängiges Angebot auf Anfrage." },
+      { q: "In welchen Gemeinden im Landkreis Regensburg trittst du auf?", a: "Alle 41 Gemeinden: Lappersdorf, Wenzenbach, Donaustauf, Tegernheim, Barbing, Pentling, Sinzing, Pielenhofen, Pettendorf, Zeitlarn, Obertraubling, Alteglofsheim, Mintraching, Wörth a. d. Donau, Hemau, Beratzhausen, Schierling und alle weiteren." },
+    ],
+    seoText: "Zauberer Landkreis Regensburg: Emilian Leber bringt Close-Up Magie und Bühnenshow in alle 41 Gemeinden des Landkreises — Hochzeiten, Firmenfeiern und Galas.",
+    langText: `Der Landkreis Regensburg umfasst 41 Gemeinden rund um die Domstadt. Als Zauberer für den Landkreis Regensburg ist das mein Kerngebiet — von Lappersdorf im Norden bis Schierling im Süden, von Hemau im Westen bis Wörth a. d. Donau im Osten erreiche ich jede Gemeinde in unter 45 Minuten.
+
+Hochzeiten in den schönen Landgasthöfen und Schlössern der Region, Firmenfeiern bei Mittelstand und Industrie, Vereinsjubiläen und private Anlässe — die Bandbreite ist groß, mein Anspruch konstant: modernes Comedy-Zauberkünstler-Entertainment mit echtem Wow-Faktor.
+
+Kosten Zauberer Landkreis Regensburg: Pakete ab 395 €, Anfahrt innerhalb des Landkreises immer inklusive.`,
+  },
+  {
+    slug: "landkreis-cham",
+    name: "Landkreis Cham",
+    region: "Bayern",
+    intro: "Landkreis Cham — der Bayerwald-Landkreis östlich von Regensburg. Als Zauberer für den Landkreis Cham bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas im Bayerischen Wald.",
+    highlight: "Der Landkreis Cham mit Bayerischem Wald, Hotels und traditionsreichen Wirtshäusern — beliebtes Hochzeits- und Retreat-Gebiet.",
+    einwohner: "125.000",
+    bekannteLocations: ["Cham", "Roding", "Furth im Wald", "Bad Kötzting", "Lam", "Waldmünchen"],
+    faq: [
+      { q: "Was kostet ein Zauberer im Landkreis Cham?", a: "Anfahrt aus Regensburg ca. 45–60 Minuten, im Angebot transparent kalkuliert. Format-abhängiges Angebot auf Anfrage." },
+      { q: "Tritt der Zauberer auf Bayerwald-Hochzeiten auf?", a: "Ja, Hochzeiten in Bayerwald-Hotels und in den Städten des Landkreises Cham gehören zu meinen regelmäßigen Auftritten." },
+    ],
+    seoText: "Zauberer Landkreis Cham: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas im Bayerischen Wald und im Landkreis Cham.",
+    langText: `Der Landkreis Cham ist der Bayerwald-Landkreis östlich von Regensburg — Cham als Kreisstadt, dazu Roding, Bad Kötzting, Furth im Wald, Lam und Waldmünchen. Als Zauberer für den Landkreis Cham bringe ich Entertainment zu Hochzeiten in Bayerwald-Hotels, Firmenfeiern bei Chamer Unternehmen und Premium-Galas im Bayerischen Wald.
+
+Kosten Zauberer Landkreis Cham: Pakete ab 395 €, Anfahrt im Angebot transparent kalkuliert.`,
+  },
+  {
+    slug: "landkreis-kelheim",
+    name: "Landkreis Kelheim",
+    region: "Bayern",
+    intro: "Landkreis Kelheim — der Donau-Altmühl-Landkreis südwestlich von Regensburg. Als Zauberer für den Landkreis Kelheim bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas.",
+    highlight: "Der Landkreis Kelheim mit Befreiungshalle, Weltenburger Donauenge, Hallertau und Altmühltal — landschaftlich und kulturell außergewöhnlich.",
+    einwohner: "125.000",
+    bekannteLocations: ["Kelheim", "Mainburg", "Riedenburg", "Bad Abbach", "Abensberg", "Weltenburg"],
+    faq: [
+      { q: "Was kostet ein Zauberer im Landkreis Kelheim?", a: "Anfahrt aus Regensburg ca. 30–60 Minuten, im Angebot transparent kalkuliert." },
+      { q: "Tritt der Zauberer in Weltenburg auf?", a: "Ja, Hochzeiten am Kloster Weltenburg und in der gesamten Region des Landkreises Kelheim gehören zu meinen Auftritten." },
+    ],
+    seoText: "Zauberer Landkreis Kelheim: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas im Donau-Altmühl-Landkreis südwestlich von Regensburg.",
+    langText: `Der Landkreis Kelheim ist der Donau-Altmühl-Landkreis südwestlich von Regensburg — mit Kelheim als Kreisstadt, dazu Mainburg in der Hallertau, Riedenburg im Altmühltal, Abensberg und Bad Abbach. Als Zauberer für den Landkreis Kelheim bringe ich Entertainment in alle Gemeinden — von Weltenburger Klosterhochzeiten über Brauerei-Events der Hallertau bis zu Kurhotel-Galas in Bad Abbach.
+
+Kosten Zauberer Landkreis Kelheim: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
+  {
+    slug: "landkreis-schwandorf",
+    name: "Landkreis Schwandorf",
+    region: "Bayern",
+    intro: "Landkreis Schwandorf — der Oberpfälzer Landkreis nördlich von Regensburg. Als Zauberer für den Landkreis Schwandorf bringe ich Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas.",
+    highlight: "Der Landkreis Schwandorf mit Schwandorf, Burglengenfeld, Maxhütte-Haidhof, Nittenau und Nabburg — Industrie- und Eventregion in der Oberpfalz.",
+    einwohner: "145.000",
+    bekannteLocations: ["Schwandorf", "Burglengenfeld", "Maxhütte-Haidhof", "Nittenau", "Nabburg", "Schwarzenfeld"],
+    faq: [
+      { q: "Was kostet ein Zauberer im Landkreis Schwandorf?", a: "Anfahrt aus Regensburg ca. 25–45 Minuten, im Angebot transparent kalkuliert." },
+      { q: "Tritt der Zauberer auf Firmenfeiern im Landkreis Schwandorf auf?", a: "Ja, Firmenfeiern für Industrie und Mittelstand im Landkreis Schwandorf gehören zu meinen Einsätzen." },
+    ],
+    seoText: "Zauberer Landkreis Schwandorf: Emilian Leber bringt Close-Up Magie und Bühnenshow zu Hochzeiten, Firmenfeiern und Galas in der Oberpfalz nördlich von Regensburg.",
+    langText: `Der Landkreis Schwandorf ist Oberpfälzer Industrie- und Eventregion nördlich von Regensburg — mit Schwandorf als Kreisstadt, dazu Burglengenfeld, Maxhütte-Haidhof, Nittenau, Nabburg und Schwarzenfeld. Als Zauberer für den Landkreis Schwandorf bringe ich Entertainment in alle Städte — von Werks-Weihnachtsfeiern bei Industriebetrieben bis zu Hochzeiten in Stadthallen und Schloss-Locations.
+
+Kosten Zauberer Landkreis Schwandorf: Pakete ab 395 €, Anfahrt im Angebot kalkuliert.`,
+  },
   {
     slug: "berlin",
     name: "Berlin",

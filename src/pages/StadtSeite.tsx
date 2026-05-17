@@ -1743,7 +1743,7 @@ const VideoSection = ({ data }: { data: Stadt }) => {
             {playing ? (
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+                src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&controls=1&playsinline=1&autoplay=1`}
                 title={`Zauberer ${data.name} – Emilian Leber Showreel`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

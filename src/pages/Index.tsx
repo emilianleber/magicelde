@@ -872,7 +872,7 @@ const VideoSection = () => {
             {playing ? (
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube.com/embed/${TVA_VIDEO_ID}?autoplay=1&rel=0`}
+                src={`https://www.youtube.com/embed/${TVA_VIDEO_ID}?rel=0&modestbranding=1&controls=1&playsinline=1&autoplay=1`}
                 title="TVA TV-Auftritt — Emilian Leber"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
