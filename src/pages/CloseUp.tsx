@@ -532,10 +532,10 @@ const EffektKatalogSection = () => {
    Layout: asymmetrisches 2×2 mit unterschiedlichen Card-Größen
    ═══════════════════════════════════════════════════════════ */
 const REPERTOIRE = [
-  { kicker: "Klassiker", title: "Signierte Karte im Geldbeutel.", body: "Ein Gast signiert eine Karte mit Edding. Die Karte verschwindet aus seinem Stapel. Drei Minuten später findet sich derselbe Gast die Karte — in seinem eigenen, die ganze Zeit verschlossenen Geldbeutel. Funktioniert auch mit Handy-Hülle, Brieftasche, Brautstrauß.", size: "lg" },
-  { kicker: "Persönlich", title: "Trauring wandert.", body: "Brautvater nimmt seinen Ring ab, hält ihn in der Faust. Plötzlich liegt der Ring beim Bräutigam. Mit Briefing-Anekdote eingebaut.", size: "sm" },
-  { kicker: "Mental", title: "Drei Worte vor der Pause.", body: "Drei Gäste denken an je ein Wort. Ich schreibe alle drei auf einen Zettel — vor der Pause, ohne zu fragen. Hängt sichtbar im Saal.", size: "sm" },
-  { kicker: "Münze", title: "Münze durch die Faust.", body: "Eine Ein-Euro-Münze in Ihrer geschlossenen Hand. Ich klopfe einmal mit dem Finger gegen Ihre Faust. Sie öffnen — die Münze ist weg. Ich öffne meine eigene Hand. Sie liegt da.", size: "md" },
+  { kicker: "Paar-Effekt · Hochzeit", title: "Draht zur Karte.", body: "Brautpaar entscheidet sich gemeinsam für eine Spielkarte — frei, am Tisch. Ich halte ein gerades Stück Draht über eine offene Flamme. Brautpaar hält gemeinsam die Enden. Drei Sekunden später biegt sich der Draht durch ihre Kraft — nicht zufällig, sondern in die exakte Form der Karte, die sie gewählt haben.", size: "lg" },
+  { kicker: "Tisch-Wahl", title: "Eine Karte umgedreht.", body: "Tisch entscheidet zusammen — Farbe, Form, Wert. Kartenspiel liegt unangetastet. Wird aufgefächert — genau die gewählte Karte liegt als einzige verkehrt herum im Deck.", size: "sm" },
+  { kicker: "Visuell · 10 cm vor euren Augen", title: "Gummis, die sich durchdringen.", body: "Zwei feste Gummiringe in eure Hände gelegt — ihr haltet sie selbst. Zehn Zentimeter vor euren Augen dringt der eine durch den anderen. Keine Ablenkung, keine Geschwindigkeit. Einfach durch.", size: "sm" },
+  { kicker: "Unmöglich", title: "Aus Kartenspiel wird Holzblock.", body: "Ein Gast signiert seine Karte, steckt sie selbst quer durchs Kartenspiel. Ich nehme das Spiel, wende es — es ist kein Kartenspiel mehr. Massiver Holzblock. Die signierte Karte ragt aus dem Holz heraus.", size: "md" },
 ];
 
 const TrickRepertoireSection = () => {
@@ -568,10 +568,10 @@ const TrickRepertoireSection = () => {
             <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: ACCENT }}>{REPERTOIRE[0].kicker}</p>
             <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-[1.1] mb-5 max-w-md">{REPERTOIRE[0].title}</h3>
             <p className="text-base md:text-lg text-foreground/75 leading-[1.7] max-w-xl">{REPERTOIRE[0].body}</p>
-            <div className="mt-auto pt-7 flex items-center gap-3">
-              <span className={`${SERIF_ITALIC} text-base`} style={{ color: ACCENT }}>3 Min</span>
+            <div className="mt-auto pt-7 flex items-center gap-3 flex-wrap">
+              <span className={`${SERIF_ITALIC} text-base`} style={{ color: ACCENT }}>4 Min</span>
               <span aria-hidden className="text-foreground/25">·</span>
-              <span className="text-sm text-foreground/55">2–8 Gäste · Geldbeutel mitbringen lassen</span>
+              <span className="text-sm text-foreground/55">Brautpaar · Flamme · sichtbarer Beweis in der Hand</span>
             </div>
           </article>
 
