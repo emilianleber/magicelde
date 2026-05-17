@@ -377,27 +377,25 @@ const ShowBeispieleSection = () => {
           </div>
         </div>
 
-        <div className="space-y-20 md:space-y-28">
+        <div className="grid md:grid-cols-3 gap-8 md:gap-10">
           {BEISPIELE.map((b, i) => (
-            <article key={b.kicker} className={`grid lg:grid-cols-12 gap-8 lg:gap-14 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
-              <div className={`lg:col-span-6 ${i % 2 === 1 ? "lg:order-2" : ""}`}>
-                <div className="relative group overflow-hidden" style={{ borderRadius: "1.25rem" }}>
-                  <img src={b.image} alt={`Moderation — ${b.kicker}`} className="w-full h-[300px] md:h-[440px] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)" }} />
-                  <div aria-hidden className="absolute inset-x-0 bottom-0 h-32" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.55))" }} />
-                  <span className={`absolute top-5 ${i % 2 === 1 ? "right-5" : "left-5"} inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white`} style={{ background: "rgba(8,6,12,0.6)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)" }}>
-                    Beispiel {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
+            <article key={b.kicker} className={`flex flex-col ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+              {/* Foto oben — volle Card-Breite */}
+              <div className="relative group overflow-hidden mb-7" style={{ borderRadius: "1.25rem" }}>
+                <img src={b.image} alt={`Moderation — ${b.kicker}`} className="w-full h-[260px] md:h-[300px] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)", objectPosition: "center 15%" }} />
+                <div aria-hidden className="absolute inset-x-0 bottom-0 h-28" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.55))" }} />
+                <span className="absolute top-5 left-5 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white" style={{ background: "rgba(8,6,12,0.6)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)" }}>
+                  Beispiel {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
-              <div className={`lg:col-span-6 ${i % 2 === 1 ? "lg:order-1" : ""}`}>
-                <p className="text-[11px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: ACCENT }}>{b.kicker}</p>
-                <h3 className="font-display text-2xl md:text-4xl font-black text-foreground leading-[1.05] mb-5">{b.title}</h3>
-                <p className="text-base md:text-lg text-foreground/75 leading-[1.7] mb-6">{b.body}</p>
-                <div className="flex flex-wrap gap-2">
-                  {b.tags.map((t) => (
-                    <span key={t} className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(36,30%,97%)] border border-foreground/10">{t}</span>
-                  ))}
-                </div>
+              {/* Text unten */}
+              <p className="text-[11px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: ACCENT }}>{b.kicker}</p>
+              <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-[1.15] mb-4">{b.title}</h3>
+              <p className="text-base text-foreground/70 leading-[1.7] mb-5 flex-1">{b.body}</p>
+              <div className="flex flex-wrap gap-2 mt-auto">
+                {b.tags.map((t) => (
+                  <span key={t} className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(36,30%,97%)] border border-foreground/10">{t}</span>
+                ))}
               </div>
             </article>
           ))}
@@ -424,13 +422,13 @@ const PullQuoteSection = () => {
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
-            Wenn die Rede{" "}
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>doppelt so lang</span>{" "}
-            wird, hat niemand ein Loch.
+            Ein Mikrofon.{" "}
+            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>Drei Disziplinen.</span>{" "}
+            Keine Übergaben.
           </p>
           <footer className="mt-10 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-white/25" aria-hidden />
-            <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}>Was Moderation + Magie ausmacht.</span>
+            <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}>Moderation, Magie und Comedy aus einer Hand.</span>
             <span className="h-px w-12 bg-white/25" aria-hidden />
           </footer>
         </blockquote>
