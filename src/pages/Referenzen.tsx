@@ -163,7 +163,7 @@ const Hero = () => {
             {/* Sub-Headline */}
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-foreground mt-4 md:mt-6 text-[clamp(1.6rem,3.2vw,2.75rem)] max-w-3xl">
               {"Events. "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 {"Seit 2016."}
               </span>{" "}Quer durch{" "}Bayern.
             </h2>
@@ -270,7 +270,7 @@ const ALL_LOGOS = [
   { name: "Turmtheater", logo: "/logos/turmtheater.png", note: "Theater · Variety-Slot" },
   { name: "Greatest Talent", logo: "/logos/greatest-talent.png", note: "TV-Finalist 2023" },
   { name: "Business Entertainment", logo: "/logos/business-entertainment.png", note: "Agentur-Partner" },
-  { name: "DPSG", logo: "/logos/dpsg.png", note: "Jugendverband · Gala" },
+  { name: "DPSG", logo: "/logos/dpsg.png", note: "Jugendverband · Gala · Alte Mälzerei" },
   { name: "Drying Little Tears", logo: "/logos/drying-little-tears.png", note: "Charity · Kinder" },
   { name: "Steinhofer Ingenieure", logo: "/logos/steinhofer.png", note: "Mittelstand · Jubiläum" },
   { name: "Wächter", logo: "/logos/waechter.png", note: "Familien-Geburtstag" },
@@ -292,7 +292,7 @@ const GrosseLogoCloud = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               {"Wer mich "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 gebucht hat
               </span>
               .
@@ -480,9 +480,9 @@ const FilterSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               Filtern nach Branche, Jahr, Anlass.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground pr-4 break-words">
               {"Finde Referenzen aus "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 deiner Branche
               </span>
               .
@@ -680,7 +680,7 @@ const StatsEditorialSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               {"Was ich seit 2016 "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 gebaut habe
               </span>
               .
@@ -939,7 +939,7 @@ const CaseStudiesSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               {"VKB."}{" "}STRABAG.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 XXXLutz.
               </span>
             </h2>
@@ -1123,7 +1123,7 @@ const BranchenListeSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               {"Quer durch "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 die Branchen
               </span>
               .
@@ -1216,7 +1216,7 @@ const StimmenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               {"Was Kunden "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 sagen
               </span>
               .
@@ -1323,9 +1323,9 @@ const VideoSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
               TVA · TV-Auftritt 2025.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground pr-4 break-words">
               {"Live im "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 Fernsehen
               </span>
               .
@@ -1446,7 +1446,7 @@ const ZeitleisteSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               {"2016 — "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 Heute
               </span>
               .
