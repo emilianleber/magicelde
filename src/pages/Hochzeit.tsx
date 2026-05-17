@@ -256,7 +256,7 @@ const Hero = () => {
                 style={{ animationDelay: `${0.3 + i * 0.08}s` }}
               >
                 {w}
-                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
             <br className="hidden sm:block" />
@@ -271,7 +271,7 @@ const Hero = () => {
                 }}
               >
                 {w}
-                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
           </h1>
@@ -1824,7 +1824,7 @@ const ZahlenInlineSection = () => {
 const hochzeitFaqs = [
   {
     q: "Was kostet ein Auftritt zur Hochzeit?",
-    a: "Hochzeitspakete starten ab 395 €. Endgültiger Preis hängt von Format, Dauer und Anreise ab. Nach der Anfrage bekommt ihr ein verbindliches Angebot ohne versteckte Kosten — alles, was auf der Rechnung steht, war vorher schon im Angebot.",
+    a: "Der Preis hängt von Format, Dauer und Anreise ab. Nach kurzer Anfrage bekommt ihr ein verbindliches Angebot ohne versteckte Kosten — alles, was auf der Rechnung steht, war vorher schon im Angebot.",
   },
   {
     q: "Wie weit im Voraus sollten wir buchen?",

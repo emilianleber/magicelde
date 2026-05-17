@@ -244,7 +244,7 @@ const Hero = () => {
                 style={{ animationDelay: `${0.3 + i * 0.08}s` }}
               >
                 {w}
-                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
             <br className="hidden sm:block" />
@@ -259,7 +259,7 @@ const Hero = () => {
                 }}
               >
                 {w}
-                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
           </h1>

@@ -116,9 +116,9 @@ const Hero = () => {
             Durchkomponierte Show. Für alle gleichzeitig.
           </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
-            {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{i < HEADLINE_SANS.length - 1 ? " " : ""}</span>))}
+            {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
-            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{i < HEADLINE_ITALIC.length - 1 ? " " : ""}</span>))}
+            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{" "}</span>))}
           </h1>
           <p className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade" style={{ animationDelay: "1.05s" }}>
             Fünfzehn bis sechzig Minuten Bühne — Mentaleffekte, Comedy-Pointen,
@@ -264,7 +264,7 @@ const TechRiderSection = () => {
               was sie brauchen — und was ich selbst mitbringe. PDF auf
               Anfrage, hier die Kurzfassung:
             </p>
-            <a href="mailto:hello@magicel.de?subject=Tech-Rider%20Bühnenshow"
+            <a href="mailto:el@magicel.de?subject=Tech-Rider%20Bühnenshow"
               className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
               style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
               Tech-Rider als PDF<ArrowRight className="w-4 h-4" />
@@ -423,7 +423,7 @@ const TrustZahlenSection = () => {
             { num: "200+", label: "Events gesamt" },
             { num: "15–60", label: "Min Bühnen-Slot" },
             { num: "500+", label: "Gäste-Range" },
-            { num: "5 Mio €", label: "Versicherung" },
+            { num: "Versichert", label: "Berufshaftpflicht inkl." },
           ].map((s) => (
             <div key={s.label} className="flex items-baseline gap-3">
               <span className="font-display text-2xl md:text-3xl font-black text-foreground tabular-nums">{s.num}</span>
@@ -437,7 +437,7 @@ const TrustZahlenSection = () => {
 };
 
 const faqs = [
-  { q: "Was kostet eine Bühnenshow?", a: "Bühnen-Pakete starten ab 695 €. Endgültiger Preis hängt von Slot-Länge, Anreise und ggf. Übernachtung ab. Verbindliches Angebot nach der Anfrage." },
+  { q: "Was kostet eine Bühnenshow?", a: "Der Preis hängt von Slot-Länge, Anreise und ggf. Übernachtung ab. Verbindliches Angebot nach kurzer Anfrage, ohne versteckte Kosten." },
   { q: "Was, wenn keine Bühne im Saal ist?", a: "Ich brauche keine Bühne im klassischen Sinn — eine freie Fläche von 2 × 1,5 m mit Sicht aufs Publikum reicht. Bei kleineren Räumen genügt eine markierte Auftrittsfläche." },
   { q: "Ist Headset / Mikrofon dabei?", a: "Auf Wunsch bringe ich Headset-Mikrofon und Mini-PA-System mit (für bis zu 60 Gäste). Bei größeren Sälen nutze ich euer Soundsystem mit XLR-Eingang." },
   { q: "Wie lang ist die Aufbauzeit?", a: "Setup 30 Minuten, Soundcheck 30 Minuten — also etwa 1 Stunde vor Showbeginn am Eventort. Bei einfachen Settings (kein Mikro) reicht oft 30 Min Gesamt." },

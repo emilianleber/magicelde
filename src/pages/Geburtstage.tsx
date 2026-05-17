@@ -213,14 +213,14 @@ const Hero = () => {
             {HEADLINE_SANS.map((w, i) => (
               <span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
                 {w}
-                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
             <br className="hidden sm:block" />
             {HEADLINE_ITALIC.map((w, i) => (
               <span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>
                 {w}
-                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
           </h1>
@@ -882,7 +882,7 @@ const TrustZahlenSection = () => {
 const faqs = [
   {
     q: "Was kostet ein Auftritt zur Geburtstagsfeier?",
-    a: "Geburtstagspakete starten ab 395 €. Endgültiger Preis hängt von Format, Dauer und Anreise ab. Nach der Anfrage bekommt ihr ein verbindliches Angebot ohne versteckte Kosten.",
+    a: "Der Preis hängt von Format, Dauer und Anreise ab. Nach kurzer Anfrage bekommt ihr ein verbindliches Angebot ohne versteckte Kosten.",
   },
   {
     q: "Wie lange dauert ein Auftritt?",

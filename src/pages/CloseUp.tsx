@@ -114,9 +114,9 @@ const Hero = () => {
             Direkt am Tisch. In euren Händen.
           </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
-            {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{i < HEADLINE_SANS.length - 1 ? " " : ""}</span>))}
+            {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
-            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{i < HEADLINE_ITALIC.length - 1 ? " " : ""}</span>))}
+            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{" "}</span>))}
           </h1>
           <p className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade" style={{ animationDelay: "1.05s" }}>
             Close-Up ist Magie zum Anfassen — Karten in eurer Hand, Münzen aus
@@ -149,55 +149,164 @@ const Hero = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   HOLLYWOOD-SEQUENZ — 5-Step Trick als Page-Twist
+   ABLAUF + BEISPIEL — Editorial-Layout statt Bubble-Cards
+   Linke Spalte: allgemeiner Close-Up-Ablauf
+   Rechte Spalte: ein konkretes Beispiel mit Tisch-Wahl
    ═══════════════════════════════════════════════════════════ */
-const SEQUENCE = [
-  { step: "01", time: "0:00", title: "Ihr wählt eine Karte.", body: "Frei, ohne Druck. Ich blicke weg, ihr seht sie euch in Ruhe an. Niemand am Tisch sieht eure Wahl." },
-  { step: "02", time: "0:15", title: "Karte zurück ins Deck.", body: "Mitten rein, ich mische. Das Deck wandert kurz auf den Tisch — niemand greift hin, niemand hält fest." },
-  { step: "03", time: "0:45", title: "Ich frage nach einer Zahl.", body: "Sagt mir eine Zahl zwischen eins und zweiundfünfzig. Ihr sagt sie. Ich notiere sie nicht — ich höre nur." },
-  { step: "04", time: "1:30", title: "Wir zählen Karten ab.", body: "Bis zu eurer gewählten Zahl. Die Karte an dieser Stelle wird umgedreht." },
-  { step: "05", time: "2:00", title: "Es ist eure Karte.", body: "Die Tafel hält den Atem an. Ihr sucht den Trick, findet ihn nicht. Drei Sekunden Stille — dann brechen alle in Lachen aus." },
+const ABLAUF_PHASEN = [
+  { phase: "Ankommen", body: "Ich setze mich an euren Tisch wie ein zusätzlicher Gast — kein großer Auftritt, kein lautes Achtung-Achtung. Erst sind alle skeptisch. Nach drei Sekunden nicht mehr." },
+  { phase: "Eisbrecher", body: "Der erste sichtbare Effekt. Eine Karte verschwindet, eine Münze taucht in einer Hand auf, die ihr selbst geschlossen habt. Reine Aufmerksamkeitsverschiebung." },
+  { phase: "Beteiligung", body: "Jetzt seid ihr Teil. Karten in euren Händen, Entscheidungen die ihr trefft, kleine Aufgaben — die Tafel wird gemeinsam zur Bühne." },
+  { phase: "Persönlich", body: "Eine Anekdote, ein Detail von euch, ein Element vom Tisch wird Teil der Routine. Magie, die nur an diesem Tisch passieren kann." },
+  { phase: "Pointe", body: "Eine Wendung, die niemand kommen sieht. Drei Sekunden Stille — dann fängt die Tafel an zu lachen, zu staunen, sich an die Schultern zu fassen." },
 ];
 
 const HollywoodSequenzSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
+    <section ref={ref} className="relative bg-white py-24 md:py-36 overflow-hidden">
+      {/* Deko: gezeichnete Linien im Hintergrund */}
+      <svg aria-hidden className="absolute top-20 right-0 w-[420px] h-[420px] opacity-[0.06] pointer-events-none" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" fill="none" stroke={ACCENT} strokeWidth="1" />
+        <circle cx="100" cy="100" r="60" fill="none" stroke={ACCENT} strokeWidth="1" />
+        <circle cx="100" cy="100" r="40" fill="none" stroke={ACCENT} strokeWidth="1" />
+        <circle cx="100" cy="100" r="20" fill="none" stroke={ACCENT} strokeWidth="1" />
+      </svg>
+
+      <div className="container px-6 relative">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Frame für Frame.</p>
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>So läuft ein Close-Up-Moment ab.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
-              Wie ein Trick{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>am Tisch abläuft</span>.
+              Fünf Schritte zum{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Wow-Moment</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Damit ihr eine Vorstellung habt, was Close-Up tatsächlich
-              bedeutet: ein typischer Trick in fünf Schritten. Zwei Minuten,
-              fünf Augen, eine Pointe.
+              Kein konkreter Trick — sondern der typische Bogen, den ein
+              Close-Up-Moment am Tisch zeichnet. Egal ob Karten, Münzen oder
+              Mentalmagie — dieser Bogen wiederholt sich.
             </p>
           </div>
         </div>
 
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          {SEQUENCE.map((s, i) => (
-            <article key={s.step} className="relative bg-[hsl(36,30%,97%)] p-6 md:p-7 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_50px_-20px_rgba(0,0,0,0.18)]" style={{ borderRadius: "1rem", boxShadow: "0 15px 30px -20px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.04)", animationDelay: `${0.1 + i * 0.08}s` }}>
-              <div className="flex items-baseline gap-3 mb-4">
-                <span className={`${SERIF_ITALIC} text-3xl md:text-4xl leading-none`} style={{ color: ACCENT }}>{s.step}</span>
-                <span className={`${SERIF_ITALIC} text-sm text-foreground/45 tabular-nums`}>{s.time}</span>
-              </div>
-              <h3 className="font-display text-base md:text-lg font-bold text-foreground leading-snug mb-3">{s.title}</h3>
-              <p className="text-sm text-foreground/65 leading-[1.6]">{s.body}</p>
-            </article>
-          ))}
-        </div>
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+          {/* LEFT — Phasen als vertikale Magazin-Liste (kein Card-Grid) */}
+          <div className={`lg:col-span-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+            <ol className="relative">
+              {ABLAUF_PHASEN.map((p, i) => (
+                <li key={p.phase} className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-5 md:gap-7 pb-10 md:pb-14 relative">
+                  {/* Verbindungs-Linie */}
+                  {i < ABLAUF_PHASEN.length - 1 && (
+                    <span
+                      aria-hidden
+                      className="absolute top-12 left-[28px] md:left-[38px] bottom-0 w-px"
+                      style={{ background: `linear-gradient(180deg, ${ACCENT}30, ${ACCENT}10)` }}
+                    />
+                  )}
+                  <div className="relative">
+                    <span
+                      className="relative flex items-center justify-center w-14 h-14 md:w-[76px] md:h-[76px] rounded-full font-display font-black text-white text-lg md:text-xl"
+                      style={{
+                        background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
+                        boxShadow: `0 10px 25px -8px rgba(154,38,64,0.4), 0 0 0 5px white`,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <div className="pt-2 md:pt-4">
+                    <h3 className={`${SERIF_ITALIC} text-2xl md:text-3xl text-foreground mb-3`}>
+                      {p.phase}.
+                    </h3>
+                    <p className="text-base md:text-lg text-foreground/65 leading-[1.7] max-w-xl">
+                      {p.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
 
-        <p className={`${SERIF_ITALIC} text-center text-base md:text-lg text-foreground/55 mt-14 max-w-3xl mx-auto`}>
-          Das ist die Grundstruktur. Drumherum baue ich Anekdoten, Pointen,
-          Ablenkung und Spannung. Aus zwei Minuten werden gefühlt zehn.
-        </p>
+          {/* RIGHT — Beispiel-Trick: Tisch-Wahl-Routine */}
+          <div className={`lg:col-span-6 lg:sticky lg:top-24 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+            <div
+              className="relative bg-[hsl(36,30%,97%)] p-8 md:p-10 overflow-hidden"
+              style={{
+                borderRadius: "1.5rem",
+                boxShadow: "0 50px 100px -30px rgba(40,20,40,0.35), 0 15px 35px -15px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
+              }}
+            >
+              {/* Spielkarten-Deko oben rechts */}
+              <span
+                aria-hidden
+                className="absolute -top-6 -right-3 select-none"
+                style={{ fontSize: "120px", color: ACCENT, opacity: 0.06, transform: "rotate(15deg)" }}
+              >
+                ♠
+              </span>
+
+              <p
+                className="text-[11px] tracking-[0.18em] uppercase font-semibold mb-3"
+                style={{ color: ACCENT }}
+              >
+                Beispiel aus dem Repertoire
+              </p>
+              <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-tight mb-7">
+                Eine Routine —{" "}
+                <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                  ihr entscheidet
+                </span>
+                .
+              </h3>
+
+              <div className="space-y-5 text-base md:text-lg text-foreground/75 leading-[1.7]">
+                <p>
+                  Eine Person am Tisch — sagen wir die Trauzeugin — bekommt
+                  ein komplettes Kartenspiel in die Hand. Sie hält es fest,
+                  ich fasse es nicht mehr an.
+                </p>
+                <p>
+                  Jetzt entscheidet ihr gemeinsam am Tisch:{" "}
+                  <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                    rot oder schwarz?
+                  </span>{" "}
+                  Ihr einigt euch. Dann:{" "}
+                  <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                    Bild- oder Zahlenkarte?
+                  </span>{" "}
+                  Diskussion am Tisch, Entscheidung. Dann:{" "}
+                  <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                    Herz oder Karo?
+                  </span>{" "}
+                  Letzte Wahl. Wert? Ihr sagt eine Zahl.
+                </p>
+                <p>
+                  Ich habe das Kartenspiel die ganze Zeit nicht mehr berührt.
+                  Die Trauzeugin breitet jetzt das Spiel auf dem Tisch aus —
+                  und genau die eine Karte, die ihr ausgewählt habt, liegt
+                  als einzige verkehrt herum im Deck.
+                </p>
+              </div>
+
+              <div
+                className="mt-8 pt-6 border-t flex items-center gap-3"
+                style={{ borderColor: `${ACCENT}30` }}
+              >
+                <span
+                  className={`${SERIF_ITALIC} text-base`}
+                  style={{ color: ACCENT }}
+                >
+                  Drei Sekunden Stille —
+                </span>
+                <span className="font-display text-sm font-bold text-foreground">
+                  dann lacht die ganze Tafel.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -390,7 +499,7 @@ const TrustZahlenSection = () => {
    FAQ
    ═══════════════════════════════════════════════════════════ */
 const faqs = [
-  { q: "Was kostet Close-Up?", a: "Close-Up-Pakete starten ab 395 €. Endgültiger Preis hängt von Dauer (30 Min vs 3 Stunden) und Anreise ab. Verbindliches Angebot nach der Anfrage, ohne versteckte Kosten." },
+  { q: "Was kostet Close-Up?", a: "Der Preis hängt von Dauer (30 Min vs 3 Stunden) und Anreise ab. Verbindliches Angebot nach kurzer Anfrage, ohne versteckte Kosten." },
   { q: "Wie viele Gäste sind ideal?", a: "Von 10 bis 200+ Gästen alles möglich. Bei kleinen Runden bleibe ich länger pro Tisch, bei größeren mache ich mehr Tischrunden. Walk-Around funktioniert bis 300+ Gäste." },
   { q: "Welche Tische, welches Setup?", a: "Jede Tischanordnung funktioniert. Ich brauche etwas Platz zum Stehen am Tisch, der Service muss durchkommen. Keine Bühne nötig, keine Technik, keine Anpassung der Location." },
   { q: "Was bei seriösen oder schweigsamen Gästen?", a: "Genau die sind oft die besten — Vorstandsvorsitzende, Anwälte, Großeltern. Nach drei Minuten zieht jeder eigene Karten. Tonalität passe ich ans Publikum an." },

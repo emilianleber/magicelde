@@ -306,7 +306,7 @@ const Hero = () => {
                 style={{ animationDelay: `${0.3 + i * 0.08}s` }}
               >
                 {w}
-                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
             <br className="hidden sm:block" />
@@ -321,7 +321,7 @@ const Hero = () => {
                 }}
               >
                 {w}
-                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
           </h1>
@@ -3171,7 +3171,7 @@ const RestaurantPartnerSection = () => {
                 {
                   title: "Höhere Marge pro Gast.",
                   body:
-                    "Bei einem Ticket-Preis von 95–145 EUR pro Person (inkl. Drei-Gang-Menü und Show) liegt eure Marge pro Gast deutlich über der eines normalen À-la-carte-Abends. Trinkgeld und Folge-Reservierungen kommen on top.",
+                    "Ein Magic-Dinner-Ticket (inkl. Drei-Gang-Menü und Show) bewegt sich auf Premium-Niveau. Eure Marge pro Gast liegt deutlich über der eines normalen À-la-carte-Abends — Trinkgeld und Folge-Reservierungen kommen on top.",
                 },
                 {
                   title: "Marketing-Hook, der euch hervorhebt.",
@@ -3275,7 +3275,7 @@ const RestaurantPartnerSection = () => {
               </div>
 
               <a
-                href="mailto:hello@magicel.de?subject=Restaurant-Partnerschaft%20Magic%20Dinner"
+                href="mailto:el@magicel.de?subject=Restaurant-Partnerschaft%20Magic%20Dinner"
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white w-full justify-center"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
@@ -3325,7 +3325,7 @@ const TicketEventSection = () => {
 
           <div className="grid sm:grid-cols-3 gap-4 md:gap-5 max-w-3xl mx-auto mb-10">
             {[
-              { num: "95 – 145 €", label: "pro Ticket · Menü inkl." },
+              { num: "3 Gänge", label: "Menü inklusive" },
               { num: "25 – 60", label: "Gäste pro Abend" },
               { num: "3 – 5×", label: "öffentliche Termine pro Jahr" },
             ].map((s) => (

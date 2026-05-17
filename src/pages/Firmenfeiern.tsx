@@ -225,7 +225,7 @@ const Hero = () => {
                 style={{ animationDelay: `${0.3 + i * 0.08}s` }}
               >
                 {w}
-                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
             <br className="hidden sm:block" />
@@ -240,7 +240,7 @@ const Hero = () => {
                 }}
               >
                 {w}
-                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+                {" "}
               </span>
             ))}
           </h1>
@@ -1671,7 +1671,7 @@ const TrustZahlenSection = () => {
 const firmenFaqs = [
   {
     q: "Was kostet ein Firmen-Engagement?",
-    a: "B2B-Pakete starten ab 495 €. Endgültiger Preis hängt von Format, Dauer, Anreise und ggf. Übernachtung ab. Nach der Anfrage bekommt ihr ein verbindliches Angebot mit Mehrwertsteuer und allen Positionen offen.",
+    a: "Der Preis hängt von Format, Dauer, Anreise und ggf. Übernachtung ab. Nach kurzer Anfrage bekommt ihr ein verbindliches Angebot mit Mehrwertsteuer und allen Positionen offen.",
   },
   {
     q: "Wie ist es mit Rechnungsstellung und Steuer?",

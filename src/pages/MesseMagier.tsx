@@ -114,9 +114,9 @@ const Hero = () => {
             Lead-Generator. Stand-Magnet. Conversion-Booster.
           </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
-            {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{i < HEADLINE_SANS.length - 1 ? " " : ""}</span>))}
+            {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
-            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{i < HEADLINE_ITALIC.length - 1 ? " " : ""}</span>))}
+            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{" "}</span>))}
           </h1>
           <p className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade" style={{ animationDelay: "1.05s" }}>
             Ich spreche eure Messe-Besucher aktiv an, ziehe sie an euren
@@ -128,7 +128,7 @@ const Hero = () => {
             <Link to="/buchung?format=Messe-Magie" className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95">
               Stand-Magier anfragen<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <a href="mailto:hello@magicel.de?subject=Messe-Anfrage" className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors">
+            <a href="mailto:el@magicel.de?subject=Messe-Anfrage" className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors">
               Per Mail anfragen<ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
@@ -319,54 +319,84 @@ const MesseTypenSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   5 · PRICING-INDIKATOR
+   5 · MESSE-WOCHE — Editorial-Timeline (kreativer als Pricing-Cards)
+   Eine typische Messe-Woche von Montag bis Sonntag
    ═══════════════════════════════════════════════════════════ */
-const PricingSection = () => {
+const MESSEWOCHE = [
+  { day: "Montag", time: "vorab", phase: "Briefing-Call", body: "30-Min-Call mit Marketing und Sales. Wir gehen die wichtigsten Produkt-Argumente durch, klären Zielgruppe, definieren die Routine, in die euer Argument gebaut wird." },
+  { day: "Dienstag", time: "Anreise", phase: "Vor-Ort-Check", body: "Vor-Ort am Vortag. Stand inspizieren, Lichtsituation prüfen, mit eurem Standpersonal kurz alles abstimmen. Eine letzte Routine-Probe." },
+  { day: "Mittwoch", time: "Tag 1", phase: "Erste Schicht", body: "8 Stunden auf dem Stand mit Pausen. Vormittags Walk-by-Tricks zum Anlocken, mittags die tiefere Routine für ernsthafte Interessenten. Abends 30-Min Recap mit eurem Sales-Lead." },
+  { day: "Donnerstag", time: "Tag 2", phase: "Justierung", body: "Auf Basis von Tag 1 angepasst — was hat funktioniert, was nicht. Vielleicht andere Routine, andere Standposition, andere Tageszeit-Aufteilung. Mehr Conversions." },
+  { day: "Freitag", time: "Tag 3", phase: "Closing-Day", body: "Letzter Messetag — viele Besucher kommen heute mit Kauf-Absicht. Magie als Closing-Tool: nach dem Effekt sind alle entspannt, Sales kann das Gespräch zum Abschluss bringen." },
+  { day: "Wochenende", time: "Nachbereitung", phase: "Final-Recap", body: "Schriftlicher Report — was funktioniert hat, wie viele Leads qualifiziert wurden, welche Argumente am stärksten gezogen haben. Basis für die nächste Messe." },
+];
+
+const MesseWocheSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
-      <div className="container px-6">
+    <section ref={ref} className="relative bg-white py-24 md:py-36 overflow-hidden">
+      {/* Diagonaler Akzent-Streifen im Hintergrund */}
+      <div
+        aria-hidden
+        className="absolute -left-20 top-1/4 w-[600px] h-[60px] -rotate-3 opacity-[0.04] pointer-events-none"
+        style={{ background: `linear-gradient(90deg, ${ACCENT}, transparent)` }}
+      />
+      <div className="container px-6 relative">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Grobe Preis-Indikation.</p>
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Eine Messe-Woche.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
-              Tagessatz statt{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Lead-Provision</span>.
+              Sechs Tage. Sechs{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Akte</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Wir arbeiten mit festen Tagessätzen, nicht mit Lead-Provision —
-              das macht eure Kalkulation sauber. Endgültiger Preis nach
-              Briefing-Call.
+              Damit ihr seht, wie eine Zusammenarbeit über eine ganze
+              Messewoche aussieht — vom ersten Briefing-Call bis zum
+              schriftlichen Final-Recap.
             </p>
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-3 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          {[
-            { title: "Halbtag", time: "3–4 h Stand", price: "ab 690 €", note: "Eine Standschicht, eine Routine, ein Recap" },
-            { title: "Vollen Tag", time: "6–8 h Stand", price: "ab 1.190 €", note: "Inkl. Pause, zwei Routine-Varianten, Tag-Recap" },
-            { title: "Mehrtages-Messe", time: "2–5 Tage", price: "auf Anfrage", note: "Frame-Vertrag, abgestaffelter Tagessatz, Marken-Routine eingebaut" },
-          ].map((p, i) => (
-            <article key={p.title} className={`relative p-7 md:p-8 transition-all duration-500 hover:-translate-y-1 ${i === 1 ? "text-white" : "bg-white"}`} style={{
-              borderRadius: "1.25rem",
-              background: i === 1 ? `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})` : undefined,
-              boxShadow: i === 1
-                ? `0 35px 70px -25px rgba(154,38,64,0.5)`
-                : "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
-            }}>
-              <p className={`${SERIF_ITALIC} text-base md:text-lg ${i === 1 ? "text-white/75" : "text-foreground/55"} mb-3`}>{p.title}</p>
-              <p className={`text-[11px] tracking-[0.16em] uppercase font-semibold mb-5 ${i === 1 ? "text-white/85" : ""}`} style={i === 1 ? undefined : { color: ACCENT }}>{p.time}</p>
-              <p className="font-display text-3xl md:text-4xl font-black leading-none mb-5">{p.price}</p>
-              <p className={`text-sm leading-[1.6] ${i === 1 ? "text-white/85" : "text-foreground/65"}`}>{p.note}</p>
-            </article>
-          ))}
+        {/* Vertikale Magazine-Liste mit gestaffeltem Layout */}
+        <div className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          {MESSEWOCHE.map((m, i) => {
+            const isOdd = i % 2 === 1;
+            return (
+              <article
+                key={m.day}
+                className={`grid md:grid-cols-12 gap-x-10 gap-y-4 py-10 md:py-14 ${
+                  i < MESSEWOCHE.length - 1 ? "border-b border-foreground/10" : ""
+                }`}
+              >
+                <div className={`md:col-span-3 ${isOdd ? "md:order-2" : ""}`}>
+                  <p
+                    className={`${SERIF_ITALIC} text-3xl md:text-4xl leading-none mb-3`}
+                    style={{ color: ACCENT }}
+                  >
+                    {m.day}
+                  </p>
+                  <p className="text-[11px] tracking-[0.18em] uppercase font-semibold text-foreground/45">
+                    {m.time}
+                  </p>
+                </div>
+                <div className={`md:col-span-9 ${isOdd ? "md:order-1 md:text-right" : ""}`}>
+                  <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-tight mb-3">
+                    {m.phase}
+                  </h3>
+                  <p className={`text-base md:text-lg text-foreground/65 leading-[1.7] ${isOdd ? "md:ml-auto" : ""} max-w-2xl`}>
+                    {m.body}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
         </div>
 
-        <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 text-center mt-12 max-w-2xl mx-auto`}>
-          Anreise + Übernachtung nach Aufwand. Geschäftsrechnung mit
-          ausgewiesener USt. AVV und Versicherungs-Nachweis auf Anfrage.
+        <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 text-center mt-14 max-w-2xl mx-auto`}>
+          Halbtag, Tag, Mehrtages-Engagement, Roadshow — Festpreis pro
+          Variante. Angebot nach Briefing-Call, GoBD-Rechnung, AVV verfügbar.
         </p>
       </div>
     </section>
@@ -439,7 +469,7 @@ const FinalCTA = () => {
             <Link to="/buchung?format=Messe-Magie" className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-black hover:bg-white/90">
               Stand-Magier anfragen<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <a href="mailto:hello@magicel.de?subject=Messe-Anfrage" className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/70 hover:text-white">
+            <a href="mailto:el@magicel.de?subject=Messe-Anfrage" className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/70 hover:text-white">
               Per Mail<ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
@@ -476,7 +506,7 @@ const MesseMagier = () => (
         <KpisSection />
         <AblaufSection />
         <MesseTypenSection />
-        <PricingSection />
+        <MesseWocheSection />
         <FAQSection />
         <FinalCTA />
       </main>

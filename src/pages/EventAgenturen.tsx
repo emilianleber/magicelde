@@ -140,9 +140,9 @@ const Hero = () => {
             Für Eventagenturen & Veranstaltungsplaner.
           </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
-            {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{i < HEADLINE_SANS.length - 1 ? " " : ""}</span>))}
+            {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
-            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{i < HEADLINE_ITALIC.length - 1 ? " " : ""}</span>))}
+            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{" "}</span>))}
           </h1>
           <p className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade" style={{ animationDelay: "1.05s" }}>
             Schnellangebot innerhalb von 8 Stunden, schriftlicher Vertrag, AVV
@@ -153,7 +153,7 @@ const Hero = () => {
             <a href="#schnellangebot" className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95">
               Schnellangebot anfragen<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="mailto:hello@magicel.de?subject=Event-Agentur%20Anfrage" className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors">
+            <a href="mailto:el@magicel.de?subject=Event-Agentur%20Anfrage" className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors">
               Per Mail anfragen<ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
@@ -362,7 +362,7 @@ const SchnellangebotSection = () => {
 
           <div className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
             <form
-              action="mailto:hello@magicel.de"
+              action="mailto:el@magicel.de"
               method="POST"
               encType="text/plain"
               className="bg-[hsl(36,30%,97%)] p-7 md:p-9 space-y-4"
@@ -400,7 +400,7 @@ const SchnellangebotSection = () => {
                 Schnellangebot anfragen<ArrowRight className="w-4 h-4" />
               </button>
               <p className="text-[11px] text-foreground/45 text-center">
-                Per Email an hello@magicel.de · Vertraulich behandelt · AVV auf Anfrage
+                Per Email an el@magicel.de · Vertraulich behandelt · AVV auf Anfrage
               </p>
             </form>
           </div>
@@ -534,7 +534,7 @@ const FinalCTA = () => {
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>8 Stunden</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
-            Eckdaten an hello@magicel.de — wir melden uns innerhalb des
+            Eckdaten an el@magicel.de — wir melden uns innerhalb des
             Werktages mit Angebots-Skizze, Format-Vorschlag und freier
             Tagen-Liste.
           </p>
@@ -542,7 +542,7 @@ const FinalCTA = () => {
             <a href="#schnellangebot" className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-black hover:bg-white/90">
               Schnellangebot anfragen<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="mailto:hello@magicel.de?subject=Agentur-Anfrage" className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/70 hover:text-white">
+            <a href="mailto:el@magicel.de?subject=Agentur-Anfrage" className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/70 hover:text-white">
               Per Mail<ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
