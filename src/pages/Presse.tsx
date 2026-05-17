@@ -511,9 +511,174 @@ const BekanntAusSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   PORTFOLIO-DOWNLOAD — direkter PDF-Download, prominent
+   ═══════════════════════════════════════════════════════════ */
+const PortfolioDownloadSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      className="bg-[#08060c] text-white py-24 md:py-36 border-y border-foreground/10 relative overflow-hidden"
+    >
+      <div
+        aria-hidden
+        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl opacity-25"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(154,38,64,0.7), transparent 60%)",
+        }}
+      />
+      <div className="relative container px-6">
+        <div
+          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+        >
+          <div className="lg:col-span-7">
+            <p
+              className={`${SERIF_ITALIC} text-lg md:text-xl text-white/55 mb-6`}
+            >
+              Portfolio · PDF.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] mb-7">
+              Komplettes Künstler-Portfolio.{" "}
+              <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+                Direkt-Download.
+              </span>
+            </h2>
+            <p className="text-base md:text-lg text-white/75 leading-[1.7] mb-8 max-w-xl">
+              Das vollständige Portfolio als PDF — Bühnenfotos, Show-Beschreibungen,
+              Werdegang, Auszeichnungen, Referenzen und Tech-Rider in einem
+              Dokument. 800 KB, druckfähig, freigegeben für Press- und
+              Briefing-Nutzung. Kein Email-Versand nötig.
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <a
+                href="/portfolio/Emilian_Leber_Portfolio.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
+                style={{
+                  background: "#f3d9a8",
+                  boxShadow: "0 18px 40px -14px rgba(199,144,66,0.55)",
+                }}
+              >
+                <Download className="w-4 h-4" />
+                Portfolio öffnen (PDF)
+              </a>
+              <a
+                href="/portfolio/Emilian_Leber_Portfolio.pdf"
+                download="Emilian_Leber_Portfolio.pdf"
+                className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/75 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
+              >
+                Direkt herunterladen
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+            </div>
+            <p
+              className={`${SERIF_ITALIC} text-sm text-white/55 mt-7 max-w-md`}
+            >
+              Stand März 2026 · 802 KB · keine Anmeldung, keine Email-Schranke.
+              Englische Version auf Anfrage.
+            </p>
+          </div>
+
+          {/* Mockup PDF-Cover */}
+          <div className="lg:col-span-5">
+            <a
+              href="/portfolio/Emilian_Leber_Portfolio.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative block aspect-[3/4] max-w-sm mx-auto overflow-hidden transition-transform duration-700 hover:-rotate-1 hover:scale-[1.02]"
+              style={{
+                borderRadius: "1.25rem",
+                background:
+                  "linear-gradient(155deg, #1a0e16 0%, #08060c 100%)",
+                boxShadow:
+                  "0 60px 120px -30px rgba(0,0,0,0.6), 0 25px 50px -20px rgba(199,144,66,0.25), inset 0 0 0 1px rgba(255,255,255,0.08)",
+              }}
+            >
+              {/* Brand-Header */}
+              <div className="absolute inset-x-0 top-0 p-6 flex items-center justify-between text-white/80">
+                <span className="text-[10px] tracking-[0.22em] uppercase font-bold">
+                  MagicEL
+                </span>
+                <span
+                  className={`${SERIF_ITALIC} text-sm`}
+                  style={{ color: "#f3d9a8" }}
+                >
+                  Portfolio 2026
+                </span>
+              </div>
+
+              {/* Center title */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+                <p
+                  className="text-[10px] tracking-[0.22em] uppercase font-bold mb-4"
+                  style={{ color: "#f3d9a8" }}
+                >
+                  Zauberer · Mentalmagier · Comedy
+                </p>
+                <h3 className="font-display font-black text-3xl md:text-4xl text-white leading-[1.05] mb-3">
+                  Emilian
+                  <br />
+                  <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+                    Leber.
+                  </span>
+                </h3>
+                <p className="text-sm text-white/65 max-w-[16ch] leading-snug">
+                  Künstler-Portfolio · Bayern und deutschlandweit
+                </p>
+              </div>
+
+              {/* Footer */}
+              <div className="absolute inset-x-0 bottom-0 p-6 flex items-end justify-between text-white/55">
+                <span className="text-[10px] tracking-[0.18em] uppercase font-bold">
+                  PDF · 802 KB
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase font-bold text-white/80 group-hover:text-[#f3d9a8] transition-colors">
+                  <Download className="w-3.5 h-3.5" />
+                  Open
+                </span>
+              </div>
+
+              {/* Glanz-Reflex */}
+              <div
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-32 opacity-30"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(255,255,255,0.18), transparent)",
+                }}
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
    PRESSEMITTEILUNGEN — Magazin-Liste, vertikal mit Trennlinien
    ═══════════════════════════════════════════════════════════ */
-const PMS = [
+type PressItem = {
+  date: string;
+  kicker: string;
+  title: string;
+  excerpt: string;
+  tag: string;
+  url?: string;
+  pdf?: string;
+};
+
+const PMS: PressItem[] = [
   {
     date: "12. Februar 2026",
     kicker: "Premiere · Tour 2026",
@@ -553,6 +718,15 @@ const PMS = [
     excerpt:
       "Auswahl-Vorrunde mit über 400 Bewerbungen, Aufnahme ins TV-Finale. Live-Auftritt vor TV-Studio-Publikum mit anschließenden Buchungen bei Award-Galas und Firmenfeiern in den Folgemonaten.",
     tag: "TV-Finalist",
+  },
+  {
+    date: "Idowa Magazin",
+    kicker: "Print + Online · Idowa Regensburg",
+    title: "Aus Kindertraum wird Bühnenzauber.",
+    excerpt:
+      "Portrait-Artikel im Idowa-Magazin (Mittelbayerische / Regensburg): vom Kinderzimmer-Trick bis zur abendfüllenden Bühnenshow — ein Werdegang-Porträt mit Interview-Auszügen, Bühnenfotos und persönlicher Geschichte. Online weiterhin abrufbar.",
+    tag: "Print-Portrait",
+    url: "https://www.idowa.de/regionen/woerth-und-regensburg/regensburg/aus-kindertraum-wird-buehnenzauber-der-17-jaehrige-magier-emilian-leber-art-349796",
   },
 ];
 
@@ -615,25 +789,43 @@ const PressemitteilungenSection = () => {
                   {pm.excerpt}
                 </p>
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                  <a
-                    href={EPK_MAIL}
-                    className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
-                    style={{
-                      color: ACCENT,
-                      borderColor: "rgba(154,38,64,0.35)",
-                    }}
-                  >
-                    <FileText className="w-3.5 h-3.5" />
-                    PDF anfordern
-                  </a>
-                  <span aria-hidden className="text-foreground/25">·</span>
-                  <a
-                    href={EPK_MAIL}
-                    className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground/55 hover:text-foreground border-b border-foreground/20 hover:border-foreground/45 pb-0.5 transition-colors"
-                  >
-                    Volltext lesen
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </a>
+                  {pm.url ? (
+                    <a
+                      href={pm.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
+                      style={{
+                        color: ACCENT,
+                        borderColor: "rgba(154,38,64,0.35)",
+                      }}
+                    >
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                      Artikel lesen (extern)
+                    </a>
+                  ) : (
+                    <>
+                      <a
+                        href={EPK_MAIL}
+                        className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
+                        style={{
+                          color: ACCENT,
+                          borderColor: "rgba(154,38,64,0.35)",
+                        }}
+                      >
+                        <FileText className="w-3.5 h-3.5" />
+                        PDF anfordern
+                      </a>
+                      <span aria-hidden className="text-foreground/25">·</span>
+                      <a
+                        href={EPK_MAIL}
+                        className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground/55 hover:text-foreground border-b border-foreground/20 hover:border-foreground/45 pb-0.5 transition-colors"
+                      >
+                        Volltext lesen
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="md:pl-4 md:text-right">
@@ -2094,6 +2286,7 @@ const Presse = () => (
           compact
         />
         <BekanntAusSection />
+        <PortfolioDownloadSection />
         <PressemitteilungenSection />
         <EPKDownloadSection />
         <PressefotosSection />
