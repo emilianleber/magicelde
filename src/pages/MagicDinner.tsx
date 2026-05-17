@@ -3083,38 +3083,67 @@ const AudienceSection = () => {
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        {/* Editorial-Liste: jede Audience als breite Zeile mit großem Index, Eyebrow-Tag und Pfeil */}
+        <div className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {AUDIENCES.map((a, i) => (
             <a
               key={a.role}
               href={a.href}
-              className="group relative bg-white p-6 md:p-7 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_50px_-20px_rgba(0,0,0,0.18)]"
-              style={{
-                borderRadius: "1rem",
-                boxShadow: "0 15px 30px -20px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.05)",
-                borderTop: `3px solid ${a.color}`,
-                animationDelay: `${0.1 + i * 0.06}s`,
-              }}
+              className="group relative grid grid-cols-[60px_1fr_auto] md:grid-cols-[80px_180px_1fr_auto] gap-4 md:gap-7 items-center py-6 md:py-7 border-b border-foreground/10 last:border-b-0 transition-all hover:bg-foreground/[0.02] -mx-3 md:-mx-6 px-3 md:px-6 rounded-2xl"
+              style={{ animationDelay: `${0.1 + i * 0.06}s` }}
             >
-              <p
-                className="text-[10px] tracking-[0.18em] uppercase font-semibold mb-3"
+              {/* Index mit kleinem Farbpunkt */}
+              <div className="flex items-center gap-2">
+                <span
+                  className={`${SERIF_ITALIC} text-4xl md:text-5xl leading-none transition-colors`}
+                  style={{ color: a.color }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </div>
+
+              {/* Audience-Tag */}
+              <div className="hidden md:block">
+                <span
+                  className="inline-block text-[10px] tracking-[0.16em] uppercase font-bold py-1.5 px-3 rounded-full"
+                  style={{
+                    color: a.color,
+                    background: `${a.color}12`,
+                    border: `1px solid ${a.color}40`,
+                  }}
+                >
+                  {a.role}
+                </span>
+              </div>
+
+              {/* Body */}
+              <div>
+                <p
+                  className="text-[10px] tracking-[0.16em] uppercase font-bold mb-1 md:hidden"
+                  style={{ color: a.color }}
+                >
+                  {a.role}
+                </p>
+                <h3 className={`${SERIF_ITALIC} text-xl md:text-2xl text-foreground/90 leading-tight mb-1.5`}>
+                  {a.eyebrow}
+                </h3>
+                <p className="text-sm md:text-[15px] text-foreground/65 leading-[1.6]">
+                  {a.body}
+                </p>
+                <span
+                  className="inline-flex md:hidden items-center gap-1.5 mt-3 text-[11px] tracking-[0.08em] uppercase font-bold"
+                  style={{ color: a.color }}
+                >
+                  {a.cta}
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+
+              {/* Pfeil rechts */}
+              <ArrowRight
+                className="hidden md:block w-5 h-5 transition-all duration-300 group-hover:translate-x-2"
                 style={{ color: a.color }}
-              >
-                {a.role}
-              </p>
-              <h3 className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/85 leading-tight mb-3`}>
-                {a.eyebrow}
-              </h3>
-              <p className="text-sm text-foreground/65 leading-[1.6] mb-5 flex-1">
-                {a.body}
-              </p>
-              <span
-                className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.08em] uppercase font-bold transition-all group-hover:translate-x-1 mt-auto"
-                style={{ color: a.color }}
-              >
-                {a.cta}
-                <ArrowRight className="w-3.5 h-3.5" />
-              </span>
+              />
             </a>
           ))}
         </div>

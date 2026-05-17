@@ -197,16 +197,71 @@ const KpisSection = () => {
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-2 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          {KPIS.map((k) => (
-            <article key={k.title} className="relative bg-[hsl(36,30%,97%)] p-7 md:p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-25px_rgba(0,0,0,0.18)]" style={{ borderRadius: "1.25rem", boxShadow: "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
-                <k.icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
+        {/* XL-Hero-Stat + Editorial-Text-Block (kein Card-Grid) */}
+        <div className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          {/* XL Stat Cluster */}
+          <div className="lg:col-span-5 relative">
+            <div className="relative">
+              {/* Riesige Hintergrund-Zahl */}
+              <p
+                className="font-display font-black tabular-nums leading-[0.85] tracking-[-0.04em]"
+                style={{
+                  fontSize: "clamp(8rem, 22vw, 22rem)",
+                  background: `linear-gradient(135deg, ${ACCENT_DEEP} 0%, ${ACCENT} 50%, #c79042 100%)`,
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                3×
+              </p>
+              <p
+                className={`${SERIF_ITALIC} text-2xl md:text-3xl text-foreground/85 leading-snug max-w-sm mt-4`}
+              >
+                bis fünffacher Stand-Traffic, gemessen über zwölf Messen.
+              </p>
+              {/* Annotations / Stat-Hints */}
+              <div className="mt-10 grid grid-cols-2 gap-5">
+                {[
+                  { num: "5 Sek.", label: "bis zum ersten Effekt" },
+                  { num: "1–3 Min.", label: "qualifizierendes Gespräch" },
+                  { num: "40 %", label: "fragen nach Folge-Events" },
+                  { num: "Marken-Trick", label: "im Programm eingebaut" },
+                ].map((s) => (
+                  <div key={s.label} className="border-l-2 pl-4 py-1" style={{ borderColor: ACCENT }}>
+                    <p className="font-display text-xl md:text-2xl font-black text-foreground tabular-nums leading-none">{s.num}</p>
+                    <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-1.5`}>{s.label}</p>
+                  </div>
+                ))}
               </div>
-              <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-3">{k.title}</h3>
-              <p className="text-base text-foreground/65 leading-[1.65]">{k.body}</p>
-            </article>
-          ))}
+            </div>
+          </div>
+
+          {/* Editorial-Text-Block mit 4 inline Paragraphen */}
+          <div className="lg:col-span-7 space-y-8">
+            {[
+              { eyebrow: "Magnet", title: "Mehr Stand-Traffic.", body: "Während alle anderen Stände mit Flyern winken, halte ich vorbeigehende Besucher mit einem Karten-Trick in 5 Sekunden auf. Ihr seid plötzlich der Stand, an dem alle stehen bleiben." },
+              { eyebrow: "Filter", title: "Gezielte Sales-Übergabe.", body: "Ich qualifiziere im Smalltalk — wer interessiert ist, übergebe ich namentlich an euer Sales-Team. Wer nur staunt, geht weiter. Keine Energie auf falsche Leute verschwendet." },
+              { eyebrow: "Brücke", title: "Eisbrecher-Faktor.", body: "Vor allem auf B2B-Messen trauen sich viele nicht, einfach den Stand zu betreten. Mit einer kleinen Magie-Aktion auf der Standkante ist die Schwelle in 30 Sekunden runter." },
+              { eyebrow: "Marke", title: "Botschaft eingebaut.", body: "Auf Wunsch baue ich eure Produkt-Story in eine Routine ein. Karten mit eurem Logo, ein Mentaleffekt mit eurer USP, ein Trick mit eurem Slogan als Pointe — die Botschaft bleibt hängen." },
+            ].map((k, i) => (
+              <div
+                key={k.title}
+                className={`relative pl-7 pb-7 ${i < 3 ? "border-b border-foreground/10" : ""}`}
+                style={{ borderLeft: `3px solid ${ACCENT}` , marginLeft: 0 }}
+              >
+                <p className="text-[11px] tracking-[0.16em] uppercase font-bold mb-1.5" style={{ color: ACCENT }}>
+                  {k.eyebrow}
+                </p>
+                <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight mb-2">
+                  {k.title}
+                </h3>
+                <p className="text-base md:text-lg text-foreground/65 leading-[1.65] max-w-2xl">
+                  {k.body}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
