@@ -235,7 +235,7 @@ const ABLAUF = [
   {
     num: "04",
     title: "Warm-Hand-Übergabe.",
-    body: "Sobald jemand qualifiziert wirkt, übergebe ich namentlich an euer Sales-Team. „Frau Schmidt, das ist Herr Müller von der Firma X, er interessiert sich für…" Sales kann sofort einsteigen.",
+    body: "Sobald jemand qualifiziert wirkt, übergebe ich namentlich an euer Sales-Team. Beispiel: [Frau Schmidt, das ist Herr Müller von der Firma X, er interessiert sich für…] — und Sales kann sofort einsteigen.",
   },
   {
     num: "05",
