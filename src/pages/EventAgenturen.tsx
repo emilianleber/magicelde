@@ -251,45 +251,14 @@ const SchnittstellenSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   3 · AGENCY-VORTEILE — Was Agenturen konkret bekommen
+   3 · AGENCY-VORTEILE — Editorial-Layout mit Mockup
+   Statt 6-Card-Grid: Großer Photo-Hero links + Vorteile als
+   nummerierte Liste mit Inline-Stats und farbigen Quote-Boxen
    ═══════════════════════════════════════════════════════════ */
-const VORTEILE = [
-  {
-    icon: Clock,
-    title: "Schnellangebot in 8 Stunden.",
-    body: "Kein Hin-und-Her bei Erstanfragen. Innerhalb des Werktages liegt eine Angebots-Skizze mit Format-Vorschlag, Preis-Range und freier Tagen-Liste auf dem Tisch.",
-  },
-  {
-    icon: EyeOff,
-    title: "White-Label im Auftritt.",
-    body: "Auf Wunsch trete ich ohne Eigen-Branding auf. Kein Logo auf der Bühne, keine Kommunikation an euren Endkunden vor oder nach dem Event ohne eure Freigabe.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "AVV + DSGVO + Versicherung.",
-    body: "Auftragsverarbeitungs-Vertrag (AVV) sofort verfügbar, Berufshaftpflicht in Höhe von 5 Mio EUR, GoBD-konforme Geschäftsrechnung mit ausgewiesener USt.",
-  },
-  {
-    icon: Repeat,
-    title: "Frame-Agreement-fähig.",
-    body: "Bei mehreren geplanten Events pro Jahr: Rahmenvertrag mit Vorzugskonditionen, Kontingent-Reservierung und vereinfachter Abruf-Prozess.",
-  },
-  {
-    icon: Handshake,
-    title: "Direkter Single-Point-of-Contact.",
-    body: "Ihr habt keinen Agenten oder Booker dazwischen — direkt mit mir am Telefon, schnelle Antworten, klare Kommunikation. Wochenends per WhatsApp erreichbar.",
-  },
-  {
-    icon: FileText,
-    title: "Press-Kit auf Knopfdruck.",
-    body: "EPK, Tech-Rider, Headshots, Pressestimmen, Videos — als PDF und einzelne Assets verfügbar. Zum Weiterreichen an Endkunden oder für eure Pitch-Unterlagen.",
-  },
-];
-
 const VorteileSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10 overflow-hidden">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
@@ -307,16 +276,121 @@ const VorteileSection = () => {
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          {VORTEILE.map((v) => (
-            <article key={v.title} className="relative bg-white p-7 md:p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-25px_rgba(0,0,0,0.18)]" style={{ borderRadius: "1.25rem", boxShadow: "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
-                <v.icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
+        {/* Editorial-Bento: Mockup-Photo + 6 Vorteile in gestaffeltem Magazin-Layout */}
+        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          {/* LEFT Column: Email-Mockup-Card mit Schnellangebot-Vorschau */}
+          <div className="lg:col-span-5 lg:sticky lg:top-24 self-start">
+            <div
+              className="relative bg-white p-7 md:p-8 overflow-hidden"
+              style={{
+                borderRadius: "1.25rem",
+                boxShadow:
+                  "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2), inset 0 0 0 1px rgba(0,0,0,0.05)",
+              }}
+            >
+              {/* Mock-Email-Header */}
+              <div className="flex items-center gap-3 pb-4 mb-5 border-b border-foreground/10">
+                <span
+                  className="relative w-2 h-2 rounded-full"
+                  style={{
+                    background: "#1f8f5f",
+                    boxShadow: "0 0 0 4px rgba(31,143,95,0.15)",
+                  }}
+                />
+                <p className="text-[10px] tracking-[0.16em] uppercase font-bold text-foreground/65">
+                  Antwort · 6 h 23 min
+                </p>
+                <span className={`${SERIF_ITALIC} text-[11px] text-foreground/45 ml-auto`}>
+                  Heute · 17:34
+                </span>
               </div>
-              <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-3">{v.title}</h3>
-              <p className="text-base text-foreground/65 leading-[1.65]">{v.body}</p>
-            </article>
-          ))}
+              <p
+                className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-2`}
+              >
+                Re: Anfrage Gala-Abend
+              </p>
+              <p className="font-display text-lg font-bold text-foreground leading-tight mb-3">
+                Hallo Frau Schmidt,
+              </p>
+              <p className="text-sm text-foreground/75 leading-[1.65] mb-4">
+                anbei unsere Angebots-Skizze mit drei Format-Varianten für
+                euren Galaabend am 14. März. Tag verfügbar, Konditionen wie
+                besprochen. AVV und Versicherungsnachweis im Anhang.
+              </p>
+              <p className="text-sm text-foreground/75 leading-[1.65] mb-5">
+                Für Detail-Call diese Woche habe ich Mi/Do je zwei Slots
+                offen.
+              </p>
+              <p className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                Beste Grüße, Emilian
+              </p>
+
+              {/* Anhang-Liste */}
+              <div className="mt-6 pt-5 border-t border-foreground/10 space-y-2">
+                {["Angebots-Skizze.pdf", "AVV-Standard.pdf", "Versicherungsnachweis.pdf", "Tech-Rider.pdf"].map((f) => (
+                  <div key={f} className="flex items-center gap-2 text-xs text-foreground/55">
+                    <FileText className="w-3.5 h-3.5" style={{ color: ACCENT }} strokeWidth={1.75} />
+                    <span>{f}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Anti-Spam Badge */}
+              <div
+                className="absolute -top-3 -right-3 rounded-full px-3 py-1.5 text-[10px] tracking-[0.14em] uppercase font-bold text-white rotate-[8deg]"
+                style={{
+                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+                  boxShadow: "0 8px 20px -5px rgba(154,38,64,0.45)",
+                }}
+              >
+                in 8 h
+              </div>
+            </div>
+            <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-5 text-center max-w-sm mx-auto`}>
+              Typische Schnellangebots-Mail nach Erstanfrage einer Agentur.
+            </p>
+          </div>
+
+          {/* RIGHT Column: 6 Vorteile als typografische Liste mit alternierenden Akzenten */}
+          <div className="lg:col-span-7">
+            <ol className="space-y-7">
+              {[
+                { num: "01", Icon: Clock, label: "Schnellangebot in 8 Stunden", body: "Innerhalb des Werktages liegt eine Angebots-Skizze mit Format-Vorschlag, Konditionen und freier Tagen-Liste auf eurem Schreibtisch. Kein Hin-und-Her, keine Wochen-Ping-Pong-Mails." },
+                { num: "02", Icon: EyeOff, label: "White-Label im Auftritt", body: "Auf Wunsch trete ich ohne Eigen-Branding auf. Kein Logo auf der Bühne, keine Eigen-Kommunikation an euren Endkunden vor oder nach dem Event ohne eure Freigabe." },
+                { num: "03", Icon: ShieldCheck, label: "AVV · DSGVO · Berufshaftpflicht", body: "Auftragsverarbeitungs-Vertrag (AVV) sofort verfügbar, Berufshaftpflicht-Versicherung, GoBD-konforme Geschäftsrechnung mit ausgewiesener USt." },
+                { num: "04", Icon: Repeat, label: "Frame-Agreement-fähig", body: "Bei mehreren geplanten Events pro Jahr: Rahmenvertrag mit Vorzugskonditionen, Kontingent-Reservierung und vereinfachtem Abruf-Prozess." },
+                { num: "05", Icon: Handshake, label: "Direkter Single-Point-of-Contact", body: "Kein Agent oder Booker dazwischen — direkt mit mir am Telefon, schnelle Antworten, klare Kommunikation. Wochenends per WhatsApp erreichbar." },
+                { num: "06", Icon: FileText, label: "Press-Kit auf Knopfdruck", body: "EPK, Tech-Rider, Headshots, Pressestimmen, Videos — als PDF und einzelne Assets verfügbar. Zum Weiterreichen an Endkunden oder für eure Pitch-Unterlagen." },
+              ].map((v, i) => (
+                <li
+                  key={v.num}
+                  className="grid grid-cols-[44px_1fr] md:grid-cols-[60px_1fr] gap-5 md:gap-7 items-start pb-7 border-b border-foreground/10 last:border-b-0"
+                >
+                  <div className="flex flex-col items-start gap-2">
+                    <span
+                      className={`${SERIF_ITALIC} text-3xl md:text-4xl leading-none`}
+                      style={{ color: ACCENT }}
+                    >
+                      {v.num}
+                    </span>
+                    <v.Icon
+                      className="w-4 h-4 mt-1"
+                      style={{ color: ACCENT, opacity: 0.5 }}
+                      strokeWidth={1.75}
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-2">
+                      {v.label}.
+                    </h3>
+                    <p className="text-base text-foreground/65 leading-[1.65] max-w-xl">
+                      {v.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </div>
     </section>
