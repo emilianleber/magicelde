@@ -335,12 +335,12 @@ const VorteileSection = () => {
                 ))}
               </div>
 
-              {/* Anti-Spam Badge */}
+              {/* Anti-Spam Badge — innerhalb der Card, nicht negative Position */}
               <div
-                className="absolute -top-3 -right-3 rounded-full px-3 py-1.5 text-[10px] tracking-[0.14em] uppercase font-bold text-white rotate-[8deg]"
+                className="absolute top-3 right-3 rounded-full px-3 py-1.5 text-[10px] tracking-[0.14em] uppercase font-bold text-white"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 8px 20px -5px rgba(154,38,64,0.45)",
+                  boxShadow: "0 6px 14px -4px rgba(154,38,64,0.45)",
                 }}
               >
                 in 8 h
