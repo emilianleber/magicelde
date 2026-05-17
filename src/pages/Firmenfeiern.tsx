@@ -1,622 +1,939 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import PageLayout from "@/components/landing/PageLayout";
+import {
+  CustomQuizSection,
+  CustomQuizConfig,
+} from "@/components/landing/CustomQuiz";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import {
   ArrowRight,
   ArrowUpRight,
   Star,
+  Trophy,
+  Award,
+  Medal,
+  Tv,
+  Briefcase,
+  Wine,
   Users,
   Sparkles,
-  Wine,
-  Mic2,
-  Check,
-  Phone,
-  ClipboardList,
-  PartyPopper,
-  Building2,
-  Briefcase,
-  Award,
   TrendingUp,
-  Snowflake,
-  Sun,
-  Leaf,
-  Flower2,
-  Trophy,
-  Zap,
-  Target,
-  Lightbulb,
+  ShieldCheck,
+  Handshake,
 } from "lucide-react";
 
-import Navigation from "@/components/landing/Navigation";
-import Footer from "@/components/landing/Footer";
-import Chatbot from "@/components/landing/Chatbot";
-import WhatsAppButton from "@/components/landing/WhatsAppButton";
-import { ClientLogos } from "@/components/landing/TrustElements";
-import { QuizWizardInline, QuizConfig } from "@/components/landing/QuizWizard";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { useCounter } from "@/hooks/useCounter";
-
-import firmenHeroImg from "@/assets/hero-firmenfeier-stock.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
-import staunenImg from "@/assets/staunen.jpg";
+import heroFirmenfeierImg from "@/assets/hero-firmenfeier-stock.jpg";
 import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
-import moderatorImg from "@/assets/moderator-hero.jpg";
-import buehneDpsgImg from "@/assets/buehne-dpsg.jpg";
-import stageShowImg from "@/assets/stage-show.jpg";
+import audienceImg from "@/assets/audience-reactions.jpg";
+import buehneShowImg from "@/assets/hero-magic.jpg";
 import emotionenImg from "@/assets/emotionen.jpg";
-import haendeInteraktionImg from "@/assets/haende-interaktion.jpg";
-import closeupImg from "@/assets/closeup.jpg";
-import portraitImg from "@/assets/magician-portrait.jpg";
 
-const GRADIENT =
-  "linear-gradient(100deg, hsl(220 95% 62%) 0%, hsl(255 85% 58%) 50%, hsl(285 80% 55%) 100%)";
-const GRADIENT_LIGHT =
-  "linear-gradient(100deg, hsl(220 95% 78%) 0%, hsl(255 85% 78%) 50%, hsl(285 90% 78%) 100%)";
+const SERIF_ITALIC =
+  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
+const ACCENT = "#9a2640";
+const ACCENT_DEEP = "#5c1622";
+const ACCENT_SOFT = "#e4b8c0";
+const AMBER_MID = "#c79042";
+const AMBER_SOFT = "#f0d8a8";
 
-/* 1 · HERO */
-const Hero = () => (
-  <section className="relative min-h-screen overflow-hidden text-white flex flex-col bg-[#0f0a19]">
-    <div className="absolute inset-0">
-      <img src={firmenHeroImg} alt="" className="h-full w-full object-cover" />
+/* ═══════════════════════════════════════════════════════════
+   1 · HERO — MagicDinner-Pattern
+   ═══════════════════════════════════════════════════════════ */
+const HeroKeyframes = () => (
+  <style>{`
+    @keyframes heroWordIn {
+      from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); }
+      to   { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); }
+    }
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes heroZoomIn {
+      from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); }
+      to   { transform: scale(1.02); opacity: 1; filter: blur(0); }
+    }
+    @keyframes heroBokehDrift {
+      0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; }
+      30%  { opacity: 1; }
+      70%  { opacity: 1; }
+      100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; }
+    }
+    @keyframes heroOvershoot {
+      0%   { opacity: 0; transform: translateY(60px) scale(0.88); }
+      55%  { opacity: 1; transform: translateY(-10px) scale(1.04); }
+      80%  { transform: translateY(2px) scale(0.99); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes heroStarPulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); }
+    }
+    .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
+    .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
+    .hero-bokeh { opacity: 0; animation-name: heroBokehDrift; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); animation-iteration-count: infinite; will-change: transform, opacity; }
+    .hero-overshoot { opacity: 0; animation: heroOvershoot 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .hero-star { animation: heroStarPulse 2.4s ease-in-out infinite; }
+    .hero-cta { transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, background-color .3s, color .3s; }
+    .hero-cta:hover { transform: translateY(-2px) scale(1.035); }
+    .hero-cta:active { transform: translateY(0) scale(0.97); }
+    .hero-photo-wrap { transform: translateY(var(--hero-parallax, 0px)); transition: transform 0.05s linear; }
+  `}</style>
+);
+
+const HEADLINE_SANS = ["Wenn", "der", "Vorstand"];
+const HEADLINE_ITALIC = ["Karten", "zückt."];
+
+const BOKEH = [
+  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
+  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
+  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
+  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
+  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
+  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
+  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
+  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
+  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
+  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
+];
+
+const Hero = () => {
+  const photoRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let raf = 0;
+    let lastY = 0;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - lastY) < 1) return;
+      lastY = y;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        const el = photoRef.current;
+        if (el && y < window.innerHeight * 1.4) {
+          el.style.setProperty("--hero-parallax", `${Math.min(y * 0.18, 80)}px`);
+        }
+        raf = 0;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+  return (
+    <section className="relative bg-[#08060c] text-white min-h-screen overflow-hidden">
+      <HeroKeyframes />
       <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(100deg, rgba(15,10,25,0.82) 0%, rgba(15,10,25,0.6) 40%, rgba(15,10,25,0.2) 80%, rgba(15,10,25,0.05) 100%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-x-0 bottom-0 h-48"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent, rgba(15,10,25,0.55))",
-        }}
-      />
-    </div>
-
-    <div className="relative z-10 container px-6 flex-1 flex items-center pt-32 md:pt-36 pb-20 md:pb-24">
-      <div className="w-full max-w-3xl">
+        ref={photoRef}
+        className="absolute inset-0 hero-photo-wrap hero-zoom"
+        style={{ willChange: "transform" }}
+      >
+        <img
+          src={heroFirmenfeierImg}
+          alt="Firmenfeier mit Zauberkünstler Emilian Leber — Bühne und Close-Up für Vorstand, Kunden, Team"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            objectPosition: "center 30%",
+            filter: "saturate(0.92) contrast(1.08) brightness(0.7)",
+          }}
+          loading="eager"
+        />
         <div
-          className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-8 opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.1s" }}
-        >
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-amber-300 text-amber-300" />
-              ))}
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
+          }}
+        />
+      </div>
+      <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
+        {BOKEH.map((b, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full hero-bokeh"
+            style={{
+              width: b.size,
+              height: b.size,
+              left: b.left,
+              top: b.top,
+              background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
+              filter: "blur(2px)",
+              animationDuration: `${b.dur}s`,
+              animationDelay: `${b.delay}s`,
+            }}
+          />
+        ))}
+      </div>
+      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+        <div className="max-w-5xl">
+          <div
+            className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade"
+            style={{ animationDelay: "0.05s" }}
+          >
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="w-4 h-4 fill-amber-300 text-amber-300 hero-star"
+                    style={{ animationDelay: `${i * 0.12}s` }}
+                  />
+                ))}
+              </div>
+              <span className="text-sm text-white/85">
+                <strong className="font-semibold text-white">5,0</strong>
+                <span className="text-white/60"> · 30+ Bewertungen</span>
+              </span>
             </div>
-            <span className="text-sm text-white/90">
-              <strong className="font-semibold text-white">5,0</strong>
-              <span className="text-white/60"> · 30+ Bewertungen</span>
+            <span aria-hidden className="hidden md:block h-4 w-px bg-white/25" />
+            <span className="text-sm text-white/80">
+              <strong className="font-semibold text-white">100+ Firmen-Engagements</strong>
             </span>
           </div>
-          <span aria-hidden className="hidden md:block h-4 w-px bg-white/20" />
-          <span className="text-sm text-white/85">
-            Für <strong className="font-semibold text-white">Eventmanager, HR & Geschäftsführung</strong>
-          </span>
+          <p
+            className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
+            style={{ animationDelay: "0.18s" }}
+          >
+            Vorstand. Kunden. Team. Eines bleibt gleich.
+          </p>
+          <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
+            {HEADLINE_SANS.map((w, i) => (
+              <span
+                key={`s-${i}`}
+                className="hero-word"
+                style={{ animationDelay: `${0.3 + i * 0.08}s` }}
+              >
+                {w}
+                {i < HEADLINE_SANS.length - 1 ? " " : ""}
+              </span>
+            ))}
+            <br className="hidden sm:block" />
+            {HEADLINE_ITALIC.map((w, i) => (
+              <span
+                key={`i-${i}`}
+                className={`hero-word ${SERIF_ITALIC}`}
+                style={{
+                  animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`,
+                  paddingRight: "0.15em",
+                  color: "#f3d9a8",
+                }}
+              >
+                {w}
+                {i < HEADLINE_ITALIC.length - 1 ? " " : ""}
+              </span>
+            ))}
+          </h1>
+          <p
+            className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade"
+            style={{ animationDelay: "1.05s" }}
+          >
+            Bühnenshow vor der versammelten Mannschaft, Close-Up am Tisch beim
+            Vorstandsdinner oder beides kombiniert — Magie, die zur Corporate
+            Identity passt und in Erinnerung bleibt.
+          </p>
+          <div
+            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 hero-fade"
+            style={{ animationDelay: "1.2s" }}
+          >
+            <a
+              href="#empfehlung"
+              className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"
+            >
+              Format-Finder
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <Link
+              to="/buchung?anlass=Firmenfeier"
+              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
+            >
+              Direkt anfragen
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+        <div className="relative mt-20 md:mt-28">
+          <div
+            className="hero-overshoot inline-flex flex-wrap items-baseline gap-x-5 md:gap-x-7 gap-y-2 text-white/85 text-xs md:text-sm tracking-[0.04em]"
+            style={{ animationDelay: "2.0s" }}
+          >
+            <span className="inline-flex items-baseline gap-1.5">
+              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">100+</strong>
+              <span className="text-white/65">Firmen-Events</span>
+            </span>
+            <span aria-hidden className="text-white/30">·</span>
+            <span className="inline-flex items-baseline gap-1.5">
+              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">200+</strong>
+              <span className="text-white/65">Events gesamt</span>
+            </span>
+            <span aria-hidden className="text-white/30">·</span>
+            <span className="inline-flex items-baseline gap-1.5">
+              <strong className="font-display font-bold text-white text-base md:text-lg">24 h</strong>
+              <span className="text-white/65">Antwort</span>
+            </span>
+            <span aria-hidden className="text-white/30">·</span>
+            <span className="text-white/65">DSGVO · Versichert · Rechnung</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   2 · VIER B2B-ANLÄSSE — Format-Selector
+   ═══════════════════════════════════════════════════════════ */
+const ANLAESSE = [
+  {
+    num: "01",
+    name: "Vorstandsdinner",
+    eyebrow: "Klein · Exklusiv",
+    body:
+      "Acht bis fünfundzwanzig Gäste, intime Tafel, persönliche Anekdoten. Ich gehe zwischen den Gängen von Person zu Person, jeder bekommt seinen eigenen Moment. Eingebettet in den Service, kein Showrummel.",
+    photo: emotionenImg,
+    stat: { num: "8 – 25", sub: "Gäste optimal" },
+  },
+  {
+    num: "02",
+    name: "Kundenabend · Galaabend",
+    eyebrow: "Repräsentativ · Premium",
+    body:
+      "Sechzig bis dreihundert Gäste, festlicher Rahmen. Close-Up beim Sektempfang als Eisbrecher, dann eine kompakte Bühnenshow als Highlight des Abends. Standing Ovations als Übergabe an den Tanz.",
+    photo: buehneShowImg,
+    stat: { num: "60 – 300", sub: "Gäste" },
+  },
+  {
+    num: "03",
+    name: "Mitarbeiter-Weihnachtsfeier",
+    eyebrow: "Locker · Verbindend",
+    body:
+      "Vierzig bis zweihundert Mitarbeiter, lockerer Ton. Walk-Around während der Vorspeise, Tisch-zu-Tisch zwischen den Gängen, kompakte Bühnenshow zum Dessert. Teambuilding-Effekt nebenbei.",
+    photo: audienceImg,
+    stat: { num: "40 – 200", sub: "Mitarbeiter" },
+  },
+  {
+    num: "04",
+    name: "Messe · Incentive · Tagung",
+    eyebrow: "Aktivierung · Show",
+    body:
+      "Walk-Around am Messestand, Aktivierungs-Bühne im Plenum, abendliche Incentive-Show. Auch geeignet als Conference-Energizer zwischen den Vorträgen — schaltet selbst die müdeste Tagung wieder ein.",
+    photo: buehneZuschauerImg,
+    stat: { num: "5 – 45", sub: "Min Slot" },
+  },
+];
+
+const AnlaesseSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const [active, setActive] = useState(0);
+  return (
+    <section ref={ref} className="bg-white py-24 md:py-36">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+              Vier B2B-Settings.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Vorstand. Kunden.{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                Team.
+              </span>
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Jeder Anlass hat eine eigene Dramaturgie und Tonalität. Klickt
+              euch durch die vier Settings, danach geht es weiter mit
+              passender Format-Empfehlung im Quiz unten.
+            </p>
+          </div>
         </div>
 
-        <h1
-          className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,5.6vw,5.25rem)] opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.25s" }}
+        <div
+          className={`grid lg:grid-cols-12 gap-8 lg:gap-12 items-start ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
         >
-          Magie, über die am{" "}
-          <span
+          <div className="lg:col-span-5 space-y-3">
+            {ANLAESSE.map((a, i) => {
+              const isActive = active === i;
+              return (
+                <button
+                  key={a.name}
+                  type="button"
+                  onClick={() => setActive(i)}
+                  onMouseEnter={() => setActive(i)}
+                  className={`group relative block w-full text-left rounded-2xl px-6 py-6 md:px-7 md:py-7 transition-all duration-500 overflow-hidden ${
+                    isActive
+                      ? "bg-foreground/[0.04] shadow-[0_20px_50px_-25px_rgba(0,0,0,0.18)]"
+                      : "hover:bg-foreground/[0.025]"
+                  }`}
+                  style={{
+                    borderLeft: `3px solid ${
+                      isActive ? ACCENT : "rgba(0,0,0,0.08)"
+                    }`,
+                  }}
+                >
+                  <div className="flex items-start gap-5">
+                    <span
+                      className={`${SERIF_ITALIC} text-3xl md:text-4xl leading-none shrink-0 transition-colors duration-500`}
+                      style={{
+                        color: isActive ? ACCENT : "rgba(0,0,0,0.28)",
+                      }}
+                    >
+                      {a.num}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p
+                        className={`text-[11px] tracking-[0.14em] uppercase font-semibold mb-1.5 transition-colors duration-500 ${
+                          isActive ? "text-foreground/70" : "text-foreground/40"
+                        }`}
+                      >
+                        {a.eyebrow}
+                      </p>
+                      <h3
+                        className={`font-display text-xl md:text-2xl font-bold leading-tight transition-colors duration-500 ${
+                          isActive ? "text-foreground" : "text-foreground/55"
+                        }`}
+                      >
+                        {a.name}
+                      </h3>
+                      <div
+                        className="overflow-hidden transition-all duration-500 ease-out"
+                        style={{
+                          maxHeight: isActive ? "300px" : "0px",
+                          opacity: isActive ? 1 : 0,
+                        }}
+                      >
+                        <p className="mt-4 text-base text-foreground/65 leading-[1.65]">
+                          {a.body}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="lg:col-span-7 lg:sticky lg:top-24">
+            <div
+              className="relative overflow-hidden h-[420px] md:h-[520px] lg:h-[600px]"
+              style={{
+                borderRadius: "1.25rem",
+                boxShadow:
+                  "0 50px 100px -30px rgba(40,20,10,0.5), 0 15px 35px -15px rgba(40,20,10,0.25)",
+              }}
+            >
+              {ANLAESSE.map((a, i) => (
+                <img
+                  key={a.name}
+                  src={a.photo}
+                  alt={`${a.name} mit Emilian Leber`}
+                  className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ease-out"
+                  style={{ opacity: active === i ? 1 : 0 }}
+                  loading="lazy"
+                />
+              ))}
+              <div
+                aria-hidden
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(180deg, transparent 50%, rgba(8,6,12,0.78) 100%)",
+                }}
+              />
+              <div className="absolute top-5 right-5 md:top-7 md:right-7">
+                <div
+                  className="relative rounded-2xl px-4 py-3 md:px-5 md:py-4 overflow-hidden transition-all duration-500"
+                  style={{
+                    background:
+                      "linear-gradient(155deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.16) 55%, rgba(255,255,255,0.08) 100%)",
+                    backdropFilter: "blur(36px) saturate(180%) brightness(112%)",
+                    WebkitBackdropFilter: "blur(36px) saturate(180%) brightness(112%)",
+                    border: "1px solid rgba(255,255,255,0.35)",
+                    boxShadow:
+                      "0 24px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.7)",
+                  }}
+                >
+                  <p
+                    className={`${SERIF_ITALIC} text-[11px] md:text-xs text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                  >
+                    {ANLAESSE[active].eyebrow.split(" · ")[0]}.
+                  </p>
+                  <p className="font-display text-xl md:text-2xl font-black text-white tabular-nums leading-none mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
+                    {ANLAESSE[active].stat.num}{" "}
+                    <span className="text-white/65 text-sm font-bold">
+                      {ANLAESSE[active].stat.sub}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="absolute bottom-5 left-5 right-5 md:bottom-7 md:left-7 md:right-7">
+                <div
+                  className="relative rounded-2xl px-5 py-4 md:px-6 md:py-5 overflow-hidden max-w-md transition-all duration-500"
+                  style={{
+                    background:
+                      "linear-gradient(155deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0.04) 100%)",
+                    backdropFilter: "blur(34px) saturate(170%)",
+                    WebkitBackdropFilter: "blur(34px) saturate(170%)",
+                    border: "1px solid rgba(255,255,255,0.22)",
+                    boxShadow:
+                      "0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.45)",
+                  }}
+                >
+                  <p
+                    className={`${SERIF_ITALIC} text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                  >
+                    Setting {String(active + 1).padStart(2, "0")}
+                  </p>
+                  <p className="font-display text-base md:text-lg text-white font-bold leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
+                    {ANLAESSE[active].name}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   3 · ROI-ARGUMENT mit Mitarbeiter-Slider — eigener B2B-Twist
+   ═══════════════════════════════════════════════════════════ */
+const RoiSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const [employees, setEmployees] = useState(120);
+  const engagementBoost = Math.round(employees * 0.85);
+  const referralRate = Math.round(employees * 0.42);
+
+  return (
+    <section
+      ref={ref}
+      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+    >
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+              Was Magie auf einem Firmen-Event tatsächlich bewegt.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Aus Budget wird{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                Erinnerung
+              </span>
+              .
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Standard-Entertainment ist austauschbar — der DJ war vor euch
+              schon woanders. Magie am Tisch ist die einzige Show, die jeder
+              Gast aus erster Hand erlebt und sich Wochen später noch merkt.
+            </p>
+          </div>
+        </div>
+
+        <div
+          className={`grid lg:grid-cols-12 gap-10 lg:gap-14 items-start ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <div className="lg:col-span-7">
+            <ul className="space-y-7">
+              {[
+                {
+                  icon: TrendingUp,
+                  title: "Conversation-Starter beim Empfang.",
+                  body:
+                    "Die ersten zwanzig Minuten entscheiden, ob euer Event als steif oder energetisch wahrgenommen wird. Magie zwischen den Gästen löst die Spannung, bevor der erste Vortrag beginnt.",
+                },
+                {
+                  icon: Sparkles,
+                  title: "Vorstand entspannt sich messbar.",
+                  body:
+                    "Drei Minuten nach der ersten Karte zückt der Vorstand selbst Karten. Das ist Wahrnehmungs-Reset im Quadrat — und zahlt direkt auf Vertrauen ein.",
+                },
+                {
+                  icon: Handshake,
+                  title: "Kunden-Akquise nebenbei.",
+                  body:
+                    "Etwa vierzig Prozent der Gäste sprechen mich auf weitere Events an. Eure Kunden bringen euch Folge-Geschäft, weil sie sich aktiv erinnern.",
+                },
+                {
+                  icon: ShieldCheck,
+                  title: "Risikoarme Buchung.",
+                  body:
+                    "Versichert, DSGVO-konform, rechnungsfähig. Vorab-Abstimmung mit Eventagentur und Service, schriftliches Briefing. Keine Überraschungen am Tag X.",
+                },
+              ].map((it) => (
+                <li key={it.title} className="grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr] gap-5 items-start">
+                  <span
+                    className="inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full shrink-0"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
+                      border: "1px solid rgba(154,38,64,0.22)",
+                    }}
+                  >
+                    <it.icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
+                  </span>
+                  <div>
+                    <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-2">
+                      {it.title}
+                    </h3>
+                    <p className="text-base text-foreground/65 leading-[1.65] max-w-xl">
+                      {it.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="lg:col-span-5 lg:sticky lg:top-24">
+            <div
+              className="relative bg-white p-7 md:p-9 overflow-hidden"
+              style={{
+                borderRadius: "1.25rem",
+                boxShadow:
+                  "0 50px 100px -30px rgba(40,20,40,0.35), 0 15px 35px -15px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
+              }}
+            >
+              <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-1.5`}>
+                Mini-Rechner.
+              </p>
+              <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-tight mb-6">
+                Wie viele Gäste habt ihr?
+              </h3>
+
+              <div className="mb-6">
+                <div className="flex items-baseline justify-between mb-2">
+                  <span
+                    className="font-display text-3xl md:text-4xl font-black tabular-nums"
+                    style={{ color: ACCENT }}
+                  >
+                    {employees}
+                  </span>
+                  <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                    Mitarbeiter / Gäste
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={20}
+                  max={500}
+                  step={10}
+                  value={employees}
+                  onChange={(e) => setEmployees(Number(e.target.value))}
+                  className="w-full"
+                  style={{ accentColor: ACCENT }}
+                />
+                <div className="flex justify-between text-[11px] text-foreground/45 mt-1">
+                  <span>20</span>
+                  <span>500+</span>
+                </div>
+              </div>
+
+              <div className="space-y-4 pt-5 border-t border-foreground/10">
+                <div className="flex items-baseline justify-between">
+                  <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                    Aktiv beteiligte Gäste
+                  </span>
+                  <span className="font-display text-lg font-black text-foreground tabular-nums">
+                    {engagementBoost}
+                  </span>
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                    Erzählen davon (∅)
+                  </span>
+                  <span
+                    className="font-display text-lg font-black tabular-nums"
+                    style={{ color: ACCENT }}
+                  >
+                    {referralRate} Personen
+                  </span>
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                    Empfehlung
+                  </span>
+                  <span className="font-display text-sm font-bold text-foreground text-right max-w-[200px]">
+                    {employees < 50
+                      ? "Close-Up · 45–90 Min"
+                      : employees < 150
+                      ? "Close-Up + Bühnen-Finale"
+                      : "Bühnenshow + Walk-Around"}
+                  </span>
+                </div>
+              </div>
+
+              <p className={`${SERIF_ITALIC} mt-6 text-xs text-foreground/45 leading-relaxed`}>
+                Schätzwerte aus über hundert Firmen-Events. Eure Zahlen
+                gehen ins schriftliche Angebot ein.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   4 · INDUSTRIES — Logo-Cloud GROSS als Hauptelement
+   ═══════════════════════════════════════════════════════════ */
+const INDUSTRIES_LOGOS = [
+  { name: "HEIM & HAUS", logo: "/logos/heim-haus.png" },
+  { name: "STRABAG", logo: "/logos/strabag.png" },
+  { name: "Versicherungskammer Bayern", logo: "/logos/vkb.png" },
+  { name: "XXXLutz", logo: "/logos/xxxlutz.png" },
+  { name: "Sixt", logo: "/logos/sixt.png" },
+  { name: "Sparkasse", logo: "/logos/sparkasse.png" },
+  { name: "Schneider Weisse", logo: "/logos/schneider-weisse.png" },
+  { name: "Wächter", logo: "/logos/waechter.png" },
+  { name: "Stadt Regensburg", logo: "/logos/stadt-regensburg.png" },
+  { name: "Steinhofer Ingenieure", logo: "/logos/steinhofer.png" },
+  { name: "Business Entertainment", logo: "/logos/business-entertainment.png" },
+  { name: "DPSG", logo: "/logos/dpsg.png" },
+];
+
+const IndustriesSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
+      <div className="container px-6">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
+          <div className="md:col-span-7">
+            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+              Industries we serve.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+              Wer mich{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                gebucht hat
+              </span>
+              .
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-8">
+            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
+              Versicherung, Bau, Möbel, Banking, Brauerei, öffentliche Hand —
+              Querschnitt der Branchen, die Magie auf ihren Events haben. Eine
+              Auswahl aus über hundert Firmen-Engagements.
+            </p>
+          </div>
+        </div>
+
+        <div
+          className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-10 md:gap-x-14 gap-y-12 md:gap-y-16 items-center ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          {INDUSTRIES_LOGOS.map((k) => (
+            <div
+              key={k.name}
+              className="group relative flex items-center justify-center min-h-[60px] md:min-h-[80px]"
+              title={k.name}
+            >
+              <img
+                src={k.logo}
+                alt={`${k.name} — Referenz-Firmenkunde`}
+                loading="lazy"
+                className="max-h-[56px] md:max-h-[72px] lg:max-h-[80px] max-w-full object-contain opacity-65 grayscale group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+              />
+            </div>
+          ))}
+        </div>
+
+        <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 text-center mt-14 max-w-2xl mx-auto`}>
+          Vollständige Referenzliste mit Ansprechpartnern auf Anfrage.
+          Viele weitere Kunden bevorzugen es, nicht öffentlich genannt zu werden.
+        </p>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   5 · VORSTAND-COUNTER — XL-Stat als Page-Twist
+   ═══════════════════════════════════════════════════════════ */
+const VorstandCounterSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      className="relative bg-black text-white py-28 md:py-40 overflow-hidden"
+    >
+      <div
+        aria-hidden
+        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-25"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)",
+        }}
+      />
+
+      <div className="relative container px-6">
+        <div
+          className={`max-w-5xl mx-auto text-center ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/55 mb-6`}>
+            Eine Beobachtung aus über hundert Firmen-Events.
+          </p>
+          <p
+            className="font-display font-black tabular-nums leading-[0.85] tracking-[-0.04em]"
             style={{
-              background: GRADIENT_LIGHT,
+              fontSize: "clamp(5rem, 14vw, 14rem)",
+              background: `linear-gradient(135deg, ${AMBER_SOFT} 0%, ${ACCENT_SOFT} 60%, ${AMBER_MID} 100%)`,
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
           >
-            Montag noch geredet wird
-          </span>
-          .
-        </h1>
+            3 Min.
+          </p>
+          <p className="font-display font-bold tracking-[-0.01em] leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] mt-8 max-w-3xl mx-auto">
+            Vorstand zückt nach{" "}
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+              drei Minuten
+            </span>{" "}
+            selbst Karten.
+          </p>
+          <p className="mt-8 mx-auto max-w-2xl text-base md:text-lg text-white/65 leading-[1.6]">
+            Das ist der typische Moment, an dem ein Firmen-Event kippt: weg
+            vom steifen Smalltalk, hin zum echten Erlebnis. Wir messen das
+            mittlerweile, weil es zu konstant ist, um Zufall zu sein.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-        <p
-          className="mt-8 max-w-xl text-lg md:text-xl leading-[1.55] text-white/85 font-light opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.4s" }}
-        >
-          Eine Karte, die vor Sekunden noch beim CEO war, taucht plötzlich bei
-          der Praktikantin auf. In dem Moment, in dem alle gemeinsam staunen,
-          verschwinden Hierarchien — und der Smalltalk ist beendet.
-        </p>
-
+/* ═══════════════════════════════════════════════════════════
+   6 · CASE-STUDY — Jan von Lehmann XL-Quote
+   ═══════════════════════════════════════════════════════════ */
+const CaseStudyQuoteSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      className="bg-[hsl(36,30%,97%)] py-28 md:py-36 border-y border-foreground/10"
+    >
+      <div className="container px-6">
         <div
-          className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5 opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.55s" }}
+          className={`max-w-4xl mx-auto ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
         >
-          <a
-            href="#empfehlung"
-            className="group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[15px] font-semibold text-[#0f0a19] bg-white hover:bg-white/95 transition-transform hover:scale-[1.01] shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
-          >
-            <span>30 Sek: Was passt zum Event?</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </a>
-          <Link
-            to="/buchung"
-            className="inline-flex items-center gap-2 font-display font-semibold text-white/85 hover:text-white border-b-2 border-white/25 hover:border-white pb-1 transition-colors"
-          >
-            Direkt anfragen
-            <ArrowUpRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <p
-          className="mt-4 text-xs md:text-sm text-white/55 opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.7s" }}
-        >
-          Kostenlos · Unverbindlich · Antwort innerhalb 24h · Rechnungsstellung
-        </p>
-      </div>
-    </div>
-  </section>
-);
-
-/* 2 · QUIZ — Firmenfeiern-spezifischer Wizard, inline */
-const firmenfeiernQuizConfig: QuizConfig = {
-  anlass: "Firmenfeier",
-  sectionEyebrow: "Format-Finder",
-  sectionTitle: (
-    <>
-      Findet das passende{" "}
-      <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-        Format
-      </span>
-      .
-    </>
-  ),
-  sectionDesc:
-    "Fünf Fragen helfen euch, das passende Format für eure Feier zu finden — Anlass, Größe, Saison, Stil, Wertfokus. Am Ende könnt ihr — wenn ihr wollt — direkt absenden, ohne nochmal Daten einzutippen.",
-  questions: [
-    {
-      id: "anlass",
-      shortLabel: "Anlass",
-      title: (
-        <>
-          Welcher{" "}
-          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Anlass
-          </span>{" "}
-          ist es?
-        </>
-      ),
-      hint: "Damit ich die richtige Format-Mischung empfehlen kann — jeder Anlass hat andere Aufmerksamkeitskurven und Erwartungshaltungen.",
-      cols: { md: 2, lg: 3 },
-      options: [
-        { value: "sommerfest", label: "Sommerfest", sub: "Locker, draußen, Mitarbeiter & Familien", icon: Sun },
-        { value: "weihnachten", label: "Weihnachtsfeier", sub: "Jahresabschluss, festliche Stimmung", icon: Snowflake },
-        { value: "kunden", label: "Kunden-Event", sub: "Externe Gäste, Wow-Faktor", icon: Building2 },
-        { value: "gala", label: "Gala / Award-Show", sub: "Premium, formaler Rahmen", icon: Trophy },
-        { value: "kickoff", label: "Strategie-Kickoff", sub: "Energizer zwischen Vorträgen", icon: Lightbulb },
-        { value: "sonstiges", label: "Etwas anderes", sub: "Jubiläum, Messe, Sonderformat", icon: Sparkles },
-      ],
-    },
-    {
-      id: "groesse",
-      shortLabel: "Größe",
-      title: (
-        <>
-          Wie{" "}
-          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            groß
-          </span>{" "}
-          wird die Feier?
-        </>
-      ),
-      hint: "Bei kleinen Gruppen funktioniert Close-Up am besten, bei großen Gruppen braucht's eine Bühne mit Mikrofon und Spotlight.",
-      cols: { md: 3 },
-      options: [
-        { value: "klein", label: "bis 50 Gäste", sub: "Kleines Team-Event, Führungskreis" },
-        { value: "mittel", label: "50 – 200 Gäste", sub: "Abteilungs- oder Firmenfest" },
-        { value: "groß", label: "200+ Gäste", sub: "Großes Corporate-Event" },
-      ],
-    },
-    {
-      id: "saison",
-      shortLabel: "Zeitraum",
-      title: (
-        <>
-          In welchem{" "}
-          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Zeitraum
-          </span>
-          ?
-        </>
-      ),
-      hint: "Hauptsaison Q4 ist meistens 6 Monate vorher gebucht — je früher ich Bescheid weiß, desto eher kann ich Slots reservieren.",
-      cols: { md: 2, lg: 4 },
-      options: [
-        { value: "q1", label: "Jan – März", sub: "Strategie-Kickoffs, Kamingespräche", icon: Snowflake },
-        { value: "q2", label: "Apr – Juni", sub: "Sommerfeste, Open-Air-Events", icon: Flower2 },
-        { value: "q3", label: "Juli – Sep", sub: "Sommerfest-Saison, Outdoor", icon: Sun },
-        { value: "q4", label: "Okt – Dez", sub: "Weihnachtsfeiern (oft 6+ Mon. Vorlauf)", icon: Leaf },
-      ],
-    },
-    {
-      id: "stil",
-      shortLabel: "Stil",
-      title: (
-        <>
-          Wie ist der{" "}
-          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Stil
-          </span>{" "}
-          des Events?
-        </>
-      ),
-      hint: "Damit ich Show-Tonalität, Outfit und Sprache (Du/Sie) abstimmen kann.",
-      cols: { md: 3 },
-      options: [
-        { value: "casual", label: "Locker", sub: "Polo & Jeans-Niveau, Stehtisch-Stimmung" },
-        { value: "formal", label: "Business", sub: "Anzug, Eventlocation, klassisch" },
-        { value: "highend", label: "Premium", sub: "Black Tie, Hotel-Gala, internationale Gäste" },
-      ],
-    },
-    {
-      id: "wert",
-      shortLabel: "Wertfokus",
-      title: (
-        <>
-          Worauf legt ihr{" "}
-          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Wert
-          </span>
-          ?
-        </>
-      ),
-      hint: "Was zählt für euch als Erfolg? Wählt das, was am wichtigsten ist — die Empfehlung wird darauf zugeschnitten.",
-      cols: { md: 2 },
-      options: [
-        { value: "wow", label: "Wow-Effekt", sub: "Der Moment, über den am Montag noch geredet wird", icon: Sparkles },
-        { value: "networking", label: "Networking", sub: "Eisbrecher zwischen Abteilungen / Standorten", icon: Users },
-        { value: "branding", label: "Markenbotschaft", sub: "Subtiler Brand-Bezug in der Show", icon: Target },
-        { value: "energizer", label: "Energizer", sub: "Stimmung dreht zwischen Reden / Programm", icon: Zap },
-      ],
-    },
-  ],
-  buildEmpfehlung: (a) => {
-    const { anlass, stil, wert } = a;
-    if (wert === "wow" || stil === "highend" || anlass === "gala" || anlass === "kunden") {
-      return {
-        format: "Bühnenshow als Show-Highlight",
-        sub: "15–60 Min · vor oder nach dem Dinner",
-        why: "Eine durchkomponierte Show — abgestimmt auf eure Branche, optional mit eingebauter Markenbotschaft. Bei Kunden- und Premium-Events der stärkste Hebel für den Wow-Effekt.",
-        link: "/buehnenshow",
-      };
-    }
-    if (wert === "networking" || anlass === "sommerfest") {
-      return {
-        format: "Close-Up beim Empfang",
-        sub: "20–70 Min · während Empfang, Häppchen oder Catering",
-        why: "Mitarbeiter aus verschiedenen Abteilungen kommen ins Gespräch — Magie ist der natürlichste Eisbrecher. Tisch-zu-Tisch oder im freien Raum.",
-        link: "/close-up",
-      };
-    }
-    if (wert === "branding") {
-      return {
-        format: "Branded Bühnenshow",
-        sub: "20–40 Min · mit eingebautem Markenbezug",
-        why: "Firmensymbol, Slogan oder Insider-Anekdote werden subtil in die Show integriert — keine plakative Werbung, sondern ein Magic-Moment, der die Botschaft transportiert.",
-        link: "/buehnenshow",
-      };
-    }
-    if (wert === "energizer" || anlass === "kickoff") {
-      return {
-        format: "Kompakter Show-Slot als Energizer",
-        sub: "15–25 Min · zwischen Programmblöcken",
-        why: "Wenn die Aufmerksamkeitskurve kippt: ein klar getakteter Show-Slot dreht die Stimmung im Raum und gibt frische Energie für den Rest des Tages.",
-        link: "/buehnenshow",
-      };
-    }
-    return {
-      format: "Komplett-Begleitung",
-      sub: "Close-Up im Empfang + Bühnenshow als Highlight",
-      why: "Wenn Gäste, Partner und Mitarbeiter zusammenkommen, braucht ihr durchgehende Highlights. Magie als roter Faden über den ganzen Abend.",
-      link: "/buchung",
-    };
-  },
-  gaesteFromAnswers: (a) =>
-    a.groesse === "klein" ? 30 : a.groesse === "mittel" ? 100 : a.groesse === "groß" ? 250 : null,
-};
-
-const QuizSection = () => <QuizWizardInline config={firmenfeiernQuizConfig} />;
-
-/* 3 · EVENTJAHR — Saisonkalender, kein Card-Stack */
-const OptionenSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const quartale = [
-    {
-      q: "Q1",
-      monate: "Jan – Mär",
-      icon: Snowflake,
-      tone: "hsl(220 70% 55%)",
-      anlaesse: ["Strategie-Kickoffs", "Kamingespräche", "Neujahrsempfänge"],
-      pick: "Energizer-Show als Auflockerung zwischen Vortragsblöcken — kompakt, 15–25 Min.",
-    },
-    {
-      q: "Q2",
-      monate: "Apr – Jun",
-      icon: Flower2,
-      tone: "hsl(255 70% 55%)",
-      anlaesse: ["Sommerfeste outdoor", "Sales-Kick-Offs", "Kunden-Roadshows"],
-      pick: "Close-Up im Empfang, Mitarbeiter mischen sich beim Stehtisch.",
-    },
-    {
-      q: "Q3",
-      monate: "Jul – Sep",
-      icon: Sun,
-      tone: "hsl(285 70% 55%)",
-      anlaesse: ["Open-Air-Sommerfeste", "Familientage", "Standort-Jubiläen"],
-      pick: "Walking-Magie über das Gelände + kompakter Showblock am Abend.",
-    },
-    {
-      q: "Q4",
-      monate: "Okt – Dez",
-      icon: Leaf,
-      tone: "hsl(220 70% 45%)",
-      anlaesse: ["Weihnachtsfeiern", "Gala-Abende", "Award-Shows"],
-      pick: "Bühnenshow als Show-Highlight — 6+ Mon. Vorlauf empfohlen.",
-      featured: true,
-    },
-  ];
-  return (
-    <section ref={ref} className="bg-white section-large">
-      <div className="container px-6">
-        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">
-            Euer Eventjahr
-          </p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Was wann{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              gebucht wird
-            </span>
-            .
-          </h2>
-          <p className="mt-5 max-w-2xl text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
-            Jedes Quartal hat seine eigenen Anlässe — und die brauchen jeweils andere Magie. Hier ein Überblick, was im Eventjahr typisch passiert.
-          </p>
-        </div>
-        <div className={`grid md:grid-cols-2 lg:grid-cols-4 gap-0 border border-foreground/10 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s", borderRadius: "1rem", overflow: "hidden" }}>
-          {quartale.map((q, i) => (
-            <div
-              key={q.q}
-              className={`relative p-6 md:p-7 flex flex-col ${
-                i < quartale.length - 1 ? "lg:border-r border-foreground/10" : ""
-              } ${i < 2 ? "md:border-b lg:border-b-0 border-foreground/10" : ""} ${
-                i === 1 ? "lg:border-b-0" : ""
-              }`}
-              style={{ background: q.featured ? "rgba(0,0,0,0.02)" : "white" }}
-            >
-              <div className="flex items-baseline gap-3 mb-1">
-                <p className="font-display text-3xl md:text-4xl font-black leading-none" style={{ color: q.tone }}>
-                  {q.q}
-                </p>
-                <q.icon className="w-4 h-4" style={{ color: q.tone, opacity: 0.6 }} />
-              </div>
-              <p className="text-xs text-foreground/45 mb-5 font-medium tracking-wide uppercase">{q.monate}</p>
-              <ul className="space-y-1.5 mb-6">
-                {q.anlaesse.map((a) => (
-                  <li key={a} className="text-sm text-foreground/75 leading-snug flex items-start gap-2">
-                    <span className="mt-2 w-1 h-1 rounded-full bg-foreground/30 shrink-0" />
-                    {a}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto pt-5 border-t border-foreground/10">
-                <p className="text-[10px] tracking-[0.2em] uppercase text-foreground/45 mb-2 font-semibold">Empfehlung</p>
-                <p className="text-[13px] leading-[1.55] text-foreground/85 font-medium">{q.pick}</p>
-              </div>
-              {q.featured && (
-                <span className="absolute top-4 right-4 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-white" style={{ background: GRADIENT }}>
-                  Hoch-Saison
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 4 · DREI SEKUNDEN — Vor / Nach Vergleich */
-const DreiSekundenSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section ref={ref} className="bg-white section-large">
-      <div className="container px-6">
-        <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Der Effekt</p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Vom Smalltalk zum{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              gemeinsamen Staunen
-            </span>
-            .
-          </h2>
-          <p className="mt-5 max-w-2xl text-base md:text-lg leading-[1.55] text-foreground/65 font-light">
-            Was passiert in den drei Sekunden, in denen aus zwei fremden Kollegen ein gemeinsames Erlebnis wird.
-          </p>
-        </div>
-
-        {/* Vor / Nach Vergleichs-Layout, B2B-orientiert */}
-        <div className={`grid md:grid-cols-2 gap-0 max-w-5xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s", border: "1px solid rgba(0,0,0,0.08)", borderRadius: "1rem", overflow: "hidden" }}>
-          {/* VORHER */}
-          <div className="p-7 md:p-9 bg-foreground/[0.02] border-b md:border-b-0 md:border-r border-foreground/8">
-            <p className="text-[10px] tracking-[0.22em] uppercase text-foreground/45 font-semibold mb-5">Vorher</p>
-            <p className="font-display text-xl md:text-2xl font-bold text-foreground leading-[1.3] mb-5">
-              Smalltalk im Stehen.
-            </p>
-            <ul className="space-y-2.5 text-sm md:text-[15px] text-foreground/65 leading-[1.55]">
-              <li className="flex gap-2">
-                <span className="text-foreground/30">·</span>
-                Vertrieb redet mit Vertrieb.
-              </li>
-              <li className="flex gap-2">
-                <span className="text-foreground/30">·</span>
-                IT bleibt unter sich.
-              </li>
-              <li className="flex gap-2">
-                <span className="text-foreground/30">·</span>
-                Standorte vermischen sich nicht.
-              </li>
-              <li className="flex gap-2">
-                <span className="text-foreground/30">·</span>
-                CEO begrüßt nur, wen er kennt.
-              </li>
-            </ul>
-          </div>
-          {/* NACHHER */}
-          <div className="p-7 md:p-9 text-white" style={{ background: "linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)" }}>
-            <p className="text-[10px] tracking-[0.22em] uppercase font-semibold mb-5" style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              Nach 3 Sekunden Magie
-            </p>
-            <p className="font-display text-xl md:text-2xl font-bold leading-[1.3] mb-5">
-              CEO und Praktikantin staunen zusammen.
-            </p>
-            <ul className="space-y-2.5 text-sm md:text-[15px] text-white/75 leading-[1.55]">
-              <li className="flex gap-2">
-                <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "hsl(255 75% 75%)" }} />
-                Gespräche zwischen Abteilungen entstehen.
-              </li>
-              <li className="flex gap-2">
-                <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "hsl(255 75% 75%)" }} />
-                Hierarchien lösen sich für den Moment auf.
-              </li>
-              <li className="flex gap-2">
-                <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "hsl(255 75% 75%)" }} />
-                Standorte mischen sich, weil alle dasselbe gesehen haben.
-              </li>
-              <li className="flex gap-2">
-                <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "hsl(255 75% 75%)" }} />
-                Am Montag wird über das Erlebnis geredet.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 5 · BEISPIEL — Case-Study mit Specs-Block, kein Timeline-Layout */
-const BeispielSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const specs = [
-    { label: "Branche", value: "Versicherung" },
-    { label: "Anlass", value: "Magic Camp · Galaabend" },
-    { label: "Gäste", value: "200 Kunden" },
-    { label: "Format", value: "Close-Up + 30-Min-Bühnenshow" },
-    { label: "Vorlauf", value: "5 Monate" },
-    { label: "Ort", value: "Tagungshotel Bayern" },
-  ];
-  const stats = [
-    { num: "200", suffix: "", label: "Gäste" },
-    { num: "30", suffix: " Min", label: "Show-Slot" },
-    { num: "5,0", suffix: "★", label: "Bewertung" },
-  ];
-  const punkte = [
-    "Briefing-Call mit Eventmanagern 4 Wochen vorab — inkl. Branchen-Insider und Insidertheme",
-    "Show enthielt eingebauten Markenbezug, der nicht plakativ wirkte — sondern als Magic-Moment",
-    "Kunden blieben länger als geplant; mehrere fragten nach Privat-Events für ihre eigenen Familien",
-  ];
-  return (
-    <section ref={ref} className="bg-foreground/[0.02] section-large border-y border-foreground/8">
-      <div className="container px-6">
-        <div className={`max-w-4xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">
-            Case Study · 2024
-          </p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
-            Magic Camp für einen{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              bayerischen Versicherer
-            </span>
-            .
-          </h2>
-        </div>
-
-        {/* Specs + Photo */}
-        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          <div className="lg:col-span-5">
-            <div className="bg-white p-7 md:p-8" style={{ borderRadius: "0.75rem", border: "1px solid rgba(0,0,0,0.06)" }}>
-              <p className="text-[10px] tracking-[0.22em] uppercase text-foreground/45 mb-5 font-semibold">Eckdaten</p>
-              <dl className="grid grid-cols-2 gap-x-6 gap-y-5">
-                {specs.map((s) => (
-                  <div key={s.label}>
-                    <dt className="text-[11px] tracking-[0.15em] uppercase text-foreground/45 mb-1">{s.label}</dt>
-                    <dd className="font-display text-base md:text-[17px] font-bold text-foreground leading-tight">{s.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
-          <div className="lg:col-span-7">
-            <div className="relative overflow-hidden h-full min-h-[300px]" style={{ borderRadius: "0.75rem", boxShadow: "0 30px 60px -20px rgba(40, 20, 60, 0.25)" }}>
-              <img src={moderatorImg} alt="Magic Camp" className="w-full h-full object-cover absolute inset-0" loading="lazy" />
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Bar */}
-        <div className={`grid grid-cols-3 gap-0 mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s", border: "1px solid rgba(0,0,0,0.08)", borderRadius: "0.75rem", overflow: "hidden", background: "white" }}>
-          {stats.map((s, i) => (
-            <div key={s.label} className={`p-7 md:p-8 text-center ${i < stats.length - 1 ? "border-r border-foreground/8" : ""}`}>
-              <p className="font-display text-3xl md:text-5xl font-black leading-none tabular-nums" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                {s.num}<span className="text-2xl md:text-3xl">{s.suffix}</span>
+          <div className="grid md:grid-cols-12 gap-x-10 gap-y-6 items-start mb-10">
+            <div className="md:col-span-7">
+              <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-4`}>
+                Case-Study · 200 Gäste, Versicherungs-Konzern.
               </p>
-              <p className="text-[11px] tracking-[0.18em] uppercase text-foreground/55 mt-3 font-semibold">{s.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Bullets — Was anders war */}
-        <div className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
-          <p className="text-[10px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-5 font-semibold">Was den Unterschied gemacht hat</p>
-          <ul className="space-y-4">
-            {punkte.map((p, i) => (
-              <li key={i} className="flex gap-4">
-                <span className="shrink-0 mt-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-white text-[11px] font-bold" style={{ background: GRADIENT }}>
-                  {i + 1}
+              <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
+                Eine Firmenfeier,{" "}
+                <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                  ein Maßstab
                 </span>
-                <p className="text-base md:text-[17px] text-foreground/75 leading-[1.6]">{p}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  );
-};
+                .
+              </h2>
+            </div>
+            <div className="md:col-span-5 md:pt-4">
+              <div className="flex flex-wrap items-baseline gap-x-5 gap-y-2 text-foreground/55">
+                <span className="text-sm">
+                  <strong className="text-foreground font-bold">200</strong> Gäste
+                </span>
+                <span aria-hidden className="text-foreground/20">·</span>
+                <span className="text-sm">
+                  <strong className="text-foreground font-bold">3</strong> h Programm
+                </span>
+                <span aria-hidden className="text-foreground/20">·</span>
+                <span className="text-sm">
+                  <strong className="text-foreground font-bold">VKB</strong>
+                </span>
+              </div>
+            </div>
+          </div>
 
-/* 6 · MEGA QUOTE — Jan von Lehmann (Wächter Agentur, echte Bewertung) */
-const MegaQuoteSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section ref={ref} className="relative overflow-hidden py-28 md:py-36">
-      <div aria-hidden className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full opacity-50 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(285 80% 88%) 0%, transparent 70%)", filter: "blur(70px)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-40 w-[700px] h-[700px] rounded-full opacity-50 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(220 95% 88%) 0%, transparent 70%)", filter: "blur(70px)" }} />
-      <div className="container px-6 relative z-10">
-        <div className={`max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <span aria-hidden className="block font-display font-black leading-none mb-[-2.5rem] md:mb-[-4rem] select-none" style={{ fontSize: "clamp(8rem, 16vw, 16rem)", background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent", opacity: 0.7 }}>"</span>
+          <span
+            aria-hidden
+            className={`${SERIF_ITALIC} block leading-none mb-[-1.5rem] md:mb-[-3rem] select-none`}
+            style={{
+              fontSize: "clamp(6rem, 14vw, 13rem)",
+              color: ACCENT,
+              opacity: 0.55,
+            }}
+          >
+            “
+          </span>
+
           <blockquote>
-            <p className="font-display font-black tracking-[-0.01em] leading-[1.1] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
-              200 geladene Gäste eines bayerischen Versicherungsunternehmens hat Emilian mit einer eigens entwickelten Zaubertrickshow begeistert —{" "}
-              <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>es war einfach Mega!</span>
+            <p className="font-display font-black tracking-[-0.015em] leading-[1.1] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
+              Es war einfach{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                Mega
+              </span>
+              ! 200 Gäste eines bayerischen Versicherungsunternehmens — Emilian
+              hat mit seiner eigens entwickelten Zaubertrickshow alle begeistert.
             </p>
             <footer className="mt-10 flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full flex items-center justify-center font-display font-black text-white text-xl" style={{ background: "linear-gradient(135deg, hsl(220 70% 55%), hsl(255 70% 55%))" }}>J</div>
-              <div>
-                <p className="font-display font-bold text-foreground text-base">Jan von Lehmann</p>
-                <p className="text-sm text-foreground/55">Eventmanagement Wächter Agentur · Google-Bewertung</p>
+              <div
+                className="w-14 h-14 rounded-full flex items-center justify-center font-display font-bold text-white text-xl"
+                style={{
+                  background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
+                }}
+              >
+                J
               </div>
-              <div className="ml-auto flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (<Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />))}
+              <div>
+                <p className="font-display font-bold text-foreground text-base">
+                  Jan von Lehmann
+                </p>
+                <p className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                  Firmenfeier · 200 Gäste · Versicherungskammer Bayern
+                </p>
+              </div>
+              <div aria-hidden className="hidden md:block ml-4 h-8 w-px bg-foreground/15" />
+              <div className="hidden md:flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
               </div>
             </footer>
           </blockquote>
@@ -626,112 +943,312 @@ const MegaQuoteSection = () => {
   );
 };
 
-/* 8 · BRANCHEN-CASES — was funktioniert in welcher Branche */
-const BranchenCasesSection = () => {
+/* ═══════════════════════════════════════════════════════════
+   7 · QUIZ — B2B-spezifischer Format-Finder mit CustomQuiz
+   ═══════════════════════════════════════════════════════════ */
+const firmenfeiernQuizConfig: CustomQuizConfig = {
+  anlass: "Firmenfeier",
+  sectionEyebrow: "Format-Finder · Firmenfeier",
+  sectionTitle: (
+    <>
+      Was passt zu eurem{" "}
+      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+        Firmenabend
+      </span>
+      ?
+    </>
+  ),
+  sectionDesc:
+    "Vier Fragen, ein konkretes Format. Abgestimmt auf Anlass-Typ, Gästezahl, Tonalität und Show-Slot. Eure Antworten kommen direkt mit, falls ihr danach anfragt.",
+  questions: [
+    {
+      id: "typ",
+      eyebrow: "Frage 01 · Anlass",
+      title: <>Was für ein Firmen-Anlass ist es?</>,
+      hint: "Davon hängt Tonalität und Format ab.",
+      feedback: "Spannender Anlass.",
+      cols: 4,
+      options: [
+        { value: "vorstand", label: "Vorstandsdinner", sub: "Klein · exklusiv · 8–25 Gäste" },
+        { value: "kunde", label: "Kundenabend · Gala", sub: "Repräsentativ · 60–300 Gäste" },
+        { value: "team", label: "Mitarbeiterfeier", sub: "Locker · 40–200 Gäste" },
+        { value: "messe", label: "Messe · Tagung", sub: "Aktivierung · Walk-Around" },
+      ],
+    },
+    {
+      id: "groesse",
+      eyebrow: "Frage 02 · Gästezahl",
+      title: <>Wie viele Gäste werden es?</>,
+      hint: "Ab 60 Gästen lohnt sich ein Bühnen-Finale zusätzlich zum Close-Up.",
+      feedback: "Passt zur Größe.",
+      cols: 4,
+      options: [
+        { value: "klein", label: "bis 30 Gäste", sub: "Intim · eine Tafel" },
+        { value: "mittel", label: "30 – 80 Gäste", sub: "Klassischer Rahmen" },
+        { value: "gross", label: "80 – 200 Gäste", sub: "Galaabend-Größe" },
+        { value: "mega", label: "200+ Gäste", sub: "Großveranstaltung" },
+      ],
+    },
+    {
+      id: "ton",
+      eyebrow: "Frage 03 · Tonalität",
+      title: <>Welche Tonalität soll der Abend haben?</>,
+      hint: "Davon hängt ab, ob ich eher zurückhaltend bleibe oder das Tempo anziehe.",
+      feedback: "Verstanden.",
+      cols: 3,
+      options: [
+        { value: "premium", label: "Premium · zurückhaltend", sub: "Repräsentativ, keine lauten Pointen" },
+        { value: "warm", label: "Warm · verbindend", sub: "Persönlich, mit Anekdoten" },
+        { value: "energetisch", label: "Energetisch · Show", sub: "Bühne, Lacher, Standing Ovation" },
+      ],
+    },
+    {
+      id: "format",
+      eyebrow: "Frage 04 · Format",
+      title: <>Bühne, Tisch oder beides?</>,
+      hint: "Bei größeren Gruppen empfehle ich die Combo — das ergibt Erzählbogen über den Abend.",
+      feedback: "Euer Format steht.",
+      cols: 3,
+      options: [
+        { value: "tisch", label: "Nur Close-Up am Tisch", sub: "Walk-Around oder Tisch-zu-Tisch" },
+        { value: "buehne", label: "Nur Bühnenshow", sub: "15–60 Min Show" },
+        { value: "kombi", label: "Beides kombiniert", sub: "Empfehlung ab 60 Gäste" },
+      ],
+    },
+  ],
+  recommend: (a) => {
+    const { typ, groesse, ton, format } = a;
+    if (typ === "vorstand" || (groesse === "klein" && ton === "premium")) {
+      return {
+        format: "Tafel-Magie beim Vorstandsdinner",
+        sub: "Tisch-zu-Tisch zwischen den Gängen · Premium-Tonalität · 90 Min",
+        why: "Bei einer kleinen, exklusiven Runde wirkt jede Bühne fehl am Platz. Ich bewege mich wie ein zusätzlicher Gast zwischen den Gängen — Karten, ein Ring, eine signierte Geschichte. Persönlich, repräsentativ, ohne Show-Rummel.",
+        link: "/buchung",
+      };
+    }
+    if (format === "buehne" || (groesse === "mega" && ton === "energetisch")) {
+      return {
+        format: "Bühnenshow für die ganze Belegschaft",
+        sub: "15–60 Min durchkomponierte Show · Mentaleffekte · Standing Ovation",
+        why: "Bei großen Versammlungen ist eine Bühnenshow die Form, die alle gleichzeitig erleben. Eingebaut: ein Effekt mit Firmenbezug, ein Mentaleffekt zum Aufwachen, ein Pointe-Finale. Standing Ovation als Übergabe an Geschäftsleitung oder DJ.",
+        link: "/buehnenshow",
+      };
+    }
+    if (format === "kombi" || groesse === "gross") {
+      return {
+        format: "Close-Up + Bühnen-Finale",
+        sub: "Walk-Around beim Empfang · Tisch-zu-Tisch · Bühnen-Show zum Abschluss",
+        why: "Der Klassiker für Gala-Größe: Eisbrecher beim Empfang, intimes Programm während des Essens, Bühne als gemeinsamer Wow-Moment am Ende. Erzählbogen über den ganzen Abend — niemand wird übergangen.",
+        link: "/magic-dinner",
+      };
+    }
+    if (typ === "messe") {
+      return {
+        format: "Aktivierung am Messestand · Energizer",
+        sub: "5–45 Min Walk-Around oder Bühnen-Energizer zwischen Vorträgen",
+        why: "Auf Messen und Tagungen ist Magie das einzige Format, das müde Köpfe sofort einschaltet. Walk-Around am Stand zieht Traffic, Bühnen-Energizer reanimiert das Plenum, abendliche Incentive-Show belohnt das Team.",
+        link: "/buchung",
+      };
+    }
+    return {
+      format: "Close-Up auf eurer Mitarbeiterfeier",
+      sub: "Walk-Around + Tisch-zu-Tisch · 45–90 Min · lockerer Ton",
+      why: "Für Team-Events ist Close-Up das passende Format: Magie an jedem Tisch, jeder Mitarbeiter erlebt seine eigene Pointe. Teambuilding nebenbei — Kollegen, die sich sonst nie sehen, haben über die Show ein Gesprächsthema.",
+      link: "/close-up",
+    };
+  },
+  gaesteFromAnswers: (a) =>
+    a.groesse === "klein" ? 20 :
+    a.groesse === "mittel" ? 60 :
+    a.groesse === "gross" ? 130 :
+    a.groesse === "mega" ? 250 :
+    null,
+  typFromAnswers: (a) =>
+    a.typ === "vorstand" ? "Vorstandsdinner" :
+    a.typ === "kunde" ? "Kundenabend" :
+    a.typ === "team" ? "Mitarbeiterfeier" :
+    a.typ === "messe" ? "Messe / Tagung" :
+    "Firmenfeier",
+};
+
+/* ═══════════════════════════════════════════════════════════
+   8 · STIMMEN — 3 B2B-Reviews
+   ═══════════════════════════════════════════════════════════ */
+const StimmenSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const cases = [
+  const reviews = [
     {
-      branche: "Versicherung",
-      gaeste: "200 Kunden",
-      anlass: "Magic Camp · Galaabend",
-      what: "Bühnenshow mit eingebauter Branchenanekdote, Close-Up beim Empfang. Hierarchien gelöst, Kunden blieben länger als geplant.",
+      quote:
+        "Es war einfach Mega! 200 Gäste eines bayerischen Versicherungsunternehmens — Emilian hat mit seiner eigens entwickelten Zaubertrickshow alle begeistert.",
+      author: "Jan von Lehmann",
+      role: "Firmenfeier · 200 Gäste",
+      initial: "J",
     },
     {
-      branche: "IT-Konzern",
-      gaeste: "500 Mitarbeiter",
-      anlass: "Sommerfest · Firmengelände",
-      what: "Tisch-zu-Tisch-Magie während des Caterings. Mitarbeiter aus verschiedenen Standorten kamen ins Gespräch — der CEO mehrfach genannt im Feedback-Bogen.",
+      quote:
+        "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt. Abwicklung sehr professionell. Gerne wieder!",
+      author: "Martina Senftl",
+      role: "B2B-Kundin",
+      initial: "M",
     },
     {
-      branche: "Sparkasse",
-      gaeste: "80 Führungskräfte",
-      anlass: "Strategie-Meeting · Tagungshotel",
-      what: "Magie als Energizer zwischen Strategieblöcken. Aufmerksamkeitskurve gerettet, Stimmung gedreht — und ein Zaubertrick mit Filialnummern eingebaut.",
-    },
-    {
-      branche: "Bauunternehmen",
-      gaeste: "120 Gäste",
-      anlass: "Weihnachtsfeier · Eventlocation",
-      what: "Kombi aus Close-Up im Empfang und 30-Min-Bühnenshow nach dem Hauptgang. Mitarbeiter und Familie gemeinsam — alle Altersgruppen mitgenommen.",
-    },
-    {
-      branche: "Mittelständler",
-      gaeste: "60 Stammkunden",
-      anlass: "Kunden-Event · Ausstellungshalle",
-      what: "Close-Up während Werksführung, Show als Abschluss. Kunden buchten direkt vor Ort weitere Termine.",
-    },
-    {
-      branche: "Agentur",
-      gaeste: "40 Mitarbeiter",
-      anlass: "Team-Event · Restaurant",
-      what: "Magic Dinner zwischen den Gängen. Kreatives Team, wollte Inspiration — hat funktioniert: anschließend Brainstorming bis 1 Uhr nachts.",
+      quote:
+        "Mit viel Charme und Witz hat er alle Gäste begeistert. Eine tolle Ergänzung für jeden besonderen Anlass.",
+      author: "Katrin Raß",
+      role: "Event-Planerin",
+      initial: "K",
     },
   ];
   return (
-    <section ref={ref} className="bg-white section-large">
+    <section ref={ref} className="bg-white py-24 md:py-36">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Branchen-Cases</p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Was in welcher{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Branche</span>{" "}
-            funktioniert.
-          </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
-            Sechs echte Beispiele aus den letzten Saisons — verschiedene Größen, verschiedene Anlässe, verschiedene Erkenntnisse.
+        <div className="max-w-2xl mb-14 md:mb-16">
+          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            Was Veranstalter sagen.
           </p>
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+            5,0 Sterne.
+            <br />
+            <span className={SERIF_ITALIC}>30+ Bewertungen.</span>
+          </h2>
         </div>
-        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {cases.map((c) => (
-            <article key={c.branche} className="relative p-7 md:p-8 flex flex-col bg-white" style={{ borderRadius: "0.75rem", boxShadow: "0 20px 50px -25px rgba(40, 20, 60, 0.2), 0 0 0 1px rgba(0,0,0,0.06)" }}>
-              <div aria-hidden className="absolute top-0 left-7 right-7 h-[2px] rounded-full" style={{ background: "linear-gradient(90deg, hsl(220 85% 65%), hsl(255 75% 65%), hsl(285 80% 65%))" }} />
-              <div className="flex items-center gap-2 mb-5">
-                <Building2 className="w-4 h-4" style={{ color: "hsl(255 60% 50%)" }} />
-                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold" style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                  {c.branche}
-                </p>
+
+        <div
+          className={`grid md:grid-cols-3 gap-6 md:gap-8 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          {reviews.map((r) => (
+            <article
+              key={r.author}
+              itemScope
+              itemType="https://schema.org/Review"
+              className="relative bg-white p-7 md:p-9 flex flex-col h-full"
+              style={{
+                borderRadius: "1rem",
+                boxShadow:
+                  "0 25px 50px -25px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04)",
+              }}
+            >
+              <div className="flex items-center gap-1 mb-5">
+                {[...Array(5)].map((_, j) => (
+                  <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+                <meta itemProp="reviewRating" content="5" />
               </div>
-              <h3 className="font-display text-2xl md:text-[1.6rem] font-black mb-1 text-foreground leading-[1.1]">{c.gaeste}</h3>
-              <p className="text-sm text-foreground/55 mb-5">{c.anlass}</p>
-              <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/75">{c.what}</p>
+              <p
+                itemProp="reviewBody"
+                className="text-[15px] md:text-base leading-[1.65] text-foreground/85 flex-1"
+              >
+                „{r.quote}"
+              </p>
+              <footer className="mt-7 pt-5 border-t border-foreground/10 flex items-center gap-4">
+                <div
+                  className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center font-display font-bold text-white text-base"
+                  style={{
+                    background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
+                  }}
+                >
+                  {r.initial}
+                </div>
+                <div>
+                  <p itemProp="author" className="font-display font-bold text-foreground text-sm">
+                    {r.author}
+                  </p>
+                  <p className={`${SERIF_ITALIC} text-[13px] text-foreground/55 mt-0.5`}>
+                    {r.role}
+                  </p>
+                </div>
+              </footer>
             </article>
           ))}
-        </div>
-        <div className={`mt-12 max-w-2xl ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
-          <p className="text-sm text-foreground/55 italic">
-            Anonymisiert auf Wunsch der Kunden — Referenzen mit Namen und Kontakt auf Anfrage.
-          </p>
         </div>
       </div>
     </section>
   );
 };
 
-/* 8 · GALERIE */
-const GalerieSection = () => {
+/* ═══════════════════════════════════════════════════════════
+   9 · TRUST + ZAHLEN
+   ═══════════════════════════════════════════════════════════ */
+const TRUST_ITEMS = [
+  { Icon: Trophy, name: "Greatest Talent", sub: "2023 · Finalist (TV)" },
+  { Icon: Award, name: "Talents of Magic", sub: "2024 · Finalist + Kreativpreis" },
+  { Icon: Medal, name: "Deutsche Jugendmeisterschaft", sub: "2024 · Top 30" },
+  { Icon: Tv, name: "TVA", sub: "2025 · TV-Auftritt" },
+  { Icon: Star, name: "ProvenExpert", sub: "5,0 ★ · 30+ Bewertungen" },
+];
+
+const TrustZahlenSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const photos = [
-    { img: stageShowImg, span: "lg:col-span-2 lg:row-span-2", pos: "object-center" },
-    { img: closeupImg, span: "", pos: "object-center" },
-    { img: haendeInteraktionImg, span: "", pos: "object-center" },
-    { img: emotionenImg, span: "", pos: "object-center" },
-    { img: portraitImg, span: "", pos: "object-top" },
-  ];
   return (
-    <section ref={ref} className="bg-white section-large">
+    <section
+      ref={ref}
+      className="bg-[hsl(36,30%,97%)] py-20 md:py-28 border-y border-foreground/10"
+    >
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-6">Impressionen</p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Echte{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Firmenevents</span>.
+        <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
+          <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>
+            Falls ihr noch Sicherheit braucht.
+          </p>
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
+            Bekannt aus TV, Wettbewerb und{" "}
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              100+ Firmen-Events
+            </span>
+            .
           </h2>
         </div>
-        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-[180px] md:auto-rows-[240px] ${isVisible ? "animate-fade-in" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
-          {photos.map((p, i) => (
-            <div key={i} className={`${p.span} overflow-hidden group relative`} style={{ borderRadius: "0.5rem" }}>
-              <img src={p.img} alt="" className={`w-full h-full object-cover ${p.pos} group-hover:scale-[1.04] transition-transform duration-700`} loading="lazy" />
-              <div aria-hidden className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: "linear-gradient(135deg, hsl(220 85% 50% / 0.2), hsl(285 80% 50% / 0.2))", mixBlendMode: "overlay" }} />
+
+        <div
+          className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          {TRUST_ITEMS.map((it) => (
+            <article
+              key={it.name}
+              className="group relative bg-white border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:-translate-y-1 hover:border-foreground/15 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.15)]"
+            >
+              <div
+                className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))",
+                  border: "1px solid rgba(154,38,64,0.22)",
+                }}
+              >
+                <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
+              </div>
+              <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">
+                {it.name}
+              </p>
+              <p className={`${SERIF_ITALIC} text-[12px] md:text-sm text-foreground/55 leading-snug`}>
+                {it.sub}
+              </p>
+            </article>
+          ))}
+        </div>
+
+        <div
+          className={`flex flex-wrap items-baseline justify-center gap-x-10 gap-y-5 md:gap-x-16 pt-10 border-t border-foreground/10 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          {[
+            { num: "100+", label: "Firmen-Engagements" },
+            { num: "200+", label: "Events gesamt" },
+            { num: "5,0 ★", label: "30+ Bewertungen" },
+            { num: "24 h", label: "Antwortzeit" },
+            { num: "DSGVO", label: "+ Versicherung + Rechnung" },
+          ].map((s) => (
+            <div key={s.label} className="flex items-baseline gap-3">
+              <span className="font-display text-2xl md:text-3xl font-black text-foreground tabular-nums">
+                {s.num}
+              </span>
+              <span className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55`}>
+                {s.label}
+              </span>
             </div>
           ))}
         </div>
@@ -740,235 +1257,74 @@ const GalerieSection = () => {
   );
 };
 
-/* 9 · ZAHLEN */
-const StatBlock = ({ end, suffix, label, desc }: { end: number; suffix: string; label: string; desc: string }) => {
-  const { count, ref } = useCounter(end);
-  return (
-    <div ref={ref}>
-      <p className="font-display font-black leading-none tabular-nums tracking-[-0.02em] text-[clamp(3rem,6vw,5.5rem)]" style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-        {count}{suffix}
-      </p>
-      <p className="text-[11px] tracking-[0.18em] uppercase text-white/55 mt-4">{label}</p>
-      <p className="mt-3 text-sm text-white/65 max-w-[220px] leading-relaxed">{desc}</p>
-    </div>
-  );
-};
+/* ═══════════════════════════════════════════════════════════
+   10 · FAQ
+   ═══════════════════════════════════════════════════════════ */
+const firmenFaqs = [
+  {
+    q: "Was kostet ein Firmen-Engagement?",
+    a: "B2B-Pakete starten ab 495 €. Endgültiger Preis hängt von Format, Dauer, Anreise und ggf. Übernachtung ab. Nach der Anfrage bekommt ihr ein verbindliches Angebot mit Mehrwertsteuer und allen Positionen offen.",
+  },
+  {
+    q: "Wie ist es mit Rechnungsstellung und Steuer?",
+    a: "Reguläre Geschäftsrechnung mit ausgewiesener Umsatzsteuer (7 % auf Kunst-Leistungen), Zahlungsziel 14 Tage. Auf Wunsch Vorab-Rechnung möglich. Versicherungsschutz inklusive.",
+  },
+  {
+    q: "Vorstand und Aufsichtsrat — wie ist es mit Pannensicherheit?",
+    a: "Für jede Routine gibt es ein Backup-Setup. Vorab schriftliche Absprache mit Eventagentur über No-Gos (Personen, die nicht angesprochen werden sollen, Themen, die nicht aufkommen sollen). Nach 100+ Firmen-Events bisher null Pannen.",
+  },
+  {
+    q: "Passt das zur Corporate Identity unseres Hauses?",
+    a: "Programm wird auf eure Tonalität abgestimmt. Premium-Versicherung läuft anders als Tech-Startup-Weihnachtsfeier. Ich höre vorab in einem 30-Min-Call, was zu euch passt — und was definitiv nicht.",
+  },
+  {
+    q: "Wie groß ist das Setup?",
+    a: "Close-Up: nichts. Bühnenshow: ca. 2 × 1,5 m Bühnenfläche, ein Tisch hinter mir, eine Steckdose. Headset-Mikro bringe ich mit, wenn ihr keins habt. 30 Min Auf- und Abbau.",
+  },
+  {
+    q: "Ab wann sollten wir buchen?",
+    a: "Idealerweise drei bis sechs Monate vorher, vor allem Q4 (Weihnachtsfeiern) ist sehr gefragt. Kurzfristig immer trotzdem anfragen — manchmal sind noch Slots offen.",
+  },
+];
 
-const ZahlenSection = () => {
+const FAQSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="relative overflow-hidden text-white py-24 md:py-32 lg:py-40 bg-[#0f0a19]">
-      <div className="absolute inset-0">
-        <img src={buehneZuschauerImg} alt="" className="w-full h-full object-cover" />
-        <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(110deg, rgba(15,10,25,0.92) 0%, rgba(30,15,45,0.85) 50%, rgba(15,10,25,0.7) 100%)" }} />
-      </div>
-      <div className="relative z-10 container px-6">
-        <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-white/55 mb-6">Erfahrung in Zahlen</p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,5vw,4.75rem)]">
-            Was{" "}
-            <span style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>200+ Firmenfeiern</span>{" "}
-            ausmachen.
-          </h2>
-        </div>
-        <div className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          <StatBlock end={200} suffix="+" label="Firmenfeiern" desc="Vom Sommerfest bis zur Galaveranstaltung." />
-          <StatBlock end={10} suffix="+" label="Jahre Routine" desc="Auch wenn der Zeitplan kippt — ich liefere." />
-          <StatBlock end={5} suffix=",0" label="Sterne Bewertung" desc="Top-Bewertungen von Eventmanagern und HR." />
-          <StatBlock end={24} suffix="h" label="Antwortzeit" desc="Persönliche Rückmeldung garantiert — auch im B2B-Tempo." />
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 10 · MÖGLICHKEITEN */
-const MoeglichkeitenSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const wirkungen = [
-    {
-      icon: Users,
-      effekt: "Eisbrecher zwischen Abteilungen",
-      mechanismus: "Close-Up beim Empfang. Mitarbeiter aus verschiedenen Standorten haben binnen 5 Sek. ein gemeinsames Gesprächsthema.",
-    },
-    {
-      icon: TrendingUp,
-      effekt: "Hierarchien lösen sich auf",
-      mechanismus: "CEO und Praktikantin staunen gemeinsam über denselben Trick. Nach so einem Moment reden sie auch nach dem Event anders miteinander.",
-    },
-    {
-      icon: Briefcase,
-      effekt: "Markenbotschaft bleibt hängen",
-      mechanismus: "Firmensymbol oder Insider-Anekdote subtil in die Show eingebaut — kein Werbespot, sondern ein Magic-Moment, der die Botschaft transportiert.",
-    },
-    {
-      icon: Zap,
-      effekt: "Aufmerksamkeitskurve dreht",
-      mechanismus: "Energizer-Slot zwischen Vortragsblöcken bei Strategie-Kickoffs. Aufmerksamkeit zurück auf 100 % für die Nachmittagssession.",
-    },
-    {
-      icon: Award,
-      effekt: "Kunden-Event wird memorabel",
-      mechanismus: "Bühnenshow als Highlight bei Roadshows oder Galaabenden. Kunden erinnern sich Wochen später noch — und buchen weitere Termine direkt vor Ort.",
-    },
-    {
-      icon: Sparkles,
-      effekt: "Gespräch am Montag",
-      mechanismus: "Eine Karte, die vom CEO in die Brieftasche der Praktikantin wandert, hält länger als jede HR-Kampagne.",
-    },
-  ];
-  return (
-    <section ref={ref} className="bg-white section-large border-y border-foreground/8">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">Wirkung im Unternehmen</p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
-            Was Magie{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>konkret bewirkt</span>.
-          </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-[1.55] text-foreground/65 font-light">
-            Sechs konkrete Effekte, die ihr nach der Firmenfeier wirklich messt — und der jeweilige Mechanismus dahinter.
+        <div className="max-w-2xl mb-14 md:mb-16">
+          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            Häufige Fragen aus dem B2B-Bereich.
           </p>
-        </div>
-        {/* B2B Cards mit Effekt + Mechanismus + Icon, ohne Tabelle */}
-        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {wirkungen.map((w, i) => (
-            <article
-              key={w.effekt}
-              className="relative p-7 md:p-8 flex flex-col bg-white transition-all hover:scale-[1.01]"
-              style={{
-                border: "1px solid rgba(0,0,0,0.08)",
-                borderRadius: "1rem",
-                boxShadow: "0 20px 50px -25px rgba(40, 20, 60, 0.2)",
-                animationDelay: `${0.1 + i * 0.05}s`,
-              }}
-            >
-              <div
-                aria-hidden
-                className="absolute top-0 left-7 right-7 h-[3px] rounded-full"
-                style={{ background: GRADIENT }}
-              />
-              <span
-                className="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-5"
-                style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}
-              >
-                <w.icon className="w-5 h-5" style={{ color: "hsl(255 60% 40%)" }} />
-              </span>
-              <p className="text-[10px] tracking-[0.22em] uppercase text-foreground/45 mb-2 font-semibold">Effekt</p>
-              <h3 className="font-display text-lg md:text-xl font-black text-foreground leading-[1.2] mb-5">
-                {w.effekt}
-              </h3>
-              <div className="pt-4 mt-auto border-t border-foreground/8">
-                <p className="text-[10px] tracking-[0.22em] uppercase text-foreground/45 mb-2 font-semibold">Mechanismus</p>
-                <p className="text-sm md:text-[15px] leading-[1.6] text-foreground/70">{w.mechanismus}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 13 · BUCHUNGS-FLOW */
-/* BuchungsFlow als 3 Procurement-Cards mit Lead-Time, Output, Antwort */
-const BuchungsFlowSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const phasen = [
-    {
-      icon: Phone,
-      num: "01",
-      titel: "Anfrage",
-      lead: "2 Min · ihr schickt",
-      output: "Datum, Ort, Anlass, Gästezahl",
-      response: "Antwort innerhalb 24h, persönlich",
-    },
-    {
-      icon: ClipboardList,
-      num: "02",
-      titel: "Konzept & Angebot",
-      lead: "30 Min · Call mit mir",
-      output: "Schriftliches Angebot, Tech-Rider, Vertrag",
-      response: "Bei Bedarf Rahmenvertrag & individuelle Konditionen",
-      featured: true,
-    },
-    {
-      icon: PartyPopper,
-      num: "03",
-      titel: "Eventtag",
-      lead: "Pünktlich vor Ort",
-      output: "Show, Backup-Equipment, Notfallnummer",
-      response: "Anschließend Rechnung mit USt-Ausweis",
-    },
-  ];
-  return (
-    <section ref={ref} className="bg-foreground/[0.02] section-large border-y border-foreground/8">
-      <div className="container px-6">
-        <div className={`max-w-3xl mb-12 md:mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">Procurement-Prozess</p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
-            Drei Phasen,{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>klare Outputs</span>.
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            Was Event-Planerinnen
+            <br />
+            <span className={SERIF_ITALIC}>vorher fragen.</span>
           </h2>
         </div>
-        <div className={`grid md:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {phasen.map((p, i) => (
-            <article
-              key={p.num}
-              className={`relative p-7 md:p-8 flex flex-col transition-all hover:scale-[1.01] ${p.featured ? "text-white" : "text-foreground"}`}
-              style={{
-                background: p.featured
-                  ? "linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(255 45% 22%) 50%, hsl(285 50% 22%) 100%)"
-                  : "white",
-                border: p.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)",
-                borderRadius: "1rem",
-                boxShadow: p.featured
-                  ? "0 30px 70px -20px rgba(60, 30, 80, 0.4)"
-                  : "0 20px 50px -25px rgba(40, 20, 60, 0.18)",
-                animationDelay: `${0.1 + i * 0.06}s`,
-              }}
-            >
-              <div className="flex items-start justify-between mb-6">
-                <span
-                  className="inline-flex items-center justify-center w-12 h-12 rounded-xl"
-                  style={{
-                    background: p.featured
-                      ? "rgba(255,255,255,0.12)"
-                      : "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))",
-                  }}
-                >
-                  <p.icon className="w-5 h-5" style={{ color: p.featured ? "white" : "hsl(255 60% 40%)" }} />
+
+        <div
+          className={`max-w-3xl border-t border-foreground/15 ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          {firmenFaqs.map((faq) => (
+            <details key={faq.q} className="group py-6 md:py-7 border-b border-foreground/15">
+              <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
+                <span className="font-display text-base md:text-lg font-bold text-foreground leading-snug pr-4">
+                  {faq.q}
                 </span>
                 <span
-                  className="font-display font-black leading-none text-3xl md:text-4xl tabular-nums"
-                  style={
-                    p.featured
-                      ? { background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }
-                      : { background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }
-                  }
+                  aria-hidden
+                  className="shrink-0 mt-1 text-foreground/40 group-open:rotate-45 transition-transform duration-300 text-2xl leading-none"
                 >
-                  {p.num}
+                  +
                 </span>
-              </div>
-              <h3 className="font-display text-xl md:text-2xl font-black leading-tight mb-2">{p.titel}</h3>
-              <p className={`text-[13px] md:text-sm font-medium mb-5 ${p.featured ? "text-white/70" : "text-foreground/55"}`}>
-                {p.lead}
+              </summary>
+              <p className="mt-4 text-base text-foreground/70 leading-[1.7] max-w-2xl">
+                {faq.a}
               </p>
-              <div className={`pt-5 border-t ${p.featured ? "border-white/15" : "border-foreground/10"}`}>
-                <p className={`text-[10px] tracking-[0.22em] uppercase mb-1.5 font-semibold ${p.featured ? "text-white/55" : "text-foreground/45"}`}>
-                  Output
-                </p>
-                <p className={`text-sm leading-[1.55] mb-4 ${p.featured ? "text-white/85" : "text-foreground/75"}`}>
-                  {p.output}
-                </p>
-                <p className={`text-[10px] tracking-[0.22em] uppercase mb-1.5 font-semibold ${p.featured ? "text-white/55" : "text-foreground/45"}`}>
-                  Antwort
-                </p>
-                <p className={`text-sm leading-[1.55] ${p.featured ? "text-white/75" : "text-foreground/65"}`}>
-                  {p.response}
-                </p>
-              </div>
-            </article>
+            </details>
           ))}
         </div>
       </div>
@@ -976,162 +1332,183 @@ const BuchungsFlowSection = () => {
   );
 };
 
-/* 12 · FAQ */
-const FAQ = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const gruppen = [
-    {
-      label: "Preis & Vertrag",
-      faqs: [
-        { q: "Was kostet eine Show für Firmenfeiern?", a: "Pakete starten ab 395€. Endgültiger Preis hängt von Format, Dauer, Anreise und Gästezahl ab. Nach der Anfrage bekommt ihr ein verbindliches schriftliches Angebot ohne versteckte Kosten." },
-        { q: "Erhalten wir eine Rechnung mit USt-Ausweis?", a: "Selbstverständlich. Vollständige Rechnung mit USt-Ausweis, Lieferanschrift und Anlass — vorbereitet für eure Buchhaltung. Auch Rahmenverträge mit festen Konditionen sind möglich." },
-        { q: "Was ist mit GEMA und Urheberrechten?", a: "Eigene Musik ist GEMA-frei oder lizenziert. Alle Tricks und Routinen sind selbst entwickelt oder lizenziert — keine rechtlichen Stolperfallen für euch." },
-      ],
-    },
-    {
-      label: "Logistik & Technik",
-      faqs: [
-        { q: "Wie weit im Voraus sollten wir buchen?", a: "Sommerfeste & Weihnachtsfeiern: 3–6 Monate Vorlauf ist ideal. Spontane Slots gehen auch — einfach trotzdem fragen." },
-        { q: "Welche Technik wird gebraucht?", a: "Bei Close-Up nichts — eigene Requisiten, kein Strom, kein Mikro nötig. Bei der Bühnenshow reicht ein Funkmikro und Spotlight; Anforderungen schicke ich rechtzeitig als Tech-Rider an euren Veranstalter." },
-        { q: "Tritt ihr auch außerhalb Bayerns auf?", a: "Schwerpunkt Bayern und Süddeutschland. Deutschlandweit und auch international buchbar — Anreise wird transparent abgerechnet." },
-        { q: "Was, wenn der Termin verschoben werden muss?", a: "Bis 14 Tage vor dem Event kostenlose Verschiebung auf einen Ersatztermin im selben Jahr — auch ohne Begründung. Danach individuell." },
-      ],
-    },
-    {
-      label: "Show & Briefing",
-      faqs: [
-        { q: "Bei welcher Mitarbeiter-/Gästezahl funktioniert es?", a: "Von 20 bis 500+ Gästen alles möglich. Bei Close-Up erreiche ich auch große Gruppen durch Tisch-zu-Tisch-Magie. Bei der Bühnenshow ist die nötige Bühnen- und Tongröße entscheidender als die Gästezahl." },
-        { q: "Können wir die Markenbotschaft einbauen?", a: "Ja. Ein Firmensymbol, ein Slogan oder eine Insider-Anekdote kann subtil in die Show eingewebt werden — nicht plakativ, sondern als Highlight. Briefing erfolgt im Vorgespräch." },
-        { q: "Ist die Show in Englisch möglich?", a: "Ja. Bühnenshow und Close-Up sind komplett auf Englisch buchbar — sinnvoll bei internationalen Kunden-Events oder Konzern-Töchtern." },
-        { q: "Was muss ich als Eventmanager vorab liefern?", a: "Datum, Ort, ungefähre Gästezahl, Anlass und Branche. Im 30-Min-Call klären wir Ablauf, Kontaktperson vor Ort und ob Markenbotschaft eingebaut werden soll. Mehr braucht es nicht." },
-        { q: "Gibt es einen Plan B, falls etwas schiefgeht?", a: "Anreise mit Pufferzeit, Backup-Equipment für Mikro und Requisiten, Notfallnummer am Eventtag. Ich bin in 10+ Jahren noch nie zu spät gekommen — aber wenn der Zeitplan kippt, improvisiere ich." },
-      ],
-    },
-  ];
-  const gruppenIcons: Record<string, any> = {
-    "Preis & Vertrag": Briefcase,
-    "Logistik & Technik": ClipboardList,
-    "Show & Briefing": Sparkles,
-  };
-  return (
-    <section ref={ref} className="bg-white section-large">
-      <div className="container px-6">
-        <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase text-foreground/45 mb-6 font-semibold">FAQ für Entscheider</p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
-            Was Eventmanager{" "}
-            <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              vorab klären
-            </span>{" "}
-            wollen.
-          </h2>
-        </div>
-        <div className={`grid lg:grid-cols-3 gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
-          {gruppen.map((gruppe) => {
-            const Icon = gruppenIcons[gruppe.label] || Sparkles;
-            return (
-              <div
-                key={gruppe.label}
-                className="bg-white p-6 md:p-7"
-                style={{
-                  border: "1px solid rgba(0,0,0,0.06)",
-                  borderRadius: "1rem",
-                  boxShadow: "0 20px 50px -25px rgba(40, 20, 60, 0.18)",
-                }}
-              >
-                <div className="flex items-center gap-3 mb-6 pb-5 border-b border-foreground/8">
-                  <span
-                    className="inline-flex items-center justify-center w-10 h-10 rounded-lg"
-                    style={{ background: "linear-gradient(135deg, hsl(220 78% 92%), hsl(255 70% 92%), hsl(285 80% 92%))" }}
-                  >
-                    <Icon className="w-4 h-4" style={{ color: "hsl(255 60% 40%)" }} />
-                  </span>
-                  <p className="font-display text-sm md:text-base font-black text-foreground">
-                    {gruppe.label}
-                  </p>
-                </div>
-                <div className="divide-y divide-foreground/8 -mx-1">
-                  {gruppe.faqs.map((faq) => (
-                    <details key={faq.q} className="group py-4 px-1">
-                      <summary className="flex items-start justify-between cursor-pointer font-display text-sm md:text-[15px] font-bold text-foreground list-none hover:text-foreground/70 transition-colors gap-3">
-                        <span className="flex-1">{faq.q}</span>
-                        <span className="text-foreground/30 group-open:rotate-45 transition-transform duration-300 text-xl shrink-0 leading-none">+</span>
-                      </summary>
-                      <p className="mt-3 text-[13px] md:text-sm leading-[1.6] text-foreground/65">{faq.a}</p>
-                    </details>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* 13 · FINAL CTA */
+/* ═══════════════════════════════════════════════════════════
+   11 · FINAL CTA
+   ═══════════════════════════════════════════════════════════ */
 const FinalCTA = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="relative overflow-hidden text-white py-28 md:py-36 bg-[#0f0a19]">
+    <section ref={ref} className="relative text-white py-28 md:py-40 overflow-hidden">
       <div className="absolute inset-0">
-        <img src={audienceImg} alt="" className="w-full h-full object-cover" />
-        <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(15,10,25,0.86) 0%, rgba(15,10,25,0.7) 50%, rgba(15,10,25,0.55) 100%)" }} />
+        <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)",
+          }}
+        />
       </div>
-      <div className="relative z-10 container px-6">
-        <div className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className="text-[11px] tracking-[0.18em] uppercase text-white/60 mb-8">Euer großes Event</p>
-          <h2 className="font-display font-black tracking-[-0.01em] leading-[1.02] text-[clamp(2.25rem,5vw,4.75rem)] text-white">
-            Macht euer Event zum{" "}
-            <span style={{ background: GRADIENT_LIGHT, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>Gesprächsstoff</span>.
-          </h2>
-          <p className="mt-6 max-w-xl text-lg md:text-xl leading-[1.55] text-white/80 font-light">
-            Schickt mir Datum, Ort und ungefähre Gästezahl — Antwort innerhalb 24h.
+      <div
+        aria-hidden
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-25"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)",
+        }}
+      />
+
+      <div className="relative container px-6">
+        <div
+          className={`max-w-3xl mx-auto text-center ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>
+            Plant euren Abend.
           </p>
-          <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-            <Link to="/buchung" className="group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[15px] font-semibold text-[#0f0a19] bg-white hover:bg-white/95 transition-transform hover:scale-[1.01] shadow-[0_12px_40px_rgba(0,0,0,0.25)]">
-              <span>Termin sichern</span>
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+            Magie für{" "}
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+              eure Firma
+            </span>
+            .
+          </h2>
+          <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
+            Schickt mir Datum, Ort und Gästezahl — Antwort innerhalb 24
+            Stunden mit einem Konzept-Vorschlag für euren Firmen-Abend.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              to="/buchung?anlass=Firmenfeier"
+              className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-black hover:bg-white/90"
+            >
+              Anfrage starten
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <a href="tel:+4915563744696" className="inline-flex items-center gap-2 font-display font-semibold text-white/85 hover:text-white border-b-2 border-white/25 hover:border-white pb-1 transition-colors">
+            <a
+              href="tel:+4915563744696"
+              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/70 hover:text-white"
+            >
               Direkt anrufen
+              <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
-          <p className="mt-4 text-sm text-white/55">Kostenlos · Unverbindlich · Antwort innerhalb 24h · Rechnung mit USt-Ausweis</p>
+          <p className="mt-6 text-xs md:text-sm text-white/45">
+            Geschäftsrechnung · Versichert · DSGVO-konform
+          </p>
         </div>
       </div>
     </section>
   );
+};
+
+/* ═══════════════════════════════════════════════════════════ */
+const SITE_URL = "https://www.magicel.de/firmenfeiern";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Zauberer für Firmenfeier — Vorstand, Kunden, Team",
+  name: "Zauberer für Firmenfeiern mit Emilian Leber",
+  description:
+    "Zauberer für Firmenfeiern in Bayern und deutschlandweit — Vorstandsdinner, Kundenabend, Galaabend, Mitarbeiterfeier. Bühnenshow und Close-Up. 100+ Firmen-Engagements, 5,0 Sterne.",
+  provider: {
+    "@type": "Person",
+    name: "Emilian Leber",
+    jobTitle: "Zauberkünstler",
+    url: "https://www.magicel.de",
+    image: "https://www.magicel.de/og-image.jpg",
+    address: { "@type": "PostalAddress", addressCountry: "DE", addressRegion: "Bayern" },
+  },
+  areaServed: { "@type": "Country", name: "Deutschland" },
+  url: SITE_URL,
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "5.0",
+    bestRating: "5",
+    reviewCount: "30",
+  },
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: firmenFaqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
 };
 
 const Firmenfeiern = () => (
   <>
     <Helmet>
-      <title>Zauberer für Firmenfeiern — Networking, Wow-Effekt, Markenbezug | Emilian Leber</title>
-      <meta name="description" content="Zauberer für Firmenfeiern, Sommerfeste & Weihnachtsfeiern. STRABAG, Sixt, VKB & 200+ Firmenkunden. Magie als Eisbrecher und Show-Highlight — deutschlandweit buchbar." />
-      <link rel="canonical" href="https://www.magicel.de/firmenfeiern" />
+      <html lang="de" />
+      <title>
+        Zauberer für Firmenfeier — Vorstand, Kunden, Team | Emilian Leber
+      </title>
+      <meta
+        name="description"
+        content="Zauberkünstler für Firmenfeiern in Bayern und deutschlandweit — Vorstandsdinner, Kundenabend, Galaabend, Mitarbeiterfeier. Bühnenshow und Close-Up, einzeln oder kombiniert. 100+ Firmen-Engagements, 5,0★."
+      />
+      <meta
+        name="keywords"
+        content="Zauberer Firmenfeier, Zauberkünstler Firmenevent, Magier Vorstandsdinner, Close-Up Kundenabend, Bühnenshow Firmenfeier, Weihnachtsfeier Magier, Galaabend Zauberer, Messe Zauberer, Emilian Leber"
+      />
+      <meta name="author" content="Emilian Leber" />
+      <meta name="robots" content="index,follow,max-image-preview:large" />
+      <link rel="canonical" href={SITE_URL} />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:locale" content="de_DE" />
+      <meta property="og:site_name" content="MagicEL — Emilian Leber" />
+      <meta property="og:url" content={SITE_URL} />
+      <meta property="og:title" content="Zauberer für Firmenfeier — Vorstand, Kunden, Team | Emilian Leber" />
+      <meta
+        property="og:description"
+        content="Bühnenshow und Close-Up für Firmenfeiern, einzeln oder kombiniert. 100+ Firmen-Engagements, 5,0★."
+      />
+      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
+
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
+
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
+        rel="stylesheet"
+      />
+
+      <script type="application/ld+json">{JSON.stringify(serviceSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
     </Helmet>
-    <Navigation />
-    <main>
-      <Hero />
-      <ClientLogos title="Vertrauen von 200+ Firmenkunden" />
-      <QuizSection />
-      <OptionenSection />
-      <DreiSekundenSection />
-      <BeispielSection />
-      <MegaQuoteSection />
-      <BranchenCasesSection />
-      <GalerieSection />
-      <ZahlenSection />
-      <MoeglichkeitenSection />
-      <BuchungsFlowSection />
-      <FAQ />
-      <FinalCTA />
-    </main>
-    <Footer />
-    <Chatbot />
-    <WhatsAppButton />
+
+    <PageLayout>
+      <main>
+        <Hero />
+        <AnlaesseSection />
+        <RoiSection />
+        <IndustriesSection />
+        <VorstandCounterSection />
+        <CaseStudyQuoteSection />
+        <CustomQuizSection config={firmenfeiernQuizConfig} />
+        <StimmenSection />
+        <TrustZahlenSection />
+        <FAQSection />
+        <FinalCTA />
+      </main>
+    </PageLayout>
   </>
 );
 
