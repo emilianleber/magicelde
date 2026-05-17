@@ -8,6 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { AdminPersistentShell } from "@/components/admin/AdminLayout";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 import EngagementPopup from "./components/landing/EngagementPopup.tsx";
+import TabTitleSwitcher from "./components/TabTitleSwitcher.tsx";
+import ShowPlanerTrigger from "./components/landing/ShowPlanerTrigger.tsx";
+import EmailReminderBanner from "./components/landing/EmailReminderBanner.tsx";
 
 // Admin pages — only loaded on admin.magicel.de / localhost
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
@@ -242,6 +245,7 @@ const App = () => (
       <BrowserRouter>
         <ScrollToTop />
         <AuthEventHandler />
+        <TabTitleSwitcher />
         <Suspense
           fallback={
             <div className="min-h-screen flex items-center justify-center bg-white">
@@ -254,6 +258,8 @@ const App = () => (
           }
         >
           {!IS_ADMIN_DOMAIN && <EngagementPopup />}
+          {!IS_ADMIN_DOMAIN && <ShowPlanerTrigger />}
+          {!IS_ADMIN_DOMAIN && <EmailReminderBanner />}
           {IS_ADMIN_DOMAIN ? <AdminRoutes /> : IS_DEV ? (
             // localhost: beide Route-Sets verfügbar
             <Routes>
