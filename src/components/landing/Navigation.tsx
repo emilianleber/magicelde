@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logoImg from "@/assets/logo-clean.webp";
+
+const SERIF_ITALIC =
+  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
+const ACCENT = "#9a2640";
+const ACCENT_DEEP = "#5c1622";
 
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -21,7 +26,7 @@ const Navigation = () => {
   }, [location]);
 
   const desktopLinkCls = scrolled
-    ? "font-sans text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
+    ? "font-sans text-[13px] font-medium text-foreground/70 hover:text-foreground transition-colors duration-200"
     : "font-sans text-[13px] font-medium text-white hover:text-white transition-colors duration-200 [text-shadow:0_1px_4px_rgba(0,0,0,0.5)]";
 
   const logoTextCls = scrolled
@@ -33,19 +38,43 @@ const Navigation = () => {
     : "h-7 w-auto brightness-0 invert transition-all duration-500 drop-shadow-md";
 
   const mobilePanelCls =
-    "lg:hidden bg-background/95 backdrop-blur-2xl border border-border/30 mt-2 mx-3 rounded-2xl p-4 pt-[env(safe-area-inset-top)] flex flex-col gap-0.5 animate-fade-up shadow-xl max-h-[78vh] overflow-y-auto";
+    "lg:hidden bg-white/95 backdrop-blur-2xl border border-foreground/10 mt-2 mx-3 rounded-2xl p-4 pt-[env(safe-area-inset-top)] flex flex-col gap-0.5 animate-fade-up shadow-[0_30px_70px_-20px_rgba(40,20,40,0.25)] max-h-[78vh] overflow-y-auto";
 
   const mobileLinkCls =
-    "px-3 py-3 font-sans text-sm text-foreground rounded-xl hover:bg-muted/60 transition-colors";
+    "px-3 py-3 font-sans text-sm text-foreground rounded-xl hover:bg-foreground/5 transition-colors";
 
-  const mobileHeadingCls =
-    "font-sans text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/40 px-3 pt-1 pb-1.5";
+  const mobileHeadingCls = `${SERIF_ITALIC} text-base text-foreground/45 px-3 pt-1 pb-1.5`;
+
+  const DropdownItem = ({
+    to,
+    label,
+    sub,
+  }: {
+    to: string;
+    label: string;
+    sub: string;
+  }) => (
+    <Link
+      to={to}
+      className="block px-4 py-3 rounded-xl hover:bg-foreground/[0.04] transition-colors group"
+    >
+      <span
+        className="block text-sm font-medium text-foreground transition-colors group-hover:text-[var(--accent)]"
+        style={{ ["--accent" as never]: ACCENT }}
+      >
+        {label}
+      </span>
+      <span className={`block ${SERIF_ITALIC} text-xs text-foreground/55 mt-0.5`}>
+        {sub}
+      </span>
+    </Link>
+  );
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-background/80 backdrop-blur-2xl border-b border-border/50 py-3"
+          ? "bg-white/85 backdrop-blur-2xl border-b border-foreground/8 py-3"
           : "bg-gradient-to-b from-black/45 via-black/15 to-transparent py-4"
       }`}
     >
@@ -69,27 +98,12 @@ const Navigation = () => {
             {activeDropdown === "anlaesse" && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3">
                 <div
-                  className="bg-background/95 backdrop-blur-2xl rounded-2xl border border-border/50 shadow-lg p-3 min-w-[220px] animate-fade-up"
+                  className="bg-white/97 backdrop-blur-2xl rounded-2xl border border-foreground/10 shadow-[0_30px_70px_-20px_rgba(40,20,40,0.3)] p-3 min-w-[240px] animate-fade-up"
                   style={{ animationDuration: "0.25s" }}
                 >
-                  {[
-                    { to: "/hochzeit", label: "Hochzeiten", sub: "Magische Momente" },
-                    { to: "/firmenfeiern", label: "Firmenfeiern", sub: "Business Entertainment" },
-                    { to: "/geburtstage", label: "Geburtstage", sub: "Unvergessliche Feiern" },
-                  ].map((item) => (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      className="block px-4 py-3 rounded-xl hover:bg-muted/60 transition-colors group"
-                    >
-                      <span className="block text-sm font-medium text-foreground group-hover:text-accent transition-colors">
-                        {item.label}
-                      </span>
-                      <span className="block text-xs text-muted-foreground mt-0.5">
-                        {item.sub}
-                      </span>
-                    </Link>
-                  ))}
+                  <DropdownItem to="/hochzeit" label="Hochzeit" sub="Drei Akte Magie" />
+                  <DropdownItem to="/firmenfeiern" label="Firmenfeier" sub="Vorstand, Kunden, Team" />
+                  <DropdownItem to="/geburtstage" label="Geburtstag · Jubiläum" sub="Persönliche Magie" />
                 </div>
               </div>
             )}
@@ -107,28 +121,14 @@ const Navigation = () => {
             {activeDropdown === "konzepte" && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3">
                 <div
-                  className="bg-background/95 backdrop-blur-2xl rounded-2xl border border-border/50 shadow-lg p-3 min-w-[220px] animate-fade-up"
+                  className="bg-white/97 backdrop-blur-2xl rounded-2xl border border-foreground/10 shadow-[0_30px_70px_-20px_rgba(40,20,40,0.3)] p-3 min-w-[240px] animate-fade-up"
                   style={{ animationDuration: "0.25s" }}
                 >
-                  {[
-                    { to: "/buehnenshow", label: "Bühnenshow", sub: "Das große Erlebnis" },
-                    { to: "/close-up", label: "Close-Up Magie", sub: "Hautnah & interaktiv" },
-                    { to: "/magic-dinner", label: "Magic Dinner", sub: "Genuss trifft Staunen" },
-                    { to: "/moderation", label: "Moderation", sub: "Charme & Bühnenpräsenz" },
-                  ].map((item) => (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      className="block px-4 py-3 rounded-xl hover:bg-muted/60 transition-colors group"
-                    >
-                      <span className="block text-sm font-medium text-foreground group-hover:text-accent transition-colors">
-                        {item.label}
-                      </span>
-                      <span className="block text-xs text-muted-foreground mt-0.5">
-                        {item.sub}
-                      </span>
-                    </Link>
-                  ))}
+                  <DropdownItem to="/buehnenshow" label="Bühnenshow" sub="Für alle gleichzeitig" />
+                  <DropdownItem to="/close-up" label="Close-Up" sub="Direkt am Tisch" />
+                  <DropdownItem to="/magic-dinner" label="Magic Dinner" sub="Tisch + Bühne" />
+                  <DropdownItem to="/comedy-zauberei" label="Comedy & Zauberei" sub="Lachen + Staunen" />
+                  <DropdownItem to="/moderation" label="Moderation" sub="Durch den Abend" />
                 </div>
               </div>
             )}
@@ -146,12 +146,19 @@ const Navigation = () => {
           <Link to="/blog" className={desktopLinkCls}>
             Magazin
           </Link>
-          <Link to="/kundenportal/login" className={desktopLinkCls}>
-            Kundenportal
-          </Link>
 
-          <Link to="/buchung" className="btn-primary !px-6 !py-2.5 !text-[13px]">
+          <Link
+            to="/buchung"
+            className="group inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-all hover:scale-[1.03] active:scale-[0.97]"
+            style={{
+              background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+              boxShadow: scrolled
+                ? "0 10px 25px -8px rgba(154,38,64,0.4)"
+                : "0 10px 30px -6px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.1) inset",
+            }}
+          >
             Anfragen
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
@@ -168,32 +175,35 @@ const Navigation = () => {
 
       {mobileOpen && (
         <div className={mobilePanelCls}>
-          <p className={mobileHeadingCls}>Anlässe</p>
+          <p className={mobileHeadingCls}>Anlässe.</p>
           <Link to="/hochzeit" className={mobileLinkCls}>
-            Hochzeiten
+            Hochzeit
           </Link>
           <Link to="/firmenfeiern" className={mobileLinkCls}>
-            Firmenfeiern
+            Firmenfeier
           </Link>
           <Link to="/geburtstage" className={mobileLinkCls}>
-            Geburtstage
+            Geburtstag · Jubiläum
           </Link>
 
-          <p className={mobileHeadingCls + " pt-3"}>Konzepte</p>
+          <p className={`${mobileHeadingCls} pt-3`}>Konzepte.</p>
           <Link to="/buehnenshow" className={mobileLinkCls}>
             Bühnenshow
           </Link>
           <Link to="/close-up" className={mobileLinkCls}>
-            Close-Up Magie
+            Close-Up
           </Link>
           <Link to="/magic-dinner" className={mobileLinkCls}>
             Magic Dinner
+          </Link>
+          <Link to="/comedy-zauberei" className={mobileLinkCls}>
+            Comedy & Zauberei
           </Link>
           <Link to="/moderation" className={mobileLinkCls}>
             Moderation
           </Link>
 
-          <div className="border-t border-border/30 my-2.5" />
+          <div className="border-t border-foreground/10 my-2.5" />
 
           <Link to="/ueber-mich" className={mobileLinkCls}>
             Über mich
@@ -210,12 +220,20 @@ const Navigation = () => {
           <Link to="/faq" className={mobileLinkCls}>
             FAQ
           </Link>
-          <Link to="/kundenportal/login" className={mobileLinkCls}>
-            Kundenportal
+          <Link to="/kontakt" className={mobileLinkCls}>
+            Kontakt
           </Link>
 
-          <Link to="/buchung" className="btn-primary justify-center mt-3">
+          <Link
+            to="/buchung"
+            className="mt-3 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white"
+            style={{
+              background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+              boxShadow: "0 12px 28px -8px rgba(154,38,64,0.5)",
+            }}
+          >
             Jetzt anfragen
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       )}
