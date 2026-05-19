@@ -2,7 +2,6 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
-import LogoMarquee from "@/components/landing/LogoMarquee";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import {
   Mail,
@@ -687,11 +686,6 @@ const Impressum = () => (
       <PageKeyframes />
       <main>
         <Hero />
-        <LogoMarquee
-          eyebrow="Geschäftspartner seit 2015. Für."
-          variant="cream"
-          compact
-        />
         <LegalContent />
         <KontaktDirektCard />
         <VerwandteRessourcen />

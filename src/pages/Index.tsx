@@ -365,30 +365,8 @@ const KonzeptIntroSection = () => {
                     "linear-gradient(180deg, transparent 45%, rgba(8,6,12,0.75) 100%)",
                 }}
               />
-              {/* Glass-Stat oben rechts */}
-              <div className="absolute top-5 right-5 md:top-7 md:right-7">
-                <div
-                  className="relative rounded-2xl px-4 py-3 md:px-5 md:py-4 overflow-hidden"
-                  style={{
-                    background:
-                      "linear-gradient(155deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.16) 55%, rgba(255,255,255,0.08) 100%)",
-                    backdropFilter: "blur(36px) saturate(180%) brightness(112%)",
-                    WebkitBackdropFilter: "blur(36px) saturate(180%) brightness(112%)",
-                    border: "1px solid rgba(255,255,255,0.35)",
-                    boxShadow:
-                      "0 24px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.7)",
-                  }}
-                >
-                  <p
-                    className={`${SERIF_ITALIC} text-[11px] md:text-xs text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
-                  >
-                    Seit 2016.
-                  </p>
-                  <p className="font-display text-base md:text-lg font-black text-white leading-tight mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
-                    Zehn Jahre. <span style={{ color: "#f3d9a8" }}>200+ Events.</span>
-                  </p>
-                </div>
-              </div>
+              {/* Glass-Stat — entfernt, da Info schon im Hero-KPI-Strip + Caption unten.
+                   Vermied Bug "Card vor Gesicht" auf bestimmten Foto-Crops. */}
               {/* Glass-Caption unten */}
               <div className="absolute bottom-5 left-5 right-5 md:bottom-7 md:left-7 md:right-7">
                 <div

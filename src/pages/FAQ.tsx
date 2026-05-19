@@ -2,7 +2,6 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
-import LogoMarquee from "@/components/landing/LogoMarquee";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import {
@@ -1156,11 +1155,6 @@ const FAQPage = () => (
       <PageKeyframes />
       <main>
         <Hero />
-        <LogoMarquee
-          eyebrow="200+ Events seit 2015. Für."
-          variant="cream"
-          compact
-        />
         <FAQCore />
         <PullQuote />
         <FrageNichtBeantwortet />

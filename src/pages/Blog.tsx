@@ -2,7 +2,6 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
-import LogoMarquee from "@/components/landing/LogoMarquee";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import {
   blogPosts,
@@ -1398,7 +1397,6 @@ const Blog = () => {
       </Helmet>
       <PageLayout>
         <Hero posts={published} />
-        <LogoMarquee compact variant="cream" eyebrow="Auftritte für" />
         {featured && <FeaturedArtikel post={featured} />}
         <PullQuoteBlack />
         <div id="posts-liste-anchor" />

@@ -749,19 +749,19 @@ const Chatbot = () => {
       {/* Floating FAB - bottom LEFT (Show-Planer-FAB is bottom right) */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-6 z-40 w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 group"
+        className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-5 md:bottom-7 md:left-7 z-40 w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg md:shadow-xl flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 group"
         style={{
           background: `linear-gradient(135deg, ${ACCENT_DEEP} 0%, ${ACCENT} 60%, ${ACCENT_DEEP} 100%)`,
-          boxShadow: `0 18px 40px -12px ${ACCENT_DEEP}99, 0 6px 14px -4px ${ACCENT}66`,
+          boxShadow: `0 10px 24px -10px ${ACCENT_DEEP}99, 0 3px 8px -3px ${ACCENT}66`,
         }}
         aria-label={open ? "Chat schliessen" : "Chat oeffnen"}
         aria-expanded={open}
       >
         {open ? (
-          <X className="w-6 h-6 text-white" aria-hidden="true" />
+          <X className="w-5 h-5 md:w-6 md:h-6 text-white" aria-hidden="true" />
         ) : (
           <>
-            <Wand2 className="w-6 h-6 text-white" aria-hidden="true" />
+            <Wand2 className="w-5 h-5 md:w-6 md:h-6 text-white" aria-hidden="true" />
             <span
               className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white animate-pulse"
               style={{ background: AMBER }}
@@ -776,7 +776,7 @@ const Chatbot = () => {
         <div
           className="fixed z-50 flex flex-col overflow-hidden shadow-2xl
                      inset-0 md:inset-auto
-                     md:bottom-24 md:left-6
+                     md:bottom-24 md:left-7
                      md:w-[380px] md:max-h-[600px] md:h-[600px]
                      md:rounded-3xl
                      animate-fade-up"

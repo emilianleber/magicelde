@@ -2,7 +2,6 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
-import LogoMarquee from "@/components/landing/LogoMarquee";
 import {
   CustomQuizSection,
   CustomQuizConfig,
@@ -78,8 +77,8 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Tickets", "zur"];
-const HEADLINE_ITALIC = ["Tour", "2026."];
+const HEADLINE_SANS = ["Magic", "Dinner"];
+const HEADLINE_ITALIC = ["Tickets."];
 
 const BOKEH = [
   { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
@@ -2337,14 +2336,13 @@ const Tickets = () => (
     <PageLayout>
       <main>
         <Hero />
-        <LogoMarquee eyebrow="200+ Auftritte · bekannt aus." variant="cream" compact />
-        <AktuelleTourShowSection />
-        <TourDatenSection />
         <MagicDinnerAbendeSection />
-        <TicketKategorienSection />
         <WasErwartetDichSection />
+        <TicketKategorienSection />
         <PullQuoteSection />
         <LocationsSection />
+        <AktuelleTourShowSection />
+        <TourDatenSection />
         <VideoSection />
         <StimmenSection />
         <FAQSection />

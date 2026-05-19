@@ -94,26 +94,26 @@ const ShowPlanerTrigger = () => {
 
   return (
     <>
-      {/* Floating Action Button — unten rechts */}
+      {/* Floating Action Button — Mobile: kompakt Icon-only, Desktop: mit Label */}
       <button
         type="button"
         onClick={openPlaner}
         aria-label="Show-Planer öffnen"
-        className="fixed bottom-5 right-5 md:bottom-7 md:right-7 z-40 group inline-flex items-center gap-2.5 px-5 py-3.5 rounded-full text-white text-[12px] tracking-[0.08em] font-semibold uppercase shadow-2xl transition-transform hover:scale-105"
+        className="fixed bottom-5 right-5 md:bottom-7 md:right-7 z-40 group inline-flex items-center justify-center gap-2 w-12 h-12 md:w-auto md:h-auto md:px-5 md:py-3.5 rounded-full text-white md:text-[12px] md:tracking-[0.08em] md:font-semibold md:uppercase transition-transform hover:scale-105"
         style={{
           background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
           boxShadow:
-            "0 20px 50px -10px rgba(154,38,64,0.55), 0 8px 20px -6px rgba(154,38,64,0.4)",
+            "0 14px 30px -10px rgba(154,38,64,0.4), 0 4px 12px -4px rgba(154,38,64,0.25)",
         }}
       >
-        <Wand2 className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-        Show planen
+        <Wand2 className="w-5 h-5 md:w-4 md:h-4 group-hover:rotate-12 transition-transform" />
+        <span className="hidden md:inline">Show planen</span>
       </button>
 
-      {/* Resume-Banner — unten links */}
+      {/* Resume-Banner — nur auf Desktop sichtbar (mobile zu eng) */}
       {showResume && !open && (
         <div
-          className="fixed bottom-[calc(4rem+1.25rem)] right-5 md:bottom-[calc(4.5rem+1.25rem)] md:right-7 z-40 w-[min(92vw,320px)] rounded-2xl p-4 text-white animate-fade-up"
+          className="hidden md:block fixed bottom-[calc(4.5rem+1.25rem)] right-7 z-40 w-[min(92vw,320px)] rounded-2xl p-4 text-white animate-fade-up"
           style={{
             background: `linear-gradient(155deg, ${ACCENT_DEEP}, #08060c)`,
             boxShadow: "0 30px 60px -20px rgba(40,20,40,0.55)",
@@ -178,10 +178,10 @@ const ShowPlanerTrigger = () => {
         </div>
       )}
 
-      {/* Exit-Intent Toast — oben mitte */}
+      {/* Exit-Intent Toast — nur Desktop (mouseleave irrelevant auf Mobile) */}
       {showExitIntent && !open && (
         <div
-          className="fixed top-5 left-1/2 -translate-x-1/2 z-40 max-w-md rounded-2xl p-5 bg-white"
+          className="hidden md:block fixed top-5 left-1/2 -translate-x-1/2 z-40 max-w-md rounded-2xl p-5 bg-white"
           style={{
             boxShadow:
               "0 30px 60px -15px rgba(40,20,40,0.35), 0 12px 25px -10px rgba(40,20,40,0.2)",

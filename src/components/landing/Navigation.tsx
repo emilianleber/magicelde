@@ -62,7 +62,7 @@ const Navigation = () => {
 
   const logoImgCls = scrolled
     ? "h-7 w-auto transition-all duration-500"
-    : "h-7 w-auto brightness-0 invert transition-all duration-500 drop-shadow-md";
+    : "h-7 w-auto brightness-0 invert transition-all duration-500 [filter:invert(1)_drop-shadow(0_2px_6px_rgba(0,0,0,0.7))]";
 
   const DropdownItem = ({
     to,
@@ -117,7 +117,7 @@ const Navigation = () => {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
             ? "bg-white/98 backdrop-blur-xl border-b border-foreground/10 py-3 shadow-[0_8px_24px_-16px_rgba(0,0,0,0.12)]"
-            : "bg-gradient-to-b from-black/50 via-black/20 to-transparent py-4"
+            : "bg-gradient-to-b from-black/70 via-black/40 to-transparent py-4"
         }`}
       >
         <div className="container flex items-center justify-between px-6">
@@ -205,7 +205,7 @@ const Navigation = () => {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className={`lg:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors ${
-              scrolled ? "text-foreground" : "text-white"
+              scrolled ? "text-foreground" : "text-white [filter:drop-shadow(0_2px_4px_rgba(0,0,0,0.6))]"
             }`}
             aria-label="Menü"
           >

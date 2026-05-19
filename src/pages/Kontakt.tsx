@@ -2,7 +2,6 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
-import LogoMarquee from "@/components/landing/LogoMarquee";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import {
@@ -1925,7 +1924,6 @@ const Kontakt = () => (
       <PageKeyframes />
       <main>
         <Hero />
-        <LogoMarquee compact variant="cream" />
         <DreiKontaktwege />
         <KontaktformularSection />
         <AntwortzeitenHeatmap />
