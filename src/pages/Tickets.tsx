@@ -78,8 +78,8 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Tickets", "für"];
-const HEADLINE_ITALIC = ["deine", "Magie."];
+const HEADLINE_SANS = ["Tickets", "zur"];
+const HEADLINE_ITALIC = ["Tour", "2026."];
 
 const BOKEH = [
   { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },

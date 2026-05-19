@@ -106,8 +106,8 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Magie", "zwischen"];
-const HEADLINE_ITALIC = ["Ja-Wort", "und", "Mitternacht."];
+const HEADLINE_SANS = ["Zauberer", "für"];
+const HEADLINE_ITALIC = ["eure", "Hochzeit."];
 
 // Bokeh — warme Kerzenlicht-Partikel, identisch zu Magic Dinner
 const BOKEH = [

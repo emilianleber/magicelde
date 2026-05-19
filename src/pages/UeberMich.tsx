@@ -64,8 +64,8 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Zwischen", "Zwölf"];
-const HEADLINE_ITALIC = ["und", "Heute."];
+const HEADLINE_SANS = ["Emilian", "Leber."];
+const HEADLINE_ITALIC = ["Zauberkünstler."];
 
 const BOKEH = [
   { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },

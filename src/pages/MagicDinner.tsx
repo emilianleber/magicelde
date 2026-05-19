@@ -154,8 +154,8 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Zwischen", "Vorspeise", "und", "Dessert"];
-const HEADLINE_ITALIC = ["verschwindet", "die", "Zeit."];
+const HEADLINE_SANS = ["Magic", "Dinner"];
+const HEADLINE_ITALIC = ["zwischen", "den", "Gängen."];
 
 // Bokeh — warme Kerzenlicht-Partikel, langsam driftend
 const BOKEH = [

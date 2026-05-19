@@ -75,8 +75,8 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Eine", "Adresse."];
-const HEADLINE_ITALIC = ["Ein", "Auftritt."];
+const HEADLINE_SANS = ["Event-Agentur-", "Partner."];
+const HEADLINE_ITALIC = ["Schnellangebot", "in", "8", "h."];
 
 const BOKEH = [
   { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },

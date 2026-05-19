@@ -71,7 +71,7 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Magie", "mit"];
+const HEADLINE_SANS = ["Comedy-Zauberei", "mit"];
 const HEADLINE_ITALIC = ["Pointe."];
 
 const BOKEH = [

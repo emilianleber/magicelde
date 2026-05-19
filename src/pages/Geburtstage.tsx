@@ -87,8 +87,8 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Wenn", "Oma"];
-const HEADLINE_ITALIC = ["wieder", "lacht."];
+const HEADLINE_SANS = ["Geburtstag", "mit"];
+const HEADLINE_ITALIC = ["Magie", "&", "Pointe."];
 
 const BOKEH = [
   { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },

@@ -69,8 +69,8 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Karten", "in"];
-const HEADLINE_ITALIC = ["euren", "Händen."];
+const HEADLINE_SANS = ["Close-Up", "Zauberer"];
+const HEADLINE_ITALIC = ["in", "euren", "Händen."];
 
 const BOKEH = [
   { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
