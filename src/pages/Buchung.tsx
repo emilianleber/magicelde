@@ -1,10 +1,54 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 import ProcessSteps from "@/components/landing/ProcessSteps";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Shield, Clock, Star, Building2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
+/* Show-Planer / Stadt-Seiten → Buchung-Prefill-Mapping */
+const ANLASS_MAP: Record<string, string> = {
+  hochzeit: "hochzeit",
+  firma: "firmenfeier",
+  firmenfeier: "firmenfeier",
+  geburtstag: "geburtstag",
+  gala: "gala",
+  messe: "messe",
+  privat: "sonstiges",
+  sonstiges: "sonstiges",
+  "magic-dinner": "magic-dinner",
+  magicdinner: "magic-dinner",
+};
+const FORMAT_MAP: Record<string, string> = {
+  closeup: "closeup",
+  "close-up": "closeup",
+  buehne: "buehnenshow",
+  buehnenshow: "buehnenshow",
+  dinner: "magic_dinner",
+  "magic-dinner": "magic_dinner",
+  moderation: "moderation",
+  kombination: "kombination",
+  unsicher: "unsicher",
+  "weiss-nicht": "unsicher",
+};
+const GAESTE_MAP: Record<string, number> = {
+  klein: 25,
+  mittel: 60,
+  gross: 150,
+  xl: 300,
+};
+
+function buildPrefillNotes(p: URLSearchParams, existing: string): string {
+  const parts: string[] = [];
+  if (existing) parts.push(existing);
+  const ton = p.get("ton");
+  const dauer = p.get("dauer");
+  const budget = p.get("budget");
+  if (ton) parts.push(`Tonalität: ${ton}.`);
+  if (dauer) parts.push(`Gewünschte Dauer: ${dauer}.`);
+  if (budget) parts.push(`Budget-Range: ${budget}.`);
+  return parts.join(" ");
+}
 
 const HeroBuchung = () => (
   <section className="relative min-h-[50vh] flex flex-col justify-center overflow-hidden">
@@ -57,10 +101,35 @@ const HeroBuchung = () => (
 const FormSection = () => {
   const { ref, isVisible } = useScrollReveal();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  // Show-Planer / Stadt-Seite Prefill
+  const prefill = useMemo(() => {
+    const fullName = (searchParams.get("name") || "").trim();
+    const [vorname, ...rest] = fullName.split(/\s+/);
+    const nachname = rest.join(" ");
+    const anlassRaw = (searchParams.get("anlass") || "").toLowerCase();
+    const formatRaw = (searchParams.get("format") || "").toLowerCase();
+    const gaesteRaw = (searchParams.get("gaeste") || "").toLowerCase();
+    const gaesteFromBucket = GAESTE_MAP[gaesteRaw];
+    const gaesteNum = gaesteRaw && !gaesteFromBucket && /^\d+$/.test(gaesteRaw) ? Number(gaesteRaw) : gaesteFromBucket;
+    return {
+      vorname: vorname || "",
+      nachname: nachname || "",
+      email: searchParams.get("email") || "",
+      phone: searchParams.get("phone") || "",
+      ort: searchParams.get("ort") || "",
+      anlass: ANLASS_MAP[anlassRaw] || "",
+      format: FORMAT_MAP[formatRaw] || "",
+      gaeste: gaesteNum ? String(gaesteNum) : "",
+      datum: searchParams.get("datum") || "",
+      nachricht: buildPrefillNotes(searchParams, searchParams.get("notizen") || ""),
+    };
+  }, [searchParams]);
 
   const inputCls =
     "w-full rounded-2xl bg-muted/50 border-0 px-5 py-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all";
@@ -150,6 +219,15 @@ const FormSection = () => {
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
+          {(prefill.email || prefill.anlass || prefill.format) && (
+            <div className="mb-6 px-5 py-3.5 rounded-2xl bg-accent/10 border border-accent/20 text-sm text-foreground/80 flex items-start gap-3">
+              <Star className="w-4 h-4 text-accent mt-0.5 shrink-0" />
+              <span>
+                Deine Show-Planer-Antworten sind unten schon vorbefüllt — schau
+                kurz drüber, ergänze Name + Datum, und ab geht's.
+              </span>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-[100px_1fr_1fr] sm:grid-cols-[120px_1fr_1fr_1fr] gap-3 sm:gap-5">
               <select
@@ -167,6 +245,7 @@ const FormSection = () => {
                 name="vorname"
                 placeholder="Vorname *"
                 required
+                defaultValue={prefill.vorname}
                 className={inputCls}
               />
               <input
@@ -174,6 +253,7 @@ const FormSection = () => {
                 name="nachname"
                 placeholder="Nachname *"
                 required
+                defaultValue={prefill.nachname}
                 className={inputCls}
               />
               <input
@@ -181,6 +261,7 @@ const FormSection = () => {
                 name="email"
                 placeholder="E-Mail *"
                 required
+                defaultValue={prefill.email}
                 className={`${inputCls} col-span-2 sm:col-span-1`}
               />
             </div>
@@ -200,6 +281,7 @@ const FormSection = () => {
                 type="tel"
                 name="phone"
                 placeholder="Telefon (optional)"
+                defaultValue={prefill.phone}
                 className={inputCls}
               />
             </div>
@@ -209,7 +291,7 @@ const FormSection = () => {
                 name="anlass"
                 required
                 className={inputCls}
-                defaultValue=""
+                defaultValue={prefill.anlass}
               >
                 <option value="" disabled>
                   Anlass wählen *
@@ -232,6 +314,7 @@ const FormSection = () => {
                 type="date"
                 name="datum"
                 placeholder="Wunschdatum"
+                defaultValue={prefill.datum}
                 className={`${inputCls} min-h-[52px]`}
                 onFocus={(e) => { try { (e.target as any).showPicker?.(); } catch {} }}
               />
@@ -242,6 +325,7 @@ const FormSection = () => {
                 type="text"
                 name="ort"
                 placeholder="Ort / Location"
+                defaultValue={prefill.ort}
                 className={inputCls}
               />
               <input
@@ -249,11 +333,12 @@ const FormSection = () => {
                 name="gaeste"
                 placeholder="Anzahl Gäste (ca.)"
                 min="1"
+                defaultValue={prefill.gaeste}
                 className={inputCls}
               />
             </div>
 
-            <select name="format" className={inputCls} defaultValue="">
+            <select name="format" className={inputCls} defaultValue={prefill.format}>
               <option value="" disabled>
                 Gewünschtes Format
               </option>
@@ -269,6 +354,7 @@ const FormSection = () => {
               name="nachricht"
               placeholder="Erzähl mir von deinem Event — was wünscht du dir? Was ist der Anlass? Gibt es besondere Vorstellungen?"
               rows={5}
+              defaultValue={prefill.nachricht}
               className={inputCls + " resize-none"}
             />
 
