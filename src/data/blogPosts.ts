@@ -819,6 +819,188 @@ export const blogPosts: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: "ploetzlich-magie-premiere-regensburg",
+    title: "Plötzlich Magie — Premierenbericht",
+    titleAccent: "22. Februar, Alte Mälzerei.",
+    excerpt:
+      "Premiere von [Plötzlich Magie — Magic Meets Comedy] in der Alten Mälzerei Regensburg. Was im Saal passiert ist, was vor und hinter dem Vorhang lief — und warum die 90 Minuten anders waren als alles davor.",
+    category: "Tour",
+    tags: [
+      "Plötzlich Magie",
+      "Premiere",
+      "Regensburg",
+      "Alte Mälzerei",
+      "Tour 2026",
+    ],
+    date: "2026-02-23",
+    readTime: "6 Min.",
+    words: 480,
+    author: EMILIAN,
+    cover: "buehne-zuschauer",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "22. Februar 2026, Alte Mälzerei Regensburg, 20:00 Uhr. Der Saal ist voll — und ich stehe sieben Meter dahinter im Backstage-Gang und höre, wie zum ersten Mal eine eigene abendfüllende Show vor einem zahlenden Publikum aufgeführt wird.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Vor zwei Jahren war das eine Idee auf einem Notizbuchblatt. Heute Abend ist es 90 Minuten Programm mit Pause, Lichtcues, Soundeinspielern und einem Saal mit über 300 Plätzen.",
+      },
+      {
+        type: "heading",
+        text: "Was vor dem Vorhang passierte",
+        id: "vor-dem-vorhang",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Tagesablauf: 09:00 Anlieferung. 11:00 Bühnenaufbau. 14:00 Soundcheck. 17:00 Tech-Rehearsal mit kompletter Licht- und Soundsequenz. 19:00 Garderobe und zwanzig Minuten Stille. 19:30 Einlass. 20:00 Saallicht aus.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Ich habe lange überlegt, ob ich vor der Show noch mit Gästen reden soll. Dagegen entschieden. Es geht nicht um den Mensch hinter der Bühne. Es geht um den Moment, in dem das Licht ausgeht und der erste Satz fällt.",
+      },
+      {
+        type: "heading",
+        text: "Die 90 Minuten",
+        id: "show",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Erster Akt: ein Mentalstück mit drei Zuschauern, dann eine Comedy-Sequenz, die das Publikum auf der Schiene hatte. Pause kurz vor dem ersten echten Tiefpunkt — bewusst. In der Pause hört man, wie im Foyer Leute über das eben Gesehene streiten. Genau das war das Ziel.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Zweiter Akt: ein längeres Stück mit Brief und Umschlag. Vorhersage des kompletten Abends, geschrieben am Morgen, vor allen Augen verschlossen. Auflösung im Finale. Standing Ovation. Ich habe es nicht erwartet — die Show ist neu und ich hatte gerechnet, dass irgendwo etwas knirschen würde.",
+      },
+      {
+        type: "quote",
+        text:
+          "Es war keine Zaubershow. Es war ein Abend. Und das ist viel mehr.",
+        attribution: "Gast nach der Premiere",
+      },
+      {
+        type: "heading",
+        text: "Was ich gelernt habe",
+        id: "lernen",
+      },
+      {
+        type: "list",
+        items: [
+          "Der erste Satz entscheidet, ob das Publikum mitgeht — die ersten 90 Sekunden sind die Show.",
+          "Eine Pause ist kein Loch — sie ist ein Programmpunkt mit eigener Dramaturgie.",
+          "Standing Ovation entsteht nicht durch das beste Stück, sondern durch den letzten gemeinsam empfundenen Atemzug.",
+          "Backstage-Stille vor der Show ist mehr wert als jede zusätzliche Probe.",
+        ],
+      },
+      {
+        type: "callout",
+        eyebrow: "Ehrlich.",
+        text:
+          "Eine eigene abendfüllende Show ist ein anderes Tier als ein Sieben-Minuten-Wettbewerbsbeitrag. Sie verlangt Ausdauer, Dramaturgie und Mut zur Pause. Das lernt man nicht in Proben — nur in echten Vorstellungen.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Die nächsten Tour-Stops folgen ab April. Wer in Regensburg dabei war, soll mir gerne schreiben — Eindrücke nehme ich auf, baue sie ein, mache die Show besser. Premiere ist nie das Ende. Premiere ist Material für die zweite Show.",
+      },
+    ],
+  },
+  {
+    slug: "tva-interview-erstes-tv",
+    title: "Erstes TV-Interview mit 16",
+    titleAccent: "TVA, ein Aufnahmestudio in Regensburg.",
+    excerpt:
+      "Zwei Kameras, ein Moderator, fünfzehn Minuten Sendezeit. Wie sich das erste TV-Interview als Sechzehnjähriger anfühlt — und was ich daraus für jede Bühne gelernt habe.",
+    category: "Hinter den Kulissen",
+    tags: [
+      "TVA",
+      "TV-Auftritt",
+      "Interview",
+      "Behind the Scenes",
+      "Medien",
+    ],
+    date: "2024-11-08",
+    readTime: "4 Min.",
+    words: 360,
+    author: EMILIAN,
+    cover: "portrait-karten",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Ich bin sechzehn. Geboren 2008. Drei Tage vorher kam die Anfrage vom TVA-Regionalsender: ob ich für ein Interview Zeit hätte, Donnerstagnachmittag, Aufnahmestudio in Regensburg. Antwort: ja, natürlich.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Was ich nicht wusste: dass dieser Donnerstagnachmittag der Tag war, an dem mir zum ersten Mal klar wurde, dass eine Kamera ein anderes Tier ist als ein Saal voller Menschen.",
+      },
+      {
+        type: "heading",
+        text: "Was vor der Aufnahme passierte",
+        id: "vorbereitung",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Studio-Setting: zwei Kameras, ein Sessel, Moderator gegenüber, ein kleiner Tisch zwischen uns für eine Live-Demonstration. Tonkontrolle. Lichteinstellung. Make-up, weil das Studio-Licht so kalt ist, dass man ohne aussieht wie ein Ferienlager-Foto.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Zwei Minuten vor der Aufnahme war ich kurz nervös. Nicht wegen der Fragen — die hatten wir vorab abgesprochen. Sondern wegen der Stille zwischen Frage und Antwort. Im Saal kann man die Stille füllen mit Bewegung. Im Studio nicht. Da wird sie zur Sendezeit.",
+      },
+      {
+        type: "heading",
+        text: "Die fünfzehn Minuten",
+        id: "interview",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Drei Themenblöcke: Werdegang, Talents-of-Magic, Pläne für 2025. Dazwischen eine Live-Routine — eine kleine Kartensequenz, die ich seit Jahren mache und die kameratauglich ist. Sie funktionierte. Der Moderator war ehrlich überrascht, die Kameraführung zoomte rechtzeitig — es lief.",
+      },
+      {
+        type: "quote",
+        text:
+          "Im Saal gewinnst du das Publikum durch Energie. Im Studio gewinnst du es durch Ruhe.",
+      },
+      {
+        type: "heading",
+        text: "Was ich danach mitnahm",
+        id: "lernen",
+      },
+      {
+        type: "list",
+        items: [
+          "Eine Kamera braucht weniger Gestik als ein Saal — die Hälfte reicht.",
+          "Pausen sind im Fernsehen länger erlaubt als gefühlt — drei Sekunden Stille sind sieben Sekunden Spannung.",
+          "Vorher absprechen, was Live-Trick und was Gespräch ist — niemand will Improvisations-Magie vor zwei Kameras.",
+          "Studio-Make-up gehört dazu, auch wenn es sich anfangs falsch anfühlt.",
+        ],
+      },
+      {
+        type: "callout",
+        eyebrow: "Erkenntnis.",
+        text:
+          "Jede Bühne hat ihre eigene Lautstärke. Wer nicht hinhört, spielt zu groß oder zu klein. TV war meine erste Lektion in dieser Lautstärke-Frage.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Das Interview lief im Spätprogramm. Meine Mutter hat es zweimal angesehen. Mein Vater hat es weitergeschickt. Und ich habe verstanden, dass das nicht der Höhepunkt war — sondern der Anfang einer anderen Art, mit Bühne umzugehen.",
+      },
+    ],
+  },
 ];
 
 export const FEATURED_SLUG = "zauberer-fuer-hochzeit-auswaehlen";

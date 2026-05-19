@@ -108,7 +108,7 @@ const ShowPlanerTrigger = () => {
       {/* Resume-Banner — unten links */}
       {showResume && !open && (
         <div
-          className="fixed bottom-5 left-5 md:bottom-7 md:left-7 z-40 max-w-sm rounded-2xl p-5 text-white animate-fade-up"
+          className="fixed bottom-[calc(4rem+1.5rem)] right-5 md:bottom-[calc(5rem+1.5rem)] md:right-7 z-40 w-[min(94vw,360px)] rounded-2xl p-5 text-white animate-fade-up"
           style={{
             background: `linear-gradient(155deg, ${ACCENT_DEEP}, #08060c)`,
             boxShadow: "0 30px 60px -20px rgba(40,20,40,0.55)",

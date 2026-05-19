@@ -98,7 +98,7 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Magie", "für"];
+const HEADLINE_SANS = ["Zauberer", "für"];
 const HEADLINE_ITALIC = ["euren", "Abend."];
 
 const BOKEH = [
