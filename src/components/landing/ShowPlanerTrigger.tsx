@@ -36,7 +36,12 @@ const ShowPlanerTrigger = () => {
       setDraftStep(draft.step);
       // verzögert zeigen, damit Page erst rendert
       const t = window.setTimeout(() => setShowResume(true), 1200);
-      return () => window.clearTimeout(t);
+      // Auto-dismiss nach 14s damit Content nicht permanent blockiert
+      const t2 = window.setTimeout(() => setShowResume(false), 16000);
+      return () => {
+        window.clearTimeout(t);
+        window.clearTimeout(t2);
+      };
     }
   }, []);
 
@@ -108,7 +113,7 @@ const ShowPlanerTrigger = () => {
       {/* Resume-Banner — unten links */}
       {showResume && !open && (
         <div
-          className="fixed bottom-[calc(4rem+1.5rem)] right-5 md:bottom-[calc(5rem+1.5rem)] md:right-7 z-40 w-[min(94vw,360px)] rounded-2xl p-5 text-white animate-fade-up"
+          className="fixed bottom-[calc(4rem+1.25rem)] right-5 md:bottom-[calc(4.5rem+1.25rem)] md:right-7 z-40 w-[min(92vw,320px)] rounded-2xl p-4 text-white animate-fade-up"
           style={{
             background: `linear-gradient(155deg, ${ACCENT_DEEP}, #08060c)`,
             boxShadow: "0 30px 60px -20px rgba(40,20,40,0.55)",
