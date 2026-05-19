@@ -1,522 +1,1161 @@
 import { useParams, Navigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useEffect, useMemo, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
-import BookingCTA from "@/components/landing/BookingCTA";
-import { blogPosts } from "@/data/blogPosts";
-import { ArrowLeft } from "lucide-react";
-import heroImg from "@/assets/hero-magic.jpg";
-import stageImg from "@/assets/stage-show.jpg";
+import {
+  blogPosts,
+  getRelatedPosts,
+  type BlogPost,
+  type BlogSection,
+} from "@/data/blogPosts";
+import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  Clock,
+  Feather,
+  Mail,
+  Quote,
+  Share2,
+  Sparkles,
+  Star,
+  Tag,
+} from "lucide-react";
+
+import weddingImg from "@/assets/wedding-magic.jpg";
+import dinnerHeroImg from "@/assets/hero-dinner.jpg";
+import dinnerBookImg from "@/assets/magicdinner-book.jpg";
+import dinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
+import dinnerEmilianImg from "@/assets/emilian-magic-dinner.jpg";
+import stageHeroImg from "@/assets/hero-stage.jpg";
+import stageShowImg from "@/assets/stage-show.jpg";
+import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
+import buehneDpsgImg from "@/assets/buehne-dpsg.jpg";
 import closeupImg from "@/assets/closeup.jpg";
-import dinnerImg from "@/assets/hero-dinner.jpg";
-import audienceImg from "@/assets/staunen.jpg";
+import closeupHeroImg from "@/assets/hero-closeup.jpg";
+import magicImg from "@/assets/hero-magic.jpg";
 import firmenfeierImg from "@/assets/hero-firmenfeier-stock.jpg";
-import hochzeitImg from "@/assets/wedding-magic.jpg";
+import audienceImg from "@/assets/audience-reactions.jpg";
+import staunenImg from "@/assets/staunen.jpg";
 import haendeImg from "@/assets/haende-interaktion.jpg";
-import heroStageImg from "@/assets/hero-stage.jpg";
-import audienceReactionsImg from "@/assets/audience-reactions.jpg";
+import emotionenImg from "@/assets/emotionen.jpg";
+import portraitKartenImg from "@/assets/portrait-karten.jpg";
+import portraitBuchImg from "@/assets/emilian-portrait-buch.jpg";
+import portraitImg from "@/assets/magician-portrait.jpg";
+import schneiderImg from "@/assets/schneider-weisse-closeup.jpg";
 
-const blogImages: Record<string, string> = {
-  "warum-zauberkunst-event-unvergesslich-macht": audienceImg,
-  "magic-dinner-was-gaeste-begeistert": dinnerImg,
-  "close-up-oder-buehnenshow-welches-konzept": closeupImg,
-  "warum-comedy-magie-besser-funktioniert": heroImg,
-  "zauberer-hochzeit-tipps": stageImg,
-  "firmenfeier-entertainment-ideen": closeupImg,
-  "zauberer-firmenfeier-buchen-2026": stageImg,
-  "hochzeitszauberer-wann-richtig": audienceImg,
-  "zauberer-muenchen-event-tipps": heroImg,
-  "magic-dinner-planen-tipps": dinnerImg,
-  "zauberer-weihnachtsfeier-2026": stageImg,
-  "teamevent-magie-teambuilding": closeupImg,
-  "zauberer-hamburg-event": heroImg,
-  "geburtstag-ideen-erwachsene-zauberer": audienceImg,
-  "close-up-oder-buehnenshow-2026": closeupImg,
-  "zauberer-berlin-entertainment": stageImg,
-  "zauberer-kosten-was-kostet": heroImg,
-  "firmen-gala-planen-tipps": stageImg,
-  "zauberer-koeln-rhein-events": heroImg,
-  "hochzeit-unterhaltung-2026": audienceImg,
-  "sommerfest-ideen-unternehmen-2026": closeupImg,
-  "zauberer-frankfurt-business-events": stageImg,
+const SERIF_ITALIC =
+  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
+const ACCENT = "#9a2640";
+const ACCENT_DEEP = "#5c1622";
+const ACCENT_SOFT = "#e4b8c0";
+
+const COVER_MAP: Record<string, string> = {
+  "wedding-magic": weddingImg,
+  dinner: dinnerHeroImg,
+  "dinner-book": dinnerBookImg,
+  "dinner-buehne": dinnerBuehneImg,
+  "dinner-emilian": dinnerEmilianImg,
+  stage: stageHeroImg,
+  "stage-show": stageShowImg,
+  "buehne-zuschauer": buehneZuschauerImg,
+  "buehne-dpsg": buehneDpsgImg,
+  closeup: closeupHeroImg,
+  magic: magicImg,
+  firmenfeier: firmenfeierImg,
+  haende: haendeImg,
+  audience: audienceImg,
+  staunen: staunenImg,
+  emotionen: emotionenImg,
+  "portrait-karten": portraitKartenImg,
+  "portrait-buch": portraitBuchImg,
+  portrait: portraitImg,
+  schneider: schneiderImg,
+};
+const coverImg = (key: string) => COVER_MAP[key] ?? magicImg;
+
+const formatDate = (iso: string) => {
+  const d = new Date(iso);
+  return d.toLocaleDateString("de-DE", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
 };
 
-const blogMidImages: Record<string, string> = {
-  "warum-zauberkunst-event-unvergesslich-macht": heroStageImg,
-  "magic-dinner-was-gaeste-begeistert": heroImg,
-  "close-up-oder-buehnenshow-welches-konzept": haendeImg,
-  "warum-comedy-magie-besser-funktioniert": audienceReactionsImg,
-  "zauberer-hochzeit-tipps": hochzeitImg,
-  "firmenfeier-entertainment-ideen": firmenfeierImg,
-  "zauberer-firmenfeier-buchen-2026": firmenfeierImg,
-  "hochzeitszauberer-wann-richtig": hochzeitImg,
-  "zauberer-muenchen-event-tipps": firmenfeierImg,
-  "magic-dinner-planen-tipps": heroImg,
-  "zauberer-weihnachtsfeier-2026": firmenfeierImg,
-  "teamevent-magie-teambuilding": haendeImg,
-  "zauberer-hamburg-event": heroStageImg,
-  "geburtstag-ideen-erwachsene-zauberer": heroImg,
-  "close-up-oder-buehnenshow-2026": haendeImg,
-  "zauberer-berlin-entertainment": heroStageImg,
-  "zauberer-kosten-was-kostet": audienceReactionsImg,
-  "firmen-gala-planen-tipps": firmenfeierImg,
-  "zauberer-koeln-rhein-events": heroStageImg,
-  "hochzeit-unterhaltung-2026": hochzeitImg,
-  "sommerfest-ideen-unternehmen-2026": haendeImg,
-  "zauberer-frankfurt-business-events": firmenfeierImg,
+const categoryToFormatPath: Record<string, string> = {
+  Hochzeit: "/hochzeit",
+  Firmenfeiern: "/firmenfeiern",
+  "Magic Dinner": "/magic-dinner",
+  Tour: "/tickets",
+  Buchung: "/buchung",
+  "Hinter den Kulissen": "/ueber-mich",
+  Hintergrund: "/buehnenshow",
 };
 
-const blogContent: Record<string, string[]> = {
-  "warum-zauberkunst-event-unvergesslich-macht": [
-    "Es gibt Events, die gut sind. Professionell organisiert, schöne Location, gutes Essen. Und dann gibt es Events, über die man noch Wochen später spricht. Der Unterschied? Ein Erlebnis, das Emotionen weckt.",
-    "Moderne Zauberkunst ist genau dieses Erlebnis. Nicht der verstaubte Zylinder-und-Kaninchen-Klischee-Moment, sondern eine interaktive, humorvolle und verblüffende Performance, die Menschen verbindet.",
-    "Warum Staunen so mächtig ist: Neurowissenschaftler haben herausgefunden, dass Momente des Staunens — sogenannte ‚Awe-Momente' — besonders tiefe Erinnerungen erzeugen. Wenn unser Gehirn etwas erlebt, das es nicht erklären kann, speichert es diesen Moment mit besonderer Intensität.",
-    "Genau das passiert bei guter Zauberkunst. Dein Gast hält eine Karte in der Hand, die plötzlich verschwindet. Oder eine geliehene Münze taucht im unmöglichsten Moment an einem unmöglichen Ort auf. Das Gehirn sagt: ‚Das kann nicht sein' — und genau deshalb vergisst man es nie.",
-    "Der soziale Faktor: Zauberkunst passiert nicht im Vakuum. Sie passiert zwischen Menschen. Close-Up Magie, also Magie direkt bei den Gästen, schafft sofort Gesprächsstoff. ‚Hast du das gesehen?!' — diesen Satz hört man auf Events mit Zauberer ständig.",
-    "Für Firmenfeiern bedeutet das: Networking passiert automatisch. Für Hochzeiten: Gäste, die sich nicht kennen, haben sofort ein gemeinsames Erlebnis. Für Geburtstage: Der Abend bekommt einen klaren Höhepunkt.",
-    "Die Emotionskombination macht den Unterschied: Comedy-Magie — also die Verbindung aus Humor und Verblüffung — erzeugt zwei Emotionen gleichzeitig: Lachen und Staunen. Studien zeigen, dass Erlebnisse mit multiplen positiven Emotionen bis zu dreimal länger im Gedächtnis bleiben.",
-    "Das ist der Grund, warum ein guter Zauberer auf einem Event mehr Eindruck hinterlässt als eine Band, ein DJ oder ein Redner. Nicht weil diese schlecht wären — sondern weil Magie eine einzigartige emotionale Tiefe erzeugt.",
-    "Was einen guten Event-Zauberer ausmacht: Er passt sich an. An die Gruppe, die Stimmung, den Anlass. Er spürt, wann der richtige Moment ist. Er unterhält, ohne aufzudrängen. Und er schafft Erinnerungen, die bleiben.",
-    "Fazit: Wenn du ein Event planst und willst, dass es nicht nur gut, sondern unvergesslich wird — dann investiere in ein Erlebnis. Zauberkunst ist nicht nur Unterhaltung. Es ist der emotionale Anker, an den sich deine Gäste noch Jahre erinnern werden.",
-  ],
-  "magic-dinner-was-gaeste-begeistert": [
-    "Ein Magic Dinner klingt auf den ersten Blick simpel: Man geht essen, und zwischendurch wird gezaubert. Doch wer ein Magic Dinner erlebt hat, weiß: Es ist eine völlig andere Erfahrung als ein normales Dinner oder eine normale Zaubershow.",
-    "Das Konzept: Ein mehrgängiges Dinner, bei dem zwischen den Gängen ein Zauberer zu jedem Tisch kommt. Die Magie passiert direkt in den Händen der Gäste — persönlich, interaktiv, absolut verblüffend. Kein Bühnenabstand, keine Zuschauer-Performer-Trennung.",
-    "Warum das Format so gut funktioniert: Die genialste Idee beim Magic Dinner ist die Nutzung der Wartezeit. Zwischen den Gängen passiert normalerweise nichts — man wartet, plaudert, schaut aufs Handy. Beim Magic Dinner wird genau diese Zeit zum Highlight.",
-    "Die Psychologie dahinter: Wartezeit fühlt sich kürzer an, wenn sie mit positiven Erlebnissen gefüllt wird. Die Gäste sind bereits in einer guten Stimmung (gutes Essen, angenehme Gesellschaft) — und die Magie verstärkt diese positive Grundstimmung exponentiell.",
-    "Was Gäste wirklich begeistert: Es ist nicht der einzelne Trick. Es ist die Kombination aus Nähe, Überraschung und Interaktion. Die Magie passiert buchstäblich in den eigenen Händen. Man ist nicht Zuschauer, sondern Beteiligter. Und genau das macht den Unterschied.",
-    "Das Tischerlebnis: Jeder Tisch bekommt sein eigenes Programm. Keine Wiederholungen. Die Gäste an Tisch 3 erleben etwas anderes als die an Tisch 7. Und danach tauschen sie sich aus: ‚Was hat er bei euch gemacht?' — ein perfekter Gesprächsstarter.",
-    "Für wen eignet sich ein Magic Dinner? Firmendinner und Incentives, bei denen man Kunden beeindrucken will. Private Feiern, die besonders sein sollen. Hochzeitsdinners, bei denen die Gäste ein gemeinsames Erlebnis brauchen. Teamevents, die anders sein sollen als alle anderen.",
-    "Der Mehrwert gegenüber einer klassischen Show: Bei einer Bühnenshow sitzt das Publikum passiv da und schaut zu. Beim Magic Dinner ist jeder Gast Teil des Geschehens. Die emotionale Wirkung ist dadurch um ein Vielfaches stärker.",
-    "Fazit: Ein Magic Dinner ist nicht einfach ‚Essen plus Zauberei'. Es ist ein durchinszeniertes Erlebnis, bei dem Genuss, Staunen, Lachen und Verbindung zu einem unvergesslichen Abend verschmelzen. Und genau deshalb buchen es immer mehr Veranstalter.",
-  ],
-  "close-up-oder-buehnenshow-welches-konzept": [
-    "Du planst ein Event und überlegst, einen Zauberer zu buchen. Aber welches Format ist das richtige? Close-Up Magie oder Bühnenshow? Die Antwort hängt von deinem Event ab — und beide Formate haben ihre eigenen Stärken.",
-    "Close-Up Magie — das Prinzip: Close-Up Magie (auch Walk-Around oder Tischzauberei genannt) passiert direkt bei den Gästen. Der Zauberer kommt zu den Tischen, zu kleinen Gruppen oder mischt sich beim Empfang unter die Gäste. Die Magie geschieht hautnah — in den Händen der Zuschauer.",
-    "Stärken von Close-Up: Intimität und Nähe erzeugen eine besonders starke emotionale Wirkung. Perfekt als Eisbrecher bei Empfängen und Networking-Events. Flexibel einsetzbar — kein Bühnenbedarf, keine Technik nötig. Funktioniert bei jeder Gruppengröße, von 10 bis 500 Gästen.",
-    "Wann Close-Up wählen? Bei Empfängen und Cocktailstunden. Auf Hochzeiten (Sektempfang ist der Klassiker). Bei Firmenveranstaltungen mit Networking-Charakter. Auf Messen und Promotion-Events. Bei Dinners zwischen den Gängen (Magic Dinner).",
-    "Bühnenshow — das Prinzip: Eine Bühnenshow ist eine inszenierte Performance für das gesamte Publikum gleichzeitig. Mit Dramaturgie, Spannungsbogen, Comedy und einem Finale, das im Gedächtnis bleibt. Alle erleben denselben Moment — ein kollektives Erlebnis.",
-    "Stärken der Bühnenshow: Klarer Programmpunkt im Ablauf — einfach planbar. Alle Gäste erleben denselben Wow-Moment. Stärkere Dramaturgie mit Höhepunkten und Finale möglich. Ideal als Abend-Highlight oder Überraschungsmoment.",
-    "Wann Bühnenshow wählen? Bei Firmen-Galas und Jubiläumsfeiern. Als Programm-Highlight bei Hochzeiten. Auf Weihnachtsfeiern. Bei Award-Verleihungen als Rahmenprogramm. Bei Veranstaltungen mit 50+ Gästen.",
-    "Die Profi-Empfehlung — Kombiniert beides! Die beste Lösung für viele Events: Close-Up beim Empfang als Eisbrecher und Stimmungsmacher. Bühnenshow als Höhepunkt des Abends für alle. So bekommt jeder Gast sein persönliches Erlebnis UND den großen gemeinsamen Moment.",
-    "Kosten und Dauer im Vergleich: Close-Up: typischerweise 30–90 Minuten, ideal für Empfang und Dinner. Bühnenshow: 15–60 Minuten, perfekt als zentraler Programmpunkt. Kombination: Das Rundum-Sorglos-Paket für Events, die keine Kompromisse machen.",
-    "Fazit: Es gibt kein ‚besser' oder ‚schlechter' — nur ‚passend' oder ‚nicht passend'. Die richtige Wahl hängt von eurem Anlass, eurer Gästezahl und eurem Ablauf ab. Im Zweifel: Fragt mich. Ich berate euch ehrlich und finde das perfekte Format für euer Event.",
-  ],
-  "warum-comedy-magie-besser-funktioniert": [
-    "Wenn du an einen Zauberer denkst, hast du wahrscheinlich ein bestimmtes Bild im Kopf: Zylinder, Kaninchen, eine geheimnisvolle Atmosphäre. Das ist klassische Magie. Und sie hat ihre Berechtigung. Aber auf modernen Events funktioniert ein anderer Ansatz deutlich besser: Comedy-Magie.",
-    "Comedy-Magie verbindet verblüffende Zauberkunst mit cleverem Humor. Das bedeutet: Dein Publikum staunt nicht nur — es lacht gleichzeitig. Und genau diese Kombination ist der Gamechanger, weil sie eine emotionale Doppelwirkung erzeugt.",
-    "Stell dir vor: Ein Gast hält eine Karte in der Hand. Er ist sich absolut sicher, welche es ist. Und dann — passiert etwas Unmögliches. Aber statt einer mysteriösen Stille bricht der ganze Tisch in Gelächter aus, weil die Art, wie es passiert ist, einfach genial witzig war.",
-    "Das ist der Moment, der Menschen verbindet. Nicht der Trick selbst — sondern die gemeinsame Emotion. Lachen und Staunen gleichzeitig.",
-    "Warum funktioniert das auf Events so gut? Drei Gründe: Es bricht das Eis sofort. Es ist für jedes Publikum geeignet. Und es bleibt in Erinnerung.",
-    "Wenn du also ein Event planst und überlegst, welches Entertainment den größten Effekt hat: Setz auf die Kombination aus Staunen und Lachen. Das ist Comedy-Magie.",
-  ],
-  "zauberer-hochzeit-tipps": [
-    "Ihr plant eure Hochzeit und überlegt, ob ein Zauberer das Richtige ist? Hier sind 7 ehrliche Tipps, die euch bei der Entscheidung helfen.",
-    "Tipp 1: Der beste Zeitpunkt ist der Sektempfang. Tipp 2: Plant 30–60 Minuten ein. Tipp 3: Bucht frühzeitig. Tipp 4: Achtet auf den Stil. Tipp 5: Macht es zur Überraschung. Tipp 6: Kombiniert Close-Up und Bühne. Tipp 7: Budget realistisch einplanen.",
-    "Ein professioneller Hochzeitszauberer kostet je nach Umfang zwischen 395€ und 749€+. Es ist das Entertainment, über das eure Gäste noch Monate später reden werden.",
-  ],
-  "firmenfeier-entertainment-ideen": [
-    "Die jährliche Firmenfeier steht an und ihr sucht nach Entertainment, das wirklich etwas bewirkt?",
-    "Das Problem mit klassischem Entertainment: Band oder DJ kennt jeder. Redner inspirieren kurz. Was fehlt? Ein Format, das Menschen wirklich zusammenbringt.",
-    "Magie als Networking-Booster: Magie ist der effektivste Gesprächsstarter, der existiert.",
-    "Der ROI von gutem Entertainment: Mitarbeiter, die einen unvergesslichen Abend hatten, fühlen sich wertgeschätzt. Kunden, die beeindruckt wurden, kommen gerne wieder.",
-  ],
-  "zauberer-firmenfeier-buchen-2026": [
-    "Die Firmenfeier ist einer der wichtigsten Abende des Jahres. Mitarbeiter, Kunden, Partner — alle kommen zusammen. Und was alle mitnehmen sollen: das Gefühl, dass dieser Abend anders war als alle anderen davor.",
-    "Warum ein Zauberer auf der Firmenfeier? Weil Magie etwas schafft, das kein anderes Entertainment kann: Sie passiert direkt bei den Gästen, schafft sofort Gesprächsstoff und verbindet Menschen, die sich noch nie gesehen haben — in Sekunden.",
-    "Was 2026 bei der Buchung wichtig ist: Die besten Event-Zauberer sind oft Monate im Voraus ausgebucht. Besonders im zweiten Halbjahr, wenn Weihnachtsfeiern und Jahresendevents anstehen, ist die Nachfrage enorm. Früh planen lohnt sich.",
-    "Das richtige Format wählen: Für Firmenfeiern gibt es im Wesentlichen drei Formate. Close-Up Magie beim Empfang — der perfekte Eisbrecher. Bühnenshow als zentraler Programmpunkt — alle erleben denselben Wow-Moment. Oder die Kombination aus beidem.",
-    "Auf die Qualität achten: Ein professioneller Zauberer für Firmenveranstaltungen hat Erfahrung mit verschiedenen Unternehmensgrößen und -kulturen. Er ist pünktlich, professionell und passt sein Programm an eure Zielgruppe an.",
-    "Referenzen prüfen: Fragt nach Video-Material und Kundenbewertungen. Ein seriöser Zauberer kann beides vorweisen. ProvenExpert, Google Reviews oder direkte Referenzen von anderen Unternehmen geben Sicherheit.",
-    "Das Budget realistisch einplanen: Qualität hat ihren Preis. Ein erfahrener Zauberer für Firmenfeiern kostet entsprechend — aber der Effekt auf eure Gäste ist messbar. Wer günstig bucht, riskiert Unprofessionalität an dem Abend, der am meisten zählt.",
-    "Organisatorische Details klären: Braucht der Zauberer eine Bühne? Einen Technik-Check im Vorfeld? Wie viele Gäste werden da sein? Je mehr Details ihr im Vorfeld klärt, desto reibungsloser läuft der Abend.",
-    "Fazit: Ein Zauberer auf der Firmenfeier ist 2026 kein Luxus — er ist das Entertainment, das euren Abend von gut zu unvergesslich macht. Plant frühzeitig, achtet auf Qualität und klärt die Details im Vorfeld. Dann wird der Abend genau das, was er sein soll.",
-  ],
-  "hochzeitszauberer-wann-richtig": [
-    "Ihr plant eure Hochzeit und überlegt, wann und wie ein Zauberer am besten eingesetzt werden soll? Das ist eine sehr gute Frage — denn das Timing entscheidet darüber, ob der Auftritt ein Highlight oder ein Fremdkörper im Ablauf wird.",
-    "Option 1: Der Sektempfang — der Klassiker. Der Sektempfang ist der beste Zeitpunkt für Close-Up Magie. Die Gäste stehen in kleinen Gruppen, reden, trinken. Genau hier ist ein Zauberer Gold wert: Er geht von Gruppe zu Gruppe, zeigt verblüffende Magie direkt in den Händen der Gäste und schafft sofort Gesprächsstoff.",
-    "Warum der Sektempfang ideal ist: In dieser Phase der Hochzeit sind die Gäste noch nicht sesshaft. Sie mingling, lernen sich kennen, suchen nach Gesprächsthemen. Ein Zauberer gibt ihnen dieses Thema — und zwar sofort. ‚Habt ihr das gerade gesehen?!' verbindet in Sekunden.",
-    "Option 2: Zwischen den Gängen beim Dinner. Ein Zauberer, der während des Dinners von Tisch zu Tisch geht, schafft das Magic-Dinner-Erlebnis. Jeder Tisch bekommt sein eigenes kleines Programm — persönlich, überraschend und direkt bei den Gästen.",
-    "Option 3: Die Bühnenshow als Abend-Highlight. Nach dem Dinner, wenn alle satt und entspannt sind und der erste Tanzteil noch nicht begonnen hat — das ist der perfekte Moment für eine 20–30-minütige Comedy-Zaubershow. Die Gäste sitzen beieinander, die Stimmung ist gut und alle erleben denselben großen Wow-Moment.",
-    "Die Kombination, die wirklich funktioniert: Close-Up beim Sektempfang als Eisbrecher. Bühnenshow nach dem Dinner als Abend-Highlight. So bekommt jeder Gast ein persönliches Erlebnis UND den großen kollektiven Moment.",
-    "Wie früh sollt ihr buchen? Hochzeitszauberer sind sehr gefragt — besonders für Samstage von Mai bis Oktober. Mindestens 6 Monate Vorlauf sind empfehlenswert, ein Jahr im Voraus ist für begehrte Termine nicht ungewöhnlich.",
-    "Was ihr vom Zauberer besprechen solltet: Ablaufplan der Hochzeit, Gästezahl, Stil der Feier (klassisch vs. modern), ob Bühne/Technik vorhanden ist und ob Kinder dabei sein werden. Ein guter Zauberer passt sein Programm an all das an.",
-    "Fazit: Der richtige Zeitpunkt für einen Hochzeitszauberer hängt von eurem Ablauf ab. Sektempfang ist der Klassiker, Bühnenshow nach dem Dinner der Höhepunkt. Und wer beides kombiniert, hat den perfekten Hochzeitsabend.",
-  ],
-  "zauberer-muenchen-event-tipps": [
-    "München ist eine der stärksten Event-Städte Deutschlands. Mit dem Oktoberfest, unzähligen Firmensitzen, einer lebendigen Gastronomie und einer riesigen Auswahl an Eventlocations ist die bayerische Landeshauptstadt ein Magnet für Großveranstaltungen aller Art.",
-    "Was eine Münchner Veranstaltung besonders macht: Ob Firmenfeier im Englischen Garten, Hochzeit in der Residenz, Gala im Vier Jahreszeiten oder Teamevent in einer der vielen innovativen Eventlocations rund um die Maximilianstraße — München-Events haben einen besonderen Charakter. Der Anspruch ist hoch, die Gäste sind es gewohnt, Qualität zu erleben.",
-    "Was macht einen guten Zauberer in München aus? Erstens: Professionelle Vorbereitung. Gute Münchner Event-Zauberer kennen die typischen Locations, die Abläufe und die Erwartungen der Gäste. Zweitens: Hochwertige Darbietung. Drittens: Flexibilität — München-Events haben oft straffe Zeitpläne.",
-    "Close-Up beim Münchner Sektempfang: Besonders auf Firmenfeiern und Hochzeiten in München ist Close-Up Magie beim Empfang eine hervorragende Wahl. Die Gäste kommen in kleinen Gruppen an, der Zauberer arbeitet sich durch den Raum und schafft sofort eine lockere Atmosphäre.",
-    "Bühnenshow für Münchner Galas: Bei Veranstaltungen ab 50 Gästen ist eine Comedy-Zaubershow als zentraler Programmpunkt ideal. Sie bietet einen klaren Ablaufpunkt, unterhält das gesamte Publikum gleichzeitig und ist in der Länge gut planbar.",
-    "Beliebte Eventlocations in München: Vom Bayerischen Hof über das Prinzregent-Theater bis zum Augustinerkeller — München hat für jede Veranstaltungsart die passende Location. Bei der Buchung eines Zauberers ist es wichtig zu klären, welche Location gewählt wurde und welche technischen Möglichkeiten dort vorhanden sind.",
-    "Frühzeitig buchen in München: Wegen der hohen Nachfrage — besonders rund ums Oktoberfest und in der Vorweihnachtszeit — sind gute Münchner Event-Zauberer früh ausgebucht. 3–6 Monate Vorlauf sind Minimum.",
-    "Fazit: München-Events haben ein hohes Niveau. Wer hier mit einem Zauberer punkten will, braucht Qualität, Erfahrung und professionelle Vorbereitung. Die Investition lohnt sich — denn Münchner Gäste wissen, was gut ist, und reden darüber.",
-  ],
-  "magic-dinner-planen-tipps": [
-    "Ein Magic Dinner ist das anspruchsvollste — und gleichzeitig wirkungsvollste — Format, das ein Zauberer auf einem Event bieten kann. Dinner und Magie verschmelzen zu einem Erlebnis, das Gäste noch lange nach dem Abend beschäftigt.",
-    "Tipp 1: Die richtige Location wählen. Nicht jede Location ist für ein Magic Dinner geeignet. Ideal sind Räume, bei denen die Tische gut zugänglich sind und der Zauberer zwischen den Gängen ungehindert von Tisch zu Tisch gehen kann. Enge Saalaufstellungen mit engen Gängen erschweren das Format.",
-    "Tipp 2: Die Gästezahl im Blick behalten. Das Magic-Dinner-Format funktioniert am besten bei 20–100 Gästen. Bei größeren Gruppen braucht der Zauberer mehr Zeit, um alle Tische zu besuchen — oder es werden mehrere Durchgänge geplant.",
-    "Tipp 3: Den Ablauf abstimmen. Klär mit dem Zauberer, bei welchem Gang er an welchem Tisch ist. So entsteht ein reibungsloser Ablauf, der weder den Service noch das Programm stört. Ein professioneller Magic-Dinner-Zauberer bringt Erfahrung mit solchen Abstimmungen mit.",
-    "Tipp 4: Keine Ankündigung im Voraus. Das Magic Dinner funktioniert am besten als Überraschung. Wenn die Gäste kommen und plötzlich merken, dass ein Zauberer an ihrem Tisch steht, ist die erste Reaktion ungefiltert — und das ist Gold wert.",
-    "Tipp 5: Hochwertige Magie, keine Tricks. Der Unterschied zwischen einem guten Magic-Dinner-Zauberer und einem mittelmäßigen liegt im Repertoire. Die Magie muss nahe, persönlich und verblüffend sein — nicht nur ‚nett'. Schau dir vorab Videos an.",
-    "Tipp 6: Mehrere Besuche pro Tisch einplanen. Das beste Magic-Dinner-Format: Der Zauberer besucht jeden Tisch zweimal. Einmal für eine kurze Sequenz, und dann für ein etwas längeres Programm. So bekommt jeder Gast genug, aber nichts wird überstrapaziert.",
-    "Tipp 7: Kombination mit Bühnenshow. Zum Abschluss des Dinners eine 15–20-minütige Bühnenshow: Das ist die Krönung eines Magic Dinners. Alle Tische haben jetzt ihre persönlichen Erlebnisse gehabt — und werden nun kollektiv von einer großen Show überrascht.",
-    "Fazit: Ein Magic Dinner ist nichts für mittelmäßiges Entertainment. Es braucht Planung, die richtige Location und einen Zauberer mit echtem Magic-Dinner-Erfahrung. Wenn alles stimmt, ist es das unvergesslichste Abendformat, das du für deine Gäste schaffen kannst.",
-  ],
-  "zauberer-weihnachtsfeier-2026": [
-    "Es klingt früh. Aber wer jetzt — im Frühjahr 2026 — noch nicht über die Weihnachtsfeier nachgedacht hat, riskiert, seinen Wunschkünstler nicht mehr zu bekommen. Denn die besten Weihnachtsfeier-Zauberer in Deutschland sind bis Oktober ausgebucht.",
-    "Warum Zauberer auf der Weihnachtsfeier? Die Weihnachtsfeier ist der wichtigste Abend des Jahres für viele Unternehmen. Mitarbeiter, die sich das ganze Jahr über abrackern, verdienen einen Abend, der wirklich besonders ist. Ein Zauberer sorgt dafür.",
-    "Das Problem mit typischer Weihnachtsfeier-Unterhaltung: Band? Haben alle schon. DJ? Kennt jeder. Karaoke? Macht nicht jeder mit. Was wirklich verbindet: ein Erlebnis, das alle überrascht — und über das alle lachen. Comedy-Magie macht genau das.",
-    "Was den Unterschied macht: Close-Up Magie beim Empfang sorgt dafür, dass sich auch die stillen Kollegen sofort in guter Gesellschaft fühlen. Eine Bühnenshow im Anschluss lässt alle gemeinsam lachen und staunen. Das ist der Kitt, der eine Belegschaft zusammenschweißt.",
-    "Welche Gästezahl? Für 20 bis 500+ Gäste gibt es das passende Format. Kleine Teams: Close-Up-only ist oft persönlicher und wirkungsvoller. Mittlere bis große Gruppen: Kombination aus Close-Up und Bühnenshow.",
-    "Was ihr jetzt tun solltet: Termin anfragen, Konzept besprechen, Datum reservieren. Die meisten seriösen Zauberer verlangen eine Anzahlung zur Reservierung — das ist normal und gibt beiden Seiten Sicherheit.",
-    "Die richtigen Fragen bei der Buchung: Habt ihr Referenzen von anderen Weihnachtsfeiern? Wie läuft eine typische Veranstaltung ab? Was braucht ihr von uns (Bühne, Technik, Ansprechpartner vor Ort)?",
-    "Fazit: Wer seinen Mitarbeitern 2026 eine Weihnachtsfeier schenken will, die sie nicht vergessen, sollte jetzt handeln. Die Nachfrage ist hoch, die Kapazitäten begrenzt. Frühzeitig buchen bedeutet: Sicherheit, Entspannung und am Ende den besten Abend des Jahres.",
-  ],
-  "teamevent-magie-teambuilding": [
-    "Das Team-Building-Budget ist freigegeben. Die Ideen auf dem Tisch: Kletterpark. Kochkurs. Lasertag. Escape Room. Alles gut. Alles schon dagewesen. Was wirklich verbindet und gleichzeitig unterhält? Ein Teamevent mit einem Zauberer.",
-    "Warum Magie als Teambuilding? Magie schafft gemeinsame Erlebnisse — und zwar auf eine Weise, die keine andere Aktivität bietet. Jeder steht plötzlich auf gleicher Augenhöhe: Der Abteilungsleiter staunt genauso wie der Praktikant. Die Chemie stimmt, weil alle dasselbe erleben.",
-    "Der Eisbrecher-Effekt: Close-Up Magie bei Teamevents ist der perfekte Eisbrecher für heterogene Gruppen — Teams aus verschiedenen Abteilungen, internationale Mitarbeiter, neue Kolleginnen und Kollegen. Magie braucht keine gemeinsame Sprache und keine gemeinsamen Interessen.",
-    "Was ein Teamevent mit Zauberer kann: Spannungsabbau nach einem langen Projektzyklus. Auflockerung bei internen Konferenzen und Off-Sites. Feiern von Erfolgen auf eine besondere Art. Schweißen von neuen Teams zusammen.",
-    "Der Unterschied zu einem klassischen Teambuilding: Beim Kletterpark muss jeder mitmachen. Beim Kochkurs auch. Beim Zauberer ist man Gast — und das ist bei vielen Teams genau das Richtige. Kein Wettbewerb, kein Stress, keine Verlierer.",
-    "Interaktive Elemente sind möglich: Manche Zauberer bieten auch interaktive Show-Elemente an, bei denen Teammitglieder aktiv eingebunden werden. Das kann besonders gut funktionieren, wenn die Gruppe sich kennt und eine offene Unternehmenskultur hat.",
-    "Was ihr bei der Planung beachten solltet: Gruppengrößen bis 20 → Close-Up only. Bis 50 → Kombination sinnvoll. Über 50 → Bühnenshow als Haupt-Highlight. Bei hybriden Events: Close-Up-Auftritte funktionieren nicht für Online-Zuschauer.",
-    "Fazit: Teambuilding mit einem Zauberer ist kein Kompromiss. Es ist eine bewusste Entscheidung für ein Erlebnis, das verbindet, unterhält und in Erinnerung bleibt. Kein Kletterpark, kein Escape Room kann das bieten.",
-  ],
-  "zauberer-hamburg-event": [
-    "Hamburg ist Deutschlands Tor zur Welt — und eine der dynamischsten Event-Städte des Landes. Von der Elbphilharmonie über den Hamburger Hafen bis zu den unzähligen Clubs, Restaurants und Eventlocations in der HafenCity: Hamburg bietet die Kulisse für Events, die sich keiner vergisst.",
-    "Warum Hamburg besondere Anforderungen stellt: Hamburger Gäste sind in der Regel event-erfahren. Konferenzen, Galas, Firmendinners — das ist hier normal. Für ein Entertainment-Angebot bedeutet das: Mittelmäßigkeit fällt auf. Qualität wird wahrgenommen und honoriert.",
-    "Die passenden Formate für Hamburger Events: Für Empfänge in der HafenCity oder Eventlocations am Hafen eignet sich Close-Up Magie ideal. Die informelle, interaktive Art passt zum Hamburger Stil — direkt, ohne Schnörkel, auf Augenhöhe. Für Galas und Firmendinner ist eine Bühnenshow der klassische Programmpunkt.",
-    "Beliebte Hamburger Eventlocations für Zauberer-Auftritte: Das Empire Riverside Hotel, das Hotel Atlantic Kempinski, die Bucerius Kunst Forum, Eventlocations auf dem Hamburger Hafen und die vielen kreativen Lofts in Altona und Ottensen sind ideale Bühnen.",
-    "Was bei der Buchung in Hamburg wichtig ist: Anfahrt und Unterkunft sind bei Künstlern aus anderen Städten ein Thema — sollten aber inklusive sein. Ein professioneller Zauberer kalkuliert diese Kosten transparent und verlangt keine versteckten Zusatzkosten.",
-    "Der Hamburger Vibe: Direkt, bodenständig, aber gleichzeitig weltoffen und modern. Ein Zauberer für Hamburger Events sollte genau das verkörpern: keine Effekthascherei, keine Selbstdarstellung — sondern echtes Handwerk mit einem Augenzwinkern.",
-    "Wann buchen: Hamburg-Events im Spätsommer und Herbst sind besonders beliebt. Die Hafengeburtstag-Saison, das Reeperbahn-Festival und das Vorweihnachtsgeschäft machen Hamburg im zweiten Halbjahr zum Hotspot. Frühzeitig anfragen lohnt sich.",
-    "Fazit: Hamburg verdient Entertainment auf seinem Niveau. Ein guter Zauberer für Hamburger Events bringt Qualität, Stil und den richtigen Umgang mit einem anspruchsvollen Publikum. Das Ergebnis: ein Abend, über den man in Hamburg noch lange redet.",
-  ],
-  "geburtstag-ideen-erwachsene-zauberer": [
-    "Der 40., 50., 60. Geburtstag. Runde Geburtstage kommen nur einmal — und sie verdienen ein Fest, das diesem Anlass gerecht wird. Aber was macht einen Geburtstag wirklich unvergesslich? Nicht die Location, nicht das Catering. Es ist das Erlebnis, das alle mit nach Hause nehmen.",
-    "Warum ein Zauberer auf dem Geburtstag? Weil Zauberkunst eine Emotion erzeugt, die keine andere Unterhaltungsform bieten kann: die Kombination aus Lachen und echtem Staunen. In dem Moment, in dem die Magie passiert — direkt vor deinen Augen, in deinen Händen — vergisst man für einen Moment alles andere.",
-    "Für wen ist ein Zauberer auf dem Geburtstag geeignet? Für Erwachsene jeder Altersgruppe. Ob 30 Gäste zum Gartengeburtstag oder 100 zur Geburtstagsgala: das Format lässt sich anpassen. Wichtig ist nur, dass der Zauberer zum Stil der Feier und zum Gastgeber passt.",
-    "Close-Up beim Geburtstag: Beim Sektempfang oder während des Buffets ist Close-Up Magie ideal. Der Zauberer mischt sich unter die Gäste, sorgt für Staunen und Gelächter direkt an den Tischen — persönlich, unerwartet und absolut verblüffend.",
-    "Die Bühnenshow als Geburtstags-Highlight: Eine 20–30-minütige Comedy-Zaubershow als Programmpunkt des Abends lässt alle gemeinsam lachen und staunen. Besonders wirkungsvoll: Der Geburtstagsgast wird Teil der Show — auf eine lustige, respektvolle Art, die in guter Erinnerung bleibt.",
-    "Was ihr bei der Planung beachten solltet: Wie viele Gäste kommen? Gibt es Kinder dabei (die meisten Zauberer haben ein kindgerechtes Repertoire)? Wollt ihr die Show als Überraschung für den Geburtstagsgast oder weiß er davon? Gibt es eine Bühne oder reicht ein freier Bereich im Raum?",
-    "Das Budget für einen Geburtstagszauberer: Je nach Format und Dauer variiert das Budget. Das Entscheidende ist nicht der Preis — es ist die Qualität des Erlebnisses. Ein guter Zauberer hinterlässt einen Abend, an den die Gäste noch Jahre später denken.",
-    "Fazit: Der runde Geburtstag ist zu wichtig für Mittelmaß. Ein Zauberer bringt das Erlebnis, das deine Feier zu einem Abend macht, über den alle noch Monate danach reden. Plant früh, stimmt das Konzept ab — und freut euch auf einen Abend, der wirklich besonders ist.",
-  ],
-  "close-up-oder-buehnenshow-2026": [
-    "Eine der häufigsten Fragen bei der Buchung eines Zauberers: ‚Was ist besser — Close-Up Magie oder Bühnenshow?' Die ehrliche Antwort: Beide Formate sind in ihrer jeweiligen Situation perfekt. Es kommt auf dein Event an.",
-    "Close-Up Magie 2026: Was es ist. Close-Up bedeutet, dass die Magie direkt bei den Gästen stattfindet — in kleinen Gruppen, bei Tischen, am Empfang. Keine Bühne, keine Distanz. Der Zauberer ist mittendrin und zeigt Verblüffendes buchstäblich in den Händen der Gäste.",
-    "Die Stärken von Close-Up: Maximale Intimität und emotionale Wirkung. Perfekt als Eisbrecher auf Empfängen und Networking-Events. Flexibel — kein Bühnenbedarf, keine Technik nötig. Für alle Gruppengrößen geeignet, auch für sehr kleine Runden.",
-    "Wann Close-Up wählen: Sektempfang auf Hochzeiten. Networking-Abende und Messen. Dinner zwischen den Gängen (Magic Dinner). Kleine Feiern bis 30 Personen, bei denen Nähe gewünscht ist.",
-    "Bühnenshow 2026: Was es ist. Eine Bühnenshow ist ein inszeniertes Programm vor dem gesamten Publikum. Mit Dramaturgie, Spannungsbogen, interaktiven Momenten und einem Finale, das alle gleichzeitig erleben.",
-    "Die Stärken der Bühnenshow: Alle Gäste erleben denselben Moment — ein kollektives Wow-Erlebnis. Klarer Programmpunkt, gut planbar. Stärkere Dramaturgie möglich. Ideal für 30–500+ Gäste.",
-    "Wann Bühnenshow wählen: Als Abend-Highlight auf Firmengalas und Weihnachtsfeiern. Als Überraschungsact nach dem Dinner auf Hochzeiten. Bei Award-Verleihungen als Rahmenprogramm. Bei Events mit klarem Programm-Ablauf.",
-    "Die Kombination — die beste Wahl für die meisten Events: Close-Up beim Empfang als Eisbrecher. Bühnenshow als Abend-Highlight für alle. So bekommt jeder Gast sein persönliches Erlebnis UND den großen kollektiven Moment.",
-    "Fazit 2026: Es gibt kein ‚besser'. Es gibt nur ‚passend'. Analysiere deinen Ablauf, deine Gästezahl und dein Event-Ziel — und wähle dann das Format, das dazu passt. Im Zweifel: beides kombinieren. Das ist in fast allen Fällen die beste Entscheidung.",
-  ],
-  "zauberer-berlin-entertainment": [
-    "Berlin ist die Hauptstadt der kreativen Events. Von Startup-Konferenzen in ehemaligen Fabrikhallen über Galas im Hotel de Rome bis zu Firmenfeiern in umgebauten Industrielofts: Berliner Events haben einen eigenen, unverwechselbaren Stil.",
-    "Was Berliner Events besonders macht: Berlin verbindet Kreativität mit Anspruch. Gäste auf Berliner Events haben oft ein hohes Niveau und sind gleichzeitig offen für Ungewöhnliches. Das ist die ideale Umgebung für Comedy-Magie — modern, direkt, humorvoll.",
-    "Close-Up Magie im Berliner Stil: Close-Up Magie passt perfekt zum Berliner Networking-Stil. Direkt, ohne Förmlichkeit, auf Augenhöhe. Bei Startup-Events, Konferenzen oder Agenturfeiern funktioniert das Format hervorragend als Eisbrecher.",
-    "Bühnenshow in Berlin: Für Firmengalas und große Abendveranstaltungen in Berlin ist eine Bühnenshow der Programmpunkt, der alle zusammenbringt. Die Berliner Offenheit für Kunst und Performance macht das Publikum zu einem der besten, das man als Zauberer haben kann.",
-    "Beliebte Berliner Eventlocations: Vom Kraftwerk über das Soho House bis zum Deutschen Historischen Museum — Berlin hat für jeden Stil die passende Location. Ein erfahrener Zauberer kennt die Besonderheiten verschiedener Locations und passt sein Programm entsprechend an.",
-    "Was Berliner Unternehmen vom Entertainment erwarten: Keine Klischees. Keine steife Show. Stattdessen: zeitgemäße Performance, die Nähe schafft, Grenzen überwindet und am Ende für echte Begeisterung sorgt. Comedy-Magie erfüllt genau diese Anforderungen.",
-    "Buchungsvorlauf in Berlin: Berlin ist ein internationaler Eventmarkt. Besonders für Events rund um die Fashion Week, IFA, Berlin Marathon und den Jahreswechsel sind Buchungen frühzeitig nötig. 3–6 Monate Vorlauf sind empfehlenswert.",
-    "Fazit: Berlin ist der perfekte Ort für modernen Event-Zauber. Die Stadt ist offen, das Publikum anspruchsvoll und gleichzeitig empfänglich. Ein guter Zauberer, der den Berliner Vibe versteht, kann hier echte Magie machen.",
-  ],
-  "zauberer-kosten-was-kostet": [
-    "Die Frage kommt immer: ‚Was kostet ein Zauberer?' Die ehrliche Antwort: Es kommt drauf an. Aber diese Antwort hilft euch nicht weiter — also hier eine ehrliche Aufschlüsselung, was die Kosten eines professionellen Event-Zauberers beeinflusst.",
-    "Was den Preis eines Zauberers bestimmt: Format und Dauer (Close-Up, Bühnenshow, Kombination). Erfahrung und Reputation des Künstlers. Anfahrtsweg und eventuelle Übernachtungskosten. Gästezahl und technische Anforderungen. Saisonalität (Weihnachtsfeier-Zeit = höhere Nachfrage).",
-    "Warum günstig oft teuer ist: Ein Zauberer für 150€ ist verlockend. Aber was bekommt ihr dafür? Oft: Hobbyisten ohne Event-Erfahrung, unzuverlässige Professionalität, ein Programm, das an der Oberflächlichkeit kratzt. Bei dem Abend, der am meisten zählt, ist das kein Kompromiss, den ihr eingehen solltet.",
-    "Was ein professioneller Event-Zauberer kostet: Professionelle Zauberer mit nachweisbarer Event-Erfahrung, guten Referenzen und einem ausgefeilten Programm kosten entsprechend. Das ist eine Investition — in den Abend, in das Erlebnis, in die Erinnerung, die ihr euren Gästen mitgebt.",
-    "Die Transparenzfrage: Seriöse Zauberer haben keine versteckten Kosten. Anfahrt ist inklusive oder klar separat ausgewiesen. Keine Überraschungen am Rechnungstag. Fragt bei der Anfrage explizit nach, was im Honorar enthalten ist.",
-    "Was ihr NICHT bezahlen solltet: Vorleistungen für nicht erbrachte Arbeit. Übermäßig hohe Stornogebühren ohne klare Regelung. ‚Equipment-Zuschläge' die nicht im Vorfeld besprochen wurden.",
-    "Wie ihr Qualität erkennt: Referenzvideos (echte Auftritte, nicht nur Studioaufnahmen). Bewertungen auf ProvenExpert, Google oder ähnlichen Plattformen. Referenzkunden, die ihr kontaktieren könnt. Ein Erstgespräch, bei dem der Zauberer euer Event und eure Anforderungen wirklich versteht.",
-    "Die richtige Frage ist nicht ‚Was kostet ein Zauberer?' sondern ‚Was ist ein unvergesslicher Abend für meine Gäste wert?'. Wenn ihr diese Frage ehrlich beantwortet, ist die Entscheidung einfacher.",
-    "Fazit: Qualität hat einen Preis. Aber der Preis für einen guten Zauberer ist eine Investition in etwas Messbares: die Begeisterung eurer Gäste, die Erinnerung an diesen Abend und die Botschaft, dass ihr Qualität schätzt.",
-  ],
-  "firmen-gala-planen-tipps": [
-    "Eine Firmen-Gala ist das Premium-Format unter den Unternehmensveranstaltungen. Alles ist größer, hochwertiger, aufwendiger. Und genau deshalb muss das Entertainment auf höchstem Niveau sein — denn auf einer Gala fällt Mittelmaß besonders auf.",
-    "Was eine Gala vom normalen Firmenevent unterscheidet: Der Anspruch ist höher. Die Gäste sind in der Regel Führungskräfte, wichtige Kunden oder besondere Mitarbeiter, die für ihre Leistung geehrt werden sollen. Das setzt voraus, dass jedes Detail stimmt — vom Catering über die Dekoration bis zum Entertainment.",
-    "Warum Comedy-Magie auf einer Gala funktioniert: Eine Gala braucht einen Programmpunkt, der alle gleichzeitig anspricht — Menschen verschiedener Hierarchiestufen, unterschiedlicher Hintergründe und Erwartungen. Comedy-Magie schafft das, weil sie eine universelle Sprache spricht: Staunen und Lachen.",
-    "Das richtige Timing auf der Gala: Close-Up Magie beim Empfang schafft eine lockere Anfangsatmosphäre, auch wenn noch nicht alle Gäste da sind. Bühnenshow nach dem Dinner als zentraler Programmpunkt, wenn alle sitzen und die Stimmung gut ist. Das ist das bewährte Format für Galas.",
-    "Technische Anforderungen für die Bühnenshow: Eine Gala hat in der Regel eine Bühne, Ton und Licht. Für die Bühnenshow des Zauberers ist eine Soundanlage wichtig. Klart im Vorfeld, was die Location bietet und was der Zauberer mitbringt oder selbst organisiert.",
-    "Moderation als Teil des Programms: Manche Zauberer bieten auch Moderation an — also die Verbindung von Moderationsaufgaben und Entertainment. Das kann auf einer Gala sehr effektiv sein und spart das separate Honorar für eine Moderation.",
-    "Frühzeitig planen: Gala-Buchungen sind oft Teil einer Jahresplanung. Die besten Zauberer für Firmengalas sind 6–12 Monate im Voraus ausgebucht. Wer seine Gala plant, sollte das Entertainment parallel zur Location-Suche buchen.",
-    "Was schiefgehen kann — und wie ihr es vermeidet: Schlechte Akustik auf der Bühne. Keine Absprache zum Ablauf. Unzuverlässiger Künstler. Das vermeidet ihr durch klare Vereinbarungen, einen Technik-Check im Vorfeld und einen professionellen Künstler mit nachweislicher Gala-Erfahrung.",
-    "Fazit: Eine Firmen-Gala ist der Abend, an dem ihr zeigt, was euch als Unternehmen wichtig ist. Das Entertainment muss diesen Anspruch erfüllen. Comedy-Magie auf dem richtigen Niveau ist genau das: hochwertig, unvergesslich und für alle Gäste gleichermaßen begeisternd.",
-  ],
-  "zauberer-koeln-rhein-events": [
-    "Köln am Rhein ist eine der quirligsten Event-Städte Deutschlands. Mit dem Karneval, einer lebendigen Unternehmenskultur, dem Kölner Dom als Wahrzeichen und einer Event-Infrastruktur, die ihresgleichen sucht — Köln Events haben Charakter.",
-    "Was Kölner Events auszeichnet: Köln ist herzlich, direkt und hat eine besondere Fähigkeit zur Feierlaune. Ob Firmenjubiläum am Rheinufer, Hochzeit in einem Kölner Schloss oder Firmenfeier in einem modernen Loft in Ehrenfeld — Köln-Events sind immer ein bisschen herzlicher als anderswo.",
-    "Close-Up Magie beim Kölner Empfang: Die lockere Kölner Mentalität ist ideal für Close-Up Magie. Gäste in Köln sind offen, haben Humor und lassen sich gerne überraschen. Ein Zauberer, der sich unter die Gäste mischt, wird hier sofort herzlich aufgenommen.",
-    "Bühnenshow auf Kölner Galas: Kölner Gäste sind es gewohnt, gut unterhalten zu werden — der Karneval hat hier Generationen trainiert. Eine Comedy-Zaubershow, die den Kölner Humor aufgreift und gleichzeitig verblüfft, ist das perfekte Format für größere Kölner Events.",
-    "Beliebte Kölner Eventlocations: Vom Maritim Hotel am Rhein über die Kölner Wolkenburg bis zur Motorworld und den Eventlocations in der Kölner Altstadt — Köln bietet für jeden Anlass die richtige Kulisse. Für einen Zauberer-Auftritt ist die Zugänglichkeit der Tische (bei Close-Up) bzw. eine Bühne (bei der Show) entscheidend.",
-    "Wann buchen in Köln: Der Kölner Eventkalender ist voll. Besonders rund um Rosenmontag, die Weihnachtszeit und die Messe-Saison ist die Nachfrage nach Event-Entertainment hoch. 3–6 Monate Vorlauf sind empfehlenswert.",
-    "Fazit: Köln liebt gute Unterhaltung. Ein Zauberer, der den Kölner Geist versteht — herzlich, witzig, direkt — trifft hier genau den Nerv. Das Ergebnis: ein Abend, über den man am nächsten Tag in der ganzen Stadt spricht.",
-  ],
-  "hochzeit-unterhaltung-2026": [
-    "Die Hochzeitsplanung 2026 hat sich verändert. Während früher Band und DJ die einzigen Entertainment-Optionen waren, gibt es heute eine neue Priorität: Erlebnisse, die alle Gäste einschließen, nicht nur die Tanzfläche.",
-    "Was Hochzeitsgäste 2026 wollen: Verbindung. Gemeinsame Momente. Emotionen, die über das Tanzen hinausgehen. Die Fotobox ist schön, aber austauschbar. Was bleibt: das eine Erlebnis, das alle gleichzeitig hatte. Das gemeinsame Staunen, das gemeinsame Lachen.",
-    "Warum Magie auf der Hochzeit 2026 der Trend ist: Auf Instagram, Pinterest und in Hochzeitsmagazinen taucht Magie als Hochzeits-Entertainment immer häufiger auf. Nicht als Kuriositätsshow, sondern als modernes, hochwertiges Format, das zu gehobenen Hochzeiten genauso passt wie zu entspannten Gartenfeiern.",
-    "Der Sektempfang-Zauberer: Der Klassiker. Beim Empfang mischt sich der Zauberer unter die Gäste — direkt, persönlich, unerwartet. Die Gäste, die sich noch nicht kennen, haben sofort Gesprächsstoff. Onkel Herbert und die Jugendfreunde des Bräutigams staunen gemeinsam. Das ist Hochzeitsmagie in Reinform.",
-    "Die Überraschungs-Show nach dem Dinner: Das Brautpaar weiß davon, die Gäste nicht. Nach dem Essen, wenn alle satt und entspannt sind, beginnt eine 20–30-minütige Comedy-Zaubershow. Dieser Überraschungsmoment ist oft der emotionale Höhepunkt der ganzen Hochzeit.",
-    "Kinder und Erwachsene gleichzeitig begeistern: Ein weiterer Vorteil von Magie als Hochzeits-Entertainment: Es funktioniert für alle Altersgruppen gleichzeitig. Kinder staunen auf ihre Weise, Erwachsene auf ihre. Kein separates Kinderprogramm nötig.",
-    "Was bei der Buchung wichtig ist: Referenzvideos von echten Hochzeiten. Klare Absprache über Ablauf und Timing. Frühzeitige Buchung (beliebte Termine gehen schnell). Besprechen, ob der Zauberer den Stil der Hochzeit — klassisch, modern, rustikal — versteht und bedient.",
-    "Fazit: Hochzeitsunterhaltung 2026 denkt über Band und DJ hinaus. Magie bringt das, was alle suchen: echte Emotionen, gemeinsame Momente und einen Abend, der Hochzeitsgeschichte schreibt. Für jedes Paar, das sich etwas Besonderes wünscht.",
-  ],
-  "sommerfest-ideen-unternehmen-2026": [
-    "Das Sommerfest ist die Chance des Jahres, das Team zu feiern. Kein formeller Rahmen, keine Jahresend-Retrospektive — einfach ein Abend (oder Nachmittag) der Wertschätzung, des Zusammenkommens und der Feierlaune. Was macht ein Unternehmens-Sommerfest 2026 wirklich besonders?",
-    "Was beim Sommerfest oft schief läuft: Buffet, Bier, Biertischgarnitur und vielleicht noch ein DJ — das kennen alle. Es ist nett, aber nicht unvergesslich. Und wenn das Team am nächsten Tag fragt ‚Was war eigentlich das Highlight?', gibt es keine Antwort.",
-    "Das Highlight-Problem: Ein gutes Sommerfest braucht einen Moment, der alle innehalten lässt. Ein gemeinsames Erlebnis, das die Leute aus dem gewohnten Plauder-Modus reißt und für ein paar Minuten wirklich verbindet.",
-    "Warum Magie beim Sommerfest funktioniert: Close-Up Magie beim Sommerfest ist das perfekte Format für informelle Settings. Gäste stehen draußen, sind entspannt, haben ein Getränk in der Hand. Und dann kommt ein Zauberer — und plötzlich ist der ganze Kreis von 6 Kollegen im Ausnahmezustand.",
-    "Outdoor-Magie: Outdoor-Sommerfeste und Magie vertragen sich sehr gut. Close-Up Magie funktioniert draußen genauso wie drinnen. Wenn eine überdachte Bühne vorhanden ist, kann auch eine Bühnenshow ein klares Programm-Highlight sein.",
-    "Für welche Teamgrößen eignet sich ein Zauberer beim Sommerfest: Ab 10 Personen lohnt sich Close-Up Magie. Ab 50 Personen empfiehlt sich eine Kombination. Für sehr große Teams (200+) ist eine Bühnenshow als Teil des Programms ideal.",
-    "Was ihr bei der Planung beachten solltet: Ist die Location (Garten, Terrasse, Festzelt) für Outdoor-Close-Up geeignet? Gibt es eine Bühne oder wird eine improvisiert? Wie lange soll das Programm dauern? Passen Zeitpunkt der Show und Programm-Ablauf zusammen?",
-    "Die Investition lohnt sich: Ein gutes Sommerfest-Entertainment ist keine große Investition im Verhältnis zum Gesamtbudget — aber sein Anteil am Abend-Erlebnis ist unverhältnismäßig groß. Der Zauberer ist oft das, worüber das Team noch Wochen danach redet.",
-    "Fazit: Macht euer Sommerfest 2026 zu einem Abend mit echtem Highlight. Ein Zauberer schafft den Moment, der allen fehlt — und der das Fest von ‚nett' zu ‚unvergesslich' macht.",
-  ],
-  "zauberer-frankfurt-business-events": [
-    "Frankfurt ist Deutschlands Business-Metropole. Sitz der Europäischen Zentralbank, der Deutschen Bank und unzählicher Dax-Unternehmen. Events in Frankfurt haben entsprechend einen klaren Business-Charakter — und entsprechend hohe Anforderungen an Entertainment.",
-    "Was Frankfurter Business-Events ausmacht: Frankfurter Gäste sind international, erfahren und haben klare Qualitätsstandards. Auf Firmenfeiern in Frankfurt trifft man Vorstände, Investoren, internationale Partner. Die Erwartungen sind hoch — und das ist genau das richtige Umfeld für hochwertiges Entertainment.",
-    "Comedy-Magie im Business-Kontext: Comedy-Magie funktioniert auf Business-Events in Frankfurt besonders gut, weil sie eine klare Botschaft sendet: Qualität und Stil, ohne Steifheit. Ein guter Zauberer liest das Publikum, passt seinen Stil an — professionell, aber menschlich.",
-    "Close-Up beim Frankfurter Networking: Das Networking auf Frankfurter Business-Events ist oft das Hauptziel. Ein Zauberer, der hier als Eisbrecher wirkt, schafft in Minuten das, wofür andere Strategien Stunden brauchen: echten menschlichen Kontakt in einem professionellen Umfeld.",
-    "Bühnenshow auf Frankfurter Galas: Für Jahresabschlussfeiern, Jubiläen und Firmengalas in Frankfurt ist eine Bühnenshow der klassische, professionell einplanbare Programmpunkt. Gut getimed, technisch perfekt — das ist der Standard, den Frankfurter Business-Events erwarten.",
-    "Beliebte Frankfurter Eventlocations: Das Frankfurter Römer, das Städel Museum, das Goethe-Haus, das Steigenberger Frankfurter Hof und die Skyline-Locations in Sachsenhausen bieten die Kulissen, die zu Business-Events passen. Für Zauberer-Auftritte sind die technischen Möglichkeiten der jeweiligen Location wichtig.",
-    "Die Messe Frankfurt als Sonderfall: Rund um die Frankfurter Messen (IAA, Buchmesse, Musikmesse etc.) sind Messenachveranstaltungen, Kundenevents und Incentives besonders beliebt. Frühzeitige Buchung ist hier essenziell.",
-    "Was Frankfurter Kunden erwarten: Pünktlichkeit, Professionalität, eine reibungslose Durchführung. Kein Überraschungseffekt beim Aufbau, keine technischen Pannen, kein Zeitverlust. Der Zauberer kommt vor Ort an, stimmt sich kurz ab und liefert dann genau das, was versprochen wurde.",
-    "Fazit: Frankfurt-Events haben den höchsten Anspruch. Entertainment auf diesem Niveau muss mithalten können. Comedy-Magie von Emilian Leber tut genau das — professionell, stilsicher und mit einem Ergebnis, das selbst die kritischsten Frankfurter Gäste überzeugt.",
-  ],
-};
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
-const BlogPost = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const post = blogPosts.find((p) => p.slug === slug);
-  if (!post) return <Navigate to="/blog" replace />;
+/* ═══════════════════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════════════════ */
+const HeroKeyframes = () => (
+  <style>{`
+    @keyframes postHeroIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes postHeroWordIn { from { opacity: 0; transform: translateY(40px) scale(0.96); filter: blur(6px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+    @keyframes postBokehDrift { 0% { transform: translateY(0) scale(1); opacity: 0.15; } 30% { opacity: 0.9; } 70% { opacity: 0.9; } 100% { transform: translateY(-90px) scale(1.1); opacity: 0; } }
+    .post-fade { opacity: 0; animation: postHeroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .post-word { display: inline-block; opacity: 0; animation: postHeroWordIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
+    .post-bokeh { opacity: 0; animation-name: postBokehDrift; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); animation-iteration-count: infinite; }
+    .toc-active { color: #5c1622; font-weight: 700; }
+    .post-body p { margin: 1.25em 0; }
+    .post-body p:first-child::first-letter { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 4.5em; float: left; line-height: 0.85; margin: 0.08em 0.12em 0 0; color: #5c1622; }
+  `}</style>
+);
 
-  const content = blogContent[post.slug] || [];
-  const image = blogImages[post.slug] || heroImg;
-  const midImage = blogMidImages[post.slug] || closeupImg;
-
-  const description = post.excerpt.length > 160 ? post.excerpt.substring(0, 157) + "..." : post.excerpt;
-
+const HeroSection = ({ post }: { post: BlogPost }) => {
+  const titleWords = post.title.split(" ");
   return (
-    <>
-    <Helmet>
-      <title>{post.title} | Emilian Leber Magazin</title>
-      <meta name="description" content={description} />
-      <link rel="canonical" href={`https://www.magicel.de/blog/${slug}`} />
-      <meta property="og:title" content={post.title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:url" content={`https://www.magicel.de/blog/${slug}`} />
-      <meta property="og:type" content="article" />
-      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
-      <meta property="og:locale" content="de_DE" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={post.title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
-      <script type="application/ld+json">{JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": post.title,
-        "description": description,
-        "datePublished": post.date,
-        "author": { "@type": "Person", "name": "Emilian Leber" },
-        "publisher": { "@type": "Organization", "name": "MagicEL Entertainment", "url": "https://www.magicel.de" },
-        "url": `https://www.magicel.de/blog/${slug}`
-      })}</script>
-    </Helmet>
-    <PageLayout>
-      <article>
-        {/* Full-bleed Hero */}
-        <div className="relative min-h-[70vh] overflow-hidden">
-          <img
-            src={image}
-            alt={post.title}
-            className="absolute inset-0 w-full h-full object-cover object-top"
-            loading="lazy"
+    <section className="relative bg-[#f5ecdc] overflow-hidden">
+      <HeroKeyframes />
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(70% 60% at 80% 10%, rgba(199,144,66,0.18) 0%, transparent 60%), radial-gradient(60% 50% at 12% 90%, rgba(154,38,64,0.10) 0%, transparent 65%)",
+        }}
+      />
+      <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[
+          { size: 16, left: "8%", top: "30%", dur: 14, delay: 0, o: 0.45 },
+          { size: 20, left: "78%", top: "20%", dur: 18, delay: 2, o: 0.35 },
+          { size: 10, left: "22%", top: "70%", dur: 16, delay: 4, o: 0.55 },
+          { size: 14, left: "62%", top: "60%", dur: 19, delay: 6, o: 0.4 },
+        ].map((b, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full post-bokeh"
+            style={{
+              width: b.size,
+              height: b.size,
+              left: b.left,
+              top: b.top,
+              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(199,144,66,0) 75%)`,
+              filter: "blur(2px)",
+              animationDuration: `${b.dur}s`,
+              animationDelay: `${b.delay}s`,
+            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
-          <div className="relative z-10 flex flex-col justify-end min-h-[70vh] pb-12 md:pb-20 px-6 md:px-12 max-w-4xl mx-auto">
-            <Link to="/blog" className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors mb-8 mt-28">
-              <ArrowLeft className="w-4 h-4" /> Magazin
-            </Link>
-            <div className="flex items-center gap-3 mb-5">
-              <span className="badge-gradient text-[10px]">{post.category}</span>
-              <span className="font-sans text-xs text-white/50">{post.readTime}</span>
-              <span className="font-sans text-xs text-white/30">·</span>
-              <span className="font-sans text-xs text-white/50">
-                {new Date(post.date).toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" })}
-              </span>
+        ))}
+      </div>
+
+      <div className="relative z-10 container px-6 pt-28 md:pt-36 pb-16 md:pb-24">
+        <Link
+          to="/blog"
+          className="inline-flex items-center gap-2 text-[12px] tracking-[0.1em] uppercase font-semibold text-foreground/55 hover:text-foreground transition-colors mb-10 post-fade"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Zurück zum Magazin
+        </Link>
+
+        <div className="grid lg:grid-cols-12 gap-10">
+          <div className="lg:col-span-9">
+            <div
+              className={`${SERIF_ITALIC} text-lg md:text-xl mb-6 post-fade`}
+              style={{ color: ACCENT, animationDelay: "0.05s" }}
+            >
+              {post.category}.
             </div>
-            <h1 className="font-display text-3xl md:text-5xl font-bold text-white leading-tight mb-6 max-w-3xl">
-              {post.title}
+            <h1 className="text-[clamp(2.25rem,6vw,6rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-8">
+              {titleWords.map((w, i) => (
+                <span
+                  key={i}
+                  className="post-word"
+                  style={{
+                    animationDelay: `${0.15 + i * 0.06}s`,
+                    marginRight: "0.22em",
+                  }}
+                >
+                  {w}
+                </span>
+              ))}
+              {post.titleAccent && (
+                <>
+                  <br />
+                  <span
+                    className={`${SERIF_ITALIC} post-word`}
+                    style={{
+                      color: ACCENT,
+                      animationDelay: `${0.15 + titleWords.length * 0.06}s`,
+                    }}
+                  >
+                    {post.titleAccent}
+                  </span>
+                </>
+              )}
             </h1>
-            <p className="font-sans text-base md:text-lg text-white/70 max-w-2xl leading-relaxed">
+
+            <p
+              className="text-lg md:text-xl leading-[1.6] text-foreground/70 max-w-3xl post-fade"
+              style={{ animationDelay: "0.45s" }}
+            >
               {post.excerpt}
             </p>
           </div>
         </div>
 
-        {/* Content */}
-        <section className="py-16 md:py-24">
-
-          {/* Intro — first 2 paragraphs */}
-          <div className="container px-6 mb-0">
-            <div className="max-w-2xl mx-auto">
-              {content.slice(0, 2).map((paragraph, i) => {
-                const colonIdx = paragraph.indexOf(': ');
-                const isH = colonIdx > 0 && colonIdx < 55 && paragraph.substring(0, colonIdx).split(' ').length <= 7;
-                if (i === 0) {
-                  return (
-                    <p key={i} className="font-sans text-lg md:text-xl font-medium text-foreground leading-relaxed mb-10 pl-5 border-l-4 border-accent">
-                      {paragraph}
-                    </p>
-                  );
-                }
-                if (isH) {
-                  return (
-                    <div key={i} className="mt-10 mb-6">
-                      <div className="w-8 h-[3px] bg-accent rounded-full mb-4" />
-                      <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-3">{paragraph.substring(0, colonIdx)}</h2>
-                      <p className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed">{paragraph.substring(colonIdx + 2)}</p>
-                    </div>
-                  );
-                }
-                return <p key={i} className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed mb-6">{paragraph}</p>;
-              })}
+        <div
+          className="mt-12 pt-8 border-t border-foreground/10 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm post-fade"
+          style={{ animationDelay: "0.55s" }}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
+              style={{
+                background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+              }}
+            >
+              EL
+            </div>
+            <div>
+              <div className="text-[10px] tracking-[0.14em] uppercase font-bold text-foreground/55">
+                Geschrieben von
+              </div>
+              <div className="font-bold text-foreground/85">
+                {post.author.name}
+              </div>
             </div>
           </div>
-
-          {/* Full-bleed mid-article image */}
-          {content.length > 2 && (
-            <div className="my-14 overflow-hidden">
-              <img src={midImage} alt="" className="w-full h-64 md:h-[30rem] object-cover object-top" />
+          <span className="text-foreground/25 hidden md:inline">·</span>
+          <div>
+            <div className="text-[10px] tracking-[0.14em] uppercase font-bold text-foreground/55">
+              Veröffentlicht
             </div>
+            <div className={`${SERIF_ITALIC} text-base text-foreground/85`}>
+              {formatDate(post.date)}
+            </div>
+          </div>
+          <span className="text-foreground/25 hidden md:inline">·</span>
+          <div className="inline-flex items-center gap-2 text-foreground/65">
+            <Clock className="w-4 h-4" style={{ color: ACCENT }} />
+            <span className="tabular-nums font-semibold">{post.readTime}</span>
+            <span className="text-foreground/30">·</span>
+            <span className="tabular-nums">{post.words} Wörter</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   FEATURE IMAGE
+   ═══════════════════════════════════════════════════════════ */
+const FeatureImage = ({ post }: { post: BlogPost }) => (
+  <section className="bg-background pt-2 pb-10">
+    <div className="container px-6">
+      <div className="max-w-5xl mx-auto">
+        <div className="relative aspect-[16/9] rounded-3xl overflow-hidden shadow-[0_60px_120px_-50px_rgba(8,6,12,0.4)]">
+          <img
+            src={coverImg(post.cover)}
+            alt={post.title}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: "center 30%" }}
+            loading="eager"
+          />
+        </div>
+        <p
+          className={`${SERIF_ITALIC} text-sm text-foreground/45 mt-4 text-center max-w-3xl mx-auto`}
+        >
+          Aus dem Magazin · {post.category} · {formatDate(post.date)}
+        </p>
+      </div>
+    </div>
+  </section>
+);
+
+/* ═══════════════════════════════════════════════════════════
+   TABLE OF CONTENTS (Sticky Sidebar)
+   ═══════════════════════════════════════════════════════════ */
+const TableOfContents = ({ post }: { post: BlogPost }) => {
+  const headings = useMemo(
+    () =>
+      post.sections
+        .filter((s): s is { type: "heading"; text: string; id?: string } =>
+          s.type === "heading",
+        )
+        .map((s) => ({
+          id: s.id ?? slugify(s.text),
+          text: s.text,
+        })),
+    [post.sections],
+  );
+
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (headings.length === 0) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActiveId(e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: 0 },
+    );
+    headings.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, [headings]);
+
+  if (headings.length < 2) return null;
+
+  return (
+    <aside className="lg:sticky lg:top-32">
+      <div className="bg-[#f5ecdc] rounded-3xl p-6 md:p-8">
+        <div className="flex items-center gap-2 mb-5">
+          <BookOpen className="w-4 h-4" style={{ color: ACCENT }} />
+          <span className="text-[11px] tracking-[0.14em] uppercase font-bold text-foreground/65">
+            Im Beitrag
+          </span>
+        </div>
+        <ol className="space-y-3 text-sm">
+          {headings.map((h, i) => (
+            <li key={h.id}>
+              <a
+                href={`#${h.id}`}
+                className={`flex items-baseline gap-3 leading-snug transition-colors ${
+                  activeId === h.id
+                    ? "toc-active"
+                    : "text-foreground/60 hover:text-foreground"
+                }`}
+              >
+                <span
+                  className={`${SERIF_ITALIC} text-base tabular-nums flex-shrink-0`}
+                  style={{ color: ACCENT }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span>{h.text}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </aside>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   POST BODY (Editorial Reading Layout)
+   ═══════════════════════════════════════════════════════════ */
+const PostBody = ({ post }: { post: BlogPost }) => {
+  const renderSection = (s: BlogSection, idx: number) => {
+    switch (s.type) {
+      case "heading": {
+        const id = s.id ?? slugify(s.text);
+        return (
+          <h2
+            key={idx}
+            id={id}
+            className="text-2xl md:text-4xl font-display font-black tracking-[-0.02em] leading-[1.1] mt-14 mb-6"
+            style={{ scrollMarginTop: "120px" }}
+          >
+            {s.text.split(" ").map((w, i, arr) =>
+              i === arr.length - 1 ? (
+                <span
+                  key={i}
+                  className={SERIF_ITALIC}
+                  style={{ color: ACCENT }}
+                >
+                  {" "}
+                  {w}
+                </span>
+              ) : (
+                <span key={i}>{i === 0 ? w : ` ${w}`}</span>
+              ),
+            )}
+          </h2>
+        );
+      }
+      case "paragraph":
+        return (
+          <p
+            key={idx}
+            className="text-base md:text-lg leading-[1.75] text-foreground/80"
+          >
+            {s.text}
+          </p>
+        );
+      case "quote":
+        return (
+          <blockquote
+            key={idx}
+            className="my-12 -mx-4 md:-mx-8 px-6 md:px-10 py-8 md:py-10 rounded-3xl bg-[#08060c] text-white relative overflow-hidden"
+          >
+            <div
+              aria-hidden
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(60% 70% at 50% 50%, rgba(154,38,64,0.22) 0%, transparent 70%)",
+              }}
+            />
+            <Quote
+              className="absolute top-4 left-6 w-8 h-8 opacity-40"
+              style={{ color: ACCENT_SOFT }}
+            />
+            <div className="relative">
+              <p
+                className={`${SERIF_ITALIC} text-2xl md:text-4xl leading-[1.2] text-white`}
+              >
+                {s.text}
+              </p>
+              {s.attribution && (
+                <p className="mt-5 text-xs tracking-[0.14em] uppercase text-white/55 font-semibold">
+                  — {s.attribution}
+                </p>
+              )}
+            </div>
+          </blockquote>
+        );
+      case "list":
+        return s.ordered ? (
+          <ol
+            key={idx}
+            className="my-8 space-y-3 list-decimal pl-6 marker:text-[color:var(--accent)] marker:font-bold"
+            style={
+              { ['--accent' as never]: ACCENT } as React.CSSProperties
+            }
+          >
+            {s.items.map((it, i) => (
+              <li
+                key={i}
+                className="text-base md:text-lg leading-[1.65] text-foreground/80 pl-2"
+              >
+                {it}
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <ul key={idx} className="my-8 space-y-4">
+            {s.items.map((it, i) => (
+              <li key={i} className="flex items-start gap-4">
+                <span
+                  className="mt-3 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                  style={{ background: ACCENT }}
+                />
+                <span className="text-base md:text-lg leading-[1.65] text-foreground/80">
+                  {it}
+                </span>
+              </li>
+            ))}
+          </ul>
+        );
+      case "callout":
+        return (
+          <aside
+            key={idx}
+            className="my-10 rounded-2xl p-6 md:p-7 border-l-4"
+            style={{
+              borderColor: ACCENT,
+              background: "#f5ecdc",
+            }}
+          >
+            <div
+              className={`${SERIF_ITALIC} text-base mb-3`}
+              style={{ color: ACCENT_DEEP }}
+            >
+              {s.eyebrow}
+            </div>
+            <p className="text-base md:text-lg leading-[1.6] text-foreground/85 font-medium">
+              {s.text}
+            </p>
+          </aside>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <article className="post-body">
+      {post.sections.map(renderSection)}
+
+      <div className="mt-16 pt-10 border-t border-foreground/10">
+        <div className="flex items-center gap-2 mb-4">
+          <Tag className="w-4 h-4" style={{ color: ACCENT }} />
+          <span className="text-[11px] tracking-[0.14em] uppercase font-bold text-foreground/55">
+            Themenfelder
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {post.tags.map((t) => (
+            <Link
+              key={t}
+              to={`/blog#tag=${encodeURIComponent(t)}`}
+              className="text-[11px] tracking-[0.06em] uppercase font-semibold px-3 py-1.5 rounded-full transition-transform hover:scale-105"
+              style={{
+                background: ACCENT_SOFT + "55",
+                color: ACCENT_DEEP,
+              }}
+            >
+              {t}
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-foreground/55">
+          <button
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({
+                  title: post.title,
+                  text: post.excerpt,
+                  url: window.location.href,
+                });
+              } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Link kopiert.");
+              }
+            }}
+            className="inline-flex items-center gap-2 text-[12px] tracking-[0.08em] uppercase font-semibold hover:text-foreground transition-colors"
+          >
+            <Share2 className="w-4 h-4" style={{ color: ACCENT }} />
+            Beitrag teilen
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   AUTOR BOX
+   ═══════════════════════════════════════════════════════════ */
+const AutorBox = ({ post }: { post: BlogPost }) => (
+  <section className="bg-[#f5ecdc] py-16 md:py-20">
+    <div className="container px-6 max-w-5xl">
+      <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
+        <div className="md:col-span-4">
+          <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
+            <img
+              src={portraitImg}
+              alt={`${post.author.name}, Magier`}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ objectPosition: "center 20%" }}
+              loading="lazy"
+            />
+          </div>
+        </div>
+        <div className="md:col-span-8">
+          <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-4`}>
+            Über den Autor.
+          </div>
+          <h3 className="text-2xl md:text-4xl font-display font-black tracking-[-0.02em] leading-[1.05] mb-5">
+            {post.author.name}.{" "}
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              {post.author.role}.
+            </span>
+          </h3>
+          <p className="text-base md:text-lg leading-[1.65] text-foreground/70 mb-6 max-w-xl">
+            Seit acht Jahren Magier, seit 2024 Finalist bei Talents of Magic
+            und Greatest Talent, 2025 erstes vollberufliches Jahr. 2026 Tour
+            [Plötzlich Magie — Magic Meets Comedy], Premiere am 22. Februar in
+            der Alten Mälzerei Regensburg.
+          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link
+              to="/ueber-mich"
+              className="inline-flex items-center gap-2 text-[12px] tracking-[0.08em] uppercase font-semibold px-5 py-2.5 rounded-full text-white transition-transform duration-300 hover:scale-[1.035]"
+              style={{
+                background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+              }}
+            >
+              Vita ansehen
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <Link
+              to="/presse"
+              className="inline-flex items-center gap-2 text-[12px] tracking-[0.08em] uppercase font-semibold text-foreground/70 hover:text-foreground transition-colors"
+            >
+              Presseanfrage
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+/* ═══════════════════════════════════════════════════════════
+   WEITERE ANSICHTEN (Related Posts — Bento)
+   ═══════════════════════════════════════════════════════════ */
+const WeitereAnsichten = ({ slug }: { slug: string }) => {
+  const related = getRelatedPosts(slug, 3);
+  if (related.length < 1) return null;
+  const [large, ...rest] = related;
+
+  return (
+    <section className="bg-background py-20 md:py-28">
+      <div className="container px-6">
+        <div className="grid lg:grid-cols-12 gap-10 mb-12 items-end">
+          <div className="lg:col-span-7">
+            <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-5`}>
+              Lies als nächstes.
+            </div>
+            <h2 className="text-[clamp(1.8rem,4vw,3.6rem)] font-display font-black tracking-[-0.025em] leading-[1.05]">
+              Drei weitere{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                Beiträge.
+              </span>
+            </h2>
+          </div>
+          <div className="lg:col-span-5">
+            <p className="text-base md:text-lg leading-[1.65] text-foreground/65">
+              Themenverwandt oder bewusst kontrastierend — drei Vorschläge aus
+              der Redaktion.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-6 md:gap-8">
+          {large && (
+            <Link
+              to={`/blog/${large.slug}`}
+              className="group lg:col-span-7 relative overflow-hidden rounded-3xl h-[420px] md:h-[500px] block"
+            >
+              <img
+                src={coverImg(large.cover)}
+                alt={large.title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+                style={{ objectPosition: "center 30%" }}
+                loading="lazy"
+              />
+              <div
+                aria-hidden
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(8,6,12,0.05) 0%, rgba(8,6,12,0.85) 100%)",
+                }}
+              />
+              <div className="absolute inset-x-0 bottom-0 p-7 md:p-9 text-white">
+                <div className="text-[11px] tracking-[0.14em] uppercase font-bold mb-3">
+                  {large.category} · {large.readTime}
+                </div>
+                <h3 className="text-2xl md:text-4xl font-display font-black leading-[1.05] mb-2">
+                  {large.title}
+                </h3>
+              </div>
+            </Link>
           )}
 
-          {/* Rest of content */}
+          <div className="lg:col-span-5 grid grid-rows-2 gap-6 md:gap-8">
+            {rest.map((p) => (
+              <Link
+                key={p.slug}
+                to={`/blog/${p.slug}`}
+                className="group relative overflow-hidden rounded-3xl h-[200px] md:h-[238px] block"
+              >
+                <img
+                  src={coverImg(p.cover)}
+                  alt={p.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
+                  style={{ objectPosition: "center 30%" }}
+                  loading="lazy"
+                />
+                <div
+                  aria-hidden
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(8,6,12,0.15) 0%, rgba(8,6,12,0.85) 100%)",
+                  }}
+                />
+                <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                  <div className="text-[10px] tracking-[0.14em] uppercase font-bold text-white/75 mb-1">
+                    {p.category}
+                  </div>
+                  <h4 className="text-base md:text-lg font-display font-bold leading-snug">
+                    {p.title}
+                  </h4>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   NEWSLETTER (Variante für Post)
+   ═══════════════════════════════════════════════════════════ */
+const NewsletterInline = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+
+  useEffect(() => {
+    if (email.includes("@") && email.length > 5) {
+      captureEmail(email, "blog-post-newsletter", { name });
+    }
+  }, [email, name]);
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.includes("@")) return;
+    markEmailSubmitted();
+    setSent(true);
+  };
+
+  return (
+    <section className="bg-[#f5ecdc] py-16 md:py-20">
+      <div className="container px-6 max-w-4xl">
+        <div className="grid md:grid-cols-12 gap-8 items-center">
+          <div className="md:col-span-6">
+            <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-4`}>
+              Magazin-Update.
+            </div>
+            <h3 className="text-2xl md:text-3xl font-display font-black tracking-[-0.02em] leading-[1.1] mb-4">
+              Beim nächsten Beitrag{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                eine Mail.
+              </span>
+            </h3>
+            <p className="text-base text-foreground/65 leading-[1.6]">
+              Einmal im Quartal. Keine Werbung, kein Funnel, keine
+              Verkaufstaktik. Abmelden jederzeit per Klick.
+            </p>
+          </div>
+          <div className="md:col-span-6">
+            {sent ? (
+              <div className="bg-white rounded-3xl p-7 text-center">
+                <Sparkles
+                  className="w-8 h-8 mx-auto mb-3"
+                  style={{ color: ACCENT }}
+                />
+                <p className="text-base text-foreground/75">
+                  Eingetragen. Du hörst beim nächsten Beitrag von mir.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={onSubmit} className="bg-white rounded-3xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Mail className="w-4 h-4" style={{ color: ACCENT }} />
+                  <span className="text-[11px] tracking-[0.14em] uppercase font-bold text-foreground/65">
+                    Abonnieren
+                  </span>
+                </div>
+                <div className="space-y-3">
+                  <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Dein Name"
+                    className="w-full bg-foreground/[0.04] border border-foreground/10 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-foreground/30"
+                  />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="dein.name@beispiel.de"
+                    className="w-full bg-foreground/[0.04] border border-foreground/10 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-foreground/30"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 text-[12px] tracking-[0.08em] uppercase font-semibold px-5 py-3 rounded-full text-white"
+                  style={{
+                    background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+                  }}
+                >
+                  Magazin abonnieren
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   PULL QUOTE (Black Full-Bleed)
+   ═══════════════════════════════════════════════════════════ */
+const PullQuoteBlack = ({ post }: { post: BlogPost }) => {
+  // Nimm das erste quote-Element oder Default
+  const quote =
+    post.sections.find(
+      (s): s is { type: "quote"; text: string; attribution?: string } =>
+        s.type === "quote",
+    ) ?? {
+      text: "Manche Geschichten passen nicht auf die Bühne.",
+      attribution: undefined,
+    };
+
+  return (
+    <section className="relative bg-[#08060c] text-white py-20 md:py-28 overflow-hidden">
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(70% 60% at 50% 50%, rgba(154,38,64,0.22) 0%, transparent 70%)",
+        }}
+      />
+      <div className="relative container px-6 max-w-4xl text-center">
+        <Quote
+          className="w-10 h-10 mx-auto mb-6 opacity-70"
+          style={{ color: ACCENT_SOFT }}
+        />
+        <blockquote
+          className={`${SERIF_ITALIC} text-2xl md:text-5xl leading-[1.15]`}
+        >
+          {quote.text}
+        </blockquote>
+        {quote.attribution && (
+          <p className="mt-6 text-xs tracking-[0.14em] uppercase text-white/55 font-semibold">
+            — {quote.attribution}
+          </p>
+        )}
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   CTA IM EVENT (Format-bezogener Cross-Link)
+   ═══════════════════════════════════════════════════════════ */
+const CTAImEvent = ({ post }: { post: BlogPost }) => {
+  const path = categoryToFormatPath[post.category];
+  if (!path) return null;
+
+  const labelMap: Record<string, { eyebrow: string; title: string; body: string; cta: string }> = {
+    "/hochzeit": {
+      eyebrow: "Für Hochzeitsplaner.",
+      title: "Plant ihr gerade eure Hochzeit?",
+      body: "Sektempfang, Dinner, nach dem Tanzen — die drei Slots, die zur Hochzeit passen. Wir schauen gemeinsam, welcher zu eurem Ablauf passt.",
+      cta: "Zur Hochzeitsseite",
+    },
+    "/firmenfeiern": {
+      eyebrow: "Für Eventmanager:innen.",
+      title: "Plant ihr ein Firmenevent?",
+      body: "Vorstandsdinner bis Mitarbeiter-Weihnachtsfeier: jedes Format mit eigener Dosierung. Wir finden die Richtige.",
+      cta: "Zur Firmenfeier-Seite",
+    },
+    "/magic-dinner": {
+      eyebrow: "Magic Dinner als Format.",
+      title: "Interesse am Format?",
+      body: "Ob im Restaurant Wald und Wiese in Sinzing oder in eurer Wunschlocation — Magic Dinner ist ein durchkomponiertes Abendformat.",
+      cta: "Zur Magic-Dinner-Seite",
+    },
+    "/tickets": {
+      eyebrow: "Plötzlich Magie — die Tour.",
+      title: "Tickets für die Tour 2026",
+      body: "Premiere am 22. Februar 2026 in der Alten Mälzerei Regensburg. Weitere Stops in Bayern folgen.",
+      cta: "Tour-Termine ansehen",
+    },
+    "/buchung": {
+      eyebrow: "Direktanfrage.",
+      title: "Konkrete Anfrage stellen",
+      body: "Datum, Ort, Anlass — und du hast innerhalb 24 Stunden Antwort plus konkreten Vorschlag.",
+      cta: "Anfrage starten",
+    },
+    "/ueber-mich": {
+      eyebrow: "Mehr zur Person.",
+      title: "Werdegang und Vita",
+      body: "Von der ersten Karte mit acht über Greatest Talent und Talents of Magic bis zur eigenen Tour 2026.",
+      cta: "Zur Vita",
+    },
+    "/buehnenshow": {
+      eyebrow: "Format Bühnenshow.",
+      title: "Bühnenshow buchen",
+      body: "Comedy-Magic-Show mit Drama-Kurve. 15, 30 oder 60 Minuten — je nach Anlass.",
+      cta: "Zur Bühnenshow",
+    },
+  };
+
+  const meta = labelMap[path] ?? labelMap["/buchung"];
+
+  return (
+    <section className="bg-background py-16 md:py-20">
+      <div className="container px-6 max-w-5xl">
+        <div className="relative overflow-hidden rounded-3xl bg-[#f5ecdc] p-8 md:p-12">
+          <div
+            aria-hidden
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(50% 60% at 90% 10%, rgba(154,38,64,0.18) 0%, transparent 60%)",
+            }}
+          />
+          <div className="relative grid md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-8">
+              <div
+                className={`${SERIF_ITALIC} text-lg mb-3`}
+                style={{ color: ACCENT }}
+              >
+                {meta.eyebrow}
+              </div>
+              <h3 className="text-2xl md:text-4xl font-display font-black tracking-[-0.02em] leading-[1.05] mb-4">
+                {meta.title}
+              </h3>
+              <p className="text-base md:text-lg leading-[1.6] text-foreground/65 max-w-xl">
+                {meta.body}
+              </p>
+            </div>
+            <div className="md:col-span-4 md:text-right">
+              <Link
+                to={path}
+                className="inline-flex items-center gap-2 text-[12px] tracking-[0.08em] uppercase font-semibold px-6 py-3.5 rounded-full text-white transition-transform duration-300 hover:scale-[1.035]"
+                style={{
+                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+                }}
+              >
+                {meta.cta}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   CTA FINAL
+   ═══════════════════════════════════════════════════════════ */
+const CTAFinal = () => (
+  <section className="relative bg-[#08060c] text-white py-24 md:py-32 overflow-hidden">
+    <div
+      aria-hidden
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        background:
+          "radial-gradient(60% 50% at 25% 30%, rgba(154,38,64,0.32) 0%, transparent 60%), radial-gradient(50% 40% at 80% 70%, rgba(199,144,66,0.25) 0%, transparent 65%)",
+      }}
+    />
+    <div className="relative container px-6 max-w-4xl text-center">
+      <div className={`${SERIF_ITALIC} text-lg text-white/55 mb-5`}>
+        Anders als gelesen.
+      </div>
+      <h2 className="text-[clamp(2rem,5vw,4.5rem)] font-display font-black tracking-[-0.025em] leading-[1.05] mb-8">
+        Erlebt es{" "}
+        <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+          selbst.
+        </span>
+      </h2>
+      <p className="text-base md:text-lg leading-[1.65] text-white/65 max-w-2xl mx-auto mb-10">
+        Show planen in drei Minuten oder direkt mailen. Antwort innerhalb 24
+        Stunden, ohne Verkaufstaktik.
+      </p>
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <Link
+          to="/#planer"
+          className="inline-flex items-center justify-center gap-2 text-[13px] tracking-[0.08em] uppercase font-semibold px-8 py-4 rounded-full text-foreground bg-white transition-transform duration-300 hover:scale-[1.035]"
+        >
+          Show planen
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+        <a
+          href="mailto:el@magicel.de"
+          className="inline-flex items-center justify-center gap-2 text-[13px] tracking-[0.08em] uppercase font-semibold px-8 py-4 rounded-full text-white border border-white/30 hover:bg-white/10 transition-colors"
+        >
+          el@magicel.de
+          <ArrowUpRight className="w-4 h-4" />
+        </a>
+      </div>
+      <p className="mt-10 text-[11px] tracking-[0.1em] uppercase text-white/40">
+        5,0★ · 30+ Bewertungen · Regensburg · Bayern · DACH
+      </p>
+    </div>
+  </section>
+);
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE
+   ═══════════════════════════════════════════════════════════ */
+const BlogPostPage = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const post = useMemo(
+    () => blogPosts.find((p) => p.slug === slug),
+    [slug],
+  );
+
+  useEffect(() => {
+    if (post) window.scrollTo(0, 0);
+  }, [post]);
+
+  if (!post) return <Navigate to="/blog" replace />;
+
+  const ogImageMap: Record<string, string> = {
+    "wedding-magic": "https://www.magicel.de/og-wedding.jpg",
+    dinner: "https://www.magicel.de/og-dinner.jpg",
+    stage: "https://www.magicel.de/og-stage.jpg",
+  };
+  const ogImage =
+    ogImageMap[post.cover] ?? "https://www.magicel.de/og-image.jpg";
+
+  return (
+    <>
+      <Helmet>
+        <html lang="de" />
+        <title>{post.title} | MagicEL Magazin</title>
+        <meta
+          name="description"
+          content={post.excerpt.slice(0, 160)}
+        />
+        <meta
+          name="keywords"
+          content={[
+            ...post.tags,
+            "Magier Magazin",
+            "Emilian Leber Blog",
+            "Zauberer Geschichten",
+          ].join(", ")}
+        />
+        <meta name="robots" content="index,follow,max-image-preview:large" />
+        <link
+          rel="canonical"
+          href={`https://www.magicel.de/blog/${post.slug}`}
+        />
+        <meta property="og:title" content={`${post.title} | MagicEL Magazin`} />
+        <meta property="og:description" content={post.excerpt.slice(0, 160)} />
+        <meta
+          property="og:url"
+          content={`https://www.magicel.de/blog/${post.slug}`}
+        />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:locale" content="de_DE" />
+        <meta
+          property="article:published_time"
+          content={`${post.date}T09:00:00+02:00`}
+        />
+        <meta
+          property="article:modified_time"
+          content={`${post.date}T09:00:00+02:00`}
+        />
+        <meta property="article:author" content={post.author.name} />
+        <meta property="article:section" content={post.category} />
+        {post.tags.map((t) => (
+          <meta key={t} property="article:tag" content={t} />
+        ))}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.excerpt.slice(0, 160)} />
+        <meta name="twitter:image" content={ogImage} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
+          rel="stylesheet"
+        />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.excerpt,
+            image: ogImage,
+            datePublished: `${post.date}T09:00:00+02:00`,
+            dateModified: `${post.date}T09:00:00+02:00`,
+            author: {
+              "@type": "Person",
+              name: post.author.name,
+              url: "https://www.magicel.de/ueber-mich",
+            },
+            publisher: {
+              "@type": "Person",
+              name: "Emilian Leber",
+              url: "https://www.magicel.de",
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://www.magicel.de/blog/${post.slug}`,
+            },
+            keywords: post.tags.join(", "),
+            articleSection: post.category,
+            wordCount: post.words,
+            inLanguage: "de-DE",
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Magazin",
+                item: "https://www.magicel.de/blog",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: post.category,
+                item: "https://www.magicel.de/blog",
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: post.title,
+                item: `https://www.magicel.de/blog/${post.slug}`,
+              },
+            ],
+          })}
+        </script>
+      </Helmet>
+      <PageLayout>
+        <HeroSection post={post} />
+        <FeatureImage post={post} />
+
+        <section className="bg-background pb-10">
           <div className="container px-6">
-            <div className="max-w-2xl mx-auto">
-              {(() => {
-                let headingCount = 0;
-                const elements: React.ReactNode[] = [];
-
-                content.slice(2).forEach((paragraph, idx) => {
-                  const i = idx + 2;
-                  const colonIdx = paragraph.indexOf(': ');
-                  const isHeading = colonIdx > 0 && colonIdx < 55 && paragraph.substring(0, colonIdx).split(' ').length <= 7;
-                  const heading = isHeading ? paragraph.substring(0, colonIdx) : '';
-                  const body = isHeading ? paragraph.substring(colonIdx + 2) : paragraph;
-                  const isFazit = isHeading && heading.toLowerCase().startsWith('fazit');
-
-                  if (isHeading) headingCount++;
-                  const hNum = headingCount;
-                  const isCallout = hNum % 3 === 0;
-
-                  // Fazit — dark inverted card
-                  if (isFazit) {
-                    elements.push(
-                      <div key={i} className="mt-14 rounded-2xl bg-foreground p-6 md:p-10">
-                        <p className="font-sans text-xs font-bold uppercase tracking-widest text-background/40 mb-4">Fazit</p>
-                        <p className="font-sans text-base md:text-lg text-background/80 leading-relaxed">{body}</p>
-                      </div>
-                    );
-                    return;
-                  }
-
-                  // Callout card (every 3rd heading) — accent left border
-                  if (isHeading && isCallout) {
-                    elements.push(
-                      <div key={i} className="mt-12 mb-6 rounded-2xl bg-muted/40 border-l-[3px] border-accent pl-6 pr-6 py-6">
-                        <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-3">{heading}</h2>
-                        <p className="font-sans text-base text-muted-foreground leading-relaxed">{body}</p>
-                      </div>
-                    );
-                    return;
-                  }
-
-                  // Regular heading section — small accent line + h2
-                  if (isHeading) {
-                    elements.push(
-                      <div key={i} className="mt-12 mb-6">
-                        <div className="w-8 h-[3px] bg-accent rounded-full mb-4" />
-                        <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-3">{heading}</h2>
-                        <p className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed">{body}</p>
-                      </div>
-                    );
-                    return;
-                  }
-
-                  elements.push(
-                    <p key={i} className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed mb-6">{paragraph}</p>
-                  );
-                });
-
-                return elements;
-              })()}
-
-              {/* CTA box */}
-              <div className="mt-14 rounded-3xl overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-accent via-purple-600 to-pink-600 opacity-90" />
-                <div className="relative z-10 p-8 md:p-10 text-center">
-                  <p className="font-sans text-xs font-semibold uppercase tracking-widest text-white/60 mb-3">Interesse geweckt?</p>
-                  <h3 className="font-display text-2xl md:text-3xl font-bold text-white mb-4 leading-tight">
-                    Jetzt unverbindlich anfragen.
-                  </h3>
-                  <p className="font-sans text-sm text-white/70 mb-6 max-w-sm mx-auto">
-                    Ich berate dich kostenlos und finde das passende Konzept für dein Event.
-                  </p>
-                  <Link
-                    to="/buchung"
-                    className="inline-flex items-center gap-2 bg-white text-foreground font-sans font-semibold text-sm px-7 py-3.5 rounded-full hover:scale-[1.02] transition-transform"
-                  >
-                    Anfrage stellen <ArrowLeft className="w-4 h-4 rotate-180" />
-                  </Link>
+            <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+              <div className="lg:col-span-3 order-2 lg:order-1">
+                <TableOfContents post={post} />
+              </div>
+              <div className="lg:col-span-9 order-1 lg:order-2">
+                <div className="max-w-3xl">
+                  <PostBody post={post} />
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Related Posts */}
-        <section className="pb-24 section-alt pt-16">
-          <div className="container px-6">
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground text-center mb-10">
-              Weitere Artikel.
-            </h2>
-            <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
-              {blogPosts.filter((p) => p.slug !== slug).slice(0, 3).map((p) => (
-                <Link
-                  key={p.slug}
-                  to={`/blog/${p.slug}`}
-                  className="group relative rounded-3xl overflow-hidden aspect-[4/3] block"
-                >
-                  <img
-                    src={blogImages[p.slug] ?? image}
-                    alt={p.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <span className="badge-gradient text-[10px] mb-2 inline-flex">{p.category}</span>
-                    <h3 className="font-display text-sm font-bold text-white leading-tight group-hover:underline underline-offset-2">
-                      {p.title}
-                    </h3>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      </article>
-
-      <BookingCTA headline={"Lust auf mehr?"} subline="Erlebe Comedy-Magie live auf deinem Event — oder lies weiter im Magazin." />
-    </PageLayout>
+        <PullQuoteBlack post={post} />
+        <AutorBox post={post} />
+        <WeitereAnsichten slug={post.slug} />
+        <NewsletterInline />
+        <CTAImEvent post={post} />
+        <CTAFinal />
+      </PageLayout>
     </>
   );
 };
 
-export default BlogPost;
+export default BlogPostPage;
