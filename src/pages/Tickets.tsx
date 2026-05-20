@@ -703,7 +703,7 @@ const TourDatenSection = () => {
    ═══════════════════════════════════════════════════════════ */
 const SUMMER_EDITION = {
   date: "11. Juli 2026",
-  label: "Summer Edition",
+  label: "Magic Dinner — Summer Edition",
   sub: "Terrasse + Innenbereich · Drei-Gänge optional",
   status: "Vorverkauf",
 };

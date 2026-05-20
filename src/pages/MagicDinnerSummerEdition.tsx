@@ -464,6 +464,8 @@ const ReservierungsSection = () => {
     email: "",
     phone: "",
     personen: "2",
+    uhrzeit: "",
+    bereich: "",
     anlass: "",
     wuensche: "",
   });
@@ -486,8 +488,9 @@ const ReservierungsSection = () => {
     const body = encodeURIComponent(
       `Reservierungsanfrage für Magic Dinner Summer Edition am ${EVENT_DATE}\n\n` +
         `Name: ${form.name}\nEmail: ${form.email}\nTelefon: ${form.phone}\n` +
-        `Personen: ${form.personen}\nAnlass: ${form.anlass || "—"}\n` +
-        `Wünsche: ${form.wuensche || "—"}`,
+        `Personen: ${form.personen}\nWunsch-Uhrzeit: ${form.uhrzeit || "—"}\n` +
+        `Bereich: ${form.bereich || "—"}\n` +
+        `Anlass: ${form.anlass || "—"}\nWünsche: ${form.wuensche || "—"}`,
     );
     window.setTimeout(() => {
       window.location.href = `mailto:${RESERVIERUNG_MAIL}?subject=${subject}&body=${body}&cc=el@magicel.de`;
@@ -661,6 +664,35 @@ const ReservierungsSection = () => {
                     className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[color:var(--ac)] outline-none text-base transition-colors bg-white"
                     style={{ ["--ac" as any]: ACCENT }}
                   />
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <select
+                      required
+                      value={form.uhrzeit}
+                      onChange={(e) => setForm((f) => ({ ...f, uhrzeit: e.target.value }))}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[color:var(--ac)] outline-none text-base transition-colors bg-white"
+                      style={{ ["--ac" as any]: ACCENT }}
+                    >
+                      <option value="">Wunsch-Uhrzeit *</option>
+                      <option value="17:00">17:00 Uhr</option>
+                      <option value="17:30">17:30 Uhr</option>
+                      <option value="18:00">18:00 Uhr</option>
+                      <option value="18:30">18:30 Uhr</option>
+                      <option value="19:00">19:00 Uhr</option>
+                      <option value="19:30">19:30 Uhr</option>
+                    </select>
+                    <select
+                      required
+                      value={form.bereich}
+                      onChange={(e) => setForm((f) => ({ ...f, bereich: e.target.value }))}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[color:var(--ac)] outline-none text-base transition-colors bg-white"
+                      style={{ ["--ac" as any]: ACCENT }}
+                    >
+                      <option value="">Bereich *</option>
+                      <option value="Terrasse">Terrasse</option>
+                      <option value="Innenbereich">Innenbereich</option>
+                      <option value="Egal">Egal — Restaurant entscheidet</option>
+                    </select>
+                  </div>
                   <input
                     type="text"
                     placeholder="Anlass (Geburtstag, Geschäftsabend, …)"
@@ -833,7 +865,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Kommt der nächste Magic-Dinner-Abend wann?",
-    a: "Nach der Summer Edition: Herbst Edition am 19. September, Winter Edition am 14. November, Neujahrs-Edition am 16. Januar 2027. Newsletter abonnieren für Vorverkauf-Hinweise.",
+    a: "Aktuell ist die Summer Edition am 11. Juli 2026 der einzige bestätigte Termin. Weitere Editionen werden über den Newsletter angekündigt — Vorverkauf üblicherweise 6–8 Wochen vorab.",
   },
 ];
 

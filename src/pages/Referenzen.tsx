@@ -259,10 +259,10 @@ const ALL_LOGOS = [
   { name: "Turmtheater", logo: "/logos/turmtheater.png", note: "Theater · Variety-Slot" },
   { name: "Greatest Talent", logo: "/logos/greatest-talent.png", note: "TV-Finalist 2023" },
   { name: "Business Entertainment", logo: "/logos/business-entertainment.png", note: "Agentur-Partner" },
-  { name: "DPSG", logo: "/logos/dpsg.png", note: "Jugendverband · Gala · Alte Mälzerei" },
+  { name: "Alte Mälzerei", logo: "/logos/dpsg.png", note: "Event-Location · Regensburg" },
   { name: "Drying Little Tears", logo: "/logos/drying-little-tears.png", note: "Charity · Kinder" },
   { name: "Steinhofer Ingenieure", logo: "/logos/steinhofer.png", note: "Mittelstand · Jubiläum" },
-  { name: "Wächter", logo: "/logos/waechter.png", note: "Familien-Geburtstag" },
+  { name: "Wächter", logo: "/logos/waechter.png", note: "Event-Agentur" },
 ] as const;
 
 const GrosseLogoCloud = () => {
@@ -376,10 +376,10 @@ const KUNDEN: Kunde[] = [
   { name: "Turmtheater", branche: "Theater", ort: "Regensburg", jahr: 2025, anlass: "Variety", format: "Abendprogramm", logo: "/logos/turmtheater.png" },
   { name: "Greatest Talent", branche: "TV", ort: "München", jahr: 2024, anlass: "TV-Show", format: "Bühne", logo: "/logos/greatest-talent.png" },
   { name: "Business Entertainment", branche: "Agentur", ort: "Bayern", jahr: 2025, anlass: "Agency-Partner", format: "diverse Slots", logo: "/logos/business-entertainment.png" },
-  { name: "DPSG", branche: "Wohlfahrt", ort: "Augsburg", jahr: 2024, anlass: "Gala", format: "Bühne", logo: "/logos/dpsg.png" },
+  { name: "Alte Mälzerei", branche: "Event-Location", ort: "Regensburg", jahr: 2024, anlass: "Gala-Abend", format: "Bühne", logo: "/logos/dpsg.png" },
   { name: "Drying Little Tears", branche: "Charity", ort: "München", jahr: 2025, anlass: "Charity-Event", format: "Close-Up", logo: "/logos/drying-little-tears.png" },
   { name: "Steinhofer Ingenieure", branche: "Mittelstand", ort: "Regensburg", jahr: 2024, anlass: "Firmenjubiläum", format: "Bühne", logo: "/logos/steinhofer.png" },
-  { name: "Wächter", branche: "Familie", ort: "Bayern", jahr: 2025, anlass: "Geburtstag", format: "Close-Up + Bühne", logo: "/logos/waechter.png" },
+  { name: "Wächter", branche: "Event-Agentur", ort: "Bayern", jahr: 2025, anlass: "Agency-Partner", format: "diverse Slots", logo: "/logos/waechter.png" },
   // Zusätzliche fiktive-anonyme-aber-realistische Einträge für mehr Filter-Material
   { name: "Hochzeit M. & L.", branche: "Hochzeit", ort: "Tegernsee", jahr: 2025, anlass: "Hochzeit", format: "Empfang + Bühne", logo: undefined },
   { name: "Hochzeit J. & A.", branche: "Hochzeit", ort: "München", jahr: 2026, anlass: "Hochzeit", format: "Close-Up + Magic Dinner", logo: undefined },
@@ -469,9 +469,9 @@ const FilterSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Filtern nach Branche, Jahr, Anlass.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground pr-4 break-words">
-              {"Finde Referenzen aus "}
-              <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.5rem,4.2vw,3.75rem)] text-foreground break-words">
+              Referenzen aus{" "}
+              <span style={{ color: ACCENT }}>
                 deiner Branche
               </span>
               .
@@ -1092,7 +1092,7 @@ const BRANCHEN = [
   { name: "TV", beispiel: "TVA · Greatest Talent · ARD-Vorabend" },
   { name: "Theater", beispiel: "Turmtheater · Variety-Abend" },
   { name: "Charity", beispiel: "Drying Little Tears · Spendengala" },
-  { name: "Wohlfahrt", beispiel: "DPSG · Gala-Abend" },
+  { name: "Event-Location", beispiel: "Alte Mälzerei · Gala-Abend" },
   { name: "Mittelstand", beispiel: "Steinhofer Ingenieure · Jubiläum" },
   { name: "Hochzeit", beispiel: "Tegernsee, München, Regensburg — 100+ Paare" },
   { name: "Familie", beispiel: "Geburtstage 30 – 80 · diverse" },
