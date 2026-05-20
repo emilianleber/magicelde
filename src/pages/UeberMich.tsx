@@ -1456,8 +1456,6 @@ const StimmenSection = () => {
           {STIMMEN.map((s) => (
             <article
               key={s.name}
-              itemScope
-              itemType="https://schema.org/Review"
               className="group relative bg-[hsl(0,0%,98%)] rounded-2xl p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
               style={{
                 boxShadow:
@@ -1476,7 +1474,6 @@ const StimmenSection = () => {
               </div>
               {/* Body */}
               <p
-                itemProp="reviewBody"
                 className={`text-base md:text-lg leading-[1.55] text-foreground/85 mb-7 md:mb-8`}
               >
                 „{s.body}"
@@ -1494,7 +1491,6 @@ const StimmenSection = () => {
                 </span>
                 <div>
                   <p
-                    itemProp="author"
                     className="font-display font-bold text-sm md:text-[15px] text-foreground leading-tight"
                   >
                     {s.name}

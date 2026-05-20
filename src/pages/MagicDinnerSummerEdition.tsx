@@ -940,7 +940,6 @@ const FAQSection = () => {
                 >
                   <h3
                     className="font-display text-base md:text-lg font-bold text-foreground leading-snug pr-4"
-                    itemProp="name"
                   >
                     {f.q}
                   </h3>

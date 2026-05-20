@@ -1511,8 +1511,6 @@ const StimmenSection = () => {
           {REVIEWS.map((r) => (
             <article
               key={r.author}
-              itemScope
-              itemType="https://schema.org/Review"
               className="relative bg-white p-7 md:p-9 flex flex-col h-full"
               style={{
                 borderRadius: "1rem",
@@ -1527,10 +1525,9 @@ const StimmenSection = () => {
                     className="w-4 h-4 fill-amber-400 text-amber-400"
                   />
                 ))}
-                <meta itemProp="reviewRating" content="5" />
+                <meta content="5" />
               </div>
               <p
-                itemProp="reviewBody"
                 className="text-[15px] md:text-base leading-[1.65] text-foreground/85 flex-1"
               >
                 [{r.quote}]
@@ -1546,7 +1543,6 @@ const StimmenSection = () => {
                 </div>
                 <div>
                   <p
-                    itemProp="author"
                     className="font-display font-bold text-foreground text-sm"
                   >
                     {r.author}

@@ -1225,8 +1225,6 @@ const StimmenSection = () => {
           {STIMMEN.map((s, i) => (
             <article
               key={s.name}
-              itemScope
-              itemType="https://schema.org/Review"
               className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-start"
             >
               {/* Initial + Meta */}
@@ -1243,18 +1241,18 @@ const StimmenSection = () => {
                   {s.initial}
                 </span>
                 <div>
-                  <p className="font-display text-base md:text-lg font-bold text-foreground" itemProp="author" itemScope itemType="https://schema.org/Person">
-                    <span itemProp="name">{s.name}</span>
+                  <p className="font-display text-base md:text-lg font-bold text-foreground">
+                    <span>{s.name}</span>
                   </p>
                   <p className={`text-sm md:text-base text-foreground/55 mt-1`}>
                     {s.role}
                   </p>
-                  <div className="flex items-center gap-0.5 mt-3" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
+                  <div className="flex items-center gap-0.5 mt-3">
                     {[...Array(s.rating)].map((_, j) => (
                       <Star key={j} className="w-4 h-4 fill-amber-500 text-amber-500" />
                     ))}
-                    <meta itemProp="ratingValue" content={String(s.rating)} />
-                    <meta itemProp="bestRating" content="5" />
+                    <meta content={String(s.rating)} />
+                    <meta content="5" />
                   </div>
                   <p className="text-xs text-foreground/45 mt-3 tracking-[0.05em]">
                     {s.detail}
@@ -1267,7 +1265,6 @@ const StimmenSection = () => {
                 <Quote className="w-10 h-10 mb-4 opacity-8" style={{ color: ACCENT }} strokeWidth={1.25} />
                 <blockquote
                   className={`text-[clamp(1.35rem,2.5vw,2.1rem)] leading-[1.35] text-foreground/85`}
-                  itemProp="reviewBody"
                 >
                   „{s.quote}"
                 </blockquote>
@@ -1696,15 +1693,23 @@ const Referenzen = () => (
         rel="stylesheet"
       />
 
-      {/* JSON-LD: Organization + AggregateRating */}
+      {/* JSON-LD: LocalBusiness + AggregateRating + valide Reviews mit itemReviewed */}
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "Organization",
+        "@type": "LocalBusiness",
+        "@id": "https://www.magicel.de/#business",
         "name": "Emilian Leber — Zauberer & Mentalist",
         "url": "https://www.magicel.de",
+        "image": "https://www.magicel.de/og-image.jpg",
         "logo": "https://www.magicel.de/og-image.jpg",
         "email": "el@magicel.de",
         "telephone": "+4915563744696",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Regensburg",
+          "addressRegion": "Bayern",
+          "addressCountry": "DE",
+        },
         "areaServed": ["DE", "Bayern", "Regensburg", "München", "Ingolstadt", "Würzburg"],
         "aggregateRating": {
           "@type": "AggregateRating",
@@ -1716,20 +1721,23 @@ const Referenzen = () => (
         "review": [
           {
             "@type": "Review",
+            "itemReviewed": { "@id": "https://www.magicel.de/#business" },
             "author": { "@type": "Person", "name": "Jan von Lehmann" },
-            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" },
             "reviewBody": "Es war einfach Mega. Alle Gäste begeistert.",
           },
           {
             "@type": "Review",
+            "itemReviewed": { "@id": "https://www.magicel.de/#business" },
             "author": { "@type": "Person", "name": "Katrin Raß" },
-            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" },
             "reviewBody": "Emilian ist der einzige Künstler, dem ich seit Jahren blind vertraue.",
           },
           {
             "@type": "Review",
+            "itemReviewed": { "@id": "https://www.magicel.de/#business" },
             "author": { "@type": "Person", "name": "Martina Senftl" },
-            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" },
             "reviewBody": "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier.",
           },
         ],
