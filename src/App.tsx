@@ -79,6 +79,7 @@ const Impressum = lazy(() => import("./pages/Impressum.tsx"));
 const AGB = lazy(() => import("./pages/AGB.tsx"));
 const StadtSeite = lazy(() => import("./pages/StadtSeite.tsx"));
 const ServiceStadtSeite = lazy(() => import("./pages/ServiceStadtSeite.tsx"));
+const WissenSeite = lazy(() => import("./pages/WissenSeite.tsx"));
 const KundenportalLogin = lazy(() => import("./pages/KundenportalLogin.tsx"));
 const Kundenportal = lazy(() => import("./pages/Kundenportal.tsx"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
@@ -242,6 +243,7 @@ const PublicRoutes = () => (
     <Route path="/zauberer-magic-dinner/:stadt" element={<ServiceStadtSeite />} />
     <Route path="/zauberer-close-up/:stadt" element={<ServiceStadtSeite />} />
     <Route path="/zauberer-buehnenshow/:stadt" element={<ServiceStadtSeite />} />
+    <Route path="/wissen/:slug" element={<WissenSeite />} />
     <Route path="/kundenportal/login" element={<KundenportalLogin />} />
     <Route path="/kundenportal" element={<Kundenportal />} />
     <Route path="/unsubscribe" element={<Unsubscribe />} />
@@ -308,6 +310,7 @@ const App = () => (
               <Route path="/zauberer-magic-dinner/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-close-up/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-buehnenshow/:stadt" element={<ServiceStadtSeite />} />
+              <Route path="/wissen/:slug" element={<WissenSeite />} />
               <Route path="/kundenportal/login" element={<KundenportalLogin />} />
               <Route path="/kundenportal" element={<Kundenportal />} />
               <Route path="/unsubscribe" element={<Unsubscribe />} />

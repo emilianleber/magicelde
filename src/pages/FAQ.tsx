@@ -97,7 +97,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "auszeichnungen",
     category: "allgemein",
     q: "Welche Auszeichnungen habe ich?",
-    a: "Greatest Talent 2023 — Finalist (TV-Show, SAT.1). Talents of Magic 2024 — Finalist + Kreativpreis. Deutsche Jugendmeisterschaft der Magie — Top 30. TVA-TV-Interview 2024. 5,0 Sterne auf ProvenExpert und Google. 2026: Eigenes Bühnenprogramm [Plötzlich Magie — Magic Meets Comedy] (Premiere 22.02.2026 Alte Mälzerei Regensburg).",
+    a: "Greatest Talent 2023 — Finalist (TV-Show, SAT.1). Talents of Magic 2024 — Finalist + Kreativpreis. Deutsche Jugendmeisterschaft der Magie — Top 30. TVA-TV-Interview 2024. 5,0 Sterne auf ProvenExpert und Google.",
   },
   {
     id: "seit-wann",
@@ -274,6 +274,226 @@ const FAQ_ITEMS: FAQItemT[] = [
     category: "preise",
     q: "Muss ich eine Anzahlung leisten?",
     a: "Ja — eine Anzahlung sichert den Termin. Höhe meist 30 % der Gesamt-Gage, fällig nach Vertragsschluss. Erst dann blockiere ich das Datum komplett. Restzahlung 14 Tage nach Veranstaltung gegen Rechnung.",
+  },
+
+  /* ───────── Allgemein · Erweitert ───────── */
+  {
+    id: "deutschlandweit",
+    category: "allgemein",
+    q: "Trete ich auch außerhalb Bayerns auf?",
+    a: "Ja, deutschlandweit. Schwerpunkt Bayern (Regensburg, München, Nürnberg, Augsburg, Ingolstadt), aber Hamburg bis Stuttgart, Berlin bis Köln sind alles regelmäßige Anfragen. Bei längerer Anreise plane ich Übernachtung ein — alles transparent im Angebot.",
+  },
+  {
+    id: "alter-erfahrung",
+    category: "allgemein",
+    q: "Bin ich nicht zu jung für professionelle Magie?",
+    a: "Berechtigte Frage. Antwort: 17 Jahre Bühnen-Erfahrung mit 18. Erster Trick mit 8, erster bezahlter Gig mit 12. Heute über 200 gespielte Events. Alter ist Erfahrung minus Anfangsjahre — bei mir 10+ Jahre Profi-Übung.",
+  },
+  {
+    id: "kindergeburtstag",
+    category: "allgemein",
+    q: "Mache ich auch Kindergeburtstage?",
+    a: "Im Moment Fokus auf Erwachsenen-Entertainment — Hochzeiten, Firmenfeiern, private Feiern ab 12 Jahren. Bei Familienfeiern beziehe ich jüngere Gäste gerne ein, aber reine Kindergeburtstage (3-12 Jahre) vermittle ich an Kollegen weiter.",
+  },
+  {
+    id: "tv-auftritte",
+    category: "allgemein",
+    q: "War ich im Fernsehen?",
+    a: "Ja — TVA-Interview 2024 (Bayerisches Regional-TV) mit 16 Jahren, Live-Studio mit Karten-Routine. Davor 2023 Greatest Talent auf SAT.1 als Finalist. Mitschnitte auf YouTube und im Presse-Bereich verfügbar.",
+  },
+  {
+    id: "ausbildung",
+    category: "allgemein",
+    q: "Habe ich eine Ausbildung als Magier?",
+    a: "Magie ist kein klassisches Lehr-Beruf — keine staatliche Prüfung. Aber: Mitglied im Magischen Zirkel von Deutschland, Mentoren-Kontakte zu deutschen Top-Profis, jährliche Wettbewerbe und Workshops. Mehr Wert als jeder Schein: 200+ echte Auftritte.",
+  },
+
+  /* ───────── Buchung · Erweitert ───────── */
+  {
+    id: "online-buchung",
+    category: "buchung",
+    q: "Kann ich direkt online buchen?",
+    a: "Nein, eine direkte Online-Buchung ohne Briefing gibt es bewusst nicht. Magie funktioniert nur wenn ich euren Anlass kenne — daher immer kurzes Telefonat oder Anfrage zuerst. Antwort kommt innerhalb 24h.",
+  },
+  {
+    id: "datum-fest",
+    category: "buchung",
+    q: "Wann wird das Datum verbindlich?",
+    a: "Mit Unterschrift unter den Vertrag und Eingang der Anzahlung (30%) ist das Datum verbindlich geblockt. Vorher ist es nur reserviert — wer schneller bucht, bekommt den Slot.",
+  },
+  {
+    id: "mehrere-anbieter",
+    category: "buchung",
+    q: "Holt ihr mehrere Angebote ein?",
+    a: "Klar, völlig legitim. Wenn du parallel andere Künstler anfragst, sag es mir einfach — ich passe das Angebot dann gegebenenfalls nach.",
+  },
+  {
+    id: "buchungs-zeitpunkt",
+    category: "buchung",
+    q: "Wann ist der beste Zeitpunkt für die Buchung?",
+    a: "Für Hochsaison-Wochenenden (Mai-September, Dezember): 3-6 Monate vorab. Werktage oder Nebensaison: 4-8 Wochen reichen meist. Last-Minute (1-2 Wochen) möglich wenn Glück + freier Slot — einfach anrufen.",
+  },
+  {
+    id: "verfuegbarkeit-pruefen",
+    category: "buchung",
+    q: "Wie kann ich die Verfügbarkeit prüfen?",
+    a: "Anfrage über Formular oder Mail mit Datum, Ort und ungefährer Gästezahl — ich antworte mit Verfügbarkeits-Status + ersten Konzept-Vorschlag innerhalb 24h.",
+  },
+  {
+    id: "umbuchung",
+    category: "buchung",
+    q: "Kann ich den Termin verschieben?",
+    a: "Bei höherer Gewalt (Krankheit, Behörden-Anordnung) unkompliziert möglich. Bei freier Wahl: je früher angekündigt, desto eher klappt's. Anzahlung wird auf den neuen Termin übertragen.",
+  },
+  {
+    id: "anrede-form",
+    category: "buchung",
+    q: "Welche Anrede soll ich beim Briefing verwenden?",
+    a: "Du oder Sie — beides ok. Bei B2B-Vorstands-Events schreibe ich automatisch Sie, bei Hochzeiten/privaten Anfragen Du. Du kannst es jederzeit umstellen — keine Eitelkeit von meiner Seite.",
+  },
+
+  /* ───────── Formate · Erweitert ───────── */
+  {
+    id: "format-empfehlung",
+    category: "formate",
+    q: "Welches Format passt zu welchem Anlass?",
+    a: "Hochzeit: Close-Up beim Sektempfang + Bühnen-Highlight vor Tanz. Firmenfeier: Close-Up beim Empfang + 25-Min-Bühnenshow zum Höhepunkt. Geburtstag/Privat: Tisch-zu-Tisch + kleine Show. Magic Dinner: nur im Restaurant-Setting mit Mehrgängen.",
+  },
+  {
+    id: "anzahl-gaeste",
+    category: "formate",
+    q: "Funktioniert die Show ab welcher Gästezahl?",
+    a: "Close-Up funktioniert ab 5 Gästen, Bühnenshow ab ca. 30. Magic Dinner ab 20. Maximum: 500+ bei Bühnenshow (mit guter Tontechnik), 150 bei Close-Up über 90 Min.",
+  },
+  {
+    id: "interaktiv",
+    category: "formate",
+    q: "Müssen Gäste mitmachen?",
+    a: "Nicht müssen — können. Eingebunden werden 5-10 Gäste pro Show, immer freiwillig, nie blamierend. Wer nicht möchte, sieht trotzdem die Magie. Wer mitmacht, wird zum Hauptdarsteller seines Moments.",
+  },
+  {
+    id: "draussen-auftritt",
+    category: "formate",
+    q: "Funktioniert Magie draußen?",
+    a: "Close-Up ja, problemlos. Bühnenshow nur bei trockenem Wetter und geschützter Lage (Wind macht Karten-Effekte schwierig). Magic Dinner ginge in Biergarten oder Restaurant-Terrasse mit Bedacht.",
+  },
+  {
+    id: "wiederholung-show",
+    category: "formate",
+    q: "Wiederhole ich Routinen bei Stamm-Kunden?",
+    a: "Nie. Wer mich zum zweiten Mal bucht, bekommt komplett anderes Programm. Mein Repertoire ist groß genug — Stamm-Kunden bekommen sogar bewusst neue Stücke vor Premieren-Publikum.",
+  },
+  {
+    id: "stillere-magie",
+    category: "formate",
+    q: "Gibt es leise Magie für intime Anlässe?",
+    a: "Ja — Close-Up am Tisch ohne Mikrofon, ohne Bühne, ohne Show-Lautstärke. Beerdigungs-Gedenkfeiern (auf besonderen Wunsch), kleine private Geburtstage, intime Hochzeiten. Wirkung kommt aus Nähe statt Effekt.",
+  },
+  {
+    id: "show-aufbau",
+    category: "formate",
+    q: "Wie ist eine 30-Min-Show aufgebaut?",
+    a: "Erste 3 Min: Hook + Aufmerksamkeit fangen. Min 4-8: Mentalstück mit Publikumsbeteiligung. Min 9-18: Karten-Sequenz mit Comedy-Pointen. Min 19-25: Mentalmagie mit Saal-Beteiligung. Min 26-30: Finale + Standing-Ovation-Moment.",
+  },
+  {
+    id: "magic-dinner-buchbar",
+    category: "formate",
+    q: "Kann ich ein Magic Dinner privat buchen?",
+    a: "Ja, auf zwei Wegen: (1) Tafel beim öffentlichen Magic-Dinner-Abend im Wald & Wiese reservieren, (2) komplett privater Magic-Dinner-Abend für deine geschlossene Gesellschaft in eurem Restaurant oder Wald & Wiese. Beides über Kontaktformular anfragen.",
+  },
+
+  /* ───────── Technik · Erweitert ───────── */
+  {
+    id: "ohne-strom",
+    category: "technik",
+    q: "Kann die Show ohne Strom funktionieren?",
+    a: "Close-Up komplett ja — keine Technik. Bühnenshow mit Akku-Lautsprecher + Karten-Magie ohne elektronische Effekte ginge auch. Klassische Magie braucht kein Strom — Modern-Stage-Magie schon eher.",
+  },
+  {
+    id: "platz-close-up",
+    category: "technik",
+    q: "Wieviel Platz braucht Close-Up?",
+    a: "Ein halber Quadratmeter Tisch zum Auflegen genügt. Steh-Empfang ohne Tisch geht auch — Magie funktioniert in der Hand. Wichtig: Gäste können in Halbkreis um mich stehen, gute Sicht auf 30 cm Distanz.",
+  },
+  {
+    id: "umkleide",
+    category: "technik",
+    q: "Brauche ich eine Umkleide?",
+    a: "Ein abschließbarer Raum für Garderobe + Vorbereitung ist hilfreich, gerne mit Spiegel. Bei kleineren Locations reicht ein Personal-WC + Stuhl. Bei Wohnungs-Auftritten ein freies Schlafzimmer.",
+  },
+  {
+    id: "video-foto",
+    category: "technik",
+    q: "Dürft ihr Fotos und Videos machen?",
+    a: "Vom Publikum aus: gerne, schickt mir die schönsten Fotos zu. Eigenes Filmen meiner Show zur Verbreitung: bitte vorab abklären (Effekte sind teilweise nicht für Detailaufnahmen gedacht).",
+  },
+  {
+    id: "spielort-anforderung",
+    category: "technik",
+    q: "Welche Anforderungen an die Location?",
+    a: "Für Close-Up: keine. Für Bühne: Mindestens 2x1,5 m freie Fläche, Stromanschluss, gute Sicht für alle Gäste. Tagsüber draußen: Sonnenschutz für meine Hände + Karten. Akustik nicht kritisch — Mikrofon kompensiert.",
+  },
+  {
+    id: "barrierefrei",
+    category: "technik",
+    q: "Ist die Show barrierefrei?",
+    a: "Für Gäste im Rollstuhl: kein Problem, ich komme zum Tisch. Hörgeschädigte Gäste: Close-Up funktioniert ohne Worte, Bühnenshow mit Gebärden-Dolmetscher auf Anfrage. Sehbeeinträchtigte: Mentalmagie statt visueller Effekte.",
+  },
+  {
+    id: "online-show",
+    category: "technik",
+    q: "Mache ich auch Online-Shows?",
+    a: "Aktuell Fokus auf Live-Auftritte. Magic Dinner im Online-Format funktioniert nicht — Magie braucht physische Nähe. Für Online-Firmen-Events vermittle ich an Kollegen die darauf spezialisiert sind.",
+  },
+
+  /* ───────── Preise · Erweitert ───────── */
+  {
+    id: "richtwert-close-up",
+    category: "preise",
+    q: "Was kostet Close-Up ungefähr?",
+    a: "60 Minuten Close-Up bei lokalem Event (Regensburg + Umkreis): mittlerer dreistelliger Bereich. Plus Anfahrt bei größerer Entfernung. Konkretes Angebot kommt nach kurzem Briefing über Anlass + Location.",
+  },
+  {
+    id: "richtwert-buehne",
+    category: "preise",
+    q: "Was kostet eine 30-Min-Bühnenshow?",
+    a: "Eintags-Auftritt in Bayern, 30 Min Bühnenshow: oberer dreistelliger Bereich plus Anfahrt. Premium-Slots (Vorstandsdinner, Galas) entsprechend höher wegen Briefing-Aufwand + Personalisierung.",
+  },
+  {
+    id: "richtwert-magic-dinner",
+    category: "preise",
+    q: "Was kostet ein privates Magic Dinner?",
+    a: "Privater Magic-Dinner-Abend mit 20-50 Gästen: vierstelliger Bereich gesamt — beinhaltet 3-4 Stunden Performance + Briefing + Anfahrt. Restaurant + Menü laufen separat über das Restaurant.",
+  },
+  {
+    id: "verhandelbar",
+    category: "preise",
+    q: "Sind die Preise verhandelbar?",
+    a: "Bei mehrtägigen Engagements, Wiederholungs-Kunden oder Charity-Anlässen: ja. Bei Standard-Buchungen sind die Preise transparent kalkuliert und entsprechen dem Aufwand — Spielraum eher klein.",
+  },
+  {
+    id: "ratenzahlung",
+    category: "preise",
+    q: "Kann ich in Raten zahlen?",
+    a: "Standard ist 30% Anzahlung bei Vertragsschluss, Rest 14 Tage nach Veranstaltung. Bei größeren Buchungen sind 3 Raten (Anzahlung / vor Termin / nach Termin) möglich — auf Anfrage.",
+  },
+  {
+    id: "stornogebuehren-recht",
+    category: "preise",
+    q: "Warum gibt es Stornogebühren?",
+    a: "Weil ein geblocktes Datum andere Buchungen ausschließt. Bei Storno 4 Wochen vorher ist es schwer, einen Ersatz-Auftrag zu finden. Staffel gilt für beide Seiten — bei Verschiebung wird Anzahlung übertragen.",
+  },
+  {
+    id: "rechnung-firma",
+    category: "preise",
+    q: "Kann ich auf Firmen-Rechnung buchen?",
+    a: "Ja, alle Rechnungen sind GoBD-konform mit ausgewiesener USt und allen Pflichtangaben. Wenn deine Firma USt-IdNr hat, bitte vorab schicken — kommt auf die Rechnung.",
+  },
+  {
+    id: "trinkgeld",
+    category: "preise",
+    q: "Erwarte ich Trinkgeld?",
+    a: "Nein, das Honorar deckt alles ab. Wer freiwillig was geben möchte: schöne Geste, aber niemals erwartet oder eingefordert.",
   },
 ];
 

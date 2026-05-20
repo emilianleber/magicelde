@@ -69,6 +69,13 @@ async function loadCities() {
   return staedte;
 }
 
+// Wissen-Topics laden
+async function loadWissenTopics() {
+  const fs = await import("node:fs");
+  const content = fs.readFileSync(join(ROOT, "src/data/wissenTopics.ts"), "utf-8");
+  return [...content.matchAll(/^\s+slug:\s*"([^"]+)"/gm)].map((m) => m[1]);
+}
+
 // Blog-Posts laden
 async function loadBlogPosts() {
   const fs = await import("node:fs");
@@ -118,6 +125,13 @@ async function main() {
         }),
       );
     }
+  }
+
+  // Wissen / Glossar
+  lines.push("  <!-- Wissen / Glossar — Definition-Pages für AEO -->");
+  const wissen = await loadWissenTopics();
+  for (const slug of wissen) {
+    lines.push(urlEntry({ path: `/wissen/${slug}`, changefreq: "monthly", priority: 0.65 }));
   }
 
   // Blog-Posts

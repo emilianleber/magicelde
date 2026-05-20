@@ -1171,8 +1171,9 @@ const MagicDinnerSummerEdition = () => (
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Event",
-          name: "Magic Dinner Summer Edition",
-          startDate: "2026-07-11T19:00:00+02:00",
+          name: "Magic Dinner — Summer Edition",
+          startDate: "2026-07-11T17:00:00+02:00",
+          endDate: "2026-07-11T23:00:00+02:00",
           eventStatus: "https://schema.org/EventScheduled",
           eventAttendanceMode:
             "https://schema.org/OfflineEventAttendanceMode",
@@ -1181,6 +1182,8 @@ const MagicDinnerSummerEdition = () => (
             name: "Restaurant Wald & Wiese",
             address: {
               "@type": "PostalAddress",
+              streetAddress: "Bruckdorfer Straße 42",
+              postalCode: "93161",
               addressLocality: "Sinzing",
               addressRegion: "Bayern",
               addressCountry: "DE",
@@ -1189,7 +1192,7 @@ const MagicDinnerSummerEdition = () => (
           },
           image: ["https://www.magicel.de/og-image.jpg"],
           description:
-            "Magic Dinner am 11. Juli 2026 im Restaurant Wald & Wiese Sinzing — Tisch reservieren, à la carte essen, Close-Up-Magie am Tisch von Emilian Leber.",
+            "Magic Dinner — Summer Edition am 11. Juli 2026 ab 17:00 Uhr im Restaurant Wald & Wiese Sinzing. Tisch reservieren, à la carte essen, Close-Up-Magie am Tisch von Emilian Leber.",
           performer: {
             "@type": "Person",
             name: "Emilian Leber",

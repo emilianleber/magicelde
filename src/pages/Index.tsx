@@ -9,6 +9,7 @@ import {
 import LogoMarquee from "@/components/landing/LogoMarquee";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { TVA_VIDEO_ID } from "@/lib/videos";
+import { personSchema, localBusinessSchema, webSiteSchema } from "@/lib/schemaHelpers";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -1848,26 +1849,6 @@ const FinalCTA = () => {
    ═══════════════════════════════════════════════════════════ */
 const SITE_URL = "https://www.magicel.de/";
 
-const personSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Emilian Leber",
-  jobTitle: "Zauberkünstler",
-  url: "https://www.magicel.de",
-  image: "https://www.magicel.de/og-image.jpg",
-  address: { "@type": "PostalAddress", addressCountry: "DE", addressRegion: "Bayern" },
-  sameAs: [
-    "https://www.instagram.com/emilian.leber",
-    "https://www.provenexpert.com/emilian-leber",
-  ],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "5.0",
-    bestRating: "5",
-    reviewCount: "30",
-  },
-};
-
 const Index = () => (
   <>
     <Helmet>
@@ -1911,7 +1892,9 @@ const Index = () => (
         rel="stylesheet"
       />
 
-      <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(personSchema())}</script>
+      <script type="application/ld+json">{JSON.stringify(localBusinessSchema())}</script>
+      <script type="application/ld+json">{JSON.stringify(webSiteSchema())}</script>
     </Helmet>
 
     <PageLayout>

@@ -1229,6 +1229,244 @@ export const blogPosts: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: "was-kostet-hochzeitszauberer",
+    title: "Was kostet ein Hochzeitszauberer?",
+    titleAccent: "Ehrliche Preisspannen 2026.",
+    excerpt:
+      "Sektempfang, Dinner, Bühnen-Highlight — was darf ein professioneller Hochzeitszauberer kosten? Realistische Preisspannen und was den Preis bestimmt.",
+    category: "Hochzeit",
+    tags: ["Hochzeit", "Preise", "Buchung", "Honorar", "Wedding"],
+    date: "2026-05-15",
+    readTime: "5 Min.",
+    words: 480,
+    author: EMILIAN,
+    cover: "wedding-magic",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Bei jedem ersten Gespräch zum Hochzeitszauber kommt die Frage zwischen \"Wie lange dauert das?\" und \"Welche Tricks machen Sie?\": Was kostet das? Hier die ehrliche Antwort — ohne Geheimnistuerei, mit echten Preisspannen.",
+      },
+      {
+        type: "heading",
+        text: "Was bestimmt den Preis?",
+        id: "preis",
+      },
+      {
+        type: "list",
+        items: [
+          "Slot-Anzahl: nur Sektempfang vs Empfang + Dinner + Bühne",
+          "Dauer pro Slot: 30 Min Close-Up vs 90 Min Tisch-zu-Tisch",
+          "Anfahrt: 30 km vs 300 km macht einen Unterschied im Honorar",
+          "Übernachtung: nötig bei Auswärts-Hochzeiten am Abend",
+          "Saison: Mai-September-Samstage sind 20-30% teurer als Werktage",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Realistische Preisspannen für Hochzeitszauber in Deutschland",
+        id: "spannen",
+      },
+      {
+        type: "list",
+        items: [
+          "60 Min Close-Up beim Sektempfang (lokal): 600-900 €",
+          "Close-Up Sektempfang + Tisch-zu-Tisch (3-4 Stunden total): 1.200-1.800 €",
+          "Voller Tag — Empfang + Dinner-Tisch + 20-Min-Bühnen-Highlight: 2.000-3.500 €",
+          "Premium-Hochzeit mit personalisierter Bühnenshow + Anfahrt + Übernachtung: 3.500-6.000 €",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Was kommt zusätzlich?",
+        id: "zusatz",
+      },
+      {
+        type: "list",
+        items: [
+          "MwSt (19%) — bei gewerblichen Anbietern selbstverständlich",
+          "Anfahrt: km-Pauschale oder Inklusiv bis X km",
+          "Übernachtung: 3-4-Sterne, üblicherweise Veranstalter-Buchung",
+          "Optional: Soundtechnik wenn Location keine hat (selten)",
+        ],
+      },
+      {
+        type: "quote",
+        text:
+          "Drei Zauberer angefragt — alle drei zwischen 1.800 und 2.500 €. Der teuerste war nicht automatisch der beste, der billigste hatte keine Versicherung. Mitte hat gewonnen.",
+        attribution: "Brautmutter, Hochzeit Tegernsee 2025",
+      },
+      {
+        type: "heading",
+        text: "Warum gibt es keine Listenpreise auf den meisten Webseiten?",
+        id: "warum",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Hochzeiten sind keine Standard-Pakete. Eine Sommerhochzeit am Tegernsee mit 200 Gästen ist nicht dieselbe Buchung wie ein Winter-Standesamt mit 30 Gästen in Augsburg. Seriöse Anbieter machen ein Angebot nach kurzem Briefing — das schützt euch vor Über- oder Unter-Bezahlung.",
+      },
+      {
+        type: "callout",
+        eyebrow: "Tipp.",
+        text:
+          "Frag drei Anbieter im selben Format an. Wenn einer deutlich billiger ist als die anderen zwei: nachfragen warum (Versicherung? Erfahrung? Vertrag?). Wenn einer deutlich teurer ist: nach Referenzen mit Telefonnummern fragen.",
+      },
+    ],
+  },
+  {
+    slug: "magie-firmenfeier-roi",
+    title: "Magie auf der Firmenfeier",
+    titleAccent: "Was ein Magier konkret verändert.",
+    excerpt:
+      "Vorstandsdinner, Weihnachtsfeier, Sommerfest — was Magie als Programmpunkt konkret beim Publikum verändert. Drei Effekte aus 200+ Firmen-Events.",
+    category: "Firmenfeiern",
+    tags: ["Firmenfeier", "Entertainment", "ROI", "Event-Planung", "Corporate"],
+    date: "2026-05-09",
+    readTime: "5 Min.",
+    words: 460,
+    author: EMILIAN,
+    cover: "magicdinner-buehne",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Firmenfeiern haben ein verstecktes Problem: alle wollen hingehen, niemand will gehen. Pflicht-Programm zwischen Reden, Buffet und der einen Tanzfläche, an der drei Personen tanzen. Magie als Programmpunkt verändert die Dynamik — hier ist was konkret passiert.",
+      },
+      {
+        type: "heading",
+        text: "01 — Eisbrecher zwischen Abteilungen",
+        id: "eisbrecher",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Beim Empfang stehen Vertrieb und IT meist in zwei getrennten Gruppen — wie zwei Inseln. Der Magier geht zur ersten Gruppe, macht 5 Minuten Close-Up. Drei Minuten später ruft jemand die andere Gruppe rüber: \"Du musst das sehen!\". In zwölf Minuten ist aus zwei Gruppen eine.",
+      },
+      {
+        type: "heading",
+        text: "02 — Gesprächs-Stoff für die nächste Woche",
+        id: "stoff",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Was Mitarbeiter Montag in der Kantine erzählen, definiert ob die Feier als \"gut\" oder \"so naja\" erinnert wird. Magie produziert Erzähl-Material: \"Du, der hat doch echt MEINE Karte erraten...\". Das wirkt 1-2 Wochen nach.",
+      },
+      {
+        type: "heading",
+        text: "03 — Standing Ovation für den Vorstand",
+        id: "ovation",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Bühnen-Slot am Ende der Feier mit Mentaleffekt, in dem der Geschäftsführer eine Wahl trifft die der Magier vorhergesagt hat. Vorstand wird zum Mit-Akteur, das Publikum klatscht stehend. Das hat etwas mit Hierarchie zu tun: jemand vom oberen Management wird sympathisch vorgeführt — ohne lächerlich zu werden.",
+      },
+      {
+        type: "quote",
+        text:
+          "Ich habe drei Jahre lang gedacht, die Feier müsste größer werden. War falsch. Sie musste anders werden. Magie war der Hebel.",
+        attribution: "HR-Leiterin, 250-Personen-Konzern, Bayern 2025",
+      },
+      {
+        type: "heading",
+        text: "Wo Magie nicht funktioniert",
+        id: "ausnahmen",
+      },
+      {
+        type: "list",
+        items: [
+          "Strikt-formelle Awards-Galas ohne Comedy-Anteil — da passt Mentalmagie, kein Close-Up",
+          "Reine Stehempfänge unter 30 Gäste — zu wenig Tafel-Material für 90 Min Close-Up",
+          "Vollständige B2B-Konferenzen ohne sozialen Teil — Magie braucht Stimmung",
+        ],
+      },
+      {
+        type: "callout",
+        eyebrow: "ROI-Realität.",
+        text:
+          "Magie kostet bei einer 100-Personen-Firmenfeier 1.500-3.000 € — also 15-30 € pro Gast. Erinnerungs-Effekt: 1-2 Wochen Gesprächs-Material und höhere Teilnahmebereitschaft im nächsten Jahr. Konservativ kalkuliert bei 5% mehr Teilnehmer ist es ROI-positiv.",
+      },
+    ],
+  },
+  {
+    slug: "tisch-vs-buehne-was-besser",
+    title: "Tisch oder Bühne",
+    titleAccent: "Was wirklich besser ankommt.",
+    excerpt:
+      "Close-Up am Tisch vs. Bühnenshow für den ganzen Saal — was wirkt besser? Eine ehrliche Analyse aus 200+ Auftritten, ohne Verkaufs-Pitch.",
+    category: "Hintergrund",
+    tags: ["Close-Up", "Bühnenshow", "Entertainment", "Vergleich", "Format-Wahl"],
+    date: "2026-04-25",
+    readTime: "4 Min.",
+    words: 400,
+    author: EMILIAN,
+    cover: "buehne-zuschauer",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Die häufigste Frage in Briefings: \"Was wirkt besser — Close-Up am Tisch oder Bühnenshow?\" Antwort wider Erwarten: kommt drauf an, was \"besser\" heißt. Hier eine ehrliche Analyse aus 200+ Auftritten.",
+      },
+      {
+        type: "heading",
+        text: "Close-Up wirkt persönlicher",
+        id: "close-up",
+      },
+      {
+        type: "paragraph",
+        text:
+          "30 Zentimeter zwischen Karte und Auge. Der Effekt passiert in deiner Hand. Du bist Augenzeuge, nicht Zuschauer. Was du erlebst, kannst du niemandem erklären — und genau das ist die Wirkung. Close-Up bleibt persönliche Erinnerung, nicht geteiltes Erlebnis.",
+      },
+      {
+        type: "heading",
+        text: "Bühne wirkt kollektiver",
+        id: "buehne",
+      },
+      {
+        type: "paragraph",
+        text:
+          "100 Augenpaare schauen denselben Effekt. Alle reagieren gleichzeitig. Die Standing Ovation ist kollektiv — die Erinnerung wird geteilt. Bühne produziert das Erlebnis \"Erinnerst du dich, wie wir alle...?\". Bei Hochzeiten und Firmenfeiern ist das oft das Gewünschte.",
+      },
+      {
+        type: "heading",
+        text: "Was wirkt stärker?",
+        id: "staerker",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Stärker wirkt das, was zur Veranstaltung passt. Vorstandsdinner mit 12 Personen: Close-Up. Hochzeitsfeier mit 100 Gästen: beides, in unterschiedlichen Slots. Galaabend mit Award-Verleihung: Bühnen-Show als Übergang. Magic Dinner: nur Close-Up — die Bühne fehlt bewusst.",
+      },
+      {
+        type: "quote",
+        text:
+          "Die beste Hochzeit hatte beides: Close-Up beim Sektempfang als Eisbrecher, Bühnenshow vor dem Tanz als emotionaler Höhepunkt. Beide Slots zusammen waren mehr als die Summe.",
+        attribution: "Hochzeitsplanerin, Tegernsee 2024",
+      },
+      {
+        type: "heading",
+        text: "Wann beide kombinieren?",
+        id: "kombinieren",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Ab ca. 60 Gästen und mindestens 4 Stunden Veranstaltungsdauer lohnt es sich. Close-Up beim Empfang als Aufwärmung, Bühne als Höhepunkt vor Dinner-Ende. Zwei Slots, ein Künstler, ein roter Faden.",
+      },
+      {
+        type: "callout",
+        eyebrow: "Faustregel.",
+        text:
+          "Unter 30 Gäste: Close-Up. Über 80 Gäste mit sitzendem Programm: Bühne. Zwischen 30 und 80 oder mit gemischtem Programm: beides kombinieren.",
+      },
+    ],
+  },
 ];
 
 export const FEATURED_SLUG = "zauberer-fuer-hochzeit-auswaehlen";
