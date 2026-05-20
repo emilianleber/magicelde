@@ -439,7 +439,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "callout",
-        eyebrow: "Roter Flag.",
+        eyebrow: "Warnsignal.",
         text:
           "Wer dir innerhalb 30 Sekunden ein Pauschalangebot schickt, ohne nach Anlass, Gästezahl oder Location gefragt zu haben, ist kein Künstler — er ist ein Buchungsbot.",
       },

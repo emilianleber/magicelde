@@ -244,6 +244,42 @@ const Hero = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   POSTER — Original-Plakat als Eye-Catcher unter dem Hero
+   ═══════════════════════════════════════════════════════════ */
+const PosterSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      className="bg-white py-16 md:py-24"
+      style={{ background: "#2e5f6e" }}
+    >
+      <div className="container px-6">
+        <div
+          className={`mx-auto max-w-[680px] ${
+            isVisible ? "animate-fade-up" : "opacity-0"
+          }`}
+        >
+          <img
+            src={posterImg}
+            alt="Magic Dinner Summer Edition — Plakat · Restaurant Wald & Wiese Sinzing · 11. Juli 2026"
+            className="w-full h-auto block"
+            style={{
+              borderRadius: "1rem",
+              boxShadow: "0 40px 80px -30px rgba(0,0,0,0.5)",
+            }}
+            loading="lazy"
+          />
+          <p className="mt-6 text-center text-sm text-white/70">
+            Originale Veranstaltungs-Ankündigung des Restaurant Wald &amp; Wiese
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
    ABLAUF — User-Erklärung: Platz reservieren → essen → Tisch-Magie
    ═══════════════════════════════════════════════════════════ */
 const AblaufSection = () => {
@@ -1207,6 +1243,7 @@ const MagicDinnerSummerEdition = () => (
     <PageLayout>
       <main>
         <Hero />
+        <PosterSection />
         <AblaufSection />
         <WannWoSection />
         <ReservierungsSection />
