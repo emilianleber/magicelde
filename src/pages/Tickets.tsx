@@ -34,7 +34,7 @@ import {
 } from "lucide-react";
 
 import heroStageImg from "@/assets/audience-reactions.jpg";
-import dinnerImg from "@/assets/magicdinner-buehne.jpg";
+import dinnerImg from "@/assets/magic-dinner-summer-poster.png";
 import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 import stageShowImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
@@ -738,24 +738,17 @@ const MagicDinnerAbendeSection = () => {
             <div
               className="relative overflow-hidden rounded-2xl"
               style={{
-                aspectRatio: "16/10",
+                aspectRatio: "1/1",
+                background: "#2e5f6e",
                 boxShadow: "0 30px 60px -25px rgba(0,0,0,0.25)",
+                maxHeight: "560px",
               }}
             >
               <img
                 src={dinnerImg}
-                alt="Magic Dinner Summer Edition im Restaurant Wald & Wiese Sinzing — Sommerabend mit Close-Up am Tisch"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+                alt="Magic Dinner Summer Edition · 11. Juli 2026 · Restaurant Wald & Wiese Sinzing — Poster"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-[1200ms] ease-out group-hover:scale-[1.02]"
                 loading="lazy"
-                style={{ objectPosition: "center 35%" }}
-              />
-              <div
-                aria-hidden
-                className="absolute inset-x-0 bottom-0 h-1/2"
-                style={{
-                  background:
-                    "linear-gradient(180deg, transparent, rgba(0,0,0,0.55))",
-                }}
               />
               <span
                 className="absolute top-5 left-5 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white"
@@ -765,17 +758,6 @@ const MagicDinnerAbendeSection = () => {
               >
                 {SUMMER.status}
               </span>
-              <div className="absolute bottom-5 left-5 right-5 md:bottom-7 md:left-7 md:right-7 text-white">
-                <p
-                  className={`text-base md:text-lg mb-1`}
-                  style={{ color: "#f3d9a8" }}
-                >
-                  Wald & Wiese · Sinzing
-                </p>
-                <p className="font-display text-lg md:text-2xl font-bold leading-tight">
-                  {SUMMER.label} · {SUMMER.date}
-                </p>
-              </div>
             </div>
           </div>
 

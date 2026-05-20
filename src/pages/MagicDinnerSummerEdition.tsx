@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 
 import heroDinnerImg from "@/assets/hero-dinner.jpg";
+import posterImg from "@/assets/magic-dinner-summer-poster.png";
 import schneiderImg from "@/assets/schneider-weisse-closeup.jpg";
 import emilianDinnerImg from "@/assets/emilian-magic-dinner.jpg";
 import staunenImg from "@/assets/staunen.jpg";
@@ -266,15 +267,8 @@ const AblaufSection = () => {
       num: "03",
       Icon: Sparkles,
       title: "Ich besuche euren Tisch.",
-      body: "Während ihr esst, gehe ich von Tisch zu Tisch. 5–7 Minuten pro Tafel, abgestimmt auf eure Runde: Karten in eure Hände, eine Münze die durch den Tisch fällt, eine Wahl die niemand erklären kann. Kein Mikrofon, keine Bühne — nur ihr und die Magie direkt vor euch.",
-      tip: "Pro Tafel sehe ich euch 2–3× im Lauf des Abends, mit unterschiedlichen Routinen pro Besuch. Lieblings-Effekt nochmal? Sag's einfach.",
-    },
-    {
-      num: "04",
-      Icon: Quote,
-      title: "Tafel-Moment zum Dessert.",
-      body: "Zur Dessert-Zeit gibt es einen zentralen Moment für den ganzen Saal — eine Mentalmagie-Routine mit allen Tafeln gleichzeitig. Vorhersage, drei Sekunden Stille, dann Applaus. Übergabe ans Restaurant, Bar offen.",
-      tip: "Danach könnt ihr noch sitzen bleiben, Karten signieren lassen oder fragen wie der Trick wirklich geht — ich verrate ihn natürlich nicht.",
+      body: "Während des Abends gehe ich von Tisch zu Tisch — Karten in eure Hände, eine Münze die durch den Tisch fällt, eine Wahl die niemand erklären kann. Kein Mikrofon, keine Bühne, kein Hetzen — nur ihr und die Magie direkt vor euch.",
+      tip: "Dauer und Zeitpunkt richten sich nach dem Abend — ihr esst entspannt, ich passe mich an euren Service-Rhythmus an.",
     },
   ];
   return (
@@ -748,22 +742,12 @@ const WasErwartetSection = () => {
     {
       Icon: Sparkles,
       title: "Close-Up direkt am Tisch",
-      body: "Karten in deinen Händen, Münzen aus dem Nichts, Mentaleffekte mit deiner Wahl. 2–3 Besuche pro Tafel über den Abend verteilt — verschiedene Routinen pro Besuch.",
+      body: "Karten in deinen Händen, Münzen aus dem Nichts, Mentaleffekte mit deiner Wahl. Während des Abends besuche ich eure Tafel — abgestimmt auf den Service-Rhythmus.",
     },
     {
       Icon: Wine,
-      title: "Sommerterrasse + Bar",
+      title: "Sommerterrasse + Innenbereich",
       body: "Bei Sonnenwetter auf der Terrasse mit Blick ins Grüne, sonst klassischer Innenbereich. Hauseigene Weine, Drinks, Bar bis spät.",
-    },
-    {
-      Icon: Quote,
-      title: "Tafel-Moment zum Dessert",
-      body: "Ein zentraler Mentalmagie-Moment für den ganzen Saal. Vorhersage, drei Sekunden Stille, dann Applaus. Niemand sieht es kommen.",
-    },
-    {
-      Icon: Music2,
-      title: "Hintergrund-Musik",
-      body: "Lounge-Soundtrack passend zur Magie. Kein Live-Programm, aber genug Atmosphäre dass die Tafel-Gespräche nicht abreißen.",
     },
     {
       Icon: Users,
@@ -853,11 +837,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Wann komme ich am Tisch dran?",
-    a: "Ich gehe von Tafel zu Tafel über den Abend verteilt — meistens während Vorspeise, zwischen den Gängen und vor dem Dessert. Insgesamt 2–3 Besuche pro Tafel mit jeweils 5–7 Minuten Magie.",
-  },
-  {
-    q: "Was passiert beim Dessert?",
-    a: "Zur Dessert-Zeit gibt es einen zentralen Tafel-Moment für den ganzen Saal — eine Mentalmagie-Routine mit allen Gästen gleichzeitig. Drei Sekunden Stille, dann Applaus, dann zurück zum Abend.",
+    a: "Ich gehe von Tafel zu Tafel über den Abend verteilt — der genaue Zeitpunkt ergibt sich aus dem Service-Rhythmus. Ihr esst entspannt, ich passe mich an. Keine starre Reihenfolge, keine Hetze.",
   },
   {
     q: "Kann ich auch jemanden überraschen?",

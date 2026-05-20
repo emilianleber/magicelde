@@ -735,181 +735,409 @@ export const blogPosts: BlogPost[] = [
     ],
   },
   {
-    slug: "tour-2026-bayern-theater",
-    title: "Tour 2026 — Bayerische Theater im Fokus",
-    titleAccent: "Plötzlich Magie.",
+    slug: "drei-sekunden-stille",
+    title: "Drei Sekunden Stille",
+    titleAccent: "die Anatomie eines Magie-Moments.",
     excerpt:
-      "Plötzlich Magie — Magic Meets Comedy. Die erste abendfüllende Tour mit Premieren in Bayern. Wo gespielt wird, wie sich das Programm entwickelt und was hinter jedem Stop steckt.",
-    category: "Tour",
+      "Warum die Drei-Sekunden-Stille nach einem Effekt das eigentliche Produkt ist — und nicht der Trick davor. Eine Studie über das, was zwischen Wow und Applaus passiert.",
+    category: "Hintergrund",
     tags: [
-      "Tour 2026",
-      "Plötzlich Magie",
-      "Bayern",
-      "Theater",
-      "Abendprogramm",
+      "Mentalmagie",
+      "Dramaturgie",
+      "Behind the Scenes",
+      "Magie-Theorie",
+      "Reaktion",
     ],
-    date: "2026-01-30",
-    readTime: "4 Min.",
-    words: 360,
+    date: "2026-03-14",
+    readTime: "5 Min.",
+    words: 420,
     author: EMILIAN,
-    cover: "buehne-zuschauer",
+    cover: "staunen",
     featured: false,
     sections: [
       {
         type: "paragraph",
         text:
-          "Plötzlich Magie — Magic Meets Comedy. So heißt die Tour, die 2026 in Bayern startet. Es ist die erste abendfüllende Show unter meinem Namen, und es ist das Format, an dem ich die letzten zwei Jahre gearbeitet habe.",
+          "Jeder gute Effekt hat einen Moment, der nicht auf der Bühne stattfindet, sondern im Kopf des Zuschauers. Drei Sekunden lang. Manchmal vier. In dieser Zeit wird aus einem Trick eine Erinnerung.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Ich nenne das die Drei-Sekunden-Stille. Es ist die Zeit zwischen der Auflösung und dem Applaus. Wenn ich diese Sekunden treffe, war der Abend gut. Wenn nicht, war alles davor egal.",
       },
       {
         type: "heading",
-        text: "Was das Programm anders macht",
-        id: "anders",
+        text: "Was in der Stille passiert",
+        id: "stille",
       },
       {
         type: "paragraph",
         text:
-          "Neunzig Minuten Show, eine Pause, ein roter Faden. Kein Variete-Format, in dem zehn unterschiedliche Effekte aneinandergereiht werden. Sondern ein erzählter Abend, in dem Comedy und Magie zusammengehören wie Vorspeise und Hauptgang.",
+          "Sekunde eins: Wahrnehmung. Der Zuschauer sieht das Ergebnis und versucht, es mit dem, was er gerade gesehen hat, in Einklang zu bringen. Sekunde zwei: Widerstand. Das Gehirn sucht eine Erklärung und findet keine. Sekunde drei: Akzeptanz. Der Zuschauer gibt das Erklären auf und erlebt den Effekt als das, was er ist — ein Wunder.",
       },
       {
         type: "paragraph",
         text:
-          "Die Comedy-Teile schreibe ich selbst. Die Magie-Teile entwickle ich seit Jahren. Beide werden hier zum ersten Mal als eine einzige Show gespielt.",
-      },
-      {
-        type: "heading",
-        text: "Stationen in Bayern",
-        id: "stationen",
-      },
-      {
-        type: "list",
-        items: [
-          "Regensburg — Premiere mit Heimspiel-Charakter.",
-          "Straubing — Klassisches Stadttheater, intime Akustik.",
-          "Landshut — Erste Show außerhalb der Heimatregion.",
-          "München — Größtes Publikum, vollständig durchproduziert.",
-          "Passau — Saisonschluss mit erweiterten Finalszenen.",
-        ],
-      },
-      {
-        type: "paragraph",
-        text:
-          "Jeder Stop ist ein eigener Lernmoment. Was in Regensburg zündet, kann in München zu klein sein. Was in Straubing funktioniert, muss in Passau überarbeitet werden. Genau diese Iteration ist der Wert einer Tour — sie macht die Show besser, Show für Show.",
+          "Erst danach kommt der Applaus. Vorher wäre er Höflichkeit. Nachher ist er Erleichterung.",
       },
       {
         type: "quote",
         text:
-          "Erste abendfüllende Show. Letztes Mal habe ich so gefühlt, als ich mit acht Jahren das erste Kartenstück lernte.",
-        attribution: "Aus dem Tour-Notizbuch, Januar 2026",
+          "Wir haben drei Sekunden lang vergessen, was logisch ist. Das war das Schönste am Abend.",
+        attribution: "Gast nach einem Magic-Dinner-Abend, Sinzing 2025",
+      },
+      {
+        type: "heading",
+        text: "Wie man die Stille hält",
+        id: "halten",
+      },
+      {
+        type: "list",
+        items: [
+          "Nicht reden, nicht atmen, nicht zur Auflösung zurückspringen.",
+          "Den Effekt unterbrechen, bevor jemand klatschen kann — aushalten.",
+          "Augenkontakt halten, aber nicht herausfordernd.",
+          "Erst loslassen, wenn der erste tiefe Atemzug aus dem Publikum kommt.",
+        ],
       },
       {
         type: "callout",
-        eyebrow: "Hintergrund.",
+        eyebrow: "Werkstatt.",
         text:
-          "Die Tour-Idee entstand 2024 beim Talents-of-Magic-Finale in München. Aus einem Sieben-Minuten-Wettbewerbsstück wurde über zwei Jahre eine neunzig-Minuten-Show.",
+          "Drei Sekunden Stille kosten mehr Arbeit als die zehn Minuten Aufbau davor. Sie sind der eigentliche Effekt — der Rest ist nur das, was zur Stille hinführt.",
       },
       {
         type: "paragraph",
         text:
-          "Wer eine Show buchen will, statt eine Tour zu besuchen, kann das parallel machen. Privatauftritte und Firmen-Events laufen unter dem Jahr weiter. Die Tour ist das Schaufenster. Die privaten Auftritte sind die Werkstatt.",
-      },
-      {
-        type: "paragraph",
-        text:
-          "Die Daten zu den einzelnen Tour-Stationen kommen sukzessive auf die Website. Für die Premiere in Regensburg ist die erste Reihe schon weg.",
+          "Wer den Beruf gut machen will, lernt nicht mehr Tricks. Er lernt die Pausen. Das gilt für die Bühne, fürs Close-Up am Tisch, fürs Restaurant. Drei Sekunden sind ein langes Stück Zeit — wenn man sie ernst nimmt.",
       },
     ],
   },
   {
-    slug: "ploetzlich-magie-premiere-regensburg",
-    title: "Plötzlich Magie — Premierenbericht",
-    titleAccent: "22. Februar, Alte Mälzerei.",
+    slug: "wenn-ein-trick-schief-geht",
+    title: "Wenn ein Trick schief geht",
+    titleAccent: "was dann wirklich passiert.",
     excerpt:
-      "Premiere von [Plötzlich Magie — Magic Meets Comedy] in der Alten Mälzerei Regensburg. Was im Saal passiert ist, was vor und hinter dem Vorhang lief — und warum die 90 Minuten anders waren als alles davor.",
-    category: "Tour",
+      "Karten landen falsch, Münzen rollen weg, Vorhersagen sind die falsche Farbe. Was passiert, wenn ein Effekt nicht funktioniert — und warum es passieren darf.",
+    category: "Hinter den Kulissen",
     tags: [
-      "Plötzlich Magie",
-      "Premiere",
-      "Regensburg",
-      "Alte Mälzerei",
-      "Tour 2026",
+      "Behind the Scenes",
+      "Fehler",
+      "Improvisation",
+      "Live-Show",
+      "Werkstatt",
     ],
-    date: "2026-02-23",
-    readTime: "6 Min.",
-    words: 480,
+    date: "2026-04-02",
+    readTime: "5 Min.",
+    words: 440,
     author: EMILIAN,
-    cover: "buehne-zuschauer",
+    cover: "staunen",
     featured: false,
     sections: [
       {
         type: "paragraph",
         text:
-          "22. Februar 2026, Alte Mälzerei Regensburg, 20:00 Uhr. Der Saal ist voll — und ich stehe sieben Meter dahinter im Backstage-Gang und höre, wie zum ersten Mal eine eigene abendfüllende Show vor einem zahlenden Publikum aufgeführt wird.",
+          "Bei einer Hochzeit in Tegernsee, irgendwo im Sommer, ist mir eine Karte aus der Hand gefallen. Drei Sekunden bevor sie hätte erscheinen müssen — am Tisch eines Brautelternpaars, fünf Augenpaare auf meiner Hand. Sie lag jetzt zwischen Salatschüssel und Weinflasche, sichtbar für alle.",
       },
       {
         type: "paragraph",
         text:
-          "Vor zwei Jahren war das eine Idee auf einem Notizbuchblatt. Heute Abend ist es 90 Minuten Programm mit Pause, Lichtcues, Soundeinspielern und einem Saal mit über 300 Plätzen.",
+          "Was tut man da? Ehrlich: man hebt sie auf, lacht selbst, und macht weiter. Nicht so tun, als wäre nichts passiert. Nicht aufgeben. Nicht entschuldigen, als wäre es eine Katastrophe. Es war eine Karte. Sie ist runtergefallen. Mehr nicht.",
       },
       {
         type: "heading",
-        text: "Was vor dem Vorhang passierte",
-        id: "vor-dem-vorhang",
+        text: "Warum Fehler erlaubt sein müssen",
+        id: "fehler",
       },
       {
         type: "paragraph",
         text:
-          "Tagesablauf: 09:00 Anlieferung. 11:00 Bühnenaufbau. 14:00 Soundcheck. 17:00 Tech-Rehearsal mit kompletter Licht- und Soundsequenz. 19:00 Garderobe und zwanzig Minuten Stille. 19:30 Einlass. 20:00 Saallicht aus.",
+          "Eine Magie-Performance, die vorgibt fehlerfrei zu sein, ist langweilig. Sie spielt eine Show, die so nicht stattfindet. Das Publikum spürt das. Wer am Tisch sitzt, will keinen Roboter mit perfekter Choreografie — sondern jemanden, dem etwas passieren kann, der damit umgeht, und der trotzdem weiter zaubert.",
       },
       {
         type: "paragraph",
         text:
-          "Ich habe lange überlegt, ob ich vor der Show noch mit Gästen reden soll. Dagegen entschieden. Es geht nicht um den Mensch hinter der Bühne. Es geht um den Moment, in dem das Licht ausgeht und der erste Satz fällt.",
-      },
-      {
-        type: "heading",
-        text: "Die 90 Minuten",
-        id: "show",
-      },
-      {
-        type: "paragraph",
-        text:
-          "Erster Akt: ein Mentalstück mit drei Zuschauern, dann eine Comedy-Sequenz, die das Publikum auf der Schiene hatte. Pause kurz vor dem ersten echten Tiefpunkt — bewusst. In der Pause hört man, wie im Foyer Leute über das eben Gesehene streiten. Genau das war das Ziel.",
-      },
-      {
-        type: "paragraph",
-        text:
-          "Zweiter Akt: ein längeres Stück mit Brief und Umschlag. Vorhersage des kompletten Abends, geschrieben am Morgen, vor allen Augen verschlossen. Auflösung im Finale. Standing Ovation. Ich habe es nicht erwartet — die Show ist neu und ich hatte gerechnet, dass irgendwo etwas knirschen würde.",
+          "Jeder gute Magier hat einen Satz, mit dem er einen Fehler in ein Programm rettet. Bei mir ist es meistens [Genau das wollte ich nicht — und genau deshalb passt es jetzt]. Es funktioniert, weil es ehrlich ist.",
       },
       {
         type: "quote",
         text:
-          "Es war keine Zaubershow. Es war ein Abend. Und das ist viel mehr.",
-        attribution: "Gast nach der Premiere",
+          "Du bist der Erste, bei dem ich vergessen habe, dass das überhaupt ein Trick war — auch als die Karte fiel.",
+        attribution: "Brautmutter, Tegernsee 2025",
       },
       {
         type: "heading",
-        text: "Was ich gelernt habe",
-        id: "lernen",
+        text: "Was hilft, wenn es passiert",
+        id: "umgang",
       },
       {
         type: "list",
         items: [
-          "Der erste Satz entscheidet, ob das Publikum mitgeht — die ersten 90 Sekunden sind die Show.",
-          "Eine Pause ist kein Loch — sie ist ein Programmpunkt mit eigener Dramaturgie.",
-          "Standing Ovation entsteht nicht durch das beste Stück, sondern durch den letzten gemeinsam empfundenen Atemzug.",
-          "Backstage-Stille vor der Show ist mehr wert als jede zusätzliche Probe.",
+          "Atmen. Eine Sekunde tiefer Atemzug ist Notfall-Recovery.",
+          "Den Fehler benennen, nicht verstecken — Authentizität schlägt Perfektion.",
+          "Eine zweite Routine im Kopf haben — als Notausgang. Ich habe pro Set immer drei Backups dabei.",
+          "Nicht weiter mit dem geplanten Stück — sondern den Reset bewusst machen.",
+          "Hinterher analysieren, warum es passiert ist. Aber nicht im Moment.",
         ],
       },
       {
         type: "callout",
-        eyebrow: "Ehrlich.",
+        eyebrow: "Lehre.",
         text:
-          "Eine eigene abendfüllende Show ist ein anderes Tier als ein Sieben-Minuten-Wettbewerbsbeitrag. Sie verlangt Ausdauer, Dramaturgie und Mut zur Pause. Das lernt man nicht in Proben — nur in echten Vorstellungen.",
+          "Routinen sind Hardware. Improvisation ist das Betriebssystem. Wer nur die Hardware probt, ist hilflos sobald sie kippt. Das echte Üben ist das, was man tut wenn alles schief geht.",
       },
       {
         type: "paragraph",
         text:
-          "Die nächsten Tour-Stops folgen ab April. Wer in Regensburg dabei war, soll mir gerne schreiben — Eindrücke nehme ich auf, baue sie ein, mache die Show besser. Premiere ist nie das Ende. Premiere ist Material für die zweite Show.",
+          "Die Karte ist seit jenem Sommer in einer Notizbuch-Tasche bei mir. Sie ist Erinnerung — daran, dass Magie nicht aus Perfektion entsteht, sondern aus dem, was zwischen den geplanten Momenten passiert.",
+      },
+    ],
+  },
+  {
+    slug: "magic-dinner-sommer-terrasse",
+    title: "Magic Dinner im Sommer",
+    titleAccent: "was die Terrasse anders macht.",
+    excerpt:
+      "Ein Sommer-Magic-Dinner ist nicht dasselbe wie der Winter-Abend. Anderes Licht, anderer Service-Rhythmus, andere Stimmung. Wie sich die Performance an die Jahreszeit anpasst.",
+    category: "Magic Dinner",
+    tags: [
+      "Magic Dinner",
+      "Sommer",
+      "Wald & Wiese",
+      "Terrasse",
+      "Atmosphäre",
+    ],
+    date: "2026-05-08",
+    readTime: "4 Min.",
+    words: 360,
+    author: EMILIAN,
+    cover: "magicdinner-buehne",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Im Winter ist ein Magic Dinner ein gedämpfter Abend. Kerzenschein, schwerer Wein, die Gäste in dunklen Pullovern, langsame Bewegungen. Im Sommer wird daraus ein anderer Abend — der Service läuft länger, der Lichtwechsel ist sichtbar, der Wind streift durchs Glas.",
+      },
+      {
+        type: "heading",
+        text: "Was sich am Abend verändert",
+        id: "veraenderungen",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Sommer-Gäste essen langsamer. Sie haben Zeit. Es gibt zwischen Vorspeise und Hauptgang oft eine kleine Pause, in der jemand auf die Terrasse geht. Für die Magie heißt das: weniger Effekte am Tisch in kürzerer Zeit, mehr Routinen die mit dem Tempo des Abends mitgehen.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Das Licht spielt mit. Bis 21:30 Uhr ist es im Juli draußen noch hell — ein anderes Setting als das Kerzen-Innenlicht im November. Man sieht mehr Finger, mehr Bewegung, mehr Detail. Ich passe das Repertoire darauf an: weniger Karten-Sequenzen die auf Schatten setzen, mehr Münzen, mehr Mentaleffekte mit blossen Händen.",
+      },
+      {
+        type: "quote",
+        text:
+          "Die Magie wirkt anders bei Sonnenuntergang. Ehrlicher irgendwie. Weniger Tricks, mehr Augen.",
+        attribution: "Tisch-Notiz nach einem Sommer-Dinner, Sinzing 2025",
+      },
+      {
+        type: "heading",
+        text: "Was bleibt gleich",
+        id: "konstanten",
+      },
+      {
+        type: "list",
+        items: [
+          "Der Drei-Sekunden-Moment nach jedem Effekt — Sommer oder Winter.",
+          "Die Tafel als zentrale Bühne — auch wenn sie auf der Terrasse steht.",
+          "Das Restaurant entscheidet den Service, ich passe mich an — nicht umgekehrt.",
+          "Keine festen Programm-Zeiten — der Abend folgt dem Essen.",
+        ],
+      },
+      {
+        type: "callout",
+        eyebrow: "Praktisch.",
+        text:
+          "Reservierung lieber früher als später — Sommer-Termine im Wald & Wiese sind 6–8 Wochen vorher meist weg. Wer die Summer Edition verpasst, kann sich für den Newsletter eintragen, dann bekommt er die nächsten Termine vorab.",
+      },
+    ],
+  },
+  {
+    slug: "karten-in-haenden-der-braut",
+    title: "Karten in den Händen der Braut",
+    titleAccent: "Hochzeitszauber-Notizen.",
+    excerpt:
+      "Sektempfang, Tisch-zu-Tisch, Brautstrauß-Routine — kleine Notizen aus dem Hochzeits-Jahr 2025. Was Brautpaare hinterher wirklich erinnern, jenseits der großen Show-Momente.",
+    category: "Hochzeit",
+    tags: [
+      "Hochzeit",
+      "Sektempfang",
+      "Close-Up",
+      "Braut",
+      "Notizen",
+    ],
+    date: "2026-04-18",
+    readTime: "4 Min.",
+    words: 360,
+    author: EMILIAN,
+    cover: "wedding-magic",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Bei jeder Hochzeit gibt es einen Moment, in dem die Braut zum ersten Mal seit der Trauung die Hände frei hat. Nicht für Champagner, nicht für ein Gruppenfoto — sondern für eine Karte, die sie selbst wählen darf. Und dann tut sich etwas an ihrem Gesicht, was kein Fotograf je einfangen wird.",
+      },
+      {
+        type: "heading",
+        text: "Die kleinen Momente",
+        id: "momente",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Hochzeiten sind voll mit großen Momenten — Ja-Wort, erster Tanz, Anschnitt der Torte. Aber das, was Gäste sich Monate später noch erzählen, sind oft die kleinen Sachen. Die Karte, die im Geldbeutel des Brautvaters auftaucht. Die Münze, die ein zehnjähriger Cousin findet. Die Vorhersage, die zwischen Vor- und Hauptgang verlesen wird.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Genau deshalb ist Close-Up bei Hochzeiten so stark. Es ist nicht das Spektakel — es ist die Nähe. Wer dreißig Zentimeter vom Effekt entfernt steht, hat ein anderes Erlebnis als die Reihe zehn beim Bühnen-Trick.",
+      },
+      {
+        type: "quote",
+        text:
+          "Meine Tante redet immer noch von der Karte, die in ihrer Handtasche war. Sie sagt, sie hat seit Wochen nicht reingeschaut. Das war drei Monate vor der Hochzeit. Ich glaube ihr das.",
+        attribution: "Braut, Hochzeit Tegernsee 2025",
+      },
+      {
+        type: "heading",
+        text: "Was funktioniert, was nicht",
+        id: "praxis",
+      },
+      {
+        type: "list",
+        items: [
+          "Funktioniert: kleine personalisierte Routinen für Trauzeugen oder Brautmutter — vorher abgesprochen.",
+          "Funktioniert: ein Stück nach dem Sektempfang als Eisbrecher zwischen verfeindeten Familienzweigen.",
+          "Funktioniert nicht: lange Bühnenstücke vor dem Essen — die Gäste sind hungrig, nicht aufnahmebereit.",
+          "Funktioniert nicht: Magie als Pflichtprogramm während der Reden — die Reden gehören den Gästen.",
+        ],
+      },
+      {
+        type: "callout",
+        eyebrow: "Tipp.",
+        text:
+          "Wer auf der Hochzeit eine Routine speziell für jemanden möchte (Brautvater, Trauzeuge, Brautmutter), schreibt mir vorab kurz zur Person — ich baue eine kleine Karte ein, die diese Person bekommt. Das wird oft als das Beste vom Abend erinnert.",
+      },
+    ],
+  },
+  {
+    slug: "werkstatt-jahr-2025-lektionen",
+    title: "Werkstattjahr 2025",
+    titleAccent: "Lektionen aus 80+ Auftritten.",
+    excerpt:
+      "Was ein Jahr mit über 80 Auftritten — Hochzeiten, Firmen, Magic Dinners, Privatfeiern — für die Performance bedeutet. Sieben Notizen aus dem Werkstattjahr.",
+    category: "Hinter den Kulissen",
+    tags: [
+      "Werkstatt",
+      "Behind the Scenes",
+      "Lernen",
+      "Jahresrückblick",
+      "Auftritt",
+    ],
+    date: "2026-01-15",
+    readTime: "6 Min.",
+    words: 540,
+    author: EMILIAN,
+    cover: "portrait-karten",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "2025 war kein Lehrjahr — es war ein Werkstattjahr. Achtzig-plus Auftritte, davon dreißig Hochzeiten, zwanzig Firmenfeiern, ein Dutzend Magic-Dinner-Abende im Wald & Wiese, der Rest Privatfeiern und Galas. Sieben Notizen aus dem Jahr.",
+      },
+      {
+        type: "heading",
+        text: "01 · Routinen altern",
+        id: "altern",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Ein Stück, das ich seit drei Jahren mache, wirkt nicht mehr wie vor drei Jahren. Nicht weil der Effekt schwächer wird — sondern weil ich ihn anders erzähle. Routinen brauchen Pflege, sonst werden sie zu Bewegung ohne Bedeutung.",
+      },
+      {
+        type: "heading",
+        text: "02 · Publikum ist verschieden",
+        id: "publikum",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Ein Vorstandsdinner ist nicht eine Brautmutter-Tafel. Das Tempo, der Humor, die Reaktionszeiten sind andere. Wer das gleiche Set überall spielt, gewinnt nirgends ganz.",
+      },
+      {
+        type: "heading",
+        text: "03 · Stille zählt mehr als Tricks",
+        id: "stille",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Drei Sekunden Stille nach einem Effekt sind mehr wert als zehn Minuten Setup davor. Wer die Stille nicht halten kann, hat keinen Effekt — nur eine Aufführung.",
+      },
+      {
+        type: "heading",
+        text: "04 · Service ist Programm",
+        id: "service",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Bei Magic Dinners habe ich gelernt, dass der Service-Rhythmus den Magie-Rhythmus diktiert. Wer das Restaurant nicht ernst nimmt, stört. Wer es ernst nimmt, wird Teil des Abends.",
+      },
+      {
+        type: "heading",
+        text: "05 · Backups sind Pflicht",
+        id: "backups",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Pro Set drei Backups. Pro Routine eine zweite Auflösung. Pro Abend ein Notausgang. Klingt paranoid — ist Profession.",
+      },
+      {
+        type: "quote",
+        text:
+          "Routinen sind Hardware. Improvisation ist das Betriebssystem. Beide muss man üben.",
+        attribution: "Notizbuch-Eintrag, Sommer 2025",
+      },
+      {
+        type: "heading",
+        text: "06 · Vorbereitung schlägt Talent",
+        id: "vorbereitung",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Die besten Abende waren die, bei denen ich mit dem Veranstalter vorher zwei Stunden geredet hatte. Briefing, Räume, Gäste, Erwartungen. Die schlechten Abende waren immer die ohne Briefing.",
+      },
+      {
+        type: "heading",
+        text: "07 · Der Künstler hinter der Bühne",
+        id: "person",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Wer als Person nicht da ist, kann auch nicht als Künstler da sein. Schlaf, gutes Essen vor dem Auftritt, kein Telefon in der Stunde davor. Die Bühne fordert den Menschen, nicht nur die Hände.",
+      },
+      {
+        type: "callout",
+        eyebrow: "2026.",
+        text:
+          "Das nächste Jahr wird ruhiger geplant: weniger Auftritte, längere Briefings, mehr Werkstattzeit zwischen den Auftritten. Qualität statt Quantität — und das Magic Dinner als Kern, um das die anderen Formate kreisen.",
       },
     ],
   },
@@ -1013,7 +1241,6 @@ export const CATEGORIES = [
   "Buchung",
   "Hinter den Kulissen",
   "Hintergrund",
-  "Tour",
 ];
 
 export const getRelatedPosts = (slug: string, limit = 3): BlogPost[] => {
