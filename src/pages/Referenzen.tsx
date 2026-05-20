@@ -115,7 +115,7 @@ const Hero = () => {
         <div className="grid lg:grid-cols-12 gap-x-10 gap-y-12 items-end">
           <div className="lg:col-span-7">
             {/* Trust-Strip */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade" style={{ animationDelay: "0.05s" }}>
+            <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-5 gap-y-2 mb-8 hero-fade" style={{ animationDelay: "0.05s" }}>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-0.5">
                   {[...Array(5)].map((_, i) => (

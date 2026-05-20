@@ -257,7 +257,7 @@ const Hero = () => {
       <div className="relative z-10 min-h-screen container px-6 flex flex-col pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="flex-1 flex flex-col justify-center max-w-5xl">
           <div
-            className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade"
+            className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-5 gap-y-2 mb-8 hero-fade"
             style={{ animationDelay: "0.05s" }}
           >
             <div className="flex items-center gap-2">

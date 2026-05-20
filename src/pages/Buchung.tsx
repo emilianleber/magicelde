@@ -204,22 +204,20 @@ const Buchung = () => {
                 innerhalb von 24 Stunden zurück — meistens schneller.
               </p>
 
-              <div className="flex flex-wrap gap-x-5 gap-y-2 mt-6 text-sm text-foreground/65">
-                <span className="inline-flex items-center gap-1.5">
-                  <Shield className="w-3.5 h-3.5" style={{ color: ACCENT }} />
+              <ul className="flex flex-col sm:flex-row sm:flex-wrap gap-x-5 gap-y-1.5 mt-6 text-sm text-foreground/65">
+                <li className="inline-flex items-center gap-1.5">
+                  <Shield className="w-3.5 h-3.5 shrink-0" style={{ color: ACCENT }} />
                   100 % unverbindlich
-                </span>
-                <span aria-hidden className="text-foreground/20">·</span>
-                <span className="inline-flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" style={{ color: ACCENT }} />
+                </li>
+                <li className="inline-flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 shrink-0" style={{ color: ACCENT }} />
                   Antwort in 24h
-                </span>
-                <span aria-hidden className="text-foreground/20">·</span>
-                <span className="inline-flex items-center gap-1.5">
-                  <Star className="w-3.5 h-3.5" style={{ color: ACCENT }} />
+                </li>
+                <li className="inline-flex items-center gap-1.5">
+                  <Star className="w-3.5 h-3.5 shrink-0" style={{ color: ACCENT }} />
                   Kostenlose Beratung
-                </span>
-              </div>
+                </li>
+              </ul>
             </div>
 
             {/* Prefill-Banner */}
@@ -269,8 +267,8 @@ const Buchung = () => {
 
             {/* Formular */}
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name + Email */}
-              <div className="grid grid-cols-1 sm:grid-cols-[120px_1fr_1fr_1fr] gap-3">
+              {/* Name */}
+              <div className="grid grid-cols-[110px_1fr] sm:grid-cols-[120px_1fr_1fr] gap-3">
                 <select
                   name="anrede"
                   className={inputCls}
@@ -295,17 +293,17 @@ const Buchung = () => {
                   placeholder="Nachname *"
                   required
                   defaultValue={prefill.nachname}
-                  className={inputCls}
-                />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="E-Mail *"
-                  required
-                  defaultValue={prefill.email}
-                  className={inputCls}
+                  className="col-span-2 sm:col-span-1 w-full rounded-xl border border-foreground/15 bg-white px-4 py-3 text-base text-foreground placeholder:text-foreground/40 focus:border-[color:var(--ac)] focus:outline-none focus:ring-2 focus:ring-[color:var(--ac)]/15 transition-colors"
                 />
               </div>
+              <input
+                type="email"
+                name="email"
+                placeholder="E-Mail *"
+                required
+                defaultValue={prefill.email}
+                className={inputCls}
+              />
 
               {/* Firma + Telefon */}
               <div className="grid sm:grid-cols-2 gap-3">

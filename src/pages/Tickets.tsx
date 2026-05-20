@@ -175,7 +175,7 @@ const Hero = () => {
       <div className="relative z-10 min-h-screen container px-6 flex flex-col pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="flex-1 flex flex-col justify-center max-w-5xl">
           <div
-            className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade"
+            className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-5 gap-y-2 mb-8 hero-fade"
             style={{ animationDelay: "0.05s" }}
           >
             <div className="flex items-center gap-2">
@@ -199,7 +199,7 @@ const Hero = () => {
             />
             <span className="text-sm text-white/80">
               <strong className="font-semibold text-white">
-                Premiere · 22. Februar 2026
+                Premiere · 22.02.2026
               </strong>
               <span className="text-white/55"> · Alte Mälzerei Regensburg</span>
             </span>
@@ -246,17 +246,17 @@ const Hero = () => {
             style={{ animationDelay: "1.2s" }}
           >
             <a
-              href="#tour-daten"
+              href="#magic-dinner"
               className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"
             >
-              Tour-Daten ansehen
+              Magic-Dinner-Abende
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
             <a
-              href="#magic-dinner"
+              href="#aktuelle-show"
               className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
             >
-              Magic-Dinner-Abende
+              Tour-Show 2026
               <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
@@ -2295,7 +2295,6 @@ const Tickets = () => (
         <PullQuoteSection />
         <LocationsSection />
         <AktuelleTourShowSection />
-        <TourDatenSection />
         <VideoSection />
         <StimmenSection />
         <FAQSection />
