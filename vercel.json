@@ -120,7 +120,15 @@
     { "source": "/faq/", "destination": "/faq", "permanent": true },
     { "source": "/buchung/", "destination": "/buchung", "permanent": true },
     { "source": "/presse/", "destination": "/presse", "permanent": true },
-    { "source": "/tickets/", "destination": "/tickets", "permanent": true }
+    { "source": "/tickets/", "destination": "/tickets", "permanent": true },
+    { "source": "/blog/", "destination": "/blog", "permanent": true },
+    { "source": "/wissen/", "destination": "/", "permanent": true },
+    { "source": "/datenschutz/", "destination": "/datenschutz", "permanent": true },
+    { "source": "/impressum/", "destination": "/impressum", "permanent": true },
+    { "source": "/agb/", "destination": "/agb", "permanent": true },
+    { "source": "/event-agenturen/", "destination": "/event-agenturen", "permanent": true },
+    { "source": "/messe-magier/", "destination": "/messe-magier", "permanent": true },
+    { "source": "/comedy-zauberei/", "destination": "/comedy-zauberei", "permanent": true }
   ],
   "headers": [
     {

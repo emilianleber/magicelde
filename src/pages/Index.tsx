@@ -33,6 +33,12 @@ import {
 } from "lucide-react";
 
 import heroStartImg from "@/assets/hero-start.jpg";
+import heroStartAvif1200 from "@/assets/hero-start-1200.avif";
+import heroStartAvif800 from "@/assets/hero-start-800.avif";
+import heroStartAvif400 from "@/assets/hero-start-400.avif";
+import heroStartWebp1200 from "@/assets/hero-start-1200.webp";
+import heroStartWebp800 from "@/assets/hero-start-800.webp";
+import heroStartWebp400 from "@/assets/hero-start-400.webp";
 import heroStageImg from "@/assets/hero-stage.jpg";
 import heroDinnerImg from "@/assets/hero-dinner.jpg";
 import heroCloseupImg from "@/assets/hero-closeup.jpg";
@@ -139,16 +145,31 @@ const Hero = () => {
         className="absolute inset-0 hero-photo-wrap hero-zoom"
         style={{ willChange: "transform" }}
       >
-        <img
-          src={heroStartImg}
-          alt="Zauberkünstler Emilian Leber — Bühne, Close-Up und Magic Dinner aus Bayern"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{
-            objectPosition: "center 30%",
-            filter: "brightness(0.75)",
-          }}
-          loading="eager"
-        />
+        <picture>
+          <source
+            type="image/avif"
+            srcSet={`${heroStartAvif400} 400w, ${heroStartAvif800} 800w, ${heroStartAvif1200} 1200w`}
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcSet={`${heroStartWebp400} 400w, ${heroStartWebp800} 800w, ${heroStartWebp1200} 1200w`}
+            sizes="100vw"
+          />
+          <img
+            src={heroStartImg}
+            alt="Zauberkünstler Emilian Leber — Bühne, Close-Up und Magic Dinner aus Bayern"
+            className="absolute inset-0 w-full h-full object-cover"
+            width="1200"
+            height="800"
+            style={{
+              objectPosition: "center 30%",
+              filter: "brightness(0.75)",
+            }}
+            loading="eager"
+            fetchPriority="high"
+          />
+        </picture>
         <div
           aria-hidden
           className="absolute inset-0"
