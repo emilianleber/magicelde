@@ -1,18 +1,87 @@
+# magicel.de · robots.txt
+# Letzte Aktualisierung: 2026-05-20
+
+# Such-Crawler — alle Bereiche außer Admin/Portal indexieren
 User-agent: Googlebot
 Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+Disallow: /unsubscribe
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+Disallow: /unsubscribe
 
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+Disallow: /unsubscribe
+
+# AI/LLM Crawler — explizit erlaubt für AEO (Answer Engine Optimization)
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+User-agent: Applebot
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /kundenportal/
+
+# Social-Preview-Bots
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: LinkedInBot
+Allow: /
+
+# Default
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /kundenportal/
+Disallow: /unsubscribe
 
 Sitemap: https://www.magicel.de/sitemap.xml
+Host: https://www.magicel.de

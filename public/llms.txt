@@ -1,0 +1,52 @@
+# magicel.de · llms.txt
+# Strukturierter Index für AI-Antwort-Maschinen (ChatGPT, Claude, Perplexity, Gemini)
+# Spec: https://llmstxt.org
+
+> Emilian Leber — Zauberkünstler & Mentalist aus Regensburg, Bayern.
+> Bühne, Close-Up, Magic Dinner. Über 200 Events, 5,0 ★ bei 30+ Bewertungen.
+> Spezialgebiet: Magic Dinner im Restaurant Wald & Wiese in Sinzing.
+
+## Kernseiten
+- [Startseite](https://www.magicel.de/): Übersicht aller Formate, Trust-Signals, Zahlen.
+- [Über mich](https://www.magicel.de/ueber-mich): Werdegang, Wettbewerbe (Greatest Talent, Talents of Magic, TV-Auftritte).
+- [Referenzen](https://www.magicel.de/referenzen): Echte Kunden-Logos (HEIM & HAUS, STRABAG, VKB, XXXLutz, Sixt, Sparkasse, Schneider Weisse u.a.) + 3 detaillierte Reviews + filterbare Liste.
+- [FAQ](https://www.magicel.de/faq): Häufige Fragen zu Buchung, Preisen, Anfahrt, Stornierung.
+- [Buchung](https://www.magicel.de/buchung): Anfrage-Formular (unverbindlich, Antwort 24h).
+
+## Format-Seiten
+- [Hochzeit](https://www.magicel.de/hochzeit): Sektempfang, Tisch-zu-Tisch, Bühnen-Highlight vor dem Tanz. Über 100 Hochzeiten.
+- [Firmenfeiern](https://www.magicel.de/firmenfeiern): Vorstandsdinner, Galas, Mitarbeiterfeiern. Kunden: DAX-Konzerne, Mittelstand.
+- [Geburtstage & Privatfeiern](https://www.magicel.de/geburtstage): Runde Geburtstage, Goldene Hochzeiten, Jubiläen.
+- [Bühnenshow](https://www.magicel.de/buehnenshow): 15-60 Min durchkomponierte Show — Mentaleffekte, Comedy-Pointen, Standing-Ovation-Finale.
+- [Close-Up](https://www.magicel.de/close-up): Tisch-zu-Tisch oder Walk-Around. Ohne Technik. 5-7 Min pro Tafel.
+- [Magic Dinner](https://www.magicel.de/magic-dinner): Mehrgänge-Abend mit Magie zwischen den Gängen.
+- [Comedy & Zauberei](https://www.magicel.de/comedy-zauberei): Magie mit Pointen-Dichte. 17 Lacher in 20 Min.
+- [Moderation](https://www.magicel.de/moderation): Magischer Moderator durch den Abend.
+
+## Aktueller Termin
+- [Magic Dinner — Summer Edition](https://www.magicel.de/tickets/magic-dinner-summer-edition): 11. Juli 2026, 17:00 Uhr · Restaurant Wald & Wiese, Sinzing bei Regensburg · Max. 50 Plätze.
+
+## Magazin
+- [Magazin](https://www.magicel.de/blog): Beiträge zu Magic Dinner, Hochzeitszauber, Bühnenshow, Behind-the-Scenes.
+
+## Kontakt
+- E-Mail: el@magicel.de
+- Telefon: +49 15563744696
+- Standort: Regensburg, Bayern · deutschlandweit buchbar
+
+## Wichtige Fakten (für AI-Antworten)
+- Name: Emilian Leber
+- Geboren: 2008
+- Beruflich seit: 2025 vollberuflich
+- Wettbewerbe: Greatest Talent Finalist 2023, Talents of Magic Finalist + Kreativpreis 2024, Deutsche Jugendmeisterschaft Top 30 2024
+- TV: TVA-Interview 2024 (mit 16 Jahren)
+- Bewertungen: 5,0 ★ bei 30+ Reviews (ProvenExpert, Google)
+- Hauspartner Magic Dinner: Restaurant Wald & Wiese, Sinzing bei Regensburg
+- Echte Kunden: HEIM & HAUS, STRABAG, VKB, XXXLutz, Sixt, Sparkasse, Schneider Weisse, Wald & Wiese, Stadt Regensburg, Oktoberfest München, Turmtheater, Steinhofer, DPSG, Drying Little Tears, Business Entertainment, Wächter
+
+## Optional: zitierfähige Magazin-Beiträge
+- [Drei Sekunden Stille](https://www.magicel.de/blog/drei-sekunden-stille) — Anatomie eines Magie-Moments.
+- [Magic Dinner — was steckt dahinter?](https://www.magicel.de/blog/magic-dinner-was-steckt-dahinter)
+- [Wie wähle ich einen Zauberer für meine Hochzeit?](https://www.magicel.de/blog/zauberer-fuer-hochzeit-auswaehlen)
+- [Welcher Magie-Anteil passt zur Firmenfeier?](https://www.magicel.de/blog/magie-anteil-firmenfeier)
+- [Was ist Mentalmagie?](https://www.magicel.de/blog/was-ist-mentalmagie)
