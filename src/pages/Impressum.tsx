@@ -241,7 +241,7 @@ const LegalContent = () => {
 
           {/* Body */}
           <article
-            className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`max-w-3xl`}
           >
             <h2
               id="tmg-5"
@@ -411,7 +411,7 @@ const KontaktDirektCard = () => {
     >
       <div className="container px-6">
         <div
-          className={`max-w-4xl mx-auto rounded-3xl bg-white p-8 md:p-12 border border-foreground/10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-4xl mx-auto rounded-3xl bg-white p-8 md:p-12 border border-foreground/10`}
           style={{ boxShadow: "0 30px 60px -25px rgba(0,0,0,0.15)" }}
         >
           <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-8 md:gap-12 items-start">
@@ -537,7 +537,7 @@ const VerwandteRessourcen = () => {
   return (
     <section ref={ref} className="bg-white py-24 md:py-28 border-y border-foreground/10">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mb-12`}>
           <p className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-4`}>
             Weiter im Rechtlichen.
           </p>
@@ -607,7 +607,7 @@ const FinalCTA = () => {
         }}
       />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className={`${SERIF_ITALIC} text-base md:text-lg text-white/60 mb-5`}>
             Fragen zur Vertretungsberechtigung?
           </p>

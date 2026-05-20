@@ -279,7 +279,7 @@ const LegalContent = () => {
 
           {/* Body */}
           <article
-            className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`max-w-3xl`}
           >
             <ParagraphH2 id="p1" num="§ 1" title="Geltungsbereich" />
             <P>
@@ -479,7 +479,7 @@ const StornierungsStaffel = () => {
       style={{ background: `linear-gradient(180deg, ${CREAM} 0%, #faf2e3 100%)` }}
     >
       <div className="container px-6">
-        <div className={`max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-4xl mx-auto`}>
           <p className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-4`}>
             § 5 · auf einen Blick.
           </p>
@@ -585,7 +585,7 @@ const VerwandteRessourcen = () => {
     >
       <div className="container px-6">
         <div
-          className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl mb-12`}
         >
           <p className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-4`}>
             Weiter im Rechtlichen.
@@ -658,7 +658,7 @@ const FinalCTA = () => {
       />
       <div className="relative container px-6">
         <div
-          className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl mx-auto text-center`}
         >
           <p className={`${SERIF_ITALIC} text-base md:text-lg text-white/60 mb-5`}>
             Frage zu einem Paragraphen?

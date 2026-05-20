@@ -268,7 +268,7 @@ const LegalContent = () => {
           </aside>
 
           {/* Body */}
-          <article className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <article className="max-w-3xl">
             <H2 id="ueberblick">
               1. Datenschutz{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -738,7 +738,7 @@ const CookieStatus = () => {
       style={{ background: `linear-gradient(180deg, ${CREAM} 0%, #faf2e3 100%)` }}
     >
       <div className="container px-6">
-        <div className={`max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-4xl mx-auto`}>
           <p className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-4`}>
             Konkret hier auf dieser Seite.
           </p>
@@ -827,7 +827,7 @@ const VerwandteRessourcen = () => {
   return (
     <section ref={ref} className="bg-white py-24 md:py-28 border-y border-foreground/10">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mb-12`}>
           <p className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-4`}>
             Weiter im Rechtlichen.
           </p>
@@ -897,7 +897,7 @@ const FinalCTA = () => {
         }}
       />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className={`${SERIF_ITALIC} text-base md:text-lg text-white/60 mb-5`}>
             Frage zur Datenverarbeitung?
           </p>
