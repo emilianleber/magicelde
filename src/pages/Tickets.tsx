@@ -8,6 +8,7 @@ import {
 } from "@/components/landing/CustomQuiz";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { captureEmail } from "@/lib/emailCapture";
+import { sendInquiry } from "@/lib/sendInquiry";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 import {
   ArrowRight,
@@ -1660,7 +1661,7 @@ const NewsletterCTASection = () => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     if (!email || !email.includes("@") || email.length < 5) {
@@ -1668,7 +1669,22 @@ const NewsletterCTASection = () => {
       return;
     }
     captureEmail(email, "tickets-newsletter");
-    setSubmitted(true);
+    try {
+      await sendInquiry({
+        name: "Newsletter-Anmeldung",
+        email,
+        anlass: "Newsletter · Tickets",
+        nachricht:
+          "Newsletter-Anmeldung über die Tickets-Seite — bitte über neue Magic-Dinner-Termine und Specials informieren.",
+      });
+      setSubmitted(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? `Anmeldung fehlgeschlagen: ${err.message}`
+          : "Anmeldung fehlgeschlagen. Bitte später erneut versuchen.",
+      );
+    }
   };
 
   return (

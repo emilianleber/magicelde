@@ -31,6 +31,7 @@ import emilianDinnerImg from "@/assets/emilian-magic-dinner.jpg";
 import staunenImg from "@/assets/staunen.jpg";
 import haendeImg from "@/assets/haende-interaktion.jpg";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
+import { sendInquiry } from "@/lib/sendInquiry";
 
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
@@ -506,22 +507,40 @@ const ReservierungsSection = () => {
     }
   }, [form]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.email || !form.email.includes("@")) return;
-    markEmailSubmitted();
     setSubmitted(true);
-    // Build mailto with all data
+
+    const nachricht =
+      `Reservierungsanfrage für Magic Dinner Summer Edition am ${EVENT_DATE}\n\n` +
+      `Wunsch-Uhrzeit: ${form.uhrzeit || "—"}\n` +
+      `Bereich: ${form.bereich || "—"}\n` +
+      `Anlass: ${form.anlass || "—"}\n` +
+      `Wünsche: ${form.wuensche || "—"}`;
+
+    try {
+      await sendInquiry({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        anlass: "Magic Dinner — Summer Edition",
+        format: form.bereich || "Restaurant",
+        datum: EVENT_DATE,
+        ort: "Restaurant Wald & Wiese · Sinzing",
+        gaeste: form.personen ? Number(form.personen) : null,
+        nachricht,
+      });
+      markEmailSubmitted();
+    } catch (err) {
+      console.error("MDSE sendInquiry failed", err);
+    }
+
+    // Plus mailto ans Restaurant (Reservierung läuft dort)
     const subject = encodeURIComponent(
       `Magic Dinner Summer Edition · ${form.personen} Personen · ${form.name}`,
     );
-    const body = encodeURIComponent(
-      `Reservierungsanfrage für Magic Dinner Summer Edition am ${EVENT_DATE}\n\n` +
-        `Name: ${form.name}\nEmail: ${form.email}\nTelefon: ${form.phone}\n` +
-        `Personen: ${form.personen}\nWunsch-Uhrzeit: ${form.uhrzeit || "—"}\n` +
-        `Bereich: ${form.bereich || "—"}\n` +
-        `Anlass: ${form.anlass || "—"}\nWünsche: ${form.wuensche || "—"}`,
-    );
+    const body = encodeURIComponent(nachricht + `\n\nKontakt: ${form.name} · ${form.email} · ${form.phone || "—"}`);
     window.setTimeout(() => {
       window.location.href = `mailto:${RESERVIERUNG_MAIL}?subject=${subject}&body=${body}&cc=el@magicel.de`;
     }, 800);

@@ -18,6 +18,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
+import { sendInquiry } from "@/lib/sendInquiry";
 
 // ──────────────────────────────────────────────────────────────────────────
 // CI v3 Tokens (Burgunder + Amber + Cream)
@@ -707,24 +708,29 @@ const Chatbot = () => {
     }
   };
 
-  const handleFormSubmit = (e: FormEvent) => {
+  const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim() || !form.email.includes("@")) return;
     setSubmitting(true);
 
-    // Capture + mark submitted
     captureEmail(form.email, "chatbot", {
       name: form.name,
       anlass: form.anlass,
       message: form.message,
     });
-    markEmailSubmitted();
 
-    setTimeout(() => {
+    try {
+      await sendInquiry({
+        name: form.name,
+        email: form.email,
+        anlass: form.anlass || "Chatbot · Karta",
+        nachricht: form.message || "Anfrage über Chatbot — keine zusätzliche Nachricht.",
+      });
+      markEmailSubmitted();
       setSubmitting(false);
       setSubmitted(true);
       pushBot({
-        text: `Danke ${form.name.split(" ")[0]}. Ich habe deine Anfrage notiert und melde mich innerhalb 24h auf ${form.email}. Falls du Lust hast, fuelle den Show-Planer mit Details aus.`,
+        text: `Danke ${form.name.split(" ")[0]}. Anfrage ist raus — Bestätigung kommt gleich an ${form.email}. Ich melde mich innerhalb 24h persönlich.`,
         actions: [
           { label: "Show-Planer starten", icon: Wand2, kind: "open-planer" },
           {
@@ -735,7 +741,15 @@ const Chatbot = () => {
           },
         ],
       });
-    }, 700);
+    } catch (err) {
+      setSubmitting(false);
+      pushBot({
+        text:
+          err instanceof Error
+            ? `Versand hat nicht geklappt: ${err.message}. Schreib mir direkt an el@magicel.de.`
+            : "Versand hat nicht geklappt. Schreib mir direkt an el@magicel.de.",
+      });
+    }
   };
 
   // ────────────────────────────────────────────────────────────────────────

@@ -34,6 +34,7 @@ import {
   markCompleted,
 } from "@/lib/showPlaner";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
+import { sendInquiry } from "@/lib/sendInquiry";
 
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
@@ -379,12 +380,39 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
     return false;
   }, [currentStep, answers, isSummary]);
 
-  const submit = () => {
+  const submit = async () => {
     if (!email || !email.includes("@")) return;
     markCompleted();
-    markEmailSubmitted();
     setSubmitted(true);
-    // Build prefilled URL to /buchung
+
+    const notizen = [
+      answers.dauer ? `Dauer: ${answers.dauer}` : null,
+      answers.tonalitaet ? `Tonalität: ${answers.tonalitaet}` : null,
+      answers.location ? `Location: ${answers.location}` : null,
+      answers.notizen ? `Notizen: ${answers.notizen}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    try {
+      await sendInquiry({
+        name: name.trim() || "Show-Planer",
+        email,
+        phone,
+        anlass: answers.anlass || "Show-Planer-Anfrage",
+        format: answers.format || "noch offen",
+        datum: answers.datum || "",
+        ort: answers.ort || "",
+        gaeste: answers.gaesteCount ? Number(answers.gaesteCount) : null,
+        nachricht:
+          `Show-Planer-Anfrage über magicel.de\n\n${notizen || "Keine zusätzlichen Notizen."}`,
+      });
+      markEmailSubmitted();
+    } catch (err) {
+      // Soft-fail: trotzdem zur Buchung weiterleiten mit Prefill als Backup
+      console.error("ShowPlaner sendInquiry failed", err);
+    }
+
     const params = new URLSearchParams();
     params.set("anlass", answers.anlass || "");
     params.set("format", answers.format || "");

@@ -15,6 +15,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
+import { sendInquiry } from "@/lib/sendInquiry";
 
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
@@ -136,35 +137,34 @@ const Buchung = () => {
       return;
     }
 
-    // Capture email even if subsequent network call would fail
     captureEmail(payload.email, "buchung", payload);
 
     try {
-      // Build mailto fallback — server endpoint not always available
-      const subject = encodeURIComponent(
-        `Anfrage · ${payload.anlass} · ${payload.name}`,
-      );
-      const body = encodeURIComponent(
-        `Anfrage von magicel.de\n\n` +
-          `Name: ${payload.name}\n` +
-          `Firma: ${payload.firma || "—"}\n` +
-          `E-Mail: ${payload.email}\n` +
-          `Telefon: ${payload.phone || "—"}\n\n` +
-          `Anlass: ${payload.anlass}\n` +
-          `Format: ${payload.format || "noch offen"}\n` +
-          `Datum: ${payload.datum || "flexibel"}\n` +
-          `Ort: ${payload.ort || "—"}\n` +
-          `Gäste: ${payload.gaeste ?? "—"}\n\n` +
-          `Nachricht:\n${payload.nachricht || "—"}`,
-      );
-
+      await sendInquiry({
+        anrede: payload.anrede ?? undefined,
+        vorname: payload.vorname,
+        nachname: payload.nachname,
+        name: payload.name,
+        firma: payload.firma,
+        email: payload.email,
+        phone: payload.phone,
+        anlass: payload.anlass,
+        datum: payload.datum,
+        ort: payload.ort,
+        gaeste: payload.gaeste,
+        format: payload.format,
+        nachricht: payload.nachricht,
+      });
       markEmailSubmitted();
-      setSuccess("Vielen Dank! Dein Email-Programm öffnet sich — sende mir die Mail einfach ab.");
-      window.setTimeout(() => {
-        window.location.href = `mailto:el@magicel.de?subject=${subject}&body=${body}`;
-      }, 600);
+      setSuccess(
+        "Anfrage ist raus. Eine Bestätigung kommt gleich per Email, ich melde mich innerhalb 24 Stunden persönlich zurück.",
+      );
     } catch (err) {
-      setError("Etwas ist schiefgelaufen. Schreib mir direkt an el@magicel.de.");
+      setError(
+        err instanceof Error
+          ? `Versand fehlgeschlagen: ${err.message}. Bitte schreib mir direkt an el@magicel.de.`
+          : "Etwas ist schiefgelaufen. Schreib mir direkt an el@magicel.de.",
+      );
     }
     setSending(false);
   };

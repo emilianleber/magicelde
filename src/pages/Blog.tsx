@@ -10,6 +10,7 @@ import {
   type BlogPost,
 } from "@/data/blogPosts";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
+import { sendInquiry } from "@/lib/sendInquiry";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -833,11 +834,28 @@ const NewsletterSignup = () => {
     }
   }, [email, name]);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const [error, setError] = useState<string | null>(null);
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     if (!email.includes("@")) return;
-    markEmailSubmitted();
-    setSent(true);
+    try {
+      await sendInquiry({
+        name: name.trim() || "Newsletter-Anmeldung",
+        email,
+        anlass: "Newsletter · Magazin",
+        nachricht:
+          "Newsletter-Anmeldung über die Magazin-Seite — bitte vierteljährliche Magazin-Updates schicken.",
+      });
+      markEmailSubmitted();
+      setSent(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? `Anmeldung fehlgeschlagen: ${err.message}`
+          : "Anmeldung fehlgeschlagen. Bitte später erneut versuchen.",
+      );
+    }
   };
 
   return (
@@ -932,6 +950,11 @@ const NewsletterSignup = () => {
                       />
                     </div>
                   </div>
+                  {error && (
+                    <p className="mt-4 text-sm text-[color:var(--ac)]" style={{ ["--ac" as never]: ACCENT }}>
+                      {error}
+                    </p>
+                  )}
                   <button
                     type="submit"
                     className="mt-7 w-full inline-flex items-center justify-center gap-2 text-[13px] tracking-[0.08em] uppercase font-semibold px-6 py-4 rounded-full text-white transition-transform duration-300 hover:scale-[1.015]"
