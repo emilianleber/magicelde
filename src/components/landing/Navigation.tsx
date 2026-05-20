@@ -60,9 +60,13 @@ const Navigation = () => {
     ? "font-display font-black text-foreground text-lg hidden sm:inline tracking-tight"
     : "font-display font-black text-white text-lg hidden sm:inline tracking-tight [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]";
 
-  const logoImgCls = scrolled
-    ? "h-7 w-auto transition-all duration-500"
-    : "h-7 w-auto brightness-0 invert transition-all duration-500 [filter:invert(1)_drop-shadow(0_2px_6px_rgba(0,0,0,0.7))]";
+  const logoImgCls = "h-7 w-auto transition-all duration-500";
+  const logoImgStyle: React.CSSProperties = scrolled
+    ? {}
+    : {
+        filter:
+          "brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,0.8))",
+      };
 
   const DropdownItem = ({
     to,
@@ -117,12 +121,12 @@ const Navigation = () => {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
             ? "bg-white/98 backdrop-blur-xl border-b border-foreground/10 py-3 shadow-[0_8px_24px_-16px_rgba(0,0,0,0.12)]"
-            : "bg-gradient-to-b from-black/70 via-black/40 to-transparent py-4"
+            : "bg-gradient-to-b from-black/85 via-black/55 to-transparent py-4"
         }`}
       >
         <div className="container flex items-center justify-between px-6">
           <Link to="/" className="flex items-center gap-2.5 min-w-0">
-            <img src={logoImg} alt="Emilian Leber" className={logoImgCls} />
+            <img src={logoImg} alt="Emilian Leber" className={logoImgCls} style={logoImgStyle} />
             <span className={logoTextCls}>Emilian Leber</span>
           </Link>
 
@@ -205,8 +209,13 @@ const Navigation = () => {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className={`lg:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors ${
-              scrolled ? "text-foreground" : "text-white [filter:drop-shadow(0_2px_4px_rgba(0,0,0,0.6))]"
+              scrolled ? "text-foreground" : "text-white"
             }`}
+            style={
+              scrolled
+                ? {}
+                : { filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.8))" }
+            }
             aria-label="Menü"
           >
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}

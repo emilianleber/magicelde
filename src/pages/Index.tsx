@@ -384,10 +384,10 @@ const KonzeptIntroSection = () => {
                   <p
                     className={`${SERIF_ITALIC} text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
-                    Aus dem Gastraum auf die Bühne.
+                    Live aus dem Restaurant.
                   </p>
                   <p className="font-display text-base md:text-xl text-white font-bold leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
-                    Gastro-Sohn. Bühnenkünstler.
+                    Tisch. Bühne. Pointe.
                   </p>
                 </div>
               </div>

@@ -789,163 +789,158 @@ const DINNER_TERMINE = [
 
 const MagicDinnerAbendeSection = () => {
   const { ref, isVisible } = useScrollReveal();
+  const SUMMER = DINNER_TERMINE[0];
+  const REST = DINNER_TERMINE.slice(1);
   return (
     <section
       id="magic-dinner"
       ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-20 md:py-28"
     >
       <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
-            >
-              Magic-Dinner-Abende · Sinzing.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
-              Dinner und{" "}
-              <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Karten am Tisch.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Zwischen Vorspeise und Dessert kommt eine Magie-Routine direkt
-              an euren Tisch. Hauspartner ist das Restaurant Wald &amp; Wiese
-              in Sinzing bei Regensburg — vier bis sechs Termine pro Jahr,
-              kleine Runden, persönliche Routinen.
-            </p>
-          </div>
+        <div className="mb-10 md:mb-14 max-w-3xl">
+          <p
+            className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-4`}
+          >
+            Aktueller Magic-Dinner-Abend.
+          </p>
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
+            Summer Edition.
+          </h2>
         </div>
 
-        <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-12 items-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+        {/* XL Featured Card — Summer Edition */}
+        <Link
+          to="/tickets/magic-dinner-summer-edition"
+          className={`group grid lg:grid-cols-12 gap-x-10 gap-y-8 items-stretch ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
-          {/* Photo + Glass-Caption */}
-          <div className="lg:col-span-6">
+          <div className="lg:col-span-7">
             <div
-              className="group relative overflow-hidden"
+              className="relative overflow-hidden rounded-2xl"
               style={{
-                borderRadius: "1.25rem",
-                aspectRatio: "4/5",
-                boxShadow:
-                  "0 50px 100px -30px rgba(0,0,0,0.35), 0 18px 40px -15px rgba(0,0,0,0.18)",
+                aspectRatio: "16/10",
+                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.25)",
               }}
             >
               <img
                 src={dinnerImg}
-                alt="Magic-Dinner-Abend im Restaurant Wald & Wiese Sinzing — Tisch-Magie zwischen den Gängen"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+                alt="Magic Dinner Summer Edition im Restaurant Wald & Wiese Sinzing — Sommerabend mit Close-Up am Tisch"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
                 loading="lazy"
+                style={{ objectPosition: "center 35%" }}
               />
               <div
                 aria-hidden
-                className="absolute inset-0"
+                className="absolute inset-x-0 bottom-0 h-1/2"
                 style={{
                   background:
-                    "linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(8,6,12,0.55) 100%)",
+                    "linear-gradient(180deg, transparent, rgba(0,0,0,0.55))",
                 }}
               />
-              {/* Glass-Caption unten */}
-              <div className="absolute inset-x-6 bottom-6">
-                <div
-                  className="rounded-2xl p-5 text-white"
-                  style={{
-                    background:
-                      "linear-gradient(155deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 100%)",
-                    backdropFilter:
-                      "blur(40px) saturate(200%) brightness(115%)",
-                    border: "1px solid rgba(255,255,255,0.35)",
-                    boxShadow:
-                      "0 20px 40px -15px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.5)",
-                  }}
+              <span
+                className="absolute top-5 left-5 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white"
+                style={{
+                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+                }}
+              >
+                {SUMMER.status}
+              </span>
+              <div className="absolute bottom-5 left-5 right-5 md:bottom-7 md:left-7 md:right-7 text-white">
+                <p
+                  className={`${SERIF_ITALIC} text-base md:text-lg mb-1`}
+                  style={{ color: "#f3d9a8" }}
                 >
-                  <p
-                    className={`${SERIF_ITALIC} text-base mb-1`}
-                    style={{ color: "#f3d9a8" }}
-                  >
-                    Wald &amp; Wiese.
-                  </p>
-                  <p className="font-display font-bold text-base leading-snug">
-                    Sinzing bei Regensburg · 4–6 Termine pro Jahr
-                  </p>
-                </div>
-              </div>
-              {/* Glass-Stat oben rechts */}
-              <div className="absolute top-6 right-6">
-                <div
-                  className="rounded-full px-4 py-2 text-[11px] tracking-[0.14em] uppercase font-bold text-white"
-                  style={{
-                    background:
-                      "linear-gradient(155deg, rgba(255,255,255,0.32), rgba(255,255,255,0.12))",
-                    backdropFilter: "blur(20px) saturate(180%)",
-                    border: "1px solid rgba(255,255,255,0.45)",
-                  }}
-                >
-                  10+ Dinner seit 2024
-                </div>
+                  Wald & Wiese · Sinzing
+                </p>
+                <p className="font-display text-lg md:text-2xl font-bold leading-tight">
+                  {SUMMER.label} · {SUMMER.date}
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Termine + CTA */}
-          <div className="lg:col-span-6">
-            <div className="mb-9">
-              <p
-                className={`${SERIF_ITALIC} text-base text-foreground/55 mb-3`}
-              >
-                So läuft ein Magic-Dinner-Abend.
-              </p>
-              <p className="text-base md:text-lg text-foreground/70 leading-[1.7] mb-4">
-                Anreise ab 18:30, Aperitif im Innenhof, Vorspeise, erste
-                Karten-Routine an eurem Tisch. Hauptgang, kurze Bühnen-Pointe
-                im Restaurant, Dessert, finale Mentalmagie-Sequenz. Ausklang
-                an der Bar mit Karten-Signatur. Ende gegen 23:00.
-              </p>
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-foreground/60">
-                <span className="inline-flex items-center gap-2">
-                  <Utensils className="w-4 h-4" style={{ color: ACCENT }} />
-                  Drei-Gänge optional
-                </span>
-                <span aria-hidden className="text-foreground/25">
-                  ·
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <Armchair className="w-4 h-4" style={{ color: ACCENT }} />
-                  Max. 30 Plätze
-                </span>
-                <span aria-hidden className="text-foreground/25">
-                  ·
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <Wine className="w-4 h-4" style={{ color: ACCENT }} />
-                  Weinbegleitung
-                </span>
-              </div>
-            </div>
+          <div className="lg:col-span-5 flex flex-col">
+            <p
+              className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3"
+              style={{ color: ACCENT }}
+            >
+              11. Juli 2026 · ab 19:00 Uhr
+            </p>
+            <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-tight mb-4">
+              Tisch reservieren.
+              <br />
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                Magic Dinner erleben.
+              </span>
+            </h3>
+            <p className="text-base text-foreground/70 leading-[1.7] mb-5">
+              Sommerabend im Restaurant Wald & Wiese. Du reservierst deinen
+              Tisch wie sonst auch, isst à la carte aus der Sommerkarte — und
+              während des Abends besuche ich euch persönlich mit Close-Up-
+              Magie. Drei Sekunden Stille, dann lacht eure Tafel.
+            </p>
+            <ul className="space-y-2 mb-7 text-sm text-foreground/70">
+              <li className="flex items-start gap-2">
+                <Utensils
+                  className="w-4 h-4 mt-0.5 shrink-0"
+                  style={{ color: ACCENT }}
+                />
+                À la carte aus der Sommerkarte
+              </li>
+              <li className="flex items-start gap-2">
+                <Armchair
+                  className="w-4 h-4 mt-0.5 shrink-0"
+                  style={{ color: ACCENT }}
+                />
+                Max. 50 Plätze · 2–12 pro Tafel
+              </li>
+              <li className="flex items-start gap-2">
+                <Wine
+                  className="w-4 h-4 mt-0.5 shrink-0"
+                  style={{ color: ACCENT }}
+                />
+                Weinbegleitung optional
+              </li>
+            </ul>
+            <span
+              className="inline-flex items-center gap-2 self-start rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-white mt-auto"
+              style={{
+                background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+              }}
+            >
+              <Ticket className="w-4 h-4" />
+              Details + Reservierung
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </div>
+        </Link>
 
-            <div className="space-y-3 mb-8">
-              {DINNER_TERMINE.map((d) => (
-                <div
+        {/* Sub-Liste der weiteren Editionen */}
+        {REST.length > 0 && (
+          <div className="mt-14 md:mt-20">
+            <p
+              className="text-[10px] tracking-[0.18em] uppercase font-bold mb-5"
+              style={{ color: ACCENT }}
+            >
+              Weitere Termine 2026 / 2027
+            </p>
+            <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
+              {REST.map((d) => (
+                <li
                   key={d.date}
-                  className="grid grid-cols-[1fr_auto] gap-4 items-center py-4 border-b border-foreground/10"
+                  className="grid grid-cols-[1fr_auto] md:grid-cols-[180px_1fr_auto] gap-4 md:gap-8 py-5 md:py-6 items-baseline"
                 >
+                  <span
+                    className="font-display text-base md:text-lg font-bold tabular-nums block"
+                    style={{ color: ACCENT }}
+                  >
+                    {d.date}
+                  </span>
                   <div>
-                    <div className="flex items-baseline gap-3 flex-wrap">
-                      <span
-                        className={`${SERIF_ITALIC} text-lg leading-none`}
-                        style={{ color: ACCENT }}
-                      >
-                        {d.date}
-                      </span>
-                      <span className="font-display font-bold text-sm text-foreground">
-                        {d.label}
-                      </span>
-                    </div>
-                    <p className="text-[13px] text-foreground/55 mt-1.5">
+                    <span className="font-display text-base md:text-lg font-bold text-foreground block">
+                      {d.label}
+                    </span>
+                    <p className="text-sm text-foreground/55 mt-0.5">
                       {d.sub}
                     </p>
                   </div>
@@ -963,41 +958,16 @@ const MagicDinnerAbendeSection = () => {
                       border:
                         d.status === "Vorverkauf"
                           ? "none"
-                          : "1px solid rgba(154,38,64,0.4)",
+                          : `1px solid ${ACCENT}55`,
                     }}
                   >
                     {d.status}
                   </span>
-                </div>
+                </li>
               ))}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4">
-              <a
-                href={WALDWIESE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 18px 40px -14px rgba(154,38,64,0.55)",
-                }}
-              >
-                <Ticket className="w-4 h-4" />
-                Tisch reservieren
-              </a>
-              <a
-                href="https://restaurant-waldwiese.de"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-foreground/70 hover:text-foreground border-b border-foreground/25 hover:border-foreground pb-1 transition-colors"
-              >
-                Restaurant-Website
-                <ArrowUpRight className="w-4 h-4" />
-              </a>
-            </div>
+            </ul>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
