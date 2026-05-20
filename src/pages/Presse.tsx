@@ -340,7 +340,7 @@ const BekanntAusSection = () => {
         </div>
 
         <div
-          className={`grid lg:grid-cols-12 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-5 md:gap-7`}
         >
           {/* SPOTLIGHT — TVA 2025 */}
           <article
@@ -455,7 +455,7 @@ const BekanntAusSection = () => {
 
         {/* BOTTOM-Row: 2 weitere Stationen */}
         <div
-          className={`grid md:grid-cols-2 gap-5 md:gap-7 mt-5 md:mt-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-2 gap-5 md:gap-7 mt-5 md:mt-7`}
         >
           {rest.slice(2).map((s) => (
             <article
@@ -538,7 +538,7 @@ const PortfolioDownloadSection = () => {
       />
       <div className="relative container px-6">
         <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-center`}
         >
           <div className="lg:col-span-7">
             <p
@@ -763,7 +763,7 @@ const PressemitteilungenSection = () => {
         </div>
 
         <div
-          className={`max-w-5xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-5xl border-t border-foreground/15`}
         >
           {PMS.map((pm) => (
             <article
@@ -890,7 +890,7 @@ const EPKDownloadSection = () => {
         </div>
 
         <div
-          className={`grid lg:grid-cols-12 gap-8 lg:gap-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-8 lg:gap-12`}
         >
           {/* LEFT — Mockup-Card */}
           <div className="lg:col-span-7 lg:sticky lg:top-24 self-start">
@@ -1201,7 +1201,7 @@ const PressefotosSection = () => {
         </div>
 
         <div
-          className={`grid md:grid-cols-12 gap-3 md:gap-4 max-w-7xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-12 gap-3 md:gap-4 max-w-7xl mx-auto`}
         >
           {PHOTOS.map((p, i) => (
             <button
@@ -1395,7 +1395,7 @@ const BoilerplateSection = () => {
         </div>
 
         <div
-          className={`grid lg:grid-cols-3 gap-6 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-3 gap-6 md:gap-7`}
         >
           {BIOS.map((b, i) => (
             <article
@@ -1498,7 +1498,7 @@ const PloetzlichMagieSection = () => {
     >
       <div className="container px-6">
         <div
-          className={`grid lg:grid-cols-12 gap-10 lg:gap-14 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-10 lg:gap-14 items-center`}
         >
           <div className="lg:col-span-6">
             <span
@@ -1696,7 +1696,7 @@ const InterviewZitateSection = () => {
         </div>
 
         <div
-          className={`grid md:grid-cols-2 gap-x-10 gap-y-12 md:gap-y-14 max-w-6xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-2 gap-x-10 gap-y-12 md:gap-y-14 max-w-6xl mx-auto`}
         >
           {QUOTES.map((q, i) => (
             <figure
@@ -1770,7 +1770,7 @@ const PullQuoteSection = () => {
         }}
       />
       <div
-        className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+        className={`relative container px-6`}
       >
         <Quote
           className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40"
@@ -1836,7 +1836,7 @@ const VideoSection = () => {
         </div>
 
         <div
-          className={`relative max-w-6xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`relative max-w-6xl mx-auto`}
           style={{
             borderRadius: "1.5rem",
             overflow: "hidden",
@@ -1923,7 +1923,7 @@ const PressFAQSection = () => {
           </h2>
         </div>
         <div
-          className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl border-t border-foreground/15`}
         >
           {FAQS.map((f) => (
             <details
@@ -1998,7 +1998,7 @@ const PressKontaktDirektSection = () => {
 
       <div className="relative container px-6">
         <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-12 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-x-14 gap-y-12 items-center`}
         >
           <div className="lg:col-span-7">
             <p

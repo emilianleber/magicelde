@@ -1319,7 +1319,7 @@ const BuchungsAblaufSection = () => {
         </div>
 
         {/* Rand-Details */}
-        <div className={`mt-14 grid md:grid-cols-3 gap-3 md:gap-4 max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.4s" }}>
+        <div className={`mt-14 grid md:grid-cols-3 gap-3 md:gap-4 max-w-4xl mx-auto`} style={{ animationDelay: "0.4s" }}>
           {[
             { label: "Versicherung", value: "Berufshaftpflicht inkl." },
             { label: "Rechnung", value: "GoBD-konform · 14 d Ziel" },

@@ -310,7 +310,7 @@ const AblaufSection = () => {
           {STEPS.map((s, i) => (
             <li
               key={s.num}
-              className={`grid md:grid-cols-[120px_1fr] lg:grid-cols-[160px_1fr_280px] gap-6 md:gap-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`grid md:grid-cols-[120px_1fr] lg:grid-cols-[160px_1fr_280px] gap-6 md:gap-10`}
               style={{ animationDelay: `${0.1 + i * 0.08}s` }}
             >
               <header>
@@ -364,7 +364,7 @@ const WannWoSection = () => {
     <section ref={ref} className="bg-[hsl(30,8%,99%)] py-20 md:py-28">
       <div className="container px-6">
         <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start`}
         >
           <div className="lg:col-span-5">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4">
@@ -503,7 +503,7 @@ const ReservierungsSection = () => {
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-12">
           <div
-            className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`lg:col-span-5`}
           >
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               Tisch reservieren.
@@ -588,7 +588,7 @@ const ReservierungsSection = () => {
             </p>
           </div>
 
-          <div className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          <div className={`lg:col-span-7`} style={{ animationDelay: "0.15s" }}>
             <div
               className="rounded-3xl p-7 md:p-10 bg-[hsl(30,8%,98.5%)]"
               style={{ border: "1px solid rgba(0,0,0,0.06)" }}
@@ -767,7 +767,7 @@ const WasErwartetSection = () => {
           {ITEMS.map((it) => (
             <li
               key={it.title}
-              className={`grid grid-cols-[52px_1fr] md:grid-cols-[72px_1fr] gap-5 md:gap-8 py-7 md:py-9 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`grid grid-cols-[52px_1fr] md:grid-cols-[72px_1fr] gap-5 md:gap-8 py-7 md:py-9`}
             >
               <span
                 className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full self-start"
@@ -854,7 +854,7 @@ const FAQSection = () => {
           </h2>
         </div>
         <div
-          className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl`}
         >
           {FAQ_ITEMS.map((f, i) => {
             const open = openIdx === i;
@@ -948,7 +948,7 @@ const WeitereEditionenSection = () => {
             .
           </h2>
         </div>
-        <ul className={`divide-y divide-foreground/10 border-y border-foreground/10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <ul className={`divide-y divide-foreground/10 border-y border-foreground/10`}>
           {ITEMS.map((it) => (
             <li
               key={it.date}

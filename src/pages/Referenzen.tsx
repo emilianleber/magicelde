@@ -286,7 +286,7 @@ const GrosseLogoCloud = () => {
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Siebzehn von zweihundert.
             </p>
@@ -298,7 +298,7 @@ const GrosseLogoCloud = () => {
               .
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Versicherung, Bau, Möbel, Brauerei, Banking, öffentliche Hand,
               TV, Theater, Charity. Quer durch die Branchen, quer durch Bayern
@@ -476,7 +476,7 @@ const FilterSection = () => {
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Filtern nach Branche, Jahr, Anlass.
             </p>
@@ -488,7 +488,7 @@ const FilterSection = () => {
               .
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Tipp: filtere nach deiner Branche und deinem Anlass — danach
               fragst du mir Ansprechpartner per Mail oder Telefon. Diskretion
@@ -498,7 +498,7 @@ const FilterSection = () => {
         </div>
 
         {/* Filter-Reihen */}
-        <div className={`space-y-7 mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+        <div className={`space-y-7 mb-12 md:mb-16`} style={{ animationDelay: "0.2s" }}>
           {/* Branche */}
           <div>
             <p className="text-[11px] tracking-[0.18em] uppercase font-bold mb-3 inline-flex items-center gap-2" style={{ color: ACCENT }}>
@@ -674,7 +674,7 @@ const StatsEditorialSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was zehn Jahre auf der Bühne zusammenrechnen.
             </p>
@@ -686,7 +686,7 @@ const StatsEditorialSection = () => {
               </span>
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Keine Marketing-Zahlen — gepflegte interne Liste. Stand
               Mai 2026. Mehrfach-Buchungen zählen als ein Event pro Termin.
@@ -695,7 +695,7 @@ const StatsEditorialSection = () => {
         </div>
 
         {/* Bento — XL, MD, MD, SM, SM, SM */}
-        <div className={`grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+        <div className={`grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6`} style={{ animationDelay: "0.2s" }}>
           {/* XL — 200+ */}
           <article
             className="relative md:col-span-8 overflow-hidden flex flex-col justify-between p-8 md:p-12 text-white"
@@ -933,7 +933,7 @@ const CaseStudiesSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Drei Top-Referenzen, in der Tiefe.
             </p>
@@ -945,7 +945,7 @@ const CaseStudiesSection = () => {
               </span>
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Drei Konzern-Events aus dem letzten Jahr — als Case-Studies, mit
               Anfrage, Konzept, Anpassung und Ergebnis. Nicht das Endbild ist
@@ -958,7 +958,7 @@ const CaseStudiesSection = () => {
           {CASES.map((cs, i) => (
             <article
               key={cs.nr}
-              className={`group relative flex flex-col ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`group relative flex flex-col`}
               style={{ animationDelay: `${0.15 + i * 0.12}s` }}
             >
               {/* Foto-Top */}
@@ -1118,7 +1118,7 @@ const BranchenListeSection = () => {
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Sechzehn Branchen, ein Ansprechpartner.
             </p>
@@ -1130,7 +1130,7 @@ const BranchenListeSection = () => {
               .
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Pro Branche habe ich mindestens drei Buchungen. Heißt: ich kenne
               die Tonalität, die typischen Risiken, die Fettnäpfchen. Für jede
@@ -1143,7 +1143,7 @@ const BranchenListeSection = () => {
           {BRANCHEN.map((b, i) => (
             <li
               key={b.name}
-              className={`grid grid-cols-[46px_1fr_auto] md:grid-cols-[80px_2fr_3fr] items-baseline gap-4 md:gap-10 py-6 md:py-8 group ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`grid grid-cols-[46px_1fr_auto] md:grid-cols-[80px_2fr_3fr] items-baseline gap-4 md:gap-10 py-6 md:py-8 group`}
               style={{ animationDelay: `${0.1 + i * 0.04}s` }}
             >
               <span
@@ -1211,7 +1211,7 @@ const StimmenSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Drei Stimmen, ungekürzt.
             </p>
@@ -1223,7 +1223,7 @@ const StimmenSection = () => {
               .
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Drei Reviews aus drei verschiedenen Welten — Firmen-Event,
               Hochzeitsplanung, Privatkundin. Originalzitat, voller Kontext.
@@ -1232,7 +1232,7 @@ const StimmenSection = () => {
           </div>
         </div>
 
-        <div className={`space-y-12 md:space-y-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+        <div className={`space-y-12 md:space-y-16`} style={{ animationDelay: "0.2s" }}>
           {STIMMEN.map((s, i) => (
             <article
               key={s.name}
@@ -1319,7 +1319,7 @@ const VideoSection = () => {
       className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
-        <div className={`grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16`}>
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               TVA · TV-Auftritt 2025.
@@ -1340,7 +1340,7 @@ const VideoSection = () => {
           </div>
         </div>
         <div
-          className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-5xl mx-auto`}
           style={{ animationDelay: "0.15s" }}
         >
           <div
@@ -1441,7 +1441,7 @@ const ZeitleisteSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zehn Jahre, in sieben Stationen.
             </p>
@@ -1453,7 +1453,7 @@ const ZeitleisteSection = () => {
               .
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Vom ersten bezahlten Auftritt mit zwölf bis zur eigenen
               Bühnenshow und zum TV-Studio — wie aus einem Hobby ein Beruf
@@ -1466,7 +1466,7 @@ const ZeitleisteSection = () => {
           {ZEITLEISTE.map((z, i) => (
             <li
               key={z.zeit}
-              className={`grid md:grid-cols-12 gap-x-10 gap-y-3 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`grid md:grid-cols-12 gap-x-10 gap-y-3`}
               style={{ animationDelay: `${0.1 + i * 0.07}s` }}
             >
               <div className="md:col-span-3">
@@ -1507,7 +1507,7 @@ const PullQuoteSection = () => {
       </div>
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)" }} />
-      <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+      <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
@@ -1573,7 +1573,7 @@ const FAQSection = () => {
             <span className={SERIF_ITALIC}>gefragt wird</span>.
           </h2>
         </div>
-        <div className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl border-t border-foreground/15`}>
           {FAQS.map((faq) => (
             <details key={faq.q} className="group py-6 md:py-7 border-b border-foreground/15">
               <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
@@ -1610,7 +1610,7 @@ const FinalCTA = () => {
       <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
 
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Diskret. Persönlich. Mit Branchen-Match.
           </p>

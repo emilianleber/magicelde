@@ -246,7 +246,7 @@ const KonzeptIntroSection = () => {
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-12 items-start">
           {/* LEFT — text */}
-          <div className={`lg:col-span-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`lg:col-span-6`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was Comedy-Zauberei wirklich ist.
             </p>
@@ -286,7 +286,7 @@ const KonzeptIntroSection = () => {
             </div>
           </div>
           {/* RIGHT — photo */}
-          <div className={`lg:col-span-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`lg:col-span-6`} style={{ animationDelay: "0.1s" }}>
             <div className="relative overflow-hidden group" style={{ borderRadius: "1.5rem", aspectRatio: "4 / 5" }}>
               <img
                 src={audienceImg}
@@ -372,7 +372,7 @@ const LachzaehlerSection = () => {
       <div aria-hidden className="absolute -bottom-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 65%)" }} />
       <div className="container px-6 relative">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-8 mb-14 md:mb-20">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/65 mb-6`}>
               Der Lachzähler.
             </p>
@@ -383,7 +383,7 @@ const LachzaehlerSection = () => {
               </span>
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-white/65 leading-[1.7] max-w-md">
               Mit-getrackt über die letzten Comedy-Slots. Lacher gezählt vom
               Veranstalter, nicht von mir. Was eine Comedy-Zauber-Show im
@@ -392,7 +392,7 @@ const LachzaehlerSection = () => {
           </div>
         </div>
 
-        <div className={`grid lg:grid-cols-12 gap-6 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid lg:grid-cols-12 gap-6 md:gap-8`}>
           {/* HERO COUNTER — 7 cols */}
           <div
             className="lg:col-span-7 relative p-10 md:p-14 flex flex-col items-start justify-center overflow-hidden"
@@ -552,7 +552,7 @@ const SplitDiptychonSection = () => {
     <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zwei Disziplinen, ein Auftritt.
             </p>
@@ -562,7 +562,7 @@ const SplitDiptychonSection = () => {
               Comedy.
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Drei Beispiele pro Seite — wie eine Pointe aussieht (rechts) und
               wie ein Trick davor wirkt (links). Im Live-Set verschmelzen
@@ -571,7 +571,7 @@ const SplitDiptychonSection = () => {
           </div>
         </div>
 
-        <div className={`grid lg:grid-cols-12 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+        <div className={`grid lg:grid-cols-12 gap-5 md:gap-7`} style={{ animationDelay: "0.15s" }}>
           {/* LEFT — Magie · cream */}
           <article
             className="lg:col-span-5 relative bg-white p-8 md:p-10 flex flex-col"
@@ -746,7 +746,7 @@ const KomikDNASection = () => {
           {KOMIK_DNA.map((b, i) => (
             <article
               key={b.akt}
-              className={`grid lg:grid-cols-12 gap-8 lg:gap-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`grid lg:grid-cols-12 gap-8 lg:gap-14`}
               style={{ animationDelay: `${0.1 + i * 0.08}s` }}
             >
               <header className="lg:col-span-3">
@@ -835,7 +835,7 @@ const ComedyAnteilSliderSection = () => {
           </div>
         </div>
 
-        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12`}>
           {/* LEFT — Mode-Switcher */}
           <div className="lg:col-span-5 space-y-3">
             {COMEDY_MODI.map((m, i) => {
@@ -948,7 +948,7 @@ const PullQuoteSection = () => {
       </div>
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)" }} />
-      <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+      <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
@@ -1012,7 +1012,7 @@ const AnlassMatrixSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36">
       <div className="container px-6">
         {/* Foto-Banner oben */}
-        <div className={`relative overflow-hidden mb-14 md:mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ borderRadius: "1.5rem" }}>
+        <div className={`relative overflow-hidden mb-14 md:mb-20`} style={{ borderRadius: "1.5rem" }}>
           <img
             src={buehneZuschauerImg}
             alt="Comedy-Zauberei vor lachendem Publikum — Emilian Leber"
@@ -1037,14 +1037,14 @@ const AnlassMatrixSection = () => {
 
         {/* Headline */}
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann Comedy-Zauberei trägt.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Anlässe.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Pointe-DNA</span>.
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Pure Comedy-Show, Stand-Up-Slot, Hochzeits-Comedy-Block,
               Firmen-Mix oder Variety-Abend. Fünf Settings, in denen
@@ -1059,7 +1059,7 @@ const AnlassMatrixSection = () => {
           {ANLAESSE_COMEDY.map((a, i) => (
             <li
               key={a.label}
-              className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[68px_1fr_auto] items-baseline gap-4 md:gap-8 py-7 md:py-10 group ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+              className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[68px_1fr_auto] items-baseline gap-4 md:gap-8 py-7 md:py-10 group`}
               style={{ animationDelay: `${0.15 + i * 0.06}s` }}
             >
               <span
@@ -1161,7 +1161,7 @@ const RepertoireBentoSection = () => {
           </div>
         </div>
 
-        <div className={`grid grid-cols-1 md:grid-cols-6 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-6 gap-5 md:gap-7`}>
           {/* lg: 4 cols — light cream */}
           <article
             className="md:col-span-4 relative bg-white p-8 md:p-10 flex flex-col"
@@ -1412,7 +1412,7 @@ const StimmenSection = () => {
             <span className={SERIF_ITALIC}>30+ Bewertungen.</span>
           </h2>
         </div>
-        <div className={`grid md:grid-cols-3 gap-6 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-3 gap-6 md:gap-8`}>
           {reviews.map((r) => (
             <article
               key={r.author}
@@ -1465,7 +1465,7 @@ const VideoSection = () => {
   return (
     <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center mb-14 md:mb-16`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">TV-Auftritt.</p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
             Comedy-Zauberei im{" "}
@@ -1478,7 +1478,7 @@ const VideoSection = () => {
             Auszug aus dem TVA-Auftritt 2025 — Comedy-Zauberei live vor TV-Publikum, mit Mentaleffekten und Pointen-Set.
           </p>
         </div>
-        <div className={`max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+        <div className={`max-w-4xl mx-auto`} style={{ animationDelay: "0.15s" }}>
           <div className="relative aspect-video overflow-hidden bg-foreground/5" style={{ borderRadius: "1.5rem" }}>
             {playing ? (
               <iframe
@@ -1608,7 +1608,7 @@ const FAQSection = () => {
             <span className={SERIF_ITALIC}>gefragt wird.</span>
           </h2>
         </div>
-        <div className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl border-t border-foreground/15`}>
           {faqs.map((faq) => (
             <details key={faq.q} className="group py-6 md:py-7 border-b border-foreground/15">
               <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
@@ -1640,7 +1640,7 @@ const FinalCTA = () => {
       <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
       <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Erste Pointe nach 18 Sekunden.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Comedy-Zauberei{" "}

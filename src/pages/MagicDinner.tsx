@@ -3085,7 +3085,7 @@ const AudienceSection = () => {
         </div>
 
         {/* Editorial-Liste: jede Audience als breite Zeile mit großem Index, Eyebrow-Tag und Pfeil */}
-        <div className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-5xl mx-auto`}>
           {AUDIENCES.map((a, i) => (
             <a
               key={a.role}
@@ -3188,7 +3188,7 @@ const RestaurantPartnerSection = () => {
           </div>
         </div>
 
-        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 items-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 items-start`}>
           {/* LEFT — Vorteile */}
           <div className="lg:col-span-7">
             <ul className="space-y-7">
@@ -3334,7 +3334,7 @@ const TicketEventSection = () => {
   return (
     <section ref={ref} id="tickets" className="bg-white py-24 md:py-36">
       <div className="container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Für Ticket-Käufer.
           </p>

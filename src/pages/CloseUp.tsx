@@ -209,7 +209,7 @@ const HollywoodSequenzSection = () => {
 
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           {/* LEFT — Phasen als vertikale Magazin-Liste (kein Card-Grid) */}
-          <div className={`lg:col-span-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`lg:col-span-6`}>
             <ol className="relative">
               {ABLAUF_PHASEN.map((p, i) => (
                 <li key={p.phase} className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-5 md:gap-7 pb-10 md:pb-14 relative">
@@ -246,7 +246,7 @@ const HollywoodSequenzSection = () => {
           </div>
 
           {/* RIGHT — Beispiel-Trick: Tisch-Wahl-Routine */}
-          <div className={`lg:col-span-6 lg:sticky lg:top-24 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          <div className={`lg:col-span-6 lg:sticky lg:top-24`} style={{ animationDelay: "0.15s" }}>
             <div
               className="relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10 overflow-hidden"
               style={{
@@ -385,7 +385,7 @@ const SettingsVariantenSection = () => {
 
         <div className="space-y-20 md:space-y-28">
           {SETTINGS.map((s, i) => (
-            <article key={s.label} className={`grid lg:grid-cols-12 gap-8 lg:gap-14 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
+            <article key={s.label} className={`grid lg:grid-cols-12 gap-8 lg:gap-14 items-center`} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
               <div className={`lg:col-span-7 ${s.direction === "rl" ? "lg:order-2" : ""}`}>
                 <div className="relative group overflow-hidden" style={{ borderRadius: "1.25rem" }}>
                   <img src={s.image} alt={`Close-Up Setting — ${s.label}`} className="w-full h-[320px] md:h-[460px] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.96)" }} />
@@ -456,7 +456,7 @@ const TypischerAbendSection = () => {
 
         <ol className="space-y-14 md:space-y-20 max-w-5xl">
           {ABEND_ZEITEN.map((z, i) => (
-            <li key={z.t} className={`grid grid-cols-1 md:grid-cols-[160px_1fr] gap-6 md:gap-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
+            <li key={z.t} className={`grid grid-cols-1 md:grid-cols-[160px_1fr] gap-6 md:gap-12`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
               <header className="md:sticky md:top-24 md:self-start">
                 <div className="flex items-baseline gap-2.5 mb-2">
                   <Clock className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={2} />
@@ -507,7 +507,7 @@ const EffektKatalogSection = () => {
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-3 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-3 gap-5 md:gap-7`}>
           {EFFEKTE.map((e) => (
             <article key={e.title} className="relative bg-white p-7 md:p-8 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-25px_rgba(0,0,0,0.18)]" style={{ borderRadius: "1rem", boxShadow: "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
               <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
@@ -562,7 +562,7 @@ const TrickRepertoireSection = () => {
           </div>
         </div>
 
-        <div className={`grid grid-cols-1 md:grid-cols-6 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-6 gap-5 md:gap-7`}>
           {/* lg: 4 cols */}
           <article className="md:col-span-4 relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10 flex flex-col" style={{ borderRadius: "1.25rem", boxShadow: "0 20px 45px -25px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)", minHeight: "320px" }}>
             <span aria-hidden className="absolute -top-8 -right-3 select-none" style={{ fontSize: "120px", color: ACCENT, opacity: 0.06, transform: "rotate(15deg)" }}>♣</span>
@@ -627,7 +627,7 @@ const PullQuoteSection = () => {
       </div>
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)" }} />
-      <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+      <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
@@ -663,7 +663,7 @@ const AnlassMixSection = () => {
     <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-12">
-          <div className={`lg:col-span-5 lg:sticky lg:top-24 lg:self-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`lg:col-span-5 lg:sticky lg:top-24 lg:self-start`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann Close-Up den Abend prägt.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-8">
               Fünf Anlässe.{" "}
@@ -680,7 +680,7 @@ const AnlassMixSection = () => {
           <div className="lg:col-span-7">
             <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
               {ANLAESSE.map((a, i) => (
-                <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[56px_1fr_auto] items-baseline gap-4 md:gap-6 py-7 md:py-9 group ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
+                <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[56px_1fr_auto] items-baseline gap-4 md:gap-6 py-7 md:py-9 group`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
                   <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
                     <a.Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
                   </span>
@@ -742,7 +742,7 @@ const GruppenDynamikSection = () => {
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-3 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-3 gap-5 md:gap-7`}>
           {GRUPPEN.map((g, i) => (
             <article key={g.persona} className={`relative p-7 md:p-9 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 ${i === 1 ? "text-white" : ""}`} style={{
               borderRadius: "1.25rem",
@@ -832,7 +832,7 @@ const StimmenSection = () => {
             5,0 Sterne.<br /><span className={SERIF_ITALIC}>30+ Bewertungen.</span>
           </h2>
         </div>
-        <div className={`grid md:grid-cols-3 gap-6 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-3 gap-6 md:gap-8`}>
           {reviews.map((r) => (
             <article key={r.author} itemScope itemType="https://schema.org/Review" className="relative bg-white p-7 md:p-9 flex flex-col h-full" style={{ borderRadius: "1rem", boxShadow: "0 25px 50px -25px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04)" }}>
               <div className="flex items-center gap-1 mb-5">{[...Array(5)].map((_, j) => (<Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />))}<meta itemProp="reviewRating" content="5" /></div>
@@ -875,7 +875,7 @@ const TrustZahlenSection = () => {
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>100+ Close-Up-Auftritte</span>.
           </h2>
         </div>
-        <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14`}>
           {TRUST_ITEMS.map((it) => (
             <article key={it.name} className="group relative bg-white border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:-translate-y-1 hover:border-foreground/15 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.15)]">
               <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))", border: "1px solid rgba(154,38,64,0.22)" }}>
@@ -886,7 +886,7 @@ const TrustZahlenSection = () => {
             </article>
           ))}
         </div>
-        <div className={`flex flex-wrap items-baseline justify-center gap-x-10 gap-y-5 md:gap-x-16 pt-10 border-t border-foreground/10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`flex flex-wrap items-baseline justify-center gap-x-10 gap-y-5 md:gap-x-16 pt-10 border-t border-foreground/10`}>
           {[
             { num: "100+", label: "Close-Up-Auftritte" },
             { num: "5–7", label: "Min pro Tisch" },
@@ -926,7 +926,7 @@ const FAQSection = () => {
             Was vorher<br /><span className={SERIF_ITALIC}>gefragt wird.</span>
           </h2>
         </div>
-        <div className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl border-t border-foreground/15`}>
           {faqs.map((faq) => (
             <details key={faq.q} className="group py-6 md:py-7 border-b border-foreground/15">
               <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
@@ -956,7 +956,7 @@ const FinalCTA = () => {
       <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
       <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Karten in eure Hände.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Close-Up{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>buchen</span>.

@@ -351,7 +351,7 @@ const AktuelleTourShowSection = () => {
       />
       <div className="relative container px-6">
         <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-center`}
         >
           <div className="lg:col-span-7">
             <p
@@ -657,7 +657,7 @@ const TourDatenSection = () => {
         </div>
 
         <div
-          className={`max-w-5xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-5xl border-t border-foreground/15`}
         >
           {TOUR_DATES.map((t) => {
             const style = STATUS_STYLES[t.status];
@@ -812,7 +812,7 @@ const MagicDinnerAbendeSection = () => {
         {/* XL Featured Card — Summer Edition */}
         <Link
           to="/tickets/magic-dinner-summer-edition"
-          className={`group grid lg:grid-cols-12 gap-x-10 gap-y-8 items-stretch ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`group grid lg:grid-cols-12 gap-x-10 gap-y-8 items-stretch`}
         >
           <div className="lg:col-span-7">
             <div
@@ -1035,7 +1035,7 @@ const TicketKategorienSection = () => {
 
         {/* Bento-Layout: Card 02 ist breit (Mitte), 01 und 03 schmaler */}
         <div
-          className={`grid lg:grid-cols-12 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-5 md:gap-6`}
         >
           {/* Card 01 — Frühbucher (links, schmal) */}
           <article
@@ -1238,7 +1238,7 @@ const WasErwartetDichSection = () => {
         </div>
 
         <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10`}
         >
           {/* Linke Sticky-Photo */}
           <div className="lg:col-span-5">
@@ -1359,7 +1359,7 @@ const PullQuoteSection = () => {
       />
       <div className="relative container px-6">
         <div
-          className={`max-w-4xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-4xl mx-auto text-center`}
         >
           <Quote
             className="w-10 h-10 mx-auto mb-8 opacity-50"
@@ -1459,7 +1459,7 @@ const LocationsSection = () => {
         </div>
 
         <div
-          className={`grid md:grid-cols-12 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-12 gap-5 md:gap-6`}
         >
           {VENUES.map((v, i) => {
             // Bento: Card 0 (Premiere) doppelt breit, alle anderen 4-cols
@@ -1569,7 +1569,7 @@ const VideoSection = () => {
         </div>
 
         <div
-          className={`relative max-w-6xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`relative max-w-6xl mx-auto`}
           style={{
             borderRadius: "1.5rem",
             overflow: "hidden",
@@ -1657,7 +1657,7 @@ const StimmenSection = () => {
           </h2>
         </div>
         <div
-          className={`grid md:grid-cols-3 gap-6 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-3 gap-6 md:gap-8`}
         >
           {REVIEWS.map((r) => (
             <article
@@ -1778,7 +1778,7 @@ const FAQSection = () => {
           </h2>
         </div>
         <div
-          className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl border-t border-foreground/15`}
         >
           {FAQS.map((faq) => (
             <details
@@ -1835,7 +1835,7 @@ const NewsletterCTASection = () => {
     >
       <div className="container px-6">
         <div
-          className={`max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-4xl mx-auto`}
         >
           <div
             className="relative grid md:grid-cols-[1.4fr_1fr] gap-x-12 gap-y-10 p-8 md:p-12 lg:p-14 overflow-hidden"
@@ -2126,7 +2126,7 @@ const FinalCTA = () => {
       />
       <div className="relative container px-6">
         <div
-          className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl mx-auto text-center`}
         >
           <p
             className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6"

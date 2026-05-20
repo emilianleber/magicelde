@@ -343,7 +343,7 @@ const AgeGeneratorSection = () => {
           </div>
         </div>
 
-        <div className={`grid lg:grid-cols-12 gap-10 lg:gap-14 items-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid lg:grid-cols-12 gap-10 lg:gap-14 items-start`}>
           {/* LEFT — Age Picker */}
           <div className="lg:col-span-5">
             <div className="flex flex-wrap gap-2 mb-8">
@@ -524,7 +524,7 @@ const MemoryLaneSection = () => {
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-3 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-3 gap-5 md:gap-7`}>
           {examples.map((ex, i) => (
             <article
               key={i}
@@ -596,7 +596,7 @@ const PullQuoteSection = () => {
         }}
       />
       <div className="relative container px-6">
-        <div className={`max-w-4xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-4xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-8">
             Aus einem Briefing-Call.
           </p>
@@ -767,7 +767,7 @@ const StimmenSection = () => {
           </h2>
         </div>
 
-        <div className={`grid md:grid-cols-3 gap-6 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-3 gap-6 md:gap-8`}>
           {reviews.map((r) => (
             <article
               key={r.author}
@@ -838,7 +838,7 @@ const TrustZahlenSection = () => {
           </h2>
         </div>
 
-        <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14`}>
           {TRUST_ITEMS.map((it) => (
             <article
               key={it.name}
@@ -859,7 +859,7 @@ const TrustZahlenSection = () => {
           ))}
         </div>
 
-        <div className={`flex flex-wrap items-baseline justify-center gap-x-10 gap-y-5 md:gap-x-16 pt-10 border-t border-foreground/10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`flex flex-wrap items-baseline justify-center gap-x-10 gap-y-5 md:gap-x-16 pt-10 border-t border-foreground/10`}>
           {[
             { num: "80+", label: "Geburtstage begleitet" },
             { num: "200+", label: "Events gesamt" },
@@ -923,7 +923,7 @@ const FAQSection = () => {
           </h2>
         </div>
 
-        <div className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl border-t border-foreground/15`}>
           {faqs.map((faq) => (
             <details key={faq.q} className="group py-6 md:py-7 border-b border-foreground/15">
               <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
@@ -967,7 +967,7 @@ const FinalCTA = () => {
         style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }}
       />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Plant euren Geburtstag.
           </p>

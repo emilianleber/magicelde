@@ -198,7 +198,7 @@ const KpisSection = () => {
         </div>
 
         {/* XL-Hero-Stat + Editorial-Text-Block (kein Card-Grid) */}
-        <div className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-center`}>
           {/* XL Stat Cluster */}
           <div className="lg:col-span-5 relative">
             <div className="relative">
@@ -320,7 +320,7 @@ const AblaufSection = () => {
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5`}>
           {ABLAUF.map((a, i) => (
             <article key={a.num} className="relative bg-white p-6 md:p-7 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_50px_-20px_rgba(0,0,0,0.18)]" style={{ borderRadius: "1rem", boxShadow: "0 15px 30px -20px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.05)", animationDelay: `${0.1 + i * 0.06}s` }}>
               <span className={`${SERIF_ITALIC} text-3xl md:text-4xl leading-none mb-5 block`} style={{ color: ACCENT }}>{a.num}</span>
@@ -357,7 +357,7 @@ const MesseTypenSection = () => {
           </h2>
         </div>
 
-        <div className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6`}>
           {MESSETYPEN.map((m) => (
             <article key={m.title} className="relative bg-[hsl(30,8%,98.5%)] p-6 md:p-7 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
               <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
@@ -415,7 +415,7 @@ const MesseWocheSection = () => {
         </div>
 
         {/* Vertikale Magazine-Liste mit gestaffeltem Layout */}
-        <div className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-5xl mx-auto`}>
           {MESSEWOCHE.map((m, i) => {
             const isOdd = i % 2 === 1;
             return (
@@ -480,7 +480,7 @@ const FAQSection = () => {
             Was Messeplaner<br /><span className={SERIF_ITALIC}>vorher fragen.</span>
           </h2>
         </div>
-        <div className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl border-t border-foreground/15`}>
           {faqs.map((faq) => (
             <details key={faq.q} className="group py-6 md:py-7 border-b border-foreground/15">
               <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
@@ -510,7 +510,7 @@ const FinalCTA = () => {
       <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
       <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Für Messen und Roadshows.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Macht euren Stand zum{" "}

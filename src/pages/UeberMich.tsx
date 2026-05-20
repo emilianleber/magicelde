@@ -370,7 +370,7 @@ const DreiToolsSection = () => {
 
         {/* Triptychon — gleichwertige Cards */}
         <div
-          className={`grid md:grid-cols-3 gap-6 lg:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-3 gap-6 lg:gap-8`}
         >
           {TOOLS.map((t, i) => (
             <article
@@ -801,7 +801,7 @@ const MeinStilSection = () => {
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           {/* LEFT — Headline + Body + Bullet-List */}
           <div
-            className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`lg:col-span-7`}
           >
             <p
               className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
@@ -885,7 +885,7 @@ const MeinStilSection = () => {
 
           {/* RIGHT — Photo mit Glass-Caption */}
           <div
-            className={`lg:col-span-5 lg:sticky lg:top-24 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`lg:col-span-5 lg:sticky lg:top-24`}
             style={{ animationDelay: "0.15s" }}
           >
             <div
@@ -1069,7 +1069,7 @@ const AuszeichnungenSection = () => {
 
         {/* Awards-Grid — 2x3 Editorial-Cards mit Story */}
         <div
-          className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8`}
         >
           {AWARDS.map((a) => (
             <article
@@ -1149,7 +1149,7 @@ const PullQuoteSection = () => {
       />
       <div className="container px-6 relative">
         <div
-          className={`max-w-4xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-4xl mx-auto text-center`}
         >
           <Quote
             className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-8 md:mb-10 opacity-50"
@@ -1237,7 +1237,7 @@ const HinterDenKulissenSection = () => {
 
         {/* Triptychon — 3 Editorial-Cards */}
         <div
-          className={`grid md:grid-cols-3 gap-6 lg:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-3 gap-6 lg:gap-8`}
         >
           {KULISSEN_STORY.map((s) => (
             <article
@@ -1375,7 +1375,7 @@ const WarumPersoenlichSection = () => {
 
         {/* Editorial-Liste — keine Bubble-Cards, sondern typografische Liste */}
         <ol
-          className={`max-w-4xl mx-auto space-y-12 md:space-y-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-4xl mx-auto space-y-12 md:space-y-16`}
         >
           {PERSOENLICH.map((p, i) => (
             <li
@@ -1468,7 +1468,7 @@ const StimmenSection = () => {
 
         {/* 3-Spalten-Reviews */}
         <div
-          className={`grid md:grid-cols-3 gap-6 lg:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-3 gap-6 lg:gap-8`}
         >
           {STIMMEN.map((s) => (
             <article
@@ -1567,7 +1567,7 @@ const VideoSection = () => {
     >
       <div className="container px-6">
         <div
-          className={`grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16`}
         >
           <div className="md:col-span-7">
             <p
@@ -1592,7 +1592,7 @@ const VideoSection = () => {
           </div>
         </div>
         <div
-          className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-5xl mx-auto`}
           style={{ animationDelay: "0.15s" }}
         >
           <div
@@ -1695,7 +1695,7 @@ const AktuelleShowSection = () => {
       </div>
       <div className="container px-6 relative">
         <div
-          className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-center`}
         >
           <div className="lg:col-span-7">
             <p
@@ -1888,7 +1888,7 @@ const ZahlenStripSection = () => {
     <section ref={ref} className="bg-white py-20 md:py-28">
       <div className="container px-6">
         <div
-          className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-5xl mx-auto`}
         >
           <p
             className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/45 text-center mb-8 md:mb-10 tracking-[0.04em]`}
@@ -1981,7 +1981,7 @@ const PersoenlicherBriefSection = () => {
 
         {/* Brief-Layout: Foto links, Brief rechts */}
         <div
-          className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-stretch ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-stretch`}
         >
           {/* LEFT — Foto Emilian */}
           <div className="lg:col-span-5">

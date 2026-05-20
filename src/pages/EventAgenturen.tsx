@@ -226,7 +226,7 @@ const SchnittstellenSection = () => {
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-2 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-2 gap-5 md:gap-6`}>
           {SCHNITTSTELLEN.map((s, i) => (
             <article key={s.role} className="relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -25px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
               <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
@@ -277,7 +277,7 @@ const VorteileSection = () => {
         </div>
 
         {/* Editorial-Bento: Mockup-Photo + 6 Vorteile in gestaffeltem Magazin-Layout */}
-        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12`}>
           {/* LEFT Column: Email-Mockup-Card mit Schnellangebot-Vorschau */}
           <div className="lg:col-span-5 lg:sticky lg:top-24 self-start">
             <div
@@ -406,7 +406,7 @@ const SchnellangebotSection = () => {
     <section ref={ref} id="schnellangebot" className="bg-white py-24 md:py-36">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          <div className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`lg:col-span-5`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Schnellangebot.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5vw,4.5rem)] text-foreground mb-8">
               In{" "}
@@ -434,7 +434,7 @@ const SchnellangebotSection = () => {
             </ul>
           </div>
 
-          <div className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          <div className={`lg:col-span-7`} style={{ animationDelay: "0.15s" }}>
             <form
               action="mailto:el@magicel.de"
               method="POST"
@@ -493,7 +493,7 @@ const AgenturCaseSection = () => {
     <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          <div className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`lg:col-span-5`}>
             <div className="relative overflow-hidden h-[420px] md:h-[520px]" style={{ borderRadius: "1.25rem", boxShadow: "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2)" }}>
               <img src={buehneZuschauerImg} alt="Agentur-Case-Study: Magic Camp mit 200 Gästen" className="w-full h-full object-cover object-center" loading="lazy" />
               <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(154,38,64,0.15) 70%, rgba(92,22,34,0.7) 100%)" }} />
@@ -506,7 +506,7 @@ const AgenturCaseSection = () => {
               </div>
             </div>
           </div>
-          <div className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          <div className={`lg:col-span-7`} style={{ animationDelay: "0.15s" }}>
             <p className="text-[11px] tracking-[0.18em] uppercase font-semibold mb-4" style={{ color: ACCENT }}>Case-Study mit Agentur-Beteiligung</p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4vw,3.25rem)] text-foreground mb-8">
               Magic Camp für{" "}
@@ -571,7 +571,7 @@ const FAQSection = () => {
             Was Eventagenturen<br /><span className={SERIF_ITALIC}>vorher fragen.</span>
           </h2>
         </div>
-        <div className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl border-t border-foreground/15`}>
           {agenturFaqs.map((faq) => (
             <details key={faq.q} className="group py-6 md:py-7 border-b border-foreground/15">
               <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
@@ -601,7 +601,7 @@ const FinalCTA = () => {
       <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
       <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Für Eventagenturen & Veranstaltungsplaner.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Schnellangebot in{" "}

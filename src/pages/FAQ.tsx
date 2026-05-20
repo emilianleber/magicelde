@@ -511,7 +511,7 @@ const FAQCore = () => {
     >
       <div className="container px-6">
         {/* Section-Header */}
-        <div className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mb-12`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Such, klick, finde.
           </p>
@@ -688,7 +688,7 @@ const PullQuote = () => {
         }}
       />
       <div className="relative container px-6">
-        <div className={`max-w-4xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-4xl mx-auto text-center`}>
           <p className={`${SERIF_ITALIC} text-base md:text-lg text-white/55 mb-8 tracking-wide uppercase text-[11px]`}>
             Kurz und ehrlich.
           </p>
@@ -762,7 +762,7 @@ const FrageNichtBeantwortet = () => {
       }}
     >
       <div className="container px-6">
-        <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Deine Frage fehlt?
           </p>
@@ -936,7 +936,7 @@ const VerwandteRessourcen = () => {
   return (
     <section ref={ref} className="bg-white py-24 md:py-32 border-y border-foreground/10">
       <div className="container px-6">
-        <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mb-14`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Weitere Anlaufstellen.
           </p>
@@ -1018,7 +1018,7 @@ const FinalCTA = () => {
         }}
       />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Genug gelesen — jetzt reden.
           </p>

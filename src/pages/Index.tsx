@@ -818,7 +818,7 @@ const VideoSection = () => {
       className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
-        <div className={`grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16`}>
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               TV-Auftritt · TVA 2025.
@@ -840,7 +840,7 @@ const VideoSection = () => {
           </div>
         </div>
         <div
-          className={`max-w-5xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-5xl mx-auto`}
           style={{ animationDelay: "0.15s" }}
         >
           <div

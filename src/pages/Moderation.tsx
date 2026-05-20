@@ -215,7 +215,7 @@ const PhasenSection = () => {
         </div>
 
         {/* Horizontale Timeline mit alternierenden Karten */}
-        <div className={`max-w-5xl mx-auto relative ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-5xl mx-auto relative`}>
           {/* Vertikale Verbindungslinie */}
           <div
             aria-hidden
@@ -293,7 +293,7 @@ const KombiUSPSection = () => {
           </div>
         </div>
 
-        <div className={`grid md:grid-cols-3 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-3 gap-5 md:gap-7`}>
           {DISZIPLINEN.map((d, i) => (
             <article key={d.label} className={`relative p-7 md:p-9 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 ${i === 1 ? "text-white" : ""}`} style={{
               borderRadius: "1.25rem",
@@ -317,7 +317,7 @@ const KombiUSPSection = () => {
           ))}
         </div>
 
-        <div className={`mt-12 md:mt-16 max-w-4xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`mt-12 md:mt-16 max-w-4xl mx-auto text-center`}>
           <p className={`${SERIF_ITALIC} text-xl md:text-3xl text-foreground/75 leading-snug`}>
             Drei Disziplinen — aber keine Übergaben zwischen Künstlern.{" "}
             <span style={{ color: ACCENT }}>Ein Auftritt, ein Honorar, ein Briefing.</span>
@@ -380,7 +380,7 @@ const ShowBeispieleSection = () => {
 
         <div className="grid md:grid-cols-3 gap-8 md:gap-10">
           {BEISPIELE.map((b, i) => (
-            <article key={b.kicker} className={`flex flex-col ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+            <article key={b.kicker} className={`flex flex-col`} style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
               {/* Foto oben — volle Card-Breite */}
               <div className="relative group overflow-hidden mb-7" style={{ borderRadius: "1.25rem" }}>
                 <img src={b.image} alt={`Moderation — ${b.kicker}`} className="w-full h-[260px] md:h-[300px] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)", objectPosition: "center 15%" }} />
@@ -419,7 +419,7 @@ const PullQuoteSection = () => {
       </div>
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)" }} />
-      <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+      <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
@@ -483,7 +483,7 @@ const AnlassMatrixSection = () => {
 
         <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
           {ANLASS_MATRIX.map((a, i) => (
-            <li key={a.label} className={`grid grid-cols-1 md:grid-cols-[56px_2fr_3fr] gap-x-8 gap-y-4 py-8 md:py-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
+            <li key={a.label} className={`grid grid-cols-1 md:grid-cols-[56px_2fr_3fr] gap-x-8 gap-y-4 py-8 md:py-10`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
               <span className="inline-flex items-center justify-center w-12 h-12 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
                 <a.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </span>
@@ -572,7 +572,7 @@ const ComedyAnteilSection = () => {
           </div>
         </div>
 
-        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid lg:grid-cols-12 gap-8 lg:gap-12`}>
           {/* LEFT — Mode-Switcher */}
           <div className="lg:col-span-5 space-y-3">
             {MODI.map((m, i) => {
@@ -655,7 +655,7 @@ const TechRiderSection = () => {
     <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          <div className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`lg:col-span-5`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Für die Eventplanung.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
               Tech-Rider.{" "}
@@ -670,7 +670,7 @@ const TechRiderSection = () => {
             </a>
           </div>
 
-          <div className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          <div className={`lg:col-span-7`} style={{ animationDelay: "0.15s" }}>
             <div className="bg-white p-7 md:p-9" style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(40,20,40,0.25), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
               {TECH_RIDER.map((row, i) => (
                 <div key={row.label} className={`grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_1fr] gap-4 ${i > 0 ? "border-t border-foreground/10 pt-5 mt-5" : ""}`}>
@@ -752,7 +752,7 @@ const StimmenSection = () => {
             5,0 Sterne.<br /><span className={SERIF_ITALIC}>30+ Bewertungen.</span>
           </h2>
         </div>
-        <div className={`grid md:grid-cols-3 gap-6 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-3 gap-6 md:gap-8`}>
           {reviews.map((r) => (
             <article key={r.author} itemScope itemType="https://schema.org/Review" className="relative bg-white p-7 md:p-9 flex flex-col h-full" style={{ borderRadius: "1rem", boxShadow: "0 25px 50px -25px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04)" }}>
               <div className="flex items-center gap-1 mb-5">{[...Array(5)].map((_, j) => (<Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />))}<meta itemProp="reviewRating" content="5" /></div>
@@ -824,7 +824,7 @@ const FAQSection = () => {
             Was vorher<br /><span className={SERIF_ITALIC}>gefragt wird.</span>
           </h2>
         </div>
-        <div className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl border-t border-foreground/15`}>
           {faqs.map((faq) => (
             <details key={faq.q} className="group py-6 md:py-7 border-b border-foreground/15">
               <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
@@ -851,7 +851,7 @@ const FinalCTA = () => {
       <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
       <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Plant euren Abend.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Moderation{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>anfragen</span>.

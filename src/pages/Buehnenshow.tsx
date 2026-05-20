@@ -198,7 +198,7 @@ const DramaKurveSection = () => {
         </div>
 
         {/* SVG-Diagramm Drama-Kurve */}
-        <div className={`relative bg-[hsl(30,8%,98.5%)] rounded-2xl p-7 md:p-10 mb-10 overflow-hidden ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+        <div className={`relative bg-[hsl(30,8%,98.5%)] rounded-2xl p-7 md:p-10 mb-10 overflow-hidden`}
           style={{ boxShadow: "0 25px 50px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
           <svg viewBox="0 0 700 220" className="w-full h-auto" preserveAspectRatio="xMidYMid meet" aria-hidden>
             <defs>
@@ -239,7 +239,7 @@ const DramaKurveSection = () => {
         </div>
 
         {/* Phasen-Karten */}
-        <div className={`grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5`}>
           {DRAMA_POINTS.map((d, i) => (
             <article key={d.phase} className="relative bg-white p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_50px_-20px_rgba(0,0,0,0.18)]" style={{ borderRadius: "1rem", boxShadow: "0 15px 30px -20px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.05)", animationDelay: `${0.1 + i * 0.06}s` }}>
               <div className="flex items-baseline gap-3 mb-3">
@@ -292,7 +292,7 @@ const FormatVariantenSection = () => {
     <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10">
-          <div className={`lg:col-span-4 lg:sticky lg:top-24 lg:self-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`lg:col-span-4 lg:sticky lg:top-24 lg:self-start`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Längen, drei Bögen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-7">
               Welche Show{" "}
@@ -312,7 +312,7 @@ const FormatVariantenSection = () => {
           <div className="lg:col-span-8">
             <ol className="divide-y divide-foreground/10 border-y border-foreground/10">
               {FORMAT_VARIANTEN.map((f, i) => (
-                <li key={f.label} className={`grid grid-cols-1 md:grid-cols-[140px_1fr] gap-x-8 gap-y-3 py-10 md:py-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+                <li key={f.label} className={`grid grid-cols-1 md:grid-cols-[140px_1fr] gap-x-8 gap-y-3 py-10 md:py-12`} style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
                   <div>
                     <span className="block text-[10px] tracking-[0.18em] uppercase font-bold mb-2" style={{ color: ACCENT }}>{String(i + 1).padStart(2, "0")} · Variante</span>
                     <span className="font-display font-black text-foreground text-xl md:text-2xl tabular-nums leading-tight block">{f.range}</span>
@@ -399,7 +399,7 @@ const BeispielShowSection = () => {
 
         <div className="space-y-16 md:space-y-20">
           {BEISPIEL_AKTE.map((b, i) => (
-            <article key={b.akt} className={`grid lg:grid-cols-12 gap-8 lg:gap-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+            <article key={b.akt} className={`grid lg:grid-cols-12 gap-8 lg:gap-14`} style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
               <header className="lg:col-span-3">
                 <div className="flex items-baseline gap-3 mb-3">
                   <Clock className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={2} />
@@ -435,7 +435,7 @@ const PullQuoteSection = () => {
       </div>
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)" }} />
-      <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+      <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
@@ -496,7 +496,7 @@ const EffektHighlightsSection = () => {
           </div>
         </div>
 
-        <div className={`grid lg:grid-cols-12 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid lg:grid-cols-12 gap-5 md:gap-7`}>
           {/* Headliner — 7 cols, dark gradient */}
           <article className="lg:col-span-7 relative p-8 md:p-12 flex flex-col text-white overflow-hidden" style={{ borderRadius: "1.25rem", background: `linear-gradient(150deg, ${ACCENT_DEEP} 0%, #08060c 65%, #08060c 100%)`, minHeight: "420px", boxShadow: "0 40px 80px -30px rgba(40,20,40,0.45)" }}>
             <div aria-hidden className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.14), transparent 70%)" }} />
@@ -559,7 +559,7 @@ const AnlassMixSection = () => {
     <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         {/* Foto oben — full-width Banner */}
-        <div className={`relative overflow-hidden mb-14 md:mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ borderRadius: "1.5rem" }}>
+        <div className={`relative overflow-hidden mb-14 md:mb-20`} style={{ borderRadius: "1.5rem" }}>
           <img src={buehneDpsgImg} alt="Bühnenshow Emilian Leber — Publikum reagiert" className="w-full h-[280px] md:h-[420px] object-cover" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)", objectPosition: "center 25%" }} />
           <div aria-hidden className="absolute inset-x-0 bottom-0 h-40" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.65))" }} />
           <div aria-hidden className="absolute -top-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
@@ -573,14 +573,14 @@ const AnlassMixSection = () => {
 
         {/* Headline */}
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
-          <div className={`md:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann eine Bühne den Abend trägt.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Anlässe.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Bühne</span>.
             </h2>
           </div>
-          <div className={`md:col-span-5 md:pt-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.1s" }}>
+          <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Die Bühne ist nicht für jede Feier nötig — aber wenn der Anlass
               passt, trägt sie den ganzen Abend. Fünf Settings, in denen das
@@ -592,7 +592,7 @@ const AnlassMixSection = () => {
         {/* Liste — full-width */}
         <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
           {ANLAESSE.map((a, i) => (
-            <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[68px_1fr_auto] items-baseline gap-4 md:gap-8 py-7 md:py-10 group ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: `${0.15 + i * 0.06}s` }}>
+            <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[68px_1fr_auto] items-baseline gap-4 md:gap-8 py-7 md:py-10 group`} style={{ animationDelay: `${0.15 + i * 0.06}s` }}>
               <span className="inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
                 <a.Icon className="w-4 h-4 md:w-6 md:h-6" style={{ color: ACCENT }} strokeWidth={1.75} />
               </span>
@@ -630,7 +630,7 @@ const TechRiderSection = () => {
     <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          <div className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+          <div className={`lg:col-span-5`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Für eure Eventplanung.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
               Tech-Rider.{" "}
@@ -648,7 +648,7 @@ const TechRiderSection = () => {
             </a>
           </div>
 
-          <div className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
+          <div className={`lg:col-span-7`} style={{ animationDelay: "0.15s" }}>
             <div className="bg-white p-7 md:p-9" style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(40,20,40,0.25), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
               {[
                 { Icon: Mic2, label: "Mikrofon", brauche: "Auf großer Bühne: Headset-Mikrofon (mein eigenes, falls nicht vorhanden)", bringe: "Headset Sennheiser EW-Serie, Reserve-Mikro" },
@@ -744,7 +744,7 @@ const StimmenSection = () => {
             5,0 Sterne.<br /><span className={SERIF_ITALIC}>30+ Bewertungen.</span>
           </h2>
         </div>
-        <div className={`grid md:grid-cols-3 gap-6 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid md:grid-cols-3 gap-6 md:gap-8`}>
           {reviews.map((r) => (
             <article key={r.author} itemScope itemType="https://schema.org/Review" className="relative bg-white p-7 md:p-9 flex flex-col h-full" style={{ borderRadius: "1rem", boxShadow: "0 25px 50px -25px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04)" }}>
               <div className="flex items-center gap-1 mb-5">{[...Array(5)].map((_, j) => (<Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />))}<meta itemProp="reviewRating" content="5" /></div>
@@ -784,7 +784,7 @@ const TrustZahlenSection = () => {
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>200+ Bühnen-Auftritten</span>.
           </h2>
         </div>
-        <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14`}>
           {TRUST_ITEMS.map((it) => (
             <article key={it.name} className="group relative bg-white border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:-translate-y-1">
               <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))", border: "1px solid rgba(154,38,64,0.22)" }}>
@@ -795,7 +795,7 @@ const TrustZahlenSection = () => {
             </article>
           ))}
         </div>
-        <div className={`flex flex-wrap items-baseline justify-center gap-x-10 gap-y-5 md:gap-x-16 pt-10 border-t border-foreground/10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`flex flex-wrap items-baseline justify-center gap-x-10 gap-y-5 md:gap-x-16 pt-10 border-t border-foreground/10`}>
           {[
             { num: "200+", label: "Events gesamt" },
             { num: "15–60", label: "Min Bühnen-Slot" },
@@ -832,7 +832,7 @@ const FAQSection = () => {
             Was vorher<br /><span className={SERIF_ITALIC}>gefragt wird.</span>
           </h2>
         </div>
-        <div className={`max-w-3xl border-t border-foreground/15 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl border-t border-foreground/15`}>
           {faqs.map((faq) => (
             <details key={faq.q} className="group py-6 md:py-7 border-b border-foreground/15">
               <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
@@ -859,7 +859,7 @@ const FinalCTA = () => {
       <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
       <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
+        <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Macht eure Bühne zum Höhepunkt.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Bühnenshow{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>buchen</span>.

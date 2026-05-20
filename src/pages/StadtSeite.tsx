@@ -340,7 +340,7 @@ const WarumStadtSection = ({ data }: { data: Stadt }) => {
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
           <div
-            className={`lg:col-span-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`lg:col-span-6`}
           >
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zauberer · Zauberkünstler · Magier · Mentalist.
@@ -379,7 +379,7 @@ const WarumStadtSection = ({ data }: { data: Stadt }) => {
             </div>
           </div>
           <div
-            className={`lg:col-span-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`lg:col-span-6`}
             style={{ animationDelay: "0.15s" }}
           >
             <div
@@ -463,7 +463,7 @@ const TrustStripSection = ({ data }: { data: Stadt }) => {
           </h2>
         </div>
         <div
-          className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4`}
         >
           {TRUST_ITEMS.map((it) => (
             <article
@@ -563,7 +563,7 @@ const FormateSection = ({ data }: { data: Stadt }) => {
         </div>
 
         <div
-          className={`grid md:grid-cols-3 gap-6 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-3 gap-6 md:gap-8`}
         >
           {FORMATE.map((f, i) => (
             <Link
@@ -717,7 +717,7 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
 
         {/* Editorial Magazin-Liste statt Card-Grid */}
         <ul
-          className={`divide-y divide-foreground/10 border-y border-foreground/10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`divide-y divide-foreground/10 border-y border-foreground/10`}
         >
           {ANLAESSE.map((a, i) => (
             <li
@@ -788,7 +788,7 @@ const InDerNaeheSection = ({ data }: { data: Stadt }) => {
     >
       <div className="container px-6">
         <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-8 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-x-14 gap-y-8 items-center`}
         >
           <div className="lg:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4">
@@ -887,7 +887,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
         </div>
 
         <ol
-          className={`relative grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`relative grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7`}
         >
           {SCHRITTE.map((s, i) => (
             <li
@@ -948,7 +948,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
           <div
-            className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`lg:col-span-7`}
           >
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Hochzeitszauberer {data.name}.
@@ -994,7 +994,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
             </div>
           </div>
           <div
-            className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`lg:col-span-5`}
             style={{ animationDelay: "0.15s" }}
           >
             <div
@@ -1052,7 +1052,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
           <div
-            className={`lg:col-span-5 lg:order-2 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`lg:col-span-5 lg:order-2`}
             style={{ animationDelay: "0.15s" }}
           >
             <div
@@ -1095,7 +1095,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
             </div>
           </div>
           <div
-            className={`lg:col-span-7 lg:order-1 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+            className={`lg:col-span-7 lg:order-1`}
           >
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Firmenzauberer {data.name}.
@@ -1213,7 +1213,7 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
 
         {/* Asymmetrisches 2-Spalten-Listing mit Sticky-Sidebar */}
         <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10`}
         >
           <aside className="lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
             <div
@@ -1321,7 +1321,7 @@ const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => {
         </div>
 
         <div
-          className={`grid md:grid-cols-3 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-3 gap-5 md:gap-7`}
         >
           {[
             {
@@ -1411,7 +1411,7 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
     >
       <div className="container px-6">
         <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start`}
         >
           <div className="lg:col-span-6">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
@@ -1566,7 +1566,7 @@ const LocationsSection = ({
         </div>
 
         <div
-          className={`flex flex-wrap gap-3 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`flex flex-wrap gap-3`}
         >
           {data.bekannteLocations.map((loc) => (
             <span
@@ -1641,7 +1641,7 @@ const StimmenSection = ({ data }: { data: Stadt }) => {
           </p>
         </div>
         <div
-          className={`grid md:grid-cols-3 gap-6 md:gap-8 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`grid md:grid-cols-3 gap-6 md:gap-8`}
         >
           {reviews.map((r) => (
             <article
@@ -1715,7 +1715,7 @@ const VideoSection = ({ data }: { data: Stadt }) => {
     >
       <div className="container px-6">
         <div
-          className={`max-w-3xl mx-auto text-center mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl mx-auto text-center mb-14 md:mb-16`}
         >
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Showreel.
@@ -1733,7 +1733,7 @@ const VideoSection = ({ data }: { data: Stadt }) => {
           </p>
         </div>
         <div
-          className={`max-w-4xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-4xl mx-auto`}
           style={{ animationDelay: "0.15s" }}
         >
           <div
@@ -1826,7 +1826,7 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
         }}
       />
       <div
-        className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+        className={`relative container px-6`}
       >
         <Quote
           className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40"
@@ -1889,7 +1889,7 @@ const FAQSection = ({ data }: { data: Stadt }) => {
           </h2>
         </div>
         <div
-          className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl`}
         >
           {faqs.map((faq, i) => {
             const open = openIndex === i;
@@ -1955,7 +1955,7 @@ const LangTextSection = ({ data }: { data: Stadt }) => {
     >
       <div className="container px-6">
         <div
-          className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl mx-auto`}
         >
           <p
             className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6 text-center`}
@@ -1997,7 +1997,7 @@ const KollegenEmpfehlungSection = ({
     <section ref={ref} className="bg-white py-12 md:py-16">
       <div className="container px-6">
         <div
-          className={`max-w-2xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-2xl mx-auto`}
         >
           <p className="text-sm md:text-base text-foreground/55 leading-relaxed text-center">
             {empfehlung.prefix}
@@ -2036,7 +2036,7 @@ const WeitereStaedteSection = ({ current }: { current: string }) => {
     >
       <div className="container px-6">
         <div
-          className={`max-w-3xl mb-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl mb-10`}
         >
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Zauberer auch in deiner Stadt.
@@ -2140,7 +2140,7 @@ const FinalCTA = ({ data }: { data: Stadt }) => {
       />
       <div className="relative container px-6">
         <div
-          className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+          className={`max-w-3xl mx-auto text-center`}
         >
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Zauberer für {data.name} buchen.
