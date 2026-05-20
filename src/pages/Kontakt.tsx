@@ -46,7 +46,7 @@ const PageKeyframes = () => (
   <style>{`
     @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes successPop { 0% { opacity: 0; transform: scale(0.85) translateY(20px); } 60% { opacity: 1; transform: scale(1.04) translateY(0); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
@@ -89,7 +89,7 @@ const Hero = () => (
         width: "60%",
         height: "70%",
         background:
-          "radial-gradient(closest-side, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
+          "radial-gradient(closest-side, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
         filter: "blur(20px)",
       }}
     />
@@ -217,7 +217,7 @@ const Hero = () => (
             style={{
               background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
               boxShadow:
-                "0 18px 40px -10px rgba(154,38,64,0.45), 0 8px 16px -6px rgba(154,38,64,0.35)",
+                "0 18px 40px -10px rgba(154,38,64,0.45), 0 8px 16px -6px rgba(154,38,64,0.15)",
             }}
           >
             Formular ausfüllen
@@ -310,7 +310,7 @@ const DreiKontaktwege = () => {
         >
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5"
             >
               Drei Wege. Einer reicht.
             </p>
@@ -549,7 +549,7 @@ const KontaktformularSection = () => {
             }`}
           >
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Das Formular.
             </p>
@@ -795,7 +795,7 @@ const KontaktformularSection = () => {
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
                     boxShadow:
-                      "0 18px 40px -10px rgba(154,38,64,0.45), 0 8px 16px -6px rgba(154,38,64,0.35)",
+                      "0 18px 40px -10px rgba(154,38,64,0.45), 0 8px 16px -6px rgba(154,38,64,0.15)",
                   }}
                 >
                   <Send className="w-4 h-4" />
@@ -880,7 +880,7 @@ const heatColor = (v: number): string => {
   if (v === 0) return "rgba(154,38,64,0.06)";
   if (v === 1) return "rgba(154,38,64,0.18)";
   if (v === 2) return "rgba(154,38,64,0.38)";
-  if (v === 3) return "rgba(154,38,64,0.35)";
+  if (v === 3) return "rgba(154,38,64,0.15)";
   return "rgba(154,38,64,0.92)";
 };
 
@@ -914,7 +914,7 @@ const AntwortzeitenHeatmap = () => {
             }`}
           >
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Wann ich schnell bin.
             </p>
@@ -1066,7 +1066,7 @@ const AntwortzeitenHeatmap = () => {
                     </span>
                   </p>
                 ) : (
-                  <p className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                  <p className="text-xs uppercase tracking-wide font-medium text-foreground/55">
                     Bewege die Maus über ein Feld.
                   </p>
                 )}
@@ -1238,7 +1238,7 @@ const PullQuote = () => {
           width: "60%",
           height: "60%",
           background:
-            "radial-gradient(closest-side, rgba(154,38,64,0.4) 0%, rgba(154,38,64,0) 70%)",
+            "radial-gradient(closest-side, rgba(154,38,64,0.18) 0%, rgba(154,38,64,0) 70%)",
           filter: "blur(40px)",
         }}
       />
@@ -1251,7 +1251,7 @@ const PullQuote = () => {
           width: "55%",
           height: "55%",
           background:
-            "radial-gradient(closest-side, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
+            "radial-gradient(closest-side, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
           filter: "blur(40px)",
         }}
       />
@@ -1333,7 +1333,7 @@ const HäufigeAnliegen = () => {
         >
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5"
             >
               Häufige Anliegen.
             </p>
@@ -1418,7 +1418,7 @@ const StandortMap = () => {
             }`}
           >
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Mein Revier.
             </p>
@@ -1597,7 +1597,7 @@ const VertrauenStrip = () => {
           }`}
         >
           <p
-            className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-3`}
+            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-3"
           >
             Bekannt aus.
           </p>
@@ -1691,7 +1691,7 @@ const SocialStrip = () => {
             }`}
           >
             <p
-              className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-3`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-3"
             >
               Auf Social.
             </p>
@@ -1788,7 +1788,7 @@ const FinalCTA = () => {
           width: "55%",
           height: "60%",
           background:
-            "radial-gradient(closest-side, rgba(199,144,66,0.3) 0%, rgba(199,144,66,0) 70%)",
+            "radial-gradient(closest-side, rgba(199,144,66,0.12) 0%, rgba(199,144,66,0) 70%)",
           filter: "blur(40px)",
         }}
       />
@@ -1800,7 +1800,7 @@ const FinalCTA = () => {
           }`}
         >
           <p
-            className={`${SERIF_ITALIC} text-lg md:text-xl text-white/55 mb-6`}
+            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6"
           >
             Eine Mail.
           </p>

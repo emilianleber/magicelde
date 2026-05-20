@@ -70,7 +70,7 @@ const HeroKeyframes = () => (
     }
     @keyframes heroStarPulse {
       0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -164,7 +164,7 @@ const Hero = () => {
           className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
           }}
         />
       </div>
@@ -178,7 +178,7 @@ const Hero = () => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
+              background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -351,7 +351,7 @@ const AnlaesseSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Vier B2B-Settings.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -533,12 +533,12 @@ const RoiSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was Magie auf einem Firmen-Event tatsächlich bewegt.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -639,7 +639,7 @@ const RoiSection = () => {
                   >
                     {employees}
                   </span>
-                  <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                  <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">
                     Mitarbeiter / Gäste
                   </span>
                 </div>
@@ -661,7 +661,7 @@ const RoiSection = () => {
 
               <div className="space-y-4 pt-5 border-t border-foreground/10">
                 <div className="flex items-baseline justify-between">
-                  <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                  <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">
                     Aktiv beteiligte Gäste
                   </span>
                   <span className="font-display text-lg font-black text-foreground tabular-nums">
@@ -669,7 +669,7 @@ const RoiSection = () => {
                   </span>
                 </div>
                 <div className="flex items-baseline justify-between">
-                  <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                  <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">
                     Erzählen davon (∅)
                   </span>
                   <span
@@ -680,7 +680,7 @@ const RoiSection = () => {
                   </span>
                 </div>
                 <div className="flex items-baseline justify-between">
-                  <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+                  <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">
                     Empfehlung
                   </span>
                   <span className="font-display text-sm font-bold text-foreground text-right max-w-[200px]">
@@ -730,7 +730,7 @@ const IndustriesSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Industries we serve.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -792,18 +792,18 @@ const VorstandCounterSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
 
@@ -813,7 +813,7 @@ const VorstandCounterSection = () => {
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6">
             Eine Beobachtung aus über hundert Firmen-Events.
           </p>
           <p
@@ -920,12 +920,12 @@ const CaseStudiesSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zwei echte Beispiele aus dem letzten Jahr.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -976,8 +976,8 @@ const CaseStudiesSection = () => {
                     style={{
                       background:
                         cs.tint === "rose"
-                          ? "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(154,38,64,0.35) 70%, rgba(92,22,34,0.7) 100%)"
-                          : "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(199,144,66,0.35) 70%, rgba(138,90,20,0.7) 100%)",
+                          ? "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(154,38,64,0.15) 70%, rgba(92,22,34,0.7) 100%)"
+                          : "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(199,144,66,0.14) 70%, rgba(138,90,20,0.7) 100%)",
                     }}
                   />
                   {/* Nr.-Marker */}
@@ -1128,7 +1128,7 @@ const FormatOptionenSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Vier Formate, kombinierbar.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1254,12 +1254,12 @@ const BuchungsAblaufSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Buchungs-Ablauf für Eventplanerinnen.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1512,7 +1512,7 @@ const StimmenSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Was Veranstalter sagen.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
@@ -1564,7 +1564,7 @@ const StimmenSection = () => {
                   <p itemProp="author" className="font-display font-bold text-foreground text-sm">
                     {r.author}
                   </p>
-                  <p className={`${SERIF_ITALIC} text-[13px] text-foreground/55 mt-0.5`}>
+                  <p className="text-xs font-medium text-foreground/55 mt-0.5">
                     {r.role}
                   </p>
                 </div>
@@ -1593,11 +1593,11 @@ const TrustZahlenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
-          <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Falls ihr noch Sicherheit braucht.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
@@ -1632,7 +1632,7 @@ const TrustZahlenSection = () => {
               <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">
                 {it.name}
               </p>
-              <p className={`${SERIF_ITALIC} text-[12px] md:text-sm text-foreground/55 leading-snug`}>
+              <p className="text-xs font-medium text-foreground/55 leading-snug">
                 {it.sub}
               </p>
             </article>
@@ -1702,7 +1702,7 @@ const FAQSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen aus dem B2B-Bereich.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1761,18 +1761,18 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
 
@@ -1782,7 +1782,7 @@ const FinalCTA = () => {
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Plant euren Abend.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
@@ -1909,7 +1909,7 @@ const Firmenfeiern = () => (
         <LogoMarquee eyebrow="100+ Firmen-Engagements." variant="cream" compact />
 
         {/* Agency-Banner: Hinweis für Eventagenturen */}
-        <section className="bg-[hsl(40,25%,98.5%)] border-b border-foreground/10">
+        <section className="bg-[hsl(30,8%,98.5%)] border-b border-foreground/10">
           <div className="container px-6 py-5 md:py-6">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-6">
               <div className="flex items-center gap-3">

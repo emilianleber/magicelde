@@ -315,7 +315,7 @@ const FeaturedArtikel = ({ post }: { post: BlogPost }) => {
             } transition-all duration-700 delay-150`}
           >
             <div
-              className={`${SERIF_ITALIC} text-base text-foreground/55 mb-4`}
+              className="text-xs uppercase tracking-[0.18em] font-semibold text-foreground/55 mb-4"
             >
               Titelstory.
             </div>
@@ -452,7 +452,7 @@ const PostsListe = ({
                     ? {
                         background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
                         color: "white",
-                        boxShadow: "0 8px 24px -10px rgba(154,38,64,0.3)",
+                        boxShadow: "0 8px 24px -10px rgba(154,38,64,0.13)",
                       }
                     : {
                         background: "rgba(8,6,12,0.05)",

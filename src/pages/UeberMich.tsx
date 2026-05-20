@@ -50,7 +50,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -163,7 +163,7 @@ const Hero = () => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
+              background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -347,7 +347,7 @@ const DreiToolsSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Drei Werkzeuge. Eine Bühne.
             </p>
@@ -558,14 +558,14 @@ const WerdegangTimelineSection = () => {
     <section
       ref={ref}
       id="werdegang"
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header */}
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Werdegang. Echte Stationen.
             </p>
@@ -619,8 +619,8 @@ const WerdegangTimelineSection = () => {
               style={{
                 height: `calc(${fillPct}% - 1rem)`,
                 background:
-                  "linear-gradient(180deg, rgba(154,38,64,0.85) 0%, rgba(154,38,64,0.3) 100%)",
-                boxShadow: "0 0 12px rgba(154,38,64,0.35)",
+                  "linear-gradient(180deg, rgba(154,38,64,0.85) 0%, rgba(154,38,64,0.13) 100%)",
+                boxShadow: "0 0 12px rgba(154,38,64,0.15)",
               }}
             />
             <ol className="space-y-12 md:space-y-14">
@@ -642,8 +642,8 @@ const WerdegangTimelineSection = () => {
                           ? `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`
                           : "linear-gradient(135deg, rgba(0,0,0,0.45), rgba(0,0,0,0.32))",
                         boxShadow: isActive
-                          ? "0 0 0 4px hsl(40,25%,98.5%), 0 0 24px rgba(154,38,64,0.4), 0 8px 22px -4px rgba(154,38,64,0.5)"
-                          : "0 0 0 4px hsl(40,25%,98.5%), 0 4px 12px -3px rgba(0,0,0,0.18)",
+                          ? "0 0 0 4px hsl(30,8%,98.5%), 0 0 24px rgba(154,38,64,0.18), 0 8px 22px -4px rgba(154,38,64,0.5)"
+                          : "0 0 0 4px hsl(30,8%,98.5%), 0 4px 12px -3px rgba(0,0,0,0.18)",
                         transform: isActive ? "scale(1.08)" : "scale(1)",
                       }}
                     >
@@ -804,7 +804,7 @@ const MeinStilSection = () => {
             className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
           >
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Mein Stil.
             </p>
@@ -1040,14 +1040,14 @@ const AuszeichnungenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header */}
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Auszeichnungen.
             </p>
@@ -1087,7 +1087,7 @@ const AuszeichnungenSection = () => {
                   className="w-11 h-11 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110"
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                    boxShadow: "0 8px 22px -4px rgba(154,38,64,0.4)",
+                    boxShadow: "0 8px 22px -4px rgba(154,38,64,0.18)",
                   }}
                 >
                   <a.icon className="w-5 h-5 text-white" />
@@ -1215,7 +1215,7 @@ const HinterDenKulissenSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Hinter den Kulissen.
             </p>
@@ -1346,14 +1346,14 @@ const WarumPersoenlichSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header */}
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Warum persönlich funktioniert.
             </p>
@@ -1446,7 +1446,7 @@ const StimmenSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Stimmen über mich persönlich.
             </p>
@@ -1475,7 +1475,7 @@ const StimmenSection = () => {
               key={s.name}
               itemScope
               itemType="https://schema.org/Review"
-              className="group relative bg-[hsl(40,25%,98.5%)] rounded-2xl p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
+              className="group relative bg-[hsl(30,8%,98.5%)] rounded-2xl p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
               style={{
                 boxShadow:
                   "0 20px 50px -20px rgba(40,20,10,0.14), 0 6px 16px -6px rgba(40,20,10,0.06)",
@@ -1563,7 +1563,7 @@ const VideoSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1571,7 +1571,7 @@ const VideoSection = () => {
         >
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               TVA · Herbst 2025.
             </p>
@@ -1959,7 +1959,7 @@ const PersoenlicherBriefSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-white/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6"
             >
               Persönlich, direkt, ohne Agentur.
             </p>

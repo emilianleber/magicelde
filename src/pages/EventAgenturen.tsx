@@ -60,7 +60,7 @@ const HeroKeyframes = () => (
     }
     @keyframes heroStarPulse {
       0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); }
+      50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -119,11 +119,11 @@ const Hero = () => {
         <img src={heroFirmenfeierImg} alt="Zauberkünstler für Event-Agenturen — Emilian Leber" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "saturate(0.92) contrast(1.08) brightness(0.7)" }} loading="eager" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)" }} />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)" }} />
-        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)" }} />
+        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)" }} />
       </div>
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
         {BOKEH.map((b, i) => (
-          <div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />
+          <div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />
         ))}
       </div>
       <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
@@ -211,7 +211,7 @@ const SchnittstellenSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Wie wir mit Agenturen arbeiten.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wie wir mit Agenturen arbeiten.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Klare{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Schnittstellen</span>. Keine Überraschungen.
@@ -228,7 +228,7 @@ const SchnittstellenSection = () => {
 
         <div className={`grid md:grid-cols-2 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {SCHNITTSTELLEN.map((s, i) => (
-            <article key={s.role} className="relative bg-[hsl(40,25%,98.5%)] p-8 md:p-10" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -25px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
+            <article key={s.role} className="relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -25px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
               <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
                 <s.icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
@@ -258,11 +258,11 @@ const SchnittstellenSection = () => {
 const VorteileSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10 overflow-hidden">
+    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10 overflow-hidden">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Sechs Gründe für Agenturen.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Sechs Gründe für Agenturen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Was Eventagenturen bei uns{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>konkret bekommen</span>.
@@ -321,7 +321,7 @@ const VorteileSection = () => {
                 Für Detail-Call diese Woche habe ich Mi/Do je zwei Slots
                 offen.
               </p>
-              <p className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+              <p className="text-xs uppercase tracking-wide font-medium text-foreground/55">
                 Beste Grüße, Emilian
               </p>
 
@@ -407,7 +407,7 @@ const SchnellangebotSection = () => {
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Schnellangebot.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Schnellangebot.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5vw,4.5rem)] text-foreground mb-8">
               In{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>8 Stunden</span>{" "}
@@ -439,7 +439,7 @@ const SchnellangebotSection = () => {
               action="mailto:el@magicel.de"
               method="POST"
               encType="text/plain"
-              className="bg-[hsl(40,25%,98.5%)] p-7 md:p-9 space-y-4"
+              className="bg-[hsl(30,8%,98.5%)] p-7 md:p-9 space-y-4"
               style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(40,20,40,0.2), inset 0 0 0 1px rgba(0,0,0,0.04)" }}
             >
               <div className="grid sm:grid-cols-2 gap-3">
@@ -490,13 +490,13 @@ const SchnellangebotSection = () => {
 const AgenturCaseSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
             <div className="relative overflow-hidden h-[420px] md:h-[520px]" style={{ borderRadius: "1.25rem", boxShadow: "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2)" }}>
               <img src={buehneZuschauerImg} alt="Agentur-Case-Study: Magic Camp mit 200 Gästen" className="w-full h-full object-cover object-center" loading="lazy" />
-              <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(154,38,64,0.35) 70%, rgba(92,22,34,0.7) 100%)" }} />
+              <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(154,38,64,0.15) 70%, rgba(92,22,34,0.7) 100%)" }} />
               <span className={`${SERIF_ITALIC} absolute top-6 left-6 md:top-8 md:left-8 leading-none text-white`} style={{ fontSize: "clamp(4rem, 8vw, 7rem)", textShadow: "0 8px 30px rgba(0,0,0,0.45)" }}>01</span>
               <div className="absolute bottom-5 left-5 right-5 md:bottom-7 md:left-7 md:right-7">
                 <div className="relative rounded-2xl px-5 py-4 overflow-hidden" style={{ background: "linear-gradient(155deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0.04) 100%)", backdropFilter: "blur(34px) saturate(170%)", WebkitBackdropFilter: "blur(34px) saturate(170%)", border: "1px solid rgba(255,255,255,0.22)", boxShadow: "0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.45)" }}>
@@ -566,7 +566,7 @@ const FAQSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Häufige Fragen aus dem Agentur-Kontext.</p>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen aus dem Agentur-Kontext.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Was Eventagenturen<br /><span className={SERIF_ITALIC}>vorher fragen.</span>
           </h2>
@@ -598,11 +598,11 @@ const FinalCTA = () => {
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>Für Eventagenturen & Veranstaltungsplaner.</p>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Für Eventagenturen & Veranstaltungsplaner.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Schnellangebot in{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>8 Stunden</span>.

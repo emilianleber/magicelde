@@ -103,7 +103,7 @@ const ShowPlanerTrigger = () => {
         style={{
           background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
           boxShadow:
-            "0 14px 30px -10px rgba(154,38,64,0.4), 0 4px 12px -4px rgba(154,38,64,0.25)",
+            "0 14px 30px -10px rgba(154,38,64,0.18), 0 4px 12px -4px rgba(154,38,64,0.25)",
         }}
       >
         <Wand2 className="w-5 h-5 md:w-4 md:h-4 group-hover:rotate-12 transition-transform" />

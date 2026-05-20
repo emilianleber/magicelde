@@ -102,7 +102,7 @@ const HeroKeyframes = () => (
     }
     @keyframes heroStarPulse {
       0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
     }
     .hero-word {
       display: inline-block;
@@ -239,7 +239,7 @@ const Hero = () => {
           className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
           }}
         />
       </div>
@@ -255,7 +255,7 @@ const Hero = () => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
+              background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -407,7 +407,7 @@ const TrustStrip = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-14">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               Bühne. TV. Wettbewerb.
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.5rem)] text-foreground">
@@ -446,7 +446,7 @@ const TrustStrip = () => {
               <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">
                 {it.name}
               </p>
-              <p className={`${SERIF_ITALIC} text-[12px] md:text-sm text-foreground/55 leading-snug`}>
+              <p className="text-xs font-medium text-foreground/55 leading-snug">
                 {it.sub}
               </p>
             </article>
@@ -478,11 +478,11 @@ const KUNDEN_LOGOS = [
 const KundenReferenzenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-b border-foreground/10">
+    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-b border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               Wer mich gebucht hat.
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.5rem)] text-foreground">
@@ -545,18 +545,18 @@ const PullQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -565,7 +565,7 @@ const PullQuoteSection = () => {
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/55 mb-8`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-8">
             Drei Sekunden später.
           </p>
           <p className="font-display font-bold tracking-[-0.01em] leading-[1.15] text-[clamp(1.75rem,4vw,3.5rem)]">
@@ -698,7 +698,7 @@ const KonzeptSection = () => {
             }`}
             style={{ animationDelay: "0.15s" }}
           >
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Das Konzept.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -814,7 +814,7 @@ const DreiSaeulenSection = () => {
         {/* Header — 2 Spalten wie Frameblox */}
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Drei Formate.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1048,11 +1048,11 @@ const AblaufSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Wie ein Abend abläuft.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
@@ -1172,13 +1172,13 @@ const BeispielAbendSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header — 2 Spalten */}
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Eine reale Reportage.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1236,8 +1236,8 @@ const BeispielAbendSection = () => {
               style={{
                 height: `calc(${fillPct}% - 1rem)`,
                 background:
-                  "linear-gradient(180deg, rgba(154,38,64,0.85) 0%, rgba(154,38,64,0.3) 100%)",
-                boxShadow: "0 0 12px rgba(154,38,64,0.35)",
+                  "linear-gradient(180deg, rgba(154,38,64,0.85) 0%, rgba(154,38,64,0.13) 100%)",
+                boxShadow: "0 0 12px rgba(154,38,64,0.15)",
               }}
             />
             <ol className="space-y-12 md:space-y-14">
@@ -1257,8 +1257,8 @@ const BeispielAbendSection = () => {
                           ? `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`
                           : "linear-gradient(135deg, rgba(0,0,0,0.45), rgba(0,0,0,0.32))",
                         boxShadow: isActive
-                          ? `0 0 0 4px hsl(40,25%,98.5%), 0 0 24px rgba(154,38,64,0.4), 0 8px 22px -4px rgba(154,38,64,0.5)`
-                          : "0 0 0 4px hsl(40,25%,98.5%), 0 4px 12px -3px rgba(0,0,0,0.18)",
+                          ? `0 0 0 4px hsl(30,8%,98.5%), 0 0 24px rgba(154,38,64,0.18), 0 8px 22px -4px rgba(154,38,64,0.5)`
+                          : "0 0 0 4px hsl(30,8%,98.5%), 0 4px 12px -3px rgba(0,0,0,0.18)",
                         transform: isActive ? "scale(1.08)" : "scale(1)",
                       }}
                     >
@@ -1711,7 +1711,7 @@ const MagicDinnerQuiz = ({ onDark = false }: { onDark?: boolean }) => {
           const cardShadow = isSel
             ? onDark
               ? `0 30px 60px -20px rgba(154,38,64,0.45), inset 0 0 0 1px ${ACCENT}`
-              : `0 25px 50px -20px rgba(154,38,64,0.35), inset 0 0 0 1px ${ACCENT}`
+              : `0 25px 50px -20px rgba(154,38,64,0.15), inset 0 0 0 1px ${ACCENT}`
             : onDark
             ? "0 20px 40px -20px rgba(0,0,0,0.5)"
             : "0 8px 20px -10px rgba(0,0,0,0.08)";
@@ -1855,7 +1855,7 @@ const ResultWithForm = ({ rec, answers, showConfetti, onReset, onDark = false }:
 
       {/* Header — Empfehlung */}
       <div className="mb-7 md:mb-8">
-        <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-3`}>
+        <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-3">
           Eure Empfehlung.
         </p>
         <h3 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.6vw,2.75rem)] text-foreground mb-3">
@@ -2049,7 +2049,7 @@ const AnlaesseSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Wann ein Magic Dinner passt.
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
@@ -2122,7 +2122,7 @@ const AnlaesseSection = () => {
 
           {/* Card 2 — CLEAN, schmaler, exakt gleich hoch wie Card 1, Booking-Widget */}
           <article
-            className="group relative overflow-hidden bg-[hsl(40,25%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
+            className="group relative overflow-hidden bg-[hsl(30,8%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
             style={{
               borderRadius: "1.5rem",
               boxShadow:
@@ -2212,7 +2212,7 @@ const AnlaesseSection = () => {
           <div className="grid md:grid-cols-[2fr_3fr] gap-4 md:gap-5">
           {/* Card 3 — CLEAN, schmaler, exakt gleich hoch wie Card 4, Avatar-Cluster */}
           <article
-            className="group relative overflow-hidden bg-[hsl(40,25%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
+            className="group relative overflow-hidden bg-[hsl(30,8%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
             style={{
               borderRadius: "1.5rem",
               boxShadow:
@@ -2291,7 +2291,7 @@ const AnlaesseSection = () => {
             />
             <span
               aria-hidden
-              className="absolute -bottom-20 -left-10 w-[280px] h-[280px] rounded-full blur-3xl opacity-15 pointer-events-none"
+              className="absolute -bottom-20 -left-10 w-[280px] h-[280px] rounded-full blur-3xl opacity-8 pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle, rgba(31,143,95,0.55), transparent 65%)",
@@ -2347,7 +2347,7 @@ const WasDuBekommstSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Was du als Gastgeber bekommst.
             </p>
@@ -2693,11 +2693,11 @@ const StimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Was Gastgeber sagen.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
@@ -2845,7 +2845,7 @@ const FAQSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
@@ -2899,7 +2899,7 @@ const FinalCTA = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
             "radial-gradient(circle, rgba(154,38,64,0.5), transparent 60%)",
@@ -2907,10 +2907,10 @@ const FinalCTA = () => {
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
 
@@ -2920,7 +2920,7 @@ const FinalCTA = () => {
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Plant euren Abend.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
@@ -3065,7 +3065,7 @@ const AudienceSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Fünf Zielgruppen. Eine Seite.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -3163,12 +3163,12 @@ const RestaurantPartnerSection = () => {
     <section
       ref={ref}
       id="restaurant-partner"
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Für Restaurants.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -3335,7 +3335,7 @@ const TicketEventSection = () => {
     <section ref={ref} id="tickets" className="bg-white py-24 md:py-36">
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Für Ticket-Käufer.
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground mb-8">
@@ -3361,7 +3361,7 @@ const TicketEventSection = () => {
             ].map((s) => (
               <div
                 key={s.label}
-                className="bg-[hsl(40,25%,98.5%)] rounded-2xl px-5 py-6 border border-foreground/8"
+                className="bg-[hsl(30,8%,98.5%)] rounded-2xl px-5 py-6 border border-foreground/8"
               >
                 <p
                   className="font-display text-2xl md:text-3xl font-black tabular-nums leading-none"

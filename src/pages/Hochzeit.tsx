@@ -91,7 +91,7 @@ const HeroKeyframes = () => (
     }
     @keyframes heroStarPulse {
       0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -190,7 +190,7 @@ const Hero = () => {
           className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
           }}
         />
       </div>
@@ -206,7 +206,7 @@ const Hero = () => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
+              background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -391,7 +391,7 @@ const AKTE = [
       "Hochzeits-Bühnenshow vor dem Eröffnungstanz — Standing Ovations der Gäste",
     duration: "15 – 30 Min",
     badge: "Bühnen-Finale",
-    glow: "rgba(154,38,64,0.4)", // burgundy
+    glow: "rgba(154,38,64,0.18)", // burgundy
   },
 ];
 
@@ -403,7 +403,7 @@ const DreiAkteSection = () => {
       <div className="container px-6 pt-24 md:pt-36 pb-12 md:pb-16">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Ein Tag, drei Energien.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -616,7 +616,7 @@ const PolaroidWall = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Sechs Momente aus echten Hochzeiten.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.2vw,5.25rem)] text-foreground">
@@ -911,13 +911,13 @@ const VertrauensSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header */}
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was ich euch vorab schriftlich zusichere.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1125,7 +1125,7 @@ const LocationSetupSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Egal wo ihr feiert.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1164,7 +1164,7 @@ const LocationSetupSection = () => {
               <span className="font-display font-bold text-foreground text-sm">
                 {l.label}
               </span>
-              <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+              <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">
                 {l.note}
               </span>
             </div>
@@ -1180,7 +1180,7 @@ const LocationSetupSection = () => {
         >
           {/* Was ich brauche */}
           <div
-            className="relative bg-[hsl(40,25%,98.5%)] p-8 md:p-10"
+            className="relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10"
             style={{
               borderRadius: "1.25rem",
               boxShadow:
@@ -1290,15 +1290,15 @@ const PlanerQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 -left-16 w-[560px] h-[560px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 -left-16 w-[560px] h-[560px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[560px] h-[560px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -right-20 w-[560px] h-[560px] rounded-full blur-3xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(228,184,192,0.45), transparent 60%)",
@@ -1399,12 +1399,12 @@ const BrautpaareStimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-14">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Stimmen aus der Brautpaar-Perspektive.
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.5rem)] text-foreground">
@@ -1472,7 +1472,7 @@ const BrautpaareStimmenSection = () => {
                   >
                     {r.author}
                   </p>
-                  <p className={`${SERIF_ITALIC} text-[13px] text-foreground/55 mt-0.5`}>
+                  <p className="text-xs font-medium text-foreground/55 mt-0.5">
                     {r.role}
                   </p>
                 </div>
@@ -1552,7 +1552,7 @@ const BuchungsFlowSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Vom Erstkontakt bis zum Ja-Wort.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1588,7 +1588,7 @@ const BuchungsFlowSection = () => {
               style={{
                 height: `calc(${fillPct}% - 1rem)`,
                 background: `linear-gradient(180deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`,
-                boxShadow: "0 0 12px rgba(154,38,64,0.35)",
+                boxShadow: "0 0 12px rgba(154,38,64,0.15)",
               }}
             />
             <ol className="space-y-12 md:space-y-16">
@@ -1609,7 +1609,7 @@ const BuchungsFlowSection = () => {
                           ? `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`
                           : "linear-gradient(135deg, rgba(0,0,0,0.45), rgba(0,0,0,0.32))",
                         boxShadow: isActive
-                          ? "0 0 0 4px white, 0 0 24px rgba(154,38,64,0.4), 0 8px 22px -4px rgba(154,38,64,0.5)"
+                          ? "0 0 0 4px white, 0 0 24px rgba(154,38,64,0.18), 0 8px 22px -4px rgba(154,38,64,0.5)"
                           : "0 0 0 4px white, 0 4px 12px -3px rgba(0,0,0,0.18)",
                         transform: isActive ? "scale(1.08)" : "scale(1)",
                       }}
@@ -1731,7 +1731,7 @@ const TrustStripSection = () => {
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
-          <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Wenn ihr noch Sicherheit braucht.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
@@ -1770,7 +1770,7 @@ const TrustStripSection = () => {
               <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">
                 {it.name}
               </p>
-              <p className={`${SERIF_ITALIC} text-[12px] md:text-sm text-foreground/55 leading-snug`}>
+              <p className="text-xs font-medium text-foreground/55 leading-snug">
                 {it.sub}
               </p>
             </article>
@@ -1862,11 +1862,11 @@ const FAQSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1936,15 +1936,15 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(228,184,192,0.5), transparent 60%)",
@@ -1957,7 +1957,7 @@ const FinalCTA = () => {
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Macht euren Tag zum Tagesgespräch.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">

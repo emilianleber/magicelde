@@ -55,7 +55,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -111,10 +111,10 @@ const Hero = () => {
         <img src={heroCloseupImg} alt="Close-Up mit Emilian Leber — Karten in euren Händen" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "saturate(0.92) contrast(1.08) brightness(0.7)" }} loading="eager" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)" }} />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)" }} />
-        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)" }} />
+        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)" }} />
       </div>
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
-        {BOKEH.map((b, i) => (<div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />))}
+        {BOKEH.map((b, i) => (<div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />))}
       </div>
       <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
         <div className="max-w-5xl">
@@ -192,7 +192,7 @@ const HollywoodSequenzSection = () => {
       <div className="container px-6 relative">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>So läuft ein Close-Up-Moment ab.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">So läuft ein Close-Up-Moment ab.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Schritte zum{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Wow-Moment</span>.
@@ -226,7 +226,7 @@ const HollywoodSequenzSection = () => {
                       className="relative flex items-center justify-center w-14 h-14 md:w-[76px] md:h-[76px] rounded-full font-display font-black text-white text-lg md:text-xl"
                       style={{
                         background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                        boxShadow: `0 10px 25px -8px rgba(154,38,64,0.4), 0 0 0 5px white`,
+                        boxShadow: `0 10px 25px -8px rgba(154,38,64,0.18), 0 0 0 5px white`,
                       }}
                     >
                       {String(i + 1).padStart(2, "0")}
@@ -248,7 +248,7 @@ const HollywoodSequenzSection = () => {
           {/* RIGHT — Beispiel-Trick: Tisch-Wahl-Routine */}
           <div className={`lg:col-span-6 lg:sticky lg:top-24 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
             <div
-              className="relative bg-[hsl(40,25%,98.5%)] p-8 md:p-10 overflow-hidden"
+              className="relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10 overflow-hidden"
               style={{
                 borderRadius: "1.5rem",
                 boxShadow: "0 50px 100px -30px rgba(40,20,40,0.35), 0 15px 35px -15px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
@@ -365,11 +365,11 @@ const SETTINGS = [
 const SettingsVariantenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-16 md:mb-24">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Drei Settings, ein Format.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Settings, ein Format.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Empfang. Tisch.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Stehtische.</span>
@@ -439,7 +439,7 @@ const TypischerAbendSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Ein Abend, von der Ankunft bis zum Tanz.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Ein Abend, von der Ankunft bis zum Tanz.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wie sich ein Close-Up-Abend{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>anfühlt</span>.
@@ -488,11 +488,11 @@ const EFFEKTE = [
 const EffektKatalogSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Drei Effekt-Familien.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Effekt-Familien.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Karten. Münzen.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Gedanken.</span>
@@ -546,7 +546,7 @@ const TrickRepertoireSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Vier Routinen aus meinem Set.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Routinen aus meinem Set.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Konkrete{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Beispiele</span>{" "}
@@ -564,7 +564,7 @@ const TrickRepertoireSection = () => {
 
         <div className={`grid grid-cols-1 md:grid-cols-6 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {/* lg: 4 cols */}
-          <article className="md:col-span-4 relative bg-[hsl(40,25%,98.5%)] p-8 md:p-10 flex flex-col" style={{ borderRadius: "1.25rem", boxShadow: "0 20px 45px -25px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)", minHeight: "320px" }}>
+          <article className="md:col-span-4 relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10 flex flex-col" style={{ borderRadius: "1.25rem", boxShadow: "0 20px 45px -25px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)", minHeight: "320px" }}>
             <span aria-hidden className="absolute -top-8 -right-3 select-none" style={{ fontSize: "120px", color: ACCENT, opacity: 0.06, transform: "rotate(15deg)" }}>♣</span>
             <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: ACCENT }}>{REPERTOIRE[0].kicker}</p>
             <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-[1.1] mb-5 max-w-md">{REPERTOIRE[0].title}</h3>
@@ -586,7 +586,7 @@ const TrickRepertoireSection = () => {
 
           {/* sm: 2 cols */}
           <article className="md:col-span-2 relative bg-[#08060c] text-white p-7 md:p-9 flex flex-col overflow-hidden" style={{ borderRadius: "1.25rem", minHeight: "300px" }}>
-            <div aria-hidden className="absolute -top-20 -right-10 w-[300px] h-[300px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.35), transparent 65%)" }} />
+            <div aria-hidden className="absolute -top-20 -right-10 w-[300px] h-[300px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.14), transparent 65%)" }} />
             <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: "#f3d9a8" }}>{REPERTOIRE[2].kicker}</p>
             <h3 className="relative font-display text-xl md:text-2xl font-black leading-tight mb-4">{REPERTOIRE[2].title}</h3>
             <p className="relative text-sm md:text-base text-white/75 leading-[1.6]">{REPERTOIRE[2].body}</p>
@@ -594,7 +594,7 @@ const TrickRepertoireSection = () => {
 
           {/* md: 4 cols */}
           <article className="md:col-span-4 relative bg-white p-8 md:p-10 flex flex-col md:flex-row gap-7 md:items-center" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -30px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(0,0,0,0.05)", minHeight: "300px" }}>
-            <div className="shrink-0 inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full" style={{ background: "linear-gradient(135deg, rgba(199,144,66,0.18), rgba(199,144,66,0.04))", border: "1px solid rgba(199,144,66,0.3)" }}>
+            <div className="shrink-0 inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full" style={{ background: "linear-gradient(135deg, rgba(199,144,66,0.18), rgba(199,144,66,0.04))", border: "1px solid rgba(199,144,66,0.12)" }}>
               <Coins className="w-9 h-9 md:w-10 md:h-10" style={{ color: "#a06820" }} strokeWidth={1.5} />
             </div>
             <div>
@@ -621,12 +621,12 @@ const PullQuoteSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
     <section ref={ref} className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden">
-      <div className="absolute inset-0 opacity-15">
+      <div className="absolute inset-0 opacity-8">
         <img src={emotionenImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.55) 0%, rgba(8,6,12,0.95) 70%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)" }} />
-      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.4), transparent 65%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
+      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)" }} />
       <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
@@ -637,7 +637,7 @@ const PullQuoteSection = () => {
           </p>
           <footer className="mt-10 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-white/25" aria-hidden />
-            <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}>Was Close-Up von Bühne unterscheidet.</span>
+            <span className="text-sm md:text-base text-white/65">Was Close-Up von Bühne unterscheidet.</span>
             <span className="h-px w-12 bg-white/25" aria-hidden />
           </footer>
         </blockquote>
@@ -660,11 +660,11 @@ const ANLAESSE = [
 const AnlassMixSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-12">
           <div className={`lg:col-span-5 lg:sticky lg:top-24 lg:self-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Wann Close-Up den Abend prägt.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann Close-Up den Abend prägt.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-8">
               Fünf Anlässe.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Ein Format</span>.
@@ -687,7 +687,7 @@ const AnlassMixSection = () => {
                   <div>
                     <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
                       <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight">{a.label}</h3>
-                      <span className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55`}>{a.note}</span>
+                      <span className="text-sm md:text-base text-foreground/65">{a.note}</span>
                     </div>
                     <p className="text-base text-foreground/65 leading-[1.65] max-w-2xl">{a.body}</p>
                   </div>
@@ -701,7 +701,7 @@ const AnlassMixSection = () => {
               <Link to="/buchung?format=Close-Up" className="hero-cta inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
                 Anlass besprechen<ArrowRight className="w-4 h-4" />
               </Link>
-              <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>Antwort innerhalb 24 h</span>
+              <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">Antwort innerhalb 24 h</span>
             </div>
           </div>
         </div>
@@ -727,7 +727,7 @@ const GruppenDynamikSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>An jedem Tisch ein anderer Ton.</p>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">An jedem Tisch ein anderer Ton.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei Publikum-Typen.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Drei Tonalitäten.</span>
@@ -746,7 +746,7 @@ const GruppenDynamikSection = () => {
           {GRUPPEN.map((g, i) => (
             <article key={g.persona} className={`relative p-7 md:p-9 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 ${i === 1 ? "text-white" : ""}`} style={{
               borderRadius: "1.25rem",
-              background: i === 1 ? `linear-gradient(160deg, ${ACCENT_DEEP} 0%, #08060c 100%)` : "hsl(40,25%,98.5%)",
+              background: i === 1 ? `linear-gradient(160deg, ${ACCENT_DEEP} 0%, #08060c 100%)` : "hsl(30,8%,98.5%)",
               boxShadow: i === 1 ? "0 35px 70px -30px rgba(40,20,40,0.4)" : "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
               minHeight: "340px",
             }}>
@@ -827,7 +827,7 @@ const StimmenSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Was Gastgeber sagen.</p>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Was Gastgeber sagen.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             5,0 Sterne.<br /><span className={SERIF_ITALIC}>30+ Bewertungen.</span>
           </h2>
@@ -841,7 +841,7 @@ const StimmenSection = () => {
                 <div className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center font-display font-bold text-white text-base" style={{ background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})` }}>{r.initial}</div>
                 <div>
                   <p itemProp="author" className="font-display font-bold text-foreground text-sm">{r.author}</p>
-                  <p className={`${SERIF_ITALIC} text-[13px] text-foreground/55 mt-0.5`}>{r.role}</p>
+                  <p className="text-xs font-medium text-foreground/55 mt-0.5">{r.role}</p>
                 </div>
               </footer>
             </article>
@@ -866,10 +866,10 @@ const TRUST_ITEMS = [
 const TrustZahlenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
-          <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>Bekannt aus.</p>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">Bekannt aus.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             TV, Wettbewerb und{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>100+ Close-Up-Auftritte</span>.
@@ -882,7 +882,7 @@ const TrustZahlenSection = () => {
                 <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
               <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">{it.name}</p>
-              <p className={`${SERIF_ITALIC} text-[12px] md:text-sm text-foreground/55 leading-snug`}>{it.sub}</p>
+              <p className="text-xs font-medium text-foreground/55 leading-snug">{it.sub}</p>
             </article>
           ))}
         </div>
@@ -921,7 +921,7 @@ const FAQSection = () => {
     <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>Häufige Fragen.</p>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Was vorher<br /><span className={SERIF_ITALIC}>gefragt wird.</span>
           </h2>
@@ -953,11 +953,11 @@ const FinalCTA = () => {
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>Karten in eure Hände.</p>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Karten in eure Hände.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Close-Up{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>buchen</span>.
           </h2>

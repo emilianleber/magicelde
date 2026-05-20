@@ -63,7 +63,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -158,7 +158,7 @@ const Hero = () => {
           className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
           }}
         />
       </div>
@@ -175,7 +175,7 @@ const Hero = () => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
+              background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -335,18 +335,18 @@ const AktuelleTourShowSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl opacity-12"
+        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)",
+            "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.4), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.18), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -355,7 +355,7 @@ const AktuelleTourShowSection = () => {
         >
           <div className="lg:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-white/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6"
             >
               Tour 2026 · Premiere.
             </p>
@@ -400,7 +400,7 @@ const AktuelleTourShowSection = () => {
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
                 style={{
                   background: "#f3d9a8",
-                  boxShadow: "0 18px 40px -14px rgba(199,144,66,0.3)",
+                  boxShadow: "0 18px 40px -14px rgba(199,144,66,0.12)",
                 }}
               >
                 <Ticket className="w-4 h-4" />
@@ -437,7 +437,7 @@ const AktuelleTourShowSection = () => {
                 background:
                   "linear-gradient(160deg, #1a0e16 0%, #08060c 60%, #2a0d18 100%)",
                 boxShadow:
-                  "0 60px 120px -30px rgba(0,0,0,0.6), 0 25px 50px -20px rgba(154,38,64,0.35), inset 0 0 0 1px rgba(255,255,255,0.08)",
+                  "0 60px 120px -30px rgba(0,0,0,0.6), 0 25px 50px -20px rgba(154,38,64,0.15), inset 0 0 0 1px rgba(255,255,255,0.08)",
               }}
             >
               <div className="absolute inset-x-0 top-0 p-6 flex items-center justify-between text-white/80">
@@ -494,7 +494,7 @@ const AktuelleTourShowSection = () => {
 
               <div
                 aria-hidden
-                className="absolute inset-x-0 top-0 h-32 opacity-15"
+                className="absolute inset-x-0 top-0 h-32 opacity-8"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.18), transparent)",
@@ -618,7 +618,7 @@ const STATUS_STYLES: Record<
   Demnächst: {
     bg: "transparent",
     color: "#5c1622",
-    border: "1px solid rgba(154,38,64,0.4)",
+    border: "1px solid rgba(154,38,64,0.18)",
   },
 };
 
@@ -628,13 +628,13 @@ const TourDatenSection = () => {
     <section
       id="tour-daten"
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Tour-Plan · 2026/2027.
             </p>
@@ -697,7 +697,7 @@ const TourDatenSection = () => {
                         className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
                         style={{
                           color: ACCENT,
-                          borderColor: "rgba(154,38,64,0.35)",
+                          borderColor: "rgba(154,38,64,0.15)",
                         }}
                       >
                         <Ticket className="w-3.5 h-3.5" />
@@ -800,7 +800,7 @@ const MagicDinnerAbendeSection = () => {
       <div className="container px-6">
         <div className="mb-10 md:mb-14 max-w-3xl">
           <p
-            className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-4`}
+            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4"
           >
             Aktueller Magic-Dinner-Abend.
           </p>
@@ -1005,13 +1005,13 @@ const TicketKategorienSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Sitzplatz-Kategorien.
             </p>
@@ -1060,7 +1060,7 @@ const TicketKategorienSection = () => {
             <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground leading-snug mb-3">
               {CATEGORIES[0].label}
             </h3>
-            <p className={`${SERIF_ITALIC} text-base text-foreground/55 mb-5`}>
+            <p className="text-xs uppercase tracking-[0.18em] font-semibold text-foreground/55 mb-5">
               {CATEGORIES[0].sub}
             </p>
             <p className="text-[15px] text-foreground/65 leading-[1.65] mb-auto">
@@ -1084,10 +1084,10 @@ const TicketKategorienSection = () => {
           >
             <div
               aria-hidden
-              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-3xl opacity-12"
+              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-3xl opacity-6"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(199,144,66,0.3), transparent 60%)",
+                  "radial-gradient(circle, rgba(199,144,66,0.12), transparent 60%)",
               }}
             />
             <div className="relative flex items-baseline gap-3 mb-7">
@@ -1216,7 +1216,7 @@ const WasErwartetDichSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Der Abend · 90 Min in vier Akten.
             </p>
@@ -1343,18 +1343,18 @@ const PullQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -1431,13 +1431,13 @@ const LocationsSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Spielstätten · Tour 2026.
             </p>
@@ -1483,10 +1483,10 @@ const LocationsSection = () => {
                 {isHero && (
                   <div
                     aria-hidden
-                    className="absolute -top-16 -right-16 w-[240px] h-[240px] rounded-full blur-3xl opacity-12"
+                    className="absolute -top-16 -right-16 w-[240px] h-[240px] rounded-full blur-3xl opacity-6"
                     style={{
                       background:
-                        "radial-gradient(circle, rgba(199,144,66,0.3), transparent 60%)",
+                        "radial-gradient(circle, rgba(199,144,66,0.12), transparent 60%)",
                     }}
                   />
                 )}
@@ -1546,7 +1546,7 @@ const VideoSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Showreel · TVA-Mitschnitt 2024.
             </p>
@@ -1641,12 +1641,12 @@ const StimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p
-            className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
           >
             Was Saal-Gäste sagen.
           </p>
@@ -1703,7 +1703,7 @@ const StimmenSection = () => {
                     {r.author}
                   </p>
                   <p
-                    className={`${SERIF_ITALIC} text-[13px] text-foreground/55 mt-0.5`}
+                    className="text-xs font-medium text-foreground/55 mt-0.5"
                   >
                     {r.role}
                   </p>
@@ -1765,7 +1765,7 @@ const FAQSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p
-            className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
           >
             Bevor du buchst.
           </p>
@@ -1831,7 +1831,7 @@ const NewsletterCTASection = () => {
     <section
       id="newsletter"
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1849,16 +1849,16 @@ const NewsletterCTASection = () => {
           >
             <div
               aria-hidden
-              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-3xl opacity-15"
+              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-3xl opacity-8"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)",
+                  "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
               }}
             />
 
             <div className="relative">
               <p
-                className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-4`}
+                className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4"
               >
                 Tour-Newsletter · alle 4–8 Wochen.
               </p>
@@ -1915,7 +1915,7 @@ const NewsletterCTASection = () => {
                     className="hero-cta w-full inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
                     style={{
                       background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                      boxShadow: "0 18px 40px -14px rgba(154,38,64,0.3)",
+                      boxShadow: "0 18px 40px -14px rgba(154,38,64,0.13)",
                     }}
                   >
                     <Send className="w-4 h-4" />
@@ -2110,18 +2110,18 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -2129,7 +2129,7 @@ const FinalCTA = () => {
           className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
           <p
-            className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}
+            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6"
           >
             Buchen oder selber planen?
           </p>

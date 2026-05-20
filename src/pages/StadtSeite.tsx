@@ -87,7 +87,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -177,7 +177,7 @@ const Hero = ({ data }: { data: Stadt }) => {
           className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
           }}
         />
       </div>
@@ -194,7 +194,7 @@ const Hero = ({ data }: { data: Stadt }) => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(255,210,140,${b.o}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
+              background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -342,7 +342,7 @@ const WarumStadtSection = ({ data }: { data: Stadt }) => {
           <div
             className={`lg:col-span-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
           >
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zauberer · Zauberkünstler · Magier · Mentalist.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground mb-8">
@@ -371,7 +371,7 @@ const WarumStadtSection = ({ data }: { data: Stadt }) => {
               ].map((t) => (
                 <span
                   key={t}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold text-foreground/70 bg-[hsl(40,25%,98.5%)] border border-foreground/10"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold text-foreground/70 bg-[hsl(30,8%,98.5%)] border border-foreground/10"
                 >
                   {t}
                 </span>
@@ -447,11 +447,11 @@ const TrustStripSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
-          <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Bekannt aus.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
@@ -488,7 +488,7 @@ const TrustStripSection = ({ data }: { data: Stadt }) => {
                 {it.name}
               </p>
               <p
-                className={`${SERIF_ITALIC} text-[12px] md:text-sm text-foreground/55 leading-snug`}
+                className="text-xs font-medium text-foreground/55 leading-snug"
               >
                 {it.sub}
               </p>
@@ -543,7 +543,7 @@ const FormateSection = ({ data }: { data: Stadt }) => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Drei Formate für Events in {data.name}.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -618,7 +618,7 @@ const FormateSection = ({ data }: { data: Stadt }) => {
                 {f.tags.map((t) => (
                   <span
                     key={t}
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(40,25%,98.5%)] border border-foreground/10"
+                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(30,8%,98.5%)] border border-foreground/10"
                   >
                     {t}
                   </span>
@@ -691,12 +691,12 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Anlässe in {data.name}.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -791,7 +791,7 @@ const InDerNaeheSection = ({ data }: { data: Stadt }) => {
           className={`grid lg:grid-cols-12 gap-x-14 gap-y-8 items-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
           <div className="lg:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-4`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4">
               [Zauberer in der Nähe] gesucht?
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground mb-5">
@@ -867,7 +867,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zauberer buchen {data.name} — so läuft's.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -892,7 +892,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
           {SCHRITTE.map((s, i) => (
             <li
               key={s.title}
-              className="relative bg-[hsl(40,25%,98.5%)] p-7 md:p-8 flex flex-col"
+              className="relative bg-[hsl(30,8%,98.5%)] p-7 md:p-8 flex flex-col"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -904,7 +904,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
                 className="inline-flex items-center justify-center w-12 h-12 rounded-full font-display font-black text-white text-lg mb-5"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                  boxShadow: "0 10px 25px -8px rgba(154,38,64,0.4)",
+                  boxShadow: "0 10px 25px -8px rgba(154,38,64,0.18)",
                 }}
               >
                 {String(i + 1).padStart(2, "0")}
@@ -943,14 +943,14 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
           <div
             className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
           >
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Hochzeitszauberer {data.name}.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8">
@@ -1030,7 +1030,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
               </ul>
               <div className="mt-6 pt-5 border-t border-foreground/10 flex items-center gap-3">
                 <Heart className="w-5 h-5" style={{ color: ACCENT }} />
-                <span className={`${SERIF_ITALIC} text-sm text-foreground/65`}>
+                <span className="text-sm text-foreground/65">
                   100+ Hochzeiten · auch in {data.name} und {data.region}
                 </span>
               </div>
@@ -1056,7 +1056,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
             style={{ animationDelay: "0.15s" }}
           >
             <div
-              className="bg-[hsl(40,25%,98.5%)] p-7 md:p-9"
+              className="bg-[hsl(30,8%,98.5%)] p-7 md:p-9"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -1088,7 +1088,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
               </ul>
               <div className="mt-6 pt-5 border-t border-foreground/10 flex items-center gap-3">
                 <Briefcase className="w-5 h-5" style={{ color: ACCENT }} />
-                <span className={`${SERIF_ITALIC} text-sm text-foreground/65`}>
+                <span className="text-sm text-foreground/65">
                   100+ Firmen-Engagements · Bayern + deutschlandweit
                 </span>
               </div>
@@ -1097,7 +1097,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
           <div
             className={`lg:col-span-7 lg:order-1 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
           >
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Firmenzauberer {data.name}.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8">
@@ -1133,7 +1133,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
               </Link>
               <Link
                 to={`/buchung?ort=${encodeURIComponent(data.name)}&format=Firma`}
-                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-[hsl(40,25%,98.5%)] border border-foreground/15 hover:border-[#9a2640]/40 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-[hsl(30,8%,98.5%)] border border-foreground/15 hover:border-[#9a2640]/40 transition-colors"
               >
                 Firmenfeier {data.name} anfragen
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1186,12 +1186,12 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was ich garantiere.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1226,10 +1226,10 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
             >
               <div
                 aria-hidden
-                className="absolute -top-32 -right-20 w-[380px] h-[380px] rounded-full blur-3xl opacity-12"
+                className="absolute -top-32 -right-20 w-[380px] h-[380px] rounded-full blur-3xl opacity-6"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(199,144,66,0.35), transparent 70%)",
+                    "radial-gradient(circle, rgba(199,144,66,0.14), transparent 70%)",
                 }}
               />
               <p
@@ -1301,7 +1301,7 @@ const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Magic Dinner {data.name}.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1389,7 +1389,7 @@ const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => {
             Magic Dinner-Konzept im Detail
             <ArrowRight className="w-4 h-4" />
           </Link>
-          <span className={`${SERIF_ITALIC} text-sm text-foreground/55`}>
+          <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">
             10+ Magic Dinners · auch in {data.name}
           </span>
         </div>
@@ -1407,14 +1407,14 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
           className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
           <div className="lg:col-span-6">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               Anfahrt nach {data.name}.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground mb-6">
@@ -1457,10 +1457,10 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
             >
               <div
                 aria-hidden
-                className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-12"
+                className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-6"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(199,144,66,0.3), transparent 70%)",
+                    "radial-gradient(circle, rgba(199,144,66,0.12), transparent 70%)",
                 }}
               />
               <div className="relative">
@@ -1540,12 +1540,12 @@ const LocationsSection = ({
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Event-Locations in {data.name}.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1626,7 +1626,7 @@ const StimmenSection = ({ data }: { data: Stadt }) => {
     <section ref={ref} className="bg-white py-24 md:py-36">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Was Gastgeber sagen.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
@@ -1687,7 +1687,7 @@ const StimmenSection = ({ data }: { data: Stadt }) => {
                     {r.author}
                   </p>
                   <p
-                    className={`${SERIF_ITALIC} text-[13px] text-foreground/55 mt-0.5`}
+                    className="text-xs font-medium text-foreground/55 mt-0.5"
                   >
                     {r.role}
                   </p>
@@ -1711,13 +1711,13 @@ const VideoSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
           className={`max-w-3xl mx-auto text-center mb-14 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Showreel.
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
@@ -1793,7 +1793,7 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
       ref={ref}
       className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden"
     >
-      <div className="absolute inset-0 opacity-12">
+      <div className="absolute inset-0 opacity-6">
         <img
           src={staunenImg}
           alt=""
@@ -1811,10 +1811,10 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)",
+            "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
         }}
       />
       <div
@@ -1822,7 +1822,7 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
         className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.4), transparent 65%)",
+            "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)",
         }}
       />
       <div
@@ -1843,7 +1843,7 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
           <footer className="mt-10 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-white/25" aria-hidden />
             <span
-              className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}
+              className="text-sm md:text-base text-white/65"
             >
               Was nach jedem Auftritt passiert.
             </span>
@@ -1880,7 +1880,7 @@ const FAQSection = ({ data }: { data: Stadt }) => {
     <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
@@ -1951,7 +1951,7 @@ const LangTextSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -2032,13 +2032,13 @@ const WeitereStaedteSection = ({ current }: { current: string }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
           className={`max-w-3xl mb-10 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Zauberer auch in deiner Stadt.
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
@@ -2124,25 +2124,25 @@ const FinalCTA = ({ data }: { data: Stadt }) => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
         <div
           className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Zauberer für {data.name} buchen.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">

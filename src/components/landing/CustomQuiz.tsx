@@ -176,7 +176,7 @@ const ResultWithForm = ({
       {showConfetti && <ConfettiBurst colors={confettiColors} />}
 
       <div className="mb-7 md:mb-8">
-        <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-3`}>
+        <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-3">
           Eure Empfehlung.
         </p>
         <h3 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.6vw,2.75rem)] text-foreground mb-3">
@@ -440,7 +440,7 @@ export const CustomQuiz = ({ config }: { config: CustomQuizConfig }) => {
           const cardShadow = isSel
             ? onDark
               ? `0 30px 60px -20px rgba(154,38,64,0.45), inset 0 0 0 1px ${ACCENT}`
-              : `0 25px 50px -20px rgba(154,38,64,0.35), inset 0 0 0 1px ${ACCENT}`
+              : `0 25px 50px -20px rgba(154,38,64,0.15), inset 0 0 0 1px ${ACCENT}`
             : onDark
             ? "0 20px 40px -20px rgba(0,0,0,0.5)"
             : "0 8px 20px -10px rgba(0,0,0,0.08)";

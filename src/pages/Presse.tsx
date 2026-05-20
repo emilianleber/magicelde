@@ -59,7 +59,7 @@ const HeroKeyframes = () => (
   <style>{`
     @keyframes heroWordIn { from { opacity: 0; transform: translateY(40px) scale(0.96) rotate(-1deg); filter: blur(6px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.18; } 30% { opacity: 0.9; } 70% { opacity: 0.9; } 100% { transform: translateY(-90px) translateX(14px) scale(1.15); opacity: 0; } }
+    @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.1; } 30% { opacity: 0.9; } 70% { opacity: 0.9; } 100% { transform: translateY(-90px) translateX(14px) scale(1.15); opacity: 0; } }
     @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 6px rgba(199,144,66,0.45)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -317,7 +317,7 @@ const BekanntAusSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Bekannt aus.
             </p>
@@ -354,7 +354,7 @@ const BekanntAusSection = () => {
           >
             <div
               aria-hidden
-              className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full blur-3xl opacity-15"
+              className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full blur-3xl opacity-8"
               style={{
                 background:
                   "radial-gradient(circle, rgba(255,210,140,0.55), transparent 60%)",
@@ -460,7 +460,7 @@ const BekanntAusSection = () => {
           {rest.slice(2).map((s) => (
             <article
               key={s.name}
-              className="relative bg-[hsl(40,25%,98.5%)] p-7 md:p-9 transition-all duration-500 hover:-translate-y-1 grid grid-cols-[auto_1fr] gap-6 items-start"
+              className="relative bg-[hsl(30,8%,98.5%)] p-7 md:p-9 transition-all duration-500 hover:-translate-y-1 grid grid-cols-[auto_1fr] gap-6 items-start"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -522,18 +522,18 @@ const PortfolioDownloadSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl opacity-12"
+        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)",
+            "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.4), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.18), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -542,7 +542,7 @@ const PortfolioDownloadSection = () => {
         >
           <div className="lg:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-white/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6"
             >
               Portfolio · PDF.
             </p>
@@ -566,7 +566,7 @@ const PortfolioDownloadSection = () => {
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
                 style={{
                   background: "#f3d9a8",
-                  boxShadow: "0 18px 40px -14px rgba(199,144,66,0.3)",
+                  boxShadow: "0 18px 40px -14px rgba(199,144,66,0.12)",
                 }}
               >
                 <Download className="w-4 h-4" />
@@ -651,7 +651,7 @@ const PortfolioDownloadSection = () => {
               {/* Glanz-Reflex */}
               <div
                 aria-hidden
-                className="absolute inset-x-0 top-0 h-32 opacity-15"
+                className="absolute inset-x-0 top-0 h-32 opacity-8"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.18), transparent)",
@@ -735,13 +735,13 @@ const PressemitteilungenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Aktuelle Pressemitteilungen.
             </p>
@@ -797,7 +797,7 @@ const PressemitteilungenSection = () => {
                       className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
                       style={{
                         color: ACCENT,
-                        borderColor: "rgba(154,38,64,0.35)",
+                        borderColor: "rgba(154,38,64,0.15)",
                       }}
                     >
                       <ArrowUpRight className="w-3.5 h-3.5" />
@@ -810,7 +810,7 @@ const PressemitteilungenSection = () => {
                         className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
                         style={{
                           color: ACCENT,
-                          borderColor: "rgba(154,38,64,0.35)",
+                          borderColor: "rgba(154,38,64,0.15)",
                         }}
                       >
                         <FileText className="w-3.5 h-3.5" />
@@ -868,7 +868,7 @@ const EPKDownloadSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Pressekit · Electronic Press Kit.
             </p>
@@ -1173,13 +1173,13 @@ const PressefotosSection = () => {
     <section
       ref={ref}
       id="pressefotos"
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Pressefotos · Hi-Res 300 dpi.
             </p>
@@ -1373,7 +1373,7 @@ const BoilerplateSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Boilerplate · drei Längen.
             </p>
@@ -1400,7 +1400,7 @@ const BoilerplateSection = () => {
           {BIOS.map((b, i) => (
             <article
               key={b.laenge}
-              className="relative flex flex-col bg-[hsl(40,25%,98.5%)] p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
+              className="relative flex flex-col bg-[hsl(30,8%,98.5%)] p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -1494,7 +1494,7 @@ const PloetzlichMagieSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1510,7 +1510,7 @@ const PloetzlichMagieSection = () => {
               Aktuelle Show · 2026
             </span>
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5"
             >
               Erste abendfüllende Tour-Show.
             </p>
@@ -1674,7 +1674,7 @@ const InterviewZitateSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Interview-Zitate · zum Weiterverwenden.
             </p>
@@ -1704,7 +1704,7 @@ const InterviewZitateSection = () => {
               className={`relative ${i === 4 ? "md:col-span-2 max-w-3xl mx-auto" : ""}`}
             >
               <Quote
-                className="w-9 h-9 md:w-10 md:h-10 mb-5 opacity-15"
+                className="w-9 h-9 md:w-10 md:h-10 mb-5 opacity-8"
                 style={{ color: ACCENT }}
                 strokeWidth={1.25}
               />
@@ -1737,7 +1737,7 @@ const PullQuoteSection = () => {
       ref={ref}
       className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden"
     >
-      <div className="absolute inset-0 opacity-12">
+      <div className="absolute inset-0 opacity-6">
         <img
           src={stageShowImg}
           alt=""
@@ -1755,10 +1755,10 @@ const PullQuoteSection = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)",
+            "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
         }}
       />
       <div
@@ -1766,7 +1766,7 @@ const PullQuoteSection = () => {
         className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.4), transparent 65%)",
+            "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)",
         }}
       />
       <div
@@ -1792,7 +1792,7 @@ const PullQuoteSection = () => {
           </p>
           <footer className="mt-10 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-white/25" aria-hidden />
-            <span className={`${SERIF_ITALIC} text-base md:text-lg text-white/65`}>
+            <span className="text-sm md:text-base text-white/65">
               TVA Bayern · 2024
             </span>
             <span className="h-px w-12 bg-white/25" aria-hidden />
@@ -1814,7 +1814,7 @@ const VideoSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
           <div className="md:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
               Video-Mitschnitt · TVA 2024.
             </p>
@@ -1907,12 +1907,12 @@ const PressFAQSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-3xl mb-14 md:mb-16">
           <p
-            className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
           >
             Häufige Press-Fragen.
           </p>
@@ -1981,18 +1981,18 @@ const PressKontaktDirektSection = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 right-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 right-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-32 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
 
@@ -2002,7 +2002,7 @@ const PressKontaktDirektSection = () => {
         >
           <div className="lg:col-span-7">
             <p
-              className={`${SERIF_ITALIC} text-lg md:text-xl text-white/55 mb-6`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6"
             >
               Direkter Press-Kontakt.
             </p>
@@ -2150,7 +2150,7 @@ const PressKontaktDirektSection = () => {
                 className="hero-cta mt-7 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white w-full"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.3)",
+                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.13)",
                 }}
               >
                 <Download className="w-3.5 h-3.5" />

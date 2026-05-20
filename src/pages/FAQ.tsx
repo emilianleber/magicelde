@@ -37,7 +37,7 @@ const PageKeyframes = () => (
   <style>{`
     @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes successPop { 0% { opacity: 0; transform: scale(0.85) translateY(20px); } 60% { opacity: 1; transform: scale(1.04) translateY(0); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
     @keyframes faqFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -317,7 +317,7 @@ const Hero = () => (
         width: "60%",
         height: "70%",
         background:
-          "radial-gradient(closest-side, rgba(199,144,66,0.28) 0%, rgba(199,144,66,0) 70%)",
+          "radial-gradient(closest-side, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
         filter: "blur(20px)",
       }}
     />
@@ -512,7 +512,7 @@ const FAQCore = () => {
       <div className="container px-6">
         {/* Section-Header */}
         <div className={`max-w-3xl mb-12 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Such, klick, finde.
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
@@ -675,16 +675,16 @@ const PullQuote = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 left-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
-          background: "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+          background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
-          background: "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+          background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -763,7 +763,7 @@ const FrageNichtBeantwortet = () => {
     >
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Deine Frage fehlt?
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-6">
@@ -937,7 +937,7 @@ const VerwandteRessourcen = () => {
     <section ref={ref} className="bg-white py-24 md:py-32 border-y border-foreground/10">
       <div className="container px-6">
         <div className={`max-w-3xl mb-14 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Weitere Anlaufstellen.
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
@@ -1005,21 +1005,21 @@ const FinalCTA = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
         style={{
-          background: "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
+          background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
         style={{
-          background: "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
+          background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
-          <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Genug gelesen — jetzt reden.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">

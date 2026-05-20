@@ -286,7 +286,7 @@ const AblaufSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
-            <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               So einfach läuft das.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
@@ -361,13 +361,13 @@ const AblaufSection = () => {
 const WannWoSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(40,25%,99%)] py-20 md:py-28">
+    <section ref={ref} className="bg-[hsl(30,8%,99%)] py-20 md:py-28">
       <div className="container px-6">
         <div
           className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}
         >
           <div className="lg:col-span-5">
-            <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-4`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4">
               Wann & wo.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.5rem)] text-foreground mb-6">
@@ -505,7 +505,7 @@ const ReservierungsSection = () => {
           <div
             className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
           >
-            <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               Tisch reservieren.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground mb-6">
@@ -523,7 +523,7 @@ const ReservierungsSection = () => {
             <div className="space-y-3 mb-6">
               <a
                 href={`tel:${RESERVIERUNG_TEL.replace(/\s/g, "")}`}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(40,25%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(30,8%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
               >
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-full shrink-0"
@@ -542,7 +542,7 @@ const ReservierungsSection = () => {
               </a>
               <a
                 href={`mailto:${RESERVIERUNG_MAIL}?subject=Reservierung%20Magic%20Dinner%20Summer%20Edition`}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(40,25%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(30,8%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
               >
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-full shrink-0"
@@ -563,7 +563,7 @@ const ReservierungsSection = () => {
                 href={RESERVIERUNG_URL}
                 target="_blank"
                 rel="noopener"
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(40,25%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(30,8%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
               >
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-full shrink-0"
@@ -590,7 +590,7 @@ const ReservierungsSection = () => {
 
           <div className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
             <div
-              className="rounded-3xl p-7 md:p-10 bg-[hsl(40,25%,98.5%)]"
+              className="rounded-3xl p-7 md:p-10 bg-[hsl(30,8%,98.5%)]"
               style={{ border: "1px solid rgba(0,0,0,0.06)" }}
             >
               {submitted ? (
@@ -743,7 +743,7 @@ const WasErwartetSection = () => {
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
           <div className="md:col-span-6">
-            <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               Was dich erwartet.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
@@ -840,10 +840,10 @@ const FAQSection = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(40,25%,99%)] py-24 md:py-36">
+    <section ref={ref} className="bg-[hsl(30,8%,99%)] py-24 md:py-36">
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-16">
-          <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Häufige Fragen.
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
@@ -937,7 +937,7 @@ const WeitereEditionenSection = () => {
     <section ref={ref} className="bg-white py-20 md:py-28 border-y border-foreground/10">
       <div className="container px-6">
         <div className="mb-10">
-          <p className={`${SERIF_ITALIC} text-base text-foreground/55 mb-3`}>
+          <p className="text-xs uppercase tracking-[0.18em] font-semibold text-foreground/55 mb-3">
             Weitere Magic-Dinner-Termine.
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.1] text-[clamp(1.75rem,3.8vw,3rem)] text-foreground">

@@ -43,7 +43,7 @@ const LogoMarquee = ({
   const { ref, isVisible } = useScrollReveal();
   const bg =
     variant === "cream"
-      ? "bg-[hsl(40,25%,98.5%)]"
+      ? "bg-[hsl(30,8%,98.5%)]"
       : variant === "white"
         ? "bg-white"
         : "bg-transparent";
@@ -84,7 +84,7 @@ const LogoMarquee = ({
             className={`max-w-3xl ${isVisible ? "animate-fade-up" : "opacity-0"}`}
           >
             <p
-              className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-3`}
+              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-3"
             >
               {eyebrow}
             </p>
@@ -105,7 +105,7 @@ const LogoMarquee = ({
           style={{
             background:
               variant === "cream"
-                ? "linear-gradient(90deg, hsl(40,25%,98.5%) 0%, transparent 100%)"
+                ? "linear-gradient(90deg, hsl(30,8%,98.5%) 0%, transparent 100%)"
                 : variant === "white"
                   ? "linear-gradient(90deg, #ffffff 0%, transparent 100%)"
                   : "linear-gradient(90deg, hsl(0 0% 100% / 0.0) 0%, transparent 100%)",
@@ -117,7 +117,7 @@ const LogoMarquee = ({
           style={{
             background:
               variant === "cream"
-                ? "linear-gradient(-90deg, hsl(40,25%,98.5%) 0%, transparent 100%)"
+                ? "linear-gradient(-90deg, hsl(30,8%,98.5%) 0%, transparent 100%)"
                 : variant === "white"
                   ? "linear-gradient(-90deg, #ffffff 0%, transparent 100%)"
                   : "linear-gradient(-90deg, hsl(0 0% 100% / 0.0) 0%, transparent 100%)",
