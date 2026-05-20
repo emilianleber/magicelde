@@ -43,7 +43,7 @@ const LogoMarquee = ({
   const { ref, isVisible } = useScrollReveal();
   const bg =
     variant === "cream"
-      ? "bg-[hsl(36,30%,97%)]"
+      ? "bg-[hsl(40,25%,98.5%)]"
       : variant === "white"
         ? "bg-white"
         : "bg-transparent";
@@ -105,7 +105,7 @@ const LogoMarquee = ({
           style={{
             background:
               variant === "cream"
-                ? "linear-gradient(90deg, hsl(36,30%,97%) 0%, transparent 100%)"
+                ? "linear-gradient(90deg, hsl(40,25%,98.5%) 0%, transparent 100%)"
                 : variant === "white"
                   ? "linear-gradient(90deg, #ffffff 0%, transparent 100%)"
                   : "linear-gradient(90deg, hsl(0 0% 100% / 0.0) 0%, transparent 100%)",
@@ -117,7 +117,7 @@ const LogoMarquee = ({
           style={{
             background:
               variant === "cream"
-                ? "linear-gradient(-90deg, hsl(36,30%,97%) 0%, transparent 100%)"
+                ? "linear-gradient(-90deg, hsl(40,25%,98.5%) 0%, transparent 100%)"
                 : variant === "white"
                   ? "linear-gradient(-90deg, #ffffff 0%, transparent 100%)"
                   : "linear-gradient(-90deg, hsl(0 0% 100% / 0.0) 0%, transparent 100%)",

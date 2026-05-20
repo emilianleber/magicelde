@@ -60,7 +60,7 @@ const HeroKeyframes = () => (
     }
     @keyframes heroStarPulse {
       0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); }
+      50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -228,7 +228,7 @@ const SchnittstellenSection = () => {
 
         <div className={`grid md:grid-cols-2 gap-5 md:gap-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {SCHNITTSTELLEN.map((s, i) => (
-            <article key={s.role} className="relative bg-[hsl(36,30%,97%)] p-8 md:p-10" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -25px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
+            <article key={s.role} className="relative bg-[hsl(40,25%,98.5%)] p-8 md:p-10" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -25px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
               <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
                 <s.icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
@@ -258,7 +258,7 @@ const SchnittstellenSection = () => {
 const VorteileSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10 overflow-hidden">
+    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10 overflow-hidden">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
@@ -439,7 +439,7 @@ const SchnellangebotSection = () => {
               action="mailto:el@magicel.de"
               method="POST"
               encType="text/plain"
-              className="bg-[hsl(36,30%,97%)] p-7 md:p-9 space-y-4"
+              className="bg-[hsl(40,25%,98.5%)] p-7 md:p-9 space-y-4"
               style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(40,20,40,0.2), inset 0 0 0 1px rgba(0,0,0,0.04)" }}
             >
               <div className="grid sm:grid-cols-2 gap-3">
@@ -490,7 +490,7 @@ const SchnellangebotSection = () => {
 const AgenturCaseSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
@@ -598,8 +598,8 @@ const FinalCTA = () => {
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-30" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)" }} />
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>Für Eventagenturen & Veranstaltungsplaner.</p>

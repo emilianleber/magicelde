@@ -29,7 +29,7 @@ const PageKeyframes = () => (
   <style>{`
     @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-star { animation: heroStarPulse 2.4s ease-in-out infinite; }
@@ -650,10 +650,10 @@ const FinalCTA = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[420px] h-[420px] rounded-full blur-3xl opacity-25"
+        className="absolute -top-32 left-1/3 w-[420px] h-[420px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
         }}
       />
       <div className="relative container px-6">

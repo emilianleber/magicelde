@@ -57,7 +57,7 @@ const SOCIALS = [
 ];
 
 const Footer = () => (
-  <footer className="relative bg-[hsl(36,30%,97%)] border-t border-foreground/10 pt-20 md:pt-28 pb-12 mt-20 md:mt-28">
+  <footer className="relative bg-[hsl(40,25%,98.5%)] border-t border-foreground/10 pt-20 md:pt-28 pb-12 mt-20 md:mt-28">
     <div className="container px-6">
       <div className="grid lg:grid-cols-12 gap-x-12 gap-y-14 mb-16 md:mb-20">
         {/* Brand block */}

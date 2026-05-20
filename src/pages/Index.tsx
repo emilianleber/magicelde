@@ -83,7 +83,7 @@ const HeroKeyframes = () => (
     }
     @keyframes heroStarPulse {
       0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -502,7 +502,7 @@ const FormateSection = () => {
     <section
       ref={ref}
       id="formate"
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -756,7 +756,7 @@ const KundenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-20 md:py-28 border-b border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-b border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
@@ -899,18 +899,18 @@ const PullQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-25"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -1034,8 +1034,8 @@ const AnlassCardDark = ({ name, eyebrow, href, img, body, tint }: DarkCardProps)
       style={{
         background:
           tint === "rose"
-            ? "linear-gradient(135deg, rgba(8,6,12,0.55) 0%, rgba(154,38,64,0.55) 70%, rgba(92,22,34,0.85) 100%)"
-            : "linear-gradient(135deg, rgba(8,6,12,0.55) 0%, rgba(199,144,66,0.55) 70%, rgba(138,90,20,0.85) 100%)",
+            ? "linear-gradient(135deg, rgba(8,6,12,0.55) 0%, rgba(154,38,64,0.3) 70%, rgba(92,22,34,0.85) 100%)"
+            : "linear-gradient(135deg, rgba(8,6,12,0.55) 0%, rgba(199,144,66,0.3) 70%, rgba(138,90,20,0.85) 100%)",
       }}
     />
     <div className="absolute bottom-0 left-0 right-0 p-7 md:p-9 lg:p-12 max-w-xl">
@@ -1062,7 +1062,7 @@ const AnlassCardDark = ({ name, eyebrow, href, img, body, tint }: DarkCardProps)
 const FirmenfeierBookingCard = () => (
   <Link
     to="/firmenfeiern"
-    className="group relative overflow-hidden bg-[hsl(36,30%,97%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
+    className="group relative overflow-hidden bg-[hsl(40,25%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
     style={{
       borderRadius: "1.5rem",
       boxShadow:
@@ -1167,7 +1167,7 @@ const GeburtstagAlterCard = () => {
   return (
     <Link
       to="/geburtstage"
-      className="group relative overflow-hidden bg-[hsl(36,30%,97%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
+      className="group relative overflow-hidden bg-[hsl(40,25%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
       style={{
         borderRadius: "1.5rem",
         boxShadow:
@@ -1588,7 +1588,7 @@ const StimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
@@ -1950,18 +1950,18 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-25"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
         }}
       />
 

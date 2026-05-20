@@ -87,7 +87,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -371,7 +371,7 @@ const WarumStadtSection = ({ data }: { data: Stadt }) => {
               ].map((t) => (
                 <span
                   key={t}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold text-foreground/70 bg-[hsl(36,30%,97%)] border border-foreground/10"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold text-foreground/70 bg-[hsl(40,25%,98.5%)] border border-foreground/10"
                 >
                   {t}
                 </span>
@@ -447,7 +447,7 @@ const TrustStripSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
@@ -618,7 +618,7 @@ const FormateSection = ({ data }: { data: Stadt }) => {
                 {f.tags.map((t) => (
                   <span
                     key={t}
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(36,30%,97%)] border border-foreground/10"
+                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(40,25%,98.5%)] border border-foreground/10"
                   >
                     {t}
                   </span>
@@ -691,7 +691,7 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -892,7 +892,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
           {SCHRITTE.map((s, i) => (
             <li
               key={s.title}
-              className="relative bg-[hsl(36,30%,97%)] p-7 md:p-8 flex flex-col"
+              className="relative bg-[hsl(40,25%,98.5%)] p-7 md:p-8 flex flex-col"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -943,7 +943,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
@@ -1056,7 +1056,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
             style={{ animationDelay: "0.15s" }}
           >
             <div
-              className="bg-[hsl(36,30%,97%)] p-7 md:p-9"
+              className="bg-[hsl(40,25%,98.5%)] p-7 md:p-9"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -1133,7 +1133,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
               </Link>
               <Link
                 to={`/buchung?ort=${encodeURIComponent(data.name)}&format=Firma`}
-                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-[hsl(36,30%,97%)] border border-foreground/15 hover:border-[#9a2640]/40 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-[hsl(40,25%,98.5%)] border border-foreground/15 hover:border-[#9a2640]/40 transition-colors"
               >
                 Firmenfeier {data.name} anfragen
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1186,7 +1186,7 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1226,10 +1226,10 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
             >
               <div
                 aria-hidden
-                className="absolute -top-32 -right-20 w-[380px] h-[380px] rounded-full blur-3xl opacity-25"
+                className="absolute -top-32 -right-20 w-[380px] h-[380px] rounded-full blur-3xl opacity-12"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(199,144,66,0.65), transparent 70%)",
+                    "radial-gradient(circle, rgba(199,144,66,0.35), transparent 70%)",
                 }}
               />
               <p
@@ -1407,7 +1407,7 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1457,10 +1457,10 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
             >
               <div
                 aria-hidden
-                className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-25"
+                className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-12"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(199,144,66,0.6), transparent 70%)",
+                    "radial-gradient(circle, rgba(199,144,66,0.3), transparent 70%)",
                 }}
               />
               <div className="relative">
@@ -1540,7 +1540,7 @@ const LocationsSection = ({
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1711,7 +1711,7 @@ const VideoSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1793,7 +1793,7 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
       ref={ref}
       className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden"
     >
-      <div className="absolute inset-0 opacity-25">
+      <div className="absolute inset-0 opacity-12">
         <img
           src={staunenImg}
           alt=""
@@ -1811,10 +1811,10 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-25"
+        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)",
+            "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)",
         }}
       />
       <div
@@ -1822,7 +1822,7 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
         className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.7), transparent 65%)",
+            "radial-gradient(circle, rgba(154,38,64,0.4), transparent 65%)",
         }}
       />
       <div
@@ -1951,7 +1951,7 @@ const LangTextSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -2032,7 +2032,7 @@ const WeitereStaedteSection = ({ current }: { current: string }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -2124,18 +2124,18 @@ const FinalCTA = ({ data }: { data: Stadt }) => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-25"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
         }}
       />
       <div className="relative container px-6">

@@ -481,7 +481,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
                           ? ACCENT
                           : i < step ||
                               (isSummary && i === STEPS.length)
-                            ? "rgba(154,38,64,0.55)"
+                            ? "rgba(154,38,64,0.3)"
                             : "rgba(0,0,0,0.25)",
                       background:
                         i === step && !isSummary
@@ -512,7 +512,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
             className="fixed top-24 left-1/2 -translate-x-1/2 z-[110] px-5 py-3 rounded-full text-white text-sm font-semibold sp-feedback pointer-events-none"
             style={{
               background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-              boxShadow: "0 18px 40px -10px rgba(154,38,64,0.55)",
+              boxShadow: "0 18px 40px -10px rgba(154,38,64,0.3)",
             }}
           >
             {feedback}
@@ -558,7 +558,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
                 type="button"
                 onClick={prev}
                 disabled={step === 0}
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground/65 hover:text-foreground transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground/65 hover:text-foreground transition-colors disabled:opacity-12 disabled:cursor-not-allowed"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Zurück
@@ -577,7 +577,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
                   type="button"
                   onClick={next}
                   disabled={!canProceed}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-all disabled:opacity-15 disabled:cursor-not-allowed"
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
                     boxShadow: canProceed
@@ -594,7 +594,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
                   type="button"
                   onClick={submit}
                   disabled={!email || !email.includes("@")}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-all disabled:opacity-15 disabled:cursor-not-allowed"
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
                     boxShadow:
@@ -694,7 +694,7 @@ const StepView = ({
                 aria-pressed={selected}
                 className="group relative text-left p-5 md:p-6 rounded-2xl transition-all duration-300"
                 style={{
-                  background: selected ? "white" : "hsl(36,30%,97%)",
+                  background: selected ? "white" : "hsl(40,25%,98.5%)",
                   border: selected
                     ? `2px solid ${ACCENT}`
                     : "2px solid transparent",
@@ -849,10 +849,10 @@ const SummaryView = ({
         >
           <div
             aria-hidden
-            className="absolute -top-20 -right-10 w-[260px] h-[260px] rounded-full blur-3xl opacity-30"
+            className="absolute -top-20 -right-10 w-[260px] h-[260px] rounded-full blur-3xl opacity-15"
             style={{
               background:
-                "radial-gradient(circle, rgba(199,144,66,0.65), transparent 65%)",
+                "radial-gradient(circle, rgba(199,144,66,0.35), transparent 65%)",
             }}
           />
           <p
@@ -889,7 +889,7 @@ const SummaryView = ({
               key={s.i}
               type="button"
               onClick={() => onEditStep(s.i)}
-              className="group text-left p-5 rounded-xl bg-[hsl(36,30%,97%)] hover:bg-white hover:shadow-md transition-all"
+              className="group text-left p-5 rounded-xl bg-[hsl(40,25%,98.5%)] hover:bg-white hover:shadow-md transition-all"
               style={{ border: "1px solid rgba(0,0,0,0.06)" }}
             >
               <div className="flex items-baseline justify-between gap-3 mb-1.5">
@@ -916,7 +916,7 @@ const SummaryView = ({
 
       {/* Email-Form */}
       <div
-        className="max-w-2xl p-7 md:p-9 rounded-2xl bg-[hsl(36,30%,97%)]"
+        className="max-w-2xl p-7 md:p-9 rounded-2xl bg-[hsl(40,25%,98.5%)]"
         style={{ border: "1px solid rgba(0,0,0,0.06)" }}
       >
         <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-5">
@@ -977,7 +977,7 @@ const SubmittedState = ({
         className="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full mb-7"
         style={{
           background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-          boxShadow: "0 20px 50px -10px rgba(154,38,64,0.55)",
+          boxShadow: "0 20px 50px -10px rgba(154,38,64,0.3)",
         }}
       >
         <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12 text-white" />

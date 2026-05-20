@@ -354,7 +354,7 @@ const BekanntAusSection = () => {
           >
             <div
               aria-hidden
-              className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full blur-3xl opacity-30"
+              className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full blur-3xl opacity-15"
               style={{
                 background:
                   "radial-gradient(circle, rgba(255,210,140,0.55), transparent 60%)",
@@ -460,7 +460,7 @@ const BekanntAusSection = () => {
           {rest.slice(2).map((s) => (
             <article
               key={s.name}
-              className="relative bg-[hsl(36,30%,97%)] p-7 md:p-9 transition-all duration-500 hover:-translate-y-1 grid grid-cols-[auto_1fr] gap-6 items-start"
+              className="relative bg-[hsl(40,25%,98.5%)] p-7 md:p-9 transition-all duration-500 hover:-translate-y-1 grid grid-cols-[auto_1fr] gap-6 items-start"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -522,18 +522,18 @@ const PortfolioDownloadSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl opacity-25"
+        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)",
+            "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.7), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.4), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -566,7 +566,7 @@ const PortfolioDownloadSection = () => {
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
                 style={{
                   background: "#f3d9a8",
-                  boxShadow: "0 18px 40px -14px rgba(199,144,66,0.55)",
+                  boxShadow: "0 18px 40px -14px rgba(199,144,66,0.3)",
                 }}
               >
                 <Download className="w-4 h-4" />
@@ -651,7 +651,7 @@ const PortfolioDownloadSection = () => {
               {/* Glanz-Reflex */}
               <div
                 aria-hidden
-                className="absolute inset-x-0 top-0 h-32 opacity-30"
+                className="absolute inset-x-0 top-0 h-32 opacity-15"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.18), transparent)",
@@ -735,7 +735,7 @@ const PressemitteilungenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1173,7 +1173,7 @@ const PressefotosSection = () => {
     <section
       ref={ref}
       id="pressefotos"
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1400,7 +1400,7 @@ const BoilerplateSection = () => {
           {BIOS.map((b, i) => (
             <article
               key={b.laenge}
-              className="relative flex flex-col bg-[hsl(36,30%,97%)] p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
+              className="relative flex flex-col bg-[hsl(40,25%,98.5%)] p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -1494,7 +1494,7 @@ const PloetzlichMagieSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1704,7 +1704,7 @@ const InterviewZitateSection = () => {
               className={`relative ${i === 4 ? "md:col-span-2 max-w-3xl mx-auto" : ""}`}
             >
               <Quote
-                className="w-9 h-9 md:w-10 md:h-10 mb-5 opacity-30"
+                className="w-9 h-9 md:w-10 md:h-10 mb-5 opacity-15"
                 style={{ color: ACCENT }}
                 strokeWidth={1.25}
               />
@@ -1737,7 +1737,7 @@ const PullQuoteSection = () => {
       ref={ref}
       className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden"
     >
-      <div className="absolute inset-0 opacity-25">
+      <div className="absolute inset-0 opacity-12">
         <img
           src={stageShowImg}
           alt=""
@@ -1755,10 +1755,10 @@ const PullQuoteSection = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-25"
+        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)",
+            "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)",
         }}
       />
       <div
@@ -1766,7 +1766,7 @@ const PullQuoteSection = () => {
         className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.7), transparent 65%)",
+            "radial-gradient(circle, rgba(154,38,64,0.4), transparent 65%)",
         }}
       />
       <div
@@ -1907,7 +1907,7 @@ const PressFAQSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-3xl mb-14 md:mb-16">
@@ -1981,18 +1981,18 @@ const PressKontaktDirektSection = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 right-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        className="absolute -top-32 right-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-25"
+        className="absolute -bottom-32 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
         }}
       />
 
@@ -2150,7 +2150,7 @@ const PressKontaktDirektSection = () => {
                 className="hero-cta mt-7 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white w-full"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.55)",
+                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.3)",
                 }}
               >
                 <Download className="w-3.5 h-3.5" />

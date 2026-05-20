@@ -52,7 +52,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -198,7 +198,7 @@ const DramaKurveSection = () => {
         </div>
 
         {/* SVG-Diagramm Drama-Kurve */}
-        <div className={`relative bg-[hsl(36,30%,97%)] rounded-2xl p-7 md:p-10 mb-10 overflow-hidden ${isVisible ? "animate-fade-up" : "opacity-0"}`}
+        <div className={`relative bg-[hsl(40,25%,98.5%)] rounded-2xl p-7 md:p-10 mb-10 overflow-hidden ${isVisible ? "animate-fade-up" : "opacity-0"}`}
           style={{ boxShadow: "0 25px 50px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
           <svg viewBox="0 0 700 220" className="w-full h-auto" preserveAspectRatio="xMidYMid meet" aria-hidden>
             <defs>
@@ -289,7 +289,7 @@ const FORMAT_VARIANTEN = [
 const FormatVariantenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10">
           <div className={`lg:col-span-4 lg:sticky lg:top-24 lg:self-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
@@ -429,12 +429,12 @@ const PullQuoteSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
     <section ref={ref} className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden">
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0 opacity-15">
         <img src={stageShowImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.6) 0%, rgba(8,6,12,0.95) 70%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)" }} />
-      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.7), transparent 65%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)" }} />
+      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.4), transparent 65%)" }} />
       <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
@@ -499,7 +499,7 @@ const EffektHighlightsSection = () => {
         <div className={`grid lg:grid-cols-12 gap-5 md:gap-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           {/* Headliner — 7 cols, dark gradient */}
           <article className="lg:col-span-7 relative p-8 md:p-12 flex flex-col text-white overflow-hidden" style={{ borderRadius: "1.25rem", background: `linear-gradient(150deg, ${ACCENT_DEEP} 0%, #08060c 65%, #08060c 100%)`, minHeight: "420px", boxShadow: "0 40px 80px -30px rgba(40,20,40,0.45)" }}>
-            <div aria-hidden className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.7), transparent 70%)" }} />
+            <div aria-hidden className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.35), transparent 70%)" }} />
             <div className="relative z-10 flex flex-col h-full">
               <div className="flex items-center gap-3 mb-7">
                 <span className="inline-flex items-center justify-center w-12 h-12 rounded-full" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}>
@@ -523,7 +523,7 @@ const EffektHighlightsSection = () => {
           {/* 3 kleinere Cards rechts in Spalte */}
           <div className="lg:col-span-5 grid grid-cols-1 gap-5 md:gap-7">
             {rest.map((h) => (
-              <article key={h.title} className="relative bg-[hsl(36,30%,97%)] p-6 md:p-7 flex gap-5 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
+              <article key={h.title} className="relative bg-[hsl(40,25%,98.5%)] p-6 md:p-7 flex gap-5 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
                 <span className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
                   <h.Icon className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
                 </span>
@@ -556,13 +556,13 @@ const ANLAESSE = [
 const AnlassMixSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         {/* Foto oben — full-width Banner */}
         <div className={`relative overflow-hidden mb-14 md:mb-20 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ borderRadius: "1.5rem" }}>
           <img src={buehneDpsgImg} alt="Bühnenshow Emilian Leber — Publikum reagiert" className="w-full h-[280px] md:h-[420px] object-cover" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)", objectPosition: "center 25%" }} />
           <div aria-hidden className="absolute inset-x-0 bottom-0 h-40" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.65))" }} />
-          <div aria-hidden className="absolute -top-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)" }} />
+          <div aria-hidden className="absolute -top-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)" }} />
           <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-10 md:right-10 text-white flex flex-wrap items-end justify-between gap-4">
             <p className={`${SERIF_ITALIC} text-lg md:text-2xl leading-snug max-w-xl`}>„Volle Bühne, volles Publikum — funktioniert von 80 bis 500 Gästen."</p>
             <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white" style={{ background: "rgba(8,6,12,0.5)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.18)" }}>
@@ -627,7 +627,7 @@ const AnlassMixSection = () => {
 const TechRiderSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className={`lg:col-span-5 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
@@ -775,7 +775,7 @@ const TRUST_ITEMS = [
 const TrustZahlenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-20 md:py-28 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
           <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>Bekannt aus.</p>
@@ -856,8 +856,8 @@ const FinalCTA = () => {
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-30" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)" }} />
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
           <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/60 mb-6`}>Macht eure Bühne zum Höhepunkt.</p>

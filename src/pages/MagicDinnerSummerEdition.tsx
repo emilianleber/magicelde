@@ -361,7 +361,7 @@ const AblaufSection = () => {
 const WannWoSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,98%)] py-20 md:py-28">
+    <section ref={ref} className="bg-[hsl(40,25%,99%)] py-20 md:py-28">
       <div className="container px-6">
         <div
           className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start ${isVisible ? "animate-fade-up" : "opacity-0"}`}
@@ -523,7 +523,7 @@ const ReservierungsSection = () => {
             <div className="space-y-3 mb-6">
               <a
                 href={`tel:${RESERVIERUNG_TEL.replace(/\s/g, "")}`}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(36,30%,97%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(40,25%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
               >
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-full shrink-0"
@@ -542,7 +542,7 @@ const ReservierungsSection = () => {
               </a>
               <a
                 href={`mailto:${RESERVIERUNG_MAIL}?subject=Reservierung%20Magic%20Dinner%20Summer%20Edition`}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(36,30%,97%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(40,25%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
               >
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-full shrink-0"
@@ -563,7 +563,7 @@ const ReservierungsSection = () => {
                 href={RESERVIERUNG_URL}
                 target="_blank"
                 rel="noopener"
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(36,30%,97%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(40,25%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
               >
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-full shrink-0"
@@ -590,7 +590,7 @@ const ReservierungsSection = () => {
 
           <div className={`lg:col-span-7 ${isVisible ? "animate-fade-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
             <div
-              className="rounded-3xl p-7 md:p-10 bg-[hsl(36,30%,97%)]"
+              className="rounded-3xl p-7 md:p-10 bg-[hsl(40,25%,98.5%)]"
               style={{ border: "1px solid rgba(0,0,0,0.06)" }}
             >
               {submitted ? (
@@ -840,7 +840,7 @@ const FAQSection = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,98%)] py-24 md:py-36">
+    <section ref={ref} className="bg-[hsl(40,25%,99%)] py-24 md:py-36">
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-16">
           <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mb-5`}>

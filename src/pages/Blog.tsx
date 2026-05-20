@@ -452,7 +452,7 @@ const PostsListe = ({
                     ? {
                         background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
                         color: "white",
-                        boxShadow: "0 8px 24px -10px rgba(154,38,64,0.55)",
+                        boxShadow: "0 8px 24px -10px rgba(154,38,64,0.3)",
                       }
                     : {
                         background: "rgba(8,6,12,0.05)",

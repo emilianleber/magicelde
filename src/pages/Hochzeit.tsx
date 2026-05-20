@@ -91,7 +91,7 @@ const HeroKeyframes = () => (
     }
     @keyframes heroStarPulse {
       0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -911,7 +911,7 @@ const VertrauensSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header */}
@@ -1180,7 +1180,7 @@ const LocationSetupSection = () => {
         >
           {/* Was ich brauche */}
           <div
-            className="relative bg-[hsl(36,30%,97%)] p-8 md:p-10"
+            className="relative bg-[hsl(40,25%,98.5%)] p-8 md:p-10"
             style={{
               borderRadius: "1.25rem",
               boxShadow:
@@ -1290,15 +1290,15 @@ const PlanerQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 -left-16 w-[560px] h-[560px] rounded-full blur-3xl opacity-30"
+        className="absolute -top-32 -left-16 w-[560px] h-[560px] rounded-full blur-3xl opacity-15"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.6), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[560px] h-[560px] rounded-full blur-3xl opacity-25"
+        className="absolute -bottom-40 -right-20 w-[560px] h-[560px] rounded-full blur-3xl opacity-12"
         style={{
           background:
             "radial-gradient(circle, rgba(228,184,192,0.45), transparent 60%)",
@@ -1399,7 +1399,7 @@ const BrautpaareStimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-14">
@@ -1862,7 +1862,7 @@ const FAQSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
@@ -1936,15 +1936,15 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-25"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
         style={{
           background:
             "radial-gradient(circle, rgba(228,184,192,0.5), transparent 60%)",

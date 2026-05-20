@@ -102,7 +102,7 @@ const HeroKeyframes = () => (
     }
     @keyframes heroStarPulse {
       0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); }
     }
     .hero-word {
       display: inline-block;
@@ -478,7 +478,7 @@ const KUNDEN_LOGOS = [
 const KundenReferenzenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-20 md:py-28 border-b border-foreground/10">
+    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-20 md:py-28 border-b border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
           <div className="md:col-span-7">
@@ -545,18 +545,18 @@ const PullQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)",
+            "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-25"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -1048,7 +1048,7 @@ const AblaufSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
@@ -1172,7 +1172,7 @@ const BeispielAbendSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header — 2 Spalten */}
@@ -1236,7 +1236,7 @@ const BeispielAbendSection = () => {
               style={{
                 height: `calc(${fillPct}% - 1rem)`,
                 background:
-                  "linear-gradient(180deg, rgba(154,38,64,0.85) 0%, rgba(154,38,64,0.55) 100%)",
+                  "linear-gradient(180deg, rgba(154,38,64,0.85) 0%, rgba(154,38,64,0.3) 100%)",
                 boxShadow: "0 0 12px rgba(154,38,64,0.35)",
               }}
             />
@@ -1257,8 +1257,8 @@ const BeispielAbendSection = () => {
                           ? `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`
                           : "linear-gradient(135deg, rgba(0,0,0,0.45), rgba(0,0,0,0.32))",
                         boxShadow: isActive
-                          ? `0 0 0 4px hsl(36,30%,97%), 0 0 24px rgba(154,38,64,0.4), 0 8px 22px -4px rgba(154,38,64,0.5)`
-                          : "0 0 0 4px hsl(36,30%,97%), 0 4px 12px -3px rgba(0,0,0,0.18)",
+                          ? `0 0 0 4px hsl(40,25%,98.5%), 0 0 24px rgba(154,38,64,0.4), 0 8px 22px -4px rgba(154,38,64,0.5)`
+                          : "0 0 0 4px hsl(40,25%,98.5%), 0 4px 12px -3px rgba(0,0,0,0.18)",
                         transform: isActive ? "scale(1.08)" : "scale(1)",
                       }}
                     >
@@ -2122,7 +2122,7 @@ const AnlaesseSection = () => {
 
           {/* Card 2 — CLEAN, schmaler, exakt gleich hoch wie Card 1, Booking-Widget */}
           <article
-            className="group relative overflow-hidden bg-[hsl(36,30%,97%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
+            className="group relative overflow-hidden bg-[hsl(40,25%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
             style={{
               borderRadius: "1.5rem",
               boxShadow:
@@ -2212,7 +2212,7 @@ const AnlaesseSection = () => {
           <div className="grid md:grid-cols-[2fr_3fr] gap-4 md:gap-5">
           {/* Card 3 — CLEAN, schmaler, exakt gleich hoch wie Card 4, Avatar-Cluster */}
           <article
-            className="group relative overflow-hidden bg-[hsl(36,30%,97%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
+            className="group relative overflow-hidden bg-[hsl(40,25%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
             style={{
               borderRadius: "1.5rem",
               boxShadow:
@@ -2291,7 +2291,7 @@ const AnlaesseSection = () => {
             />
             <span
               aria-hidden
-              className="absolute -bottom-20 -left-10 w-[280px] h-[280px] rounded-full blur-3xl opacity-30 pointer-events-none"
+              className="absolute -bottom-20 -left-10 w-[280px] h-[280px] rounded-full blur-3xl opacity-15 pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle, rgba(31,143,95,0.55), transparent 65%)",
@@ -2693,7 +2693,7 @@ const StimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
@@ -2899,7 +2899,7 @@ const FinalCTA = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-30"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15"
         style={{
           background:
             "radial-gradient(circle, rgba(154,38,64,0.5), transparent 60%)",
@@ -2907,10 +2907,10 @@ const FinalCTA = () => {
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-25"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)",
+            "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)",
         }}
       />
 
@@ -3163,7 +3163,7 @@ const RestaurantPartnerSection = () => {
     <section
       ref={ref}
       id="restaurant-partner"
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -3361,7 +3361,7 @@ const TicketEventSection = () => {
             ].map((s) => (
               <div
                 key={s.label}
-                className="bg-[hsl(36,30%,97%)] rounded-2xl px-5 py-6 border border-foreground/8"
+                className="bg-[hsl(40,25%,98.5%)] rounded-2xl px-5 py-6 border border-foreground/8"
               >
                 <p
                   className="font-display text-2xl md:text-3xl font-black tabular-nums leading-none"

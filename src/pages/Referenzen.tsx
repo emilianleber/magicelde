@@ -48,7 +48,7 @@ const HeroKeyframes = () => (
     @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes heroNumberIn { 0% { opacity: 0; transform: translateY(80px) scale(0.86); filter: blur(10px); } 60% { opacity: 1; transform: translateY(-6px) scale(1.02); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.55)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.3)); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.15; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -472,7 +472,7 @@ const FilterSection = () => {
     <section
       ref={ref}
       id="filter"
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
@@ -706,7 +706,7 @@ const StatsEditorialSection = () => {
               boxShadow: "0 40px 80px -30px rgba(154,38,64,0.5)",
             }}
           >
-            <div aria-hidden className="absolute -top-32 -right-32 w-[460px] h-[460px] rounded-full blur-3xl opacity-30" style={{ background: "radial-gradient(circle, rgba(255,210,140,0.6), transparent 60%)" }} />
+            <div aria-hidden className="absolute -top-32 -right-32 w-[460px] h-[460px] rounded-full blur-3xl opacity-15" style={{ background: "radial-gradient(circle, rgba(255,210,140,0.6), transparent 60%)" }} />
             <div className="relative z-10">
               <p className="text-[11px] tracking-[0.18em] uppercase font-bold text-white/65 mb-4">
                 Seit 2016 · Hauptzahl
@@ -730,7 +730,7 @@ const StatsEditorialSection = () => {
 
           {/* MD — 100+ Hochzeiten */}
           <article
-            className="relative md:col-span-4 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(36,30%,97%)]"
+            className="relative md:col-span-4 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(40,25%,98.5%)]"
             style={{ borderRadius: "1.5rem", minHeight: "360px", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}
           >
             <div>
@@ -749,7 +749,7 @@ const StatsEditorialSection = () => {
 
           {/* MD — 100+ Firmen */}
           <article
-            className="relative md:col-span-6 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(36,30%,97%)]"
+            className="relative md:col-span-6 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(40,25%,98.5%)]"
             style={{ borderRadius: "1.5rem", minHeight: "300px", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}
           >
             <div>
@@ -837,7 +837,7 @@ const StatsEditorialSection = () => {
 
           {/* SM — 5,0 Sterne */}
           <article
-            className="relative md:col-span-6 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(36,30%,97%)]"
+            className="relative md:col-span-6 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(40,25%,98.5%)]"
             style={{ borderRadius: "1.5rem", minHeight: "260px", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}
           >
             <div className="flex items-center gap-1">
@@ -1114,7 +1114,7 @@ const BranchenListeSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
@@ -1275,7 +1275,7 @@ const StimmenSection = () => {
 
               {/* Quote */}
               <div className="lg:col-span-9">
-                <Quote className="w-10 h-10 mb-4 opacity-30" style={{ color: ACCENT }} strokeWidth={1.25} />
+                <Quote className="w-10 h-10 mb-4 opacity-15" style={{ color: ACCENT }} strokeWidth={1.25} />
                 <blockquote
                   className={`${SERIF_ITALIC} text-[clamp(1.35rem,2.5vw,2.1rem)] leading-[1.35] text-foreground/85`}
                   itemProp="reviewBody"
@@ -1316,7 +1316,7 @@ const VideoSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className={`grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
@@ -1501,12 +1501,12 @@ const PullQuoteSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
     <section ref={ref} className="relative bg-black text-white py-28 md:py-40 overflow-hidden">
-      <div className="absolute inset-0 opacity-25">
+      <div className="absolute inset-0 opacity-12">
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.55) 0%, rgba(8,6,12,0.96) 70%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.55), transparent 65%)" }} />
-      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.7), transparent 65%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.3), transparent 65%)" }} />
+      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.4), transparent 65%)" }} />
       <div className={`relative container px-6 ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
@@ -1562,7 +1562,7 @@ const FAQS = [
 const FAQSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(36,30%,97%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-[hsl(40,25%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}>
@@ -1606,8 +1606,8 @@ const FinalCTA = () => {
         <img src={heroMagicImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 50%, rgba(8,6,12,0.6) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-30" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.55), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-25" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.5), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-15" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.3), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-12" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.25), transparent 60%)" }} />
 
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-fade-up" : "opacity-0"}`}>
