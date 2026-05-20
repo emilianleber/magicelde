@@ -39,7 +39,7 @@ const SERIF_ITALIC =
 const AMBER = "#f3d9a8";
 
 const EVENT_DATE = "11. Juli 2026";
-const EVENT_TIME = "19:00";
+const EVENT_TIME = "17:00";
 const EVENT_LOCATION = "Restaurant Wald & Wiese";
 const EVENT_ADDRESS = "Sinzing bei Regensburg";
 const RESERVIERUNG_TEL = "+49 941 9469770";
@@ -193,7 +193,7 @@ const Hero = () => {
           </p>
 
           <div
-            className="mt-9 self-start inline-flex flex-col sm:flex-row items-center gap-4 hero-fade"
+            className="mt-9 inline-flex flex-col sm:flex-row items-start gap-4 hero-fade"
             style={{ animationDelay: "1.15s" }}
           >
             <a

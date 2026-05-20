@@ -33,8 +33,8 @@ import {
   Armchair,
 } from "lucide-react";
 
-import heroStageImg from "@/assets/hero-stage.jpg";
-import dinnerImg from "@/assets/hero-dinner.jpg";
+import heroStageImg from "@/assets/audience-reactions.jpg";
+import dinnerImg from "@/assets/magicdinner-buehne.jpg";
 import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 import stageShowImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
@@ -77,8 +77,8 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HEADLINE_SANS = ["Magic", "Dinner"];
-const HEADLINE_ITALIC = ["Tickets."];
+const HEADLINE_SANS = ["Tickets"];
+const HEADLINE_ITALIC = ["& Termine."];
 
 const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
@@ -118,7 +118,7 @@ const Hero = () => {
       >
         <img
           src={heroStageImg}
-          alt="Plötzlich Magie — Tour-Show 2026 mit Emilian Leber, Bühne mit warmem Spotlicht"
+          alt="Tickets & Termine — anstehende Shows mit Emilian Leber"
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             objectPosition: "center 28%",
@@ -199,9 +199,9 @@ const Hero = () => {
             />
             <span className="text-sm text-white/80">
               <strong className="font-semibold text-white">
-                Summer Edition · 11.07.2026
+                Aktuell
               </strong>
-              <span className="text-white/55"> · Wald &amp; Wiese · Sinzing</span>
+              <span className="text-white/55"> · Summer Edition · 11.07.2026</span>
             </span>
           </div>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
@@ -236,56 +236,27 @@ const Hero = () => {
             className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade"
             style={{ animationDelay: "1.05s" }}
           >
-            Magic Dinner Summer Edition · 11. Juli 2026 im Restaurant Wald
-            &amp; Wiese in Sinzing. Du reservierst deinen Tisch, isst à la
-            carte — und während des Abends besuche ich euch persönlich mit
-            Close-Up-Magie.
+            Anstehende Veranstaltungen mit Reservierung oder Vorverkauf —
+            Magic Dinner, Theater-Shows und Specials. Aktuelle Liste unten.
           </p>
           <div
-            className="mt-10 self-start inline-flex flex-col sm:flex-row items-center gap-4 hero-fade"
+            className="mt-10 inline-flex flex-col sm:flex-row items-start gap-4 hero-fade"
             style={{ animationDelay: "1.2s" }}
           >
-            <Link
-              to="/tickets/magic-dinner-summer-edition"
+            <a
+              href="#events"
               className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"
             >
-              Tisch reservieren
+              Aktuelle Events
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <a
-              href="#magic-dinner"
+            </a>
+            <Link
+              to="/buchung"
               className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
             >
-              Details
+              Private Buchung
               <ArrowUpRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-        <div className="relative mt-16 md:mt-24">
-          <div
-            className="hero-overshoot flex flex-wrap items-baseline gap-x-4 md:gap-x-7 gap-y-2 text-white/85 text-xs md:text-sm tracking-[0.04em]"
-            style={{ animationDelay: "2.0s" }}
-          >
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-                11.07.2026
-              </strong>
-              <span className="text-white/65">Sa, ab 19:00</span>
-            </span>
-            <span aria-hidden className="text-white/30">·</span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-                50
-              </strong>
-              <span className="text-white/65">Plätze max.</span>
-            </span>
-            <span aria-hidden className="text-white/30">·</span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-white text-base md:text-lg">
-                Sinzing
-              </strong>
-              <span className="text-white/65">bei Regensburg</span>
-            </span>
+            </Link>
           </div>
         </div>
       </div>
@@ -742,7 +713,7 @@ const MagicDinnerAbendeSection = () => {
   const SUMMER = SUMMER_EDITION;
   return (
     <section
-      id="magic-dinner"
+      id="events"
       ref={ref}
       className="bg-white py-20 md:py-28"
     >
@@ -751,10 +722,10 @@ const MagicDinnerAbendeSection = () => {
           <p
             className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4"
           >
-            Aktueller Magic-Dinner-Abend.
+            Anstehende Events.
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
-            Summer Edition.
+            Aktuelle Termine.
           </h2>
         </div>
 
@@ -813,7 +784,7 @@ const MagicDinnerAbendeSection = () => {
               className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3"
               style={{ color: ACCENT }}
             >
-              11. Juli 2026 · ab 19:00 Uhr
+              11. Juli 2026 · ab 17:00 Uhr
             </p>
             <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-tight mb-4">
               Tisch reservieren.
@@ -1617,36 +1588,32 @@ const StimmenSection = () => {
    ═══════════════════════════════════════════════════════════ */
 const FAQS = [
   {
-    q: "Wie kommen die Tickets zu mir?",
-    a: "Nach abgeschlossener Bestellung kommt das Ticket innerhalb von 15 Minuten als PDF per E-Mail. Du druckst es aus oder zeigst es am Einlass auf dem Smartphone vor. Bei Wald-&-Wiese-Magic-Dinner-Abenden reicht die Reservierungsbestätigung — Namen-Check an der Tür.",
+    q: "Wie funktioniert die Magic-Dinner-Reservierung?",
+    a: "Du reservierst direkt beim Restaurant Wald & Wiese — per Telefon, E-Mail oder Online-Formular auf der Detail-Seite. Das Restaurant gibt mir die Tisch-Liste am Abend, ich besuche euch dann persönlich am Tisch zwischen den Gängen.",
   },
   {
-    q: "Was passiert bei Krankheit oder Verhinderung?",
-    a: "Ticket auf andere Person übertragbar — einfach am Einlass den neuen Namen nennen. Bei plötzlicher Erkrankung mit Attest: Umbuchung auf einen anderen Tour-Termin in derselben Saison möglich, unbürokratisch. Erstattung über die jeweilige Spielstätte nach deren AGB.",
+    q: "Was kostet das Magic Dinner?",
+    a: "Du isst à la carte aus der regulären Karte des Restaurants — keine festen Menüpreise. Die Magic-Performance am Tisch ist im Restaurant-Erlebnis enthalten, kein zusätzlicher Eintritt.",
   },
   {
-    q: "Kann ich einen Sitzplatz reservieren?",
-    a: "In der Premium-Front-Reihe ja — feste Platzwahl beim Vorverkauf. Standard- und Frühbucher-Tickets sind freie Platzwahl innerhalb der Zone. Wer früh kommt, sitzt vorn. Saalöffnung ist immer 30 Minuten vor Show-Beginn.",
+    q: "Wie viele Plätze gibt es?",
+    a: "Max. 50 Plätze pro Magic-Dinner-Abend, 2–12 Personen pro Tafel. Da das ein gemütlicher Restaurant-Abend ist, lohnt sich frühe Reservierung — die Termine sind schnell ausgebucht.",
   },
   {
-    q: "Kann ich Tickets verschenken?",
-    a: "Sehr gerne. Geschenk-Tickets können auf jeden Namen ausgestellt werden — Bestellname und Show-Datum reichen, der Name kann bis 24 h vor Show geändert werden. Auf Wunsch personalisiertes Geschenk-PDF mit Widmung. Schreib mir einfach kurz.",
+    q: "Kann ich Allergien oder Diät-Wünsche angeben?",
+    a: "Klar. Bei der Reservierung beim Restaurant angeben — Wald & Wiese hat vegetarische und vegane Alternativen, fragt aktiv nach Allergien. Bei der Magic-Performance werden keine Lebensmittel verwendet.",
   },
   {
-    q: "Was soll ich anziehen?",
-    a: "Smart Casual reicht überall — gepflegtes Hemd, dunkle Hose, oder eleganteres Kleid. Bei der Tour-Premiere in der Alten Mälzerei tendiert die Stimmung etwas dressierter. Bei Magic-Dinner-Abenden im Wald &-Wiese ist Restaurant-Smart-Casual angemessen.",
+    q: "Wie lange dauert der Abend?",
+    a: "Ankunft ab 17:00 Uhr. Du isst in eurem Tempo aus der Karte, während des Abends besuche ich jede Tafel mit Close-Up-Magie. Üblicherweise endet das Ganze gegen 22:00–23:00 Uhr — kein festes Programm, kein Hetzen.",
   },
   {
-    q: "Magic-Dinner: Welches Menü gibt es?",
-    a: "Das Restaurant Wald &-Wiese erstellt für jeden Magic-Dinner-Abend ein abgestimmtes Drei-Gänge-Menü mit saisonalen Zutaten — bayerisch-modern interpretiert. Vegetarische und vegane Alternativen vorhanden, gerne bei der Reservierung mitteilen. Allergien per Mail vorab klären.",
+    q: "Geburtstag oder Anlass im Tisch — was kann ich vorab sagen?",
+    a: "Bei der Reservierung mit Anlass und Namen melden — eine kleine personalisierte Routine während des Abends ist möglich, bleibt aber Überraschung. Bei Wünschen einfach el@magicel.de.",
   },
   {
-    q: "Special-Wünsche — Allergien, Geburtstag im Publikum?",
-    a: "Allergien und Unverträglichkeiten bitte 48 h vor dem Termin per E-Mail an el@magicel.de — bei Magic-Dinner-Abenden direkt mit der Reservierung. Wenn du jemanden im Publikum hast der Geburtstag hat, schreib mir vorab — eine personalisierte Routine während der Show ist möglich, bleibt aber Überraschung.",
-  },
-  {
-    q: "Sind die Spielstätten behinderten-gerecht?",
-    a: "Alle bestätigten Tour-Spielstätten sind ebenerdig erreichbar oder per Aufzug zugänglich. Rollstuhl-Plätze in der vorderen Reihe per direkter Anfrage vorab buchbar. Bei der Alten Mälzerei und der Tafelhalle: barrierefreie Toiletten vorhanden. Schreib mir kurz, ich kläre individuell mit der Spielstätte.",
+    q: "Was wenn ich nicht kommen kann?",
+    a: "Stornierung läuft über das Restaurant nach deren AGB. Bei kurzfristigem Ausfall einfach melden — wir finden eine Lösung. Tisch übertragen geht problemlos.",
   },
 ];
 
@@ -1755,18 +1722,18 @@ const NewsletterCTASection = () => {
               <p
                 className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4"
               >
-                Tour-Newsletter · alle 4–8 Wochen.
+                Event-Newsletter · alle 4–8 Wochen.
               </p>
               <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.8vw,3rem)] text-foreground mb-5">
                 Sei der erste bei{" "}
                 <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                  neuen Tour-Daten.
+                  neuen Terminen.
                 </span>
               </h2>
               <p className="text-base md:text-lg text-foreground/65 leading-[1.7] max-w-md">
-                Neue Tour-Stopps, Vorverkaufs-Starts und Magic-Dinner-Abende —
-                bevor sie öffentlich angekündigt werden. Kurze Mails, kein
-                Spam, jederzeit abbestellbar.
+                Neue Magic-Dinner-Abende und Specials — bevor sie öffentlich
+                angekündigt werden. Kurze Mails, kein Spam, jederzeit
+                abbestellbar.
               </p>
             </div>
 
@@ -1839,8 +1806,8 @@ const NewsletterCTASection = () => {
                       Eingetragen. Danke.
                     </p>
                     <p className="text-sm text-foreground/65 leading-snug">
-                      Du bekommst die nächste Tour-Mail mit neuen Stopps und
-                      Vorverkaufs-Daten — meistens 4–8 Wochen Vorlauf.
+                      Du bekommst die nächste Mail mit neuen Magic-Dinner-Terminen
+                      — meistens 4–8 Wochen Vorlauf.
                     </p>
                   </div>
                 </div>
@@ -1989,7 +1956,7 @@ const FinalCTA = () => {
     >
       <div className="absolute inset-0">
         <img
-          src={audienceImg}
+          src={heroStageImg}
           alt=""
           className="w-full h-full object-cover"
           loading="lazy"
@@ -2152,16 +2119,14 @@ const Tickets = () => (
   <>
     <Helmet>
       <html lang="de" />
-      <title>
-        Tickets — Plötzlich Magie 2026 Tour | Emilian Leber
-      </title>
+      <title>Tickets & Termine — Magic Dinner Summer Edition | Emilian Leber</title>
       <meta
         name="description"
-        content="Tickets für die Tour-Show Plötzlich Magie — Magic Meets Comedy. Premiere 22.02.2026 in der Alten Mälzerei Regensburg, anschließend Bayern-Tour. Plus Magic-Dinner-Abende im Wald & Wiese."
+        content="Aktuelle Tickets & Termine — Magic Dinner Summer Edition am 11.07.2026 im Restaurant Wald & Wiese in Sinzing bei Regensburg. Reservierung beim Restaurant."
       />
       <meta
         name="keywords"
-        content="Tickets Emilian Leber, Plötzlich Magie Tickets, Magier Tickets Bayern, Magic Dinner Tickets, Zaubershow Karten, Comedy-Magie Tour, Tour-Show Regensburg, Alte Mälzerei, Wald und Wiese Sinzing, Magier Tour 2026"
+        content="Tickets Emilian Leber, Magic Dinner Tickets, Magic Dinner Summer Edition, Wald und Wiese Sinzing, Zaubershow Karten Bayern, Magier Tickets Regensburg"
       />
       <meta name="robots" content="index,follow,max-image-preview:large" />
       <link rel="canonical" href={SITE_URL} />
@@ -2169,22 +2134,22 @@ const Tickets = () => (
       <meta property="og:url" content={SITE_URL} />
       <meta
         property="og:title"
-        content="Tickets — Plötzlich Magie 2026 Tour | Emilian Leber"
+        content="Tickets & Termine — Magic Dinner Summer Edition | Emilian Leber"
       />
       <meta
         property="og:description"
-        content="Premiere 22.02.2026 in der Alten Mälzerei Regensburg. 90 Min Mentalmagie + Comedy. Anschließend Bayern-Tour + Magic-Dinner-Abende im Wald & Wiese Sinzing. 5,0 Sterne."
+        content="Magic Dinner Summer Edition am 11.07.2026 im Restaurant Wald & Wiese in Sinzing. Du reservierst den Tisch, isst à la carte — und ich besuche euch persönlich mit Close-Up-Magie."
       />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
       <meta property="og:locale" content="de_DE" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta
         name="twitter:title"
-        content="Tickets — Plötzlich Magie 2026 Tour | Emilian Leber"
+        content="Tickets & Termine — Magic Dinner Summer Edition | Emilian Leber"
       />
       <meta
         name="twitter:description"
-        content="Premiere 22.02.2026 Alte Mälzerei Regensburg. 90 Min Magic Meets Comedy. Bayern-Tour + Magic-Dinner-Abende."
+        content="Magic Dinner Summer Edition 11.07.2026 · Wald & Wiese Sinzing. À la carte + Close-Up-Magie am Tisch."
       />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link
@@ -2202,8 +2167,6 @@ const Tickets = () => (
       <main>
         <Hero />
         <MagicDinnerAbendeSection />
-        <WasErwartetDichSection />
-        <StimmenSection />
         <FAQSection />
         <NewsletterCTASection />
         <FinalCTA />

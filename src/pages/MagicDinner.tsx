@@ -320,7 +320,7 @@ const Hero = () => {
           </p>
 
           <div
-            className="mt-10 self-start inline-flex flex-col sm:flex-row items-center gap-4 hero-fade"
+            className="mt-10 inline-flex flex-col sm:flex-row items-start gap-4 hero-fade"
             style={{ animationDelay: "1.2s" }}
           >
             <a

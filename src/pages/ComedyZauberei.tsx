@@ -183,7 +183,7 @@ const Hero = () => {
           <p className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade" style={{ animationDelay: "1.05s" }}>
             Comedy-Zauberei für Bühne, Variety, Firmenfeier oder Hochzeit. Mentaleffekte mit Pointen-Set, Karten-Comedy, Audience-Roast — dosierbar von dezentem Witz bis pure Stand-Up. Lachen UND Staunen, in derselben Sekunde.
           </p>
-          <div className="mt-10 self-start inline-flex flex-col sm:flex-row items-center gap-4 hero-fade" style={{ animationDelay: "1.2s" }}>
+          <div className="mt-10 inline-flex flex-col sm:flex-row items-start gap-4 hero-fade" style={{ animationDelay: "1.2s" }}>
             <a href="#empfehlung" className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95">
               Comedy-Finder
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
