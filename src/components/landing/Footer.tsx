@@ -69,7 +69,7 @@ const Footer = () => (
             </span>
           </Link>
           <p
-            className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/70 leading-[1.45] mb-8`}
+            className={"text-base md:text-lg text-foreground/70 leading-[1.55] mb-8"}
           >
             Bühne, Close-Up und Magic Dinner — aus Bayern, deutschlandweit.
           </p>
@@ -98,7 +98,7 @@ const Footer = () => (
           {FOOTER_COLS.map((col) => (
             <div key={col.heading}>
               <p
-                className={`${SERIF_ITALIC} text-sm text-foreground/45 mb-5`}
+                className={"text-[11px] uppercase tracking-[0.2em] font-semibold text-foreground/45 mb-5"}
               >
                 {col.heading}.
               </p>
@@ -123,7 +123,7 @@ const Footer = () => (
       {/* City links */}
       <div className="border-t border-foreground/10 pt-10 mb-10">
         <p
-          className={`${SERIF_ITALIC} text-sm text-foreground/45 mb-4`}
+          className={"text-[11px] uppercase tracking-[0.2em] font-semibold text-foreground/45 mb-4"}
         >
           Zauberer in deiner Stadt.
         </p>
