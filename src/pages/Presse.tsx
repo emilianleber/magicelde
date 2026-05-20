@@ -307,7 +307,7 @@ const BekanntAusSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fernsehen, Wettbewerbe{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 und 200+ Live-Bühnen
               </span>
               .
@@ -403,9 +403,7 @@ const BekanntAusSection = () => {
                   <span
                     className="inline-flex items-center justify-center w-11 h-11 rounded-full shrink-0"
                     style={{
-                      background:
-                        "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
-                      border: "1px solid rgba(0,0,0,0.040)",
+                      background: "transparent",
                     }}
                   >
                     <s.Icon
@@ -454,9 +452,7 @@ const BekanntAusSection = () => {
               <span
                 className="inline-flex items-center justify-center w-14 h-14 rounded-full shrink-0"
                 style={{
-                  background:
-                    "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
-                  border: "1px solid rgba(0,0,0,0.040)",
+                  background: "transparent",
                 }}
               >
                 <s.Icon
@@ -731,7 +727,7 @@ const PressemitteilungenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Was zuletzt{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 lief
               </span>
               .
@@ -858,7 +854,7 @@ const EPKDownloadSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Ein EPK.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Alles drin
               </span>
               .
@@ -1169,7 +1165,7 @@ const PressefotosSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Zehn Fotos.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Print-ready
               </span>
               .
@@ -1363,7 +1359,7 @@ const BoilerplateSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               50, 100,{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 250 Wörter
               </span>
               .
@@ -1500,7 +1496,7 @@ const PloetzlichMagieSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
               Plötzlich{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Magie
               </span>
               .
@@ -1664,7 +1660,7 @@ const InterviewZitateSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               In{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 eigenen Worten
               </span>
               .
@@ -1804,7 +1800,7 @@ const VideoSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               TV-Auftritt{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 im Mitschnitt
               </span>
               .
@@ -1992,7 +1988,7 @@ const PressKontaktDirektSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.0] text-[clamp(2.5rem,6vw,5.5rem)] mb-8">
               Schreib mir{" "}
-              <span style={{ color: ACCENT_SOFT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
                 direkt
               </span>
               .

@@ -193,7 +193,7 @@ const Hero = () => {
         ))}
       </div>
 
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
@@ -647,32 +647,25 @@ const TrustStrip = () => (
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-y-3 md:gap-y-0 md:gap-x-0 divide-y md:divide-y-0 md:divide-x divide-foreground/10 border-y border-foreground/10">
         {TRUST_ITEMS.map((it) => (
           <article
             key={it.name}
-            className="group relative bg-foreground/[0.025] border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:bg-foreground/[0.04] hover:-translate-y-1 hover:border-foreground/15 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.15)]"
+            className="flex items-center gap-4 md:flex-col md:items-start md:gap-0 px-1 py-5 md:px-6 md:py-7"
           >
-            <div
-              className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
-                border: "1px solid rgba(0,0,0,0.040)",
-              }}
-            >
-              <it.Icon
-                className="w-5 h-5"
-                style={{ color: ACCENT }}
-                strokeWidth={1.75}
-              />
+            <it.Icon
+              className="w-5 h-5 md:w-6 md:h-6 shrink-0 md:mb-4"
+              style={{ color: ACCENT }}
+              strokeWidth={1.5}
+            />
+            <div className="min-w-0">
+              <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-0.5 md:mb-1.5">
+                {it.name}
+              </p>
+              <p className="text-xs font-medium text-foreground/55 leading-snug">
+                {it.sub}
+              </p>
             </div>
-            <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">
-              {it.name}
-            </p>
-            <p className="text-xs font-medium text-foreground/55 leading-snug">
-              {it.sub}
-            </p>
           </article>
         ))}
       </div>
@@ -1923,7 +1916,7 @@ const FinalCTA = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Magie für{" "}
-            <span style={{ color: ACCENT_SOFT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               euren Anlass
             </span>
             .

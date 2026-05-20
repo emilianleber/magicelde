@@ -564,7 +564,7 @@ const AutorBox = ({ post }: { post: BlogPost }) => (
           </div>
           <h3 className="text-2xl md:text-4xl font-display font-black tracking-[-0.02em] leading-[1.05] mb-5">
             {post.author.name}.{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               {post.author.role}.
             </span>
           </h3>
@@ -617,7 +617,7 @@ const WeitereAnsichten = ({ slug }: { slug: string }) => {
             </div>
             <h2 className="text-[clamp(1.8rem,4vw,3.6rem)] font-display font-black tracking-[-0.025em] leading-[1.05]">
               Drei weitere{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Beiträge.
               </span>
             </h2>
@@ -732,7 +732,7 @@ const NewsletterInline = () => {
             </div>
             <h3 className="text-2xl md:text-3xl font-display font-black tracking-[-0.02em] leading-[1.1] mb-4">
               Beim nächsten Beitrag{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 eine Mail.
               </span>
             </h3>
@@ -958,7 +958,7 @@ const CTAFinal = () => (
       </div>
       <h2 className="text-[clamp(2rem,5vw,4.5rem)] font-display font-black tracking-[-0.025em] leading-[1.05] mb-8">
         Erlebt es{" "}
-        <span style={{ color: ACCENT_SOFT }}>
+        <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
           selbst.
         </span>
       </h2>

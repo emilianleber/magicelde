@@ -160,7 +160,7 @@ const Hero = () => {
           />
         ))}
       </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div
             className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade"
@@ -336,7 +336,7 @@ const DreiToolsSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Karte. Münze.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Buch.
               </span>
             </h2>
@@ -418,7 +418,7 @@ const DreiToolsSection = () => {
             className={`${SERIF_ITALIC} text-xl md:text-2xl text-foreground/70 leading-[1.4]`}
           >
             Drei Gegenstände aus deiner Hosentasche.{" "}
-            <span style={{ color: ACCENT }}>Sechs Stunden tägliches Üben.</span>{" "}
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Sechs Stunden tägliches Üben.</span>{" "}
             Zehn Jahre.
           </p>
         </div>
@@ -554,7 +554,7 @@ const WerdegangTimelineSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Von Acht{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 bis Heute.
               </span>
             </h2>
@@ -793,7 +793,7 @@ const MeinStilSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8 md:mb-10">
               Kein Zylinder.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Kein Kaninchen.
               </span>
             </h2>
@@ -1036,7 +1036,7 @@ const AuszeichnungenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sechs Stationen.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Eine Karriere.
               </span>
             </h2>
@@ -1204,7 +1204,7 @@ const HinterDenKulissenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Üben. Vorbereiten.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Auftreten.
               </span>
             </h2>
@@ -1342,7 +1342,7 @@ const WarumPersoenlichSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Vier Säulen.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Kein Programm von der Stange.
               </span>
             </h2>
@@ -1435,7 +1435,7 @@ const StimmenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei Reviews.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Drei echte Menschen.
               </span>
             </h2>
@@ -1560,7 +1560,7 @@ const VideoSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Drei Minuten{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 im Fernsehen.
               </span>
             </h2>

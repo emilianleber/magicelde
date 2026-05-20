@@ -172,7 +172,7 @@ const Hero = () => {
           />
         ))}
       </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div
             className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade"
@@ -624,7 +624,7 @@ const TourDatenSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Bayern,{" "}
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Stadt für Stadt.
               </span>
             </h2>
@@ -852,7 +852,7 @@ const MagicDinnerAbendeSection = () => {
             <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-tight mb-4">
               Tisch reservieren.
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Magic Dinner erleben.
               </span>
             </h3>
@@ -1001,7 +1001,7 @@ const TicketKategorienSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei Zonen.{" "}
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Eine Show.
               </span>
             </h2>
@@ -1206,7 +1206,7 @@ const WasErwartetDichSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Was dich{" "}
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 erwartet.
               </span>
             </h2>
@@ -1427,7 +1427,7 @@ const LocationsSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sechs Bühnen,{" "}
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 eine Show.
               </span>
             </h2>
@@ -1536,7 +1536,7 @@ const VideoSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sieh dir an,{" "}
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 worauf du dich freust.
               </span>
             </h2>
@@ -1755,7 +1755,7 @@ const FAQSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Häufige Ticket-
             <br />
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               Fragen.
             </span>
           </h2>
@@ -1847,7 +1847,7 @@ const NewsletterCTASection = () => {
               </p>
               <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.8vw,3rem)] text-foreground mb-5">
                 Sei der erste bei{" "}
-                <span style={{ color: ACCENT }}>
+                <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                   neuen Tour-Daten.
                 </span>
               </h2>
@@ -1950,7 +1950,7 @@ const ticketsQuizConfig: CustomQuizConfig = {
   sectionTitle: (
     <>
       Tour-Show oder{" "}
-      <span style={{ color: ACCENT }}>
+      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
         Magic Dinner?
       </span>
     </>
@@ -2118,7 +2118,7 @@ const FinalCTA = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Tour-Ticket{" "}
-            <span style={{ color: ACCENT_SOFT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               oder eigene Show.
             </span>
           </h2>

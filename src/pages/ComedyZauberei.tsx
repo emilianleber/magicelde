@@ -132,7 +132,7 @@ const Hero = () => {
           />
         ))}
       </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade" style={{ animationDelay: "0.05s" }}>
             <div className="flex items-center gap-2">
@@ -238,10 +238,10 @@ const KonzeptIntroSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8">
               Nicht Trick.{" "}
-              <span style={{ color: ACCENT }}>Dann Witz.</span>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Dann Witz.</span>
               <br />
               Sondern beides{" "}
-              <span style={{ color: ACCENT }}>gleichzeitig</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>gleichzeitig</span>.
             </h2>
             <p className="text-base md:text-lg text-foreground/75 leading-[1.7] mb-5 max-w-xl">
               Klassische Zauberer brauchen Stille, damit ein Effekt wirkt.
@@ -544,7 +544,7 @@ const SplitDiptychonSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Magie{" "}
-              <span style={{ color: ACCENT }}>und</span>{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>und</span>{" "}
               Comedy.
             </h2>
           </div>
@@ -574,7 +574,7 @@ const SplitDiptychonSection = () => {
             </div>
             <h3 className="font-display text-3xl md:text-4xl font-black text-foreground leading-[1.05] mb-5">
               Etwas, das{" "}
-              <span style={{ color: ACCENT }}>nicht stimmen kann.</span>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>nicht stimmen kann.</span>
             </h3>
             <p className="text-base md:text-lg text-foreground/70 leading-[1.7] mb-8 max-w-md">
               Die magische Sekunde: drei Sekunden Stille, dann atmet der Saal
@@ -586,8 +586,7 @@ const SplitDiptychonSection = () => {
                   <span
                     className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full"
                     style={{
-                      background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
-                      border: "1px solid rgba(0,0,0,0.040)",
+                      background: "transparent",
                     }}
                   >
                     <m.Icon className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -665,7 +664,7 @@ const SplitDiptychonSection = () => {
 
         <p className={`${SERIF_ITALIC} text-lg md:text-2xl text-foreground/70 leading-snug mt-14 max-w-3xl`}>
           Klassische Zauberer wollen, dass ihr staunt.{" "}
-          <span style={{ color: ACCENT }}>Ich will, dass ihr lacht — direkt danach.</span>
+          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Ich will, dass ihr lacht — direkt danach.</span>
         </p>
       </div>
     </section>
@@ -716,7 +715,7 @@ const KomikDNASection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Akte, eine Pointe.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Die DNA{" "}
-              <span style={{ color: ACCENT }}>eines Lachers</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>eines Lachers</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -809,7 +808,7 @@ const ComedyAnteilSliderSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei{" "}
-              <span style={{ color: ACCENT }}>Comedy-Modi</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Comedy-Modi</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -1027,7 +1026,7 @@ const AnlassMatrixSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann Comedy-Zauberei trägt.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Anlässe.{" "}
-              <span style={{ color: ACCENT }}>Eine Pointe-DNA</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Pointe-DNA</span>.
             </h2>
           </div>
           <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
@@ -1051,8 +1050,7 @@ const AnlassMatrixSection = () => {
               <span
                 className="inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full self-start"
                 style={{
-                  background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
-                  border: "1px solid rgba(0,0,0,0.040)",
+                  background: "transparent",
                 }}
               >
                 <a.Icon className="w-4 h-4 md:w-6 md:h-6" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -1135,7 +1133,7 @@ const RepertoireBentoSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Pointe, Trick,{" "}
-              <span style={{ color: ACCENT }}>Pointe wieder</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Pointe wieder</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -1257,7 +1255,7 @@ const comedyQuizConfig: CustomQuizConfig = {
   sectionTitle: (
     <>
       Welcher{" "}
-      <span style={{ color: ACCENT }}>
+      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
         Comedy-Stil
       </span>{" "}
       passt zu euch?
@@ -1455,7 +1453,7 @@ const VideoSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">TV-Auftritt.</p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
             Comedy-Zauberei im{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               TV
             </span>
             .
@@ -1521,7 +1519,7 @@ const TrustSection = () => (
         <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">Bekannt aus.</p>
         <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
           TV, Wettbewerb und{" "}
-          <span style={{ color: ACCENT }}>
+          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
             200+ Comedy-Slots
           </span>
           .
@@ -1536,8 +1534,7 @@ const TrustSection = () => (
             <div
               className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
               style={{
-                background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
-                border: "1px solid rgba(0,0,0,0.040)",
+                background: "transparent",
               }}
             >
               <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -1630,7 +1627,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Erste Pointe nach 18 Sekunden.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Comedy-Zauberei{" "}
-            <span style={{ color: ACCENT_SOFT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               buchen
             </span>
             .

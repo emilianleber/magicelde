@@ -177,7 +177,7 @@ const Hero = () => {
           />
         ))}
       </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade" style={{ animationDelay: "0.05s" }}>
             <div className="flex items-center gap-2">
@@ -315,7 +315,7 @@ const AgeGeneratorSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wählt das{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Jahrzehnt
               </span>
               .
@@ -495,7 +495,7 @@ const MemoryLaneSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Aus eurer Geschichte wird{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 ein Trick
               </span>
               .
@@ -533,8 +533,7 @@ const MemoryLaneSection = () => {
               <div
                 className="rounded-xl p-4 mt-auto"
                 style={{
-                  background: "linear-gradient(135deg, rgba(0,0,0,0.030), rgba(0,0,0,0.010))",
-                  border: "1px solid rgba(0,0,0,0.040)",
+                  background: "transparent",
                 }}
               >
                 <p
@@ -610,7 +609,7 @@ const geburtstagQuizConfig: CustomQuizConfig = {
   sectionTitle: (
     <>
       Findet euer{" "}
-      <span style={{ color: ACCENT }}>
+      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
         Geburtstags-Format
       </span>
       .
@@ -817,7 +816,7 @@ const TrustZahlenSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             Bekannt aus TV, Wettbewerb und{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               80+ Geburtstagen
             </span>
             .
@@ -833,8 +832,7 @@ const TrustZahlenSection = () => {
               <div
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
                 style={{
-                  background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
-                  border: "1px solid rgba(0,0,0,0.040)",
+                  background: "transparent",
                 }}
               >
                 <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -959,7 +957,7 @@ const FinalCTA = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Magie als{" "}
-            <span style={{ color: ACCENT_SOFT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               Geschenk
             </span>
             .

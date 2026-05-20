@@ -310,7 +310,7 @@ const DreiKontaktwege = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Such dir aus,
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 wie du magst.
               </span>
             </h2>
@@ -549,7 +549,7 @@ const KontaktformularSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2rem,5vw,4.5rem)] text-foreground mb-8">
               Erzähl mir
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 vom Abend.
               </span>
             </h2>
@@ -914,7 +914,7 @@ const AntwortzeitenHeatmap = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-7">
               Werktags am
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 schnellsten.
               </span>
             </h2>
@@ -1333,7 +1333,7 @@ const HäufigeAnliegen = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Vielleicht
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 ist es eines davon.
               </span>
             </h2>
@@ -1418,7 +1418,7 @@ const StandortMap = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-7">
               Bayern primär,
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 deutschlandweit.
               </span>
             </h2>

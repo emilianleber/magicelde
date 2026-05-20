@@ -510,7 +510,7 @@ const FAQCore = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
             Antworten nach{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               Thema.
             </span>
           </h2>
@@ -687,7 +687,7 @@ const PullQuote = () => {
           </p>
           <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,5vw,4.5rem)] text-white">
             Über dreißig Fragen.{" "}
-            <span style={{ color: ACCENT_SOFT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               Eine Antwort: ja, das geht.
             </span>
           </p>
@@ -761,7 +761,7 @@ const FrageNichtBeantwortet = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-6">
             Stell sie{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               direkt mir.
             </span>
           </h2>
@@ -935,7 +935,7 @@ const VerwandteRessourcen = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
             Falls du{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               direkt weiter willst.
             </span>
           </h2>
@@ -1017,7 +1017,7 @@ const FinalCTA = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Lass uns{" "}
-            <span style={{ color: ACCENT_SOFT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               dein Event planen.
             </span>
           </h2>

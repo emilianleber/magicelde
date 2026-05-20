@@ -100,7 +100,7 @@ const Hero = () => {
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
         {BOKEH.map((b, i) => (<div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />))}
       </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade" style={{ animationDelay: "0.05s" }}>
             <div className="flex items-center gap-2">
@@ -187,7 +187,7 @@ const PhasenSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Phasen, ein Abend.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wie ich euch{" "}
-              <span style={{ color: ACCENT }}>durch den Abend</span>{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>durch den Abend</span>{" "}
               führe.
             </h2>
           </div>
@@ -266,7 +266,7 @@ const KombiUSPSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Disziplinen. Ein Auftritt.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Moderation, Magie und{" "}
-              <span style={{ color: ACCENT }}>Comedy</span>{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Comedy</span>{" "}
               aus einer Hand.
             </h2>
           </div>
@@ -306,7 +306,7 @@ const KombiUSPSection = () => {
         <div className={`mt-12 md:mt-16 max-w-4xl mx-auto text-center`}>
           <p className={`${SERIF_ITALIC} text-xl md:text-3xl text-foreground/75 leading-snug`}>
             Drei Disziplinen — aber keine Übergaben zwischen Künstlern.{" "}
-            <span style={{ color: ACCENT }}>Ein Auftritt, ein Honorar, ein Briefing.</span>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Ein Auftritt, ein Honorar, ein Briefing.</span>
           </p>
         </div>
       </div>
@@ -352,7 +352,7 @@ const ShowBeispieleSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei reale Abende.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Aus dem{" "}
-              <span style={{ color: ACCENT }}>Moderations-Archiv</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Moderations-Archiv</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -454,7 +454,7 @@ const AnlassMatrixSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Fünf Anlässe, fünf Mischverhältnisse.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Anlass.{" "}
-              <span style={{ color: ACCENT }}>Tonalität.</span>{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Tonalität.</span>{" "}
               Mix.
             </h2>
           </div>
@@ -470,7 +470,7 @@ const AnlassMatrixSection = () => {
         <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
           {ANLASS_MATRIX.map((a, i) => (
             <li key={a.label} className={`grid grid-cols-1 md:grid-cols-[56px_2fr_3fr] gap-x-8 gap-y-4 py-8 md:py-10`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
-              <span className="inline-flex items-center justify-center w-12 h-12 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
+              <span className="inline-flex items-center justify-center w-12 h-12 rounded-full self-start" style={{ background: "transparent" }}>
                 <a.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </span>
               <div>
@@ -547,7 +547,7 @@ const ComedyAnteilSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wie viel Comedy ist drin?</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei{" "}
-              <span style={{ color: ACCENT }}>Modus-Schalter</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Modus-Schalter</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -645,7 +645,7 @@ const TechRiderSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Für die Eventplanung.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
               Tech-Rider.{" "}
-              <span style={{ color: ACCENT }}>Plus Briefing-Liste.</span>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Plus Briefing-Liste.</span>
             </h2>
             <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-8 max-w-md">
               Was Eventagentur und Location wissen müssen — Technik plus
@@ -660,7 +660,7 @@ const TechRiderSection = () => {
             <div className="bg-white p-7 md:p-9" style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(0,0,0,0.125), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
               {TECH_RIDER.map((row, i) => (
                 <div key={row.label} className={`grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_1fr] gap-4 ${i > 0 ? "border-t border-foreground/10 pt-5 mt-5" : ""}`}>
-                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
+                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0" style={{ background: "transparent" }}>
                     <row.Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
                   </span>
                   <div className="col-span-1 md:col-span-1">
@@ -692,7 +692,7 @@ const TechRiderSection = () => {
 const modQuizConfig: CustomQuizConfig = {
   anlass: "Moderation",
   sectionEyebrow: "Format-Finder · Moderation",
-  sectionTitle: (<>Welcher{" "}<span style={{ color: ACCENT }}>Moderations-Slot</span>?</>),
+  sectionTitle: (<>Welcher{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT }}>Moderations-Slot</span>?</>),
   sectionDesc: "Drei Fragen, eine konkrete Empfehlung — von Empfangs-Moderation bis Award-Show.",
   questions: [
     { id: "anlass", eyebrow: "Frage 01 · Anlass", title: <>Was für ein Anlass?</>, hint: "Davon hängt Tonalität und Sprach-Stil ab.", feedback: "Spannend.", cols: 4, options: [
@@ -773,13 +773,13 @@ const TrustSection = () => (
         <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">Bekannt aus.</p>
         <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
           TV, Wettbewerb und{" "}
-          <span style={{ color: ACCENT }}>Bühnen-Erfahrung seit 2016</span>.
+          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Bühnen-Erfahrung seit 2016</span>.
         </h2>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
         {TRUST_ITEMS.map((it) => (
           <article key={it.name} className="group relative bg-white border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:-translate-y-1">
-            <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))", border: "1px solid rgba(0,0,0,0.040)" }}>
+            <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "transparent" }}>
               <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
             </div>
             <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">{it.name}</p>
@@ -840,7 +840,7 @@ const FinalCTA = () => {
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Plant euren Abend.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
-            Moderation{" "}<span style={{ color: ACCENT_SOFT }}>anfragen</span>.
+            Moderation{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>anfragen</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
             Schickt mir Datum, Ort und Programm-Übersicht — Antwort innerhalb 24 Stunden mit Konzept-Vorschlag.

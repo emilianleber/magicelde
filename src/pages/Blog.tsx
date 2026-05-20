@@ -313,7 +313,7 @@ const FeaturedArtikel = ({ post }: { post: BlogPost }) => {
             <h2 className="text-[clamp(1.8rem,3.6vw,3rem)] font-display font-black leading-[1.05] tracking-[-0.02em] mb-6">
               {post.title}{" "}
               {post.titleAccent && (
-                <span style={{ color: ACCENT }}>
+                <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                   {post.titleAccent}
                 </span>
               )}
@@ -409,7 +409,7 @@ const PostsListe = ({
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4.2rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Geschichten zwischen{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Tisch und Bühne.
               </span>
             </h2>
@@ -602,7 +602,7 @@ const RedaktionsSchaufenster = ({ posts }: { posts: BlogPost[] }) => {
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4.2rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Drei{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Lieblinge.
               </span>
             </h2>
@@ -733,7 +733,7 @@ const TopPosts = ({ posts }: { posts: BlogPost[] }) => {
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4.2rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Top-Beiträge{" "}
-              <span style={{ color: ACCENT_SOFT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
                 dieses Quartals.
               </span>
             </h2>
@@ -807,7 +807,7 @@ const PullQuoteBlack = () => (
       />
       <blockquote className="text-3xl md:text-5xl font-display font-black tracking-[-0.02em] leading-[1.15]">
         Manche Geschichten passen nicht{" "}
-        <span style={{ color: ACCENT_SOFT }}>
+        <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
           auf die Bühne.
         </span>{" "}
         Genau die landen hier.
@@ -850,7 +850,7 @@ const NewsletterSignup = () => {
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-6">
               Einmal im Quartal.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Kein Spam.
               </span>
             </h2>
@@ -997,7 +997,7 @@ const AutorVorstellung = () => (
           </div>
           <h2 className="text-[clamp(2rem,4.5vw,3.6rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-6">
             Magier seit acht.{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               Schreibend seit jetzt.
             </span>
           </h2>
@@ -1086,7 +1086,7 @@ const ThemenWolke = ({ posts }: { posts: BlogPost[] }) => {
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Was hier{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 besprochen wird.
               </span>
             </h2>
@@ -1176,7 +1176,7 @@ const VerwandteRessourcen = () => {
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Verwandte{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Bereiche.
               </span>
             </h2>
@@ -1253,7 +1253,7 @@ const FinalCTA = () => (
       </div>
       <h2 className="text-[clamp(2.25rem,5.5vw,5rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-10">
         Lesen.{" "}
-        <span style={{ color: ACCENT_SOFT }}>
+        <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
           Oder buchen.
         </span>
       </h2>

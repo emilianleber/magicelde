@@ -102,7 +102,7 @@ const Hero = () => {
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
         {BOKEH.map((b, i) => (<div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />))}
       </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade" style={{ animationDelay: "0.05s" }}>
             <div className="flex items-center gap-2">
@@ -169,7 +169,7 @@ const DramaKurveSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Eine Show. Ein Spannungsbogen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Die{" "}
-              <span style={{ color: ACCENT }}>Drama-Kurve</span>{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Drama-Kurve</span>{" "}
               einer 20-Min-Show.
             </h2>
           </div>
@@ -282,7 +282,7 @@ const FormatVariantenSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Längen, drei Bögen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-7">
               Welche Show{" "}
-              <span style={{ color: ACCENT }}>passt</span>{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>passt</span>{" "}
               zu eurem Slot?
             </h2>
             <p className="text-base md:text-lg text-foreground/65 leading-[1.7] max-w-md">
@@ -371,7 +371,7 @@ const BeispielShowSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Eine 20-Min-Show, von innen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Vier Akte.{" "}
-              <span style={{ color: ACCENT }}>Ein Saal.</span>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Ein Saal.</span>
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -470,7 +470,7 @@ const EffektHighlightsSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Bühnen-Highlights aus dem Repertoire.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Routinen, die{" "}
-              <span style={{ color: ACCENT }}>im Kopf bleiben</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>im Kopf bleiben</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -510,7 +510,7 @@ const EffektHighlightsSection = () => {
           <div className="lg:col-span-5 grid grid-cols-1 gap-5 md:gap-7">
             {rest.map((h) => (
               <article key={h.title} className="relative bg-[hsl(0,0%,98%)] p-6 md:p-7 flex gap-5 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
-                <span className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
+                <span className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ background: "transparent" }}>
                   <h.Icon className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
                 </span>
                 <div>
@@ -563,7 +563,7 @@ const AnlassMixSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann eine Bühne den Abend trägt.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Anlässe.{" "}
-              <span style={{ color: ACCENT }}>Eine Bühne</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Bühne</span>.
             </h2>
           </div>
           <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
@@ -579,7 +579,7 @@ const AnlassMixSection = () => {
         <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
           {ANLAESSE.map((a, i) => (
             <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[68px_1fr_auto] items-baseline gap-4 md:gap-8 py-7 md:py-10 group`} style={{ animationDelay: `${0.15 + i * 0.06}s` }}>
-              <span className="inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
+              <span className="inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full self-start" style={{ background: "transparent" }}>
                 <a.Icon className="w-4 h-4 md:w-6 md:h-6" style={{ color: ACCENT }} strokeWidth={1.75} />
               </span>
               <div className="grid md:grid-cols-[1fr_2fr] gap-x-8 gap-y-2 items-baseline">
@@ -620,7 +620,7 @@ const TechRiderSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Für eure Eventplanung.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
               Tech-Rider.{" "}
-              <span style={{ color: ACCENT }}>Eine Seite. Alle Infos.</span>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Seite. Alle Infos.</span>
             </h2>
             <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-8">
               Damit Eventagentur, Technik und Location-Manager genau wissen,
@@ -643,7 +643,7 @@ const TechRiderSection = () => {
                 { Icon: Cable, label: "Strom", brauche: "Eine Steckdose in Bühnen-Nähe. Mehr nicht.", bringe: "Verlängerungskabel, Mehrfachsteckdose" },
               ].map((row, i) => (
                 <div key={row.label} className={`grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_1fr] gap-4 ${i > 0 ? "border-t border-foreground/10 pt-5 mt-5" : ""}`}>
-                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
+                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0" style={{ background: "transparent" }}>
                     <row.Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
                   </span>
                   <div className="col-span-1 md:col-span-1">
@@ -677,7 +677,7 @@ const TechRiderSection = () => {
 const buehneQuizConfig: CustomQuizConfig = {
   anlass: "Bühnenshow",
   sectionEyebrow: "Format-Finder · Bühnenshow",
-  sectionTitle: (<>Welche{" "}<span style={{ color: ACCENT }}>Bühnen-Variante</span>{" "}passt?</>),
+  sectionTitle: (<>Welche{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT }}>Bühnen-Variante</span>{" "}passt?</>),
   sectionDesc: "Drei Fragen, eine konkrete Empfehlung — Highlight-Slot, Hauptshow oder Abendprogramm.",
   questions: [
     { id: "slot", eyebrow: "Frage 01 · Slot", title: <>Wie viel Bühnen-Zeit habt ihr?</>, hint: "Kompakter Highlight-Slot oder Hauptshow als Programmpunkt?", feedback: "Verstanden.", cols: 3, options: [
@@ -767,13 +767,13 @@ const TrustZahlenSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">Bekannt aus.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             TV, Wettbewerb und{" "}
-            <span style={{ color: ACCENT }}>200+ Bühnen-Auftritten</span>.
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>200+ Bühnen-Auftritten</span>.
           </h2>
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14`}>
           {TRUST_ITEMS.map((it) => (
             <article key={it.name} className="group relative bg-white border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:-translate-y-1">
-              <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))", border: "1px solid rgba(0,0,0,0.040)" }}>
+              <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "transparent" }}>
                 <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
               <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">{it.name}</p>
@@ -848,7 +848,7 @@ const FinalCTA = () => {
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Macht eure Bühne zum Höhepunkt.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
-            Bühnenshow{" "}<span style={{ color: ACCENT_SOFT }}>buchen</span>.
+            Bühnenshow{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>buchen</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
             Schickt mir Datum, Ort, Bühnen-Slot und Gästezahl — Antwort innerhalb 24 Stunden mit Konzept-Vorschlag und Tech-Rider.

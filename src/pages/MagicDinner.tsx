@@ -254,7 +254,7 @@ const Hero = () => {
       </div>
 
 
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div
             className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade"
@@ -409,14 +409,12 @@ const TrustStrip = () => {
           {items.map((it) => (
             <article
               key={it.name}
-              className="group relative bg-foreground/[0.025] border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:bg-foreground/[0.04] hover:-translate-y-1 hover:border-foreground/15 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.15)]"
+              className="bg-white border border-foreground/10 rounded-2xl px-5 py-6 md:px-6 md:py-7"
             >
               <div
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
                 style={{
-                  background:
-                    "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
-                  border: "1px solid rgba(0,0,0,0.040)",
+                  background: "transparent",
                 }}
               >
                 <it.Icon
@@ -469,7 +467,7 @@ const KundenReferenzenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.5rem)] text-foreground">
               Kunden &{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Referenzen
               </span>
               .
@@ -686,7 +684,7 @@ const KonzeptSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Tisch oder Bühne.
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Oder beides.
               </span>
             </h2>
@@ -801,7 +799,7 @@ const DreiSaeulenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wählt euer{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Format
               </span>
               .
@@ -1165,7 +1163,7 @@ const BeispielAbendSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sechzigster.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Mit Marmeladenglas.
               </span>
             </h2>
@@ -1350,7 +1348,7 @@ const BeispielAbendSection = () => {
           >
             „Mutter hat geweint.
             <br />
-            <span style={{ color: ACCENT }}>Mehr Erfolg geht nicht."</span>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Mehr Erfolg geht nicht."</span>
           </p>
           <p className="mt-5 text-sm tracking-[0.12em] uppercase text-foreground/45 font-semibold">
             — Notiz aus dem Briefing-Call
@@ -2036,7 +2034,7 @@ const AnlaesseSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
               Vier Anlässe.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Ein Format.
               </span>
             </h2>
@@ -2401,7 +2399,7 @@ const KartenFaecherSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             Jeder Abend{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               ein eigener Moment
             </span>
             .
@@ -3052,7 +3050,7 @@ const AudienceSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Magic Dinner — für{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 wen?
               </span>
             </h2>
@@ -3155,7 +3153,7 @@ const RestaurantPartnerSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Magic Dinner als{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 eure Veranstaltungsreihe
               </span>
               .
@@ -3200,8 +3198,7 @@ const RestaurantPartnerSection = () => {
                   <span
                     className="inline-flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full shrink-0"
                     style={{
-                      background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
-                      border: "1px solid rgba(0,0,0,0.040)",
+                      background: "transparent",
                     }}
                   >
                     <Sparkles className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -3322,7 +3319,7 @@ const TicketEventSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground mb-8">
             Öffentliche{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               Magic-Dinner-Termine
             </span>
             .

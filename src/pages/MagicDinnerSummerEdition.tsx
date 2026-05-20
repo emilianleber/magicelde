@@ -34,6 +34,8 @@ import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const ACCENT_SOFT = "#e4b8c0";
+const SERIF_ITALIC =
+  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const AMBER = "#f3d9a8";
 
 const EVENT_DATE = "11. Juli 2026";
@@ -113,7 +115,7 @@ const Hero = () => {
         />
       </div>
 
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-4xl">
           <div
             className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-7 hero-fade"
@@ -289,7 +291,7 @@ const AblaufSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
               Vier Schritte vom{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Tisch zur Pointe
               </span>
               .
@@ -370,7 +372,7 @@ const WannWoSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.5rem)] text-foreground mb-6">
               Sommerabend in{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Sinzing
               </span>
               .
@@ -508,7 +510,7 @@ const ReservierungsSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground mb-6">
               Platz sichern.<br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Sommerabend buchen.
               </span>
             </h2>
@@ -616,7 +618,7 @@ const ReservierungsSection = () => {
                   </p>
                   <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-5">
                     Bequemer Weg —{" "}
-                    <span style={{ color: ACCENT }}>
+                    <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                       schick uns die Anfrage.
                     </span>
                   </h3>
@@ -746,7 +748,7 @@ const WasErwartetSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
               Sechs Dinge die diesen{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Abend ausmachen
               </span>
               .
@@ -846,7 +848,7 @@ const FAQSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
             Was vorher{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               gefragt wird.
             </span>
           </h2>
@@ -940,7 +942,7 @@ const WeitereEditionenSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.1] text-[clamp(1.75rem,3.8vw,3rem)] text-foreground">
             Nach Sommer kommt{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               mehr
             </span>
             .
@@ -1024,7 +1026,7 @@ const FinalCTA = () => (
         </p>
         <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.8vw,4rem)]">
           Tisch sichern.<br />
-          <span style={{ color: ACCENT_SOFT }}>
+          <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
             Magie bekommen.
           </span>
         </h2>

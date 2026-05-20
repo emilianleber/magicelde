@@ -89,7 +89,7 @@ const Hero = () => {
           <div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />
         ))}
       </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade" style={{ animationDelay: "0.05s" }}>
             <div className="flex items-center gap-2">
@@ -171,7 +171,7 @@ const KpisSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Hebel für Messe-ROI.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Was Magie am Messestand{" "}
-              <span style={{ color: ACCENT }}>tatsächlich bewirkt</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>tatsächlich bewirkt</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -295,7 +295,7 @@ const AblaufSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">So läuft das ab.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Schritte zum{" "}
-              <span style={{ color: ACCENT }}>Stand-Lead-Magneten</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Stand-Lead-Magneten</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -339,14 +339,14 @@ const MesseTypenSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wo das funktioniert.</p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Vier{" "}
-            <span style={{ color: ACCENT }}>Setting-Typen</span>.
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Setting-Typen</span>.
           </h2>
         </div>
 
         <div className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6`}>
           {MESSETYPEN.map((m) => (
             <article key={m.title} className="relative bg-[hsl(0,0%,98%)] p-6 md:p-7 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
-              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4" style={{ background: "transparent" }}>
                 <m.Icon className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
               <h3 className="font-display text-lg font-bold text-foreground leading-tight mb-3">{m.title}</h3>
@@ -388,7 +388,7 @@ const MesseWocheSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Eine Messe-Woche.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sechs Tage. Sechs{" "}
-              <span style={{ color: ACCENT }}>Akte</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Akte</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -500,7 +500,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Für Messen und Roadshows.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Macht euren Stand zum{" "}
-            <span style={{ color: ACCENT_SOFT }}>Gesprächsthema</span>.
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>Gesprächsthema</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
             Schickt mir Messe, Datum, Standgröße und Produkt-Argument —

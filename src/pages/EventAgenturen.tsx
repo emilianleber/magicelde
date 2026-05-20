@@ -115,7 +115,7 @@ const Hero = () => {
           <div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />
         ))}
       </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade" style={{ animationDelay: "0.05s" }}>
             <div className="flex items-center gap-2">
@@ -200,7 +200,7 @@ const SchnittstellenSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wie wir mit Agenturen arbeiten.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Klare{" "}
-              <span style={{ color: ACCENT }}>Schnittstellen</span>. Keine Überraschungen.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Schnittstellen</span>. Keine Überraschungen.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -215,7 +215,7 @@ const SchnittstellenSection = () => {
         <div className={`grid md:grid-cols-2 gap-5 md:gap-6`}>
           {SCHNITTSTELLEN.map((s, i) => (
             <article key={s.role} className="relative bg-[hsl(0,0%,98%)] p-8 md:p-10" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -25px rgba(0,0,0,0.090), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{ background: "transparent" }}>
                 <s.icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
               <p className="text-[11px] tracking-[0.18em] uppercase font-semibold mb-3" style={{ color: ACCENT }}>Schnittstelle {String(i + 1).padStart(2, "0")}</p>
@@ -251,7 +251,7 @@ const VorteileSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Sechs Gründe für Agenturen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Was Eventagenturen bei uns{" "}
-              <span style={{ color: ACCENT }}>konkret bekommen</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>konkret bekommen</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -396,7 +396,7 @@ const SchnellangebotSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Schnellangebot.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5vw,4.5rem)] text-foreground mb-8">
               In{" "}
-              <span style={{ color: ACCENT }}>8 Stunden</span>{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>8 Stunden</span>{" "}
               auf eurem Schreibtisch.
             </h2>
             <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-7">
@@ -496,7 +496,7 @@ const AgenturCaseSection = () => {
             <p className="text-[11px] tracking-[0.18em] uppercase font-semibold mb-4" style={{ color: ACCENT }}>Case-Study mit Agentur-Beteiligung</p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4vw,3.25rem)] text-foreground mb-8">
               Magic Camp für{" "}
-              <span style={{ color: ACCENT }}>200 Gäste</span>.
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>200 Gäste</span>.
             </h2>
             <div className="space-y-5 text-base md:text-lg leading-[1.7] text-foreground/70 mb-8">
               <p>
@@ -591,7 +591,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Für Eventagenturen & Veranstaltungsplaner.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Schnellangebot in{" "}
-            <span style={{ color: ACCENT_SOFT }}>8 Stunden</span>.
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>8 Stunden</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
             Eckdaten an el@magicel.de — wir melden uns innerhalb des

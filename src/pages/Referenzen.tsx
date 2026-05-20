@@ -35,6 +35,8 @@ import stageShowImg from "@/assets/stage-show.jpg";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const ACCENT_SOFT = "#e4b8c0";
+const SERIF_ITALIC =
+  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const AMBER_SOFT = "#f0d8a8";
 
 /* ═══════════════════════════════════════════════════════════
@@ -143,7 +145,7 @@ const Hero = () => {
                 className="font-display font-black tabular-nums leading-[0.82] tracking-[-0.05em] text-foreground"
                 style={{ fontSize: "clamp(6rem, 18vw, 18rem)" }}
               >
-                200<span style={{ color: ACCENT }}>+</span>
+                200<span className={SERIF_ITALIC} style={{ color: ACCENT }}>+</span>
               </h1>
             </div>
 
@@ -668,7 +670,7 @@ const StatsEditorialSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground">
               Was ich seit 2016
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 gebaut habe.
               </span>
             </h2>
@@ -723,7 +725,7 @@ const StatsEditorialSection = () => {
             <div>
               <Heart className="w-5 h-5 mb-4" style={{ color: ACCENT }} strokeWidth={1.75} />
               <p className="font-display font-black tabular-nums leading-[0.9] tracking-[-0.035em] text-foreground" style={{ fontSize: "clamp(3.5rem, 7vw, 6rem)" }}>
-                100<span style={{ color: ACCENT }}>+</span>
+                100<span className={SERIF_ITALIC} style={{ color: ACCENT }}>+</span>
               </p>
             </div>
             <div>
@@ -742,7 +744,7 @@ const StatsEditorialSection = () => {
             <div>
               <Building2 className="w-5 h-5 mb-4" style={{ color: ACCENT }} strokeWidth={1.75} />
               <p className="font-display font-black tabular-nums leading-[0.9] tracking-[-0.035em] text-foreground" style={{ fontSize: "clamp(3.25rem, 6vw, 5.5rem)" }}>
-                100<span style={{ color: ACCENT }}>+</span>
+                100<span className={SERIF_ITALIC} style={{ color: ACCENT }}>+</span>
               </p>
             </div>
             <div>
@@ -785,7 +787,7 @@ const StatsEditorialSection = () => {
             <div>
               <Trophy className="w-5 h-5 mb-4" style={{ color: ACCENT }} strokeWidth={1.75} />
               <p className="font-display font-black tabular-nums leading-[0.9] tracking-[-0.035em] text-foreground" style={{ fontSize: "clamp(2.75rem, 5vw, 4.5rem)" }}>
-                80<span style={{ color: ACCENT }}>+</span>
+                80<span className={SERIF_ITALIC} style={{ color: ACCENT }}>+</span>
               </p>
             </div>
             <div>
@@ -834,7 +836,7 @@ const StatsEditorialSection = () => {
             </div>
             <div className="mt-4">
               <p className="font-display font-black tabular-nums leading-[0.9] tracking-[-0.035em] text-foreground" style={{ fontSize: "clamp(3.25rem, 6vw, 5.5rem)" }}>
-                5,0<span style={{ color: ACCENT }}>★</span>
+                5,0<span className={SERIF_ITALIC} style={{ color: ACCENT }}>★</span>
               </p>
               <p className="font-display text-lg font-bold text-foreground mt-2">
                 30+ Bewertungen
@@ -927,7 +929,7 @@ const CaseStudiesSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground">
               VKB. STRABAG.
               <br />
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 XXXLutz.
               </span>
             </h2>
@@ -1604,7 +1606,7 @@ const FinalCTA = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)]">
             Schreib mir.
             <br />
-            <span style={{ color: ACCENT_SOFT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               Referenzen
             </span>{" "}aus deiner Branche.
           </h2>

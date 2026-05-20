@@ -204,7 +204,7 @@ const Hero = () => {
         ))}
       </div>
 
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <div
             className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade"
@@ -390,7 +390,7 @@ const DreiAkteSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei Akte.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Ein Tag.
               </span>
             </h2>
@@ -603,7 +603,7 @@ const PolaroidWall = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.2vw,5.25rem)] text-foreground">
               Was Magie auf eurer Hochzeit{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 konkret bedeutet
               </span>
               .
@@ -690,7 +690,7 @@ const hochzeitQuizConfig: QuizConfig = {
   sectionTitle: (
     <>
       Findet euren{" "}
-      <span style={{ color: ACCENT }}>
+      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
         Magie-Moment
       </span>
       .
@@ -705,7 +705,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Wie{" "}
-          <span style={{ color: ACCENT }}>
+          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
             groß
           </span>{" "}
           wird eure Hochzeit?
@@ -725,7 +725,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Wann soll die{" "}
-          <span style={{ color: ACCENT }}>
+          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
             Magie
           </span>{" "}
           passieren?
@@ -746,7 +746,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Wie ist der{" "}
-          <span style={{ color: ACCENT }}>
+          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
             Stil
           </span>{" "}
           eurer Hochzeit?
@@ -766,7 +766,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Wer sind eure{" "}
-          <span style={{ color: ACCENT }}>
+          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
             Gäste
           </span>
           ?
@@ -786,7 +786,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Was ist euch{" "}
-          <span style={{ color: ACCENT }}>
+          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
             wichtig
           </span>
           ?
@@ -904,7 +904,7 @@ const VertrauensSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Eure Ringe.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Eure Routine.
               </span>
             </h2>
@@ -934,9 +934,7 @@ const VertrauensSection = () => {
                   <span
                     className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0"
                     style={{
-                      background:
-                        "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
-                      border: "1px solid rgba(0,0,0,0.040)",
+                      background: "transparent",
                     }}
                   >
                     <v.icon
@@ -1112,7 +1110,7 @@ const LocationSetupSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Eure Location,{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 mein Setup
               </span>
               .
@@ -1314,7 +1312,7 @@ const PlanerQuoteSection = () => {
             <p className="font-display font-black tracking-[-0.015em] leading-[1.1] text-[clamp(1.75rem,4.2vw,3.5rem)]">
               Ich durfte eine Hochzeit planen, bei der Emilian als Zauberer
               aufgetreten ist — und es war{" "}
-              <span style={{ color: ACCENT_SOFT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
                 wirklich großartig
               </span>
               . Mit viel Charme und Witz hat er alle Gäste begeistert.
@@ -1391,7 +1389,7 @@ const BrautpaareStimmenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.5rem)] text-foreground">
               Was andere{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Brautpaare
               </span>{" "}
               sagen.
@@ -1539,7 +1537,7 @@ const BuchungsFlowSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Vier Schritte.{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Kein Stress.
               </span>
             </h2>
@@ -1718,7 +1716,7 @@ const TrustStripSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             Bekannt aus TV, Wettbewerb und{" "}
-            <span style={{ color: ACCENT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               200+ Events
             </span>
             .
@@ -1733,14 +1731,12 @@ const TrustStripSection = () => {
           {TRUST_ITEMS.map((it) => (
             <article
               key={it.name}
-              className="group relative bg-foreground/[0.025] border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:bg-foreground/[0.04] hover:-translate-y-1 hover:border-foreground/15 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.15)]"
+              className="bg-white border border-foreground/10 rounded-2xl px-5 py-6 md:px-6 md:py-7"
             >
               <div
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
                 style={{
-                  background:
-                    "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
-                  border: "1px solid rgba(0,0,0,0.040)",
+                  background: "transparent",
                 }}
               >
                 <it.Icon
@@ -1945,7 +1941,7 @@ const FinalCTA = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Eure Hochzeit.
             <br />
-            <span style={{ color: ACCENT_SOFT }}>
+            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               Drei Akte Magie.
             </span>
           </h2>
