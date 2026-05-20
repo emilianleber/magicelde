@@ -177,8 +177,8 @@ const Hero = () => {
           />
         ))}
       </div>
-      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col justify-center md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
-        <div className="max-w-5xl">
+      <div className="relative z-10 min-h-screen container px-6 flex flex-col pt-28 md:pt-32 pb-10 md:pb-20">
+        <div className="flex-1 flex flex-col justify-center max-w-5xl">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade" style={{ animationDelay: "0.05s" }}>
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-0.5">
@@ -216,7 +216,7 @@ const Hero = () => {
             Geburtstagstisch, kompakte Bühnenshow zwischen den Reden, oder
             beides. Mit eingebauten Anekdoten aus eurem Leben.
           </p>
-          <div className="mt-10 inline-flex flex-col sm:flex-row items-center sm:items-center gap-4 hero-fade" style={{ animationDelay: "1.2s" }}>
+          <div className="mt-10 self-start inline-flex flex-col sm:flex-row items-center gap-4 hero-fade" style={{ animationDelay: "1.2s" }}>
             <a
               href="#empfehlung"
               className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"
