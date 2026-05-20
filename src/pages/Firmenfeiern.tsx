@@ -237,7 +237,7 @@ const Hero = () => {
             Identity passt und in Erinnerung bleibt.
           </p>
           <div
-            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 hero-fade"
+            className="mt-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 hero-fade"
             style={{ animationDelay: "1.2s" }}
           >
             <a

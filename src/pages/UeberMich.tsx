@@ -230,7 +230,7 @@ const Hero = () => {
             erzähle ich dir, wie das passiert ist.
           </p>
           <div
-            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 hero-fade"
+            className="mt-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 hero-fade"
             style={{ animationDelay: "1.2s" }}
           >
             <a
@@ -1728,7 +1728,7 @@ const AktuelleShowSection = () => {
                 <span className="text-white/65 text-sm">Solo · Tour 2026</span>
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
               <Link
                 to="/buchung?show=Plötzlich+Magie"
                 className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"

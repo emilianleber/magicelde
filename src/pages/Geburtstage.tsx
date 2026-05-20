@@ -216,7 +216,7 @@ const Hero = () => {
             Geburtstagstisch, kompakte Bühnenshow zwischen den Reden, oder
             beides. Mit eingebauten Anekdoten aus eurem Leben.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 hero-fade" style={{ animationDelay: "1.2s" }}>
+          <div className="mt-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 hero-fade" style={{ animationDelay: "1.2s" }}>
             <a
               href="#empfehlung"
               className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"

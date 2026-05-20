@@ -320,7 +320,7 @@ const Hero = () => {
           </p>
 
           <div
-            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 hero-fade"
+            className="mt-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 hero-fade"
             style={{ animationDelay: "1.2s" }}
           >
             <a
@@ -1931,7 +1931,7 @@ const ResultWithForm = ({ rec, answers, showConfetti, onReset, onDark = false }:
           className="w-full rounded-xl bg-white border border-foreground/12 px-4 py-3 text-sm placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors resize-none mb-4"
         />
 
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start justify-between">
           <button
             type="submit"
             disabled={submitted}
@@ -2512,7 +2512,7 @@ const WaldUndWieseSection = () => {
               </p>
             </div>
 
-            <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="mt-10 flex flex-col sm:flex-row items-center sm:items-start gap-4">
               <Link
                 to="/buchung"
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#0c0a10] hover:bg-white/95"
