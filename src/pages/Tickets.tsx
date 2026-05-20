@@ -199,9 +199,9 @@ const Hero = () => {
             />
             <span className="text-sm text-white/80">
               <strong className="font-semibold text-white">
-                Premiere · 22.02.2026
+                Summer Edition · 11.07.2026
               </strong>
-              <span className="text-white/55"> · Alte Mälzerei Regensburg</span>
+              <span className="text-white/55"> · Wald &amp; Wiese · Sinzing</span>
             </span>
           </div>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
@@ -236,68 +236,55 @@ const Hero = () => {
             className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade"
             style={{ animationDelay: "1.05s" }}
           >
-            90 Minuten Show — Mentalmagie, Karten-Routinen und Comedy-Pointen.
-            Premiere am 22.02.2026 in der Alten Mälzerei Regensburg, danach
-            Tour durch bayerische Theater. Plus regelmäßige Magic-Dinner-Abende
-            im Restaurant Wald &amp; Wiese in Sinzing.
+            Magic Dinner Summer Edition · 11. Juli 2026 im Restaurant Wald
+            &amp; Wiese in Sinzing. Du reservierst deinen Tisch, isst à la
+            carte — und während des Abends besuche ich euch persönlich mit
+            Close-Up-Magie.
           </p>
           <div
             className="mt-10 self-start inline-flex flex-col sm:flex-row items-center gap-4 hero-fade"
             style={{ animationDelay: "1.2s" }}
           >
-            <a
-              href="#magic-dinner"
+            <Link
+              to="/tickets/magic-dinner-summer-edition"
               className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"
             >
-              Magic-Dinner-Abende
+              Tisch reservieren
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
+            </Link>
             <a
-              href="#aktuelle-show"
+              href="#magic-dinner"
               className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
             >
-              Tour-Show 2026
+              Details
               <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
         </div>
-        <div className="relative mt-20 md:mt-28">
+        <div className="relative mt-16 md:mt-24">
           <div
-            className="hero-overshoot inline-flex flex-wrap items-baseline gap-x-5 md:gap-x-7 gap-y-2 text-white/85 text-xs md:text-sm tracking-[0.04em]"
+            className="hero-overshoot flex flex-wrap items-baseline gap-x-4 md:gap-x-7 gap-y-2 text-white/85 text-xs md:text-sm tracking-[0.04em]"
             style={{ animationDelay: "2.0s" }}
           >
             <span className="inline-flex items-baseline gap-1.5">
               <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-                90
+                11.07.2026
               </strong>
-              <span className="text-white/65">Min Show</span>
+              <span className="text-white/65">Sa, ab 19:00</span>
             </span>
-            <span aria-hidden className="text-white/30">
-              ·
-            </span>
+            <span aria-hidden className="text-white/30">·</span>
             <span className="inline-flex items-baseline gap-1.5">
               <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-                22.02.2026
+                50
               </strong>
-              <span className="text-white/65">Premiere</span>
+              <span className="text-white/65">Plätze max.</span>
             </span>
-            <span aria-hidden className="text-white/30">
-              ·
-            </span>
+            <span aria-hidden className="text-white/30">·</span>
             <span className="inline-flex items-baseline gap-1.5">
               <strong className="font-display font-bold text-white text-base md:text-lg">
-                Alte Mälzerei
+                Sinzing
               </strong>
-              <span className="text-white/65">Regensburg</span>
-            </span>
-            <span aria-hidden className="text-white/30">
-              ·
-            </span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-                50+
-              </strong>
-              <span className="text-white/65">Plätze pro Termin</span>
+              <span className="text-white/65">bei Regensburg</span>
             </span>
           </div>
         </div>
@@ -743,37 +730,16 @@ const TourDatenSection = () => {
 /* ═══════════════════════════════════════════════════════════
    MAGIC-DINNER-ABENDE — Editorial-Split mit Wald & Wiese
    ═══════════════════════════════════════════════════════════ */
-const DINNER_TERMINE = [
-  {
-    date: "11. Juli 2026",
-    label: "Summer Edition",
-    sub: "Terrasse + Innenbereich · Drei-Gänge optional",
-    status: "Vorverkauf",
-  },
-  {
-    date: "19. September 2026",
-    label: "Herbst Edition",
-    sub: "Wild-Menü auf Wunsch · Innenraum",
-    status: "Vorverkauf",
-  },
-  {
-    date: "14. November 2026",
-    label: "Winter Edition",
-    sub: "Glühwein-Aperitif · Kerzenschein",
-    status: "Demnächst",
-  },
-  {
-    date: "16. Januar 2027",
-    label: "Neujahrs Edition",
-    sub: "Drei-Gänge inklusive · After-Show-Bar",
-    status: "Demnächst",
-  },
-];
+const SUMMER_EDITION = {
+  date: "11. Juli 2026",
+  label: "Summer Edition",
+  sub: "Terrasse + Innenbereich · Drei-Gänge optional",
+  status: "Vorverkauf",
+};
 
 const MagicDinnerAbendeSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const SUMMER = DINNER_TERMINE[0];
-  const REST = DINNER_TERMINE.slice(1);
+  const SUMMER = SUMMER_EDITION;
   return (
     <section
       id="magic-dinner"
@@ -897,60 +863,6 @@ const MagicDinnerAbendeSection = () => {
             </span>
           </div>
         </Link>
-
-        {/* Sub-Liste der weiteren Editionen */}
-        {REST.length > 0 && (
-          <div className="mt-14 md:mt-20">
-            <p
-              className="text-[10px] tracking-[0.18em] uppercase font-bold mb-5"
-              style={{ color: ACCENT }}
-            >
-              Weitere Termine 2026 / 2027
-            </p>
-            <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
-              {REST.map((d) => (
-                <li
-                  key={d.date}
-                  className="grid grid-cols-[1fr_auto] md:grid-cols-[180px_1fr_auto] gap-4 md:gap-8 py-5 md:py-6 items-baseline"
-                >
-                  <span
-                    className="font-display text-base md:text-lg font-bold tabular-nums block"
-                    style={{ color: ACCENT }}
-                  >
-                    {d.date}
-                  </span>
-                  <div>
-                    <span className="font-display text-base md:text-lg font-bold text-foreground block">
-                      {d.label}
-                    </span>
-                    <p className="text-sm text-foreground/55 mt-0.5">
-                      {d.sub}
-                    </p>
-                  </div>
-                  <span
-                    className="inline-flex items-center px-3 py-1 rounded-full text-[10px] tracking-[0.14em] uppercase font-bold whitespace-nowrap"
-                    style={{
-                      background:
-                        d.status === "Vorverkauf"
-                          ? `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`
-                          : "transparent",
-                      color:
-                        d.status === "Vorverkauf"
-                          ? "#ffffff"
-                          : ACCENT_DEEP,
-                      border:
-                        d.status === "Vorverkauf"
-                          ? "none"
-                          : `1px solid ${ACCENT}55`,
-                    }}
-                  >
-                    {d.status}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </section>
   );
@@ -2291,14 +2203,8 @@ const Tickets = () => (
         <Hero />
         <MagicDinnerAbendeSection />
         <WasErwartetDichSection />
-        <TicketKategorienSection />
-        <PullQuoteSection />
-        <LocationsSection />
-        <AktuelleTourShowSection />
-        <VideoSection />
         <StimmenSection />
         <FAQSection />
-        <CustomQuizSection config={ticketsQuizConfig} />
         <NewsletterCTASection />
         <FinalCTA />
       </main>

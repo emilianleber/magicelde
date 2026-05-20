@@ -590,7 +590,7 @@ const ReservierungsSection = () => {
 
           <div className={`lg:col-span-7`} style={{ animationDelay: "0.15s" }}>
             <div
-              className="rounded-3xl p-7 md:p-10 bg-[hsl(0,0%,98%)]"
+              className="rounded-3xl p-5 sm:p-7 md:p-10 bg-[hsl(0,0%,98%)]"
               style={{ border: "1px solid rgba(0,0,0,0.06)" }}
             >
               {submitted ? (
@@ -679,13 +679,14 @@ const ReservierungsSection = () => {
                   />
                   <button
                     type="submit"
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-full py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-transform hover:scale-[1.02]"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-[11px] sm:text-[12px] tracking-[0.06em] sm:tracking-[0.08em] font-semibold uppercase text-white transition-transform hover:scale-[1.02]"
                     style={{
                       background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
                     }}
                   >
-                    Reservierungs-Anfrage senden
-                    <ArrowRight className="w-4 h-4" />
+                    <span className="sm:hidden">Anfrage senden</span>
+                    <span className="hidden sm:inline">Reservierungs-Anfrage senden</span>
+                    <ArrowRight className="w-4 h-4 shrink-0" />
                   </button>
                   <p className="text-xs text-foreground/55 leading-[1.55] text-center pt-2">
                     Wir geben deine Anfrage ans Restaurant weiter. Email mit
