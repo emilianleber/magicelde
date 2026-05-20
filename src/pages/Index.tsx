@@ -193,7 +193,7 @@ const Hero = () => {
         ))}
       </div>
 
-      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col justify-center md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-5xl">
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
@@ -233,7 +233,7 @@ const Hero = () => {
           </p>
 
           <div
-            className="mt-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 hero-fade"
+            className="mt-10 inline-flex flex-col sm:flex-row items-center sm:items-center gap-4 hero-fade"
             style={{ animationDelay: "1.2s" }}
           >
             <a
@@ -444,7 +444,6 @@ const FORMATE = [
 
 const FormateSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const [active, setActive] = useState(0);
   return (
     <section
       ref={ref}
@@ -459,7 +458,7 @@ const FormateSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wählt euer{" "}
-              <span style={{ color: ACCENT }}>
+              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Hauptformat
               </span>
               .
@@ -467,148 +466,60 @@ const FormateSection = () => {
           </div>
           <div className="md:col-span-5 md:pt-8">
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Bühne, Close-Up oder Magic Dinner — jedes Format hat seine eigene
-              Dramaturgie. Klickt euch durch die drei, danach geht es weiter
-              zur jeweiligen Format-Page mit allen Details.
+              Bühne, Close-Up oder Magic Dinner — jedes Format hat seine
+              eigene Dramaturgie.
             </p>
           </div>
         </div>
 
         <div
-          className={`grid lg:grid-cols-12 gap-8 lg:gap-12 items-start ${
+          className={`grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <div className="lg:col-span-5 space-y-3">
-            {FORMATE.map((f, i) => {
-              const isActive = active === i;
-              return (
-                <button
-                  key={f.name}
-                  type="button"
-                  onClick={() => setActive(i)}
-                  onMouseEnter={() => setActive(i)}
-                  className={`group relative block w-full text-left rounded-2xl px-6 py-6 md:px-7 md:py-7 transition-all duration-500 overflow-hidden ${
-                    isActive
-                      ? "bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.18)]"
-                      : "hover:bg-white/60"
-                  }`}
-                  style={{
-                    borderLeft: `3px solid ${isActive ? f.accent : "rgba(0,0,0,0.08)"}`,
-                  }}
-                >
-                  <div className="flex items-start gap-5">
-                    <span
-                      className={`${SERIF_ITALIC} text-3xl md:text-4xl leading-none shrink-0 transition-colors duration-500`}
-                      style={{
-                        color: isActive ? f.accent : "rgba(0,0,0,0.28)",
-                      }}
-                    >
-                      0{i + 1}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p
-                        className={`text-[11px] tracking-[0.14em] uppercase font-semibold mb-1.5 transition-colors duration-500 ${
-                          isActive ? "text-foreground/70" : "text-foreground/40"
-                        }`}
-                      >
-                        {f.eyebrow}
-                      </p>
-                      <h3
-                        className={`${SERIF_ITALIC} font-display text-xl md:text-2xl font-bold leading-tight transition-colors duration-500 ${
-                          isActive ? "text-foreground" : "text-foreground/55"
-                        }`}
-                      >
-                        {f.name}
-                      </h3>
-                      <div
-                        className="overflow-hidden transition-all duration-500 ease-out"
-                        style={{
-                          maxHeight: isActive ? "320px" : "0px",
-                          opacity: isActive ? 1 : 0,
-                        }}
-                      >
-                        <p className="mt-4 text-base text-foreground/65 leading-[1.65]">
-                          {f.body}
-                        </p>
-                        <ul className="mt-4 space-y-1.5">
-                          {f.bullets.map((b) => (
-                            <li
-                              key={b}
-                              className="text-sm md:text-base text-foreground/65"
-                            >
-                              · {b}
-                            </li>
-                          ))}
-                        </ul>
-                        <Link
-                          to={f.href}
-                          className="inline-flex items-center gap-1.5 mt-5 text-[12px] tracking-[0.08em] uppercase font-semibold transition-colors"
-                          style={{ color: f.accent }}
-                        >
-                          {f.name} entdecken
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="lg:col-span-7 lg:sticky lg:top-24">
-            <div
-              className="relative overflow-hidden h-[420px] md:h-[520px] lg:h-[600px]"
-              style={{
-                borderRadius: "1.25rem",
-                boxShadow:
-                  "0 50px 100px -30px rgba(40,20,10,0.5), 0 15px 35px -15px rgba(40,20,10,0.25)",
-              }}
+          {FORMATE.map((f, i) => (
+            <Link
+              key={f.name}
+              to={f.href}
+              className="group relative overflow-hidden block h-[300px] md:h-[460px] text-white transition-transform duration-500 hover:-translate-y-1"
+              style={{ borderRadius: "1.25rem" }}
             >
-              {FORMATE.map((f, i) => (
-                <img
-                  key={f.name}
-                  src={f.img}
-                  alt={`${f.name} mit Emilian Leber`}
-                  className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ease-out"
-                  style={{ opacity: active === i ? 1 : 0 }}
-                  loading="lazy"
-                />
-              ))}
+              <img
+                src={f.img}
+                alt={`${f.name} mit Emilian Leber`}
+                className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+                loading="lazy"
+              />
               <div
                 aria-hidden
-                className="absolute inset-0 pointer-events-none"
+                className="absolute inset-0"
                 style={{
                   background:
-                    "linear-gradient(180deg, transparent 50%, rgba(8,6,12,0.78) 100%)",
+                    "linear-gradient(180deg, rgba(8,6,12,0.18) 0%, rgba(8,6,12,0.40) 55%, rgba(8,6,12,0.82) 100%)",
                 }}
               />
-              <div className="absolute bottom-5 left-5 right-5 md:bottom-7 md:left-7 md:right-7">
-                <div
-                  className="relative rounded-2xl px-5 py-4 md:px-6 md:py-5 overflow-hidden max-w-md"
-                  style={{
-                    background:
-                      "linear-gradient(155deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0.04) 100%)",
-                    backdropFilter: "blur(34px) saturate(170%)",
-                    WebkitBackdropFilter: "blur(34px) saturate(170%)",
-                    border: "1px solid rgba(255,255,255,0.22)",
-                    boxShadow:
-                      "0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.45)",
-                  }}
+              <div className="absolute top-5 left-5 md:top-7 md:left-7">
+                <span
+                  className={`${SERIF_ITALIC} text-2xl md:text-3xl leading-none drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]`}
+                  style={{ color: f.accent }}
                 >
-                  <p
-                    className={`text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
-                  >
-                    Format {String(active + 1).padStart(2, "0")}
-                  </p>
-                  <p className="font-display text-base md:text-lg text-white font-bold leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
-                    {FORMATE[active].name} · {FORMATE[active].eyebrow}
-                  </p>
-                </div>
+                  0{i + 1}
+                </span>
               </div>
-            </div>
-          </div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                <p className="text-xs md:text-sm text-white/85 mb-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+                  {f.eyebrow}
+                </p>
+                <h3 className="font-display text-2xl md:text-[1.85rem] font-bold leading-tight mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+                  {f.name}
+                </h3>
+                <span className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.1em] uppercase font-bold text-white/90 group-hover:text-white">
+                  Entdecken
+                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
@@ -995,8 +906,8 @@ const FirmenfeierBookingCard = () => (
         "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
     }}
   >
-    {/* Animiertes Booking-Confirmation-Mockup — auf Mobile ausgeblendet (zu voll) */}
-    <div className="relative flex-[1.5] px-5 py-8 md:px-7 md:py-10 hidden md:flex items-center justify-center bg-foreground/[0.03] overflow-hidden">
+    {/* Animiertes Booking-Confirmation-Mockup */}
+    <div className="relative flex-[1.5] px-5 py-6 md:px-7 md:py-10 flex items-center justify-center bg-foreground/[0.03] overflow-hidden">
       <div
         className="w-full max-w-[260px] rounded-xl bg-white px-3.5 py-3 md:px-4 md:py-3.5 transition-transform duration-500 group-hover:-translate-y-1"
         style={{
@@ -1072,7 +983,7 @@ const FirmenfeierBookingCard = () => (
       <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-2">
         Firmenfeier
       </h3>
-      <p className="hidden md:block text-sm text-foreground/65 leading-[1.55] max-w-md">
+      <p className="text-sm text-foreground/65 leading-[1.55] max-w-md">
         Vorstandsdinner, Kundenabend, Galaabend, Mitarbeiterfeier. Auch der
         schweigsamste Vorstand zückt nach drei Minuten Karten.
       </p>
@@ -1100,7 +1011,7 @@ const GeburtstagAlterCard = () => {
           "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
       }}
     >
-      <div className="relative flex-[1.5] p-4 md:p-5 hidden md:flex flex-col items-center justify-center bg-foreground/[0.03] overflow-hidden gap-5">
+      <div className="relative flex-[1.5] p-4 md:p-5 flex flex-col items-center justify-center bg-foreground/[0.03] overflow-hidden gap-4 md:gap-5">
         {/* Kuchen mit Kerzen */}
         <div className="relative">
           <div
@@ -1201,7 +1112,7 @@ const GeburtstagAlterCard = () => {
         <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-2">
           Geburtstag · Jubiläum
         </h3>
-        <p className="hidden md:block text-sm text-foreground/65 leading-[1.55] max-w-md">
+        <p className="text-sm text-foreground/65 leading-[1.55] max-w-md">
           Anekdoten der Familie eingebaut, Tisch-zu-Tisch oder eine kleine
           Bühnenshow zwischen den Reden. Ab fünfzig Gäste sehr stark.
         </p>

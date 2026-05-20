@@ -241,150 +241,92 @@ const Navigation = () => {
             </button>
           </div>
 
-          {/* Mobile Body */}
-          <div className="px-6 py-8 pb-20">
-            {/* Trust strip */}
-            <div className="flex items-center gap-4 mb-10 pb-7 border-b border-foreground/10">
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <div>
-                <p className="font-display font-bold text-foreground text-sm leading-tight">
-                  5,0 · 30+ Bewertungen
-                </p>
-                <p className={`text-xs text-foreground/55`}>
-                  Antwort innerhalb 24 h
-                </p>
-              </div>
-            </div>
-
-            {/* Anlässe Section */}
-            <div className="mb-10">
-              <p className={`text-base text-foreground/55 mb-4 px-1`}>
-                Anlässe.
-              </p>
-              <div className="grid gap-2">
-                {ANLAESSE.map((item, i) => (
+          {/* Mobile Body — schlanke Liste */}
+          <div className="px-6 py-6 pb-16">
+            {/* Anlässe */}
+            <p className="text-[10px] tracking-[0.22em] uppercase font-semibold text-foreground/45 mb-3">
+              Anlässe
+            </p>
+            <ul className="border-y border-foreground/10 divide-y divide-foreground/10 mb-8">
+              {ANLAESSE.map((item) => (
+                <li key={item.to}>
                   <Link
-                    key={item.to}
                     to={item.to}
-                    className="group relative flex items-center justify-between px-4 py-4 rounded-2xl bg-foreground/[0.03] border border-foreground/8 transition-all duration-300 hover:bg-foreground/[0.06] hover:border-foreground/15 hover:-translate-y-0.5 hover:shadow-[0_15px_30px_-15px_rgba(0,0,0,0.15)]"
-                    style={{ animationDelay: `${i * 0.04}s` }}
+                    className="flex items-center justify-between py-3.5 group"
                   >
-                    <div>
-                      <p className="font-display font-bold text-foreground text-base leading-tight">
-                        {item.label}
-                      </p>
-                      <p className={`text-sm text-foreground/55 mt-0.5`}>
-                        {item.sub}
-                      </p>
-                    </div>
-                    <ArrowRight
-                      className="w-4 h-4 transition-all group-hover:translate-x-1"
-                      style={{ color: ACCENT }}
-                    />
+                    <span className="font-display font-semibold text-foreground text-base">
+                      {item.label}
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-foreground/30 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
                   </Link>
-                ))}
-              </div>
-            </div>
+                </li>
+              ))}
+            </ul>
 
-            {/* Konzepte Section */}
-            <div className="mb-10">
-              <p className={`text-base text-foreground/55 mb-4 px-1`}>
-                Konzepte.
-              </p>
-              <div className="grid gap-2">
-                {KONZEPTE.map((item, i) => (
+            {/* Konzepte */}
+            <p className="text-[10px] tracking-[0.22em] uppercase font-semibold text-foreground/45 mb-3">
+              Konzepte
+            </p>
+            <ul className="border-y border-foreground/10 divide-y divide-foreground/10 mb-8">
+              {KONZEPTE.map((item) => (
+                <li key={item.to}>
                   <Link
-                    key={item.to}
                     to={item.to}
-                    className="group relative flex items-center justify-between px-4 py-4 rounded-2xl bg-foreground/[0.03] border border-foreground/8 transition-all duration-300 hover:bg-foreground/[0.06] hover:border-foreground/15 hover:-translate-y-0.5 hover:shadow-[0_15px_30px_-15px_rgba(0,0,0,0.15)]"
-                    style={{ animationDelay: `${i * 0.04}s` }}
+                    className="flex items-center justify-between py-3.5 group"
                   >
-                    <div>
-                      <p className="font-display font-bold text-foreground text-base leading-tight">
-                        {item.label}
-                      </p>
-                      <p className={`text-sm text-foreground/55 mt-0.5`}>
-                        {item.sub}
-                      </p>
-                    </div>
-                    <ArrowRight
-                      className="w-4 h-4 transition-all group-hover:translate-x-1"
-                      style={{ color: ACCENT }}
-                    />
+                    <span className="font-display font-semibold text-foreground text-base">
+                      {item.label}
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-foreground/30 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
                   </Link>
-                ))}
-              </div>
-            </div>
+                </li>
+              ))}
+            </ul>
 
-            {/* Mehr Section */}
-            <div className="mb-10">
-              <p className={`text-base text-foreground/55 mb-4 px-1`}>
-                Mehr.
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { to: "/ueber-mich", label: "Über mich" },
-                  { to: "/referenzen", label: "Referenzen" },
-                  { to: "/tickets", label: "Tickets" },
-                  { to: "/blog", label: "Magazin" },
-                  { to: "/faq", label: "FAQ" },
-                  { to: "/kontakt", label: "Kontakt" },
-                ].map((item) => (
+            {/* Mehr */}
+            <p className="text-[10px] tracking-[0.22em] uppercase font-semibold text-foreground/45 mb-3">
+              Mehr
+            </p>
+            <ul className="border-y border-foreground/10 divide-y divide-foreground/10 mb-8">
+              {[
+                { to: "/ueber-mich", label: "Über mich" },
+                { to: "/referenzen", label: "Referenzen" },
+                { to: "/tickets", label: "Tickets" },
+                { to: "/blog", label: "Magazin" },
+                { to: "/faq", label: "FAQ" },
+                { to: "/kontakt", label: "Kontakt" },
+              ].map((item) => (
+                <li key={item.to}>
                   <Link
-                    key={item.to}
                     to={item.to}
-                    className="px-4 py-3 rounded-xl text-sm font-medium text-foreground/75 bg-foreground/[0.02] hover:bg-foreground/[0.06] hover:text-foreground transition-colors text-center"
+                    className="flex items-center justify-between py-3.5 group"
                   >
-                    {item.label}
+                    <span className="font-display font-semibold text-foreground text-base">
+                      {item.label}
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-foreground/30 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
                   </Link>
-                ))}
-              </div>
-            </div>
+                </li>
+              ))}
+            </ul>
 
-            {/* Big CTA */}
-            <div className="space-y-3">
+            {/* CTAs */}
+            <div className="flex flex-col gap-3">
               <Link
                 to="/buchung"
-                className="group inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white w-full transition-all hover:scale-[1.02]"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 18px 40px -10px rgba(0,0,0,0.040)",
-                }}
+                className="group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white w-full transition-transform hover:scale-[1.01]"
+                style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})` }}
               >
                 Jetzt anfragen
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <a
                 href="tel:+4915563744696"
-                className="inline-flex items-center justify-center gap-2 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-foreground w-full border border-foreground/15 hover:bg-foreground/[0.04] transition-colors"
+                className="inline-flex items-center justify-center gap-2 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground/70 hover:text-foreground transition-colors"
               >
                 Direkt anrufen
                 <ArrowUpRight className="w-4 h-4" />
               </a>
-            </div>
-
-            {/* Bottom Info */}
-            <div className="mt-10 pt-7 border-t border-foreground/10 grid grid-cols-2 gap-4 text-center">
-              <div>
-                <p className={`text-sm text-foreground/55 mb-0.5`}>
-                  Standort
-                </p>
-                <p className="font-display font-bold text-foreground text-sm">
-                  Bayern · DE
-                </p>
-              </div>
-              <div>
-                <p className={`text-sm text-foreground/55 mb-0.5`}>
-                  Erfahrung
-                </p>
-                <p className="font-display font-bold text-foreground text-sm">
-                  200+ Events seit 2016
-                </p>
-              </div>
             </div>
           </div>
         </div>

@@ -115,7 +115,7 @@ const Hero = () => {
         />
       </div>
 
-      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
+      <div className="relative z-10 min-h-[78vh] md:min-h-screen container px-6 flex flex-col justify-center md:justify-between pt-28 md:pt-32 pb-10 md:pb-20">
         <div className="max-w-4xl">
           <div
             className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-7 hero-fade"
@@ -193,7 +193,7 @@ const Hero = () => {
           </p>
 
           <div
-            className="mt-9 flex flex-col sm:flex-row items-center sm:items-start gap-4 hero-fade"
+            className="mt-9 inline-flex flex-col sm:flex-row items-center sm:items-center gap-4 hero-fade"
             style={{ animationDelay: "1.15s" }}
           >
             <a
