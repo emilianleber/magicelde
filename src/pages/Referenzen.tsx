@@ -69,7 +69,7 @@ const Hero = () => {
       className="relative overflow-hidden"
       style={{
         background:
-          "linear-gradient(170deg, #fbf3e3 0%, #fafafa 45%, #efe1c5 100%)",
+          "linear-gradient(170deg, #fafafa 0%, #ffffff 50%, #fafafa 100%)",
       }}
     >
       <HeroKeyframes />

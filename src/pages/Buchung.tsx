@@ -270,7 +270,7 @@ const Buchung = () => {
             {/* Formular */}
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Name + Email */}
-              <div className="grid grid-cols-[100px_1fr] sm:grid-cols-[120px_1fr_1fr_1fr] gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-[120px_1fr_1fr_1fr] gap-3">
                 <select
                   name="anrede"
                   className={inputCls}
@@ -303,7 +303,7 @@ const Buchung = () => {
                   placeholder="E-Mail *"
                   required
                   defaultValue={prefill.email}
-                  className={`${inputCls} col-span-2 sm:col-span-1`}
+                  className={inputCls}
                 />
               </div>
 

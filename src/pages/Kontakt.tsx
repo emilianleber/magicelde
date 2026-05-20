@@ -1919,11 +1919,15 @@ const Kontakt = () => (
         <Hero />
         <DreiKontaktwege />
         <KontaktformularSection />
-        <AntwortzeitenHeatmap />
+        <div className="hidden md:block">
+          <AntwortzeitenHeatmap />
+        </div>
         <ShowPlanerVorschlag />
         <PullQuote />
         <HäufigeAnliegen />
-        <StandortMap />
+        <div className="hidden md:block">
+          <StandortMap />
+        </div>
         <VertrauenStrip />
         <SocialStrip />
         <FinalCTA />

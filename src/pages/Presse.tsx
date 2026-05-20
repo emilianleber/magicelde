@@ -923,19 +923,19 @@ const EPKDownloadSection = () => {
                 {EPK_ATTACHMENTS.map((a) => (
                   <li
                     key={a.name}
-                    className="flex items-center justify-between gap-4 py-2.5 px-3 rounded-lg hover:bg-foreground/[0.03] transition-colors"
+                    className="flex items-center justify-between gap-3 py-2.5 px-3 rounded-lg hover:bg-foreground/[0.03] transition-colors min-w-0"
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
                       <FileText
                         className="w-4 h-4 shrink-0"
                         style={{ color: ACCENT }}
                         strokeWidth={1.75}
                       />
-                      <span className="text-sm text-foreground/80 truncate font-mono">
+                      <span className="text-xs md:text-sm text-foreground/80 truncate font-mono min-w-0">
                         {a.name}
                       </span>
                     </div>
-                    <span className="text-[11px] tabular-nums text-foreground/45 shrink-0">
+                    <span className="text-[10px] md:text-[11px] tabular-nums text-foreground/45 shrink-0">
                       {a.size}
                     </span>
                   </li>
