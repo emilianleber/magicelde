@@ -8,7 +8,7 @@ import {
 } from "@/components/landing/CustomQuiz";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { captureEmail } from "@/lib/emailCapture";
-import { sendInquiry } from "@/lib/sendInquiry";
+import { subscribeNewsletter } from "@/lib/sendInquiry";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 import {
   ArrowRight,
@@ -1670,12 +1670,9 @@ const NewsletterCTASection = () => {
     }
     captureEmail(email, "tickets-newsletter");
     try {
-      await sendInquiry({
-        name: "Newsletter-Anmeldung",
+      await subscribeNewsletter({
         email,
-        anlass: "Newsletter · Tickets",
-        nachricht:
-          "Newsletter-Anmeldung über die Tickets-Seite — bitte über neue Magic-Dinner-Termine und Specials informieren.",
+        source: "tickets-newsletter",
       });
       setSubmitted(true);
     } catch (err) {

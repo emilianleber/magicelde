@@ -24,6 +24,7 @@ const AdminEventDetail = lazy(() => import("@/pages/AdminEventDetail"));
 const AdminNewRequest = lazy(() => import("@/pages/AdminNewRequest"));
 const AdminNewEvent = lazy(() => import("@/pages/AdminNewEvent"));
 const AdminMails = lazy(() => import("@/pages/AdminMails"));
+const AdminNewsletter = lazy(() => import("@/pages/AdminNewsletter"));
 const AdminCustomers = lazy(() => import("@/pages/AdminCustomers"));
 const AdminCustomerDetail = lazy(() => import("@/pages/AdminCustomerDetail"));
 const AdminNewCustomer = lazy(() => import("@/pages/AdminNewCustomer"));
@@ -79,6 +80,7 @@ const AGB = lazy(() => import("./pages/AGB.tsx"));
 const StadtSeite = lazy(() => import("./pages/StadtSeite.tsx"));
 const KundenportalLogin = lazy(() => import("./pages/KundenportalLogin.tsx"));
 const Kundenportal = lazy(() => import("./pages/Kundenportal.tsx"));
+const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
@@ -193,6 +195,7 @@ const AdminRoutes = () => (
 
       {/* Mails & Todos */}
       <Route path="/admin/mails" element={<AdminMails />} />
+      <Route path="/admin/newsletter" element={<AdminNewsletter />} />
       <Route path="/admin/todos" element={<AdminTodos />} />
 
       {/* Kundenportal (Admin-Preview-Modus) — Admin sieht Portal aus Kundensicht */}
@@ -235,6 +238,7 @@ const PublicRoutes = () => (
     <Route path="/zauberer/:stadt" element={<StadtSeite />} />
     <Route path="/kundenportal/login" element={<KundenportalLogin />} />
     <Route path="/kundenportal" element={<Kundenportal />} />
+    <Route path="/unsubscribe" element={<Unsubscribe />} />
     {/* Block admin on public domain */}
     <Route path="/admin/*" element={<Navigate to="/" replace />} />
     <Route path="*" element={<NotFound />} />
@@ -295,6 +299,7 @@ const App = () => (
               <Route path="/zauberer/:stadt" element={<StadtSeite />} />
               <Route path="/kundenportal/login" element={<KundenportalLogin />} />
               <Route path="/kundenportal" element={<Kundenportal />} />
+              <Route path="/unsubscribe" element={<Unsubscribe />} />
 
               {/* Login / Passwort ohne Shell */}
               <Route path="/admin/login" element={<AdminLogin />} />
@@ -360,6 +365,7 @@ const App = () => (
                 <Route path="/admin/artikel" element={<AdminArtikel />} />
                 {/* Mails & Todos */}
                 <Route path="/admin/mails" element={<AdminMails />} />
+      <Route path="/admin/newsletter" element={<AdminNewsletter />} />
                 <Route path="/admin/todos" element={<AdminTodos />} />
                 <Route path="*" element={<Navigate to="/admin" replace />} />
               </Route>

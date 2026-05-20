@@ -10,7 +10,7 @@ import {
   type BlogPost,
 } from "@/data/blogPosts";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
-import { sendInquiry } from "@/lib/sendInquiry";
+import { subscribeNewsletter } from "@/lib/sendInquiry";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -840,12 +840,10 @@ const NewsletterSignup = () => {
     setError(null);
     if (!email.includes("@")) return;
     try {
-      await sendInquiry({
-        name: name.trim() || "Newsletter-Anmeldung",
+      await subscribeNewsletter({
         email,
-        anlass: "Newsletter · Magazin",
-        nachricht:
-          "Newsletter-Anmeldung über die Magazin-Seite — bitte vierteljährliche Magazin-Updates schicken.",
+        name: name.trim() || undefined,
+        source: "blog-newsletter",
       });
       markEmailSubmitted();
       setSent(true);
