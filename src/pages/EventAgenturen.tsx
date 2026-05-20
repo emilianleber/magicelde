@@ -59,8 +59,8 @@ const HeroKeyframes = () => (
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
     @keyframes heroStarPulse {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); }
+      50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -78,18 +78,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Event-Agentur-", "Partner."];
 const HEADLINE_ITALIC = ["Schnellangebot", "in", "8", "h."];
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -116,10 +105,10 @@ const Hero = () => {
     <section className="relative bg-[#08060c] text-white min-h-screen overflow-hidden">
       <HeroKeyframes />
       <div ref={photoRef} className="absolute inset-0 hero-photo-wrap hero-zoom" style={{ willChange: "transform" }}>
-        <img src={heroFirmenfeierImg} alt="Zauberkünstler für Event-Agenturen — Emilian Leber" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "saturate(0.92) contrast(1.08) brightness(0.7)" }} loading="eager" />
+        <img src={heroFirmenfeierImg} alt="Zauberkünstler für Event-Agenturen — Emilian Leber" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "brightness(0.78)" }} loading="eager" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)" }} />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)" }} />
-        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)" }} />
+        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)" }} />
       </div>
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
         {BOKEH.map((b, i) => (
@@ -136,9 +125,6 @@ const Hero = () => {
             <span aria-hidden className="hidden md:block h-4 w-px bg-white/25" />
             <span className="text-sm text-white/80"><strong className="font-semibold text-white">B2B-Partner für Eventagenturen</strong></span>
           </div>
-          <p className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`} style={{ animationDelay: "0.18s" }}>
-            Für Eventagenturen & Veranstaltungsplaner.
-          </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
@@ -214,7 +200,7 @@ const SchnittstellenSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wie wir mit Agenturen arbeiten.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Klare{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Schnittstellen</span>. Keine Überraschungen.
+              <span style={{ color: ACCENT }}>Schnittstellen</span>. Keine Überraschungen.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -228,8 +214,8 @@ const SchnittstellenSection = () => {
 
         <div className={`grid md:grid-cols-2 gap-5 md:gap-6`}>
           {SCHNITTSTELLEN.map((s, i) => (
-            <article key={s.role} className="relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -25px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+            <article key={s.role} className="relative bg-[hsl(0,0%,98%)] p-8 md:p-10" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -25px rgba(0,0,0,0.090), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
                 <s.icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
               <p className="text-[11px] tracking-[0.18em] uppercase font-semibold mb-3" style={{ color: ACCENT }}>Schnittstelle {String(i + 1).padStart(2, "0")}</p>
@@ -258,14 +244,14 @@ const SchnittstellenSection = () => {
 const VorteileSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10 overflow-hidden">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10 overflow-hidden">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Sechs Gründe für Agenturen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Was Eventagenturen bei uns{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>konkret bekommen</span>.
+              <span style={{ color: ACCENT }}>konkret bekommen</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -285,7 +271,7 @@ const VorteileSection = () => {
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
-                  "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                  "0 50px 100px -30px rgba(0,0,0,0.200), 0 15px 35px -15px rgba(0,0,0,0.100), inset 0 0 0 1px rgba(0,0,0,0.05)",
               }}
             >
               {/* Mock-Email-Header */}
@@ -300,12 +286,12 @@ const VorteileSection = () => {
                 <p className="text-[10px] tracking-[0.16em] uppercase font-bold text-foreground/65">
                   Antwort · 6 h 23 min
                 </p>
-                <span className={`${SERIF_ITALIC} text-[11px] text-foreground/45 ml-auto`}>
+                <span className={`text-[11px] text-foreground/45 ml-auto`}>
                   Heute · 17:34
                 </span>
               </div>
               <p
-                className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-2`}
+                className={`text-sm text-foreground/55 mb-2`}
               >
                 Re: Anfrage Gala-Abend
               </p>
@@ -340,13 +326,13 @@ const VorteileSection = () => {
                 className="absolute top-3 right-3 rounded-full px-3 py-1.5 text-[10px] tracking-[0.14em] uppercase font-bold text-white"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 6px 14px -4px rgba(154,38,64,0.45)",
+                  boxShadow: "0 6px 14px -4px rgba(0,0,0,0.040)",
                 }}
               >
                 in 8 h
               </div>
             </div>
-            <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-5 text-center max-w-sm mx-auto`}>
+            <p className={`text-sm text-foreground/55 mt-5 text-center max-w-sm mx-auto`}>
               Typische Schnellangebots-Mail nach Erstanfrage einer Agentur.
             </p>
           </div>
@@ -410,7 +396,7 @@ const SchnellangebotSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Schnellangebot.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5vw,4.5rem)] text-foreground mb-8">
               In{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>8 Stunden</span>{" "}
+              <span style={{ color: ACCENT }}>8 Stunden</span>{" "}
               auf eurem Schreibtisch.
             </h2>
             <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-7">
@@ -439,8 +425,8 @@ const SchnellangebotSection = () => {
               action="mailto:el@magicel.de"
               method="POST"
               encType="text/plain"
-              className="bg-[hsl(30,8%,98.5%)] p-7 md:p-9 space-y-4"
-              style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(40,20,40,0.2), inset 0 0 0 1px rgba(0,0,0,0.04)" }}
+              className="bg-[hsl(0,0%,98%)] p-7 md:p-9 space-y-4"
+              style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(0,0,0,0.100), inset 0 0 0 1px rgba(0,0,0,0.04)" }}
             >
               <div className="grid sm:grid-cols-2 gap-3">
                 <input name="agentur" required placeholder="Agentur-Name" className="w-full rounded-xl bg-white border border-foreground/12 px-4 py-3 text-sm placeholder:text-foreground/40 focus:outline-none focus:border-foreground/40 transition-colors" />
@@ -470,7 +456,7 @@ const SchnellangebotSection = () => {
                 <label htmlFor="whitelabel" className="text-sm text-foreground/70">White-Label gewünscht (kein Eigen-Branding im Auftritt)</label>
               </div>
 
-              <button type="submit" className="w-full inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white transition-all hover:scale-[1.01]" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
+              <button type="submit" className="w-full inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white transition-all hover:scale-[1.01]" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)" }}>
                 Schnellangebot anfragen<ArrowRight className="w-4 h-4" />
               </button>
               <p className="text-[11px] text-foreground/45 text-center">
@@ -490,17 +476,17 @@ const SchnellangebotSection = () => {
 const AgenturCaseSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className={`lg:col-span-5`}>
-            <div className="relative overflow-hidden h-[420px] md:h-[520px]" style={{ borderRadius: "1.25rem", boxShadow: "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2)" }}>
+            <div className="relative overflow-hidden h-[420px] md:h-[520px]" style={{ borderRadius: "1.25rem", boxShadow: "0 50px 100px -30px rgba(0,0,0,0.200), 0 15px 35px -15px rgba(0,0,0,0.100)" }}>
               <img src={buehneZuschauerImg} alt="Agentur-Case-Study: Magic Camp mit 200 Gästen" className="w-full h-full object-cover object-center" loading="lazy" />
-              <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(154,38,64,0.15) 70%, rgba(92,22,34,0.7) 100%)" }} />
-              <span className={`${SERIF_ITALIC} absolute top-6 left-6 md:top-8 md:left-8 leading-none text-white`} style={{ fontSize: "clamp(4rem, 8vw, 7rem)", textShadow: "0 8px 30px rgba(0,0,0,0.45)" }}>01</span>
+              <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(0,0,0,0.040) 70%, rgba(0,0,0,0.280) 100%)" }} />
+              <span className={`absolute top-6 left-6 md:top-8 md:left-8 leading-none text-white`} style={{ fontSize: "clamp(4rem, 8vw, 7rem)", textShadow: "0 8px 30px rgba(0,0,0,0.45)" }}>01</span>
               <div className="absolute bottom-5 left-5 right-5 md:bottom-7 md:left-7 md:right-7">
                 <div className="relative rounded-2xl px-5 py-4 overflow-hidden" style={{ background: "linear-gradient(155deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0.04) 100%)", backdropFilter: "blur(34px) saturate(170%)", WebkitBackdropFilter: "blur(34px) saturate(170%)", border: "1px solid rgba(255,255,255,0.22)", boxShadow: "0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.45)" }}>
-                  <p className={`${SERIF_ITALIC} text-white/80 text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}>Agentur-Konstellation</p>
+                  <p className={`text-white/80 text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}>Agentur-Konstellation</p>
                   <p className="font-display text-base font-bold text-white leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">200 Gäste · Versicherungs-Konzern · Nähe Ingolstadt</p>
                 </div>
               </div>
@@ -510,7 +496,7 @@ const AgenturCaseSection = () => {
             <p className="text-[11px] tracking-[0.18em] uppercase font-semibold mb-4" style={{ color: ACCENT }}>Case-Study mit Agentur-Beteiligung</p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4vw,3.25rem)] text-foreground mb-8">
               Magic Camp für{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>200 Gäste</span>.
+              <span style={{ color: ACCENT }}>200 Gäste</span>.
             </h2>
             <div className="space-y-5 text-base md:text-lg leading-[1.7] text-foreground/70 mb-8">
               <p>
@@ -568,7 +554,7 @@ const FAQSection = () => {
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen aus dem Agentur-Kontext.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
-            Was Eventagenturen<br /><span className={SERIF_ITALIC}>vorher fragen.</span>
+            Was Eventagenturen<br /><span>vorher fragen.</span>
           </h2>
         </div>
         <div className={`max-w-3xl border-t border-foreground/15`}>
@@ -598,14 +584,14 @@ const FinalCTA = () => {
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Für Eventagenturen & Veranstaltungsplaner.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Schnellangebot in{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>8 Stunden</span>.
+            <span style={{ color: ACCENT_SOFT }}>8 Stunden</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
             Eckdaten an el@magicel.de — wir melden uns innerhalb des

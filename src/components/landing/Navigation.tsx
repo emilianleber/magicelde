@@ -3,8 +3,6 @@ import { Menu, X, ChevronDown, ArrowRight, ArrowUpRight, Star, Clock } from "luc
 import { Link, useLocation } from "react-router-dom";
 import logoImg from "@/assets/logo-clean.webp";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 
@@ -80,7 +78,7 @@ const Navigation = () => {
     <Link
       to={to}
       className="group/item relative block px-4 py-3.5 rounded-xl hover:bg-[var(--accent-bg)] transition-all duration-300 overflow-hidden"
-      style={{ ["--accent-bg" as never]: "rgba(154,38,64,0.06)" }}
+      style={{ ["--accent-bg" as never]: "rgba(0,0,0,0.030)" }}
     >
       {/* Hover-Akzent left border */}
       <span
@@ -103,7 +101,7 @@ const Navigation = () => {
           >
             {label}
           </span>
-          <span className={`block ${SERIF_ITALIC} text-xs text-foreground/55 mt-0.5`}>
+          <span className={`block text-xs text-foreground/55 mt-0.5`}>
             {sub}
           </span>
         </div>
@@ -144,7 +142,7 @@ const Navigation = () => {
               {activeDropdown === "anlaesse" && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3">
                   <div
-                    className="bg-white rounded-2xl border border-foreground/10 shadow-[0_40px_80px_-20px_rgba(40,20,40,0.3)] p-3 min-w-[260px] animate-fade-up"
+                    className="bg-white rounded-2xl border border-foreground/10 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.150)] p-3 min-w-[260px] animate-fade-up"
                     style={{ animationDuration: "0.25s" }}
                   >
                     {ANLAESSE.map((item) => (
@@ -167,7 +165,7 @@ const Navigation = () => {
               {activeDropdown === "konzepte" && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3">
                   <div
-                    className="bg-white rounded-2xl border border-foreground/10 shadow-[0_40px_80px_-20px_rgba(40,20,40,0.3)] p-3 min-w-[260px] animate-fade-up"
+                    className="bg-white rounded-2xl border border-foreground/10 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.150)] p-3 min-w-[260px] animate-fade-up"
                     style={{ animationDuration: "0.25s" }}
                   >
                     {KONZEPTE.map((item) => (
@@ -197,7 +195,7 @@ const Navigation = () => {
               style={{
                 background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
                 boxShadow: scrolled
-                  ? "0 10px 25px -8px rgba(154,38,64,0.18)"
+                  ? "0 10px 25px -8px rgba(0,0,0,0.040)"
                   : "0 10px 30px -6px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.1) inset",
               }}
             >
@@ -256,7 +254,7 @@ const Navigation = () => {
                 <p className="font-display font-bold text-foreground text-sm leading-tight">
                   5,0 · 30+ Bewertungen
                 </p>
-                <p className={`${SERIF_ITALIC} text-xs text-foreground/55`}>
+                <p className={`text-xs text-foreground/55`}>
                   Antwort innerhalb 24 h
                 </p>
               </div>
@@ -264,7 +262,7 @@ const Navigation = () => {
 
             {/* Anlässe Section */}
             <div className="mb-10">
-              <p className={`${SERIF_ITALIC} text-base text-foreground/55 mb-4 px-1`}>
+              <p className={`text-base text-foreground/55 mb-4 px-1`}>
                 Anlässe.
               </p>
               <div className="grid gap-2">
@@ -279,7 +277,7 @@ const Navigation = () => {
                       <p className="font-display font-bold text-foreground text-base leading-tight">
                         {item.label}
                       </p>
-                      <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-0.5`}>
+                      <p className={`text-sm text-foreground/55 mt-0.5`}>
                         {item.sub}
                       </p>
                     </div>
@@ -294,7 +292,7 @@ const Navigation = () => {
 
             {/* Konzepte Section */}
             <div className="mb-10">
-              <p className={`${SERIF_ITALIC} text-base text-foreground/55 mb-4 px-1`}>
+              <p className={`text-base text-foreground/55 mb-4 px-1`}>
                 Konzepte.
               </p>
               <div className="grid gap-2">
@@ -309,7 +307,7 @@ const Navigation = () => {
                       <p className="font-display font-bold text-foreground text-base leading-tight">
                         {item.label}
                       </p>
-                      <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-0.5`}>
+                      <p className={`text-sm text-foreground/55 mt-0.5`}>
                         {item.sub}
                       </p>
                     </div>
@@ -324,7 +322,7 @@ const Navigation = () => {
 
             {/* Mehr Section */}
             <div className="mb-10">
-              <p className={`${SERIF_ITALIC} text-base text-foreground/55 mb-4 px-1`}>
+              <p className={`text-base text-foreground/55 mb-4 px-1`}>
                 Mehr.
               </p>
               <div className="grid grid-cols-2 gap-2">
@@ -354,7 +352,7 @@ const Navigation = () => {
                 className="group inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white w-full transition-all hover:scale-[1.02]"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 18px 40px -10px rgba(154,38,64,0.5)",
+                  boxShadow: "0 18px 40px -10px rgba(0,0,0,0.040)",
                 }}
               >
                 Jetzt anfragen
@@ -372,7 +370,7 @@ const Navigation = () => {
             {/* Bottom Info */}
             <div className="mt-10 pt-7 border-t border-foreground/10 grid grid-cols-2 gap-4 text-center">
               <div>
-                <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-0.5`}>
+                <p className={`text-sm text-foreground/55 mb-0.5`}>
                   Standort
                 </p>
                 <p className="font-display font-bold text-foreground text-sm">
@@ -380,7 +378,7 @@ const Navigation = () => {
                 </p>
               </div>
               <div>
-                <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-0.5`}>
+                <p className={`text-sm text-foreground/55 mb-0.5`}>
                   Erfahrung
                 </p>
                 <p className="font-display font-bold text-foreground text-sm">

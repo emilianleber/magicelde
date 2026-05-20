@@ -37,7 +37,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -54,18 +54,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Messezauberer.", "3×"];
 const HEADLINE_ITALIC = ["Stand-Traffic."];
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -90,10 +79,10 @@ const Hero = () => {
     <section className="relative bg-[#08060c] text-white min-h-screen overflow-hidden">
       <HeroKeyframes />
       <div ref={photoRef} className="absolute inset-0 hero-photo-wrap hero-zoom" style={{ willChange: "transform" }}>
-        <img src={haendeImg} alt="Messemagier am Stand — Lead-Generator mit Magie" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "saturate(0.92) contrast(1.08) brightness(0.7)" }} loading="eager" />
+        <img src={haendeImg} alt="Messemagier am Stand — Lead-Generator mit Magie" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "brightness(0.78)" }} loading="eager" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)" }} />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)" }} />
-        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)" }} />
+        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)" }} />
       </div>
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
         {BOKEH.map((b, i) => (
@@ -110,9 +99,6 @@ const Hero = () => {
             <span aria-hidden className="hidden md:block h-4 w-px bg-white/25" />
             <span className="text-sm text-white/80"><strong className="font-semibold text-white">200+ Events</strong> · davon zahlreiche Messe-Engagements</span>
           </div>
-          <p className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`} style={{ animationDelay: "0.18s" }}>
-            Lead-Generator. Stand-Magnet. Conversion-Booster.
-          </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
@@ -185,7 +171,7 @@ const KpisSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Hebel für Messe-ROI.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Was Magie am Messestand{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>tatsächlich bewirkt</span>.
+              <span style={{ color: ACCENT }}>tatsächlich bewirkt</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -230,7 +216,7 @@ const KpisSection = () => {
                 ].map((s) => (
                   <div key={s.label} className="border-l-2 pl-4 py-1" style={{ borderColor: ACCENT }}>
                     <p className="font-display text-xl md:text-2xl font-black text-foreground tabular-nums leading-none">{s.num}</p>
-                    <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-1.5`}>{s.label}</p>
+                    <p className={`text-sm text-foreground/55 mt-1.5`}>{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -302,14 +288,14 @@ const ABLAUF = [
 const AblaufSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">So läuft das ab.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Schritte zum{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Stand-Lead-Magneten</span>.
+              <span style={{ color: ACCENT }}>Stand-Lead-Magneten</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -353,14 +339,14 @@ const MesseTypenSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wo das funktioniert.</p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Vier{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Setting-Typen</span>.
+            <span style={{ color: ACCENT }}>Setting-Typen</span>.
           </h2>
         </div>
 
         <div className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6`}>
           {MESSETYPEN.map((m) => (
-            <article key={m.title} className="relative bg-[hsl(30,8%,98.5%)] p-6 md:p-7 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
-              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+            <article key={m.title} className="relative bg-[hsl(0,0%,98%)] p-6 md:p-7 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
                 <m.Icon className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
               <h3 className="font-display text-lg font-bold text-foreground leading-tight mb-3">{m.title}</h3>
@@ -402,7 +388,7 @@ const MesseWocheSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Eine Messe-Woche.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sechs Tage. Sechs{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Akte</span>.
+              <span style={{ color: ACCENT }}>Akte</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -449,7 +435,7 @@ const MesseWocheSection = () => {
           })}
         </div>
 
-        <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 text-center mt-14 max-w-2xl mx-auto`}>
+        <p className={`text-base md:text-lg text-foreground/55 text-center mt-14 max-w-2xl mx-auto`}>
           Halbtag, Tag, Mehrtages-Engagement, Roadshow — Festpreis pro
           Variante. Angebot nach Briefing-Call, GoBD-Rechnung, AVV verfügbar.
         </p>
@@ -477,7 +463,7 @@ const FAQSection = () => {
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
-            Was Messeplaner<br /><span className={SERIF_ITALIC}>vorher fragen.</span>
+            Was Messeplaner<br /><span>vorher fragen.</span>
           </h2>
         </div>
         <div className={`max-w-3xl border-t border-foreground/15`}>
@@ -507,14 +493,14 @@ const FinalCTA = () => {
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Für Messen und Roadshows.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Macht euren Stand zum{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>Gesprächsthema</span>.
+            <span style={{ color: ACCENT_SOFT }}>Gesprächsthema</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
             Schickt mir Messe, Datum, Standgröße und Produkt-Argument —

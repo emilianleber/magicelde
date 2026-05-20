@@ -58,12 +58,19 @@
     @apply border-border;
   }
 
-  html {
+  html, body {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  #root {
+    overflow-x: clip;
   }
 
   h1, h2, h3, h4, h5, h6 {

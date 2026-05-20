@@ -37,7 +37,7 @@ const SERIF_ITALIC =
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const ACCENT_SOFT = "#e4b8c0";
-const CREAM = "#f5ecdc";
+const CREAM = "#fafafa";
 
 /* ════════════════════════════════════════════════════════
    KEYFRAMES
@@ -46,7 +46,7 @@ const PageKeyframes = () => (
   <style>{`
     @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes successPop { 0% { opacity: 0; transform: scale(0.85) translateY(20px); } 60% { opacity: 1; transform: scale(1.04) translateY(0); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
@@ -63,20 +63,13 @@ const PageKeyframes = () => (
 const HEADLINE_SANS = ["Schreibe"];
 const HEADLINE_ITALIC = ["mir."];
 
-const BOKEH = [
-  { size: 18, left: "10%", top: "32%", dur: 16, delay: 0, o: 0.4 },
-  { size: 22, left: "82%", top: "22%", dur: 18, delay: 2, o: 0.35 },
-  { size: 14, left: "68%", top: "72%", dur: 14, delay: 4, o: 0.5 },
-  { size: 12, left: "22%", top: "78%", dur: 19, delay: 6, o: 0.4 },
-  { size: 24, left: "92%", top: "58%", dur: 17, delay: 3, o: 0.32 },
-  { size: 16, left: "40%", top: "12%", dur: 21, delay: 5, o: 0.45 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => (
   <section
     className="relative overflow-hidden"
     style={{
-      background: `linear-gradient(180deg, ${CREAM} 0%, #f9f1e2 55%, #fbf4e6 100%)`,
+      background: `linear-gradient(180deg, ${CREAM} 0%, #fafafa 55%, #ffffff 100%)`,
     }}
   >
     {/* Amber-Glow oben rechts */}
@@ -89,7 +82,7 @@ const Hero = () => (
         width: "60%",
         height: "70%",
         background:
-          "radial-gradient(closest-side, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+          "radial-gradient(closest-side, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
         filter: "blur(20px)",
       }}
     />
@@ -103,7 +96,7 @@ const Hero = () => (
         width: "55%",
         height: "60%",
         background:
-          "radial-gradient(closest-side, rgba(154,38,64,0.18) 0%, rgba(154,38,64,0) 70%)",
+          "radial-gradient(closest-side, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
         filter: "blur(20px)",
       }}
     />
@@ -119,7 +112,7 @@ const Hero = () => (
           left: b.left,
           top: b.top,
           background:
-            "radial-gradient(closest-side, rgba(199,144,66,0.85) 0%, rgba(199,144,66,0.0) 70%)",
+            "radial-gradient(closest-side, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           animationDuration: `${b.dur}s`,
           animationDelay: `${b.delay}s`,
           opacity: b.o,
@@ -157,7 +150,7 @@ const Hero = () => (
 
         {/* Eyebrow */}
         <p
-          className={`hero-fade ${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+          className={`${SERIF_ITALIC} hero-fade text-lg md:text-xl text-foreground/55 mb-6`}
           style={{ animationDelay: "0.15s" }}
         >
           Direkt-Kontakt.
@@ -217,7 +210,7 @@ const Hero = () => (
             style={{
               background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
               boxShadow:
-                "0 18px 40px -10px rgba(154,38,64,0.45), 0 8px 16px -6px rgba(154,38,64,0.15)",
+                "0 18px 40px -10px rgba(0,0,0,0.040), 0 8px 16px -6px rgba(0,0,0,0.040)",
             }}
           >
             Formular ausfüllen
@@ -317,7 +310,7 @@ const DreiKontaktwege = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Such dir aus,
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 wie du magst.
               </span>
             </h2>
@@ -352,11 +345,11 @@ const DreiKontaktwege = () => {
                     : "linear-gradient(155deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%)",
                   border: w.primary
                     ? "1px solid rgba(255,255,255,0.25)"
-                    : "1px solid rgba(154,38,64,0.18)",
+                    : "1px solid rgba(0,0,0,0.040)",
                   backdropFilter: w.primary ? undefined : "blur(20px)",
                   boxShadow: w.primary
-                    ? "0 30px 60px -20px rgba(154,38,64,0.45)"
-                    : "0 25px 50px -20px rgba(40,20,40,0.18)",
+                    ? "0 30px 60px -20px rgba(0,0,0,0.040)"
+                    : "0 25px 50px -20px rgba(0,0,0,0.090)",
                 }}
               >
                 {/* Glass-Glare oben links */}
@@ -396,7 +389,7 @@ const DreiKontaktwege = () => {
 
                   {/* Eyebrow */}
                   <p
-                    className={`${SERIF_ITALIC} text-base mb-3 ${
+                    className={`text-base mb-3 ${
                       w.primary ? "text-white/70" : "text-foreground/50"
                     }`}
                   >
@@ -405,7 +398,7 @@ const DreiKontaktwege = () => {
 
                   {/* Name */}
                   <h3
-                    className={`font-display text-2xl md:text-3xl font-bold leading-tight mb-3 ${
+                    className={`${SERIF_ITALIC} font-display text-2xl md:text-3xl font-bold leading-tight mb-3 ${
                       w.primary ? "text-white" : "text-foreground"
                     }`}
                   >
@@ -556,7 +549,7 @@ const KontaktformularSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2rem,5vw,4.5rem)] text-foreground mb-8">
               Erzähl mir
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 vom Abend.
               </span>
             </h2>
@@ -622,13 +615,13 @@ const KontaktformularSection = () => {
                 style={{
                   background:
                     "linear-gradient(155deg, rgba(255,255,255,0.85) 0%, rgba(245,236,220,0.5) 100%)",
-                  border: "1px solid rgba(154,38,64,0.12)",
-                  boxShadow: "0 30px 60px -20px rgba(40,20,40,0.15)",
+                  border: "1px solid rgba(0,0,0,0.040)",
+                  boxShadow: "0 30px 60px -20px rgba(0,0,0,0.075)",
                 }}
               >
                 {/* Eyebrow */}
                 <p
-                  className={`${SERIF_ITALIC} text-base text-foreground/55 mb-2`}
+                  className={`text-base text-foreground/55 mb-2`}
                 >
                   Deine Anfrage.
                 </p>
@@ -795,7 +788,7 @@ const KontaktformularSection = () => {
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
                     boxShadow:
-                      "0 18px 40px -10px rgba(154,38,64,0.45), 0 8px 16px -6px rgba(154,38,64,0.15)",
+                      "0 18px 40px -10px rgba(0,0,0,0.040), 0 8px 16px -6px rgba(0,0,0,0.040)",
                   }}
                 >
                   <Send className="w-4 h-4" />
@@ -819,7 +812,7 @@ const KontaktformularSection = () => {
                 className="success-pop rounded-3xl p-12 md:p-16 text-center"
                 style={{
                   background: `linear-gradient(155deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`,
-                  boxShadow: "0 30px 60px -20px rgba(154,38,64,0.45)",
+                  boxShadow: "0 30px 60px -20px rgba(0,0,0,0.040)",
                 }}
               >
                 <div
@@ -832,7 +825,7 @@ const KontaktformularSection = () => {
                   <CheckCircle2 className="w-10 h-10 text-white" />
                 </div>
                 <p
-                  className={`${SERIF_ITALIC} text-lg text-white/75 mb-3`}
+                  className={`text-lg text-white/75 mb-3`}
                 >
                   Angekommen.
                 </p>
@@ -877,11 +870,11 @@ const HEATMAP: number[][] = [
 ];
 
 const heatColor = (v: number): string => {
-  if (v === 0) return "rgba(154,38,64,0.06)";
-  if (v === 1) return "rgba(154,38,64,0.18)";
-  if (v === 2) return "rgba(154,38,64,0.38)";
-  if (v === 3) return "rgba(154,38,64,0.15)";
-  return "rgba(154,38,64,0.92)";
+  if (v === 0) return "rgba(0,0,0,0.030)";
+  if (v === 1) return "rgba(0,0,0,0.040)";
+  if (v === 2) return "rgba(0,0,0,0.040)";
+  if (v === 3) return "rgba(0,0,0,0.040)";
+  return "rgba(0,0,0,0.040)";
 };
 
 const heatLabel = (v: number): string => {
@@ -921,7 +914,7 @@ const AntwortzeitenHeatmap = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-7">
               Werktags am
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 schnellsten.
               </span>
             </h2>
@@ -935,7 +928,7 @@ const AntwortzeitenHeatmap = () => {
               className="inline-flex items-center gap-3 rounded-full px-5 py-3 text-[12px] tracking-[0.08em] uppercase font-semibold"
               style={{
                 background: "rgba(255,255,255,0.7)",
-                border: "1px solid rgba(154,38,64,0.18)",
+                border: "1px solid rgba(0,0,0,0.040)",
                 color: ACCENT_DEEP,
               }}
             >
@@ -956,8 +949,8 @@ const AntwortzeitenHeatmap = () => {
               style={{
                 background:
                   "linear-gradient(155deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.55) 100%)",
-                border: "1px solid rgba(154,38,64,0.15)",
-                boxShadow: "0 30px 60px -25px rgba(40,20,40,0.15)",
+                border: "1px solid rgba(0,0,0,0.040)",
+                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.075)",
               }}
             >
               {/* Header */}
@@ -1027,7 +1020,7 @@ const AntwortzeitenHeatmap = () => {
                             aspectRatio: "1.2",
                             transform: isHovered ? "scale(1.08)" : "scale(1)",
                             boxShadow: isHovered
-                              ? "0 8px 20px -4px rgba(154,38,64,0.45)"
+                              ? "0 8px 20px -4px rgba(0,0,0,0.040)"
                               : "none",
                           }}
                           aria-label={`${TAGE[di]} ${ZEITEN[zi].label}: ${heatLabel(v)}`}
@@ -1043,10 +1036,10 @@ const AntwortzeitenHeatmap = () => {
                 className="mt-5 rounded-2xl px-5 py-4 text-center transition-all min-h-[60px]"
                 style={{
                   background: hovered
-                    ? "rgba(154,38,64,0.08)"
+                    ? "rgba(0,0,0,0.040)"
                     : "rgba(0,0,0,0.04)",
                   border: hovered
-                    ? "1px solid rgba(154,38,64,0.25)"
+                    ? "1px solid rgba(0,0,0,0.040)"
                     : "1px solid rgba(0,0,0,0.05)",
                 }}
               >
@@ -1061,7 +1054,7 @@ const AntwortzeitenHeatmap = () => {
                     <span className="text-foreground/60">
                       ({ZEITEN[hovered.slot].sub}) —
                     </span>{" "}
-                    <span className={SERIF_ITALIC}>
+                    <span>
                       {heatLabel(HEATMAP[hovered.day][hovered.slot])}
                     </span>
                   </p>
@@ -1100,7 +1093,7 @@ const ShowPlanerVorschlag = () => {
           }`}
           style={{
             background: `linear-gradient(135deg, ${ACCENT_DEEP} 0%, #08060c 100%)`,
-            boxShadow: "0 40px 80px -20px rgba(40,20,40,0.45)",
+            boxShadow: "0 40px 80px -20px rgba(0,0,0,0.225)",
           }}
         >
           {/* Glow */}
@@ -1113,7 +1106,7 @@ const ShowPlanerVorschlag = () => {
               width: "60%",
               height: "120%",
               background:
-                "radial-gradient(closest-side, rgba(199,144,66,0.32) 0%, rgba(199,144,66,0) 70%)",
+                "radial-gradient(closest-side, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
               filter: "blur(20px)",
             }}
           />
@@ -1121,14 +1114,14 @@ const ShowPlanerVorschlag = () => {
           <div className="relative grid md:grid-cols-12 gap-8 p-10 md:p-16">
             <div className="md:col-span-7">
               <p
-                className={`${SERIF_ITALIC} text-lg text-white/65 mb-5`}
+                className={`text-lg text-white/65 mb-5`}
               >
                 Lieber strukturiert?
               </p>
               <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4.5vw,3.5rem)] text-white mb-6">
                 Plane in 90 Sekunden
                 <br />
-                <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+                <span style={{ color: "#f3d9a8" }}>
                   deine Show.
                 </span>
               </h2>
@@ -1238,7 +1231,7 @@ const PullQuote = () => {
           width: "60%",
           height: "60%",
           background:
-            "radial-gradient(closest-side, rgba(154,38,64,0.18) 0%, rgba(154,38,64,0) 70%)",
+            "radial-gradient(closest-side, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
           filter: "blur(40px)",
         }}
       />
@@ -1251,7 +1244,7 @@ const PullQuote = () => {
           width: "55%",
           height: "55%",
           background:
-            "radial-gradient(closest-side, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+            "radial-gradient(closest-side, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           filter: "blur(40px)",
         }}
       />
@@ -1263,14 +1256,14 @@ const PullQuote = () => {
           }`}
         >
           <p
-            className={`${SERIF_ITALIC} text-base md:text-lg text-white/55 mb-8 tracking-wide`}
+            className={`text-base md:text-lg text-white/55 mb-8 tracking-wide`}
           >
             Versprechen.
           </p>
           <p className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,6.5vw,6rem)] text-white">
             24 Stunden.
             <br />
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#f3d9a8" }}>
               Mehr brauchst du nicht zu warten.
             </span>
           </p>
@@ -1340,7 +1333,7 @@ const HäufigeAnliegen = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Vielleicht
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 ist es eines davon.
               </span>
             </h2>
@@ -1425,7 +1418,7 @@ const StandortMap = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-7">
               Bayern primär,
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 deutschlandweit.
               </span>
             </h2>
@@ -1468,8 +1461,8 @@ const StandortMap = () => {
               style={{
                 background:
                   "linear-gradient(155deg, rgba(255,255,255,0.85) 0%, rgba(245,236,220,0.5) 100%)",
-                border: "1px solid rgba(154,38,64,0.15)",
-                boxShadow: "0 30px 60px -25px rgba(40,20,40,0.15)",
+                border: "1px solid rgba(0,0,0,0.040)",
+                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.075)",
               }}
             >
               <svg
@@ -1559,7 +1552,7 @@ const StandortMap = () => {
               </svg>
 
               <p
-                className={`${SERIF_ITALIC} text-sm text-foreground/55 text-center mt-5`}
+                className={`text-sm text-foreground/55 text-center mt-5`}
               >
                 Stilisiert. Anfahrtswege kläre ich pro Anfrage.
               </p>
@@ -1616,7 +1609,7 @@ const VertrauenStrip = () => {
                 }`}
                 style={{
                   background: "rgba(255,255,255,0.7)",
-                  border: "1px solid rgba(154,38,64,0.1)",
+                  border: "1px solid rgba(0,0,0,0.040)",
                   animationDelay: `${0.15 + i * 0.08}s`,
                 }}
               >
@@ -1632,7 +1625,7 @@ const VertrauenStrip = () => {
                   {t.label}
                 </p>
                 <p
-                  className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-1`}
+                  className={`text-sm text-foreground/55 mt-1`}
                 >
                   {t.sub}
                 </p>
@@ -1725,7 +1718,7 @@ const SocialStrip = () => {
                 }`}
                 style={{
                   background: "rgba(255,255,255,0.7)",
-                  border: "1px solid rgba(154,38,64,0.12)",
+                  border: "1px solid rgba(0,0,0,0.040)",
                   animationDelay: `${0.15 + i * 0.08}s`,
                 }}
               >
@@ -1775,7 +1768,7 @@ const FinalCTA = () => {
           width: "60%",
           height: "70%",
           background:
-            "radial-gradient(closest-side, rgba(154,38,64,0.45) 0%, rgba(154,38,64,0) 70%)",
+            "radial-gradient(closest-side, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
           filter: "blur(40px)",
         }}
       />
@@ -1788,7 +1781,7 @@ const FinalCTA = () => {
           width: "55%",
           height: "60%",
           background:
-            "radial-gradient(closest-side, rgba(199,144,66,0.12) 0%, rgba(199,144,66,0) 70%)",
+            "radial-gradient(closest-side, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           filter: "blur(40px)",
         }}
       />
@@ -1807,7 +1800,7 @@ const FinalCTA = () => {
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.5rem,7vw,6.5rem)] text-white mb-10">
             Lass uns loslegen
             <br />
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#f3d9a8" }}>
               — schreib mir.
             </span>
           </h2>

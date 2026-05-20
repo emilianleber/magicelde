@@ -32,8 +32,6 @@ import stageShowImg from "@/assets/stage-show.jpg";
 /* ─────────────────────────────────────────────────────────────
    Tokens
    ───────────────────────────────────────────────────────────── */
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const ACCENT_SOFT = "#e4b8c0";
@@ -48,7 +46,7 @@ const HeroKeyframes = () => (
     @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes heroNumberIn { 0% { opacity: 0; transform: translateY(80px) scale(0.86); filter: blur(10px); } 60% { opacity: 1; transform: translateY(-6px) scale(1.02); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.15; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -61,14 +59,7 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const HERO_BOKEH = [
-  { size: 18, left: "8%", top: "22%", dur: 16, delay: 0, o: 0.32 },
-  { size: 12, left: "16%", top: "70%", dur: 19, delay: 3, o: 0.28 },
-  { size: 22, left: "82%", top: "26%", dur: 17, delay: 1.5, o: 0.30 },
-  { size: 14, left: "90%", top: "60%", dur: 20, delay: 4, o: 0.34 },
-  { size: 10, left: "48%", top: "85%", dur: 14, delay: 5.5, o: 0.40 },
-  { size: 16, left: "70%", top: "80%", dur: 22, delay: 2.5, o: 0.26 },
-];
+const HERO_BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   return (
@@ -76,26 +67,26 @@ const Hero = () => {
       className="relative overflow-hidden"
       style={{
         background:
-          "linear-gradient(170deg, #fbf3e3 0%, #f5ecdc 45%, #efe1c5 100%)",
+          "linear-gradient(170deg, #fbf3e3 0%, #fafafa 45%, #efe1c5 100%)",
       }}
     >
       <HeroKeyframes />
       {/* Amber-Glow oben rechts */}
       <div
         aria-hidden
-        className="absolute -top-40 -right-32 w-[720px] h-[720px] rounded-full blur-3xl pointer-events-none"
+        className="absolute -top-40 -right-32 w-[720px] h-[720px] rounded-full blur-2xl pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.32) 0%, rgba(199,144,66,0) 70%)",
+            "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
         }}
       />
       {/* Burgunder-Glow unten links */}
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-32 w-[640px] h-[640px] rounded-full blur-3xl pointer-events-none"
+        className="absolute -bottom-40 -left-32 w-[640px] h-[640px] rounded-full blur-2xl pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.18) 0%, rgba(154,38,64,0) 70%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
         }}
       />
       {/* Bokeh */}
@@ -109,7 +100,7 @@ const Hero = () => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(199,144,66,0) 75%)`,
+              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(0,0,0,0.000) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -146,10 +137,6 @@ const Hero = () => {
             </div>
 
             {/* Italic Eyebrow */}
-            <p className={`${SERIF_ITALIC} text-xl md:text-2xl text-foreground/55 mb-6 md:mb-8 hero-fade`} style={{ animationDelay: "0.18s" }}>
-              Referenzen.
-            </p>
-
             {/* GROSSE Zahl statt vollbild Hero */}
             <div className="hero-num" style={{ animationDelay: "0.3s" }}>
               <h1
@@ -163,7 +150,7 @@ const Hero = () => {
             {/* Sub-Headline */}
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-foreground mt-4 md:mt-6 text-[clamp(1.6rem,3.2vw,2.75rem)] max-w-3xl">
               {"Events. "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
+              <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 {"Seit 2016."}
               </span>{" "}Quer durch{" "}Bayern.
             </h2>
@@ -183,7 +170,7 @@ const Hero = () => {
                 className="hero-cta group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+                  boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
                 }}
               >
                 Referenzen anfragen
@@ -206,7 +193,7 @@ const Hero = () => {
                 <p className="text-[11px] tracking-[0.18em] uppercase font-bold mb-2" style={{ color: ACCENT }}>
                   Auf einen Blick
                 </p>
-                <p className={`${SERIF_ITALIC} text-base text-foreground/55 leading-[1.5]`}>
+                <p className={`text-base text-foreground/55 leading-[1.5]`}>
                   Zehn Jahre, vier Formate, ein Tonfall. Hier eine Übersicht.
                 </p>
               </div>
@@ -227,7 +214,7 @@ const Hero = () => {
                     >
                       {s.n}
                     </dt>
-                    <dd className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55 mt-1`}>
+                    <dd className={`text-sm md:text-base text-foreground/55 mt-1`}>
                       {s.l}
                     </dd>
                   </div>
@@ -292,7 +279,7 @@ const GrosseLogoCloud = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"Wer mich "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
+              <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 gebucht hat
               </span>
               .
@@ -333,7 +320,7 @@ const GrosseLogoCloud = () => {
                 <p className="font-display text-sm md:text-base font-bold text-foreground leading-tight">
                   {k.name}
                 </p>
-                <p className={`${SERIF_ITALIC} text-xs md:text-sm text-foreground/55 mt-1`}>
+                <p className={`text-xs md:text-sm text-foreground/55 mt-1`}>
                   {k.note}
                 </p>
               </figcaption>
@@ -349,7 +336,7 @@ const GrosseLogoCloud = () => {
         </div>
 
         <div className="mt-16 md:mt-20 max-w-3xl">
-          <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/60 leading-[1.6]`}>
+          <p className={`text-base md:text-lg text-foreground/60 leading-[1.6]`}>
             Plus rund 180 weitere Auftraggeber — Hochzeitspaare, Familien,
             Mittelständler, Restaurants. Wer Diskretion möchte, bekommt sie.
           </p>
@@ -461,7 +448,7 @@ const FilterSection = () => {
         background: active ? `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})` : "rgba(0,0,0,0.04)",
         color: active ? "#fff" : "rgba(15,15,20,0.65)",
         border: active ? "1px solid transparent" : "1px solid rgba(0,0,0,0.08)",
-        boxShadow: active ? "0 8px 20px -8px rgba(154,38,64,0.45)" : "none",
+        boxShadow: active ? "0 8px 20px -8px rgba(0,0,0,0.040)" : "none",
       }}
     >
       {children}
@@ -472,7 +459,7 @@ const FilterSection = () => {
     <section
       ref={ref}
       id="filter"
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
@@ -482,7 +469,7 @@ const FilterSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground pr-4 break-words">
               {"Finde Referenzen aus "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
+              <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 deiner Branche
               </span>
               .
@@ -550,7 +537,7 @@ const FilterSection = () => {
               {(branche !== "Alle" || jahr !== "Alle" || anlass !== "Alle") && (
                 <>
                   {" "}— gefiltert nach{" "}
-                  <span className={SERIF_ITALIC}>
+                  <span>
                     {[branche !== "Alle" ? branche : null, jahr !== "Alle" ? String(jahr) : null, anlass !== "Alle" ? anlass : null]
                       .filter(Boolean)
                       .join(" · ")}
@@ -588,9 +575,9 @@ const FilterSection = () => {
                     <span
                       className="inline-flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full font-display text-sm font-bold"
                       style={{
-                        background: "rgba(154,38,64,0.08)",
+                        background: "rgba(0,0,0,0.040)",
                         color: ACCENT,
-                        border: "1px solid rgba(154,38,64,0.18)",
+                        border: "1px solid rgba(0,0,0,0.040)",
                       }}
                     >
                       {k.name.charAt(0)}
@@ -603,7 +590,7 @@ const FilterSection = () => {
                   <p className="font-display text-base md:text-lg font-bold text-foreground leading-tight truncate">
                     {k.name}
                   </p>
-                  <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-0.5`}>
+                  <p className={`text-sm text-foreground/55 mt-0.5`}>
                     {k.branche} · <span className="not-italic"><MapPin className="inline w-3 h-3 -mt-0.5 mr-0.5" />{k.ort}</span>
                   </p>
                 </div>
@@ -613,7 +600,7 @@ const FilterSection = () => {
                   <p className="text-sm text-foreground/75 leading-snug">
                     <span className="font-semibold">{k.anlass}</span>
                     <span className="text-foreground/45"> · </span>
-                    <span className={SERIF_ITALIC}>{k.format}</span>
+                    <span>{k.format}</span>
                   </p>
                   <p className="text-xs text-foreground/45 mt-0.5 tabular-nums">{k.jahr}</p>
                 </div>
@@ -621,7 +608,7 @@ const FilterSection = () => {
                 {/* Mobile Anlass */}
                 <div className="md:hidden text-right">
                   <p className="text-xs font-semibold text-foreground/70 tabular-nums">{k.jahr}</p>
-                  <p className={`${SERIF_ITALIC} text-xs text-foreground/55`}>{k.anlass}</p>
+                  <p className={`text-xs text-foreground/55`}>{k.anlass}</p>
                 </div>
 
                 {/* Pfeil */}
@@ -633,7 +620,7 @@ const FilterSection = () => {
           </ul>
         ) : (
           <div className="border-y border-foreground/10 py-16 text-center">
-            <p className={`${SERIF_ITALIC} text-lg text-foreground/55`}>
+            <p className={`text-lg text-foreground/55`}>
               Keine Treffer in dieser Kombination — probier eine andere
               Filtermischung oder frag direkt an.
             </p>
@@ -647,7 +634,7 @@ const FilterSection = () => {
           </div>
         )}
 
-        <p className={`${SERIF_ITALIC} text-base text-foreground/55 mt-10 max-w-2xl`}>
+        <p className={`text-base text-foreground/55 mt-10 max-w-2xl`}>
           Hinweis: einige Hochzeiten/Familien-Events sind anonymisiert
           dargestellt (DSGVO + Diskretion). Ansprechpartner nur auf Anfrage.
         </p>
@@ -681,7 +668,7 @@ const StatsEditorialSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground">
               Was ich seit 2016
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 gebaut habe.
               </span>
             </h2>
@@ -703,10 +690,10 @@ const StatsEditorialSection = () => {
               borderRadius: "1.5rem",
               background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, ${ACCENT} 55%, ${ACCENT_DEEP} 100%)`,
               minHeight: "360px",
-              boxShadow: "0 40px 80px -30px rgba(154,38,64,0.5)",
+              boxShadow: "0 40px 80px -30px rgba(0,0,0,0.040)",
             }}
           >
-            <div aria-hidden className="absolute -top-32 -right-32 w-[460px] h-[460px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(255,210,140,0.6), transparent 60%)" }} />
+            <div aria-hidden className="absolute -top-32 -right-32 w-[460px] h-[460px] rounded-full blur-2xl opacity-8" style={{ background: "radial-gradient(circle, rgba(255,210,140,0.6), transparent 60%)" }} />
             <div className="relative z-10">
               <p className="text-[11px] tracking-[0.18em] uppercase font-bold text-white/65 mb-4">
                 Seit 2016 · Hauptzahl
@@ -722,7 +709,7 @@ const StatsEditorialSection = () => {
               <p className="font-display text-xl md:text-2xl font-bold leading-tight">
                 Events insgesamt
               </p>
-              <p className={`${SERIF_ITALIC} text-base md:text-lg text-white/75 mt-1`}>
+              <p className={`text-base md:text-lg text-white/75 mt-1`}>
                 vom Sektempfang bis zur Gala, von 8 bis 500 Gästen.
               </p>
             </div>
@@ -730,7 +717,7 @@ const StatsEditorialSection = () => {
 
           {/* MD — 100+ Hochzeiten */}
           <article
-            className="relative md:col-span-4 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(30,8%,98.5%)]"
+            className="relative md:col-span-4 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(0,0%,98%)]"
             style={{ borderRadius: "1.5rem", minHeight: "360px", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}
           >
             <div>
@@ -741,7 +728,7 @@ const StatsEditorialSection = () => {
             </div>
             <div>
               <p className="font-display text-lg font-bold text-foreground">Hochzeiten</p>
-              <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-1`}>
+              <p className={`text-sm text-foreground/55 mt-1`}>
                 Empfang, Hochzeitsdinner, vor dem Tanz.
               </p>
             </div>
@@ -749,7 +736,7 @@ const StatsEditorialSection = () => {
 
           {/* MD — 100+ Firmen */}
           <article
-            className="relative md:col-span-6 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(30,8%,98.5%)]"
+            className="relative md:col-span-6 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(0,0%,98%)]"
             style={{ borderRadius: "1.5rem", minHeight: "300px", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}
           >
             <div>
@@ -760,7 +747,7 @@ const StatsEditorialSection = () => {
             </div>
             <div>
               <p className="font-display text-lg font-bold text-foreground">Firmen-Engagements</p>
-              <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-1`}>
+              <p className={`text-sm text-foreground/55 mt-1`}>
                 Vorstandsdinner, Mitarbeiterfeier, Kundenabend, Messe.
               </p>
             </div>
@@ -784,7 +771,7 @@ const StatsEditorialSection = () => {
             </div>
             <div>
               <p className="font-display text-base font-bold">Close-Up</p>
-              <p className={`${SERIF_ITALIC} text-xs text-white/65 mt-1`}>
+              <p className={`text-xs text-white/65 mt-1`}>
                 Tisch-zu-Tisch, Walk-Around.
               </p>
             </div>
@@ -803,7 +790,7 @@ const StatsEditorialSection = () => {
             </div>
             <div>
               <p className="font-display text-base font-bold text-foreground">Geburtstage</p>
-              <p className={`${SERIF_ITALIC} text-xs text-foreground/55 mt-1`}>
+              <p className={`text-xs text-foreground/55 mt-1`}>
                 30er bis Goldene Hochzeit.
               </p>
             </div>
@@ -829,7 +816,7 @@ const StatsEditorialSection = () => {
             </div>
             <div>
               <p className="font-display text-lg font-bold" style={{ color: "#08060c" }}>Magic Dinners</p>
-              <p className={`${SERIF_ITALIC} text-sm mt-1`} style={{ color: "rgba(8,6,12,0.65)" }}>
+              <p className={`text-sm mt-1`} style={{ color: "rgba(8,6,12,0.65)" }}>
                 Vier-Gänge-Format mit Wald & Wiese, Sinzing.
               </p>
             </div>
@@ -837,7 +824,7 @@ const StatsEditorialSection = () => {
 
           {/* SM — 5,0 Sterne */}
           <article
-            className="relative md:col-span-6 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(30,8%,98.5%)]"
+            className="relative md:col-span-6 overflow-hidden flex flex-col justify-between p-7 md:p-9 bg-[hsl(0,0%,98%)]"
             style={{ borderRadius: "1.5rem", minHeight: "260px", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}
           >
             <div className="flex items-center gap-1">
@@ -852,7 +839,7 @@ const StatsEditorialSection = () => {
               <p className="font-display text-lg font-bold text-foreground mt-2">
                 30+ Bewertungen
               </p>
-              <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-1`}>
+              <p className={`text-sm text-foreground/55 mt-1`}>
                 ProvenExpert, Google, persönliche Empfehlungen.
               </p>
             </div>
@@ -940,7 +927,7 @@ const CaseStudiesSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground">
               VKB. STRABAG.
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 XXXLutz.
               </span>
             </h2>
@@ -966,7 +953,7 @@ const CaseStudiesSection = () => {
                 className="relative overflow-hidden h-[280px] md:h-[340px]"
                 style={{
                   borderRadius: "1.25rem",
-                  boxShadow: "0 30px 70px -28px rgba(40,20,40,0.4)",
+                  boxShadow: "0 30px 70px -28px rgba(0,0,0,0.200)",
                 }}
               >
                 <img
@@ -982,15 +969,15 @@ const CaseStudiesSection = () => {
                   style={{
                     background:
                       cs.tint === "rose"
-                        ? "linear-gradient(180deg, rgba(8,6,12,0.18) 0%, rgba(154,38,64,0.30) 70%, rgba(92,22,34,0.62) 100%)"
+                        ? "linear-gradient(180deg, rgba(8,6,12,0.18) 0%, rgba(0,0,0,0.040) 70%, rgba(0,0,0,0.248) 100%)"
                         : cs.tint === "amber"
-                          ? "linear-gradient(180deg, rgba(8,6,12,0.18) 0%, rgba(199,144,66,0.1) 70%, rgba(138,90,20,0.62) 100%)"
+                          ? "linear-gradient(180deg, rgba(8,6,12,0.18) 0%, rgba(0,0,0,0.024) 70%, rgba(138,90,20,0.62) 100%)"
                           : "linear-gradient(180deg, rgba(8,6,12,0.20) 0%, rgba(31,94,63,0.32) 70%, rgba(14,61,42,0.65) 100%)",
                   }}
                 />
                 {/* Nr.-Marker */}
                 <span
-                  className={`${SERIF_ITALIC} absolute top-4 right-5 md:top-5 md:right-6 leading-none text-white/85`}
+                  className={`absolute top-4 right-5 md:top-5 md:right-6 leading-none text-white/85`}
                   style={{
                     fontSize: "clamp(2.5rem, 4vw, 4rem)",
                     textShadow: "0 4px 18px rgba(0,0,0,0.45)",
@@ -1040,9 +1027,9 @@ const CaseStudiesSection = () => {
                       key={t}
                       className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] tracking-[0.06em] font-semibold uppercase"
                       style={{
-                        background: "rgba(154,38,64,0.07)",
+                        background: "rgba(0,0,0,0.035)",
                         color: ACCENT_DEEP,
-                        border: "1px solid rgba(154,38,64,0.14)",
+                        border: "1px solid rgba(0,0,0,0.040)",
                       }}
                     >
                       {t}
@@ -1055,7 +1042,7 @@ const CaseStudiesSection = () => {
                   className="relative pl-4 mt-4"
                   style={{ borderLeft: `2px solid ${ACCENT}` }}
                 >
-                  <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/85 leading-[1.45] mb-1`}>
+                  <p className={`text-base md:text-lg text-foreground/85 leading-[1.45] mb-1`}>
                     „{cs.pull}"
                   </p>
                   <p className="text-xs text-foreground/55 tracking-[0.05em]">
@@ -1073,7 +1060,7 @@ const CaseStudiesSection = () => {
             className="hero-cta inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
             style={{
               background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-              boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+              boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
             }}
           >
             Eigene Case-Study starten <ArrowRight className="w-4 h-4" />
@@ -1114,7 +1101,7 @@ const BranchenListeSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
@@ -1124,7 +1111,7 @@ const BranchenListeSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"Quer durch "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
+              <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 die Branchen
               </span>
               .
@@ -1147,7 +1134,7 @@ const BranchenListeSection = () => {
               style={{ animationDelay: `${0.1 + i * 0.04}s` }}
             >
               <span
-                className={`${SERIF_ITALIC} text-foreground/30 tabular-nums`}
+                className={`text-foreground/30 tabular-nums`}
                 style={{ fontSize: "clamp(1.5rem,3vw,2.5rem)", lineHeight: 1 }}
               >
                 {String(i + 1).padStart(2, "0")}
@@ -1155,14 +1142,14 @@ const BranchenListeSection = () => {
               <h3 className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight">
                 {b.name}
               </h3>
-              <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 text-right`}>
+              <p className={`text-base md:text-lg text-foreground/55 text-right`}>
                 {b.beispiel}
               </p>
             </li>
           ))}
         </ul>
 
-        <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mt-10 max-w-2xl`}>
+        <p className={`text-base md:text-lg text-foreground/55 mt-10 max-w-2xl`}>
           Deine Branche fehlt? Wahrscheinlich nicht — frag direkt an. Auch
           Pharma, Recht, IT, Beratung, Gesundheit war schon dabei (NDA-bedingt
           nicht öffentlich).
@@ -1217,7 +1204,7 @@ const StimmenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"Was Kunden "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
+              <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 sagen
               </span>
               .
@@ -1247,7 +1234,7 @@ const StimmenSection = () => {
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
                     color: "#fff",
-                    boxShadow: "0 12px 26px -10px rgba(154,38,64,0.45)",
+                    boxShadow: "0 12px 26px -10px rgba(0,0,0,0.040)",
                   }}
                   aria-hidden
                 >
@@ -1257,7 +1244,7 @@ const StimmenSection = () => {
                   <p className="font-display text-base md:text-lg font-bold text-foreground" itemProp="author" itemScope itemType="https://schema.org/Person">
                     <span itemProp="name">{s.name}</span>
                   </p>
-                  <p className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55 mt-1`}>
+                  <p className={`text-sm md:text-base text-foreground/55 mt-1`}>
                     {s.role}
                   </p>
                   <div className="flex items-center gap-0.5 mt-3" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
@@ -1277,7 +1264,7 @@ const StimmenSection = () => {
               <div className="lg:col-span-9">
                 <Quote className="w-10 h-10 mb-4 opacity-8" style={{ color: ACCENT }} strokeWidth={1.25} />
                 <blockquote
-                  className={`${SERIF_ITALIC} text-[clamp(1.35rem,2.5vw,2.1rem)] leading-[1.35] text-foreground/85`}
+                  className={`text-[clamp(1.35rem,2.5vw,2.1rem)] leading-[1.35] text-foreground/85`}
                   itemProp="reviewBody"
                 >
                   „{s.quote}"
@@ -1316,7 +1303,7 @@ const VideoSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className={`grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16`}>
@@ -1326,7 +1313,7 @@ const VideoSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground pr-4 break-words">
               {"Live im "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
+              <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 Fernsehen
               </span>
               .
@@ -1447,7 +1434,7 @@ const ZeitleisteSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
               {"2016 — "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT, paddingRight: "0.18em" }}>
+              <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 Heute
               </span>
               .
@@ -1476,7 +1463,7 @@ const ZeitleisteSection = () => {
                 >
                   {z.zeit}
                 </p>
-                <p className={`${SERIF_ITALIC} text-sm text-foreground/45 mt-2`}>{z.aside}</p>
+                <p className={`text-sm text-foreground/45 mt-2`}>{z.aside}</p>
               </div>
               <div className="md:col-span-9 md:pl-6 md:border-l md:border-foreground/15">
                 <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight mb-3">
@@ -1505,14 +1492,14 @@ const PullQuoteSection = () => {
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.55) 0%, rgba(8,6,12,0.96) 70%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
-      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
+      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)" }} />
       <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
             {"Zweihundert Abende."}{" "}
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#f3d9a8" }}>
               Eine Stille immer.
             </span>
           </p>
@@ -1562,7 +1549,7 @@ const FAQS = [
 const FAQSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
@@ -1570,7 +1557,7 @@ const FAQSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground pr-4 break-words">
             Was vorher{" "}
-            <span className={SERIF_ITALIC}>gefragt wird</span>.
+            <span>gefragt wird</span>.
           </h2>
         </div>
         <div className={`max-w-3xl border-t border-foreground/15`}>
@@ -1606,8 +1593,8 @@ const FinalCTA = () => {
         <img src={heroMagicImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 50%, rgba(8,6,12,0.6) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
 
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
@@ -1617,7 +1604,7 @@ const FinalCTA = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)]">
             Schreib mir.
             <br />
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               Referenzen
             </span>{" "}aus deiner Branche.
           </h2>

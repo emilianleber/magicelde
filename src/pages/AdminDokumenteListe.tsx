@@ -410,7 +410,7 @@ export default function AdminDokumenteListe() {
               </div>
               <span className="text-xs text-muted-foreground font-medium">{label}</span>
             </div>
-            <p className={`text-xl font-bold tabular-nums leading-tight ${valueCls}`}>{value}</p>
+            <p className={`${SERIF_ITALIC} text-xl font-bold tabular-nums leading-tight ${valueCls}`}>{value}</p>
             <p className="text-xs text-muted-foreground mt-0.5">{sub}</p>
           </div>
         ))}

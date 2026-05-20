@@ -9,8 +9,6 @@ import { ArrowRight } from "lucide-react";
  * Fragen, Empfehlungen, Tonalität.
  * ────────────────────────────────────────────────────────── */
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 
@@ -183,7 +181,7 @@ const ResultWithForm = ({
           {rec.format}
         </h3>
         <p
-          className={`${SERIF_ITALIC} text-base md:text-lg mb-5`}
+          className={`text-base md:text-lg mb-5`}
           style={{ color: ACCENT }}
         >
           {rec.sub}
@@ -227,7 +225,7 @@ const ResultWithForm = ({
         className="rounded-2xl bg-foreground/[0.03] border border-foreground/10 p-5 md:p-7"
       >
         <div className="flex items-baseline justify-between mb-5">
-          <p className={`${SERIF_ITALIC} text-lg text-foreground/70`}>
+          <p className={`text-lg text-foreground/70`}>
             Jetzt kurz anfragen.
           </p>
           <p className="text-[11px] tracking-[0.12em] uppercase text-foreground/45 font-semibold">
@@ -284,7 +282,7 @@ const ResultWithForm = ({
             className="inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white transition-all hover:scale-[1.03] active:scale-[0.97] disabled:opacity-70"
             style={{
               background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-              boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+              boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
             }}
           >
             {submitted ? "Wird gesendet…" : "Anfrage senden"}
@@ -379,7 +377,7 @@ export const CustomQuiz = ({ config }: { config: CustomQuizConfig }) => {
         >
           {q.eyebrow}
         </p>
-        <p className={`${SERIF_ITALIC} text-sm ${txtMute}`}>
+        <p className={`text-sm ${txtMute}`}>
           {step + 1} / {config.questions.length}
         </p>
       </div>
@@ -439,8 +437,8 @@ export const CustomQuiz = ({ config }: { config: CustomQuizConfig }) => {
             : "rgba(0,0,0,0.08)";
           const cardShadow = isSel
             ? onDark
-              ? `0 30px 60px -20px rgba(154,38,64,0.45), inset 0 0 0 1px ${ACCENT}`
-              : `0 25px 50px -20px rgba(154,38,64,0.15), inset 0 0 0 1px ${ACCENT}`
+              ? `0 30px 60px -20px rgba(0,0,0,0.040), inset 0 0 0 1px ${ACCENT}`
+              : `0 25px 50px -20px rgba(0,0,0,0.040), inset 0 0 0 1px ${ACCENT}`
             : onDark
             ? "0 20px 40px -20px rgba(0,0,0,0.5)"
             : "0 8px 20px -10px rgba(0,0,0,0.08)";
@@ -478,7 +476,7 @@ export const CustomQuiz = ({ config }: { config: CustomQuizConfig }) => {
                   {opt.label}
                 </p>
                 <p
-                  className={`${SERIF_ITALIC} text-xs md:text-sm leading-snug ${
+                  className={`text-xs md:text-sm leading-snug ${
                     onDark ? "text-white/65" : "text-foreground/55"
                   }`}
                 >
@@ -507,7 +505,7 @@ export const CustomQuiz = ({ config }: { config: CustomQuizConfig }) => {
             className="rounded-full px-5 py-2.5 text-sm font-display font-bold text-white shadow-2xl animate-fade-up flex items-center gap-2"
             style={{
               background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-              boxShadow: "0 20px 40px -10px rgba(154,38,64,0.5)",
+              boxShadow: "0 20px 40px -10px rgba(0,0,0,0.040)",
             }}
           >
             <span>{feedback}</span>

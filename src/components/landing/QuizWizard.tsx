@@ -369,7 +369,7 @@ const WizardBody = ({
 
   const cardOptionStyle = (selected: boolean) =>
     selected
-      ? { background: GRADIENT, boxShadow: "0 12px 30px rgba(154,38,64,0.15)" }
+      ? { background: GRADIENT, boxShadow: "0 12px 30px rgba(0,0,0,0.040)" }
       : {};
 
   const currentQuestion = step <= total ? config.questions[step - 1] : null;
@@ -595,7 +595,7 @@ const WizardBody = ({
                     className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{
                       background: GRADIENT,
-                      boxShadow: "0 10px 30px rgba(154,38,64,0.15)",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.040)",
                     }}
                   >
                     {sending ? (

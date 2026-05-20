@@ -69,8 +69,8 @@ const HeroKeyframes = () => (
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
     @keyframes heroStarPulse {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -88,18 +88,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Zauberer", "für"];
 const HEADLINE_ITALIC = ["eure", "Firmenfeier."];
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -139,7 +128,7 @@ const Hero = () => {
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             objectPosition: "center 30%",
-            filter: "saturate(0.92) contrast(1.08) brightness(0.7)",
+            filter: "brightness(0.78)",
           }}
           loading="eager"
         />
@@ -161,10 +150,10 @@ const Hero = () => {
         />
         <div
           aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -212,12 +201,6 @@ const Hero = () => {
               <strong className="font-semibold text-white">100+ Firmen-Engagements</strong>
             </span>
           </div>
-          <p
-            className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
-            style={{ animationDelay: "0.18s" }}
-          >
-            Vorstand. Kunden. Team. Eines bleibt gleich.
-          </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
               <span
@@ -356,7 +339,7 @@ const AnlaesseSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Vorstand. Kunden.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Team.
               </span>
             </h2>
@@ -413,7 +396,7 @@ const AnlaesseSection = () => {
                         {a.eyebrow}
                       </p>
                       <h3
-                        className={`font-display text-xl md:text-2xl font-bold leading-tight transition-colors duration-500 ${
+                        className={`${SERIF_ITALIC} font-display text-xl md:text-2xl font-bold leading-tight transition-colors duration-500 ${
                           isActive ? "text-foreground" : "text-foreground/55"
                         }`}
                       >
@@ -478,7 +461,7 @@ const AnlaesseSection = () => {
                   }}
                 >
                   <p
-                    className={`${SERIF_ITALIC} text-[11px] md:text-xs text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-[11px] md:text-xs text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     {ANLAESSE[active].eyebrow.split(" · ")[0]}.
                   </p>
@@ -504,7 +487,7 @@ const AnlaesseSection = () => {
                   }}
                 >
                   <p
-                    className={`${SERIF_ITALIC} text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Setting {String(active + 1).padStart(2, "0")}
                   </p>
@@ -533,7 +516,7 @@ const RoiSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -543,7 +526,7 @@ const RoiSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Aus Budget wird{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Erinnerung
               </span>
               .
@@ -596,8 +579,8 @@ const RoiSection = () => {
                     className="inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full shrink-0"
                     style={{
                       background:
-                        "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
-                      border: "1px solid rgba(154,38,64,0.22)",
+                        "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
+                      border: "1px solid rgba(0,0,0,0.040)",
                     }}
                   >
                     <it.icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -621,10 +604,10 @@ const RoiSection = () => {
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
-                  "0 50px 100px -30px rgba(40,20,40,0.35), 0 15px 35px -15px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                  "0 50px 100px -30px rgba(0,0,0,0.175), 0 15px 35px -15px rgba(0,0,0,0.090), inset 0 0 0 1px rgba(0,0,0,0.05)",
               }}
             >
-              <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-1.5`}>
+              <p className={`text-sm text-foreground/55 mb-1.5`}>
                 Mini-Rechner.
               </p>
               <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-tight mb-6">
@@ -693,7 +676,7 @@ const RoiSection = () => {
                 </div>
               </div>
 
-              <p className={`${SERIF_ITALIC} mt-6 text-xs text-foreground/45 leading-relaxed`}>
+              <p className={`mt-6 text-xs text-foreground/45 leading-relaxed`}>
                 Schätzwerte aus über hundert Firmen-Events. Eure Zahlen
                 gehen ins schriftliche Angebot ein.
               </p>
@@ -735,7 +718,7 @@ const IndustriesSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wer mich{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 gebucht hat
               </span>
               .
@@ -771,7 +754,7 @@ const IndustriesSection = () => {
           ))}
         </div>
 
-        <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 text-center mt-14 max-w-2xl mx-auto`}>
+        <p className={`text-base md:text-lg text-foreground/55 text-center mt-14 max-w-2xl mx-auto`}>
           Vollständige Referenzliste mit Ansprechpartnern auf Anfrage.
           Viele weitere Kunden bevorzugen es, nicht öffentlich genannt zu werden.
         </p>
@@ -792,15 +775,15 @@ const VorstandCounterSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -830,7 +813,7 @@ const VorstandCounterSection = () => {
           </p>
           <p className="font-display font-bold tracking-[-0.01em] leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] mt-8 max-w-3xl mx-auto">
             Vorstand zückt nach{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               drei Minuten
             </span>{" "}
             selbst Karten.
@@ -920,7 +903,7 @@ const CaseStudiesSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -930,7 +913,7 @@ const CaseStudiesSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wie zwei Firmen{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 ihren Abend
               </span>{" "}
               geplant haben.
@@ -961,7 +944,7 @@ const CaseStudiesSection = () => {
                   style={{
                     borderRadius: "1.25rem",
                     boxShadow:
-                      "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2)",
+                      "0 50px 100px -30px rgba(0,0,0,0.200), 0 15px 35px -15px rgba(0,0,0,0.100)",
                   }}
                 >
                   <img
@@ -976,13 +959,13 @@ const CaseStudiesSection = () => {
                     style={{
                       background:
                         cs.tint === "rose"
-                          ? "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(154,38,64,0.15) 70%, rgba(92,22,34,0.7) 100%)"
-                          : "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(199,144,66,0.14) 70%, rgba(138,90,20,0.7) 100%)",
+                          ? "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(0,0,0,0.040) 70%, rgba(0,0,0,0.280) 100%)"
+                          : "linear-gradient(135deg, rgba(8,6,12,0.45) 0%, rgba(0,0,0,0.024) 70%, rgba(138,90,20,0.7) 100%)",
                     }}
                   />
                   {/* Nr.-Marker */}
                   <span
-                    className={`${SERIF_ITALIC} absolute top-6 left-6 md:top-8 md:left-8 leading-none text-white`}
+                    className={`absolute top-6 left-6 md:top-8 md:left-8 leading-none text-white`}
                     style={{
                       fontSize: "clamp(4rem, 8vw, 7rem)",
                       textShadow: "0 8px 30px rgba(0,0,0,0.45)",
@@ -1005,7 +988,7 @@ const CaseStudiesSection = () => {
                       }}
                     >
                       <p
-                        className={`${SERIF_ITALIC} text-white/80 text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                        className={`text-white/80 text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                       >
                         {cs.branche}
                       </p>
@@ -1039,7 +1022,7 @@ const CaseStudiesSection = () => {
                         className="inline-flex items-center justify-center w-7 h-7 md:w-9 md:h-9 rounded-full shrink-0 font-display font-bold text-white text-xs md:text-sm"
                         style={{
                           background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                          boxShadow: "0 6px 14px -4px rgba(154,38,64,0.45)",
+                          boxShadow: "0 6px 14px -4px rgba(0,0,0,0.040)",
                         }}
                       >
                         {idx + 1}
@@ -1133,7 +1116,7 @@ const FormatOptionenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Welches Format wollt ihr{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 buchen
               </span>
               ?
@@ -1186,7 +1169,7 @@ const FormatOptionenSection = () => {
                 {f.bullets.map((b) => (
                   <li
                     key={b}
-                    className={`${SERIF_ITALIC} text-sm text-foreground/55 leading-snug`}
+                    className={`text-sm text-foreground/55 leading-snug`}
                   >
                     · {b}
                   </li>
@@ -1254,7 +1237,7 @@ const BuchungsAblaufSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1264,7 +1247,7 @@ const BuchungsAblaufSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Schritte.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Schriftlich. Sauber.
               </span>
             </h2>
@@ -1337,7 +1320,7 @@ const BuchungsAblaufSection = () => {
                 style={{ background: ACCENT }}
               />
               <div className="flex-1 min-w-0">
-                <p className={`${SERIF_ITALIC} text-[11px] text-foreground/45 leading-tight`}>
+                <p className={`text-[11px] text-foreground/45 leading-tight`}>
                   {d.label}
                 </p>
                 <p className="font-display font-bold text-foreground text-xs leading-tight">
@@ -1361,7 +1344,7 @@ const firmenfeiernQuizConfig: CustomQuizConfig = {
   sectionTitle: (
     <>
       Was passt zu eurem{" "}
-      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+      <span style={{ color: ACCENT }}>
         Firmenabend
       </span>
       ?
@@ -1518,7 +1501,7 @@ const StimmenSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             5,0 Sterne.
             <br />
-            <span className={SERIF_ITALIC}>30+ Bewertungen.</span>
+            <span>30+ Bewertungen.</span>
           </h2>
         </div>
 
@@ -1593,7 +1576,7 @@ const TrustZahlenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-white py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
@@ -1602,7 +1585,7 @@ const TrustZahlenSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             Bekannt aus TV, Wettbewerb und{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               100+ Firmen-Events
             </span>
             .
@@ -1623,8 +1606,8 @@ const TrustZahlenSection = () => {
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))",
-                  border: "1px solid rgba(154,38,64,0.22)",
+                    "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
+                  border: "1px solid rgba(0,0,0,0.040)",
                 }}
               >
                 <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -1655,7 +1638,7 @@ const TrustZahlenSection = () => {
               <span className="font-display text-2xl md:text-3xl font-black text-foreground tabular-nums">
                 {s.num}
               </span>
-              <span className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55`}>
+              <span className={`text-base md:text-lg text-foreground/55`}>
                 {s.label}
               </span>
             </div>
@@ -1708,7 +1691,7 @@ const FAQSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Was Event-Planerinnen
             <br />
-            <span className={SERIF_ITALIC}>vorher fragen.</span>
+            <span>vorher fragen.</span>
           </h2>
         </div>
 
@@ -1761,15 +1744,15 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -1787,7 +1770,7 @@ const FinalCTA = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Magie für{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               eure Firma
             </span>
             .
@@ -1909,15 +1892,15 @@ const Firmenfeiern = () => (
         <LogoMarquee eyebrow="100+ Firmen-Engagements." variant="cream" compact />
 
         {/* Agency-Banner: Hinweis für Eventagenturen */}
-        <section className="bg-[hsl(30,8%,98.5%)] border-b border-foreground/10">
+        <section className="bg-[hsl(0,0%,98%)] border-b border-foreground/10">
           <div className="container px-6 py-5 md:py-6">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-6">
               <div className="flex items-center gap-3">
                 <span
                   className="inline-flex items-center justify-center w-9 h-9 rounded-full shrink-0"
                   style={{
-                    background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
-                    border: "1px solid rgba(154,38,64,0.22)",
+                    background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
+                    border: "1px solid rgba(0,0,0,0.040)",
                   }}
                 >
                   <Briefcase className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -1929,7 +1912,7 @@ const Firmenfeiern = () => (
                   >
                     Eventagentur · Veranstaltungsplanung
                   </p>
-                  <p className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/70`}>
+                  <p className={`text-sm md:text-base text-foreground/70`}>
                     Bucht ihr im Auftrag eures Kunden? Dann gibt's hier den passenden Bereich.
                   </p>
                 </div>

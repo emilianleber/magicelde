@@ -1,42 +1,40 @@
 import { useEffect, useState } from "react";
-import { Sparkles, X, Wand2 } from "lucide-react";
+import { Sparkles, X, Wand2, MessageCircle } from "lucide-react";
 import ShowPlanerModal from "./ShowPlanerModal";
 import { hasDraft, isCompleted, loadDraft } from "@/lib/showPlaner";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 
 /**
- * Show-Planer-Trigger
+ * Unified FAB-Menu unten rechts:
+ * - Wand2 = Show planen (öffnet ShowPlanerModal)
+ * - MessageCircle = Chat (dispatcht open-chatbot)
+ * - WhatsApp = öffnet wa.me Link
  *
- * Rendert:
- * - Floating Action Button unten rechts auf jeder Page (außer Admin)
- * - Resume-Banner unten links wenn Draft vorhanden
- * - Exit-Intent-Toast oben mitte wenn Maus aus Viewport → "Show fertig planen?"
- *   (nur auf Desktop, max 1× pro Session)
- *
- * Triggert ShowPlanerModal-Open auf Klick.
+ * Resume-Banner + Exit-Intent bleibt.
  */
 
 const SHOWPLANER_HASH = "#planer";
 const EXIT_INTENT_SHOWN_KEY = "magicel_exit_intent_session";
+const WHATSAPP_URL =
+  "https://wa.me/4915563744696?text=" +
+  encodeURIComponent(
+    "Hallo Emilian! Ich interessiere mich für eine Buchung als Zauberer für mein Event.",
+  );
 
 const ShowPlanerTrigger = () => {
   const [open, setOpen] = useState(false);
   const [showResume, setShowResume] = useState(false);
   const [showExitIntent, setShowExitIntent] = useState(false);
   const [draftStep, setDraftStep] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Resume-Banner: zeigen wenn Draft existiert und nicht completed
   useEffect(() => {
     const draft = loadDraft();
     if (draft && !isCompleted() && draft.step > 0) {
       setDraftStep(draft.step);
-      // verzögert zeigen, damit Page erst rendert
       const t = window.setTimeout(() => setShowResume(true), 1200);
-      // Auto-dismiss nach 14s damit Content nicht permanent blockiert
       const t2 = window.setTimeout(() => setShowResume(false), 16000);
       return () => {
         window.clearTimeout(t);
@@ -45,12 +43,12 @@ const ShowPlanerTrigger = () => {
     }
   }, []);
 
-  // Hash-Trigger: wenn URL Hash #planer hat, Modal öffnen
   useEffect(() => {
     const checkHash = () => {
       if (window.location.hash === SHOWPLANER_HASH) {
         setOpen(true);
         setShowResume(false);
+        setMenuOpen(false);
       }
     };
     checkHash();
@@ -58,18 +56,16 @@ const ShowPlanerTrigger = () => {
     return () => window.removeEventListener("hashchange", checkHash);
   }, []);
 
-  // Exit-Intent: Maus verlässt Viewport oben → Toast einblenden
   useEffect(() => {
     if (sessionStorage.getItem(EXIT_INTENT_SHOWN_KEY) === "true") return;
     if (isCompleted()) return;
-    // Nur auf Pointer-Geräten (Desktop) — mobile macht "mouseleave" wenig Sinn
     const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!isDesktop) return;
 
     let armed = false;
     const armTimer = window.setTimeout(() => {
       armed = true;
-    }, 15000); // erst nach 15s armen — kein Sofort-Pop
+    }, 15000);
 
     const handler = (e: MouseEvent) => {
       if (!armed) return;
@@ -90,33 +86,90 @@ const ShowPlanerTrigger = () => {
     setOpen(true);
     setShowResume(false);
     setShowExitIntent(false);
+    setMenuOpen(false);
+  };
+
+  const openChat = () => {
+    document.dispatchEvent(new CustomEvent("open-chatbot"));
+    setMenuOpen(false);
   };
 
   return (
     <>
-      {/* Floating Action Button — Mobile: kompakt Icon-only, Desktop: mit Label */}
+      {/* Backdrop bei offenem Menü, schließt bei Klick außerhalb */}
+      {menuOpen && (
+        <button
+          type="button"
+          aria-label="Menü schließen"
+          onClick={() => setMenuOpen(false)}
+          className="fixed inset-0 z-30 bg-transparent"
+        />
+      )}
+
+      {/* Mini-Buttons über dem Haupt-FAB, faden sich beim Klick auf */}
+      <div
+        className={`fixed bottom-[5.5rem] right-5 md:bottom-[6rem] md:right-7 z-40 flex flex-col items-end gap-2.5 pointer-events-none transition-all duration-200 ${
+          menuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+        }`}
+        aria-hidden={!menuOpen}
+      >
+        <MiniAction
+          label="Show planen"
+          icon={<Wand2 className="w-4 h-4" aria-hidden="true" />}
+          onClick={openPlaner}
+          tabIndex={menuOpen ? 0 : -1}
+        />
+        <MiniAction
+          label="Chat starten"
+          icon={<MessageCircle className="w-4 h-4" aria-hidden="true" />}
+          onClick={openChat}
+          tabIndex={menuOpen ? 0 : -1}
+        />
+        <MiniAction
+          label="WhatsApp"
+          icon={
+            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 .998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          }
+          onClick={() => {
+            window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
+            setMenuOpen(false);
+          }}
+          tabIndex={menuOpen ? 0 : -1}
+          bg="#25D366"
+        />
+      </div>
+
+      {/* Haupt-FAB */}
       <button
         type="button"
-        onClick={openPlaner}
-        aria-label="Show-Planer öffnen"
-        className="fixed bottom-5 right-5 md:bottom-7 md:right-7 z-40 group inline-flex items-center justify-center gap-2 w-12 h-12 md:w-auto md:h-auto md:px-5 md:py-3.5 rounded-full text-white md:text-[12px] md:tracking-[0.08em] md:font-semibold md:uppercase transition-transform hover:scale-105"
+        onClick={() => {
+          if (menuOpen) setMenuOpen(false);
+          else setMenuOpen(true);
+        }}
+        aria-label={menuOpen ? "Menü schließen" : "Kontakt-Menü öffnen"}
+        aria-expanded={menuOpen}
+        className="fixed bottom-5 right-5 md:bottom-7 md:right-7 z-40 inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full text-white transition-transform hover:scale-105"
         style={{
           background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-          boxShadow:
-            "0 14px 30px -10px rgba(154,38,64,0.18), 0 4px 12px -4px rgba(154,38,64,0.25)",
+          boxShadow: "0 8px 18px -8px rgba(0,0,0,0.25)",
         }}
       >
-        <Wand2 className="w-5 h-5 md:w-4 md:h-4 group-hover:rotate-12 transition-transform" />
-        <span className="hidden md:inline">Show planen</span>
+        {menuOpen ? (
+          <X className="w-5 h-5 md:w-6 md:h-6" aria-hidden="true" />
+        ) : (
+          <Wand2 className="w-5 h-5 md:w-6 md:h-6" aria-hidden="true" />
+        )}
       </button>
 
-      {/* Resume-Banner — nur auf Desktop sichtbar (mobile zu eng) */}
-      {showResume && !open && (
+      {/* Resume-Banner — nur Desktop */}
+      {showResume && !open && !menuOpen && (
         <div
-          className="hidden md:block fixed bottom-[calc(4.5rem+1.25rem)] right-7 z-40 w-[min(92vw,320px)] rounded-2xl p-4 text-white animate-fade-up"
+          className="hidden md:block fixed bottom-[calc(5rem+1.25rem)] right-7 z-40 w-[min(92vw,320px)] rounded-2xl p-4 text-white animate-fade-up"
           style={{
             background: `linear-gradient(155deg, ${ACCENT_DEEP}, #08060c)`,
-            boxShadow: "0 30px 60px -20px rgba(40,20,40,0.55)",
+            boxShadow: "0 18px 36px -16px rgba(0,0,0,0.35)",
             animation: "fadeUpResume 0.5s cubic-bezier(0.16,1,0.3,1) forwards",
           }}
         >
@@ -127,33 +180,25 @@ const ShowPlanerTrigger = () => {
             <span
               className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full"
               style={{
-                background: "rgba(243,217,168,0.15)",
-                border: "1px solid rgba(243,217,168,0.3)",
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.18)",
               }}
             >
-              <Sparkles className="w-4 h-4" style={{ color: "#f3d9a8" }} />
+              <Sparkles className="w-4 h-4 text-white" />
             </span>
             <div className="flex-1 min-w-0">
-              <p
-                className="text-[10px] tracking-[0.18em] uppercase font-bold mb-1"
-                style={{ color: "#f3d9a8" }}
-              >
+              <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-1 text-white/65">
                 Show-Planer · {draftStep}/9
               </p>
-              <p className={`${SERIF_ITALIC} text-base leading-snug mb-3`}>
+              <p className="text-sm leading-snug mb-3">
                 Du hast eine Show begonnen — magst weitermachen?
               </p>
               <div className="flex items-center gap-3">
                 <button
                   type="button"
                   onClick={openPlaner}
-                  className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.16em] uppercase font-bold text-white"
-                  style={{
-                    background: "rgba(243,217,168,0.95)",
-                    color: "#08060c",
-                    borderRadius: "999px",
-                    padding: "8px 14px",
-                  }}
+                  className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.16em] uppercase font-bold rounded-full px-3.5 py-2"
+                  style={{ background: "#fff", color: "#08060c" }}
                 >
                   Weitermachen
                 </button>
@@ -178,14 +223,13 @@ const ShowPlanerTrigger = () => {
         </div>
       )}
 
-      {/* Exit-Intent Toast — nur Desktop (mouseleave irrelevant auf Mobile) */}
+      {/* Exit-Intent Toast — nur Desktop */}
       {showExitIntent && !open && (
         <div
           className="hidden md:block fixed top-5 left-1/2 -translate-x-1/2 z-40 max-w-md rounded-2xl p-5 bg-white"
           style={{
-            boxShadow:
-              "0 30px 60px -15px rgba(40,20,40,0.35), 0 12px 25px -10px rgba(40,20,40,0.2)",
-            border: "1px solid rgba(154,38,64,0.15)",
+            boxShadow: "0 18px 36px -16px rgba(0,0,0,0.25)",
+            border: "1px solid rgba(0,0,0,0.08)",
             animation: "fadeUpResume 0.45s cubic-bezier(0.16,1,0.3,1) forwards",
           }}
         >
@@ -205,9 +249,7 @@ const ShowPlanerTrigger = () => {
               >
                 Vorher noch eines.
               </p>
-              <p
-                className={`${SERIF_ITALIC} text-base leading-snug mb-3 text-foreground`}
-              >
+              <p className="text-base leading-snug mb-3 text-foreground">
                 Lust deine Show in 90 Sekunden zu planen?
               </p>
               <div className="flex items-center gap-3">
@@ -246,5 +288,34 @@ const ShowPlanerTrigger = () => {
     </>
   );
 };
+
+interface MiniActionProps {
+  label: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+  tabIndex?: number;
+  bg?: string;
+}
+
+const MiniAction = ({ label, icon, onClick, tabIndex, bg }: MiniActionProps) => (
+  <button
+    type="button"
+    onClick={onClick}
+    tabIndex={tabIndex}
+    className="pointer-events-auto inline-flex items-center gap-2 pl-3 pr-3.5 h-10 rounded-full bg-white text-foreground text-[12px] font-semibold tracking-tight hover:scale-[1.03] transition-transform"
+    style={{
+      boxShadow: "0 6px 14px -6px rgba(0,0,0,0.18)",
+      border: "1px solid rgba(0,0,0,0.06)",
+    }}
+  >
+    <span
+      className="inline-flex items-center justify-center w-7 h-7 rounded-full text-white"
+      style={{ background: bg ?? ACCENT_DEEP }}
+    >
+      {icon}
+    </span>
+    <span>{label}</span>
+  </button>
+);
 
 export default ShowPlanerTrigger;

@@ -63,7 +63,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -80,18 +80,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Magic", "Dinner"];
 const HEADLINE_ITALIC = ["Tickets."];
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.4 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.6 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.5 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.3 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.4 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -155,10 +144,10 @@ const Hero = () => {
         />
         <div
           aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -215,12 +204,6 @@ const Hero = () => {
               <span className="text-white/55"> · Alte Mälzerei Regensburg</span>
             </span>
           </div>
-          <p
-            className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
-            style={{ animationDelay: "0.18s" }}
-          >
-            Plötzlich Magie — Magic Meets Comedy.
-          </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
               <span
@@ -335,18 +318,18 @@ const AktuelleTourShowSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl opacity-6"
+        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-2xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
+            "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.18), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -362,7 +345,7 @@ const AktuelleTourShowSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] mb-7">
               Plötzlich Magie —{" "}
               <br />
-              <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+              <span style={{ color: "#f3d9a8" }}>
                 Magic Meets Comedy.
               </span>
             </h2>
@@ -400,7 +383,7 @@ const AktuelleTourShowSection = () => {
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
                 style={{
                   background: "#f3d9a8",
-                  boxShadow: "0 18px 40px -14px rgba(199,144,66,0.12)",
+                  boxShadow: "0 18px 40px -14px rgba(0,0,0,0.024)",
                 }}
               >
                 <Ticket className="w-4 h-4" />
@@ -415,7 +398,7 @@ const AktuelleTourShowSection = () => {
               </Link>
             </div>
             <p
-              className={`${SERIF_ITALIC} text-sm text-white/55 mt-7 max-w-md`}
+              className={`text-sm text-white/55 mt-7 max-w-md`}
             >
               Tour-Premiere — Theater-Veranstalter und Pressevertreter bitte über{" "}
               <a
@@ -437,7 +420,7 @@ const AktuelleTourShowSection = () => {
                 background:
                   "linear-gradient(160deg, #1a0e16 0%, #08060c 60%, #2a0d18 100%)",
                 boxShadow:
-                  "0 60px 120px -30px rgba(0,0,0,0.6), 0 25px 50px -20px rgba(154,38,64,0.15), inset 0 0 0 1px rgba(255,255,255,0.08)",
+                  "0 60px 120px -30px rgba(0,0,0,0.6), 0 25px 50px -20px rgba(0,0,0,0.040), inset 0 0 0 1px rgba(255,255,255,0.08)",
               }}
             >
               <div className="absolute inset-x-0 top-0 p-6 flex items-center justify-between text-white/80">
@@ -445,7 +428,7 @@ const AktuelleTourShowSection = () => {
                   MagicEL · Premiere
                 </span>
                 <span
-                  className={`${SERIF_ITALIC} text-sm`}
+                  className={`text-sm`}
                   style={{ color: "#f3d9a8" }}
                 >
                   N° 001
@@ -462,7 +445,7 @@ const AktuelleTourShowSection = () => {
                 <h3 className="font-display font-black text-3xl md:text-4xl text-white leading-[1.05] mb-3">
                   22.02
                   <br />
-                  <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+                  <span style={{ color: "#f3d9a8" }}>
                     2026.
                   </span>
                 </h3>
@@ -472,9 +455,9 @@ const AktuelleTourShowSection = () => {
                 <span
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] tracking-[0.18em] uppercase font-bold"
                   style={{
-                    background: "rgba(199,144,66,0.18)",
+                    background: "rgba(0,0,0,0.024)",
                     color: "#f3d9a8",
-                    border: "1px solid rgba(199,144,66,0.4)",
+                    border: "1px solid rgba(0,0,0,0.024)",
                   }}
                 >
                   <Sparkles className="w-3 h-3" />
@@ -618,7 +601,7 @@ const STATUS_STYLES: Record<
   Demnächst: {
     bg: "transparent",
     color: "#5c1622",
-    border: "1px solid rgba(154,38,64,0.18)",
+    border: "1px solid rgba(0,0,0,0.040)",
   },
 };
 
@@ -628,7 +611,7 @@ const TourDatenSection = () => {
     <section
       id="tour-daten"
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -641,7 +624,7 @@ const TourDatenSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Bayern,{" "}
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Stadt für Stadt.
               </span>
             </h2>
@@ -683,7 +666,7 @@ const TourDatenSection = () => {
                   <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-snug mb-2">
                     {t.city}
                     <span className="text-foreground/40"> · </span>
-                    <span className={`${SERIF_ITALIC} text-foreground/85`}>
+                    <span className={`text-foreground/85`}>
                       {t.venue}
                     </span>
                   </h3>
@@ -697,7 +680,7 @@ const TourDatenSection = () => {
                         className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
                         style={{
                           color: ACCENT,
-                          borderColor: "rgba(154,38,64,0.15)",
+                          borderColor: "rgba(0,0,0,0.040)",
                         }}
                       >
                         <Ticket className="w-3.5 h-3.5" />
@@ -740,7 +723,7 @@ const TourDatenSection = () => {
         </div>
 
         <p
-          className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-10 max-w-2xl`}
+          className={`text-sm text-foreground/55 mt-10 max-w-2xl`}
         >
           Stand {PREMIERE_DATE.split(".")[0]}. Mai 2026 · Termine ohne Gewähr ·
           Vorverkaufs-Tickets über die jeweilige Spielstätte oder direkt über{" "}
@@ -847,7 +830,7 @@ const MagicDinnerAbendeSection = () => {
               </span>
               <div className="absolute bottom-5 left-5 right-5 md:bottom-7 md:left-7 md:right-7 text-white">
                 <p
-                  className={`${SERIF_ITALIC} text-base md:text-lg mb-1`}
+                  className={`text-base md:text-lg mb-1`}
                   style={{ color: "#f3d9a8" }}
                 >
                   Wald & Wiese · Sinzing
@@ -869,7 +852,7 @@ const MagicDinnerAbendeSection = () => {
             <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-tight mb-4">
               Tisch reservieren.
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Magic Dinner erleben.
               </span>
             </h3>
@@ -1005,7 +988,7 @@ const TicketKategorienSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1018,7 +1001,7 @@ const TicketKategorienSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei Zonen.{" "}
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Eine Show.
               </span>
             </h2>
@@ -1084,10 +1067,10 @@ const TicketKategorienSection = () => {
           >
             <div
               aria-hidden
-              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-3xl opacity-6"
+              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-2xl opacity-6"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(199,144,66,0.12), transparent 60%)",
+                  "radial-gradient(circle, rgba(0,0,0,0.024), transparent 60%)",
               }}
             />
             <div className="relative flex items-baseline gap-3 mb-7">
@@ -1108,7 +1091,7 @@ const TicketKategorienSection = () => {
               {CATEGORIES[1].label}
             </h3>
             <p
-              className={`relative ${SERIF_ITALIC} text-base text-white/65 mb-5`}
+              className={`relative text-base text-white/65 mb-5`}
             >
               {CATEGORIES[1].sub}
             </p>
@@ -1131,7 +1114,7 @@ const TicketKategorienSection = () => {
               background:
                 "linear-gradient(155deg, #5c1622 0%, #9a2640 100%)",
               boxShadow:
-                "0 25px 50px -25px rgba(154,38,64,0.5), inset 0 0 0 1px rgba(255,255,255,0.12)",
+                "0 25px 50px -25px rgba(0,0,0,0.040), inset 0 0 0 1px rgba(255,255,255,0.12)",
               color: "#fff",
             }}
           >
@@ -1152,7 +1135,7 @@ const TicketKategorienSection = () => {
             <h3 className="font-display text-xl md:text-2xl font-bold leading-snug mb-3">
               {CATEGORIES[2].label}
             </h3>
-            <p className={`${SERIF_ITALIC} text-sm text-white/75 mb-4`}>
+            <p className={`text-sm text-white/75 mb-4`}>
               {CATEGORIES[2].sub}
             </p>
             <p className="text-[14px] text-white/85 leading-[1.6] mb-auto">
@@ -1168,7 +1151,7 @@ const TicketKategorienSection = () => {
         </div>
 
         <p
-          className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-10 max-w-2xl`}
+          className={`text-sm text-foreground/55 mt-10 max-w-2xl`}
         >
           Preis je Tour-Stopp · jeweilige Spielstätte legt Kontingent und
           Endpreis fest · Sammelbuchungen ab 8 Personen direkt anfragen.
@@ -1223,7 +1206,7 @@ const WasErwartetDichSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Was dich{" "}
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 erwartet.
               </span>
             </h2>
@@ -1280,7 +1263,7 @@ const WasErwartetDichSection = () => {
                     }}
                   >
                     <p
-                      className={`${SERIF_ITALIC} text-base mb-1`}
+                      className={`text-base mb-1`}
                       style={{ color: "#f3d9a8" }}
                     >
                       Block II · Climax.
@@ -1343,15 +1326,15 @@ const PullQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -1368,12 +1351,12 @@ const PullQuoteSection = () => {
           <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,5vw,4.5rem)]">
             Drei Sekunden Stille.
             <br />
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#f3d9a8" }}>
               Dann lacht der ganze Saal.
             </span>
           </p>
           <p
-            className={`${SERIF_ITALIC} text-base md:text-lg text-white/55 mt-8`}
+            className={`text-base md:text-lg text-white/55 mt-8`}
           >
             — Was nach dem Climax-Effekt passiert · Tour-Premiere Plötzlich Magie
           </p>
@@ -1431,7 +1414,7 @@ const LocationsSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1444,7 +1427,7 @@ const LocationsSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sechs Bühnen,{" "}
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 eine Show.
               </span>
             </h2>
@@ -1483,10 +1466,10 @@ const LocationsSection = () => {
                 {isHero && (
                   <div
                     aria-hidden
-                    className="absolute -top-16 -right-16 w-[240px] h-[240px] rounded-full blur-3xl opacity-6"
+                    className="absolute -top-16 -right-16 w-[240px] h-[240px] rounded-full blur-2xl opacity-6"
                     style={{
                       background:
-                        "radial-gradient(circle, rgba(199,144,66,0.12), transparent 60%)",
+                        "radial-gradient(circle, rgba(0,0,0,0.024), transparent 60%)",
                     }}
                   />
                 )}
@@ -1504,12 +1487,12 @@ const LocationsSection = () => {
                     </span>
                   </div>
                   <h3
-                    className={`font-display ${isHero ? "text-2xl md:text-3xl" : "text-xl"} font-bold leading-snug mb-2`}
+                    className={`${SERIF_ITALIC} font-display ${isHero ? "text-2xl md:text-3xl" : "text-xl"} font-bold leading-snug mb-2`}
                   >
                     {v.name}
                   </h3>
                   <p
-                    className={`${SERIF_ITALIC} text-sm ${isHero ? "text-white/65" : "text-foreground/55"} mb-4`}
+                    className={`text-sm ${isHero ? "text-white/65" : "text-foreground/55"} mb-4`}
                   >
                     {v.type}
                   </p>
@@ -1525,7 +1508,7 @@ const LocationsSection = () => {
         </div>
 
         <p
-          className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-10 max-w-2xl`}
+          className={`text-sm text-foreground/55 mt-10 max-w-2xl`}
         >
           Weitere Spielstätten für Herbst 2026 und 2027 in Planung — neue
           Tour-Daten zuerst über den Newsletter.
@@ -1553,7 +1536,7 @@ const VideoSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sieh dir an,{" "}
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 worauf du dich freust.
               </span>
             </h2>
@@ -1574,7 +1557,7 @@ const VideoSection = () => {
             borderRadius: "1.5rem",
             overflow: "hidden",
             boxShadow:
-              "0 50px 100px -30px rgba(40,20,40,0.45), 0 18px 40px -15px rgba(40,20,40,0.22)",
+              "0 50px 100px -30px rgba(0,0,0,0.225), 0 18px 40px -15px rgba(0,0,0,0.110)",
           }}
         >
           <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
@@ -1598,7 +1581,7 @@ const VideoSection = () => {
           <span aria-hidden className="text-foreground/25">
             ·
           </span>
-          <span className={SERIF_ITALIC}>2024 · mit 16 Jahren</span>
+          <span>2024 · mit 16 Jahren</span>
           <span aria-hidden className="text-foreground/25">
             ·
           </span>
@@ -1641,7 +1624,7 @@ const StimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
@@ -1653,7 +1636,7 @@ const StimmenSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             5,0 Sterne.
             <br />
-            <span className={SERIF_ITALIC}>30+ Bewertungen.</span>
+            <span>30+ Bewertungen.</span>
           </h2>
         </div>
         <div
@@ -1772,7 +1755,7 @@ const FAQSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Häufige Ticket-
             <br />
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               Fragen.
             </span>
           </h2>
@@ -1831,7 +1814,7 @@ const NewsletterCTASection = () => {
     <section
       id="newsletter"
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1849,10 +1832,10 @@ const NewsletterCTASection = () => {
           >
             <div
               aria-hidden
-              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-3xl opacity-8"
+              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-2xl opacity-8"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
+                  "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
               }}
             />
 
@@ -1864,7 +1847,7 @@ const NewsletterCTASection = () => {
               </p>
               <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.8vw,3rem)] text-foreground mb-5">
                 Sei der erste bei{" "}
-                <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                <span style={{ color: ACCENT }}>
                   neuen Tour-Daten.
                 </span>
               </h2>
@@ -1915,7 +1898,7 @@ const NewsletterCTASection = () => {
                     className="hero-cta w-full inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
                     style={{
                       background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                      boxShadow: "0 18px 40px -14px rgba(154,38,64,0.13)",
+                      boxShadow: "0 18px 40px -14px rgba(0,0,0,0.040)",
                     }}
                   >
                     <Send className="w-4 h-4" />
@@ -1931,8 +1914,8 @@ const NewsletterCTASection = () => {
                 <div
                   className="p-6 rounded-2xl flex items-start gap-4"
                   style={{
-                    background: "rgba(154,38,64,0.08)",
-                    border: "1px solid rgba(154,38,64,0.2)",
+                    background: "rgba(0,0,0,0.040)",
+                    border: "1px solid rgba(0,0,0,0.040)",
                   }}
                 >
                   <CheckCircle2
@@ -1967,7 +1950,7 @@ const ticketsQuizConfig: CustomQuizConfig = {
   sectionTitle: (
     <>
       Tour-Show oder{" "}
-      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+      <span style={{ color: ACCENT }}>
         Magic Dinner?
       </span>
     </>
@@ -2110,15 +2093,15 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -2135,7 +2118,7 @@ const FinalCTA = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Tour-Ticket{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               oder eigene Show.
             </span>
           </h2>
@@ -2163,7 +2146,7 @@ const FinalCTA = () => {
             </Link>
           </div>
           <p
-            className={`${SERIF_ITALIC} text-sm text-white/55 mt-9 max-w-md mx-auto`}
+            className={`text-sm text-white/55 mt-9 max-w-md mx-auto`}
           >
             el@magicel.de · +49 15563744696 · Bayern und deutschlandweit.
           </p>

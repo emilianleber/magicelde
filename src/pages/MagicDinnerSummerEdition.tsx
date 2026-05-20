@@ -31,8 +31,6 @@ import staunenImg from "@/assets/staunen.jpg";
 import haendeImg from "@/assets/haende-interaktion.jpg";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const ACCENT_SOFT = "#e4b8c0";
@@ -291,7 +289,7 @@ const AblaufSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
               Vier Schritte vom{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Tisch zur Pointe
               </span>
               .
@@ -372,7 +370,7 @@ const WannWoSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.5rem)] text-foreground mb-6">
               Sommerabend in{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Sinzing
               </span>
               .
@@ -510,7 +508,7 @@ const ReservierungsSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground mb-6">
               Platz sichern.<br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Sommerabend buchen.
               </span>
             </h2>
@@ -523,7 +521,7 @@ const ReservierungsSection = () => {
             <div className="space-y-3 mb-6">
               <a
                 href={`tel:${RESERVIERUNG_TEL.replace(/\s/g, "")}`}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(30,8%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(0,0%,98%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
               >
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-full shrink-0"
@@ -542,7 +540,7 @@ const ReservierungsSection = () => {
               </a>
               <a
                 href={`mailto:${RESERVIERUNG_MAIL}?subject=Reservierung%20Magic%20Dinner%20Summer%20Edition`}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(30,8%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(0,0%,98%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
               >
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-full shrink-0"
@@ -563,7 +561,7 @@ const ReservierungsSection = () => {
                 href={RESERVIERUNG_URL}
                 target="_blank"
                 rel="noopener"
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(30,8%,98.5%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[hsl(0,0%,98%)] hover:bg-white hover:shadow-md transition-all border border-foreground/8"
               >
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-full shrink-0"
@@ -590,7 +588,7 @@ const ReservierungsSection = () => {
 
           <div className={`lg:col-span-7`} style={{ animationDelay: "0.15s" }}>
             <div
-              className="rounded-3xl p-7 md:p-10 bg-[hsl(30,8%,98.5%)]"
+              className="rounded-3xl p-7 md:p-10 bg-[hsl(0,0%,98%)]"
               style={{ border: "1px solid rgba(0,0,0,0.06)" }}
             >
               {submitted ? (
@@ -618,7 +616,7 @@ const ReservierungsSection = () => {
                   </p>
                   <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-5">
                     Bequemer Weg —{" "}
-                    <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                    <span style={{ color: ACCENT }}>
                       schick uns die Anfrage.
                     </span>
                   </h3>
@@ -748,7 +746,7 @@ const WasErwartetSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
               Sechs Dinge die diesen{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Abend ausmachen
               </span>
               .
@@ -848,7 +846,7 @@ const FAQSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
             Was vorher{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               gefragt wird.
             </span>
           </h2>
@@ -878,7 +876,7 @@ const FAQSection = () => {
                   </h3>
                   <span
                     aria-hidden
-                    className={`shrink-0 text-2xl transition-transform duration-300 ${open ? "rotate-45" : ""}`}
+                    className={`${SERIF_ITALIC} shrink-0 text-2xl transition-transform duration-300 ${open ? "rotate-45" : ""}`}
                     style={{ color: ACCENT }}
                   >
                     +
@@ -942,7 +940,7 @@ const WeitereEditionenSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.1] text-[clamp(1.75rem,3.8vw,3rem)] text-foreground">
             Nach Sommer kommt{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               mehr
             </span>
             .
@@ -1021,12 +1019,12 @@ const FinalCTA = () => (
     </div>
     <div className="relative container px-6">
       <div className="max-w-3xl mx-auto text-center">
-        <p className={`${SERIF_ITALIC} text-base md:text-lg text-white/55 mb-5`}>
+        <p className={`text-base md:text-lg text-white/55 mb-5`}>
           Magic Dinner Summer Edition · 11. Juli 2026.
         </p>
         <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.8vw,4rem)]">
           Tisch sichern.<br />
-          <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+          <span style={{ color: ACCENT_SOFT }}>
             Magie bekommen.
           </span>
         </h2>

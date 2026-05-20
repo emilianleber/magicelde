@@ -1416,7 +1416,7 @@ const AdminShowEditor = () => {
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div className={`rounded-xl border p-4 ${gewinn >= 0 ? "border-green-200 bg-green-50/30" : "border-red-200 bg-red-50/30"}`}>
                     <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Gewinn</p>
-                    <p className={`text-2xl font-bold ${gewinn >= 0 ? "text-green-700" : "text-red-700"}`}>{gewinn.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
+                    <p className={`${SERIF_ITALIC} text-2xl font-bold ${gewinn >= 0 ? "text-green-700" : "text-red-700"}`}>{gewinn.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</p>
                   </div>
                   <div className="rounded-xl border border-border/20 p-4">
                     <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Gesamtzeit</p>

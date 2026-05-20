@@ -928,9 +928,9 @@ const Kundenportal = () => {
       <section className="relative min-h-screen pt-24 pb-20">
         {/* Decorative background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/[0.06] blur-3xl" />
-          <div className="absolute top-1/3 -left-32 w-72 h-72 rounded-full bg-blue-500/[0.04] blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-purple-500/[0.04] blur-3xl" />
+          <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/[0.06] blur-2xl" />
+          <div className="absolute top-1/3 -left-32 w-72 h-72 rounded-full bg-blue-500/[0.04] blur-2xl" />
+          <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-purple-500/[0.04] blur-2xl" />
         </div>
         <div className="container px-4 sm:px-6 max-w-4xl mx-auto relative">
 
@@ -1005,7 +1005,7 @@ const Kundenportal = () => {
                     </a>
                   </div>
                 </div>
-                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-red-500/10 blur-3xl pointer-events-none" />
+                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-red-500/10 blur-2xl pointer-events-none" />
               </div>
 
             ) : currentEvent && currentEvent.status === "abgeschlossen" ? (
@@ -1032,7 +1032,7 @@ const Kundenportal = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
+                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
               </div>
 
             ) : currentEvent && currentEvent.status === "event_erfolgt" ? (
@@ -1060,7 +1060,7 @@ const Kundenportal = () => {
                     )}
                   </div>
                 </div>
-                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
+                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
               </div>
 
             ) : currentEvent ? (
@@ -1094,7 +1094,7 @@ const Kundenportal = () => {
                     </button>
                   )}
                 </div>
-                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
+                <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
               </div>
             ) : (
               /* Kein Event → Willkommen */
@@ -1855,7 +1855,7 @@ const Kundenportal = () => {
                 </h1>
                 {paketInfo?.zieldauer && <p className="font-sans text-sm text-white/60 mt-2">Bis zu {paketInfo.zieldauer} Minuten Showprogramm</p>}
               </div>
-              <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
+              <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
             </div>
 
             {/* ── Über Ihr Programm (1 Block, kombiniert Paket + Anlass + Format) ── */}
@@ -2820,7 +2820,7 @@ const Kundenportal = () => {
                   {/* Star rating recap */}
                   <div className="flex items-center justify-center gap-1 mt-4 mb-2">
                     {[1, 2, 3, 4, 5].map(s => (
-                      <span key={s} className={`text-xl ${fbRating >= s ? "opacity-100" : "opacity-20"}`}>
+                      <span key={s} className={`${SERIF_ITALIC} text-xl ${fbRating >= s ? "opacity-100" : "opacity-20"}`}>
                         {fbRating >= s ? "\u2B50" : "\u2606"}
                       </span>
                     ))}
@@ -2880,7 +2880,7 @@ const Kundenportal = () => {
                       <button
                         key={star}
                         onClick={() => setFbRating(star)}
-                        className={`w-12 h-12 rounded-xl text-2xl transition-all ${fbRating >= star ? "bg-amber-100 border-2 border-amber-400 scale-110" : "bg-black/[0.02] border border-black/[0.08] hover:bg-amber-50"}`}
+                        className={`${SERIF_ITALIC} w-12 h-12 rounded-xl text-2xl transition-all ${fbRating >= star ? "bg-amber-100 border-2 border-amber-400 scale-110" : "bg-black/[0.02] border border-black/[0.08] hover:bg-amber-50"}`}
                       >
                         {fbRating >= star ? "⭐" : "☆"}
                       </button>

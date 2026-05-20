@@ -47,7 +47,7 @@ const SERIF_ITALIC =
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const ACCENT_SOFT = "#e4b8c0";
-const CREAM = "#f5ecdc";
+const CREAM = "#fafafa";
 const EPK_MAIL =
   "mailto:el@magicel.de?subject=EPK%20Anfrage%20Emilian%20Leber&body=Hallo%20Emilian%2C%20bitte%20schicken%20Sie%20mir%20das%20vollst%C3%A4ndige%20EPK%20%28Bio%2C%20Fotos%2C%20Logo%2C%20Tour-Daten%29.%20Danke%21";
 
@@ -60,7 +60,7 @@ const HeroKeyframes = () => (
     @keyframes heroWordIn { from { opacity: 0; transform: translateY(40px) scale(0.96) rotate(-1deg); filter: blur(6px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.1; } 30% { opacity: 0.9; } 70% { opacity: 0.9; } 100% { transform: translateY(-90px) translateX(14px) scale(1.15); opacity: 0; } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 6px rgba(199,144,66,0.45)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 6px rgba(0,0,0,0.024)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-bokeh { opacity: 0; animation-name: heroBokehDrift; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); animation-iteration-count: infinite; will-change: transform, opacity; }
@@ -74,16 +74,7 @@ const HeroKeyframes = () => (
 const HEAD_SANS = ["Pressebereich."];
 const HEAD_ITALIC = ["Material", "fertig", "geliefert."];
 
-const BOKEH = [
-  { size: 18, left: "10%", top: "32%", dur: 16, delay: 0, o: 0.4 },
-  { size: 12, left: "6%", top: "68%", dur: 19, delay: 2, o: 0.5 },
-  { size: 22, left: "82%", top: "22%", dur: 17, delay: 1, o: 0.35 },
-  { size: 14, left: "88%", top: "55%", dur: 21, delay: 3, o: 0.5 },
-  { size: 10, left: "60%", top: "78%", dur: 14, delay: 4, o: 0.55 },
-  { size: 16, left: "92%", top: "80%", dur: 18, delay: 1.6, o: 0.32 },
-  { size: 12, left: "35%", top: "85%", dur: 20, delay: 5.5, o: 0.45 },
-  { size: 14, left: "48%", top: "14%", dur: 22, delay: 4.5, o: 0.3 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   return (
@@ -96,18 +87,18 @@ const Hero = () => {
       <HeroKeyframes />
       <div
         aria-hidden
-        className="absolute -top-32 right-0 w-[520px] h-[520px] rounded-full blur-3xl pointer-events-none"
+        className="absolute -top-32 right-0 w-[520px] h-[520px] rounded-full blur-2xl pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.22) 0%, rgba(199,144,66,0) 70%)",
+            "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 -left-20 w-[420px] h-[420px] rounded-full blur-3xl pointer-events-none"
+        className="absolute -bottom-32 -left-20 w-[420px] h-[420px] rounded-full blur-2xl pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.10) 0%, rgba(154,38,64,0) 70%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
         }}
       />
       <div
@@ -123,7 +114,7 @@ const Hero = () => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(199,144,66,0) 75%)`,
+              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(0,0,0,0.000) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -160,13 +151,6 @@ const Hero = () => {
             <span aria-hidden className="hidden md:block h-4 w-px bg-foreground/20" />
             <span className="text-sm text-foreground/65">Bayern · deutschlandweit</span>
           </div>
-
-          <p
-            className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-5 md:mb-7 hero-fade`}
-            style={{ animationDelay: "0.15s" }}
-          >
-            Für Journalist:innen, Redakteur:innen und Event-Press-Teams.
-          </p>
 
           <h1 className="font-display font-black tracking-[-0.03em] leading-[0.98] text-[clamp(2.75rem,8vw,7.5rem)] text-foreground max-w-5xl">
             {HEAD_SANS.map((w, i) => (
@@ -215,7 +199,7 @@ const Hero = () => {
               className="hero-cta group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
               style={{
                 background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                boxShadow: "0 18px 36px -10px rgba(154,38,64,0.45)",
+                boxShadow: "0 18px 36px -10px rgba(0,0,0,0.040)",
               }}
             >
               <Download className="w-4 h-4" />
@@ -323,7 +307,7 @@ const BekanntAusSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fernsehen, Wettbewerbe{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 und 200+ Live-Bühnen
               </span>
               .
@@ -349,12 +333,12 @@ const BekanntAusSection = () => {
               borderRadius: "1.25rem",
               background: `linear-gradient(135deg, ${ACCENT_DEEP} 0%, ${ACCENT} 100%)`,
               boxShadow:
-                "0 35px 70px -25px rgba(92,22,34,0.55), inset 0 0 0 1px rgba(255,255,255,0.08)",
+                "0 35px 70px -25px rgba(0,0,0,0.220), inset 0 0 0 1px rgba(255,255,255,0.08)",
             }}
           >
             <div
               aria-hidden
-              className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full blur-3xl opacity-8"
+              className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full blur-2xl opacity-8"
               style={{
                 background:
                   "radial-gradient(circle, rgba(255,210,140,0.55), transparent 60%)",
@@ -379,7 +363,7 @@ const BekanntAusSection = () => {
                 {spotlight.name}.
               </h3>
               <p
-                className={`${SERIF_ITALIC} text-base md:text-lg text-white/75 mb-7`}
+                className={`text-base md:text-lg text-white/75 mb-7`}
               >
                 {spotlight.sub}
               </p>
@@ -420,8 +404,8 @@ const BekanntAusSection = () => {
                     className="inline-flex items-center justify-center w-11 h-11 rounded-full shrink-0"
                     style={{
                       background:
-                        "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
-                      border: "1px solid rgba(154,38,64,0.22)",
+                        "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
+                      border: "1px solid rgba(0,0,0,0.040)",
                     }}
                   >
                     <s.Icon
@@ -441,7 +425,7 @@ const BekanntAusSection = () => {
                   {s.name}.
                 </h3>
                 <p
-                  className={`${SERIF_ITALIC} text-[13px] text-foreground/55 mb-4`}
+                  className={`text-[13px] text-foreground/55 mb-4`}
                 >
                   {s.sub}
                 </p>
@@ -460,7 +444,7 @@ const BekanntAusSection = () => {
           {rest.slice(2).map((s) => (
             <article
               key={s.name}
-              className="relative bg-[hsl(30,8%,98.5%)] p-7 md:p-9 transition-all duration-500 hover:-translate-y-1 grid grid-cols-[auto_1fr] gap-6 items-start"
+              className="relative bg-[hsl(0,0%,98%)] p-7 md:p-9 transition-all duration-500 hover:-translate-y-1 grid grid-cols-[auto_1fr] gap-6 items-start"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -471,8 +455,8 @@ const BekanntAusSection = () => {
                 className="inline-flex items-center justify-center w-14 h-14 rounded-full shrink-0"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
-                  border: "1px solid rgba(154,38,64,0.22)",
+                    "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
+                  border: "1px solid rgba(0,0,0,0.040)",
                 }}
               >
                 <s.Icon
@@ -487,14 +471,14 @@ const BekanntAusSection = () => {
                     {s.name}.
                   </h3>
                   <span
-                    className={`${SERIF_ITALIC} text-lg leading-none`}
+                    className={`text-lg leading-none`}
                     style={{ color: ACCENT }}
                   >
                     {s.year}
                   </span>
                 </div>
                 <p
-                  className={`${SERIF_ITALIC} text-[13px] text-foreground/55 mb-4`}
+                  className={`text-[13px] text-foreground/55 mb-4`}
                 >
                   {s.sub}
                 </p>
@@ -522,18 +506,18 @@ const PortfolioDownloadSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl opacity-6"
+        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-2xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
+            "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.18), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
@@ -548,7 +532,7 @@ const PortfolioDownloadSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] mb-7">
               Komplettes Künstler-Portfolio.{" "}
-              <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+              <span style={{ color: "#f3d9a8" }}>
                 Direkt-Download.
               </span>
             </h2>
@@ -566,7 +550,7 @@ const PortfolioDownloadSection = () => {
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
                 style={{
                   background: "#f3d9a8",
-                  boxShadow: "0 18px 40px -14px rgba(199,144,66,0.12)",
+                  boxShadow: "0 18px 40px -14px rgba(0,0,0,0.024)",
                 }}
               >
                 <Download className="w-4 h-4" />
@@ -582,7 +566,7 @@ const PortfolioDownloadSection = () => {
               </a>
             </div>
             <p
-              className={`${SERIF_ITALIC} text-sm text-white/55 mt-7 max-w-md`}
+              className={`text-sm text-white/55 mt-7 max-w-md`}
             >
               Stand März 2026 · 802 KB · keine Anmeldung, keine Email-Schranke.
               Englische Version auf Anfrage.
@@ -601,7 +585,7 @@ const PortfolioDownloadSection = () => {
                 background:
                   "linear-gradient(155deg, #1a0e16 0%, #08060c 100%)",
                 boxShadow:
-                  "0 60px 120px -30px rgba(0,0,0,0.6), 0 25px 50px -20px rgba(199,144,66,0.25), inset 0 0 0 1px rgba(255,255,255,0.08)",
+                  "0 60px 120px -30px rgba(0,0,0,0.6), 0 25px 50px -20px rgba(0,0,0,0.024), inset 0 0 0 1px rgba(255,255,255,0.08)",
               }}
             >
               {/* Brand-Header */}
@@ -610,7 +594,7 @@ const PortfolioDownloadSection = () => {
                   MagicEL
                 </span>
                 <span
-                  className={`${SERIF_ITALIC} text-sm`}
+                  className={`text-sm`}
                   style={{ color: "#f3d9a8" }}
                 >
                   Portfolio 2026
@@ -628,7 +612,7 @@ const PortfolioDownloadSection = () => {
                 <h3 className="font-display font-black text-3xl md:text-4xl text-white leading-[1.05] mb-3">
                   Emilian
                   <br />
-                  <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+                  <span style={{ color: "#f3d9a8" }}>
                     Leber.
                   </span>
                 </h3>
@@ -735,7 +719,7 @@ const PressemitteilungenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -747,7 +731,7 @@ const PressemitteilungenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Was zuletzt{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 lief
               </span>
               .
@@ -797,7 +781,7 @@ const PressemitteilungenSection = () => {
                       className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
                       style={{
                         color: ACCENT,
-                        borderColor: "rgba(154,38,64,0.15)",
+                        borderColor: "rgba(0,0,0,0.040)",
                       }}
                     >
                       <ArrowUpRight className="w-3.5 h-3.5" />
@@ -810,7 +794,7 @@ const PressemitteilungenSection = () => {
                         className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
                         style={{
                           color: ACCENT,
-                          borderColor: "rgba(154,38,64,0.15)",
+                          borderColor: "rgba(0,0,0,0.040)",
                         }}
                       >
                         <FileText className="w-3.5 h-3.5" />
@@ -874,7 +858,7 @@ const EPKDownloadSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Ein EPK.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Alles drin
               </span>
               .
@@ -899,7 +883,7 @@ const EPKDownloadSection = () => {
               style={{
                 borderRadius: "1.5rem",
                 boxShadow:
-                  "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                  "0 50px 100px -30px rgba(0,0,0,0.200), 0 15px 35px -15px rgba(0,0,0,0.100), inset 0 0 0 1px rgba(0,0,0,0.05)",
               }}
             >
               {/* Header — Datei-Vorschau-Style */}
@@ -909,7 +893,7 @@ const EPKDownloadSection = () => {
                     className="inline-flex items-center justify-center w-11 h-11 rounded-xl"
                     style={{
                       background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                      boxShadow: "0 10px 24px -8px rgba(154,38,64,0.45)",
+                      boxShadow: "0 10px 24px -8px rgba(0,0,0,0.040)",
                     }}
                   >
                     <Paperclip
@@ -922,7 +906,7 @@ const EPKDownloadSection = () => {
                       Emilian_Leber_EPK_2026.zip
                     </p>
                     <p
-                      className={`${SERIF_ITALIC} text-[12px] text-foreground/55 mt-0.5`}
+                      className={`text-[12px] text-foreground/55 mt-0.5`}
                     >
                       8 Dateien · 52 MB · Stand März 2026
                     </p>
@@ -981,7 +965,7 @@ const EPKDownloadSection = () => {
                   className="hero-cta inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white"
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                    boxShadow: "0 10px 24px -8px rgba(154,38,64,0.45)",
+                    boxShadow: "0 10px 24px -8px rgba(0,0,0,0.040)",
                   }}
                 >
                   <Download className="w-3.5 h-3.5" />
@@ -990,7 +974,7 @@ const EPKDownloadSection = () => {
               </div>
 
               <p
-                className={`${SERIF_ITALIC} text-xs text-foreground/45 mt-5 text-center`}
+                className={`text-xs text-foreground/45 mt-5 text-center`}
               >
                 Bildnachweis: MagicEL / Emilian Leber. Keine Bearbeitung der
                 Logo-Datei ohne Rücksprache.
@@ -1173,7 +1157,7 @@ const PressefotosSection = () => {
     <section
       ref={ref}
       id="pressefotos"
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1185,7 +1169,7 @@ const PressefotosSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Zehn Fotos.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Print-ready
               </span>
               .
@@ -1228,14 +1212,14 @@ const PressefotosSection = () => {
                 <p className="font-display text-white font-bold text-base md:text-lg leading-tight mb-1">
                   {p.label}
                 </p>
-                <p className={`${SERIF_ITALIC} text-white/70 text-[12px]`}>
+                <p className={`text-white/70 text-[12px]`}>
                   {p.caption}
                 </p>
               </div>
               <span
                 className="absolute top-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] tracking-[0.12em] uppercase font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity"
                 style={{
-                  background: "rgba(154,38,64,0.92)",
+                  background: "rgba(0,0,0,0.040)",
                 }}
               >
                 <Download className="w-3 h-3" />
@@ -1246,7 +1230,7 @@ const PressefotosSection = () => {
         </div>
 
         <p
-          className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-10 text-center max-w-2xl mx-auto`}
+          className={`text-sm text-foreground/55 mt-10 text-center max-w-2xl mx-auto`}
         >
           Für Print-Auflösung 300 dpi bitte direkt anfragen — Hi-Res-Versionen
           liegen separat als ZIP bereit (siehe EPK oben).
@@ -1285,7 +1269,7 @@ const PressefotosSection = () => {
                 <p className="font-display text-lg md:text-xl font-bold">
                   {active.label}
                 </p>
-                <p className={`${SERIF_ITALIC} text-sm text-white/65 mt-1`}>
+                <p className={`text-sm text-white/65 mt-1`}>
                   {active.caption} · Bildnachweis: MagicEL / Emilian Leber
                 </p>
               </div>
@@ -1294,7 +1278,7 @@ const PressefotosSection = () => {
                 className="hero-cta inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-white"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+                  boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
                 }}
               >
                 <Download className="w-4 h-4" />
@@ -1379,7 +1363,7 @@ const BoilerplateSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               50, 100,{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 250 Wörter
               </span>
               .
@@ -1400,7 +1384,7 @@ const BoilerplateSection = () => {
           {BIOS.map((b, i) => (
             <article
               key={b.laenge}
-              className="relative flex flex-col bg-[hsl(30,8%,98.5%)] p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
+              className="relative flex flex-col bg-[hsl(0,0%,98%)] p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -1420,7 +1404,7 @@ const BoilerplateSection = () => {
                 </span>
               </div>
               <p
-                className={`${SERIF_ITALIC} text-[13px] text-foreground/55 mb-5`}
+                className={`text-[13px] text-foreground/55 mb-5`}
               >
                 {b.desc}
               </p>
@@ -1450,7 +1434,7 @@ const BoilerplateSection = () => {
                   boxShadow:
                     copiedIdx === i
                       ? "0 10px 24px -8px rgba(31,143,95,0.45)"
-                      : "0 10px 24px -8px rgba(154,38,64,0.45)",
+                      : "0 10px 24px -8px rgba(0,0,0,0.040)",
                 }}
                 aria-label={
                   copiedIdx === i
@@ -1475,7 +1459,7 @@ const BoilerplateSection = () => {
         </div>
 
         <p
-          className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-12 text-center max-w-2xl mx-auto`}
+          className={`text-sm text-foreground/55 mt-12 text-center max-w-2xl mx-auto`}
         >
           Alle Boilerplates auf Stand März 2026. Anpassungen oder
           Sonderversionen (englisch, fachspezifisch, mit Tour-Daten)
@@ -1494,7 +1478,7 @@ const PloetzlichMagieSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1516,7 +1500,7 @@ const PloetzlichMagieSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
               Plötzlich{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Magie
               </span>
               .
@@ -1555,7 +1539,7 @@ const PloetzlichMagieSection = () => {
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+                  boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
                 }}
               >
                 Tour-Anfrage senden
@@ -1577,7 +1561,7 @@ const PloetzlichMagieSection = () => {
               style={{
                 borderRadius: "1.5rem",
                 boxShadow:
-                  "0 50px 100px -30px rgba(40,20,40,0.45), 0 18px 40px -15px rgba(40,20,40,0.25)",
+                  "0 50px 100px -30px rgba(0,0,0,0.225), 0 18px 40px -15px rgba(0,0,0,0.125)",
               }}
             >
               <img
@@ -1618,7 +1602,7 @@ const PloetzlichMagieSection = () => {
                 <p className="font-display text-base md:text-lg font-bold leading-tight mb-1">
                   Alte Mälzerei Regensburg
                 </p>
-                <p className={`${SERIF_ITALIC} text-sm text-white/70`}>
+                <p className={`text-sm text-white/70`}>
                   22.02.2026 · Tour-Premiere
                 </p>
               </div>
@@ -1680,7 +1664,7 @@ const InterviewZitateSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               In{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 eigenen Worten
               </span>
               .
@@ -1755,18 +1739,18 @@ const PullQuoteSection = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
+            "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20"
+        className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)",
         }}
       />
       <div
@@ -1780,12 +1764,12 @@ const PullQuoteSection = () => {
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
             Erstes TV-Interview{" "}
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#f3d9a8" }}>
               mit 16
             </span>
             .<br />
             Acht Jahre nach dem{" "}
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#f3d9a8" }}>
               ersten Trick
             </span>
             .
@@ -1820,7 +1804,7 @@ const VideoSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               TV-Auftritt{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 im Mitschnitt
               </span>
               .
@@ -1841,7 +1825,7 @@ const VideoSection = () => {
             borderRadius: "1.5rem",
             overflow: "hidden",
             boxShadow:
-              "0 50px 100px -30px rgba(40,20,40,0.45), 0 18px 40px -15px rgba(40,20,40,0.22)",
+              "0 50px 100px -30px rgba(0,0,0,0.225), 0 18px 40px -15px rgba(0,0,0,0.110)",
           }}
         >
           <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
@@ -1863,7 +1847,7 @@ const VideoSection = () => {
             TVA Bayern
           </span>
           <span aria-hidden className="text-foreground/25">·</span>
-          <span className={SERIF_ITALIC}>November 2025</span>
+          <span>November 2025</span>
           <span aria-hidden className="text-foreground/25">·</span>
           <span>Embed-Code auf Anfrage</span>
         </div>
@@ -1907,7 +1891,7 @@ const PressFAQSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-3xl mb-14 md:mb-16">
@@ -1919,7 +1903,7 @@ const PressFAQSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Was Redaktionen
             <br />
-            <span className={SERIF_ITALIC}>vorab fragen.</span>
+            <span>vorab fragen.</span>
           </h2>
         </div>
         <div
@@ -1981,15 +1965,15 @@ const PressKontaktDirektSection = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 right-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 right-1/4 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-32 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -2008,7 +1992,7 @@ const PressKontaktDirektSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.0] text-[clamp(2.5rem,6vw,5.5rem)] mb-8">
               Schreib mir{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+              <span style={{ color: ACCENT_SOFT }}>
                 direkt
               </span>
               .
@@ -2073,7 +2057,7 @@ const PressKontaktDirektSection = () => {
                     <p className="font-display text-lg md:text-xl font-bold text-white leading-tight">
                       {c.value}
                     </p>
-                    <p className={`${SERIF_ITALIC} text-sm text-white/55 mt-0.5`}>
+                    <p className={`text-sm text-white/55 mt-0.5`}>
                       {c.hint}
                     </p>
                   </div>
@@ -2113,7 +2097,7 @@ const PressKontaktDirektSection = () => {
               }}
             >
               <p
-                className={`${SERIF_ITALIC} text-base md:text-lg text-white/55 mb-3`}
+                className={`text-base md:text-lg text-white/55 mb-3`}
               >
                 Eine kurze Selbst-Vorstellung —
               </p>
@@ -2137,7 +2121,7 @@ const PressKontaktDirektSection = () => {
                       {s.v}
                     </p>
                     <p
-                      className={`${SERIF_ITALIC} text-xs text-white/55 mt-1.5`}
+                      className={`text-xs text-white/55 mt-1.5`}
                     >
                       {s.l}
                     </p>
@@ -2150,7 +2134,7 @@ const PressKontaktDirektSection = () => {
                 className="hero-cta mt-7 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white w-full"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.13)",
+                  boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
                 }}
               >
                 <Download className="w-3.5 h-3.5" />

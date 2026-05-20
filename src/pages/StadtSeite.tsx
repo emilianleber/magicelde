@@ -87,7 +87,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -101,18 +101,7 @@ const HeroKeyframes = () => (
   `}</style>
 );
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.4 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.6 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.5 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.3 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.4 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = ({ data }: { data: Stadt }) => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -152,7 +141,7 @@ const Hero = ({ data }: { data: Stadt }) => {
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             objectPosition: "center 30%",
-            filter: "saturate(0.92) contrast(1.08) brightness(0.7)",
+            filter: "brightness(0.78)",
           }}
           loading="eager"
         />
@@ -174,10 +163,10 @@ const Hero = ({ data }: { data: Stadt }) => {
         />
         <div
           aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -235,12 +224,6 @@ const Hero = ({ data }: { data: Stadt }) => {
               Termine 2026 frei
             </span>
           </div>
-          <p
-            className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
-            style={{ animationDelay: "0.18s" }}
-          >
-            Hochzeit. Firmenfeier. Geburtstag.
-          </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
               <span
@@ -347,7 +330,7 @@ const WarumStadtSection = ({ data }: { data: Stadt }) => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground mb-8">
               Warum einen Zauberer in{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 {data.name}
               </span>{" "}
               buchen?
@@ -371,7 +354,7 @@ const WarumStadtSection = ({ data }: { data: Stadt }) => {
               ].map((t) => (
                 <span
                   key={t}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold text-foreground/70 bg-[hsl(30,8%,98.5%)] border border-foreground/10"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold text-foreground/70 bg-[hsl(0,0%,98%)] border border-foreground/10"
                 >
                   {t}
                 </span>
@@ -447,7 +430,7 @@ const TrustStripSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-white py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
@@ -456,7 +439,7 @@ const TrustStripSection = ({ data }: { data: Stadt }) => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             TV, Wettbewerb und{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               200+ Events
             </span>{" "}
             seit 2016 — auch in {data.name}.
@@ -474,8 +457,8 @@ const TrustStripSection = ({ data }: { data: Stadt }) => {
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))",
-                  border: "1px solid rgba(154,38,64,0.22)",
+                    "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
+                  border: "1px solid rgba(0,0,0,0.040)",
                 }}
               >
                 <it.Icon
@@ -548,7 +531,7 @@ const FormateSection = ({ data }: { data: Stadt }) => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Close-Up. Bühne.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Magic Dinner.
               </span>
             </h2>
@@ -608,7 +591,7 @@ const FormateSection = ({ data }: { data: Stadt }) => {
               <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-tight mb-2">
                 {f.title}
               </h3>
-              <p className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55 mb-4`}>
+              <p className={`text-sm md:text-base text-foreground/55 mb-4`}>
                 {f.seoTitle}
               </p>
               <p className="text-base text-foreground/70 leading-[1.7] mb-5 flex-1">
@@ -618,7 +601,7 @@ const FormateSection = ({ data }: { data: Stadt }) => {
                 {f.tags.map((t) => (
                   <span
                     key={t}
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(30,8%,98.5%)] border border-foreground/10"
+                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(0,0%,98%)] border border-foreground/10"
                   >
                     {t}
                   </span>
@@ -691,7 +674,7 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -701,7 +684,7 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Hochzeit. Firma.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Geburtstag.
               </span>
             </h2>
@@ -811,7 +794,7 @@ const InDerNaeheSection = ({ data }: { data: Stadt }) => {
               className="hero-cta group inline-flex items-center gap-2 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
               style={{
                 background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+                boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
               }}
             >
               Anfrage starten ({data.name})
@@ -872,7 +855,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Vier Schritte.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Kein Stress.
               </span>
             </h2>
@@ -892,7 +875,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
           {SCHRITTE.map((s, i) => (
             <li
               key={s.title}
-              className="relative bg-[hsl(30,8%,98.5%)] p-7 md:p-8 flex flex-col"
+              className="relative bg-[hsl(0,0%,98%)] p-7 md:p-8 flex flex-col"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
@@ -904,7 +887,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
                 className="inline-flex items-center justify-center w-12 h-12 rounded-full font-display font-black text-white text-lg mb-5"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                  boxShadow: "0 10px 25px -8px rgba(154,38,64,0.18)",
+                  boxShadow: "0 10px 25px -8px rgba(0,0,0,0.040)",
                 }}
               >
                 {String(i + 1).padStart(2, "0")}
@@ -922,7 +905,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
                 {s.body}
               </p>
               <span
-                className={`${SERIF_ITALIC} text-sm`}
+                className={`text-sm`}
                 style={{ color: ACCENT }}
               >
                 {s.meta}
@@ -943,7 +926,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
@@ -955,7 +938,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8">
               Magie beim Sektempfang.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Beim Dinner. Vor dem Tanz.
               </span>
             </h2>
@@ -1002,7 +985,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
-                  "0 30px 60px -25px rgba(40,20,40,0.2), inset 0 0 0 1px rgba(0,0,0,0.04)",
+                  "0 30px 60px -25px rgba(0,0,0,0.100), inset 0 0 0 1px rgba(0,0,0,0.04)",
               }}
             >
               <p
@@ -1019,7 +1002,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
                 ].map((s, i) => (
                   <li key={i} className="py-4 first:pt-0 last:pb-0">
                     <span
-                      className={`${SERIF_ITALIC} text-base block mb-1`}
+                      className={`text-base block mb-1`}
                       style={{ color: ACCENT }}
                     >
                       {s.time}
@@ -1056,11 +1039,11 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
             style={{ animationDelay: "0.15s" }}
           >
             <div
-              className="bg-[hsl(30,8%,98.5%)] p-7 md:p-9"
+              className="bg-[hsl(0,0%,98%)] p-7 md:p-9"
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
-                  "0 30px 60px -25px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                  "0 30px 60px -25px rgba(0,0,0,0.090), inset 0 0 0 1px rgba(0,0,0,0.05)",
               }}
             >
               <p
@@ -1102,7 +1085,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8">
               Corporate-Entertainment, das{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 der Vorstand zückt
               </span>
               .
@@ -1133,7 +1116,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
               </Link>
               <Link
                 to={`/buchung?ort=${encodeURIComponent(data.name)}&format=Firma`}
-                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-[hsl(30,8%,98.5%)] border border-foreground/15 hover:border-[#9a2640]/40 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-[hsl(0,0%,98%)] border border-foreground/15 hover:border-[#9a2640]/40 transition-colors"
               >
                 Firmenfeier {data.name} anfragen
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1186,7 +1169,7 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1196,7 +1179,7 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sechs{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Garantien
               </span>{" "}
               für dein Event in {data.name}.
@@ -1221,15 +1204,15 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
               style={{
                 borderRadius: "1.5rem",
                 background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, #08060c 100%)`,
-                boxShadow: "0 35px 70px -30px rgba(40,20,40,0.4)",
+                boxShadow: "0 35px 70px -30px rgba(0,0,0,0.200)",
               }}
             >
               <div
                 aria-hidden
-                className="absolute -top-32 -right-20 w-[380px] h-[380px] rounded-full blur-3xl opacity-6"
+                className="absolute -top-32 -right-20 w-[380px] h-[380px] rounded-full blur-2xl opacity-6"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(199,144,66,0.14), transparent 70%)",
+                    "radial-gradient(circle, rgba(0,0,0,0.024), transparent 70%)",
                 }}
               />
               <p
@@ -1240,7 +1223,7 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
               </p>
               <h3 className="relative font-display text-2xl md:text-3xl font-black leading-[1.1] mb-5">
                 Im Angebot{" "}
-                <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+                <span style={{ color: "#f3d9a8" }}>
                   schriftlich fixiert
                 </span>
                 .
@@ -1306,7 +1289,7 @@ const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei Gänge. Drei{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Magie-Routinen.
               </span>
             </h2>
@@ -1352,7 +1335,7 @@ const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => {
                   i === 1
                     ? `linear-gradient(160deg, ${ACCENT_DEEP} 0%, #08060c 100%)`
                     : "linear-gradient(160deg, #08060c 0%, #1a0e16 100%)",
-                boxShadow: "0 30px 60px -25px rgba(40,20,40,0.35)",
+                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.175)",
                 minHeight: "320px",
               }}
             >
@@ -1407,7 +1390,7 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-white py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1419,7 +1402,7 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground mb-6">
               Schnell zu dir nach{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 {data.name}
               </span>
               .
@@ -1452,15 +1435,15 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
               style={{
                 borderRadius: "1.5rem",
                 background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, #08060c 100%)`,
-                boxShadow: "0 40px 80px -30px rgba(40,20,40,0.4)",
+                boxShadow: "0 40px 80px -30px rgba(0,0,0,0.200)",
               }}
             >
               <div
                 aria-hidden
-                className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-6"
+                className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-2xl opacity-6"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(199,144,66,0.12), transparent 70%)",
+                    "radial-gradient(circle, rgba(0,0,0,0.024), transparent 70%)",
                 }}
               />
               <div className="relative">
@@ -1472,7 +1455,7 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
                 </p>
                 <h3 className="font-display text-2xl md:text-3xl font-black leading-[1.1] mb-5">
                   Termine in {data.name} aktuell{" "}
-                  <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+                  <span style={{ color: "#f3d9a8" }}>
                     verfügbar
                   </span>
                   .
@@ -1540,7 +1523,7 @@ const LocationsSection = ({
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -1550,7 +1533,7 @@ const LocationsSection = ({
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               In den{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 bekanntesten Locations
               </span>{" "}
               der Stadt.
@@ -1632,7 +1615,7 @@ const StimmenSection = ({ data }: { data: Stadt }) => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             5,0 Sterne.
             <br />
-            <span className={SERIF_ITALIC}>30+ Bewertungen.</span>
+            <span>30+ Bewertungen.</span>
           </h2>
           <p className="mt-6 text-base md:text-lg text-foreground/60 leading-[1.6] max-w-xl">
             Verifizierte ProvenExpert-Bewertungen aus Bayern — auch von Events in
@@ -1711,7 +1694,7 @@ const VideoSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1722,7 +1705,7 @@ const VideoSection = ({ data }: { data: Stadt }) => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
             Sieh dir den{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               Zauberer
             </span>{" "}
             an.
@@ -1811,18 +1794,18 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)",
+            "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20"
+        className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)",
         }}
       />
       <div
@@ -1836,7 +1819,7 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
             Drei Sekunden Stille.{" "}
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#f3d9a8" }}>
               Dann lacht ein Saal in {data.name}.
             </span>
           </p>
@@ -1885,7 +1868,7 @@ const FAQSection = ({ data }: { data: Stadt }) => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Zauberer {data.name}.<br />
-            <span className={SERIF_ITALIC}>Was vorher gefragt wird.</span>
+            <span>Was vorher gefragt wird.</span>
           </h2>
         </div>
         <div
@@ -1951,7 +1934,7 @@ const LangTextSection = ({ data }: { data: Stadt }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1964,7 +1947,7 @@ const LangTextSection = ({ data }: { data: Stadt }) => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2.25rem,5vw,4.5rem)] text-foreground mb-12 text-center">
             Zauberer {data.name} —{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               ausführlich erklärt.
             </span>
           </h2>
@@ -2032,7 +2015,7 @@ const WeitereStaedteSection = ({ current }: { current: string }) => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-white py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -2043,7 +2026,7 @@ const WeitereStaedteSection = ({ current }: { current: string }) => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
             Über {staedte.length}+ Städte in{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               Deutschland und Österreich
             </span>
             .
@@ -2124,15 +2107,15 @@ const FinalCTA = ({ data }: { data: Stadt }) => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -2147,7 +2130,7 @@ const FinalCTA = ({ data }: { data: Stadt }) => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Dein Event in{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               {data.name}
             </span>
             . Magisch.
@@ -2187,7 +2170,7 @@ const buildStadtQuizConfig = (data: Stadt): CustomQuizConfig => ({
   sectionTitle: (
     <>
       Welcher Zauberer passt zu deinem{" "}
-      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+      <span style={{ color: ACCENT }}>
         Event in {data.name}
       </span>
       ?

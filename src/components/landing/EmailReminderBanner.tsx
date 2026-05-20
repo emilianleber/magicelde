@@ -6,8 +6,6 @@ import {
   shouldShowReminder,
 } from "@/lib/emailCapture";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 
@@ -47,8 +45,8 @@ const EmailReminderBanner = () => {
       className="fixed bottom-5 left-1/2 -translate-x-1/2 z-30 w-[min(94vw,480px)] rounded-2xl p-5 bg-white"
       style={{
         boxShadow:
-          "0 30px 60px -15px rgba(40,20,40,0.35), 0 12px 25px -10px rgba(40,20,40,0.2)",
-        border: "1px solid rgba(154,38,64,0.18)",
+          "0 30px 60px -15px rgba(0,0,0,0.175), 0 12px 25px -10px rgba(0,0,0,0.100)",
+        border: "1px solid rgba(0,0,0,0.040)",
         animation: "remBannerIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards",
       }}
     >
@@ -71,7 +69,7 @@ const EmailReminderBanner = () => {
           >
             Du hast da was vergessen.
           </p>
-          <p className={`${SERIF_ITALIC} text-base text-foreground leading-snug mb-3`}>
+          <p className={`text-base text-foreground leading-snug mb-3`}>
             Deine Anfrage war fast fertig — magst sie jetzt abschicken?
           </p>
           <div className="flex items-center gap-3">

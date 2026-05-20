@@ -26,10 +26,8 @@ import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const AMBER = "#f3d9a8";
-const CREAM = "hsl(36, 30%, 97%)";
+const CREAM = "hsl(0,0%,98%)";
 const DARK_BG = "#08060c";
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 
 // ──────────────────────────────────────────────────────────────────────────
 // Types
@@ -746,32 +744,7 @@ const Chatbot = () => {
 
   return (
     <>
-      {/* Floating FAB - bottom LEFT (Show-Planer-FAB is bottom right) */}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-5 md:bottom-7 md:left-7 z-40 w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg md:shadow-xl flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 group"
-        style={{
-          background: `linear-gradient(135deg, ${ACCENT_DEEP} 0%, ${ACCENT} 60%, ${ACCENT_DEEP} 100%)`,
-          boxShadow: `0 10px 24px -10px ${ACCENT_DEEP}99, 0 3px 8px -3px ${ACCENT}66`,
-        }}
-        aria-label={open ? "Chat schliessen" : "Chat oeffnen"}
-        aria-expanded={open}
-      >
-        {open ? (
-          <X className="w-5 h-5 md:w-6 md:h-6 text-white" aria-hidden="true" />
-        ) : (
-          <>
-            <Wand2 className="w-5 h-5 md:w-6 md:h-6 text-white" aria-hidden="true" />
-            <span
-              className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white animate-pulse"
-              style={{ background: AMBER }}
-              aria-hidden="true"
-            />
-          </>
-        )}
-      </button>
-
-      {/* Chat Panel */}
+      {/* Chat Panel — FAB ist in ShowPlanerTrigger (Unified Menu) konsolidiert */}
       {open && (
         <div
           className="fixed z-50 flex flex-col overflow-hidden shadow-2xl
@@ -819,7 +792,7 @@ const Chatbot = () => {
                 Karta
               </p>
               <p
-                className={`${SERIF_ITALIC} text-[12px] text-white/75 leading-tight truncate`}
+                className={`text-[12px] text-white/75 leading-tight truncate`}
               >
                 Dein Show-Helfer
               </p>
@@ -984,13 +957,13 @@ const MessageBubble = ({
                   color: "hsl(260 15% 12%)",
                   borderLeft: `2px solid ${ACCENT}`,
                   borderRadius: "18px 18px 18px 6px",
-                  boxShadow: "0 6px 18px -8px rgba(92,22,34,0.25)",
+                  boxShadow: "0 6px 18px -8px rgba(0,0,0,0.100)",
                 }
               : {
                   background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`,
                   color: "white",
                   borderRadius: "18px 18px 6px 18px",
-                  boxShadow: "0 6px 18px -8px rgba(92,22,34,0.4)",
+                  boxShadow: "0 6px 18px -8px rgba(0,0,0,0.160)",
                 }
           }
         >
@@ -1031,7 +1004,7 @@ const MessageBubble = ({
           style={{
             background: "white",
             border: `1px solid ${ACCENT}33`,
-            boxShadow: "0 8px 24px -10px rgba(92,22,34,0.25)",
+            boxShadow: "0 8px 24px -10px rgba(0,0,0,0.100)",
           }}
         >
           <FormField

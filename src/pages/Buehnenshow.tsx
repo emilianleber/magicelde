@@ -52,7 +52,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -69,18 +69,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Bühnenshow", "mit"];
 const HEADLINE_ITALIC = ["Drama-Kurve."];
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -105,10 +94,10 @@ const Hero = () => {
     <section className="relative bg-[#08060c] text-white min-h-screen overflow-hidden">
       <HeroKeyframes />
       <div ref={photoRef} className="absolute inset-0 hero-photo-wrap hero-zoom" style={{ willChange: "transform" }}>
-        <img src={heroStageImg} alt="Bühnenshow mit Emilian Leber — Magie für die ganze Mannschaft" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "saturate(0.92) contrast(1.08) brightness(0.7)" }} loading="eager" />
+        <img src={heroStageImg} alt="Bühnenshow mit Emilian Leber — Magie für die ganze Mannschaft" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "brightness(0.78)" }} loading="eager" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)" }} />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)" }} />
-        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)" }} />
+        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)" }} />
       </div>
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
         {BOKEH.map((b, i) => (<div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />))}
@@ -123,9 +112,6 @@ const Hero = () => {
             <span aria-hidden className="hidden md:block h-4 w-px bg-white/25" />
             <span className="text-sm text-white/80"><strong className="font-semibold text-white">Bühnen-Erfahrung seit 2016</strong></span>
           </div>
-          <p className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`} style={{ animationDelay: "0.18s" }}>
-            Durchkomponierte Show. Für alle gleichzeitig.
-          </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
@@ -183,7 +169,7 @@ const DramaKurveSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Eine Show. Ein Spannungsbogen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Die{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Drama-Kurve</span>{" "}
+              <span style={{ color: ACCENT }}>Drama-Kurve</span>{" "}
               einer 20-Min-Show.
             </h2>
           </div>
@@ -198,7 +184,7 @@ const DramaKurveSection = () => {
         </div>
 
         {/* SVG-Diagramm Drama-Kurve */}
-        <div className={`relative bg-[hsl(30,8%,98.5%)] rounded-2xl p-7 md:p-10 mb-10 overflow-hidden`}
+        <div className={`relative bg-[hsl(0,0%,98%)] rounded-2xl p-7 md:p-10 mb-10 overflow-hidden`}
           style={{ boxShadow: "0 25px 50px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
           <svg viewBox="0 0 700 220" className="w-full h-auto" preserveAspectRatio="xMidYMid meet" aria-hidden>
             <defs>
@@ -289,14 +275,14 @@ const FORMAT_VARIANTEN = [
 const FormatVariantenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10">
           <div className={`lg:col-span-4 lg:sticky lg:top-24 lg:self-start`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Längen, drei Bögen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-7">
               Welche Show{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>passt</span>{" "}
+              <span style={{ color: ACCENT }}>passt</span>{" "}
               zu eurem Slot?
             </h2>
             <p className="text-base md:text-lg text-foreground/65 leading-[1.7] max-w-md">
@@ -316,7 +302,7 @@ const FormatVariantenSection = () => {
                   <div>
                     <span className="block text-[10px] tracking-[0.18em] uppercase font-bold mb-2" style={{ color: ACCENT }}>{String(i + 1).padStart(2, "0")} · Variante</span>
                     <span className="font-display font-black text-foreground text-xl md:text-2xl tabular-nums leading-tight block">{f.range}</span>
-                    <span className={`${SERIF_ITALIC} text-base text-foreground/55 mt-1 block`}>{f.label}</span>
+                    <span className={`text-base text-foreground/55 mt-1 block`}>{f.label}</span>
                   </div>
                   <div>
                     <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-3">{f.sub}</p>
@@ -385,7 +371,7 @@ const BeispielShowSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Eine 20-Min-Show, von innen.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Vier Akte.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Ein Saal.</span>
+              <span style={{ color: ACCENT }}>Ein Saal.</span>
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -433,14 +419,14 @@ const PullQuoteSection = () => {
         <img src={stageShowImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.6) 0%, rgba(8,6,12,0.95) 70%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
-      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
+      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)" }} />
       <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
             Standing Ovation.{" "}
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#f3d9a8" }}>
               Drei Sekunden Stille
             </span>{" "}
             davor.
@@ -484,7 +470,7 @@ const EffektHighlightsSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Bühnen-Highlights aus dem Repertoire.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Routinen, die{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>im Kopf bleiben</span>.
+              <span style={{ color: ACCENT }}>im Kopf bleiben</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -498,8 +484,8 @@ const EffektHighlightsSection = () => {
 
         <div className={`grid lg:grid-cols-12 gap-5 md:gap-7`}>
           {/* Headliner — 7 cols, dark gradient */}
-          <article className="lg:col-span-7 relative p-8 md:p-12 flex flex-col text-white overflow-hidden" style={{ borderRadius: "1.25rem", background: `linear-gradient(150deg, ${ACCENT_DEEP} 0%, #08060c 65%, #08060c 100%)`, minHeight: "420px", boxShadow: "0 40px 80px -30px rgba(40,20,40,0.45)" }}>
-            <div aria-hidden className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.14), transparent 70%)" }} />
+          <article className="lg:col-span-7 relative p-8 md:p-12 flex flex-col text-white overflow-hidden" style={{ borderRadius: "1.25rem", background: `linear-gradient(150deg, ${ACCENT_DEEP} 0%, #08060c 65%, #08060c 100%)`, minHeight: "420px", boxShadow: "0 40px 80px -30px rgba(0,0,0,0.225)" }}>
+            <div aria-hidden className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 70%)" }} />
             <div className="relative z-10 flex flex-col h-full">
               <div className="flex items-center gap-3 mb-7">
                 <span className="inline-flex items-center justify-center w-12 h-12 rounded-full" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}>
@@ -509,7 +495,7 @@ const EffektHighlightsSection = () => {
               </div>
               <h3 className="font-display text-3xl md:text-4xl font-black leading-[1.05] mb-6 max-w-md">
                 {headliner.title.replace(".", "")}.{" "}
-                <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>Eine Seite zu viel.</span>
+                <span style={{ color: "#f3d9a8" }}>Eine Seite zu viel.</span>
               </h3>
               <p className="text-base md:text-lg text-white/75 leading-[1.65] max-w-lg mt-auto">{headliner.body}</p>
               <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] tracking-[0.04em] text-white/65">
@@ -523,8 +509,8 @@ const EffektHighlightsSection = () => {
           {/* 3 kleinere Cards rechts in Spalte */}
           <div className="lg:col-span-5 grid grid-cols-1 gap-5 md:gap-7">
             {rest.map((h) => (
-              <article key={h.title} className="relative bg-[hsl(30,8%,98.5%)] p-6 md:p-7 flex gap-5 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
-                <span className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+              <article key={h.title} className="relative bg-[hsl(0,0%,98%)] p-6 md:p-7 flex gap-5 transition-all duration-500 hover:-translate-y-1" style={{ borderRadius: "1rem", boxShadow: "0 18px 35px -22px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
+                <span className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
                   <h.Icon className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
                 </span>
                 <div>
@@ -556,13 +542,13 @@ const ANLAESSE = [
 const AnlassMixSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         {/* Foto oben — full-width Banner */}
         <div className={`relative overflow-hidden mb-14 md:mb-20`} style={{ borderRadius: "1.5rem" }}>
           <img src={buehneDpsgImg} alt="Bühnenshow Emilian Leber — Publikum reagiert" className="w-full h-[280px] md:h-[420px] object-cover" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.92)", objectPosition: "center 25%" }} />
           <div aria-hidden className="absolute inset-x-0 bottom-0 h-40" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.65))" }} />
-          <div aria-hidden className="absolute -top-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
+          <div aria-hidden className="absolute -top-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
           <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-10 md:right-10 text-white flex flex-wrap items-end justify-between gap-4">
             <p className={`${SERIF_ITALIC} text-lg md:text-2xl leading-snug max-w-xl`}>„Volle Bühne, volles Publikum — funktioniert von 80 bis 500 Gästen."</p>
             <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white" style={{ background: "rgba(8,6,12,0.5)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.18)" }}>
@@ -577,7 +563,7 @@ const AnlassMixSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann eine Bühne den Abend trägt.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Anlässe.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Bühne</span>.
+              <span style={{ color: ACCENT }}>Eine Bühne</span>.
             </h2>
           </div>
           <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
@@ -593,7 +579,7 @@ const AnlassMixSection = () => {
         <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
           {ANLAESSE.map((a, i) => (
             <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[68px_1fr_auto] items-baseline gap-4 md:gap-8 py-7 md:py-10 group`} style={{ animationDelay: `${0.15 + i * 0.06}s` }}>
-              <span className="inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+              <span className="inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
                 <a.Icon className="w-4 h-4 md:w-6 md:h-6" style={{ color: ACCENT }} strokeWidth={1.75} />
               </span>
               <div className="grid md:grid-cols-[1fr_2fr] gap-x-8 gap-y-2 items-baseline">
@@ -611,7 +597,7 @@ const AnlassMixSection = () => {
         </ul>
 
         <div className="mt-12 flex flex-wrap items-center gap-4">
-          <Link to="/buchung?format=Bühnenshow" className="hero-cta inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
+          <Link to="/buchung?format=Bühnenshow" className="hero-cta inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)" }}>
             Anlass besprechen<ArrowRight className="w-4 h-4" />
           </Link>
           <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">Antwort innerhalb 24 h</span>
@@ -627,14 +613,14 @@ const AnlassMixSection = () => {
 const TechRiderSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className={`lg:col-span-5`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Für eure Eventplanung.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
               Tech-Rider.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Seite. Alle Infos.</span>
+              <span style={{ color: ACCENT }}>Eine Seite. Alle Infos.</span>
             </h2>
             <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-8">
               Damit Eventagentur, Technik und Location-Manager genau wissen,
@@ -643,13 +629,13 @@ const TechRiderSection = () => {
             </p>
             <a href="mailto:el@magicel.de?subject=Tech-Rider%20Bühnenshow"
               className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
-              style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
+              style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)" }}>
               Tech-Rider als PDF<ArrowRight className="w-4 h-4" />
             </a>
           </div>
 
           <div className={`lg:col-span-7`} style={{ animationDelay: "0.15s" }}>
-            <div className="bg-white p-7 md:p-9" style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(40,20,40,0.25), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
+            <div className="bg-white p-7 md:p-9" style={{ borderRadius: "1.25rem", boxShadow: "0 30px 60px -25px rgba(0,0,0,0.125), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
               {[
                 { Icon: Mic2, label: "Mikrofon", brauche: "Auf großer Bühne: Headset-Mikrofon (mein eigenes, falls nicht vorhanden)", bringe: "Headset Sennheiser EW-Serie, Reserve-Mikro" },
                 { Icon: Music, label: "Sound", brauche: "Soundsystem mit XLR-Eingang, oder 3,5mm-Klinke. Bei kleinen Räumen: nichts.", bringe: "Eigenes Mini-PA-System (bis 60 Gäste), Backing-Track auf USB" },
@@ -657,7 +643,7 @@ const TechRiderSection = () => {
                 { Icon: Cable, label: "Strom", brauche: "Eine Steckdose in Bühnen-Nähe. Mehr nicht.", bringe: "Verlängerungskabel, Mehrfachsteckdose" },
               ].map((row, i) => (
                 <div key={row.label} className={`grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_1fr] gap-4 ${i > 0 ? "border-t border-foreground/10 pt-5 mt-5" : ""}`}>
-                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
                     <row.Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
                   </span>
                   <div className="col-span-1 md:col-span-1">
@@ -665,7 +651,7 @@ const TechRiderSection = () => {
                     <p className="text-sm text-foreground/75 leading-[1.55]">{row.brauche}</p>
                   </div>
                   <div className="col-span-2 md:col-span-1 md:border-l md:border-foreground/10 md:pl-4">
-                    <p className={`${SERIF_ITALIC} text-[10px] tracking-[0.16em] uppercase font-semibold mb-1.5 text-foreground/55`}>bringe selbst</p>
+                    <p className={`text-[10px] tracking-[0.16em] uppercase font-semibold mb-1.5 text-foreground/55`}>bringe selbst</p>
                     <p className="text-sm text-foreground/70 leading-[1.55]">{row.bringe}</p>
                   </div>
                 </div>
@@ -691,7 +677,7 @@ const TechRiderSection = () => {
 const buehneQuizConfig: CustomQuizConfig = {
   anlass: "Bühnenshow",
   sectionEyebrow: "Format-Finder · Bühnenshow",
-  sectionTitle: (<>Welche{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT }}>Bühnen-Variante</span>{" "}passt?</>),
+  sectionTitle: (<>Welche{" "}<span style={{ color: ACCENT }}>Bühnen-Variante</span>{" "}passt?</>),
   sectionDesc: "Drei Fragen, eine konkrete Empfehlung — Highlight-Slot, Hauptshow oder Abendprogramm.",
   questions: [
     { id: "slot", eyebrow: "Frage 01 · Slot", title: <>Wie viel Bühnen-Zeit habt ihr?</>, hint: "Kompakter Highlight-Slot oder Hauptshow als Programmpunkt?", feedback: "Verstanden.", cols: 3, options: [
@@ -741,7 +727,7 @@ const StimmenSection = () => {
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Was Gastgeber sagen.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
-            5,0 Sterne.<br /><span className={SERIF_ITALIC}>30+ Bewertungen.</span>
+            5,0 Sterne.<br /><span>30+ Bewertungen.</span>
           </h2>
         </div>
         <div className={`grid md:grid-cols-3 gap-6 md:gap-8`}>
@@ -775,19 +761,19 @@ const TRUST_ITEMS = [
 const TrustZahlenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-20 md:py-28 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">Bekannt aus.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             TV, Wettbewerb und{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>200+ Bühnen-Auftritten</span>.
+            <span style={{ color: ACCENT }}>200+ Bühnen-Auftritten</span>.
           </h2>
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14`}>
           {TRUST_ITEMS.map((it) => (
             <article key={it.name} className="group relative bg-white border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:-translate-y-1">
-              <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))", border: "1px solid rgba(154,38,64,0.22)" }}>
+              <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))", border: "1px solid rgba(0,0,0,0.040)" }}>
                 <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
               <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">{it.name}</p>
@@ -804,7 +790,7 @@ const TrustZahlenSection = () => {
           ].map((s) => (
             <div key={s.label} className="flex items-baseline gap-3">
               <span className="font-display text-2xl md:text-3xl font-black text-foreground tabular-nums">{s.num}</span>
-              <span className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55`}>{s.label}</span>
+              <span className={`text-base md:text-lg text-foreground/55`}>{s.label}</span>
             </div>
           ))}
         </div>
@@ -829,7 +815,7 @@ const FAQSection = () => {
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
-            Was vorher<br /><span className={SERIF_ITALIC}>gefragt wird.</span>
+            Was vorher<br /><span>gefragt wird.</span>
           </h2>
         </div>
         <div className={`max-w-3xl border-t border-foreground/15`}>
@@ -856,13 +842,13 @@ const FinalCTA = () => {
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Macht eure Bühne zum Höhepunkt.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
-            Bühnenshow{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>buchen</span>.
+            Bühnenshow{" "}<span style={{ color: ACCENT_SOFT }}>buchen</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
             Schickt mir Datum, Ort, Bühnen-Slot und Gästezahl — Antwort innerhalb 24 Stunden mit Konzept-Vorschlag und Tech-Rider.

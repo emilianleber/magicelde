@@ -35,8 +35,6 @@ import {
 } from "@/lib/showPlaner";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const AMBER = "#f3d9a8";
@@ -452,7 +450,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
                   Show-Planer
                 </span>
                 <span
-                  className={`${SERIF_ITALIC} text-sm text-foreground/55 tabular-nums`}
+                  className={`text-sm text-foreground/55 tabular-nums`}
                 >
                   {isSummary
                     ? "Übersicht · fast geschafft"
@@ -481,11 +479,11 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
                           ? ACCENT
                           : i < step ||
                               (isSummary && i === STEPS.length)
-                            ? "rgba(154,38,64,0.13)"
+                            ? "rgba(0,0,0,0.040)"
                             : "rgba(0,0,0,0.25)",
                       background:
                         i === step && !isSummary
-                          ? "rgba(154,38,64,0.08)"
+                          ? "rgba(0,0,0,0.040)"
                           : "transparent",
                       cursor: i <= step ? "pointer" : "default",
                     }}
@@ -512,7 +510,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
             className="fixed top-24 left-1/2 -translate-x-1/2 z-[110] px-5 py-3 rounded-full text-white text-sm font-semibold sp-feedback pointer-events-none"
             style={{
               background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-              boxShadow: "0 18px 40px -10px rgba(154,38,64,0.13)",
+              boxShadow: "0 18px 40px -10px rgba(0,0,0,0.040)",
             }}
           >
             {feedback}
@@ -564,7 +562,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
                 Zurück
               </button>
               <span
-                className={`${SERIF_ITALIC} text-xs md:text-sm text-foreground/55 text-center`}
+                className={`text-xs md:text-sm text-foreground/55 text-center`}
               >
                 {isSummary
                   ? "Fast geschafft — nur noch Email."
@@ -581,7 +579,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
                     boxShadow: canProceed
-                      ? "0 14px 30px -8px rgba(154,38,64,0.5)"
+                      ? "0 14px 30px -8px rgba(0,0,0,0.040)"
                       : "none",
                   }}
                 >
@@ -599,7 +597,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
                     background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
                     boxShadow:
                       email && email.includes("@")
-                        ? "0 14px 30px -8px rgba(154,38,64,0.5)"
+                        ? "0 14px 30px -8px rgba(0,0,0,0.040)"
                         : "none",
                   }}
                 >
@@ -633,7 +631,7 @@ const StepView = ({
         <div className="lg:col-span-7">
           <div className="flex items-baseline gap-3 mb-5">
             <span
-              className={`${SERIF_ITALIC} text-4xl md:text-5xl tabular-nums leading-none`}
+              className={`text-4xl md:text-5xl tabular-nums leading-none`}
               style={{ color: ACCENT }}
             >
               {step.number}
@@ -656,7 +654,7 @@ const StepView = ({
           className="lg:col-span-5 self-start p-6 rounded-2xl"
           style={{
             background: "linear-gradient(155deg, #fff7e6 0%, #f3e6c8 100%)",
-            border: "1px solid rgba(199,144,66,0.25)",
+            border: "1px solid rgba(0,0,0,0.024)",
           }}
         >
           <div className="flex items-baseline gap-2 mb-2">
@@ -694,12 +692,12 @@ const StepView = ({
                 aria-pressed={selected}
                 className="group relative text-left p-5 md:p-6 rounded-2xl transition-all duration-300"
                 style={{
-                  background: selected ? "white" : "hsl(30,8%,98.5%)",
+                  background: selected ? "white" : "hsl(0,0%,98%)",
                   border: selected
                     ? `2px solid ${ACCENT}`
                     : "2px solid transparent",
                   boxShadow: selected
-                    ? "0 25px 50px -25px rgba(154,38,64,0.15), inset 0 0 0 1px rgba(154,38,64,0.18)"
+                    ? "0 25px 50px -25px rgba(0,0,0,0.040), inset 0 0 0 1px rgba(0,0,0,0.040)"
                     : "0 10px 25px -20px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.05)",
                   transform: selected ? "scale(1.02)" : "scale(1)",
                 }}
@@ -710,8 +708,8 @@ const StepView = ({
                     style={{
                       background: selected
                         ? `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`
-                        : "linear-gradient(135deg, rgba(154,38,64,0.12), rgba(154,38,64,0.04))",
-                      border: "1px solid rgba(154,38,64,0.22)",
+                        : "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
+                      border: "1px solid rgba(0,0,0,0.040)",
                     }}
                   >
                     <opt.Icon
@@ -731,7 +729,7 @@ const StepView = ({
                   {opt.label}
                 </h3>
                 <p
-                  className={`${SERIF_ITALIC} text-xs md:text-sm text-foreground/55 leading-snug`}
+                  className={`text-xs md:text-sm text-foreground/55 leading-snug`}
                 >
                   {opt.sub}
                 </p>
@@ -766,7 +764,7 @@ const StepView = ({
             style={{ ["--ac" as any]: ACCENT }}
           />
           <p
-            className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-3`}
+            className={`text-sm text-foreground/55 mt-3`}
           >
             Optional — du kannst auch leer lassen und im Telefonat erzählen.
           </p>
@@ -814,7 +812,7 @@ const SummaryView = ({
         <div className="lg:col-span-7">
           <div className="flex items-baseline gap-3 mb-5">
             <span
-              className={`${SERIF_ITALIC} text-4xl md:text-5xl tabular-nums leading-none`}
+              className={`text-4xl md:text-5xl tabular-nums leading-none`}
               style={{ color: ACCENT }}
             >
               10
@@ -828,7 +826,7 @@ const SummaryView = ({
           </div>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground mb-6">
             Bald{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               geschafft
             </span>
             .
@@ -844,15 +842,15 @@ const SummaryView = ({
           className="lg:col-span-5 self-start p-7 rounded-2xl relative overflow-hidden text-white"
           style={{
             background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, #08060c 100%)`,
-            boxShadow: "0 30px 60px -25px rgba(40,20,40,0.45)",
+            boxShadow: "0 30px 60px -25px rgba(0,0,0,0.225)",
           }}
         >
           <div
             aria-hidden
-            className="absolute -top-20 -right-10 w-[260px] h-[260px] rounded-full blur-3xl opacity-8"
+            className="absolute -top-20 -right-10 w-[260px] h-[260px] rounded-full blur-2xl opacity-8"
             style={{
               background:
-                "radial-gradient(circle, rgba(199,144,66,0.14), transparent 65%)",
+                "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
             }}
           />
           <p
@@ -889,7 +887,7 @@ const SummaryView = ({
               key={s.i}
               type="button"
               onClick={() => onEditStep(s.i)}
-              className="group text-left p-5 rounded-xl bg-[hsl(30,8%,98.5%)] hover:bg-white hover:shadow-md transition-all"
+              className="group text-left p-5 rounded-xl bg-[hsl(0,0%,98%)] hover:bg-white hover:shadow-md transition-all"
               style={{ border: "1px solid rgba(0,0,0,0.06)" }}
             >
               <div className="flex items-baseline justify-between gap-3 mb-1.5">
@@ -916,12 +914,12 @@ const SummaryView = ({
 
       {/* Email-Form */}
       <div
-        className="max-w-2xl p-7 md:p-9 rounded-2xl bg-[hsl(30,8%,98.5%)]"
+        className="max-w-2xl p-7 md:p-9 rounded-2xl bg-[hsl(0,0%,98%)]"
         style={{ border: "1px solid rgba(0,0,0,0.06)" }}
       >
         <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-5">
           Letzter Schritt —{" "}
-          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+          <span style={{ color: ACCENT }}>
             wie erreiche ich dich?
           </span>
         </h3>
@@ -953,7 +951,7 @@ const SummaryView = ({
           />
         </div>
         <p
-          className={`${SERIF_ITALIC} text-xs md:text-sm text-foreground/55 mt-4 flex items-center gap-2`}
+          className={`text-xs md:text-sm text-foreground/55 mt-4 flex items-center gap-2`}
         >
           <Sparkles className="w-3 h-3" style={{ color: ACCENT }} />
           Deine Antwort kommt innerhalb 24 Stunden — meistens schneller.
@@ -977,14 +975,14 @@ const SubmittedState = ({
         className="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full mb-7"
         style={{
           background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-          boxShadow: "0 20px 50px -10px rgba(154,38,64,0.13)",
+          boxShadow: "0 20px 50px -10px rgba(0,0,0,0.040)",
         }}
       >
         <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12 text-white" />
       </div>
       <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,5vw,4rem)] text-foreground mb-5">
         Geschafft.{" "}
-        <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+        <span style={{ color: ACCENT }}>
           Ich bin dran.
         </span>
       </h2>

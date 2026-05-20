@@ -998,7 +998,7 @@ const AdminBookingDetail = () => {
               </div>
               <div className="rounded-xl border border-border/20 px-5 py-4">
                 <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Bezahlt</p>
-                <p className={`text-xl font-bold mt-1 ${totalBezahlt >= totalBrutto ? "text-green-600" : "text-amber-600"}`}>
+                <p className={`${SERIF_ITALIC} text-xl font-bold mt-1 ${totalBezahlt >= totalBrutto ? "text-green-600" : "text-amber-600"}`}>
                   {totalBezahlt.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €
                 </p>
               </div>

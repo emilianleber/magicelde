@@ -54,7 +54,7 @@ const SERIF_ITALIC =
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const ACCENT_SOFT = "#e4b8c0";
-const CREAM = "#f5ecdc";
+const CREAM = "#fafafa";
 
 /* ═══════════════════════════════════════════════════════════
    IMAGE MAP
@@ -100,16 +100,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Magazin", "der"];
 const HEADLINE_ITALIC = ["Bühne", "und", "Tafel."];
 
-const BOKEH = [
-  { size: 18, left: "10%", top: "32%", dur: 14, delay: 0, o: 0.45 },
-  { size: 22, left: "78%", top: "18%", dur: 18, delay: 2, o: 0.35 },
-  { size: 12, left: "22%", top: "72%", dur: 16, delay: 4, o: 0.55 },
-  { size: 16, left: "62%", top: "62%", dur: 19, delay: 6, o: 0.4 },
-  { size: 24, left: "88%", top: "48%", dur: 22, delay: 1, o: 0.3 },
-  { size: 14, left: "48%", top: "12%", dur: 21, delay: 5, o: 0.5 },
-  { size: 20, left: "70%", top: "80%", dur: 17, delay: 3, o: 0.45 },
-  { size: 10, left: "30%", top: "44%", dur: 23, delay: 7, o: 0.55 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 /* ═══════════════════════════════════════════════════════════
    HELPERS
@@ -137,14 +128,14 @@ const Hero = ({ posts }: { posts: BlogPost[] }) => {
   const themes = new Set(posts.map((p) => p.category)).size;
 
   return (
-    <section className="relative bg-[#f5ecdc] text-foreground overflow-hidden">
+    <section className="relative bg-[#fafafa] text-foreground overflow-hidden">
       <HeroKeyframes />
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(80% 60% at 80% 10%, rgba(199,144,66,0.18) 0%, transparent 60%), radial-gradient(60% 50% at 12% 90%, rgba(154,38,64,0.10) 0%, transparent 65%)",
+            "radial-gradient(80% 60% at 80% 10%, rgba(0,0,0,0.024) 0%, transparent 60%), radial-gradient(60% 50% at 12% 90%, rgba(0,0,0,0.040) 0%, transparent 65%)",
         }}
       />
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -157,7 +148,7 @@ const Hero = ({ posts }: { posts: BlogPost[] }) => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(199,144,66,0) 75%)`,
+              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(0,0,0,0.000) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -298,7 +289,7 @@ const FeaturedArtikel = ({ post }: { post: BlogPost }) => {
                 </span>
               </div>
               <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-white text-sm">
-                <span className={`${SERIF_ITALIC} text-base md:text-lg`}>
+                <span className={`text-base md:text-lg`}>
                   {formatDate(post.date)}
                 </span>
                 <span className="inline-flex items-center gap-2 tabular-nums">
@@ -322,7 +313,7 @@ const FeaturedArtikel = ({ post }: { post: BlogPost }) => {
             <h2 className="text-[clamp(1.8rem,3.6vw,3rem)] font-display font-black leading-[1.05] tracking-[-0.02em] mb-6">
               {post.title}{" "}
               {post.titleAccent && (
-                <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                <span style={{ color: ACCENT }}>
                   {post.titleAccent}
                 </span>
               )}
@@ -409,16 +400,16 @@ const PostsListe = ({
   }, [posts, featuredSlug, activeCategory, activeTag]);
 
   return (
-    <section className="bg-[#f5ecdc] py-20 md:py-28">
+    <section className="bg-[#fafafa] py-20 md:py-28">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-12 mb-14 items-end">
           <div className="lg:col-span-7">
-            <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-5`}>
+            <div className={`text-lg text-foreground/55 mb-5`}>
               Alle Beiträge.
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4.2rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Geschichten zwischen{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Tisch und Bühne.
               </span>
             </h2>
@@ -435,7 +426,7 @@ const PostsListe = ({
         {/* Kategorien Tabs */}
         <div className="flex items-center gap-2 mb-6">
           <Filter className="w-4 h-4 text-foreground/45" />
-          <span className={`${SERIF_ITALIC} text-foreground/55`}>
+          <span className={`text-foreground/55`}>
             Themenfeld.
           </span>
         </div>
@@ -452,7 +443,7 @@ const PostsListe = ({
                     ? {
                         background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
                         color: "white",
-                        boxShadow: "0 8px 24px -10px rgba(154,38,64,0.13)",
+                        boxShadow: "0 8px 24px -10px rgba(0,0,0,0.040)",
                       }
                     : {
                         background: "rgba(8,6,12,0.05)",
@@ -520,7 +511,7 @@ const PostsListe = ({
                     №&nbsp;{String(i + 1).padStart(2, "0")}
                   </span>
                   <span
-                    className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/65 tabular-nums`}
+                    className={`text-base md:text-lg text-foreground/65 tabular-nums`}
                   >
                     {formatDate(post.date)}
                   </span>
@@ -536,7 +527,7 @@ const PostsListe = ({
                     {post.title}{" "}
                     {post.titleAccent && (
                       <span
-                        className={SERIF_ITALIC}
+
                         style={{ color: ACCENT, fontWeight: 400 }}
                       >
                         {post.titleAccent}
@@ -606,12 +597,12 @@ const RedaktionsSchaufenster = ({ posts }: { posts: BlogPost[] }) => {
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 mb-14 items-end">
           <div className="lg:col-span-7">
-            <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-5`}>
+            <div className={`text-lg text-foreground/55 mb-5`}>
               Editor's Pick.
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4.2rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Drei{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Lieblinge.
               </span>
             </h2>
@@ -662,7 +653,7 @@ const RedaktionsSchaufenster = ({ posts }: { posts: BlogPost[] }) => {
               <h3 className="text-3xl md:text-5xl font-display font-black tracking-[-0.025em] leading-[1.02] mb-3 max-w-2xl">
                 {large.title}{" "}
                 {large.titleAccent && (
-                  <span className={SERIF_ITALIC}>{large.titleAccent}</span>
+                  <span>{large.titleAccent}</span>
                 )}
               </h3>
               <p className="text-white/75 text-sm md:text-base max-w-xl line-clamp-2">
@@ -731,18 +722,18 @@ const TopPosts = ({ posts }: { posts: BlogPost[] }) => {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(60% 50% at 90% 20%, rgba(154,38,64,0.25) 0%, transparent 60%), radial-gradient(50% 40% at 10% 80%, rgba(199,144,66,0.18) 0%, transparent 65%)",
+            "radial-gradient(60% 50% at 90% 20%, rgba(0,0,0,0.040) 0%, transparent 60%), radial-gradient(50% 40% at 10% 80%, rgba(0,0,0,0.024) 0%, transparent 65%)",
         }}
       />
       <div className="relative container px-6">
         <div className="grid lg:grid-cols-12 gap-10 mb-14 items-end">
           <div className="lg:col-span-7">
-            <div className={`${SERIF_ITALIC} text-lg text-white/55 mb-5`}>
+            <div className={`text-lg text-white/55 mb-5`}>
               Am meisten gelesen.
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4.2rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Top-Beiträge{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+              <span style={{ color: ACCENT_SOFT }}>
                 dieses Quartals.
               </span>
             </h2>
@@ -806,7 +797,7 @@ const PullQuoteBlack = () => (
       className="absolute inset-0 pointer-events-none"
       style={{
         background:
-          "radial-gradient(70% 60% at 50% 50%, rgba(154,38,64,0.22) 0%, transparent 70%)",
+          "radial-gradient(70% 60% at 50% 50%, rgba(0,0,0,0.040) 0%, transparent 70%)",
       }}
     />
     <div className="relative container px-6 max-w-4xl text-center">
@@ -816,12 +807,12 @@ const PullQuoteBlack = () => (
       />
       <blockquote className="text-3xl md:text-5xl font-display font-black tracking-[-0.02em] leading-[1.15]">
         Manche Geschichten passen nicht{" "}
-        <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+        <span style={{ color: ACCENT_SOFT }}>
           auf die Bühne.
         </span>{" "}
         Genau die landen hier.
       </blockquote>
-      <p className={`${SERIF_ITALIC} mt-8 text-white/55 text-base md:text-lg`}>
+      <p className={`mt-8 text-white/55 text-base md:text-lg`}>
         — die Editorial-Idee dieses Magazins
       </p>
     </div>
@@ -850,16 +841,16 @@ const NewsletterSignup = () => {
   };
 
   return (
-    <section className="bg-[#f5ecdc] py-20 md:py-28">
+    <section className="bg-[#fafafa] py-20 md:py-28">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           <div className="lg:col-span-6">
-            <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-5`}>
+            <div className={`text-lg text-foreground/55 mb-5`}>
               Magazin-Update.
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-6">
               Einmal im Quartal.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Kein Spam.
               </span>
             </h2>
@@ -990,7 +981,7 @@ const AutorVorstellung = () => (
               }}
             />
             <div className="absolute bottom-5 left-5 right-5 text-white">
-              <div className={`${SERIF_ITALIC} text-sm text-white/70`}>
+              <div className={`text-sm text-white/70`}>
                 Im Magazin schreibt.
               </div>
               <div className="text-lg font-display font-bold">
@@ -1001,12 +992,12 @@ const AutorVorstellung = () => (
         </div>
 
         <div className="lg:col-span-7">
-          <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-5`}>
+          <div className={`text-lg text-foreground/55 mb-5`}>
             Über den Autor.
           </div>
           <h2 className="text-[clamp(2rem,4.5vw,3.6rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-6">
             Magier seit acht.{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               Schreibend seit jetzt.
             </span>
           </h2>
@@ -1086,16 +1077,16 @@ const ThemenWolke = ({ posts }: { posts: BlogPost[] }) => {
   };
 
   return (
-    <section className="bg-[#f5ecdc] py-20 md:py-28">
+    <section className="bg-[#fafafa] py-20 md:py-28">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 mb-14 items-end">
           <div className="lg:col-span-7">
-            <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-5`}>
+            <div className={`text-lg text-foreground/55 mb-5`}>
               Themenwolke.
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Was hier{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 besprochen wird.
               </span>
             </h2>
@@ -1117,7 +1108,7 @@ const ThemenWolke = ({ posts }: { posts: BlogPost[] }) => {
               <button
                 key={tag}
                 onClick={() => onTagClick(tag)}
-                className={`${SERIF_ITALIC} hover:text-[color:var(--accent)] transition-colors leading-none`}
+                className={`hover:text-[color:var(--accent)] transition-colors leading-none`}
                 style={
                   {
                     fontSize: `${size}px`,
@@ -1180,12 +1171,12 @@ const VerwandteRessourcen = () => {
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 mb-14 items-end">
           <div className="lg:col-span-7">
-            <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-5`}>
+            <div className={`text-lg text-foreground/55 mb-5`}>
               Im Haus.
             </div>
             <h2 className="text-[clamp(2rem,4.5vw,4rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Verwandte{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Bereiche.
               </span>
             </h2>
@@ -1203,7 +1194,7 @@ const VerwandteRessourcen = () => {
             <Link
               key={it.to}
               to={it.to}
-              className="group block bg-[#f5ecdc] rounded-3xl overflow-hidden hover:-translate-y-1 transition-transform duration-500"
+              className="group block bg-[#fafafa] rounded-3xl overflow-hidden hover:-translate-y-1 transition-transform duration-500"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
@@ -1216,7 +1207,7 @@ const VerwandteRessourcen = () => {
               </div>
               <div className="p-6 md:p-7">
                 <div
-                  className={`${SERIF_ITALIC} text-base mb-2`}
+                  className={`text-base mb-2`}
                   style={{ color: ACCENT }}
                 >
                   {it.eyebrow}
@@ -1253,16 +1244,16 @@ const FinalCTA = () => (
       className="absolute inset-0 pointer-events-none"
       style={{
         background:
-          "radial-gradient(60% 50% at 25% 30%, rgba(154,38,64,0.32) 0%, transparent 60%), radial-gradient(50% 40% at 80% 70%, rgba(199,144,66,0.25) 0%, transparent 65%)",
+          "radial-gradient(60% 50% at 25% 30%, rgba(0,0,0,0.040) 0%, transparent 60%), radial-gradient(50% 40% at 80% 70%, rgba(0,0,0,0.024) 0%, transparent 65%)",
       }}
     />
     <div className="relative container px-6 text-center max-w-4xl">
-      <div className={`${SERIF_ITALIC} text-lg text-white/55 mb-6`}>
+      <div className={`text-lg text-white/55 mb-6`}>
         Zwei Wege weiter.
       </div>
       <h2 className="text-[clamp(2.25rem,5.5vw,5rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-10">
         Lesen.{" "}
-        <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+        <span style={{ color: ACCENT_SOFT }}>
           Oder buchen.
         </span>
       </h2>

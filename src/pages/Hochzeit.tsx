@@ -55,7 +55,7 @@ const ACCENT_SOFT = "#e4b8c0";
 const EMERALD_DEEP = "#0e3d2a";
 const AMBER_MID = "#c79042";
 const AMBER_SOFT = "#f0d8a8";
-const CREAM = "#f5ecdc";
+const CREAM = "#fafafa";
 
 /* ═══════════════════════════════════════════════════════════
    1 · HERO — identisches Pattern wie Magic Dinner
@@ -90,8 +90,8 @@ const HeroKeyframes = () => (
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
     @keyframes heroStarPulse {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -110,18 +110,7 @@ const HEADLINE_SANS = ["Zauberer", "für"];
 const HEADLINE_ITALIC = ["eure", "Hochzeit."];
 
 // Bokeh — warme Kerzenlicht-Partikel, identisch zu Magic Dinner
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -165,7 +154,7 @@ const Hero = () => {
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             objectPosition: "center 25%",
-            filter: "saturate(0.92) contrast(1.08) brightness(0.72)",
+            filter: "brightness(0.78)",
           }}
           loading="eager"
         />
@@ -187,10 +176,10 @@ const Hero = () => {
         />
         <div
           aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -241,13 +230,6 @@ const Hero = () => {
               <strong className="font-semibold text-white">100+ Hochzeiten</strong> begleitet
             </span>
           </div>
-
-          <p
-            className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
-            style={{ animationDelay: "0.18s" }}
-          >
-            Eine Hochzeit. Drei Akte Magie.
-          </p>
 
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
@@ -376,7 +358,7 @@ const AKTE = [
       "Magie beim Hochzeitsdinner — Tisch-zu-Tisch oder Bühnen-Einlage zwischen den Gängen",
     duration: "5 – 25 Min",
     badge: "Tisch oder Bühne",
-    glow: "rgba(199,144,66,0.4)", // amber
+    glow: "rgba(0,0,0,0.024)", // amber
   },
   {
     nr: "III",
@@ -391,7 +373,7 @@ const AKTE = [
       "Hochzeits-Bühnenshow vor dem Eröffnungstanz — Standing Ovations der Gäste",
     duration: "15 – 30 Min",
     badge: "Bühnen-Finale",
-    glow: "rgba(154,38,64,0.18)", // burgundy
+    glow: "rgba(0,0,0,0.040)", // burgundy
   },
 ];
 
@@ -408,7 +390,7 @@ const DreiAkteSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei Akte.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Ein Tag.
               </span>
             </h2>
@@ -460,7 +442,7 @@ const DreiAkteSection = () => {
                 {/* Glow tint individuell pro Akt */}
                 <div
                   aria-hidden
-                  className="absolute -top-20 -right-20 w-[400px] h-[400px] rounded-full blur-3xl pointer-events-none mix-blend-screen"
+                  className="absolute -top-20 -right-20 w-[400px] h-[400px] rounded-full blur-2xl pointer-events-none mix-blend-screen"
                   style={{
                     background: `radial-gradient(circle, ${a.glow} 0%, transparent 70%)`,
                   }}
@@ -468,7 +450,7 @@ const DreiAkteSection = () => {
                 {/* Akt-Marker (italic-serif gigantisch über dem Foto) */}
                 <div className="absolute top-6 left-6 md:top-10 md:left-10 pointer-events-none">
                   <span
-                    className={`${SERIF_ITALIC} font-normal text-white leading-none block`}
+                    className={`font-normal text-white leading-none block`}
                     style={{
                       fontSize: "clamp(5rem, 10vw, 10rem)",
                       textShadow: "0 8px 30px rgba(0,0,0,0.45)",
@@ -493,7 +475,7 @@ const DreiAkteSection = () => {
                     }}
                   >
                     <p
-                      className={`${SERIF_ITALIC} text-[11px] text-white/80 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] mb-0.5`}
+                      className={`text-[11px] text-white/80 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] mb-0.5`}
                     >
                       {a.badge}
                     </p>
@@ -621,7 +603,7 @@ const PolaroidWall = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.2vw,5.25rem)] text-foreground">
               Was Magie auf eurer Hochzeit{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 konkret bedeutet
               </span>
               .
@@ -680,7 +662,7 @@ const PolaroidWall = () => {
                   {p.title}
                 </h3>
                 <p
-                  className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/65 leading-[1.45]`}
+                  className={`text-sm md:text-base text-foreground/65 leading-[1.45]`}
                 >
                   {p.note}
                 </p>
@@ -690,7 +672,7 @@ const PolaroidWall = () => {
         </div>
 
         {/* Footnote */}
-        <p className={`${SERIF_ITALIC} text-center text-base md:text-lg text-foreground/55 mt-16 max-w-2xl mx-auto`}>
+        <p className={`text-center text-base md:text-lg text-foreground/55 mt-16 max-w-2xl mx-auto`}>
           Ihr habt eine Idee, die hier nicht steht? Schreibt sie mir.
           Ich entwickle gern etwas Eigenes für euren Tag.
         </p>
@@ -708,7 +690,7 @@ const hochzeitQuizConfig: QuizConfig = {
   sectionTitle: (
     <>
       Findet euren{" "}
-      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+      <span style={{ color: ACCENT }}>
         Magie-Moment
       </span>
       .
@@ -723,7 +705,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Wie{" "}
-          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+          <span style={{ color: ACCENT }}>
             groß
           </span>{" "}
           wird eure Hochzeit?
@@ -743,7 +725,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Wann soll die{" "}
-          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+          <span style={{ color: ACCENT }}>
             Magie
           </span>{" "}
           passieren?
@@ -764,7 +746,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Wie ist der{" "}
-          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+          <span style={{ color: ACCENT }}>
             Stil
           </span>{" "}
           eurer Hochzeit?
@@ -784,7 +766,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Wer sind eure{" "}
-          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+          <span style={{ color: ACCENT }}>
             Gäste
           </span>
           ?
@@ -804,7 +786,7 @@ const hochzeitQuizConfig: QuizConfig = {
       title: (
         <>
           Was ist euch{" "}
-          <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+          <span style={{ color: ACCENT }}>
             wichtig
           </span>
           ?
@@ -911,7 +893,7 @@ const VertrauensSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header */}
@@ -922,7 +904,7 @@ const VertrauensSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Eure Ringe.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Eure Routine.
               </span>
             </h2>
@@ -953,8 +935,8 @@ const VertrauensSection = () => {
                     className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0"
                     style={{
                       background:
-                        "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
-                      border: "1px solid rgba(154,38,64,0.22)",
+                        "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
+                      border: "1px solid rgba(0,0,0,0.040)",
                     }}
                   >
                     <v.icon
@@ -966,7 +948,7 @@ const VertrauensSection = () => {
                   <div>
                     <div className="flex items-baseline gap-3 mb-2">
                       <span
-                        className={`${SERIF_ITALIC} text-base md:text-lg shrink-0`}
+                        className={`text-base md:text-lg shrink-0`}
                         style={{ color: ACCENT }}
                       >
                         0{i + 1}
@@ -996,14 +978,14 @@ const VertrauensSection = () => {
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
-                  "0 50px 100px -30px rgba(40,20,40,0.35), 0 15px 35px -15px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                  "0 50px 100px -30px rgba(0,0,0,0.175), 0 15px 35px -15px rgba(0,0,0,0.090), inset 0 0 0 1px rgba(0,0,0,0.05)",
               }}
             >
               {/* Letter-Style Header */}
               <div className="flex items-start justify-between mb-7">
                 <div>
                   <p
-                    className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-1`}
+                    className={`text-sm text-foreground/55 mb-1`}
                   >
                     Briefing — vertraulich
                   </p>
@@ -1013,7 +995,7 @@ const VertrauensSection = () => {
                 </div>
                 <span
                   className="text-[10px] tracking-[0.15em] uppercase font-bold px-2.5 py-1 rounded"
-                  style={{ background: "rgba(154,38,64,0.1)", color: ACCENT }}
+                  style={{ background: "rgba(0,0,0,0.040)", color: ACCENT }}
                 >
                   1 Wo. vorher
                 </span>
@@ -1033,7 +1015,7 @@ const VertrauensSection = () => {
                     className="grid grid-cols-[110px_1fr] gap-4 items-baseline text-sm"
                   >
                     <dt
-                      className={`${SERIF_ITALIC} text-foreground/55 leading-snug`}
+                      className={`text-foreground/55 leading-snug`}
                     >
                       {m.k}
                     </dt>
@@ -1047,7 +1029,7 @@ const VertrauensSection = () => {
               {/* Signature-Block */}
               <div className="pt-6 border-t border-foreground/10">
                 <p
-                  className={`${SERIF_ITALIC} text-xs text-foreground/50 mb-3`}
+                  className={`text-xs text-foreground/50 mb-3`}
                 >
                   Unterschrieben
                 </p>
@@ -1077,7 +1059,7 @@ const VertrauensSection = () => {
                   fontSize: "11px",
                   lineHeight: 1.1,
                   textAlign: "center",
-                  boxShadow: "0 8px 24px rgba(154,38,64,0.18)",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.040)",
                 }}
               >
                 ohne
@@ -1130,7 +1112,7 @@ const LocationSetupSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Eure Location,{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 mein Setup
               </span>
               .
@@ -1180,11 +1162,11 @@ const LocationSetupSection = () => {
         >
           {/* Was ich brauche */}
           <div
-            className="relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10"
+            className="relative bg-[hsl(0,0%,98%)] p-8 md:p-10"
             style={{
               borderRadius: "1.25rem",
               boxShadow:
-                "0 25px 50px -25px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.04)",
+                "0 25px 50px -25px rgba(0,0,0,0.090), inset 0 0 0 1px rgba(0,0,0,0.04)",
             }}
           >
             <p
@@ -1205,7 +1187,7 @@ const LocationSetupSection = () => {
                   <span
                     className="shrink-0 mt-1 w-5 h-5 rounded-full flex items-center justify-center"
                     style={{
-                      background: "rgba(154,38,64,0.1)",
+                      background: "rgba(0,0,0,0.040)",
                       color: ACCENT,
                     }}
                   >
@@ -1230,7 +1212,7 @@ const LocationSetupSection = () => {
             {/* Soft glow */}
             <span
               aria-hidden
-              className="absolute -top-16 -right-8 w-[320px] h-[320px] rounded-full blur-3xl opacity-50 pointer-events-none"
+              className="absolute -top-16 -right-8 w-[320px] h-[320px] rounded-full blur-2xl opacity-50 pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle, rgba(255,200,90,0.4), transparent 65%)",
@@ -1266,7 +1248,7 @@ const LocationSetupSection = () => {
             </ul>
 
             <p
-              className={`${SERIF_ITALIC} relative text-base md:text-lg mt-8 pt-6 border-t border-white/15 text-white/80`}
+              className={`relative text-base md:text-lg mt-8 pt-6 border-t border-white/15 text-white/80`}
             >
               Ihr macht nichts außer ein paar Anekdoten schicken.
             </p>
@@ -1290,15 +1272,15 @@ const PlanerQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 -left-16 w-[560px] h-[560px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 -left-16 w-[560px] h-[560px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[560px] h-[560px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[560px] h-[560px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(228,184,192,0.45), transparent 60%)",
@@ -1318,7 +1300,7 @@ const PlanerQuoteSection = () => {
           {/* XL Italic Quote Mark */}
           <span
             aria-hidden
-            className={`${SERIF_ITALIC} block leading-none mb-[-1.5rem] md:mb-[-3rem] select-none text-center`}
+            className={`block leading-none mb-[-1.5rem] md:mb-[-3rem] select-none text-center`}
             style={{
               fontSize: "clamp(6rem, 14vw, 13rem)",
               color: ACCENT,
@@ -1332,7 +1314,7 @@ const PlanerQuoteSection = () => {
             <p className="font-display font-black tracking-[-0.015em] leading-[1.1] text-[clamp(1.75rem,4.2vw,3.5rem)]">
               Ich durfte eine Hochzeit planen, bei der Emilian als Zauberer
               aufgetreten ist — und es war{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+              <span style={{ color: ACCENT_SOFT }}>
                 wirklich großartig
               </span>
               . Mit viel Charme und Witz hat er alle Gäste begeistert.
@@ -1351,7 +1333,7 @@ const PlanerQuoteSection = () => {
                 <p className="font-display font-bold text-white text-base">
                   Katrin Raß
                 </p>
-                <p className={`${SERIF_ITALIC} text-sm text-white/55`}>
+                <p className={`text-sm text-white/55`}>
                   Hochzeitsplanerin · Google-Bewertung
                 </p>
               </div>
@@ -1399,7 +1381,7 @@ const BrautpaareStimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10"
+      className="bg-white py-20 md:py-28 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-14">
@@ -1409,7 +1391,7 @@ const BrautpaareStimmenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.5rem)] text-foreground">
               Was andere{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Brautpaare
               </span>{" "}
               sagen.
@@ -1557,7 +1539,7 @@ const BuchungsFlowSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Vier Schritte.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Kein Stress.
               </span>
             </h2>
@@ -1588,7 +1570,7 @@ const BuchungsFlowSection = () => {
               style={{
                 height: `calc(${fillPct}% - 1rem)`,
                 background: `linear-gradient(180deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`,
-                boxShadow: "0 0 12px rgba(154,38,64,0.15)",
+                boxShadow: "0 0 12px rgba(0,0,0,0.040)",
               }}
             />
             <ol className="space-y-12 md:space-y-16">
@@ -1609,7 +1591,7 @@ const BuchungsFlowSection = () => {
                           ? `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`
                           : "linear-gradient(135deg, rgba(0,0,0,0.45), rgba(0,0,0,0.32))",
                         boxShadow: isActive
-                          ? "0 0 0 4px white, 0 0 24px rgba(154,38,64,0.18), 0 8px 22px -4px rgba(154,38,64,0.5)"
+                          ? "0 0 0 4px white, 0 0 24px rgba(0,0,0,0.040), 0 8px 22px -4px rgba(0,0,0,0.040)"
                           : "0 0 0 4px white, 0 4px 12px -3px rgba(0,0,0,0.18)",
                         transform: isActive ? "scale(1.08)" : "scale(1)",
                       }}
@@ -1617,7 +1599,7 @@ const BuchungsFlowSection = () => {
                       {s.num}
                     </div>
                     <p
-                      className={`${SERIF_ITALIC} text-base md:text-lg mb-2 transition-colors duration-500`}
+                      className={`text-base md:text-lg mb-2 transition-colors duration-500`}
                       style={{
                         color: isActive ? ACCENT : "rgba(0,0,0,0.42)",
                       }}
@@ -1654,7 +1636,7 @@ const BuchungsFlowSection = () => {
                 borderRadius: "1.25rem",
                 height: "min(72vh, 640px)",
                 boxShadow:
-                  "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2)",
+                  "0 50px 100px -30px rgba(0,0,0,0.200), 0 15px 35px -15px rgba(0,0,0,0.100)",
               }}
             >
               <img
@@ -1693,7 +1675,7 @@ const BuchungsFlowSection = () => {
                     }}
                   />
                   <p
-                    className={`${SERIF_ITALIC} text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Persönlich.
                   </p>
@@ -1736,7 +1718,7 @@ const TrustStripSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             Bekannt aus TV, Wettbewerb und{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               200+ Events
             </span>
             .
@@ -1757,8 +1739,8 @@ const TrustStripSection = () => {
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))",
-                  border: "1px solid rgba(154,38,64,0.22)",
+                    "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
+                  border: "1px solid rgba(0,0,0,0.040)",
                 }}
               >
                 <it.Icon
@@ -1808,7 +1790,7 @@ const ZahlenInlineSection = () => {
               <span className="font-display text-2xl md:text-3xl font-black text-foreground tabular-nums">
                 {s.num}
               </span>
-              <span className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55`}>
+              <span className={`text-base md:text-lg text-foreground/55`}>
                 {s.label}
               </span>
             </div>
@@ -1862,7 +1844,7 @@ const FAQSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
@@ -1872,7 +1854,7 @@ const FAQSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Was Brautpaare
             <br />
-            <span className={SERIF_ITALIC}>vor der Buchung fragen.</span>
+            <span>vor der Buchung fragen.</span>
           </h2>
         </div>
 
@@ -1936,15 +1918,15 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(228,184,192,0.5), transparent 60%)",
@@ -1963,7 +1945,7 @@ const FinalCTA = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Eure Hochzeit.
             <br />
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               Drei Akte Magie.
             </span>
           </h2>

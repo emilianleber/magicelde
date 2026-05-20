@@ -28,7 +28,7 @@ const SERIF_ITALIC =
 const ACCENT = "#9a2640";
 const ACCENT_DEEP = "#5c1622";
 const ACCENT_SOFT = "#e4b8c0";
-const CREAM = "#f5ecdc";
+const CREAM = "#fafafa";
 
 /* ════════════════════════════════════════════════════════
    KEYFRAMES
@@ -37,7 +37,7 @@ const PageKeyframes = () => (
   <style>{`
     @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes successPop { 0% { opacity: 0; transform: scale(0.85) translateY(20px); } 60% { opacity: 1; transform: scale(1.04) translateY(0); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
     @keyframes faqFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -292,20 +292,13 @@ const HEADLINE_SANS = ["FAQ", "—", "was"];
 const HEADLINE_SANS_2 = ["vorher"];
 const HEADLINE_ITALIC = ["gefragt wird."];
 
-const BOKEH = [
-  { size: 18, left: "8%", top: "30%", dur: 16, delay: 0, o: 0.4 },
-  { size: 22, left: "84%", top: "20%", dur: 18, delay: 2, o: 0.35 },
-  { size: 14, left: "70%", top: "70%", dur: 14, delay: 4, o: 0.5 },
-  { size: 12, left: "24%", top: "76%", dur: 19, delay: 6, o: 0.4 },
-  { size: 24, left: "90%", top: "58%", dur: 17, delay: 3, o: 0.32 },
-  { size: 16, left: "42%", top: "12%", dur: 21, delay: 5, o: 0.45 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => (
   <section
     className="relative overflow-hidden"
     style={{
-      background: `linear-gradient(180deg, ${CREAM} 0%, #f9f1e2 55%, #fbf4e6 100%)`,
+      background: `linear-gradient(180deg, ${CREAM} 0%, #fafafa 55%, #ffffff 100%)`,
     }}
   >
     <div
@@ -317,7 +310,7 @@ const Hero = () => (
         width: "60%",
         height: "70%",
         background:
-          "radial-gradient(closest-side, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+          "radial-gradient(closest-side, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
         filter: "blur(20px)",
       }}
     />
@@ -330,7 +323,7 @@ const Hero = () => (
         width: "55%",
         height: "60%",
         background:
-          "radial-gradient(closest-side, rgba(154,38,64,0.18) 0%, rgba(154,38,64,0) 70%)",
+          "radial-gradient(closest-side, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
         filter: "blur(20px)",
       }}
     />
@@ -345,7 +338,7 @@ const Hero = () => (
           left: b.left,
           top: b.top,
           background:
-            "radial-gradient(closest-side, rgba(199,144,66,0.85) 0%, rgba(199,144,66,0.0) 70%)",
+            "radial-gradient(closest-side, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           animationDuration: `${b.dur}s`,
           animationDelay: `${b.delay}s`,
           opacity: b.o,
@@ -381,7 +374,7 @@ const Hero = () => (
         </div>
 
         <p
-          className={`hero-fade ${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6`}
+          className={`${SERIF_ITALIC} hero-fade text-lg md:text-xl text-foreground/55 mb-6`}
           style={{ animationDelay: "0.15s" }}
         >
           FAQ · Häufige Fragen.
@@ -517,7 +510,7 @@ const FAQCore = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
             Antworten nach{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               Thema.
             </span>
           </h2>
@@ -590,7 +583,7 @@ const FAQCore = () => {
                     className={`group inline-flex items-center gap-2.5 px-5 py-3 rounded-full border-2 transition-all duration-300 ${
                       active
                         ? "text-white"
-                        : "text-foreground/75 hover:text-foreground bg-[#f5ecdc]/60 hover:bg-[#f5ecdc]"
+                        : "text-foreground/75 hover:text-foreground bg-[#fafafa]/60 hover:bg-[#fafafa]"
                     }`}
                     style={{
                       borderColor: active ? ACCENT : "transparent",
@@ -598,7 +591,7 @@ const FAQCore = () => {
                         ? `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`
                         : undefined,
                       boxShadow: active
-                        ? "0 8px 24px -8px rgba(154,38,64,0.45)"
+                        ? "0 8px 24px -8px rgba(0,0,0,0.040)"
                         : undefined,
                     }}
                   >
@@ -675,26 +668,26 @@ const PullQuote = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 left-1/4 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
-          background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+          background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
       />
       <div className="relative container px-6">
         <div className={`max-w-4xl mx-auto text-center`}>
-          <p className={`${SERIF_ITALIC} text-base md:text-lg text-white/55 mb-8 tracking-wide uppercase text-[11px]`}>
+          <p className={`text-base md:text-lg text-white/55 mb-8 tracking-wide uppercase text-[11px]`}>
             Kurz und ehrlich.
           </p>
           <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,5vw,4.5rem)] text-white">
             Über dreißig Fragen.{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               Eine Antwort: ja, das geht.
             </span>
           </p>
@@ -768,7 +761,7 @@ const FrageNichtBeantwortet = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-6">
             Stell sie{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               direkt mir.
             </span>
           </h2>
@@ -845,7 +838,7 @@ const FrageNichtBeantwortet = () => {
                   className="group inline-flex items-center justify-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`,
-                    boxShadow: "0 12px 28px -8px rgba(154,38,64,0.45)",
+                    boxShadow: "0 12px 28px -8px rgba(0,0,0,0.040)",
                   }}
                 >
                   <Send className="w-4 h-4" />
@@ -875,7 +868,7 @@ const FrageNichtBeantwortet = () => {
                 className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-6"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`,
-                  boxShadow: "0 12px 28px -8px rgba(154,38,64,0.45)",
+                  boxShadow: "0 12px 28px -8px rgba(0,0,0,0.040)",
                 }}
               >
                 <CheckCircle2 className="w-8 h-8 text-white" />
@@ -942,7 +935,7 @@ const VerwandteRessourcen = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
             Falls du{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               direkt weiter willst.
             </span>
           </h2>
@@ -954,7 +947,7 @@ const VerwandteRessourcen = () => {
               <Link
                 key={l.title}
                 to={l.to}
-                className="group block rounded-3xl p-7 transition-all duration-500 hover:-translate-y-1 border border-foreground/10 bg-[#f5ecdc]/40 hover:bg-[#f5ecdc]/70"
+                className="group block rounded-3xl p-7 transition-all duration-500 hover:-translate-y-1 border border-foreground/10 bg-[#fafafa]/40 hover:bg-[#fafafa]/70"
                 style={{
                   boxShadow: "0 4px 16px -4px rgba(0,0,0,0.04)",
                 }}
@@ -967,7 +960,7 @@ const VerwandteRessourcen = () => {
                 >
                   <Icon className="w-5 h-5 text-white" />
                 </div>
-                <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-2`}>
+                <p className={`text-sm text-foreground/55 mb-2`}>
                   {l.eyebrow}
                 </p>
                 <h3 className="font-display text-xl font-bold text-foreground mb-3 leading-snug">
@@ -1005,14 +998,14 @@ const FinalCTA = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
-          background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+          background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
@@ -1024,7 +1017,7 @@ const FinalCTA = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Lass uns{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               dein Event planen.
             </span>
           </h2>

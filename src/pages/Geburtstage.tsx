@@ -71,8 +71,8 @@ const HeroKeyframes = () => (
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
     @keyframes heroStarPulse {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -90,18 +90,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Geburtstag", "mit"];
 const HEADLINE_ITALIC = ["Magie", "&", "Pointe."];
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -141,7 +130,7 @@ const Hero = () => {
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             objectPosition: "center 30%",
-            filter: "saturate(0.92) contrast(1.08) brightness(0.7)",
+            filter: "brightness(0.78)",
           }}
           loading="eager"
         />
@@ -163,10 +152,10 @@ const Hero = () => {
         />
         <div
           aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -207,9 +196,6 @@ const Hero = () => {
               <strong className="font-semibold text-white">80+ Geburtstage</strong> begleitet
             </span>
           </div>
-          <p className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`} style={{ animationDelay: "0.18s" }}>
-            Anekdoten der Familie. Magie als Geschenk.
-          </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
               <span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
@@ -329,7 +315,7 @@ const AgeGeneratorSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wählt das{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Jahrzehnt
               </span>
               .
@@ -365,7 +351,7 @@ const AgeGeneratorSection = () => {
                             padding: "12px 24px",
                             borderRadius: "9999px",
                             background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                            boxShadow: "0 14px 30px -8px rgba(154,38,64,0.5)",
+                            boxShadow: "0 14px 30px -8px rgba(0,0,0,0.040)",
                             fontSize: "1.125rem",
                           }
                         : {
@@ -384,7 +370,7 @@ const AgeGeneratorSection = () => {
             </div>
 
             <p
-              className={`${SERIF_ITALIC} text-[11px] tracking-[0.18em] uppercase font-semibold mb-3`}
+              className={`text-[11px] tracking-[0.18em] uppercase font-semibold mb-3`}
               style={{ color: ACCENT }}
             >
               {program.fokus}
@@ -457,7 +443,7 @@ const AgeGeneratorSection = () => {
                       "0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.45)",
                   }}
                 >
-                  <p className={`${SERIF_ITALIC} text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}>
+                  <p className={`text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}>
                     Alters-Programm
                   </p>
                   <p className="font-display text-base md:text-lg text-white font-bold leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
@@ -499,7 +485,7 @@ const MemoryLaneSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -509,7 +495,7 @@ const MemoryLaneSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Aus eurer Geschichte wird{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 ein Trick
               </span>
               .
@@ -547,12 +533,12 @@ const MemoryLaneSection = () => {
               <div
                 className="rounded-xl p-4 mt-auto"
                 style={{
-                  background: "linear-gradient(135deg, rgba(154,38,64,0.06), rgba(154,38,64,0.02))",
-                  border: "1px solid rgba(154,38,64,0.18)",
+                  background: "linear-gradient(135deg, rgba(0,0,0,0.030), rgba(0,0,0,0.010))",
+                  border: "1px solid rgba(0,0,0,0.040)",
                 }}
               >
                 <p
-                  className={`${SERIF_ITALIC} text-[11px] tracking-[0.16em] uppercase font-semibold mb-2`}
+                  className={`text-[11px] tracking-[0.16em] uppercase font-semibold mb-2`}
                   style={{ color: ACCENT }}
                 >
                   Mini-Routine
@@ -565,7 +551,7 @@ const MemoryLaneSection = () => {
           ))}
         </div>
 
-        <p className={`${SERIF_ITALIC} text-center text-base md:text-lg text-foreground/55 mt-14 max-w-2xl mx-auto`}>
+        <p className={`text-center text-base md:text-lg text-foreground/55 mt-14 max-w-2xl mx-auto`}>
           Eure Familie versteht den Witz. Alle anderen staunen — und fragen
           sich, woher der Typ das wissen kann.
         </p>
@@ -583,14 +569,14 @@ const PullQuoteSection = () => {
     <section ref={ref} className="relative bg-black text-white py-28 md:py-40 overflow-hidden">
       <div
         aria-hidden
-        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
-          background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+          background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-6"
         style={{
           background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
         }}
@@ -602,7 +588,7 @@ const PullQuoteSection = () => {
           </p>
           <p className="font-display font-bold tracking-[-0.01em] leading-[1.15] text-[clamp(1.75rem,4vw,3.5rem)]">
             Mutter hat geweint.{" "}
-            <span className={`${SERIF_ITALIC}`} style={{ color: ACCENT_SOFT }}>
+            <span className={``} style={{ color: ACCENT_SOFT }}>
               Mehr Erfolg geht nicht.
             </span>
           </p>
@@ -624,7 +610,7 @@ const geburtstagQuizConfig: CustomQuizConfig = {
   sectionTitle: (
     <>
       Findet euer{" "}
-      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+      <span style={{ color: ACCENT }}>
         Geburtstags-Format
       </span>
       .
@@ -763,7 +749,7 @@ const StimmenSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             5,0 Sterne.
             <br />
-            <span className={SERIF_ITALIC}>80+ Geburtstage.</span>
+            <span>80+ Geburtstage.</span>
           </h2>
         </div>
 
@@ -823,7 +809,7 @@ const TRUST_ITEMS = [
 const TrustZahlenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-20 md:py-28 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
@@ -831,7 +817,7 @@ const TrustZahlenSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             Bekannt aus TV, Wettbewerb und{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               80+ Geburtstagen
             </span>
             .
@@ -847,8 +833,8 @@ const TrustZahlenSection = () => {
               <div
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
                 style={{
-                  background: "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))",
-                  border: "1px solid rgba(154,38,64,0.22)",
+                  background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
+                  border: "1px solid rgba(0,0,0,0.040)",
                 }}
               >
                 <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -868,7 +854,7 @@ const TrustZahlenSection = () => {
           ].map((s) => (
             <div key={s.label} className="flex items-baseline gap-3">
               <span className="font-display text-2xl md:text-3xl font-black text-foreground tabular-nums">{s.num}</span>
-              <span className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55`}>{s.label}</span>
+              <span className={`text-base md:text-lg text-foreground/55`}>{s.label}</span>
             </div>
           ))}
         </div>
@@ -919,7 +905,7 @@ const FAQSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
             Was Familien
             <br />
-            <span className={SERIF_ITALIC}>vorher fragen.</span>
+            <span>vorher fragen.</span>
           </h2>
         </div>
 
@@ -958,12 +944,12 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
-        style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }}
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
+        style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)" }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }}
       />
       <div className="relative container px-6">
@@ -973,7 +959,7 @@ const FinalCTA = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Magie als{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               Geschenk
             </span>
             .

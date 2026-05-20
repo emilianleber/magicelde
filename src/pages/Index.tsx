@@ -82,8 +82,8 @@ const HeroKeyframes = () => (
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
     @keyframes heroStarPulse {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); }
     }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -101,18 +101,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Zauberer", "für"];
 const HEADLINE_ITALIC = ["euren", "Abend."];
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -155,7 +144,7 @@ const Hero = () => {
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             objectPosition: "center 30%",
-            filter: "saturate(0.92) contrast(1.08) brightness(0.7)",
+            filter: "brightness(0.75)",
           }}
           loading="eager"
         />
@@ -177,10 +166,10 @@ const Hero = () => {
         />
         <div
           aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -206,38 +195,6 @@ const Hero = () => {
 
       <div className="relative z-10 min-h-screen container px-6 flex flex-col justify-between pt-28 md:pt-32 pb-16 md:pb-20">
         <div className="max-w-5xl">
-          <div
-            className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-8 hero-fade"
-            style={{ animationDelay: "0.05s" }}
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-4 h-4 fill-amber-300 text-amber-300 hero-star"
-                    style={{ animationDelay: `${i * 0.12}s` }}
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-white/85">
-                <strong className="font-semibold text-white">5,0</strong>
-                <span className="text-white/60"> · 30+ Bewertungen</span>
-              </span>
-            </div>
-            <span aria-hidden className="hidden md:block h-4 w-px bg-white/25" />
-            <span className="text-sm text-white/80">
-              <strong className="font-semibold text-white">200+ Events</strong> · Bayern + deutschlandweit
-            </span>
-          </div>
-
-          <p
-            className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
-            style={{ animationDelay: "0.18s" }}
-          >
-            Drei Formate. Ein Künstler.
-          </p>
-
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
               <span
@@ -296,29 +253,19 @@ const Hero = () => {
           </div>
         </div>
 
-        <div className="relative mt-20 md:mt-28">
+        <div className="relative mt-16 md:mt-24">
           <div
-            className="hero-overshoot inline-flex flex-wrap items-baseline gap-x-5 md:gap-x-7 gap-y-2 text-white/85 text-xs md:text-sm tracking-[0.04em]"
-            style={{ animationDelay: "2.0s" }}
+            className="hero-overshoot flex items-center gap-x-4 text-white/80 text-xs md:text-sm tracking-[0.04em]"
+            style={{ animationDelay: "1.6s" }}
           >
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">200+</strong>
-              <span className="text-white/65">Events</span>
+            <span className="flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+              ))}
+              <span className="ml-1 text-white/85"><strong className="font-semibold text-white">5,0</strong> · 30+ Bewertungen</span>
             </span>
-            <span aria-hidden className="text-white/30">·</span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">100+</strong>
-              <span className="text-white/65">Hochzeiten</span>
-            </span>
-            <span aria-hidden className="text-white/30">·</span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-white text-base md:text-lg">24 h</strong>
-              <span className="text-white/65">Antwort</span>
-            </span>
-            <span aria-hidden className="text-white/30">·</span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <span className="text-white/65">Bayern · deutschlandweit</span>
-            </span>
+            <span aria-hidden className="text-white/25">·</span>
+            <span className="text-white/85"><strong className="font-semibold text-white">200+ Events</strong> · Bayern + deutschlandweit</span>
           </div>
         </div>
       </div>
@@ -382,7 +329,7 @@ const KonzeptIntroSection = () => {
                   }}
                 >
                   <p
-                    className={`${SERIF_ITALIC} text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Live aus dem Restaurant.
                   </p>
@@ -406,7 +353,7 @@ const KonzeptIntroSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Magie, die sich in euren Abend{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 einfügt
               </span>
               .
@@ -448,7 +395,7 @@ const KonzeptIntroSection = () => {
                     {s.num}
                   </p>
                   <p
-                    className={`${SERIF_ITALIC} text-foreground/55 text-xs md:text-sm mt-2 leading-tight`}
+                    className={`text-foreground/55 text-xs md:text-sm mt-2 leading-tight`}
                   >
                     {s.sub}
                   </p>
@@ -502,7 +449,7 @@ const FormateSection = () => {
     <section
       ref={ref}
       id="formate"
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -512,7 +459,7 @@ const FormateSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wählt euer{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Hauptformat
               </span>
               .
@@ -568,7 +515,7 @@ const FormateSection = () => {
                         {f.eyebrow}
                       </p>
                       <h3
-                        className={`font-display text-xl md:text-2xl font-bold leading-tight transition-colors duration-500 ${
+                        className={`${SERIF_ITALIC} font-display text-xl md:text-2xl font-bold leading-tight transition-colors duration-500 ${
                           isActive ? "text-foreground" : "text-foreground/55"
                         }`}
                       >
@@ -651,7 +598,7 @@ const FormateSection = () => {
                   }}
                 >
                   <p
-                    className={`${SERIF_ITALIC} text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Format {String(active + 1).padStart(2, "0")}
                   </p>
@@ -710,8 +657,8 @@ const TrustStrip = () => (
               className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))",
-                border: "1px solid rgba(154,38,64,0.22)",
+                  "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
+                border: "1px solid rgba(0,0,0,0.040)",
               }}
             >
               <it.Icon
@@ -756,7 +703,7 @@ const KundenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-b border-foreground/10"
+      className="bg-white py-20 md:py-28 border-b border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
@@ -766,7 +713,7 @@ const KundenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.5rem)] text-foreground">
               Kunden &{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Referenzen
               </span>
               .
@@ -825,7 +772,7 @@ const VideoSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Sieh dir die{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Show im Fernsehen
               </span>{" "}
               an.
@@ -899,15 +846,15 @@ const PullQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -926,7 +873,7 @@ const PullQuoteSection = () => {
             Ein Ring, der im Geldbeutel des Brautvaters auftaucht. Eine Karte,
             die der Vorstandsvorsitzende selbst gewählt hat — und die im
             versiegelten Glas auf dem Sideboard liegt. Drei Sekunden{" "}
-            <span className={`${SERIF_ITALIC}`}>halten alle den Atem an.</span>
+            <span className={``}>halten alle den Atem an.</span>
           </p>
           <p className="mt-10 text-sm md:text-base text-white/45">
             Genau diese drei Sekunden sind das Produkt — nicht der Trick davor.
@@ -952,7 +899,7 @@ const AnlaesseSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
               Vier Anlässe.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Vier Pfade.
               </span>
             </h2>
@@ -1018,8 +965,8 @@ const AnlassCardDark = ({ name, eyebrow, href, img, body, tint }: DarkCardProps)
       borderRadius: "1.5rem",
       boxShadow:
         tint === "rose"
-          ? "0 35px 70px -25px rgba(154,38,64,0.45)"
-          : "0 35px 70px -25px rgba(199,144,66,0.5)",
+          ? "0 35px 70px -25px rgba(0,0,0,0.040)"
+          : "0 35px 70px -25px rgba(0,0,0,0.024)",
     }}
   >
     <img
@@ -1034,13 +981,13 @@ const AnlassCardDark = ({ name, eyebrow, href, img, body, tint }: DarkCardProps)
       style={{
         background:
           tint === "rose"
-            ? "linear-gradient(135deg, rgba(8,6,12,0.55) 0%, rgba(154,38,64,0.13) 70%, rgba(92,22,34,0.85) 100%)"
-            : "linear-gradient(135deg, rgba(8,6,12,0.55) 0%, rgba(199,144,66,0.12) 70%, rgba(138,90,20,0.85) 100%)",
+            ? "linear-gradient(135deg, rgba(8,6,12,0.55) 0%, rgba(0,0,0,0.040) 70%, rgba(0,0,0,0.340) 100%)"
+            : "linear-gradient(135deg, rgba(8,6,12,0.55) 0%, rgba(0,0,0,0.024) 70%, rgba(138,90,20,0.85) 100%)",
       }}
     />
     <div className="absolute bottom-0 left-0 right-0 p-7 md:p-9 lg:p-12 max-w-xl">
       <p
-        className={`${SERIF_ITALIC} text-base md:text-lg text-white/85 mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)]`}
+        className={`text-base md:text-lg text-white/85 mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)]`}
       >
         {eyebrow}
       </p>
@@ -1062,7 +1009,7 @@ const AnlassCardDark = ({ name, eyebrow, href, img, body, tint }: DarkCardProps)
 const FirmenfeierBookingCard = () => (
   <Link
     to="/firmenfeiern"
-    className="group relative overflow-hidden bg-[hsl(30,8%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
+    className="group relative overflow-hidden bg-[hsl(0,0%,98%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
     style={{
       borderRadius: "1.5rem",
       boxShadow:
@@ -1092,14 +1039,14 @@ const FirmenfeierBookingCard = () => (
               Bestätigt
             </span>
           </div>
-          <span className={`${SERIF_ITALIC} text-[10px] text-foreground/45`}>
+          <span className={`text-[10px] text-foreground/45`}>
             #2024-118
           </span>
         </div>
         <p className="font-display text-sm font-bold text-foreground leading-tight mb-0.5">
           Vorstandsdinner
         </p>
-        <p className={`${SERIF_ITALIC} text-[11px] text-foreground/55 mb-2.5`}>
+        <p className={`text-[11px] text-foreground/55 mb-2.5`}>
           Fr · 14. März · 19:00
         </p>
         <div className="flex items-center gap-0.5 mb-2.5">
@@ -1125,7 +1072,7 @@ const FirmenfeierBookingCard = () => (
             className="text-[9px] tracking-[0.1em] uppercase font-bold px-1.5 py-0.5 rounded"
             style={{
               color: ACCENT,
-              background: "rgba(154,38,64,0.08)",
+              background: "rgba(0,0,0,0.040)",
             }}
           >
             Tisch + Bühne
@@ -1140,7 +1087,7 @@ const FirmenfeierBookingCard = () => (
       `}</style>
     </div>
     <div className="p-5 md:p-6 flex-1 flex flex-col justify-end">
-      <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-1.5`}>
+      <p className={`text-sm text-foreground/55 mb-1.5`}>
         Vorstand, Kunden, Team.
       </p>
       <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-2">
@@ -1167,7 +1114,7 @@ const GeburtstagAlterCard = () => {
   return (
     <Link
       to="/geburtstage"
-      className="group relative overflow-hidden bg-[hsl(30,8%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
+      className="group relative overflow-hidden bg-[hsl(0,0%,98%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
       style={{
         borderRadius: "1.5rem",
         boxShadow:
@@ -1183,7 +1130,7 @@ const GeburtstagAlterCard = () => {
               background:
                 "linear-gradient(180deg, #f0d8a8 0%, #d4a875 70%, #b88955 100%)",
               boxShadow:
-                "0 12px 24px -8px rgba(154,38,64,0.25), inset 0 -3px 0 rgba(154,38,64,0.18)",
+                "0 12px 24px -8px rgba(0,0,0,0.040), inset 0 -3px 0 rgba(0,0,0,0.040)",
             }}
           >
             <div
@@ -1233,7 +1180,7 @@ const GeburtstagAlterCard = () => {
 
         {/* Alter-Picker Pills */}
         <div className="w-full max-w-[280px]">
-          <p className={`${SERIF_ITALIC} text-xs text-foreground/55 mb-2 text-center`}>
+          <p className={`text-xs text-foreground/55 mb-2 text-center`}>
             Welcher Geburtstag?
           </p>
           <div className="flex gap-1.5 justify-center">
@@ -1256,7 +1203,7 @@ const GeburtstagAlterCard = () => {
                     isActive
                       ? {
                           background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                          boxShadow: "0 6px 14px -4px rgba(154,38,64,0.5)",
+                          boxShadow: "0 6px 14px -4px rgba(0,0,0,0.040)",
                         }
                       : undefined
                   }
@@ -1269,7 +1216,7 @@ const GeburtstagAlterCard = () => {
         </div>
       </div>
       <div className="p-5 md:p-6 flex-1 flex flex-col justify-end">
-        <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-1.5`}>
+        <p className={`text-sm text-foreground/55 mb-1.5`}>
           Runde Geburtstage, Goldene Hochzeiten.
         </p>
         <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-2">
@@ -1318,7 +1265,7 @@ const ComedyZaubereiSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Lachen und{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Staunen
               </span>{" "}
               am selben Tisch.
@@ -1348,7 +1295,7 @@ const ComedyZaubereiSection = () => {
                 <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight">
                   Lacher in 20 Minuten
                 </p>
-                <p className={`${SERIF_ITALIC} text-xs md:text-sm text-foreground/55 mt-0.5`}>
+                <p className={`text-xs md:text-sm text-foreground/55 mt-0.5`}>
                   Durchschnitt aus 30 Bühnenshows. Eigene Notizen.
                 </p>
               </div>
@@ -1360,7 +1307,7 @@ const ComedyZaubereiSection = () => {
                 className="hero-cta group inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 15px 35px -10px rgba(154,38,64,0.45)",
+                  boxShadow: "0 15px 35px -10px rgba(0,0,0,0.040)",
                 }}
               >
                 Comedy-Zauberei entdecken
@@ -1380,7 +1327,7 @@ const ComedyZaubereiSection = () => {
               className="relative overflow-hidden h-[280px] md:h-[420px]"
               style={{
                 borderRadius: "1rem",
-                boxShadow: "0 30px 60px -25px rgba(40,20,40,0.3)",
+                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.150)",
               }}
             >
               <img
@@ -1411,7 +1358,7 @@ const ComedyZaubereiSection = () => {
               className="relative overflow-hidden h-[280px] md:h-[420px] mt-8"
               style={{
                 borderRadius: "1rem",
-                boxShadow: "0 30px 60px -25px rgba(40,20,40,0.3)",
+                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.150)",
               }}
             >
               <img
@@ -1454,7 +1401,7 @@ const indexQuizConfig: CustomQuizConfig = {
   sectionTitle: (
     <>
       Welches Format passt zu{" "}
-      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+      <span style={{ color: ACCENT }}>
         eurem Event
       </span>
       ?
@@ -1588,7 +1535,7 @@ const StimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
@@ -1598,7 +1545,7 @@ const StimmenSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             5,0 Sterne.
             <br />
-            <span className={SERIF_ITALIC}>30+ Bewertungen.</span>
+            <span>30+ Bewertungen.</span>
           </h2>
         </div>
 
@@ -1682,7 +1629,7 @@ const UeberMichSection = () => {
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
-                  "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.2)",
+                  "0 50px 100px -30px rgba(0,0,0,0.200), 0 15px 35px -15px rgba(0,0,0,0.100)",
               }}
             >
               <img
@@ -1713,7 +1660,7 @@ const UeberMichSection = () => {
                   }}
                 >
                   <p
-                    className={`${SERIF_ITALIC} text-white/80 text-sm mb-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/80 text-sm mb-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Emilian Leber
                   </p>
@@ -1736,7 +1683,7 @@ const UeberMichSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.2vw,5rem)] text-foreground">
               Magie seit{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 zehn Jahren
               </span>
               .
@@ -1779,7 +1726,7 @@ const UeberMichSection = () => {
                 className="hero-cta group inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 15px 35px -10px rgba(154,38,64,0.45)",
+                  boxShadow: "0 15px 35px -10px rgba(0,0,0,0.040)",
                 }}
               >
                 Mehr über Emilian
@@ -1821,7 +1768,7 @@ const ZahlenInlineSection = () => {
               <span className="font-display text-2xl md:text-3xl font-black text-foreground tabular-nums">
                 {s.num}
               </span>
-              <span className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55`}>
+              <span className={`text-base md:text-lg text-foreground/55`}>
                 {s.label}
               </span>
             </div>
@@ -1871,7 +1818,7 @@ const FAQSection = () => {
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
               Was meistens
               <br />
-              <span className={SERIF_ITALIC}>gefragt wird.</span>
+              <span>gefragt wird.</span>
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8 self-end">
@@ -1950,15 +1897,15 @@ const FinalCTA = () => {
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -1976,7 +1923,7 @@ const FinalCTA = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Magie für{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+            <span style={{ color: ACCENT_SOFT }}>
               euren Anlass
             </span>
             .

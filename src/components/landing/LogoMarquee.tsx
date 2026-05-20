@@ -20,8 +20,6 @@ const LOGOS = [
   { src: "/logos/waechter.png", alt: "Wächter" },
 ];
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 
 interface LogoMarqueeProps {
   /** Optional eyebrow above the marquee. Default: italic-serif text. */
@@ -43,7 +41,7 @@ const LogoMarquee = ({
   const { ref, isVisible } = useScrollReveal();
   const bg =
     variant === "cream"
-      ? "bg-[hsl(30,8%,98.5%)]"
+      ? "bg-[hsl(0,0%,98%)]"
       : variant === "white"
         ? "bg-white"
         : "bg-transparent";
@@ -105,7 +103,7 @@ const LogoMarquee = ({
           style={{
             background:
               variant === "cream"
-                ? "linear-gradient(90deg, hsl(30,8%,98.5%) 0%, transparent 100%)"
+                ? "linear-gradient(90deg, hsl(0,0%,98%) 0%, transparent 100%)"
                 : variant === "white"
                   ? "linear-gradient(90deg, #ffffff 0%, transparent 100%)"
                   : "linear-gradient(90deg, hsl(0 0% 100% / 0.0) 0%, transparent 100%)",
@@ -117,7 +115,7 @@ const LogoMarquee = ({
           style={{
             background:
               variant === "cream"
-                ? "linear-gradient(-90deg, hsl(30,8%,98.5%) 0%, transparent 100%)"
+                ? "linear-gradient(-90deg, hsl(0,0%,98%) 0%, transparent 100%)"
                 : variant === "white"
                   ? "linear-gradient(-90deg, #ffffff 0%, transparent 100%)"
                   : "linear-gradient(-90deg, hsl(0 0% 100% / 0.0) 0%, transparent 100%)",

@@ -50,7 +50,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -67,18 +67,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Emilian", "Leber."];
 const HEADLINE_ITALIC = ["Zauberkünstler."];
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.4 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.6 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.5 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.3 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.4 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -143,10 +132,10 @@ const Hero = () => {
         />
         <div
           aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.26) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -203,12 +192,6 @@ const Hero = () => {
               · zehn Jahre Bühne
             </span>
           </div>
-          <p
-            className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
-            style={{ animationDelay: "0.18s" }}
-          >
-            Karten. Münzen. Bühne.
-          </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
               <span
@@ -353,7 +336,7 @@ const DreiToolsSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Karte. Münze.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Buch.
               </span>
             </h2>
@@ -558,7 +541,7 @@ const WerdegangTimelineSection = () => {
     <section
       ref={ref}
       id="werdegang"
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header */}
@@ -571,7 +554,7 @@ const WerdegangTimelineSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Von Acht{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 bis Heute.
               </span>
             </h2>
@@ -619,8 +602,8 @@ const WerdegangTimelineSection = () => {
               style={{
                 height: `calc(${fillPct}% - 1rem)`,
                 background:
-                  "linear-gradient(180deg, rgba(154,38,64,0.85) 0%, rgba(154,38,64,0.13) 100%)",
-                boxShadow: "0 0 12px rgba(154,38,64,0.15)",
+                  "linear-gradient(180deg, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.040) 100%)",
+                boxShadow: "0 0 12px rgba(0,0,0,0.040)",
               }}
             />
             <ol className="space-y-12 md:space-y-14">
@@ -642,8 +625,8 @@ const WerdegangTimelineSection = () => {
                           ? `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`
                           : "linear-gradient(135deg, rgba(0,0,0,0.45), rgba(0,0,0,0.32))",
                         boxShadow: isActive
-                          ? "0 0 0 4px hsl(30,8%,98.5%), 0 0 24px rgba(154,38,64,0.18), 0 8px 22px -4px rgba(154,38,64,0.5)"
-                          : "0 0 0 4px hsl(30,8%,98.5%), 0 4px 12px -3px rgba(0,0,0,0.18)",
+                          ? "0 0 0 4px hsl(0,0%,98%), 0 0 24px rgba(0,0,0,0.040), 0 8px 22px -4px rgba(0,0,0,0.040)"
+                          : "0 0 0 4px hsl(0,0%,98%), 0 4px 12px -3px rgba(0,0,0,0.18)",
                         transform: isActive ? "scale(1.08)" : "scale(1)",
                       }}
                     >
@@ -652,7 +635,7 @@ const WerdegangTimelineSection = () => {
                     {/* Year + Age inline */}
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1.5">
                       <p
-                        className={`${SERIF_ITALIC} text-base md:text-lg transition-colors duration-500`}
+                        className={`text-base md:text-lg transition-colors duration-500`}
                         style={{
                           color: isActive ? ACCENT : "rgba(0,0,0,0.42)",
                         }}
@@ -712,25 +695,25 @@ const WerdegangTimelineSection = () => {
                 background:
                   "linear-gradient(155deg, #0e0a14 0%, #1a1322 60%, #0e0a14 100%)",
                 boxShadow:
-                  "0 50px 100px -30px rgba(40,20,40,0.4), 0 15px 35px -15px rgba(40,20,40,0.18)",
+                  "0 50px 100px -30px rgba(0,0,0,0.200), 0 15px 35px -15px rgba(0,0,0,0.090)",
               }}
             >
               {/* Burgunder-Glow oben rechts */}
               <div
                 aria-hidden
-                className="absolute -top-20 -right-20 w-[400px] h-[400px] rounded-full blur-3xl pointer-events-none"
+                className="absolute -top-20 -right-20 w-[400px] h-[400px] rounded-full blur-2xl pointer-events-none"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(154,38,64,0.25) 0%, rgba(154,38,64,0) 70%)",
+                    "radial-gradient(circle, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
                 }}
               />
               {/* Amber-Glow unten links */}
               <div
                 aria-hidden
-                className="absolute -bottom-24 -left-24 w-[420px] h-[420px] rounded-full blur-3xl pointer-events-none"
+                className="absolute -bottom-24 -left-24 w-[420px] h-[420px] rounded-full blur-2xl pointer-events-none"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(199,144,66,0.18) 0%, rgba(199,144,66,0) 70%)",
+                    "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
                 }}
               />
 
@@ -774,7 +757,7 @@ const WerdegangTimelineSection = () => {
                     Phase
                   </span>
                   <span
-                    className={`${SERIF_ITALIC} text-base md:text-lg`}
+                    className={`text-base md:text-lg`}
                     style={{ color: ACCENT_SOFT }}
                   >
                     {activePhase < 0 ? "—" : `0${activePhase + 1}`.slice(-2)}
@@ -810,7 +793,7 @@ const MeinStilSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8 md:mb-10">
               Kein Zylinder.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Kein Kaninchen.
               </span>
             </h2>
@@ -934,7 +917,7 @@ const MeinStilSection = () => {
                     }}
                   />
                   <p
-                    className={`${SERIF_ITALIC} text-white/85 text-xs md:text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/85 text-xs md:text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Studio-Setup, Probe-Tag.
                   </p>
@@ -958,7 +941,7 @@ const MeinStilSection = () => {
                   }}
                 >
                   <p
-                    className={`${SERIF_ITALIC} text-[10px] md:text-xs text-white/80 mb-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-[10px] md:text-xs text-white/80 mb-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Tägliches Training
                   </p>
@@ -1040,7 +1023,7 @@ const AuszeichnungenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header */}
@@ -1053,7 +1036,7 @@ const AuszeichnungenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sechs Stationen.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Eine Karriere.
               </span>
             </h2>
@@ -1087,13 +1070,13 @@ const AuszeichnungenSection = () => {
                   className="w-11 h-11 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110"
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                    boxShadow: "0 8px 22px -4px rgba(154,38,64,0.18)",
+                    boxShadow: "0 8px 22px -4px rgba(0,0,0,0.040)",
                   }}
                 >
                   <a.icon className="w-5 h-5 text-white" />
                 </div>
                 <span
-                  className={`${SERIF_ITALIC} text-base md:text-lg`}
+                  className={`text-base md:text-lg`}
                   style={{ color: ACCENT }}
                 >
                   {a.year}
@@ -1103,7 +1086,7 @@ const AuszeichnungenSection = () => {
                 {a.title}
               </h3>
               <p
-                className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/55 mb-4`}
+                className={`text-sm md:text-base text-foreground/55 mb-4`}
               >
                 {a.subtitle}
               </p>
@@ -1133,18 +1116,18 @@ const PullQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 -right-40 w-[640px] h-[640px] rounded-full blur-3xl pointer-events-none"
+        className="absolute -top-40 -right-40 w-[640px] h-[640px] rounded-full blur-2xl pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.32) 0%, rgba(154,38,64,0) 70%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-40 w-[640px] h-[640px] rounded-full blur-3xl pointer-events-none"
+        className="absolute -bottom-40 -left-40 w-[640px] h-[640px] rounded-full blur-2xl pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.22) 0%, rgba(199,144,66,0) 70%)",
+            "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
         }}
       />
       <div className="container px-6 relative">
@@ -1156,7 +1139,7 @@ const PullQuoteSection = () => {
             style={{ color: ACCENT_SOFT }}
           />
           <p
-            className={`${SERIF_ITALIC} text-[clamp(2rem,5vw,4.5rem)] leading-[1.12] text-white/95 mb-10 md:mb-12`}
+            className={`text-[clamp(2rem,5vw,4.5rem)] leading-[1.12] text-white/95 mb-10 md:mb-12`}
           >
             Zehn Jahre.{" "}
             <span style={{ color: "#f3d9a8" }}>
@@ -1221,7 +1204,7 @@ const HinterDenKulissenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Üben. Vorbereiten.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Auftreten.
               </span>
             </h2>
@@ -1287,7 +1270,7 @@ const HinterDenKulissenSection = () => {
                 {/* Bottom-Text */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-7 text-white">
                   <p
-                    className={`${SERIF_ITALIC} text-base md:text-lg mb-2 text-white/70`}
+                    className={`text-base md:text-lg mb-2 text-white/70`}
                   >
                     {s.eyebrow}
                   </p>
@@ -1346,7 +1329,7 @@ const WarumPersoenlichSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header */}
@@ -1359,7 +1342,7 @@ const WarumPersoenlichSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Vier Säulen.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Kein Programm von der Stange.
               </span>
             </h2>
@@ -1452,7 +1435,7 @@ const StimmenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei Reviews.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Drei echte Menschen.
               </span>
             </h2>
@@ -1475,7 +1458,7 @@ const StimmenSection = () => {
               key={s.name}
               itemScope
               itemType="https://schema.org/Review"
-              className="group relative bg-[hsl(30,8%,98.5%)] rounded-2xl p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
+              className="group relative bg-[hsl(0,0%,98%)] rounded-2xl p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
               style={{
                 boxShadow:
                   "0 20px 50px -20px rgba(40,20,10,0.14), 0 6px 16px -6px rgba(40,20,10,0.06)",
@@ -1494,7 +1477,7 @@ const StimmenSection = () => {
               {/* Body */}
               <p
                 itemProp="reviewBody"
-                className={`${SERIF_ITALIC} text-base md:text-lg leading-[1.55] text-foreground/85 mb-7 md:mb-8`}
+                className={`text-base md:text-lg leading-[1.55] text-foreground/85 mb-7 md:mb-8`}
               >
                 „{s.body}"
               </p>
@@ -1563,7 +1546,7 @@ const VideoSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div
@@ -1577,7 +1560,7 @@ const VideoSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
               Drei Minuten{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 im Fernsehen.
               </span>
             </h2>
@@ -1686,10 +1669,10 @@ const AktuelleShowSection = () => {
         />
         <div
           aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(154,38,64,0.32) 0%, rgba(154,38,64,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -1705,7 +1688,7 @@ const AktuelleShowSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,6vw,5.5rem)] text-white mb-8">
               Plötzlich{" "}
-              <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+              <span style={{ color: "#f3d9a8" }}>
                 Magie.
               </span>
               <br />
@@ -1769,14 +1752,14 @@ const AktuelleShowSection = () => {
               className="relative bg-white p-8 md:p-10 rounded-2xl"
               style={{
                 boxShadow:
-                  "0 60px 120px -30px rgba(154,38,64,0.5), 0 25px 50px -20px rgba(0,0,0,0.4)",
+                  "0 60px 120px -30px rgba(0,0,0,0.040), 0 25px 50px -20px rgba(0,0,0,0.4)",
               }}
             >
               {/* Letter-Style Header */}
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <p
-                    className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-1`}
+                    className={`text-sm text-foreground/55 mb-1`}
                   >
                     Show-Programm
                   </p>
@@ -1787,7 +1770,7 @@ const AktuelleShowSection = () => {
                 <span
                   className="text-[10px] tracking-[0.15em] uppercase font-bold px-2.5 py-1 rounded"
                   style={{
-                    background: "rgba(154,38,64,0.1)",
+                    background: "rgba(0,0,0,0.040)",
                     color: ACCENT,
                   }}
                 >
@@ -1820,7 +1803,7 @@ const AktuelleShowSection = () => {
                     className="grid grid-cols-[120px_1fr] gap-4 items-baseline text-sm"
                   >
                     <dt
-                      className={`${SERIF_ITALIC} text-foreground/55 leading-snug`}
+                      className={`text-foreground/55 leading-snug`}
                     >
                       {m.k}
                     </dt>
@@ -1834,7 +1817,7 @@ const AktuelleShowSection = () => {
               {/* Signature */}
               <div className="pt-6 mt-6 border-t border-foreground/10">
                 <p
-                  className={`${SERIF_ITALIC} text-xs text-foreground/50 mb-2`}
+                  className={`text-xs text-foreground/50 mb-2`}
                 >
                   Künstlerische Leitung
                 </p>
@@ -1864,7 +1847,7 @@ const AktuelleShowSection = () => {
                   fontSize: "10px",
                   lineHeight: 1.1,
                   textAlign: "center",
-                  boxShadow: "0 8px 24px rgba(154,38,64,0.22)",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.040)",
                 }}
               >
                 Tour
@@ -1891,7 +1874,7 @@ const ZahlenStripSection = () => {
           className={`max-w-5xl mx-auto`}
         >
           <p
-            className={`${SERIF_ITALIC} text-sm md:text-base text-foreground/45 text-center mb-8 md:mb-10 tracking-[0.04em]`}
+            className={`text-sm md:text-base text-foreground/45 text-center mb-8 md:mb-10 tracking-[0.04em]`}
           >
             Zehn Jahre in Zahlen.
           </p>
@@ -1939,18 +1922,18 @@ const PersoenlicherBriefSection = () => {
       {/* Glows */}
       <div
         aria-hidden
-        className="absolute -top-40 -right-40 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+        className="absolute -top-40 -right-40 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.32) 0%, rgba(154,38,64,0) 70%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-40 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+        className="absolute -bottom-40 -left-40 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(199,144,66,0.22) 0%, rgba(199,144,66,0) 70%)",
+            "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
         }}
       />
 
@@ -1965,7 +1948,7 @@ const PersoenlicherBriefSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,6vw,5.5rem)] text-white">
               Schreibe mir{" "}
-              <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+              <span style={{ color: "#f3d9a8" }}>
                 direkt.
               </span>
             </h2>
@@ -2022,7 +2005,7 @@ const PersoenlicherBriefSection = () => {
                   }}
                 >
                   <p
-                    className={`${SERIF_ITALIC} text-white/80 text-xs md:text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/80 text-xs md:text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Emilian Leber
                   </p>
@@ -2048,7 +2031,7 @@ const PersoenlicherBriefSection = () => {
               <div className="flex items-start justify-between mb-8 md:mb-10">
                 <div>
                   <p
-                    className={`${SERIF_ITALIC} text-sm text-foreground/55 mb-1`}
+                    className={`text-sm text-foreground/55 mb-1`}
                   >
                     Persönlich. Vertraulich.
                   </p>
@@ -2059,7 +2042,7 @@ const PersoenlicherBriefSection = () => {
                 <span
                   className="text-[10px] tracking-[0.15em] uppercase font-bold px-2.5 py-1 rounded shrink-0 ml-3"
                   style={{
-                    background: "rgba(154,38,64,0.1)",
+                    background: "rgba(0,0,0,0.040)",
                     color: ACCENT,
                   }}
                 >
@@ -2103,7 +2086,7 @@ const PersoenlicherBriefSection = () => {
               {/* Signature-Block */}
               <div className="pt-7 border-t border-foreground/10 mb-10">
                 <p
-                  className={`${SERIF_ITALIC} text-xs text-foreground/50 mb-3`}
+                  className={`text-xs text-foreground/50 mb-3`}
                 >
                   Persönlich unterschrieben
                 </p>
@@ -2128,7 +2111,7 @@ const PersoenlicherBriefSection = () => {
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
                     boxShadow:
-                      "0 14px 32px -10px rgba(154,38,64,0.5)",
+                      "0 14px 32px -10px rgba(0,0,0,0.040)",
                   }}
                 >
                   Schreibe mir direkt
@@ -2156,7 +2139,7 @@ const PersoenlicherBriefSection = () => {
                   fontSize: "11px",
                   lineHeight: 1.1,
                   textAlign: "center",
-                  boxShadow: "0 12px 32px rgba(154,38,64,0.25)",
+                  boxShadow: "0 12px 32px rgba(0,0,0,0.040)",
                 }}
               >
                 seit

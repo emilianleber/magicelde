@@ -123,14 +123,14 @@ const HeroKeyframes = () => (
 const HeroSection = ({ post }: { post: BlogPost }) => {
   const titleWords = post.title.split(" ");
   return (
-    <section className="relative bg-[#f5ecdc] overflow-hidden">
+    <section className="relative bg-[#fafafa] overflow-hidden">
       <HeroKeyframes />
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(70% 60% at 80% 10%, rgba(199,144,66,0.18) 0%, transparent 60%), radial-gradient(60% 50% at 12% 90%, rgba(154,38,64,0.10) 0%, transparent 65%)",
+            "radial-gradient(70% 60% at 80% 10%, rgba(0,0,0,0.024) 0%, transparent 60%), radial-gradient(60% 50% at 12% 90%, rgba(0,0,0,0.040) 0%, transparent 65%)",
         }}
       />
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -148,7 +148,7 @@ const HeroSection = ({ post }: { post: BlogPost }) => {
               height: b.size,
               left: b.left,
               top: b.top,
-              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(199,144,66,0) 75%)`,
+              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(0,0,0,0.000) 75%)`,
               filter: "blur(2px)",
               animationDuration: `${b.dur}s`,
               animationDelay: `${b.delay}s`,
@@ -191,7 +191,7 @@ const HeroSection = ({ post }: { post: BlogPost }) => {
                 <>
                   <br />
                   <span
-                    className={`${SERIF_ITALIC} post-word`}
+                    className={`post-word`}
                     style={{
                       color: ACCENT,
                       animationDelay: `${0.15 + titleWords.length * 0.06}s`,
@@ -239,7 +239,7 @@ const HeroSection = ({ post }: { post: BlogPost }) => {
             <div className="text-[10px] tracking-[0.14em] uppercase font-bold text-foreground/55">
               Veröffentlicht
             </div>
-            <div className={`${SERIF_ITALIC} text-base text-foreground/85`}>
+            <div className={`text-base text-foreground/85`}>
               {formatDate(post.date)}
             </div>
           </div>
@@ -273,7 +273,7 @@ const FeatureImage = ({ post }: { post: BlogPost }) => (
           />
         </div>
         <p
-          className={`${SERIF_ITALIC} text-sm text-foreground/45 mt-4 text-center max-w-3xl mx-auto`}
+          className={`text-sm text-foreground/45 mt-4 text-center max-w-3xl mx-auto`}
         >
           Aus dem Magazin · {post.category} · {formatDate(post.date)}
         </p>
@@ -322,7 +322,7 @@ const TableOfContents = ({ post }: { post: BlogPost }) => {
 
   return (
     <aside className="lg:sticky lg:top-32">
-      <div className="bg-[#f5ecdc] rounded-3xl p-6 md:p-8">
+      <div className="bg-[#fafafa] rounded-3xl p-6 md:p-8">
         <div className="flex items-center gap-2 mb-5">
           <BookOpen className="w-4 h-4" style={{ color: ACCENT }} />
           <span className="text-[11px] tracking-[0.14em] uppercase font-bold text-foreground/65">
@@ -341,7 +341,7 @@ const TableOfContents = ({ post }: { post: BlogPost }) => {
                 }`}
               >
                 <span
-                  className={`${SERIF_ITALIC} text-base tabular-nums flex-shrink-0`}
+                  className={`text-base tabular-nums flex-shrink-0`}
                   style={{ color: ACCENT }}
                 >
                   {String(i + 1).padStart(2, "0")}
@@ -375,7 +375,7 @@ const PostBody = ({ post }: { post: BlogPost }) => {
               i === arr.length - 1 ? (
                 <span
                   key={i}
-                  className={SERIF_ITALIC}
+
                   style={{ color: ACCENT }}
                 >
                   {" "}
@@ -408,7 +408,7 @@ const PostBody = ({ post }: { post: BlogPost }) => {
               className="absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "radial-gradient(60% 70% at 50% 50%, rgba(154,38,64,0.22) 0%, transparent 70%)",
+                  "radial-gradient(60% 70% at 50% 50%, rgba(0,0,0,0.040) 0%, transparent 70%)",
               }}
             />
             <Quote
@@ -469,11 +469,11 @@ const PostBody = ({ post }: { post: BlogPost }) => {
             className="my-10 rounded-2xl p-6 md:p-7 border-l-4"
             style={{
               borderColor: ACCENT,
-              background: "#f5ecdc",
+              background: "#fafafa",
             }}
           >
             <div
-              className={`${SERIF_ITALIC} text-base mb-3`}
+              className={`text-base mb-3`}
               style={{ color: ACCENT_DEEP }}
             >
               {s.eyebrow}
@@ -544,7 +544,7 @@ const PostBody = ({ post }: { post: BlogPost }) => {
    AUTOR BOX
    ═══════════════════════════════════════════════════════════ */
 const AutorBox = ({ post }: { post: BlogPost }) => (
-  <section className="bg-[#f5ecdc] py-16 md:py-20">
+  <section className="bg-[#fafafa] py-16 md:py-20">
     <div className="container px-6 max-w-5xl">
       <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
         <div className="md:col-span-4">
@@ -559,12 +559,12 @@ const AutorBox = ({ post }: { post: BlogPost }) => (
           </div>
         </div>
         <div className="md:col-span-8">
-          <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-4`}>
+          <div className={`text-lg text-foreground/55 mb-4`}>
             Über den Autor.
           </div>
           <h3 className="text-2xl md:text-4xl font-display font-black tracking-[-0.02em] leading-[1.05] mb-5">
             {post.author.name}.{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               {post.author.role}.
             </span>
           </h3>
@@ -612,12 +612,12 @@ const WeitereAnsichten = ({ slug }: { slug: string }) => {
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-10 mb-12 items-end">
           <div className="lg:col-span-7">
-            <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-5`}>
+            <div className={`text-lg text-foreground/55 mb-5`}>
               Lies als nächstes.
             </div>
             <h2 className="text-[clamp(1.8rem,4vw,3.6rem)] font-display font-black tracking-[-0.025em] leading-[1.05]">
               Drei weitere{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Beiträge.
               </span>
             </h2>
@@ -723,16 +723,16 @@ const NewsletterInline = () => {
   };
 
   return (
-    <section className="bg-[#f5ecdc] py-16 md:py-20">
+    <section className="bg-[#fafafa] py-16 md:py-20">
       <div className="container px-6 max-w-4xl">
         <div className="grid md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-6">
-            <div className={`${SERIF_ITALIC} text-lg text-foreground/55 mb-4`}>
+            <div className={`text-lg text-foreground/55 mb-4`}>
               Magazin-Update.
             </div>
             <h3 className="text-2xl md:text-3xl font-display font-black tracking-[-0.02em] leading-[1.1] mb-4">
               Beim nächsten Beitrag{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 eine Mail.
               </span>
             </h3>
@@ -816,7 +816,7 @@ const PullQuoteBlack = ({ post }: { post: BlogPost }) => {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(70% 60% at 50% 50%, rgba(154,38,64,0.22) 0%, transparent 70%)",
+            "radial-gradient(70% 60% at 50% 50%, rgba(0,0,0,0.040) 0%, transparent 70%)",
         }}
       />
       <div className="relative container px-6 max-w-4xl text-center">
@@ -896,19 +896,19 @@ const CTAImEvent = ({ post }: { post: BlogPost }) => {
   return (
     <section className="bg-background py-16 md:py-20">
       <div className="container px-6 max-w-5xl">
-        <div className="relative overflow-hidden rounded-3xl bg-[#f5ecdc] p-8 md:p-12">
+        <div className="relative overflow-hidden rounded-3xl bg-[#fafafa] p-8 md:p-12">
           <div
             aria-hidden
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(50% 60% at 90% 10%, rgba(154,38,64,0.18) 0%, transparent 60%)",
+                "radial-gradient(50% 60% at 90% 10%, rgba(0,0,0,0.040) 0%, transparent 60%)",
             }}
           />
           <div className="relative grid md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-8">
               <div
-                className={`${SERIF_ITALIC} text-lg mb-3`}
+                className={`text-lg mb-3`}
                 style={{ color: ACCENT }}
               >
                 {meta.eyebrow}
@@ -949,16 +949,16 @@ const CTAFinal = () => (
       className="absolute inset-0 pointer-events-none"
       style={{
         background:
-          "radial-gradient(60% 50% at 25% 30%, rgba(154,38,64,0.32) 0%, transparent 60%), radial-gradient(50% 40% at 80% 70%, rgba(199,144,66,0.25) 0%, transparent 65%)",
+          "radial-gradient(60% 50% at 25% 30%, rgba(0,0,0,0.040) 0%, transparent 60%), radial-gradient(50% 40% at 80% 70%, rgba(0,0,0,0.024) 0%, transparent 65%)",
       }}
     />
     <div className="relative container px-6 max-w-4xl text-center">
-      <div className={`${SERIF_ITALIC} text-lg text-white/55 mb-5`}>
+      <div className={`text-lg text-white/55 mb-5`}>
         Anders als gelesen.
       </div>
       <h2 className="text-[clamp(2rem,5vw,4.5rem)] font-display font-black tracking-[-0.025em] leading-[1.05] mb-8">
         Erlebt es{" "}
-        <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+        <span style={{ color: ACCENT_SOFT }}>
           selbst.
         </span>
       </h2>

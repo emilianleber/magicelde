@@ -46,7 +46,7 @@ const EMERALD_MID = "#1f5e3f";
 const AMBER_DEEP = "#8a5a14";
 const AMBER_MID = "#c79042";
 const AMBER_SOFT = "#f0d8a8";
-const CREAM = "#f5ecdc";
+const CREAM = "#fafafa";
 
 // Warmer Dinner-Gradient (statt Neon-Pink-Purple-Yellow)
 const GRADIENT_WARM =
@@ -101,8 +101,8 @@ const HeroKeyframes = () => (
       50%      { transform: translateY(-6px); }
     }
     @keyframes heroStarPulse {
-      0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(199,144,66,0)); }
-      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); }
+      0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); }
+      50%      { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); }
     }
     .hero-word {
       display: inline-block;
@@ -158,18 +158,7 @@ const HEADLINE_SANS = ["Magic", "Dinner"];
 const HEADLINE_ITALIC = ["zwischen", "den", "Gängen."];
 
 // Bokeh — warme Kerzenlicht-Partikel, langsam driftend
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0,   o: 0.45 },
-  { size: 14, left: "8%",  top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1,   o: 0.40 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6,   o: 0.50 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5,   o: 0.30 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -214,7 +203,7 @@ const Hero = () => {
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             objectPosition: "center 25%",
-            filter: "saturate(0.92) contrast(1.08) brightness(0.72)",
+            filter: "brightness(0.78)",
           }}
           loading="eager"
         />
@@ -236,10 +225,10 @@ const Hero = () => {
         />
         <div
           aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -291,13 +280,6 @@ const Hero = () => {
               <strong className="font-semibold text-white">Spezialgebiet</strong> seit 2023
             </span>
           </div>
-
-          <p
-            className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`}
-            style={{ animationDelay: "0.18s" }}
-          >
-            Tisch und Bühne zwischen den Gängen.
-          </p>
 
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (
@@ -433,8 +415,8 @@ const TrustStrip = () => {
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))",
-                  border: "1px solid rgba(154,38,64,0.22)",
+                    "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))",
+                  border: "1px solid rgba(0,0,0,0.040)",
                 }}
               >
                 <it.Icon
@@ -478,7 +460,7 @@ const KUNDEN_LOGOS = [
 const KundenReferenzenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-b border-foreground/10">
+    <section ref={ref} className="bg-white py-20 md:py-28 border-b border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
           <div className="md:col-span-7">
@@ -487,7 +469,7 @@ const KundenReferenzenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,4vw,3.5rem)] text-foreground">
               Kunden &{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Referenzen
               </span>
               .
@@ -545,15 +527,15 @@ const PullQuoteSection = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -572,7 +554,7 @@ const PullQuoteSection = () => {
             Die Karte, die vor Sekunden noch in der Hand der Schwiegermutter
             lag, taucht beim Brautvater im Weinglas auf. Niemand am Tisch
             atmet. Eine halbe Sekunde später{" "}
-            <span className={`${SERIF_ITALIC}`}>lacht die ganze Tafel</span>.
+            <span className={``}>lacht die ganze Tafel</span>.
           </p>
           <p className="mt-10 text-sm md:text-base text-white/45">
             Genau dieser Moment ist das Produkt — nicht der Trick davor.
@@ -646,7 +628,7 @@ const KonzeptSection = () => {
                     }}
                   />
                   <p
-                    className={`${SERIF_ITALIC} text-[11px] md:text-xs text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-[11px] md:text-xs text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Wahlweise.
                   </p>
@@ -679,7 +661,7 @@ const KonzeptSection = () => {
                     }}
                   />
                   <p
-                    className={`${SERIF_ITALIC} text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Zwei Formate, ein Abend.
                   </p>
@@ -704,7 +686,7 @@ const KonzeptSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Tisch oder Bühne.
               <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Oder beides.
               </span>
             </h2>
@@ -738,7 +720,7 @@ const KonzeptSection = () => {
                     {s.num}
                   </p>
                   <p
-                    className={`${SERIF_ITALIC} text-foreground/55 text-xs md:text-sm mt-2 leading-tight`}
+                    className={`text-foreground/55 text-xs md:text-sm mt-2 leading-tight`}
                   >
                     {s.sub}
                   </p>
@@ -819,7 +801,7 @@ const DreiSaeulenSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wählt euer{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Format
               </span>
               .
@@ -881,7 +863,7 @@ const DreiSaeulenSection = () => {
                         {opt.eyebrow}
                       </p>
                       <h3
-                        className={`font-display text-xl md:text-2xl font-bold leading-tight transition-colors duration-500 ${
+                        className={`${SERIF_ITALIC} font-display text-xl md:text-2xl font-bold leading-tight transition-colors duration-500 ${
                           isActive ? "text-foreground" : "text-foreground/55"
                         }`}
                       >
@@ -961,7 +943,7 @@ const DreiSaeulenSection = () => {
                     }}
                   />
                   <p
-                    className={`${SERIF_ITALIC} text-[11px] md:text-xs text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-[11px] md:text-xs text-white/85 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     {current.eyebrow.split(" · ")[0]}.
                   </p>
@@ -997,7 +979,7 @@ const DreiSaeulenSection = () => {
                     }}
                   />
                   <p
-                    className={`${SERIF_ITALIC} text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/80 text-sm md:text-base mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     {current.title}
                   </p>
@@ -1048,7 +1030,7 @@ const AblaufSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
@@ -1058,7 +1040,7 @@ const AblaufSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             Vier Phasen.
             <br />
-            <span className={SERIF_ITALIC}>Tisch und Bühne.</span>
+            <span>Tisch und Bühne.</span>
           </h2>
           <p className="mt-6 text-base md:text-lg text-foreground/60 leading-[1.6]">
             Zeitliche Orientierung für einen Abend mit etwa achtzig Gästen,
@@ -1172,7 +1154,7 @@ const BeispielAbendSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         {/* Header — 2 Spalten */}
@@ -1183,7 +1165,7 @@ const BeispielAbendSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Sechzigster.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Mit Marmeladenglas.
               </span>
             </h2>
@@ -1236,8 +1218,8 @@ const BeispielAbendSection = () => {
               style={{
                 height: `calc(${fillPct}% - 1rem)`,
                 background:
-                  "linear-gradient(180deg, rgba(154,38,64,0.85) 0%, rgba(154,38,64,0.13) 100%)",
-                boxShadow: "0 0 12px rgba(154,38,64,0.15)",
+                  "linear-gradient(180deg, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.040) 100%)",
+                boxShadow: "0 0 12px rgba(0,0,0,0.040)",
               }}
             />
             <ol className="space-y-12 md:space-y-14">
@@ -1257,15 +1239,15 @@ const BeispielAbendSection = () => {
                           ? `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`
                           : "linear-gradient(135deg, rgba(0,0,0,0.45), rgba(0,0,0,0.32))",
                         boxShadow: isActive
-                          ? `0 0 0 4px hsl(30,8%,98.5%), 0 0 24px rgba(154,38,64,0.18), 0 8px 22px -4px rgba(154,38,64,0.5)`
-                          : "0 0 0 4px hsl(30,8%,98.5%), 0 4px 12px -3px rgba(0,0,0,0.18)",
+                          ? `0 0 0 4px hsl(0,0%,98%), 0 0 24px rgba(0,0,0,0.040), 0 8px 22px -4px rgba(0,0,0,0.040)`
+                          : "0 0 0 4px hsl(0,0%,98%), 0 4px 12px -3px rgba(0,0,0,0.18)",
                         transform: isActive ? "scale(1.08)" : "scale(1)",
                       }}
                     >
                       {p.num}
                     </div>
                     <p
-                      className={`${SERIF_ITALIC} text-base md:text-lg mb-1.5 transition-colors duration-500`}
+                      className={`text-base md:text-lg mb-1.5 transition-colors duration-500`}
                       style={{
                         color: isActive
                           ? ACCENT
@@ -1348,7 +1330,7 @@ const BeispielAbendSection = () => {
                     }}
                   />
                   <p
-                    className={`${SERIF_ITALIC} text-white/80 text-xs md:text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
+                    className={`text-white/80 text-xs md:text-sm mb-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]`}
                   >
                     Tischrunde, Hauptgang.
                   </p>
@@ -1650,7 +1632,7 @@ const MagicDinnerQuiz = ({ onDark = false }: { onDark?: boolean }) => {
         <p className={`text-[11px] md:text-xs tracking-[0.14em] uppercase font-semibold ${txtMute}`}>
           {q.eyebrow}
         </p>
-        <p className={`${SERIF_ITALIC} text-sm ${txtMute}`}>
+        <p className={`text-sm ${txtMute}`}>
           {step + 1} / {MD_QUIZ.length}
         </p>
       </div>
@@ -1710,8 +1692,8 @@ const MagicDinnerQuiz = ({ onDark = false }: { onDark?: boolean }) => {
             : "rgba(0,0,0,0.08)";
           const cardShadow = isSel
             ? onDark
-              ? `0 30px 60px -20px rgba(154,38,64,0.45), inset 0 0 0 1px ${ACCENT}`
-              : `0 25px 50px -20px rgba(154,38,64,0.15), inset 0 0 0 1px ${ACCENT}`
+              ? `0 30px 60px -20px rgba(0,0,0,0.040), inset 0 0 0 1px ${ACCENT}`
+              : `0 25px 50px -20px rgba(0,0,0,0.040), inset 0 0 0 1px ${ACCENT}`
             : onDark
             ? "0 20px 40px -20px rgba(0,0,0,0.5)"
             : "0 8px 20px -10px rgba(0,0,0,0.08)";
@@ -1749,7 +1731,7 @@ const MagicDinnerQuiz = ({ onDark = false }: { onDark?: boolean }) => {
                   {opt.label}
                 </p>
                 <p
-                  className={`${SERIF_ITALIC} text-xs md:text-sm leading-snug ${
+                  className={`text-xs md:text-sm leading-snug ${
                     onDark ? "text-white/65" : "text-foreground/55"
                   }`}
                 >
@@ -1782,7 +1764,7 @@ const MagicDinnerQuiz = ({ onDark = false }: { onDark?: boolean }) => {
             className="rounded-full px-5 py-2.5 text-sm font-display font-bold text-white shadow-2xl animate-fade-up flex items-center gap-2"
             style={{
               background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-              boxShadow: "0 20px 40px -10px rgba(154,38,64,0.5)",
+              boxShadow: "0 20px 40px -10px rgba(0,0,0,0.040)",
             }}
           >
             <span>{feedback}</span>
@@ -1862,7 +1844,7 @@ const ResultWithForm = ({ rec, answers, showConfetti, onReset, onDark = false }:
           {rec.format}
         </h3>
         <p
-          className={`${SERIF_ITALIC} text-base md:text-lg mb-5`}
+          className={`text-base md:text-lg mb-5`}
           style={{ color: ACCENT }}
         >
           {rec.sub}
@@ -1900,7 +1882,7 @@ const ResultWithForm = ({ rec, answers, showConfetti, onReset, onDark = false }:
       >
         <div className="flex items-baseline justify-between mb-5">
           <p
-            className={`${SERIF_ITALIC} text-lg text-foreground/70`}
+            className={`text-lg text-foreground/70`}
           >
             Jetzt kurz anfragen.
           </p>
@@ -1958,7 +1940,7 @@ const ResultWithForm = ({ rec, answers, showConfetti, onReset, onDark = false }:
             className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white transition-all disabled:opacity-70"
             style={{
               background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-              boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+              boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
             }}
           >
             {submitted ? "Wird gesendet…" : "Anfrage senden"}
@@ -2054,7 +2036,7 @@ const AnlaesseSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
               Vier Anlässe.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 Ein Format.
               </span>
             </h2>
@@ -2082,13 +2064,13 @@ const AnlaesseSection = () => {
               borderRadius: "1.5rem",
               background:
                 "linear-gradient(135deg, #f8d76b 0%, #f0a35a 30%, #d76a55 65%, #9a2640 100%)",
-              boxShadow: "0 35px 70px -25px rgba(154,38,64,0.45)",
+              boxShadow: "0 35px 70px -25px rgba(0,0,0,0.040)",
             }}
           >
             {/* Innerer Soft-Glare */}
             <span
               aria-hidden
-              className="absolute -top-20 -left-20 w-[320px] h-[320px] rounded-full blur-3xl opacity-50 pointer-events-none"
+              className="absolute -top-20 -left-20 w-[320px] h-[320px] rounded-full blur-2xl opacity-50 pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle, rgba(255,230,180,0.7), transparent 70%)",
@@ -2097,7 +2079,7 @@ const AnlaesseSection = () => {
             {/* Warmer akzent-glow rechts oben */}
             <span
               aria-hidden
-              className="absolute -top-10 right-0 w-[280px] h-[280px] rounded-full blur-3xl opacity-40 pointer-events-none"
+              className="absolute -top-10 right-0 w-[280px] h-[280px] rounded-full blur-2xl opacity-40 pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle, rgba(255,200,140,0.6), transparent 70%)",
@@ -2105,7 +2087,7 @@ const AnlaesseSection = () => {
             />
             <div className="absolute bottom-0 left-0 right-0 p-7 md:p-9 lg:p-12 max-w-xl">
               <p
-                className={`${SERIF_ITALIC} text-base md:text-lg text-white/85 mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)]`}
+                className={`text-base md:text-lg text-white/85 mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)]`}
               >
                 Für Geburtstage.
               </p>
@@ -2122,7 +2104,7 @@ const AnlaesseSection = () => {
 
           {/* Card 2 — CLEAN, schmaler, exakt gleich hoch wie Card 1, Booking-Widget */}
           <article
-            className="group relative overflow-hidden bg-[hsl(30,8%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
+            className="group relative overflow-hidden bg-[hsl(0,0%,98%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
             style={{
               borderRadius: "1.5rem",
               boxShadow:
@@ -2151,14 +2133,14 @@ const AnlaesseSection = () => {
                       Bestätigt
                     </span>
                   </div>
-                  <span className={`${SERIF_ITALIC} text-[11px] text-foreground/45`}>
+                  <span className={`text-[11px] text-foreground/45`}>
                     #2024-118
                   </span>
                 </div>
                 <p className="font-display text-base font-bold text-foreground leading-tight mb-0.5">
                   Vorstandsdinner
                 </p>
-                <p className={`${SERIF_ITALIC} text-xs text-foreground/55 mb-3`}>
+                <p className={`text-xs text-foreground/55 mb-3`}>
                   Fr · 14. März · 19:00
                 </p>
                 {/* Mini-Stepper */}
@@ -2188,7 +2170,7 @@ const AnlaesseSection = () => {
                     className="text-[10px] tracking-[0.1em] uppercase font-bold px-2 py-1 rounded"
                     style={{
                       color: ACCENT,
-                      background: "rgba(154,38,64,0.08)",
+                      background: "rgba(0,0,0,0.040)",
                     }}
                   >
                     Tisch + Bühne
@@ -2212,7 +2194,7 @@ const AnlaesseSection = () => {
           <div className="grid md:grid-cols-[2fr_3fr] gap-4 md:gap-5">
           {/* Card 3 — CLEAN, schmaler, exakt gleich hoch wie Card 4, Avatar-Cluster */}
           <article
-            className="group relative overflow-hidden bg-[hsl(30,8%,98.5%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
+            className="group relative overflow-hidden bg-[hsl(0,0%,98%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px]"
             style={{
               borderRadius: "1.5rem",
               boxShadow:
@@ -2283,7 +2265,7 @@ const AnlaesseSection = () => {
           >
             <span
               aria-hidden
-              className="absolute -top-16 -right-8 w-[320px] h-[320px] rounded-full blur-3xl opacity-50 pointer-events-none"
+              className="absolute -top-16 -right-8 w-[320px] h-[320px] rounded-full blur-2xl opacity-50 pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle, rgba(255,200,90,0.5), transparent 65%)",
@@ -2291,7 +2273,7 @@ const AnlaesseSection = () => {
             />
             <span
               aria-hidden
-              className="absolute -bottom-20 -left-10 w-[280px] h-[280px] rounded-full blur-3xl opacity-8 pointer-events-none"
+              className="absolute -bottom-20 -left-10 w-[280px] h-[280px] rounded-full blur-2xl opacity-8 pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle, rgba(31,143,95,0.55), transparent 65%)",
@@ -2299,7 +2281,7 @@ const AnlaesseSection = () => {
             />
             <div className="absolute bottom-0 left-0 right-0 p-7 md:p-9 lg:p-12 max-w-xl">
               <p
-                className={`${SERIF_ITALIC} text-base md:text-lg text-white/85 mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]`}
+                className={`text-base md:text-lg text-white/85 mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]`}
               >
                 Für Teams.
               </p>
@@ -2353,7 +2335,7 @@ const WasDuBekommstSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.25rem,5vw,4.5rem)] text-foreground">
               Ein Abend, der einfach läuft.{" "}
-              <span className={SERIF_ITALIC}>Ohne Aufwand für euch.</span>
+              <span>Ohne Aufwand für euch.</span>
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-10">
@@ -2405,7 +2387,7 @@ const KartenFaecherSection = () => {
       className="relative overflow-hidden"
       style={{
         background:
-          "radial-gradient(70% 80% at 30% 30%, #f5ecdc 0%, rgba(245,236,220,0) 75%), radial-gradient(60% 70% at 75% 70%, #f0d8a8 0%, rgba(240,216,168,0) 75%), #ffffff",
+          "radial-gradient(70% 80% at 30% 30%, #fafafa 0%, rgba(245,236,220,0) 75%), radial-gradient(60% 70% at 75% 70%, #f0d8a8 0%, rgba(240,216,168,0) 75%), #ffffff",
       }}
     >
       <div className="container px-6 py-20 md:py-28">
@@ -2419,7 +2401,7 @@ const KartenFaecherSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             Jeder Abend{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               ein eigener Moment
             </span>
             .
@@ -2488,10 +2470,10 @@ const WaldUndWieseSection = () => {
         {/* Warmer Amber-Glow rechts oben für Restaurant-Stimmung */}
         <div
           aria-hidden
-          className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-3xl pointer-events-none"
+          className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-2xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, rgba(199,144,66,0.32) 0%, rgba(199,144,66,0) 70%)",
+              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
           }}
         />
       </div>
@@ -2509,7 +2491,7 @@ const WaldUndWieseSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] mb-8">
               Wald & Wiese.{" "}
-              <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+              <span style={{ color: "#f3d9a8" }}>
                 Mein Haus.
               </span>
             </h2>
@@ -2608,7 +2590,7 @@ const WaldUndWieseSection = () => {
                 <div className="flex items-start justify-between mb-6">
                   <div>
                     <p
-                      className={`${SERIF_ITALIC} text-sm text-white/65 mb-1.5`}
+                      className={`text-sm text-white/65 mb-1.5`}
                     >
                       Restaurant.
                     </p>
@@ -2632,7 +2614,7 @@ const WaldUndWieseSection = () => {
                       className="grid grid-cols-[80px_1fr] gap-3 text-sm"
                     >
                       <dt
-                        className={`${SERIF_ITALIC} text-white/55`}
+                        className={`text-white/55`}
                       >
                         {m.k}
                       </dt>
@@ -2693,7 +2675,7 @@ const StimmenSection = () => {
   return (
     <section
       ref={ref}
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
@@ -2703,7 +2685,7 @@ const StimmenSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             5,0 Sterne.
             <br />
-            <span className={SERIF_ITALIC}>30+ Bewertungen.</span>
+            <span>30+ Bewertungen.</span>
           </h2>
         </div>
 
@@ -2790,7 +2772,7 @@ const ZahlenInlineSection = () => {
               <span className="font-display text-2xl md:text-3xl font-black text-foreground tabular-nums">
                 {s.num}
               </span>
-              <span className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55`}>
+              <span className={`text-base md:text-lg text-foreground/55`}>
                 {s.label}
               </span>
             </div>
@@ -2851,7 +2833,7 @@ const FAQSection = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
             Was Gastgeber meistens
             <br />
-            <span className={SERIF_ITALIC}>fragen.</span>
+            <span>fragen.</span>
           </h2>
         </div>
 
@@ -2899,15 +2881,15 @@ const FinalCTA = () => {
     >
       <div
         aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8"
+        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
         style={{
           background:
-            "radial-gradient(circle, rgba(154,38,64,0.5), transparent 60%)",
+            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6"
+        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
         style={{
           background:
             "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
@@ -2926,7 +2908,7 @@ const FinalCTA = () => {
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
             Magic Dinner buchen
             <br />
-            <span className={SERIF_ITALIC}>für euren Anlass.</span>
+            <span>für euren Anlass.</span>
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/65 leading-[1.6]">
             Kurze Anfrage mit Datum, Ort und Gästezahl reicht. Ich melde mich
@@ -3070,7 +3052,7 @@ const AudienceSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Magic Dinner — für{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 wen?
               </span>
             </h2>
@@ -3163,7 +3145,7 @@ const RestaurantPartnerSection = () => {
     <section
       ref={ref}
       id="restaurant-partner"
-      className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10"
+      className="bg-white py-24 md:py-36 border-y border-foreground/10"
     >
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
@@ -3173,7 +3155,7 @@ const RestaurantPartnerSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Magic Dinner als{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+              <span style={{ color: ACCENT }}>
                 eure Veranstaltungsreihe
               </span>
               .
@@ -3218,8 +3200,8 @@ const RestaurantPartnerSection = () => {
                   <span
                     className="inline-flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-full shrink-0"
                     style={{
-                      background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
-                      border: "1px solid rgba(154,38,64,0.22)",
+                      background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
+                      border: "1px solid rgba(0,0,0,0.040)",
                     }}
                   >
                     <Sparkles className="w-4 h-4" style={{ color: ACCENT }} strokeWidth={1.75} />
@@ -3244,10 +3226,10 @@ const RestaurantPartnerSection = () => {
               style={{
                 borderRadius: "1.25rem",
                 boxShadow:
-                  "0 50px 100px -30px rgba(40,20,40,0.35), 0 15px 35px -15px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                  "0 50px 100px -30px rgba(0,0,0,0.175), 0 15px 35px -15px rgba(0,0,0,0.090), inset 0 0 0 1px rgba(0,0,0,0.05)",
               }}
             >
-              <p className={`${SERIF_ITALIC} text-base text-foreground/55 mb-2`}>
+              <p className={`text-base text-foreground/55 mb-2`}>
                 Kooperations-Modell.
               </p>
               <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-tight mb-6">
@@ -3292,7 +3274,7 @@ const RestaurantPartnerSection = () => {
               </ol>
 
               <div className="pt-6 border-t border-foreground/10 mb-6">
-                <p className={`${SERIF_ITALIC} text-xs text-foreground/55 mb-3`}>
+                <p className={`text-xs text-foreground/55 mb-3`}>
                   Beispiel-Hauspartner.
                 </p>
                 <p className="font-display text-base font-bold text-foreground leading-tight mb-1.5">
@@ -3309,7 +3291,7 @@ const RestaurantPartnerSection = () => {
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white w-full justify-center"
                 style={{
                   background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+                  boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
                 }}
               >
                 Restaurant-Anfrage starten
@@ -3340,7 +3322,7 @@ const TicketEventSection = () => {
           </p>
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground mb-8">
             Öffentliche{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+            <span style={{ color: ACCENT }}>
               Magic-Dinner-Termine
             </span>
             .
@@ -3361,7 +3343,7 @@ const TicketEventSection = () => {
             ].map((s) => (
               <div
                 key={s.label}
-                className="bg-[hsl(30,8%,98.5%)] rounded-2xl px-5 py-6 border border-foreground/8"
+                className="bg-[hsl(0,0%,98%)] rounded-2xl px-5 py-6 border border-foreground/8"
               >
                 <p
                   className="font-display text-2xl md:text-3xl font-black tabular-nums leading-none"
@@ -3369,7 +3351,7 @@ const TicketEventSection = () => {
                 >
                   {s.num}
                 </p>
-                <p className={`${SERIF_ITALIC} text-sm text-foreground/55 mt-2`}>
+                <p className={`text-sm text-foreground/55 mt-2`}>
                   {s.label}
                 </p>
               </div>
@@ -3382,7 +3364,7 @@ const TicketEventSection = () => {
               className="hero-cta group inline-flex items-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
               style={{
                 background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)",
+                boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
               }}
             >
               Aktuelle Termine ansehen

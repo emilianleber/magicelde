@@ -55,7 +55,7 @@ const HeroKeyframes = () => (
     @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
     @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
     @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(199,144,66,0)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(199,144,66,0.12)); } }
+    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
     .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
@@ -72,18 +72,7 @@ const HeroKeyframes = () => (
 const HEADLINE_SANS = ["Close-Up", "Zauberer"];
 const HEADLINE_ITALIC = ["in", "euren", "Händen."];
 
-const BOKEH = [
-  { size: 22, left: "12%", top: "28%", dur: 14, delay: 0, o: 0.45 },
-  { size: 14, left: "8%", top: "62%", dur: 18, delay: 2.5, o: 0.55 },
-  { size: 28, left: "78%", top: "18%", dur: 16, delay: 1, o: 0.40 },
-  { size: 18, left: "88%", top: "48%", dur: 20, delay: 3.5, o: 0.55 },
-  { size: 12, left: "62%", top: "72%", dur: 13, delay: 4.5, o: 0.60 },
-  { size: 24, left: "92%", top: "78%", dur: 17, delay: 1.8, o: 0.35 },
-  { size: 10, left: "32%", top: "82%", dur: 19, delay: 6, o: 0.50 },
-  { size: 16, left: "48%", top: "12%", dur: 22, delay: 5, o: 0.30 },
-  { size: 20, left: "70%", top: "38%", dur: 15, delay: 7.5, o: 0.45 },
-  { size: 14, left: "20%", top: "44%", dur: 21, delay: 8.5, o: 0.40 },
-];
+const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
 
 const Hero = () => {
   const photoRef = useRef<HTMLDivElement>(null);
@@ -108,10 +97,10 @@ const Hero = () => {
     <section className="relative bg-[#08060c] text-white min-h-screen overflow-hidden">
       <HeroKeyframes />
       <div ref={photoRef} className="absolute inset-0 hero-photo-wrap hero-zoom" style={{ willChange: "transform" }}>
-        <img src={heroCloseupImg} alt="Close-Up mit Emilian Leber — Karten in euren Händen" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "saturate(0.92) contrast(1.08) brightness(0.7)" }} loading="eager" />
+        <img src={heroCloseupImg} alt="Close-Up mit Emilian Leber — Karten in euren Händen" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 30%", filter: "brightness(0.78)" }} loading="eager" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)" }} />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)" }} />
-        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.1) 0%, rgba(199,144,66,0) 70%)" }} />
+        <div aria-hidden className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)" }} />
       </div>
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
         {BOKEH.map((b, i) => (<div key={i} className="absolute rounded-full hero-bokeh" style={{ width: b.size, height: b.size, left: b.left, top: b.top, background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`, filter: "blur(2px)", animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s` }} />))}
@@ -126,9 +115,6 @@ const Hero = () => {
             <span aria-hidden className="hidden md:block h-4 w-px bg-white/25" />
             <span className="text-sm text-white/80"><strong className="font-semibold text-white">100+ Close-Up-Auftritte</strong></span>
           </div>
-          <p className={`${SERIF_ITALIC} text-xl md:text-2xl text-white/75 mb-6 md:mb-8 hero-fade`} style={{ animationDelay: "0.18s" }}>
-            Direkt am Tisch. In euren Händen.
-          </p>
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
@@ -195,7 +181,7 @@ const HollywoodSequenzSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">So läuft ein Close-Up-Moment ab.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Fünf Schritte zum{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Wow-Moment</span>.
+              <span style={{ color: ACCENT }}>Wow-Moment</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -226,7 +212,7 @@ const HollywoodSequenzSection = () => {
                       className="relative flex items-center justify-center w-14 h-14 md:w-[76px] md:h-[76px] rounded-full font-display font-black text-white text-lg md:text-xl"
                       style={{
                         background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                        boxShadow: `0 10px 25px -8px rgba(154,38,64,0.18), 0 0 0 5px white`,
+                        boxShadow: `0 10px 25px -8px rgba(0,0,0,0.040), 0 0 0 5px white`,
                       }}
                     >
                       {String(i + 1).padStart(2, "0")}
@@ -248,10 +234,10 @@ const HollywoodSequenzSection = () => {
           {/* RIGHT — Beispiel-Trick: Tisch-Wahl-Routine */}
           <div className={`lg:col-span-6 lg:sticky lg:top-24`} style={{ animationDelay: "0.15s" }}>
             <div
-              className="relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10 overflow-hidden"
+              className="relative bg-[hsl(0,0%,98%)] p-8 md:p-10 overflow-hidden"
               style={{
                 borderRadius: "1.5rem",
-                boxShadow: "0 50px 100px -30px rgba(40,20,40,0.35), 0 15px 35px -15px rgba(40,20,40,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                boxShadow: "0 50px 100px -30px rgba(0,0,0,0.175), 0 15px 35px -15px rgba(0,0,0,0.090), inset 0 0 0 1px rgba(0,0,0,0.05)",
               }}
             >
               {/* Spielkarten-Deko oben rechts */}
@@ -271,7 +257,7 @@ const HollywoodSequenzSection = () => {
               </p>
               <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-tight mb-7">
                 Eine Routine —{" "}
-                <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                <span style={{ color: ACCENT }}>
                   ihr entscheidet
                 </span>
                 .
@@ -285,15 +271,15 @@ const HollywoodSequenzSection = () => {
                 </p>
                 <p>
                   Jetzt entscheidet ihr gemeinsam am Tisch:{" "}
-                  <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                  <span style={{ color: ACCENT }}>
                     rot oder schwarz?
                   </span>{" "}
                   Ihr einigt euch. Dann:{" "}
-                  <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                  <span style={{ color: ACCENT }}>
                     Bild- oder Zahlenkarte?
                   </span>{" "}
                   Diskussion am Tisch, Entscheidung. Dann:{" "}
-                  <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
+                  <span style={{ color: ACCENT }}>
                     Herz oder Karo?
                   </span>{" "}
                   Letzte Wahl. Wert? Ihr sagt eine Zahl.
@@ -311,7 +297,7 @@ const HollywoodSequenzSection = () => {
                 style={{ borderColor: `${ACCENT}30` }}
               >
                 <span
-                  className={`${SERIF_ITALIC} text-base`}
+                  className={`text-base`}
                   style={{ color: ACCENT }}
                 >
                   Drei Sekunden Stille —
@@ -365,14 +351,14 @@ const SETTINGS = [
 const SettingsVariantenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-16 md:mb-24">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Settings, ein Format.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Empfang. Tisch.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Stehtische.</span>
+              <span style={{ color: ACCENT }}>Stehtische.</span>
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -397,10 +383,10 @@ const SettingsVariantenSection = () => {
               </div>
               <div className={`lg:col-span-5 ${s.direction === "rl" ? "lg:order-1" : ""}`}>
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="inline-flex items-center justify-center w-12 h-12 rounded-full" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+                  <span className="inline-flex items-center justify-center w-12 h-12 rounded-full" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
                     <s.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
                   </span>
-                  <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55`}>{s.sub}</p>
+                  <p className={`text-base md:text-lg text-foreground/55`}>{s.sub}</p>
                 </div>
                 <h3 className="font-display text-2xl md:text-4xl font-black text-foreground leading-[1.05] mb-5">
                   {s.label}.
@@ -442,7 +428,7 @@ const TypischerAbendSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Ein Abend, von der Ankunft bis zum Tanz.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Wie sich ein Close-Up-Abend{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>anfühlt</span>.
+              <span style={{ color: ACCENT }}>anfühlt</span>.
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -488,14 +474,14 @@ const EFFEKTE = [
 const EffektKatalogSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Effekt-Familien.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Karten. Münzen.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Gedanken.</span>
+              <span style={{ color: ACCENT }}>Gedanken.</span>
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -510,14 +496,14 @@ const EffektKatalogSection = () => {
         <div className={`grid md:grid-cols-3 gap-5 md:gap-7`}>
           {EFFEKTE.map((e) => (
             <article key={e.title} className="relative bg-white p-7 md:p-8 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-25px_rgba(0,0,0,0.18)]" style={{ borderRadius: "1rem", boxShadow: "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)" }}>
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
                 <e.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
               <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-3">{e.title}</h3>
               <p className="text-sm md:text-base text-foreground/65 leading-[1.6] mb-5">{e.body}</p>
               <ul className="space-y-2 mt-auto">
                 {e.examples.map((ex) => (
-                  <li key={ex} className={`${SERIF_ITALIC} text-sm text-foreground/55 leading-snug`}>· {ex}</li>
+                  <li key={ex} className={`text-sm text-foreground/55 leading-snug`}>· {ex}</li>
                 ))}
               </ul>
             </article>
@@ -549,7 +535,7 @@ const TrickRepertoireSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Routinen aus meinem Set.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Konkrete{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Beispiele</span>{" "}
+              <span style={{ color: ACCENT }}>Beispiele</span>{" "}
               aus dem Repertoire.
             </h2>
           </div>
@@ -564,13 +550,13 @@ const TrickRepertoireSection = () => {
 
         <div className={`grid grid-cols-1 md:grid-cols-6 gap-5 md:gap-7`}>
           {/* lg: 4 cols */}
-          <article className="md:col-span-4 relative bg-[hsl(30,8%,98.5%)] p-8 md:p-10 flex flex-col" style={{ borderRadius: "1.25rem", boxShadow: "0 20px 45px -25px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)", minHeight: "320px" }}>
+          <article className="md:col-span-4 relative bg-[hsl(0,0%,98%)] p-8 md:p-10 flex flex-col" style={{ borderRadius: "1.25rem", boxShadow: "0 20px 45px -25px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)", minHeight: "320px" }}>
             <span aria-hidden className="absolute -top-8 -right-3 select-none" style={{ fontSize: "120px", color: ACCENT, opacity: 0.06, transform: "rotate(15deg)" }}>♣</span>
             <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: ACCENT }}>{REPERTOIRE[0].kicker}</p>
             <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-[1.1] mb-5 max-w-md">{REPERTOIRE[0].title}</h3>
             <p className="text-base md:text-lg text-foreground/75 leading-[1.7] max-w-xl">{REPERTOIRE[0].body}</p>
             <div className="mt-auto pt-7 flex items-center gap-3 flex-wrap">
-              <span className={`${SERIF_ITALIC} text-base`} style={{ color: ACCENT }}>4 Min</span>
+              <span className={`text-base`} style={{ color: ACCENT }}>4 Min</span>
               <span aria-hidden className="text-foreground/25">·</span>
               <span className="text-sm text-foreground/55">Brautpaar · Flamme · sichtbarer Beweis in der Hand</span>
             </div>
@@ -586,7 +572,7 @@ const TrickRepertoireSection = () => {
 
           {/* sm: 2 cols */}
           <article className="md:col-span-2 relative bg-[#08060c] text-white p-7 md:p-9 flex flex-col overflow-hidden" style={{ borderRadius: "1.25rem", minHeight: "300px" }}>
-            <div aria-hidden className="absolute -top-20 -right-10 w-[300px] h-[300px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.14), transparent 65%)" }} />
+            <div aria-hidden className="absolute -top-20 -right-10 w-[300px] h-[300px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
             <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: "#f3d9a8" }}>{REPERTOIRE[2].kicker}</p>
             <h3 className="relative font-display text-xl md:text-2xl font-black leading-tight mb-4">{REPERTOIRE[2].title}</h3>
             <p className="relative text-sm md:text-base text-white/75 leading-[1.6]">{REPERTOIRE[2].body}</p>
@@ -594,7 +580,7 @@ const TrickRepertoireSection = () => {
 
           {/* md: 4 cols */}
           <article className="md:col-span-4 relative bg-white p-8 md:p-10 flex flex-col md:flex-row gap-7 md:items-center" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -30px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(0,0,0,0.05)", minHeight: "300px" }}>
-            <div className="shrink-0 inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full" style={{ background: "linear-gradient(135deg, rgba(199,144,66,0.18), rgba(199,144,66,0.04))", border: "1px solid rgba(199,144,66,0.12)" }}>
+            <div className="shrink-0 inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.024), rgba(0,0,0,0.016))", border: "1px solid rgba(0,0,0,0.024)" }}>
               <Coins className="w-9 h-9 md:w-10 md:h-10" style={{ color: "#a06820" }} strokeWidth={1.5} />
             </div>
             <div>
@@ -605,7 +591,7 @@ const TrickRepertoireSection = () => {
           </article>
         </div>
 
-        <p className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55 mt-10 max-w-2xl`}>
+        <p className={`text-base md:text-lg text-foreground/55 mt-10 max-w-2xl`}>
           Plus rund 40 weitere Routinen aus meinem festen Set — wir wählen
           gemeinsam, was zu euch passt.
         </p>
@@ -625,14 +611,14 @@ const PullQuoteSection = () => {
         <img src={emotionenImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.55) 0%, rgba(8,6,12,0.95) 70%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(199,144,66,0.12), transparent 65%)" }} />
-      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.18), transparent 65%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
+      <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)" }} />
       <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
             Die Karten sind in{" "}
-            <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>euren Händen</span>.{" "}
+            <span style={{ color: "#f3d9a8" }}>euren Händen</span>.{" "}
             Nicht in meinen.
           </p>
           <footer className="mt-10 flex items-center justify-center gap-4">
@@ -660,20 +646,20 @@ const ANLAESSE = [
 const AnlassMixSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-24 md:py-36 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
       <div className="container px-6">
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-12">
           <div className={`lg:col-span-5 lg:sticky lg:top-24 lg:self-start`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann Close-Up den Abend prägt.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-8">
               Fünf Anlässe.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Ein Format</span>.
+              <span style={{ color: ACCENT }}>Ein Format</span>.
             </h2>
             <div className="relative overflow-hidden" style={{ borderRadius: "1.25rem" }}>
               <img src={schneiderWeisseImg} alt="Close-Up Tischmagie — Emilian Leber" className="w-full h-[340px] md:h-[420px] object-cover" loading="lazy" style={{ filter: "saturate(0.95) brightness(0.94)" }} />
               <div aria-hidden className="absolute inset-x-0 bottom-0 h-32" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.55))" }} />
               <div className="absolute bottom-5 left-5 right-5 text-white">
-                <p className={`${SERIF_ITALIC} text-base md:text-lg leading-snug`}>„Karten am Tisch funktionieren von Hochzeit bis Vorstandsdinner."</p>
+                <p className={`text-base md:text-lg leading-snug`}>„Karten am Tisch funktionieren von Hochzeit bis Vorstandsdinner."</p>
               </div>
             </div>
           </div>
@@ -681,7 +667,7 @@ const AnlassMixSection = () => {
             <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
               {ANLAESSE.map((a, i) => (
                 <li key={a.label} className={`grid grid-cols-[44px_1fr_auto] md:grid-cols-[56px_1fr_auto] items-baseline gap-4 md:gap-6 py-7 md:py-9 group`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
-                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))", border: "1px solid rgba(154,38,64,0.22)" }}>
+                  <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full self-start" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))", border: "1px solid rgba(0,0,0,0.040)" }}>
                     <a.Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
                   </span>
                   <div>
@@ -698,7 +684,7 @@ const AnlassMixSection = () => {
               ))}
             </ul>
             <div className="mt-10 flex items-center gap-3">
-              <Link to="/buchung?format=Close-Up" className="hero-cta inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(154,38,64,0.45)" }}>
+              <Link to="/buchung?format=Close-Up" className="hero-cta inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white" style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`, boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)" }}>
                 Anlass besprechen<ArrowRight className="w-4 h-4" />
               </Link>
               <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">Antwort innerhalb 24 h</span>
@@ -730,7 +716,7 @@ const GruppenDynamikSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">An jedem Tisch ein anderer Ton.</p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
               Drei Publikum-Typen.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Drei Tonalitäten.</span>
+              <span style={{ color: ACCENT }}>Drei Tonalitäten.</span>
             </h2>
           </div>
           <div className="md:col-span-5 md:pt-8">
@@ -746,24 +732,24 @@ const GruppenDynamikSection = () => {
           {GRUPPEN.map((g, i) => (
             <article key={g.persona} className={`relative p-7 md:p-9 flex flex-col h-full transition-all duration-500 hover:-translate-y-1 ${i === 1 ? "text-white" : ""}`} style={{
               borderRadius: "1.25rem",
-              background: i === 1 ? `linear-gradient(160deg, ${ACCENT_DEEP} 0%, #08060c 100%)` : "hsl(30,8%,98.5%)",
-              boxShadow: i === 1 ? "0 35px 70px -30px rgba(40,20,40,0.4)" : "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
+              background: i === 1 ? `linear-gradient(160deg, ${ACCENT_DEEP} 0%, #08060c 100%)` : "hsl(0,0%,98%)",
+              boxShadow: i === 1 ? "0 35px 70px -30px rgba(0,0,0,0.200)" : "0 18px 35px -22px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
               minHeight: "340px",
             }}>
               <div className="flex items-center gap-3 mb-6">
                 <span className="inline-flex items-center justify-center w-11 h-11 rounded-full" style={{
-                  background: i === 1 ? "rgba(255,255,255,0.08)" : "linear-gradient(135deg, rgba(154,38,64,0.14), rgba(154,38,64,0.04))",
-                  border: i === 1 ? "1px solid rgba(255,255,255,0.18)" : "1px solid rgba(154,38,64,0.22)",
+                  background: i === 1 ? "rgba(255,255,255,0.08)" : "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
+                  border: i === 1 ? "1px solid rgba(255,255,255,0.18)" : "1px solid rgba(0,0,0,0.040)",
                 }}>
                   <g.Icon className="w-5 h-5" style={{ color: i === 1 ? "#f3d9a8" : ACCENT }} strokeWidth={1.75} />
                 </span>
                 <span className="text-[10px] tracking-[0.18em] uppercase font-bold" style={{ color: i === 1 ? "rgba(255,255,255,0.6)" : ACCENT }}>Typ {String(i + 1).padStart(2, "0")}</span>
               </div>
-              <h3 className={`font-display text-2xl md:text-3xl font-black leading-tight mb-2 ${i === 1 ? "" : "text-foreground"}`}>{g.persona}</h3>
-              <p className={`${SERIF_ITALIC} text-sm md:text-base mb-5`} style={{ color: i === 1 ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.55)" }}>{g.sub}</p>
+              <h3 className={`${SERIF_ITALIC} font-display text-2xl md:text-3xl font-black leading-tight mb-2 ${i === 1 ? "" : "text-foreground"}`}>{g.persona}</h3>
+              <p className={`text-sm md:text-base mb-5`} style={{ color: i === 1 ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.55)" }}>{g.sub}</p>
               <p className={`text-base leading-[1.7] flex-1 ${i === 1 ? "text-white/80" : "text-foreground/75"}`}>{g.body}</p>
               <div className="mt-7 pt-5 border-t" style={{ borderColor: i === 1 ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)" }}>
-                <span className={`${SERIF_ITALIC} text-base`} style={{ color: i === 1 ? "#f3d9a8" : ACCENT }}>{g.tag}</span>
+                <span className={`text-base`} style={{ color: i === 1 ? "#f3d9a8" : ACCENT }}>{g.tag}</span>
               </div>
             </article>
           ))}
@@ -779,7 +765,7 @@ const GruppenDynamikSection = () => {
 const closeupQuizConfig: CustomQuizConfig = {
   anlass: "Close-Up",
   sectionEyebrow: "Format-Finder · Close-Up",
-  sectionTitle: (<>Findet euer{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT }}>Close-Up-Setting</span>.</>),
+  sectionTitle: (<>Findet euer{" "}<span style={{ color: ACCENT }}>Close-Up-Setting</span>.</>),
   sectionDesc: "Drei Fragen, eine konkrete Close-Up-Empfehlung. Walk-Around, Tisch-zu-Tisch oder Stunden-Wedding.",
   questions: [
     { id: "setting", eyebrow: "Frage 01 · Setting", title: <>Welches Setting habt ihr?</>, hint: "Steh-Empfang, sitzendes Dinner oder Mix?", feedback: "Verstanden.", cols: 3, options: [
@@ -829,7 +815,7 @@ const StimmenSection = () => {
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Was Gastgeber sagen.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
-            5,0 Sterne.<br /><span className={SERIF_ITALIC}>30+ Bewertungen.</span>
+            5,0 Sterne.<br /><span>30+ Bewertungen.</span>
           </h2>
         </div>
         <div className={`grid md:grid-cols-3 gap-6 md:gap-8`}>
@@ -866,19 +852,19 @@ const TRUST_ITEMS = [
 const TrustZahlenSection = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-[hsl(30,8%,98.5%)] py-20 md:py-28 border-y border-foreground/10">
+    <section ref={ref} className="bg-white py-20 md:py-28 border-y border-foreground/10">
       <div className="container px-6">
         <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">Bekannt aus.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
             TV, Wettbewerb und{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>100+ Close-Up-Auftritte</span>.
+            <span style={{ color: ACCENT }}>100+ Close-Up-Auftritte</span>.
           </h2>
         </div>
         <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-14`}>
           {TRUST_ITEMS.map((it) => (
             <article key={it.name} className="group relative bg-white border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:-translate-y-1 hover:border-foreground/15 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.15)]">
-              <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "linear-gradient(135deg, rgba(154,38,64,0.16), rgba(154,38,64,0.05))", border: "1px solid rgba(154,38,64,0.22)" }}>
+              <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.025))", border: "1px solid rgba(0,0,0,0.040)" }}>
                 <it.Icon className="w-5 h-5" style={{ color: ACCENT }} strokeWidth={1.75} />
               </div>
               <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">{it.name}</p>
@@ -895,7 +881,7 @@ const TrustZahlenSection = () => {
           ].map((s) => (
             <div key={s.label} className="flex items-baseline gap-3">
               <span className="font-display text-2xl md:text-3xl font-black text-foreground tabular-nums">{s.num}</span>
-              <span className={`${SERIF_ITALIC} text-base md:text-lg text-foreground/55`}>{s.label}</span>
+              <span className={`text-base md:text-lg text-foreground/55`}>{s.label}</span>
             </div>
           ))}
         </div>
@@ -923,7 +909,7 @@ const FAQSection = () => {
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
-            Was vorher<br /><span className={SERIF_ITALIC}>gefragt wird.</span>
+            Was vorher<br /><span>gefragt wird.</span>
           </h2>
         </div>
         <div className={`max-w-3xl border-t border-foreground/15`}>
@@ -953,13 +939,13 @@ const FinalCTA = () => {
         <img src={audienceImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)" }} />
       </div>
-      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-3xl opacity-8" style={{ background: "radial-gradient(circle, rgba(154,38,64,0.13), transparent 60%)" }} />
-      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-3xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
+      <div aria-hidden className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)" }} />
+      <div aria-hidden className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)" }} />
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Karten in eure Hände.</p>
           <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
-            Close-Up{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>buchen</span>.
+            Close-Up{" "}<span style={{ color: ACCENT_SOFT }}>buchen</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
             Schickt mir Datum, Ort und Gästezahl — Antwort innerhalb 24 Stunden mit einem Close-Up-Konzept für euren Abend.
