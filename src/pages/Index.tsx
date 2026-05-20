@@ -835,41 +835,27 @@ const PullQuoteSection = () => {
   return (
     <section
       ref={ref}
-      className="relative bg-black text-white py-28 md:py-40 overflow-hidden"
+      className="relative bg-black text-white py-24 md:py-36 overflow-hidden"
     >
-      <div
-        aria-hidden
-        className="absolute -top-40 -right-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-6"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
-        }}
-      />
       <div className="relative container px-6">
         <div
-          className={`max-w-4xl mx-auto text-center ${
+          className={`max-w-3xl mx-auto text-center ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
         >
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-8">
+          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/45 mb-8">
             Was Magie wirklich bedeutet.
           </p>
-          <p className="font-display font-bold tracking-[-0.01em] leading-[1.15] text-[clamp(1.75rem,4vw,3.5rem)]">
-            Ein Ring, der im Geldbeutel des Brautvaters auftaucht. Eine Karte,
-            die der Vorstandsvorsitzende selbst gewählt hat — und die im
-            versiegelten Glas auf dem Sideboard liegt. Drei Sekunden{" "}
-            <span className={``}>halten alle den Atem an.</span>
+          <p className="font-display font-bold tracking-[-0.01em] leading-[1.18] text-[clamp(1.5rem,3.2vw,2.6rem)]">
+            Drei Sekunden Stille —{" "}
+            <span className={SERIF_ITALIC} style={{ color: AMBER_SOFT }}>
+              bevor jemand laut wird.
+            </span>
           </p>
-          <p className="mt-10 text-sm md:text-base text-white/45">
-            Genau diese drei Sekunden sind das Produkt — nicht der Trick davor.
+          <p className="mt-8 max-w-xl mx-auto text-sm md:text-base text-white/55 leading-[1.65]">
+            Eine Karte, die euer Vorstand selbst gewählt hat. Im versiegelten
+            Glas auf dem Sideboard. Diese drei Sekunden sind das Produkt —
+            nicht der Trick davor.
           </p>
         </div>
       </div>
@@ -953,7 +939,7 @@ type DarkCardProps = {
 const AnlassCardDark = ({ name, eyebrow, href, img, body, tint }: DarkCardProps) => (
   <Link
     to={href}
-    className="group relative overflow-hidden text-white transition-transform duration-500 hover:-translate-y-1 h-[320px] md:h-[380px] block"
+    className="group relative overflow-hidden text-white transition-transform duration-500 hover:-translate-y-1 h-[220px] md:h-[380px] block"
     style={{
       borderRadius: "1.5rem",
       boxShadow:
@@ -978,19 +964,19 @@ const AnlassCardDark = ({ name, eyebrow, href, img, body, tint }: DarkCardProps)
             : "linear-gradient(135deg, rgba(8,6,12,0.55) 0%, rgba(0,0,0,0.024) 70%, rgba(138,90,20,0.85) 100%)",
       }}
     />
-    <div className="absolute bottom-0 left-0 right-0 p-7 md:p-9 lg:p-12 max-w-xl">
+    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-9 lg:p-12 max-w-xl">
       <p
-        className={`text-base md:text-lg text-white/85 mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)]`}
+        className={`hidden md:block text-base md:text-lg text-white/85 mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)]`}
       >
         {eyebrow}
       </p>
-      <h3 className="font-display text-2xl md:text-[2rem] lg:text-4xl font-bold leading-tight mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
+      <h3 className="font-display text-[1.75rem] md:text-[2rem] lg:text-4xl font-bold leading-tight mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
         {name}
       </h3>
-      <p className="text-sm md:text-base text-white/90 leading-[1.55] max-w-md drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]">
+      <p className="hidden md:block text-sm md:text-base text-white/90 leading-[1.55] max-w-md drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]">
         {body}
       </p>
-      <span className="inline-flex items-center gap-1.5 mt-5 text-[12px] tracking-[0.08em] uppercase font-bold text-white/85 group-hover:text-white">
+      <span className="inline-flex items-center gap-1.5 mt-2 md:mt-5 text-[12px] tracking-[0.08em] uppercase font-bold text-white/85 group-hover:text-white">
         Mehr ansehen
         <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
       </span>
@@ -1002,15 +988,15 @@ const AnlassCardDark = ({ name, eyebrow, href, img, body, tint }: DarkCardProps)
 const FirmenfeierBookingCard = () => (
   <Link
     to="/firmenfeiern"
-    className="group relative overflow-hidden bg-[hsl(0,0%,98%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
+    className="group relative overflow-hidden bg-[hsl(0,0%,98%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col md:h-[380px] block"
     style={{
       borderRadius: "1.5rem",
       boxShadow:
         "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
     }}
   >
-    {/* Animiertes Booking-Confirmation-Mockup — kompakter mit mehr Padding */}
-    <div className="relative flex-[1.5] px-5 py-8 md:px-7 md:py-10 flex items-center justify-center bg-foreground/[0.03] overflow-hidden">
+    {/* Animiertes Booking-Confirmation-Mockup — auf Mobile ausgeblendet (zu voll) */}
+    <div className="relative flex-[1.5] px-5 py-8 md:px-7 md:py-10 hidden md:flex items-center justify-center bg-foreground/[0.03] overflow-hidden">
       <div
         className="w-full max-w-[260px] rounded-xl bg-white px-3.5 py-3 md:px-4 md:py-3.5 transition-transform duration-500 group-hover:-translate-y-1"
         style={{
@@ -1086,7 +1072,7 @@ const FirmenfeierBookingCard = () => (
       <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-2">
         Firmenfeier
       </h3>
-      <p className="text-sm text-foreground/65 leading-[1.55] max-w-md">
+      <p className="hidden md:block text-sm text-foreground/65 leading-[1.55] max-w-md">
         Vorstandsdinner, Kundenabend, Galaabend, Mitarbeiterfeier. Auch der
         schweigsamste Vorstand zückt nach drei Minuten Karten.
       </p>
@@ -1107,14 +1093,14 @@ const GeburtstagAlterCard = () => {
   return (
     <Link
       to="/geburtstage"
-      className="group relative overflow-hidden bg-[hsl(0,0%,98%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col h-[320px] md:h-[380px] block"
+      className="group relative overflow-hidden bg-[hsl(0,0%,98%)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_35px_70px_-20px_rgba(0,0,0,0.18)] flex flex-col md:h-[380px] block"
       style={{
         borderRadius: "1.5rem",
         boxShadow:
           "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
       }}
     >
-      <div className="relative flex-[1.5] p-4 md:p-5 flex flex-col items-center justify-center bg-foreground/[0.03] overflow-hidden gap-5">
+      <div className="relative flex-[1.5] p-4 md:p-5 hidden md:flex flex-col items-center justify-center bg-foreground/[0.03] overflow-hidden gap-5">
         {/* Kuchen mit Kerzen */}
         <div className="relative">
           <div
@@ -1215,7 +1201,7 @@ const GeburtstagAlterCard = () => {
         <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-2">
           Geburtstag · Jubiläum
         </h3>
-        <p className="text-sm text-foreground/65 leading-[1.55] max-w-md">
+        <p className="hidden md:block text-sm text-foreground/65 leading-[1.55] max-w-md">
           Anekdoten der Familie eingebaut, Tisch-zu-Tisch oder eine kleine
           Bühnenshow zwischen den Reden. Ab fünfzig Gäste sehr stark.
         </p>
