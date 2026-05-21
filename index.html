@@ -51,36 +51,44 @@
     <meta name="twitter:description" content="Moderner Zauberer für Events, Firmenfeiern und Hochzeiten." />
     <meta name="twitter:image" content="https://www.magicel.de/hero-magic.jpg" />
 
-    <!-- Schema -->
+    <!-- Schema — LocalBusiness mit @id-Anker für Cross-Page-Referenzen -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": ["LocalBusiness", "EntertainmentBusiness"],
-      "name": "Emilian Leber – Zauberer & Showkünstler",
-      "description": "Moderner Zauberer für Firmenfeiern, Hochzeiten, Galas und Events – deutschlandweit buchbar.",
+      "@id": "https://www.magicel.de/#business",
+      "name": "Emilian Leber – Zauberer & Mentalist",
+      "description": "Zauberer für Firmenfeiern, Hochzeiten, Galas und Magic Dinner — deutschlandweit buchbar.",
       "url": "https://www.magicel.de",
       "telephone": "+4915563744696",
       "email": "el@magicel.de",
-      "priceRange": "€€€",
+      "priceRange": "€€-€€€",
       "image": "https://www.magicel.de/og-image.jpg",
+      "logo": "https://www.magicel.de/og-image.jpg",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Regensburg",
         "addressRegion": "Bayern",
         "addressCountry": "DE"
       },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Deutschland"
-      },
+      "areaServed": [
+        { "@type": "Country", "name": "Deutschland" },
+        { "@type": "AdministrativeArea", "name": "Bayern" },
+        { "@type": "City", "name": "Regensburg" },
+        { "@type": "City", "name": "München" },
+        { "@type": "City", "name": "Nürnberg" }
+      ],
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": "4.9",
+        "ratingValue": "5.0",
         "bestRating": "5",
         "worstRating": "1",
-        "reviewCount": "34"
+        "reviewCount": "30"
       },
-      "sameAs": ["https://www.instagram.com/emilian.leber"],
+      "sameAs": [
+        "https://www.instagram.com/emilian.leber",
+        "https://www.provenexpert.com/emilian-leber"
+      ],
       "serviceType": ["Zauberer", "Close-Up Magie", "Bühnenshow", "Magic Dinner", "Hochzeitszauberer", "Firmenfeiern"]
     }
     </script>
