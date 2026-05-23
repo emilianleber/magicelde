@@ -337,7 +337,7 @@ const AnlaesseSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Vier B2B-Settings.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Vorstand. Kunden.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Team.
@@ -524,7 +524,7 @@ const RoiSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was Magie auf einem Firmen-Event tatsächlich bewegt.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Aus Budget wird{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Erinnerung
@@ -715,7 +715,7 @@ const IndustriesSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Industries we serve.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Wer mich{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 gebucht hat
@@ -910,7 +910,7 @@ const CaseStudiesSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zwei echte Beispiele aus dem letzten Jahr.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Wie zwei Firmen{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 ihren Abend
@@ -1113,7 +1113,7 @@ const FormatOptionenSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Vier Formate, kombinierbar.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Welches Format wollt ihr{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 buchen
@@ -1244,7 +1244,7 @@ const BuchungsAblaufSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Buchungs-Ablauf für Eventplanerinnen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Fünf Schritte.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Schriftlich. Sauber.
@@ -1497,7 +1497,7 @@ const StimmenSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Was Veranstalter sagen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             5,0 Sterne.
             <br />
             <span>30+ Bewertungen.</span>
@@ -1682,7 +1682,7 @@ const FAQSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen aus dem B2B-Bereich.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Was Event-Planerinnen
             <br />
             <span>vorher fragen.</span>
@@ -1762,7 +1762,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Plant euren Abend.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Magie für{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               eure Firma

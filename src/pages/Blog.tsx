@@ -408,7 +408,7 @@ const PostsListe = ({
             <div className={`text-lg text-foreground/55 mb-5`}>
               Alle Beiträge.
             </div>
-            <h2 className="text-[clamp(2rem,4.5vw,4.2rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
+            <h2 className="text-[clamp(1.75rem,3.25vw,2.875rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Geschichten zwischen{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Tisch und Bühne.
@@ -601,7 +601,7 @@ const RedaktionsSchaufenster = ({ posts }: { posts: BlogPost[] }) => {
             <div className={`text-lg text-foreground/55 mb-5`}>
               Editor's Pick.
             </div>
-            <h2 className="text-[clamp(2rem,4.5vw,4.2rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
+            <h2 className="text-[clamp(1.75rem,3.25vw,2.875rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Drei{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Lieblinge.
@@ -732,7 +732,7 @@ const TopPosts = ({ posts }: { posts: BlogPost[] }) => {
             <div className={`text-lg text-white/55 mb-5`}>
               Am meisten gelesen.
             </div>
-            <h2 className="text-[clamp(2rem,4.5vw,4.2rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
+            <h2 className="text-[clamp(1.75rem,3.25vw,2.875rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Top-Beiträge{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
                 dieses Quartals.
@@ -864,7 +864,7 @@ const NewsletterSignup = () => {
             <div className={`text-lg text-foreground/55 mb-5`}>
               Magazin-Update.
             </div>
-            <h2 className="text-[clamp(2rem,4.5vw,4rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-6">
+            <h2 className="text-[clamp(1.75rem,3.25vw,2.75rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-6">
               Einmal im Quartal.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Kein Spam.
@@ -1016,7 +1016,7 @@ const AutorVorstellung = () => (
           <div className={`text-lg text-foreground/55 mb-5`}>
             Über den Autor.
           </div>
-          <h2 className="text-[clamp(2rem,4.5vw,3.6rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-6">
+          <h2 className="text-[clamp(1.75rem,3.25vw,2.75rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-6">
             Magier seit acht.{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               Schreibend seit jetzt.
@@ -1105,7 +1105,7 @@ const ThemenWolke = ({ posts }: { posts: BlogPost[] }) => {
             <div className={`text-lg text-foreground/55 mb-5`}>
               Themenwolke.
             </div>
-            <h2 className="text-[clamp(2rem,4.5vw,4rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
+            <h2 className="text-[clamp(1.75rem,3.25vw,2.75rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Was hier{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 besprochen wird.
@@ -1195,7 +1195,7 @@ const VerwandteRessourcen = () => {
             <div className={`text-lg text-foreground/55 mb-5`}>
               Im Haus.
             </div>
-            <h2 className="text-[clamp(2rem,4.5vw,4rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
+            <h2 className="text-[clamp(1.75rem,3.25vw,2.75rem)] font-display font-black tracking-[-0.025em] leading-[1.02]">
               Verwandte{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Bereiche.
@@ -1272,7 +1272,7 @@ const FinalCTA = () => (
       <div className={`text-lg text-white/55 mb-6`}>
         Zwei Wege weiter.
       </div>
-      <h2 className="text-[clamp(2.25rem,5.5vw,5rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-10">
+      <h2 className="text-[clamp(1.875rem,3.75vw,3rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-10">
         Lesen.{" "}
         <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
           Oder buchen.

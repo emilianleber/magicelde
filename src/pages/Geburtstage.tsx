@@ -313,7 +313,7 @@ const AgeGeneratorSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Jedes Jahrzehnt feiert anders.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Wählt das{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Jahrzehnt
@@ -493,7 +493,7 @@ const MemoryLaneSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Anekdoten-Einbau.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Aus eurer Geschichte wird{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 ein Trick
@@ -745,7 +745,7 @@ const StimmenSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Was Familien sagen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             5,0 Sterne.
             <br />
             <span>80+ Geburtstage.</span>
@@ -898,7 +898,7 @@ const FAQSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Was Familien
             <br />
             <span>vorher fragen.</span>
@@ -953,7 +953,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Plant euren Geburtstag.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Magie als{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               Geschenk

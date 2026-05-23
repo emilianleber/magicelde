@@ -307,7 +307,7 @@ const DreiKontaktwege = () => {
             >
               Drei Wege. Einer reicht.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
               Such dir aus,
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -546,7 +546,7 @@ const KontaktformularSection = () => {
             >
               Das Formular.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2rem,5vw,4.5rem)] text-foreground mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(1.75rem,3.5vw,2.875rem)] text-foreground mb-8">
               Erzähl mir
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -911,7 +911,7 @@ const AntwortzeitenHeatmap = () => {
             >
               Wann ich schnell bin.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-7">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground mb-7">
               Werktags am
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -1260,7 +1260,7 @@ const PullQuote = () => {
           >
             Versprechen.
           </p>
-          <p className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,6.5vw,6rem)] text-white">
+          <p className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(1.875rem,4vw,3.5rem)] text-white">
             24 Stunden.
             <br />
             <span style={{ color: "#f3d9a8" }}>
@@ -1330,7 +1330,7 @@ const HäufigeAnliegen = () => {
             >
               Häufige Anliegen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
               Vielleicht
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -1415,7 +1415,7 @@ const StandortMap = () => {
             >
               Mein Revier.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-7">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground mb-7">
               Bayern primär,
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>

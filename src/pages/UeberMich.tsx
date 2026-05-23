@@ -334,7 +334,7 @@ const DreiToolsSection = () => {
             >
               Drei Werkzeuge. Eine Bühne.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Karte. Münze.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Buch.
@@ -552,7 +552,7 @@ const WerdegangTimelineSection = () => {
             >
               Werdegang. Echte Stationen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Von Acht{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 bis Heute.
@@ -791,7 +791,7 @@ const MeinStilSection = () => {
             >
               Mein Stil.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8 md:mb-10">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground mb-8 md:mb-10">
               Kein Zylinder.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Kein Kaninchen.
@@ -1034,7 +1034,7 @@ const AuszeichnungenSection = () => {
             >
               Auszeichnungen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Sechs Stationen.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Eine Karriere.
@@ -1139,7 +1139,7 @@ const PullQuoteSection = () => {
             style={{ color: ACCENT_SOFT }}
           />
           <p
-            className={`text-[clamp(2rem,5vw,4.5rem)] leading-[1.12] text-white/95 mb-10 md:mb-12`}
+            className={`text-[clamp(1.75rem,3.5vw,2.875rem)] leading-[1.12] text-white/95 mb-10 md:mb-12`}
           >
             Zehn Jahre.{" "}
             <span style={{ color: "#f3d9a8" }}>
@@ -1202,7 +1202,7 @@ const HinterDenKulissenSection = () => {
             >
               Hinter den Kulissen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
               Üben. Vorbereiten.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Auftreten.
@@ -1340,7 +1340,7 @@ const WarumPersoenlichSection = () => {
             >
               Warum persönlich funktioniert.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
               Vier Säulen.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Kein Programm von der Stange.
@@ -1433,7 +1433,7 @@ const StimmenSection = () => {
             >
               Stimmen über mich persönlich.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Drei Reviews.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Drei echte Menschen.
@@ -1554,7 +1554,7 @@ const VideoSection = () => {
             >
               TVA · Herbst 2025.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
               Drei Minuten{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 im Fernsehen.
@@ -1682,7 +1682,7 @@ const AktuelleShowSection = () => {
             >
               Premiere 2026. Bayern + deutschlandweit.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,6vw,5.5rem)] text-white mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,4vw,3.25rem)] text-white mb-8">
               Plötzlich{" "}
               <span style={{ color: "#f3d9a8" }}>
                 Magie.
@@ -1942,7 +1942,7 @@ const PersoenlicherBriefSection = () => {
             >
               Persönlich, direkt, ohne Agentur.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,6vw,5.5rem)] text-white">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,4vw,3.25rem)] text-white">
               Schreibe mir{" "}
               <span style={{ color: "#f3d9a8" }}>
                 direkt.

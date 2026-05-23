@@ -682,7 +682,7 @@ const KonzeptSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Das Konzept.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Tisch oder Bühne.
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -798,7 +798,7 @@ const DreiSaeulenSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Drei Formate.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Wählt euer{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Format
@@ -1036,7 +1036,7 @@ const AblaufSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Wie ein Abend abläuft.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             Vier Phasen.
             <br />
             <span>Tisch und Bühne.</span>
@@ -1162,7 +1162,7 @@ const BeispielAbendSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Eine reale Reportage.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Sechzigster.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Mit Marmeladenglas.
@@ -1656,7 +1656,7 @@ const MagicDinnerQuiz = ({ onDark = false }: { onDark?: boolean }) => {
       </div>
 
       <h3
-        className={`font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2rem,4.5vw,3.5rem)] mb-4 ${txt}`}
+        className={`font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)] mb-4 ${txt}`}
       >
         {q.title}
       </h3>
@@ -2033,7 +2033,7 @@ const AnlaesseSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Wann ein Magic Dinner passt.
             </p>
-            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
               Vier Anlässe.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Ein Format.
@@ -2332,7 +2332,7 @@ const WasDuBekommstSection = () => {
             >
               Was du als Gastgeber bekommst.
             </p>
-            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.25rem,5vw,4.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.875rem,3.5vw,3rem)] text-foreground">
               Ein Abend, der einfach läuft.{" "}
               <span>Ohne Aufwand für euch.</span>
             </h2>
@@ -2398,7 +2398,7 @@ const KartenFaecherSection = () => {
           <p className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/65 mb-6`}>
             Aus über zweihundert Abenden.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             Jeder Abend{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               ein eigener Moment
@@ -2488,7 +2488,7 @@ const WaldUndWieseSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/65 mb-6`}>
               Lieblings-Location.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] mb-8">
               Wald & Wiese.{" "}
               <span style={{ color: "#f3d9a8" }}>
                 Mein Haus.
@@ -2681,7 +2681,7 @@ const StimmenSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Was Gastgeber sagen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             5,0 Sterne.
             <br />
             <span>30+ Bewertungen.</span>
@@ -2825,7 +2825,7 @@ const FAQSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             Was Gastgeber meistens
             <br />
             <span>fragen.</span>
@@ -2900,7 +2900,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Plant euren Abend.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Magic Dinner buchen
             <br />
             <span>für euren Anlass.</span>
@@ -3045,7 +3045,7 @@ const AudienceSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Fünf Zielgruppen. Eine Seite.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Magic Dinner — für{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 wen?
@@ -3148,7 +3148,7 @@ const RestaurantPartnerSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Für Restaurants.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Magic Dinner als{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 eure Veranstaltungsreihe
@@ -3314,7 +3314,7 @@ const TicketEventSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Für Ticket-Käufer.
           </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground mb-8">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground mb-8">
             Öffentliche{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               Magic-Dinner-Termine

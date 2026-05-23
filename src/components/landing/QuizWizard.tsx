@@ -75,7 +75,7 @@ const SectionHead = ({ config }: { config: QuizConfig }) => {
         className={`font-display font-black tracking-[-0.01em] leading-[1.05] text-foreground ${
           compact
             ? "text-[clamp(1.6rem,3.6vw,3rem)]"
-            : "text-[clamp(2rem,4.8vw,4.5rem)]"
+            : "text-[clamp(1.75rem,3.5vw,2.875rem)]"
         }`}
       >
         {config.sectionTitle}
@@ -428,7 +428,7 @@ const WizardBody = ({
             </p>
             <h3 className={`font-display font-black text-foreground leading-[1.02] mb-5 ${
               fullBleed
-                ? "text-[clamp(2rem,4.5vw,4.5rem)]"
+                ? "text-[clamp(1.75rem,3.5vw,2.875rem)]"
                 : "text-2xl md:text-4xl"
             }`}>
               {currentQuestion.title}

@@ -84,7 +84,7 @@ const Inner = ({ topic }: { topic: WissenTopic }) => {
                 Wissen
               </p>
 
-              <h1 className="font-display font-black tracking-[-0.025em] leading-[1.1] text-[clamp(2rem,5.5vw,4rem)] text-foreground mb-7">
+              <h1 className="font-display font-black tracking-[-0.025em] leading-[1.1] text-[clamp(1.75rem,3.5vw,2.875rem)] text-foreground mb-7">
                 {topic.title}
               </h1>
 

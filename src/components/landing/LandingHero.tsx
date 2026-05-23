@@ -73,7 +73,7 @@ const LandingHero = () => {
 
           {/* Headline */}
           <h1
-            className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(2.5rem,5.8vw,5.5rem)] opacity-0 animate-fade-up"
+            className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[clamp(1.75rem,3.25vw,2.625rem)] opacity-0 animate-fade-up"
             style={{ animationDelay: "0.25s" }}
           >
             <span className="block">Magie, die</span>

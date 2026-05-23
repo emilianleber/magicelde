@@ -728,7 +728,7 @@ const FAQCore = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Such, klick, finde.
           </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground">
             Antworten nach{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               Thema.
@@ -905,7 +905,7 @@ const PullQuote = () => {
           <p className={`text-base md:text-lg text-white/55 mb-8 tracking-wide uppercase text-[11px]`}>
             Kurz und ehrlich.
           </p>
-          <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,5vw,4.5rem)] text-white">
+          <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.875rem)] text-white">
             Über dreißig Fragen.{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               Eine Antwort: ja, das geht.
@@ -979,7 +979,7 @@ const FrageNichtBeantwortet = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Deine Frage fehlt?
           </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] text-foreground mb-6">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground mb-6">
             Stell sie{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               direkt mir.
@@ -1235,7 +1235,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Genug gelesen — jetzt reden.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Lass uns{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               dein Event planen.

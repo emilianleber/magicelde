@@ -185,7 +185,7 @@ const PhasenSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Phasen, ein Abend.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Wie ich euch{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>durch den Abend</span>{" "}
               führe.
@@ -264,7 +264,7 @@ const KombiUSPSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Disziplinen. Ein Auftritt.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Moderation, Magie und{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Comedy</span>{" "}
               aus einer Hand.
@@ -350,7 +350,7 @@ const ShowBeispieleSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-16 md:mb-24">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei reale Abende.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Aus dem{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Moderations-Archiv</span>.
             </h2>
@@ -408,7 +408,7 @@ const PullQuoteSection = () => {
       <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
-          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
+          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Ein Mikrofon.{" "}
             <span style={{ color: "#f3d9a8" }}>Drei Disziplinen.</span>{" "}
             Keine Übergaben.
@@ -452,7 +452,7 @@ const AnlassMatrixSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Fünf Anlässe, fünf Mischverhältnisse.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Anlass.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Tonalität.</span>{" "}
               Mix.
@@ -545,7 +545,7 @@ const ComedyAnteilSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wie viel Comedy ist drin?</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Drei{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Modus-Schalter</span>.
             </h2>
@@ -643,7 +643,7 @@ const TechRiderSection = () => {
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className={`lg:col-span-5`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Für die Eventplanung.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground mb-7">
               Tech-Rider.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Plus Briefing-Liste.</span>
             </h2>
@@ -734,7 +734,7 @@ const StimmenSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Was Veranstalter sagen.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             5,0 Sterne.<br /><span>30+ Bewertungen.</span>
           </h2>
         </div>
@@ -806,7 +806,7 @@ const FAQSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Was vorher<br /><span>gefragt wird.</span>
           </h2>
         </div>
@@ -839,7 +839,7 @@ const FinalCTA = () => {
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Plant euren Abend.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Moderation{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>anfragen</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">

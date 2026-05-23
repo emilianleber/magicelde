@@ -671,7 +671,7 @@ const StepView = ({
               {step.eyebrow}
             </span>
           </div>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground mb-6">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground mb-6">
             {step.title}
           </h2>
           <p className="text-base md:text-lg text-foreground/65 leading-[1.65] max-w-xl">
@@ -852,7 +852,7 @@ const SummaryView = ({
               Letzter Schritt · Übersicht & Absenden
             </span>
           </div>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground mb-6">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground mb-6">
             Bald{" "}
             <span style={{ color: ACCENT }}>
               geschafft
@@ -1008,7 +1008,7 @@ const SubmittedState = ({
       >
         <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12 text-white" />
       </div>
-      <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,5vw,4rem)] text-foreground mb-5">
+      <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.875rem)] text-foreground mb-5">
         Geschafft.{" "}
         <span style={{ color: ACCENT }}>
           Ich bin dran.

@@ -403,7 +403,7 @@ export const CustomQuiz = ({ config }: { config: CustomQuizConfig }) => {
       </div>
 
       <h3
-        className={`font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2rem,4.5vw,3.5rem)] mb-4 ${txt}`}
+        className={`font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)] mb-4 ${txt}`}
       >
         {q.title}
       </h3>
@@ -531,7 +531,7 @@ export const CustomQuizSection = ({ config }: { config: CustomQuizConfig }) => (
         <p className="text-[11px] md:text-xs tracking-[0.18em] uppercase text-foreground/45 mb-5 md:mb-6">
           {config.sectionEyebrow}
         </p>
-        <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(2rem,4.8vw,4.5rem)] text-foreground">
+        <h2 className="font-display font-black tracking-[-0.01em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.875rem)] text-foreground">
           {config.sectionTitle}
         </h2>
         {config.sectionDesc && (

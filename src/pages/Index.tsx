@@ -373,7 +373,7 @@ const KonzeptIntroSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was ich mache.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Magie, die sich in euren Abend{" "}
               <span style={{ color: ACCENT }}>
                 einfügt
@@ -478,7 +478,7 @@ const FormateSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Drei Formate, ein Künstler.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Wählt euer{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Hauptformat
@@ -697,7 +697,7 @@ const VideoSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               TV-Auftritt · TVA 2025.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
               Sieh dir die{" "}
               <span style={{ color: ACCENT }}>
                 Show im Fernsehen
@@ -810,7 +810,7 @@ const AnlaesseSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Für jeden Anlass die passende Magie.
             </p>
-            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
               Vier Anlässe.{" "}
               <span style={{ color: ACCENT }}>
                 Vier Pfade.
@@ -1176,7 +1176,7 @@ const ComedyZaubereiSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Comedy gehört dazu — nicht als Beilage.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Lachen und{" "}
               <span style={{ color: ACCENT }}>
                 Staunen
@@ -1455,7 +1455,7 @@ const StimmenSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Was Gastgeber sagen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             5,0 Sterne.
             <br />
             <span>30+ Bewertungen.</span>
@@ -1590,7 +1590,7 @@ const UeberMichSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Wer das macht.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.2vw,5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
               Magie seit{" "}
               <span style={{ color: ACCENT }}>
                 zehn Jahren
@@ -1724,7 +1724,7 @@ const FAQSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Häufige Fragen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
               Was meistens
               <br />
               <span>gefragt wird.</span>
@@ -1830,7 +1830,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Plant euren Abend.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Magie für{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               euren Anlass

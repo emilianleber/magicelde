@@ -174,7 +174,7 @@ const HeroSection = ({ post }: { post: BlogPost }) => {
             >
               {post.category}.
             </div>
-            <h1 className="text-[clamp(2.25rem,6vw,6rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-8">
+            <h1 className="text-[clamp(1.875rem,4vw,3.5rem)] font-display font-black tracking-[-0.025em] leading-[1.02] mb-8">
               {titleWords.map((w, i) => (
                 <span
                   key={i}
@@ -956,7 +956,7 @@ const CTAFinal = () => (
       <div className={`text-lg text-white/55 mb-5`}>
         Anders als gelesen.
       </div>
-      <h2 className="text-[clamp(2rem,5vw,4.5rem)] font-display font-black tracking-[-0.025em] leading-[1.05] mb-8">
+      <h2 className="text-[clamp(1.75rem,3.5vw,2.875rem)] font-display font-black tracking-[-0.025em] leading-[1.05] mb-8">
         Erlebt es{" "}
         <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
           selbst.

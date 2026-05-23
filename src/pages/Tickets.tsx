@@ -301,7 +301,7 @@ const AktuelleTourShowSection = () => {
             >
               Tour 2026 · Premiere.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] mb-7">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] mb-7">
               Plötzlich Magie —{" "}
               <br />
               <span style={{ color: "#f3d9a8" }}>
@@ -580,7 +580,7 @@ const TourDatenSection = () => {
             >
               Tour-Plan · 2026/2027.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Bayern,{" "}
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -725,7 +725,7 @@ const MagicDinnerAbendeSection = () => {
           >
             Anstehende Events.
           </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground">
             Aktuelle Termine.
           </h2>
         </div>
@@ -864,7 +864,7 @@ const TicketKategorienSection = () => {
             >
               Sitzplatz-Kategorien.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Drei Zonen.{" "}
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -1069,7 +1069,7 @@ const WasErwartetDichSection = () => {
             >
               Der Abend · 90 Min in vier Akten.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Was dich{" "}
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -1214,7 +1214,7 @@ const PullQuoteSection = () => {
             className="w-10 h-10 mx-auto mb-8 opacity-50"
             style={{ color: "#f3d9a8" }}
           />
-          <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,5vw,4.5rem)]">
+          <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.875rem)]">
             Drei Sekunden Stille.
             <br />
             <span style={{ color: "#f3d9a8" }}>
@@ -1290,7 +1290,7 @@ const LocationsSection = () => {
             >
               Spielstätten · Tour 2026.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Sechs Bühnen,{" "}
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -1399,7 +1399,7 @@ const VideoSection = () => {
             >
               Showreel · TVA-Mitschnitt 2024.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Sieh dir an,{" "}
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -1499,7 +1499,7 @@ const StimmenSection = () => {
           >
             Was Saal-Gäste sagen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             5,0 Sterne.
             <br />
             <span>30+ Bewertungen.</span>
@@ -1610,7 +1610,7 @@ const FAQSection = () => {
           >
             Bevor du buchst.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Häufige Ticket-
             <br />
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -1986,7 +1986,7 @@ const FinalCTA = () => {
           >
             Buchen oder selber planen?
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Tour-Ticket{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               oder eigene Show.

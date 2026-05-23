@@ -179,7 +179,7 @@ const HollywoodSequenzSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">So läuft ein Close-Up-Moment ab.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Fünf Schritte zum{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Wow-Moment</span>.
             </h2>
@@ -356,7 +356,7 @@ const SettingsVariantenSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-16 md:mb-24">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Settings, ein Format.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Empfang. Tisch.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Stehtische.</span>
             </h2>
@@ -426,7 +426,7 @@ const TypischerAbendSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Ein Abend, von der Ankunft bis zum Tanz.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Wie sich ein Close-Up-Abend{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>anfühlt</span>.
             </h2>
@@ -479,7 +479,7 @@ const EffektKatalogSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Drei Effekt-Familien.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Karten. Münzen.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Gedanken.</span>
             </h2>
@@ -533,7 +533,7 @@ const TrickRepertoireSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Routinen aus meinem Set.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Konkrete{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Beispiele</span>{" "}
               aus dem Repertoire.
@@ -616,7 +616,7 @@ const PullQuoteSection = () => {
       <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
-          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
+          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Die Karten sind in{" "}
             <span style={{ color: "#f3d9a8" }}>euren Händen</span>.{" "}
             Nicht in meinen.
@@ -651,7 +651,7 @@ const AnlassMixSection = () => {
         <div className="grid lg:grid-cols-12 gap-x-14 gap-y-12">
           <div className={`lg:col-span-5 lg:sticky lg:top-24 lg:self-start`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann Close-Up den Abend prägt.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,4.5vw,4.25rem)] text-foreground mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.25vw,2.875rem)] text-foreground mb-8">
               Fünf Anlässe.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Ein Format</span>.
             </h2>
@@ -714,7 +714,7 @@ const GruppenDynamikSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">An jedem Tisch ein anderer Ton.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Drei Publikum-Typen.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Drei Tonalitäten.</span>
             </h2>
@@ -814,7 +814,7 @@ const StimmenSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Was Gastgeber sagen.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             5,0 Sterne.<br /><span>30+ Bewertungen.</span>
           </h2>
         </div>
@@ -908,7 +908,7 @@ const FAQSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Was vorher<br /><span>gefragt wird.</span>
           </h2>
         </div>
@@ -944,7 +944,7 @@ const FinalCTA = () => {
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Karten in eure Hände.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Close-Up{" "}<span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>buchen</span>.
           </h2>
           <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">

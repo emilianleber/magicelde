@@ -328,7 +328,7 @@ const WarumStadtSection = ({ data }: { data: Stadt }) => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zauberer · Zauberkünstler · Magier · Mentalist.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground mb-8">
               Warum einen Zauberer in{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 {data.name}
@@ -527,7 +527,7 @@ const FormateSection = ({ data }: { data: Stadt }) => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Drei Formate für Events in {data.name}.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Close-Up. Bühne.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Magic Dinner.
@@ -680,7 +680,7 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Anlässe in {data.name}.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Hochzeit. Firma.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Geburtstag.
@@ -851,7 +851,7 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zauberer buchen {data.name} — so läuft's.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Vier Schritte.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Kein Stress.
@@ -934,7 +934,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Hochzeitszauberer {data.name}.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground mb-8">
               Magie beim Sektempfang.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Beim Dinner. Vor dem Tanz.
@@ -1081,7 +1081,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Firmenzauberer {data.name}.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground mb-8">
               Corporate-Entertainment, das{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 der Vorstand zückt
@@ -1175,7 +1175,7 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was ich garantiere.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Sechs{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Garantien
@@ -1285,7 +1285,7 @@ const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Magic Dinner {data.name}.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Drei Gänge. Drei{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Magie-Routinen.
@@ -1529,7 +1529,7 @@ const LocationsSection = ({
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Event-Locations in {data.name}.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               In den{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 bekanntesten Locations
@@ -1610,7 +1610,7 @@ const StimmenSection = ({ data }: { data: Stadt }) => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Was Gastgeber sagen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             5,0 Sterne.
             <br />
             <span>30+ Bewertungen.</span>
@@ -1697,7 +1697,7 @@ const VideoSection = ({ data }: { data: Stadt }) => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Showreel.
           </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
             Sieh dir den{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               Zauberer
@@ -1811,7 +1811,7 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
           strokeWidth={1.25}
         />
         <blockquote className="max-w-5xl mx-auto text-center">
-          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
+          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Drei Sekunden Stille.{" "}
             <span style={{ color: "#f3d9a8" }}>
               Dann lacht ein Saal in {data.name}.
@@ -1860,7 +1860,7 @@ const FAQSection = ({ data }: { data: Stadt }) => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Zauberer {data.name}.<br />
             <span>Was vorher gefragt wird.</span>
           </h2>
@@ -1938,7 +1938,7 @@ const LangTextSection = ({ data }: { data: Stadt }) => {
           >
             Alles, was du wissen musst.
           </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2.25rem,5vw,4.5rem)] text-foreground mb-12 text-center">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.875rem,3.5vw,3rem)] text-foreground mb-12 text-center">
             Zauberer {data.name} —{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               ausführlich erklärt.
@@ -2121,7 +2121,7 @@ const FinalCTA = ({ data }: { data: Stadt }) => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Zauberer für {data.name} buchen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Dein Event in{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               {data.name}

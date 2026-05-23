@@ -280,7 +280,7 @@ const GrosseLogoCloud = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Siebzehn von zweihundert.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground pr-4 break-words">
               {"Wer mich "}
               <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 gebucht hat
@@ -669,7 +669,7 @@ const StatsEditorialSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was zehn Jahre auf der Bühne zusammenrechnen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground">
               Was ich seit 2016
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -928,7 +928,7 @@ const CaseStudiesSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Drei Top-Referenzen, in der Tiefe.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground">
               VKB. STRABAG.
               <br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
@@ -1113,7 +1113,7 @@ const BranchenListeSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Sechzehn Branchen, ein Ansprechpartner.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground pr-4 break-words">
               {"Quer durch "}
               <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 die Branchen
@@ -1206,7 +1206,7 @@ const StimmenSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Drei Stimmen, ungekürzt.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground pr-4 break-words">
               {"Was Kunden "}
               <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 sagen
@@ -1312,7 +1312,7 @@ const VideoSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               TVA · TV-Auftritt 2025.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground pr-4 break-words">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground pr-4 break-words">
               {"Live im "}
               <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 Fernsehen
@@ -1433,7 +1433,7 @@ const ZeitleisteSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zehn Jahre, in sieben Stationen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.2vw,4rem)] text-foreground pr-4 break-words">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground pr-4 break-words">
               {"2016 — "}
               <span style={{ color: ACCENT, paddingRight: "0.18em" }}>
                 Heute
@@ -1498,7 +1498,7 @@ const PullQuoteSection = () => {
       <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
-          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
+          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             {"Zweihundert Abende."}{" "}
             <span style={{ color: "#f3d9a8" }}>
               Eine Stille immer.
@@ -1556,7 +1556,7 @@ const FAQSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen zu Referenzen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.2vw,3.75rem)] text-foreground pr-4 break-words">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground pr-4 break-words">
             Was vorher{" "}
             <span>gefragt wird</span>.
           </h2>
@@ -1602,7 +1602,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Diskret. Persönlich. Mit Branchen-Match.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)]">
             Schreib mir.
             <br />
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>

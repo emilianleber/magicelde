@@ -320,7 +320,7 @@ const AblaufSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               So einfach läuft das.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground">
               Vier Schritte vom{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Tisch zur Pointe
@@ -401,7 +401,7 @@ const WannWoSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4">
               Wann & wo.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.5rem)] text-foreground mb-6">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.625rem)] text-foreground mb-6">
               Sommerabend in{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Sinzing
@@ -560,7 +560,7 @@ const ReservierungsSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               Tisch reservieren.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground mb-6">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground mb-6">
               Platz sichern.<br />
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Sommerabend buchen.
@@ -818,7 +818,7 @@ const WasErwartetSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
               Was dich erwartet.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground">
               Sechs Dinge die diesen{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Abend ausmachen
@@ -914,7 +914,7 @@ const FAQSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
             Häufige Fragen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,3.75rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground">
             Was vorher{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               gefragt wird.
@@ -1091,7 +1091,7 @@ const FinalCTA = () => (
         <p className={`text-base md:text-lg text-white/55 mb-5`}>
           Magic Dinner Summer Edition · 11. Juli 2026.
         </p>
-        <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.8vw,4rem)]">
+        <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)]">
           Tisch sichern.<br />
           <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
             Magie bekommen.

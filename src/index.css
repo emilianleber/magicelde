@@ -142,11 +142,11 @@
   }
 
   .headline-section {
-    @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.08] tracking-normal;
+    @apply font-display text-[1.875rem] sm:text-[2.25rem] md:text-[2.625rem] lg:text-[3rem] font-bold leading-[1.1] tracking-normal;
   }
 
   .headline-sub {
-    @apply font-display text-2xl md:text-3xl lg:text-4xl font-bold leading-[1.12] tracking-normal;
+    @apply font-display text-xl md:text-2xl lg:text-[1.75rem] font-bold leading-[1.18] tracking-normal;
   }
 
   .text-body {

@@ -198,7 +198,7 @@ const SchnittstellenSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wie wir mit Agenturen arbeiten.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Klare{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Schnittstellen</span>. Keine Überraschungen.
             </h2>
@@ -249,7 +249,7 @@ const VorteileSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Sechs Gründe für Agenturen.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Was Eventagenturen bei uns{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>konkret bekommen</span>.
             </h2>
@@ -394,7 +394,7 @@ const SchnellangebotSection = () => {
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className={`lg:col-span-5`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Schnellangebot.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5vw,4.5rem)] text-foreground mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.5vw,3rem)] text-foreground mb-8">
               In{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>8 Stunden</span>{" "}
               auf eurem Schreibtisch.
@@ -494,7 +494,7 @@ const AgenturCaseSection = () => {
           </div>
           <div className={`lg:col-span-7`} style={{ animationDelay: "0.15s" }}>
             <p className="text-[11px] tracking-[0.18em] uppercase font-semibold mb-4" style={{ color: ACCENT }}>Case-Study mit Agentur-Beteiligung</p>
-            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4vw,3.25rem)] text-foreground mb-8">
+            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.625rem)] text-foreground mb-8">
               Magic Camp für{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>200 Gäste</span>.
             </h2>
@@ -553,7 +553,7 @@ const FAQSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen aus dem Agentur-Kontext.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Was Eventagenturen<br /><span>vorher fragen.</span>
           </h2>
         </div>
@@ -589,7 +589,7 @@ const FinalCTA = () => {
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Für Eventagenturen & Veranstaltungsplaner.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Schnellangebot in{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>8 Stunden</span>.
           </h2>

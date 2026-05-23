@@ -154,7 +154,7 @@ const Hero = ({ service, city, h1 }: { service: ServiceFormat; city: Stadt; h1: 
         <p className="text-[11px] tracking-[0.22em] uppercase font-semibold text-white/70 mb-4">
           {service.hero.eyebrow}
         </p>
-        <h1 className="font-display font-black tracking-[-0.03em] leading-[1.0] text-[clamp(2.25rem,6vw,5.5rem)] text-white max-w-4xl">
+        <h1 className="font-display font-black tracking-[-0.03em] leading-[1.0] text-[clamp(1.875rem,4vw,3.25rem)] text-white max-w-4xl">
           {service.hero.titlePrefix}{" "}
           <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
             {city.name}.
@@ -371,7 +371,7 @@ const FinalCta = ({ service, city }: { service: ServiceFormat; city: Stadt }) =>
       <p className="text-[11px] tracking-[0.22em] uppercase font-semibold text-white/55 mb-5">
         {service.shortName} buchen
       </p>
-      <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,5vw,4rem)]">
+      <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.875rem)]">
         Bereit für{" "}
         <span className={SERIF_ITALIC} style={{ color: "#e4b8c0" }}>
           {service.shortName} in {city.name}?

@@ -169,7 +169,7 @@ const KpisSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Hebel für Messe-ROI.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Was Magie am Messestand{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>tatsächlich bewirkt</span>.
             </h2>
@@ -293,7 +293,7 @@ const AblaufSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">So läuft das ab.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Fünf Schritte zum{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Stand-Lead-Magneten</span>.
             </h2>
@@ -337,7 +337,7 @@ const MesseTypenSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wo das funktioniert.</p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Vier{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Setting-Typen</span>.
           </h2>
@@ -383,7 +383,7 @@ const CaseStudySection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6">
               Aus der Praxis.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2rem,5vw,4.5rem)]">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.75rem,3.5vw,2.875rem)]">
               Wie ein{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
                 Kartentrick
@@ -502,7 +502,7 @@ const MesseWocheSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Eine Messe-Woche.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Sechs Tage. Sechs{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Akte</span>.
             </h2>
@@ -578,7 +578,7 @@ const FAQSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Was Messeplaner<br /><span>vorher fragen.</span>
           </h2>
         </div>
@@ -614,7 +614,7 @@ const FinalCTA = () => {
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Für Messen und Roadshows.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Macht euren Stand zum{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>Gesprächsthema</span>.
           </h2>

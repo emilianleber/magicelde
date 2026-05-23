@@ -388,7 +388,7 @@ const DreiAkteSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Ein Tag, drei Energien.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Drei Akte.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Ein Tag.
@@ -601,7 +601,7 @@ const PolaroidWall = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Sechs Momente aus echten Hochzeiten.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.25rem,5.2vw,5.25rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
               Was Magie auf eurer Hochzeit{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 konkret bedeutet
@@ -902,7 +902,7 @@ const VertrauensSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was ich euch vorab schriftlich zusichere.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Eure Ringe.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Eure Routine.
@@ -1108,7 +1108,7 @@ const LocationSetupSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Egal wo ihr feiert.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Eure Location,{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 mein Setup
@@ -1531,7 +1531,7 @@ const BuchungsFlowSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Vom Erstkontakt bis zum Ja-Wort.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Vier Schritte.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Kein Stress.
@@ -1843,7 +1843,7 @@ const FAQSection = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
             Häufige Fragen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Was Brautpaare
             <br />
             <span>vor der Buchung fragen.</span>
@@ -1934,7 +1934,7 @@ const FinalCTA = () => {
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
             Macht euren Tag zum Tagesgespräch.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Eure Hochzeit.
             <br />
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>

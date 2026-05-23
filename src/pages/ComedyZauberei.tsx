@@ -236,7 +236,7 @@ const KonzeptIntroSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Was Comedy-Zauberei wirklich ist.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-8">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground mb-8">
               Nicht Trick.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Dann Witz.</span>
               <br />
@@ -362,7 +362,7 @@ const LachzaehlerSection = () => {
             <p className={`${SERIF_ITALIC} text-lg md:text-xl text-white/65 mb-6`}>
               Der Lachzähler.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-white">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-white">
               Siebzehn Lacher.{" "}
               <span style={{ color: "#f3d9a8" }}>
                 Zwanzig Minuten.
@@ -542,7 +542,7 @@ const SplitDiptychonSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Zwei Disziplinen, ein Auftritt.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Magie{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>und</span>{" "}
               Comedy.
@@ -713,7 +713,7 @@ const KomikDNASection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className="md:col-span-7">
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Vier Akte, eine Pointe.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Die DNA{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>eines Lachers</span>.
             </h2>
@@ -806,7 +806,7 @@ const ComedyAnteilSliderSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Wie viel Comedy ist drin?
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Drei{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Comedy-Modi</span>.
             </h2>
@@ -936,7 +936,7 @@ const PullQuoteSection = () => {
       <div className={`relative container px-6`}>
         <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
-          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
+          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Erste Pointe nach 18 Sekunden.{" "}
             <span style={{ color: "#f3d9a8" }}>
               Letzte vor dem Applaus.
@@ -1024,7 +1024,7 @@ const AnlassMatrixSection = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
           <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Wann Comedy-Zauberei trägt.</p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Fünf Anlässe.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Eine Pointe-DNA</span>.
             </h2>
@@ -1131,7 +1131,7 @@ const RepertoireBentoSection = () => {
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
               Vier Routinen aus dem Comedy-Set.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Pointe, Trick,{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>Pointe wieder</span>.
             </h2>
@@ -1390,7 +1390,7 @@ const StimmenSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Was Gastgeber sagen.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.5rem,6.5vw,6.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
             5,0 Sterne.
             <br />
             <span>30+ Bewertungen.</span>
@@ -1449,7 +1449,7 @@ const VideoSection = () => {
       <div className="container px-6">
         <div className={`max-w-3xl mx-auto text-center mb-14 md:mb-16`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">TV-Auftritt.</p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
             Comedy-Zauberei im{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
               TV
@@ -1583,7 +1583,7 @@ const FAQSection = () => {
       <div className="container px-6">
         <div className="max-w-2xl mb-14 md:mb-16">
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">Häufige Fragen.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Was vorher
             <br />
             <span>gefragt wird.</span>
@@ -1623,7 +1623,7 @@ const FinalCTA = () => {
       <div className="relative container px-6">
         <div className={`max-w-3xl mx-auto text-center`}>
           <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">Erste Pointe nach 18 Sekunden.</p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(2.5rem,5.5vw,5rem)]">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
             Comedy-Zauberei{" "}
             <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
               buchen

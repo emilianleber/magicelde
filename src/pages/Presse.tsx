@@ -305,7 +305,7 @@ const BekanntAusSection = () => {
             >
               Bekannt aus.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Fernsehen, Wettbewerbe{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 und 200+ Live-Bühnen
@@ -526,7 +526,7 @@ const PortfolioDownloadSection = () => {
             >
               Portfolio · PDF.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(2rem,4.5vw,4rem)] mb-7">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] mb-7">
               Komplettes Künstler-Portfolio.{" "}
               <span style={{ color: "#f3d9a8" }}>
                 Direkt-Download.
@@ -725,7 +725,7 @@ const PressemitteilungenSection = () => {
             >
               Aktuelle Pressemitteilungen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Was zuletzt{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 lief
@@ -852,7 +852,7 @@ const EPKDownloadSection = () => {
             >
               Pressekit · Electronic Press Kit.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Ein EPK.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Alles drin
@@ -1163,7 +1163,7 @@ const PressefotosSection = () => {
             >
               Pressefotos · Hi-Res 300 dpi.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Zehn Fotos.{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Print-ready
@@ -1357,7 +1357,7 @@ const BoilerplateSection = () => {
             >
               Boilerplate · drei Längen.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               50, 100,{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 250 Wörter
@@ -1494,7 +1494,7 @@ const PloetzlichMagieSection = () => {
             >
               Erste abendfüllende Tour-Show.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5rem)] text-foreground mb-7">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground mb-7">
               Plötzlich{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 Magie
@@ -1658,7 +1658,7 @@ const InterviewZitateSection = () => {
             >
               Interview-Zitate · zum Weiterverwenden.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               In{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 eigenen Worten
@@ -1758,7 +1758,7 @@ const PullQuoteSection = () => {
           strokeWidth={1.25}
         />
         <blockquote className="max-w-5xl mx-auto text-center">
-          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(2.25rem,5vw,4.75rem)]">
+          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Erstes TV-Interview{" "}
             <span style={{ color: "#f3d9a8" }}>
               mit 16
@@ -1798,7 +1798,7 @@ const VideoSection = () => {
             >
               Video-Mitschnitt · TVA 2024.
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               TV-Auftritt{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
                 im Mitschnitt
@@ -1896,7 +1896,7 @@ const PressFAQSection = () => {
           >
             Häufige Press-Fragen.
           </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2.25rem,5.5vw,5.5rem)] text-foreground">
+          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
             Was Redaktionen
             <br />
             <span>vorab fragen.</span>
@@ -1986,7 +1986,7 @@ const PressKontaktDirektSection = () => {
             >
               Direkter Press-Kontakt.
             </p>
-            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.0] text-[clamp(2.5rem,6vw,5.5rem)] mb-8">
+            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.0] text-[clamp(1.75rem,3.25vw,2.625rem)] mb-8">
               Schreib mir{" "}
               <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
                 direkt
