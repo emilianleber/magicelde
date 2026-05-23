@@ -2027,46 +2027,9 @@ const FinalCTA = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   JSON-LD — EntertainmentEvent + BreadcrumbList + AggregateRating
+   JSON-LD — BreadcrumbList + Person + Event (Magic Dinner Summer Edition)
    ═══════════════════════════════════════════════════════════ */
 const SITE_URL = "https://www.magicel.de/tickets";
-
-const buildEventLd = (t: TourDate) => ({
-  "@type": "TheaterEvent",
-  name: "Plötzlich Magie — Magic Meets Comedy",
-  description:
-    "Abendfüllende Bühnenshow mit Mentalmagie, Karten-Routinen und Comedy-Pointen. 90 Minuten Tour-Show von Emilian Leber.",
-  startDate: t.date,
-  eventStatus:
-    t.status === "Ausverkauft"
-      ? "https://schema.org/EventScheduled"
-      : "https://schema.org/EventScheduled",
-  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-  location: {
-    "@type": "Place",
-    name: t.venue,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: t.city,
-      addressCountry: "DE",
-    },
-  },
-  performer: {
-    "@type": "Person",
-    name: "Emilian Leber",
-    url: "https://www.magicel.de",
-  },
-  offers: {
-    "@type": "Offer",
-    availability:
-      t.status === "Ausverkauft"
-        ? "https://schema.org/SoldOut"
-        : t.status === "Demnächst"
-          ? "https://schema.org/PreOrder"
-          : "https://schema.org/InStock",
-    url: SITE_URL,
-  },
-});
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -2101,7 +2064,58 @@ const jsonLd = {
         worstRating: "1",
       },
     },
-    ...TOUR_DATES.map(buildEventLd),
+    {
+      "@type": "Event",
+      name: "Magic Dinner — Summer Edition",
+      description:
+        "Magic Dinner Summer Edition am 11. Juli 2026 ab 17:00 Uhr im Restaurant Wald & Wiese Sinzing. Tisch reservieren, à la carte essen, Close-Up-Magie am Tisch von Emilian Leber.",
+      startDate: "2026-07-11T17:00:00+02:00",
+      endDate: "2026-07-11T23:00:00+02:00",
+      eventStatus: "https://schema.org/EventScheduled",
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      image: ["https://www.magicel.de/og-image.jpg"],
+      url: "https://www.magicel.de/tickets/magic-dinner-summer-edition",
+      location: {
+        "@type": "Place",
+        name: "Restaurant Wald & Wiese",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Bruckdorfer Straße 42",
+          postalCode: "93161",
+          addressLocality: "Sinzing",
+          addressRegion: "Bayern",
+          addressCountry: "DE",
+        },
+        url: "https://restaurant-waldwiese.de",
+      },
+      performer: {
+        "@type": "Person",
+        name: "Emilian Leber",
+        url: "https://www.magicel.de",
+      },
+      organizer: [
+        {
+          "@type": "Organization",
+          name: "Restaurant Wald & Wiese",
+          url: "https://restaurant-waldwiese.de",
+        },
+        {
+          "@type": "Person",
+          name: "Emilian Leber",
+          url: "https://www.magicel.de",
+        },
+      ],
+      offers: {
+        "@type": "Offer",
+        url: "https://www.magicel.de/tickets/magic-dinner-summer-edition",
+        availability: "https://schema.org/InStock",
+        priceCurrency: "EUR",
+        price: "0",
+        description:
+          "Reservierung kostenlos. Verzehr à la carte aus der Restaurantkarte.",
+        validFrom: "2026-04-01T00:00:00+02:00",
+      },
+    },
   ],
 };
 
