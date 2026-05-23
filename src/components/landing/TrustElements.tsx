@@ -128,6 +128,7 @@ const clientLogos: { name: string; logo?: string }[] = [
   { name: "Wald & Wiese", logo: "/logos/wald-wiese.png" },
   { name: "The Greatest Talent", logo: "/logos/greatest-talent.png" },
   { name: "Stadt Regensburg", logo: "/logos/stadt-regensburg.png" },
+  { name: "Stadt Deggendorf", logo: "/logos/stadt-deggendorf.svg" },
   { name: "Turmtheater Regensburg", logo: "/logos/turmtheater.png" },
 ];
 

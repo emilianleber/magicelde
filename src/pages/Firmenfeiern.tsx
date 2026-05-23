@@ -699,6 +699,7 @@ const INDUSTRIES_LOGOS = [
   { name: "Schneider Weisse", logo: "/logos/schneider-weisse.png" },
   { name: "Wächter", logo: "/logos/waechter.png" },
   { name: "Stadt Regensburg", logo: "/logos/stadt-regensburg.png" },
+  { name: "Stadt Deggendorf", logo: "/logos/stadt-deggendorf.svg" },
   { name: "Steinhofer Ingenieure", logo: "/logos/steinhofer.png" },
   { name: "Business Entertainment", logo: "/logos/business-entertainment.png" },
   { name: "DPSG", logo: "/logos/dpsg.png" },

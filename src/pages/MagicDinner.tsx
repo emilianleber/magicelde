@@ -450,6 +450,7 @@ const KUNDEN_LOGOS = [
   { name: "Schneider Weisse",            logo: "/logos/schneider-weisse.png" },
   { name: "Wald & Wiese",                logo: "/logos/wald-wiese.png" },
   { name: "Stadt Regensburg",            logo: "/logos/stadt-regensburg.png" },
+  { name: "Stadt Deggendorf",            logo: "/logos/stadt-deggendorf.svg" },
   { name: "Oktoberfest München",         logo: "/logos/oktoberfest.png" },
   { name: "Turmtheater Regensburg",      logo: "/logos/turmtheater.png" },
   { name: "Steinhofer Ingenieure",       logo: "/logos/steinhofer.png" },

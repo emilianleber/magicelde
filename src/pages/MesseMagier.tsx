@@ -360,6 +360,122 @@ const MesseTypenSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   4.5 · CASE STUDY — Stadt Deggendorf, 50 Jahre Tourist-Information
+   ═══════════════════════════════════════════════════════════ */
+const CaseStudySection = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section
+      ref={ref}
+      className="relative bg-[#08060c] text-white py-24 md:py-36 overflow-hidden"
+    >
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.06] pointer-events-none"
+        style={{
+          backgroundImage: `radial-gradient(circle at 20% 30%, ${ACCENT} 0%, transparent 50%), radial-gradient(circle at 80% 70%, ${ACCENT_SOFT} 0%, transparent 50%)`,
+        }}
+      />
+
+      <div className="container px-6 relative">
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-10 mb-12 md:mb-16">
+          <div className="md:col-span-7">
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6">
+              Aus der Praxis.
+            </p>
+            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(2rem,5vw,4.5rem)]">
+              Wie ein{" "}
+              <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
+                Kartentrick
+              </span>{" "}
+              Besucher zu den Ständen führt.
+            </h2>
+          </div>
+          <div className="md:col-span-5 md:pt-3 flex md:justify-end">
+            <img
+              src="/logos/stadt-deggendorf.svg"
+              alt="Stadt Deggendorf"
+              className="h-9 md:h-11 w-auto opacity-90"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-12 gap-x-12 gap-y-10">
+          <aside className="md:col-span-4">
+            <dl className="space-y-5 text-sm">
+              <div>
+                <dt className="text-[10px] tracking-[0.2em] uppercase font-semibold text-white/45 mb-1.5">
+                  Auftraggeber
+                </dt>
+                <dd className="text-white/90">Stadt Deggendorf · Tourist-Information</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] tracking-[0.2em] uppercase font-semibold text-white/45 mb-1.5">
+                  Anlass
+                </dt>
+                <dd className="text-white/90">50-jähriges Jubiläum der Tourist-Information</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] tracking-[0.2em] uppercase font-semibold text-white/45 mb-1.5">
+                  Setting
+                </dt>
+                <dd className="text-white/90">
+                  Messestand im Foyer · Besucher-Ansprache auf zwei Seiten des Hauses
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[10px] tracking-[0.2em] uppercase font-semibold text-white/45 mb-1.5">
+                  Format
+                </dt>
+                <dd className="text-white/90">Close-Up · Walk-Around · Lead-Funnel</dd>
+              </div>
+            </dl>
+          </aside>
+
+          <div className="md:col-span-8 space-y-6 text-[15px] md:text-base leading-[1.7] text-white/80">
+            <p>
+              Die Tourist-Information feiert ihr 50-jähriges Bestehen — und steht dabei
+              vor dem klassischen Messe-Problem: Wie macht man die eigenen Stände im
+              eigenen Haus sichtbar, wenn Besucher das Gebäude eh nur als Durchgang
+              wahrnehmen?
+            </p>
+            <p>
+              <span className="text-white font-semibold">Die Lösung war keine Bühne.</span>{" "}
+              Sondern Close-Up-Magie an zwei Punkten im Haus — Eingang Nord und Eingang
+              Süd. Jeder, der reinkam, lief in einen kurzen, irritierend guten Effekt.
+              Karten in der Hand, Sekundenmoment Staunen — und direkt danach der weiche
+              Verweis: <em>„Übrigens, ein paar Meter weiter findest du den Stand für…"</em>
+            </p>
+            <p>
+              Der Trick (im wörtlichen Sinn) ist die Aufmerksamkeits-Ökonomie:
+              Magie kauft drei bis fünf Sekunden ungeteilte Konzentration. In diesen
+              Sekunden landet die Info, die sonst am Plakat vorbeigerauscht wäre. Aus
+              dem Durchläufer wird ein Standbesucher.
+            </p>
+            <div className="pt-4 flex flex-wrap gap-3">
+              <Link
+                to="/buchung?format=Messe-Magie"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95 transition-colors"
+              >
+                Jubiläum oder Messe planen
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+              <a
+                href="mailto:el@magicel.de?subject=Stand-Magie-Anfrage"
+                className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white/70 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
+              >
+                Direkt schreiben
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
    5 · MESSE-WOCHE — Editorial-Timeline (kreativer als Pricing-Cards)
    Eine typische Messe-Woche von Montag bis Sonntag
    ═══════════════════════════════════════════════════════════ */
@@ -547,6 +663,7 @@ const MesseMagier = () => (
         <KpisSection />
         <AblaufSection />
         <MesseTypenSection />
+        <CaseStudySection />
         <MesseWocheSection />
         <FAQSection />
         <FinalCTA />

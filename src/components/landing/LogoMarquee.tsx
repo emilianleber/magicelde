@@ -10,6 +10,7 @@ const LOGOS = [
   { src: "/logos/schneider-weisse.png", alt: "Schneider Weisse" },
   { src: "/logos/wald-wiese.png", alt: "Wald & Wiese" },
   { src: "/logos/stadt-regensburg.png", alt: "Stadt Regensburg" },
+  { src: "/logos/stadt-deggendorf.svg", alt: "Stadt Deggendorf" },
   { src: "/logos/oktoberfest.png", alt: "Oktoberfest" },
   { src: "/logos/turmtheater.png", alt: "Turmtheater" },
   { src: "/logos/greatest-talent.png", alt: "Greatest Talent (TV)" },
