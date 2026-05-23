@@ -1,60 +1,97 @@
 /**
- * Post-build script: generates route-specific HTML files with correct
- * title/description/canonical so Googlebot sees them without JS rendering.
- * Vercel serves static files before rewrites, so this works automatically.
+ * Post-build: schreibt route-spezifische dist/<path>/index.html mit
+ * korrektem <title>, <meta description>, <link canonical>, og:* und
+ * twitter:* damit Googlebot pro Route unique Signale sieht (ohne JS-Render).
+ *
+ * Vercel serviert statische Dateien vor den SPA-Rewrites — funktioniert out-of-the-box.
+ *
+ * Datenquellen (Single Source of Truth = .ts-Files, via Regex extrahiert):
+ *   - src/data/staedte.ts        → 109 Städte ({slug, name})
+ *   - src/data/serviceFormats.ts → 5 Service-Formate ({slug, routePrefix, metaTitle, metaDescription})
+ *   - src/data/blogPosts.ts      → 18 Blog-Posts ({slug, title, excerpt})
+ *   - src/data/wissenTopics.ts   → 8 Wissen-Pages ({slug, metaTitle, metaDescription})
+ *
+ * Output:
+ *   - 23 Hauptseiten + 109 Städte + 545 Service-Stadt-Kombis + 18 Blog + 8 Wissen
+ *   = ~703 prerendered HTML-Files (matched sitemap.xml).
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 const BASE = 'https://www.magicel.de';
+const ROOT = process.cwd();
+const DIST = join(ROOT, 'dist');
 
-const cities = [
-  { slug: 'regensburg', name: 'Regensburg' },
-  { slug: 'muenchen', name: 'München' },
-  { slug: 'nuernberg', name: 'Nürnberg' },
-  { slug: 'augsburg', name: 'Augsburg' },
-  { slug: 'wuerzburg', name: 'Würzburg' },
-  { slug: 'ingolstadt', name: 'Ingolstadt' },
-  { slug: 'passau', name: 'Passau' },
-  { slug: 'landshut', name: 'Landshut' },
-  { slug: 'bamberg', name: 'Bamberg' },
-  { slug: 'bayreuth', name: 'Bayreuth' },
-  { slug: 'erlangen', name: 'Erlangen' },
-  { slug: 'fuerth', name: 'Fürth' },
-  { slug: 'rosenheim', name: 'Rosenheim' },
-  { slug: 'kempten', name: 'Kempten' },
-  { slug: 'aschaffenburg', name: 'Aschaffenburg' },
-  { slug: 'straubing', name: 'Straubing' },
-  { slug: 'freising', name: 'Freising' },
-  { slug: 'berlin', name: 'Berlin' },
-  { slug: 'hamburg', name: 'Hamburg' },
-  { slug: 'frankfurt', name: 'Frankfurt' },
-  { slug: 'stuttgart', name: 'Stuttgart' },
-  { slug: 'koeln', name: 'Köln' },
-  { slug: 'duesseldorf', name: 'Düsseldorf' },
-  { slug: 'dresden', name: 'Dresden' },
-  { slug: 'leipzig', name: 'Leipzig' },
-  { slug: 'hannover', name: 'Hannover' },
-  { slug: 'dortmund', name: 'Dortmund' },
-  { slug: 'bremen', name: 'Bremen' },
-  { slug: 'salzburg', name: 'Salzburg' },
-  { slug: 'wien', name: 'Wien' },
-  { slug: 'muenster', name: 'Münster' },
-  { slug: 'bochum', name: 'Bochum' },
-  { slug: 'bielefeld', name: 'Bielefeld' },
-  { slug: 'bonn', name: 'Bonn' },
-  { slug: 'wuppertal', name: 'Wuppertal' },
-  { slug: 'mannheim', name: 'Mannheim' },
-  { slug: 'karlsruhe', name: 'Karlsruhe' },
-  { slug: 'wiesbaden', name: 'Wiesbaden' },
-  { slug: 'mainz', name: 'Mainz' },
-  { slug: 'magdeburg', name: 'Magdeburg' },
-  { slug: 'erfurt', name: 'Erfurt' },
-  { slug: 'freiburg', name: 'Freiburg' },
-  { slug: 'luebeck', name: 'Lübeck' },
-  { slug: 'kiel', name: 'Kiel' },
-  { slug: 'braunschweig', name: 'Braunschweig' },
-];
+/* ────────────────────────────────────────────────────────────
+   Data loaders — Regex über .ts-Files (kein TS-Compile nötig)
+   ──────────────────────────────────────────────────────────── */
+
+function read(rel) {
+  return readFileSync(join(ROOT, rel), 'utf-8');
+}
+
+function loadCities() {
+  const content = read('src/data/staedte.ts');
+  const start = content.indexOf('export const staedte');
+  const body = start === -1 ? content : content.slice(start);
+  const out = [];
+  const re = /\{\s*slug:\s*"([^"]+)",\s*name:\s*"([^"]+)"/g;
+  let m;
+  while ((m = re.exec(body)) !== null) {
+    out.push({ slug: m[1], name: m[2] });
+  }
+  return out;
+}
+
+function loadServiceFormats() {
+  const content = read('src/data/serviceFormats.ts');
+  const start = content.indexOf('export const SERVICE_FORMATS');
+  const body = start === -1 ? content : content.slice(start);
+  const out = [];
+  // Order in serviceFormats.ts: slug → ... → routePrefix → ... → metaTitle → metaDescription
+  const re = /slug:\s*"([^"]+)"[\s\S]*?routePrefix:\s*"([^"]+)"[\s\S]*?metaTitle:\s*"([^"]+)",\s*metaDescription:\s*"([^"]+)"/g;
+  let m;
+  while ((m = re.exec(body)) !== null) {
+    out.push({
+      slug: m[1],
+      routePrefix: m[2],
+      metaTitleTpl: m[3],
+      metaDescriptionTpl: m[4],
+    });
+  }
+  return out;
+}
+
+function loadBlogPosts() {
+  const content = read('src/data/blogPosts.ts');
+  const start = content.indexOf('export const blogPosts');
+  const body = start === -1 ? content : content.slice(start);
+  const out = [];
+  const re = /slug:\s*"([^"]+)",\s*title:\s*"([^"]+)"[\s\S]*?excerpt:\s*"([^"]+)"/g;
+  let m;
+  while ((m = re.exec(body)) !== null) {
+    out.push({ slug: m[1], title: m[2], excerpt: m[3] });
+  }
+  return out;
+}
+
+function loadWissenTopics() {
+  const content = read('src/data/wissenTopics.ts');
+  const start = content.indexOf('export const wissenTopics');
+  const body = start === -1 ? content : content.slice(start);
+  const out = [];
+  const re = /slug:\s*"([^"]+)"[\s\S]*?metaTitle:\s*"([^"]+)",\s*metaDescription:\s*"([^"]+)"/g;
+  let m;
+  while ((m = re.exec(body)) !== null) {
+    out.push({ slug: m[1], metaTitle: m[2], metaDescription: m[3] });
+  }
+  return out;
+}
+
+/* ────────────────────────────────────────────────────────────
+   Statische Routen (Single Source of Truth — synchronisiert
+   mit scripts/generate-sitemap.mjs)
+   ──────────────────────────────────────────────────────────── */
 
 const staticRoutes = [
   {
@@ -76,10 +113,40 @@ const staticRoutes = [
     ogTitle: 'Zauberer für Firmenfeiern – Emilian Leber',
   },
   {
-    path: '/geburtstage',
-    title: 'Zauberer für Geburtstage – Emilian Leber | Geburtstagsshow',
-    description: 'Zauberer für Geburtstage: Emilian Leber macht Ihren runden Geburtstag unvergesslich – mit interaktiver Close-Up Magie und Comedy-Show für Erwachsene.',
-    ogTitle: 'Zauberer für Geburtstage – Emilian Leber',
+    path: '/magic-dinner',
+    title: 'Magic Dinner – Emilian Leber | Dinner und Zaubershow',
+    description: 'Magic Dinner mit Emilian Leber: Ein unvergesslicher Abend aus Dinner und Magie – exklusiv, interaktiv und einzigartig. Für besondere Anlässe und Events.',
+    ogTitle: 'Magic Dinner – Emilian Leber | Dinner & Zaubershow',
+  },
+  {
+    path: '/tickets',
+    title: 'Tickets & Termine — Magic Dinner Summer Edition | Emilian Leber',
+    description: 'Aktuelle Tickets & Termine — Magic Dinner Summer Edition am 11.07.2026 im Restaurant Wald & Wiese in Sinzing bei Regensburg. Reservierung beim Restaurant.',
+    ogTitle: 'Tickets & Termine — Magic Dinner Summer Edition',
+  },
+  {
+    path: '/tickets/magic-dinner-summer-edition',
+    title: 'Magic Dinner Summer Edition — 11. Juli 2026 | Wald & Wiese Sinzing',
+    description: 'Magic Dinner Summer Edition am 11. Juli 2026 ab 17:00 Uhr im Restaurant Wald & Wiese Sinzing bei Regensburg. Tisch reservieren, à la carte essen, Close-Up-Magie am Tisch von Emilian Leber.',
+    ogTitle: 'Magic Dinner Summer Edition — 11. Juli 2026',
+  },
+  {
+    path: '/buchung',
+    title: 'Zauberer buchen – Emilian Leber | Unverbindlich anfragen',
+    description: 'Zauberer buchen: Emilian Leber kostenlos und unverbindlich anfragen. Für Firmenfeiern, Hochzeiten, Geburtstage und Events deutschlandweit.',
+    ogTitle: 'Zauberer buchen – Emilian Leber',
+  },
+  {
+    path: '/event-agenturen',
+    title: 'Zauberer für Event-Agenturen – Emilian Leber | White-Label & Premium-Acts',
+    description: 'Event-Agenturen: Verlässlicher Showact mit Pressekit, Tech-Rider und kurzen Reaktionszeiten. Über 100 Firmenevents, deutschlandweit buchbar — Emilian Leber.',
+    ogTitle: 'Zauberer für Event-Agenturen – Emilian Leber',
+  },
+  {
+    path: '/messe-magier',
+    title: 'Messe-Magier – Emilian Leber | Standmagie & Lead-Magnet',
+    description: 'Messe-Magier Emilian Leber: Standmagie, die Besucher anzieht und Gespräche eröffnet. Branded Routinen, professioneller Auftritt, messbarer Lead-Effekt.',
+    ogTitle: 'Messe-Magier – Emilian Leber | Standmagie',
   },
   {
     path: '/buehnenshow',
@@ -94,10 +161,16 @@ const staticRoutes = [
     ogTitle: 'Close-Up Magie – Emilian Leber | Tischzauberei',
   },
   {
-    path: '/magic-dinner',
-    title: 'Magic Dinner – Emilian Leber | Dinner und Zaubershow',
-    description: 'Magic Dinner mit Emilian Leber: Ein unvergesslicher Abend aus Dinner und Magie – exklusiv, interaktiv und einzigartig. Für besondere Anlässe und Events.',
-    ogTitle: 'Magic Dinner – Emilian Leber | Dinner & Zaubershow',
+    path: '/geburtstage',
+    title: 'Zauberer für Geburtstage – Emilian Leber | Geburtstagsshow',
+    description: 'Zauberer für Geburtstage: Emilian Leber macht Ihren runden Geburtstag unvergesslich – mit interaktiver Close-Up Magie und Comedy-Show für Erwachsene.',
+    ogTitle: 'Zauberer für Geburtstage – Emilian Leber',
+  },
+  {
+    path: '/comedy-zauberei',
+    title: 'Comedy-Zauberei – Emilian Leber | Wenn Magie auf Pointe trifft',
+    description: 'Comedy-Zauberei von Emilian Leber: Magie und Humor verschmelzen — Routinen, die nicht nur staunen lassen, sondern lachen. Für Firmenfeiern, Galas und Events.',
+    ogTitle: 'Comedy-Zauberei – Emilian Leber',
   },
   {
     path: '/moderation',
@@ -106,28 +179,16 @@ const staticRoutes = [
     ogTitle: 'Moderator & Zauberer – Emilian Leber',
   },
   {
+    path: '/referenzen',
+    title: 'Referenzen & Bewertungen – Emilian Leber | Zauberer',
+    description: 'Bewertungen und Referenzen von Emilian Leber: Über 30 begeisterte Kunden, 5,0 Sterne auf ProvenExpert. Lesen Sie echte Erfahrungsberichte.',
+    ogTitle: 'Referenzen – Emilian Leber | 5,0 Sterne',
+  },
+  {
     path: '/ueber-mich',
     title: 'Über Emilian Leber – Zauberer & Showkünstler aus Regensburg',
     description: 'Emilian Leber – professioneller Zauberer und Showkünstler aus Regensburg. Modernes Entertainment für Firmenfeiern, Hochzeiten und Events deutschlandweit.',
     ogTitle: 'Über Emilian Leber – Zauberer & Showkünstler',
-  },
-  {
-    path: '/referenzen',
-    title: 'Referenzen & Bewertungen – Emilian Leber | Zauberer',
-    description: 'Bewertungen und Referenzen von Emilian Leber: Über 34 begeisterte Kunden, 4.9 Sterne auf ProvenExpert. Lesen Sie echte Erfahrungsberichte.',
-    ogTitle: 'Referenzen – Emilian Leber | 4.9 Sterne',
-  },
-  {
-    path: '/faq',
-    title: 'FAQ – Häufige Fragen zum Zauberer buchen | Emilian Leber',
-    description: 'Häufige Fragen zum Zauberer buchen: Kosten, Ablauf, Formate und mehr. Emilian Leber beantwortet alle Fragen rund um Close-Up Magie, Bühnenshow und Magic Dinner.',
-    ogTitle: 'FAQ – Zauberer buchen | Emilian Leber',
-  },
-  {
-    path: '/presse',
-    title: 'Presse – Emilian Leber | Pressematerial & Downloads',
-    description: 'Pressematerial von Emilian Leber: Fotos, Texte und Informationen für Medien und Veranstalter. Professioneller Zauberer aus Regensburg.',
-    ogTitle: 'Presse – Emilian Leber',
   },
   {
     path: '/kontakt',
@@ -136,21 +197,49 @@ const staticRoutes = [
     ogTitle: 'Kontakt – Emilian Leber | Zauberer anfragen',
   },
   {
-    path: '/buchung',
-    title: 'Zauberer buchen – Emilian Leber | Unverbindlich anfragen',
-    description: 'Zauberer buchen: Emilian Leber kostenlos und unverbindlich anfragen. Für Firmenfeiern, Hochzeiten, Geburtstage und Events deutschlandweit.',
-    ogTitle: 'Zauberer buchen – Emilian Leber',
+    path: '/presse',
+    title: 'Presse – Emilian Leber | Pressematerial & Downloads',
+    description: 'Pressematerial von Emilian Leber: Fotos, Texte und Informationen für Medien und Veranstalter. Professioneller Zauberer aus Regensburg.',
+    ogTitle: 'Presse – Emilian Leber',
   },
   {
-    path: '/tickets',
-    title: 'Tickets – Emilian Leber | Zaubershow Tickets',
-    description: 'Tickets für die Zaubershow von Emilian Leber. Jetzt Plätze sichern für unvergessliche Abende voller Magie, Comedy und Staunen.',
-    ogTitle: 'Tickets – Emilian Leber | Zaubershow',
+    path: '/blog',
+    title: 'Magazin – Emilian Leber | Wissen rund um Zauberkunst & Events',
+    description: 'Das Magazin von Emilian Leber: Artikel zu Hochzeitszauberer, Firmenfeier-Magie, Magic Dinner und Bühnenshow — aus 10+ Jahren Erfahrung.',
+    ogTitle: 'Magazin – Emilian Leber',
+  },
+  {
+    path: '/faq',
+    title: 'FAQ – Häufige Fragen zum Zauberer buchen | Emilian Leber',
+    description: 'Häufige Fragen zum Zauberer buchen: Kosten, Ablauf, Formate und mehr. Emilian Leber beantwortet alle Fragen rund um Close-Up Magie, Bühnenshow und Magic Dinner.',
+    ogTitle: 'FAQ – Zauberer buchen | Emilian Leber',
+  },
+  {
+    path: '/datenschutz',
+    title: 'Datenschutz – Emilian Leber',
+    description: 'Datenschutzerklärung von Emilian Leber — Zauberer & Showkünstler.',
+    ogTitle: 'Datenschutz – Emilian Leber',
+  },
+  {
+    path: '/impressum',
+    title: 'Impressum – Emilian Leber',
+    description: 'Impressum & rechtliche Angaben von Emilian Leber — Zauberer & Showkünstler aus Regensburg.',
+    ogTitle: 'Impressum – Emilian Leber',
+  },
+  {
+    path: '/agb',
+    title: 'AGB – Emilian Leber',
+    description: 'Allgemeine Geschäftsbedingungen von Emilian Leber — Zauberer & Showkünstler.',
+    ogTitle: 'AGB – Emilian Leber',
   },
 ];
 
-function esc(str) {
-  return str
+/* ────────────────────────────────────────────────────────────
+   Meta-Injection in dist/index.html-Shell
+   ──────────────────────────────────────────────────────────── */
+
+function esc(s) {
+  return s
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -174,33 +263,78 @@ function injectMeta(html, { title, description, canonical, ogTitle }) {
       `$1${esc(ogTitle || title)}$2`);
 }
 
-const baseHtml = readFileSync('dist/index.html', 'utf-8');
-let count = 0;
-
-// Static routes
-for (const route of staticRoutes) {
-  const canonical = `${BASE}${route.path}`;
-  const html = injectMeta(baseHtml, { ...route, canonical });
-  if (route.path === '/') {
-    writeFileSync('dist/index.html', html);
+function writeRoute(routePath, html) {
+  if (routePath === '/') {
+    writeFileSync(join(DIST, 'index.html'), html);
   } else {
-    const dir = join('dist', route.path.slice(1));
+    const dir = join(DIST, routePath.slice(1));
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, 'index.html'), html);
   }
+}
+
+/* ────────────────────────────────────────────────────────────
+   Main
+   ──────────────────────────────────────────────────────────── */
+
+const baseHtml = readFileSync(join(DIST, 'index.html'), 'utf-8');
+let count = 0;
+
+// 1) Statische Hauptseiten (23)
+for (const r of staticRoutes) {
+  const canonical = `${BASE}${r.path}`;
+  writeRoute(r.path, injectMeta(baseHtml, { ...r, canonical }));
   count++;
 }
 
-// City routes
-for (const city of cities) {
-  const canonical = `${BASE}/zauberer/${city.slug}`;
-  const title = `Zauberer ${city.name} – Emilian Leber | Zaubershow, Close-Up & Magic Dinner`;
-  const description = `Zauberer in ${city.name}: Emilian Leber begeistert mit interaktiver Close-Up Magie, Comedy-Zaubershow & Magic Dinner auf Hochzeiten, Firmenfeiern und Events in ${city.name}. Jetzt unverbindlich anfragen!`;
-  const html = injectMeta(baseHtml, { title, description, canonical, ogTitle: `Zauberer ${city.name} – Emilian Leber` });
-  const dir = join('dist', 'zauberer', city.slug);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, 'index.html'), html);
+// 2) Stadt-Pages /zauberer/:stadt (109)
+const cities = loadCities();
+if (cities.length === 0) throw new Error('inject-meta: keine Städte aus staedte.ts geladen');
+for (const c of cities) {
+  const canonical = `${BASE}/zauberer/${c.slug}`;
+  const title = `Zauberer ${c.name} – Emilian Leber | Zaubershow, Close-Up & Magic Dinner`;
+  const description = `Zauberer in ${c.name}: Emilian Leber begeistert mit interaktiver Close-Up Magie, Comedy-Zaubershow & Magic Dinner auf Hochzeiten, Firmenfeiern und Events in ${c.name}. Jetzt unverbindlich anfragen!`;
+  const ogTitle = `Zauberer ${c.name} – Emilian Leber`;
+  writeRoute(`/zauberer/${c.slug}`, injectMeta(baseHtml, { title, description, canonical, ogTitle }));
   count++;
 }
 
-console.log(`✓ Prerendered ${count} routes`);
+// 3) Service-Stadt-Kombis /zauberer-{service}/{stadt} (5 × 109 = 545)
+const formats = loadServiceFormats();
+if (formats.length === 0) throw new Error('inject-meta: keine Service-Formate aus serviceFormats.ts geladen');
+for (const f of formats) {
+  for (const c of cities) {
+    const canonical = `${BASE}${f.routePrefix}/${c.slug}`;
+    const title = f.metaTitleTpl.replace(/\{stadt\}/g, c.name);
+    const description = f.metaDescriptionTpl.replace(/\{stadt\}/g, c.name);
+    writeRoute(`${f.routePrefix}/${c.slug}`, injectMeta(baseHtml, { title, description, canonical, ogTitle: title }));
+    count++;
+  }
+}
+
+// 4) Blog-Posts /blog/:slug (18)
+const posts = loadBlogPosts();
+if (posts.length === 0) throw new Error('inject-meta: keine Blog-Posts aus blogPosts.ts geladen');
+for (const p of posts) {
+  const canonical = `${BASE}/blog/${p.slug}`;
+  const title = `${p.title} – Magazin | Emilian Leber`;
+  const ogTitle = p.title;
+  writeRoute(`/blog/${p.slug}`, injectMeta(baseHtml, { title, description: p.excerpt, canonical, ogTitle }));
+  count++;
+}
+
+// 5) Wissen-Pages /wissen/:slug (8)
+const topics = loadWissenTopics();
+if (topics.length === 0) throw new Error('inject-meta: keine Wissen-Topics aus wissenTopics.ts geladen');
+for (const w of topics) {
+  const canonical = `${BASE}/wissen/${w.slug}`;
+  writeRoute(`/wissen/${w.slug}`, injectMeta(baseHtml, {
+    title: w.metaTitle,
+    description: w.metaDescription,
+    canonical,
+    ogTitle: w.metaTitle,
+  }));
+  count++;
+}
+
+console.log(`✓ Prerendered ${count} routes (${staticRoutes.length} static + ${cities.length} cities + ${formats.length * cities.length} service-cities + ${posts.length} blog + ${topics.length} wissen)`);
