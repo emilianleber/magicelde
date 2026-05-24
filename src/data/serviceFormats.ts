@@ -24,7 +24,16 @@ export interface ServiceFormat {
   faqGlobal: { q: string; a: string }[]; // Format-spezifische FAQs (city-agnostic)
   ctaPrimary: string;
   detailHref: string; // Link auf die Detail-Format-Page
-  routePrefix: string; // /zauberer-hochzeit/ etc.
+  routePrefix: string; // /zauberer-hochzeit/ etc. — Slash trennt service+city
+  /**
+   * Optional: alternative URL-Form mit Bindestrich statt Slash zwischen
+   * Service und Stadt. Wenn gesetzt, ist DAS der canonical und wird in
+   * Sitemap + inject-meta verwendet. Beispiel für magic-dinner:
+   *   pathSeparator: "-"  →  /magic-dinner-stuttgart  (statt /zauberer-magic-dinner/stuttgart)
+   *   urlPrefix: "/magic-dinner"  (ohne abschliessenden Slash)
+   * Der alte URL-Pfad wird per Vercel-301-Redirect auf den neuen geleitet.
+   */
+  canonicalPrefix?: string; // z.B. "/magic-dinner" — Stadt wird mit "-" angehängt
 }
 
 export const SERVICE_FORMATS: ServiceFormat[] = [
@@ -153,6 +162,10 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
     shortName: "Magic Dinner",
     routePrefix: "/zauberer-magic-dinner",
     detailHref: "/magic-dinner",
+    // GSC: Sucher tippen "magic dinner stuttgart" / "magic dinner berlin" —
+    // keyword-tighter URL ist /magic-dinner-{stadt}. Alt-URL bleibt funktional
+    // (Vercel-301 → neue URL, siehe vercel.json).
+    canonicalPrefix: "/magic-dinner",
     hero: {
       eyebrow: "Magic Dinner — Restaurant-Erlebnis mit Tisch-Magie",
       titlePrefix: "Magic Dinner in",

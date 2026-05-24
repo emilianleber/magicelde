@@ -49,6 +49,7 @@ function loadServiceFormats() {
   const body = start === -1 ? content : content.slice(start);
   const out = [];
   // Order in serviceFormats.ts: slug → ... → routePrefix → ... → metaTitle → metaDescription
+  // canonicalPrefix ist optional → separater Lookup pro Format.
   const re = /slug:\s*"([^"]+)"[\s\S]*?routePrefix:\s*"([^"]+)"[\s\S]*?metaTitle:\s*"([^"]+)",\s*metaDescription:\s*"([^"]+)"/g;
   let m;
   while ((m = re.exec(body)) !== null) {
@@ -58,6 +59,21 @@ function loadServiceFormats() {
       metaTitleTpl: m[3],
       metaDescriptionTpl: m[4],
     });
+  }
+  // canonicalPrefix per slug aufspüren
+  for (const f of out) {
+    const re2 = new RegExp(`slug:\\s*"${f.slug.replace(/-/g, '\\-')}"[\\s\\S]*?canonicalPrefix:\\s*"([^"]+)"`);
+    const mm = body.match(re2);
+    // matched-block muss INNERHALB des aktuellen Format-Objekts liegen — heuristic:
+    // wenn das nächste "slug:" nach dem aktuellen vor canonicalPrefix kommt, ist's ein anderes Format.
+    if (mm) {
+      const idxSlug = body.indexOf(`slug: "${f.slug}"`);
+      const idxNextSlug = body.indexOf('slug: "', idxSlug + 1);
+      const idxCanonical = body.indexOf(mm[0]);
+      if (idxNextSlug === -1 || idxCanonical < idxNextSlug) {
+        f.canonicalPrefix = mm[1];
+      }
+    }
   }
   return out;
 }
@@ -300,14 +316,20 @@ for (const c of cities) {
 }
 
 // 3) Service-Stadt-Kombis /zauberer-{service}/{stadt} (5 × 109 = 545)
+// Ausnahme: Formate mit canonicalPrefix (z.B. magic-dinner) werden unter
+// /magic-dinner-{stadt} prerendert statt unter /zauberer-magic-dinner/{stadt}.
+// Die Alt-URL wird per Vercel-301 auf die Neu-URL weitergeleitet (vercel.json).
 const formats = loadServiceFormats();
 if (formats.length === 0) throw new Error('inject-meta: keine Service-Formate aus serviceFormats.ts geladen');
 for (const f of formats) {
   for (const c of cities) {
-    const canonical = `${BASE}${f.routePrefix}/${c.slug}`;
+    const urlPath = f.canonicalPrefix
+      ? `${f.canonicalPrefix}-${c.slug}`
+      : `${f.routePrefix}/${c.slug}`;
+    const canonical = `${BASE}${urlPath}`;
     const title = f.metaTitleTpl.replace(/\{stadt\}/g, c.name);
     const description = f.metaDescriptionTpl.replace(/\{stadt\}/g, c.name);
-    writeRoute(`${f.routePrefix}/${c.slug}`, injectMeta(baseHtml, { title, description, canonical, ogTitle: title }));
+    writeRoute(urlPath, injectMeta(baseHtml, { title, description, canonical, ogTitle: title }));
     count++;
   }
 }

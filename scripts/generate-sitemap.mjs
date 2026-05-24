@@ -113,13 +113,18 @@ async function main() {
   }
 
   // Service-Stadt-Kombi-Pages /zauberer-[format]/[stadt]
+  // Ausnahme: magic-dinner nutzt die neue keyword-tighter URL /magic-dinner-[stadt].
   lines.push("  <!-- Service-Stadt-Kombinationen (Long-Tail) -->");
   for (const service of SERVICE_SLUGS) {
     for (const c of cities) {
       const slug = c.slug || c;
+      const path =
+        service.slug === "magic-dinner"
+          ? `/magic-dinner-${slug}`
+          : `/zauberer-${service.slug}/${slug}`;
       lines.push(
         urlEntry({
-          path: `/zauberer-${service.slug}/${slug}`,
+          path,
           changefreq: "monthly",
           priority: service.priority,
         }),

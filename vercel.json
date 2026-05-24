@@ -32,6 +32,11 @@
     { "source": "/tischzauberei/", "destination": "/close-up", "permanent": true },
     { "source": "/ploetzlich-magie", "destination": "/", "permanent": true },
     { "source": "/ploetzlich-magie/", "destination": "/", "permanent": true },
+    { "source": "/showformate", "destination": "/", "permanent": true },
+    { "source": "/showformate/", "destination": "/", "permanent": true },
+
+    { "source": "/zauberer-magic-dinner/:city", "destination": "/magic-dinner-:city", "permanent": true },
+    { "source": "/zauberer-magic-dinner/:city/", "destination": "/magic-dinner-:city", "permanent": true },
 
     { "source": "/ask-for-tickets", "destination": "/tickets", "permanent": true },
     { "source": "/ask-for-tickets/", "destination": "/tickets", "permanent": true },

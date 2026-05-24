@@ -243,6 +243,8 @@ const PublicRoutes = () => (
     <Route path="/zauberer-magic-dinner/:stadt" element={<ServiceStadtSeite />} />
     <Route path="/zauberer-close-up/:stadt" element={<ServiceStadtSeite />} />
     <Route path="/zauberer-buehnenshow/:stadt" element={<ServiceStadtSeite />} />
+    {/* Neu-Form für Magic Dinner (SEO: keyword-tighter URL "magic-dinner-{stadt}"). */}
+    <Route path="/magic-dinner-:stadt" element={<ServiceStadtSeite />} />
     <Route path="/wissen/:slug" element={<WissenSeite />} />
     <Route path="/kundenportal/login" element={<KundenportalLogin />} />
     <Route path="/kundenportal" element={<Kundenportal />} />
@@ -308,6 +310,7 @@ const App = () => (
               <Route path="/zauberer-hochzeit/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-firmenfeier/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-magic-dinner/:stadt" element={<ServiceStadtSeite />} />
+              <Route path="/magic-dinner-:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-close-up/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-buehnenshow/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/wissen/:slug" element={<WissenSeite />} />

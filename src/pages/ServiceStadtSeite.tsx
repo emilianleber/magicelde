@@ -20,10 +20,15 @@ const SERIF_ITALIC =
   "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
 const SITE_URL = "https://www.magicel.de";
 
-// Extrahiert "hochzeit" aus "/zauberer-hochzeit/regensburg"
+// Extrahiert den Service-Slug aus dem URL-Pfad.
+// Akzeptiert beide Formen:
+//   - /zauberer-<service>/<stadt>         (Alt-Form, alle 5 Formate)
+//   - /magic-dinner-<stadt>               (Neu-Form, nur magic-dinner)
 function parseServiceFromPath(pathname: string): string | undefined {
-  const match = pathname.match(/^\/zauberer-([a-z-]+)\/[^/]+\/?$/);
-  return match?.[1];
+  const old = pathname.match(/^\/zauberer-([a-z-]+)\/[^/]+\/?$/);
+  if (old) return old[1];
+  if (/^\/magic-dinner-[^/]+\/?$/.test(pathname)) return "magic-dinner";
+  return undefined;
 }
 
 const ServiceStadtSeite = () => {
@@ -53,7 +58,12 @@ interface PageProps {
 }
 
 const ServicePage = ({ service, city }: PageProps) => {
-  const fullUrl = `${SITE_URL}${service.routePrefix}/${city.slug}`;
+  // Wenn ein canonicalPrefix gesetzt ist (z.B. "/magic-dinner" für magic-dinner),
+  // bauen wir die canonical URL mit Bindestrich-Trennung: /magic-dinner-stuttgart.
+  // Sonst Standard-Form mit Slash: /zauberer-X/stuttgart.
+  const fullUrl = service.canonicalPrefix
+    ? `${SITE_URL}${service.canonicalPrefix}-${city.slug}`
+    : `${SITE_URL}${service.routePrefix}/${city.slug}`;
   const metaTitle = service.hero.metaTitle.replace("{stadt}", city.name);
   const metaDescription = service.hero.metaDescription.replace("{stadt}", city.name);
   const h1 = `${service.hero.titlePrefix} ${city.name}.`;

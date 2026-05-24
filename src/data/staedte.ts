@@ -1632,20 +1632,55 @@ Preise Zauberer Frankfurt: Meine Pakete beginnen ab 395 €. Kontaktiere mich f�
     slug: "stuttgart",
     name: "Stuttgart",
     region: "Baden-Württemberg",
-    intro: "Stuttgart — die Stadt der Ingenieure und Innovationen — verdient Entertainment, das genauso präzise und beeindruckend ist. Als Zauberer für Stuttgart bringe ich moderne Magie zu Firmenfeiern, Hochzeiten und Events im Schwabenland.",
-    highlight: "Technik trifft Kreativität — moderne Magie für die innovativste Stadt Süddeutschlands.",
+    intro: "Als Zauberer für Stuttgart bringe ich moderne Zauberkunst in eine Stadt, in der Präzision Identität ist. Daimler, Porsche, Bosch, Mahle, Trumpf, Stihl — Stuttgart ist Hidden-Champion-Land, und das Publikum hat hohe Ansprüche: kein Klamauk, kein Glitzer, sondern Effekte mit Tiefe. Ich biete Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und private Anlässe im gesamten Großraum — Stuttgart, Sindelfingen, Böblingen, Ludwigsburg, Esslingen, Fellbach, Waiblingen.",
+    highlight: "Die Schwabenmetropole verlangt Entertainment auf Augenhöhe mit ihren Hidden Champions: präzise gebaut, technisch sauber, ohne Stuttgarter Bescheidenheit zu verletzen. Genau dafür ist Mentalmagie mit Insider-Briefing das richtige Format.",
     einwohner: "630.000",
-    bekannteLocations: ["Porsche Museum", "Mercedes-Benz Museum", "Liederhalle", "Wizemann", "Hotel am Schlossgarten"],
-    faq: [
-      { q: "Was kostet ein Zauberer in Stuttgart?", a: "Ich erstelle dir ein individuelles Angebot — die Beratung ist kostenlos und unverbindlich." },
-      { q: "Tritt der Zauberer auch bei Automotive-Events auf?", a: "Ja, Corporate Events für Automobilunternehmen sind einer meiner Schwerpunkte — professionell und auf hohem Niveau." },
+    bekannteLocations: [
+      "Liederhalle (Beethoven-/Mozartsaal)",
+      "Wagenhallen Nordbahnhof",
+      "MHP Arena",
+      "Carl Benz Arena",
+      "Mercedes-Benz Museum",
+      "Porsche Museum",
+      "SI-Centrum Stuttgart",
+      "Schloss Solitude",
+      "Schloss Hohenheim",
+      "Hotel am Schlossgarten",
+      "Steigenberger Graf Zeppelin",
+      "Wielandshöhe",
     ],
-    seoText: "Zauberer Stuttgart: Emilian Leber ist dein Entertainer für Events in Stuttgart und Baden-Württemberg. Professionelle Zaubershow für Firmenfeiern, Hochzeiten und Corporate Events in der Schwabenmetropole.",
-    langText: `Stuttgart — die schwäbische Metropole, Stadt der Automobil-Ikonen und des kreativen Unternehmertums. Als Zauberer für Stuttgart verbinde ich technische Präzision mit kreativer Magie — für Firmenfeiern, Hochzeiten und Galas in der Schwabenmetropole.
+    faq: [
+      {
+        q: "Was kostet ein Zauberer in Stuttgart?",
+        a: "Hängt vom Format ab: Close-Up beim Empfang startet im mittleren dreistelligen Bereich, eine 30-Min-Bühnenshow für eine Firmenfeier liegt höher, kombinierte Pakete (Walk-Around + Bühne) sind das beste Preis-Leistungs-Verhältnis. Anreise aus Regensburg ist im Tagessatz enthalten — kein Kilometerzuschlag. Konkretes Angebot kommt nach einem kurzen Briefing-Call.",
+      },
+      {
+        q: "Welche Stuttgarter Locations eignen sich am besten für Zauberkunst?",
+        a: "Für Bühnenshows: Beethovensaal/Mozartsaal in der Liederhalle, MHP Arena, Carl Benz Arena. Für Close-Up und Magic Dinner: Hotel am Schlossgarten, Steigenberger Graf Zeppelin, Wielandshöhe, SI-Centrum. Für Hochzeiten: Schloss Solitude, Schloss Hohenheim, Schloss Ludwigsburg, Wagenhallen — alle haben den Mix aus Pomp und Nähe, der Magie trägt.",
+      },
+      {
+        q: "Macht ihr auch Automotive-/Industrie-Events bei Daimler, Porsche, Bosch?",
+        a: "Ja — Industrie und Automotive sind ein Schwerpunkt. Vor jedem Engagement Briefing-Call mit Marketing oder HR: laufende Kampagnen, Werks-Insider, sensible Themen die NICHT vorkommen. Daraus 2-3 personalisierte Routinen mit Insider-Bezug. Tonalität: präzise, kein Show-Gehabe — passt zur Schwaben-Mentalität.",
+      },
+      {
+        q: "Wie früh sollte ich für Stuttgart anfragen?",
+        a: "Q4 (Weihnachtsfeier-Saison Oktober–Dezember) am besten 8–12 Wochen vorher anfragen, da Stuttgart einer der nachgefragtesten Standorte ist. Sommerfeste und Q1/Q2-Events 6–8 Wochen vorher. Kurzfristig (2–4 Wochen) bei freiem Slot möglich — anfragen lohnt sich immer.",
+      },
+      {
+        q: "Wird der Großraum Stuttgart abgedeckt (Sindelfingen, Ludwigsburg, Esslingen, Böblingen)?",
+        a: "Ja, kompletter Großraum inklusive: Sindelfingen (Mercedes-Werk), Böblingen, Ludwigsburg (Schloss + Forum am Schlosspark), Esslingen, Fellbach (Mercedes-Benz Klassik), Waiblingen, Cannstatt, Untertürkheim — alle ohne Aufpreis im Tagessatz.",
+      },
+    ],
+    seoText: "Zauberer Stuttgart Emilian Leber: Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeier, Hochzeit und Geburtstag in Stuttgart und im Großraum Sindelfingen, Böblingen, Ludwigsburg, Esslingen. 5,0 Sterne bei 30+ Bewertungen, über 200 Events seit 2016, Greatest-Talent-Finalist 2023.",
+    langText: `Stuttgart ist Hidden-Champion-Land: Daimler, Porsche, Bosch, Mahle, Trumpf, Stihl, Festo — Weltmarktführer, die ihre Stärke nie laut tragen. Genau diese Mentalität prägt auch die Event-Kultur. Stuttgart-Publikum will nicht Show — es will Substanz. Mentalmagie funktioniert hier besser als Comedy-Klamauk, ein präziser Karten-Effekt mehr als zehn Hampelmann-Tricks.
 
-Automotive-Events bei Porsche oder Mercedes, Weihnachtsfeiern im Wizemann, Hochzeiten im Schlosspark oder Galas in der Liederhalle — Stuttgart bietet erstklassige Eventlocations. Mein Programm passt sich dem jeweiligen Stil perfekt an.
+Drei Anlässe, drei Formate. Für Hochzeiten in Stuttgart und Region empfehle ich das Drei-Akt-Modell: Close-Up beim Sektempfang (Schloss Solitude, Schloss Hohenheim, Schloss Ludwigsburg, Hotel am Schlossgarten oder Wielandshöhe), Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Für Firmenfeiern (Weihnachtsfeier, Kunden-Event, Sommerfest in der Wagenhallen oder MHP Arena) der Mix aus Walk-Around beim Empfang und 25–35-Min-Bühnenshow als Höhepunkt zwischen Vorstandsrede und Buffet. Für Privatanlässe (runde Geburtstage, Familienfeiern in Cannstatt oder im Stuttgarter Westen) reines Close-Up reicht meistens.
 
-Kosten Zauberer Stuttgart: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+Industrie-Events brauchen Briefing. Wer für Stuttgarter Konzerne arbeitet, weiß: die Insider sind das Wertvollste. Vor jedem Industrie-Engagement Briefing-Call mit Marketing oder HR — Produktnamen, interne Running-Gags, laufende Kampagnen, der CEO der nie ohne Hosenträger erscheint. Diese Insider fließen in Mentaleffekte und Pointen ein, ohne dass die Show zur Insider-Veranstaltung wird. Wenn ein Bosch-Mitarbeiter am Ende sagt [Wie konnte der wissen, dass…], ist das die richtige Reaktion.
+
+Magic Dinner in Stuttgart. Mein Spezialgebiet — Mehrgänge-Abend mit Close-Up-Magie direkt am Tisch — funktioniert in Stuttgarter Spitzen-Restaurants besonders gut, weil das schwäbische Verständnis von [Essen mit Würde] zur Magie passt: kein Tempo-Drift, kein Klamauk, der Service-Rhythmus bleibt. Bisher als Format vor allem im Hauspartner-Restaurant Wald & Wiese in Sinzing bei Regensburg etabliert — Stuttgart-Restaurants mit Tafel-Bestuhlung und Sterneküche-Anspruch sind grundsätzlich interessiert; Anfrage über das Kontaktformular.
+
+Anreise und Logistik. Stuttgart liegt 250 km von meinem Heimatstandort Regensburg — 2,5 Stunden über die A8/A3. Anreise und Übernachtung (bei Spätauftritten) sind im Tagessatz enthalten, kein Kilometerzuschlag. Setup-Zeit für Close-Up-Auftritte: 15 Minuten. Für Bühnenshows: 60–90 Minuten inklusive Soundcheck. Lichtcues und Soundeinspieler optional; bei einfachem Setting reicht ein Headset-Mikrofon vom Veranstalter.`,
   },
   {
     slug: "koeln",
