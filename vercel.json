@@ -37,6 +37,8 @@
 
     { "source": "/zauberer-magic-dinner/:city", "destination": "/magic-dinner-:city", "permanent": true },
     { "source": "/zauberer-magic-dinner/:city/", "destination": "/magic-dinner-:city", "permanent": true },
+    { "source": "/zauberer-buehnenshow/:city", "destination": "/zaubershow-:city", "permanent": true },
+    { "source": "/zauberer-buehnenshow/:city/", "destination": "/zaubershow-:city", "permanent": true },
 
     { "source": "/ask-for-tickets", "destination": "/tickets", "permanent": true },
     { "source": "/ask-for-tickets/", "destination": "/tickets", "permanent": true },

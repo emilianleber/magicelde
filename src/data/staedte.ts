@@ -1569,45 +1569,109 @@ Kosten Zauberer Landkreis Schwandorf: Pakete ab 395 €, Anfahrt im Angebot kalk
     slug: "berlin",
     name: "Berlin",
     region: "Berlin",
-    intro: "Berlin ist die Stadt der Events und der großen Bühnen. Als Zauberer für Berlin bringe ich moderne Zauberkunst in die Hauptstadt — von Corporate Events in Mitte über Hochzeiten in Charlottenburg bis zu Galas am Potsdamer Platz.",
-    highlight: "Hauptstadt-Events verdienen Hauptstadt-Entertainment — professionell, modern, unvergesslich.",
+    intro: "Als Zauberer für Berlin bringe ich moderne Zauberkunst in eine Stadt, die alles schon gesehen hat — und die genau deshalb umso höhere Ansprüche stellt. Tech-Startups in Mitte, Politik-Empfänge unter den Linden, Mediendienstleister in Friedrichshain, klassische Gala-Abende im Adlon: in Berlin funktioniert nur, was sich nicht wie Standard anfühlt. Ich biete Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und exklusive Events — im gesamten S-Bahn-Ring plus Potsdam.",
+    highlight: "Berlin verzeiht keine Show-Klischees. Mentalmagie mit Insider-Briefing aus eurer Branche, Pointen die nicht aus dem Comedy-Klub stammen, ein Premium-Tonfall ohne Glitzer — das funktioniert hier.",
     einwohner: "3.700.000",
-    bekannteLocations: ["Hotel Adlon Kempinski", "Estrel Berlin", "Friedrichstadt-Palast (Umfeld)", "Spindler & Klatt", "Soho House Berlin"],
-    faq: [
-      { q: "Was kostet ein Zauberer in Berlin?", a: "Die Kosten variieren je nach Format. Kontaktiere mich für ein individuelles Angebot — Anfahrt und Übernachtung sind bei Berlin-Events inklusive." },
-      { q: "Tritt der Zauberer regelmäßig in Berlin auf?", a: "Ja, ich bin mehrmals im Jahr für Events in Berlin — von Firmenfeiern bis zu privaten Feiern." },
+    bekannteLocations: [
+      "Hotel Adlon Kempinski",
+      "Westin Grand Berlin",
+      "Hotel de Rome",
+      "Soho House Berlin",
+      "Estrel Berlin",
+      "Tipi am Kanzleramt",
+      "Spindler & Klatt",
+      "Mercedes-Platz · Verti Music Hall",
+      "Schloss Charlottenburg",
+      "Wasserwerk Berlin",
+      "Bricks Berlin",
+      "Friedrichstadt-Palast (Umfeld)",
     ],
-    seoText: "Zauberer Berlin: Emilian Leber begeistert als professioneller Zauberkünstler auf Events in Berlin. Close-Up Magie, Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und Galas in der Hauptstadt.",
-    langText: `Berlin ist die Hauptstadt der Kreativität, der großen Shows und der unvergesslichen Events. Als Zauberer für Berlin begeistere ich auf Firmenfeiern in Mitte, Hochzeiten in Charlottenburg und Galas am Potsdamer Platz — mit moderner Magie, die zur Energie dieser Stadt passt.
+    faq: [
+      {
+        q: "Was kostet ein Zauberer in Berlin?",
+        a: "Hängt vom Format ab: Close-Up beim Empfang im mittleren dreistelligen Bereich, eine 30-Min-Bühnenshow für eine Firmenfeier liegt deutlich höher, Kombi-Pakete bringen das beste Preis-Leistungs-Verhältnis. Anreise aus Regensburg (Flug oder Zug) und Übernachtung sind im Tagessatz enthalten — keine versteckten Posten. Konkretes Angebot nach kurzem Briefing-Call.",
+      },
+      {
+        q: "Welche Berliner Locations eignen sich für Zauberkunst?",
+        a: "Für Galas und Bühnenshows: Hotel Adlon, Westin Grand, Hotel de Rome, Estrel-Festsaal, Tipi am Kanzleramt, Wasserwerk Berlin. Für Close-Up und private Tafeln: Soho House, Bricks Berlin, Spindler & Klatt. Für Hochzeiten: Schloss Charlottenburg, Bötzow Brauerei, Spreespeicher, Friedrichshof Industrial-Chic-Locations.",
+      },
+      {
+        q: "Tech-Startups, Politik, Medien — passt euer Stil zu Berliner Branchen?",
+        a: "Tech-Szene mag Mentalmagie mit logischem Twist statt klassischer Karten-Magie. Politik-Empfänge brauchen diskreten, intelligenten Stil ohne Anbiedern. Mediendienstleister erwarten Performance auf Profi-Niveau. Vor jedem Berlin-Engagement Briefing-Call: Branche, sensible Themen, gewünschte Tonalität.",
+      },
+      {
+        q: "Wie schnell kommt ihr nach Berlin (Logistik)?",
+        a: "Anreise per Flug oder Zug (4-5 h aus Regensburg), An- und Abreise immer am Vor- bzw. Folgetag — kein Same-Day-Stress. Setup-Zeit für Close-Up: 15 Min. Für Bühnenshows: 60–90 Min inklusive Soundcheck. Bei Spätauftritten Übernachtung inklusive (Hotel meiner Wahl in Tagessatz).",
+      },
+      {
+        q: "Wird auch Umland abgedeckt (Potsdam, Brandenburg)?",
+        a: "Ja — Potsdam, Oranienburg, Bernau, Königs Wusterhausen und das gesamte direkte Umland im Tagessatz ohne Aufpreis. Bei größerer Entfernung (Frankfurt/Oder, Cottbus) kommt ein moderater Reisekosten-Aufschlag.",
+      },
+    ],
+    seoText: "Zauberer Berlin Emilian Leber: Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeier, Hochzeit, Politik-Empfang und Tech-Event in Berlin und Umland. 5,0 Sterne bei 30+ Bewertungen, über 200 Events seit 2016, Greatest-Talent-Finalist 2023.",
+    langText: `Berlin ist die Stadt mit dem härtesten Publikum Deutschlands. Wer hier auftritt, kann nicht auf Wow-Effekt-Routinen vom letzten Jahrhundert vertrauen — Berlin hat alles schon gesehen, alles schon geliked und alles schon geghosted. Das Gute: wenn etwas in Berlin funktioniert, funktioniert es überall. Mein Programm ist genau darauf ausgelegt — Mentalmagie mit Substanz, Comedy ohne Klischee, ein Premium-Tonfall der auch ohne Adlon-Lobby funktioniert.
 
-Close-Up Magie direkt bei deinen Gästen, eine durchkomponierte Bühnenshow oder ein exklusives Magic Dinner — in Berlin setze ich alle drei Formate regelmäßig um. Das Berliner Publikum liebt Unterhaltung, die überrascht und gleichzeitig intelligent ist. Genau das liefere ich.
+Drei Formate, drei Berliner Settings. Close-Up Magie beim Empfang ist die Standardlösung für Tech-Startup-Parties (Mitte, Kreuzberg, Friedrichshain) und Politik-Empfänge (Mitte, Tiergarten) — locker genug für die Tech-Szene, präzise genug für Lobby-Dinner. Die durchkomponierte Bühnenshow (25–40 Min, Mentalmagie + Comedy + Standing-Ovation-Finale) trägt Galas im Adlon, Hotel de Rome, Westin Grand und im Estrel-Festsaal. Magic Dinner als Format ist in Berlin noch jung — meine Anfrage-Inbox zeigt aber: Berliner Top-Restaurants mit Tafel-Bestuhlung sind grundsätzlich interessiert, und das Publikum versteht das Konzept sofort.
 
-Einen Zauberer für Berlin buchen: Meine Pakete beginnen ab 395 €. Anfahrt und ggf. Übernachtung sind inklusive — keine versteckten Kosten.
+Insider-Briefing macht den Unterschied. Vor jedem Berlin-Event ein 30-Min-Briefing-Call mit Marketing, HR oder dem persönlichen Veranstalter. Bei Politik-Empfängen: welche Themen DÜRFEN auf keinen Fall vorkommen. Bei Tech-Startups: welche internen Memes treffen wirklich. Bei Mediendienstleister-Events: welche Branchen-Insider machen die Pointe statt sie tot zu erklären. Diese Insider fließen in 2-3 personalisierte Mentaleffekte ein — der Unterschied zwischen Show-Standard und [Hat der wirklich gerade unseren Praktikanten gemeint?].
 
-Ob Startup-Party in Kreuzberg, Gala im Adlon oder Mittelstand-Weihnachtsfeier in Prenzlauer Berg: Ich kenne das Berliner Eventpublikum und passe mein Programm entsprechend an. Von Techunternehmen in Mitte bis zu Kulturfirmen in Friedrichshain — moderner Zauberkünstler-Stil, der zum urbanen Berliner Lebensgefühl passt.
+Hochzeiten in Berlin. Berliner Hochzeiten sind ungewöhnlich vielfältig: Schloss Charlottenburg für die klassische Variante, Wasserwerk Berlin für industriell-modern, Soho House für intim-cool, Bötzow Brauerei für entspannt-charmant. Für jedes Setting passe ich das Drei-Akt-Modell an: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Bei kleineren Berliner Hochzeiten (40–80 Gäste) reicht oft Close-Up plus ein 15-Min-Bühnen-Slot — präzise platziert wirkt das stärker als ein Full-Programm.
 
-Für Hochzeiten in Berlin — ob klassisch in Charlottenburg oder industrial-chic in Treptow — sorge ich beim Sektempfang und während des Dinners für magische Momente, die deine Gäste nie vergessen werden. Als Hochzeitszauberer für Berlin bin ich ein erfahrener Partner.
-
-Jetzt unverbindlich anfragen: Ich antworte innerhalb von 24 Stunden und entwickle gemeinsam mit dir das perfekte Showkonzept für dein Event in Berlin.`,
+Anreise und Logistik. Berlin liegt 530 km vom Heimatstandort Regensburg — 5 h mit dem Auto oder 1,5 h Flugzeit ab München. Anreise immer am Vortag, Übernachtung in einem Hotel meiner Wahl (im Tagessatz enthalten). Setup-Zeit für Close-Up-Auftritte: 15 Min. Für Bühnenshows: 60–90 Min inklusive Soundcheck. Headset-Mikrofon vom Veranstalter, Lichtcues optional. Im S-Bahn-Ring und in Potsdam keine zusätzlichen Reisekosten.`,
   },
   {
     slug: "hamburg",
     name: "Hamburg",
     region: "Hamburg",
-    intro: "Von der Elbphilharmonie bis zur Speicherstadt — in Hamburg liefere ich Magie, die zur Hansestadt passt. Als Zauberer für Hamburg begeistere ich auf Firmenfeiern, Hochzeiten und exklusiven Events mit Close-Up Magie und Bühnenshow.",
-    highlight: "Hanseatisch elegant, modern inszeniert — professionelles Entertainment für die schönste Stadt im Norden.",
+    intro: "Als Zauberer für Hamburg bringe ich moderne Zauberkunst in die Stadt mit dem klarsten Stil-Codex Deutschlands. Hamburger Publikum erkennt Übertreibung sofort und mag sie nicht. Hanseatische Zurückhaltung, präzises Timing, ein Schuss trockener Humor — das sind die Zutaten, die hier funktionieren. Ich biete Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und Reederei-/Logistik-Events in Hamburg und dem gesamten Norden bis Lübeck und Bremen.",
+    highlight: "Hamburg verzeiht keine Effekthascherei. Mentalmagie mit Insider-Bezug zu Hafen, Reedereien oder Mediendienstleistern — und dem nordischen Understatement, das hier den Unterschied macht.",
     einwohner: "1.900.000",
-    bekannteLocations: ["Hotel Atlantic Kempinski", "Speicherstadt Eventlocations", "Cruise Center HafenCity", "Alsterhaus", "East Hotel"],
-    faq: [
-      { q: "Was kostet ein Zauberer in Hamburg?", a: "Die Kosten richten sich nach Format und Dauer. Anfahrt und Übernachtung sind bei Hamburg-Events inklusive." },
-      { q: "Wie buche ich einen Zauberer für eine Firmenfeier in Hamburg?", a: "Einfach über mein Kontaktformular anfragen — ich melde mich innerhalb von 24 Stunden mit einem individuellen Angebot." },
+    bekannteLocations: [
+      "Elbphilharmonie · Plaza-Räume",
+      "Hotel Atlantic Kempinski",
+      "Fairmont Vier Jahreszeiten",
+      "Stage Theater im Hafen",
+      "Hotel Tortue",
+      "Cap San Diego (Schiff)",
+      "East Hotel Hamburg",
+      "Speicherstadt Eventlocations",
+      "Cruise Center HafenCity",
+      "Alsterhaus",
+      "Schmidt's Tivoli",
+      "Empire Riverside",
     ],
-    seoText: "Zauberer Hamburg: Emilian Leber ist dein Entertainer für Events in Hamburg. Professionelle Zaubershow, Close-Up Magie und Comedy für Firmenfeiern, Hochzeiten und Galas in der Hansestadt.",
-    langText: `Hamburg — die Hansestadt an der Elbe, Deutschlands Tor zur Welt und eine der schönsten Städte des Landes. Als Zauberer für Hamburg verbinde ich hanseatische Eleganz mit moderner Zauberkunst, die überrascht und begeistert.
+    faq: [
+      {
+        q: "Was kostet ein Zauberer in Hamburg?",
+        a: "Hängt vom Format ab: Close-Up beim Empfang im mittleren dreistelligen Bereich, eine 30-Min-Bühnenshow für eine Firmenfeier liegt höher, Kombi-Pakete sind das beste Preis-Leistungs-Verhältnis. Anreise aus Regensburg (Flug 1,5 h ab München oder ICE 7 h) und Übernachtung sind im Tagessatz enthalten. Konkretes Angebot nach kurzem Briefing-Call.",
+      },
+      {
+        q: "Welche Hamburger Locations eignen sich für Zauberkunst?",
+        a: "Für Galas und Bühnenshows: Elbphilharmonie Plaza-Räume, Hotel Atlantic Kempinski, Fairmont Vier Jahreszeiten, Hotel Tortue, Empire Riverside. Für Close-Up und private Tafeln: East Hotel, Speicherstadt-Eventlocations, Alsterhaus. Für besondere Anlässe: Cap San Diego als Schiff-Setting oder Stage Theater im Hafen.",
+      },
+      {
+        q: "Funktioniert Close-Up auch auf einem Schiff?",
+        a: "Ja — Schiffs-Auftritte (Cap San Diego, Alster-Schiff, MS Hanseatic, Hafen-Barkassen) sind ein eigenes Format. Etwas Bewegung im Boden ist meist kein Problem, nur bei stärkerem Seegang spiele ich kein Mentalstück mit fallenden Objekten. Briefing vorab: Setting, Tischanordnung, Wetter-Plan B.",
+      },
+      {
+        q: "Tischzauberei Hamburg — wie viele Gäste pro Stunde?",
+        a: "Bei 6-Min-pro-Tafel-Routinen schaffe ich in 60 Minuten 8–10 Tafeln (40–100 Gäste). Bei Firmenfeiern mit Steh-Empfang gehe ich von Gruppe zu Gruppe (5 Min pro Gruppe, ca. 12 Gruppen pro Stunde). Größere Events werden auf mehrere Slots verteilt.",
+      },
+      {
+        q: "Wird das Hamburger Umland abgedeckt (Lübeck, Kiel, Bremen, Stade)?",
+        a: "Ja — Norddeutsches Umland im Tagessatz: Lübeck (1 h), Stade, Pinneberg, Wedel, Buxtehude, Ahrensburg, Bad Oldesloe. Kiel und Bremen liegen weiter (1,5–2 h) — möglich, kommt mit moderatem Reisezuschlag. Bei Mehr-Tages-Aufenthalt im Norden lassen sich auch mehrere Events kombinieren.",
+      },
+    ],
+    seoText: "Zauberer Hamburg Emilian Leber: Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeier, Hochzeit, Reederei-Event und Tischzauberei in Hamburg und Umland bis Lübeck/Bremen. 5,0 Sterne bei 30+ Bewertungen, über 200 Events seit 2016, Greatest-Talent-Finalist 2023.",
+    langText: `Hamburg ist die Stadt mit dem klarsten Stil-Codex Deutschlands. Hanseatisches Understatement, gepflegte Distanz, präzise Kommunikation — das prägt auch die Event-Kultur. Hamburger Publikum will keinen Bauchredner-Klamauk und keine Effekthascherei. Was funktioniert: trockener Humor, technisch saubere Magie, Mentalstücke mit Substanz. Ein Karten-Effekt der elegant aufgeht zählt hier mehr als zehn Showbiz-Posen.
 
-Firmenfeiern in der Speicherstadt, Galas in der Elbphilharmonie-Umgebung, Hochzeiten in der HafenCity — Hamburg bietet Weltklasse-Locations für Weltklasse-Entertainment. Ich liefere genau das: professionell, charmant und unvergesslich.
+Drei Anlässe, drei Hamburger Settings. Für Hochzeiten in Hamburg empfehle ich das Drei-Akt-Modell — Close-Up beim Sektempfang (Atlantic, Vier Jahreszeiten, Tortue, oder Hafen-Locations wie Cap San Diego), Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Für Firmenfeiern (Reedereien, Logistik-Konzerne wie Hapag-Lloyd-Umfeld, Mediendienstleister im Spiegel/Zeit-Umfeld) der Mix aus Walk-Around beim Empfang plus 25–35-Min-Bühne als Highlight. Für Privatanlässe in Hafencity oder Eppendorf reicht reines Close-Up — Mentalstück + 4–6 Tisch-zu-Tisch-Runden über zwei Stunden.
 
-Kosten Zauberer Hamburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+Reederei- und Hafen-Insider machen den Unterschied. Hamburg hat eine eigene Industrie-Kultur mit eigenen Codes — Hapag-Lloyd-Insider, Containerschiff-Anekdoten, der ewige Unterschied zwischen Hamburg und Bremen, das Hafen-Wetter als Standard-Smalltalk. Vor jedem Hamburger Firmen-Event Briefing-Call: welche Insider passen, welche Themen vermeiden, welche Branchen-Memes treffen. Diese fließen in 2–3 personalisierte Routinen ein — der Hamburger CEO sagt am Ende oft genau dasselbe wie der Münchner: [Woher wusste der das?] — aber er sagt es mit weniger Worten.
+
+Schiff-Auftritte sind ein eigenes Format. Cap San Diego im Hafen, Alster-Dampfer, MS Hanseatic, private Barkassen — Schiffs-Events brauchen angepasste Routinen (kein freier Wurf, keine fallenden Objekte bei Seegang). Dafür kommt ein Setting hinzu, das in keiner Halle erreichbar ist: das Wasser als Bühnenbild, der Hafen als Kulisse, der Wind als Soundtrack. Wenn ein Schiffs-Event in der Anfrage steht, plane ich grundsätzlich mit Wetter-Plan B im Hafenrestaurant.
+
+Anreise und Logistik. Hamburg liegt 800 km vom Heimatstandort Regensburg — Flug ab München (1,5 h) oder ICE (7 h). Anreise immer am Vortag, Übernachtung in einem Hotel meiner Wahl (im Tagessatz enthalten — typischerweise Empire Riverside, East Hotel oder Innside in der HafenCity). Setup-Zeit für Close-Up: 15 Min. Für Bühnenshows: 60–90 Min inklusive Soundcheck. Im Hamburger Stadtgebiet und im direkten Umland (Pinneberg, Ahrensburg, Wedel, Stade, Buxtehude) keine zusätzlichen Reisekosten.`,
   },
   {
     slug: "frankfurt",

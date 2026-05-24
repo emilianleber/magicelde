@@ -21,13 +21,15 @@ const SERIF_ITALIC =
 const SITE_URL = "https://www.magicel.de";
 
 // Extrahiert den Service-Slug aus dem URL-Pfad.
-// Akzeptiert beide Formen:
-//   - /zauberer-<service>/<stadt>         (Alt-Form, alle 5 Formate)
-//   - /magic-dinner-<stadt>               (Neu-Form, nur magic-dinner)
+// Akzeptiert mehrere Formen:
+//   - /zauberer-<service>/<stadt>     (Alt-Form, alle 5 Formate)
+//   - /magic-dinner-<stadt>           (Neu-Form, nur magic-dinner)
+//   - /zaubershow-<stadt>             (Neu-Form, nur buehnenshow)
 function parseServiceFromPath(pathname: string): string | undefined {
   const old = pathname.match(/^\/zauberer-([a-z-]+)\/[^/]+\/?$/);
   if (old) return old[1];
   if (/^\/magic-dinner-[^/]+\/?$/.test(pathname)) return "magic-dinner";
+  if (/^\/zaubershow-[^/]+\/?$/.test(pathname)) return "buehnenshow";
   return undefined;
 }
 

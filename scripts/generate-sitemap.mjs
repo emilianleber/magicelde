@@ -121,7 +121,9 @@ async function main() {
       const path =
         service.slug === "magic-dinner"
           ? `/magic-dinner-${slug}`
-          : `/zauberer-${service.slug}/${slug}`;
+          : service.slug === "buehnenshow"
+            ? `/zaubershow-${slug}`
+            : `/zauberer-${service.slug}/${slug}`;
       lines.push(
         urlEntry({
           path,

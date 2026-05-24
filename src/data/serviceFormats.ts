@@ -286,13 +286,17 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
     shortName: "Bühnenshow",
     routePrefix: "/zauberer-buehnenshow",
     detailHref: "/buehnenshow",
+    // GSC: Sucher tippen "zaubershow stuttgart/nürnberg/augsburg/frankfurt/hamburg"
+    // — keyword-tighter URL ist /zaubershow-{stadt}. Alt-URL bleibt funktional
+    // (Vercel-301 → neue URL, siehe vercel.json).
+    canonicalPrefix: "/zaubershow",
     hero: {
       eyebrow: "Bühnenshow · 15-60 Minuten durchkomponiert",
       titlePrefix: "Bühnen-Zauberer für",
       metaTitle:
-        "★ Bühnenshow Zauberer {stadt} · Comedy + Magic · 5,0/5",
+        "★ Zaubershow {stadt} · Comedy + Mentalmagie · 5,0/5",
       metaDescription:
-        "Bühnen-Zauberer für {stadt}: 15-60 Min durchkomponiert — Mentaleffekte, Comedy, Standing-Ovation-Finale. Greatest-Talent-Finalist. 5,0★ bei 30+ Bewertungen.",
+        "Zaubershow für {stadt}: 15-60 Min durchkomponierte Bühnenshow — Mentaleffekte, Comedy, Standing-Ovation-Finale. Greatest-Talent-Finalist. 5,0★ bei 30+ Bewertungen.",
     },
     intro:
       "15-60 Minuten durchkomponierte Bühnenshow — Hook, Aufbau, Peaks, Climax, Übergabe. Mentaleffekte, Comedy-Pointen, Standing-Ovation-Finale. Greatest-Talent-Finalist und Kreativpreisträger.",
