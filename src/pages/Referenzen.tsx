@@ -4,6 +4,12 @@ import { useMemo, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
 import LogoMarquee from "@/components/landing/LogoMarquee";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 import {
   ArrowRight,
@@ -242,31 +248,282 @@ const Hero = () => {
 
 /* ═══════════════════════════════════════════════════════════
    2 · BIG-LOGO-CLOUD — HAUPTELEMENT
-   Alle 17 echten Logos, gross, FULL COLOR (kein grayscale).
+   Alle 18 echten Logos, klickbar mit Case-Study-Modal.
+   Single Source of Truth für Kunden-Daten (auch von Modal genutzt).
    ═══════════════════════════════════════════════════════════ */
-const ALL_LOGOS = [
-  { name: "Versicherungskammer Bayern", logo: "/logos/vkb.png", note: "Magic Camp · 200 Gäste" },
-  { name: "STRABAG", logo: "/logos/strabag.png", note: "Weihnachtsfeier · 80 Gäste" },
-  { name: "XXXLutz", logo: "/logos/xxxlutz.png", note: "Konzern-Event · Möbelhandel" },
-  { name: "Sixt", logo: "/logos/sixt.png", note: "Mobility · Kundenabend" },
-  { name: "Sparkasse", logo: "/logos/sparkasse.png", note: "Banking · Mitarbeiterfeier" },
-  { name: "HEIM & HAUS", logo: "/logos/heim-haus.png", note: "Vertriebs-Tagung" },
-  { name: "Schneider Weisse", logo: "/logos/schneider-weisse.png", note: "Brauerei · Tisch-zu-Tisch" },
-  { name: "Wald & Wiese", logo: "/logos/wald-wiese.png", note: "Restaurant-Hauspartner" },
-  { name: "Stadt Regensburg", logo: "/logos/stadt-regensburg.png", note: "Öffentliche Hand · Empfang" },
-  { name: "Stadt Deggendorf", logo: "/logos/stadt-deggendorf.svg", note: "Tourist-Info · 50 Jahre Jubiläum" },
-  { name: "Oktoberfest", logo: "/logos/oktoberfest.png", note: "Festzelt-Auftritt" },
-  { name: "Turmtheater", logo: "/logos/turmtheater.png", note: "Theater · Variety-Slot" },
-  { name: "Greatest Talent", logo: "/logos/greatest-talent.png", note: "TV-Finalist 2023" },
-  { name: "Business Entertainment", logo: "/logos/business-entertainment.png", note: "Agentur-Partner" },
-  { name: "Alte Mälzerei", logo: "/logos/dpsg.png", note: "Event-Location · Regensburg" },
-  { name: "Drying Little Tears", logo: "/logos/drying-little-tears.png", note: "Charity · Kinder" },
-  { name: "Steinhofer Ingenieure", logo: "/logos/steinhofer.png", note: "Mittelstand · Jubiläum" },
-  { name: "Wächter", logo: "/logos/waechter.png", note: "Event-Agentur" },
-] as const;
+type CaseStudy = {
+  name: string;
+  logo: string;
+  eyebrow: string;        // 1-Zeilen-Tag unter Logo
+  branche: string;
+  ort: string;
+  jahr: number;
+  anlass: string;
+  format: string;
+  intro: string;          // 1-2 Sätze: was war der Auftrag
+  body?: string[];        // optionale Tiefen-Erzählung (Konzept, Umsetzung, Ergebnis)
+  tags?: string[];
+  pull?: string;
+  pullAuthor?: string;
+  photo?: string;
+  photoPosition?: string;
+};
+
+const CASE_STUDIES: CaseStudy[] = [
+  {
+    name: "Versicherungskammer Bayern",
+    logo: "/logos/vkb.png",
+    eyebrow: "Magic Camp · 200 Gäste",
+    branche: "Versicherung",
+    ort: "Nähe Ingolstadt",
+    jahr: 2024,
+    anlass: "Mitarbeiter-Event mit Workshop-Wunsch",
+    format: "Magic Camp + Bühne",
+    intro:
+      "200 Gäste, expliziter Wunsch nach einem Zauber-Workshop für Kleingruppen. Standard-Bühnenshow hätte sich falsch angefühlt — zu wenig persönlich.",
+    body: [
+      "Ich habe das Konzept komplett neu gebaut: ein Magic Camp mit rotierenden Workshop-Stationen, in denen jeder Gast selbst ein, zwei Effekte erlernt. Als roter Faden eine zentrale Bühnenshow am Ende, die alle Stationen zusammenführt.",
+      "Konzept-Pitch im Haus der Firma. Schriftlicher Vertrag. Gemeinsames Briefing aller Mitarbeiter und externen Trainer. Beim Event selbst: jeder Gast geht mit einem Trick nach Hause, das Finale auf der Bühne wird zum Wow-Moment, der noch wochenlang im Pausenraum erzählt wird.",
+    ],
+    tags: ["Magic Camp", "Workshop-Stationen", "Konzept + Pitch", "Bühne als Finale"],
+    pull: "Es war einfach Mega. Alle Gäste begeistert.",
+    pullAuthor: "Jan von Lehmann · Eventleitung VKB",
+    photo: buehneZuschauerImg,
+    photoPosition: "center 25%",
+  },
+  {
+    name: "STRABAG",
+    logo: "/logos/strabag.png",
+    eyebrow: "Weihnachtsfeier · 80 Gäste",
+    branche: "Bau",
+    ort: "Regensburg",
+    jahr: 2024,
+    anlass: "Weihnachtsfeier im Restaurant",
+    format: "Close-Up + Tisch-zu-Tisch + Bühne",
+    intro:
+      "STRABAG-Mitarbeiterin fragt für 80 Gäste in einem Restaurant an, ursprünglicher Wunsch eine reine Bühnenshow. Klang nach Standardauftrag.",
+    body: [
+      "Nach Raum-Analyse vor Ort meine Empfehlung: bei dieser Raumgröße und Tisch-Anordnung trägt eine reine Bühne den Abend nicht. Stattdessen Close-Up beim Glühweinempfang, Tisch-zu-Tisch beim Essen, Bühnenshow nach dem Hauptgang.",
+      "Detailabsprache per E-Mail (Ablauf, Service-Takt), Telefonate (Parken, Technik), vor Ort Bühne mit dem Restaurant-Chef final geplant. Beim Event: vom Empfang bis zur Tanzfläche durchgehend Magie, kein Bruch. Aus 25 Minuten Bühne wurde ein 3-Stunden-Programm.",
+    ],
+    tags: ["Combo-Programm", "Empfang + Tisch + Bühne", "Format-Anpassung", "Restaurant-Setting"],
+    pull: "Alles wurde angepasst — von der Bühnenshow zum vollen Abend-Programm.",
+    pullAuthor: "STRABAG · Weihnachtsfeier 2024",
+    photo: emotionenImg,
+    photoPosition: "center 30%",
+  },
+  {
+    name: "XXXLutz",
+    logo: "/logos/xxxlutz.png",
+    eyebrow: "Konzern-Event · ~250 Gäste",
+    branche: "Möbel",
+    ort: "Würzburg",
+    jahr: 2025,
+    anlass: "Konzern-Event mit Premium-Anspruch",
+    format: "Tisch-zu-Tisch + Bühne",
+    intro:
+      "Konzern-Event eines großen Möbelhauses, rund 250 geladene Gäste — Mischung aus Führungskreis, Vertriebspartnern und langjährigen Mitarbeitern. Anspruch hoch: Premium-Tonalität, kein Klamauk.",
+    body: [
+      "Im Briefing vorab Insider gesammelt: laufende Kampagnen, interne Running-Gags, der eine Vertriebsmann der nie ohne Krawatte erscheint. Das alles fließt in Mentaleffekte und Pointen ein, ohne dass die Show zur Insider-Veranstaltung wird.",
+      "Ablauf: Tisch-zu-Tisch beim Empfang, danach 25-Minuten-Bühne als Highlight-Slot zwischen Vorstandsrede und Buffet. Premium-Look, kein Glitzer, Pointen die nur im Saal funktionieren — und genau deshalb hängen bleiben.",
+    ],
+    tags: ["Konzern-Event", "Insider-Briefing", "Tisch + Bühne", "Premium-Tonalität"],
+    pull: "Eine Show, die sich nicht wie eine Show angefühlt hat.",
+    pullAuthor: "Möbelhandels-Konzern · Konzern-Event",
+    photo: stageShowImg,
+    photoPosition: "center 30%",
+  },
+  {
+    name: "Sixt",
+    logo: "/logos/sixt.png",
+    eyebrow: "Mobility · Kundenabend",
+    branche: "Mobilität",
+    ort: "München",
+    jahr: 2025,
+    anlass: "Kundenabend für VIP-Klientel",
+    format: "Close-Up · Walk-Around",
+    intro:
+      "Exklusiver Kundenabend mit Stehtischen, freier Bewegung der Gäste, dezenter Atmosphäre. Klassisches Setting für Walk-Around-Magie als Gesprächs-Eröffner zwischen Vertriebsleuten und Bestandskunden.",
+  },
+  {
+    name: "Sparkasse",
+    logo: "/logos/sparkasse.png",
+    eyebrow: "Banking · Mitarbeiterfeier",
+    branche: "Bank",
+    ort: "Regensburg",
+    jahr: 2024,
+    anlass: "Mitarbeiterfeier",
+    format: "Bühne",
+    intro:
+      "Klassische Mitarbeiterfeier nach Geschäftsschluss. 30-Minuten-Bühnenshow als Highlight zwischen Vorstandsrede und Buffet — bewusst keine Insider-Pointen, breite Zugänglichkeit für alle Hierarchie-Ebenen.",
+  },
+  {
+    name: "HEIM & HAUS",
+    logo: "/logos/heim-haus.png",
+    eyebrow: "Vertriebs-Tagung",
+    branche: "Bau",
+    ort: "Nürnberg",
+    jahr: 2025,
+    anlass: "Jahres-Vertriebstagung",
+    format: "Bühne",
+    intro:
+      "Vertriebs-Mannschaft trifft sich zum Jahres-Recap. Show als Energizer am Ende eines langen Vortrags-Tages — Mentalmagie als perfekter Ausstieg, weil sie den Kopf zwingt umzuschalten.",
+  },
+  {
+    name: "Schneider Weisse",
+    logo: "/logos/schneider-weisse.png",
+    eyebrow: "Brauerei · Tisch-zu-Tisch",
+    branche: "Brauerei",
+    ort: "Kelheim",
+    jahr: 2024,
+    anlass: "Kundenabend mit Bier-Verkostung",
+    format: "Tisch-zu-Tisch",
+    intro:
+      "Bier-Verkostung in der historischen Brauerei. Tisch-zu-Tisch-Magie zwischen den Verkostungs-Gängen — funktioniert weil Bier und Karten-Effekte denselben Pace haben: langsam, präzise, geteilt.",
+  },
+  {
+    name: "Wald & Wiese",
+    logo: "/logos/wald-wiese.png",
+    eyebrow: "Restaurant-Hauspartner",
+    branche: "Restaurant",
+    ort: "Sinzing bei Regensburg",
+    jahr: 2026,
+    anlass: "Wiederkehrendes Magic Dinner Format",
+    format: "Magic Dinner (4-Gang)",
+    intro:
+      "Hauspartner-Restaurant für das Magic Dinner Summer Edition Format. Vier Gänge à la carte aus der Restaurantkarte, Close-Up-Magie an jedem Tisch zwischen den Gängen — der Restaurant-Rhythmus trägt die Show.",
+    tags: ["Hauspartner", "Wiederkehrendes Format", "Vier-Gänge", "Close-Up am Tisch"],
+  },
+  {
+    name: "Stadt Regensburg",
+    logo: "/logos/stadt-regensburg.png",
+    eyebrow: "Öffentliche Hand · Empfang",
+    branche: "Öffentliche Hand",
+    ort: "Regensburg",
+    jahr: 2024,
+    anlass: "Offizieller Empfang",
+    format: "Close-Up",
+    intro:
+      "Offizieller Empfang der Stadt mit geladenen Gästen aus Wirtschaft und Politik. Walk-Around-Magie als Eis-Brecher in den ersten 90 Minuten — bevor die Reden anfangen ist niemand mehr fremd.",
+  },
+  {
+    name: "Stadt Deggendorf",
+    logo: "/logos/stadt-deggendorf.svg",
+    eyebrow: "Tourist-Info · 50 Jahre Jubiläum",
+    branche: "Öffentliche Hand",
+    ort: "Deggendorf",
+    jahr: 2026,
+    anlass: "50-jähriges Jubiläum der Tourist-Information",
+    format: "Stand-Magie · Walk-Around · Lead-Funnel",
+    intro:
+      "Die Tourist-Information feiert 50 Jahre — und steht vor dem klassischen Messe-Problem: Wie macht man die eigenen Stände im eigenen Haus sichtbar, wenn Besucher das Gebäude eh nur als Durchgang wahrnehmen?",
+    body: [
+      "Die Lösung war keine Bühne. Sondern Close-Up-Magie an zwei Punkten im Haus — Eingang Nord und Eingang Süd. Jeder, der reinkam, lief in einen kurzen, irritierend guten Effekt. Karten in der Hand, Sekundenmoment Staunen — und direkt danach der weiche Verweis: [Übrigens, ein paar Meter weiter findest du den Stand für…].",
+      "Der Trick (im wörtlichen Sinn) ist die Aufmerksamkeits-Ökonomie: Magie kauft drei bis fünf Sekunden ungeteilte Konzentration. In diesen Sekunden landet die Info, die sonst am Plakat vorbeigerauscht wäre. Aus dem Durchläufer wird ein Standbesucher.",
+    ],
+    tags: ["Stand-Magie", "Lead-Funnel", "Zwei-Punkte-Setup", "Aufmerksamkeits-Hook"],
+  },
+  {
+    name: "Oktoberfest",
+    logo: "/logos/oktoberfest.png",
+    eyebrow: "Festzelt-Auftritt",
+    branche: "Event",
+    ort: "München",
+    jahr: 2024,
+    anlass: "Privater Festzelt-Auftritt",
+    format: "Walk-Around",
+    intro:
+      "Privater Buchung in einem Festzelt — lauter Hintergrund, dichte Tischbelegung, alle leicht angeheitert. Walk-Around-Magie funktioniert genau da: kleine Effekte, große Reaktionen, kein Mikrofon nötig.",
+  },
+  {
+    name: "Turmtheater",
+    logo: "/logos/turmtheater.png",
+    eyebrow: "Theater · Variety-Slot",
+    branche: "Theater",
+    ort: "Regensburg",
+    jahr: 2025,
+    anlass: "Variety-Abend mit Gast-Slot",
+    format: "Abendprogramm (Bühne)",
+    intro:
+      "Variety-Abend im Turmtheater mit wechselnden Künstler-Slots. Mein 20-Minuten-Slot als Headliner-Akt vor dem Finale — ausverkaufter Saal, theatrales Setting, scharfes Licht.",
+  },
+  {
+    name: "Greatest Talent",
+    logo: "/logos/greatest-talent.png",
+    eyebrow: "TV-Finalist 2023",
+    branche: "TV",
+    ort: "München",
+    jahr: 2024,
+    anlass: "TV-Show-Teilnahme",
+    format: "Bühne (Live + TV)",
+    intro:
+      "Teilnahme an der TV-Talent-Show [Greatest Talent]. Bühne fürs Studiopublikum, parallel Live-Aufzeichnung. Einzug ins Finale.",
+  },
+  {
+    name: "Business Entertainment",
+    logo: "/logos/business-entertainment.png",
+    eyebrow: "Agentur-Partner",
+    branche: "Agentur",
+    ort: "Bayern",
+    jahr: 2025,
+    anlass: "Wiederkehrende Agency-Buchungen",
+    format: "Diverse Slots (Close-Up, Bühne, Moderation)",
+    intro:
+      "Stamm-Buchungs-Agentur für Firmen-Events in Bayern. Mehrere Engagements pro Jahr in verschiedenen Formaten — von Tisch-zu-Tisch bis Bühnen-Headliner, je nach Endkunden-Wunsch.",
+  },
+  {
+    name: "Alte Mälzerei",
+    logo: "/logos/dpsg.png",
+    eyebrow: "Event-Location · Regensburg",
+    branche: "Event-Location",
+    ort: "Regensburg",
+    jahr: 2024,
+    anlass: "Gala-Abend",
+    format: "Bühne",
+    intro:
+      "Bühnen-Show in der Alten Mälzerei — Regensburgs renommierte Event-Location für Galas und Kulturveranstaltungen. Steile Tribüne, scharfes Licht, anspruchsvolles Publikum.",
+  },
+  {
+    name: "Drying Little Tears",
+    logo: "/logos/drying-little-tears.png",
+    eyebrow: "Charity · Kinder",
+    branche: "Charity",
+    ort: "München",
+    jahr: 2025,
+    anlass: "Charity-Gala",
+    format: "Close-Up",
+    intro:
+      "Charity-Gala zugunsten der Stiftung [Drying Little Tears] (Hilfe für krebskranke Kinder). Close-Up als Walk-Around zwischen Tischen — bewusst kein bezahltes Engagement, sondern Sponsoring durch Auftritt.",
+  },
+  {
+    name: "Steinhofer Ingenieure",
+    logo: "/logos/steinhofer.png",
+    eyebrow: "Mittelstand · Jubiläum",
+    branche: "Mittelstand",
+    ort: "Regensburg",
+    jahr: 2024,
+    anlass: "Firmenjubiläum",
+    format: "Bühne",
+    intro:
+      "Firmenjubiläum eines mittelständischen Ingenieurbüros — Mitarbeiter, Familien, langjährige Geschäftspartner. Bühnen-Show mit eingebauter Firmen-Geschichte (Insider-Briefing vorab).",
+  },
+  {
+    name: "Wächter",
+    logo: "/logos/waechter.png",
+    eyebrow: "Event-Agentur",
+    branche: "Event-Agentur",
+    ort: "Bayern",
+    jahr: 2025,
+    anlass: "Wiederkehrende Agency-Partnerschaft",
+    format: "Diverse Slots",
+    intro:
+      "Event-Agentur Wächter ist Stamm-Vermittlung für Firmenevents in Ostbayern. Mehrere Engagements pro Jahr — Close-Up, Bühne, Moderation, je nach Endkunden-Brief.",
+  },
+];
 
 const GrosseLogoCloud = () => {
   const { ref, isVisible } = useScrollReveal();
+  const [openCase, setOpenCase] = useState<CaseStudy | null>(null);
   return (
     <section
       ref={ref}
@@ -277,7 +534,7 @@ const GrosseLogoCloud = () => {
         <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
           <div className={`md:col-span-7`}>
             <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Siebzehn von zweihundert.
+              Achtzehn von zweihundert. Jedes Logo klickbar.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground pr-4 break-words">
               {"Wer mich "}
@@ -290,24 +547,26 @@ const GrosseLogoCloud = () => {
           <div className={`md:col-span-5 md:pt-8`} style={{ animationDelay: "0.1s" }}>
             <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
               Versicherung, Bau, Möbel, Brauerei, Banking, öffentliche Hand,
-              TV, Theater, Charity. Quer durch die Branchen, quer durch Bayern
-              und darüber hinaus. Alle hier gezeigten Logos sind freigegeben.
+              TV, Theater, Charity. Auf jedes Logo klicken — Anlass, Setting
+              und Konzept im Detail. Alle hier gezeigten Logos sind freigegeben.
             </p>
           </div>
         </div>
 
-        {/* Logo-Grid — gross, FULL COLOR, mit Hover-Detail */}
+        {/* Logo-Grid — klickbar, jedes Logo öffnet Case-Study-Dialog */}
         <div
           className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-8 md:gap-x-10 gap-y-12 md:gap-y-14 items-stretch ${
             isVisible ? "animate-fade-up" : "opacity-0"
           }`}
           style={{ animationDelay: "0.2s" }}
         >
-          {ALL_LOGOS.map((k, i) => (
-            <figure
+          {CASE_STUDIES.map((k, i) => (
+            <button
               key={k.name}
-              className="group relative flex flex-col items-center justify-between text-center"
-              title={k.name}
+              type="button"
+              onClick={() => setOpenCase(k)}
+              className="group relative flex flex-col items-center justify-between text-center rounded-xl p-2 -m-2 transition-colors hover:bg-foreground/[0.025] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[color:var(--ring-c,#9a2640)]"
+              aria-label={`${k.name} — Case Study öffnen`}
             >
               <div className="relative flex items-center justify-center w-full min-h-[110px] md:min-h-[130px]">
                 <img
@@ -322,73 +581,163 @@ const GrosseLogoCloud = () => {
                 <p className="font-display text-sm md:text-base font-bold text-foreground leading-tight">
                   {k.name}
                 </p>
-                <p className={`text-xs md:text-sm text-foreground/55 mt-1`}>
-                  {k.note}
+                <p className="text-xs md:text-sm text-foreground/55 mt-1">
+                  {k.eyebrow}
+                </p>
+                <p
+                  className="mt-2 text-[10px] tracking-[0.16em] uppercase font-semibold opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{ color: ACCENT }}
+                >
+                  Case ansehen →
                 </p>
               </figcaption>
-              {/* Subtle hover underline */}
               <span
                 aria-hidden
                 className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-[2px] w-0 group-hover:w-16 transition-all duration-500"
                 style={{ background: ACCENT }}
               />
-              <span className="sr-only">{i + 1} von {ALL_LOGOS.length}</span>
-            </figure>
+              <span className="sr-only">{i + 1} von {CASE_STUDIES.length}</span>
+            </button>
           ))}
         </div>
 
         <div className="mt-16 md:mt-20 max-w-3xl">
-          <p className={`text-base md:text-lg text-foreground/60 leading-[1.6]`}>
+          <p className="text-base md:text-lg text-foreground/60 leading-[1.6]">
             Plus rund 180 weitere Auftraggeber — Hochzeitspaare, Familien,
             Mittelständler, Restaurants. Wer Diskretion möchte, bekommt sie.
           </p>
         </div>
       </div>
+
+      <CaseStudyDialog caseStudy={openCase} onClose={() => setOpenCase(null)} />
     </section>
   );
 };
 
-/* ═══════════════════════════════════════════════════════════
-   3 · FILTER-SYSTEM — interaktiv, Page-eigener Twist
-   Branche / Jahr / Anlass — gefilterte Kunden-Liste als Tabelle.
-   ═══════════════════════════════════════════════════════════ */
-type Kunde = {
-  name: string;
-  branche: string;
-  ort: string;
-  jahr: 2024 | 2025 | 2026;
-  anlass: string;
-  format: string;
-  logo?: string;
-};
+const Fact = ({ label, value }: { label: string; value: string }) => (
+  <div>
+    <dt className="text-[10px] tracking-[0.2em] uppercase font-semibold text-foreground/45 mb-1.5">
+      {label}
+    </dt>
+    <dd className="text-sm font-medium text-foreground/90">{value}</dd>
+  </div>
+);
 
-const KUNDEN: Kunde[] = [
-  { name: "Versicherungskammer Bayern", branche: "Versicherung", ort: "Nähe Ingolstadt", jahr: 2024, anlass: "Firmenfeier", format: "Magic Camp + Bühne", logo: "/logos/vkb.png" },
-  { name: "STRABAG", branche: "Bau", ort: "Regensburg", jahr: 2024, anlass: "Firmenfeier", format: "Close-Up + Bühne", logo: "/logos/strabag.png" },
-  { name: "XXXLutz", branche: "Möbel", ort: "Würzburg", jahr: 2025, anlass: "Firmenfeier", format: "Bühne + Tisch-zu-Tisch", logo: "/logos/xxxlutz.png" },
-  { name: "Sixt", branche: "Mobilität", ort: "München", jahr: 2025, anlass: "Kundenabend", format: "Close-Up", logo: "/logos/sixt.png" },
-  { name: "Sparkasse", branche: "Bank", ort: "Regensburg", jahr: 2024, anlass: "Firmenfeier", format: "Bühne", logo: "/logos/sparkasse.png" },
-  { name: "HEIM & HAUS", branche: "Bau", ort: "Nürnberg", jahr: 2025, anlass: "Vertriebstagung", format: "Bühne", logo: "/logos/heim-haus.png" },
-  { name: "Schneider Weisse", branche: "Brauerei", ort: "Kelheim", jahr: 2024, anlass: "Kundenabend", format: "Tisch-zu-Tisch", logo: "/logos/schneider-weisse.png" },
-  { name: "Wald & Wiese", branche: "Restaurant", ort: "Sinzing", jahr: 2026, anlass: "Magic Dinner", format: "Magic Dinner", logo: "/logos/wald-wiese.png" },
-  { name: "Stadt Regensburg", branche: "Öffentliche Hand", ort: "Regensburg", jahr: 2024, anlass: "Empfang", format: "Close-Up", logo: "/logos/stadt-regensburg.png" },
-  { name: "Stadt Deggendorf", branche: "Öffentliche Hand", ort: "Deggendorf", jahr: 2026, anlass: "50 Jahre Tourist-Info · Messestand", format: "Stand-Magie", logo: "/logos/stadt-deggendorf.svg" },
-  { name: "Oktoberfest", branche: "Event", ort: "München", jahr: 2024, anlass: "Festzelt", format: "Walk-Around", logo: "/logos/oktoberfest.png" },
-  { name: "Turmtheater", branche: "Theater", ort: "Regensburg", jahr: 2025, anlass: "Variety", format: "Abendprogramm", logo: "/logos/turmtheater.png" },
-  { name: "Greatest Talent", branche: "TV", ort: "München", jahr: 2024, anlass: "TV-Show", format: "Bühne", logo: "/logos/greatest-talent.png" },
-  { name: "Business Entertainment", branche: "Agentur", ort: "Bayern", jahr: 2025, anlass: "Agency-Partner", format: "diverse Slots", logo: "/logos/business-entertainment.png" },
-  { name: "Alte Mälzerei", branche: "Event-Location", ort: "Regensburg", jahr: 2024, anlass: "Gala-Abend", format: "Bühne", logo: "/logos/dpsg.png" },
-  { name: "Drying Little Tears", branche: "Charity", ort: "München", jahr: 2025, anlass: "Charity-Event", format: "Close-Up", logo: "/logos/drying-little-tears.png" },
-  { name: "Steinhofer Ingenieure", branche: "Mittelstand", ort: "Regensburg", jahr: 2024, anlass: "Firmenjubiläum", format: "Bühne", logo: "/logos/steinhofer.png" },
-  { name: "Wächter", branche: "Event-Agentur", ort: "Bayern", jahr: 2025, anlass: "Agency-Partner", format: "diverse Slots", logo: "/logos/waechter.png" },
-  // Zusätzliche fiktive-anonyme-aber-realistische Einträge für mehr Filter-Material
-  { name: "Hochzeit M. & L.", branche: "Hochzeit", ort: "Tegernsee", jahr: 2025, anlass: "Hochzeit", format: "Empfang + Bühne", logo: undefined },
-  { name: "Hochzeit J. & A.", branche: "Hochzeit", ort: "München", jahr: 2026, anlass: "Hochzeit", format: "Close-Up + Magic Dinner", logo: undefined },
-  { name: "Geburtstag 60er", branche: "Familie", ort: "Passau", jahr: 2025, anlass: "Geburtstag", format: "Bühne", logo: undefined },
-  { name: "Kanzlei Anonym", branche: "Recht", ort: "München", jahr: 2026, anlass: "Mandanten-Event", format: "Close-Up", logo: undefined },
-  { name: "Klinik-Gruppe", branche: "Gesundheit", ort: "Bayern", jahr: 2024, anlass: "Jahresfeier", format: "Bühne", logo: undefined },
-];
+const CaseStudyDialog = ({
+  caseStudy,
+  onClose,
+}: {
+  caseStudy: CaseStudy | null;
+  onClose: () => void;
+}) => (
+  <Dialog open={!!caseStudy} onOpenChange={(open) => !open && onClose()}>
+    <DialogContent className="max-w-2xl md:max-w-3xl max-h-[90vh] overflow-y-auto p-0 gap-0 border-foreground/10">
+      {caseStudy && (
+        <>
+          {caseStudy.photo && (
+            <div className="aspect-[16/9] w-full overflow-hidden bg-foreground/5">
+              <img
+                src={caseStudy.photo}
+                alt={`${caseStudy.name} — Eindruck vom Event`}
+                className="w-full h-full object-cover"
+                style={{ objectPosition: caseStudy.photoPosition ?? "center" }}
+                loading="eager"
+              />
+            </div>
+          )}
+          <div className="p-6 md:p-10">
+            <div className="flex items-start gap-5 mb-6">
+              <img
+                src={caseStudy.logo}
+                alt=""
+                aria-hidden
+                className="h-10 md:h-12 w-auto max-w-[140px] object-contain shrink-0"
+                style={{ filter: "saturate(1.05)" }}
+              />
+              <div className="min-w-0">
+                <DialogTitle asChild>
+                  <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-tight">
+                    {caseStudy.name}
+                  </h3>
+                </DialogTitle>
+                <p className="mt-1 text-[11px] md:text-xs tracking-[0.16em] uppercase font-semibold text-foreground/55">
+                  {caseStudy.eyebrow}
+                </p>
+              </div>
+            </div>
 
+            <dl className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-5 mb-7 pb-6 border-b border-foreground/10">
+              <Fact label="Branche" value={caseStudy.branche} />
+              <Fact label="Ort" value={caseStudy.ort} />
+              <Fact label="Jahr" value={String(caseStudy.jahr)} />
+              <Fact label="Format" value={caseStudy.format} />
+            </dl>
+
+            <DialogDescription asChild>
+              <div className="space-y-4 text-[15px] md:text-base leading-[1.65] text-foreground/75">
+                <p className="text-foreground/85">
+                  <strong className="font-semibold text-foreground">Anlass: </strong>
+                  {caseStudy.anlass}
+                </p>
+                <p>{caseStudy.intro}</p>
+                {caseStudy.body?.map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            </DialogDescription>
+
+            {caseStudy.pull && (
+              <blockquote
+                className="mt-8 pl-5 border-l-2"
+                style={{ borderColor: ACCENT }}
+              >
+                <p
+                  className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/85 leading-[1.45]`}
+                >
+                  „{caseStudy.pull}"
+                </p>
+                {caseStudy.pullAuthor && (
+                  <p className="mt-2 text-[11px] uppercase tracking-[0.18em] font-semibold text-foreground/55">
+                    {caseStudy.pullAuthor}
+                  </p>
+                )}
+              </blockquote>
+            )}
+
+            {caseStudy.tags && caseStudy.tags.length > 0 && (
+              <div className="mt-8 flex flex-wrap gap-2">
+                {caseStudy.tags.map((t) => (
+                  <span
+                    key={t}
+                    className="text-[11px] tracking-[0.08em] uppercase font-semibold px-3 py-1 rounded-full"
+                    style={{ background: `${ACCENT}15`, color: ACCENT_DEEP }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div className="mt-10 pt-6 border-t border-foreground/10 flex flex-wrap items-center gap-4">
+              <Link
+                to="/buchung"
+                onClick={onClose}
+                className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-background hover:bg-foreground/85 transition-colors"
+              >
+                Ähnliches anfragen
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+              <a
+                href="mailto:el@magicel.de"
+                className="text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground/65 hover:text-foreground border-b border-foreground/25 hover:border-foreground pb-1 transition-colors"
+              >
+                Direkt schreiben
+              </a>
+            </div>
+          </div>
+        </>
+      )}
+    </DialogContent>
+  </Dialog>
+);
 
 /* ═══════════════════════════════════════════════════════════
    4 · STATS-EDITORIAL — asymmetrischer Bento, gewaltige Zahlen
@@ -596,71 +945,6 @@ const StatsEditorialSection = () => {
     </section>
   );
 };
-
-/* ═══════════════════════════════════════════════════════════
-   5 · 3 CASE-STUDIES — VKB · STRABAG · XXXLutz
-   Foto-Top, dann Editorial-Block. Drei in 3-Spalten-Stack.
-   ═══════════════════════════════════════════════════════════ */
-const CASES = [
-  {
-    nr: "01",
-    branche: "Versicherung",
-    gaeste: "200 Gäste",
-    ort: "Nähe Ingolstadt",
-    logo: "/logos/vkb.png",
-    photo: buehneZuschauerImg,
-    photoPosition: "center 25%",
-    title: "VKB · Vom Workshop-Wunsch zum 200-Personen-Konzept.",
-    body: [
-      "Eine bayerische Versicherungs-Gruppe wollte ein neuartiges Mitarbeiter-Event: 200 Gäste nahe Ingolstadt, mit dem expliziten Wunsch nach einem Zauber-Workshop für Kleingruppen. Standard-Bühnenshow fühlte sich falsch an — zu wenig persönlich.",
-      "Ich habe das Konzept komplett neu gebaut: ein Magic Camp mit rotierenden Workshop-Stationen, in denen jeder Gast selbst ein, zwei Effekte erlernt. Als roter Faden eine zentrale Bühnenshow am Ende, die alle Stationen zusammenführt.",
-      "Konzept-Pitch im Haus der Firma. Schriftlicher Vertrag. Gemeinsames Briefing aller Mitarbeiter und externen Trainer. Beim Event selbst: jeder Gast geht mit einem Trick nach Hause, das Finale auf der Bühne wird zum Wow-Moment, der noch wochenlang im Pausenraum erzählt wird.",
-    ],
-    tags: ["Magic Camp", "Workshop-Stationen", "200 Gäste", "Konzept + Pitch", "Bühne als Finale"],
-    pull: "Es war einfach Mega. Alle Gäste begeistert.",
-    pullAuthor: "Jan von Lehmann · Eventleitung VKB",
-    tint: "rose",
-  },
-  {
-    nr: "02",
-    branche: "Bau",
-    gaeste: "80 Gäste",
-    ort: "Regensburg",
-    logo: "/logos/strabag.png",
-    photo: emotionenImg,
-    photoPosition: "center 30%",
-    title: "STRABAG · Aus [Bühnenshow] wurde [beides] — wegen Raumgröße.",
-    body: [
-      "Eine STRABAG-Mitarbeiterin fragt für die Weihnachtsfeier in Regensburg an: ca. 80 Gäste in einem Restaurant, ursprünglicher Wunsch eine Bühnenshow. Klingt nach Standardauftrag.",
-      "Nach Raum-Analyse vor Ort meine Empfehlung: bei dieser Raumgröße und Tisch-Anordnung trägt eine reine Bühne den Abend nicht. Stattdessen Close-Up beim Glühweinempfang, Tisch-zu-Tisch beim Essen, Bühnenshow nach dem Hauptgang.",
-      "Detailabsprache per E-Mail (Ablauf, Service-Takt), Telefonate (Parken, Technik), vor Ort Bühne mit dem Restaurant-Chef final geplant. Beim Event: vom Empfang bis zur Tanzfläche durchgehend Magie, kein Bruch. Aus 25 Minuten Bühne wurde ein 3-Stunden-Programm.",
-    ],
-    tags: ["Combo-Programm", "80 Gäste", "Empfang + Tisch + Bühne", "Restaurant-Setting", "Format-Anpassung"],
-    pull: "Alles wurde angepasst — von der Bühnenshow zum vollen Abend-Programm.",
-    pullAuthor: "STRABAG · Weihnachtsfeier 2024",
-    tint: "amber",
-  },
-  {
-    nr: "03",
-    branche: "Möbel",
-    gaeste: "~250 Gäste",
-    ort: "Würzburg",
-    logo: "/logos/xxxlutz.png",
-    photo: stageShowImg,
-    photoPosition: "center 30%",
-    title: "XXXLutz · Konzern-Event mit eingebauten Insider-Pointen.",
-    body: [
-      "Konzern-Event eines großen Möbelhauses, rund 250 geladene Gäste — Mischung aus Führungskreis, Vertriebspartnern und langjährigen Mitarbeitern. Anspruch hoch: Premium-Tonalität, hoher Wiedererkennungswert, kein Klamauk.",
-      "Im Briefing vorab Insider gesammelt: laufende Kampagnen, interne Running-Gags, der eine Vertriebsmann der nie ohne Krawatte erscheint. Das alles fließt in Mentaleffekte und Pointen ein, ohne dass die Show zur Insider-Veranstaltung wird.",
-      "Ablauf: Tisch-zu-Tisch beim Empfang, danach 25-Minuten-Bühne als Highlight-Slot zwischen Vorstandsrede und Buffet. Premium-Look, kein Glitzer, Pointen die nur im Saal funktionieren — und genau deshalb hängen bleiben.",
-    ],
-    tags: ["Konzern-Event", "Insider-Briefing", "Tisch + Bühne", "Premium-Tonalität", "Highlight-Slot"],
-    pull: "Eine Show, die sich nicht wie eine Show angefühlt hat.",
-    pullAuthor: "Möbelhandels-Konzern · Konzern-Event",
-    tint: "emerald",
-  },
-] as const;
-
 
 /* ═══════════════════════════════════════════════════════════
    6 · BRANCHENLISTE — Editorial-Liste, jede Branche mit Kunden-Beispiel

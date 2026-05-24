@@ -54,26 +54,31 @@ const LogoMarquee = ({
     >
       <style>{`
         @keyframes logoScroll {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
+          from { transform: translate3d(0, 0, 0); }
+          to   { transform: translate3d(-50%, 0, 0); }
         }
         .logo-track {
           display: flex;
-          gap: 4rem;
           width: max-content;
           animation: logoScroll 55s linear infinite;
           will-change: transform;
         }
+        /* gap als margin-right auf jedes Item — sorgt für gleichmäßigen
+           Abstand auch zwischen letztem Item der ersten Hälfte und erstem
+           Item der zweiten Hälfte → nahtloser -50%-Loop ohne Lücke. */
+        .logo-item { margin-right: 4rem; }
         @media (hover: hover) {
           .logo-marquee:hover .logo-track {
             animation-play-state: paused;
           }
         }
         @media (max-width: 768px) {
-          .logo-track { gap: 2.5rem; animation-duration: 35s; }
+          .logo-item { margin-right: 2.5rem; }
+          .logo-track { animation-duration: 35s; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .logo-track { animation: none; flex-wrap: wrap; width: 100%; justify-content: center; gap: 2rem; }
+          .logo-track { animation: none; flex-wrap: wrap; width: 100%; justify-content: center; }
+          .logo-item { margin-right: 2rem; }
         }
       `}</style>
 
@@ -127,23 +132,16 @@ const LogoMarquee = ({
           {[...LOGOS, ...LOGOS].map((l, i) => (
             <div
               key={`${l.alt}-${i}`}
-              className="shrink-0 flex items-center justify-center"
+              className="logo-item shrink-0 flex items-center justify-center"
               style={{ height: compact ? 48 : 72 }}
             >
               <img
                 src={l.src}
                 alt={l.alt}
-                className="h-full w-auto object-contain transition-all duration-500 opacity-65 hover:opacity-100 hover:scale-105"
-                style={{ filter: "grayscale(100%)" }}
-                loading="lazy"
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.filter =
-                    "grayscale(0%)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.filter =
-                    "grayscale(100%)";
-                }}
+                className="h-full w-auto object-contain transition-transform duration-500 hover:scale-105"
+                style={{ filter: "saturate(1.05)" }}
+                loading="eager"
+                decoding="async"
               />
             </div>
           ))}
