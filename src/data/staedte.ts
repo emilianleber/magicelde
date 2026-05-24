@@ -53,50 +53,109 @@ Ruf mich an oder schreib mir — als lokaler Zauberer in Regensburg bin ich schn
     slug: "muenchen",
     name: "München",
     region: "Bayern",
-    intro: "München ist eine der aufregendsten Event-Städte Europas. Von exklusiven Firmenfeiern im BMW-Umfeld über Hochzeiten in oberbayerischen Schlössern bis zu Galas in der Münchner Residenz — als Zauberer für München liefere ich Premium-Entertainment, das zum Anspruch der bayerischen Landeshauptstadt passt.",
-    highlight: "Regelmäßig auf Münchner Events unterwegs — vom Firmenabend in Schwabing bis zur Gala im Hotel Bayerischer Hof. München ist mein zweites Zuhause.",
+    intro: "Als Zauberer für München bringe ich moderne Zauberkunst in die bayerische Landeshauptstadt — Stadt von Allianz, Munich Re, Siemens, BMW, Linde, Wacker und einem Beratungs-Hub (McKinsey, BCG, Bain), der Premium-Maßstäbe setzt. Münchner Event-Publikum ist gleichzeitig konservativ-elegant und international-anspruchsvoll. Ich biete Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und exklusive Events in München, Oberbayern und am Starnberger See / Tegernsee.",
+    highlight: "München ist mein nächstgelegener Großstadt-Markt (1,5 h aus Regensburg). Über 80 Münchner Engagements seit 2016 — vom Bayerischer-Hof-Bankett bis zur Schwabinger Startup-Party. Ich kenne die Locations, die Schiebezeiten und die Tonalität.",
     einwohner: "1.500.000",
-    bekannteLocations: ["Hotel Bayerischer Hof", "BMW Welt", "Residenz München", "Alte Kongresshalle", "Zenith", "Paulaner am Nockherberg", "Lenbach Palais"],
-    faq: [
-      { q: "Was kostet ein Zauberer in München?", a: "Die Kosten variieren je nach Format — Close-Up Magie, Bühnenshow oder Magic Dinner. Kontaktiere mich für ein individuelles Angebot, die Beratung ist kostenlos." },
-      { q: "Tritt der Zauberer auch auf Münchner Firmenfeiern auf?", a: "Ja, Firmenfeiern und Corporate Events in München sind einer meiner Schwerpunkte. Von DAX-Konzernen bis Mittelstand — ich passe das Programm an eure Unternehmenskultur an." },
-      { q: "Kann ich den Zauberer für eine Hochzeit in München buchen?", a: "Absolut! Hochzeiten in München und Umgebung sind ein großer Teil meiner Auftritte. Ich sorge beim Sektempfang, Dinner oder der Party für magische Momente." },
-      { q: "Wie lange dauert die Anfahrt nach München?", a: "Von Regensburg nach München sind es nur ca. 1,5 Stunden. Die Anfahrt ist im Preis inbegriffen." },
+    bekannteLocations: [
+      "Hotel Bayerischer Hof",
+      "Mandarin Oriental München",
+      "Charles Hotel",
+      "Hotel Vier Jahreszeiten Kempinski",
+      "Residenz München (Antiquarium, Kaisersaal)",
+      "BMW Welt + BMW Museum",
+      "Allianz Arena (Business-Bereich)",
+      "Alte Kongresshalle",
+      "Postpalast",
+      "Hofbräuhaus · Festsaal",
+      "Zenith Halle",
+      "Schloss Nymphenburg",
     ],
-    seoText: "Zauberer München gesucht? Emilian Leber ist dein Zauberkünstler für Events in München und ganz Oberbayern. Als professioneller Entertainer begeistere ich auf Firmenfeiern, Hochzeiten, Geburtstagen und Galas in München mit moderner Close-Up Magie und Comedy-Zaubershow. Von Bogenhausen bis Sendling, von der Isar bis zum Englischen Garten — ich komme zu dir.",
-    langText: `Als Zauberer für München kenne ich die Erwartungen des anspruchsvollsten Eventpublikums Bayerns genau. Von der Weihnachtsfeier im Paulaner am Nockherberg über die Gala in der BMW Welt bis zur Hochzeit am Starnberger See — ich bringe professionelle Close-Up Magie und Comedy-Bühnenshow direkt zu dir.
+    faq: [
+      {
+        q: "Was kostet ein Zauberer in München?",
+        a: "Hängt vom Format ab: Close-Up beim Empfang im mittleren dreistelligen Bereich, eine 30-Min-Bühnenshow für eine Firmenfeier liegt höher, Kombi-Pakete bringen das beste Preis-Leistungs-Verhältnis. Anreise aus Regensburg (1,5 h Autofahrt) ist im Tagessatz enthalten — kein Kilometerzuschlag, keine Übernachtungskosten bei früherem Ende. Konkretes Angebot kommt nach kurzem Briefing-Call.",
+      },
+      {
+        q: "Welche Münchner Locations eignen sich für Zauberkunst?",
+        a: "Für Galas und große Bühnen: Bayerischer Hof, Residenz, BMW Welt, Alte Kongresshalle, Postpalast, Hofbräuhaus-Festsaal. Für Close-Up und Magic Dinner: Mandarin Oriental, Charles Hotel, Vier Jahreszeiten, Schumann's, Käfer am Hofgarten. Für Hochzeiten: Schloss Nymphenburg, Hofbräukeller-Festsaal, Schloss Schleißheim, Schloss Berg am Starnberger See, Bachmair Weissach am Tegernsee.",
+      },
+      {
+        q: "Macht ihr auch DAX-Konzern-Events (Allianz, BMW, Siemens, Munich Re)?",
+        a: "Ja — DAX und große bayerische Konzerne sind ein Hauptformat. Vor jedem Industrie-Engagement Briefing-Call mit HR oder Marketing: Konzern-Insider (laufende Kampagnen, Werks-Memes, Bayern-vs-Schwaben-Reibungen), sensible Themen die NICHT vorkommen, gewünschte Tonalität (klassisch konservativ oder Startup-locker). Daraus 2-3 personalisierte Mentaleffekte mit Insider-Bezug.",
+      },
+      {
+        q: "Wird das Münchner Umland abgedeckt (Starnberg, Tegernsee, Garmisch, Ingolstadt)?",
+        a: "Ja — gesamter Großraum München im Tagessatz ohne Aufpreis: Starnberg, Tutzing, Tegernsee, Bad Tölz, Bad Wiessee, Bachmair Weissach, Wolfratshausen, Geretsried, Erding, Freising, Dachau, Garching. Ingolstadt (zwischen München und Regensburg) ist im Tagessatz inklusive. Garmisch-Partenkirchen mit moderatem Reisezuschlag.",
+      },
+      {
+        q: "Wie schnell könnt ihr für ein Münchner Event kommen (Kurzfristanfrage)?",
+        a: "1,5 h Anfahrt aus Regensburg — bei freiem Slot Same-Day-Buchungen für München möglich (z.B. bei Krankheits-Ausfall eines anderen Künstlers). Reguläre Vorlaufzeit: Q4 (Weihnachtsfeier-Saison) 8–12 Wochen, Sommerfeste 6–8 Wochen, kurzfristig (2–4 Wochen) bei freiem Slot machbar.",
+      },
+    ],
+    seoText: "Zauberer München Emilian Leber: Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeier, Hochzeit, DAX-Konzern-Event und Privatfeier in München, am Starnberger See und Tegernsee. Über 80 Münchner Engagements, 5,0 Sterne bei 30+ Bewertungen, Greatest-Talent-Finalist 2023.",
+    langText: `München ist mein nächstgelegener Großstadt-Markt — 1,5 Stunden aus Regensburg, über 80 Engagements seit 2016. Das bedeutet: ich kenne den Bayerischer Hof, die Residenz, die BMW Welt, die Alte Kongresshalle und den Hofbräuhaus-Festsaal nicht aus dem Veranstaltungs-Prospekt, sondern aus eigenen Auftritten. Das schlägt sich in der Vorbereitung nieder — Setup-Zeiten, Lichtsituationen, Service-Schnittstellen sind bekannt, nichts wird improvisiert.
 
-München ist eine Weltklasse-Eventstadt, und das spürt man bei jedem Auftritt: Das Publikum ist anspruchsvoll, die Locations sind außergewöhnlich und die Erwartungen hoch. Genau deshalb liefere ich in München Entertainment auf Premium-Niveau — interaktiv, überraschend und unvergesslich.
+Drei Anlässe, drei Münchner Formate. Für Münchner Hochzeiten (klassisch in Schloss Nymphenburg, Schloss Berg, Schloss Schleißheim; entspannt im Hofbräukeller; international im Mandarin Oriental) das Drei-Akt-Modell: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Für Firmenfeiern (DAX-Konzerne wie Allianz, Munich Re, BMW, Siemens; Beratungen wie McKinsey, BCG, Bain; Pharma-Konzerne wie Wacker): Walk-Around beim Empfang plus 25–35-Min-Bühne als Höhepunkt zwischen Vorstandsrede und Buffet. Für Privatanlässe (runde Geburtstage in Schwabing, Bogenhausen, Grünwald) reines Close-Up reicht meist.
 
-Einen Zauberer in München zu buchen bedeutet: Meine Pakete beginnen ab 395 €. Die Anfahrt von Regensburg nach München ist immer inklusive — du bezahlst für Qualität und bekommst sie.
+Bayerischer Premium-Markt braucht zwei Tonalitäten. München hat eine besondere Doppel-Identität: konservativ-elegant (Bayerischer Hof, Residenz, Vier Jahreszeiten) und international-locker (Mandarin Oriental, Charles, Schumann's, Startup-Szene um Werksviertel). Ich passe die Show-Tonalität entsprechend an: Mentalmagie mit klassischer Eleganz für Bankett-Settings, lockere Comedy-Pointen mit Bayern-vs-Schwaben-Twist für Startup-Parties. Beide Versionen sind Premium — aber sie klingen unterschiedlich.
 
-Als Hochzeitszauberer in München sorge ich beim Sektempfang für Staunen, während des Dinners für magische Tischmomente und in der Partyphase für eine Bühnenshow, die deine Gäste noch Wochen danach beschäftigt. Besonders beliebt in München: die Kombination aus 45 Minuten Close-Up beim Empfang und einer 30-minütigen Bühnenshow nach dem Essen.
+Magic Dinner in München. Mein Spezialgebiet (Mehrgänge-Abend mit Close-Up-Magie am Tisch) funktioniert in Münchner Sterne-Restaurants und Top-Hotel-Restaurants (Atelier im Bayerischer Hof, Schwarzreiter im Vier Jahreszeiten, EssZimmer im Mandarin, Tantris) besonders gut. Bisher als Format im Hauspartner-Restaurant Wald & Wiese in Sinzing etabliert — Münchner Restaurants mit Tafel-Bestuhlung und Sterneküche-Anspruch sind grundsätzlich interessiert, Anfrage über das Kontaktformular.
 
-Für Firmenfeiern in München — ob DAX-Konzern oder aufstrebendes Startup — ist modernes Zauberkünstler-Entertainment das perfekte Programm für Mitarbeiterveranstaltungen. Weihnachtsfeier in der Alten Kongresshalle, Sommerfest in Schwabing oder Jubiläum auf Schloss Nymphenburg — ich passe mein Showkonzept immer dem Anlass und dem Publikum an.
-
-Kontaktiere mich jetzt für ein unverbindliches Beratungsgespräch. Ich antworte innerhalb von 24 Stunden und entwickle gemeinsam mit dir das optimale Showkonzept für dein Event in München.`,
+Anreise und Logistik. München liegt 125 km vom Heimatstandort Regensburg — 1,5 h über die A93/A92. Anreise meist am Eventtag, bei Frühveranstaltungen am Vortag mit Hotel-Übernachtung (im Tagessatz). Setup für Close-Up: 15 Min. Für Bühnenshows: 60–90 Min inklusive Soundcheck. Im Münchner Stadtgebiet plus Großraum (Starnberg, Tegernsee, Erding, Freising, Garching, Ingolstadt) keine Reisekostenzuschläge.`,
   },
   {
     slug: "nuernberg",
     name: "Nürnberg",
     region: "Bayern",
-    intro: "Nürnberg — Frankens pulsierende Metropole — bietet mit ihrer einzigartigen Mischung aus Tradition und Moderne den perfekten Rahmen für magische Events. Als Zauberer für Nürnberg bringe ich Close-Up Magie, Bühnenshow und Magic Dinner in die zweitgrößte Stadt Bayerns.",
-    highlight: "Nürnberg ist nur eine Stunde von Regensburg entfernt. Fränkisches Flair trifft moderne Zauberkunst — perfekt für dein Event in der Noris.",
+    intro: "Als Zauberer für Nürnberg arbeite ich in einer der wichtigsten Wirtschaftsregionen Bayerns: Siemens-Erbe, DATEV, GfK, Diehl-Konzern, Schaeffler — Nürnberg ist Industrie- und Tech-Hub. Dazu die NürnbergMesse als Standort vieler internationaler Branchenmessen (Spielwarenmesse, Embedded World, BIOFACH). Ich biete Close-Up Magie, Comedy-Bühnenshow, Magic Dinner und Messe-Standmagie für Firmenfeiern, Hochzeiten und Messen in Nürnberg, Fürth, Erlangen, Schwabach und der gesamten Metropolregion.",
+    highlight: "Nürnberg liegt 90 km von Regensburg — Anreise in einer Stunde, kein Übernachtungsbedarf. Über 30 Engagements in der Metropolregion seit 2016. Das spart Tagessatz für euch und Logistik-Stress für mich.",
     einwohner: "520.000",
-    bekannteLocations: ["Meistersingerhalle", "NürnbergMesse", "Historischer Rathaussaal", "CVJM", "Ofenwerk", "Loftwerk Nürnberg"],
-    faq: [
-      { q: "Was kostet ein Zauberer in Nürnberg?", a: "Die Kosten richten sich nach Art und Dauer des Auftritts. Ich erstelle dir gerne ein individuelles Angebot — kostenlos und unverbindlich." },
-      { q: "Eignet sich ein Zauberer für eine Firmenfeier in Nürnberg?", a: "Auf jeden Fall! Nürnberg ist eine starke Wirtschaftsstadt — ich habe bereits auf zahlreichen Corporate Events in der Region aufgetreten." },
-      { q: "Kann der Zauberer auch auf der NürnbergMesse auftreten?", a: "Ja, Messeauftritte gehören zu meinem Repertoire. Ich ziehe Besucher an euren Stand und sorge für bleibende Eindrücke." },
+    bekannteLocations: [
+      "Meistersingerhalle",
+      "Tafelhalle Nürnberg",
+      "NürnbergMesse (Halle 1–12)",
+      "Le Méridien Grand Hotel",
+      "Hotel Maritim",
+      "Historischer Rathaussaal",
+      "Z-Bau",
+      "Kulturwerkstatt Auf AEG",
+      "Loftwerk Nürnberg",
+      "Ofenwerk",
+      "Schloss Faber-Castell (Stein)",
+      "Hotel Schindlerhof",
     ],
-    seoText: "Zauberer Nürnberg: Emilian Leber ist dein Entertainer für Events in Nürnberg und der Metropolregion. Ob Firmenfeier, Hochzeit, Weihnachtsfeier oder Messeauftritt — mit professioneller Zauberkunst wird dein Event in Nürnberg zum Highlight.",
-    langText: `Als Zauberer für Nürnberg bin ich in Frankens pulsierender Metropole regelmäßig unterwegs — von Firmenevents auf der NürnbergMesse bis zur Hochzeit im historischen Rathaussaal. Nürnberg ist eine Stadt mit starker Wirtschaft, tiefer Geschichte und einer wachsenden Eventkultur.
+    faq: [
+      {
+        q: "Was kostet ein Zauberer in Nürnberg?",
+        a: "Hängt vom Format ab: Close-Up beim Empfang im mittleren dreistelligen Bereich, eine 30-Min-Bühnenshow höher, Kombi-Pakete sind das beste Preis-Leistungs-Verhältnis. Vorteil Nürnberg: nur 90 km aus Regensburg, daher kein Übernachtungs-Aufschlag selbst bei Spätauftritten. Anreise im Tagessatz enthalten.",
+      },
+      {
+        q: "Welche Nürnberger Locations eignen sich für Zauberkunst?",
+        a: "Für Bühnenshows: Meistersingerhalle, Tafelhalle, Z-Bau, Kulturwerkstatt Auf AEG. Für Galas: Historischer Rathaussaal, Le Méridien Grand Hotel, Hotel Maritim. Für Close-Up und private Tafeln: Hotel Schindlerhof, Loftwerk, Ofenwerk. Für Hochzeiten: Schloss Faber-Castell in Stein, Burg Wernfels, Burg Rabenstein in Franken.",
+      },
+      {
+        q: "Auftritte auf der NürnbergMesse — wie läuft das?",
+        a: "Messe-Magie als eigenes Format (siehe /messe-magier): aktive Besucher-Ansprache am Stand mit Effekten, die Vorbeigehende stoppen, und warmer Übergabe an Sales. Funktioniert besonders gut bei Embedded World, Spielwarenmesse, BIOFACH, IT-SA. Bei mehrtägiger Buchung Tages-Reduktion. Sprache deutsch/englisch je nach Messe-Publikum.",
+      },
+      {
+        q: "Funktioniert das auch für Mittelstand und fränkische Industrie (Siemens, DATEV, Schaeffler)?",
+        a: "Genau das ist der Schwerpunkt in der Region. Vor jedem Industrie-Engagement Briefing-Call mit HR oder Marketing: Konzern-Insider, fränkische Tonalität (eher zurückhaltend, kein bayerisches Krachledern), gewünschte Show-Länge. Daraus 2–3 personalisierte Routinen — funktioniert für Siemens-Vorstandsdinner genauso wie für 50-Mann-DATEV-Sommerfest.",
+      },
+      {
+        q: "Wird die Metropolregion abgedeckt (Fürth, Erlangen, Schwabach, Bamberg, Bayreuth)?",
+        a: "Ja — Nürnberg + Fürth + Erlangen + Schwabach + Herzogenaurach (Adidas) im Tagessatz ohne Aufpreis. Bamberg, Bayreuth, Coburg, Forchheim, Ansbach liegen weiter (45–90 Min) — möglich mit moderatem Reisezuschlag oder bei Kombi-Buchung im selben Zeitfenster.",
+      },
+    ],
+    seoText: "Zauberer Nürnberg Emilian Leber: Close-Up Magie, Comedy-Bühnenshow, Magic Dinner und Messe-Standmagie für Firmenfeier, Hochzeit und NürnbergMesse in Nürnberg, Fürth, Erlangen, Schwabach und Metropolregion. 5,0 Sterne bei 30+ Bewertungen, über 30 Engagements seit 2016.",
+    langText: `Nürnberg ist nach München mein zweitgrößter Bayern-Markt — und der mit der besten Anreise-Logistik. 90 km aus Regensburg, eine Stunde über die A3, kein Übernachtungsbedarf selbst bei Spätauftritten. Das macht Nürnberg planungs-freundlich: Same-Day-Buchungen bei freiem Slot, kurze Kalender-Vorlaufzeiten möglich, weniger Reise-Aufschlag im Tagessatz.
 
-Ob du einen Zauberer für eine Firmenfeier in Nürnberg suchst — Weihnachtsfeier, Jubiläum oder Teambuilding-Event — oder für eine Hochzeit oder einen Geburtstag: Ich liefere das passende Programm. Interaktiv, modern und immer auf hohem Niveau.
+Drei Anlässe, drei Nürnberger Settings. Für fränkische Hochzeiten (klassisch in Schloss Faber-Castell in Stein, im Historischen Rathaussaal oder auf Burg Rabenstein) das Drei-Akt-Modell: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Für Firmenfeiern in der fränkischen Industrie (Siemens-Erbe in Nürnberg, DATEV, GfK, Schaeffler in Herzogenaurach, Adidas in Herzogenaurach, Diehl-Konzern): Walk-Around beim Empfang plus 25–35-Min-Bühne als Höhepunkt. Für Privatanlässe in Nürnberg-Mitte, Erlenstegen oder Erlangen-Süd: Close-Up reicht meist.
 
-Preise Zauberer Nürnberg: Meine Pakete beginnen ab 395 €. Anfahrt nach Nürnberg ist inklusive — keine Überraschungen bei der Abrechnung.
+NürnbergMesse ist ein eigener Markt. Mit Embedded World, Spielwarenmesse, BIOFACH und IT-SA hat Nürnberg internationale Messen mit Premium-Publikum. Messe-Magie als aktive Stand-Magnet-Strategie (siehe /messe-magier) funktioniert besonders gut bei IT-, Konsumgüter- und Sicherheits-Messen — Effekte die Vorbeigehende stoppen, dann warmer Übergabe an euer Sales-Team. Bei mehrtägiger Buchung Tages-Reduktion.
 
-Neben Nürnberg bediene ich die gesamte Metropolregion — Fürth, Erlangen, Schwabach und Umgebung. Als Zauberkünstler für Nürnberg kenne ich die Locations, das Publikum und was einen Abend wirklich unvergesslich macht. Kontaktiere mich jetzt für dein Event.`,
+Fränkische Tonalität ist anders. Franken ist nicht Bayern. Der Humor ist trockener, das Auftreten zurückhaltender, das Krachledern wird hier eher beäugt als bejubelt. Mein Programm passt sich an: weniger Comedy-Pointen vom Münchner-Typ, mehr Mentalmagie mit Substanz, mehr Augen-zwinkern statt Bauchredner-Energie. Wer für Erlanger Tech-Mittelständler oder Herzogenauracher Konzerne arbeitet, weiß: das richtige Maß macht den Unterschied.
+
+Anreise und Logistik. Nürnberg liegt 90 km vom Heimatstandort Regensburg — 1 h über die A3. Same-Day-Anreise problemlos, Übernachtung nicht notwendig (außer bei Auftritten nach Mitternacht). Setup für Close-Up: 15 Min. Für Bühnenshows: 60–90 Min inklusive Soundcheck. In Nürnberg, Fürth, Erlangen, Schwabach, Herzogenaurach keine Reisekostenzuschläge.`,
   },
   {
     slug: "augsburg",
@@ -1677,20 +1736,55 @@ Anreise und Logistik. Hamburg liegt 800 km vom Heimatstandort Regensburg — Flu
     slug: "frankfurt",
     name: "Frankfurt",
     region: "Hessen",
-    intro: "Frankfurt — die Finanz- und Messestadt am Main — braucht Entertainment auf höchstem Niveau. Als Zauberer für Frankfurt liefere ich genau das: Premium Close-Up Magie, Bühnenshow und Magic Dinner für Corporate Events, Messen und private Feiern.",
-    highlight: "Ideal für Corporate Events und Messeauftritte — Frankfurt ist einer der wichtigsten Eventstandorte Deutschlands.",
+    intro: "Als Zauberer für Frankfurt am Main bringe ich moderne Zauberkunst in Deutschlands wichtigsten Finanz- und Messestandort. Banken, Beratungen (Big Four, McKinsey/BCG), Pharma-Konzerne (Sanofi, Merck Darmstadt), Logistik rund um den Flughafen und die Frankfurter Messe als jährlicher Hotspot — das Publikum hier ist international, anspruchsvoll und gewohnt, Premium-Entertainment kritisch zu bewerten. Ich biete Close-Up Magie, Comedy-Bühnenshow, Magic Dinner und Standmagie für Firmenfeiern, Hochzeiten und Messeauftritte in Frankfurt und im Rhein-Main-Gebiet.",
+    highlight: "Frankfurt-Publikum ist Premium-Maßstab. Internationale Gäste, Banking-Tonalität, kurze Konzentrations-Slots zwischen Vorständen und Vorträgen — Mentalmagie mit Mehrsprachigkeit auf Anfrage.",
     einwohner: "760.000",
-    bekannteLocations: ["Messe Frankfurt", "Alte Oper", "Palmengarten", "Villa Kennedy", "Frankfurter Societät"],
-    faq: [
-      { q: "Was kostet ein Zauberer in Frankfurt?", a: "Die Kosten variieren je nach Format. Kontaktiere mich für eine kostenlose Beratung und ein individuelles Angebot." },
-      { q: "Tritt der Zauberer auch auf Messen in Frankfurt auf?", a: "Ja! Messeauftritte gehören zu meinem Kerngeschäft — ich ziehe Besucher an euren Stand und mache eure Marke unvergesslich." },
+    bekannteLocations: [
+      "Alte Oper (Mozart-/Beethovensaal)",
+      "Messe Frankfurt (Halle 1–11)",
+      "Festhalle Frankfurt",
+      "Palmengarten · Orangerie",
+      "Villa Kennedy",
+      "Frankfurter Hof (Steigenberger)",
+      "Roomers Hotel",
+      "Sofitel Frankfurt Opera",
+      "Jumeirah Frankfurt",
+      "Skyline Plaza · Eventfläche",
+      "Mainzer Hof",
+      "Klassikstadt Frankfurt",
     ],
-    seoText: "Zauberer Frankfurt: Emilian Leber begeistert als Zauberkünstler auf Events in Frankfurt am Main. Close-Up Magie und Bühnenshow für Firmenfeiern, Messen, Hochzeiten und Galas in der Mainmetropole.",
-    langText: `Frankfurt am Main — das wirtschaftliche Herz Deutschlands, Finanzmetropole und internationale Messestadt. Als Zauberer für Frankfurt liefere ich Entertainment auf dem Niveau, das diese Stadt und ihre anspruchsvollen Events verlangen.
+    faq: [
+      {
+        q: "Was kostet ein Zauberer in Frankfurt?",
+        a: "Hängt vom Format ab: Close-Up beim Empfang im mittleren dreistelligen Bereich, eine 30-Min-Bühnenshow höher, Kombi-Pakete bringen das beste Preis-Leistungs-Verhältnis. Messe-Tagessätze etwas anders gerechnet (mehrtägige Buchung mit Reduktion). Anreise aus Regensburg (ICE 4 h oder Flug 1 h) und Übernachtung im Tagessatz enthalten. Konkretes Angebot nach Briefing-Call.",
+      },
+      {
+        q: "Welche Frankfurter Locations eignen sich für Zauberkunst?",
+        a: "Für Galas und Bühnenshows: Alte Oper, Festhalle, Frankfurter Hof, Villa Kennedy, Sofitel Frankfurt Opera. Für Close-Up und private Tafeln: Roomers Hotel, Jumeirah, Palmengarten Orangerie. Für Messeauftritte: alle Hallen der Messe Frankfurt (1–11) plus Skyline Plaza für Begleit-Events. Für Hochzeiten: Klassikstadt, Maingau-Locations, Schloss-Locations im Taunus.",
+      },
+      {
+        q: "Macht ihr auch Messeauftritte auf der Frankfurter Messe?",
+        a: "Ja — Messe-Magie ist ein eigenes Format (siehe /messe-magier). Aktive Besucher-Ansprache am Stand, Effekte die Vorbeigehende stoppen, Übergabe an Sales-Mitarbeiter mit warmem Vorgespräch. Bei mehrtägiger Buchung Tages-Reduktion. Sprache deutsch/englisch nach Bedarf — auf der Messe meist beides parallel.",
+      },
+      {
+        q: "Ist eine englischsprachige Show in Frankfurt möglich?",
+        a: "Ja — sowohl Close-Up als auch Bühnenshow komplett auf Englisch buchbar. Bei internationalen Gästen empfohlen (Banken-Gala, Pharma-Konzern-Event, internationale Konferenz). Zweisprachiges Programm (deutsch/englisch) auf Wunsch möglich — funktioniert besonders bei Hochzeiten mit gemischten Gästen.",
+      },
+      {
+        q: "Wird das Rhein-Main-Gebiet abgedeckt (Wiesbaden, Mainz, Offenbach, Darmstadt)?",
+        a: "Ja — gesamtes Rhein-Main-Gebiet im Tagessatz ohne Aufpreis: Wiesbaden, Mainz, Offenbach, Darmstadt, Bad Homburg, Königstein, Eschborn, Friedberg. Bei größerer Entfernung (Marburg, Gießen, Aschaffenburg-Bereich) moderater Reisezuschlag.",
+      },
+    ],
+    seoText: "Zauberer Frankfurt Emilian Leber: Close-Up Magie, Comedy-Bühnenshow, Magic Dinner und Standmagie auf der Messe Frankfurt für Banking-Events, Pharma-Galas und Hochzeiten in Frankfurt und Rhein-Main-Gebiet (Wiesbaden, Mainz, Offenbach, Darmstadt). 5,0 Sterne bei 30+ Bewertungen.",
+    langText: `Frankfurt ist Banking-Land, Beratungs-Land, Messe-Land. Drei Branchen mit eigenem Tempo und eigener Sprache — und einem Publikum, das Premium-Entertainment kritisch bewertet, weil es täglich mit internationalen Profis spricht. Wer hier Show macht, muss zwei Sachen gleichzeitig liefern: technisch sauber und intellektuell anspruchsvoll genug für ein Auditorium, in dem der CFO und der M&A-Partner mitdenken.
 
-Von Messeauftritten auf der Frankfurter Messe über Bankenjubiläen in der Alten Oper bis zu exklusiven Galas in der Palmengarten-Orangerie — Frankfurt bietet die wichtigsten Event-Locations Deutschlands, und ich bin dort regelmäßig präsent.
+Drei Formate für drei Frankfurter Anlässe. Für Banking-Galas und Beratungs-Events in der Alten Oper, im Frankfurter Hof oder im Sofitel: die durchkomponierte Bühnenshow (25–40 Min) mit Mentalmagie als Hauptelement, Comedy gezielt dosiert, Standing-Ovation-Finale. Für Empfänge in Roomers, Jumeirah oder Villa Kennedy: Close-Up Walk-Around, 60–90 Min, von Gruppe zu Gruppe, deutsch/englisch. Für die Messe: aktive Stand-Magie als Besucher-Magnet (siehe /messe-magier) — funktioniert besonders gut bei IT-, Pharma- und Konsumgüter-Messen.
 
-Preise Zauberer Frankfurt: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+Sprache spielt eine Rolle. Frankfurter Events sind häufiger international als andere deutsche Städte. Vor jedem Frankfurt-Engagement Briefing: deutsch / englisch / zweisprachig? Bei zweisprachigem Setting plane ich die Show so, dass beide Sprachgruppen die Pointen verstehen — kein „peinliches Übersetzen", sondern eingebaute Bilingual-Routinen, die Sprache selbst zum Effekt machen.
+
+Magic Dinner in Frankfurt. Mein Spezialgebiet — Mehrgänge-Abend mit Close-Up-Magie am Tisch — funktioniert in Frankfurter Sternerestaurants und in den Top-Hotel-Restaurants (Lafleur, Villa Merton, Tigerpalast, Restaurant im Frankfurter Hof) besonders gut. Anfrage über das Kontaktformular — bisher als Format vor allem im Hauspartner-Restaurant Wald & Wiese in Sinzing etabliert, in Frankfurt grundsätzlich auf Anfrage realisierbar.
+
+Anreise und Logistik. Frankfurt liegt 360 km vom Heimatstandort Regensburg — ICE 4 h oder Flug ab München 1 h. Anreise immer am Vor- oder Eventtag früh, Übernachtung in einem Hotel meiner Wahl im Tagessatz (typischerweise Roomers oder Jumeirah, bei Messe-Buchungen Hotels in Niederrad). Setup für Close-Up: 15 Min. Für Bühnenshows: 60–90 Min inklusive Soundcheck. Im Rhein-Main-Gebiet keine Reisekostenzuschläge.`,
   },
   {
     slug: "stuttgart",
