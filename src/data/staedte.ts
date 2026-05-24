@@ -161,58 +161,151 @@ Anreise und Logistik. Nürnberg liegt 90 km vom Heimatstandort Regensburg — 1 
     slug: "augsburg",
     name: "Augsburg",
     region: "Bayern",
-    intro: "In der Fuggerstadt Augsburg sorge ich als Zauberer für Events, die in Erinnerung bleiben — modern, interaktiv und professionell. Ob Firmenfeier in der Augsburger Innenstadt, Hochzeit im Schwäbischen oder Gala im Kongress am Park.",
-    highlight: "Augsburg liegt perfekt zwischen München und Regensburg — ideal erreichbar und als drittgrößte Stadt Bayerns ein starker Eventstandort.",
+    intro: "Als Zauberer für Augsburg arbeite ich in der ältesten Stadt Bayerns — Fuggerstadt mit starker Wirtschaftsbasis (MAN, KUKA, Fujitsu, Premium-Aerotec, MT Aerospace) und gleichzeitig Universitätsstadt mit lebendiger Event-Kultur. Augsburg liegt verkehrsgünstig zwischen München und Stuttgart, was die Stadt zum Treffpunkt für regionale Firmenfeiern und Mehrtages-Events macht. Ich biete Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und exklusive Events in Augsburg und Bayerisch-Schwaben.",
+    highlight: "Augsburg-Publikum mag den schwäbischen Premium-Stil: präzise, ohne Glitzer, mit trockenem Humor. Mentalmagie wirkt hier besonders gut, weil sie technisch sauber sein muss.",
     einwohner: "300.000",
-    bekannteLocations: ["Kongress am Park", "Goldener Saal", "Textilmuseum", "WWK Arena Logen", "Hotel Maximilian's"],
-    faq: [
-      { q: "Was kostet ein Zauberer in Augsburg?", a: "Je nach Format und Dauer erstelle ich dir ein individuelles Angebot. Die Beratung ist kostenlos und unverbindlich." },
-      { q: "Für welche Anlässe kann ich einen Zauberer in Augsburg buchen?", a: "Firmenfeiern, Hochzeiten, Geburtstage, Weihnachtsfeiern, Jubiläen, Messen — ich passe mein Programm an jeden Anlass an." },
+    bekannteLocations: [
+      "Kongress am Park",
+      "Goldener Saal · Rathaus",
+      "Hotel Maximilian's",
+      "Steigenberger Drei Mohren",
+      "Kurhaus Göggingen",
+      "Augsburger Puppenkiste (Umfeld)",
+      "Schwabenhalle Lechhausen",
+      "WWK Arena · Business-Logen",
+      "Textilmuseum (TIM)",
+      "Diakonissenhaus · Eventbereich",
+      "Schloss Bocksberg",
+      "Brechthaus-Garten",
     ],
-    seoText: "Zauberer Augsburg: Emilian Leber begeistert als Zauberkünstler und Entertainer auf Events in Augsburg. Close-Up Magie, Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und private Feiern in der Fuggerstadt.",
-    langText: `Augsburg — Fuggerstadt, drittgrößte Stadt Bayerns und aufstrebender Eventstandort zwischen München und Stuttgart. Als Zauberer für Augsburg bringe ich modernes Entertainment zu Firmenfeiern im Kongress am Park, Hochzeiten im Goldenen Saal und Events in der lebendigsten Stadt Schwabens.
+    faq: [
+      {
+        q: "Was kostet ein Zauberer in Augsburg?",
+        a: "Hängt vom Format ab: Close-Up beim Empfang im mittleren dreistelligen Bereich, eine 30-Min-Bühnenshow höher, Kombi-Pakete bringen das beste Preis-Leistungs-Verhältnis. Anreise aus Regensburg (1,5 h über A9/A8) im Tagessatz enthalten — kein Übernachtungs-Aufschlag bei Auftritten vor Mitternacht. Konkretes Angebot nach Briefing-Call.",
+      },
+      {
+        q: "Welche Augsburger Locations eignen sich für Zauberkunst?",
+        a: "Für Galas und Bühnenshows: Kongress am Park, Goldener Saal im Rathaus, Kurhaus Göggingen, Schwabenhalle Lechhausen. Für Close-Up und Magic Dinner: Hotel Maximilian's, Steigenberger Drei Mohren, Restaurant Ratskeller Augsburg. Für Hochzeiten: Schloss Bocksberg, Goldener Saal, Brechthaus-Garten, Schaezlerpalais, im Umland Schloss Scherneck.",
+      },
+      {
+        q: "Macht ihr auch Industrie-Events (MAN, KUKA, Fujitsu, Premium-Aerotec)?",
+        a: "Ja — Augsburger Industrie ist ein Schwerpunkt. Vor jedem Engagement Briefing-Call mit HR oder Marketing: Konzern-Insider, sensible Themen, schwäbische Tonalität (zurückhaltend, präzise, kein bayerisches Krachledern). Daraus 2-3 personalisierte Mentaleffekte. Für Robotik-/Tech-Konzerne wie KUKA funktioniert Mentalmagie mit Logik-Twist besonders gut.",
+      },
+      {
+        q: "Wird Bayerisch-Schwaben abgedeckt (Friedberg, Königsbrunn, Memmingen, Donauwörth)?",
+        a: "Ja — Augsburger Umland und Bayerisch-Schwaben im Tagessatz ohne Aufpreis: Friedberg, Königsbrunn, Stadtbergen, Gersthofen, Neusäß. Memmingen, Donauwörth, Dillingen, Krumbach liegen 30–60 Min weiter — möglich mit moderatem Reisezuschlag oder bei Kombi-Buchungen.",
+      },
+    ],
+    seoText: "Zauberer Augsburg Emilian Leber: Close-Up Magie, Comedy-Zaubershow und Magic Dinner für Firmenfeier, Hochzeit, Industrie-Event (MAN/KUKA/Fujitsu) und Privatfeier in Augsburg und Bayerisch-Schwaben. 5,0 Sterne bei 30+ Bewertungen, über 200 Events seit 2016.",
+    langText: `Augsburg ist Bayerns drittgrößte Stadt mit eigenständigem Charakter: schwäbisch-bayerische Mischung, alte Fuggers-Tradition, neue Industrie-Vielfalt (MAN, KUKA, Fujitsu, Premium-Aerotec). Das prägt auch die Event-Kultur — gehobener Anspruch wie in München, aber mit der schwäbischen Zurückhaltung, die Klamauk sofort durchschaut. Wer hier auftritt, muss präzise sein.
 
-Das Augsburger Publikum schätzt Entertainment, das unterhaltsam und professionell zugleich ist — kein Lametta, keine Klischees, sondern echte Magie mit echtem Humor. Genau das ist mein Stil.
+Drei Anlässe, drei Augsburger Formate. Für Hochzeiten (klassisch im Goldenen Saal, im Schaezlerpalais oder auf Schloss Bocksberg; entspannt im Brechthaus-Garten) das Drei-Akt-Modell: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Für Firmenfeiern (Industrie wie MAN, KUKA, Fujitsu, Premium-Aerotec, MT Aerospace) der Mix aus Walk-Around beim Empfang plus 25–35-Min-Bühne als Höhepunkt. Für Privatanlässe in Augsburg-Hochfeld, Lechhausen oder Göggingen reicht reines Close-Up.
 
-Kosten für einen Zauberer in Augsburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+Industrie-Insider zählen doppelt. Augsburger Industrie ist hochspezialisiert (Robotik, Druckmaschinenbau, Luftfahrt-Komponenten) — Insider-Briefing macht hier besonders viel aus, weil die Branchenrunden klein sind und sich alle kennen. Wenn ein Mentaleffekt eine laufende KUKA-Roboter-Generation oder ein Premium-Aerotec-Bauteil ins Spiel bringt, weiß das Publikum sofort: hier hat sich jemand vorbereitet. Das ändert die Wertschätzung der ganzen Show.
+
+Magic Dinner in Augsburg. Mein Spezialgebiet — Mehrgänge-Abend mit Close-Up-Magie am Tisch — funktioniert in Augsburger Spitzen-Restaurants (Magnolia im Hotel Maximilian's, August im Innenhof, Restaurant Ratskeller, Sartory im Steigenberger) grundsätzlich. Anfrage über das Kontaktformular — bisher als Format im Hauspartner-Restaurant Wald & Wiese in Sinzing etabliert.
+
+Anreise und Logistik. Augsburg liegt 220 km vom Heimatstandort Regensburg — 1,5 h über A9/A8. Same-Day-Anreise möglich, Übernachtung selten nötig. Setup für Close-Up: 15 Min. Für Bühnenshows: 60–90 Min inklusive Soundcheck. In Augsburg und Bayerisch-Schwaben (Friedberg, Königsbrunn, Stadtbergen, Gersthofen, Neusäß) keine Reisekostenzuschläge.`,
   },
   {
     slug: "wuerzburg",
     name: "Würzburg",
     region: "Bayern",
-    intro: "Würzburg — die Stadt der Residenz, des Weins und unvergesslicher Events. Als Zauberer für Würzburg bringe ich moderne Magie in die Mainmetropole Unterfrankens. Von der Weinfest-Gala bis zur Firmenfeier im Residenzschloss.",
-    highlight: "Fränkischer Charme trifft moderne Performance — Würzburg bietet traumhafte Locations für magische Events.",
+    intro: "Als Zauberer für Würzburg arbeite ich in einer der schönsten Barock-Städte Deutschlands — UNESCO-Weltkulturerbe-Residenz, Wein-Region (Frankenweine), Universitätsstadt und wirtschaftliches Zentrum Unterfrankens mit Konzernen wie Koenig & Bauer, Brose, Vogel Communications, Bosch Rexroth. Ich biete Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und exklusive Events in Würzburg und ganz Unterfranken.",
+    highlight: "Würzburg-Publikum schätzt zwei Dinge: Eleganz (Residenz-Niveau) und fränkische Echtheit (keine Show-Posen). Mentalmagie funktioniert hier perfekt — präzise, intim, ohne Bauchredner-Lautstärke.",
     einwohner: "130.000",
-    bekannteLocations: ["Residenz Würzburg", "Congress Centrum", "Bürgerspital Weinstube", "VCC Vogel Convention Center", "Schloss Steinburg"],
-    faq: [
-      { q: "Was kostet ein Zauberer in Würzburg?", a: "Die Kosten variieren je nach Format. Kontaktiere mich für ein kostenloses, individuelles Angebot." },
-      { q: "Kommt der Zauberer auch nach Unterfranken?", a: "Ja, ich trete in ganz Unterfranken auf — Würzburg, Aschaffenburg, Schweinfurt und Umgebung." },
+    bekannteLocations: [
+      "Residenz Würzburg (Kaisersaal, Hofgarten)",
+      "Vogel Convention Center (VCC)",
+      "Congress Centrum Würzburg",
+      "Bürgerspital Weinstube",
+      "Festung Marienberg",
+      "Hotel Rebstock",
+      "Hotel Maritim Würzburg",
+      "Schloss Steinburg",
+      "Schloss Veitshöchheim (Hofgarten)",
+      "Posthalle Würzburg",
+      "Mozartsaal Hochschule für Musik",
+      "Würzburger Weinhäuser (Juliusspital, Staatlicher Hofkeller)",
     ],
-    seoText: "Zauberer Würzburg gesucht? Emilian Leber ist dein Zauberkünstler für Events in Würzburg und Unterfranken. Professionelle Zaubershow, Close-Up Magie und Magic Dinner für Firmenfeiern, Hochzeiten und Geburtstage.",
-    langText: `Würzburg — die Mainmetropole Unterfrankens mit Residenz, Weinkultur und einer einzigartigen Eventatmosphäre. Als Zauberer für Würzburg liefere ich Entertainment, das zu diesem besonderen Flair passt — elegant, interaktiv und unvergesslich.
+    faq: [
+      {
+        q: "Was kostet ein Zauberer in Würzburg?",
+        a: "Hängt vom Format ab: Close-Up beim Empfang im mittleren dreistelligen Bereich, eine 30-Min-Bühnenshow höher, Kombi-Pakete sind das beste Preis-Leistungs-Verhältnis. Anreise aus Regensburg (2,5 h über A3) im Tagessatz enthalten — bei Spätauftritten Übernachtung inklusive. Konkretes Angebot nach Briefing-Call.",
+      },
+      {
+        q: "Welche Würzburger Locations eignen sich für Zauberkunst?",
+        a: "Für Galas und Bühnenshows: Residenz (Kaisersaal, Spiegelsaal), Vogel Convention Center, Congress Centrum, Posthalle, Schloss Veitshöchheim. Für Close-Up und Weinprobe-Magic-Dinner: Bürgerspital, Juliusspital, Staatlicher Hofkeller, Hotel Rebstock, Schloss Steinburg. Für Hochzeiten: Residenz-Hofgarten, Festung Marienberg, Schloss Steinburg, Hotel Maritim.",
+      },
+      {
+        q: "Funktioniert das auch bei Weinprobe-Events und Frankenwein-Dinner?",
+        a: "Besonders gut. Wein-Verkostung + Close-Up-Magie zwischen den Gängen ist ein perfektes Format-Match: beide brauchen Aufmerksamkeit, beide leben vom geteilten Moment, beide profitieren vom langsamen Rhythmus. In Würzburger Weinhäusern (Juliusspital, Bürgerspital) habe ich Tischmagie als Format-Bridge zwischen Wein-Sequenzen eingesetzt — funktioniert.",
+      },
+      {
+        q: "Wird Unterfranken abgedeckt (Schweinfurt, Aschaffenburg, Bad Kissingen, Kitzingen)?",
+        a: "Ja — ganz Unterfranken im Tagessatz ohne Aufpreis: Würzburg, Kitzingen, Ochsenfurt, Veitshöchheim. Schweinfurt (35 km), Aschaffenburg (75 km), Bad Kissingen (60 km) liegen weiter — möglich im Tagessatz bei Verfügbarkeit, sonst moderater Reisezuschlag.",
+      },
+    ],
+    seoText: "Zauberer Würzburg Emilian Leber: Close-Up Magie, Comedy-Bühnenshow, Magic Dinner und Weinprobe-Magie in der Residenz, im Bürgerspital und in unterfränkischen Locations. Für Hochzeit, Firmenfeier (Koenig & Bauer, Brose, Vogel) und Privatfeier. 5,0 Sterne bei 30+ Bewertungen.",
+    langText: `Würzburg verbindet zwei Welten: UNESCO-Weltkulturerbe-Eleganz (Residenz, Hofgarten, Festung Marienberg) und solide unterfränkische Wirtschaftskraft (Koenig & Bauer, Brose, Vogel Communications, Bosch Rexroth). Das Würzburger Publikum will Premium-Entertainment, das beides ehrt: stilvolle Tonalität, aber keine Show-Pose. Mentalmagie und präzise Karten-Magie funktionieren hier perfekt.
 
-Ob Weinprobe-Gala im Bürgerspital, Firmenfeier im Congress Centrum oder Hochzeit in der Residenz — Würzburg bietet traumhafte Locations. Mein Programm passt sich dem stilvollen Ambiente der Barockstadt an.
+Drei Anlässe, drei Würzburger Settings. Für Hochzeiten in der Residenz, im Hofgarten Veitshöchheim, in Schloss Steinburg oder Festung Marienberg das Drei-Akt-Modell: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Für Firmenfeiern (Koenig & Bauer-Mitarbeiter-Events, Vogel-Verlag-Jubiläen, Bosch-Rexroth-Standort-Feiern, Brose-Tagungen) der Mix aus Walk-Around plus 25–35-Min-Bühne. Für Privatanlässe in Würzburg-Mitte, Sanderau oder Grombühl reines Close-Up reicht meist.
 
-Preise Zauberer Würzburg: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+Wein-Region als eigener Markt. Würzburg ist das Zentrum des Frankenweins — Bürgerspital, Juliusspital, Staatlicher Hofkeller sind Top-Adressen. Wein-Verkostungs-Events mit eingebauter Close-Up-Magie sind ein eigener Markt: Wein und Magie teilen denselben Pace (langsam, präzise, geteilter Moment), und der Wechsel zwischen Verkostungs-Sequenz und Tischmagie-Routine hält die Aufmerksamkeit hoch. Habe ich mehrfach gemacht, würde ich jederzeit wieder empfehlen.
+
+Magic Dinner in Würzburg. Mein Spezialgebiet (Mehrgänge-Abend mit Close-Up-Magie am Tisch) passt zu Würzburg besonders gut, weil das fränkische Verständnis von [Essen mit Würde] und der Weinpace zur Magie-Tonalität passt. Würzburger Sterne-Restaurants und Top-Hotel-Restaurants sind interessant — Anfrage über das Kontaktformular.
+
+Anreise und Logistik. Würzburg liegt 280 km vom Heimatstandort Regensburg — 2,5 h über A3. Anreise am Vor- oder Eventtag früh; bei Spätauftritten Übernachtung in einem Würzburger Hotel (im Tagessatz, typischerweise Maritim oder Rebstock). Setup für Close-Up: 15 Min. Für Bühnenshows: 60–90 Min. In Würzburg und direkter Umgebung keine Reisekostenzuschläge.`,
   },
   {
     slug: "ingolstadt",
     name: "Ingolstadt",
     region: "Bayern",
-    intro: "In der Audi-Stadt Ingolstadt bringe ich Innovation und Magie zusammen. Als Zauberer für Ingolstadt liefere ich modernes Entertainment für Corporate Events, Firmenfeiern und private Feiern — perfekt für eine Stadt, die Innovation lebt.",
-    highlight: "Ingolstadt liegt zentral zwischen München und Nürnberg — die Automotive-Hochburg verdient Entertainment auf Premium-Niveau.",
+    intro: "Als Zauberer für Ingolstadt arbeite ich in der Audi-Heimatstadt — Automotive-Hochburg mit Konzern-HQ, Zulieferer-Cluster (Conti, Schaeffler-Werk, Faurecia-Umfeld), MediaMarktSaturn-Konzernsitz und Universitätsstadt mit aufstrebender Tech-Szene. Ingolstadt liegt 80 km von Regensburg — sehr gute Anreise-Logistik. Ich biete Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und private Anlässe in Ingolstadt und der Region Donau-Altmühl.",
+    highlight: "Ingolstadt-Publikum ist Audi-trainiert: Qualitätsanspruch hoch, Toleranz für Show-Klischees niedrig. Wer hier präzise und ohne Effekthascherei liefert, gewinnt. Mentalmagie statt Bauchredner.",
     einwohner: "140.000",
-    bekannteLocations: ["Audi Forum", "Stadttheater Ingolstadt", "Klenzepark", "Saturn Arena Logen", "Schloss Ingolstadt"],
-    faq: [
-      { q: "Tritt der Zauberer auch bei Audi-Events auf?", a: "Ja, Corporate Events für Automobilunternehmen und deren Zulieferer gehören zu meinen Spezialitäten. Ich passe das Programm an eure Unternehmenskultur an." },
-      { q: "Was kostet ein Zauberer in Ingolstadt?", a: "Die Kosten richten sich nach Format und Dauer. Ich berate dich gerne kostenlos und unverbindlich." },
+    bekannteLocations: [
+      "Audi Forum Ingolstadt",
+      "Stadttheater Ingolstadt",
+      "Klenzepark · Festbereich",
+      "Saturn Arena · Business-Logen",
+      "Maritim Hotel Ingolstadt",
+      "Bayerischer Hof Ingolstadt",
+      "Hotel Ammerland",
+      "Schloss Ingolstadt · Bayerisches Armeemuseum",
+      "Festsaal Neues Schloss",
+      "Eventhalle Westpark",
+      "Konzertsaal Ingolstadt Village",
+      "Schloss Sandersdorf-Brehna (Region)",
     ],
-    seoText: "Zauberer Ingolstadt: Emilian Leber begeistert als professioneller Zauberkünstler auf Events in Ingolstadt. Moderne Zauberkunst für Firmenfeiern, Audi-Events, Hochzeiten und Geburtstage in der Donaustadt.",
-    langText: `Als Zauberer für Ingolstadt verbinde ich Innovation und Magie — passend zur Stadt, die als Heimat von Audi für Spitzenleistung steht. Mein Entertainment ist genauso präzise und beeindruckend wie die Ingenieurskunst aus der Donaustadt.
+    faq: [
+      {
+        q: "Tritt der Zauberer auch bei Audi-Events auf?",
+        a: "Ja — Audi und Automobilzulieferer sind ein Schwerpunkt. Vor jedem Engagement Briefing-Call mit HR oder Marketing: Modell-Insider, sensible Themen, gewünschte Tonalität (klassisch Premium oder lockerer für Mitarbeiter-Sommerfest). Daraus 2–3 personalisierte Mentaleffekte. Diskretion ist Standard — was im Briefing besprochen wird, bleibt im Briefing.",
+      },
+      {
+        q: "Was kostet ein Zauberer in Ingolstadt?",
+        a: "Hängt vom Format ab: Close-Up beim Empfang im mittleren dreistelligen Bereich, eine 30-Min-Bühnenshow höher, Kombi-Pakete sind das beste Preis-Leistungs-Verhältnis. Anreise aus Regensburg (1 h über A93) im Tagessatz enthalten — kein Übernachtungs-Aufschlag selbst bei späten Auftritten.",
+      },
+      {
+        q: "Welche Ingolstädter Locations eignen sich für Zauberkunst?",
+        a: "Für Galas und Bühnenshows: Audi Forum, Stadttheater, Saturn Arena Business-Logen, Eventhalle Westpark. Für Close-Up und Magic Dinner: Maritim Hotel, Bayerischer Hof, Hotel Ammerland. Für Hochzeiten: Schloss Ingolstadt, Festsaal Neues Schloss, Klenzepark im Sommer, Region Schlösser (Sandersdorf-Brehna).",
+      },
+      {
+        q: "Wird die Region abgedeckt (Eichstätt, Pfaffenhofen, Neuburg, Manching)?",
+        a: "Ja — Ingolstadt + direkter Großraum im Tagessatz ohne Aufpreis: Eichstätt, Pfaffenhofen, Neuburg an der Donau, Manching, Reichertshofen. Da Ingolstadt zwischen Regensburg und München liegt, sind auch Kombi-Buchungen mit anderen Städten in der Region effizient.",
+      },
+    ],
+    seoText: "Zauberer Ingolstadt Emilian Leber: Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Audi-Events, Automobilzulieferer-Firmenfeiern, Hochzeit und Privatfeier in Ingolstadt und Region (Eichstätt, Pfaffenhofen, Neuburg, Manching). 5,0 Sterne bei 30+ Bewertungen.",
+    langText: `Ingolstadt ist Audi-Land. Der Konzern prägt nicht nur die Wirtschaft, sondern auch die Erwartungshaltung an Premium-Entertainment in der Stadt. Wer im Audi-Umfeld auftritt (oder bei einem der vielen Zulieferer wie Conti, Schaeffler, Faurecia oder auch bei MediaMarktSaturn als zweitem großen Arbeitgeber), spricht zu einem Publikum, das täglich mit Qualitätsstandards arbeitet. Show-Klischees fallen hier sofort auf. Was funktioniert: technische Präzision, Mentalmagie mit Logik-Twist, Eleganz ohne Pose.
 
-Firmenfeiern im Audi Forum, Weihnachtsfeiern für Automobilzulieferer oder Galas im Stadttheater — Ingolstadt bietet großartige Eventlocations. Als Zauberer für Ingolstadt entwickle ich für jede Veranstaltung das passende Showprogramm.
+Drei Anlässe, drei Ingolstädter Formate. Für Hochzeiten (klassisch im Schloss Ingolstadt, im Festsaal Neues Schloss oder im Klenzepark-Pavillon) das Drei-Akt-Modell: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Für Firmenfeiern bei Audi und Zulieferern: Walk-Around beim Empfang plus 25–35-Min-Bühne als Höhepunkt zwischen Vorstandsrede und Buffet. Für Privatanlässe in Mailing, Friedrichshofen oder Etting reicht reines Close-Up.
 
-Zauberer Ingolstadt Kosten: Meine Pakete beginnen ab 395 €. Kontaktiere mich für ein kostenloses Angebot.`,
+Automotive-Insider zählen. Vor jedem Audi- oder Zulieferer-Event Briefing-Call. Themen: aktuelles Modell-Portfolio, intern besprochene Herausforderungen (die NICHT in Pointen vorkommen sollen), interne Running-Gags, vielleicht der Werkstor-Wachmann der seit 20 Jahren dort steht. Diese Insider fließen in 2-3 personalisierte Mentaleffekte ein — die Show wirkt dann maßgeschneidert, nicht von der Stange. Diskretion ist Standard.
+
+Magic Dinner in Ingolstadt. Mein Spezialgebiet (Mehrgänge-Abend mit Close-Up-Magie am Tisch) ist in Ingolstädter Premium-Restaurants und im Restaurant Genusswerkstatt im Audi Forum grundsätzlich machbar — bisher als Format vor allem im Hauspartner-Restaurant Wald & Wiese in Sinzing (40 Min entfernt) etabliert. Für ein Ingolstädter Magic Dinner: Anfrage über das Kontaktformular.
+
+Anreise und Logistik. Ingolstadt liegt 80 km vom Heimatstandort Regensburg — 1 h über die A93. Same-Day-Anreise problemlos, kein Übernachtungsbedarf. Setup für Close-Up: 15 Min. Für Bühnenshows: 60–90 Min inklusive Soundcheck. In Ingolstadt, Eichstätt, Pfaffenhofen, Neuburg und Manching keine Reisekostenzuschläge. Da Ingolstadt zwischen Regensburg und München liegt, sind Kombi-Buchungen (z.B. Vormittag Audi, Abend München-Event) effizient möglich.`,
   },
   {
     slug: "passau",
