@@ -38,9 +38,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Hochzeitszauberer für deinen Tag",
       titlePrefix: "Zauberer für Hochzeit in",
       metaTitle:
-        "Zauberer Hochzeit {stadt} — Emilian Leber · Sektempfang, Tisch & Bühne",
+        "★ Hochzeitszauberer {stadt} · Empfang + Show · 5,0/5",
       metaDescription:
-        "Hochzeitszauberer für {stadt} und Umgebung. Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Über 100 Hochzeiten begleitet. 5,0★ · 30+ Bewertungen. Unverbindlich anfragen.",
+        "Hochzeitszauberer für {stadt} — Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. 100+ Hochzeiten begleitet. 5,0★ bei 30+ Bewertungen. Jetzt unverbindlich anfragen.",
     },
     intro:
       "Drei Akte über euren Tag: Sektempfang, Dinner, Show vor dem Tanz. Close-Up am Tisch und Bühne — einzeln oder als roter Faden über den ganzen Abend.",
@@ -97,9 +97,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Firmenfeier-Zauberer · Premium-Entertainment",
       titlePrefix: "Zauberer für Firmenfeier in",
       metaTitle:
-        "Zauberer Firmenfeier {stadt} — Emilian Leber · Vorstandsdinner & Gala",
+        "★ Zauberer Firmenfeier {stadt} · Premium · 5,0/5",
       metaDescription:
-        "Firmenfeier-Zauberer für {stadt} — Vorstandsdinner, Weihnachtsfeier, Galaabend, Mitarbeiterfeier. DAX-Konzerne und Mittelstand. Insider-Pointen aus dem Briefing, Magie-Bridges in der Moderation. 200+ Firmen-Events.",
+        "Firmenfeier-Zauberer für {stadt} — Vorstandsdinner, Weihnachtsfeier, Gala. DAX-Konzerne und Mittelstand. Insider-Pointen aus dem Briefing. 200+ Events. 5,0★ bei 30+ Bewertungen.",
     },
     intro:
       "Vorstandsdinner, Kundenabend, Galaabend, Mitarbeiterfeier. Tonalität ans Unternehmen angepasst, Insider-Pointen aus dem Briefing, Magie-Bridges in der Moderation, Standing-Ovation-Finale.",
@@ -157,9 +157,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Magic Dinner — Restaurant-Erlebnis mit Tisch-Magie",
       titlePrefix: "Magic Dinner in",
       metaTitle:
-        "Magic Dinner {stadt} — Restaurant-Erlebnis mit Close-Up am Tisch",
+        "★ Magic Dinner {stadt} · Close-Up am Tisch · 5,0/5",
       metaDescription:
-        "Magic Dinner in {stadt}: Mehrgänge-Abend im Restaurant mit Close-Up-Magie direkt am Tisch. Spezialgebiet seit 2023. Hauspartner: Wald & Wiese, Sinzing. Für private Tafeln, Geburtstage, Geschäftsabende.",
+        "Magic Dinner in {stadt}: Mehrgänge-Abend mit Close-Up-Magie direkt am Tisch. Spezialgebiet seit 2023. Hauspartner Wald & Wiese in Sinzing. 5,0★ bei 30+ Bewertungen. Jetzt anfragen.",
     },
     intro:
       "Mehrgänge-Abend mit Magie zwischen den Gängen. Close-Up direkt am Tisch, Mentalmagie zwischen den Tafeln, alles eingebettet in den Service-Rhythmus. Mein Spezialgebiet seit 2023.",
@@ -217,9 +217,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Close-Up Magie · direkt am Tisch und in deinen Händen",
       titlePrefix: "Close-Up Zauberer für",
       metaTitle:
-        "Close-Up Zauberer {stadt} — Karten, Münzen, Mentaleffekte am Tisch",
+        "★ Close-Up Zauberer {stadt} · Karten + Mental · 5,0/5",
       metaDescription:
-        "Close-Up Zauberkünstler für {stadt}: Karten in eurer Hand, Münzen aus dem Nichts, Mentaleffekte mit eurer Wahl. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner. Ohne Technik, ohne Bühne — direkt vor euch.",
+        "Close-Up Zauberkünstler für {stadt}: Karten in eurer Hand, Münzen aus dem Nichts, Mentaleffekte. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner. 5,0★ bei 30+ Bewertungen.",
     },
     intro:
       "Karten in eurer Hand, Münzen die wandern, ein Ring der durch den Tisch fällt. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner — intim, persönlich, ohne Technik.",
@@ -277,9 +277,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Bühnenshow · 15-60 Minuten durchkomponiert",
       titlePrefix: "Bühnen-Zauberer für",
       metaTitle:
-        "Bühnenshow Zauberer {stadt} — Magic & Comedy für Saal-Auftritte",
+        "★ Bühnenshow Zauberer {stadt} · Comedy + Magic · 5,0/5",
       metaDescription:
-        "Bühnen-Zauberer für {stadt}: 15-60 Min durchkomponierte Show — Mentaleffekte, Comedy-Pointen, Standing-Ovation-Finale. Greatest-Talent-Finalist und Kreativpreisträger. Für Galas, Firmenabende, Theater-Slots.",
+        "Bühnen-Zauberer für {stadt}: 15-60 Min durchkomponiert — Mentaleffekte, Comedy, Standing-Ovation-Finale. Greatest-Talent-Finalist. 5,0★ bei 30+ Bewertungen.",
     },
     intro:
       "15-60 Minuten durchkomponierte Bühnenshow — Hook, Aufbau, Peaks, Climax, Übergabe. Mentaleffekte, Comedy-Pointen, Standing-Ovation-Finale. Greatest-Talent-Finalist und Kreativpreisträger.",

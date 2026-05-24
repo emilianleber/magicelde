@@ -96,33 +96,33 @@ function loadWissenTopics() {
 const staticRoutes = [
   {
     path: '/',
-    title: 'Emilian Leber – Zauberer für Events, Firmenfeiern & Hochzeiten',
-    description: 'Emilian Leber begeistert als moderner Zauberer auf Hochzeiten, Firmenfeiern und Events. Einzigartige Shows voller Humor und Staunen. Jetzt anfragen!',
-    ogTitle: 'Emilian Leber – Zauberer für Events, Firmenfeiern & Hochzeiten',
+    title: '★ Emilian Leber · Zauberer für Hochzeit + Firmenfeier · 5,0/5',
+    description: 'Emilian Leber — Zauberer für Hochzeiten, Firmenfeiern und Events. Comedy, Mentalmagie, Magic Dinner. 200+ Events seit 2016. 5,0★ bei 30+ Bewertungen. Jetzt unverbindlich anfragen.',
+    ogTitle: 'Emilian Leber — Zauberer · 5,0★ bei 30+ Bewertungen',
   },
   {
     path: '/hochzeit',
-    title: 'Hochzeitszauberer – Emilian Leber | Zauberer für Hochzeiten',
-    description: 'Emilian Leber ist Hochzeitszauberer und sorgt deutschlandweit mit moderner Zauberkunst für unvergessliche Momente auf Ihrer Hochzeit. Jetzt anfragen!',
-    ogTitle: 'Hochzeitszauberer – Emilian Leber | Zauberer für Hochzeiten',
+    title: '★ Hochzeitszauberer — Emilian Leber · Sektempfang + Show · 5,0/5',
+    description: 'Hochzeitszauberer Emilian Leber: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. 100+ Hochzeiten begleitet. 5,0★ bei 30+ Bewertungen.',
+    ogTitle: 'Hochzeitszauberer — 100+ Hochzeiten · 5,0★',
   },
   {
     path: '/firmenfeiern',
-    title: 'Zauberer für Firmenfeiern – Emilian Leber | Corporate Entertainment',
-    description: 'Zauberer für Firmenfeiern: Emilian Leber begeistert mit interaktiver Magie und Comedy-Show auf Firmenfeiern, Weihnachtsfeiern und Corporate Events. Deutschlandweit buchbar.',
-    ogTitle: 'Zauberer für Firmenfeiern – Emilian Leber',
+    title: '★ Zauberer Firmenfeier — Emilian Leber · Premium-Entertainment · 5,0/5',
+    description: 'Zauberer für Firmenfeiern: Vorstandsdinner, Weihnachtsfeier, Gala. DAX-Konzerne bis Mittelstand. Insider-Pointen aus dem Briefing. 200+ Events. 5,0★ bei 30+ Bewertungen.',
+    ogTitle: 'Zauberer Firmenfeier — 200+ Events · 5,0★',
   },
   {
     path: '/magic-dinner',
-    title: 'Magic Dinner – Emilian Leber | Dinner und Zaubershow',
-    description: 'Magic Dinner mit Emilian Leber: Ein unvergesslicher Abend aus Dinner und Magie – exklusiv, interaktiv und einzigartig. Für besondere Anlässe und Events.',
-    ogTitle: 'Magic Dinner – Emilian Leber | Dinner & Zaubershow',
+    title: '★ Magic Dinner — Emilian Leber · Close-Up am Tisch · 5,0/5',
+    description: 'Magic Dinner mit Emilian Leber: Mehrgänge-Abend mit Close-Up-Magie direkt am Tisch. Spezialgebiet seit 2023. Hauspartner Wald & Wiese in Sinzing. 5,0★ bei 30+ Bewertungen.',
+    ogTitle: 'Magic Dinner — Spezialgebiet seit 2023 · 5,0★',
   },
   {
     path: '/tickets',
-    title: 'Tickets & Termine — Magic Dinner Summer Edition | Emilian Leber',
-    description: 'Aktuelle Tickets & Termine — Magic Dinner Summer Edition am 11.07.2026 im Restaurant Wald & Wiese in Sinzing bei Regensburg. Reservierung beim Restaurant.',
-    ogTitle: 'Tickets & Termine — Magic Dinner Summer Edition',
+    title: '★ Tickets — Magic Dinner Summer Edition · 11.07.2026 · Wald & Wiese',
+    description: 'Tickets Magic Dinner Summer Edition am 11.07.2026 im Restaurant Wald & Wiese in Sinzing bei Regensburg. À la carte essen + Close-Up-Magie am Tisch. Reservierung beim Restaurant.',
+    ogTitle: 'Tickets — Magic Dinner Summer Edition 11.07.2026',
   },
   {
     path: '/tickets/magic-dinner-summer-edition',
@@ -150,21 +150,21 @@ const staticRoutes = [
   },
   {
     path: '/buehnenshow',
-    title: 'Zaubershow – Emilian Leber | Comedy Bühnenshow',
-    description: 'Die Bühnenshow von Emilian Leber: 30–60 Minuten Comedy-Zaubershow mit Publikumsinteraktion. Für Firmenfeiern, Galas und Events – deutschlandweit buchbar.',
-    ogTitle: 'Bühnenshow – Emilian Leber | Comedy Zaubershow',
+    title: '★ Zaubershow — Emilian Leber · Comedy + Mental · 5,0/5',
+    description: 'Bühnenshow von Emilian Leber: 30-60 Min Comedy-Zaubershow mit Mentalmagie und Standing-Ovation-Finale. Greatest-Talent-Finalist. 5,0★ bei 30+ Bewertungen.',
+    ogTitle: 'Bühnenshow — Greatest-Talent-Finalist · 5,0★',
   },
   {
     path: '/close-up',
-    title: 'Close-Up Magie – Emilian Leber | Tischzauberei',
-    description: 'Close-Up Magie von Emilian Leber: Interaktive Tischzauberei direkt bei Ihren Gästen – perfekt für Empfänge, Dinner und Networking-Events. Jetzt anfragen!',
-    ogTitle: 'Close-Up Magie – Emilian Leber | Tischzauberei',
+    title: '★ Close-Up Magie — Emilian Leber · Tischzauberei · 5,0/5',
+    description: 'Close-Up Magie von Emilian Leber: Karten in eurer Hand, Münzen, Mentaleffekte. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner. 100+ Close-Up-Auftritte. 5,0★.',
+    ogTitle: 'Close-Up Magie — 100+ Auftritte · 5,0★',
   },
   {
     path: '/geburtstage',
-    title: 'Zauberer für Geburtstage – Emilian Leber | Geburtstagsshow',
-    description: 'Zauberer für Geburtstage: Emilian Leber macht Ihren runden Geburtstag unvergesslich – mit interaktiver Close-Up Magie und Comedy-Show für Erwachsene.',
-    ogTitle: 'Zauberer für Geburtstage – Emilian Leber',
+    title: '★ Zauberer Geburtstag — Emilian Leber · Runder Tag · 5,0/5',
+    description: 'Zauberer für runde Geburtstage: Close-Up am Tisch + Comedy-Bühnenshow für Erwachsene. 80+ Geburtstage von 30er bis Goldene. 5,0★ bei 30+ Bewertungen.',
+    ogTitle: 'Zauberer für Geburtstage — 80+ Feiern · 5,0★',
   },
   {
     path: '/comedy-zauberei',
@@ -180,9 +180,9 @@ const staticRoutes = [
   },
   {
     path: '/referenzen',
-    title: 'Referenzen & Bewertungen – Emilian Leber | Zauberer',
-    description: 'Bewertungen und Referenzen von Emilian Leber: Über 30 begeisterte Kunden, 5,0 Sterne auf ProvenExpert. Lesen Sie echte Erfahrungsberichte.',
-    ogTitle: 'Referenzen – Emilian Leber | 5,0 Sterne',
+    title: '★ Referenzen — Emilian Leber · 18 Kunden-Cases · 5,0/5',
+    description: 'Referenzen Emilian Leber: VKB, STRABAG, XXXLutz, Sparkasse, Stadt Regensburg, Stadt Deggendorf u.v.m. Jeder Case mit Anlass, Konzept und Story. 5,0★ bei 30+ Bewertungen.',
+    ogTitle: 'Referenzen — 18 Kunden-Cases · 5,0★',
   },
   {
     path: '/ueber-mich',
@@ -292,9 +292,9 @@ const cities = loadCities();
 if (cities.length === 0) throw new Error('inject-meta: keine Städte aus staedte.ts geladen');
 for (const c of cities) {
   const canonical = `${BASE}/zauberer/${c.slug}`;
-  const title = `Zauberer ${c.name} – Emilian Leber | Zaubershow, Close-Up & Magic Dinner`;
-  const description = `Zauberer in ${c.name}: Emilian Leber begeistert mit interaktiver Close-Up Magie, Comedy-Zaubershow & Magic Dinner auf Hochzeiten, Firmenfeiern und Events in ${c.name}. Jetzt unverbindlich anfragen!`;
-  const ogTitle = `Zauberer ${c.name} – Emilian Leber`;
+  const title = `★ Zauberer ${c.name} · Close-Up + Bühne + Magic Dinner · 5,0/5`;
+  const description = `Zauberer in ${c.name}: Close-Up Magie, Comedy-Bühnenshow & Magic Dinner für Hochzeit, Firmenfeier und Geburtstag. 200+ Events seit 2016. 5,0★ bei 30+ Bewertungen. Jetzt anfragen.`;
+  const ogTitle = `Zauberer ${c.name} — 5,0★ bei 30+ Bewertungen`;
   writeRoute(`/zauberer/${c.slug}`, injectMeta(baseHtml, { title, description, canonical, ogTitle }));
   count++;
 }
