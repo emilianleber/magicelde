@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useLocation, useParams, Navigate } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
+import NotFound from "./NotFound";
 import PageLayout from "@/components/landing/PageLayout";
 import { getServiceFormat, type ServiceFormat } from "@/data/serviceFormats";
 import { staedte, type Stadt } from "@/data/staedte";
@@ -48,7 +49,7 @@ const ServiceStadtSeite = () => {
   );
 
   if (!serviceFormat || !city) {
-    return <Navigate to="/" replace />;
+    return <NotFound />;
   }
 
   return <ServicePage service={serviceFormat} city={city} />;

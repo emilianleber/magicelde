@@ -1,5 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/landing/PageLayout";
 
 const NotFound = () => {
@@ -10,6 +11,11 @@ const NotFound = () => {
 
   return (
     <PageLayout>
+      <Helmet>
+        <title>Seite nicht gefunden — magicel.de</title>
+        <meta name="robots" content="noindex, follow" />
+        <meta name="googlebot" content="noindex, follow" />
+      </Helmet>
       <section className="min-h-screen flex flex-col justify-center">
         <div className="container px-6 pt-28 pb-16">
           <div className="max-w-2xl mx-auto text-center">

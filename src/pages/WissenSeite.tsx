@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useParams, Navigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import NotFound from "./NotFound";
 import PageLayout from "@/components/landing/PageLayout";
 import { getWissenTopic, wissenTopics, type WissenTopic } from "@/data/wissenTopics";
 import { ArrowRight, ArrowUpRight, BookOpen } from "lucide-react";
@@ -14,7 +15,7 @@ const SERIF_ITALIC =
 const WissenSeite = () => {
   const { slug } = useParams<{ slug: string }>();
   const topic = useMemo(() => (slug ? getWissenTopic(slug) : undefined), [slug]);
-  if (!topic) return <Navigate to="/" replace />;
+  if (!topic) return <NotFound />;
   return <Inner topic={topic} />;
 };
 

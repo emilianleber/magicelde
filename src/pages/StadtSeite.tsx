@@ -1,4 +1,5 @@
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import NotFound from "./NotFound";
 import { Helmet } from "react-helmet-async";
 import { useEffect, useRef, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
@@ -2315,7 +2316,7 @@ const buildStadtQuizConfig = (data: Stadt): CustomQuizConfig => ({
 const StadtSeite = () => {
   const { stadt } = useParams<{ stadt: string }>();
   const data = staedte.find((s) => s.slug === stadt);
-  if (!data) return <Navigate to="/404" replace />;
+  if (!data) return <NotFound />;
 
   const siteUrl = `https://www.magicel.de/zauberer/${data.slug}`;
   const title = `Zauberer ${data.name} — Hochzeit, Firmenfeier, Magic Dinner | Emilian Leber`;

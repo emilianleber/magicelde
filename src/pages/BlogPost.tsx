@@ -1,4 +1,5 @@
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import NotFoundPage from "./NotFound";
 import { Helmet } from "react-helmet-async";
 import { useEffect, useMemo, useState } from "react";
 import PageLayout from "@/components/landing/PageLayout";
@@ -1003,7 +1004,7 @@ const BlogPostPage = () => {
     if (post) window.scrollTo(0, 0);
   }, [post]);
 
-  if (!post) return <Navigate to="/blog" replace />;
+  if (!post) return <NotFoundPage />;
 
   const ogImageMap: Record<string, string> = {
     "wedding-magic": "https://www.magicel.de/og-wedding.jpg",
