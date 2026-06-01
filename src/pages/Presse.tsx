@@ -1618,7 +1618,7 @@ const QUOTES = [
     quote:
       "Die schönste Reaktion ist nicht der Applaus. Es sind die drei Sekunden Stille davor, in denen alle gleichzeitig die Luft anhalten.",
     context: "Über den Moment vor dem Applaus",
-    source: "Interview · TVA · 2024",
+    source: "Interview · TVA · 2025",
   },
   {
     quote:
@@ -1773,7 +1773,7 @@ const PullQuoteSection = () => {
           <footer className="mt-10 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-white/25" aria-hidden />
             <span className="text-sm md:text-base text-white/65">
-              TVA Bayern · 2024
+              TVA Bayern · 2025
             </span>
             <span className="h-px w-12 bg-white/25" aria-hidden />
           </footer>
@@ -1796,7 +1796,7 @@ const VideoSection = () => {
             <p
               className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
-              Video-Mitschnitt · TVA 2024.
+              Video-Mitschnitt · TVA 2025.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               TV-Auftritt{" "}

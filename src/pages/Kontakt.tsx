@@ -1568,7 +1568,7 @@ const StandortMap = () => {
    10 · VERTRAUEN-STRIP
    ════════════════════════════════════════════════════════ */
 const VERTRAUEN = [
-  { icon: Tv, label: "TVA TV", sub: "Auftritt 2024" },
+  { icon: Tv, label: "TVA TV", sub: "Auftritt 2025" },
   { icon: Trophy, label: "Greatest Talent", sub: "Finalist 2023" },
   { icon: Award, label: "Talents of Magic", sub: "Kreativpreis 2024" },
   { icon: Medal, label: "Dt. Jugendmeisterschaft", sub: "Top 30 · 2024" },

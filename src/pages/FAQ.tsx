@@ -97,7 +97,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "auszeichnungen",
     category: "allgemein",
     q: "Welche Auszeichnungen habe ich?",
-    a: "Greatest Talent 2023 — Finalist (TV-Show, SAT.1). Talents of Magic 2024 — Finalist + Kreativpreis. Deutsche Jugendmeisterschaft der Magie — Top 30. TVA-TV-Interview 2024. 5,0 Sterne auf ProvenExpert und Google.",
+    a: "Greatest Talent 2023 — Finalist (TV-Show, SAT.1). Talents of Magic 2024 — Finalist + Kreativpreis. Deutsche Jugendmeisterschaft der Magie — Top 30. TVA-TV-Interview 2025. 5,0 Sterne auf ProvenExpert und Google.",
   },
   {
     id: "seit-wann",
@@ -299,7 +299,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "tv-auftritte",
     category: "allgemein",
     q: "War ich im Fernsehen?",
-    a: "Ja — TVA-Interview 2024 (Bayerisches Regional-TV) mit 16 Jahren, Live-Studio mit Karten-Routine. Davor 2023 Greatest Talent auf SAT.1 als Finalist. Mitschnitte auf YouTube und im Presse-Bereich verfügbar.",
+    a: "Ja — TVA-Interview 2025 (Bayerisches Regional-TV) mit 16 Jahren, Live-Studio mit Karten-Routine. Davor 2023 Greatest Talent auf SAT.1 als Finalist. Mitschnitte auf YouTube und im Presse-Bereich verfügbar.",
   },
   {
     id: "ausbildung",

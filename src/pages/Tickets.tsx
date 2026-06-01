@@ -1397,7 +1397,7 @@ const VideoSection = () => {
             <p
               className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
-              Showreel · TVA-Mitschnitt 2024.
+              Showreel · TVA-Mitschnitt 2025.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
               Sieh dir an,{" "}
@@ -1409,7 +1409,7 @@ const VideoSection = () => {
           </div>
           <div className="md:col-span-5 md:pt-8">
             <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              TVA Bayern hat 2024 eine komplette Show-Routine im Studio
+              TVA Bayern hat 2025 eine komplette Show-Routine im Studio
               aufgenommen — Live-Karten-Test mit dem Moderator, Mentaleffekt
               mit Studio-Publikum. Der Mitschnitt zeigt, was bei einer
               Bühnenshow auf dich zukommt.
@@ -1429,7 +1429,7 @@ const VideoSection = () => {
           <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
             <iframe
               src={`https://www.youtube.com/embed/${TVA_VIDEO_ID}?rel=0&modestbranding=1`}
-              title="TVA TV-Interview 2024 — Emilian Leber, Showreel-Einblick"
+              title="TVA TV-Interview 2025 — Emilian Leber, Showreel-Einblick"
               loading="lazy"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -1447,7 +1447,7 @@ const VideoSection = () => {
           <span aria-hidden className="text-foreground/25">
             ·
           </span>
-          <span>2024 · mit 16 Jahren</span>
+          <span>2025 · mit 16 Jahren</span>
           <span aria-hidden className="text-foreground/25">
             ·
           </span>
