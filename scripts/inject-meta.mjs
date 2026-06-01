@@ -1,108 +1,35 @@
 /**
  * Post-build: schreibt route-spezifische dist/<path>/index.html mit
- * korrektem <title>, <meta description>, <link canonical>, og:* und
- * twitter:* damit Googlebot pro Route unique Signale sieht (ohne JS-Render).
+ *   - korrektem <title>, <meta description>, <link canonical>, og:*, twitter:*
+ *   - JSON-LD im <head> (Single Source — react-helmet-async@3 rendert keine
+ *     <script>-Tags; siehe scripts/seo-content.mjs)
+ *   - statischem Body-Content (H1/H2/H3, Text, interne+externe Links, FAQ)
+ *     INNERHALB #root, damit No-JS-/AI-Crawler echten Inhalt sehen.
  *
  * Vercel serviert statische Dateien vor den SPA-Rewrites — funktioniert out-of-the-box.
  *
- * Datenquellen (Single Source of Truth = .ts-Files, via Regex extrahiert):
- *   - src/data/staedte.ts        → 109 Städte ({slug, name})
- *   - src/data/serviceFormats.ts → 5 Service-Formate ({slug, routePrefix, metaTitle, metaDescription})
- *   - src/data/blogPosts.ts      → 18 Blog-Posts ({slug, title, excerpt})
- *   - src/data/wissenTopics.ts   → 8 Wissen-Pages ({slug, metaTitle, metaDescription})
+ * Daten (Single Source of Truth = .ts-Files) werden via esbuild voll geladen
+ * (createRenderer().data, siehe seo-content.mjs) — kein fragiles Regex.
  *
- * Output:
- *   - 23 Hauptseiten + 109 Städte + 545 Service-Stadt-Kombis + 18 Blog + 8 Wissen
- *   = ~703 prerendered HTML-Files (matched sitemap.xml).
+ * Output: 23 Hauptseiten + 109 Städte + 545 Service-Stadt-Kombis + 16 Blog
+ *   + 6 Wissen = 699 prerendered HTML-Files (deckungsgleich mit sitemap.xml).
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
+import { createRenderer } from './seo-content.mjs';
 
 const BASE = 'https://www.magicel.de';
 const ROOT = process.cwd();
 const DIST = join(ROOT, 'dist');
 
 /* ────────────────────────────────────────────────────────────
-   Data loaders — Regex über .ts-Files (kein TS-Compile nötig)
+   Daten kommen aus createRenderer().data (siehe scripts/seo-content.mjs).
+   Dort werden die .ts-Datendateien via esbuild voll-fidelity geladen —
+   kein fragiles Regex-Parsing über verschachtelte Objekte. Das fixt u.a.
+   die fehlerhafte canonicalPrefix-Heuristik der alten Regex-Loader, die
+   hochzeit/firmenfeier/close-up faelschlich auf /magic-dinner- bzw.
+   /zaubershow- umbog (Kollision → 327 Service-Stadt-Seiten fehlten).
    ──────────────────────────────────────────────────────────── */
-
-function read(rel) {
-  return readFileSync(join(ROOT, rel), 'utf-8');
-}
-
-function loadCities() {
-  const content = read('src/data/staedte.ts');
-  const start = content.indexOf('export const staedte');
-  const body = start === -1 ? content : content.slice(start);
-  const out = [];
-  const re = /\{\s*slug:\s*"([^"]+)",\s*name:\s*"([^"]+)"/g;
-  let m;
-  while ((m = re.exec(body)) !== null) {
-    out.push({ slug: m[1], name: m[2] });
-  }
-  return out;
-}
-
-function loadServiceFormats() {
-  const content = read('src/data/serviceFormats.ts');
-  const start = content.indexOf('export const SERVICE_FORMATS');
-  const body = start === -1 ? content : content.slice(start);
-  const out = [];
-  // Order in serviceFormats.ts: slug → ... → routePrefix → ... → metaTitle → metaDescription
-  // canonicalPrefix ist optional → separater Lookup pro Format.
-  const re = /slug:\s*"([^"]+)"[\s\S]*?routePrefix:\s*"([^"]+)"[\s\S]*?metaTitle:\s*"([^"]+)",\s*metaDescription:\s*"([^"]+)"/g;
-  let m;
-  while ((m = re.exec(body)) !== null) {
-    out.push({
-      slug: m[1],
-      routePrefix: m[2],
-      metaTitleTpl: m[3],
-      metaDescriptionTpl: m[4],
-    });
-  }
-  // canonicalPrefix per slug aufspüren
-  for (const f of out) {
-    const re2 = new RegExp(`slug:\\s*"${f.slug.replace(/-/g, '\\-')}"[\\s\\S]*?canonicalPrefix:\\s*"([^"]+)"`);
-    const mm = body.match(re2);
-    // matched-block muss INNERHALB des aktuellen Format-Objekts liegen — heuristic:
-    // wenn das nächste "slug:" nach dem aktuellen vor canonicalPrefix kommt, ist's ein anderes Format.
-    if (mm) {
-      const idxSlug = body.indexOf(`slug: "${f.slug}"`);
-      const idxNextSlug = body.indexOf('slug: "', idxSlug + 1);
-      const idxCanonical = body.indexOf(mm[0]);
-      if (idxNextSlug === -1 || idxCanonical < idxNextSlug) {
-        f.canonicalPrefix = mm[1];
-      }
-    }
-  }
-  return out;
-}
-
-function loadBlogPosts() {
-  const content = read('src/data/blogPosts.ts');
-  const start = content.indexOf('export const blogPosts');
-  const body = start === -1 ? content : content.slice(start);
-  const out = [];
-  const re = /slug:\s*"([^"]+)",\s*title:\s*"([^"]+)"[\s\S]*?excerpt:\s*"([^"]+)"/g;
-  let m;
-  while ((m = re.exec(body)) !== null) {
-    out.push({ slug: m[1], title: m[2], excerpt: m[3] });
-  }
-  return out;
-}
-
-function loadWissenTopics() {
-  const content = read('src/data/wissenTopics.ts');
-  const start = content.indexOf('export const wissenTopics');
-  const body = start === -1 ? content : content.slice(start);
-  const out = [];
-  const re = /slug:\s*"([^"]+)"[\s\S]*?metaTitle:\s*"([^"]+)",\s*metaDescription:\s*"([^"]+)"/g;
-  let m;
-  while ((m = re.exec(body)) !== null) {
-    out.push({ slug: m[1], metaTitle: m[2], metaDescription: m[3] });
-  }
-  return out;
-}
 
 /* ────────────────────────────────────────────────────────────
    Statische Routen (Single Source of Truth — synchronisiert
@@ -279,6 +206,33 @@ function injectMeta(html, { title, description, canonical, ogTitle }) {
       `$1${esc(ogTitle || title)}$2`);
 }
 
+/**
+ * Injiziert die zwei statischen SEO-Teile:
+ *   - parts.jsonLd → vor </head> (persistent; sichtbar für No-JS-Crawler
+ *     UND Googlebot). react-helmet-async@3 rendert <script>-Tags nicht,
+ *     deshalb ist dieses Build-time-JSON-LD die Single Source of Truth.
+ *     aggregateRating steht nur EINMAL pro Seite (auf LocalBusiness) → kein
+ *     GSC-"mehrere Bewertungen"-Fehler.
+ *   - parts.body → INNERHALB #root. React (createRoot, kein hydrateRoot)
+ *     leert #root beim Mount → kein doppelter sichtbarer Inhalt für JS-User.
+ * Replacement-Funktion statt String, damit '$' im Content nicht als
+ * Replace-Pattern ($&, $1 …) interpretiert wird.
+ */
+function injectStatic(html, parts) {
+  if (!parts || (!parts.jsonLd && !parts.body)) return html;
+  let out = html;
+  if (parts.jsonLd) {
+    out = out.replace('</head>', () => `    ${parts.jsonLd}\n  </head>`);
+  }
+  if (parts.body) {
+    out = out.replace(
+      '<div id="root"></div>',
+      () => `<div id="root">${parts.body}</div>`
+    );
+  }
+  return out;
+}
+
 function writeRoute(routePath, html) {
   if (routePath === '/') {
     writeFileSync(join(DIST, 'index.html'), html);
@@ -294,24 +248,32 @@ function writeRoute(routePath, html) {
    ──────────────────────────────────────────────────────────── */
 
 const baseHtml = readFileSync(join(DIST, 'index.html'), 'utf-8');
+const renderer = await createRenderer();
 let count = 0;
 
 // 1) Statische Hauptseiten (23)
 for (const r of staticRoutes) {
   const canonical = `${BASE}${r.path}`;
-  writeRoute(r.path, injectMeta(baseHtml, { ...r, canonical }));
+  const html = injectMeta(baseHtml, { ...r, canonical });
+  const injection =
+    r.path === '/'
+      ? renderer.render({ kind: 'home' })
+      : renderer.render({ kind: 'static', path: r.path, route: r });
+  writeRoute(r.path, injectStatic(html, injection));
   count++;
 }
 
 // 2) Stadt-Pages /zauberer/:stadt (109)
-const cities = loadCities();
+const cities = renderer.data.cities;
 if (cities.length === 0) throw new Error('inject-meta: keine Städte aus staedte.ts geladen');
 for (const c of cities) {
   const canonical = `${BASE}/zauberer/${c.slug}`;
   const title = `★ Zauberer ${c.name} · Close-Up + Bühne + Magic Dinner · 5,0/5`;
   const description = `Zauberer in ${c.name}: Close-Up Magie, Comedy-Bühnenshow & Magic Dinner für Hochzeit, Firmenfeier und Geburtstag. 200+ Events seit 2016. 5,0★ bei 30+ Bewertungen. Jetzt anfragen.`;
   const ogTitle = `Zauberer ${c.name} — 5,0★ bei 30+ Bewertungen`;
-  writeRoute(`/zauberer/${c.slug}`, injectMeta(baseHtml, { title, description, canonical, ogTitle }));
+  const html = injectMeta(baseHtml, { title, description, canonical, ogTitle });
+  const injection = renderer.render({ kind: 'city', citySlug: c.slug });
+  writeRoute(`/zauberer/${c.slug}`, injectStatic(html, injection));
   count++;
 }
 
@@ -319,7 +281,7 @@ for (const c of cities) {
 // Ausnahme: Formate mit canonicalPrefix (z.B. magic-dinner) werden unter
 // /magic-dinner-{stadt} prerendert statt unter /zauberer-magic-dinner/{stadt}.
 // Die Alt-URL wird per Vercel-301 auf die Neu-URL weitergeleitet (vercel.json).
-const formats = loadServiceFormats();
+const formats = renderer.data.formats;
 if (formats.length === 0) throw new Error('inject-meta: keine Service-Formate aus serviceFormats.ts geladen');
 for (const f of formats) {
   for (const c of cities) {
@@ -327,35 +289,46 @@ for (const f of formats) {
       ? `${f.canonicalPrefix}-${c.slug}`
       : `${f.routePrefix}/${c.slug}`;
     const canonical = `${BASE}${urlPath}`;
-    const title = f.metaTitleTpl.replace(/\{stadt\}/g, c.name);
-    const description = f.metaDescriptionTpl.replace(/\{stadt\}/g, c.name);
-    writeRoute(urlPath, injectMeta(baseHtml, { title, description, canonical, ogTitle: title }));
+    const title = f.hero.metaTitle.replace(/\{stadt\}/g, c.name);
+    const description = f.hero.metaDescription.replace(/\{stadt\}/g, c.name);
+    const html = injectMeta(baseHtml, { title, description, canonical, ogTitle: title });
+    const injection = renderer.render({
+      kind: 'serviceCity',
+      formatSlug: f.slug,
+      citySlug: c.slug,
+      urlPath,
+    });
+    writeRoute(urlPath, injectStatic(html, injection));
     count++;
   }
 }
 
 // 4) Blog-Posts /blog/:slug (18)
-const posts = loadBlogPosts();
+const posts = renderer.data.blog;
 if (posts.length === 0) throw new Error('inject-meta: keine Blog-Posts aus blogPosts.ts geladen');
 for (const p of posts) {
   const canonical = `${BASE}/blog/${p.slug}`;
   const title = `${p.title} – Magazin | Emilian Leber`;
   const ogTitle = p.title;
-  writeRoute(`/blog/${p.slug}`, injectMeta(baseHtml, { title, description: p.excerpt, canonical, ogTitle }));
+  const html = injectMeta(baseHtml, { title, description: p.excerpt, canonical, ogTitle });
+  const injection = renderer.render({ kind: 'blog', slug: p.slug });
+  writeRoute(`/blog/${p.slug}`, injectStatic(html, injection));
   count++;
 }
 
 // 5) Wissen-Pages /wissen/:slug (8)
-const topics = loadWissenTopics();
+const topics = renderer.data.wissen;
 if (topics.length === 0) throw new Error('inject-meta: keine Wissen-Topics aus wissenTopics.ts geladen');
 for (const w of topics) {
   const canonical = `${BASE}/wissen/${w.slug}`;
-  writeRoute(`/wissen/${w.slug}`, injectMeta(baseHtml, {
+  const html = injectMeta(baseHtml, {
     title: w.metaTitle,
     description: w.metaDescription,
     canonical,
     ogTitle: w.metaTitle,
-  }));
+  });
+  const injection = renderer.render({ kind: 'wissen', slug: w.slug });
+  writeRoute(`/wissen/${w.slug}`, injectStatic(html, injection));
   count++;
 }
 

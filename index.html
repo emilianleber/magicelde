@@ -51,10 +51,13 @@
     <meta name="twitter:description" content="Moderner Zauberer für Events, Firmenfeiern und Hochzeiten." />
     <meta name="twitter:image" content="https://www.magicel.de/hero-magic.jpg" />
 
-    <!-- LocalBusiness wird per Page injiziert (siehe src/lib/schemaHelpers.ts).
-         Static-Shell ohne LocalBusiness, damit es kein doppeltes
-         aggregateRating gibt (GSC-Fehler "Review hat mehrere
-         zusammengefasste Bewertungen"). -->
+    <!-- JSON-LD wird beim Build pro Route in den <head> injiziert
+         (scripts/inject-meta.mjs + scripts/seo-content.mjs) — Single Source,
+         genau EINE aggregateRating pro Seite (auf LocalBusiness).
+         Die client-seitigen <script ld+json> der Page-Komponenten sind aktuell
+         wirkungslos (react-helmet-async@3 rendert keine <script>-Tags); falls
+         Helmet je gefixt/ersetzt wird, dort JSON-LD entfernen — sonst doppelte
+         aggregateRating (GSC-Fehler "Review hat mehrere Bewertungen"). -->
   </head>
 
   <body>
