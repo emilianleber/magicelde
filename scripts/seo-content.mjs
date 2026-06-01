@@ -33,6 +33,10 @@ const WEBSITE_ID = `${SITE_URL}/#website`;
 
 const PROVENEXPERT = "https://www.provenexpert.com/emilian-leber";
 const INSTAGRAM = "https://www.instagram.com/emilian.leber";
+// Echte, verifizierte externe Zitations-Quellen (AEO: external citation links).
+const YOUTUBE_TVA = "https://youtu.be/R0_mXGxzC9E"; // TV-Auftritt TVA 2025
+const WIKI_ZAUBERKUNST = "https://de.wikipedia.org/wiki/Zauberkunst";
+const RESTAURANT_WALDWIESE = "https://restaurant-waldwiese.de"; // Magic-Dinner-Hauspartner
 
 /* ─────────────────────────────────────────────────────────────
    Daten laden (esbuild transform → data:-URL import)
@@ -115,14 +119,16 @@ function internalLinksBlock(pairs) {
     .join(" &middot; ")}</p>`;
 }
 
-/** Externe Zitations-Links (review-Plattform, Social, optional Wikipedia). */
+/** Externe Zitations-Links (review-Plattform, Social, TV/Presse, Referenz). */
 function externalLinksBlock(extra = []) {
   const items = [
     xlink(PROVENEXPERT, "Bewertungen auf ProvenExpert"),
     xlink(INSTAGRAM, "Emilian Leber auf Instagram"),
+    xlink(YOUTUBE_TVA, "TV-Auftritt im TVA (YouTube)"),
+    xlink(WIKI_ZAUBERKUNST, "Zauberkunst (Wikipedia)"),
     ...extra.map(([href, label]) => xlink(href, label)),
   ];
-  return `<p style="${S.links}"><strong>Mehr &amp; extern:</strong> ${items.join(
+  return `<p style="${S.links}"><strong>Mehr &amp; externe Quellen:</strong> ${items.join(
     " &middot; "
   )}</p>`;
 }
@@ -749,7 +755,11 @@ function renderServiceDetail(format, path) {
       ["/referenzen", "Referenzen"],
       ["/kontakt", "Kontakt & Anfrage"],
     ]),
-    externalLinksBlock(),
+    externalLinksBlock(
+      format.slug === "magic-dinner"
+        ? [[RESTAURANT_WALDWIESE, "Restaurant Wald & Wiese"]]
+        : []
+    ),
   ].join("");
   return assemble({
     inner,
@@ -798,7 +808,11 @@ function renderServiceCity(format, city, urlPath) {
       ...FORMAT_LINKS.filter(([href]) => href !== format.detailHref),
       ["/referenzen", "Referenzen"],
     ]),
-    externalLinksBlock([wikipediaCity(city)]),
+    externalLinksBlock(
+      format.slug === "magic-dinner"
+        ? [wikipediaCity(city), [RESTAURANT_WALDWIESE, "Restaurant Wald & Wiese"]]
+        : [wikipediaCity(city)]
+    ),
   ].join("");
   return assemble({
     inner,
