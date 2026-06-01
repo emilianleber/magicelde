@@ -1155,7 +1155,7 @@ export const blogPosts: BlogPost[] = [
       "Behind the Scenes",
       "Medien",
     ],
-    date: "2024-11-08",
+    date: "2025-02-13",
     readTime: "4 Min.",
     words: 360,
     author: EMILIAN,

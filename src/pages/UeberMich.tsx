@@ -494,7 +494,7 @@ const STATIONEN = [
     age: "Vollberuflich + TV",
     title: "Vollberuflich. TVA-Auftritt.",
     body:
-      "Magie ist offiziell mein Beruf — kein Nebenher mehr. Im Herbst lädt der TVA (TV Aktuell) zum Live-Studio-Auftritt ein. Drei Minuten Mentalmagie vor laufender Kamera mit dem Moderator. Das Video läuft heute auf der Startseite — siehe Video-Section weiter unten.",
+      "Magie ist offiziell mein Beruf — kein Nebenher mehr. Im Februar lädt der TVA (TV Aktuell) zum Live-Studio-Auftritt ein. Drei Minuten Mentalmagie vor laufender Kamera mit dem Moderator. Das Video läuft heute auf der Startseite — siehe Video-Section weiter unten.",
     quote: "Zweitausendfünfundzwanzig. [Vollberuflich.] Magie ist nicht mehr ein Teil von mir — sie ist es ganz.",
   },
   {
@@ -995,7 +995,7 @@ const AWARDS = [
     title: "TVA TV-Auftritt",
     subtitle: "Live-Studio-Auftritt",
     body:
-      "Im Herbst lädt der TVA (TV Aktuell) zum Live-Studio-Auftritt ein. Drei Minuten Mentalmagie vor laufender Kamera mit dem Moderator. Das Video läuft heute noch auf der Startseite.",
+      "Im Februar lädt der TVA (TV Aktuell) zum Live-Studio-Auftritt ein. Drei Minuten Mentalmagie vor laufender Kamera mit dem Moderator. Das Video läuft heute noch auf der Startseite.",
     detail: "TVA · Live-Studio · 3 Min",
   },
   {
@@ -1552,7 +1552,7 @@ const VideoSection = () => {
             <p
               className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
             >
-              TVA · Herbst 2025.
+              TVA · Februar 2025.
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
               Drei Minuten{" "}
