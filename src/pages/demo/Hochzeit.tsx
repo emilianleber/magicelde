@@ -1,9 +1,9 @@
-/** /demo/hochzeit — Anlass (kreativ, eigene Komposition). */
+/** /demo/hochzeit — Anlass-Landingpage (groß): Akte + Formate + Gestaltung. */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { InteractiveTabs, SplitFeature, Bento, NotificationFlow } from "@/components/voltage/creative";
+import { InteractiveTabs, FormatCards, SplitFeature, Bento, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Sparkles, Heart, Gem, Check, Clock, CalendarCheck } from "lucide-react";
+import { Hand, Wand2, UtensilsCrossed, Gem, Heart, Check, Clock, CalendarCheck } from "lucide-react";
 import heroImg from "@/assets/wedding-magic.jpg";
 import splitImg from "@/assets/emotionen.jpg";
 import bentoImg from "@/assets/audience-reactions.jpg";
@@ -24,16 +24,29 @@ export default function DemoHochzeit() {
         sub="Drei Akte Magie zwischen Ja-Wort und Mitternacht — Sektempfang, Dinner und Bühnenshow vor dem Tanz. Mit Briefing vorab, Insider-Momenten und viel Gefühl."
         image={heroImg}
         imageAlt="Zauberer bei einer Hochzeit"
+        imgPos="center"
         badge="Brautmutter weint regelmäßig — vor Lachen oder vor Rührung."
       />
 
       <InteractiveTabs
-        eyebrow="Drei Akte"
+        eyebrow="Der Aufbau"
         title={<>Magie über den ganzen Tag — <span style={{ color: COBALT }}>eingetaktet</span> in euren Ablauf.</>}
         tabs={[
-          { t: "Sektempfang", d: "Close-Up Walk-Around, während ihr Fotos macht — Magie direkt in den Händen eurer Gäste, als Eisbrecher zwischen den Tischkreisen.", img: actA },
-          { t: "Hochzeitsdinner", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, ohne dass der Ablauf gestört wird.", img: actB },
-          { t: "Vor dem Tanz", d: "20–30 Min Bühnenshow als emotionales Finale — Comedy, Mentalmagie und ein Moment, der Gänsehaut macht.", img: actC },
+          { t: "Sektempfang", d: "Close-Up Walk-Around, während ihr Fotos macht — Magie direkt in den Händen eurer Gäste, als Eisbrecher zwischen den Tischkreisen.", img: actA, pos: "center" },
+          { t: "Hochzeitsdinner", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, ohne dass der Ablauf gestört wird.", img: actB, pos: "center" },
+          { t: "Vor dem Tanz", d: "20–30 Min Bühnenshow als emotionales Finale — Comedy, Mentalmagie und ein Moment, der Gänsehaut macht.", img: actC, pos: "top" },
+        ]}
+      />
+
+      <FormatCards
+        eyebrow="Welche Formate passen"
+        title={<>Drei Formate — <span style={{ color: COBALT }}>frei kombinierbar</span>.</>}
+        sub="Ihr wählt, was zu eurem Tag passt — einzeln oder als Drei-Akt-Paket über Empfang, Dinner und Tanz."
+        note="Frei kombinierbar — einzeln gebucht oder als durchgängiger Hochzeits-Tag."
+        formats={[
+          { t: "Close-Up", d: "Magie direkt in den Händen eurer Gäste — der Eisbrecher beim Sektempfang.", h: "/demo/close-up", Icon: Hand },
+          { t: "Bühnenshow", d: "20–30 Min Comedy & Mentalmagie als emotionales Finale vor dem Tanz.", h: "/demo/buehnenshow", Icon: Wand2 },
+          { t: "Magic Dinner", d: "Tisch-zu-Tisch zwischen den Gängen, durchkomponiert über den Abend.", h: "/demo/magic-dinner", Icon: UtensilsCrossed },
         ]}
       />
 
@@ -44,6 +57,7 @@ export default function DemoHochzeit() {
         points={["Persönliches Briefing vor der Hochzeit", "Ringtraum — der Gänsehaut-Moment rund um eure Ringe", "Ich halte den Zeitplan und bringe Ruhe in den Ablauf"]}
         image={splitImg}
         imageAlt="Emilian Leber mit Gästen"
+        imgPos="center"
         reverse
         stat={{ v: "100+", l: "Hochzeiten" }}
       />
@@ -53,7 +67,7 @@ export default function DemoHochzeit() {
         title="Mehr als Tricks — ein roter Faden."
         sub="Comedy und Emotion im Wechsel, der Abend rund durchgeplant."
         items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Echte Reaktionen", title: "Auch die skeptischen Gäste sind am Ende am stärksten geflasht." },
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Echte Reaktionen", title: "Auch die skeptischen Gäste sind am Ende am stärksten geflasht.", pos: "center" },
           { kind: "cobalt", span: "col-span-2", v: "5,0★", l: "30+ Bewertungen — ohne Ausreißer" },
           { kind: "glass", span: "col-span-1", Icon: Gem, t: "Premium", d: "Elegant, nicht kitschig." },
           { kind: "glass", span: "col-span-1", Icon: Heart, t: "Mit Gefühl", d: "Staunen, lachen, gerührt sein." },

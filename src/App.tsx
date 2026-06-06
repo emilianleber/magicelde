@@ -66,6 +66,7 @@ const DemoFirmenfeiern = lazy(() => import("./pages/demo/Firmenfeiern.tsx"));
 const DemoGeburtstage = lazy(() => import("./pages/demo/Geburtstage.tsx"));
 const DemoEventAgenturen = lazy(() => import("./pages/demo/EventAgenturen.tsx"));
 const DemoMesse = lazy(() => import("./pages/demo/Messe.tsx"));
+const DemoStadtRegensburg = lazy(() => import("./pages/demo/StadtRegensburg.tsx"));
 const Hochzeit = lazy(() => import("./pages/Hochzeit.tsx"));
 const Firmenfeiern = lazy(() => import("./pages/Firmenfeiern.tsx"));
 const EventAgenturen = lazy(() => import("./pages/EventAgenturen.tsx"));
@@ -252,6 +253,7 @@ const PublicRoutes = () => (
     <Route path="/demo/geburtstage" element={<DemoGeburtstage />} />
     <Route path="/demo/event-agenturen" element={<DemoEventAgenturen />} />
     <Route path="/demo/messe-magier" element={<DemoMesse />} />
+    <Route path="/demo/zauberer-regensburg" element={<DemoStadtRegensburg />} />
     <Route path="/demo/ueber" element={<DemoUeber />} />
     <Route path="/demo/referenzen" element={<DemoReferenzen />} />
     <Route path="/demo/kontakt" element={<DemoKontakt />} />
@@ -335,6 +337,7 @@ const App = () => (
               <Route path="/demo/geburtstage" element={<DemoGeburtstage />} />
               <Route path="/demo/event-agenturen" element={<DemoEventAgenturen />} />
               <Route path="/demo/messe-magier" element={<DemoMesse />} />
+              <Route path="/demo/zauberer-regensburg" element={<DemoStadtRegensburg />} />
               <Route path="/demo/ueber" element={<DemoUeber />} />
               <Route path="/demo/referenzen" element={<DemoReferenzen />} />
               <Route path="/demo/kontakt" element={<DemoKontakt />} />

@@ -57,7 +57,7 @@ export function SplitFeature({ eyebrow, title, sub, points, image, imageAlt, rev
 
 /* ════════ 2. Bento — gemischte Karten (Foto / Stat / Glas / Zitat), wie das Warum-Karussell ════════ */
 type BentoItem =
-  | { kind: "photo"; span?: string; image: string; chip?: string; title: string }
+  | { kind: "photo"; span?: string; image: string; chip?: string; title: string; pos?: string }
   | { kind: "cobalt"; span?: string; v: string; l: string; note?: string }
   | { kind: "glass"; span?: string; Icon: Icon; t: string; d: string }
   | { kind: "quote"; span?: string; text: string; name: string };
@@ -76,7 +76,7 @@ export function Bento({ eyebrow, title, sub, items }: { eyebrow: string; title: 
             const span = it.span || "";
             if (it.kind === "photo") return (
               <motion.div key={i} variants={up} className={`relative rounded-[24px] overflow-hidden ${span}`}>
-                <img src={it.image} alt="" className="absolute inset-0 w-full h-full object-cover object-top" loading="lazy" />
+                <img src={it.image} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: it.pos || "center" }} loading="lazy" />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,15,0.05) 30%, rgba(10,11,15,0.85) 100%)" }} />
                 {it.chip && <span className="absolute top-5 left-5 px-3.5 py-1.5 rounded-full text-[12.5px] font-semibold" style={{ ...glass, color: INK }}>{it.chip}</span>}
                 <h3 className="absolute left-6 bottom-5 right-6 font-extrabold text-white" style={{ fontSize: "clamp(1.25rem,1.7vw,1.7rem)", lineHeight: 1.08 }}>{it.title}</h3>
@@ -172,7 +172,7 @@ export function NotificationFlow({ eyebrow, title, sub, steps }: { eyebrow: stri
 }
 
 /* ════════ 5. InteractiveTabs — Pills + Bild-Preview (Anlässe-Stil, interaktiv) ════════ */
-export function InteractiveTabs({ eyebrow, title, tabs }: { eyebrow: string; title: ReactNode; tabs: { t: string; d: string; img: string }[] }) {
+export function InteractiveTabs({ eyebrow, title, tabs }: { eyebrow: string; title: ReactNode; tabs: { t: string; d: string; img: string; pos?: string }[] }) {
   const [idx, setIdx] = useState(0);
   return (
     <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24">
@@ -188,7 +188,7 @@ export function InteractiveTabs({ eyebrow, title, tabs }: { eyebrow: string; tit
         <motion.div variants={up} className="relative rounded-[24px] overflow-hidden" style={{ border: `1px solid ${L_LINE}` }}>
           <AnimatePresence mode="wait">
             <motion.div key={idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} className="relative">
-              <img src={tabs[idx].img} alt={tabs[idx].t} className="w-full h-[360px] md:h-[460px] object-cover object-top" />
+              <img src={tabs[idx].img} alt={tabs[idx].t} className="w-full h-[360px] md:h-[460px] object-cover" style={{ objectPosition: tabs[idx].pos || "center" }} />
               <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(10,11,15,0.86) 0%, rgba(10,11,15,0.45) 52%, rgba(10,11,15,0.15) 100%)" }} />
               <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-12 max-w-2xl">
                 <h3 className="font-extrabold text-white" style={{ fontSize: "clamp(1.75rem,3.5vw,3rem)", lineHeight: 1.04 }}>{tabs[idx].t}</h3>
@@ -202,15 +202,87 @@ export function InteractiveTabs({ eyebrow, title, tabs }: { eyebrow: string; tit
   );
 }
 
+/* ════════ 8. ExampleSets — konkrete Beispiel-Sets + wie gestaltbar (Format-Seiten) ════════ */
+export function ExampleSets({ eyebrow, title, sub, sets, options }: {
+  eyebrow: string; title: ReactNode; sub?: ReactNode;
+  sets: { tag: string; t: string; d: string }[];
+  options?: { Icon: Icon; t: string; d: string }[];
+}) {
+  return (
+    <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl"><Eyebrow>{eyebrow}</Eyebrow>
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ ...H2, color: INK }}>{title}</h2>
+          {sub && <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>{sub}</p>}
+        </motion.div>
+        <div className="grid md:grid-cols-3 gap-5 mt-10">
+          {sets.map((s) => (
+            <motion.div key={s.t} variants={up} className="rounded-[24px] p-7 flex flex-col" style={{ background: WHITE, border: `1px solid ${L_LINE}` }}>
+              <span className="self-start px-3 py-1.5 rounded-full text-[12px] font-bold tracking-wide" style={{ background: `${COBALT}14`, color: COBALT }}>{s.tag}</span>
+              <h3 className="text-[19px] font-bold mt-4" style={{ color: INK }}>{s.t}</h3>
+              <p className="mt-2 text-[14.5px] leading-[1.55]" style={{ color: L_DIM }}>{s.d}</p>
+            </motion.div>
+          ))}
+        </div>
+        {options && (
+          <div className="mt-10">
+            <p className="text-[12px] tracking-[0.16em] uppercase font-semibold mb-4" style={{ color: L_DIM }}>Frei gestaltbar</p>
+            <div className="flex flex-wrap gap-3">
+              {options.map(({ Icon, t, d }) => (
+                <motion.div key={t} variants={up} className="inline-flex items-center gap-2.5 rounded-full pl-3 pr-5 py-2.5" style={{ background: WHITE, border: `1px solid ${L_LINE}` }}>
+                  <span className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: `${COBALT}14`, color: COBALT }}><Icon className="w-[18px] h-[18px]" /></span>
+                  <span className="text-[13.5px]"><strong style={{ color: INK }}>{t}</strong><span style={{ color: L_DIM }}> · {d}</span></span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </motion.section>
+  );
+}
+
+/* ════════ 7. FormatCards — welche Formate passen (Anlass → Formate verlinken) ════════ */
+export function FormatCards({ eyebrow, title, sub, note, formats }: {
+  eyebrow: string; title: ReactNode; sub?: ReactNode; note?: string;
+  formats: { t: string; d: string; h: string; Icon: Icon }[];
+}) {
+  return (
+    <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24">
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl"><Eyebrow>{eyebrow}</Eyebrow>
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ ...H2, color: INK }}>{title}</h2>
+          {sub && <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>{sub}</p>}
+        </motion.div>
+        <div className="grid md:grid-cols-3 gap-5 mt-10">
+          {formats.map(({ t, d, h, Icon }) => (
+            <motion.a key={t} href={h} variants={up} className="group rounded-[24px] p-7 flex flex-col transition-transform hover:scale-[1.02]" style={{ background: CARD_LIGHT, border: `1px solid ${L_LINE}` }}>
+              <span className="w-12 h-12 rounded-[14px] flex items-center justify-center" style={{ background: COBALT, color: WHITE }}><Icon className="w-6 h-6" /></span>
+              <h3 className="text-[20px] font-bold mt-5" style={{ color: INK }}>{t}</h3>
+              <p className="mt-2 text-[14.5px] leading-[1.55] flex-1" style={{ color: L_DIM }}>{d}</p>
+              <span className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold mt-5" style={{ color: COBALT }}>Mehr erfahren <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" /></span>
+            </motion.a>
+          ))}
+        </div>
+        {note && (
+          <motion.div variants={up} className="mt-6 inline-flex items-center gap-2.5 rounded-full px-5 py-3 text-[14.5px] font-medium" style={{ ...glass, color: INK }}>
+            <Layers className="w-5 h-5" style={{ color: COBALT }} /> {note}
+          </motion.div>
+        )}
+      </div>
+    </motion.section>
+  );
+}
+
 /* ════════ 6. DarkShowcase — dunkle Foto+Text-Section (Über-Stil) ════════ */
-export function DarkShowcase({ eyebrow, title, paras, image, imageAlt, badge, reverse }: {
-  eyebrow: string; title: ReactNode; paras: string[]; image: string; imageAlt: string; badge?: string; reverse?: boolean;
+export function DarkShowcase({ eyebrow, title, paras, image, imageAlt, badge, reverse, imgPos = "top" }: {
+  eyebrow: string; title: ReactNode; paras: string[]; image: string; imageAlt: string; badge?: string; reverse?: boolean; imgPos?: string;
 }) {
   return (
     <section className="px-5 md:px-10 py-20 md:py-28" style={{ background: INK, color: WHITE }}>
       <div className={`max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${reverse ? "lg:[direction:rtl]" : ""}`}>
         <motion.div variants={up} initial="hidden" whileInView="show" viewport={vp} className="relative rounded-[24px] overflow-hidden [direction:ltr]" style={{ boxShadow: "0 40px 90px -34px rgba(0,0,0,0.6)" }}>
-          <img src={image} alt={imageAlt} className="w-full h-[420px] md:h-[520px] object-cover object-top" loading="lazy" />
+          <img src={image} alt={imageAlt} className="w-full h-[420px] md:h-[520px] object-cover" style={{ objectPosition: imgPos }} loading="lazy" />
           {badge && <span className="absolute top-5 left-5 text-[12px] font-bold px-3.5 py-2 rounded-full" style={{ ...glassDark, color: WHITE }}>{badge}</span>}
         </motion.div>
         <motion.div variants={up} initial="hidden" whileInView="show" viewport={vp} className="[direction:ltr]">

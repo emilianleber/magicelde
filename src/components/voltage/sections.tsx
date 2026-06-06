@@ -28,9 +28,9 @@ export function SectionHeader({ eyebrow, title, sub, center, dark }: { eyebrow?:
 }
 
 /* ── Seiten-Hero (hell, Portrait/Foto rechts + Glas-Review) ── */
-export function SubHero({ eyebrow, title, sub, image, imageAlt, badge, primary = { label: "Termin anfragen", href: ANFRAGE_HREF }, secondary }: {
+export function SubHero({ eyebrow, title, sub, image, imageAlt, badge, primary = { label: "Termin anfragen", href: ANFRAGE_HREF }, secondary, imgPos = "top" }: {
   eyebrow: string; title: ReactNode; sub: ReactNode; image: string; imageAlt: string; badge?: string;
-  primary?: { label: string; href: string }; secondary?: { label: string; href: string };
+  primary?: { label: string; href: string }; secondary?: { label: string; href: string }; imgPos?: string;
 }) {
   return (
     <header className="relative overflow-hidden px-5 md:px-10 pt-10 md:pt-16 pb-14 md:pb-20" style={{ background: WHITE }}>
@@ -53,7 +53,7 @@ export function SubHero({ eyebrow, title, sub, image, imageAlt, badge, primary =
         </div>
         <motion.div variants={up} className="relative mx-auto w-full max-w-[420px] lg:max-w-none">
           <div className="relative rounded-[24px] overflow-hidden mx-auto lg:ml-auto lg:mr-0 w-full max-w-[420px]" style={{ boxShadow: "0 40px 80px -34px rgba(10,11,15,0.4)" }}>
-            <img src={image} alt={imageAlt} className="w-full h-[420px] md:h-[520px] object-cover object-top" loading="eager" />
+            <img src={image} alt={imageAlt} className="w-full h-[420px] md:h-[520px] object-cover" style={{ objectPosition: imgPos }} loading="eager" />
           </div>
           {badge && (
             <div className="hidden sm:block absolute -left-5 bottom-8 rounded-[22px] px-5 py-4" style={glass}>
