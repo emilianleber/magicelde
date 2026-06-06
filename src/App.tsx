@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useNavigate, useParams, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -51,6 +51,21 @@ const AdminPakete = lazy(() => import("@/pages/AdminPakete"));
 
 // Public pages — only loaded on www.magicel.de
 const Index = lazy(() => import("./pages/Index.tsx"));
+const StartDemo = lazy(() => import("./pages/StartDemo.tsx"));
+// Voltage-Prototyp Unterseiten (/demo/*) — noindex
+const DemoBuehnenshow = lazy(() => import("./pages/demo/Buehnenshow.tsx"));
+const DemoHochzeit = lazy(() => import("./pages/demo/Hochzeit.tsx"));
+const DemoUeber = lazy(() => import("./pages/demo/Ueber.tsx"));
+const DemoReferenzen = lazy(() => import("./pages/demo/Referenzen.tsx"));
+const DemoKontakt = lazy(() => import("./pages/demo/Kontakt.tsx"));
+const DemoCloseUp = lazy(() => import("./pages/demo/CloseUp.tsx"));
+const DemoMagicDinner = lazy(() => import("./pages/demo/MagicDinner.tsx"));
+const DemoModeration = lazy(() => import("./pages/demo/Moderation.tsx"));
+const DemoComedy = lazy(() => import("./pages/demo/Comedy.tsx"));
+const DemoFirmenfeiern = lazy(() => import("./pages/demo/Firmenfeiern.tsx"));
+const DemoGeburtstage = lazy(() => import("./pages/demo/Geburtstage.tsx"));
+const DemoEventAgenturen = lazy(() => import("./pages/demo/EventAgenturen.tsx"));
+const DemoMesse = lazy(() => import("./pages/demo/Messe.tsx"));
 const Hochzeit = lazy(() => import("./pages/Hochzeit.tsx"));
 const Firmenfeiern = lazy(() => import("./pages/Firmenfeiern.tsx"));
 const EventAgenturen = lazy(() => import("./pages/EventAgenturen.tsx"));
@@ -117,6 +132,19 @@ const AuthEventHandler = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
   return null;
+};
+
+// Globales Public-Chrome (Popup, ShowPlaner, Mail-Banner) — NICHT im Voltage-Prototyp /demo/*
+const PublicChrome = () => {
+  const { pathname } = useLocation();
+  if (IS_ADMIN_DOMAIN || pathname.startsWith("/demo")) return null;
+  return (
+    <>
+      <EngagementPopup />
+      <ShowPlanerTrigger />
+      <EmailReminderBanner />
+    </>
+  );
 };
 
 // ── Admin CRM routes (only on admin.magicel.de or localhost) ─────────────────
@@ -213,6 +241,20 @@ const AdminRoutes = () => (
 const PublicRoutes = () => (
   <Routes>
     <Route path="/" element={<Index />} />
+    <Route path="/demo" element={<StartDemo />} />
+    <Route path="/demo/buehnenshow" element={<DemoBuehnenshow />} />
+    <Route path="/demo/close-up" element={<DemoCloseUp />} />
+    <Route path="/demo/magic-dinner" element={<DemoMagicDinner />} />
+    <Route path="/demo/moderation" element={<DemoModeration />} />
+    <Route path="/demo/comedy" element={<DemoComedy />} />
+    <Route path="/demo/hochzeit" element={<DemoHochzeit />} />
+    <Route path="/demo/firmenfeiern" element={<DemoFirmenfeiern />} />
+    <Route path="/demo/geburtstage" element={<DemoGeburtstage />} />
+    <Route path="/demo/event-agenturen" element={<DemoEventAgenturen />} />
+    <Route path="/demo/messe-magier" element={<DemoMesse />} />
+    <Route path="/demo/ueber" element={<DemoUeber />} />
+    <Route path="/demo/referenzen" element={<DemoReferenzen />} />
+    <Route path="/demo/kontakt" element={<DemoKontakt />} />
     <Route path="/hochzeit" element={<Hochzeit />} />
     <Route path="/firmenfeiern" element={<Firmenfeiern />} />
     <Route path="/event-agenturen" element={<EventAgenturen />} />
@@ -277,13 +319,25 @@ const App = () => (
             </div>
           }
         >
-          {!IS_ADMIN_DOMAIN && <EngagementPopup />}
-          {!IS_ADMIN_DOMAIN && <ShowPlanerTrigger />}
-          {!IS_ADMIN_DOMAIN && <EmailReminderBanner />}
+          <PublicChrome />
           {IS_ADMIN_DOMAIN ? <AdminRoutes /> : IS_DEV ? (
             // localhost: beide Route-Sets verfügbar
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/demo" element={<StartDemo />} />
+              <Route path="/demo/buehnenshow" element={<DemoBuehnenshow />} />
+              <Route path="/demo/close-up" element={<DemoCloseUp />} />
+              <Route path="/demo/magic-dinner" element={<DemoMagicDinner />} />
+              <Route path="/demo/moderation" element={<DemoModeration />} />
+              <Route path="/demo/comedy" element={<DemoComedy />} />
+              <Route path="/demo/hochzeit" element={<DemoHochzeit />} />
+              <Route path="/demo/firmenfeiern" element={<DemoFirmenfeiern />} />
+              <Route path="/demo/geburtstage" element={<DemoGeburtstage />} />
+              <Route path="/demo/event-agenturen" element={<DemoEventAgenturen />} />
+              <Route path="/demo/messe-magier" element={<DemoMesse />} />
+              <Route path="/demo/ueber" element={<DemoUeber />} />
+              <Route path="/demo/referenzen" element={<DemoReferenzen />} />
+              <Route path="/demo/kontakt" element={<DemoKontakt />} />
               <Route path="/hochzeit" element={<Hochzeit />} />
               <Route path="/firmenfeiern" element={<Firmenfeiern />} />
               <Route path="/event-agenturen" element={<EventAgenturen />} />
