@@ -1,9 +1,13 @@
-/** /demo/referenzen — Referenzen-Template. Echte Kunden + echte Bewertungen. */
+/** /demo/referenzen — Referenzen (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, Stats, LogoMarquee, ReviewsBlock, PullQuote, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, LogoMarquee, ReviewsBlock, PullQuote, FinalCTA } from "@/components/voltage/sections";
+import { Bento, SplitFeature } from "@/components/voltage/creative";
 import { motion } from "framer-motion";
+import { Building2 } from "lucide-react";
 import { INK, WHITE, COBALT, MAGENTA, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
 import refImg from "@/assets/greatest-talent-presse.jpg";
+import bentoImg from "@/assets/magicdinner-buehne.jpg";
+import splitImg from "@/assets/schneider-weisse-closeup.jpg";
 
 const CLIENTS = [
   { logo: "vkb.png", name: "Versicherungskammer Bayern", branch: "Versicherung" },
@@ -37,12 +41,17 @@ export default function DemoReferenzen() {
         primary={{ label: "Selbst anfragen", href: "/demo/kontakt" }}
       />
 
-      <Stats items={[
-        { v: "200+", l: "Events seit 2016" },
-        { v: "100+", l: "Hochzeiten" },
-        { v: "100+", l: "Firmen-Engagements" },
-        { v: "80+", l: "Geburtstage & Jubiläen" },
-      ]} />
+      <Bento
+        eyebrow="Zahlen, die zählen"
+        title="Erfahrung in Zahlen."
+        sub="Über alle Anlässe und Branchen hinweg — seit 2016 quer durch Bayern und deutschlandweit."
+        items={[
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Magic Dinner", title: "Vom Vorstands-Dinner bis zur Messe." },
+          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events seit 2016" },
+          { kind: "glass", span: "col-span-1", Icon: Building2, t: "16+ Branchen", d: "Versicherung bis Theater." },
+          { kind: "quote", span: "col-span-2", text: "Zuverlässig, flexibel — das Publikum ist jedes Mal begeistert.", name: "Eventagentur · Bayern" },
+        ]}
+      />
 
       <LogoMarquee label="Auftraggeber aus 16+ Branchen" />
 
@@ -64,7 +73,17 @@ export default function DemoReferenzen() {
         </div>
       </motion.section>
 
-      <ReviewsBlock />
+      <SplitFeature
+        eyebrow="Aus 16+ Branchen"
+        title={<>Premium-Gala oder Comedy-Abend — <span style={{ color: COBALT }}>eine</span> Künstlerpersönlichkeit.</>}
+        sub="Versicherung, Bau, Banking, Brauerei, Theater, öffentliche Hand — die Tonalität passt sich an, die Verlässlichkeit bleibt gleich."
+        points={["Konzept, Vertrag und Briefing aus einer Hand", "Tonalität fein justiert nach Anlass", "Antwort in unter 24 Stunden"]}
+        image={splitImg}
+        imageAlt="Emilian Leber bei einem Firmenevent"
+        stat={{ v: "16+", l: "Branchen" }}
+      />
+
+      <ReviewsBlock paper={false} />
 
       <PullQuote
         text="Wir haben ein Magic Camp komplett neu aufgestellt — 200 Gäste, Workshop-Stationen, Bühnenshow als Finale. Emilian hat Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega."

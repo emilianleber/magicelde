@@ -1,9 +1,15 @@
-/** /demo/hochzeit — Anlass-Template (Hochzeit). Echte Inhalte (Drei Akte). */
+/** /demo/hochzeit — Anlass (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, Steps, GlassFeatures, Statement, PullQuote, Stats, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { InteractiveTabs, SplitFeature, Bento, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Sparkles, Heart, Clock, Users, Gem, Smile, MessageSquare } from "lucide-react";
-import weddingImg from "@/assets/wedding-magic.jpg";
+import { Sparkles, Heart, Gem, Check, Clock, CalendarCheck } from "lucide-react";
+import heroImg from "@/assets/wedding-magic.jpg";
+import splitImg from "@/assets/emotionen.jpg";
+import bentoImg from "@/assets/audience-reactions.jpg";
+import actA from "@/assets/haende-interaktion.jpg";
+import actB from "@/assets/emilian-magic-dinner.jpg";
+import actC from "@/assets/stage-show.jpg";
 
 export default function DemoHochzeit() {
   return (
@@ -16,37 +22,54 @@ export default function DemoHochzeit() {
         eyebrow="Anlass · Hochzeit"
         title={<>Zauberer für eure <span style={{ color: COBALT }}>Hochzeit</span><span style={{ color: MAGENTA }}>.</span></>}
         sub="Drei Akte Magie zwischen Ja-Wort und Mitternacht — Sektempfang, Dinner und Bühnenshow vor dem Tanz. Mit Briefing vorab, Insider-Momenten und viel Gefühl."
-        image={weddingImg}
+        image={heroImg}
         imageAlt="Zauberer bei einer Hochzeit"
-        badge="„Brautmutter weint regelmäßig — vor Lachen oder vor Rührung."
+        badge="Brautmutter weint regelmäßig — vor Lachen oder vor Rührung."
       />
 
-      <Steps
+      <InteractiveTabs
         eyebrow="Drei Akte"
-        title="Magie über den ganzen Tag verteilt."
-        sub="Eingetaktet in euren Ablauf — vom Sektempfang bis vor den ersten Tanz. Ihr wählt, was passt."
-        items={[
-          { t: "Sektempfang", d: "Close-Up Walk-Around, während ihr Fotos macht — Magie direkt in den Händen eurer Gäste, als Eisbrecher zwischen den Tischkreisen." },
-          { t: "Hochzeitsdinner", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, ohne dass der Ablauf gestört wird." },
-          { t: "Vor dem Tanz", d: "20–30 Min Bühnenshow als emotionales Finale — Comedy, Mentalmagie und ein Moment, der Gänsehaut macht." },
+        title={<>Magie über den ganzen Tag — <span style={{ color: COBALT }}>eingetaktet</span> in euren Ablauf.</>}
+        tabs={[
+          { t: "Sektempfang", d: "Close-Up Walk-Around, während ihr Fotos macht — Magie direkt in den Händen eurer Gäste, als Eisbrecher zwischen den Tischkreisen.", img: actA },
+          { t: "Hochzeitsdinner", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, ohne dass der Ablauf gestört wird.", img: actB },
+          { t: "Vor dem Tanz", d: "20–30 Min Bühnenshow als emotionales Finale — Comedy, Mentalmagie und ein Moment, der Gänsehaut macht.", img: actC },
         ]}
       />
 
-      <GlassFeatures
+      <SplitFeature
+        eyebrow="Vorbereitet auf euch"
+        title={<>Mit Briefing, <span style={{ color: COBALT }}>Insidern</span> und eurer Geschichte.</>}
+        sub="Ich checke das Brautpaar vorab und baue Namen, Insider und eure Geschichte in die Show ein. Premium-Tonalität, nichts Kitschiges — abgestimmt mit Fotograf und DJ."
+        points={["Persönliches Briefing vor der Hochzeit", "Ringtraum — der Gänsehaut-Moment rund um eure Ringe", "Ich halte den Zeitplan und bringe Ruhe in den Ablauf"]}
+        image={splitImg}
+        imageAlt="Emilian Leber mit Gästen"
+        reverse
+        stat={{ v: "100+", l: "Hochzeiten" }}
+      />
+
+      <Bento
         eyebrow="Warum Brautpaare mich buchen"
         title="Mehr als Tricks — ein roter Faden."
-        sub="Premium-Tonalität, nichts Kitschiges. Abgestimmt mit Fotograf und DJ, vorbereitet auf eure Geschichte."
+        sub="Comedy und Emotion im Wechsel, der Abend rund durchgeplant."
         items={[
-          { Icon: MessageSquare, t: "Briefing vorab", d: "Ich checke das Brautpaar vorab und baue Insider, Namen und eure Geschichte ein." },
-          { Icon: Gem, t: "Premium, nicht kitschig", d: "Elegante Tonalität, die zu einer Hochzeit passt — fein dosierter Humor." },
-          { Icon: Sparkles, t: "Ringtraum-Moment", d: "Auf Wunsch ein Signature-Effekt rund um die Ringe — der Gänsehaut-Augenblick." },
-          { Icon: Clock, t: "Zeitplan im Griff", d: "Ich bringe Ruhe in den Ablauf und halte mich exakt an euren Timing-Plan." },
-          { Icon: Smile, t: "Comedy + Emotion", d: "Gäste staunen und lachen — und sind im nächsten Moment gerührt. Beides." },
-          { Icon: Heart, t: "Auch skeptische Gäste", d: "Gerade die, die Magie am wenigsten erwarten, sind am Ende am stärksten geflasht." },
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Echte Reaktionen", title: "Auch die skeptischen Gäste sind am Ende am stärksten geflasht." },
+          { kind: "cobalt", span: "col-span-2", v: "5,0★", l: "30+ Bewertungen — ohne Ausreißer" },
+          { kind: "glass", span: "col-span-1", Icon: Gem, t: "Premium", d: "Elegant, nicht kitschig." },
+          { kind: "glass", span: "col-span-1", Icon: Heart, t: "Mit Gefühl", d: "Staunen, lachen, gerührt sein." },
         ]}
       />
 
-      <Statement>Am Ende reden alle noch <span style={{ color: COBALT }}>Wochen später</span> davon.</Statement>
+      <NotificationFlow
+        eyebrow="So unkompliziert"
+        title={<>Von der Anfrage bis zum <span style={{ color: COBALT }}>Termin</span>.</>}
+        sub="Eine kurze Nachricht reicht. Ich melde mich in unter 24 Stunden mit Vorschlag und Angebot — verbindlich und ohne Stress."
+        steps={[
+          { Icon: Check, t: "Anfrage erhalten", d: "Datum, Ort, Ablauf — gerade eben." },
+          { Icon: Clock, t: "Antwort & Angebot", d: "In unter 24 Stunden, versprochen." },
+          { Icon: CalendarCheck, t: "Termin bestätigt", d: "Wir freuen uns auf euren Tag!" },
+        ]}
+      />
 
       <PullQuote
         text="Du warst der absolute Höhepunkt unserer Hochzeitsfeier. Was ich nicht erwartet hätte: dass die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter."
@@ -54,14 +77,7 @@ export default function DemoHochzeit() {
         role="Brautpaar · Bayern"
       />
 
-      <Stats items={[
-        { v: "100+", l: "Hochzeiten begleitet" },
-        { v: "5,0★", l: "30+ Bewertungen" },
-        { v: "200+", l: "Events seit 2016" },
-        { v: "3", l: "Akte pro Hochzeit" },
-      ]} />
-
-      <ReviewsBlock />
+      <ReviewsBlock paper={false} />
 
       <FinalCTA
         title={<>Macht euren Gästen den Abend unvergesslich<span style={{ color: MAGENTA }}>.</span></>}
