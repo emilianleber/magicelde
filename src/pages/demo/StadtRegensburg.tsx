@@ -4,7 +4,7 @@ import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage
 import { SplitFeature, FormatCards, InteractiveTabs, Bento } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Hand, Wand2, UtensilsCrossed, MapPin, Clock, Sparkles } from "lucide-react";
-import heroImg from "@/assets/buehne-dpsg.jpg";
+import heroImg from "@/assets/stage-show.jpg";
 import splitImg from "@/assets/moderator-hero.jpg";
 import bentoImg from "@/assets/magicdinner-buehne.jpg";
 import tabA from "@/assets/wedding-magic.jpg";

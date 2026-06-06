@@ -4,7 +4,7 @@ import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage
 import { SplitFeature, FlowBand, Bento, DarkShowcase, FormatCards } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Handshake, Hand, Wand2, UtensilsCrossed } from "lucide-react";
-import heroImg from "@/assets/buehne-dpsg.jpg";
+import heroImg from "@/assets/emilian-portrait-cards.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
 import bentoImg from "@/assets/buehne-zuschauer.jpg";
 import darkImg from "@/assets/stage-show.jpg";
