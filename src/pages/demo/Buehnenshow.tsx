@@ -1,16 +1,17 @@
-/** /demo/buehnenshow — Format-Landingpage (groß): Beispiele + Gestaltung + Drama-Kurve. */
+/** /demo/buehnenshow — Format-Landingpage: editorial, Karussell statt Kachel-Grids, jedes Bild max. 1×. */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, ExampleSets, FlowBand, Bento, InteractiveTabs, DarkShowcase } from "@/components/voltage/creative";
+import { SplitFeature, ExampleSets, WarumCarousel, InteractiveTabs, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Sparkles, Smile, Award, Clock, Gauge, Users, Languages } from "lucide-react";
+import { Sparkles, Award, Clock, Gauge, Users, Languages } from "lucide-react";
 import heroImg from "@/assets/buehne-dpsg.jpg";
 import splitImg from "@/assets/stage-show.jpg";
-import bentoImg from "@/assets/buehne-zuschauer.jpg";
+import carA from "@/assets/buehne-zuschauer.jpg";
+import carB from "@/assets/audience-reactions.jpg";
 import darkImg from "@/assets/moderator-hero.jpg";
-import tab1 from "@/assets/audience-reactions.jpg";
-import tab2 from "@/assets/magicdinner-buehne.jpg";
-import tab3 from "@/assets/buehne-zuschauer.jpg";
+import tab1 from "@/assets/magicdinner-buehne.jpg";
+import tab2 from "@/assets/emilian-magic-dinner.jpg";
+import tab3 from "@/assets/haende-interaktion.jpg";
 
 export default function DemoBuehnenshow() {
   return (
@@ -25,6 +26,7 @@ export default function DemoBuehnenshow() {
         sub="Eine durchkomponierte Show für den ganzen Saal: Mentalmagie, Comedy-Pointen und ein Finale, bei dem alle aufstehen. Kein Trick-Marathon — ein Abend mit Spannungsbogen."
         image={heroImg}
         imageAlt="Emilian Leber bei einer Bühnenshow"
+        imgPos="top"
         badge="Standing Ovations — Show, bei der der ganze Saal mitgeht."
         secondary={{ label: "Show ansehen", href: "/demo#show" }}
       />
@@ -54,40 +56,29 @@ export default function DemoBuehnenshow() {
           { Icon: Gauge, t: "Tonalität", d: "Premium bis Comedy" },
           { Icon: Users, t: "Saalgröße", d: "50–500 Gäste" },
           { Icon: Languages, t: "Sprache", d: "DE / EN" },
-          { Icon: Sparkles, t: "Themen", d: "auf euer Event" },
         ]}
       />
 
-      <FlowBand
-        eyebrow="Die Drama-Kurve"
-        title="Jede Minute hat einen Bogen."
-        sub="Aufbau, Mittelteil, Finale — die Show ist getaktet wie ein guter Film. Am Ende steht der Saal."
-        milestones={[
-          { t: "Aufbau", d: "Der Einstieg, der sofort alle mitnimmt." },
-          { t: "Mittelteil", d: "Mentalmagie und Comedy im Wechsel." },
-          { t: "Finale", d: "Der Höhepunkt mit Standing Ovation." },
-        ]}
-      />
-
-      <Bento
-        eyebrow="Was hängenbleibt"
-        title="Sechs Dinge, die eure Gäste mitnehmen."
-        sub="Mentalmagie, Comedy und große Momente — modular auf eure Eventlänge abgestimmt."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Standing Ovations", title: "Der Moment, in dem alle gleichzeitig mitgehen." },
-          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events seit 2016" },
-          { kind: "glass", span: "col-span-1", Icon: Sparkles, t: "Mentalmagie", d: "Sauber gebaut, live am Publikum." },
-          { kind: "quote", span: "col-span-2", text: "Bühnenshow als Finale — alle Gäste begeistert.", name: "Jan von Lehmann · Eventleitung" },
+      <WarumCarousel
+        eyebrow="Warum Bühnenshow?"
+        title="Sechs Gründe, warum der Saal aufsteht."
+        cards={[
+          { kind: "photo", image: carA, chip: "Mentalmagie", title: "Hautnah am Gast", text: "Auch ein einzelner Zuschauer wird Teil eines unmöglichen Moments.", pos: "center" },
+          { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine auf jeder Bühne — von der Hochzeit bis zur TV-Show." },
+          { kind: "feature", Icon: Sparkles, title: "Mentalmagie", text: "Gedanken, Vorhersagen, Unmögliches — sauber gebaut, live gespielt." },
+          { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Der ganze Saal geht mit", text: "Comedy, über die mitgelacht wird — nie über jemanden.", pos: "center" },
+          { kind: "review", text: "Bühnenshow als Finale — alle Gäste begeistert.", name: "Jan von Lehmann · Eventleitung" },
+          { kind: "feature", Icon: Award, title: "Standing-Ovation-Finale", text: "Jeder Slot endet auf einem Höhepunkt — der Moment, über den man redet." },
         ]}
       />
 
       <InteractiveTabs
         eyebrow="Im Einsatz"
-        title="Vom Wohnzimmer-Format bis zur großen Bühne."
+        title="Vom intimen Rahmen bis zur großen Bühne."
         tabs={[
-          { t: "Intim · 30–80 Gäste", d: "Geburtstag, private Feier, Kundenabend — nah dran, mit viel Interaktion.", img: tab1, pos: "center" },
-          { t: "Saal · bis 300", d: "Hochzeit, Firmenfeier, Gala — die runde Show mit großem Finale.", img: tab2, pos: "center" },
-          { t: "Mentalmagie hautnah", d: "Auch ein einzelner Gast wird Teil eines unmöglichen Moments.", img: tab3, pos: "center" },
+          { t: "Saal · bis 300", d: "Hochzeit, Firmenfeier, Gala — die runde Show mit großem Finale.", img: tab1, pos: "center" },
+          { t: "Magic Dinner", d: "Eingebettet in den Abend, zwischen den Gängen und als Bühnen-Finale.", img: tab2, pos: "center" },
+          { t: "Close-Up-Akzente", d: "Mentalmagie hautnah als Ergänzung — direkt in den Händen der Gäste.", img: tab3, pos: "center" },
         ]}
       />
 
