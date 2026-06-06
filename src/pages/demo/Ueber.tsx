@@ -1,13 +1,14 @@
 /** /demo/ueber — Über (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { DarkShowcase, SplitFeature, Bento, FlowBand } from "@/components/voltage/creative";
+import { DarkShowcase, SplitFeature, WarumCarousel } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Tv, Trophy, Award } from "lucide-react";
+import { Tv, Award } from "lucide-react";
 import heroImg from "@/assets/magician-portrait.jpg";
 import storyImg from "@/assets/emilian-portrait-cards.jpg";
 import splitImg from "@/assets/emotionen.jpg";
-import bentoImg from "@/assets/moderator-hero.jpg";
+import carA from "@/assets/buehne-dpsg.jpg";
+import carB from "@/assets/audience-reactions.jpg";
 
 export default function DemoUeber() {
   return (
@@ -48,26 +49,16 @@ export default function DemoUeber() {
         reverse
       />
 
-      <Bento
-        eyebrow="Bühnen & Auszeichnungen"
-        title="Wo ich schon stand."
-        sub="TV-Finals, Wettbewerbe und über 200 Live-Events — Routine, die euch Sicherheit gibt."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Greatest Talent 2023", title: "Finalist vor TV-Publikum und Kameras." },
-          { kind: "cobalt", span: "col-span-1", v: "3×", l: "TV-Finalist" },
-          { kind: "glass", span: "col-span-1", Icon: Trophy, t: "Talents of Magic", d: "Finalist + Kreativpreis 2024." },
-          { kind: "quote", span: "col-span-2", text: "Emilian ist der einzige, dem ich seit Jahren blind vertraue.", name: "Katrin Raß · Hochzeitsplanerin" },
-        ]}
-      />
-
-      <FlowBand
-        eyebrow="Mein Weg"
-        title="Drei Jahre, drei Bühnen."
-        sub="Von der TV-Show bis zum eigenen Format — kontinuierlich auf großen Bühnen."
-        milestones={[
-          { t: "Greatest Talent 2023", d: "Finalist der TV-Show (SAT.1)." },
-          { t: "Talents of Magic 2024", d: "Finalist und Kreativpreis." },
-          { t: "TVA-TV 2025", d: "Porträt im regionalen Fernsehen." },
+      <WarumCarousel
+        eyebrow="Warum Emilian?"
+        title={<>Sechs Gründe, warum man mich <span style={{ color: COBALT }}>wieder</span> bucht.</>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Greatest Talent 2023", title: "Finalist vor TV-Publikum", text: "Auf der großen Bühne wie im kleinen Rahmen — vor Kameras genauso ruhig.", pos: "top" },
+          { kind: "stat", v: "3×", l: "TV-Finalist", text: "Greatest Talent 2023, Talents of Magic 2024, TVA-Porträt 2025." },
+          { kind: "feature", Icon: Tv, title: "Im Fernsehen erprobt", text: "Was vor Kameras und Live-Publikum funktioniert, funktioniert auch bei euch." },
+          { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Staunen und Lachen", text: "Comedy gehört zur Magie — die Gäste lachen mit, nie über jemanden.", pos: "center" },
+          { kind: "review", text: "Emilian ist der einzige, dem ich seit Jahren blind vertraue.", name: "Katrin Raß · Hochzeitsplanerin" },
+          { kind: "feature", Icon: Award, title: "200+ Events seit 2016", text: "Routine aus über 200 gespielten Abenden — von der Hochzeit bis zum Vorstands-Dinner." },
         ]}
       />
 

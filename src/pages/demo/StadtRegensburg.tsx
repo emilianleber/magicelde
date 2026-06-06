@@ -1,13 +1,14 @@
 /** /demo/zauberer-regensburg — Stadt-Landingpage (groß): lokal + Formate + Anlässe. */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA, FAQ } from "@/components/voltage/sections";
-import { SplitFeature, FormatCards, InteractiveTabs, Bento } from "@/components/voltage/creative";
+import { SplitFeature, FormatCards, InteractiveTabs, WarumCarousel } from "@/components/voltage/creative";
 import { motion } from "framer-motion";
 import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
-import { Hand, Wand2, UtensilsCrossed, MapPin, ArrowUpRight } from "lucide-react";
+import { Hand, Wand2, UtensilsCrossed, MapPin, Route, ArrowUpRight } from "lucide-react";
 import heroImg from "@/assets/stage-show.jpg";
 import splitImg from "@/assets/moderator-hero.jpg";
-import bentoImg from "@/assets/magicdinner-buehne.jpg";
+import carA from "@/assets/magicdinner-buehne.jpg";
+import carB from "@/assets/buehne-zuschauer.jpg";
 import tabA from "@/assets/wedding-magic.jpg";
 import tabB from "@/assets/schneider-weisse-closeup.jpg";
 import tabC from "@/assets/audience-reactions.jpg";
@@ -62,15 +63,16 @@ export default function DemoStadtRegensburg() {
         ]}
       />
 
-      <Bento
-        eyebrow="In Zahlen"
-        title="Routine aus der Region."
-        sub="Über 200 Events seit 2016 — viele davon in Regensburg und Umgebung."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Regensburg & Umland", title: "Vom Vorstands-Dinner bis zur großen Gala.", pos: "center" },
-          { kind: "cobalt", span: "col-span-1", v: "5,0★", l: "30+ Bewertungen" },
-          { kind: "glass", span: "col-span-1", Icon: MapPin, t: "Regensburg", d: "Heimat & kurze Wege." },
-          { kind: "quote", span: "col-span-2", text: "Alle sprechen noch Wochen danach davon. Sogar meine Mutter war geflasht.", name: "Martina Senftl · Regensburg" },
+      <WarumCarousel
+        eyebrow="Warum aus Regensburg?"
+        title={<>Sechs Gründe, warum <span style={{ color: COBALT }}>kurze Wege</span> mehr bringen<span style={{ color: MAGENTA }}>.</span></>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Regensburg & Umland", title: "Vom Vorstands-Dinner bis zur Gala", text: "Vertraut mit Säle, Caterern und dem Ablauf vor Ort — von der intimen Feier bis zur großen Bühne.", pos: "center" },
+          { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine in ganz Bayern — viele davon in Regensburg und der Region." },
+          { kind: "feature", Icon: MapPin, title: "Heimat Regensburg", text: "Zuhause in der Stadt: kurze Wege, transparente Anfahrt, keine teuren Übernachtungen." },
+          { kind: "photo", image: carB, chip: "Voller Saal", title: "Der ganze Saal geht mit", text: "Comedy & Mentalmagie für jeden Rahmen — Close-Up am Tisch oder große Bühnenshow.", pos: "center" },
+          { kind: "review", text: "Alle sprechen noch Wochen danach davon. Sogar meine Mutter war geflasht.", name: "Martina Senftl · Regensburg" },
+          { kind: "feature", Icon: Route, title: "Deutschlandweit dabei", text: "Regensburg ist die Basis — wenn ihr woanders feiert, bin ich trotzdem zur Stelle." },
         ]}
       />
 

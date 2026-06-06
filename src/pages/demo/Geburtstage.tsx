@@ -1,14 +1,15 @@
 /** /demo/geburtstage — Anlass (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, Bento, InteractiveTabs, FormatCards } from "@/components/voltage/creative";
+import { SplitFeature, WarumCarousel, InteractiveTabs, FormatCards } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Cake, Hand, Wand2, UtensilsCrossed } from "lucide-react";
+import { Hand, Wand2, UtensilsCrossed, Heart, Smile } from "lucide-react";
 import heroImg from "@/assets/hero-birthday.jpg";
 import splitImg from "@/assets/emotionen.jpg";
-import bentoImg from "@/assets/audience-reactions.jpg";
-import tabA from "@/assets/hero-birthday.jpg";
-import tabB from "@/assets/audience-reactions.jpg";
+import carA from "@/assets/audience-reactions.jpg";
+import carB from "@/assets/emilian-magic-dinner.jpg";
+import tabA from "@/assets/haende-interaktion.jpg";
+import tabB from "@/assets/zuschauer-blau.jpg";
 import tabC from "@/assets/stage-show.jpg";
 
 export default function DemoGeburtstage() {
@@ -38,15 +39,16 @@ export default function DemoGeburtstage() {
         stat={{ v: "80+", l: "Geburtstage & Jubiläen" }}
       />
 
-      <Bento
-        eyebrow="Warum man mich für die Feier bucht"
-        title="Mehr als Tricks — ein Abend mit Herz."
-        sub="Comedy und Emotion im Wechsel, jeder Gast wird Teil der Show."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Echte Reaktionen", title: "Auch die skeptischen Gäste sind am Ende am stärksten geflasht." },
-          { kind: "cobalt", span: "col-span-1", v: "80+", l: "Geburtstage & Jubiläen" },
-          { kind: "glass", span: "col-span-1", Icon: Cake, t: "Auch für Skeptiker", d: "Wer nichts erwartet, staunt am meisten." },
-          { kind: "quote", span: "col-span-2", text: "Du warst der absolute Höhepunkt unserer Feier — sogar meine Mutter war komplett geflasht.", name: "Martina Senftl" },
+      <WarumCarousel
+        eyebrow="Warum zum Geburtstag?"
+        title={<>Sechs Gründe, warum der ganze <span style={{ color: COBALT }}>Tisch</span> mitgeht.</>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Echte Reaktionen", title: "Auch die Skeptiker", text: "Wer nichts erwartet, staunt am meisten — und ist am Ende am stärksten geflasht.", pos: "center" },
+          { kind: "stat", v: "80+", l: "Geburtstage & Jubiläen", text: "Vom runden 50er bis zur großen Familienfeier — Routine für jeden Anlass." },
+          { kind: "feature", Icon: Heart, title: "Persönliche Insider", text: "Ich arbeite kleine Geschichten zum Jubilar in die Show ein — Magie, die berührt." },
+          { kind: "photo", image: carB, chip: "Comedy & Herz", title: "Staunen und lachen", text: "Comedy-lastig und herzlich — der ganze Tisch geht mit, im Wechsel aus Lachen und Gänsehaut.", pos: "center" },
+          { kind: "review", text: "Du warst der absolute Höhepunkt unserer Feier — sogar meine Mutter war komplett geflasht.", name: "Martina Senftl · Geburtstagsfeier" },
+          { kind: "feature", Icon: Smile, title: "Jeder ist dabei", text: "Ich binde alle ein, auch die Schüchternen — niemand wird vorgeführt, alle haben Spaß." },
         ]}
       />
 
@@ -54,9 +56,9 @@ export default function DemoGeburtstage() {
         eyebrow="Drei Formate, ein Abend"
         title={<>Genau so viel Magie, wie eure Feier <span style={{ color: COBALT }}>braucht</span>.</>}
         tabs={[
-          { t: "Walk-Around", d: "Close-Up direkt unter den Gästen — Magie in den Händen, von Grüppchen zu Grüppchen. Perfekt als Eisbrecher beim Sektempfang.", img: tabA },
-          { t: "Tisch-Highlights", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, mit Insidern zum Jubilar und viel Lachen.", img: tabB },
-          { t: "Kleine Bühnenshow", d: "15–25 Minuten als Höhepunkt des Abends — Comedy, Mentalmagie und ein Gänsehaut-Finale. Für 20 bis 200 Gäste.", img: tabC },
+          { t: "Walk-Around", d: "Close-Up direkt unter den Gästen — Magie in den Händen, von Grüppchen zu Grüppchen. Perfekt als Eisbrecher beim Sektempfang.", img: tabA, pos: "center" },
+          { t: "Tisch-Highlights", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, mit Insidern zum Jubilar und viel Lachen.", img: tabB, pos: "center" },
+          { t: "Kleine Bühnenshow", d: "15–25 Minuten als Höhepunkt des Abends — Comedy, Mentalmagie und ein Gänsehaut-Finale. Für 20 bis 200 Gäste.", img: tabC, pos: "top" },
         ]}
       />
 

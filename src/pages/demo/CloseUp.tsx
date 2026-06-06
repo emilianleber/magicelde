@@ -1,12 +1,13 @@
 /** /demo/close-up — Close-Up Zauberer / Tischmagie (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, ExampleSets, Bento, NotificationFlow, DarkShowcase } from "@/components/voltage/creative";
+import { SplitFeature, ExampleSets, WarumCarousel, NotificationFlow, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Eye, Check, Clock, CalendarCheck, Users, Sparkles, Languages } from "lucide-react";
+import { Check, Clock, CalendarCheck, Users, Sparkles, Languages, Award } from "lucide-react";
 import heroImg from "@/assets/closeup.jpg";
 import splitImg from "@/assets/haende-interaktion.jpg";
-import bentoImg from "@/assets/zuschauer-blau.jpg";
+import carA from "@/assets/schneider-weisse-closeup.jpg";
+import carB from "@/assets/audience-reactions.jpg";
 import darkImg from "@/assets/hero-closeup.jpg";
 
 export default function DemoCloseUp() {
@@ -22,6 +23,7 @@ export default function DemoCloseUp() {
         sub="Tischmagie auf Augenhöhe: Ich gehe von Gruppe zu Gruppe, Karten und Münzen passieren direkt in den Händen eurer Gäste. Keine Bühne, kein Aufbau — nur das Unmögliche aus nächster Nähe."
         image={heroImg}
         imageAlt="Emilian Leber bei der Tischmagie"
+        imgPos="center 78%"
         badge="Pro Tisch 5–7 Minuten — 50–80 Gäste in rund 90 Minuten."
         secondary={{ label: "Mehr ansehen", href: "/demo#show" }}
       />
@@ -58,15 +60,16 @@ export default function DemoCloseUp() {
         ]}
       />
 
-      <Bento
-        eyebrow="Was Close-Up ausmacht"
-        title="Magie ohne Distanz."
-        sub="Von Tisch zu Tisch oder im Walk-Around — die Effekte spielen sich auf Tuchfühlung ab, mitten unter euren Gästen."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Walk-Around", title: "Mitten unter den Gästen — Tisch für Tisch." },
-          { kind: "cobalt", span: "col-span-1", v: "100+", l: "Close-Up-Auftritte" },
-          { kind: "glass", span: "col-span-1", Icon: Eye, t: "Hautnah", d: "Direkt vor den Augen, nichts versteckt." },
-          { kind: "quote", span: "col-span-2", text: "Selbst die skeptischen Gäste haben am Ende nur noch gestaunt.", name: "Martina Senftl · Gastgeberin" },
+      <WarumCarousel
+        eyebrow="Warum Close-Up?"
+        title={<>Sechs Gründe, warum Magie <span style={{ color: COBALT }}>hautnah</span> am stärksten wirkt.</>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Walk-Around", title: "Mitten unter den Gästen", text: "Von Tisch zu Tisch — die Effekte spielen sich auf Tuchfühlung ab, nicht auf einer fernen Bühne.", pos: "center" },
+          { kind: "stat", v: "100+", l: "Close-Up-Auftritte", text: "Routine an jedem Tisch — vom Sektempfang bis ins volle Restaurant." },
+          { kind: "feature", Icon: Sparkles, title: "In ihrer eigenen Hand", text: "Karten und Münzen passieren direkt auf der Handfläche der Gäste — so nah, dass sie es selbst gemacht zu haben glauben." },
+          { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Selbst die Skeptiker staunen", text: "Nichts ist versteckt, alles direkt vor den Augen — genau das macht es unwiderstehlich.", pos: "center" },
+          { kind: "review", text: "Selbst die skeptischen Gäste haben am Ende nur noch gestaunt.", name: "Martina Senftl · Gastgeberin" },
+          { kind: "feature", Icon: Award, title: "Keine Technik nötig", text: "Kein Aufbau, kein Strom, kein Mikro — ein paar Karten genügen, und ich passe mich an euren Ablauf an." },
         ]}
       />
 

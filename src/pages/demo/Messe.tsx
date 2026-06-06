@@ -1,12 +1,13 @@
 /** /demo/messe-magier — Anlass (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, FormatCards, Bento, NotificationFlow } from "@/components/voltage/creative";
+import { SplitFeature, FormatCards, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed } from "lucide-react";
+import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Languages } from "lucide-react";
 import heroImg from "@/assets/audience-reactions.jpg";
 import splitImg from "@/assets/haende-interaktion.jpg";
-import bentoImg from "@/assets/zuschauer-blau.jpg";
+import carA from "@/assets/buehne-zuschauer.jpg";
+import carB from "@/assets/stage-show.jpg";
 
 export default function DemoMesse() {
   return (
@@ -47,15 +48,16 @@ export default function DemoMesse() {
         ]}
       />
 
-      <Bento
-        eyebrow="Warum Aussteller mich buchen"
-        title="Mehr als ein Showact — ein Werkzeug für den Stand."
-        sub="Kein Selbstzweck, sondern messbar mehr Kontakte — abgestimmt auf Ihre Ziele und Ihr Standpersonal."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Voller Stand", title: "Eine Traube bildet sich — auch in den ruhigen Hallen-Phasen." },
-          { kind: "cobalt", span: "col-span-1", v: "50–80", l: "Kontakte pro Stunde" },
-          { kind: "glass", span: "col-span-1", Icon: Target, t: "Lead-Magnet", d: "Spürbar mehr qualifizierte Standkontakte." },
-          { kind: "quote", span: "col-span-2", text: "Der Stand war den ganzen Tag voll — die Effekte mit unserer Botschaft sind bei den Besuchern hängengeblieben.", name: "Jan von Lehmann" },
+      <WarumCarousel
+        eyebrow="Warum Messe-Magie?"
+        title={<>Sechs Gründe, warum der <span style={{ color: COBALT }}>Stand</span> voll wird.</>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Voller Stand", title: "Die Traube bildet sich", text: "Eine Menschentraube entsteht ganz ohne aufdringliches Ansprechen — auch in den ruhigen Hallen-Phasen.", pos: "center" },
+          { kind: "stat", v: "50–80", l: "Kontakte pro Stunde", text: "Echte Standkontakte statt leerem Gang — direkt am Lead-Zähler messbar." },
+          { kind: "feature", Icon: Target, title: "Lead-Magnet", text: "Spürbar mehr qualifizierte Standkontakte — die Hemmschwelle für das Gespräch fällt." },
+          { kind: "photo", image: carB, chip: "Botschaft", title: "Ihr Claim im Aha-Moment", text: "Die Effekte transportieren Ihre Botschaft mitten ins Staunen — und bleiben hängen.", pos: "top" },
+          { kind: "review", text: "Der Stand war den ganzen Tag voll — die Effekte mit unserer Botschaft sind bei den Besuchern hängengeblieben.", name: "Jan von Lehmann · Eventleitung" },
+          { kind: "feature", Icon: Languages, title: "Mehrsprachig", text: "DE und EN fließend — internationale Besucher werden voll abgeholt." },
         ]}
       />
 

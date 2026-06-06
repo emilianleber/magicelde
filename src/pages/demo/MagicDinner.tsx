@@ -1,12 +1,13 @@
 /** /demo/magic-dinner — Magic Dinner (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { InteractiveTabs, SplitFeature, Bento, FlowBand, ExampleSets } from "@/components/voltage/creative";
+import { InteractiveTabs, SplitFeature, WarumCarousel, ExampleSets } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { UtensilsCrossed, Clock, MapPin, Sparkles } from "lucide-react";
 import heroImg from "@/assets/magicdinner-buehne.jpg";
 import splitImg from "@/assets/hero-dinner.jpg";
-import bentoImg from "@/assets/magicdinner-book.jpg";
+import carA from "@/assets/emotionen.jpg";
+import carB from "@/assets/audience-reactions.jpg";
 import tab1 from "@/assets/emilian-magic-dinner.jpg";
 import tab2 from "@/assets/magicdinner-book.jpg";
 import tab3 from "@/assets/stage-show.jpg";
@@ -32,7 +33,7 @@ export default function DemoMagicDinner() {
         title={<>Magie, eingetaktet in die <span style={{ color: COBALT }}>Menüfolge</span>.</>}
         tabs={[
           { t: "Aperitif · Walk-Around", d: "Beim Sektempfang gehe ich von Gruppe zu Gruppe — Close-Up direkt in den Händen, als Eisbrecher, bevor sich alle setzen.", img: tab1 },
-          { t: "Zwischen den Gängen · Tisch-zu-Tisch", d: "Während Teller getauscht werden, bekommt jeder Tisch seinen eigenen Moment — ohne dass der Service ins Stocken gerät.", img: tab2 },
+          { t: "Zwischen den Gängen · Tisch-zu-Tisch", d: "Während Teller getauscht werden, bekommt jeder Tisch seinen eigenen Moment — ohne dass der Service ins Stocken gerät.", img: tab2, pos: "center 60%" },
           { t: "Dessert · Bühnen-Finale", d: "Zum Abschluss die durchkomponierte Bühnenshow vor dem ganzen Saal — Mentalmagie, Comedy und ein großer Schluss.", img: tab3 },
         ]}
       />
@@ -65,26 +66,16 @@ export default function DemoMagicDinner() {
         ]}
       />
 
-      <Bento
-        eyebrow="Warum Magic Dinner"
-        title="Ein Format, das den ganzen Abend trägt."
-        sub="Walk-Around, Tisch-zu-Tisch und Bühne in einem Stück — abgestimmt auf euer Menü."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Magic Dinner", title: "Tisch und Bühne greifen über den ganzen Abend ineinander." },
-          { kind: "cobalt", span: "col-span-1", v: "seit 2023", l: "mein Signature-Format" },
-          { kind: "glass", span: "col-span-1", Icon: UtensilsCrossed, t: "3–5 Gänge", d: "Magie zwischen jedem Gang." },
-          { kind: "quote", span: "col-span-2", text: "Magic Dinner war das Highlight — die Gäste reden heute noch davon.", name: "Katrin Raß · Hochzeitsplanerin" },
-        ]}
-      />
-
-      <FlowBand
-        eyebrow="Der Abend in drei Phasen"
-        title="Vom Aperitif bis zum Bühnen-Finale."
-        sub="Jede Phase ist auf den Service-Rhythmus abgestimmt — der Abend baut sich auf wie ein gutes Menü."
-        milestones={[
-          { t: "Aperitif", d: "Walk-Around beim Sektempfang als Eisbrecher." },
-          { t: "Zwischengänge", d: "Tisch-zu-Tisch zwischen den Gängen." },
-          { t: "Finale", d: "Bühnenshow zum Dessert vor dem ganzen Saal." },
+      <WarumCarousel
+        eyebrow="Warum Magic Dinner?"
+        title={<>Sechs Gründe, warum ein <span style={{ color: COBALT }}>ganzer Abend</span> in Erinnerung bleibt.</>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Magic Dinner", title: "Magie zwischen jedem Gang", text: "Tisch und Bühne greifen über den ganzen Abend ineinander — abgestimmt auf euer Menü.", pos: "center" },
+          { kind: "stat", v: "seit 2023", l: "mein Signature-Format", text: "Durchkomponiert über 2,5–4 Stunden, im Takt mit dem Service." },
+          { kind: "feature", Icon: UtensilsCrossed, title: "3–5 Gänge", text: "Walk-Around zum Aperitif, Tisch-zu-Tisch zwischen den Gängen, Bühnen-Finale zum Dessert." },
+          { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Jeder Tisch sein Moment", text: "Während Teller getauscht werden, bekommt jede Gruppe einen eigenen Höhepunkt.", pos: "center" },
+          { kind: "review", text: "Magic Dinner war das Highlight — die Gäste reden heute noch davon.", name: "Katrin Raß · Hochzeitsplanerin" },
+          { kind: "feature", Icon: Sparkles, title: "Abgestimmt aufs Menü", text: "Ich plane jede Phase vorab mit Küche, Service und Musik — Gänge und Magie im selben Takt." },
         ]}
       />
 

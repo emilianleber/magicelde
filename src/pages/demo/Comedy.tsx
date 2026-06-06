@@ -1,14 +1,15 @@
 /** /demo/comedy — Comedy-Zauberei (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, ExampleSets, Bento, InteractiveTabs, NotificationFlow } from "@/components/voltage/creative";
+import { SplitFeature, ExampleSets, WarumCarousel, InteractiveTabs, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Smile, Mail, Clock, CalendarCheck, Gauge, Users, Sparkles } from "lucide-react";
+import { Mail, Clock, CalendarCheck, Gauge, Users, Sparkles, Mic } from "lucide-react";
 import heroImg from "@/assets/emotionen.jpg";
 import splitImg from "@/assets/audience-reactions.jpg";
-import bentoImg from "@/assets/zuschauer-blau.jpg";
+import carA from "@/assets/zuschauer-blau.jpg";
+import carB from "@/assets/buehne-zuschauer.jpg";
 import tab1 from "@/assets/buehne-dpsg.jpg";
-import tab2 from "@/assets/audience-reactions.jpg";
+import tab2 from "@/assets/emilian-magic-dinner.jpg";
 import tab3 from "@/assets/stage-show.jpg";
 
 export default function DemoComedy() {
@@ -55,15 +56,16 @@ export default function DemoComedy() {
         ]}
       />
 
-      <Bento
-        eyebrow="Was hängenbleibt"
-        title="Comedy mit Substanz."
-        sub="Routine, eine Comedy-Dosis nach Anlass und echte Reaktionen — modular auf eure Eventlänge und euren Abend abgestimmt."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Echte Reaktionen", title: "Der Moment, in dem der ganze Saal gleichzeitig lacht." },
-          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events Routine" },
-          { kind: "glass", span: "col-span-1", Icon: Smile, t: "Comedy-Dosis nach Anlass", d: "Von pointiert bis durchgängig lustig — passend zu euren Gästen." },
-          { kind: "quote", span: "col-span-2", text: "Alle haben gestaunt und Tränen gelacht — genau die Mischung, die wir wollten.", name: "Martina Senftl · Eventkundin" },
+      <WarumCarousel
+        eyebrow="Warum Comedy-Zauberei?"
+        title={<>Sechs Gründe, warum der ganze Saal <span style={{ color: COBALT }}>mitlacht</span>.</>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Echte Reaktionen", title: "Der Moment, in dem alle gleichzeitig lachen", text: "Comedy, über die mitgelacht wird — nie über jemanden, kein Fremdscham.", pos: "center" },
+          { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine, die Pointen sitzen lässt — von der Firmenfeier bis zur Gala." },
+          { kind: "feature", Icon: Sparkles, title: "Magie als Setup", text: "Erst der Wow-Moment, dann die Pointe — Mentalmagie baut den Lacher auf." },
+          { kind: "photo", image: carB, chip: "Comedy-Dosis nach Anlass", title: "Von pointiert bis durchgängig lustig", text: "Passend zu euren Gästen getaktet — wie ein guter Stand-Up-Set.", pos: "center" },
+          { kind: "review", text: "Alle haben gestaunt und Tränen gelacht — genau die Mischung, die wir wollten.", name: "Martina Senftl · Eventkundin" },
+          { kind: "feature", Icon: Mic, title: "Pointen die sitzen", text: "Kein Brüllen ins Mikro, kein Trick-Marathon — getaktet wie ein guter Set." },
         ]}
       />
 

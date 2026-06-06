@@ -1,12 +1,13 @@
 /** /demo/event-agenturen — Buyer-Persona Event-Agenturen (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, FlowBand, Bento, DarkShowcase, FormatCards } from "@/components/voltage/creative";
+import { SplitFeature, WarumCarousel, DarkShowcase, FormatCards } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Handshake, Hand, Wand2, UtensilsCrossed } from "lucide-react";
+import { Handshake, ShieldCheck, Hand, Wand2, UtensilsCrossed } from "lucide-react";
 import heroImg from "@/assets/emilian-portrait-cards.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
-import bentoImg from "@/assets/buehne-zuschauer.jpg";
+import carA from "@/assets/buehne-zuschauer.jpg";
+import carB from "@/assets/audience-reactions.jpg";
 import darkImg from "@/assets/stage-show.jpg";
 
 export default function DemoEventAgenturen() {
@@ -48,26 +49,16 @@ export default function DemoEventAgenturen() {
         ]}
       />
 
-      <FlowBand
-        eyebrow="So läuft die Zusammenarbeit"
-        title={<>Drei Etappen — <span style={{ color: COBALT }}>planbar</span> von Anfang bis Ende.</>}
-        sub="Klare Abläufe, an jedem Punkt ansprechbar. Ihr behaltet die Kontrolle über euer Event, ich liefere meinen Part verlässlich."
-        milestones={[
-          { t: "Briefing & Konzept", d: "Wir klären Format, Zielgruppe und Programmpunkt — ich liefere Pitch-Material und Konzeptvorschlag." },
-          { t: "Umsetzung vor Ort", d: "Pünktlich, vorbereitet, im Timing — Close-Up oder Bühne, ohne dass ihr nachsteuern müsst." },
-          { t: "Nachbereitung", d: "Saubere Abrechnung, ehrliches Feedback und Bilder fürs Portfolio — bereit fürs nächste Mal." },
-        ]}
-      />
-
-      <Bento
-        eyebrow="Warum Agenturen mit mir arbeiten"
-        title="Ein Act, viele Formate — ein verlässlicher Ansprechpartner."
-        sub="Skalierbar, white-label-tauglich und seit Jahren ohne Reklamation."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Greatest Talent", title: "Bühnenerprobt vor großem Publikum — auch unter Live-Druck." },
-          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events für Agenturen & Direktkunden" },
-          { kind: "glass", span: "col-span-1", Icon: Handshake, t: "White-Label", d: "Fügt sich nahtlos in euer Programm ein." },
-          { kind: "quote", span: "col-span-2", text: "Wir buchen Emilian seit Jahren — verlässlich, professionell, nie ein Problem. Genau der Act, den man Kunden bedenkenlos empfiehlt.", name: "Jan von Lehmann · Event-Agentur" },
+      <WarumCarousel
+        eyebrow="Warum Agenturen mit mir arbeiten?"
+        title={<>Sechs Gründe, warum Agenturen mich <span style={{ color: COBALT }}>weiterbuchen</span><span style={{ color: MAGENTA }}>.</span></>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Bühnenerprobt", title: "Auch unter Live-Druck sicher", text: "Vor großem Publikum erprobt — der Act sitzt, auch wenn euer Kunde zuschaut.", pos: "center" },
+          { kind: "feature", Icon: Handshake, title: "White-Label", text: "Fügt sich nahtlos in euer Programm ein — euer Kunde sieht ein rundes Event, nicht zehn Einzelteile." },
+          { kind: "stat", v: "200+", l: "Events für Agenturen & Direktkunden", text: "Routine in jedem Rahmen — vom Empfang bis zur großen Gala." },
+          { kind: "review", text: "Wir buchen Emilian seit Jahren — verlässlich, professionell, nie ein Problem. Genau der Act, den man Kunden bedenkenlos empfiehlt.", name: "Jan von Lehmann · Event-Agentur" },
+          { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Der Saal geht mit", text: "Comedy, über die mitgelacht wird — eine Show, die euren Programmpunkt zum Highlight macht.", pos: "center" },
+          { kind: "feature", Icon: ShieldCheck, title: "Kein Risiko", text: "Tech-Rider, Versicherung, Vertrag und Briefing kommen sauber und rechtzeitig — kein einziger Ausfall." },
         ]}
       />
 

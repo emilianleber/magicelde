@@ -1,12 +1,13 @@
 /** /demo/referenzen — Referenzen (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, LogoMarquee, ReviewsBlock, PullQuote, FinalCTA } from "@/components/voltage/sections";
-import { Bento, SplitFeature } from "@/components/voltage/creative";
+import { WarumCarousel, SplitFeature } from "@/components/voltage/creative";
 import { motion } from "framer-motion";
-import { Building2 } from "lucide-react";
+import { Building2, Star } from "lucide-react";
 import { INK, WHITE, COBALT, MAGENTA, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
 import refImg from "@/assets/magicdinner-buehne.jpg";
-import bentoImg from "@/assets/magicdinner-buehne.jpg";
+import carA from "@/assets/audience-reactions.jpg";
+import carB from "@/assets/buehne-zuschauer.jpg";
 import splitImg from "@/assets/schneider-weisse-closeup.jpg";
 
 const CLIENTS = [
@@ -41,15 +42,16 @@ export default function DemoReferenzen() {
         primary={{ label: "Selbst anfragen", href: "/demo/kontakt" }}
       />
 
-      <Bento
-        eyebrow="Zahlen, die zählen"
-        title="Erfahrung in Zahlen."
-        sub="Über alle Anlässe und Branchen hinweg — seit 2016 quer durch Bayern und deutschlandweit."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Magic Dinner", title: "Vom Vorstands-Dinner bis zur Messe." },
-          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events seit 2016" },
-          { kind: "glass", span: "col-span-1", Icon: Building2, t: "16+ Branchen", d: "Versicherung bis Theater." },
-          { kind: "quote", span: "col-span-2", text: "Zuverlässig, flexibel — das Publikum ist jedes Mal begeistert.", name: "Eventagentur · Bayern" },
+      <WarumCarousel
+        eyebrow="Warum Referenzen?"
+        title={<>Sechs Gründe, warum man auf <span style={{ color: COBALT }}>Erfahrung</span> setzt<span style={{ color: MAGENTA }}>.</span></>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Echte Reaktionen", title: "Publikum, das mitgeht", text: "Begeisterte Gäste auf jeder Feier — vom Vorstands-Dinner bis zur Messe.", pos: "center" },
+          { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine quer durch Bayern und deutschlandweit." },
+          { kind: "feature", Icon: Building2, title: "16+ Branchen", text: "Versicherung bis Theater — die Tonalität passt sich an, die Verlässlichkeit bleibt gleich." },
+          { kind: "photo", image: carB, chip: "Bühne & Saal", title: "Vom Gala-Slot bis zum Headliner", text: "Jeder Auftritt vorbereitet und exakt auf den Anlass abgestimmt.", pos: "center" },
+          { kind: "review", text: "Zuverlässig, flexibel — das Publikum ist jedes Mal begeistert.", name: "Eventagentur · Bayern" },
+          { kind: "feature", Icon: Star, title: "5,0★ verifiziert", text: "30+ echte Bewertungen auf Google und ProvenExpert — mit benannten Auftraggebern." },
         ]}
       />
 

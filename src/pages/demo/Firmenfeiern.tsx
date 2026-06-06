@@ -1,12 +1,13 @@
 /** /demo/firmenfeiern — Anlass Firmenfeier (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { InteractiveTabs, FormatCards, SplitFeature, Bento, NotificationFlow } from "@/components/voltage/creative";
+import { InteractiveTabs, FormatCards, SplitFeature, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed } from "lucide-react";
+import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles } from "lucide-react";
 import heroImg from "@/assets/schneider-weisse-closeup.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
-import bentoImg from "@/assets/buehne-zuschauer.jpg";
+import carA from "@/assets/buehne-zuschauer.jpg";
+import carB from "@/assets/audience-reactions.jpg";
 import tab1 from "@/assets/closeup.jpg";
 import tab2 from "@/assets/emilian-magic-dinner.jpg";
 import tab3 from "@/assets/stage-show.jpg";
@@ -31,7 +32,7 @@ export default function DemoFirmenfeiern() {
         eyebrow="Drei Formate"
         title={<>Vom Empfang bis zur <span style={{ color: COBALT }}>Bühne</span> — eingetaktet in euer Programm.</>}
         tabs={[
-          { t: "Empfang · Walk-Around", d: "Close-Up von Gruppe zu Gruppe während Sektempfang und Networking — der Eisbrecher, der Abteilungen ins Gespräch bringt, bevor das Programm überhaupt startet.", img: tab1 },
+          { t: "Empfang · Walk-Around", d: "Close-Up von Gruppe zu Gruppe während Sektempfang und Networking — der Eisbrecher, der Abteilungen ins Gespräch bringt, bevor das Programm überhaupt startet.", img: tab1, pos: "center 78%" },
           { t: "Dinner · Tisch-zu-Tisch", d: "Zwischen den Gängen bekommt jeder Tisch seinen eigenen Moment — Magie direkt in den Händen, ohne dass der Ablauf des Abends ins Stocken gerät.", img: tab2 },
           { t: "Bühne als Finale", d: "20–30 Min Bühnenshow als Höhepunkt — Mentalmagie, Comedy und ein Finale, das den Abend für den ganzen Saal zusammenfasst.", img: tab3 },
         ]}
@@ -60,15 +61,16 @@ export default function DemoFirmenfeiern() {
         stat={{ v: "100+", l: "Firmen-Events" }}
       />
 
-      <Bento
-        eyebrow="Warum Firmen mich buchen"
-        title="Premium oder Comedy — passend zu eurem Anlass."
-        sub="Vom seriösen Kundenabend bis zur lockeren Mitarbeiterfeier — gleiche Qualität, anderer Ton."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Echte Reaktionen", title: "Auch das skeptische Management ist am Ende am stärksten geflasht." },
-          { kind: "cobalt", span: "col-span-1", v: "100+", l: "Firmen-Engagements" },
-          { kind: "glass", span: "col-span-1", Icon: Briefcase, t: "Premium bis Comedy", d: "Der Ton, der zu eurer Marke passt." },
-          { kind: "quote", span: "col-span-2", text: "Bühnenshow als Finale — alle 200 Gäste begeistert.", name: "Jan von Lehmann · Eventleitung" },
+      <WarumCarousel
+        eyebrow="Warum Firmenfeier?"
+        title={<>Sechs Gründe, warum Firmen mich <span style={{ color: COBALT }}>buchen</span>.</>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Echte Reaktionen", title: "Auch das Management ist geflasht", text: "Selbst die skeptischsten Gäste stehen am Ende am stärksten unter Strom.", pos: "center" },
+          { kind: "stat", v: "100+", l: "Firmen-Events", text: "Routine vom Vorstandsdinner bis zur großen Mitarbeiterfeier." },
+          { kind: "feature", Icon: Briefcase, title: "Premium bis Comedy", text: "Der Ton, der zu eurer Marke passt — seriöser Kundenabend oder lockere Feier." },
+          { kind: "photo", image: carB, chip: "Eisbrecher", title: "Abteilungen kommen ins Gespräch", text: "Magie, die gemischte Teams aus allen Bereichen zusammenbringt.", pos: "center" },
+          { kind: "review", text: "Bühnenshow als Finale — alle 200 Gäste begeistert.", name: "Jan von Lehmann · Eventleitung" },
+          { kind: "feature", Icon: Sparkles, title: "Insider-Briefing vorab", text: "Firmen-Stories, Namen und Running Gags aus dem Team — eingebaut in die Show." },
         ]}
       />
 

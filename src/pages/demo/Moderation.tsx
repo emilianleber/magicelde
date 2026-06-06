@@ -1,12 +1,13 @@
 /** /demo/moderation — Moderation (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, ExampleSets, FlowBand, Bento, DarkShowcase } from "@/components/voltage/creative";
+import { SplitFeature, ExampleSets, WarumCarousel, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Mic2, Clock, Languages, Sparkles, Users } from "lucide-react";
+import { Mic2, Clock, Languages, Sparkles, Users, Award } from "lucide-react";
 import heroImg from "@/assets/moderator-hero.jpg";
 import splitImg from "@/assets/buehne-zuschauer.jpg";
-import bentoImg from "@/assets/audience-reactions.jpg";
+import carA from "@/assets/haende-interaktion.jpg";
+import carB from "@/assets/buehne-dpsg.jpg";
 import darkImg from "@/assets/stage-show.jpg";
 
 export default function DemoModeration() {
@@ -53,26 +54,16 @@ export default function DemoModeration() {
         ]}
       />
 
-      <FlowBand
-        eyebrow="So läuft der Abend"
-        title="Vom ersten Briefing bis zum letzten Applaus."
-        sub="Eine Moderation ist Vorbereitung. Wir stimmen den Ablauf vorab ab, ich führe sicher durch den Abend und setze die magischen Akzente an den richtigen Stellen."
-        milestones={[
-          { t: "Vorab-Abstimmung", d: "Ablaufplan, Namen, Timing — alles vor dem Event geklärt." },
-          { t: "Durch den Abend führen", d: "Programmpunkte verbinden, Energie und Tempo halten." },
-          { t: "Magische Akzente", d: "Kleine Momente Magie statt Lückenfüller — pointiert gesetzt." },
-        ]}
-      />
-
-      <Bento
-        eyebrow="Warum es funktioniert"
-        title="Routine, Energie und ein Faden, der nicht reißt."
-        sub="Über 200 Events Bühnenerfahrung — als Moderator weiß ich genau, wie man einen Saal durch einen ganzen Abend trägt."
-        items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Roter Faden", title: "Ein Abend, der sich rund und durchdacht anfühlt." },
-          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events seit 2016" },
-          { kind: "glass", span: "col-span-1", Icon: Mic2, t: "Roter Faden", d: "Programmpunkte verbunden, Energie gehalten." },
-          { kind: "quote", span: "col-span-2", text: "Hat den ganzen Abend zusammengehalten — souverän und mit Charme.", name: "Jan von Lehmann · Eventleitung" },
+      <WarumCarousel
+        eyebrow="Warum Moderation?"
+        title={<>Sechs Gründe, warum der <span style={{ color: COBALT }}>Faden</span> hält.</>}
+        cards={[
+          { kind: "photo", image: carA, chip: "Roter Faden", title: "Ein Abend, der sich rund anfühlt", text: "Programmpunkte verbunden, Energie und Tempo gehalten — kein Bruch zwischen den Punkten.", pos: "center" },
+          { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine auf jeder Bühne — vom kurzen Übergang bis zur ganzen Gala." },
+          { kind: "feature", Icon: Mic2, title: "Magische Akzente", text: "Kleine Momente Magie statt Lückenfüller — pointiert an den Übergängen gesetzt." },
+          { kind: "photo", image: carB, chip: "Souverän", title: "Sicher durch den ganzen Abend", text: "Auch wenn der Ablauf einmal kippt: ruhig, schlagfertig, mit Charme.", pos: "top" },
+          { kind: "review", text: "Hat den ganzen Abend zusammengehalten — souverän und mit Charme.", name: "Jan von Lehmann · Eventleitung" },
+          { kind: "feature", Icon: Award, title: "Vorab abgestimmt", text: "Ablaufplan, Namen und Timing klären wir vor dem Event — am Abend läuft alles." },
         ]}
       />
 
