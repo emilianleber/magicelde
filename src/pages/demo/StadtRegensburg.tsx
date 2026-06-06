@@ -1,9 +1,10 @@
 /** /demo/zauberer-regensburg — Stadt-Landingpage (groß): lokal + Formate + Anlässe. */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA, FAQ } from "@/components/voltage/sections";
 import { SplitFeature, FormatCards, InteractiveTabs, Bento } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Hand, Wand2, UtensilsCrossed, MapPin, Clock, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
+import { Hand, Wand2, UtensilsCrossed, MapPin, ArrowUpRight } from "lucide-react";
 import heroImg from "@/assets/stage-show.jpg";
 import splitImg from "@/assets/moderator-hero.jpg";
 import bentoImg from "@/assets/magicdinner-buehne.jpg";
@@ -80,6 +81,31 @@ export default function DemoStadtRegensburg() {
       />
 
       <ReviewsBlock paper={false} />
+
+      <FAQ
+        eyebrow="Zauberer Regensburg · FAQ"
+        title="Gut zu wissen für eure Feier in Regensburg."
+        items={[
+          { q: "Was kostet ein Zauberer in Regensburg?", a: "Das hängt von Format, Dauer und Anlass ab. Sag mir kurz, was du planst — du bekommst ein transparentes Angebot, in Regensburg und Umgebung ohne große Anfahrt." },
+          { q: "Welche Locations in Regensburg bespielst du?", a: "Vom Turmtheater über Eventlocations bis zu Restaurants und Sälen im Umland — ich kenne die Häuser und den Ablauf vor Ort." },
+          { q: "Wie früh sollte ich buchen?", a: "Wochenenden in der Hochsaison (Mai–September, Dezember) brauchen 8–12 Wochen Vorlauf. Kurzfristig frag trotzdem — manchmal geht noch was in zwei Wochen." },
+          { q: "Trittst du auch außerhalb von Regensburg auf?", a: "Ja, deutschlandweit. Regensburg ist Heimat, aber ich bin regelmäßig in ganz Bayern und darüber hinaus unterwegs." },
+        ]}
+      />
+
+      {/* Region / interne Links (SEO) */}
+      <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 pb-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div variants={up}><Eyebrow>Auch in der Region</Eyebrow><h2 className="font-extrabold tracking-[-0.02em] max-w-3xl" style={{ fontSize: "clamp(1.6rem,3vw,2.4rem)", lineHeight: 1.06, color: INK }}>Zauberer in ganz Ostbayern — und darüber hinaus.</h2></motion.div>
+          <div className="flex flex-wrap gap-3 mt-7">
+            {["Regensburg", "München", "Nürnberg", "Ingolstadt", "Landshut", "Passau", "Straubing", "Augsburg", "Würzburg", "Deggendorf"].map((c) => (
+              <motion.a key={c} variants={up} href={c === "Regensburg" ? "/demo/zauberer-regensburg" : "#"} className="inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-[14px] font-medium transition-colors hover:border-[#1D3FFF]" style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}>
+                Zauberer {c} <ArrowUpRight className="w-4 h-4" style={{ color: COBALT }} />
+              </motion.a>
+            ))}
+          </div>
+        </div>
+      </motion.section>
 
       <FinalCTA
         title={<>Eure Feier in Regensburg — unvergesslich<span style={{ color: MAGENTA }}>.</span></>}
