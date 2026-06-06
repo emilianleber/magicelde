@@ -1,6 +1,6 @@
 /** /demo/messe-magier — Anlass (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, FormatCards, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Languages } from "lucide-react";
@@ -79,6 +79,35 @@ export default function DemoMesse() {
       />
 
       <ReviewsBlock paper={false} />
+
+      <FAQ
+        items={[
+          {
+            q: "Was kostet ein Messe-Magier ungefaehr?",
+            a: "Der Preis haengt von Einsatzdauer, Anfahrt und Umfang ab - ein Stand-Slot fuer ein paar Stunden ist anders kalkuliert als der ganze Messetag. Nach einer kurzen Anfrage ueber /demo/kontakt bekommen Sie ein konkretes Angebot, in der Regel binnen 24 Stunden.",
+          },
+          {
+            q: "Wie laeuft die Anfrage ab und wie schnell kommt eine Antwort?",
+            a: "Eine kurze Nachricht zu Messe, Standgroesse, Termin und Ziel reicht voellig. Ich melde mich innerhalb von 24 Stunden persoenlich mit Konzept und Angebot zurueck.",
+          },
+          {
+            q: "Wie viel Platz braucht die Magie am Stand?",
+            a: "Close-Up funktioniert direkt in den Haenden der Besucher und braucht praktisch keinen Aufbau - ein paar Quadratmeter freie Standflaeche genuegen. Fuer einen Buehnen-Slot auf der Aktionsflaeche klaeren wir Buehne und Technik vorab im Briefing.",
+          },
+          {
+            q: "Lassen sich Effekte und Botschaft auf unser Produkt anpassen?",
+            a: "Ja, das ist der Kern der Sache: Ihr Claim oder Produkt wird in die Effekte eingebaut und sitzt mitten im Aha-Moment. Sie schildern mir kurz Ihre Botschaft, ich entwickle daraus passende Routinen fuer den Stand.",
+          },
+          {
+            q: "Geht das auch auf Englisch fuer internationale Besucher?",
+            a: "Ja, ich arbeite fliessend in Deutsch und Englisch und wechsle je nach Besucher direkt. So holen Sie auch internationales Messepublikum voll ab.",
+          },
+          {
+            q: "Reisen Sie auch ueberregional zu unserer Messe an?",
+            a: "Ja, ich bin deutschlandweit unterwegs - Basis ist Bayern rund um Regensburg, mit ueber 200 Events seit 2016 und drei TV-Finals. Anfahrt und mehrtaegige Auftritte stimmen wir einfach in der Anfrage ab.",
+          },
+        ]}
+      />
 
       <FinalCTA
         title={<>Machen Sie Ihren Stand zum Hingucker der Messe<span style={{ color: MAGENTA }}>.</span></>}

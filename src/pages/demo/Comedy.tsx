@@ -1,6 +1,6 @@
 /** /demo/comedy — Comedy-Zauberei (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, ExampleSets, WarumCarousel, InteractiveTabs, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Mail, Clock, CalendarCheck, Gauge, Users, Sparkles, Mic } from "lucide-react";
@@ -97,6 +97,35 @@ export default function DemoComedy() {
       />
 
       <ReviewsBlock paper={false} />
+
+      <FAQ
+        items={[
+          {
+            q: "Was kostet eine Comedy-Zaubershow?",
+            a: "Preislich abhaengig von Dauer, Anfahrt und Gaestezahl - vom 15-Minuten-Slot bis zum 45-Minuten-Headliner. Schildert mir kurz euer Event ueber /demo/kontakt, dann bekommt ihr ein passendes Angebot.",
+          },
+          {
+            q: "Wie laeuft die Anfrage ab und wie schnell kommt eine Antwort?",
+            a: "Erzaehlt mir kurz von Anlass, Datum und Gaestezahl ueber /demo/kontakt. Ich melde mich innerhalb von 24 Stunden persoenlich zurueck - danach folgen Briefing, Vertrag und Technik aus einer Hand.",
+          },
+          {
+            q: "Wie lange dauert das Comedy-Set?",
+            a: "Zwischen 15 und 45 Minuten - vom pointierten Slot zwischen zwei Programmpunkten bis zum Hauptact des Abends. Die Laenge richtet sich nach eurem Ablauf, die Comedy-Dosis nach dem Anlass.",
+          },
+          {
+            q: "Fuer wie viele Gaeste und welche Raumgroesse eignet sich das?",
+            a: "Von der intimen Runde bis zum vollen Saal: 30 bis 500 Gaeste funktionieren bestens. Wichtiger als die Raumgroesse ist gute Sicht auf die Buehne - bei groesseren Gruppen sorgt eine Mikrofonanlage dafuer, dass jede Pointe ankommt.",
+          },
+          {
+            q: "Was wird an Platz und Technik gebraucht?",
+            a: "Ein freier Buehnen- oder Auftrittsbereich und bei groesseren Gruppen ein Mikrofon plus Saallicht reichen meist aus. Ich klaere die Technik vorab mit eurem Location-Team, sodass am Eventtag nichts dem Zufall ueberlassen bleibt.",
+          },
+          {
+            q: "Geht die Show auch auf Englisch und wie weit reist Emilian?",
+            a: "Die Show gibt es auf Deutsch und Englisch - ideal fuer internationale Gaeste und Firmen-Events. Basis ist Bayern/Regensburg, gebucht und gespielt wird deutschlandweit; die Anfahrt fliesst einfach ins Angebot ein.",
+          },
+        ]}
+      />
 
       <FinalCTA
         title={<>Bereit für staunen und lachen<span style={{ color: MAGENTA }}>?</span></>}

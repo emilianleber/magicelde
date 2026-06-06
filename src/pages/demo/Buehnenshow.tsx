@@ -1,6 +1,6 @@
 /** /demo/buehnenshow — Format-Landingpage: editorial, Karussell statt Kachel-Grids, jedes Bild max. 1×. */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, ExampleSets, WarumCarousel, InteractiveTabs, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Sparkles, Award, Clock, Gauge, Users, Languages } from "lucide-react";
@@ -102,6 +102,35 @@ export default function DemoBuehnenshow() {
       />
 
       <ReviewsBlock paper={false} />
+
+      <FAQ
+        items={[
+          {
+            q: "Was kostet eine Bühnenshow?",
+            a: "Das haengt von Dauer, Anfahrt und Gaestezahl ab - eine 15-Minuten-Gala kostet weniger als ein 60-Minuten-Headliner-Slot. Schick mir kurz Datum, Ort und gewuenschte Laenge ueber das Kontaktformular, dann bekommst du ein konkretes Angebot.",
+          },
+          {
+            q: "Wie laeuft die Anfrage ab und wie schnell kommt eine Antwort?",
+            a: "Du schreibst mir ueber /demo/kontakt ein paar Eckdaten zu eurem Event, und ich melde mich innerhalb von 24 Stunden persoenlich zurueck. Danach klaeren wir Ablauf, Laenge und Buehne in einem kurzen Gespraech.",
+          },
+          {
+            q: "Wie lange dauert die Show und wie viele Gaeste passen?",
+            a: "Die Show laesst sich von 15 bis 60 Minuten takten - vom pointierten Gala-Slot bis zum Headliner-Act. Sie funktioniert fuer 50 bis 500 Gaeste, weil Headset, Ton und Buehnen-Aufbau auf die Saalgroesse abgestimmt werden.",
+          },
+          {
+            q: "Was braucht ihr an Platz und Technik?",
+            a: "Die Buehne braucht nur etwa 2 x 1,5 m, Headset und Ton bringe ich selbst mit. Einen Tech-Rider gibt es auf Anfrage - ihr muesst euch um nichts kuemmern.",
+          },
+          {
+            q: "Geht die Show auch auf Englisch und wie weit reist du an?",
+            a: "Die komplette Show gibt es auf Deutsch und Englisch, ideal fuer internationale Gaeste oder gemischtes Publikum. Basis ist Bayern rund um Regensburg, gespielt wird aber deutschlandweit.",
+          },
+          {
+            q: "Wie individuell laesst sich die Show anpassen?",
+            a: "Jeder Auftritt wird auf euren Anlass abgestimmt - Laenge, Tonalitaet von Premium bis Comedy und der Einbau ins Programm. Mit ueber 200 Events seit 2016 und 3x TV-Finalist-Erfahrung passt die Drama-Kurve auf Hochzeit, Firmenfeier oder Gala.",
+          },
+        ]}
+      />
 
       <FinalCTA
         title={<>Bereit für die Show, bei der alle aufstehen<span style={{ color: MAGENTA }}>?</span></>}

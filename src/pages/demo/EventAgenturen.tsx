@@ -1,6 +1,6 @@
 /** /demo/event-agenturen — Buyer-Persona Event-Agenturen (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, WarumCarousel, DarkShowcase, FormatCards } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Handshake, ShieldCheck, Hand, Wand2, UtensilsCrossed } from "lucide-react";
@@ -82,6 +82,35 @@ export default function DemoEventAgenturen() {
       />
 
       <ReviewsBlock paper={false} />
+
+      <FAQ
+        items={[
+          {
+            q: "Wie läuft die Anfrage für einen Kunden-Act ab?",
+            a: "Schreibt mir über /demo/kontakt kurz Format, Termin und Rahmen eures Events. Ihr bekommt eine Antwort binnen 24 Stunden, dazu auf Wunsch Pitch-Material, mit dem ihr direkt bei eurem Kunden punkten könnt.",
+          },
+          {
+            q: "Was kostet das ungefähr?",
+            a: "Die Gage ist abhängig von Dauer, Anfahrt und Gästezahl, deshalb gibt es keinen festen Listenpreis. Nach einer kurzen Anfrage bekommt ihr ein verbindliches, white-label-taugliches Angebot, das ihr sauber an euren Kunden weitergeben könnt.",
+          },
+          {
+            q: "Was braucht ihr für Vertrag, Tech-Rider und Briefing?",
+            a: "Vertrag, Tech-Rider, Versicherungsnachweis und ein White-Label-Briefing kommen aus einer Hand und rechtzeitig vor dem Termin. Ihr müsst nichts nachhalten und gebt eurem Kunden ein rundes, abgesichertes Paket.",
+          },
+          {
+            q: "Für wie viele Gäste und welche Raumgröße eignet sich der Act?",
+            a: "Vom intimen Empfang mit 20 Personen bis zur großen Gala mit mehreren hundert Gästen ist alles machbar. Close-Up funktioniert mobil von Tisch zu Tisch, die Bühnenshow füllt den ganzen Saal — ich passe das Format an Raum und Gästezahl an.",
+          },
+          {
+            q: "Auf Deutsch oder Englisch, und wie weit reist du an?",
+            a: "Die Show gibt es komplett auf Deutsch und Englisch, ideal für internationale Kunden eurer Agentur. Basis ist Bayern (Regensburg), gebucht und gespielt wird deutschlandweit — Anfahrt klären wir vorab transparent im Angebot.",
+          },
+          {
+            q: "Wie individuell lässt sich der Act an den Kunden anpassen?",
+            a: "Inhalte, Länge und Tonalität stimme ich auf Anlass und Marke eures Kunden ab und spreche mich vorab mit Technik und Moderation ab. Aus 200+ Events seit 2016 und drei TV-Finals bringe ich die Routine mit, mich nahtlos in euren Ablauf einzufügen.",
+          },
+        ]}
+      />
 
       <FinalCTA
         title={<>Sucht ihr einen verlässlichen Act für euren Kunden<span style={{ color: MAGENTA }}>?</span></>}

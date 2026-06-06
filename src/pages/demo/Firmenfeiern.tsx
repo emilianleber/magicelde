@@ -1,6 +1,6 @@
 /** /demo/firmenfeiern — Anlass Firmenfeier (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { InteractiveTabs, FormatCards, SplitFeature, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles } from "lucide-react";
@@ -92,6 +92,35 @@ export default function DemoFirmenfeiern() {
       />
 
       <ReviewsBlock paper={false} />
+
+      <FAQ
+        items={[
+          {
+            q: "Wie läuft die Anfrage ab und wie schnell bekomme ich eine Antwort?",
+            a: "Schreibt mir kurz über /demo/kontakt mit Datum, Ort und Anlass der Firmenfeier. Ich melde mich innerhalb von 24 Stunden persönlich mit einem konkreten Vorschlag und Angebot zurück.",
+          },
+          {
+            q: "Was kostet ein Auftritt für unsere Firmenfeier?",
+            a: "Der Preis hängt von Dauer, Anfahrt und Gästezahl ab — vom Walk-Around beim Empfang bis zur Bühnenshow als Finale. Nach einer kurzen Anfrage über /demo/kontakt bekommt ihr ein verbindliches Angebot, das genau auf euren Abend passt.",
+          },
+          {
+            q: "Für wie viele Gäste und welche Raumgröße eignet sich das?",
+            a: "Close-Up beim Empfang und Tisch-zu-Tisch beim Dinner funktionieren von kleinen Runden bis zu mehreren hundert Gästen, weil ich von Gruppe zu Gruppe gehe. Für die Bühnenshow als Finale reicht eine kleine freie Fläche und eine einfache Tonanlage — von der intimen Mitarbeiterfeier bis zum Saal mit 200 Personen.",
+          },
+          {
+            q: "Was braucht ihr vor Ort an Platz und Technik?",
+            a: "Für Walk-Around und Tisch-zu-Tisch genügt das, was ohnehin da ist — keine Bühne nötig. Für die Bühnenshow reichen eine kleine freie Fläche, ein Mikrofon und Anschluss an eure Tonanlage; den Rest stimme ich vorab mit eurem Eventteam ab.",
+          },
+          {
+            q: "Geht das auch auf Englisch und reist Emilian deutschlandweit an?",
+            a: "Ja, ich spiele auf Deutsch und Englisch — ideal für internationale Teams und Kundenabende. Basis ist Bayern bzw. Regensburg, gebucht werde ich deutschlandweit; die Anfahrt fließt transparent ins Angebot ein.",
+          },
+          {
+            q: "Wie individuell wird die Show auf unser Unternehmen angepasst?",
+            a: "Vorab hole ich mir per Insider-Briefing eure Firmen-Stories, Namen und Running Gags aus dem Team und baue sie in die Show ein. Die Tonalität reicht von Premium bis Comedy — über 200 Events seit 2016 und drei TV-Finals geben euch die Sicherheit, dass es zu eurem Anlass passt.",
+          },
+        ]}
+      />
 
       <FinalCTA
         title={<>Macht eurem Team den Abend unvergesslich<span style={{ color: MAGENTA }}>.</span></>}

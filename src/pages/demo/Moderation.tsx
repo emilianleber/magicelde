@@ -1,6 +1,6 @@
 /** /demo/moderation — Moderation (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, ExampleSets, WarumCarousel, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Mic2, Clock, Languages, Sparkles, Users, Award } from "lucide-react";
@@ -87,6 +87,35 @@ export default function DemoModeration() {
       />
 
       <ReviewsBlock paper={false} />
+
+      <FAQ
+        items={[
+          {
+            q: "Was kostet eine Moderation und wie läuft die Anfrage?",
+            a: "Preislich ist es abhängig von Dauer, Anfahrt und Gästezahl — ein konkretes Angebot bekommst du nach einer kurzen Anfrage. Schreib mir einfach über /demo/kontakt, ich antworte innerhalb von 24 Stunden.",
+          },
+          {
+            q: "Wie lang kann die Moderation gehen?",
+            a: "Die Länge ist flexibel: vom kurzen Übergang zwischen zwei Programmpunkten bis zur Moderation durch den ganzen Gala-Abend. Wir legen vorab fest, an welchen Stellen ich den roten Faden übernehme.",
+          },
+          {
+            q: "Für wie viele Gäste und welche Raumgröße ist das geeignet?",
+            a: "Von der kleinen Firmenfeier bis zur Gala mit rund 500 Gästen ist alles möglich. Bei größeren Sälen sorgt die mitgebrachte Technik dafür, dass die Moderation überall gut ankommt.",
+          },
+          {
+            q: "Was wird vor Ort gebraucht — Platz und Technik?",
+            a: "Headset und Ton bringe ich mit, ihr müsst nichts stellen. Wichtig ist nur ein Punkt am Programm, von dem aus ich moderieren kann; den Rest stimmen wir vorab ab.",
+          },
+          {
+            q: "Geht die Moderation auch auf Englisch?",
+            a: "Ja, ich moderiere auf Deutsch und auf Englisch, auf Wunsch auch zweisprachig im Wechsel. Gerade bei internationalen Gästen sorgt das dafür, dass alle dem Abend folgen können.",
+          },
+          {
+            q: "Wie individuell wird der Ablauf abgestimmt und wie weit reist du?",
+            a: "Ablaufplan, Namen und Timing klären wir vor dem Event, sodass am Abend alles sitzt und die Magie-Akzente genau dorthin passen, wo ihr sie wollt. Ich bin deutschlandweit unterwegs, mit Basis in Bayern bei Regensburg — über 200 Events seit 2016 und 3-facher TV-Finalist.",
+          },
+        ]}
+      />
 
       <FinalCTA
         title={<>Bereit für einen Abend mit rotem Faden<span style={{ color: MAGENTA }}>?</span></>}

@@ -1,6 +1,6 @@
 /** /demo/magic-dinner — Magic Dinner (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { InteractiveTabs, SplitFeature, WarumCarousel, ExampleSets } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { UtensilsCrossed, Clock, MapPin, Sparkles } from "lucide-react";
@@ -86,6 +86,35 @@ export default function DemoMagicDinner() {
       />
 
       <ReviewsBlock paper={false} />
+
+      <FAQ
+        items={[
+          {
+            q: "Was kostet ein Magic Dinner ungefaehr?",
+            a: "Das haengt von Dauer, Gaestezahl und Anfahrt ab — ein Drei-Gang-Abend ist anders kalkuliert als das grosse Fuenf-Gang-Menue mit Buehnen-Finale. Schreibt mir kurz Datum, Location und Menue, dann bekommt ihr ein konkretes Angebot.",
+          },
+          {
+            q: "Wie laeuft die Anfrage ab und wie schnell hoere ich von dir?",
+            a: "Ihr schreibt mir ueber das Kontaktformular unter /demo/kontakt mit Datum, Location und ungefaehrer Gaestezahl. Ich melde mich innerhalb von 24 Stunden persoenlich mit Rueckfragen und einem passenden Vorschlag zurueck.",
+          },
+          {
+            q: "Wie lange dauert ein Magic Dinner?",
+            a: "Ein Magic Dinner ist ueber 2,5 bis 4 Stunden durchkomponiert — vom Walk-Around beim Aperitif ueber Tisch-zu-Tisch zwischen den Gaengen bis zum Buehnen-Finale zum Dessert. Die genaue Taktung stimme ich vorab mit Kueche und Service ab.",
+          },
+          {
+            q: "Fuer wie viele Gaeste und welche Raumgroesse eignet sich das Format?",
+            a: "Magic Dinner funktioniert von der intimen Tafel mit 20 Gaesten bis zum grossen Saal mit mehreren hundert Personen. Das Tisch-zu-Tisch skaliert ueber die Gangpausen, das Buehnen-Finale braucht je nach Gruppe nur einen freien Bereich vorne.",
+          },
+          {
+            q: "Was wird an Platz und Technik gebraucht?",
+            a: "Fuers Tisch-zu-Tisch reicht der gedeckte Tisch — da brauche ich nichts ausser etwas Bewegungsraum. Fuer das Buehnen-Finale genuegt eine freie Flaeche vorne sowie ein Mikrofon und etwas Licht; das klaere ich vorab mit eurer Location oder Technik.",
+          },
+          {
+            q: "Auf Deutsch oder Englisch, und wie weit reist du an?",
+            a: "Ich moderiere das Magic Dinner auf Deutsch oder Englisch — ideal fuer internationale Tische. Basis ist Regensburg in Bayern, gebucht werde ich aber deutschlandweit; ueber 200 Events seit 2016 und drei TV-Finals stehen hinter dem Format.",
+          },
+        ]}
+      />
 
       <FinalCTA
         title={<>Macht aus eurem Dinner einen ganzen Abend Magie<span style={{ color: MAGENTA }}>.</span></>}

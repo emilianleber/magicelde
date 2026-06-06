@@ -84,6 +84,20 @@ const REVIEWS = [
   { name: "Markus R.", init: "M", when: "vor 3 Monaten", text: "Buchung unkompliziert, Show erstklassig. Genau die Mischung aus Staunen und Humor." },
   { name: "Sandra P.", init: "S", when: "vor 4 Monaten", text: "Hat unseren 50. Geburtstag unvergesslich gemacht. Jeder im Raum war eingebunden — großartig." },
 ];
+const ABLAUF = [
+  { Icon: Mail, t: "Anfrage", d: "Ihr schreibt mir kurz Datum, Ort und Anlass — per Formular, Mail oder WhatsApp." },
+  { Icon: Phone, t: "Kennenlernen", d: "In einem kurzen Gespräch klären wir, was zu eurem Abend passt: Format, Tonalität, Ablauf." },
+  { Icon: Wand2, t: "Feinschliff", d: "Ich stimme die Show auf euch ab — Insider, Timing, Technik. Ihr müsst euch um nichts kümmern." },
+  { Icon: Award, t: "Die Show", d: "Am Abend selbst: Staunen, Lachen und Standing Ovations — der Moment, über den man noch redet." },
+];
+const FAQ_ITEMS = [
+  { q: "Was kostet ein Auftritt?", a: "Die Gage hängt von Format, Dauer, Anfahrt und Gästezahl ab. Schreibt mir kurz euer Event — ihr bekommt binnen 24 Stunden ein konkretes, unverbindliches Angebot." },
+  { q: "Wie weit reist du?", a: "Basis ist Regensburg, gebucht werde ich aber deutschlandweit und im benachbarten Ausland. Anfahrt und ggf. Übernachtung stimmen wir vorab transparent ab." },
+  { q: "Wie viel Platz und Technik brauchst du?", a: "Close-Up braucht gar nichts. Für die Bühnenshow genügen rund 2 × 1,5 m, Headset und Ton bringe ich mit. Tech-Rider auf Anfrage." },
+  { q: "Für wie viele Gäste eignet sich die Show?", a: "Von der kleinen Feier mit 20 Personen bis zur Gala mit über 500 Gästen. Ich passe Format und Ablauf an eure Gruppengröße an." },
+  { q: "Spielst du auch auf Englisch?", a: "Ja. Ich spiele komplett auf Deutsch oder Englisch — ideal für internationale Firmen-Events und Hochzeiten." },
+  { q: "Wie schnell bekomme ich eine Antwort?", a: "In der Regel innerhalb von 24 Stunden — mit Verfügbarkeit und einem unverbindlichen Angebot." },
+];
 
 const up = { hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } };
@@ -548,12 +562,56 @@ const StartDemo = () => {
         </div>
       </motion.section>
 
+      {/* ══ ABLAUF — So läuft die Zusammenarbeit ══ */}
+      <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#F1F4F9", borderTop: `1px solid ${L_LINE}` }}>
+        <div className="max-w-7xl mx-auto">
+          <motion.div variants={up} className="max-w-2xl mb-10">
+            <Eyebrow>So läuft's ab</Eyebrow>
+            <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}>Von der Anfrage bis zur <span style={{ color: COBALT }}>Standing Ovation</span>.</h2>
+            <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>Vier Schritte, ein verlässlicher Ablauf — und ihr müsst euch um nichts kümmern.</p>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {ABLAUF.map((s, i) => (
+              <motion.div key={s.t} variants={up} className="relative rounded-[24px] p-7 flex flex-col h-full" style={{ background: WHITE, border: `1px solid ${L_LINE}`, boxShadow: "0 18px 40px -28px rgba(10,11,15,0.3)" }}>
+                <div className="flex items-center justify-between">
+                  <span className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: COBALT, color: WHITE }}><s.Icon className="w-[22px] h-[22px]" /></span>
+                  <span className="font-extrabold text-[40px] leading-none select-none" style={{ color: "rgba(29,63,255,0.12)" }}>{i + 1}</span>
+                </div>
+                <h3 className="font-extrabold mt-6 text-[20px]" style={{ color: INK }}>{s.t}</h3>
+                <p className="mt-2 text-[14.5px] leading-[1.55]" style={{ color: L_DIM }}>{s.d}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
       {/* ══ PULL-QUOTE (ruhig) ══ */}
       <motion.section variants={up} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-20 md:py-28" style={{ background: PAPER }}>
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex justify-center mb-6"><Stars s={20} /></div>
           <blockquote className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.5rem,3.4vw,2.6rem)", lineHeight: 1.2, color: INK }}>„Close-Up direkt am Tisch — unsere Gäste waren sprachlos und kurz darauf am Lachen. Magisch."</blockquote>
           <p className="mt-7 text-[14px] inline-flex items-center gap-2" style={{ color: L_DIM }}><GoogleG s={16} /> Julia & Tom · Brautpaar</p>
+        </div>
+      </motion.section>
+
+      {/* ══ FAQ ══ */}
+      <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: WHITE, borderTop: `1px solid ${L_LINE}` }}>
+        <div className="max-w-3xl mx-auto">
+          <motion.div variants={up} className="text-center mb-10">
+            <p className="flex items-center justify-center gap-2 text-[12px] tracking-[0.16em] uppercase font-semibold mb-5" style={{ color: L_DIM }}><span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: COBALT }} /> Häufige Fragen</p>
+            <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.04, color: INK }}>Gut zu wissen.</h2>
+          </motion.div>
+          <div className="space-y-3">
+            {FAQ_ITEMS.map((f) => (
+              <motion.details key={f.q} variants={up} className="group rounded-[18px] px-6 py-5" style={{ background: "#F6F8FB", border: `1px solid ${L_LINE}` }}>
+                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none">
+                  <span className="text-[16px] font-semibold" style={{ color: INK }}>{f.q}</span>
+                  <ChevronDown className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180" style={{ color: COBALT }} />
+                </summary>
+                <p className="mt-3 text-[15px] leading-[1.6]" style={{ color: L_DIM }}>{f.a}</p>
+              </motion.details>
+            ))}
+          </div>
         </div>
       </motion.section>
 
