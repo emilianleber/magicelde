@@ -8,13 +8,13 @@ import type { ReactNode } from "react";
 import { Star, Wand2, Hand, UtensilsCrossed, Mic2, Smile } from "lucide-react";
 
 /* ── Farben ── */
-export const INK = "#0A0B0F", PAPER = "#F5F3EF", WHITE = "#FFFFFF";
+export const INK = "#0A0B0F", PAPER = "#F4F6F9", WHITE = "#FFFFFF";
 export const COBALT = "#1D3FFF", MAGENTA = "#FF2D7A", GSTAR = "#FBBC04";
 export const L_LINE = "rgba(10,11,15,0.10)", D_LINE = "rgba(255,255,255,0.14)";
 export const L_DIM = "#5f5a54", D_DIM = "#a7a2b0";
 export const SANS = "'Outfit', system-ui, -apple-system, sans-serif";
-export const PANEL_BG = "#F2ECE1";
-export const CARD_LIGHT = "linear-gradient(160deg, #FFFFFF 0%, #F4EEE4 100%)";
+export const PANEL_BG = "#EEF1F6";
+export const CARD_LIGHT = "#FFFFFF";
 
 /* ── Echte Kontakt-Daten & Links (Single Source of Truth) ── */
 export const PHONE_HREF = "tel:+4915563744696";

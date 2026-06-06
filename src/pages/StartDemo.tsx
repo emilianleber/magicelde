@@ -60,9 +60,9 @@ const SHOWS_MENU = [
 const SHOWS_NAV = SHOWS_MENU.map((s) => s.t);
 const STAEDTE = ["Regensburg", "München", "Nürnberg", "Ingolstadt", "Landshut", "Passau", "Augsburg", "Würzburg"];
 const FORMATE = [
-  { img: stageImg, title: "Bühnenshow", text: "Comedy, Mentalmagie und große Momente — die Show, bei der der ganze Saal mitgeht." },
-  { img: closeupImg, title: "Close-Up", text: "Magie in den Händen eurer Gäste. Hautnah, interaktiv, zum Mitreden am nächsten Tag." },
-  { img: dinnerBookImg, title: "Magic Dinner", text: "Walk-Around, Tisch-zu-Tisch und Bühnen-Finale — durchkomponiert zwischen den Gängen." },
+  { img: stageImg, title: "Bühnenshow", text: "Comedy, Mentalmagie und große Momente — die Show, bei der der ganze Saal mitgeht.", pos: "top" },
+  { img: closeupImg, title: "Close-Up", text: "Magie in den Händen eurer Gäste. Hautnah, interaktiv, zum Mitreden am nächsten Tag.", pos: "center 78%" },
+  { img: dinnerBookImg, title: "Magic Dinner", text: "Walk-Around, Tisch-zu-Tisch und Bühnen-Finale — durchkomponiert zwischen den Gängen.", pos: "center 60%" },
 ];
 const ANLAESSE = [
   { t: "Hochzeit", d: "Der Moment zwischen Trauung und Party — Magie, die Gänsehaut macht.", img: weddingImg, cls: "md:col-span-2 md:row-span-2", big: true },
@@ -305,7 +305,7 @@ const StartDemo = () => {
           <div className="grid md:grid-cols-3 gap-5">
             {FORMATE.map((f) => (
               <motion.a key={f.title} href="#kontakt" variants={up} className="group rounded-[20px] overflow-hidden flex flex-col" style={{ background: WHITE, border: `1px solid ${L_LINE}`, boxShadow: "0 20px 50px -36px rgba(10,11,15,0.5)" }}>
-                <div className="relative h-[230px] overflow-hidden"><img src={f.img} alt={f.title} className="w-full h-full object-cover object-top transition-transform duration-[1200ms] group-hover:scale-105" loading="lazy" /></div>
+                <div className="relative h-[230px] overflow-hidden"><img src={f.img} alt={f.title} className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" style={{ objectPosition: f.pos }} loading="lazy" /></div>
                 <div className="p-6 flex-1">
                   <h3 className="text-2xl font-bold mb-2" style={{ color: INK }}>{f.title}</h3>
                   <p className="text-[14.5px] leading-[1.6]" style={{ color: L_DIM }}>{f.text}</p>

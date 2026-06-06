@@ -3,10 +3,10 @@
  * Signature-Elemente der Startseite als Bausteine: Flow-Linie, Foto-Splits, Bento,
  * Glas-Notifications, interaktive Tabs, Dark-Showcase. Bewusst KEINE uniformen Widget-Grids.
  */
-import { useState, type ComponentType, type ReactNode } from "react";
+import { useState, useRef, type ComponentType, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Check, Layers } from "lucide-react";
+import { ArrowRight, Check, Layers, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   INK, WHITE, PAPER, COBALT, MAGENTA, L_LINE, L_DIM, D_DIM, PANEL_BG, CARD_LIGHT,
   ANFRAGE_HREF, up, stagger, vp, glass, glassDark, Eyebrow, Stars, GoogleG,
@@ -199,6 +199,76 @@ export function InteractiveTabs({ eyebrow, title, tabs }: { eyebrow: string; tit
         </motion.div>
       </div>
     </motion.section>
+  );
+}
+
+/* ════════ 10. WarumCarousel — die „Sechs Gründe"-Karussell-Section (Startseiten-Showpiece) ════════ */
+type CarouselCard =
+  | { kind: "photo"; image: string; chip?: string; title: string; text: string; pos?: string }
+  | { kind: "stat"; v: string; l: string; text?: string }
+  | { kind: "review"; text: string; name: string }
+  | { kind: "feature"; Icon: Icon; title: string; text: string };
+
+export function WarumCarousel({ eyebrow, title, cards }: { eyebrow: string; title: ReactNode; cards: CarouselCard[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const scroll = (d: number) => {
+    const el = ref.current;
+    if (!el || el.children.length < 2) return;
+    const stride = (el.children[1] as HTMLElement).offsetLeft - (el.children[0] as HTMLElement).offsetLeft;
+    el.scrollBy({ left: d * stride, behavior: "smooth" });
+  };
+  const size = "relative shrink-0 snap-start w-[300px] sm:w-[480px] lg:w-[620px] h-[440px] lg:h-[480px] rounded-[32px] overflow-hidden";
+  return (
+    <section className="px-4 md:px-8 py-14 md:py-20" style={{ background: WHITE }}>
+      <div className="max-w-[1364px] mx-auto rounded-[28px] md:rounded-[44px] overflow-hidden pt-12 md:pt-16" style={{ background: PANEL_BG }}>
+        <div className="px-7 md:px-14 flex items-end justify-between gap-6 mb-9 md:mb-12">
+          <div className="max-w-3xl">
+            <span className="inline-block px-3.5 py-1.5 rounded-full text-[13px] font-semibold mb-5" style={{ background: INK, color: WHITE }}>{eyebrow}</span>
+            <h2 className="font-extrabold tracking-[-0.02em]" style={{ ...H2, color: INK }}>{title}</h2>
+          </div>
+          <div className="hidden md:flex items-center gap-3 shrink-0 pb-2">
+            <button onClick={() => scroll(-1)} aria-label="Zurück" className="w-12 h-12 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ background: INK, color: WHITE }}><ChevronLeft className="w-5 h-5" /></button>
+            <button onClick={() => scroll(1)} aria-label="Weiter" className="w-12 h-12 rounded-full flex items-center justify-center transition-opacity hover:opacity-80" style={{ background: INK, color: WHITE }}><ChevronRight className="w-5 h-5" /></button>
+          </div>
+        </div>
+        <div ref={ref} className="no-bar flex gap-6 overflow-x-auto snap-x snap-proximity scroll-pl-7 md:scroll-pl-14 px-7 md:px-14 pb-14 md:pb-16">
+          {cards.map((c, i) => {
+            if (c.kind === "photo") return (
+              <div key={i} className={size}>
+                <img src={c.image} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: c.pos || "center" }} loading="lazy" />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,15,0.05) 28%, rgba(10,11,15,0.88) 100%)" }} />
+                {c.chip && <span className="absolute top-6 left-6 px-4 py-2 rounded-full text-[13px] font-semibold" style={{ ...glass, color: INK }}>{c.chip}</span>}
+                <div className="absolute inset-x-0 bottom-0 p-7 lg:p-9">
+                  <h3 className="font-extrabold" style={{ fontSize: "clamp(1.6rem,2.2vw,2.2rem)", lineHeight: 1.06, color: WHITE }}>{c.title}</h3>
+                  <p className="mt-2.5 max-w-md text-[15px] leading-[1.5]" style={{ color: "rgba(255,255,255,0.88)" }}>{c.text}</p>
+                </div>
+              </div>
+            );
+            if (c.kind === "stat") return (
+              <div key={i} className={`${size} flex flex-col justify-center p-9`} style={{ background: COBALT, color: WHITE }}>
+                <p className="font-extrabold tracking-[-0.02em] leading-none" style={{ fontSize: "clamp(3.5rem,6vw,5rem)" }}>{c.v}</p>
+                <p className="mt-4 text-[18px] font-semibold">{c.l}</p>
+                {c.text && <p className="mt-2 text-[15px]" style={{ color: "rgba(255,255,255,0.78)" }}>{c.text}</p>}
+              </div>
+            );
+            if (c.kind === "review") return (
+              <div key={i} className={`${size} flex flex-col justify-between p-9`} style={{ background: WHITE, border: `1px solid ${L_LINE}` }}>
+                <div className="flex items-center gap-2"><GoogleG s={24} /><Stars s={16} /></div>
+                <p className="text-[19px] leading-snug font-semibold" style={{ color: INK }}>„{c.text}"</p>
+                <p className="text-[13.5px]" style={{ color: L_DIM }}>{c.name}</p>
+              </div>
+            );
+            return (
+              <div key={i} className={`${size} flex flex-col justify-end p-9`} style={{ background: WHITE, border: `1px solid ${L_LINE}` }}>
+                <span className="w-14 h-14 rounded-[16px] flex items-center justify-center" style={{ background: COBALT, color: WHITE }}><c.Icon className="w-7 h-7" /></span>
+                <h3 className="font-extrabold mt-5" style={{ fontSize: "clamp(1.5rem,2vw,2rem)", lineHeight: 1.08, color: INK }}>{c.title}</h3>
+                <p className="mt-2.5 text-[15.5px] leading-[1.5]" style={{ color: L_DIM }}>{c.text}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
 
