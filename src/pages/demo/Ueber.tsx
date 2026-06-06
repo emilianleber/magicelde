@@ -7,7 +7,7 @@ import { Tv, Trophy, Award } from "lucide-react";
 import heroImg from "@/assets/magician-portrait.jpg";
 import storyImg from "@/assets/emilian-portrait-cards.jpg";
 import splitImg from "@/assets/emotionen.jpg";
-import bentoImg from "@/assets/greatest-talent-presse.jpg";
+import bentoImg from "@/assets/moderator-hero.jpg";
 
 export default function DemoUeber() {
   return (

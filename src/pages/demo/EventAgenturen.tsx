@@ -4,9 +4,9 @@ import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage
 import { SplitFeature, FlowBand, Bento, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Handshake } from "lucide-react";
-import heroImg from "@/assets/talents-of-magic-team.jpg";
+import heroImg from "@/assets/buehne-dpsg.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
-import bentoImg from "@/assets/greatest-talent-presse.jpg";
+import bentoImg from "@/assets/buehne-zuschauer.jpg";
 import darkImg from "@/assets/stage-show.jpg";
 
 export default function DemoEventAgenturen() {

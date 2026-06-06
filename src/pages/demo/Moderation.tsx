@@ -6,7 +6,7 @@ import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Mic2 } from "lucide-react";
 import heroImg from "@/assets/moderator-hero.jpg";
 import splitImg from "@/assets/buehne-zuschauer.jpg";
-import bentoImg from "@/assets/greatest-talent-presse.jpg";
+import bentoImg from "@/assets/audience-reactions.jpg";
 import darkImg from "@/assets/stage-show.jpg";
 
 export default function DemoModeration() {

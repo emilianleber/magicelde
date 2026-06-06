@@ -26,7 +26,7 @@ import dinnerBookImg from "@/assets/magicdinner-book.jpg";
 import weddingImg from "@/assets/wedding-magic.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 import magicdinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
-import greatestTalentImg from "@/assets/greatest-talent-presse.jpg";
+import greatestTalentImg from "@/assets/moderator-hero.jpg";
 import birthdayImg from "@/assets/hero-birthday.jpg";
 import schneiderImg from "@/assets/schneider-weisse-closeup.jpg";
 import haendeImg from "@/assets/haende-interaktion.jpg";

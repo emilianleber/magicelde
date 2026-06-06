@@ -5,7 +5,7 @@ import { Bento, SplitFeature } from "@/components/voltage/creative";
 import { motion } from "framer-motion";
 import { Building2 } from "lucide-react";
 import { INK, WHITE, COBALT, MAGENTA, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
-import refImg from "@/assets/greatest-talent-presse.jpg";
+import refImg from "@/assets/magicdinner-buehne.jpg";
 import bentoImg from "@/assets/magicdinner-buehne.jpg";
 import splitImg from "@/assets/schneider-weisse-closeup.jpg";
 
