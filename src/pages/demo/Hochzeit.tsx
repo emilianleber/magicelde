@@ -1,9 +1,9 @@
 /** /demo/hochzeit — Anlass-Landingpage (groß): Akte + Formate + Gestaltung. */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { InteractiveTabs, FormatCards, SplitFeature, Bento, NotificationFlow } from "@/components/voltage/creative";
+import { InteractiveTabs, FormatCards, SplitFeature, PolaroidWall, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Hand, Wand2, UtensilsCrossed, Gem, Heart, Check, Clock, CalendarCheck } from "lucide-react";
+import { Hand, Wand2, UtensilsCrossed, Check, Clock, CalendarCheck } from "lucide-react";
 import heroImg from "@/assets/wedding-magic.jpg";
 import splitImg from "@/assets/emotionen.jpg";
 import bentoImg from "@/assets/audience-reactions.jpg";
@@ -62,15 +62,17 @@ export default function DemoHochzeit() {
         stat={{ v: "100+", l: "Hochzeiten" }}
       />
 
-      <Bento
-        eyebrow="Warum Brautpaare mich buchen"
-        title="Mehr als Tricks — ein roter Faden."
-        sub="Comedy und Emotion im Wechsel, der Abend rund durchgeplant."
+      <PolaroidWall
+        eyebrow="Momente, die bleiben"
+        title={<>Was an eurem Tag <span style={{ color: COBALT }}>passiert</span>.</>}
+        sub="Kleine Augenblicke, über die eure Gäste noch Wochen später reden — verteilt über den ganzen Tag."
         items={[
-          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Echte Reaktionen", title: "Auch die skeptischen Gäste sind am Ende am stärksten geflasht.", pos: "center" },
-          { kind: "cobalt", span: "col-span-2", v: "5,0★", l: "30+ Bewertungen — ohne Ausreißer" },
-          { kind: "glass", span: "col-span-1", Icon: Gem, t: "Premium", d: "Elegant, nicht kitschig." },
-          { kind: "glass", span: "col-span-1", Icon: Heart, t: "Mit Gefühl", d: "Staunen, lachen, gerührt sein." },
+          { image: actA, caption: "Magie beim Sektempfang", pos: "center" },
+          { image: actB, caption: "Tisch-zu-Tisch beim Dinner", pos: "center" },
+          { image: actC, caption: "Die Show vor dem Tanz", pos: "top" },
+          { image: bentoImg, caption: "Gäste, die mitgehen", pos: "center" },
+          { image: splitImg, caption: "Sogar die Skeptiker", pos: "center" },
+          { image: heroImg, caption: "Gänsehaut, garantiert", pos: "center" },
         ]}
       />
 

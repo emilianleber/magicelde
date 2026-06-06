@@ -202,6 +202,33 @@ export function InteractiveTabs({ eyebrow, title, tabs }: { eyebrow: string; tit
   );
 }
 
+/* ════════ 9. PolaroidWall — editoriale, gekippte Foto-Wand mit Notizen (kein Kachel-Grid) ════════ */
+export function PolaroidWall({ eyebrow, title, sub, items }: {
+  eyebrow: string; title: ReactNode; sub?: ReactNode; items: { image: string; caption: string; pos?: string }[];
+}) {
+  const rot = [-3, 2.5, -1.5, 3, -2.5, 1.5, -2, 2];
+  return (
+    <section className="px-5 md:px-10 py-16 md:py-24 overflow-hidden" style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} initial="hidden" whileInView="show" viewport={vp} className="max-w-3xl"><Eyebrow>{eyebrow}</Eyebrow>
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ ...H2, color: INK }}>{title}</h2>
+          {sub && <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>{sub}</p>}
+        </motion.div>
+        <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="flex flex-wrap justify-center gap-x-6 gap-y-10 mt-12">
+          {items.map((it, i) => (
+            <motion.figure key={i} variants={up} className="w-[230px] md:w-[260px] bg-white p-3 pb-4 shrink-0" style={{ transform: `rotate(${rot[i % rot.length]}deg)`, boxShadow: "0 24px 50px -22px rgba(10,11,15,0.4)" }}>
+              <div className="relative overflow-hidden" style={{ aspectRatio: "1 / 1" }}>
+                <img src={it.image} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: it.pos || "center" }} loading="lazy" />
+              </div>
+              <figcaption className="mt-3 text-[14.5px] font-semibold text-center" style={{ color: INK }}>{it.caption}</figcaption>
+            </motion.figure>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 /* ════════ 8. ExampleSets — konkrete Beispiel-Sets + wie gestaltbar (Format-Seiten) ════════ */
 export function ExampleSets({ eyebrow, title, sub, sets, options }: {
   eyebrow: string; title: ReactNode; sub?: ReactNode;
