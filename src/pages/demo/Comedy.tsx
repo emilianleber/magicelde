@@ -1,71 +1,86 @@
-/** /demo/comedy — Show-Detail-Template (Comedy-Zauberei). Echte Inhalte. */
+/** /demo/comedy — Comedy-Zauberei (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, FactsGrid, Statement, GlassFeatures, Steps, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SplitFeature, Bento, InteractiveTabs, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Clock, Users, Smile, Heart, Sparkles, MessageSquare, Wand2, Hand, Target, Award } from "lucide-react";
-import comedyImg from "@/assets/emotionen.jpg";
+import { Smile, Mail, Clock, CalendarCheck } from "lucide-react";
+import heroImg from "@/assets/emotionen.jpg";
+import splitImg from "@/assets/audience-reactions.jpg";
+import bentoImg from "@/assets/zuschauer-blau.jpg";
+import tab1 from "@/assets/buehne-dpsg.jpg";
+import tab2 from "@/assets/audience-reactions.jpg";
+import tab3 from "@/assets/stage-show.jpg";
 
 export default function DemoComedy() {
   return (
     <VoltageShell
       title="DEMO · Comedy-Zauberei — staunen und lachen | Emilian Leber"
-      description="Comedy-Zauberei in Bayern & deutschlandweit — Stand-Up trifft Mentalmagie. Staunen und lachen im selben Moment, kein Fremdscham-Humor. 15–45 Min, 30–500 Gäste."
+      description="Comedy-Zauberei in Bayern & deutschlandweit — Stand-Up trifft Mentalmagie. Staunen und lachen gleichzeitig, 15–45 Min, 30–500 Gäste, kein Fremdscham-Humor."
       path="/demo/comedy"
     >
       <SubHero
         eyebrow="Konzept · Comedy-Zauberei"
-        title={<>Comedy, die <span style={{ color: COBALT }}>hängenbleibt</span><span style={{ color: MAGENTA }}>.</span></>}
-        sub="Stand-Up trifft Mentalmagie: staunen UND lachen im selben Moment — nicht nacheinander. Pointen, die sitzen, Magie als Setup für die Lacher. Ohne Fremdscham, immer mit dem Publikum."
-        image={comedyImg}
-        imageAlt="Emilian Leber bei einer Comedy-Zauberei mit lachendem Publikum"
-        badge="Gelacht und gestaunt — der Act, über den man am Tag danach noch redet."
+        title={<>Staunen <span style={{ color: COBALT }}>und</span> lachen<span style={{ color: MAGENTA }}>.</span></>}
+        sub="Comedy-Zauberei, die hängenbleibt: Stand-Up trifft Mentalmagie. Die Magie ist das Setup für die Lacher — euer Saal staunt und lacht im selben Moment. 15–45 Min, 30–500 Gäste."
+        image={heroImg}
+        imageAlt="Lachendes Publikum bei einer Comedy-Zaubershow"
+        badge="Stand-Up trifft Mentalmagie — staunen UND lachen gleichzeitig."
         secondary={{ label: "Show ansehen", href: "/demo#show" }}
       />
 
-      <FactsGrid items={[
-        { Icon: Clock, k: "Dauer", v: "15 – 45 Minuten" },
-        { Icon: Users, k: "Gäste", v: "30 – 500 Personen" },
-        { Icon: Smile, k: "Comedy-Dosis", v: "nach Anlass" },
-        { Icon: Heart, k: "Humor", v: "kein Fremdscham" },
-      ]} />
+      <SplitFeature
+        eyebrow="Pointen die sitzen"
+        title={<>Comedy, über die <span style={{ color: COBALT }}>mitgelacht</span> wird.</>}
+        sub="Kein Trick-Marathon und kein Brüllen ins Mikro. Die Mentalmagie baut den Moment auf, die Pointe löst ihn — und gelacht wird mit den Gästen, nie über jemanden."
+        points={["Pointen die sitzen — getaktet wie ein guter Stand-Up-Set", "Gelacht wird mit, nie über jemanden — kein Fremdscham-Humor", "Magie als Setup für die Lacher: erst der Wow-Moment, dann die Pointe"]}
+        image={splitImg}
+        imageAlt="Begeisterte Reaktionen im Publikum"
+        stat={{ v: "200+", l: "Events seit 2016" }}
+      />
 
-      <Statement>Staunen und Lachen im selben Moment — nicht <span style={{ color: COBALT }}>nacheinander</span>.</Statement>
-
-      <GlassFeatures
-        eyebrow="Was die Comedy ausmacht"
-        title="Sechs Dinge, die hängenbleiben."
-        sub="Stand-Up trifft Mentalmagie — modular auf eure Eventlänge und euren Anlass abgestimmt."
+      <Bento
+        eyebrow="Was hängenbleibt"
+        title="Comedy mit Substanz."
+        sub="Routine, eine Comedy-Dosis nach Anlass und echte Reaktionen — modular auf eure Eventlänge und euren Abend abgestimmt."
         items={[
-          { Icon: Target, t: "Pointen, die sitzen", d: "Kein Witz-Gewitter, sondern Timing. Jede Pointe ist gebaut — und landet." },
-          { Icon: Heart, t: "Gelacht wird mit", d: "Nie über jemanden, immer miteinander. Humor, der den ganzen Saal mitnimmt." },
-          { Icon: Sparkles, t: "Magie als Setup", d: "Das Unmögliche ist die Vorlage für den Lacher — staunen wird zur Pointe." },
-          { Icon: Hand, t: "Echte Interaktion", d: "Gäste werden eingebunden — ohne Fremdscham, mit echtem Aha-Moment." },
-          { Icon: Wand2, t: "Maßgeschneiderte Tonalität", d: "Von dezent-elegant bis comedy-lastig — die Dosis stimmt sich auf den Anlass ab." },
-          { Icon: Award, t: "200+ Events Routine", d: "Über 200 Auftritte — die Pointen sind erprobt, das Timing sitzt im Schlaf." },
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Echte Reaktionen", title: "Der Moment, in dem der ganze Saal gleichzeitig lacht." },
+          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events Routine" },
+          { kind: "glass", span: "col-span-1", Icon: Smile, t: "Comedy-Dosis nach Anlass", d: "Von pointiert bis durchgängig lustig — passend zu euren Gästen." },
+          { kind: "quote", span: "col-span-2", text: "Alle haben gestaunt und Tränen gelacht — genau die Mischung, die wir wollten.", name: "Martina Senftl · Eventkundin" },
         ]}
       />
 
-      <Steps
-        eyebrow="Drei Akte"
-        title="So entsteht der Lacher."
-        sub="Je nach Eventlänge und Programmpunkten — ich takte die Comedy in euren Abend ein."
-        items={[
-          { t: "Aufwärmen", d: "Erste Pointen brechen das Eis — der Saal merkt: hier wird gelacht, nicht ausgelacht." },
-          { t: "Mitnehmen", d: "Magie und Comedy verzahnen sich — staunen wird zur Vorlage für den nächsten Lacher." },
-          { t: "Pointen-Finale", d: "Der Höhepunkt, bei dem Verblüffung und Lacher zusammenfallen — der Moment, über den man redet." },
+      <InteractiveTabs
+        eyebrow="Der Bogen"
+        title="Aufwärmen, mitnehmen, Pointen-Finale."
+        tabs={[
+          { t: "Aufwärmen", d: "Der lockere Einstieg, der sofort Lacher holt und alle aus der Reserve lockt — ohne jemanden vorzuführen.", img: tab1 },
+          { t: "Mitnehmen", d: "Mentalmagie und Comedy im Wechsel: erst der Wow-Moment, dann die Pointe, die ihn aufs Korn nimmt.", img: tab2 },
+          { t: "Pointen-Finale", d: "Der Höhepunkt, bei dem Staunen und Lachen zusammenfallen — der Moment, über den danach noch geredet wird.", img: tab3 },
+        ]}
+      />
+
+      <NotificationFlow
+        eyebrow="So einfach geht's"
+        title={<>In drei Schritten zur <span style={{ color: COBALT }}>Show</span>.</>}
+        sub="Kurz das Event schildern, schnelle Antwort, Termin bestätigt — den Rest übernehme ich. Kein Fremdscham, keine Überraschungen."
+        steps={[
+          { Icon: Mail, t: "Anfrage", d: "Erzähl mir kurz von Anlass, Datum und Gästezahl." },
+          { Icon: Clock, t: "Antwort < 24h", d: "Ich melde mich innerhalb von 24 Stunden persönlich zurück." },
+          { Icon: CalendarCheck, t: "Termin bestätigt", d: "Briefing, Vertrag, Tech — alles aus einer Hand geliefert." },
         ]}
       />
 
       <PullQuote
-        text="Alle sprechen noch Wochen danach davon. Selbst die Gäste, die ich am wenigsten für Magie offen hielt, waren am Ende am stärksten geflasht."
+        text="Alle haben gestaunt und Tränen gelacht. Comedy ohne Fremdscham — genau die Mischung, die wir uns gewünscht haben."
         name="Martina Senftl"
         role="Eventkundin"
       />
 
-      <ReviewsBlock />
+      <ReviewsBlock paper={false} />
 
       <FinalCTA
-        title={<>Bereit für den Act, über den alle noch reden<span style={{ color: MAGENTA }}>?</span></>}
+        title={<>Bereit für staunen und lachen<span style={{ color: MAGENTA }}>?</span></>}
         sub="Erzähl mir kurz von eurem Event — ich melde mich innerhalb von 24 Stunden persönlich zurück."
       />
     </VoltageShell>

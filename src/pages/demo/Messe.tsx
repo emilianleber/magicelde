@@ -1,9 +1,12 @@
-/** /demo/messe-magier — Anlass-Template (Messe & Roadshow). Echte Inhalte. */
+/** /demo/messe-magier — Anlass (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, Steps, GlassFeatures, Statement, PullQuote, Stats, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SplitFeature, Bento, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Users, MessageSquare, Megaphone, Target, Clock, MessageCircle } from "lucide-react";
-import audienceImg from "@/assets/audience-reactions.jpg";
+import { Target, Megaphone, Clock, CalendarCheck } from "lucide-react";
+import heroImg from "@/assets/audience-reactions.jpg";
+import splitImg from "@/assets/haende-interaktion.jpg";
+import bentoImg from "@/assets/zuschauer-blau.jpg";
 
 export default function DemoMesse() {
   return (
@@ -16,37 +19,44 @@ export default function DemoMesse() {
         eyebrow="Anlass · Messe & Roadshow"
         title={<>Magie, die an den <span style={{ color: COBALT }}>Stand zieht</span><span style={{ color: MAGENTA }}>.</span></>}
         sub="Close-Up am Stand als Magnet — zieht Besucher an, hält sie im Gespräch und platziert Ihre Botschaft mitten im Effekt. Flexibel über den ganzen Messetag, auf Wunsch in DE und EN."
-        image={audienceImg}
+        image={heroImg}
         imageAlt="Begeisterte Besucher reagieren auf Close-Up-Magie am Messestand"
         badge="50–80 echte Standkontakte pro Stunde — statt leerem Gang."
       />
 
-      <Steps
-        eyebrow="So funktioniert es am Stand"
-        title="Aus Laufkundschaft werden Gespräche."
-        sub="Drei Phasen, die ineinandergreifen — vom ersten Blickkontakt bis zur platzierten Botschaft. Eingetaktet in Ihren Messetag."
-        items={[
-          { t: "Menschen anziehen", d: "Close-Up direkt am Stand erzeugt eine Traube — Besucher bleiben stehen, schauen zu und kommen näher, ganz ohne aufdringliches Ansprechen." },
-          { t: "Im Gespräch halten", d: "Aus dem Staunen entsteht ein lockerer Moment. Die Hemmschwelle fällt, Ihr Standpersonal kommt entspannt ins Gespräch — Magie als Eisbrecher." },
-          { t: "Botschaft platzieren", d: "Ihre Kernbotschaft, Ihr Produkt oder Ihr Claim wird in die Effekte eingebaut — sie bleibt hängen, weil sie an einen Aha-Moment gekoppelt ist." },
-        ]}
+      <SplitFeature
+        eyebrow="Der Magnet am Stand"
+        title={<>Close-Up zieht Menschen an — und Ihre <span style={{ color: COBALT }}>Botschaft</span> mit rein.</>}
+        sub="Eine Traube am Stand entsteht ganz ohne aufdringliches Ansprechen. Aus dem Staunen wird ein lockerer Moment — die Hemmschwelle fällt, Ihr Standpersonal kommt entspannt ins Gespräch. Und Ihr Claim sitzt mitten im Aha-Moment."
+        points={["Mehrsprachig in DE und EN — internationale Besucher voll abgeholt", "Flexible Slots über den ganzen Messetag — gezielt, wenn der Gang sonst leer wäre", "Messbar mehr qualifizierte Standkontakte — ROI direkt am Lead-Zähler"]}
+        image={splitImg}
+        imageAlt="Close-Up-Magie direkt in den Händen der Standbesucher"
+        reverse
+        stat={{ v: "DE + EN", l: "mehrsprachig" }}
       />
 
-      <GlassFeatures
+      <Bento
         eyebrow="Warum Aussteller mich buchen"
         title="Mehr als ein Showact — ein Werkzeug für den Stand."
-        sub="Abgestimmt auf Ihre Ziele, Ihre Botschaft und Ihr Standpersonal. Kein Selbstzweck, sondern messbar mehr Kontakte."
+        sub="Kein Selbstzweck, sondern messbar mehr Kontakte — abgestimmt auf Ihre Ziele und Ihr Standpersonal."
         items={[
-          { Icon: Users, t: "Magnet am Stand", d: "Close-Up zieht Besucher aktiv an — Ihr Stand füllt sich auch in ruhigen Hallen-Phasen." },
-          { Icon: Megaphone, t: "Botschaft im Effekt", d: "Ich binde Ihren Claim, Ihr Produkt oder Ihre Kernbotschaft direkt in die Effekte ein." },
-          { Icon: MessageSquare, t: "Senkt die Hemmschwelle", d: "Aus Zuschauern werden Gesprächspartner — Ihr Standpersonal kommt leichter ins Gespräch." },
-          { Icon: MessageCircle, t: "DE & EN möglich", d: "Auf Wunsch mehrsprachig — internationale Besucher werden genauso abgeholt wie deutsche." },
-          { Icon: Clock, t: "Flexible Slots", d: "Verteilt über den Messetag — zu Stoßzeiten oder gezielt, wenn der Gang sonst leer wäre." },
-          { Icon: Target, t: "Messbar mehr Kontakte", d: "Spürbar mehr qualifizierte Standkontakte — der ROI zeigt sich direkt am Lead-Zähler." },
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Voller Stand", title: "Eine Traube bildet sich — auch in den ruhigen Hallen-Phasen." },
+          { kind: "cobalt", span: "col-span-1", v: "50–80", l: "Kontakte pro Stunde" },
+          { kind: "glass", span: "col-span-1", Icon: Target, t: "Lead-Magnet", d: "Spürbar mehr qualifizierte Standkontakte." },
+          { kind: "quote", span: "col-span-2", text: "Der Stand war den ganzen Tag voll — die Effekte mit unserer Botschaft sind bei den Besuchern hängengeblieben.", name: "Jan von Lehmann" },
         ]}
       />
 
-      <Statement>Ein voller Stand verkauft sich <span style={{ color: COBALT }}>von selbst</span>.</Statement>
+      <NotificationFlow
+        eyebrow="So unkompliziert"
+        title={<>Von der Anfrage bis zum <span style={{ color: COBALT }}>Termin</span>.</>}
+        sub="Eine kurze Nachricht zu Messe, Standgröße und Ziel reicht. Ich melde mich in unter 24 Stunden mit Konzept und Angebot — verbindlich und ohne Stress."
+        steps={[
+          { Icon: Megaphone, t: "Anfrage erhalten", d: "Messe, Standgröße, Ziel — gerade eben." },
+          { Icon: Clock, t: "Antwort & Angebot", d: "In unter 24 Stunden, versprochen." },
+          { Icon: CalendarCheck, t: "Termin bestätigt", d: "Wir machen Ihren Stand zum Hingucker." },
+        ]}
+      />
 
       <PullQuote
         text="Emilian hat Konzept, Pitch und Briefing in einem Stück geliefert. Der Stand war den ganzen Tag voll — die Effekte mit unserer Botschaft sind bei den Besuchern hängengeblieben."
@@ -54,14 +64,7 @@ export default function DemoMesse() {
         role="Eventleitung · Messeauftritt"
       />
 
-      <Stats items={[
-        { v: "200+", l: "Events seit 2016" },
-        { v: "50–80", l: "Kontakte pro Stunde" },
-        { v: "5,0★", l: "30+ Bewertungen" },
-        { v: "DE + EN", l: "mehrsprachig möglich" },
-      ]} />
-
-      <ReviewsBlock />
+      <ReviewsBlock paper={false} />
 
       <FinalCTA
         title={<>Machen Sie Ihren Stand zum Hingucker der Messe<span style={{ color: MAGENTA }}>.</span></>}

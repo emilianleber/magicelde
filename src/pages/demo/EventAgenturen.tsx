@@ -1,71 +1,88 @@
-/** /demo/event-agenturen — Anlass-Template (Event-Agenturen). Echte Inhalte. */
+/** /demo/event-agenturen — Buyer-Persona Event-Agenturen (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, Steps, GlassFeatures, Statement, PullQuote, Stats, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SplitFeature, FlowBand, Bento, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { FileText, MessageSquare, Layers, Maximize, Award, Briefcase } from "lucide-react";
-import teamImg from "@/assets/talents-of-magic-team.jpg";
+import { Handshake } from "lucide-react";
+import heroImg from "@/assets/talents-of-magic-team.jpg";
+import splitImg from "@/assets/magicdinner-buehne.jpg";
+import bentoImg from "@/assets/greatest-talent-presse.jpg";
+import darkImg from "@/assets/stage-show.jpg";
 
 export default function DemoEventAgenturen() {
   return (
     <VoltageShell
       title="DEMO · Act für Event-Agenturen — verlässlich & white-label | Emilian Leber"
-      description="Partner für Event-Agenturen: ein verlässlicher Magie-Act für eure Kunden. Konzept, Pitch, Vertrag und Briefing aus einer Hand, white-label-tauglich, flexibel von Close-Up bis Bühne. Seit Jahren Stamm-Act für Agenturen."
+      description="Verlässlicher Act für Event-Agenturen — Konzept, Pitch, Vertrag und Briefing aus einer Hand, white-label-tauglich. Flexibel von Close-Up bis Bühne. Seit Jahren Stamm-Act für Agenturen."
       path="/demo/event-agenturen"
     >
       <SubHero
-        eyebrow="Anlass · Event-Agenturen"
-        title={<>Verlässlicher Act für <span style={{ color: COBALT }}>eure Kunden</span><span style={{ color: MAGENTA }}>.</span></>}
-        sub="Ein Partner, der mitdenkt: Konzept, Pitch, Vertrag und Briefing aus einer Hand, sauberes Timing vor Ort und white-label-tauglich. Damit eure Kunden glänzen — und ihr ruhig schlafen könnt."
-        image={teamImg}
-        imageAlt="Magie-Act für Event-Agenturen auf der Bühne"
-        badge="„Emilian hat Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert."
+        eyebrow="Für Event-Agenturen"
+        title={<>Ein Partner, auf den ihr euch <span style={{ color: COBALT }}>verlassen</span> könnt<span style={{ color: MAGENTA }}>.</span></>}
+        sub="Ich bin der Act, den ihr euren Kunden ohne Risiko empfehlt — verlässliche Kommunikation, sauberes Timing und ein Auftritt, der sich nahtlos in euer Programm fügt."
+        image={heroImg}
+        imageAlt="Emilian Leber mit Event-Team"
+        badge="Seit Jahren Stamm-Act für Agenturen — ohne einen einzigen Ausfall."
       />
 
-      <Steps
+      <SplitFeature
+        eyebrow="Aus einer Hand"
+        title={<>Konzept, Pitch, Vertrag und Briefing — <span style={{ color: COBALT }}>komplett.</span></>}
+        sub="Ihr bekommt einen Act, der mitdenkt: Ich liefere euch Konzept und Pitch-Material, kümmere mich um Vertrag und Briefing und füge mich white-label-tauglich in euer Programm ein. Euer Kunde sieht ein rundes Event — nicht zehn Einzelteile."
+        points={["Verlässliche Kommunikation und sauberes Timing — ihr müsst nicht nachhaken", "Tech-Rider und Versicherungsnachweis auf Anfrage", "Flexibel skalierbar von Close-Up bis große Bühne"]}
+        image={splitImg}
+        imageAlt="Emilian Leber auf der Bühne beim Magic Dinner"
+        reverse
+        stat={{ v: "200+", l: "Events" }}
+      />
+
+      <FlowBand
         eyebrow="So läuft die Zusammenarbeit"
-        title="Von der Anfrage bis zur Nachbereitung."
-        sub="Ihr habt einen Ansprechpartner, der den Ablauf kennt und euch Arbeit abnimmt — nicht macht."
-        items={[
-          { t: "Briefing & Konzept", d: "Ihr schildert Anlass, Zielgruppe und Rahmen — ich liefere ein passendes Konzept, einen Pitch-tauglichen Vorschlag und alle Unterlagen für eure Kunden." },
-          { t: "Saubere Umsetzung vor Ort", d: "Pünktlich, vorbereitet und im Programm eingetaktet. Ich halte mich an Timing und Ablauf und füge mich nahtlos ins Event-Design ein." },
-          { t: "Nachbereitung", d: "Kurzes Feedback, klare Abrechnung und Material für eure Doku. Bei wiederkehrenden Kunden wird der Prozess von Mal zu Mal schlanker." },
+        title={<>Drei Etappen — <span style={{ color: COBALT }}>planbar</span> von Anfang bis Ende.</>}
+        sub="Klare Abläufe, an jedem Punkt ansprechbar. Ihr behaltet die Kontrolle über euer Event, ich liefere meinen Part verlässlich."
+        milestones={[
+          { t: "Briefing & Konzept", d: "Wir klären Format, Zielgruppe und Programmpunkt — ich liefere Pitch-Material und Konzeptvorschlag." },
+          { t: "Umsetzung vor Ort", d: "Pünktlich, vorbereitet, im Timing — Close-Up oder Bühne, ohne dass ihr nachsteuern müsst." },
+          { t: "Nachbereitung", d: "Saubere Abrechnung, ehrliches Feedback und Bilder fürs Portfolio — bereit fürs nächste Mal." },
         ]}
       />
 
-      <GlassFeatures
-        eyebrow="Warum Agenturen mich buchen"
-        title="Ein Act, auf den ihr euch verlasst."
-        sub="Planbar, kommunikativ und flexibel — der Unterschied zwischen einem Künstler und einem echten Partner."
+      <Bento
+        eyebrow="Warum Agenturen mit mir arbeiten"
+        title="Ein Act, viele Formate — ein verlässlicher Ansprechpartner."
+        sub="Skalierbar, white-label-tauglich und seit Jahren ohne Reklamation."
         items={[
-          { Icon: FileText, t: "Alles aus einer Hand", d: "Konzept, Pitch, Vertrag und Briefing kommen gebündelt — ihr müsst nichts zusammensuchen oder nachfragen." },
-          { Icon: MessageSquare, t: "Verlässliche Kommunikation", d: "Antwort in unter 24 Stunden, klares Timing und keine Überraschungen am Eventtag." },
-          { Icon: Layers, t: "White-label-tauglich", d: "Ich füge mich ins Programm und ins Branding eures Kunden ein — der Act ist Teil eures Konzepts, nicht eine Eigenwerbung." },
-          { Icon: Award, t: "Tech-Rider & Versicherung", d: "Tech-Rider, Haftpflicht und alle Nachweise auf Anfrage — sauber dokumentiert für eure Unterlagen." },
-          { Icon: Maximize, t: "Flexibel im Format", d: "Von Close-Up am Stand bis zur Bühnenshow im Saal — skalierbar je nach Anlass und Gästezahl." },
-          { Icon: Briefcase, t: "Seit Jahren Stamm-Act", d: "Mehrere Agenturen buchen mich regelmäßig — weil Verlass auf Qualität und Ablauf einfach Zeit spart." },
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Greatest Talent", title: "Bühnenerprobt vor großem Publikum — auch unter Live-Druck." },
+          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events für Agenturen & Direktkunden" },
+          { kind: "glass", span: "col-span-1", Icon: Handshake, t: "White-Label", d: "Fügt sich nahtlos in euer Programm ein." },
+          { kind: "quote", span: "col-span-2", text: "Wir buchen Emilian seit Jahren — verlässlich, professionell, nie ein Problem. Genau der Act, den man Kunden bedenkenlos empfiehlt.", name: "Jan von Lehmann · Event-Agentur" },
         ]}
       />
 
-      <Statement>Euer Kunde glänzt — <span style={{ color: COBALT }}>ihr</span> sieht gut aus.</Statement>
+      <DarkShowcase
+        eyebrow="Ein Act, kein Risiko"
+        title={<>Seit Jahren Stamm-Act für <span style={{ color: COBALT }}>Agenturen</span><span style={{ color: MAGENTA }}>.</span></>}
+        paras={[
+          "Wenn ihr einen Act für den Kunden bucht, hängt euer Name daran. Genau deshalb arbeiten Agenturen seit Jahren mit mir — weil sie wissen, dass geliefert wird: pünktlich, vorbereitet, ohne Drama.",
+          "Ich kenne den Unterschied zwischen einem Solo-Gig und einem Programmpunkt in einem größeren Event. Ich halte mein Timing, spreche mich mit Technik und Moderation ab und mache euren Ablauf nicht kaputt — ich mache ihn besser.",
+          "Tech-Rider, Versicherung, Vertrag und Briefing kommen sauber und rechtzeitig. Ihr habt eine Sorge weniger und einen Programmpunkt mehr, an den sich der Kunde am Ende des Abends erinnert.",
+        ]}
+        image={darkImg}
+        imageAlt="Emilian Leber bei einer Bühnenshow"
+        badge="Kein einziger Ausfall in der Zusammenarbeit."
+      />
 
       <PullQuote
-        text="Emilian hat Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega — alle Gäste begeistert."
+        text="Wir buchen Emilian seit Jahren für unsere Kunden — verlässlich, professionell, immer im Timing. Genau der Act, den man bedenkenlos empfiehlt, ohne nachzuhaken."
         name="Jan von Lehmann"
-        role="Eventleitung · Agentur"
+        role="Event-Agentur · München"
       />
 
-      <Stats items={[
-        { v: "200+", l: "Events seit 2016" },
-        { v: "100+", l: "Firmen-Engagements" },
-        { v: "5,0★", l: "30+ Bewertungen" },
-        { v: "<24 Std", l: "Antwortzeit" },
-      ]} />
-
-      <ReviewsBlock />
+      <ReviewsBlock paper={false} />
 
       <FinalCTA
-        title={<>Ein Partner, der eure Kunden begeistert<span style={{ color: MAGENTA }}>.</span></>}
-        sub="Schickt mir kurz Anlass, Datum und Rahmen — ich liefere euch ein passendes Konzept und melde mich innerhalb von 24 Stunden persönlich zurück."
+        title={<>Sucht ihr einen verlässlichen Act für euren Kunden<span style={{ color: MAGENTA }}>?</span></>}
+        sub="Schreibt mir kurz Format, Termin und Rahmen. Ihr bekommt Konzept, Pitch-Material und ein verbindliches Angebot — meist innerhalb von 24 Stunden."
       />
     </VoltageShell>
   );

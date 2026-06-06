@@ -1,68 +1,84 @@
-/** /demo/moderation — Show-Detail-Template (Moderation). Echte Inhalte. */
+/** /demo/moderation — Moderation (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, FactsGrid, Statement, GlassFeatures, Steps, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SplitFeature, FlowBand, Bento, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Clock, Trophy, Mic2, MessageSquare, Sparkles, Layers, Zap, FileText, Award, Megaphone } from "lucide-react";
-import moderatorImg from "@/assets/moderator-hero.jpg";
+import { Mic2 } from "lucide-react";
+import heroImg from "@/assets/moderator-hero.jpg";
+import splitImg from "@/assets/buehne-zuschauer.jpg";
+import bentoImg from "@/assets/greatest-talent-presse.jpg";
+import darkImg from "@/assets/stage-show.jpg";
 
 export default function DemoModeration() {
   return (
     <VoltageShell
       title="DEMO · Moderation — Roter Faden für Gala & Event | Emilian Leber"
-      description="Moderation mit rotem Faden für Gala, Award & Firmenevent — verbindet Programmpunkte, hält Energie und Timing, mit Mentalmagie-Einsprengseln. Headset & Ton inkl., auf Wunsch zweisprachig DE/EN."
+      description="Moderation mit rotem Faden für Gala & Event — verbindet Programmpunkte, hält Energie und Timing, setzt magische Akzente statt Lückenfüller. Flexible Länge, Headset & Ton inklusive, auf Wunsch DE/EN."
       path="/demo/moderation"
     >
       <SubHero
         eyebrow="Konzept · Moderation"
         title={<>Moderation mit <span style={{ color: COBALT }}>rotem Faden</span><span style={{ color: MAGENTA }}>.</span></>}
-        sub="Ich verbinde eure Programmpunkte, halte Energie und Timing im Saal — mit Mentalmagie-Einsprengseln statt Lückenfüller. Ein Abend, der sich rund anfühlt, von der Begrüßung bis zum Schluss."
-        image={moderatorImg}
+        sub="Ein Moderator, der den Abend zusammenhält: verbindet Programmpunkte, hält Energie und Timing — und setzt magische Akzente, wo andere nur Lückenfüller liefern."
+        image={heroImg}
         imageAlt="Emilian Leber als Moderator auf der Bühne"
-        badge="Roter Faden — der Abend läuft, das Timing sitzt."
-        secondary={{ label: "Mehr sehen", href: "/demo#show" }}
+        badge="Roter Faden — ein Abend, der sich rund anfühlt."
+        secondary={{ label: "Mehr ansehen", href: "/demo#show" }}
       />
 
-      <FactsGrid items={[
-        { Icon: Clock, k: "Länge", v: "flexibel · ganzer Abend" },
-        { Icon: Trophy, k: "Anlass", v: "Gala · Award · Firmenevent" },
-        { Icon: Mic2, k: "Technik", v: "Headset & Ton inkl." },
-        { Icon: MessageSquare, k: "Sprache", v: "auf Wunsch DE / EN" },
-      ]} />
+      <SplitFeature
+        eyebrow="Mehr als Ansagen"
+        title={<>Der <span style={{ color: COBALT }}>rote Faden</span>, der euren Abend trägt.</>}
+        sub="Eine gute Moderation verbindet die Programmpunkte, hält die Energie im Saal und das Timing im Griff. Statt Lückenfüller gibt es magische Akzente, die in Erinnerung bleiben."
+        points={["Flexible Länge — vom kurzen Übergang bis zur ganzen Gala", "Headset und Ton inklusive — ihr müsst nichts stellen", "Auf Wunsch zweisprachig — Deutsch oder Englisch"]}
+        image={splitImg}
+        imageAlt="Emilian Leber mit dem Publikum"
+        stat={{ v: "DE / EN", l: "Zweisprachig auf Wunsch" }}
+      />
 
-      <Statement>Kein Ansager am Pult — ein <span style={{ color: COBALT }}>roter Faden</span>, der den Abend trägt.</Statement>
-
-      <GlassFeatures
-        eyebrow="Was die Moderation ausmacht"
-        title="Sechs Dinge, die den Abend tragen."
-        sub="Souveräne Führung trifft Mentalmagie — abgestimmt auf euer Programm und euren Anlass."
-        items={[
-          { Icon: Layers, t: "Roter Faden", d: "Eine Klammer über den ganzen Abend — Themen und Auftritte greifen ineinander statt nebeneinander." },
-          { Icon: Zap, t: "Übergänge & Timing", d: "Saubere Anmoderationen, gehaltene Pausen, Programmpunkte sitzen auf die Minute." },
-          { Icon: Megaphone, t: "Energie im Saal", d: "Ich lese den Raum und halte die Stimmung oben — auch in Hängern und Umbaupausen." },
-          { Icon: Sparkles, t: "Magie-Akzente", d: "Mentalmagie-Einsprengsel statt Lückenfüller — kleine Momente, die wach machen." },
-          { Icon: FileText, t: "Briefing vorab", d: "Ablauf, Namen, Anekdoten, Sponsoren — alles geprüft, bevor das Licht angeht." },
-          { Icon: Award, t: "Profi seit 2016", d: "Galas, Awards und Firmenevents moderiert — ich kenne den Druck einer Live-Bühne." },
+      <FlowBand
+        eyebrow="So läuft der Abend"
+        title="Vom ersten Briefing bis zum letzten Applaus."
+        sub="Eine Moderation ist Vorbereitung. Wir stimmen den Ablauf vorab ab, ich führe sicher durch den Abend und setze die magischen Akzente an den richtigen Stellen."
+        milestones={[
+          { t: "Vorab-Abstimmung", d: "Ablaufplan, Namen, Timing — alles vor dem Event geklärt." },
+          { t: "Durch den Abend führen", d: "Programmpunkte verbinden, Energie und Tempo halten." },
+          { t: "Magische Akzente", d: "Kleine Momente Magie statt Lückenfüller — pointiert gesetzt." },
         ]}
       />
 
-      <Steps
-        eyebrow="Drei Schritte"
-        title="So führe ich durch euren Abend."
-        sub="Von der Vorab-Abstimmung bis zu den magischen Akzenten — ich takte mich in euren Ablauf ein."
+      <Bento
+        eyebrow="Warum es funktioniert"
+        title="Routine, Energie und ein Faden, der nicht reißt."
+        sub="Über 200 Events Bühnenerfahrung — als Moderator weiß ich genau, wie man einen Saal durch einen ganzen Abend trägt."
         items={[
-          { t: "Vorab-Abstimmung", d: "Wir gehen den Ablauf durch: Programmpunkte, Namen, Timing, Tonalität — ich baue das Briefing." },
-          { t: "Durch den Abend führen", d: "Ich verbinde die Punkte, halte Energie und Zeitplan und nehme den Saal souverän mit." },
-          { t: "Magische Akzente", d: "An den richtigen Stellen kurze Mentalmagie — Momente, die den Abend würzen statt füllen." },
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Roter Faden", title: "Ein Abend, der sich rund und durchdacht anfühlt." },
+          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events seit 2016" },
+          { kind: "glass", span: "col-span-1", Icon: Mic2, t: "Roter Faden", d: "Programmpunkte verbunden, Energie gehalten." },
+          { kind: "quote", span: "col-span-2", text: "Hat den ganzen Abend zusammengehalten — souverän und mit Charme.", name: "Jan von Lehmann · Eventleitung" },
         ]}
+      />
+
+      <DarkShowcase
+        eyebrow="Souveränität"
+        title={<>Energie im Saal <span style={{ color: COBALT }}>halten</span>.</>}
+        paras={[
+          "Übergänge, die sitzen, ein Timing, das die Spannung trägt — und die Ruhe, auch dann souverän zu bleiben, wenn der Ablauf einmal kippt. Genau das macht den Unterschied zwischen Ansagen und echter Moderation.",
+          "Headset und Ton sind inklusive, der Ablauf vorab abgestimmt. Ihr kümmert euch um euer Event — ich kümmere mich darum, dass der Faden hält.",
+        ]}
+        image={darkImg}
+        imageAlt="Emilian Leber auf der Bühne im Scheinwerferlicht"
+        badge="200+ Events"
+        reverse
       />
 
       <PullQuote
-        text="Emilian hat den ganzen Abend zusammengehalten — Timing perfekt, Energie da, und die kleinen Magie-Momente haben den Saal jedes Mal wach gemacht."
+        text="Hat unsere Gala souverän durch den Abend geführt, jeden Programmpunkt verbunden und mit den magischen Akzenten richtig Energie reingebracht."
         name="Jan von Lehmann"
         role="Eventleitung"
       />
 
-      <ReviewsBlock />
+      <ReviewsBlock paper={false} />
 
       <FinalCTA
         title={<>Bereit für einen Abend mit rotem Faden<span style={{ color: MAGENTA }}>?</span></>}

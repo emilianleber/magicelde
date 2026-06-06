@@ -1,71 +1,76 @@
-/** /demo/geburtstage — Anlass-Template (Geburtstag & Jubiläum). Echte Inhalte. */
+/** /demo/geburtstage — Anlass (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, Steps, GlassFeatures, Statement, PullQuote, Stats, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SplitFeature, Bento, InteractiveTabs } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Smile, Users, Heart, Clock, MessageSquare, Cake } from "lucide-react";
-import birthdayImg from "@/assets/hero-birthday.jpg";
+import { Cake } from "lucide-react";
+import heroImg from "@/assets/hero-birthday.jpg";
+import splitImg from "@/assets/emotionen.jpg";
+import bentoImg from "@/assets/audience-reactions.jpg";
+import tabA from "@/assets/hero-birthday.jpg";
+import tabB from "@/assets/audience-reactions.jpg";
+import tabC from "@/assets/stage-show.jpg";
 
 export default function DemoGeburtstage() {
   return (
     <VoltageShell
       title="DEMO · Zauberer für Geburtstag & Jubiläum | Emilian Leber"
-      description="Zauberer für Geburtstag & Jubiläum in Bayern & deutschlandweit. Die Show, über die man noch redet — Walk-Around, Tisch-Highlights und kleine Bühnenshow als Finale. 80+ Geburtstage & Jubiläen."
+      description="Zauberer für Geburtstag und Jubiläum in Bayern & deutschlandweit. Comedy-lastig und herzlich, mit persönlichen Insidern zum Jubilar — vom runden 60er bis zur großen Familienfeier. 80+ Feiern."
       path="/demo/geburtstage"
     >
       <SubHero
         eyebrow="Anlass · Geburtstag & Jubiläum"
-        title={<>Die Show, über die man noch <span style={{ color: COBALT }}>redet</span><span style={{ color: MAGENTA }}>.</span></>}
-        sub="Zauberer für runden Geburtstag und Jubiläum — comedy-lastig, herzlich und mit persönlichen Insidern zum Jubilar. Vom 50er bis zur großen Familienfeier, in flexiblen Längen."
-        image={birthdayImg}
-        imageAlt="Zauberer auf einer Geburtstagsfeier"
-        badge="„Sogar die, die nie staunen, haben gestaunt — und gelacht."
+        title={<>Zauberer für Geburtstag & <span style={{ color: COBALT }}>Jubiläum</span><span style={{ color: MAGENTA }}>.</span></>}
+        sub="Die Show, über die man noch redet — comedy-lastig, herzlich und mit persönlichen Insidern zum Jubilar. Vom runden 50er bis zur großen Familienfeier."
+        image={heroImg}
+        imageAlt="Zauberer bei einer Geburtstagsfeier"
+        badge="Selbst die Skeptiker am Tisch sind am Ende am stärksten geflasht."
       />
 
-      <Steps
-        eyebrow="Der Ablauf"
-        title="Magie über den ganzen Abend verteilt."
-        sub="Eingetaktet in eure Feier — locker, ohne den Ablauf zu stören. Ihr wählt, was passt."
+      <SplitFeature
+        eyebrow="So fühlt sich der Abend an"
+        title={<>Staunen und lachen — und <span style={{ color: COBALT }}>jeder</span> ist dabei.</>}
+        sub="Comedy-lastig und herzlich: Ich binde alle ein, auch die Skeptiker, und arbeite persönliche Insider zum Jubilar in die Show ein. Magie, die berührt statt nur verblüfft."
+        points={["Vom runden 50er und 60er bis zur großen Familienfeier", "Flexible Längen — vom Walk-Around bis zur kleinen Bühnenshow", "Staunen und lachen im Wechsel, der ganze Tisch geht mit"]}
+        image={splitImg}
+        imageAlt="Emilian Leber mit Gästen"
+        reverse
+        stat={{ v: "80+", l: "Geburtstage & Jubiläen" }}
+      />
+
+      <Bento
+        eyebrow="Warum man mich für die Feier bucht"
+        title="Mehr als Tricks — ein Abend mit Herz."
+        sub="Comedy und Emotion im Wechsel, jeder Gast wird Teil der Show."
         items={[
-          { t: "Walk-Around", d: "Close-Up direkt unter den Gästen, während angestoßen und geplaudert wird — der perfekte Eisbrecher, der sofort für Stimmung sorgt." },
-          { t: "Tisch-Highlights", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen eigenen Moment, persönlich und nah." },
-          { t: "Kleine Bühnenshow", d: "20–30 Min als Finale für die ganze Runde — Comedy, Mentalmagie und ein Moment, der dem Jubilar gewidmet ist." },
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Echte Reaktionen", title: "Auch die skeptischen Gäste sind am Ende am stärksten geflasht." },
+          { kind: "cobalt", span: "col-span-1", v: "80+", l: "Geburtstage & Jubiläen" },
+          { kind: "glass", span: "col-span-1", Icon: Cake, t: "Auch für Skeptiker", d: "Wer nichts erwartet, staunt am meisten." },
+          { kind: "quote", span: "col-span-2", text: "Du warst der absolute Höhepunkt unserer Feier — sogar meine Mutter war komplett geflasht.", name: "Martina Senftl" },
         ]}
       />
 
-      <GlassFeatures
-        eyebrow="Warum Gastgeber mich buchen"
-        title="Mehr als Tricks — ein Abend, der bleibt."
-        sub="Herzlich, nahbar und auf den Jubilar zugeschnitten. Abgestimmt auf eure Runde, vom runden Geburtstag bis zur Familienfeier."
-        items={[
-          { Icon: Smile, t: "Comedy-lastig & herzlich", d: "Gäste staunen und lachen — leichter Humor, der zur Feier passt und nie über jemanden geht." },
-          { Icon: Users, t: "Bindet alle ein", d: "Auch die Skeptiker am Tisch — gerade die, die nichts erwarten, sind am Ende am stärksten geflasht." },
-          { Icon: MessageSquare, t: "Persönliche Insider", d: "Ich baue Namen, Anekdoten und kleine Insider zum Jubilar ein — abgestimmt vorab mit euch." },
-          { Icon: Cake, t: "Vom 50er bis Familienfeier", d: "Ob runder 50er, 60er oder gemütliche Familienrunde — die Show passt sich Anlass und Gruppe an." },
-          { Icon: Clock, t: "Flexible Längen", d: "Von einer Stunde Walk-Around bis zum kompletten Abend — so lang, wie es zu eurem Ablauf passt." },
-          { Icon: Heart, t: "Staunen und lachen", d: "Der Moment, in dem alle gleichzeitig lachen und im nächsten Augenblick gerührt sind. Beides." },
+      <InteractiveTabs
+        eyebrow="Drei Formate, ein Abend"
+        title={<>Genau so viel Magie, wie eure Feier <span style={{ color: COBALT }}>braucht</span>.</>}
+        tabs={[
+          { t: "Walk-Around", d: "Close-Up direkt unter den Gästen — Magie in den Händen, von Grüppchen zu Grüppchen. Perfekt als Eisbrecher beim Sektempfang.", img: tabA },
+          { t: "Tisch-Highlights", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, mit Insidern zum Jubilar und viel Lachen.", img: tabB },
+          { t: "Kleine Bühnenshow", d: "15–25 Minuten als Höhepunkt des Abends — Comedy, Mentalmagie und ein Gänsehaut-Finale. Für 20 bis 200 Gäste.", img: tabC },
         ]}
       />
-
-      <Statement>Am Ende reden alle noch <span style={{ color: COBALT }}>Wochen später</span> davon.</Statement>
 
       <PullQuote
-        text="Du warst der absolute Höhepunkt unserer Feier. Was ich nicht erwartet hätte: dass die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter — und das soll was heißen."
+        text="Du warst der absolute Höhepunkt unserer Feier. Was ich nicht erwartet hätte: dass ausgerechnet die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter."
         name="Martina Senftl"
-        role="Eventkundin · Geburtstag + Hochzeit"
+        role="Geburtstagsfeier · Bayern"
       />
 
-      <Stats items={[
-        { v: "80+", l: "Geburtstage & Jubiläen" },
-        { v: "5,0★", l: "30+ Bewertungen" },
-        { v: "200+", l: "Events seit 2016" },
-        { v: "20–200", l: "Gäste pro Feier" },
-      ]} />
-
-      <ReviewsBlock />
+      <ReviewsBlock paper={false} />
 
       <FinalCTA
-        title={<>Macht dem Jubilar den Abend unvergesslich<span style={{ color: MAGENTA }}>.</span></>}
-        sub="Erzählt mir kurz von eurer Feier — Anlass, Datum, Ort, Gästezahl. Ich melde mich innerhalb von 24 Stunden persönlich zurück."
+        title={<>Macht dem Jubilar einen Abend, über den man noch redet<span style={{ color: MAGENTA }}>.</span></>}
+        sub="Erzählt mir kurz von eurer Feier — Anlass, Datum, Ort und Gästezahl. Ich melde mich innerhalb von 24 Stunden persönlich zurück."
       />
     </VoltageShell>
   );

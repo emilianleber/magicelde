@@ -46,6 +46,21 @@ Der Headless-Preview-Tab drosselt `requestAnimationFrame` → Framer-Motion Reve
 „frieren" bei ~0 ein. Betrifft auch StartDemo im Preview. **Im echten Browser (Vordergrund) laufen sie normal.**
 Für Verifikations-Screenshots: `<style>` mit `.voltage-root [style*="opacity"]{opacity:1!important;transform:none!important}` injizieren.
 
+## ✨ Kreativ-Redesign der Unterseiten (2026-06-06, Update)
+User-Feedback: Startseite top, aber Unterseiten zu langweilig/„copy-paste" wegen uniformer Widget-Grids.
+Lösung: **`src/components/voltage/creative.tsx`** — abwechslungsreiche Sections im Stripe/Anyfin-Stil mit den
+Signature-Elementen der Startseite:
+- **SplitFeature** (asymmetrisch Foto+Text, alternierend, Glas-Stat-Overlay) · **Bento** (gemischte Karten:
+  Foto/Cobalt-Stat/Glas/Zitat — wie das Warum-Karussell) · **FlowBand** (Flow-Linie dashed→solid im beigen Panel)
+  · **NotificationFlow** (Glas-Notification-Stack) · **InteractiveTabs** (Pills + Bild-Preview, interaktiv) ·
+  **DarkShowcase** (dunkle Foto+Text-Section).
+- Jede Seite nutzt eine **andere Komposition** dieser Bausteine → keine zwei Seiten gleich.
+- Buehnenshow, Hochzeit, Ueber, Referenzen von Hand neu komponiert (visuell bestätigt: alle Sections top).
+  Die 8 Derivate (CloseUp, MagicDinner, Moderation, Comedy, Firmenfeiern, Geburtstage, EventAgenturen, Messe)
+  per Workflow mit je eigener Komposition + eigenen Bildern.
+- Bento-Item-Shapes: `{kind:'photo',span,image,chip,title}` · `{kind:'cobalt',span,v,l}` ·
+  `{kind:'glass',span,Icon,t,d}` · `{kind:'quote',span,text,name}`. Span-Muster: photo "col-span-2 row-span-2" + 3 weitere.
+
 ## TODO / Nächste Schritte
 1. **StartDemo-Integration:** echtes Logo in StartDemo-Nav/Footer, Nav-Links → /demo/* (Shows-Dropdown,
    Referenzen, Über, Kontakt), damit die Home den Prototyp verbindet. (Surgical, StartDemo-Look bewahren.)

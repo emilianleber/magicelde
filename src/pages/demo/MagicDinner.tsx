@@ -1,72 +1,87 @@
-/** /demo/magic-dinner — Show-Detail-Template (Magic Dinner). Echte Inhalte. */
+/** /demo/magic-dinner — Magic Dinner (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, FactsGrid, Statement, GlassFeatures, Steps, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { InteractiveTabs, SplitFeature, Bento, FlowBand } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Clock, UtensilsCrossed, Layers, MapPin, Sparkles, Hand, Award, Mic2, Users, Gem } from "lucide-react";
-import dinnerImg from "@/assets/magicdinner-buehne.jpg";
+import { UtensilsCrossed } from "lucide-react";
+import heroImg from "@/assets/magicdinner-buehne.jpg";
+import splitImg from "@/assets/hero-dinner.jpg";
+import bentoImg from "@/assets/magicdinner-book.jpg";
+import tab1 from "@/assets/emilian-magic-dinner.jpg";
+import tab2 from "@/assets/magicdinner-book.jpg";
+import tab3 from "@/assets/stage-show.jpg";
 
 export default function DemoMagicDinner() {
   return (
     <VoltageShell
       title="DEMO · Magic Dinner — Tisch & Bühne zwischen den Gängen | Emilian Leber"
-      description="Magic Dinner mit Emilian Leber — Magie durchkomponiert über den ganzen Abend: Aperitif-Walk-Around, Tisch-zu-Tisch zwischen den Gängen und ein Bühnen-Finale. Für 20–120 Gäste, abgestimmt auf den Service-Rhythmus."
+      description="Magic Dinner mit Emilian Leber — Tisch und Bühne zwischen den Gängen. Aperitif-Walk-Around, Tisch-zu-Tisch zwischen den Gängen, Bühnen-Finale. Durchkomponiert über 2,5–4 Stunden, 3–5 Gänge."
       path="/demo/magic-dinner"
     >
       <SubHero
-        eyebrow="Konzept · Magic Dinner"
+        eyebrow="Signature · Magic Dinner"
         title={<>Tisch und Bühne <span style={{ color: COBALT }}>zwischen den Gängen</span><span style={{ color: MAGENTA }}>.</span></>}
-        sub="Magie, die sich durch den ganzen Abend zieht — vom Aperitif über jeden Gang bis zum großen Finale. Kein Programmpunkt, sondern ein roter Faden, abgestimmt auf euren Service-Rhythmus."
-        image={dinnerImg}
-        imageAlt="Emilian Leber beim Magic Dinner"
-        badge="Signature-Format — Magie durchkomponiert über den ganzen Abend."
-        secondary={{ label: "Abend ansehen", href: "/demo#show" }}
+        sub="Ein ganzer Abend, durchkomponiert mit dem Service-Rhythmus: Walk-Around zum Aperitif, Tisch-zu-Tisch zwischen den Gängen und ein Bühnen-Finale zum Dessert. Magie und Menü greifen ineinander."
+        image={heroImg}
+        imageAlt="Magic Dinner mit Emilian Leber"
+        badge="Seit 2023 mein Signature-Format — Gänge und Magie im selben Takt."
       />
 
-      <FactsGrid items={[
-        { Icon: Clock, k: "Dauer", v: "2,5 – 4 Stunden" },
-        { Icon: UtensilsCrossed, k: "Menü", v: "3 – 5 Gänge" },
-        { Icon: Layers, k: "Aufbau", v: "Aperitif · Tisch · Finale" },
-        { Icon: MapPin, k: "Location", v: "Wald & Wiese, Sinzing" },
-      ]} />
-
-      <Statement>Kein Programmpunkt — ein <span style={{ color: COBALT }}>roter Faden</span> über den ganzen Abend.</Statement>
-
-      <GlassFeatures
-        eyebrow="Was den Abend ausmacht"
-        title="Sechs Dinge, die hängenbleiben."
-        sub="Magie und Menü greifen ineinander — durchkomponiert, getaktet und auf eure Gästezahl abgestimmt."
-        items={[
-          { Icon: Sparkles, t: "Durchkomponiert", d: "Magie zieht sich vom Aperitif bis zum Finale — als roter Faden, nicht als Einzeltrick." },
-          { Icon: Clock, t: "Im Service-Rhythmus", d: "Abgestimmt mit Küche und Service — die Magie passt sich an, nicht der Abend an mich." },
-          { Icon: Mic2, t: "Musik & Atmosphäre", d: "Licht, Ton und Stimmung greifen ineinander — der Abend hat eine Dramaturgie." },
-          { Icon: Gem, t: "Signature-Format", d: "Seit 2023 erprobt und verfeinert — das Format, für das man mich bucht." },
-          { Icon: Users, t: "Für 20 – 120 Gäste", d: "Skaliert vom intimen Dinner bis zur großen Tafel — ohne dass Nähe verloren geht." },
-          { Icon: Award, t: "Premium-Tonalität", d: "Ruhig, hochwertig, mit Pointen dosiert — passend zum gehobenen Abend." },
+      <InteractiveTabs
+        eyebrow="Drei Phasen"
+        title={<>Magie, eingetaktet in die <span style={{ color: COBALT }}>Menüfolge</span>.</>}
+        tabs={[
+          { t: "Aperitif · Walk-Around", d: "Beim Sektempfang gehe ich von Gruppe zu Gruppe — Close-Up direkt in den Händen, als Eisbrecher, bevor sich alle setzen.", img: tab1 },
+          { t: "Zwischen den Gängen · Tisch-zu-Tisch", d: "Während Teller getauscht werden, bekommt jeder Tisch seinen eigenen Moment — ohne dass der Service ins Stocken gerät.", img: tab2 },
+          { t: "Dessert · Bühnen-Finale", d: "Zum Abschluss die durchkomponierte Bühnenshow vor dem ganzen Saal — Mentalmagie, Comedy und ein großer Schluss.", img: tab3 },
         ]}
       />
 
-      <Steps
-        eyebrow="Drei Phasen"
-        title="Wie sich der Abend aufbaut."
-        sub="Ich takte die Magie in euren Ablauf ein — vom Empfang bis zum letzten Gang."
+      <SplitFeature
+        eyebrow="Durchkomponiert über den Abend"
+        title={<>Abgestimmt mit <span style={{ color: COBALT }}>Service-Rhythmus</span>, Musik und Atmosphäre.</>}
+        sub="Magic Dinner ist kein Programmpunkt, sondern der rote Faden des Abends. Ich stimme jede Phase vorab mit Küche, Service und Musik ab — damit Gänge und Magie im selben Takt laufen."
+        points={["2,5–4 Stunden über den ganzen Abend getaktet", "3–5 Gänge, Magie zwischen jedem Gang", "Partner-Location Wald & Wiese Sinzing oder eure Location"]}
+        image={splitImg}
+        imageAlt="Gedeckter Tisch beim Magic Dinner"
+        reverse
+        stat={{ v: "2,5–4 h", l: "durchkomponiert" }}
+      />
+
+      <Bento
+        eyebrow="Warum Magic Dinner"
+        title="Ein Format, das den ganzen Abend trägt."
+        sub="Walk-Around, Tisch-zu-Tisch und Bühne in einem Stück — abgestimmt auf euer Menü."
         items={[
-          { t: "Aperitif · Walk-Around", d: "Beim Empfang gehe ich von Gruppe zu Gruppe — als Eisbrecher, bevor sich alle setzen." },
-          { t: "Zwischen den Gängen · Tisch-zu-Tisch", d: "In den Service-Pausen komme ich an jeden Tisch — Magie direkt in den Händen der Gäste." },
-          { t: "Bühnen-Finale", d: "Zum Abschluss der große Moment für den ganzen Saal — der Höhepunkt, über den man redet." },
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Magic Dinner", title: "Tisch und Bühne greifen über den ganzen Abend ineinander." },
+          { kind: "cobalt", span: "col-span-1", v: "seit 2023", l: "mein Signature-Format" },
+          { kind: "glass", span: "col-span-1", Icon: UtensilsCrossed, t: "3–5 Gänge", d: "Magie zwischen jedem Gang." },
+          { kind: "quote", span: "col-span-2", text: "Magic Dinner war das Highlight — die Gäste reden heute noch davon.", name: "Katrin Raß · Hochzeitsplanerin" },
+        ]}
+      />
+
+      <FlowBand
+        eyebrow="Der Abend in drei Phasen"
+        title="Vom Aperitif bis zum Bühnen-Finale."
+        sub="Jede Phase ist auf den Service-Rhythmus abgestimmt — der Abend baut sich auf wie ein gutes Menü."
+        milestones={[
+          { t: "Aperitif", d: "Walk-Around beim Sektempfang als Eisbrecher." },
+          { t: "Zwischengänge", d: "Tisch-zu-Tisch zwischen den Gängen." },
+          { t: "Finale", d: "Bühnenshow zum Dessert vor dem ganzen Saal." },
         ]}
       />
 
       <PullQuote
-        text="Ein Abend wie aus einem Guss — Magie, Menü und Timing greifen perfekt ineinander. Genau das Format, das ich meinen Brautpaaren ans Herz lege."
+        text="Magic Dinner war das Highlight unserer Feier. Emilian hat sich perfekt in den Ablauf eingefügt — vom Aperitif bis zum Finale. Die Gäste reden heute noch davon."
         name="Katrin Raß"
-        role="Hochzeitsplanerin · Bayern + DE"
+        role="Hochzeitsplanerin"
       />
 
-      <ReviewsBlock />
+      <ReviewsBlock paper={false} />
 
       <FinalCTA
-        title={<>Bereit für einen Abend, der durchkomponiert ist<span style={{ color: MAGENTA }}>?</span></>}
-        sub="Erzähl mir kurz von eurem Abend und eurer Location — ich melde mich innerhalb von 24 Stunden persönlich zurück."
+        title={<>Macht aus eurem Dinner einen ganzen Abend Magie<span style={{ color: MAGENTA }}>.</span></>}
+        sub="Erzählt mir kurz von eurem Abend — Datum, Location, Menü. Ich melde mich innerhalb von 24 Stunden persönlich zurück."
       />
     </VoltageShell>
   );
