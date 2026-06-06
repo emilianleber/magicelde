@@ -36,6 +36,7 @@ export default function DemoBuehnenshow() {
         points={["Gedanken lesen, Vorhersagen, Unmögliches — live am Publikum", "Comedy, über die mitgelacht wird — nie über jemanden", "Echte Interaktion ohne Fremdscham"]}
         image={splitImg}
         imageAlt="Emilian Leber auf der Bühne mit Gast"
+        imgPos="top"
         stat={{ v: "10 J.", l: "Bühnen-Erfahrung" }}
       />
 

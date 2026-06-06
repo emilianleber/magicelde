@@ -16,9 +16,9 @@ type Icon = ComponentType<{ className?: string; style?: React.CSSProperties }>;
 const H2 = { fontSize: "clamp(2rem,4.4vw,3.4rem)", lineHeight: 1.04 } as const;
 
 /* ════════ 1. SplitFeature — asymmetrisch Foto + Text (Stripe-Workhorse) ════════ */
-export function SplitFeature({ eyebrow, title, sub, points, image, imageAlt, reverse, dark, stat }: {
+export function SplitFeature({ eyebrow, title, sub, points, image, imageAlt, reverse, dark, stat, imgPos = "center" }: {
   eyebrow: string; title: ReactNode; sub: ReactNode; points?: string[];
-  image: string; imageAlt: string; reverse?: boolean; dark?: boolean; stat?: { v: string; l: string };
+  image: string; imageAlt: string; reverse?: boolean; dark?: boolean; stat?: { v: string; l: string }; imgPos?: string;
 }) {
   return (
     <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp}
@@ -26,7 +26,7 @@ export function SplitFeature({ eyebrow, title, sub, points, image, imageAlt, rev
       <div className={`max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-16 items-center ${reverse ? "lg:[direction:rtl]" : ""}`}>
         <motion.div variants={up} className="relative [direction:ltr]">
           <div className="relative rounded-[28px] overflow-hidden" style={{ boxShadow: "0 40px 80px -34px rgba(10,11,15,0.4)" }}>
-            <img src={image} alt={imageAlt} className="w-full h-[360px] md:h-[500px] object-cover object-top" loading="lazy" />
+            <img src={image} alt={imageAlt} className="w-full h-[360px] md:h-[500px] object-cover" style={{ objectPosition: imgPos }} loading="lazy" />
           </div>
           {stat && (
             <div className="hidden sm:block absolute -right-4 -bottom-5 rounded-[22px] px-6 py-5" style={dark ? { ...glassDark } : { background: WHITE, boxShadow: "0 24px 60px -24px rgba(10,11,15,0.3)", border: `1px solid ${L_LINE}` }}>
