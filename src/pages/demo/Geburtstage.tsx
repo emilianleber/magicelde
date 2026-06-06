@@ -1,9 +1,9 @@
 /** /demo/geburtstage — Anlass (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, Bento, InteractiveTabs } from "@/components/voltage/creative";
+import { SplitFeature, Bento, InteractiveTabs, FormatCards } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Cake } from "lucide-react";
+import { Cake, Hand, Wand2, UtensilsCrossed } from "lucide-react";
 import heroImg from "@/assets/hero-birthday.jpg";
 import splitImg from "@/assets/emotionen.jpg";
 import bentoImg from "@/assets/audience-reactions.jpg";
@@ -57,6 +57,18 @@ export default function DemoGeburtstage() {
           { t: "Walk-Around", d: "Close-Up direkt unter den Gästen — Magie in den Händen, von Grüppchen zu Grüppchen. Perfekt als Eisbrecher beim Sektempfang.", img: tabA },
           { t: "Tisch-Highlights", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, mit Insidern zum Jubilar und viel Lachen.", img: tabB },
           { t: "Kleine Bühnenshow", d: "15–25 Minuten als Höhepunkt des Abends — Comedy, Mentalmagie und ein Gänsehaut-Finale. Für 20 bis 200 Gäste.", img: tabC },
+        ]}
+      />
+
+      <FormatCards
+        eyebrow="Welche Formate passen"
+        title={<>Drei Formate für euren Geburtstag — <span style={{ color: COBALT }}>frei kombinierbar</span>.</>}
+        sub="Von der Tischmagie unter Gästen bis zur kleinen Bühnenshow als Finale."
+        note="Frei kombinierbar — Tischmagie, Bühne oder beides."
+        formats={[
+          { t: "Close-Up", d: "Magie direkt in den Händen eurer Gäste.", h: "/demo/close-up", Icon: Hand },
+          { t: "Bühnenshow", d: "Comedy & Mentalmagie für den ganzen Saal.", h: "/demo/buehnenshow", Icon: Wand2 },
+          { t: "Magic Dinner", d: "Durchkomponiert über den ganzen Abend.", h: "/demo/magic-dinner", Icon: UtensilsCrossed },
         ]}
       />
 

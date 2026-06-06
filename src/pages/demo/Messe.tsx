@@ -1,9 +1,9 @@
 /** /demo/messe-magier — Anlass (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, Bento, NotificationFlow } from "@/components/voltage/creative";
+import { SplitFeature, FormatCards, Bento, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Target, Megaphone, Clock, CalendarCheck } from "lucide-react";
+import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed } from "lucide-react";
 import heroImg from "@/assets/audience-reactions.jpg";
 import splitImg from "@/assets/haende-interaktion.jpg";
 import bentoImg from "@/assets/zuschauer-blau.jpg";
@@ -33,6 +33,18 @@ export default function DemoMesse() {
         imageAlt="Close-Up-Magie direkt in den Händen der Standbesucher"
         reverse
         stat={{ v: "DE + EN", l: "mehrsprachig" }}
+      />
+
+      <FormatCards
+        eyebrow="Welche Formate passen"
+        title={<>Drei Formate für Messe & Roadshow — <span style={{ color: COBALT }}>frei kombinierbar</span>.</>}
+        sub="Vom Lead-Magnet am Stand bis zum Bühnen-Slot auf der Aktionsfläche."
+        note="Flexibel über den Messetag — Close-Up am Stand bis Bühnen-Slot."
+        formats={[
+          { t: "Close-Up", d: "Magie direkt in den Händen eurer Gäste.", h: "/demo/close-up", Icon: Hand },
+          { t: "Bühnenshow", d: "Comedy & Mentalmagie für den ganzen Saal.", h: "/demo/buehnenshow", Icon: Wand2 },
+          { t: "Magic Dinner", d: "Durchkomponiert über den ganzen Abend.", h: "/demo/magic-dinner", Icon: UtensilsCrossed },
+        ]}
       />
 
       <Bento

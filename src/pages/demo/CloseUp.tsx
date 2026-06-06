@@ -1,9 +1,9 @@
 /** /demo/close-up — Close-Up Zauberer / Tischmagie (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, Bento, NotificationFlow, DarkShowcase } from "@/components/voltage/creative";
+import { SplitFeature, ExampleSets, Bento, NotificationFlow, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Eye, Check, Clock, CalendarCheck } from "lucide-react";
+import { Eye, Check, Clock, CalendarCheck, Users, Sparkles, Languages } from "lucide-react";
 import heroImg from "@/assets/closeup.jpg";
 import splitImg from "@/assets/haende-interaktion.jpg";
 import bentoImg from "@/assets/zuschauer-blau.jpg";
@@ -39,6 +39,23 @@ export default function DemoCloseUp() {
         imageAlt="Tischmagie in den Händen eines Gastes"
         reverse
         stat={{ v: "5–7 Min", l: "pro Tisch" }}
+      />
+
+      <ExampleSets
+        eyebrow="Beispiel-Sets"
+        title={<>So kann euer Close-Up aussehen<span style={{ color: COBALT }}>.</span></>}
+        sub="Drei typische Zuschnitte — und alles dazwischen."
+        sets={[
+          { tag: "Empfang", t: "Walk-Around", d: "~60 Min beim Sektempfang oder Aperitif — Magie zwischen den Gruppen." },
+          { tag: "Dinner", t: "Tisch-zu-Tisch", d: "Zwischen den Gängen, jeder Tisch bekommt 5–7 Min seinen Moment." },
+          { tag: "Pause", t: "Highlights", d: "Gezielte Sets in den Programmpausen — als Überraschung eingestreut." },
+        ]}
+        options={[
+          { Icon: Clock, t: "Dauer", d: "flexibel" },
+          { Icon: Users, t: "Gäste", d: "50–80 in 90 Min" },
+          { Icon: Sparkles, t: "Effekte", d: "Karten, Münzen, Mental" },
+          { Icon: Languages, t: "Sprache", d: "DE / EN" },
+        ]}
       />
 
       <Bento

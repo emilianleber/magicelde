@@ -1,9 +1,9 @@
 /** /demo/firmenfeiern — Anlass Firmenfeier (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { InteractiveTabs, SplitFeature, Bento, NotificationFlow } from "@/components/voltage/creative";
+import { InteractiveTabs, FormatCards, SplitFeature, Bento, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Briefcase, Check, Clock, CalendarCheck } from "lucide-react";
+import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed } from "lucide-react";
 import heroImg from "@/assets/schneider-weisse-closeup.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
 import bentoImg from "@/assets/buehne-zuschauer.jpg";
@@ -34,6 +34,18 @@ export default function DemoFirmenfeiern() {
           { t: "Empfang · Walk-Around", d: "Close-Up von Gruppe zu Gruppe während Sektempfang und Networking — der Eisbrecher, der Abteilungen ins Gespräch bringt, bevor das Programm überhaupt startet.", img: tab1 },
           { t: "Dinner · Tisch-zu-Tisch", d: "Zwischen den Gängen bekommt jeder Tisch seinen eigenen Moment — Magie direkt in den Händen, ohne dass der Ablauf des Abends ins Stocken gerät.", img: tab2 },
           { t: "Bühne als Finale", d: "20–30 Min Bühnenshow als Höhepunkt — Mentalmagie, Comedy und ein Finale, das den Abend für den ganzen Saal zusammenfasst.", img: tab3 },
+        ]}
+      />
+
+      <FormatCards
+        eyebrow="Welche Formate passen"
+        title={<>Drei Formate für jede Firmenfeier — <span style={{ color: COBALT }}>frei kombinierbar</span>.</>}
+        sub="Vom Vorstands-Dinner bis zur Mitarbeiterfeier — ihr wählt den Mix."
+        note="Vom Empfang bis zum Bühnen-Finale — einzeln oder kombiniert."
+        formats={[
+          { t: "Close-Up", d: "Magie direkt in den Händen eurer Gäste.", h: "/demo/close-up", Icon: Hand },
+          { t: "Bühnenshow", d: "Comedy & Mentalmagie für den ganzen Saal.", h: "/demo/buehnenshow", Icon: Wand2 },
+          { t: "Magic Dinner", d: "Durchkomponiert über den ganzen Abend.", h: "/demo/magic-dinner", Icon: UtensilsCrossed },
         ]}
       />
 

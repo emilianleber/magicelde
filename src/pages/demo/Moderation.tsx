@@ -1,9 +1,9 @@
 /** /demo/moderation — Moderation (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, FlowBand, Bento, DarkShowcase } from "@/components/voltage/creative";
+import { SplitFeature, ExampleSets, FlowBand, Bento, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Mic2 } from "lucide-react";
+import { Mic2, Clock, Languages, Sparkles, Users } from "lucide-react";
 import heroImg from "@/assets/moderator-hero.jpg";
 import splitImg from "@/assets/buehne-zuschauer.jpg";
 import bentoImg from "@/assets/audience-reactions.jpg";
@@ -34,6 +34,23 @@ export default function DemoModeration() {
         image={splitImg}
         imageAlt="Emilian Leber mit dem Publikum"
         stat={{ v: "DE / EN", l: "Zweisprachig auf Wunsch" }}
+      />
+
+      <ExampleSets
+        eyebrow="Beispiel-Sets"
+        title={<>So kann eure Moderation aussehen<span style={{ color: COBALT }}>.</span></>}
+        sub="Vom roten Faden bis zur Gala-Moderation."
+        sets={[
+          { tag: "Gala", t: "Abend-Moderation", d: "Roter Faden durch den ganzen Abend, mit Magie-Akzenten an den Übergängen." },
+          { tag: "Award", t: "Show-Moderation", d: "Anmoderationen, Timing und Energie für Preisverleihungen." },
+          { tag: "Firmenevent", t: "Programm-Führung", d: "Verbindet Reden, Pausen und Programmpunkte zu einem Fluss." },
+        ]}
+        options={[
+          { Icon: Clock, t: "Länge", d: "flexibel" },
+          { Icon: Languages, t: "Sprache", d: "DE / EN" },
+          { Icon: Sparkles, t: "Magie-Akzente", d: "dosierbar" },
+          { Icon: Users, t: "Saalgröße", d: "bis 500" },
+        ]}
       />
 
       <FlowBand

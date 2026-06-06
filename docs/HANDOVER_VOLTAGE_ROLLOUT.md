@@ -61,7 +61,20 @@ Signature-Elementen der Startseite:
 - Bento-Item-Shapes: `{kind:'photo',span,image,chip,title}` · `{kind:'cobalt',span,v,l}` ·
   `{kind:'glass',span,Icon,t,d}` · `{kind:'quote',span,text,name}`. Span-Muster: photo "col-span-2 row-span-2" + 3 weitere.
 
-## TODO / Nächste Schritte
+## Runde 3 (2026-06-06): Inhalte + Bilder + Stadt-Seite
+User-Feedback: Anlass-Seiten müssen auf Formate hinweisen; Format-Seiten brauchen Beispiele + Gestaltbarkeit;
+Stadt-Seiten fehlen; wichtige Seiten = große Landingpages; Bilder doppelt/falsch gecroppt; greatest-talent-
+Bild (Emilian NICHT drauf) zu oft. Umgesetzt:
+- **FormatCards** (creative.tsx) — Anlass-Seiten verlinken die 3 Formate (Close-Up/Bühne/Magic Dinner) + „frei kombinierbar". In Hochzeit + via Workflow in Firmenfeiern/Geburtstage/EventAgenturen/Messe.
+- **ExampleSets** (creative.tsx) — Format-Seiten zeigen 3 Beispiel-Sets (z.B. „15 Min Gala-Slot") + „Frei gestaltbar"-Optionen (Länge/Tonalität/Sprache…). In Buehnenshow + via Workflow in CloseUp/MagicDinner/Moderation/Comedy.
+- **Stadt-Template:** `src/pages/demo/StadtRegensburg.tsx` → `/demo/zauberer-regensburg` (lokal + Formate + Anlässe). Footer-„Zauberer Regensburg" verlinkt drauf. Leicht für weitere Städte duplizierbar.
+- **Bild-Fixes:** `greatest-talent-presse.jpg` (kein Emilian) + `talents-of-magic-team.jpg` überall ersetzt durch echte Emilian-Stage/Event-Bilder. **Crop konfigurierbar:** `imgPos`/`pos` auf SubHero/SplitFeature/DarkShowcase/Bento-Foto/InteractiveTabs. Defaults: SubHero/Dark "top", Split/Bento/Tabs "center".
+- **Bild-Map** (Emilian sichtbar): moderator-hero (Starry-Stage/TV, top/center), schneider-weisse (top), haende-interaktion (center), stage-show (top), buehne-zuschauer (center), audience-reactions (center), magicdinner-buehne (center), buehne-dpsg (top), emotionen (center). NICHT nutzen: greatest-talent-presse, talents-of-magic-team.
+
+## TODO / Nächste Schritte (offen)
+- Bild-Doppelungen weiter reduzieren (Pool begrenzt; pro Seite checken dass Emilian sichtbar + Crop passt).
+- Weitere Stadt-Seiten (München, Nürnberg…) aus StadtRegensburg-Template.
+- Derivate ggf. zu größeren Landingpages ausbauen (User: wichtige Seiten groß, andere dürfen kleiner sein).
 1. **StartDemo-Integration:** echtes Logo in StartDemo-Nav/Footer, Nav-Links → /demo/* (Shows-Dropdown,
    Referenzen, Über, Kontakt), damit die Home den Prototyp verbindet. (Surgical, StartDemo-Look bewahren.)
 2. **Visuelle Politur** der Unterseiten im echten Browser prüfen (Animationen, Bild-Crops object-top,

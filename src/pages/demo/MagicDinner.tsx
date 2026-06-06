@@ -1,9 +1,9 @@
 /** /demo/magic-dinner — Magic Dinner (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { InteractiveTabs, SplitFeature, Bento, FlowBand } from "@/components/voltage/creative";
+import { InteractiveTabs, SplitFeature, Bento, FlowBand, ExampleSets } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { UtensilsCrossed } from "lucide-react";
+import { UtensilsCrossed, Clock, MapPin, Sparkles } from "lucide-react";
 import heroImg from "@/assets/magicdinner-buehne.jpg";
 import splitImg from "@/assets/hero-dinner.jpg";
 import bentoImg from "@/assets/magicdinner-book.jpg";
@@ -46,6 +46,23 @@ export default function DemoMagicDinner() {
         imageAlt="Gedeckter Tisch beim Magic Dinner"
         reverse
         stat={{ v: "2,5–4 h", l: "durchkomponiert" }}
+      />
+
+      <ExampleSets
+        eyebrow="Beispiel-Sets"
+        title={<>So kann euer Magic Dinner aussehen<span style={{ color: COBALT }}>.</span></>}
+        sub="Vom Drei-Gang-Abend bis zum großen Menü."
+        sets={[
+          { tag: "3 Gänge", t: "Der kompakte Abend", d: "Aperitif-Magie und Tisch-zu-Tisch zwischen den Gängen." },
+          { tag: "4 Gänge", t: "Mit Bühnen-Finale", d: "Walk-Around, Tisch-zu-Tisch und eine kurze Bühnenshow zum Schluss." },
+          { tag: "5 Gänge", t: "Das große Menü", d: "Durchkomponiert über den ganzen Abend, abgestimmt mit dem Service." },
+        ]}
+        options={[
+          { Icon: UtensilsCrossed, t: "Gänge", d: "3–5" },
+          { Icon: Clock, t: "Dauer", d: "2,5–4 Std" },
+          { Icon: MapPin, t: "Location", d: "Partner oder eure" },
+          { Icon: Sparkles, t: "Bühnen-Finale", d: "optional" },
+        ]}
       />
 
       <Bento

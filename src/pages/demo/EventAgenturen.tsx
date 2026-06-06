@@ -1,9 +1,9 @@
 /** /demo/event-agenturen — Buyer-Persona Event-Agenturen (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, FlowBand, Bento, DarkShowcase } from "@/components/voltage/creative";
+import { SplitFeature, FlowBand, Bento, DarkShowcase, FormatCards } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Handshake } from "lucide-react";
+import { Handshake, Hand, Wand2, UtensilsCrossed } from "lucide-react";
 import heroImg from "@/assets/buehne-dpsg.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
 import bentoImg from "@/assets/buehne-zuschauer.jpg";
@@ -34,6 +34,18 @@ export default function DemoEventAgenturen() {
         imageAlt="Emilian Leber auf der Bühne beim Magic Dinner"
         reverse
         stat={{ v: "200+", l: "Events" }}
+      />
+
+      <FormatCards
+        eyebrow="Welche Formate passen"
+        title={<>Drei Formate für euer Programm — <span style={{ color: COBALT }}>frei kombinierbar</span>.</>}
+        sub="White-label kombinierbar — was immer eure Kunden brauchen."
+        note="Modular buchbar — passend zum Programm eurer Kunden."
+        formats={[
+          { t: "Close-Up", d: "Magie direkt in den Händen eurer Gäste.", h: "/demo/close-up", Icon: Hand },
+          { t: "Bühnenshow", d: "Comedy & Mentalmagie für den ganzen Saal.", h: "/demo/buehnenshow", Icon: Wand2 },
+          { t: "Magic Dinner", d: "Durchkomponiert über den ganzen Abend.", h: "/demo/magic-dinner", Icon: UtensilsCrossed },
+        ]}
       />
 
       <FlowBand

@@ -1,9 +1,9 @@
 /** /demo/comedy — Comedy-Zauberei (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
-import { SplitFeature, Bento, InteractiveTabs, NotificationFlow } from "@/components/voltage/creative";
+import { SplitFeature, ExampleSets, Bento, InteractiveTabs, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Smile, Mail, Clock, CalendarCheck } from "lucide-react";
+import { Smile, Mail, Clock, CalendarCheck, Gauge, Users, Sparkles } from "lucide-react";
 import heroImg from "@/assets/emotionen.jpg";
 import splitImg from "@/assets/audience-reactions.jpg";
 import bentoImg from "@/assets/zuschauer-blau.jpg";
@@ -36,6 +36,23 @@ export default function DemoComedy() {
         image={splitImg}
         imageAlt="Begeisterte Reaktionen im Publikum"
         stat={{ v: "200+", l: "Events seit 2016" }}
+      />
+
+      <ExampleSets
+        eyebrow="Beispiel-Sets"
+        title={<>So kann euer Comedy-Set aussehen<span style={{ color: COBALT }}>.</span></>}
+        sub="Von der Pointe zwischendurch bis zum Headliner."
+        sets={[
+          { tag: "15 Min", t: "Der Slot", d: "Pointierter Comedy-Magie-Auftritt zwischen zwei Programmpunkten." },
+          { tag: "30 Min", t: "Die Show", d: "Comedy und Mentalmagie im Wechsel, mit Pointen-Finale." },
+          { tag: "45+ Min", t: "Der Headliner", d: "Der Hauptact des Abends — Lacher und Staunen im Sekundentakt." },
+        ]}
+        options={[
+          { Icon: Clock, t: "Länge", d: "15–45 Min" },
+          { Icon: Gauge, t: "Comedy-Dosis", d: "nach Anlass" },
+          { Icon: Users, t: "Gäste", d: "30–500" },
+          { Icon: Sparkles, t: "Themen", d: "auf euer Event" },
+        ]}
       />
 
       <Bento
