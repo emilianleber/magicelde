@@ -1,9 +1,16 @@
-/** /demo/buehnenshow — Show-Detail-Template (Bühnenshow). Echte Inhalte. */
+/** /demo/buehnenshow — Show-Detail (kreativ, abwechslungsreich). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, FactsGrid, Statement, GlassFeatures, Steps, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SplitFeature, FlowBand, Bento, InteractiveTabs, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Clock, Users, Maximize, Mic2, Sparkles, Smile, Award, Layers, Wand2, Hand } from "lucide-react";
-import stageImg from "@/assets/buehne-dpsg.jpg";
+import { Sparkles, Smile, Award } from "lucide-react";
+import heroImg from "@/assets/buehne-dpsg.jpg";
+import splitImg from "@/assets/stage-show.jpg";
+import bentoImg from "@/assets/buehne-zuschauer.jpg";
+import darkImg from "@/assets/greatest-talent-presse.jpg";
+import tab1 from "@/assets/buehne-zuschauer.jpg";
+import tab2 from "@/assets/magicdinner-buehne.jpg";
+import tab3 from "@/assets/greatest-talent-presse.jpg";
 
 export default function DemoBuehnenshow() {
   return (
@@ -16,53 +23,74 @@ export default function DemoBuehnenshow() {
         eyebrow="Konzept · Bühnenshow"
         title={<>Bühnenshow mit <span style={{ color: COBALT }}>Drama-Kurve</span><span style={{ color: MAGENTA }}>.</span></>}
         sub="Eine durchkomponierte Show für den ganzen Saal: Mentalmagie, Comedy-Pointen und ein Finale, bei dem alle aufstehen. Kein Trick-Marathon — ein Abend mit Spannungsbogen."
-        image={stageImg}
+        image={heroImg}
         imageAlt="Emilian Leber bei einer Bühnenshow"
         badge="Standing Ovations — Show, bei der der ganze Saal mitgeht."
         secondary={{ label: "Show ansehen", href: "/demo#show" }}
       />
 
-      <FactsGrid items={[
-        { Icon: Clock, k: "Dauer", v: "15 – 60 Minuten" },
-        { Icon: Users, k: "Gäste", v: "50 – 500 Personen" },
-        { Icon: Maximize, k: "Bühne", v: "ab 2 × 1,5 m" },
-        { Icon: Mic2, k: "Technik", v: "Headset & Ton inkl." },
-      ]} />
+      <SplitFeature
+        eyebrow="Mentalmagie trifft Comedy"
+        title={<>Zwei Dinge gleichzeitig: <span style={{ color: COBALT }}>staunen</span> und lachen.</>}
+        sub="Die Show ist nicht Trick an Trick gereiht, sondern erzählt. Mentaleffekte bauen Spannung auf, Comedy löst sie — bis zum großen Schluss."
+        points={["Gedanken lesen, Vorhersagen, Unmögliches — live am Publikum", "Comedy, über die mitgelacht wird — nie über jemanden", "Echte Interaktion ohne Fremdscham"]}
+        image={splitImg}
+        imageAlt="Emilian Leber auf der Bühne mit Gast"
+        stat={{ v: "10 J.", l: "Bühnen-Erfahrung" }}
+      />
 
-      <Statement>Keine Trick-Parade — jede Minute hat einen <span style={{ color: COBALT }}>Spannungsbogen</span>.</Statement>
-
-      <GlassFeatures
-        eyebrow="Was die Show ausmacht"
-        title="Sechs Dinge, die hängenbleiben."
-        sub="Mentalmagie trifft Comedy — modular auf eure Eventlänge und euren Anlass abgestimmt."
-        items={[
-          { Icon: Sparkles, t: "Mentalmagie", d: "Gedanken, Vorhersagen, Unmögliches — sauber gebaut, live am Publikum." },
-          { Icon: Smile, t: "Comedy-Pointen", d: "Gelacht wird mit, nie über jemanden. Humor, der den Saal mitnimmt." },
-          { Icon: Award, t: "Standing-Ovation-Finale", d: "Jeder Slot endet auf einem Höhepunkt — der Moment, über den man redet." },
-          { Icon: Layers, t: "Drei Längen", d: "15, 30 oder 45–60 Minuten — passend in euren Ablauf eingetaktet." },
-          { Icon: Wand2, t: "Maßgeschneidert", d: "Tonalität von Premium-Gala bis Comedy-lastig — dosiert nach Anlass." },
-          { Icon: Hand, t: "Echte Interaktion", d: "Gäste werden eingebunden — ohne Fremdscham, mit echtem Aha." },
+      <FlowBand
+        eyebrow="Die Drama-Kurve"
+        title="Jede Minute hat einen Bogen."
+        sub="Aufbau, Mittelteil, Finale — die Show ist getaktet wie ein guter Film. Am Ende steht der Saal."
+        milestones={[
+          { t: "Aufbau", d: "Der Einstieg, der sofort alle mitnimmt." },
+          { t: "Mittelteil", d: "Mentalmagie und Comedy im Wechsel." },
+          { t: "Finale", d: "Der Höhepunkt mit Standing Ovation." },
         ]}
       />
 
-      <Steps
-        eyebrow="Drei Slots"
-        title="Einzeln oder kombiniert."
-        sub="Je nach Eventlänge und Programmpunkten — ich takte die Show in euren Abend ein."
+      <Bento
+        eyebrow="Was hängenbleibt"
+        title="Sechs Dinge, die eure Gäste mitnehmen."
+        sub="Mentalmagie, Comedy und große Momente — modular auf eure Eventlänge abgestimmt."
         items={[
-          { t: "Kurz · 15 Min", d: "Der pointierte Auftritt zwischen zwei Programmpunkten — Gala, Award, Empfang." },
-          { t: "Standard · 30 Min", d: "Die runde Show mit Aufbau, Mittelteil und Finale — der Klassiker für Feiern." },
-          { t: "Headliner · 45–60 Min", d: "Der Hauptact des Abends mit voller Drama-Kurve und großem Schluss." },
+          { kind: "photo", span: "col-span-2 row-span-2", image: bentoImg, chip: "Standing Ovations", title: "Der Moment, in dem alle gleichzeitig aufstehen." },
+          { kind: "cobalt", span: "col-span-1", v: "200+", l: "Events seit 2016" },
+          { kind: "glass", span: "col-span-1", Icon: Sparkles, t: "Mentalmagie", d: "Sauber gebaut, live am Publikum." },
+          { kind: "quote", span: "col-span-2", text: "Bühnenshow als Finale — alle Gäste begeistert.", name: "Jan von Lehmann · Eventleitung" },
         ]}
+      />
+
+      <InteractiveTabs
+        eyebrow="Drei Slots"
+        title="Einzeln oder kombiniert — eingetaktet in euren Abend."
+        tabs={[
+          { t: "Kurz · 15 Min", d: "Der pointierte Auftritt zwischen zwei Programmpunkten — Gala, Award, Empfang.", img: tab1 },
+          { t: "Standard · 30 Min", d: "Die runde Show mit Aufbau, Mittelteil und Finale — der Klassiker für Feiern.", img: tab2 },
+          { t: "Headliner · 45–60 Min", d: "Der Hauptact des Abends mit voller Drama-Kurve und großem Schluss.", img: tab3 },
+        ]}
+      />
+
+      <DarkShowcase
+        eyebrow="Kein Risiko"
+        title={<>Routine, die euch <span style={{ color: COBALT }}>Sicherheit</span> gibt.</>}
+        paras={[
+          "Über 200 Events seit 2016 — von der Hochzeit bis zur TV-Bühne. 3× TV-Finalist, dabei jeder Auftritt vorbereitet und auf euren Anlass abgestimmt.",
+          "Headset und Ton sind inklusive, die Bühne braucht nur 2 × 1,5 m. Tech-Rider auf Anfrage. Ihr müsst euch um nichts kümmern.",
+        ]}
+        image={darkImg}
+        imageAlt="Emilian Leber auf einer großen Bühne"
+        badge="3× TV-Finalist"
       />
 
       <PullQuote
-        text="Bühnenshow als Finale — alle Gäste begeistert. Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert."
+        text="Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega. Alle Gäste begeistert."
         name="Jan von Lehmann"
         role="Eventleitung · 200 Gäste"
       />
 
-      <ReviewsBlock />
+      <ReviewsBlock paper={false} />
 
       <FinalCTA
         title={<>Bereit für die Show, bei der alle aufstehen<span style={{ color: MAGENTA }}>?</span></>}
