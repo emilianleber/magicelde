@@ -16,6 +16,8 @@ import {
   Wand2, Hand, UtensilsCrossed, Mic2, Smile, Menu, X, Instagram, Youtube, Linkedin, Facebook, Award, Clock, Layers, ChevronLeft, ChevronRight, Check, CalendarCheck,
 } from "lucide-react";
 import { TVA_VIDEO_ID } from "@/lib/videos";
+import VoltageHeader from "@/components/voltage/VoltageHeader";
+import VoltageFooter from "@/components/voltage/VoltageFooter";
 
 import siteLogo from "@/assets/logo-clean.webp";
 import portraitImg from "@/assets/magician-portrait.jpg";
@@ -193,79 +195,7 @@ const StartDemo = () => {
       `}</style>
 
       {/* ══ HEADER ══ */}
-      <div className="hidden md:flex items-center justify-between px-10 py-2.5 text-[12.5px]" style={{ background: INK, color: D_DIM }}>
-        <div className="flex items-center gap-6">
-          <a href={PHONE} className="hover:text-white inline-flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> +49 155 63744696</a>
-          <a href="mailto:el@magicel.de" className="hover:text-white inline-flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" /> el@magicel.de</a>
-          <span className="inline-flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" /> Regensburg & deutschlandweit</span>
-        </div>
-        <span className="inline-flex items-center gap-2" style={{ color: WHITE }}><span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: COBALT }} /> Termine 2026 frei</span>
-      </div>
-
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-5 md:px-10 py-4 transition-colors duration-300" style={{ background: scrolled || menuOpen ? `${WHITE}f5` : "transparent", backdropFilter: scrolled || menuOpen ? "blur(14px)" : "none", borderBottom: `1px solid ${scrolled || menuOpen ? L_LINE : "transparent"}` }}>
-        <a href="#top" className="flex items-center gap-2.5 shrink-0"><img src={siteLogo} alt="Emilian Leber" className="h-7 w-auto" /><span className="text-[16px] font-extrabold tracking-tight" style={{ color: INK }}>Emilian Leber</span></a>
-        <div className="hidden lg:flex items-center gap-7 text-[14px] font-medium" style={{ color: INK }}>
-          <div className="pv-has-dd relative">
-            <button className="inline-flex items-center gap-1 py-2">Shows <ChevronDown className="w-3.5 h-3.5" /></button>
-            <div className="pv-dd absolute top-full left-0 pt-3 z-50">
-              <div className="w-[700px] rounded-[18px] p-3 grid grid-cols-[1fr_240px] gap-3" style={panel}>
-                <div className="grid grid-cols-2 gap-1">
-                  {SHOWS_MENU.map(({ t, d, Icon, h }) => (
-                    <a key={t} href={h} className="flex gap-3 p-3 rounded-[12px] transition-colors hover:bg-[#F5F3EF]">
-                      <span className="shrink-0 w-9 h-9 rounded-[9px] flex items-center justify-center" style={{ background: `${COBALT}12`, color: COBALT }}><Icon className="w-[18px] h-[18px]" /></span>
-                      <span className="min-w-0"><span className="block text-[14px] font-semibold leading-tight" style={{ color: INK }}>{t}</span><span className="block text-[12px] leading-snug mt-0.5" style={{ color: L_DIM }}>{d}</span></span>
-                    </a>
-                  ))}
-                </div>
-                <a href="/magic-dinner" className="relative rounded-[14px] overflow-hidden flex flex-col justify-end p-4" style={{ minHeight: 200 }}>
-                  <img src={dinnerImg} alt="" className="absolute inset-0 w-full h-full object-cover object-top" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,15,0.1), rgba(10,11,15,0.85))" }} />
-                  <div className="relative">
-                    <span className="text-[10px] tracking-[0.12em] uppercase font-bold px-2 py-1 rounded" style={{ background: COBALT, color: WHITE }}>Beliebt</span>
-                    <h4 className="text-white text-lg font-bold mt-2">Magic Dinner</h4>
-                    <span className="inline-flex items-center gap-1 text-[12px] font-semibold mt-1.5" style={{ color: WHITE }}>Ansehen <ArrowRight className="w-3.5 h-3.5" /></span>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-          <a href="#warum" className="pv-link py-2">Warum Emilian</a>
-          <a href="#anlaesse" className="pv-link py-2">Anlässe</a>
-          <a href="/referenzen" className="pv-link py-2">Referenzen</a>
-          <a href="/ueber-mich" className="pv-link py-2">Über</a>
-          <a href="/kontakt" className="pv-link py-2">Kontakt</a>
-        </div>
-        <div className="flex items-center gap-2">
-          <a href="/buchung" className={`${cta} hidden sm:inline-flex`} style={{ background: COBALT, color: WHITE, padding: "10px 20px" }}>Anfragen <ArrowRight className="w-4 h-4" /></a>
-          <button className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ border: `1px solid ${L_LINE}`, color: INK }} aria-label="Menü öffnen" onClick={() => setMenuOpen((v) => !v)}>
-            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="lg:hidden fixed inset-0 z-[55] flex flex-col" style={{ background: WHITE }}>
-            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: `1px solid ${L_LINE}` }}>
-              <span className="text-[16px] font-extrabold" style={{ color: INK }}>Emilian Leber</span>
-              <button onClick={() => setMenuOpen(false)} aria-label="Menü schließen" className="inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ border: `1px solid ${L_LINE}`, color: INK }}><X className="w-5 h-5" /></button>
-            </div>
-            <div className="flex-1 flex flex-col justify-center px-7">
-              {NAV.map((n, i) => (
-                <motion.a key={n.t} href={n.h} onClick={() => setMenuOpen(false)} initial={{ opacity: 0, x: -14 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.06 + i * 0.05 }} className="py-3 font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,9vw,2.75rem)", color: INK, lineHeight: 1.1 }}>{n.t}<span style={{ color: COBALT }}>.</span></motion.a>
-              ))}
-            </div>
-            <div className="px-7 pb-10 space-y-5">
-              <a href="/buchung" onClick={() => setMenuOpen(false)} className="flex items-center justify-center gap-2 rounded-full px-6 py-4 text-[16px] font-semibold" style={{ background: COBALT, color: WHITE }}>Termin anfragen <ArrowRight className="w-4 h-4" /></a>
-              <div className="flex items-center gap-6 text-[15px]" style={{ color: L_DIM }}>
-                <a href={PHONE} className="inline-flex items-center gap-2"><Phone className="w-4 h-4" style={{ color: COBALT }} /> Anrufen</a>
-                <a href="mailto:el@magicel.de" className="inline-flex items-center gap-2"><Mail className="w-4 h-4" style={{ color: COBALT }} /> E-Mail</a>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <VoltageHeader scrolled={scrolled} />
 
       {/* ══ HERO ══ */}
       <header id="top" className="relative overflow-hidden px-5 md:px-10 pt-12 md:pt-20 pb-14 md:pb-24" style={{ background: WHITE }}>
@@ -632,39 +562,7 @@ const StartDemo = () => {
       </motion.section>
 
       {/* ══ FOOTER ══ */}
-      <footer className="relative overflow-hidden" style={{ background: INK, color: D_DIM }}>
-        <div aria-hidden className="absolute -top-32 -right-24 w-[560px] h-[560px] rounded-full pointer-events-none" style={{ background: `radial-gradient(circle, ${COBALT}26, transparent 60%)` }} />
-        <div className="relative max-w-7xl mx-auto px-5 md:px-10 pt-20 md:pt-24 pb-10 grid grid-cols-2 md:grid-cols-12 gap-y-12 gap-x-8">
-          <div className="col-span-2 md:col-span-4">
-            <div className="flex items-center gap-2.5"><img src={siteLogo} alt="Emilian Leber" className="h-7 w-auto" style={{ filter: "brightness(0) invert(1)" }} /><span className="text-[22px] font-extrabold tracking-tight" style={{ color: WHITE }}>Emilian Leber</span></div>
-            <p className="text-[15px] leading-[1.65] mt-4 max-w-xs" style={{ color: D_DIM }}>Comedy-Zauberer aus Regensburg. Bühnenshow, Close-Up und Magic Dinner für Hochzeiten, Firmenfeiern & Events — deutschlandweit.</p>
-            <div className="mt-6 space-y-2.5 text-[14.5px]">
-              <a href={PHONE} className="flex items-center gap-2.5 hover:text-white transition-colors"><Phone className="w-4 h-4" style={{ color: COBALT }} /> +49 155 63744696</a>
-              <a href="mailto:el@magicel.de" className="flex items-center gap-2.5 hover:text-white transition-colors"><Mail className="w-4 h-4" style={{ color: COBALT }} /> el@magicel.de</a>
-              <span className="flex items-center gap-2.5"><MapPin className="w-4 h-4" style={{ color: COBALT }} /> Regensburg & deutschlandweit</span>
-            </div>
-            <div className="flex items-center gap-3 mt-7">{[
-              { Ic: Instagram, href: "https://www.instagram.com/_magicel/" },
-              { Ic: Youtube, href: "https://www.youtube.com/channel/UCDm5lC0Dq3b8vhJpwRJcXCA" },
-              { Ic: Facebook, href: "https://www.facebook.com/people/Emilian-Leber-Zauberer-Mentalist/61582946450467/" },
-              { Ic: Linkedin, href: "https://de.linkedin.com/in/emilian-leber-3b3414369" },
-            ].map(({ Ic, href }, i) => (<a key={i} href={href} target="_blank" rel="noopener noreferrer" aria-label="Social" className="w-11 h-11 rounded-full flex items-center justify-center transition-colors hover:text-white hover:border-white/40" style={{ border: `1px solid ${D_LINE}` }}><Ic className="w-[18px] h-[18px]" /></a>))}</div>
-          </div>
-          <div className="md:col-span-2 md:col-start-7"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Konzepte</p><ul className="space-y-3 text-[14.5px]">{SHOWS_MENU.map((s) => <li key={s.t}><a href={s.h} className="hover:text-white transition-colors">{s.t}</a></li>)}</ul></div>
-          <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Anlässe</p><ul className="space-y-3 text-[14.5px]">{ANLAESSE.map((a) => <li key={a.t}><a href="#anlaesse" className="hover:text-white transition-colors">{a.t}</a></li>)}</ul></div>
-          <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Kontakt</p><ul className="space-y-3 text-[14.5px]"><li><a href="/kontakt" className="hover:text-white transition-colors">Termin anfragen</a></li><li><a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a></li>{STAEDTE.slice(0, 3).map((c) => <li key={c}><a href={`/zauberer/${({ "München": "muenchen", "Nürnberg": "nuernberg", "Würzburg": "wuerzburg" } as Record<string, string>)[c] || c.toLowerCase()}`} className="hover:text-white transition-colors">Zauberer {c}</a></li>)}</ul></div>
-        </div>
-        {/* Riesen-Wortmarke */}
-        <div className="relative px-5 md:px-10">
-          <div className="max-w-7xl mx-auto" style={{ borderTop: `1px solid ${D_LINE}` }}>
-            <p className="font-extrabold tracking-[-0.04em] leading-[0.82] py-9 md:py-12 select-none whitespace-nowrap" style={{ fontSize: "clamp(3rem,14vw,12rem)", color: "rgba(255,255,255,0.055)" }}>Erst staunen.</p>
-          </div>
-        </div>
-        <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[12.5px]" style={{ borderTop: `1px solid ${D_LINE}` }}>
-          <div className="flex items-center gap-6"><a href="#" className="hover:text-white transition-colors">Impressum</a><a href="#" className="hover:text-white transition-colors">Datenschutz</a><a href="#" className="hover:text-white transition-colors">AGB</a></div>
-          <span>© 2026 Emilian Leber · Demo-Entwurf</span>
-        </div>
-      </footer>
+      <VoltageFooter />
     </div>
   );
 };

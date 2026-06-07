@@ -14,10 +14,16 @@ const NAV_MOBILE = [
   { t: "Bühnenshow", h: "/buehnenshow" },
   { t: "Close-Up", h: "/close-up" },
   { t: "Magic Dinner", h: "/magic-dinner" },
+  { t: "Moderation", h: "/moderation" },
+  { t: "Comedy-Zauberei", h: "/comedy-zauberei" },
   { t: "Hochzeit", h: "/hochzeit" },
   { t: "Firmenfeier", h: "/firmenfeiern" },
+  { t: "Geburtstag · Jubiläum", h: "/geburtstage" },
+  { t: "Event-Agenturen", h: "/event-agenturen" },
+  { t: "Messe · Roadshow", h: "/messe-magier" },
   { t: "Referenzen", h: "/referenzen" },
   { t: "Über mich", h: "/ueber-mich" },
+  { t: "Tickets", h: "/tickets" },
   { t: "Kontakt", h: "/kontakt" },
 ];
 
@@ -82,6 +88,7 @@ export default function VoltageHeader({ scrolled }: { scrolled: boolean }) {
             </div>
           </div>
           <Link to="/referenzen" className="pv-link py-2">Referenzen</Link>
+          <Link to="/tickets" className="pv-link py-2">Tickets</Link>
           <Link to="/ueber-mich" className="pv-link py-2">Über mich</Link>
           <Link to="/kontakt" className="pv-link py-2">Kontakt</Link>
         </div>
@@ -98,11 +105,11 @@ export default function VoltageHeader({ scrolled }: { scrolled: boolean }) {
         <div className="lg:hidden fixed inset-0 z-[55] flex flex-col" style={{ background: WHITE }}>
           <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: `1px solid ${L_LINE}` }}>
             <Logo />
-            <button onClick={() => setMenuOpen(false)} aria-label="Menü schließen" className="inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ border: `1px solid ${L_LINE}`, color: INK }}><X className="w-5 h-5" /></button>
+            <button onClick={() => setMenuOpen(false)} aria-label="Menü schließen" className="inline-flex items-center gap-2 justify-center h-11 px-4 rounded-full text-[14px] font-semibold" style={{ background: INK, color: WHITE }}>Schließen <X className="w-4 h-4" /></button>
           </div>
-          <div className="flex-1 overflow-y-auto flex flex-col justify-center px-7">
+          <div className="flex-1 overflow-y-auto flex flex-col justify-start px-7 py-6">
             {NAV_MOBILE.map((n) => (
-              <Link key={n.t} to={n.h} onClick={() => setMenuOpen(false)} className="py-2.5 font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.6rem,7vw,2.2rem)", color: INK, lineHeight: 1.15 }}>{n.t}<span style={{ color: COBALT }}>.</span></Link>
+              <Link key={n.t} to={n.h} onClick={() => setMenuOpen(false)} className="py-2 font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.3rem,5.5vw,1.75rem)", color: INK, lineHeight: 1.2 }}>{n.t}<span style={{ color: COBALT }}>.</span></Link>
             ))}
           </div>
           <div className="px-7 pb-10 space-y-5">
