@@ -15,10 +15,10 @@ import {
   Sparkles,
 } from "lucide-react";
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
+/* Voltage: Cobalt statt Burgunder, kein Serif/Italic. */
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const SERIF_ITALIC = "not-italic";
 const SITE_URL = "https://www.magicel.de";
 
 // Extrahiert den Service-Slug aus dem URL-Pfad.
@@ -169,7 +169,7 @@ const Hero = ({ service, city, h1 }: { service: ServiceFormat; city: Stadt; h1: 
         </p>
         <h1 className="font-display font-black tracking-[-0.03em] leading-[1.0] text-[clamp(1.875rem,4vw,3.25rem)] text-white max-w-4xl">
           {service.hero.titlePrefix}{" "}
-          <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+          <span className={SERIF_ITALIC} style={{ color: "#AFC0FF" }}>
             {city.name}.
           </span>
         </h1>
@@ -200,7 +200,7 @@ const Hero = ({ service, city, h1 }: { service: ServiceFormat; city: Stadt; h1: 
           </span>
           <span aria-hidden className="text-white/25">·</span>
           <span className="inline-flex items-center gap-2">
-            <MapPin className="w-4 h-4" style={{ color: "#f3d9a8" }} />
+            <MapPin className="w-4 h-4" style={{ color: "#AFC0FF" }} />
             <span>{city.name} · {city.region}</span>
           </span>
         </div>
@@ -386,7 +386,7 @@ const FinalCta = ({ service, city }: { service: ServiceFormat; city: Stadt }) =>
       </p>
       <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.875rem)]">
         Bereit für{" "}
-        <span className={SERIF_ITALIC} style={{ color: "#e4b8c0" }}>
+        <span className={SERIF_ITALIC} style={{ color: "#C7D2FF" }}>
           {service.shortName} in {city.name}?
         </span>
       </h2>

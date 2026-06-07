@@ -40,11 +40,11 @@ import LogoMarquee from "@/components/landing/LogoMarquee";
 import { CustomQuizSection, CustomQuizConfig } from "@/components/landing/CustomQuiz";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+/* Voltage: kein Serif/Italic mehr — betonte Wörter bleiben (Cobalt via ACCENT inline). */
+const SERIF_ITALIC = "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 
 /* ═══════════════════════════════════════════════════════════
    SEO Keywords — pro Stadt durchsubstituiert
@@ -244,7 +244,7 @@ const Hero = ({ data }: { data: Stadt }) => {
               style={{
                 animationDelay: `${0.3 + HEADLINE_SANS.length * 0.08}s`,
                 paddingRight: "0.15em",
-                color: "#f3d9a8",
+                color: "#AFC0FF",
               }}
             >
               {data.name}.
@@ -718,7 +718,7 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-3">
                   <Link
                     to={a.link}
-                    className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight hover:text-[#9a2640] transition-colors"
+                    className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight hover:text-[#1D3FFF] transition-colors"
                   >
                     {a.label}
                   </Link>
@@ -746,7 +746,7 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
               <Link
                 to={a.link}
                 aria-label={`Mehr zu ${a.label}`}
-                className="hidden md:inline-flex items-center justify-center w-11 h-11 rounded-full transition-all duration-500 group-hover:bg-[#9a2640] group-hover:text-white text-foreground/30 self-start mt-2"
+                className="hidden md:inline-flex items-center justify-center w-11 h-11 rounded-full transition-all duration-500 group-hover:bg-[#1D3FFF] group-hover:text-white text-foreground/30 self-start mt-2"
               >
                 <ArrowUpRight className="w-4 h-4" />
               </Link>
@@ -968,7 +968,7 @@ const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
               </Link>
               <Link
                 to={`/buchung?ort=${encodeURIComponent(data.name)}&format=Hochzeit`}
-                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-white border border-foreground/15 hover:border-[#9a2640]/40 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-white border border-foreground/15 hover:border-[#1D3FFF]/40 transition-colors"
               >
                 Hochzeit in {data.name} anfragen
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1115,7 +1115,7 @@ const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
               </Link>
               <Link
                 to={`/buchung?ort=${encodeURIComponent(data.name)}&format=Firma`}
-                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-[hsl(0,0%,98%)] border border-foreground/15 hover:border-[#9a2640]/40 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-[hsl(0,0%,98%)] border border-foreground/15 hover:border-[#1D3FFF]/40 transition-colors"
               >
                 Firmenfeier {data.name} anfragen
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1216,13 +1216,13 @@ const GarantienSection = ({ data }: { data: Stadt }) => {
               />
               <p
                 className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3"
-                style={{ color: "#f3d9a8" }}
+                style={{ color: "#AFC0FF" }}
               >
                 Risk auf Null
               </p>
               <h3 className="relative font-display text-2xl md:text-3xl font-black leading-[1.1] mb-5">
                 Im Angebot{" "}
-                <span style={{ color: "#f3d9a8" }}>
+                <span style={{ color: "#AFC0FF" }}>
                   schriftlich fixiert
                 </span>
                 .
@@ -1340,13 +1340,13 @@ const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => {
             >
               <p
                 className="text-[10px] tracking-[0.18em] uppercase font-bold mb-2"
-                style={{ color: "#f3d9a8" }}
+                style={{ color: "#AFC0FF" }}
               >
                 {g.kicker}
               </p>
               <p
                 className={`${SERIF_ITALIC} text-2xl md:text-3xl mb-4`}
-                style={{ color: "#f3d9a8" }}
+                style={{ color: "#AFC0FF" }}
               >
                 {g.gang}.
               </p>
@@ -1448,13 +1448,13 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
               <div className="relative">
                 <p
                   className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3"
-                  style={{ color: "#f3d9a8" }}
+                  style={{ color: "#AFC0FF" }}
                 >
                   Verfügbarkeit {year}–{year + 1}
                 </p>
                 <h3 className="font-display text-2xl md:text-3xl font-black leading-[1.1] mb-5">
                   Termine in {data.name} aktuell{" "}
-                  <span style={{ color: "#f3d9a8" }}>
+                  <span style={{ color: "#AFC0FF" }}>
                     verfügbar
                   </span>
                   .
@@ -1553,7 +1553,7 @@ const LocationsSection = ({
           {data.bekannteLocations.map((loc) => (
             <span
               key={loc}
-              className="inline-flex items-center gap-2 font-sans text-sm text-foreground/80 px-5 py-3 rounded-full bg-white border border-foreground/10 hover:border-[color:var(--accent-color,#9a2640)]/40 transition-colors"
+              className="inline-flex items-center gap-2 font-sans text-sm text-foreground/80 px-5 py-3 rounded-full bg-white border border-foreground/10 hover:border-[color:var(--accent-color,#1D3FFF)]/40 transition-colors"
             >
               <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               {loc}
@@ -1808,13 +1808,13 @@ const PullQuoteSection = ({ data }: { data: Stadt }) => {
       >
         <Quote
           className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40"
-          style={{ color: "#f3d9a8" }}
+          style={{ color: "#AFC0FF" }}
           strokeWidth={1.25}
         />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Drei Sekunden Stille.{" "}
-            <span style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#AFC0FF" }}>
               Dann lacht ein Saal in {data.name}.
             </span>
           </p>
@@ -1982,7 +1982,7 @@ const KollegenEmpfehlungSection = ({
               href={empfehlung.linkHref}
               target="_blank"
               rel="noopener"
-              className="text-foreground underline decoration-foreground/30 underline-offset-4 hover:decoration-[#9a2640] transition-colors"
+              className="text-foreground underline decoration-foreground/30 underline-offset-4 hover:decoration-[#1D3FFF] transition-colors"
             >
               {empfehlung.linkText}
             </a>
@@ -2039,7 +2039,7 @@ const WeitereStaedteSection = ({ current }: { current: string }) => {
                 <Link
                   key={s.slug}
                   to={`/zauberer/${s.slug}`}
-                  className="inline-flex items-center gap-1.5 font-sans text-sm text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full bg-white border border-foreground/10 hover:border-[#9a2640]/30"
+                  className="inline-flex items-center gap-1.5 font-sans text-sm text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full bg-white border border-foreground/10 hover:border-[#1D3FFF]/30"
                 >
                   Zauberer {s.name}
                 </Link>
@@ -2060,7 +2060,7 @@ const WeitereStaedteSection = ({ current }: { current: string }) => {
                 <Link
                   key={s.slug}
                   to={`/zauberer/${s.slug}`}
-                  className="inline-flex items-center gap-1.5 font-sans text-sm text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full bg-white border border-foreground/10 hover:border-[#9a2640]/30"
+                  className="inline-flex items-center gap-1.5 font-sans text-sm text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full bg-white border border-foreground/10 hover:border-[#1D3FFF]/30"
                 >
                   Zauberer {s.name}
                 </Link>
