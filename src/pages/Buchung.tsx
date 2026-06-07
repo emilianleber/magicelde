@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
-import PageLayout from "@/components/landing/PageLayout";
+import VoltageShell from "@/components/voltage/VoltageShell";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Shield,
@@ -207,23 +206,16 @@ const Buchung = () => {
     "w-full rounded-xl border border-foreground/15 bg-white px-4 py-3 text-base text-foreground placeholder:text-foreground/40 focus:border-[color:var(--ac)] focus:outline-none focus:ring-2 focus:ring-[color:var(--ac)]/15 transition-colors";
 
   return (
-    <>
-      <Helmet>
-        <html lang="de" />
-        <title>Anfrage senden — Zauberer Emilian Leber | Bayern</title>
-        <meta
-          name="description"
-          content="Anfrage für Hochzeit, Firmenfeier, Geburtstag oder Magic Dinner — unverbindlich und kostenlos. Antwort innerhalb 24 Stunden. 5,0★ · 200+ Events."
-        />
-        <meta name="robots" content="index,follow" />
-        <link rel="canonical" href="https://www.magicel.de/buchung" />
-      </Helmet>
-
-      <PageLayout>
-        <main
-          className="container px-6 pt-28 md:pt-36 pb-20"
-          style={{ ["--ac" as never]: ACCENT }}
-        >
+    <VoltageShell
+      title="Anfrage senden — Zauberer Emilian Leber | Bayern"
+      description="Anfrage für Hochzeit, Firmenfeier, Geburtstag oder Magic Dinner — unverbindlich und kostenlos. Antwort innerhalb 24 Stunden. 5,0★ · 200+ Events."
+      path="/buchung"
+      noindex={false}
+    >
+      <div
+        className="container px-6 pt-12 md:pt-16 pb-20"
+        style={{ ["--ac" as never]: ACCENT }}
+      >
           <div className="max-w-3xl mx-auto">
             {/* Header */}
             <div className="mb-10 md:mb-12">
@@ -492,9 +484,8 @@ const Buchung = () => {
               </p>
             </form>
           </div>
-        </main>
-      </PageLayout>
-    </>
+        </div>
+    </VoltageShell>
   );
 };
 
