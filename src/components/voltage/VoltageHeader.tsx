@@ -10,20 +10,10 @@ import {
 } from "./theme";
 import logo from "@/assets/logo-clean.webp";
 
-const NAV_MOBILE = [
-  { t: "Bühnenshow", h: "/buehnenshow" },
-  { t: "Close-Up", h: "/close-up" },
-  { t: "Magic Dinner", h: "/magic-dinner" },
-  { t: "Moderation", h: "/moderation" },
-  { t: "Comedy-Zauberei", h: "/comedy-zauberei" },
-  { t: "Hochzeit", h: "/hochzeit" },
-  { t: "Firmenfeier", h: "/firmenfeiern" },
-  { t: "Geburtstag · Jubiläum", h: "/geburtstage" },
-  { t: "Event-Agenturen", h: "/event-agenturen" },
-  { t: "Messe · Roadshow", h: "/messe-magier" },
+const NAV_FLAT = [
   { t: "Referenzen", h: "/referenzen" },
-  { t: "Über mich", h: "/ueber-mich" },
   { t: "Tickets", h: "/tickets" },
+  { t: "Über mich", h: "/ueber-mich" },
   { t: "Kontakt", h: "/kontakt" },
 ];
 
@@ -36,6 +26,8 @@ const Logo = () => (
 
 export default function VoltageHeader({ scrolled }: { scrolled: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const closeMenu = () => { setMenuOpen(false); setOpenGroup(null); };
   useEffect(() => {
     document.documentElement.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.documentElement.style.overflow = ""; };
@@ -105,15 +97,29 @@ export default function VoltageHeader({ scrolled }: { scrolled: boolean }) {
         <div className="lg:hidden fixed inset-0 z-[55] flex flex-col" style={{ background: WHITE }}>
           <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: `1px solid ${L_LINE}` }}>
             <Logo />
-            <button onClick={() => setMenuOpen(false)} aria-label="Menü schließen" className="inline-flex items-center gap-2 justify-center h-11 px-4 rounded-full text-[14px] font-semibold" style={{ background: INK, color: WHITE }}>Schließen <X className="w-4 h-4" /></button>
+            <button onClick={closeMenu} aria-label="Menü schließen" className="inline-flex items-center gap-2 justify-center h-11 px-4 rounded-full text-[14px] font-semibold" style={{ background: INK, color: WHITE }}>Schließen <X className="w-4 h-4" /></button>
           </div>
-          <div className="flex-1 overflow-y-auto flex flex-col justify-start px-7 py-6">
-            {NAV_MOBILE.map((n) => (
-              <Link key={n.t} to={n.h} onClick={() => setMenuOpen(false)} className="py-2 font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.3rem,5.5vw,1.75rem)", color: INK, lineHeight: 1.2 }}>{n.t}<span style={{ color: COBALT }}>.</span></Link>
+          <div className="flex-1 overflow-y-auto px-7 py-4">
+            {[{ key: "formate", t: "Formate", items: KONZEPTE }, { key: "anlaesse", t: "Anlässe", items: ANLAESSE_NAV }].map((g) => (
+              <div key={g.key} style={{ borderBottom: `1px solid ${L_LINE}` }}>
+                <button onClick={() => setOpenGroup((v) => (v === g.key ? null : g.key))} className="w-full flex items-center justify-between py-4 font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.4rem,6vw,1.9rem)", color: INK }}>
+                  {g.t}<ChevronDown className="w-6 h-6 shrink-0 transition-transform" style={{ color: COBALT, transform: openGroup === g.key ? "rotate(180deg)" : "none" }} />
+                </button>
+                {openGroup === g.key && (
+                  <div className="pb-4 pl-1 flex flex-col">
+                    {g.items.map((it) => (
+                      <Link key={it.t} to={it.h} onClick={closeMenu} className="py-2.5 text-[17px] font-semibold" style={{ color: L_DIM }}>{it.t}</Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            {NAV_FLAT.map((n) => (
+              <Link key={n.t} to={n.h} onClick={closeMenu} className="block py-4 font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.4rem,6vw,1.9rem)", color: INK, borderBottom: `1px solid ${L_LINE}` }}>{n.t}<span style={{ color: COBALT }}>.</span></Link>
             ))}
           </div>
-          <div className="px-7 pb-10 space-y-5">
-            <Link to={ANFRAGE_HREF} onClick={() => setMenuOpen(false)} className="flex items-center justify-center gap-2 rounded-full px-6 py-4 text-[16px] font-semibold" style={{ background: COBALT, color: WHITE }}>Termin anfragen <ArrowRight className="w-4 h-4" /></Link>
+          <div className="px-7 pb-10 pt-4 space-y-5">
+            <Link to={ANFRAGE_HREF} onClick={closeMenu} className="flex items-center justify-center gap-2 rounded-full px-6 py-4 text-[16px] font-semibold" style={{ background: COBALT, color: WHITE }}>Termin anfragen <ArrowRight className="w-4 h-4" /></Link>
             <div className="flex items-center gap-6 text-[15px]" style={{ color: L_DIM }}>
               <a href={PHONE_HREF} className="inline-flex items-center gap-2"><Phone className="w-4 h-4" style={{ color: COBALT }} /> Anrufen</a>
               <a href={EMAIL_HREF} className="inline-flex items-center gap-2"><Mail className="w-4 h-4" style={{ color: COBALT }} /> E-Mail</a>
