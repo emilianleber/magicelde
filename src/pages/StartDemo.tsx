@@ -21,10 +21,10 @@ import VoltageFooter from "@/components/voltage/VoltageFooter";
 
 import siteLogo from "@/assets/logo-clean.webp";
 import portraitImg from "@/assets/magician-portrait.jpg";
-import stageImg from "@/assets/stage-show.jpg";
-import closeupImg from "@/assets/closeup.jpg";
+import stageImg from "@/assets/staunen.jpg";
+import closeupImg from "@/assets/hero-closeup.jpg";
 import dinnerImg from "@/assets/emilian-magic-dinner.jpg";
-import dinnerBookImg from "@/assets/magicdinner-book.jpg";
+import dinnerBookImg from "@/assets/hero-stage.jpg";
 import weddingImg from "@/assets/wedding-magic.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 import magicdinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
@@ -62,9 +62,9 @@ const SHOWS_MENU = [
 const SHOWS_NAV = SHOWS_MENU.map((s) => s.t);
 const STAEDTE = ["Regensburg", "München", "Nürnberg", "Ingolstadt", "Landshut", "Passau", "Augsburg", "Würzburg"];
 const FORMATE = [
-  { img: stageImg, title: "Bühnenshow", text: "Comedy, Mentalmagie und große Momente — die Show, bei der der ganze Saal mitgeht.", pos: "top" },
-  { img: closeupImg, title: "Close-Up", text: "Magie in den Händen eurer Gäste. Hautnah, interaktiv, zum Mitreden am nächsten Tag.", pos: "center 78%" },
-  { img: dinnerBookImg, title: "Magic Dinner", text: "Walk-Around, Tisch-zu-Tisch und Bühnen-Finale — durchkomponiert zwischen den Gängen.", pos: "center 60%" },
+  { img: stageImg, title: "Bühnenshow", text: "Comedy, Mentalmagie und große Momente — die Show, bei der der ganze Saal mitgeht.", pos: "center" },
+  { img: closeupImg, title: "Close-Up", text: "Magie in den Händen eurer Gäste. Hautnah, interaktiv, zum Mitreden am nächsten Tag.", pos: "center" },
+  { img: dinnerBookImg, title: "Magic Dinner", text: "Walk-Around, Tisch-zu-Tisch und Bühnen-Finale — durchkomponiert zwischen den Gängen.", pos: "center" },
 ];
 const ANLAESSE = [
   { t: "Hochzeit", d: "Der Moment zwischen Trauung und Party — Magie, die Gänsehaut macht.", img: weddingImg, cls: "md:col-span-2 md:row-span-2", big: true },
