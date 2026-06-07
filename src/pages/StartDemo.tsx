@@ -236,7 +236,7 @@ const StartDemo = () => {
           <a href="/kontakt" className="pv-link py-2">Kontakt</a>
         </div>
         <div className="flex items-center gap-2">
-          <a href="#kontakt" className={`${cta} hidden sm:inline-flex`} style={{ background: COBALT, color: WHITE, padding: "10px 20px" }}>Anfragen <ArrowRight className="w-4 h-4" /></a>
+          <a href="/buchung" className={`${cta} hidden sm:inline-flex`} style={{ background: COBALT, color: WHITE, padding: "10px 20px" }}>Anfragen <ArrowRight className="w-4 h-4" /></a>
           <button className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ border: `1px solid ${L_LINE}`, color: INK }} aria-label="Menü öffnen" onClick={() => setMenuOpen((v) => !v)}>
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -257,7 +257,7 @@ const StartDemo = () => {
               ))}
             </div>
             <div className="px-7 pb-10 space-y-5">
-              <a href="#kontakt" onClick={() => setMenuOpen(false)} className="flex items-center justify-center gap-2 rounded-full px-6 py-4 text-[16px] font-semibold" style={{ background: COBALT, color: WHITE }}>Termin anfragen <ArrowRight className="w-4 h-4" /></a>
+              <a href="/buchung" onClick={() => setMenuOpen(false)} className="flex items-center justify-center gap-2 rounded-full px-6 py-4 text-[16px] font-semibold" style={{ background: COBALT, color: WHITE }}>Termin anfragen <ArrowRight className="w-4 h-4" /></a>
               <div className="flex items-center gap-6 text-[15px]" style={{ color: L_DIM }}>
                 <a href={PHONE} className="inline-flex items-center gap-2"><Phone className="w-4 h-4" style={{ color: COBALT }} /> Anrufen</a>
                 <a href="mailto:el@magicel.de" className="inline-flex items-center gap-2"><Mail className="w-4 h-4" style={{ color: COBALT }} /> E-Mail</a>
@@ -283,7 +283,7 @@ const StartDemo = () => {
               Erst staunen, dann lachen — Close-Up, Bühnenshow & Magic Dinner für Hochzeit, Firmenfeier & Gala. Aus Regensburg, deutschlandweit.
             </motion.p>
             <motion.div variants={up} className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-              <a href="#kontakt" className={cta} style={{ background: COBALT, color: WHITE }}>Termin anfragen <ArrowRight className="w-4 h-4" /></a>
+              <a href="/buchung" className={cta} style={{ background: COBALT, color: WHITE }}>Termin anfragen <ArrowRight className="w-4 h-4" /></a>
               <a href="#show" className={ghost} style={{ border: `1px solid ${L_LINE}`, color: INK }}><Play className="w-4 h-4" /> Show ansehen</a>
             </motion.div>
             <motion.div variants={up} className="mt-9 inline-flex items-center gap-3 text-[13px]" style={{ color: L_DIM }}>
@@ -557,7 +557,7 @@ const StartDemo = () => {
                 <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-12 max-w-2xl">
                   <h3 className="font-extrabold text-white" style={{ fontSize: "clamp(1.75rem,3.5vw,3rem)", lineHeight: 1.04 }}>{ANLAESSE[anlassIdx].t}</h3>
                   <p className="mt-3 max-w-lg text-[15px] md:text-base" style={{ color: "rgba(255,255,255,0.85)" }}>{ANLAESSE[anlassIdx].d}</p>
-                  <a href="#kontakt" className="mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold w-fit" style={{ background: WHITE, color: INK }}>{ANLAESSE[anlassIdx].t} anfragen <ArrowRight className="w-4 h-4" /></a>
+                  <a href="/buchung" className="mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold w-fit" style={{ background: WHITE, color: INK }}>{ANLAESSE[anlassIdx].t} anfragen <ArrowRight className="w-4 h-4" /></a>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -625,7 +625,7 @@ const StartDemo = () => {
           <h2 className="relative font-extrabold tracking-[-0.03em] max-w-3xl" style={{ fontSize: "clamp(2.25rem,5.5vw,4.25rem)", lineHeight: 1.0, color: WHITE }}>Bereit, dass eure Gäste staunen — und lachen<span style={{ color: MAGENTA }}>?</span></h2>
           <p className="relative mt-6 max-w-xl text-[16px] md:text-lg leading-[1.55]" style={{ color: "rgba(255,255,255,0.88)" }}>Erzähl mir kurz von eurem Event — ich melde mich innerhalb von 24 Stunden persönlich zurück.</p>
           <div className="relative mt-9 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-            <a href="mailto:el@magicel.de" className={cta} style={{ background: WHITE, color: COBALT }}>Anfrage senden <ArrowRight className="w-4 h-4" /></a>
+            <a href="/buchung" className={cta} style={{ background: WHITE, color: COBALT }}>Anfrage senden <ArrowRight className="w-4 h-4" /></a>
             <a href={PHONE} className={ghost} style={{ border: "1px solid rgba(255,255,255,0.4)", color: WHITE }}><Phone className="w-4 h-4" /> +49 155 63744696</a>
           </div>
         </div>

@@ -26,8 +26,8 @@ export const INSTAGRAM = "https://www.instagram.com/_magicel/";
 export const YOUTUBE = "https://www.youtube.com/channel/UCDm5lC0Dq3b8vhJpwRJcXCA";
 export const FACEBOOK = "https://www.facebook.com/people/Emilian-Leber-Zauberer-Mentalist/61582946450467/";
 export const LINKEDIN = "https://de.linkedin.com/in/emilian-leber-3b3414369";
-/** Anfrage-Ziel (live). */
-export const ANFRAGE_HREF = "/kontakt";
+/** Anfrage-Ziel (live) — strukturiertes Buchungsformular (CRM). */
+export const ANFRAGE_HREF = "/buchung";
 export const SITE_URL = "https://www.magicel.de";
 
 /* ── Navigation (Live-Routen) ── */
