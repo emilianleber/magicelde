@@ -241,7 +241,7 @@ const AdminRoutes = () => (
 // ── Public website + Kundenportal routes (magicel.de) ────────────────────────
 const PublicRoutes = () => (
   <Routes>
-    <Route path="/" element={<Index />} />
+    <Route path="/" element={<StartDemo />} />
     <Route path="/demo" element={<StartDemo />} />
     <Route path="/demo/buehnenshow" element={<DemoBuehnenshow />} />
     <Route path="/demo/close-up" element={<DemoCloseUp />} />
@@ -325,7 +325,7 @@ const App = () => (
           {IS_ADMIN_DOMAIN ? <AdminRoutes /> : IS_DEV ? (
             // localhost: beide Route-Sets verfügbar
             <Routes>
-              <Route path="/" element={<Index />} />
+              <Route path="/" element={<StartDemo />} />
               <Route path="/demo" element={<StartDemo />} />
               <Route path="/demo/buehnenshow" element={<DemoBuehnenshow />} />
               <Route path="/demo/close-up" element={<DemoCloseUp />} />

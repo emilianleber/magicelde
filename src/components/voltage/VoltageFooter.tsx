@@ -8,7 +8,11 @@ import {
 } from "./theme";
 import logo from "@/assets/logo-clean.webp";
 
-const STAEDTE = ["Regensburg", "München", "Nürnberg", "Ingolstadt", "Landshut", "Passau"];
+const STAEDTE: { name: string; slug: string }[] = [
+  { name: "Regensburg", slug: "regensburg" },
+  { name: "München", slug: "muenchen" },
+  { name: "Nürnberg", slug: "nuernberg" },
+];
 const SOCIALS = [
   { Icon: Instagram, href: INSTAGRAM, label: "Instagram" },
   { Icon: Youtube, href: YOUTUBE, label: "YouTube" },
@@ -36,7 +40,7 @@ export default function VoltageFooter() {
         </div>
         <div className="md:col-span-2 md:col-start-7"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Konzepte</p><ul className="space-y-3 text-[14.5px]">{KONZEPTE.map((s) => <li key={s.t}><Link to={s.h} className="hover:text-white transition-colors">{s.t}</Link></li>)}</ul></div>
         <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Anlässe</p><ul className="space-y-3 text-[14.5px]">{ANLAESSE_NAV.map((a) => <li key={a.t}><Link to={a.h} className="hover:text-white transition-colors">{a.t}</Link></li>)}</ul></div>
-        <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Kontakt</p><ul className="space-y-3 text-[14.5px]"><li><Link to="/demo/kontakt" className="hover:text-white transition-colors">Termin anfragen</Link></li><li><a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a></li>{STAEDTE.slice(0, 3).map((c) => <li key={c}><a href={c === "Regensburg" ? "/demo/zauberer-regensburg" : "#"} className="hover:text-white transition-colors">Zauberer {c}</a></li>)}</ul></div>
+        <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Kontakt</p><ul className="space-y-3 text-[14.5px]"><li><Link to="/kontakt" className="hover:text-white transition-colors">Termin anfragen</Link></li><li><a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a></li>{STAEDTE.map((c) => <li key={c.slug}><Link to={`/zauberer/${c.slug}`} className="hover:text-white transition-colors">Zauberer {c.name}</Link></li>)}</ul></div>
       </div>
       <div className="relative px-5 md:px-10">
         <div className="max-w-7xl mx-auto" style={{ borderTop: `1px solid ${D_LINE}` }}>
@@ -45,7 +49,7 @@ export default function VoltageFooter() {
       </div>
       <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[12.5px]" style={{ borderTop: `1px solid ${D_LINE}` }}>
         <div className="flex items-center gap-6"><a href="/impressum" className="hover:text-white transition-colors">Impressum</a><a href="/datenschutz" className="hover:text-white transition-colors">Datenschutz</a><a href="/agb" className="hover:text-white transition-colors">AGB</a></div>
-        <span>© 2026 Emilian Leber · MagicEL Entertainment · Demo-Entwurf</span>
+        <span>© 2026 Emilian Leber · MagicEL Entertainment</span>
       </div>
     </footer>
   );

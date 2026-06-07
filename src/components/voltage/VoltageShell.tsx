@@ -41,7 +41,9 @@ export default function VoltageShell({ title, description, path = "/demo", child
       </Helmet>
       <VoltageGlobalStyle />
 
-      <div className="fixed bottom-4 left-4 z-[60] text-[10px] tracking-[0.16em] uppercase font-bold px-3 py-1.5 rounded-full" style={{ background: INK, color: WHITE }}>Demo · nicht live</div>
+      {noindex && (
+        <div className="fixed bottom-4 left-4 z-[60] text-[10px] tracking-[0.16em] uppercase font-bold px-3 py-1.5 rounded-full" style={{ background: INK, color: WHITE }}>Demo · nicht live</div>
+      )}
 
       <VoltageHeader scrolled={scrolled} />
       <main>{children}</main>

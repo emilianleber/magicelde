@@ -32,7 +32,7 @@ import schneiderImg from "@/assets/schneider-weisse-closeup.jpg";
 import haendeImg from "@/assets/haende-interaktion.jpg";
 import heroDinnerImg from "@/assets/hero-dinner.jpg";
 
-const INK = "#0A0B0F", PAPER = "#F5F3EF", WHITE = "#FFFFFF";
+const INK = "#0A0B0F", PAPER = "#F4F6F9", WHITE = "#FFFFFF";
 const COBALT = "#1D3FFF", MAGENTA = "#FF2D7A", GSTAR = "#FBBC04";
 const L_LINE = "rgba(10,11,15,0.10)", D_LINE = "rgba(255,255,255,0.14)";
 const L_DIM = "#5f5a54", D_DIM = "#a7a2b0";
@@ -51,11 +51,11 @@ const GRUENDE = [
 ];
 const ALL_LOGOS = ["vkb.png","strabag.png","xxxlutz.png","sixt.png","sparkasse.png","heim-haus.png","schneider-weisse.png","wald-wiese.png","stadt-regensburg.png","oktoberfest.png","turmtheater.png","steinhofer.png"];
 const SHOWS_MENU = [
-  { t: "Bühnenshow", d: "Comedy + Mentalmagie für den ganzen Saal", Icon: Wand2, h: "/demo/buehnenshow" },
-  { t: "Close-Up", d: "Magie direkt in den Händen der Gäste", Icon: Hand, h: "/demo/close-up" },
-  { t: "Magic Dinner", d: "Durchkomponiert über den ganzen Abend", Icon: UtensilsCrossed, h: "/demo/magic-dinner" },
-  { t: "Moderation", d: "Roter Faden für Gala & Event", Icon: Mic2, h: "/demo/moderation" },
-  { t: "Comedy", d: "Pointen, die hängenbleiben", Icon: Smile, h: "/demo/comedy" },
+  { t: "Bühnenshow", d: "Comedy + Mentalmagie für den ganzen Saal", Icon: Wand2, h: "/buehnenshow" },
+  { t: "Close-Up", d: "Magie direkt in den Händen der Gäste", Icon: Hand, h: "/close-up" },
+  { t: "Magic Dinner", d: "Durchkomponiert über den ganzen Abend", Icon: UtensilsCrossed, h: "/magic-dinner" },
+  { t: "Moderation", d: "Roter Faden für Gala & Event", Icon: Mic2, h: "/moderation" },
+  { t: "Comedy", d: "Pointen, die hängenbleiben", Icon: Smile, h: "/comedy-zauberei" },
 ];
 const SHOWS_NAV = SHOWS_MENU.map((s) => s.t);
 const STAEDTE = ["Regensburg", "München", "Nürnberg", "Ingolstadt", "Landshut", "Passau", "Augsburg", "Würzburg"];
@@ -146,8 +146,8 @@ const StartDemo = () => {
   const cta = "inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[14px] font-semibold transition-transform hover:scale-[1.02]";
   const ghost = "inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[14px] font-semibold";
   const panel = { background: WHITE, border: `1px solid ${L_LINE}`, boxShadow: "0 24px 60px -24px rgba(10,11,15,0.25)" };
-  const panelBg = "#F2ECE1";
-  const cardLight = "linear-gradient(160deg, #FFFFFF 0%, #F4EEE4 100%)";
+  const panelBg = "#EEF1F6";
+  const cardLight = "#FFFFFF";
   const cardSize = "relative shrink-0 snap-start w-[330px] sm:w-[560px] lg:w-[760px] h-[500px] lg:h-[548px] rounded-[40px] overflow-hidden";
   const cardH3 = "font-extrabold";
   const cardP = "mt-3 max-w-md text-[15.5px] leading-[1.55]";
@@ -161,8 +161,13 @@ const StartDemo = () => {
     <div className="pv-root min-h-screen overflow-x-hidden" style={{ background: WHITE, color: INK, fontFamily: SANS }}>
       <Helmet>
         <html lang="de" />
-        <title>DEMO · Emilian Leber — Comedy-Zauberer aus Regensburg</title>
-        <meta name="robots" content="noindex,nofollow" />
+        <title>Emilian Leber — Comedy-Zauberer aus Regensburg | Bühnenshow, Close-Up & Magic Dinner</title>
+        <meta name="description" content="Comedy-Zauberer Emilian Leber aus Regensburg — Bühnenshow, Close-Up und Magic Dinner für Hochzeiten, Firmenfeiern und Events. Deutschlandweit, 200+ Events, 5,0★." />
+        <meta name="robots" content="index,follow,max-image-preview:large" />
+        <link rel="canonical" href="https://www.magicel.de/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Emilian Leber — Comedy-Zauberer aus Regensburg" />
+        <meta property="og:description" content="Bühnenshow, Close-Up und Magic Dinner für Hochzeiten, Firmenfeiern und Events. Deutschlandweit." />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" />
       </Helmet>
 
@@ -186,8 +191,6 @@ const StartDemo = () => {
         .no-bar { -ms-overflow-style: none; scrollbar-width: none; }
         button[aria-label="Kontakt-Menü öffnen"], button[aria-label="Menü schließen"] { display:none !important; }
       `}</style>
-
-      <div className="fixed bottom-4 left-4 z-[60] text-[10px] tracking-[0.16em] uppercase font-bold px-3 py-1.5 rounded-full" style={{ background: INK, color: WHITE }}>Demo · nicht live</div>
 
       {/* ══ HEADER ══ */}
       <div className="hidden md:flex items-center justify-between px-10 py-2.5 text-[12.5px]" style={{ background: INK, color: D_DIM }}>
@@ -214,7 +217,7 @@ const StartDemo = () => {
                     </a>
                   ))}
                 </div>
-                <a href="/demo/magic-dinner" className="relative rounded-[14px] overflow-hidden flex flex-col justify-end p-4" style={{ minHeight: 200 }}>
+                <a href="/magic-dinner" className="relative rounded-[14px] overflow-hidden flex flex-col justify-end p-4" style={{ minHeight: 200 }}>
                   <img src={dinnerImg} alt="" className="absolute inset-0 w-full h-full object-cover object-top" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,15,0.1), rgba(10,11,15,0.85))" }} />
                   <div className="relative">
@@ -228,9 +231,9 @@ const StartDemo = () => {
           </div>
           <a href="#warum" className="pv-link py-2">Warum Emilian</a>
           <a href="#anlaesse" className="pv-link py-2">Anlässe</a>
-          <a href="/demo/referenzen" className="pv-link py-2">Referenzen</a>
-          <a href="/demo/ueber" className="pv-link py-2">Über</a>
-          <a href="/demo/kontakt" className="pv-link py-2">Kontakt</a>
+          <a href="/referenzen" className="pv-link py-2">Referenzen</a>
+          <a href="/ueber-mich" className="pv-link py-2">Über</a>
+          <a href="/kontakt" className="pv-link py-2">Kontakt</a>
         </div>
         <div className="flex items-center gap-2">
           <a href="#kontakt" className={`${cta} hidden sm:inline-flex`} style={{ background: COBALT, color: WHITE, padding: "10px 20px" }}>Anfragen <ArrowRight className="w-4 h-4" /></a>
@@ -649,7 +652,7 @@ const StartDemo = () => {
           </div>
           <div className="md:col-span-2 md:col-start-7"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Konzepte</p><ul className="space-y-3 text-[14.5px]">{SHOWS_MENU.map((s) => <li key={s.t}><a href={s.h} className="hover:text-white transition-colors">{s.t}</a></li>)}</ul></div>
           <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Anlässe</p><ul className="space-y-3 text-[14.5px]">{ANLAESSE.map((a) => <li key={a.t}><a href="#anlaesse" className="hover:text-white transition-colors">{a.t}</a></li>)}</ul></div>
-          <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Kontakt</p><ul className="space-y-3 text-[14.5px]"><li><a href="/demo/kontakt" className="hover:text-white transition-colors">Termin anfragen</a></li><li><a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a></li>{STAEDTE.slice(0, 3).map((c) => <li key={c}><a href="#" className="hover:text-white transition-colors">Zauberer {c}</a></li>)}</ul></div>
+          <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Kontakt</p><ul className="space-y-3 text-[14.5px]"><li><a href="/kontakt" className="hover:text-white transition-colors">Termin anfragen</a></li><li><a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a></li>{STAEDTE.slice(0, 3).map((c) => <li key={c}><a href={`/zauberer/${({ "München": "muenchen", "Nürnberg": "nuernberg", "Würzburg": "wuerzburg" } as Record<string, string>)[c] || c.toLowerCase()}`} className="hover:text-white transition-colors">Zauberer {c}</a></li>)}</ul></div>
         </div>
         {/* Riesen-Wortmarke */}
         <div className="relative px-5 md:px-10">

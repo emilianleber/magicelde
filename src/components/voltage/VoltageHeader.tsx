@@ -11,18 +11,18 @@ import {
 import logo from "@/assets/logo-clean.webp";
 
 const NAV_MOBILE = [
-  { t: "Bühnenshow", h: "/demo/buehnenshow" },
-  { t: "Close-Up", h: "/demo/close-up" },
-  { t: "Magic Dinner", h: "/demo/magic-dinner" },
-  { t: "Hochzeit", h: "/demo/hochzeit" },
-  { t: "Firmenfeier", h: "/demo/firmenfeiern" },
-  { t: "Referenzen", h: "/demo/referenzen" },
-  { t: "Über mich", h: "/demo/ueber" },
-  { t: "Kontakt", h: "/demo/kontakt" },
+  { t: "Bühnenshow", h: "/buehnenshow" },
+  { t: "Close-Up", h: "/close-up" },
+  { t: "Magic Dinner", h: "/magic-dinner" },
+  { t: "Hochzeit", h: "/hochzeit" },
+  { t: "Firmenfeier", h: "/firmenfeiern" },
+  { t: "Referenzen", h: "/referenzen" },
+  { t: "Über mich", h: "/ueber-mich" },
+  { t: "Kontakt", h: "/kontakt" },
 ];
 
 const Logo = () => (
-  <Link to="/demo" className="flex items-center gap-2.5 shrink-0" aria-label="Emilian Leber — Startseite">
+  <Link to="/" className="flex items-center gap-2.5 shrink-0" aria-label="Emilian Leber — Startseite">
     <img src={logo} alt="Emilian Leber" className="h-7 w-auto" />
     <span className="text-[16px] font-extrabold tracking-tight" style={{ color: INK }}>Emilian Leber</span>
   </Link>
@@ -81,9 +81,9 @@ export default function VoltageHeader({ scrolled }: { scrolled: boolean }) {
               </div>
             </div>
           </div>
-          <Link to="/demo/referenzen" className="pv-link py-2">Referenzen</Link>
-          <Link to="/demo/ueber" className="pv-link py-2">Über mich</Link>
-          <Link to="/demo/kontakt" className="pv-link py-2">Kontakt</Link>
+          <Link to="/referenzen" className="pv-link py-2">Referenzen</Link>
+          <Link to="/ueber-mich" className="pv-link py-2">Über mich</Link>
+          <Link to="/kontakt" className="pv-link py-2">Kontakt</Link>
         </div>
         <div className="flex items-center gap-2">
           <Link to={ANFRAGE_HREF} className={`${cta} hidden sm:inline-flex`} style={{ background: COBALT, color: WHITE, padding: "10px 20px" }}>Anfragen <ArrowRight className="w-4 h-4" /></Link>

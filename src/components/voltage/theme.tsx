@@ -26,24 +26,24 @@ export const INSTAGRAM = "https://www.instagram.com/_magicel/";
 export const YOUTUBE = "https://www.youtube.com/channel/UCDm5lC0Dq3b8vhJpwRJcXCA";
 export const FACEBOOK = "https://www.facebook.com/people/Emilian-Leber-Zauberer-Mentalist/61582946450467/";
 export const LINKEDIN = "https://de.linkedin.com/in/emilian-leber-3b3414369";
-/** Anfrage-Ziel im Prototyp (echte Buchung wäre /buchung). */
-export const ANFRAGE_HREF = "/demo/kontakt";
+/** Anfrage-Ziel (live). */
+export const ANFRAGE_HREF = "/kontakt";
 export const SITE_URL = "https://www.magicel.de";
 
-/* ── Navigation (Prototyp-Routen /demo/*) ── */
+/* ── Navigation (Live-Routen) ── */
 export const KONZEPTE = [
-  { t: "Bühnenshow", h: "/demo/buehnenshow", d: "Comedy + Mentalmagie für den ganzen Saal", Icon: Wand2 },
-  { t: "Close-Up", h: "/demo/close-up", d: "Magie direkt in den Händen der Gäste", Icon: Hand },
-  { t: "Magic Dinner", h: "/demo/magic-dinner", d: "Durchkomponiert über den ganzen Abend", Icon: UtensilsCrossed },
-  { t: "Moderation", h: "/demo/moderation", d: "Roter Faden für Gala & Event", Icon: Mic2 },
-  { t: "Comedy-Zauberei", h: "/demo/comedy", d: "Pointen, die hängenbleiben", Icon: Smile },
+  { t: "Bühnenshow", h: "/buehnenshow", d: "Comedy + Mentalmagie für den ganzen Saal", Icon: Wand2 },
+  { t: "Close-Up", h: "/close-up", d: "Magie direkt in den Händen der Gäste", Icon: Hand },
+  { t: "Magic Dinner", h: "/magic-dinner", d: "Durchkomponiert über den ganzen Abend", Icon: UtensilsCrossed },
+  { t: "Moderation", h: "/moderation", d: "Roter Faden für Gala & Event", Icon: Mic2 },
+  { t: "Comedy-Zauberei", h: "/comedy-zauberei", d: "Pointen, die hängenbleiben", Icon: Smile },
 ];
 export const ANLAESSE_NAV = [
-  { t: "Hochzeit", h: "/demo/hochzeit", d: "Magie zwischen Ja-Wort und Mitternacht" },
-  { t: "Firmenfeier", h: "/demo/firmenfeiern", d: "Eisbrecher für gemischte Teams" },
-  { t: "Geburtstag · Jubiläum", h: "/demo/geburtstage", d: "Die Show, über die man noch redet" },
-  { t: "Event-Agenturen", h: "/demo/event-agenturen", d: "Verlässlicher Act für eure Kunden" },
-  { t: "Messe · Roadshow", h: "/demo/messe-magier", d: "Magie, die Menschen an den Stand zieht" },
+  { t: "Hochzeit", h: "/hochzeit", d: "Magie zwischen Ja-Wort und Mitternacht" },
+  { t: "Firmenfeier", h: "/firmenfeiern", d: "Eisbrecher für gemischte Teams" },
+  { t: "Geburtstag · Jubiläum", h: "/geburtstage", d: "Die Show, über die man noch redet" },
+  { t: "Event-Agenturen", h: "/event-agenturen", d: "Verlässlicher Act für eure Kunden" },
+  { t: "Messe · Roadshow", h: "/messe-magier", d: "Magie, die Menschen an den Stand zieht" },
 ];
 
 /* ── Echte Bewertungen (verifiziert aus dem Bestand) ── */
