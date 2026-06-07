@@ -1,50 +1,57 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import NotFound from "./NotFound";
 import { Helmet } from "react-helmet-async";
-import { useEffect, useRef, useState } from "react";
-import PageLayout from "@/components/landing/PageLayout";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { motion } from "framer-motion";
 import { staedte, type KollegenEmpfehlung, type Stadt } from "@/data/staedte";
 import {
-  ArrowRight,
   ArrowUpRight,
-  Star,
-  MapPin,
-  Trophy,
-  Award,
-  Medal,
-  Tv,
-  Sparkles,
+  Hand,
+  Wand2,
+  UtensilsCrossed,
   Heart,
-  Building2,
-  Cake,
   Briefcase,
-  PartyPopper,
-  Users,
+  Cake,
+  Building2,
   GraduationCap,
-  Quote,
-  ChevronDown,
-  ChevronUp,
-  Wine,
-  Utensils,
-  CheckCircle2,
+  PartyPopper,
+  MapPin,
+  Route,
+  Sparkles,
+  ShieldCheck,
 } from "lucide-react";
 
-import heroStartImg from "@/assets/hero-start.jpg";
-import closeupImg from "@/assets/closeup.jpg";
-import stageImg from "@/assets/buehne-zuschauer.jpg";
-import dinnerImg from "@/assets/emilian-magic-dinner.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
-import staunenImg from "@/assets/staunen.jpg";
-import LogoMarquee from "@/components/landing/LogoMarquee";
+import VoltageShell from "@/components/voltage/VoltageShell";
+import {
+  SubHero,
+  Stats,
+  Steps,
+  ReviewsBlock,
+  FAQ,
+  FinalCTA,
+  LogoMarquee,
+} from "@/components/voltage/sections";
+import {
+  SplitFeature,
+  FormatCards,
+  InteractiveTabs,
+  WarumCarousel,
+  ExampleSets,
+  DarkShowcase,
+} from "@/components/voltage/creative";
+import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
 import { CustomQuizSection, CustomQuizConfig } from "@/components/landing/CustomQuiz";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 
-/* Voltage: kein Serif/Italic mehr — betonte Wörter bleiben (Cobalt via ACCENT inline). */
-const SERIF_ITALIC = "not-italic";
+import heroStartImg from "@/assets/hero-start.jpg";
+import stageImg from "@/assets/buehne-zuschauer.jpg";
+import audienceImg from "@/assets/audience-reactions.jpg";
+import staunenImg from "@/assets/staunen.jpg";
+import weddingImg from "@/assets/wedding-magic.jpg";
+import schneiderImg from "@/assets/schneider-weisse-closeup.jpg";
+import dinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
+
+/* Voltage: Cobalt-Akzent inline, kein Serif/Italic, kein Gold/Burgunder. */
 const ACCENT = "#1D3FFF";
-const ACCENT_DEEP = "#1233CC";
-const ACCENT_SOFT = "#C7D2FF";
 
 /* ═══════════════════════════════════════════════════════════
    SEO Keywords — pro Stadt durchsubstituiert
@@ -79,553 +86,143 @@ const keywordList = (name: string): string =>
   ].join(", ");
 
 /* ═══════════════════════════════════════════════════════════
-   HERO
+   WARUM-STADT — Editorial Split (highlight + seoText)
    ═══════════════════════════════════════════════════════════ */
-const HeroKeyframes = () => (
-  <style>{`
-    @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
-    @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
-    @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
-    @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
-    .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
-    .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
-    .hero-bokeh { opacity: 0; animation-name: heroBokehDrift; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); animation-iteration-count: infinite; will-change: transform, opacity; }
-    .hero-overshoot { opacity: 0; animation: heroOvershoot 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-    .hero-star { animation: heroStarPulse 2.4s ease-in-out infinite; }
-    .hero-cta { transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, background-color .3s, color .3s; }
-    .hero-cta:hover { transform: translateY(-2px) scale(1.035); }
-    .hero-cta:active { transform: translateY(0) scale(0.97); }
-    .hero-photo-wrap { transform: translateY(var(--hero-parallax, 0px)); transition: transform 0.05s linear; }
-  `}</style>
+const WarumStadtSection = ({ data }: { data: Stadt }) => (
+  <SplitFeature
+    eyebrow="Zauberer · Zauberkünstler · Magier · Mentalist"
+    title={
+      <>
+        Warum einen Zauberer in <span style={{ color: COBALT }}>{data.name}</span> buchen?
+      </>
+    }
+    sub={
+      <>
+        {data.highlight}
+        {data.seoText && (
+          <>
+            <br />
+            <br />
+            {data.seoText}
+          </>
+        )}
+      </>
+    }
+    points={[
+      "Close-Up Magie & Tischzauberei",
+      "Bühnenshow mit Comedy & Mentalmagie",
+      "Magic Dinner — Magie zwischen den Gängen",
+      "Moderation mit eingebauter Magie",
+    ]}
+    image={audienceImg}
+    imageAlt={`Publikum reagiert auf den Zauberer in ${data.name}`}
+    imgPos="top"
+    stat={{ v: "200+", l: `Events seit 2016 — auch in ${data.region}` }}
+  />
 );
 
-const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
-
-const Hero = ({ data }: { data: Stadt }) => {
-  const photoRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    let raf = 0;
-    let lastY = 0;
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (Math.abs(y - lastY) < 1) return;
-      lastY = y;
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        const el = photoRef.current;
-        if (el && y < window.innerHeight * 1.4)
-          el.style.setProperty("--hero-parallax", `${Math.min(y * 0.18, 80)}px`);
-        raf = 0;
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-  const HEADLINE_SANS = ["Zauberer", "in"];
-  return (
-    <section className="relative bg-[#08060c] text-white min-h-screen overflow-hidden">
-      <HeroKeyframes />
-      <div
-        ref={photoRef}
-        className="absolute inset-0 hero-photo-wrap hero-zoom"
-        style={{ willChange: "transform" }}
-      >
-        <img
-          src={heroStartImg}
-          alt={`Zauberer ${data.name} — Emilian Leber auf Events in ${data.name}`}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{
-            objectPosition: "center 30%",
-            filter: "brightness(0.78)",
-          }}
-          loading="eager"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
-          }}
-        />
-      </div>
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none overflow-hidden"
-      >
-        {BOKEH.map((b, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full hero-bokeh"
-            style={{
-              width: b.size,
-              height: b.size,
-              left: b.left,
-              top: b.top,
-              background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
-              filter: "blur(2px)",
-              animationDuration: `${b.dur}s`,
-              animationDelay: `${b.delay}s`,
-            }}
-          />
-        ))}
-      </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col pt-28 md:pt-32 pb-10 md:pb-20">
-        <div className="flex-1 flex flex-col justify-center max-w-5xl">
-          <div
-            className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-5 gap-y-2 mb-8 hero-fade"
-            style={{ animationDelay: "0.05s" }}
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-4 h-4 fill-amber-300 text-amber-300 hero-star"
-                    style={{ animationDelay: `${i * 0.12}s` }}
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-white/85">
-                <strong className="font-semibold text-white">5,0</strong>
-                <span className="text-white/60"> · 30+ Bewertungen</span>
-              </span>
-            </div>
-            <span aria-hidden className="hidden md:block h-4 w-px bg-white/25" />
-            <span className="text-sm text-white/80 inline-flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5" />
-              <strong className="font-semibold text-white">{data.name}</strong>
-              <span className="text-white/55">· {data.region}</span>
-            </span>
-            <span aria-hidden className="hidden md:block h-4 w-px bg-white/25" />
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-green-400/30 bg-green-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-green-300">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-300 animate-pulse" />
-              Termine 2026 frei
-            </span>
-          </div>
-          <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
-            {HEADLINE_SANS.map((w, i) => (
-              <span
-                key={`s-${i}`}
-                className="hero-word"
-                style={{
-                  animationDelay: `${0.3 + i * 0.08}s`,
-                  marginRight: "0.22em",
-                }}
-              >
-                {w}
-              </span>
-            ))}
-            <br className="hidden sm:block" />
-            <span
-              className={`hero-word ${SERIF_ITALIC}`}
-              style={{
-                animationDelay: `${0.3 + HEADLINE_SANS.length * 0.08}s`,
-                paddingRight: "0.15em",
-                color: "#AFC0FF",
-              }}
-            >
-              {data.name}.
-            </span>
-          </h1>
-          <p
-            className="mt-8 md:mt-10 max-w-2xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade"
-            style={{ animationDelay: "1.05s" }}
-          >
-            {data.intro}
-          </p>
-          <div
-            className="mt-10 inline-flex flex-col sm:flex-row items-start gap-4 hero-fade"
-            style={{ animationDelay: "1.2s" }}
-          >
-            <Link
-              to={`/buchung?ort=${encodeURIComponent(data.name)}`}
-              className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"
-            >
-              Zauberer {data.name} anfragen
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <a
-              href="#showkonzepte"
-              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
-            >
-              Showkonzepte ansehen
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-        <div className="relative mt-20 md:mt-28">
-          <div
-            className="hero-overshoot inline-flex flex-wrap items-baseline gap-x-5 md:gap-x-7 gap-y-2 text-white/85 text-xs md:text-sm tracking-[0.04em]"
-            style={{ animationDelay: "2.0s" }}
-          >
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-                200+
-              </strong>
-              <span className="text-white/65">Events</span>
-            </span>
-            <span aria-hidden className="text-white/30">·</span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-                5,0★
-              </strong>
-              <span className="text-white/65">30+ Bewertungen</span>
-            </span>
-            {data.einwohner && (
-              <>
-                <span aria-hidden className="text-white/30">·</span>
-                <span className="inline-flex items-baseline gap-1.5">
-                  <strong className="font-display font-bold text-white text-base md:text-lg tabular-nums">
-                    {data.einwohner}
-                  </strong>
-                  <span className="text-white/65">{data.name}er</span>
-                </span>
-              </>
-            )}
-            <span aria-hidden className="text-white/30">·</span>
-            <span className="text-white/65">24h Antwort</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 /* ═══════════════════════════════════════════════════════════
-   WARUM-STADT — Editorial Split
+   TRUST — TV, Wettbewerb, 200+ Events (Stats)
    ═══════════════════════════════════════════════════════════ */
-const WarumStadtSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
-          <div
-            className={`lg:col-span-6`}
-          >
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Zauberer · Zauberkünstler · Magier · Mentalist.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground mb-8">
-              Warum einen Zauberer in{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                {data.name}
-              </span>{" "}
-              buchen?
-            </h2>
-            <p className="text-base md:text-lg text-foreground/75 leading-[1.7] mb-6">
-              {data.highlight}
-            </p>
-            {data.seoText && (
-              <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-8">
-                {data.seoText}
-              </p>
-            )}
-            <div className="flex flex-wrap gap-2 mt-2">
-              {[
-                "Close-Up Magie",
-                "Bühnenshow",
-                "Magic Dinner",
-                "Mentalmagie",
-                "Comedy-Zauberei",
-                "Moderation mit Magie",
-              ].map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold text-foreground/70 bg-[hsl(0,0%,98%)] border border-foreground/10"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div
-            className={`lg:col-span-6`}
-            style={{ animationDelay: "0.15s" }}
-          >
-            <div
-              className="relative overflow-hidden"
-              style={{ borderRadius: "1.5rem" }}
-            >
-              <img
-                src={audienceImg}
-                alt={`Publikum reagiert auf den Zauberer in ${data.name}`}
-                className="w-full h-[420px] md:h-[540px] object-cover"
-                loading="lazy"
-                style={{
-                  filter: "saturate(0.95) brightness(0.94)",
-                  objectPosition: "center 30%",
-                }}
-              />
-              <div
-                aria-hidden
-                className="absolute inset-x-0 bottom-0 h-40"
-                style={{
-                  background:
-                    "linear-gradient(180deg, transparent, rgba(0,0,0,0.65))",
-                }}
-              />
-              <div
-                className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8 text-white inline-flex flex-wrap items-end justify-between gap-4"
-              >
-                <p
-                  className={`${SERIF_ITALIC} text-base md:text-xl leading-snug max-w-xs`}
-                >
-                  Drei Sekunden Stille — dann lacht der Saal in {data.name}.
-                </p>
-                <span
-                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white"
-                  style={{
-                    background: "rgba(8,6,12,0.5)",
-                    backdropFilter: "blur(12px)",
-                    border: "1px solid rgba(255,255,255,0.18)",
-                  }}
-                >
-                  Live in {data.region}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   TRUST-STRIP
-   ═══════════════════════════════════════════════════════════ */
-const TRUST_ITEMS = [
-  { Icon: Trophy, name: "Greatest Talent", sub: "2023 · Finalist (TV)" },
-  { Icon: Award, name: "Talents of Magic", sub: "2024 · Finalist + Kreativpreis" },
-  { Icon: Medal, name: "Deutsche Jugendmeisterschaft", sub: "2024 · Top 30" },
-  { Icon: Tv, name: "TVA", sub: "2025 · TV-Auftritt" },
-  { Icon: Star, name: "ProvenExpert", sub: "5,0 ★ · 30+ Bewertungen" },
-];
-
-const TrustStripSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-20 md:py-28 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="max-w-2xl mb-12 md:mb-14 mx-auto text-center">
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
-            Bekannt aus.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.5rem,3.5vw,2.75rem)] text-foreground">
-            TV, Wettbewerb und{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-              200+ Events
-            </span>{" "}
-            seit 2016 — auch in {data.name}.
-          </h2>
-        </div>
-        <div
-          className={`grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4`}
-        >
-          {TRUST_ITEMS.map((it) => (
-            <article
-              key={it.name}
-              className="group relative bg-white border border-foreground/8 rounded-2xl px-5 py-6 md:px-6 md:py-7 transition-all duration-500 hover:-translate-y-1"
-            >
-              <div
-                className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
-                style={{
-                  background: "transparent",
-                }}
-              >
-                <it.Icon
-                  className="w-5 h-5"
-                  style={{ color: ACCENT }}
-                  strokeWidth={1.75}
-                />
-              </div>
-              <p className="font-display font-bold text-foreground text-sm md:text-base leading-tight mb-1.5">
-                {it.name}
-              </p>
-              <p
-                className="text-xs font-medium text-foreground/55 leading-snug"
-              >
-                {it.sub}
-              </p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+const TrustStripSection = ({ data }: { data: Stadt }) => (
+  <Stats
+    items={[
+      { v: "200+", l: `Events seit 2016 — auch in ${data.name}` },
+      { v: "5,0★", l: "30+ Bewertungen · ProvenExpert" },
+      { v: "TV", l: "TVA-Auftritt 2025 · Greatest Talent 2023" },
+      { v: "24 h", l: "Antwort auf jede Anfrage" },
+    ]}
+  />
+);
 
 /* ═══════════════════════════════════════════════════════════
    FORMATE — 3 Showformate (Close-Up / Bühnenshow / Magic Dinner)
    ═══════════════════════════════════════════════════════════ */
-const FormateSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  const FORMATE = [
-    {
-      img: closeupImg,
-      kicker: "Format 01",
-      title: `Close-Up Zauberer ${data.name}`,
-      seoTitle: `Tischzauberer & Walk-Around in ${data.name}`,
-      body: `Interaktive Tischzauberei und Walk-Around-Magie direkt bei euren Gästen in ${data.name}. Karten, Münzen, Mentalmagie — der Eisbrecher bei Sektempfang, Dinner und Networking-Events.`,
-      tags: ["5–7 Min pro Tisch", "Walk-Around", "Keine Bühne nötig"],
-      link: "/close-up",
-    },
-    {
-      img: stageImg,
-      kicker: "Format 02",
-      title: `Bühnenshow ${data.name}`,
-      seoTitle: `Zaubershow für Galas und Firmenfeiern`,
-      body: `Durchkomponierte Comedy-Zaubershow mit Mentaleffekten, Comedy-Pointen und Standing-Ovation-Finale. Für Galas, Firmenfeiern und Hochzeiten in ${data.name} — 15 bis 60 Min, ab 50 Gästen.`,
-      tags: ["15–60 Min", "50–500 Gäste", "Headset + Sound"],
-      link: "/buehnenshow",
-    },
-    {
-      img: dinnerImg,
-      kicker: "Format 03",
-      title: `Magic Dinner ${data.name}`,
-      seoTitle: `Magie zwischen den Gängen`,
-      body: `Dinner und Magie kombiniert — Close-Up und Bühnenshow eingebettet in einen Mehrgänge-Abend. Exklusives Erlebnis-Format für besondere Anlässe in ${data.name} und Umgebung.`,
-      tags: ["Ganzer Abend", "Dinner + Show", "Mit Restaurant-Partnern"],
-      link: "/magic-dinner",
-    },
-  ];
-  return (
-    <section
-      ref={ref}
-      id="showkonzepte"
-      className="bg-white py-24 md:py-36"
-    >
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Drei Formate für Events in {data.name}.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Close-Up. Bühne.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Magic Dinner.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Drei bewährte Showformate — einzeln oder kombiniert. Ich passe das
-              Programm individuell an deinen Anlass in {data.name} an, mit
-              Briefing-Call vorab.
-            </p>
-          </div>
-        </div>
-
-        <div
-          className={`grid md:grid-cols-3 gap-6 md:gap-8`}
-        >
-          {FORMATE.map((f, i) => (
-            <Link
-              key={f.title}
-              to={f.link}
-              className="group flex flex-col h-full transition-transform duration-500 hover:-translate-y-1"
-              style={{ animationDelay: `${0.1 + i * 0.1}s` }}
-            >
-              <div
-                className="relative overflow-hidden mb-6"
-                style={{ borderRadius: "1.25rem" }}
-              >
-                <img
-                  src={f.img}
-                  alt={`${f.title} — ${f.seoTitle}`}
-                  className="w-full h-[300px] md:h-[360px] object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
-                  loading="lazy"
-                  style={{
-                    filter: "saturate(0.95) brightness(0.92)",
-                    objectPosition: "center 25%",
-                  }}
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-x-0 bottom-0 h-32"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, transparent, rgba(0,0,0,0.55))",
-                  }}
-                />
-                <span
-                  className="absolute top-5 left-5 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white"
-                  style={{
-                    background: "rgba(8,6,12,0.6)",
-                    backdropFilter: "blur(12px)",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                  }}
-                >
-                  {f.kicker}
-                </span>
-              </div>
-              <h3 className="font-display text-xl md:text-2xl font-black text-foreground leading-tight mb-2">
-                {f.title}
-              </h3>
-              <p className={`text-sm md:text-base text-foreground/55 mb-4`}>
-                {f.seoTitle}
-              </p>
-              <p className="text-base text-foreground/70 leading-[1.7] mb-5 flex-1">
-                {f.body}
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {f.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-[hsl(0,0%,98%)] border border-foreground/10"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <span
-                className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] uppercase font-semibold mt-auto"
-                style={{ color: ACCENT }}
-              >
-                Format ansehen
-                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+const FormateSection = ({ data }: { data: Stadt }) => (
+  <FormatCards
+    eyebrow={`Drei Formate für Events in ${data.name}`}
+    title={
+      <>
+        Close-Up. Bühne. <span style={{ color: COBALT }}>Magic Dinner.</span>
+      </>
+    }
+    sub={`Drei bewährte Showformate — einzeln oder kombiniert. Ich passe das Programm individuell an deinen Anlass in ${data.name} an, mit Briefing-Call vorab.`}
+    note="Frei kombinierbar — von der Tischmagie bis zur großen Bühnenshow."
+    formats={[
+      {
+        t: `Close-Up Zauberer ${data.name}`,
+        d: `Interaktive Tischzauberei und Walk-Around-Magie direkt bei euren Gästen in ${data.name}. Karten, Münzen, Mentalmagie — der Eisbrecher bei Sektempfang, Dinner und Networking-Events.`,
+        h: "/close-up",
+        Icon: Hand,
+      },
+      {
+        t: `Bühnenshow ${data.name}`,
+        d: `Durchkomponierte Comedy-Zaubershow mit Mentaleffekten, Comedy-Pointen und Standing-Ovation-Finale. Für Galas, Firmenfeiern und Hochzeiten in ${data.name} — 15 bis 60 Min, ab 50 Gästen.`,
+        h: "/buehnenshow",
+        Icon: Wand2,
+      },
+      {
+        t: `Magic Dinner ${data.name}`,
+        d: `Dinner und Magie kombiniert — Close-Up und Bühnenshow eingebettet in einen Mehrgänge-Abend. Exklusives Erlebnis-Format für besondere Anlässe in ${data.name} und Umgebung.`,
+        h: "/magic-dinner",
+        Icon: UtensilsCrossed,
+      },
+    ]}
+  />
+);
 
 /* ═══════════════════════════════════════════════════════════
-   ANLÄSSE — Keyword-Coverage für Hochzeit/Firmenfeier/Geburtstag etc.
+   HOCHZEITSMAGIER-STADT — Vertiefung Keyword "Hochzeitszauberer [Stadt]"
+   ═══════════════════════════════════════════════════════════ */
+const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => (
+  <>
+  <SplitFeature
+    eyebrow={`Hochzeitszauberer ${data.name}`}
+    title={
+      <>
+        Magie beim Sektempfang. <span style={{ color: COBALT }}>Beim Dinner. Vor dem Tanz.</span>
+      </>
+    }
+    sub={
+      <>
+        Ein Hochzeitszauberer in {data.name} bringt drei Phasen zum Glänzen: Walk-Around beim
+        Sektempfang als Eisbrecher zwischen Familien, Tisch-zu-Tisch beim Hochzeitsdinner mit
+        eingebauten Brautpaar-Anekdoten und eine kompakte Bühnen-Highlightshow vor dem
+        Eröffnungstanz. 100+ Hochzeiten bayernweit — das Setup steht.
+        <br />
+        <br />
+        Egal ob klassische kirchliche Hochzeit, freie Trauung oder standesamtliche Feier in{" "}
+        {data.name} — eingebaute Magie ist die Pointe, die deine Gäste noch Jahre später erzählen
+        werden. Mit Brautpaar-Briefing vorab, damit eure Geschichte Teil der Show wird.
+      </>
+    }
+    points={[
+      `Empfang — Walk-Around · 30–60 Min · Eisbrecher zwischen Gästen in ${data.name}.`,
+      "Dinner — Tisch-zu-Tisch · 5–7 Min pro Tafel · eingebaute Brautpaar-Anekdoten.",
+      "Vor dem Tanz — Bühnen-Highlight · 15–20 Min · Standing-Ovation-Finale vor der Tanzeröffnung.",
+      `100+ Hochzeiten · auch in ${data.name} und ${data.region}`,
+    ]}
+    image={weddingImg}
+    imageAlt={`Hochzeitszauberer in ${data.name} beim Brautpaar`}
+    imgPos="center"
+  />
+  <div className="px-5 md:px-10 -mt-8 md:-mt-12 pb-4">
+    <div className="max-w-7xl mx-auto flex flex-wrap gap-3">
+      <a href="/hochzeit" className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
+        Hochzeitszauberer-Konzept ansehen <ArrowUpRight className="w-3.5 h-3.5" />
+      </a>
+      <a href={`/buchung?ort=${encodeURIComponent(data.name)}&format=Hochzeit`} className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase transition-colors hover:border-[#1D3FFF]" style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}>
+        Hochzeit in {data.name} anfragen <ArrowUpRight className="w-3.5 h-3.5" />
+      </a>
+    </div>
+  </div>
+  </>
+);
+
+/* ═══════════════════════════════════════════════════════════
+   ANLÄSSE — Keyword-Coverage Hochzeit/Firmenfeier/Geburtstag etc.
    ═══════════════════════════════════════════════════════════ */
 const AnlaesseSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
   const ANLAESSE = [
     {
       Icon: Heart,
@@ -671,712 +268,323 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
     },
   ];
   return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
     >
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Anlässe in {data.name}.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Hochzeit. Firma.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Geburtstag.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Für jeden Anlass in {data.name} der passende Zauberer. Hochzeit,
-              Firmenfeier, Geburtstag, Gala, Messe oder private Feier — alle
-              Formate, alle Tonalitäten.
-            </p>
-          </div>
-        </div>
-
-        {/* Editorial Magazin-Liste statt Card-Grid */}
-        <ul
-          className={`divide-y divide-foreground/10 border-y border-foreground/10`}
-        >
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10">
+          <Eyebrow>Anlässe in {data.name}</Eyebrow>
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.4vw,3.4rem)", lineHeight: 1.04, color: INK }}>
+            Hochzeit. Firma. <span style={{ color: COBALT }}>Geburtstag.</span>
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Für jeden Anlass in {data.name} der passende Zauberer. Hochzeit, Firmenfeier, Geburtstag,
+            Gala, Messe oder private Feier — alle Formate, alle Tonalitäten.
+          </p>
+        </motion.div>
+        <ul className="divide-y" style={{ borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}`, borderColor: L_LINE }}>
           {ANLAESSE.map((a, i) => (
-            <li
+            <motion.li
               key={a.keyword}
-              className="group grid grid-cols-[64px_1fr_auto] md:grid-cols-[88px_1fr_auto] items-baseline gap-5 md:gap-10 py-7 md:py-10"
+              variants={up}
+              className="group grid grid-cols-[56px_1fr_auto] md:grid-cols-[88px_1fr_auto] items-baseline gap-5 md:gap-10 py-7 md:py-10"
+              style={{ borderColor: L_LINE }}
             >
-              <div className="flex items-baseline gap-3 self-start">
-                <span
-                  className={`${SERIF_ITALIC} text-3xl md:text-5xl tabular-nums leading-none`}
-                  style={{ color: ACCENT }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              </div>
+              <span className="text-3xl md:text-5xl font-extrabold tabular-nums leading-none" style={{ color: COBALT }}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <div>
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-3">
-                  <Link
-                    to={a.link}
-                    className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight hover:text-[#1D3FFF] transition-colors"
-                  >
+                  <a href={a.link} className="text-xl md:text-2xl font-bold leading-tight transition-colors hover:text-[#1D3FFF]" style={{ color: INK }}>
                     {a.label}
-                  </Link>
-                  <span
-                    className="text-[10px] tracking-[0.18em] uppercase font-bold"
-                    style={{ color: ACCENT }}
-                  >
+                  </a>
+                  <span className="text-[10px] tracking-[0.18em] uppercase font-bold" style={{ color: COBALT }}>
                     {a.keyword}
                   </span>
                 </div>
-                <p className="text-base text-foreground/65 leading-[1.65] max-w-3xl mb-3">
+                <p className="text-[15.5px] leading-[1.65] max-w-3xl mb-3" style={{ color: L_DIM }}>
                   {a.body}
                 </p>
                 <span className="inline-flex items-center gap-1.5">
-                  <a.Icon className="w-3.5 h-3.5" style={{ color: ACCENT }} strokeWidth={2} />
-                  <Link
-                    to={a.link}
-                    className="text-[12px] tracking-[0.08em] uppercase font-semibold"
-                    style={{ color: ACCENT }}
-                  >
+                  <a.Icon className="w-3.5 h-3.5" style={{ color: COBALT }} />
+                  <a href={a.link} className="text-[12px] tracking-[0.08em] uppercase font-semibold" style={{ color: COBALT }}>
                     Mehr erfahren →
-                  </Link>
+                  </a>
                 </span>
               </div>
-              <Link
-                to={a.link}
+              <a
+                href={a.link}
                 aria-label={`Mehr zu ${a.label}`}
-                className="hidden md:inline-flex items-center justify-center w-11 h-11 rounded-full transition-all duration-500 group-hover:bg-[#1D3FFF] group-hover:text-white text-foreground/30 self-start mt-2"
+                className="hidden md:inline-flex items-center justify-center w-11 h-11 rounded-full transition-all group-hover:bg-[#1D3FFF] group-hover:text-white self-start mt-2"
+                style={{ color: "rgba(10,11,15,0.3)", border: `1px solid ${L_LINE}` }}
               >
                 <ArrowUpRight className="w-4 h-4" />
-              </Link>
-            </li>
+              </a>
+            </motion.li>
           ))}
         </ul>
       </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   IN DER NÄHE — geo-search keyword coverage
-   ═══════════════════════════════════════════════════════════ */
-const InDerNaeheSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-20 md:py-28"
-    >
-      <div className="container px-6">
-        <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-8 items-center`}
-        >
-          <div className="lg:col-span-7">
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4">
-              [Zauberer in der Nähe] gesucht?
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground mb-5">
-              Du bist in {data.name} oder Umgebung — ich bin hier.
-            </h2>
-            <p className="text-base md:text-lg text-foreground/70 leading-[1.7] max-w-2xl">
-              Wer „Zauberer in der Nähe" oder „Magier in der Umgebung" sucht und
-              in {data.name} oder dem Umkreis sitzt: Ich komme zu jedem
-              Veranstaltungsort in {data.name} und {data.region}. Anfahrt im
-              Angebot kalkuliert, keine versteckten Kosten, kurze Reaktionszeit
-              auf Anfragen.
-            </p>
-          </div>
-          <div className="lg:col-span-5 flex flex-col gap-3">
-            <Link
-              to={`/buchung?ort=${encodeURIComponent(data.name)}`}
-              className="hero-cta group inline-flex items-center gap-2 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
-              style={{
-                background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
-              }}
-            >
-              Anfrage starten ({data.name})
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <a
-              href="tel:+4915563744696"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground/[0.04] px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-foreground hover:bg-foreground/[0.07] transition-colors"
-            >
-              Direkt anrufen
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   ABLAUF-BUCHUNG — 4-Step-Prozess für Keyword "Zauberer buchen [Stadt]"
-   ═══════════════════════════════════════════════════════════ */
-const AblaufBuchungSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  const SCHRITTE = [
-    {
-      kicker: "Schritt 01",
-      title: "Anfrage",
-      body: `Du schickst mir Datum, Anlass, Gästezahl und Wunsch-Location in ${data.name}. Über das Formular, per Email an el@magicel.de oder telefonisch. Antwort innerhalb 24 Stunden — meistens schneller.`,
-      meta: "≤ 24 h Antwort",
-    },
-    {
-      kicker: "Schritt 02",
-      title: "Briefing-Call",
-      body: `30-Min-Telefonat zu deinem Event in ${data.name}: Anlass im Detail, Publikum, Tonalität (festlich, casual, Premium), gewünschtes Format, Insider-Anekdoten für eingebaute Mentaleffekte.`,
-      meta: "30 Min · kostenlos",
-    },
-    {
-      kicker: "Schritt 03",
-      title: "Show in {name}".replace("{name}", data.name),
-      body: `Setup 30 Min vor Showbeginn, Soundcheck (falls Bühne), dann die Show. Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühne vor dem Tanz — je nach gebuchtem Format.`,
-      meta: "Pünktlich · versichert",
-    },
-    {
-      kicker: "Schritt 04",
-      title: "Nachbereitung",
-      body: `Innerhalb 48 Stunden nach dem Event kurze Nachfrage zu deinem Erlebnis in ${data.name}. Optionale ProvenExpert-Bewertung, falls du wirklich zufrieden warst — sonst kein Druck.`,
-      meta: "48 h Nachsorge",
-    },
-  ];
-  return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Zauberer buchen {data.name} — so läuft's.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Vier Schritte.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Kein Stress.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Den Zauberer für dein Event in {data.name} zu buchen, ist nicht
-              kompliziert — kein PDF-Fragebogen, keine Vertragsklauseln vorab.
-              Vier transparente Schritte vom ersten Kontakt bis zur Show.
-            </p>
-          </div>
-        </div>
-
-        <ol
-          className={`relative grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7`}
-        >
-          {SCHRITTE.map((s, i) => (
-            <li
-              key={s.title}
-              className="relative bg-[hsl(0,0%,98%)] p-7 md:p-8 flex flex-col"
-              style={{
-                borderRadius: "1.25rem",
-                boxShadow:
-                  "0 18px 35px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
-                animationDelay: `${0.1 + i * 0.08}s`,
-              }}
-            >
-              <span
-                className="inline-flex items-center justify-center w-12 h-12 rounded-full font-display font-black text-white text-lg mb-5"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                  boxShadow: "0 10px 25px -8px rgba(0,0,0,0.040)",
-                }}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <p
-                className="text-[10px] tracking-[0.18em] uppercase font-bold mb-2"
-                style={{ color: ACCENT }}
-              >
-                {s.kicker}
-              </p>
-              <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight mb-3">
-                {s.title}
-              </h3>
-              <p className="text-sm text-foreground/65 leading-[1.65] mb-5 flex-1">
-                {s.body}
-              </p>
-              <span
-                className={`text-sm`}
-                style={{ color: ACCENT }}
-              >
-                {s.meta}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   HOCHZEITSMAGIER-STADT — Vertiefung Keyword "Hochzeitszauberer [Stadt]"
-   ═══════════════════════════════════════════════════════════ */
-const HochzeitsmagierStadtSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
-          <div
-            className={`lg:col-span-7`}
-          >
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Hochzeitszauberer {data.name}.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground mb-8">
-              Magie beim Sektempfang.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Beim Dinner. Vor dem Tanz.
-              </span>
-            </h2>
-            <p className="text-base md:text-lg text-foreground/75 leading-[1.7] mb-6">
-              Ein Hochzeitszauberer in {data.name} bringt drei Phasen zum
-              Glänzen: Walk-Around beim Sektempfang als Eisbrecher zwischen
-              Familien, Tisch-zu-Tisch beim Hochzeitsdinner mit eingebauten
-              Brautpaar-Anekdoten und eine kompakte Bühnen-Highlightshow vor dem
-              Eröffnungstanz. 100+ Hochzeiten bayernweit — das Setup steht.
-            </p>
-            <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-8">
-              Egal ob klassische kirchliche Hochzeit, freie Trauung oder
-              standesamtliche Feier in {data.name} — eingebaute Magie ist die
-              Pointe, die deine Gäste noch Jahre später erzählen werden. Mit
-              Brautpaar-Briefing vorab, damit eure Geschichte Teil der Show
-              wird.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/hochzeit"
-                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                }}
-              >
-                Hochzeitszauberer-Konzept ansehen
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-              <Link
-                to={`/buchung?ort=${encodeURIComponent(data.name)}&format=Hochzeit`}
-                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-white border border-foreground/15 hover:border-[#1D3FFF]/40 transition-colors"
-              >
-                Hochzeit in {data.name} anfragen
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-          <div
-            className={`lg:col-span-5`}
-            style={{ animationDelay: "0.15s" }}
-          >
-            <div
-              className="bg-white p-7 md:p-9"
-              style={{
-                borderRadius: "1.25rem",
-                boxShadow:
-                  "0 30px 60px -25px rgba(0,0,0,0.100), inset 0 0 0 1px rgba(0,0,0,0.04)",
-              }}
-            >
-              <p
-                className="text-[10px] tracking-[0.18em] uppercase font-bold mb-4"
-                style={{ color: ACCENT }}
-              >
-                Drei Hochzeits-Slots
-              </p>
-              <ul className="divide-y divide-foreground/10">
-                {[
-                  { time: "Empfang", body: `Walk-Around · 30–60 Min · Eisbrecher zwischen Gästen in ${data.name}.` },
-                  { time: "Dinner", body: "Tisch-zu-Tisch · 5–7 Min pro Tafel · eingebaute Brautpaar-Anekdoten." },
-                  { time: "Vor dem Tanz", body: "Bühnen-Highlight · 15–20 Min · Standing-Ovation-Finale vor der Tanzeröffnung." },
-                ].map((s, i) => (
-                  <li key={i} className="py-4 first:pt-0 last:pb-0">
-                    <span
-                      className={`text-base block mb-1`}
-                      style={{ color: ACCENT }}
-                    >
-                      {s.time}
-                    </span>
-                    <p className="text-sm text-foreground/75 leading-[1.6]">{s.body}</p>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 pt-5 border-t border-foreground/10 flex items-center gap-3">
-                <Heart className="w-5 h-5" style={{ color: ACCENT }} />
-                <span className="text-sm text-foreground/65">
-                  100+ Hochzeiten · auch in {data.name} und {data.region}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </motion.section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
    FIRMENZAUBERER-STADT — Vertiefung Keyword "Firmenzauberer [Stadt]"
    ═══════════════════════════════════════════════════════════ */
-const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
-          <div
-            className={`lg:col-span-5 lg:order-2`}
-            style={{ animationDelay: "0.15s" }}
-          >
-            <div
-              className="bg-[hsl(0,0%,98%)] p-7 md:p-9"
-              style={{
-                borderRadius: "1.25rem",
-                boxShadow:
-                  "0 30px 60px -25px rgba(0,0,0,0.090), inset 0 0 0 1px rgba(0,0,0,0.05)",
-              }}
-            >
-              <p
-                className="text-[10px] tracking-[0.18em] uppercase font-bold mb-4"
-                style={{ color: ACCENT }}
-              >
-                Firmen-Anlässe in {data.name}
-              </p>
-              <ul className="divide-y divide-foreground/10">
-                {[
-                  { label: "Weihnachtsfeier", body: `Klassiker im Q4 — Mitarbeiter und Partner in ${data.name}.` },
-                  { label: "Vorstandsdinner", body: "Premium-Tonalität, leise Mentaleffekte, drei Sekunden Stille." },
-                  { label: "Sales-Kickoff", body: "Energetisch, eingebaute Pointen aus dem Briefing der Geschäftsleitung." },
-                  { label: "Jubiläum / Firmenfest", body: "Sommerfeste, Geburtstage des Unternehmens, Mitarbeiter-Events." },
-                ].map((a, i) => (
-                  <li key={i} className="py-4 first:pt-0 last:pb-0">
-                    <span
-                      className={`font-display text-base font-bold text-foreground block mb-1`}
-                    >
-                      {a.label}
-                    </span>
-                    <p className="text-sm text-foreground/65 leading-[1.6]">{a.body}</p>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 pt-5 border-t border-foreground/10 flex items-center gap-3">
-                <Briefcase className="w-5 h-5" style={{ color: ACCENT }} />
-                <span className="text-sm text-foreground/65">
-                  100+ Firmen-Engagements · Bayern + deutschlandweit
-                </span>
-              </div>
-            </div>
-          </div>
-          <div
-            className={`lg:col-span-7 lg:order-1`}
-          >
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Firmenzauberer {data.name}.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground mb-8">
-              Corporate-Entertainment, das{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                der Vorstand zückt
-              </span>
-              .
-            </h2>
-            <p className="text-base md:text-lg text-foreground/75 leading-[1.7] mb-6">
-              Ein Firmenzauberer in {data.name} braucht mehr als Tricks — er
-              braucht Tonalitätsgefühl. Vorstandsabend anders als
-              Mitarbeiter-Weihnachtsfeier, Sales-Kickoff anders als Jubiläum.
-              Mit Briefing-Call der Geschäftsleitung baue ich Insider-Pointen
-              ein, die nur in eurem Saal funktionieren.
-            </p>
-            <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-8">
-              Premium-Beispiel: 200 Gäste, Versicherungs-Konzern in {data.region},
-              Vorstandsvorsitzender zückte selbst drei Minuten nach Übergabe die
-              Karten. Berufshaftpflicht, DSGVO + AVV abgesichert, Tech-Rider
-              auf Anfrage.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/firmenfeiern"
-                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                }}
-              >
-                Firmenfeier-Konzept ansehen
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-              <Link
-                to={`/buchung?ort=${encodeURIComponent(data.name)}&format=Firma`}
-                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground bg-[hsl(0,0%,98%)] border border-foreground/15 hover:border-[#1D3FFF]/40 transition-colors"
-              >
-                Firmenfeier {data.name} anfragen
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+const FirmenzaubererStadtSection = ({ data }: { data: Stadt }) => (
+  <>
+  <SplitFeature
+    reverse
+    eyebrow={`Firmenzauberer ${data.name}`}
+    title={
+      <>
+        Corporate-Entertainment, das <span style={{ color: COBALT }}>der Vorstand zückt</span>.
+      </>
+    }
+    sub={
+      <>
+        Ein Firmenzauberer in {data.name} braucht mehr als Tricks — er braucht Tonalitätsgefühl.
+        Vorstandsabend anders als Mitarbeiter-Weihnachtsfeier, Sales-Kickoff anders als Jubiläum.
+        Mit Briefing-Call der Geschäftsleitung baue ich Insider-Pointen ein, die nur in eurem Saal
+        funktionieren.
+        <br />
+        <br />
+        Premium-Beispiel: 200 Gäste, Versicherungs-Konzern in {data.region}, Vorstandsvorsitzender
+        zückte selbst drei Minuten nach Übergabe die Karten. Berufshaftpflicht, DSGVO + AVV
+        abgesichert, Tech-Rider auf Anfrage.
+      </>
+    }
+    points={[
+      `Weihnachtsfeier — Klassiker im Q4 · Mitarbeiter und Partner in ${data.name}.`,
+      "Vorstandsdinner — Premium-Tonalität, leise Mentaleffekte, drei Sekunden Stille.",
+      "Sales-Kickoff — energetisch, eingebaute Pointen aus dem Briefing der Geschäftsleitung.",
+      "Jubiläum / Firmenfest — Sommerfeste, Geburtstage des Unternehmens, Mitarbeiter-Events.",
+    ]}
+    image={stageImg}
+    imageAlt={`Firmenzauberer auf der Bühne in ${data.name}`}
+    imgPos="top"
+    stat={{ v: "100+", l: "Firmen-Engagements · Bayern + DE" }}
+  />
+  <div className="px-5 md:px-10 -mt-8 md:-mt-12 pb-4">
+    <div className="max-w-7xl mx-auto flex flex-wrap gap-3">
+      <a href="/firmenfeiern" className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
+        Firmenfeier-Konzept ansehen <ArrowUpRight className="w-3.5 h-3.5" />
+      </a>
+      <a href={`/buchung?ort=${encodeURIComponent(data.name)}&format=Firma`} className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase transition-colors hover:border-[#1D3FFF]" style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}>
+        Firmenfeier {data.name} anfragen <ArrowUpRight className="w-3.5 h-3.5" />
+      </a>
+    </div>
+  </div>
+  </>
+);
 
 /* ═══════════════════════════════════════════════════════════
-   GARANTIEN — Trust Signals für SEO + Conversion
+   ABLAUF-BUCHUNG — 4-Step-Prozess "Zauberer buchen [Stadt]"
    ═══════════════════════════════════════════════════════════ */
-const GarantienSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  const GARANTIEN = [
-    {
-      Icon: CheckCircle2,
-      title: "Berufshaftpflicht",
-      body: `Standard-Berufshaftpflicht für Künstler greift bei jedem Auftritt in ${data.name} — Sach- und Personenschäden abgesichert. Versicherungs-Nachweis auf Anfrage.`,
-    },
-    {
-      Icon: CheckCircle2,
-      title: "30 Min Briefing-Call",
-      body: `Vorab-Call zur Klärung von Anlass, Tonalität, Tabus und Insider-Anekdoten — kostenlos, ohne Verpflichtung.`,
-    },
-    {
-      Icon: CheckCircle2,
-      title: "24h-Antwort-Garantie",
-      body: `Anfragen aus ${data.name} beantworte ich innerhalb 24 Stunden — meistens schneller, oft am selben Tag.`,
-    },
-    {
-      Icon: CheckCircle2,
-      title: "DSGVO + AVV",
-      body: `Datenschutz, Auftragsverarbeitungsvertrag und alle rechtlichen Grundlagen — gerade für Firmenkunden in ${data.name} wichtig.`,
-    },
-    {
-      Icon: CheckCircle2,
-      title: "Pünktlichkeits-Versprechen",
-      body: `Setup 30 Min vor Showbeginn, Soundcheck inkludiert. Kein Stress vor eurer Veranstaltung in ${data.name}.`,
-    },
-    {
-      Icon: CheckCircle2,
-      title: "Krankheits-Ersatz",
-      body: `Im (sehr unwahrscheinlichen) Krankheitsfall bekomme ich einen geprüften Kollegen organisiert — kein Loch im Programm.`,
-    },
-  ];
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Was ich garantiere.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Sechs{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Garantien
-              </span>{" "}
-              für dein Event in {data.name}.
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Einen Zauberer in {data.name} zu buchen ist Vertrauenssache. Sechs
-              Versprechen, die das Risiko für dich auf Null bringen — schriftlich
-              im Angebot fixiert.
-            </p>
-          </div>
-        </div>
-
-        {/* Asymmetrisches 2-Spalten-Listing mit Sticky-Sidebar */}
-        <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10`}
-        >
-          <aside className="lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
-            <div
-              className="relative p-7 md:p-9 text-white overflow-hidden"
-              style={{
-                borderRadius: "1.5rem",
-                background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, #08060c 100%)`,
-                boxShadow: "0 35px 70px -30px rgba(0,0,0,0.200)",
-              }}
-            >
-              <div
-                aria-hidden
-                className="absolute -top-32 -right-20 w-[380px] h-[380px] rounded-full blur-2xl opacity-6"
-                style={{
-                  background:
-                    "radial-gradient(circle, rgba(0,0,0,0.024), transparent 70%)",
-                }}
-              />
-              <p
-                className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3"
-                style={{ color: "#AFC0FF" }}
-              >
-                Risk auf Null
-              </p>
-              <h3 className="relative font-display text-2xl md:text-3xl font-black leading-[1.1] mb-5">
-                Im Angebot{" "}
-                <span style={{ color: "#AFC0FF" }}>
-                  schriftlich fixiert
-                </span>
-                .
-              </h3>
-              <p className="relative text-sm md:text-base text-white/75 leading-[1.65]">
-                Sechs Garantien — direkt im Angebot dokumentiert, nicht im
-                Kleingedruckten. So weißt du, dass die Show in {data.name}
-                {" "}läuft, egal was passiert.
-              </p>
-            </div>
-          </aside>
-
-          <ol className="lg:col-span-8 space-y-0 divide-y divide-foreground/10 border-y border-foreground/10">
-            {GARANTIEN.map((g, i) => (
-              <li
-                key={g.title}
-                className="grid grid-cols-[44px_1fr] md:grid-cols-[64px_1fr] gap-5 md:gap-7 py-7 md:py-8"
-              >
-                <div className="flex items-baseline gap-2">
-                  <span
-                    className={`${SERIF_ITALIC} text-2xl md:text-3xl tabular-nums leading-none`}
-                    style={{ color: ACCENT }}
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
-                <div>
-                  <div className="flex items-baseline gap-3 mb-2">
-                    <g.Icon
-                      className="w-4 h-4 shrink-0"
-                      style={{ color: ACCENT }}
-                      strokeWidth={2}
-                    />
-                    <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight">
-                      {g.title}
-                    </h3>
-                  </div>
-                  <p className="text-base text-foreground/65 leading-[1.7] max-w-2xl">
-                    {g.body}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
-    </section>
-  );
-};
+const AblaufBuchungSection = ({ data }: { data: Stadt }) => (
+  <Steps
+    eyebrow={`Zauberer buchen ${data.name} — so läuft es`}
+    title={
+      <>
+        Vier Schritte. <span style={{ color: COBALT }}>Kein Stress.</span>
+      </>
+    }
+    sub={`Den Zauberer für dein Event in ${data.name} zu buchen, ist nicht kompliziert — kein PDF-Fragebogen, keine Vertragsklauseln vorab. Vier transparente Schritte vom ersten Kontakt bis zur Show.`}
+    items={[
+      {
+        t: "Anfrage",
+        d: `Du schickst mir Datum, Anlass, Gästezahl und Wunsch-Location in ${data.name}. Über das Formular, per Email an el@magicel.de oder telefonisch. Antwort innerhalb 24 Stunden — meistens schneller.`,
+      },
+      {
+        t: "Briefing-Call",
+        d: `30-Min-Telefonat zu deinem Event in ${data.name}: Anlass im Detail, Publikum, Tonalität (festlich, casual, Premium), gewünschtes Format, Insider-Anekdoten für eingebaute Mentaleffekte.`,
+      },
+      {
+        t: `Show in ${data.name}`,
+        d: `Setup 30 Min vor Showbeginn, Soundcheck (falls Bühne), dann die Show. Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühne vor dem Tanz — je nach gebuchtem Format.`,
+      },
+      {
+        t: "Nachbereitung",
+        d: `Innerhalb 48 Stunden nach dem Event kurze Nachfrage zu deinem Erlebnis in ${data.name}. Optionale ProvenExpert-Bewertung, falls du wirklich zufrieden warst — sonst kein Druck.`,
+      },
+    ]}
+  />
+);
 
 /* ═══════════════════════════════════════════════════════════
    MAGIC-DINNER-STADT — Vertiefung Keyword "Magic Dinner [Stadt]"
    ═══════════════════════════════════════════════════════════ */
-const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Magic Dinner {data.name}.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Drei Gänge. Drei{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Magie-Routinen.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Magic Dinner ist mein Spezialgebiet — Mehrgänge-Abend mit Close-Up
-              zwischen den Gängen und Bühnen-Höhepunkt zum Dessert. Funktioniert
-              in Restaurants in {data.name} oder als geschlossener Privatabend.
-            </p>
-          </div>
-        </div>
+const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => (
+  <ExampleSets
+    eyebrow={`Magic Dinner ${data.name}`}
+    title={
+      <>
+        Drei Gänge. Drei <span style={{ color: COBALT }}>Magie-Routinen.</span>
+      </>
+    }
+    sub={`Magic Dinner ist mein Spezialgebiet — Mehrgänge-Abend mit Close-Up zwischen den Gängen und Bühnen-Höhepunkt zum Dessert. Funktioniert in Restaurants in ${data.name} oder als geschlossener Privatabend.`}
+    sets={[
+      {
+        tag: "Vorspeise · 20 Min pro Tisch",
+        t: "Eisbrecher",
+        d: `Walk-Around zwischen den Plätzen, Karten in die Hände der Gäste, kleine Wow-Effekte direkt am Tisch in ${data.name}.`,
+      },
+      {
+        tag: "Hauptgang · 5–7 Min pro Tisch",
+        t: "Tafel-Magie",
+        d: `Tisch-zu-Tisch-Routinen mit eingebauten Anekdoten der Gastgeber. Jeder Tisch bekommt seine eigene Mini-Show.`,
+      },
+      {
+        tag: "Dessert · 15–20 Min zentral",
+        t: "Bühnen-Pointe",
+        d: `Eine zentrale Bühnen-Routine für die ganze Tafel gleichzeitig — Mentaleffekt mit drei Sekunden Stille danach.`,
+      },
+    ]}
+    options={[
+      { Icon: UtensilsCrossed, t: "Magic Dinner-Konzept im Detail", d: "ganzer Abend" },
+      { Icon: Sparkles, t: `10+ Magic Dinners`, d: `auch in ${data.name}` },
+    ]}
+  />
+);
 
-        <div
-          className={`grid md:grid-cols-3 gap-5 md:gap-7`}
-        >
-          {[
-            {
-              gang: "Vorspeise",
-              title: "Eisbrecher",
-              body: `Walk-Around zwischen den Plätzen, Karten in die Hände der Gäste, kleine Wow-Effekte direkt am Tisch in ${data.name}.`,
-              kicker: "20 Min · pro Tisch",
-            },
-            {
-              gang: "Hauptgang",
-              title: "Tafel-Magie",
-              body: `Tisch-zu-Tisch-Routinen mit eingebauten Anekdoten der Gastgeber. Jeder Tisch bekommt seine eigene Mini-Show.`,
-              kicker: "5–7 Min · pro Tisch",
-            },
-            {
-              gang: "Dessert",
-              title: "Bühnen-Pointe",
-              body: `Eine zentrale Bühnen-Routine für die ganze Tafel gleichzeitig — Mentaleffekt mit drei Sekunden Stille danach.`,
-              kicker: "15–20 Min · zentral",
-            },
-          ].map((g, i) => (
-            <article
-              key={g.gang}
-              className="relative p-7 md:p-9 flex flex-col h-full text-white"
-              style={{
-                borderRadius: "1.25rem",
-                background:
-                  i === 1
-                    ? `linear-gradient(160deg, ${ACCENT_DEEP} 0%, #08060c 100%)`
-                    : "linear-gradient(160deg, #08060c 0%, #1a0e16 100%)",
-                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.175)",
-                minHeight: "320px",
-              }}
-            >
-              <p
-                className="text-[10px] tracking-[0.18em] uppercase font-bold mb-2"
-                style={{ color: "#AFC0FF" }}
-              >
-                {g.kicker}
-              </p>
-              <p
-                className={`${SERIF_ITALIC} text-2xl md:text-3xl mb-4`}
-                style={{ color: "#AFC0FF" }}
-              >
-                {g.gang}.
-              </p>
-              <h3 className="font-display text-xl md:text-2xl font-black leading-tight mb-4">
-                {g.title}
-              </h3>
-              <p className="text-sm md:text-base text-white/75 leading-[1.65] flex-1">
-                {g.body}
-              </p>
-            </article>
-          ))}
-        </div>
+/* ═══════════════════════════════════════════════════════════
+   WARUM-STADT-KARUSSELL — die geliebte Sechs-Gründe-Section
+   ═══════════════════════════════════════════════════════════ */
+const WarumStadtCarousel = ({ data }: { data: Stadt }) => (
+  <WarumCarousel
+    eyebrow={`Warum aus ${data.region}?`}
+    title={
+      <>
+        Sechs Gründe, warum ein Zauberer in <span style={{ color: COBALT }}>{data.name}</span> mehr bringt
+        <span style={{ color: MAGENTA }}>.</span>
+      </>
+    }
+    cards={[
+      {
+        kind: "photo",
+        image: dinnerBuehneImg,
+        chip: `${data.name} & Umland`,
+        title: "Vom Vorstands-Dinner bis zur Gala",
+        text: `Vertraut mit Sälen, Caterern und dem Ablauf vor Ort — von der intimen Feier bis zur großen Bühne in ${data.name}.`,
+        pos: "center",
+      },
+      { kind: "stat", v: "200+", l: "Events seit 2016", text: `Routine in ganz Bayern — viele davon in ${data.region}.` },
+      {
+        kind: "feature",
+        Icon: MapPin,
+        title: `Schnell in ${data.name}`,
+        text: `Anfahrt nach ${data.name} im Angebot transparent kalkuliert — keine versteckten Kosten, kurze Reaktionszeit.`,
+      },
+      {
+        kind: "photo",
+        image: stageImg,
+        chip: "Voller Saal",
+        title: `Der ganze Saal in ${data.name} geht mit`,
+        text: "Comedy & Mentalmagie für jeden Rahmen — Close-Up am Tisch oder große Bühnenshow.",
+        pos: "top",
+      },
+      { kind: "review", text: "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt.", name: "Martina Senftl · Eventkundin" },
+      {
+        kind: "feature",
+        Icon: Route,
+        title: "Deutschlandweit dabei",
+        text: `Regensburg ist die Basis — für Events in ${data.name} und ${data.region} bin ich zur Stelle, deutschlandweit unterwegs.`,
+      },
+    ]}
+  />
+);
 
-        <div className="mt-10 flex flex-wrap items-center gap-4">
-          <Link
-            to="/magic-dinner"
-            className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white"
-            style={{
-              background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-            }}
+/* ═══════════════════════════════════════════════════════════
+   IN DER NÄHE — geo-search keyword coverage
+   ═══════════════════════════════════════════════════════════ */
+const InDerNaeheSection = ({ data }: { data: Stadt }) => (
+  <SplitFeature
+    eyebrow="Zauberer in der Nähe gesucht?"
+    title={
+      <>
+        Du bist in {data.name} oder Umgebung — <span style={{ color: COBALT }}>ich bin hier</span>.
+      </>
+    }
+    sub={`Wer "Zauberer in der Nähe" oder "Magier in der Umgebung" sucht und in ${data.name} oder dem Umkreis sitzt: Ich komme zu jedem Veranstaltungsort in ${data.name} und ${data.region}. Anfahrt im Angebot kalkuliert, keine versteckten Kosten, kurze Reaktionszeit auf Anfragen.`}
+    points={[
+      `Anfrage starten für ${data.name}`,
+      "Direkt anrufen — +49 155 63744696",
+      `Ich komme zu jedem Veranstaltungsort in ${data.name} und ${data.region}`,
+    ]}
+    image={schneiderImg}
+    imageAlt={`Zauberer in der Nähe von ${data.name}`}
+    imgPos="top"
+  />
+);
+
+/* ═══════════════════════════════════════════════════════════
+   LOCATIONS — bekannte Venues der Stadt
+   ═══════════════════════════════════════════════════════════ */
+const LocationsSection = ({ data }: { data: Stadt & { bekannteLocations: string[] } }) => (
+  <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24">
+    <div className="max-w-7xl mx-auto">
+      <motion.div variants={up} className="max-w-3xl mb-10">
+        <Eyebrow>Event-Locations in {data.name}</Eyebrow>
+        <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.4vw,3.4rem)", lineHeight: 1.04, color: INK }}>
+          In den <span style={{ color: COBALT }}>bekanntesten Locations</span> der Stadt.
+        </h2>
+        <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+          Ich trete regelmäßig in Locations und Venues in {data.name} auf — und komme zu jeder
+          Wunsch-Location. Schlosssäle, Hotels, Restaurants, Eventhallen.
+        </p>
+      </motion.div>
+      <motion.div variants={up} className="flex flex-wrap gap-3">
+        {data.bekannteLocations.map((loc) => (
+          <span
+            key={loc}
+            className="inline-flex items-center gap-2 text-sm px-5 py-3 rounded-full transition-colors"
+            style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}
           >
-            Magic Dinner-Konzept im Detail
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <span className="text-xs uppercase tracking-wide font-medium text-foreground/55">
-            10+ Magic Dinners · auch in {data.name}
+            <MapPin className="w-3.5 h-3.5" style={{ color: COBALT }} />
+            {loc}
           </span>
-        </div>
-      </div>
-    </section>
+        ))}
+      </motion.div>
+      <motion.p variants={up} className="mt-10 text-[15px] md:text-base leading-relaxed max-w-2xl" style={{ color: L_DIM }}>
+        Deine Location ist nicht dabei? Kein Problem — ich komme zu jedem Veranstaltungsort in{" "}
+        {data.name} und Umgebung.{" "}
+        <a href={`/buchung?ort=${encodeURIComponent(data.name)}`} style={{ color: COBALT }} className="hover:underline font-semibold">
+          Jetzt anfragen →
+        </a>
+      </motion.p>
+    </div>
+  </motion.section>
+);
+
+/* ═══════════════════════════════════════════════════════════
+   GARANTIEN — Trust Signals
+   ═══════════════════════════════════════════════════════════ */
+const GarantienSection = ({ data }: { data: Stadt }) => {
+  const GARANTIEN = [
+    { tag: "Versicherung", t: "Berufshaftpflicht", d: `Standard-Berufshaftpflicht für Künstler greift bei jedem Auftritt in ${data.name} — Sach- und Personenschäden abgesichert. Versicherungs-Nachweis auf Anfrage.` },
+    { tag: "Vorbereitung", t: "30 Min Briefing-Call", d: `Vorab-Call zur Klärung von Anlass, Tonalität, Tabus und Insider-Anekdoten — kostenlos, ohne Verpflichtung.` },
+    { tag: "Reaktion", t: "24h-Antwort-Garantie", d: `Anfragen aus ${data.name} beantworte ich innerhalb 24 Stunden — meistens schneller, oft am selben Tag.` },
+    { tag: "Recht", t: "DSGVO + AVV", d: `Datenschutz, Auftragsverarbeitungsvertrag und alle rechtlichen Grundlagen — gerade für Firmenkunden in ${data.name} wichtig.` },
+    { tag: "Verlässlichkeit", t: "Pünktlichkeits-Versprechen", d: `Setup 30 Min vor Showbeginn, Soundcheck inkludiert. Kein Stress vor eurer Veranstaltung in ${data.name}.` },
+    { tag: "Ausfallschutz", t: "Krankheits-Ersatz", d: `Im (sehr unwahrscheinlichen) Krankheitsfall bekomme ich einen geprüften Kollegen organisiert — kein Loch im Programm.` },
+  ];
+  return (
+    <ExampleSets
+      eyebrow="Was ich garantiere"
+      title={
+        <>
+          Sechs <span style={{ color: COBALT }}>Garantien</span> für dein Event in {data.name}.
+        </>
+      }
+      sub={`Einen Zauberer in ${data.name} zu buchen ist Vertrauenssache. Sechs Versprechen, die das Risiko für dich auf Null bringen — schriftlich im Angebot fixiert.`}
+      sets={GARANTIEN}
+      options={[{ Icon: ShieldCheck, t: "Risk auf Null", d: "im Angebot schriftlich fixiert" }]}
+    />
   );
 };
 
@@ -1384,461 +592,109 @@ const MagicDinnerStadtSection = ({ data }: { data: Stadt }) => {
    ANREISE / VERFÜGBARKEIT — geo + freshness signal
    ═══════════════════════════════════════════════════════════ */
 const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
   const year = new Date().getFullYear();
   return (
-    <section
-      ref={ref}
-      className="bg-white py-20 md:py-28 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start`}
-        >
-          <div className="lg:col-span-6">
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
-              Anfahrt nach {data.name}.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground mb-6">
-              Schnell zu dir nach{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                {data.name}
-              </span>
-              .
-            </h2>
-            <p className="text-base md:text-lg text-foreground/70 leading-[1.7] mb-5 max-w-xl">
-              Mein Standort ist Regensburg — von dort aus betreue ich Events in
-              ganz Bayern und deutschlandweit. Die Anfahrt nach {data.name} ist
-              im Angebot transparent kalkuliert, keine versteckten Kosten.
-              Pünktliches Erscheinen vor Showbeginn garantiert.
-            </p>
-            <div className="flex flex-wrap gap-2 mt-3">
-              {[
-                "Anfahrt im Angebot",
-                "Kein Stau-Risiko (eigene Reserve)",
-                "Pünktlich vor Setup",
-                "Bayern flächendeckend",
-              ].map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-white border border-foreground/10"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="lg:col-span-6">
-            <div
-              className="relative p-8 md:p-10 text-white overflow-hidden"
-              style={{
-                borderRadius: "1.5rem",
-                background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, #08060c 100%)`,
-                boxShadow: "0 40px 80px -30px rgba(0,0,0,0.200)",
-              }}
-            >
-              <div
-                aria-hidden
-                className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-2xl opacity-6"
-                style={{
-                  background:
-                    "radial-gradient(circle, rgba(0,0,0,0.024), transparent 70%)",
-                }}
-              />
-              <div className="relative">
-                <p
-                  className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3"
-                  style={{ color: "#AFC0FF" }}
-                >
-                  Verfügbarkeit {year}–{year + 1}
-                </p>
-                <h3 className="font-display text-2xl md:text-3xl font-black leading-[1.1] mb-5">
-                  Termine in {data.name} aktuell{" "}
-                  <span style={{ color: "#AFC0FF" }}>
-                    verfügbar
-                  </span>
-                  .
-                </h3>
-                <p className="text-base text-white/80 leading-[1.7] mb-7">
-                  Q1 und Q2 sind aktuell entspannt — Q4 (Weihnachtsfeier-Saison)
-                  füllt sich erfahrungsgemäß ab Juli. Hochzeitstermine
-                  Mai–September am besten frühzeitig anfragen, gerade in {data.name}.
-                </p>
-                <div className="grid grid-cols-3 gap-3 mb-7">
-                  {[
-                    { label: "Q1–Q2", color: "#86d29a" },
-                    { label: "Q3", color: "#AFC0FF" },
-                    { label: "Q4", color: "#e09a6e" },
-                  ].map((q) => (
-                    <div
-                      key={q.label}
-                      className="rounded-xl px-3 py-3 text-center"
-                      style={{
-                        background: "rgba(255,255,255,0.06)",
-                        border: "1px solid rgba(255,255,255,0.12)",
-                      }}
-                    >
-                      <span
-                        className="font-display font-black text-base block"
-                        style={{ color: q.color }}
-                      >
-                        {q.label}
-                      </span>
-                      <span className="text-[10px] tracking-[0.16em] uppercase font-bold text-white/55">
-                        {q.color === "#86d29a"
-                          ? "Entspannt"
-                          : q.color === "#AFC0FF"
-                            ? "Mittel"
-                            : "Eng"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <Link
-                  to={`/buchung?ort=${encodeURIComponent(data.name)}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-black hover:bg-white/95 transition-colors"
-                >
-                  Termin in {data.name} sichern
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <SplitFeature
+      reverse
+      eyebrow={`Anfahrt nach ${data.name}`}
+      title={
+        <>
+          Schnell zu dir nach <span style={{ color: COBALT }}>{data.name}</span>.
+        </>
+      }
+      sub={
+        <>
+          Mein Standort ist Regensburg — von dort aus betreue ich Events in ganz Bayern und
+          deutschlandweit. Die Anfahrt nach {data.name} ist im Angebot transparent kalkuliert, keine
+          versteckten Kosten. Pünktliches Erscheinen vor Showbeginn garantiert.
+          <br />
+          <br />
+          Verfügbarkeit {year}–{year + 1}: Termine in {data.name} aktuell verfügbar. Q1 und Q2 sind
+          aktuell entspannt — Q4 (Weihnachtsfeier-Saison) füllt sich erfahrungsgemäß ab Juli.
+          Hochzeitstermine Mai–September am besten frühzeitig anfragen, gerade in {data.name}.
+        </>
+      }
+      points={[
+        "Anfahrt im Angebot",
+        "Kein Stau-Risiko (eigene Reserve)",
+        "Pünktlich vor Setup",
+        "Bayern flächendeckend",
+      ]}
+      image={staunenImg}
+      imageAlt={`Anfahrt und Verfügbarkeit für ${data.name}`}
+      imgPos="top"
+      stat={{ v: "≤ 24 h", l: `Termin in ${data.name} sichern` }}
+    />
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
-   LOCATIONS — bekannte Venues der Stadt
+   STIMMEN — Reviews (Voltage ReviewsBlock, echte Bewertungen)
    ═══════════════════════════════════════════════════════════ */
-const LocationsSection = ({
-  data,
-}: {
-  data: Stadt & { bekannteLocations: string[] };
-}) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-              Event-Locations in {data.name}.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              In den{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                bekanntesten Locations
-              </span>{" "}
-              der Stadt.
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.6] max-w-md">
-              Ich trete regelmäßig in Locations und Venues in {data.name} auf —
-              und komme zu jeder Wunsch-Location. Schlosssäle, Hotels,
-              Restaurants, Eventhallen.
-            </p>
-          </div>
-        </div>
-
-        <div
-          className={`flex flex-wrap gap-3`}
-        >
-          {data.bekannteLocations.map((loc) => (
-            <span
-              key={loc}
-              className="inline-flex items-center gap-2 font-sans text-sm text-foreground/80 px-5 py-3 rounded-full bg-white border border-foreground/10 hover:border-[color:var(--accent-color,#1D3FFF)]/40 transition-colors"
-            >
-              <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT }} />
-              {loc}
-            </span>
-          ))}
-        </div>
-        <p className="mt-10 text-sm md:text-base text-foreground/60 leading-relaxed max-w-2xl">
-          Deine Location ist nicht dabei? Kein Problem — ich komme zu jedem
-          Veranstaltungsort in {data.name} und Umgebung.{" "}
-          <Link
-            to={`/buchung?ort=${encodeURIComponent(data.name)}`}
-            style={{ color: ACCENT }}
-            className="hover:underline font-semibold"
-          >
-            Jetzt anfragen →
-          </Link>
-        </p>
-      </div>
-    </section>
-  );
-};
+const StimmenSection = () => <ReviewsBlock paper={false} />;
 
 /* ═══════════════════════════════════════════════════════════
-   STIMMEN
-   ═══════════════════════════════════════════════════════════ */
-const StimmenSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  const reviews = [
-    {
-      quote:
-        "Es war einfach Mega! 200 Gäste — Emilian hat mit seiner Bühnenshow und Close-Up alle begeistert.",
-      author: "Jan von Lehmann",
-      role: "Firmenfeier · 200 Gäste",
-      initial: "J",
-    },
-    {
-      quote:
-        "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt.",
-      author: "Martina Senftl",
-      role: "Eventkundin",
-      initial: "M",
-    },
-    {
-      quote:
-        "Mit viel Charme und Witz hat er alle Gäste begeistert. Eine tolle Ergänzung für jeden besonderen Anlass.",
-      author: "Katrin Raß",
-      role: "Hochzeitsplanerin",
-      initial: "K",
-    },
-  ];
-  return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="max-w-2xl mb-14 md:mb-16">
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-            Was Gastgeber sagen.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
-            5,0 Sterne.
-            <br />
-            <span>30+ Bewertungen.</span>
-          </h2>
-          <p className="mt-6 text-base md:text-lg text-foreground/60 leading-[1.6] max-w-xl">
-            Verifizierte ProvenExpert-Bewertungen aus Bayern — auch von Events in
-            {" "}
-            {data.name} und Umgebung.
-          </p>
-        </div>
-        <div
-          className={`grid md:grid-cols-3 gap-6 md:gap-8`}
-        >
-          {reviews.map((r) => (
-            <article
-              key={r.author}
-              className="relative bg-white p-7 md:p-9 flex flex-col h-full"
-              style={{
-                borderRadius: "1rem",
-                boxShadow:
-                  "0 25px 50px -25px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04)",
-              }}
-            >
-              <div className="flex items-center gap-1 mb-5">
-                {[...Array(5)].map((_, j) => (
-                  <Star
-                    key={j}
-                    className="w-4 h-4 fill-amber-400 text-amber-400"
-                  />
-                ))}
-                <meta content="5" />
-              </div>
-              <p
-                className="text-[15px] md:text-base leading-[1.65] text-foreground/85 flex-1"
-              >
-                „{r.quote}"
-              </p>
-              <footer className="mt-7 pt-5 border-t border-foreground/10 flex items-center gap-4">
-                <div
-                  className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center font-display font-bold text-white text-base"
-                  style={{
-                    background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                  }}
-                >
-                  {r.initial}
-                </div>
-                <div>
-                  <p
-                    className="font-display font-bold text-foreground text-sm"
-                  >
-                    {r.author}
-                  </p>
-                  <p
-                    className="text-xs font-medium text-foreground/55 mt-0.5"
-                  >
-                    {r.role}
-                  </p>
-                </div>
-              </footer>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   VIDEO
+   VIDEO — Showreel (TVA)
    ═══════════════════════════════════════════════════════════ */
 const VideoSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  const [playing, setPlaying] = useState(false);
   const videoId = TVA_VIDEO_ID;
   return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div
-          className={`max-w-3xl mx-auto text-center mb-14 md:mb-16`}
-        >
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-            Showreel.
+    <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
+      <div className="max-w-4xl mx-auto">
+        <motion.div variants={up} className="max-w-2xl mx-auto text-center mb-10">
+          <p className="flex items-center justify-center gap-2 text-[12px] tracking-[0.16em] uppercase font-semibold mb-5" style={{ color: L_DIM }}>
+            <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: COBALT }} />
+            Showreel
           </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground">
-            Sieh dir den{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-              Zauberer
-            </span>{" "}
-            an.
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.4vw,3rem)", lineHeight: 1.04, color: INK }}>
+            Sieh dir den <span style={{ color: COBALT }}>Zauberer</span> an.
           </h2>
-          <p className="mt-6 text-base md:text-lg text-foreground/60 leading-[1.6] max-w-xl mx-auto">
-            Erster Eindruck vom Zauberer für {data.name} — Auszug aus Auftritten
-            auf Firmenfeiern, Hochzeiten und Galas in Bayern.
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Erster Eindruck vom Zauberer für {data.name} — Auszug aus Auftritten auf Firmenfeiern,
+            Hochzeiten und Galas in Bayern.
           </p>
-        </div>
-        <div
-          className={`max-w-4xl mx-auto`}
-          style={{ animationDelay: "0.15s" }}
-        >
-          <div
-            className="relative aspect-video overflow-hidden bg-foreground/5"
-            style={{ borderRadius: "1.5rem" }}
-          >
-            {playing ? (
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&controls=1&playsinline=1&autoplay=1`}
-                title={`Zauberer ${data.name} – Emilian Leber Showreel`}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            ) : (
-              <>
-                <img
-                  src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
-                  alt={`Zauberer ${data.name} — Emilian Leber Showreel Vorschau`}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <button
-                    onClick={() => setPlaying(true)}
-                    className="w-20 h-20 rounded-full hover:scale-110 transition-transform flex items-center justify-center shadow-2xl"
-                    style={{
-                      background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                    }}
-                    aria-label={`Showreel Zauberer ${data.name} abspielen`}
-                  >
-                    <svg
-                      className="w-8 h-8 text-white ml-1"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
+        </motion.div>
+        <motion.div variants={up} className="relative aspect-video overflow-hidden rounded-[24px]" style={{ border: `1px solid ${L_LINE}` }}>
+          <iframe
+            className="absolute inset-0 w-full h-full"
+            src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&controls=1&playsinline=1`}
+            title={`Zauberer ${data.name} – Emilian Leber Showreel`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            loading="lazy"
+          />
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
-   PULL-QUOTE — black full-bleed mit Stadt-Bezug
+   PULL-QUOTE — dark full-bleed mit Stadt-Bezug
    ═══════════════════════════════════════════════════════════ */
-const PullQuoteSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden"
-    >
-      <div className="absolute inset-0 opacity-6">
-        <img
-          src={staunenImg}
-          alt=""
-          className="w-full h-full object-cover"
-          loading="lazy"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.55) 0%, rgba(8,6,12,0.95) 70%)",
-          }}
-        />
-      </div>
-      <div
-        aria-hidden
-        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)",
-        }}
-      />
-      <div
-        className={`relative container px-6`}
-      >
-        <Quote
-          className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40"
-          style={{ color: "#AFC0FF" }}
-          strokeWidth={1.25}
-        />
-        <blockquote className="max-w-5xl mx-auto text-center">
-          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
-            Drei Sekunden Stille.{" "}
-            <span style={{ color: "#AFC0FF" }}>
-              Dann lacht ein Saal in {data.name}.
-            </span>
-          </p>
-          <footer className="mt-10 flex items-center justify-center gap-4">
-            <span className="h-px w-12 bg-white/25" aria-hidden />
-            <span
-              className="text-sm md:text-base text-white/65"
-            >
-              Was nach jedem Auftritt passiert.
-            </span>
-            <span className="h-px w-12 bg-white/25" aria-hidden />
-          </footer>
-        </blockquote>
-      </div>
-    </section>
-  );
-};
+const PullQuoteSection = ({ data }: { data: Stadt }) => (
+  <DarkShowcase
+    eyebrow="Was nach jedem Auftritt passiert"
+    title={
+      <>
+        Drei Sekunden Stille. <span style={{ color: "#9db0ff" }}>Dann lacht ein Saal in {data.name}.</span>
+      </>
+    }
+    paras={[
+      `Karten in den Händen der Gäste, ein Mentaleffekt mit Veranstalter-Bezug, eine Pointe, die nur in eurem Saal in ${data.name} funktioniert.`,
+      `Drei Sekunden Stille — dann lacht der ganze Saal. Das ist der Moment, über den deine Gäste in ${data.name} noch Jahre später reden.`,
+    ]}
+    image={staunenImg}
+    imageAlt={`Staunen beim Zauberer in ${data.name}`}
+    imgPos="top"
+    badge="200+ Events"
+  />
+);
 
 /* ═══════════════════════════════════════════════════════════
    FAQ — Stadt-spezifisch + Allgemein
    ═══════════════════════════════════════════════════════════ */
 const FAQSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
   const allgemein = [
     {
       q: `Wie weit im Voraus muss ich den Zauberer in ${data.name} buchen?`,
@@ -1853,68 +709,13 @@ const FAQSection = ({ data }: { data: Stadt }) => {
       a: `Ja — ich komme zu jedem Veranstaltungsort in ${data.name} und ${data.region}. Hochzeits-Locations am Land, Restaurants im Umkreis, Firmen-Standorte außerhalb der Stadt — die Anfahrt ist im Angebot kalkuliert.`,
     },
   ];
-  const faqs = [...(data.faq || []), ...allgemein];
+  const items = [...(data.faq || []), ...allgemein];
   return (
-    <section ref={ref} className="bg-white py-24 md:py-36 border-y border-foreground/10">
-      <div className="container px-6">
-        <div className="max-w-2xl mb-14 md:mb-16">
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-            Häufige Fragen.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-            Zauberer {data.name}.<br />
-            <span>Was vorher gefragt wird.</span>
-          </h2>
-        </div>
-        <div
-          className={`max-w-3xl`}
-        >
-          {faqs.map((faq, i) => {
-            const open = openIndex === i;
-            return (
-              <div
-                key={i}
-                className="border-b border-foreground/15"
-                itemScope
-                itemType="https://schema.org/Question"
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenIndex(open ? null : i)}
-                  className="flex items-center justify-between w-full py-6 md:py-7 text-left gap-6 group"
-                >
-                  <h3
-                    className="font-display text-base md:text-lg font-bold text-foreground leading-snug pr-4"
-                  >
-                    {faq.q}
-                  </h3>
-                  {open ? (
-                    <ChevronUp className="w-5 h-5 text-foreground/50 shrink-0" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-foreground/50 shrink-0 transition-transform group-hover:translate-y-0.5" />
-                  )}
-                </button>
-                {open && (
-                  <div
-                    className="pb-6 md:pb-7"
-                    itemScope
-                    itemProp="acceptedAnswer"
-                    itemType="https://schema.org/Answer"
-                  >
-                    <p
-                      className="text-base text-foreground/70 leading-[1.7] max-w-2xl"
-                      itemProp="text"
-                    >
-                      {faq.a}
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+    <FAQ
+      eyebrow={`Zauberer ${data.name} · Häufige Fragen`}
+      title={`Zauberer ${data.name} — was vorher gefragt wird.`}
+      items={items}
+    />
   );
 };
 
@@ -1922,241 +723,112 @@ const FAQSection = ({ data }: { data: Stadt }) => {
    LANG-TEXT — SEO-Text unten
    ═══════════════════════════════════════════════════════════ */
 const LangTextSection = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
   if (!data.langText) return null;
   const paragraphs = data.langText.split("\n\n").filter(Boolean);
   return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div
-          className={`max-w-3xl mx-auto`}
-        >
-          <p
-            className={`${SERIF_ITALIC} text-lg md:text-xl text-foreground/55 mb-6 text-center`}
-          >
-            Alles, was du wissen musst.
+    <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
+      <div className="max-w-3xl mx-auto">
+        <motion.div variants={up} className="text-center mb-10">
+          <p className="flex items-center justify-center gap-2 text-[12px] tracking-[0.16em] uppercase font-semibold mb-5" style={{ color: L_DIM }}>
+            <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: COBALT }} />
+            Alles, was du wissen musst
           </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.875rem,3.5vw,3rem)] text-foreground mb-12 text-center">
-            Zauberer {data.name} —{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-              ausführlich erklärt.
-            </span>
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.4vw,3rem)", lineHeight: 1.05, color: INK }}>
+            Zauberer {data.name} — <span style={{ color: COBALT }}>ausführlich erklärt.</span>
           </h2>
-          <div className="space-y-6 md:space-y-7">
-            {paragraphs.map((p, i) => (
-              <p
-                key={i}
-                className="text-base md:text-lg text-foreground/75 leading-[1.8]"
-              >
-                {p}
-              </p>
-            ))}
-          </div>
+        </motion.div>
+        <div className="space-y-6 md:space-y-7">
+          {paragraphs.map((p, i) => (
+            <motion.p key={i} variants={up} className="text-[16px] md:text-lg leading-[1.8]" style={{ color: "#3a3833" }}>
+              {p}
+            </motion.p>
+          ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
    KOLLEGEN-EMPFEHLUNG
    ═══════════════════════════════════════════════════════════ */
-const KollegenEmpfehlungSection = ({
-  empfehlung,
-}: {
-  empfehlung: KollegenEmpfehlung;
-}) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section ref={ref} className="bg-white py-12 md:py-16">
-      <div className="container px-6">
-        <div
-          className={`max-w-2xl mx-auto`}
-        >
-          <p className="text-sm md:text-base text-foreground/55 leading-relaxed text-center">
-            {empfehlung.prefix}
-            <a
-              href={empfehlung.linkHref}
-              target="_blank"
-              rel="noopener"
-              className="text-foreground underline decoration-foreground/30 underline-offset-4 hover:decoration-[#1D3FFF] transition-colors"
-            >
-              {empfehlung.linkText}
-            </a>
-            {empfehlung.suffix}
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
+const KollegenEmpfehlungSection = ({ empfehlung }: { empfehlung: KollegenEmpfehlung }) => (
+  <section className="px-5 md:px-10 py-10 md:py-14">
+    <div className="max-w-2xl mx-auto">
+      <p className="text-[14px] md:text-[15px] leading-relaxed text-center" style={{ color: L_DIM }}>
+        {empfehlung.prefix}
+        <a href={empfehlung.linkHref} target="_blank" rel="noopener" className="underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
+          {empfehlung.linkText}
+        </a>
+        {empfehlung.suffix}
+      </p>
+    </div>
+  </section>
+);
 
 /* ═══════════════════════════════════════════════════════════
-   WEITERE STÄDTE — Internal Linking
+   WEITERE STÄDTE — Internal Linking (SEO-wichtig)
    ═══════════════════════════════════════════════════════════ */
 const WeitereStaedteSection = ({ current }: { current: string }) => {
-  const { ref, isVisible } = useScrollReveal();
   const currentData = staedte.find((s) => s.slug === current);
-  const sameRegion = staedte
-    .filter((s) => s.slug !== current && s.region === currentData?.region)
-    .slice(0, 12);
-  const others = staedte
-    .filter((s) => s.slug !== current && s.region !== currentData?.region)
-    .slice(0, 6);
+  const sameRegion = staedte.filter((s) => s.slug !== current && s.region === currentData?.region).slice(0, 12);
+  const others = staedte.filter((s) => s.slug !== current && s.region !== currentData?.region).slice(0, 6);
   return (
-    <section
-      ref={ref}
-      className="bg-white py-20 md:py-28 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div
-          className={`max-w-3xl mb-10`}
-        >
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6">
-            Zauberer auch in deiner Stadt.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
-            Über {staedte.length}+ Städte in{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-              Deutschland und Österreich
-            </span>
-            .
+    <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10">
+          <Eyebrow>Zauberer auch in deiner Stadt</Eyebrow>
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.75rem,4vw,3.25rem)", lineHeight: 1.05, color: INK }}>
+            Über {staedte.length}+ Städte in <span style={{ color: COBALT }}>Deutschland und Österreich</span>.
           </h2>
-        </div>
+        </motion.div>
         {sameRegion.length > 0 && (
           <div className="mb-10">
-            <p
-              className="text-[10px] tracking-[0.18em] uppercase font-bold mb-5"
-              style={{ color: ACCENT }}
-            >
+            <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-5" style={{ color: COBALT }}>
               Zauberer in {currentData?.region}
             </p>
             <div className="flex flex-wrap gap-2.5">
               {sameRegion.map((s) => (
-                <Link
+                <motion.a
                   key={s.slug}
-                  to={`/zauberer/${s.slug}`}
-                  className="inline-flex items-center gap-1.5 font-sans text-sm text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full bg-white border border-foreground/10 hover:border-[#1D3FFF]/30"
+                  variants={up}
+                  href={`/zauberer/${s.slug}`}
+                  className="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-full transition-colors hover:border-[#1D3FFF]"
+                  style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}
                 >
                   Zauberer {s.name}
-                </Link>
+                </motion.a>
               ))}
             </div>
           </div>
         )}
         {others.length > 0 && (
           <div>
-            <p
-              className="text-[10px] tracking-[0.18em] uppercase font-bold mb-5"
-              style={{ color: ACCENT }}
-            >
+            <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-5" style={{ color: COBALT }}>
               Deutschlandweit
             </p>
             <div className="flex flex-wrap gap-2.5">
               {others.map((s) => (
-                <Link
+                <motion.a
                   key={s.slug}
-                  to={`/zauberer/${s.slug}`}
-                  className="inline-flex items-center gap-1.5 font-sans text-sm text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full bg-white border border-foreground/10 hover:border-[#1D3FFF]/30"
+                  variants={up}
+                  href={`/zauberer/${s.slug}`}
+                  className="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-full transition-colors hover:border-[#1D3FFF]"
+                  style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}
                 >
                   Zauberer {s.name}
-                </Link>
+                </motion.a>
               ))}
             </div>
           </div>
         )}
       </div>
-    </section>
+    </motion.section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
-   FINAL CTA
-   ═══════════════════════════════════════════════════════════ */
-const FinalCTA = ({ data }: { data: Stadt }) => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="relative text-white py-28 md:py-40 overflow-hidden"
-    >
-      <div className="absolute inset-0">
-        <img
-          src={audienceImg}
-          alt=""
-          className="w-full h-full object-cover"
-          loading="lazy"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(120deg, rgba(8,6,12,0.92) 0%, rgba(8,6,12,0.75) 50%, rgba(8,6,12,0.55) 100%)",
-          }}
-        />
-      </div>
-      <div
-        aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
-        }}
-      />
-      <div className="relative container px-6">
-        <div
-          className={`max-w-3xl mx-auto text-center`}
-        >
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
-            Zauberer für {data.name} buchen.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
-            Dein Event in{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
-              {data.name}
-            </span>
-            . Magisch.
-          </h2>
-          <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
-            Schick mir Datum, Anlass, Gästezahl und Location in {data.name} —
-            Antwort innerhalb 24 Stunden mit Konzept-Vorschlag und Angebot.
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to={`/buchung?ort=${encodeURIComponent(data.name)}`}
-              className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-black hover:bg-white/90"
-            >
-              Anfrage starten
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <a
-              href="tel:+4915563744696"
-              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/70 hover:text-white"
-            >
-              Direkt anrufen
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   QUIZ — Stadt-spezifischer Format-Finder
+   QUIZ — Stadt-spezifischer Format-Finder (1:1 erhalten)
    ═══════════════════════════════════════════════════════════ */
 const buildStadtQuizConfig = (data: Stadt): CustomQuizConfig => ({
   anlass: `Event in ${data.name}`,
@@ -2164,10 +836,7 @@ const buildStadtQuizConfig = (data: Stadt): CustomQuizConfig => ({
   sectionTitle: (
     <>
       Welcher Zauberer passt zu deinem{" "}
-      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-        Event in {data.name}
-      </span>
-      ?
+      <span style={{ color: ACCENT }}>Event in {data.name}</span>?
     </>
   ),
   sectionDesc: `Vier Fragen — du bekommst eine konkrete Empfehlung für dein Event in ${data.name}: Format, Dauer, ungefährer Rahmen.`,
@@ -2323,47 +992,30 @@ const StadtSeite = () => {
   const description = `Zauberer in ${data.name} buchen: Close-Up Magie, Bühnenshow, Magic Dinner für Hochzeit, Firmenfeier, Geburtstag und Galas. 5,0★ · 30+ Bewertungen · 200+ Events · 24 h Antwort.`;
   const keywords = keywordList(data.name);
 
-  const faqSchema = (data.faq?.length ?? 0) > 0
-    ? {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: (data.faq ?? []).map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
-      }
-    : null;
+  const faqSchema =
+    (data.faq?.length ?? 0) > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: (data.faq ?? []).map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }
+      : null;
 
   return (
-    <PageLayout>
+    <VoltageShell title={title} description={description} path={`/zauberer/${data.slug}`} noindex={false}>
       <Helmet>
-        <html lang="de" />
-        <title>{title}</title>
-        <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
-        <meta name="robots" content="index,follow,max-image-preview:large" />
-        <link rel="canonical" href={siteUrl} />
-        <meta property="og:type" content="website" />
         <meta property="og:url" content={siteUrl} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
         <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
         <meta property="og:locale" content="de_DE" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
-          rel="stylesheet"
-        />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -2426,45 +1078,61 @@ const StadtSeite = () => {
             contentUrl: `https://www.youtube.com/watch?v=${TVA_VIDEO_ID}`,
           })}
         </script>
-        {faqSchema && (
-          <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-        )}
+        {faqSchema && <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>}
       </Helmet>
-      <main>
-        <Hero data={data} />
-        <LogoMarquee
-          eyebrow={`Auftritte für Konzerne und Marken — auch in ${data.name}.`}
-          headline=""
-          variant="cream"
-          compact
-        />
-        <WarumStadtSection data={data} />
-        <TrustStripSection data={data} />
-        <FormateSection data={data} />
-        <HochzeitsmagierStadtSection data={data} />
-        <AnlaesseSection data={data} />
-        <FirmenzaubererStadtSection data={data} />
-        <AblaufBuchungSection data={data} />
-        <MagicDinnerStadtSection data={data} />
-        <PullQuoteSection data={data} />
-        <InDerNaeheSection data={data} />
-        {data.bekannteLocations && data.bekannteLocations.length > 0 && (
-          <LocationsSection data={data as Stadt & { bekannteLocations: string[] }} />
-        )}
-        <GarantienSection data={data} />
-        <AnreiseVerfuegbarkeitSection data={data} />
-        <CustomQuizSection config={buildStadtQuizConfig(data)} />
-        <StimmenSection data={data} />
-        <VideoSection data={data} />
-        <FAQSection data={data} />
-        <LangTextSection data={data} />
-        {data.kollegenEmpfehlung && (
-          <KollegenEmpfehlungSection empfehlung={data.kollegenEmpfehlung} />
-        )}
-        <WeitereStaedteSection current={data.slug} />
-        <FinalCTA data={data} />
-      </main>
-    </PageLayout>
+
+      <SubHero
+        eyebrow={`Zauberer · ${data.name} · ${data.region}`}
+        title={
+          <>
+            Zauberer in <span style={{ color: COBALT }}>{data.name}</span>
+            <span style={{ color: MAGENTA }}>.</span>
+          </>
+        }
+        sub={data.intro}
+        image={heroStartImg}
+        imageAlt={`Zauberer ${data.name} — Emilian Leber auf Events in ${data.name}`}
+        imgPos="top"
+        badge={`${data.name} · 200+ Events · Termine 2026 frei`}
+        primary={{ label: `Zauberer ${data.name} anfragen`, href: `/buchung?ort=${encodeURIComponent(data.name)}` }}
+        secondary={{ label: "Showkonzepte ansehen", href: "/close-up" }}
+      />
+
+      <LogoMarquee label={`Auftritte für Konzerne und Marken — auch in ${data.name}.`} />
+
+      <WarumStadtSection data={data} />
+      <TrustStripSection data={data} />
+      <FormateSection data={data} />
+      <HochzeitsmagierStadtSection data={data} />
+      <AnlaesseSection data={data} />
+      <FirmenzaubererStadtSection data={data} />
+      <AblaufBuchungSection data={data} />
+      <MagicDinnerStadtSection data={data} />
+      <WarumStadtCarousel data={data} />
+      <PullQuoteSection data={data} />
+      <InDerNaeheSection data={data} />
+      {data.bekannteLocations && data.bekannteLocations.length > 0 && (
+        <LocationsSection data={data as Stadt & { bekannteLocations: string[] }} />
+      )}
+      <GarantienSection data={data} />
+      <AnreiseVerfuegbarkeitSection data={data} />
+      <CustomQuizSection config={buildStadtQuizConfig(data)} />
+      <StimmenSection />
+      <VideoSection data={data} />
+      <FAQSection data={data} />
+      <LangTextSection data={data} />
+      {data.kollegenEmpfehlung && <KollegenEmpfehlungSection empfehlung={data.kollegenEmpfehlung} />}
+      <WeitereStaedteSection current={data.slug} />
+
+      <FinalCTA
+        title={
+          <>
+            Dein Event in {data.name}. <span style={{ color: MAGENTA }}>Magisch.</span>
+          </>
+        }
+        sub={`Schick mir Datum, Anlass, Gästezahl und Location in ${data.name} — Antwort innerhalb 24 Stunden mit Konzept-Vorschlag und Angebot.`}
+      />
+    </VoltageShell>
   );
 };
 
