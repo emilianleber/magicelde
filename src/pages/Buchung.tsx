@@ -17,8 +17,8 @@ import {
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import { sendInquiry } from "@/lib/sendInquiry";
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
 
 /* Mapping Show-Planer → Buchung */
 const ANLASS_MAP: Record<string, string> = {
@@ -52,6 +52,39 @@ const GAESTE_MAP: Record<string, number> = {
   xl: 300,
 };
 
+/** Baut einen vorausgefüllten mailto-Link aus den Formulardaten — Fallback,
+ *  falls der API-Versand fehlschlägt, damit kein Lead verloren geht. */
+function buildInquiryMailto(p: {
+  vorname: string;
+  nachname: string;
+  email: string;
+  phone: string;
+  firma: string | null;
+  anlass: string;
+  datum: string;
+  ort: string;
+  gaeste: number | null;
+  format: string;
+  nachricht: string;
+}): string {
+  const rows = [
+    `Name: ${p.vorname} ${p.nachname}`.trim(),
+    `E-Mail: ${p.email}`,
+    p.phone ? `Telefon: ${p.phone}` : "",
+    p.firma ? `Firma: ${p.firma}` : "",
+    p.anlass ? `Anlass: ${p.anlass}` : "",
+    p.datum ? `Datum: ${p.datum}` : "",
+    p.ort ? `Ort: ${p.ort}` : "",
+    p.gaeste ? `Gaeste: ${p.gaeste}` : "",
+    p.format ? `Format: ${p.format}` : "",
+  ].filter(Boolean);
+  const body = [...rows, "", p.nachricht || "(keine Nachricht)"].join("\n");
+  const subject = `Event-Anfrage: ${p.anlass || "Anlass offen"}${p.ort ? ` - ${p.ort}` : ""}`;
+  return `mailto:el@magicel.de?subject=${encodeURIComponent(
+    subject,
+  )}&body=${encodeURIComponent(body)}`;
+}
+
 function buildPrefillNotes(p: URLSearchParams, existing: string): string {
   const parts: string[] = [];
   if (existing) parts.push(existing);
@@ -70,6 +103,7 @@ const Buchung = () => {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [mailtoHref, setMailtoHref] = useState("");
 
   const prefill = useMemo(() => {
     const fullName = (searchParams.get("name") || "").trim();
@@ -101,6 +135,7 @@ const Buchung = () => {
     e.preventDefault();
     setSending(true);
     setError("");
+    setMailtoHref("");
 
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -159,12 +194,11 @@ const Buchung = () => {
       setSuccess(
         "Anfrage ist raus. Eine Bestätigung kommt gleich per Email, ich melde mich innerhalb 24 Stunden persönlich zurück.",
       );
-    } catch (err) {
+    } catch {
       setError(
-        err instanceof Error
-          ? `Versand fehlgeschlagen: ${err.message}. Bitte schreib mir direkt an el@magicel.de.`
-          : "Etwas ist schiefgelaufen. Schreib mir direkt an el@magicel.de.",
+        "Der automatische Versand hat gerade nicht geklappt. Kein Problem — schick mir deine Anfrage mit einem Klick direkt per E-Mail, alle Angaben sind schon eingetragen:",
       );
+      setMailtoHref(buildInquiryMailto(payload));
     }
     setSending(false);
   };
@@ -406,9 +440,21 @@ const Buchung = () => {
               />
 
               {error && (
-                <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-2.5 rounded-lg">
-                  {error}
-                </p>
+                <div className="text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-3 rounded-lg space-y-3">
+                  <p>{error}</p>
+                  {mailtoHref && (
+                    <a
+                      href={mailtoHref}
+                      className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-transform hover:scale-[1.02]"
+                      style={{
+                        background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+                      }}
+                    >
+                      <Mail className="w-4 h-4" />
+                      Anfrage per E-Mail senden
+                    </a>
+                  )}
+                </div>
               )}
               {success && (
                 <p className="text-sm text-green-700 bg-green-50 border border-green-200 px-4 py-2.5 rounded-lg flex items-center gap-2">

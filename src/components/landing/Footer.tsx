@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { staedte } from "@/data/staedte";
 import logoImg from "@/assets/logo-clean.webp";
 
-const ACCENT = "#9a2640";
+const ACCENT = "#1D3FFF";
 
 const FOOTER_COLS = [
   {

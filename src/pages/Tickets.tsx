@@ -42,10 +42,10 @@ import audienceImg from "@/assets/audience-reactions.jpg";
 import portraitCardsImg from "@/assets/emilian-portrait-cards.jpg";
 
 const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+  "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 
 const PREMIERE_LOCATION = "Alte Mälzerei Regensburg";
 const PREMIERE_DATE = "22. Februar 2026";
@@ -226,7 +226,7 @@ const Hero = () => {
                 style={{
                   animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`,
                   marginRight: "0.22em",
-                  color: "#f3d9a8",
+                  color: "#AFC0FF",
                 }}
               >
                 {w}
@@ -304,7 +304,7 @@ const AktuelleTourShowSection = () => {
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] mb-7">
               Plötzlich Magie —{" "}
               <br />
-              <span style={{ color: "#f3d9a8" }}>
+              <span style={{ color: "#AFC0FF" }}>
                 Magic Meets Comedy.
               </span>
             </h2>
@@ -318,21 +318,21 @@ const AktuelleTourShowSection = () => {
             </p>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-9 text-sm text-white/70">
               <span className="inline-flex items-center gap-2">
-                <Clock className="w-4 h-4" style={{ color: "#f3d9a8" }} />
+                <Clock className="w-4 h-4" style={{ color: "#AFC0FF" }} />
                 90 Min · 1 Pause
               </span>
               <span aria-hidden className="text-white/25">
                 ·
               </span>
               <span className="inline-flex items-center gap-2">
-                <Users className="w-4 h-4" style={{ color: "#f3d9a8" }} />
+                <Users className="w-4 h-4" style={{ color: "#AFC0FF" }} />
                 ab 12 Jahren
               </span>
               <span aria-hidden className="text-white/25">
                 ·
               </span>
               <span className="inline-flex items-center gap-2">
-                <Theater className="w-4 h-4" style={{ color: "#f3d9a8" }} />
+                <Theater className="w-4 h-4" style={{ color: "#AFC0FF" }} />
                 Theater- und Saalbühnen
               </span>
             </div>
@@ -341,7 +341,7 @@ const AktuelleTourShowSection = () => {
                 href="#tour-daten"
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
                 style={{
-                  background: "#f3d9a8",
+                  background: "#AFC0FF",
                   boxShadow: "0 18px 40px -14px rgba(0,0,0,0.024)",
                 }}
               >
@@ -388,7 +388,7 @@ const AktuelleTourShowSection = () => {
                 </span>
                 <span
                   className={`text-sm`}
-                  style={{ color: "#f3d9a8" }}
+                  style={{ color: "#AFC0FF" }}
                 >
                   N° 001
                 </span>
@@ -397,14 +397,14 @@ const AktuelleTourShowSection = () => {
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
                 <p
                   className="text-[10px] tracking-[0.22em] uppercase font-bold mb-4"
-                  style={{ color: "#f3d9a8" }}
+                  style={{ color: "#AFC0FF" }}
                 >
                   Plötzlich Magie · Magic Meets Comedy
                 </p>
                 <h3 className="font-display font-black text-3xl md:text-4xl text-white leading-[1.05] mb-3">
                   22.02
                   <br />
-                  <span style={{ color: "#f3d9a8" }}>
+                  <span style={{ color: "#AFC0FF" }}>
                     2026.
                   </span>
                 </h3>
@@ -415,7 +415,7 @@ const AktuelleTourShowSection = () => {
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] tracking-[0.18em] uppercase font-bold"
                   style={{
                     background: "rgba(0,0,0,0.024)",
-                    color: "#f3d9a8",
+                    color: "#AFC0FF",
                     border: "1px solid rgba(0,0,0,0.024)",
                   }}
                 >
@@ -428,7 +428,7 @@ const AktuelleTourShowSection = () => {
                 <span className="text-[10px] tracking-[0.18em] uppercase font-bold">
                   Premiere · Tour 2026
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase font-bold text-white/80 group-hover:text-[#f3d9a8] transition-colors">
+                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase font-bold text-white/80 group-hover:text-[#AFC0FF] transition-colors">
                   <Ticket className="w-3.5 h-3.5" />
                   N° 001
                 </span>
@@ -545,11 +545,11 @@ const STATUS_STYLES: Record<
   { bg: string; color: string; border?: string }
 > = {
   Vorverkauf: {
-    bg: "linear-gradient(135deg, #5c1622, #9a2640)",
+    bg: "linear-gradient(135deg, #1233CC, #1D3FFF)",
     color: "#ffffff",
   },
   Restkarten: {
-    bg: "linear-gradient(135deg, #8a5a14, #c79042)",
+    bg: "linear-gradient(135deg, #1233CC, #1D3FFF)",
     color: "#ffffff",
   },
   Ausverkauft: {
@@ -559,7 +559,7 @@ const STATUS_STYLES: Record<
   },
   Demnächst: {
     bg: "transparent",
-    color: "#5c1622",
+    color: "#1233CC",
     border: "1px solid rgba(0,0,0,0.040)",
   },
 };
@@ -942,13 +942,13 @@ const TicketKategorienSection = () => {
             <div className="relative flex items-baseline gap-3 mb-7">
               <span
                 className={`${SERIF_ITALIC} text-3xl leading-none`}
-                style={{ color: "#f3d9a8" }}
+                style={{ color: "#AFC0FF" }}
               >
                 {CATEGORIES[1].no}
               </span>
               <span
                 className="text-[10px] tracking-[0.18em] uppercase font-bold"
-                style={{ color: "#f3d9a8" }}
+                style={{ color: "#AFC0FF" }}
               >
                 Hauptkontingent
               </span>
@@ -966,7 +966,7 @@ const TicketKategorienSection = () => {
             </p>
             <p
               className="relative text-[11px] tracking-[0.14em] uppercase font-bold mt-5 pt-5 border-t border-white/15"
-              style={{ color: "#f3d9a8" }}
+              style={{ color: "#AFC0FF" }}
             >
               {CATEGORIES[1].note}
             </p>
@@ -978,7 +978,7 @@ const TicketKategorienSection = () => {
             style={{
               borderRadius: "1.25rem",
               background:
-                "linear-gradient(155deg, #5c1622 0%, #9a2640 100%)",
+                "linear-gradient(155deg, #1233CC 0%, #1D3FFF 100%)",
               boxShadow:
                 "0 25px 50px -25px rgba(0,0,0,0.040), inset 0 0 0 1px rgba(255,255,255,0.12)",
               color: "#fff",
@@ -987,13 +987,13 @@ const TicketKategorienSection = () => {
             <div className="flex items-baseline gap-3 mb-7">
               <span
                 className={`${SERIF_ITALIC} text-3xl leading-none`}
-                style={{ color: "#f3d9a8" }}
+                style={{ color: "#AFC0FF" }}
               >
                 {CATEGORIES[2].no}
               </span>
               <span
                 className="text-[10px] tracking-[0.18em] uppercase font-bold"
-                style={{ color: "#f3d9a8" }}
+                style={{ color: "#AFC0FF" }}
               >
                 Front-Reihe
               </span>
@@ -1009,7 +1009,7 @@ const TicketKategorienSection = () => {
             </p>
             <p
               className="text-[10px] tracking-[0.14em] uppercase font-bold mt-5 pt-5 border-t border-white/20"
-              style={{ color: "#f3d9a8" }}
+              style={{ color: "#AFC0FF" }}
             >
               {CATEGORIES[2].note}
             </p>
@@ -1130,7 +1130,7 @@ const WasErwartetDichSection = () => {
                   >
                     <p
                       className={`text-base mb-1`}
-                      style={{ color: "#f3d9a8" }}
+                      style={{ color: "#AFC0FF" }}
                     >
                       Block II · Climax.
                     </p>
@@ -1212,12 +1212,12 @@ const PullQuoteSection = () => {
         >
           <Quote
             className="w-10 h-10 mx-auto mb-8 opacity-50"
-            style={{ color: "#f3d9a8" }}
+            style={{ color: "#AFC0FF" }}
           />
           <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.875rem)]">
             Drei Sekunden Stille.
             <br />
-            <span style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#AFC0FF" }}>
               Dann lacht der ganze Saal.
             </span>
           </p>
@@ -1343,11 +1343,11 @@ const LocationsSection = () => {
                   <div className="flex items-baseline gap-3 mb-5">
                     <MapPin
                       className="w-4 h-4"
-                      style={{ color: isHero ? "#f3d9a8" : ACCENT }}
+                      style={{ color: isHero ? "#AFC0FF" : ACCENT }}
                     />
                     <span
                       className="text-[10px] tracking-[0.18em] uppercase font-bold"
-                      style={{ color: isHero ? "#f3d9a8" : ACCENT }}
+                      style={{ color: isHero ? "#AFC0FF" : ACCENT }}
                     >
                       {v.city}
                     </span>
@@ -1695,7 +1695,7 @@ const NewsletterCTASection = () => {
             style={{
               borderRadius: "1.5rem",
               background:
-                "linear-gradient(155deg, #ffffff 0%, #faf3e6 60%, #f0d8a8 100%)",
+                "linear-gradient(155deg, #ffffff 0%, #EEF1F6 60%, #C7D2FF 100%)",
               boxShadow:
                 "0 50px 100px -30px rgba(120,80,30,0.25), 0 18px 40px -15px rgba(120,80,30,0.15), inset 0 0 0 1px rgba(255,255,255,0.5)",
             }}

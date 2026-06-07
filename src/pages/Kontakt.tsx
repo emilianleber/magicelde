@@ -33,10 +33,10 @@ import {
    DESIGN-TOKENS
    ════════════════════════════════════════════════════════ */
 const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+  "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 const CREAM = "#fafafa";
 
 /* ════════════════════════════════════════════════════════
@@ -133,8 +133,8 @@ const Hero = () => (
                 key={i}
                 className="hero-star w-4 h-4"
                 style={{
-                  color: "#c79042",
-                  fill: "#c79042",
+                  color: "#1D3FFF",
+                  fill: "#1D3FFF",
                   animationDelay: `${i * 0.18}s`,
                 }}
               />
@@ -645,7 +645,7 @@ const KontaktformularSection = () => {
                       value={form.name}
                       onChange={(e) => update("name", e.target.value)}
                       placeholder="Vor- und Nachname"
-                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#9a2640] focus:outline-none focus:ring-2 focus:ring-[#9a2640]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
+                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#1D3FFF] focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
                     />
                   </div>
                   <div>
@@ -662,7 +662,7 @@ const KontaktformularSection = () => {
                       value={form.email}
                       onChange={(e) => update("email", e.target.value)}
                       placeholder="dein@email.de"
-                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#9a2640] focus:outline-none focus:ring-2 focus:ring-[#9a2640]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
+                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#1D3FFF] focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
                     />
                   </div>
                 </div>
@@ -682,7 +682,7 @@ const KontaktformularSection = () => {
                       value={form.telefon}
                       onChange={(e) => update("telefon", e.target.value)}
                       placeholder="optional"
-                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#9a2640] focus:outline-none focus:ring-2 focus:ring-[#9a2640]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
+                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#1D3FFF] focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
                     />
                   </div>
                   <div>
@@ -696,7 +696,7 @@ const KontaktformularSection = () => {
                       id="kontakt-anlass"
                       value={form.anlass}
                       onChange={(e) => update("anlass", e.target.value)}
-                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#9a2640] focus:outline-none focus:ring-2 focus:ring-[#9a2640]/15 transition-all text-base text-foreground"
+                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#1D3FFF] focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/15 transition-all text-base text-foreground"
                     >
                       <option value="">Bitte wählen</option>
                       {ANLASS_OPTIONEN.map((o) => (
@@ -722,7 +722,7 @@ const KontaktformularSection = () => {
                       type="date"
                       value={form.datum}
                       onChange={(e) => update("datum", e.target.value)}
-                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#9a2640] focus:outline-none focus:ring-2 focus:ring-[#9a2640]/15 transition-all text-base text-foreground"
+                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#1D3FFF] focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/15 transition-all text-base text-foreground"
                     />
                   </div>
                   <div>
@@ -738,7 +738,7 @@ const KontaktformularSection = () => {
                       value={form.gaeste}
                       onChange={(e) => update("gaeste", e.target.value)}
                       placeholder="z.B. 80 Gäste"
-                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#9a2640] focus:outline-none focus:ring-2 focus:ring-[#9a2640]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
+                      className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#1D3FFF] focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
                     />
                   </div>
                 </div>
@@ -757,7 +757,7 @@ const KontaktformularSection = () => {
                     value={form.ort}
                     onChange={(e) => update("ort", e.target.value)}
                     placeholder="Stadt oder Locationname"
-                    className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#9a2640] focus:outline-none focus:ring-2 focus:ring-[#9a2640]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
+                    className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#1D3FFF] focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/15 transition-all text-base text-foreground placeholder:text-foreground/35"
                   />
                 </div>
 
@@ -776,7 +776,7 @@ const KontaktformularSection = () => {
                     value={form.nachricht}
                     onChange={(e) => update("nachricht", e.target.value)}
                     placeholder="Erzähl mir kurz vom Abend — Format, Stimmung, was dir wichtig ist."
-                    className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#9a2640] focus:outline-none focus:ring-2 focus:ring-[#9a2640]/15 transition-all text-base text-foreground placeholder:text-foreground/35 resize-none"
+                    className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-foreground/15 focus:border-[#1D3FFF] focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/15 transition-all text-base text-foreground placeholder:text-foreground/35 resize-none"
                   />
                 </div>
 
@@ -1121,7 +1121,7 @@ const ShowPlanerVorschlag = () => {
               <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4.5vw,3.5rem)] text-white mb-6">
                 Plane in 90 Sekunden
                 <br />
-                <span style={{ color: "#f3d9a8" }}>
+                <span style={{ color: "#AFC0FF" }}>
                   deine Show.
                 </span>
               </h2>
@@ -1135,7 +1135,7 @@ const ShowPlanerVorschlag = () => {
                 onClick={openPlaner}
                 className="inline-flex items-center gap-2 px-7 py-4 rounded-full text-foreground text-[12px] tracking-[0.1em] uppercase font-semibold transition-transform hover:scale-[1.035] active:scale-[0.97]"
                 style={{
-                  background: "#f3d9a8",
+                  background: "#AFC0FF",
                   boxShadow:
                     "0 18px 40px -10px rgba(243,217,168,0.45), 0 8px 16px -6px rgba(0,0,0,0.25)",
                 }}
@@ -1158,13 +1158,13 @@ const ShowPlanerVorschlag = () => {
                 <div className="flex items-center justify-between mb-4">
                   <p
                     className="text-[10px] tracking-[0.18em] uppercase font-bold"
-                    style={{ color: "#f3d9a8" }}
+                    style={{ color: "#AFC0FF" }}
                   >
                     Planer · Schritt 4 / 9
                   </p>
                   <Sparkles
                     className="w-4 h-4"
-                    style={{ color: "#f3d9a8" }}
+                    style={{ color: "#AFC0FF" }}
                   />
                 </div>
                 <div className="space-y-2 mb-5">
@@ -1197,7 +1197,7 @@ const ShowPlanerVorschlag = () => {
                     className="h-full rounded-full"
                     style={{
                       width: "44%",
-                      background: `linear-gradient(90deg, #f3d9a8, ${ACCENT})`,
+                      background: `linear-gradient(90deg, #AFC0FF, ${ACCENT})`,
                     }}
                   />
                 </div>
@@ -1263,7 +1263,7 @@ const PullQuote = () => {
           <p className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(1.875rem,4vw,3.5rem)] text-white">
             24 Stunden.
             <br />
-            <span style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#AFC0FF" }}>
               Mehr brauchst du nicht zu warten.
             </span>
           </p>
@@ -1366,7 +1366,7 @@ const HäufigeAnliegen = () => {
                   </span>
                 </div>
                 <div className="md:col-span-8">
-                  <h3 className="font-display text-xl md:text-2xl font-bold text-foreground tracking-tight mb-2 group-hover:text-[#9a2640] transition-colors">
+                  <h3 className="font-display text-xl md:text-2xl font-bold text-foreground tracking-tight mb-2 group-hover:text-[#1D3FFF] transition-colors">
                     {a.titel}
                   </h3>
                   <p className="text-base text-foreground/65 leading-[1.65] max-w-2xl">
@@ -1473,19 +1473,19 @@ const StandortMap = () => {
               >
                 <defs>
                   <linearGradient id="bayern-fill" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#e4b8c0" stopOpacity="0.35" />
-                    <stop offset="100%" stopColor="#9a2640" stopOpacity="0.18" />
+                    <stop offset="0%" stopColor="#C7D2FF" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#1D3FFF" stopOpacity="0.18" />
                   </linearGradient>
                   <radialGradient id="pin-glow" cx="0.5" cy="0.5" r="0.5">
-                    <stop offset="0%" stopColor="#9a2640" stopOpacity="0.6" />
-                    <stop offset="100%" stopColor="#9a2640" stopOpacity="0" />
+                    <stop offset="0%" stopColor="#1D3FFF" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="#1D3FFF" stopOpacity="0" />
                   </radialGradient>
                 </defs>
                 {/* Bayern stilisiert (Vereinfachung — Hauptkonturen) */}
                 <path
                   d="M 120 50 L 180 40 L 240 50 L 290 70 L 320 100 L 340 140 L 350 180 L 360 220 L 350 260 L 340 290 L 350 320 L 340 360 L 310 390 L 270 410 L 230 420 L 190 415 L 150 405 L 110 390 L 80 360 L 60 320 L 50 280 L 60 240 L 50 200 L 60 160 L 80 120 L 100 80 Z"
                   fill="url(#bayern-fill)"
-                  stroke="#9a2640"
+                  stroke="#1D3FFF"
                   strokeWidth="2"
                   strokeOpacity="0.4"
                 />
@@ -1502,14 +1502,14 @@ const StandortMap = () => {
                       cx={c.x}
                       cy={c.y}
                       r="3"
-                      fill="#5c1622"
+                      fill="#1233CC"
                       opacity="0.45"
                     />
                     <text
                       x={c.x + 7}
                       y={c.y + 4}
                       fontSize="11"
-                      fill="#5c1622"
+                      fill="#1233CC"
                       opacity="0.55"
                       fontFamily="Inter, sans-serif"
                     >
@@ -1533,7 +1533,7 @@ const StandortMap = () => {
                   y="262"
                   fontSize="15"
                   fontWeight="700"
-                  fill="#5c1622"
+                  fill="#1233CC"
                   fontFamily="Inter, sans-serif"
                 >
                   Regensburg
@@ -1542,7 +1542,7 @@ const StandortMap = () => {
                   x="245"
                   y="280"
                   fontSize="11"
-                  fill="#5c1622"
+                  fill="#1233CC"
                   opacity="0.65"
                   fontFamily="Instrument Serif, Georgia, serif"
                   fontStyle="italic"
@@ -1731,14 +1731,14 @@ const SocialStrip = () => {
                   <Icon className="w-4 h-4 text-white" />
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-display text-base font-bold text-foreground tracking-tight group-hover:text-[#9a2640] transition-colors">
+                  <p className="font-display text-base font-bold text-foreground tracking-tight group-hover:text-[#1D3FFF] transition-colors">
                     {s.label}
                   </p>
                   <p className="text-xs text-foreground/55 truncate">
                     {s.handle}
                   </p>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-foreground/35 group-hover:text-[#9a2640] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                <ArrowUpRight className="w-4 h-4 text-foreground/35 group-hover:text-[#1D3FFF] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
               </a>
             );
           })}
@@ -1800,7 +1800,7 @@ const FinalCTA = () => {
           <h2 className="font-display font-black tracking-[-0.025em] leading-[1.02] text-[clamp(2.5rem,7vw,6.5rem)] text-white mb-10">
             Lass uns loslegen
             <br />
-            <span style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#AFC0FF" }}>
               — schreib mir.
             </span>
           </h2>
@@ -1809,7 +1809,7 @@ const FinalCTA = () => {
               href="#kontaktformular"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-foreground text-[12px] tracking-[0.1em] uppercase font-semibold transition-transform hover:scale-[1.035] active:scale-[0.97]"
               style={{
-                background: "#f3d9a8",
+                background: "#AFC0FF",
                 boxShadow:
                   "0 18px 40px -10px rgba(243,217,168,0.55), 0 8px 16px -6px rgba(0,0,0,0.35)",
               }}

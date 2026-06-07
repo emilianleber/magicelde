@@ -37,12 +37,12 @@ import stageShowImg from "@/assets/stage-show.jpg";
 /* ─────────────────────────────────────────────────────────────
    Tokens
    ───────────────────────────────────────────────────────────── */
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const AMBER_SOFT = "#f0d8a8";
+  "not-italic";
+const AMBER_SOFT = "#C7D2FF";
 
 /* ═══════════════════════════════════════════════════════════
    1 · HERO — minimaler text-only Hero, cream BG (kein Photo-Backdrop)
@@ -565,7 +565,7 @@ const GrosseLogoCloud = () => {
               key={k.name}
               type="button"
               onClick={() => setOpenCase(k)}
-              className="group relative flex flex-col items-center justify-between text-center rounded-xl p-2 -m-2 transition-colors hover:bg-foreground/[0.025] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[color:var(--ring-c,#9a2640)]"
+              className="group relative flex flex-col items-center justify-between text-center rounded-xl p-2 -m-2 transition-colors hover:bg-foreground/[0.025] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[color:var(--ring-c,#1D3FFF)]"
               aria-label={`${k.name} — Case Study öffnen`}
             >
               <div className="relative flex items-center justify-center w-full min-h-[110px] md:min-h-[130px]">
@@ -897,7 +897,7 @@ const StatsEditorialSection = () => {
             className="relative md:col-span-6 overflow-hidden flex flex-col justify-between p-7 md:p-9 text-white"
             style={{
               borderRadius: "1.5rem",
-              background: "linear-gradient(135deg, #8a5a14 0%, #c79042 60%, #f0d8a8 100%)",
+              background: "linear-gradient(135deg, #1233CC 0%, #1D3FFF 60%, #C7D2FF 100%)",
               minHeight: "260px",
               boxShadow: "0 40px 80px -30px rgba(138,90,20,0.5)",
             }}
@@ -1364,11 +1364,11 @@ const PullQuoteSection = () => {
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)" }} />
       <div className={`relative container px-6`}>
-        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
+        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#AFC0FF" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             {"Zweihundert Abende."}{" "}
-            <span style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#AFC0FF" }}>
               Eine Stille immer.
             </span>
           </p>

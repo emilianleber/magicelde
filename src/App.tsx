@@ -314,7 +314,7 @@ const App = () => (
           fallback={
             <div className="min-h-screen flex items-center justify-center bg-white">
               <div
-                className="w-10 h-10 rounded-full border-2 border-foreground/15 border-t-[#9a2640] animate-spin"
+                className="w-10 h-10 rounded-full border-2 border-foreground/15 border-t-[#1D3FFF] animate-spin"
                 aria-label="Lade"
                 role="status"
               />

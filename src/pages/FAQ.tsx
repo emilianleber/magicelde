@@ -24,10 +24,10 @@ import {
    DESIGN-TOKENS
    ════════════════════════════════════════════════════════ */
 const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+  "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 const CREAM = "#fafafa";
 
 /* ════════════════════════════════════════════════════════
@@ -578,8 +578,8 @@ const Hero = () => (
                 key={i}
                 className="hero-star w-4 h-4"
                 style={{
-                  color: "#c79042",
-                  fill: "#c79042",
+                  color: "#1D3FFF",
+                  fill: "#1D3FFF",
                   animationDelay: `${i * 0.18}s`,
                 }}
               />
@@ -749,7 +749,7 @@ const FAQCore = () => {
           >
             <Search
               aria-hidden
-              className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 transition-colors group-focus-within:text-[#9a2640]"
+              className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 transition-colors group-focus-within:text-[#1D3FFF]"
             />
             <input
               id="faq-search"
@@ -757,7 +757,7 @@ const FAQCore = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Stichwort eingeben — z. B. Honorar, Anfahrt, Close-Up..."
-              className="w-full pl-14 pr-6 py-5 md:py-6 rounded-2xl border-2 border-foreground/10 focus:border-[#9a2640] focus:outline-none bg-white text-base md:text-lg text-foreground placeholder:text-foreground/40 transition-all duration-200"
+              className="w-full pl-14 pr-6 py-5 md:py-6 rounded-2xl border-2 border-foreground/10 focus:border-[#1D3FFF] focus:outline-none bg-white text-base md:text-lg text-foreground placeholder:text-foreground/40 transition-all duration-200"
               autoComplete="off"
             />
             {search && (
@@ -971,7 +971,7 @@ const FrageNichtBeantwortet = () => {
       ref={ref}
       className="py-24 md:py-32"
       style={{
-        background: `linear-gradient(180deg, ${CREAM} 0%, #faf2e3 100%)`,
+        background: `linear-gradient(180deg, ${CREAM} 0%, #EEF1F6 100%)`,
       }}
     >
       <div className="container px-6">
@@ -1014,7 +1014,7 @@ const FrageNichtBeantwortet = () => {
                     onChange={(e) => setName(e.target.value)}
                     required
                     placeholder="Vor- und Nachname"
-                    className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[#9a2640] focus:outline-none bg-white text-base text-foreground placeholder:text-foreground/40 transition-all"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[#1D3FFF] focus:outline-none bg-white text-base text-foreground placeholder:text-foreground/40 transition-all"
                   />
                 </div>
                 <div>
@@ -1031,7 +1031,7 @@ const FrageNichtBeantwortet = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="name@firma.de"
-                    className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[#9a2640] focus:outline-none bg-white text-base text-foreground placeholder:text-foreground/40 transition-all"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[#1D3FFF] focus:outline-none bg-white text-base text-foreground placeholder:text-foreground/40 transition-all"
                   />
                 </div>
               </div>
@@ -1049,7 +1049,7 @@ const FrageNichtBeantwortet = () => {
                   required
                   rows={5}
                   placeholder="Worum geht es? Datum, Anlass, Gästezahl helfen mir, präzise zu antworten."
-                  className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[#9a2640] focus:outline-none bg-white text-base text-foreground placeholder:text-foreground/40 transition-all resize-none"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[#1D3FFF] focus:outline-none bg-white text-base text-foreground placeholder:text-foreground/40 transition-all resize-none"
                 />
               </div>
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">

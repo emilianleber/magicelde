@@ -436,7 +436,7 @@ const AdminNewsletter = () => {
                 onClick={handleSend}
                 disabled={sending || !subject.trim() || !bodyHtml.trim() || counts.active === 0}
                 className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ background: "linear-gradient(135deg, #5c1622, #9a2640)" }}
+                style={{ background: "linear-gradient(135deg, #1233CC, #1D3FFF)" }}
               >
                 {sending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

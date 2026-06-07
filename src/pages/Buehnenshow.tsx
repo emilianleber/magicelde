@@ -36,11 +36,10 @@ import buehneDpsgImg from "@/assets/buehne-dpsg.jpg";
 import stageShowImg from "@/assets/stage-show.jpg";
 import audienceImg from "@/assets/audience-reactions.jpg";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+const SERIF_ITALIC = "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 
 /* ═══════════════════════════════════════════════════════════
    HERO
@@ -115,7 +114,7 @@ const Hero = () => {
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
-            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{" "}</span>))}
+            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#AFC0FF" }}>{w}{" "}</span>))}
           </h1>
           <p className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade" style={{ animationDelay: "1.05s" }}>
             Fünfzehn bis sechzig Minuten Bühne — Mentaleffekte, Comedy-Pointen,
@@ -212,15 +211,15 @@ const DramaKurveSection = () => {
               <g key={p.label}>
                 <circle cx={p.x} cy={p.y} r="6" fill={ACCENT} />
                 <circle cx={p.x} cy={p.y} r="11" fill="none" stroke={ACCENT} strokeWidth="1.5" opacity="0.3" />
-                <text x={p.x} y={p.y - 18} fill="rgba(0,0,0,0.55)" fontSize="11" textAnchor="middle" fontFamily="'Instrument Serif', serif" fontStyle="italic">
+                <text x={p.x} y={p.y - 18} fill="rgba(0,0,0,0.55)" fontSize="11" textAnchor="middle">
                   {p.label} min
                 </text>
               </g>
             ))}
             {/* Y-axis label */}
-            <text x="20" y="35" fill="rgba(0,0,0,0.45)" fontSize="11" fontFamily="'Instrument Serif', serif" fontStyle="italic">Spannung</text>
-            <text x="20" y="50" fill="rgba(0,0,0,0.45)" fontSize="11" fontFamily="'Instrument Serif', serif" fontStyle="italic">hoch</text>
-            <text x="20" y="200" fill="rgba(0,0,0,0.45)" fontSize="11" fontFamily="'Instrument Serif', serif" fontStyle="italic">niedrig</text>
+            <text x="20" y="35" fill="rgba(0,0,0,0.45)" fontSize="11">Spannung</text>
+            <text x="20" y="50" fill="rgba(0,0,0,0.45)" fontSize="11">hoch</text>
+            <text x="20" y="200" fill="rgba(0,0,0,0.45)" fontSize="11">niedrig</text>
           </svg>
         </div>
 
@@ -422,11 +421,11 @@ const PullQuoteSection = () => {
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)" }} />
       <div className={`relative container px-6`}>
-        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
+        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#AFC0FF" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Standing Ovation.{" "}
-            <span style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#AFC0FF" }}>
               Drei Sekunden Stille
             </span>{" "}
             davor.
@@ -489,17 +488,17 @@ const EffektHighlightsSection = () => {
             <div className="relative z-10 flex flex-col h-full">
               <div className="flex items-center gap-3 mb-7">
                 <span className="inline-flex items-center justify-center w-12 h-12 rounded-full" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}>
-                  <headliner.Icon className="w-5 h-5" style={{ color: "#f3d9a8" }} strokeWidth={1.75} />
+                  <headliner.Icon className="w-5 h-5" style={{ color: "#AFC0FF" }} strokeWidth={1.75} />
                 </span>
                 <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-white/75">{headliner.kicker}</span>
               </div>
               <h3 className="font-display text-3xl md:text-4xl font-black leading-[1.05] mb-6 max-w-md">
                 {headliner.title.replace(".", "")}.{" "}
-                <span style={{ color: "#f3d9a8" }}>Eine Seite zu viel.</span>
+                <span style={{ color: "#AFC0FF" }}>Eine Seite zu viel.</span>
               </h3>
               <p className="text-base md:text-lg text-white/75 leading-[1.65] max-w-lg mt-auto">{headliner.body}</p>
               <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] tracking-[0.04em] text-white/65">
-                <span className="inline-flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full" style={{ background: "#f3d9a8" }} aria-hidden />Mentaleffekt + sichtbarer Beweis</span>
+                <span className="inline-flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full" style={{ background: "#AFC0FF" }} aria-hidden />Mentaleffekt + sichtbarer Beweis</span>
                 <span aria-hidden className="text-white/25">·</span>
                 <span>Buch · Umschlag · zerrissene Seite</span>
               </div>
@@ -589,7 +588,7 @@ const AnlassMixSection = () => {
                 </div>
                 <p className="text-base text-foreground/65 leading-[1.65]">{a.body}</p>
               </div>
-              <span className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-500 group-hover:bg-[#9a2640] group-hover:text-white text-foreground/30 self-start mt-1" aria-hidden>
+              <span className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-500 group-hover:bg-[#1D3FFF] group-hover:text-white text-foreground/30 self-start mt-1" aria-hidden>
                 <ArrowUpRight className="w-4 h-4" />
               </span>
             </li>

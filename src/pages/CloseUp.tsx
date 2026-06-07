@@ -39,11 +39,10 @@ import schneiderWeisseImg from "@/assets/schneider-weisse-closeup.jpg";
 import staunenImg from "@/assets/staunen.jpg";
 import emotionenImg from "@/assets/emotionen.jpg";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+const SERIF_ITALIC = "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 
 /* ═══════════════════════════════════════════════════════════
    HERO
@@ -118,7 +117,7 @@ const Hero = () => {
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
-            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{" "}</span>))}
+            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#AFC0FF" }}>{w}{" "}</span>))}
           </h1>
           <p className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade" style={{ animationDelay: "1.05s" }}>
             Close-Up ist Magie zum Anfassen — Karten in eurer Hand, Münzen aus
@@ -573,7 +572,7 @@ const TrickRepertoireSection = () => {
           {/* sm: 2 cols */}
           <article className="md:col-span-2 relative bg-[#08060c] text-white p-7 md:p-9 flex flex-col overflow-hidden" style={{ borderRadius: "1.25rem", minHeight: "300px" }}>
             <div aria-hidden className="absolute -top-20 -right-10 w-[300px] h-[300px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
-            <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: "#f3d9a8" }}>{REPERTOIRE[2].kicker}</p>
+            <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: "#AFC0FF" }}>{REPERTOIRE[2].kicker}</p>
             <h3 className="relative font-display text-xl md:text-2xl font-black leading-tight mb-4">{REPERTOIRE[2].title}</h3>
             <p className="relative text-sm md:text-base text-white/75 leading-[1.6]">{REPERTOIRE[2].body}</p>
           </article>
@@ -581,7 +580,7 @@ const TrickRepertoireSection = () => {
           {/* md: 4 cols */}
           <article className="md:col-span-4 relative bg-white p-8 md:p-10 flex flex-col md:flex-row gap-7 md:items-center" style={{ borderRadius: "1.25rem", boxShadow: "0 25px 50px -30px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(0,0,0,0.05)", minHeight: "300px" }}>
             <div className="shrink-0 inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full" style={{ background: "transparent" }}>
-              <Coins className="w-9 h-9 md:w-10 md:h-10" style={{ color: "#a06820" }} strokeWidth={1.5} />
+              <Coins className="w-9 h-9 md:w-10 md:h-10" style={{ color: "#1233CC" }} strokeWidth={1.5} />
             </div>
             <div>
               <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-2.5" style={{ color: ACCENT }}>{REPERTOIRE[3].kicker}</p>
@@ -614,11 +613,11 @@ const PullQuoteSection = () => {
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)" }} />
       <div className={`relative container px-6`}>
-        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
+        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#AFC0FF" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Die Karten sind in{" "}
-            <span style={{ color: "#f3d9a8" }}>euren Händen</span>.{" "}
+            <span style={{ color: "#AFC0FF" }}>euren Händen</span>.{" "}
             Nicht in meinen.
           </p>
           <footer className="mt-10 flex items-center justify-center gap-4">
@@ -677,7 +676,7 @@ const AnlassMixSection = () => {
                     </div>
                     <p className="text-base text-foreground/65 leading-[1.65] max-w-2xl">{a.body}</p>
                   </div>
-                  <span className="hidden md:inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-500 group-hover:bg-[#9a2640] group-hover:text-white text-foreground/30 self-start mt-1" aria-hidden>
+                  <span className="hidden md:inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-500 group-hover:bg-[#1D3FFF] group-hover:text-white text-foreground/30 self-start mt-1" aria-hidden>
                     <ArrowUpRight className="w-4 h-4" />
                   </span>
                 </li>
@@ -741,7 +740,7 @@ const GruppenDynamikSection = () => {
                   background: i === 1 ? "rgba(255,255,255,0.08)" : "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
                   border: i === 1 ? "1px solid rgba(255,255,255,0.18)" : "1px solid rgba(0,0,0,0.040)",
                 }}>
-                  <g.Icon className="w-5 h-5" style={{ color: i === 1 ? "#f3d9a8" : ACCENT }} strokeWidth={1.75} />
+                  <g.Icon className="w-5 h-5" style={{ color: i === 1 ? "#AFC0FF" : ACCENT }} strokeWidth={1.75} />
                 </span>
                 <span className="text-[10px] tracking-[0.18em] uppercase font-bold" style={{ color: i === 1 ? "rgba(255,255,255,0.6)" : ACCENT }}>Typ {String(i + 1).padStart(2, "0")}</span>
               </div>
@@ -749,7 +748,7 @@ const GruppenDynamikSection = () => {
               <p className={`text-sm md:text-base mb-5`} style={{ color: i === 1 ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.55)" }}>{g.sub}</p>
               <p className={`text-base leading-[1.7] flex-1 ${i === 1 ? "text-white/80" : "text-foreground/75"}`}>{g.body}</p>
               <div className="mt-7 pt-5 border-t" style={{ borderColor: i === 1 ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)" }}>
-                <span className={`text-base`} style={{ color: i === 1 ? "#f3d9a8" : ACCENT }}>{g.tag}</span>
+                <span className={`text-base`} style={{ color: i === 1 ? "#AFC0FF" : ACCENT }}>{g.tag}</span>
               </div>
             </article>
           ))}

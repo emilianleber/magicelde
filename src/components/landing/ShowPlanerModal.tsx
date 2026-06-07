@@ -36,9 +36,9 @@ import {
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import { sendInquiry } from "@/lib/sendInquiry";
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const AMBER = "#f3d9a8";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const AMBER = "#AFC0FF";
 
 /* ───────────────────────────────────────────────────────────
    STEP-DEFINITIONS
@@ -681,18 +681,18 @@ const StepView = ({
         <aside
           className="lg:col-span-5 self-start p-6 rounded-2xl"
           style={{
-            background: "linear-gradient(155deg, #fff7e6 0%, #f3e6c8 100%)",
+            background: "linear-gradient(155deg, #EEF1F6 0%, #DCE4FF 100%)",
             border: "1px solid rgba(0,0,0,0.024)",
           }}
         >
           <div className="flex items-baseline gap-2 mb-2">
             <Lightbulb
               className="w-4 h-4 shrink-0 mt-0.5"
-              style={{ color: "#a06820" }}
+              style={{ color: "#1233CC" }}
             />
             <span
               className="text-[10px] tracking-[0.18em] uppercase font-bold"
-              style={{ color: "#a06820" }}
+              style={{ color: "#1233CC" }}
             >
               Tipp
             </span>

@@ -5,8 +5,8 @@ import PageLayout from "@/components/landing/PageLayout";
 import { CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";
 
 const SUPABASE_URL = "https://rjhvqctjtgfpxzhnrozt.supabase.co";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
 
 const Unsubscribe = () => {
   const [params] = useSearchParams();

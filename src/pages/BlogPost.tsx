@@ -47,11 +47,10 @@ import portraitBuchImg from "@/assets/emilian-portrait-buch.jpg";
 import portraitImg from "@/assets/magician-portrait.jpg";
 import schneiderImg from "@/assets/schneider-weisse-closeup.jpg";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+const SERIF_ITALIC = "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 
 const COVER_MAP: Record<string, string> = {
   "wedding-magic": weddingImg,
@@ -115,9 +114,9 @@ const HeroKeyframes = () => (
     .post-fade { opacity: 0; animation: postHeroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .post-word { display: inline-block; opacity: 0; animation: postHeroWordIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
     .post-bokeh { opacity: 0; animation-name: postBokehDrift; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); animation-iteration-count: infinite; }
-    .toc-active { color: #5c1622; font-weight: 700; }
+    .toc-active { color: #1233CC; font-weight: 700; }
     .post-body p { margin: 1.25em 0; }
-    .post-body p:first-child::first-letter { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 4.5em; float: left; line-height: 0.85; margin: 0.08em 0.12em 0 0; color: #5c1622; }
+    .post-body p:first-child::first-letter { font-style: normal; font-size: 4.5em; float: left; line-height: 0.85; margin: 0.08em 0.12em 0 0; color: #1233CC; }
   `}</style>
 );
 

@@ -9,8 +9,8 @@ import { ArrowRight } from "lucide-react";
  * Fragen, Empfehlungen, Tonalität.
  * ────────────────────────────────────────────────────────── */
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
 
 export type CustomQuizOption = {
   value: string;
@@ -61,10 +61,10 @@ export type CustomQuizConfig = {
 };
 
 const DEFAULT_CONFETTI = [
-  "#f3d9a8",
-  "#c79042",
-  "#9a2640",
-  "#5c1622",
+  "#AFC0FF",
+  "#1D3FFF",
+  "#1D3FFF",
+  "#1233CC",
   "#1f5e3f",
   "#ffffff",
 ];

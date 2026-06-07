@@ -34,11 +34,10 @@ import audienceImg from "@/assets/audience-reactions.jpg";
 import stageShowImg from "@/assets/stage-show.jpg";
 import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+const SERIF_ITALIC = "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 
 /* ═══════════════════════════════════════════════════════════
    HERO
@@ -113,7 +112,7 @@ const Hero = () => {
           <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
             {HEADLINE_SANS.map((w, i) => (<span key={`s-${i}`} className="hero-word" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>{w}{" "}</span>))}
             <br className="hidden sm:block" />
-            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>{w}{" "}</span>))}
+            {HEADLINE_ITALIC.map((w, i) => (<span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#AFC0FF" }}>{w}{" "}</span>))}
           </h1>
           <p className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade" style={{ animationDelay: "1.05s" }}>
             Moderation eures Abends — Begrüßung, Programm-Übergaben,
@@ -293,7 +292,7 @@ const KombiUSPSection = () => {
                   background: i === 1 ? "rgba(255,255,255,0.08)" : "linear-gradient(135deg, rgba(0,0,0,0.040), rgba(0,0,0,0.020))",
                   border: i === 1 ? "1px solid rgba(255,255,255,0.18)" : "1px solid rgba(0,0,0,0.040)",
                 }}>
-                  <d.Icon className="w-5 h-5" style={{ color: i === 1 ? "#f3d9a8" : ACCENT }} strokeWidth={1.75} />
+                  <d.Icon className="w-5 h-5" style={{ color: i === 1 ? "#AFC0FF" : ACCENT }} strokeWidth={1.75} />
                 </span>
                 <span className="text-[10px] tracking-[0.18em] uppercase font-bold" style={{ color: i === 1 ? "rgba(255,255,255,0.65)" : ACCENT }}>{d.tag}</span>
               </div>
@@ -406,11 +405,11 @@ const PullQuoteSection = () => {
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)" }} />
       <div className={`relative container px-6`}>
-        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
+        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#AFC0FF" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Ein Mikrofon.{" "}
-            <span style={{ color: "#f3d9a8" }}>Drei Disziplinen.</span>{" "}
+            <span style={{ color: "#AFC0FF" }}>Drei Disziplinen.</span>{" "}
             Keine Übergaben.
           </p>
           <footer className="mt-10 flex items-center justify-center gap-4">
@@ -482,7 +481,7 @@ const AnlassMatrixSection = () => {
                 <div className="flex gap-2 mb-3">
                   {[
                     { label: "Mod", val: a.mix.mod, color: ACCENT },
-                    { label: "Mag", val: a.mix.mag, color: "#c79042" },
+                    { label: "Mag", val: a.mix.mag, color: "#1D3FFF" },
                     { label: "Com", val: a.mix.com, color: "#1f5e3f" },
                   ].map((m) => (
                     <div key={m.label} className="flex-1">
@@ -596,14 +595,14 @@ const ComedyAnteilSection = () => {
             <div className="relative p-8 md:p-10 text-white overflow-hidden" style={{ borderRadius: "1.5rem", background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, #08060c 100%)`, boxShadow: "0 50px 100px -30px rgba(0,0,0,0.200)" }}>
               <div aria-hidden className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 70%)" }} />
 
-              <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: "#f3d9a8" }}>Aktiver Modus</p>
+              <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: "#AFC0FF" }}>Aktiver Modus</p>
               <h3 className="relative font-display text-2xl md:text-4xl font-black leading-[1.1] mb-5">{current.label}.</h3>
               <p className="relative text-base md:text-lg text-white/80 leading-[1.7] mb-8 max-w-lg">{current.desc}</p>
 
               <div className="relative space-y-4">
                 {[
-                  { label: "Moderations-Anteil", val: current.stats.mod, color: "#f3d9a8" },
-                  { label: "Magie-Anteil", val: current.stats.mag, color: "#c79042" },
+                  { label: "Moderations-Anteil", val: current.stats.mod, color: "#AFC0FF" },
+                  { label: "Magie-Anteil", val: current.stats.mag, color: "#1D3FFF" },
                   { label: "Comedy-Anteil", val: current.stats.com, color: "#86d29a" },
                 ].map((s) => (
                   <div key={s.label}>

@@ -7,10 +7,9 @@ import { getWissenTopic, wissenTopics, type WissenTopic } from "@/data/wissenTop
 import { ArrowRight, ArrowUpRight, BookOpen } from "lucide-react";
 import { SITE_URL, BUSINESS_ID } from "@/lib/schemaHelpers";
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const SERIF_ITALIC = "not-italic";
 
 const WissenSeite = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -188,7 +187,7 @@ const Inner = ({ topic }: { topic: WissenTopic }) => {
                 </p>
                 <h3 className="font-display text-2xl md:text-3xl font-black leading-tight mb-3">
                   Brauchst du{" "}
-                  <span className={SERIF_ITALIC} style={{ color: "#f3d9a8" }}>
+                  <span className={SERIF_ITALIC} style={{ color: "#AFC0FF" }}>
                     konkrete Antwort?
                   </span>
                 </h3>

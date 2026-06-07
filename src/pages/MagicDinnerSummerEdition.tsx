@@ -33,12 +33,12 @@ import haendeImg from "@/assets/haende-interaktion.jpg";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import { sendInquiry } from "@/lib/sendInquiry";
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const AMBER = "#f3d9a8";
+  "not-italic";
+const AMBER = "#AFC0FF";
 
 const EVENT_DATE = "11. Juli 2026";
 const EVENT_TIME = "17:00";

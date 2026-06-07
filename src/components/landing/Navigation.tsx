@@ -3,8 +3,8 @@ import { Menu, X, ChevronDown, ArrowRight, ArrowUpRight, Star, Clock } from "luc
 import { Link, useLocation } from "react-router-dom";
 import logoImg from "@/assets/logo-clean.webp";
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
 
 const ANLAESSE = [
   { to: "/hochzeit", label: "Hochzeit", sub: "Drei Akte Magie" },

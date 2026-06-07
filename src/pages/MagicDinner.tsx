@@ -31,21 +31,20 @@ import zuschauerBlauImg from "@/assets/zuschauer-blau.jpg";
  *   – Restaurant-Bernstein / Brass (warmes Licht, Kerzen)
  *   – Burgunder / Weinrot (Stage-Light, Logo, Kartenrücken)
  *   – Cream-Off-White (Tischwäsche)                                */
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
+const SERIF_ITALIC = "not-italic";
 
 // Akzent für aktive Listenpunkte (statt Frameblox-Pink): Burgunder
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
 
 // Smaragd (Emilians Sakko)
 const EMERALD_DEEP = "#0e3d2a";
 const EMERALD_MID = "#1f5e3f";
 
 // Bernstein / Brass (Restaurant-Atmosphäre)
-const AMBER_DEEP = "#8a5a14";
-const AMBER_MID = "#c79042";
-const AMBER_SOFT = "#f0d8a8";
+const AMBER_DEEP = "#1233CC";
+const AMBER_MID = "#1D3FFF";
+const AMBER_SOFT = "#C7D2FF";
 const CREAM = "#fafafa";
 
 // Warmer Dinner-Gradient (statt Neon-Pink-Purple-Yellow)
@@ -300,7 +299,7 @@ const Hero = () => {
                 style={{
                   animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`,
                   paddingRight: "0.15em",
-                  color: "#f3d9a8",
+                  color: "#AFC0FF",
                 }}
               >
                 {w}
@@ -632,7 +631,7 @@ const KonzeptSection = () => {
                     Wahlweise.
                   </p>
                   <p className="font-display text-base md:text-lg font-black text-white leading-tight mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
-                    Tisch · Bühne · <span style={{ color: "#f3d9a8" }}>Combo</span>
+                    Tisch · Bühne · <span style={{ color: "#AFC0FF" }}>Combo</span>
                   </p>
                 </div>
               </div>
@@ -1564,7 +1563,7 @@ function recommend(a: Record<string, string>): Recommendation {
 }
 
 const CONFETTI_COUNT = 36;
-const CONFETTI_COLORS = ["#f3d9a8", "#c79042", "#9a2640", "#5c1622", "#1f5e3f", "#ffffff"];
+const CONFETTI_COLORS = ["#AFC0FF", "#1D3FFF", "#1D3FFF", "#1233CC", "#1f5e3f", "#ffffff"];
 
 const MagicDinnerQuiz = ({ onDark = false }: { onDark?: boolean }) => {
   const [step, setStep] = useState(0);
@@ -2062,7 +2061,7 @@ const AnlaesseSection = () => {
             style={{
               borderRadius: "1.5rem",
               background:
-                "linear-gradient(135deg, #f8d76b 0%, #f0a35a 30%, #d76a55 65%, #9a2640 100%)",
+                "linear-gradient(135deg, #AFC0FF 0%, #f0a35a 30%, #d76a55 65%, #1D3FFF 100%)",
               boxShadow: "0 35px 70px -25px rgba(0,0,0,0.040)",
             }}
           >
@@ -2205,11 +2204,11 @@ const AnlaesseSection = () => {
                 {/* Avatar-Cluster (überlappend) */}
                 <div className="flex -space-x-3">
                   {[
-                    { letter: "B", color: "linear-gradient(135deg, #9a2640, #5c1622)" },
-                    { letter: "T", color: "linear-gradient(135deg, #c79042, #8a5a14)" },
+                    { letter: "B", color: "linear-gradient(135deg, #1D3FFF, #1233CC)" },
+                    { letter: "T", color: "linear-gradient(135deg, #1D3FFF, #1233CC)" },
                     { letter: "M", color: "linear-gradient(135deg, #1f5e3f, #0e3d2a)" },
-                    { letter: "F", color: "linear-gradient(135deg, #d76a55, #9a2640)" },
-                    { letter: "K", color: "linear-gradient(135deg, #c79042, #b07b2c)" },
+                    { letter: "F", color: "linear-gradient(135deg, #d76a55, #1D3FFF)" },
+                    { letter: "K", color: "linear-gradient(135deg, #1D3FFF, #1233CC)" },
                   ].map((a) => (
                     <div
                       key={a.letter}
@@ -2386,7 +2385,7 @@ const KartenFaecherSection = () => {
       className="relative overflow-hidden"
       style={{
         background:
-          "radial-gradient(70% 80% at 30% 30%, #fafafa 0%, rgba(245,236,220,0) 75%), radial-gradient(60% 70% at 75% 70%, #f0d8a8 0%, rgba(240,216,168,0) 75%), #ffffff",
+          "radial-gradient(70% 80% at 30% 30%, #fafafa 0%, rgba(245,236,220,0) 75%), radial-gradient(60% 70% at 75% 70%, #C7D2FF 0%, rgba(240,216,168,0) 75%), #ffffff",
       }}
     >
       <div className="container px-6 py-20 md:py-28">
@@ -2490,7 +2489,7 @@ const WaldUndWieseSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] mb-8">
               Wald & Wiese.{" "}
-              <span style={{ color: "#f3d9a8" }}>
+              <span style={{ color: "#AFC0FF" }}>
                 Mein Haus.
               </span>
             </h2>
@@ -2629,7 +2628,7 @@ const WaldUndWieseSection = () => {
                   </span>
                   <span
                     className="text-[10px] tracking-[0.18em] uppercase text-white/45 font-semibold"
-                    style={{ color: "#f3d9a8" }}
+                    style={{ color: "#AFC0FF" }}
                   >
                     Hauspartner
                   </span>
@@ -2720,7 +2719,7 @@ const StimmenSection = () => {
               <footer className="mt-7 pt-5 border-t border-foreground/10 flex items-center gap-4">
                 <div
                   className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center font-display font-bold text-white text-base"
-                  style={{ background: "linear-gradient(135deg, #9a2640, #5c1622)" }}
+                  style={{ background: "linear-gradient(135deg, #1D3FFF, #1233CC)" }}
                 >
                   {r.initial}
                 </div>

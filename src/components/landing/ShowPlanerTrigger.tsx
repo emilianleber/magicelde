@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Sparkles, X, Wand2, MessageCircle } from "lucide-react";
+import { Sparkles, X, Wand2, MessageCircle, Phone } from "lucide-react";
 import ShowPlanerModal from "./ShowPlanerModal";
 import { hasDraft, isCompleted, loadDraft } from "@/lib/showPlaner";
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
 
 /**
  * Unified FAB-Menu unten rechts:
@@ -22,6 +22,7 @@ const WHATSAPP_URL =
   encodeURIComponent(
     "Hallo Emilian! Ich interessiere mich für eine Buchung als Zauberer für mein Event.",
   );
+const TEL_URL = "tel:+4915563744696";
 
 const ShowPlanerTrigger = () => {
   const [open, setOpen] = useState(false);
@@ -134,6 +135,14 @@ const ShowPlanerTrigger = () => {
               setMenuOpen(false);
             }}
             bg="#25D366"
+          />
+          <MiniAction
+            label="Anrufen"
+            icon={<Phone className="w-4 h-4" aria-hidden="true" />}
+            onClick={() => {
+              window.location.href = TEL_URL;
+              setMenuOpen(false);
+            }}
           />
         </div>
       )}

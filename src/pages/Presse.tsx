@@ -43,10 +43,10 @@ import greatestTalentImg from "@/assets/greatest-talent-presse.jpg";
 import talentsTeamImg from "@/assets/talents-of-magic-team.jpg";
 
 const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+  "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 const CREAM = "#fafafa";
 const EPK_MAIL =
   "mailto:el@magicel.de?subject=EPK%20Anfrage%20Emilian%20Leber&body=Hallo%20Emilian%2C%20bitte%20schicken%20Sie%20mir%20das%20vollst%C3%A4ndige%20EPK%20%28Bio%2C%20Fotos%2C%20Logo%2C%20Tour-Daten%29.%20Danke%21";
@@ -528,7 +528,7 @@ const PortfolioDownloadSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] mb-7">
               Komplettes Künstler-Portfolio.{" "}
-              <span style={{ color: "#f3d9a8" }}>
+              <span style={{ color: "#AFC0FF" }}>
                 Direkt-Download.
               </span>
             </h2>
@@ -545,7 +545,7 @@ const PortfolioDownloadSection = () => {
                 rel="noopener noreferrer"
                 className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
                 style={{
-                  background: "#f3d9a8",
+                  background: "#AFC0FF",
                   boxShadow: "0 18px 40px -14px rgba(0,0,0,0.024)",
                 }}
               >
@@ -591,7 +591,7 @@ const PortfolioDownloadSection = () => {
                 </span>
                 <span
                   className={`text-sm`}
-                  style={{ color: "#f3d9a8" }}
+                  style={{ color: "#AFC0FF" }}
                 >
                   Portfolio 2026
                 </span>
@@ -601,14 +601,14 @@ const PortfolioDownloadSection = () => {
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
                 <p
                   className="text-[10px] tracking-[0.22em] uppercase font-bold mb-4"
-                  style={{ color: "#f3d9a8" }}
+                  style={{ color: "#AFC0FF" }}
                 >
                   Zauberer · Mentalmagier · Comedy
                 </p>
                 <h3 className="font-display font-black text-3xl md:text-4xl text-white leading-[1.05] mb-3">
                   Emilian
                   <br />
-                  <span style={{ color: "#f3d9a8" }}>
+                  <span style={{ color: "#AFC0FF" }}>
                     Leber.
                   </span>
                 </h3>
@@ -622,7 +622,7 @@ const PortfolioDownloadSection = () => {
                 <span className="text-[10px] tracking-[0.18em] uppercase font-bold">
                   PDF · 802 KB
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase font-bold text-white/80 group-hover:text-[#f3d9a8] transition-colors">
+                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase font-bold text-white/80 group-hover:text-[#AFC0FF] transition-colors">
                   <Download className="w-3.5 h-3.5" />
                   Open
                 </span>
@@ -1589,7 +1589,7 @@ const PloetzlichMagieSection = () => {
                 <div className="flex items-center gap-2 mb-2">
                   <MapPin
                     className="w-3.5 h-3.5"
-                    style={{ color: "#f3d9a8" }}
+                    style={{ color: "#AFC0FF" }}
                   />
                   <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-white/85">
                     Premiere-Location
@@ -1754,18 +1754,18 @@ const PullQuoteSection = () => {
       >
         <Quote
           className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40"
-          style={{ color: "#f3d9a8" }}
+          style={{ color: "#AFC0FF" }}
           strokeWidth={1.25}
         />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Erstes TV-Interview{" "}
-            <span style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#AFC0FF" }}>
               mit 16
             </span>
             .<br />
             Acht Jahre nach dem{" "}
-            <span style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#AFC0FF" }}>
               ersten Trick
             </span>
             .

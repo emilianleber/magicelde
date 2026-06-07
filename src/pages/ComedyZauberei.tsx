@@ -39,11 +39,10 @@ import buehneDpsgImg from "@/assets/buehne-dpsg.jpg";
 import stageShowImg from "@/assets/stage-show.jpg";
 import emotionenImg from "@/assets/emotionen.jpg";
 
-const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+const SERIF_ITALIC = "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 
 /* ═══════════════════════════════════════════════════════════
    HERO
@@ -173,7 +172,7 @@ const Hero = () => {
                 style={{
                   animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`,
                   marginRight: "0.22em",
-                  color: "#f3d9a8",
+                  color: "#AFC0FF",
                 }}
               >
                 {w}
@@ -364,7 +363,7 @@ const LachzaehlerSection = () => {
             </p>
             <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-white">
               Siebzehn Lacher.{" "}
-              <span style={{ color: "#f3d9a8" }}>
+              <span style={{ color: "#AFC0FF" }}>
                 Zwanzig Minuten.
               </span>
             </h2>
@@ -391,7 +390,7 @@ const LachzaehlerSection = () => {
             }}
           >
             <div aria-hidden className="absolute -top-32 -right-10 w-[420px] h-[420px] rounded-full blur-2xl opacity-8" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
-            <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-4" style={{ color: "#f3d9a8" }}>
+            <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-4" style={{ color: "#AFC0FF" }}>
               Durchschnitt · letzte Saison
             </p>
             <div className="relative flex items-baseline gap-4 mb-6 lach-counter-pulse">
@@ -399,7 +398,7 @@ const LachzaehlerSection = () => {
                 className="font-display font-black tabular-nums leading-[0.9]"
                 style={{
                   fontSize: "clamp(7rem, 18vw, 16rem)",
-                  background: "linear-gradient(180deg, #ffffff 0%, #f3d9a8 100%)",
+                  background: "linear-gradient(180deg, #ffffff 0%, #AFC0FF 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -408,7 +407,7 @@ const LachzaehlerSection = () => {
               >
                 {hero}
               </span>
-              <Laugh className="w-12 h-12 md:w-16 md:h-16 self-end mb-6" style={{ color: "#f3d9a8" }} strokeWidth={1.5} />
+              <Laugh className="w-12 h-12 md:w-16 md:h-16 self-end mb-6" style={{ color: "#AFC0FF" }} strokeWidth={1.5} />
             </div>
             <p className={`${SERIF_ITALIC} relative text-2xl md:text-4xl text-white/85 leading-tight mb-3`}>
               {LACH_HERO.label} {LACH_HERO.sub}.
@@ -425,7 +424,7 @@ const LachzaehlerSection = () => {
                   key={i}
                   className="w-1.5 h-1.5 rounded-full"
                   style={{
-                    background: i < hero ? "#f3d9a8" : "rgba(255,255,255,0.12)",
+                    background: i < hero ? "#AFC0FF" : "rgba(255,255,255,0.12)",
                     transition: "background 200ms ease",
                   }}
                 />
@@ -457,7 +456,7 @@ const LachzaehlerSection = () => {
                     border: "1px solid rgba(255,255,255,0.12)",
                   }}
                 >
-                  <row.Icon className="w-5 h-5" style={{ color: i === 1 ? "#f3d9a8" : "rgba(255,255,255,0.85)" }} strokeWidth={1.75} />
+                  <row.Icon className="w-5 h-5" style={{ color: i === 1 ? "#AFC0FF" : "rgba(255,255,255,0.85)" }} strokeWidth={1.75} />
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2 mb-1">
@@ -465,7 +464,7 @@ const LachzaehlerSection = () => {
                       className="font-display font-black tabular-nums leading-none"
                       style={{
                         fontSize: "clamp(2.5rem, 4.5vw, 3.5rem)",
-                        color: i === 1 ? "#f3d9a8" : "white",
+                        color: i === 1 ? "#AFC0FF" : "white",
                       }}
                     >
                       {row.val}
@@ -619,12 +618,12 @@ const SplitDiptychonSection = () => {
             <div aria-hidden className="absolute -bottom-32 -left-10 w-[380px] h-[380px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)" }} />
 
             <div className="relative flex items-baseline gap-3 mb-8">
-              <span className={`${SERIF_ITALIC} text-3xl md:text-4xl tabular-nums`} style={{ color: "#f3d9a8" }}>02</span>
-              <span className="text-[11px] tracking-[0.18em] uppercase font-bold" style={{ color: "#f3d9a8" }}>Comedy · die Pointe</span>
+              <span className={`${SERIF_ITALIC} text-3xl md:text-4xl tabular-nums`} style={{ color: "#AFC0FF" }}>02</span>
+              <span className="text-[11px] tracking-[0.18em] uppercase font-bold" style={{ color: "#AFC0FF" }}>Comedy · die Pointe</span>
             </div>
             <h3 className="relative font-display text-3xl md:text-5xl font-black text-white leading-[1.0] mb-5">
               Und der Saal{" "}
-              <span style={{ color: "#f3d9a8" }}>lacht.</span>
+              <span style={{ color: "#AFC0FF" }}>lacht.</span>
             </h3>
             <p className="relative text-base md:text-lg text-white/70 leading-[1.7] mb-8 max-w-lg">
               Pointe direkt nach dem Trick. Nicht parallel — sondern an genau
@@ -645,11 +644,11 @@ const SplitDiptychonSection = () => {
                       border: "1px solid rgba(255,255,255,0.14)",
                     }}
                   >
-                    <c.Icon className="w-4 h-4" style={{ color: "#f3d9a8" }} strokeWidth={1.75} />
+                    <c.Icon className="w-4 h-4" style={{ color: "#AFC0FF" }} strokeWidth={1.75} />
                   </span>
                   <div>
                     <div className="flex items-baseline gap-3 mb-1.5">
-                      <span className={`text-sm tabular-nums`} style={{ color: "#f3d9a8" }}>
+                      <span className={`text-sm tabular-nums`} style={{ color: "#AFC0FF" }}>
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <p className="font-display text-base md:text-xl font-bold leading-tight">{c.title}</p>
@@ -880,7 +879,7 @@ const ComedyAnteilSliderSection = () => {
             >
               <div aria-hidden className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 70%)" }} />
 
-              <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: "#f3d9a8" }}>
+              <p className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3" style={{ color: "#AFC0FF" }}>
                 Aktiver Modus
               </p>
               <h3 className="relative font-display text-2xl md:text-4xl font-black leading-[1.1] mb-5">
@@ -892,8 +891,8 @@ const ComedyAnteilSliderSection = () => {
 
               <div className="relative space-y-4">
                 {[
-                  { label: "Magie-Anteil", val: current.stats.magie, color: "#f3d9a8" },
-                  { label: "Comedy-Anteil", val: current.stats.comedy, color: "#c79042" },
+                  { label: "Magie-Anteil", val: current.stats.magie, color: "#AFC0FF" },
+                  { label: "Comedy-Anteil", val: current.stats.comedy, color: "#1D3FFF" },
                   { label: "Roast-Anteil", val: current.stats.roast, color: "#86d29a" },
                 ].map((s) => (
                   <div key={s.label}>
@@ -934,11 +933,11 @@ const PullQuoteSection = () => {
       <div aria-hidden className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)" }} />
       <div aria-hidden className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20" style={{ background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)" }} />
       <div className={`relative container px-6`}>
-        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#f3d9a8" }} strokeWidth={1.25} />
+        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40" style={{ color: "#AFC0FF" }} strokeWidth={1.25} />
         <blockquote className="max-w-5xl mx-auto text-center">
           <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
             Erste Pointe nach 18 Sekunden.{" "}
-            <span style={{ color: "#f3d9a8" }}>
+            <span style={{ color: "#AFC0FF" }}>
               Letzte vor dem Applaus.
             </span>
           </p>
@@ -1063,7 +1062,7 @@ const AnlassMatrixSection = () => {
                 <p className="text-base text-foreground/65 leading-[1.65]">{a.body}</p>
               </div>
               <span
-                className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-500 group-hover:bg-[#9a2640] group-hover:text-white text-foreground/30 self-start mt-1"
+                className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-500 group-hover:bg-[#1D3FFF] group-hover:text-white text-foreground/30 self-start mt-1"
                 aria-hidden
               >
                 <ArrowUpRight className="w-4 h-4" />
@@ -1182,7 +1181,7 @@ const RepertoireBentoSection = () => {
             <h3 className="font-display text-xl md:text-2xl font-black leading-tight mb-4">{COMEDY_REPERTOIRE[1].title}</h3>
             <p className="text-sm md:text-base text-white/80 leading-[1.6]">{COMEDY_REPERTOIRE[1].body}</p>
             <div className="mt-auto pt-5 flex items-center gap-2 text-[12px] text-white/65">
-              <span className={`text-sm`} style={{ color: "#f3d9a8" }}>4 Min</span>
+              <span className={`text-sm`} style={{ color: "#AFC0FF" }}>4 Min</span>
               <span aria-hidden className="text-white/30">·</span>
               <span>Bühne · Gast-Routine</span>
             </div>
@@ -1227,10 +1226,10 @@ const RepertoireBentoSection = () => {
                 border: "1px solid rgba(255,255,255,0.14)",
               }}
             >
-              <Laugh className="w-9 h-9 md:w-10 md:h-10" style={{ color: "#f3d9a8" }} strokeWidth={1.5} />
+              <Laugh className="w-9 h-9 md:w-10 md:h-10" style={{ color: "#AFC0FF" }} strokeWidth={1.5} />
             </div>
             <div className="relative">
-              <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-2.5" style={{ color: "#f3d9a8" }}>{COMEDY_REPERTOIRE[3].kicker}</p>
+              <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-2.5" style={{ color: "#AFC0FF" }}>{COMEDY_REPERTOIRE[3].kicker}</p>
               <h3 className="font-display text-xl md:text-2xl font-black leading-tight mb-3">{COMEDY_REPERTOIRE[3].title}</h3>
               <p className="text-sm md:text-base text-white/75 leading-[1.65] max-w-lg">{COMEDY_REPERTOIRE[3].body}</p>
             </div>

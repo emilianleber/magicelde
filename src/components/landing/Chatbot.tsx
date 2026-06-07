@@ -24,9 +24,9 @@ import { sendInquiry } from "@/lib/sendInquiry";
 // CI v3 Tokens (Burgunder + Amber + Cream)
 // ──────────────────────────────────────────────────────────────────────────
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const AMBER = "#f3d9a8";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const AMBER = "#AFC0FF";
 const CREAM = "hsl(0,0%,98%)";
 const DARK_BG = "#08060c";
 
@@ -34,7 +34,12 @@ const DARK_BG = "#08060c";
 // Types
 // ──────────────────────────────────────────────────────────────────────────
 
-type ActionKind = "navigate" | "open-planer" | "show-form" | "send-message";
+type ActionKind =
+  | "navigate"
+  | "open-planer"
+  | "show-form"
+  | "send-message"
+  | "link";
 
 type ChatAction = {
   label: string;
@@ -705,6 +710,9 @@ const Chatbot = () => {
       case "send-message":
         if (action.target) handleSend(action.target);
         break;
+      case "link":
+        if (action.target) window.location.href = action.target;
+        break;
     }
   };
 
@@ -741,13 +749,24 @@ const Chatbot = () => {
           },
         ],
       });
-    } catch (err) {
+    } catch {
       setSubmitting(false);
+      const mailto = `mailto:el@magicel.de?subject=${encodeURIComponent(
+        `Event-Anfrage: ${form.anlass || "Anlass offen"}`,
+      )}&body=${encodeURIComponent(
+        [
+          `Name: ${form.name}`,
+          `E-Mail: ${form.email}`,
+          form.anlass ? `Anlass: ${form.anlass}` : "",
+          "",
+          form.message || "(keine Nachricht)",
+        ]
+          .filter(Boolean)
+          .join("\n"),
+      )}`;
       pushBot({
-        text:
-          err instanceof Error
-            ? `Versand hat nicht geklappt: ${err.message}. Schreib mir direkt an el@magicel.de.`
-            : "Versand hat nicht geklappt. Schreib mir direkt an el@magicel.de.",
+        text: "Der automatische Versand klappt gerade nicht — schick mir deine Anfrage mit einem Klick direkt per E-Mail, alles ist schon eingetragen:",
+        actions: [{ label: "Per E-Mail senden", icon: Mail, kind: "link", target: mailto }],
       });
     }
   };

@@ -1467,7 +1467,7 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
                 <div className="grid grid-cols-3 gap-3 mb-7">
                   {[
                     { label: "Q1–Q2", color: "#86d29a" },
-                    { label: "Q3", color: "#e3c87a" },
+                    { label: "Q3", color: "#AFC0FF" },
                     { label: "Q4", color: "#e09a6e" },
                   ].map((q) => (
                     <div
@@ -1487,7 +1487,7 @@ const AnreiseVerfuegbarkeitSection = ({ data }: { data: Stadt }) => {
                       <span className="text-[10px] tracking-[0.16em] uppercase font-bold text-white/55">
                         {q.color === "#86d29a"
                           ? "Entspannt"
-                          : q.color === "#e3c87a"
+                          : q.color === "#AFC0FF"
                             ? "Mittel"
                             : "Eng"}
                       </span>

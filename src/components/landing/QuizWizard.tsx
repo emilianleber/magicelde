@@ -10,11 +10,11 @@ import {
 } from "lucide-react";
 
 /* CI v3 Tokens — Burgunder als Akzent, Amber/Cream für Light-Variante */
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const AMBER_SOFT = "#f0d8a8";
-const AMBER_MID = "#c79042";
-const ACCENT_SOFT = "#e4b8c0";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const AMBER_SOFT = "#C7D2FF";
+const AMBER_MID = "#1D3FFF";
+const ACCENT_SOFT = "#C7D2FF";
 
 const GRADIENT =
   `linear-gradient(100deg, ${ACCENT_DEEP} 0%, ${ACCENT} 55%, ${AMBER_MID} 100%)`;

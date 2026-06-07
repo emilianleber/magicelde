@@ -34,12 +34,12 @@ import closeupImg from "@/assets/closeup.jpg";
 import haendeImg from "@/assets/haende-interaktion.jpg";
 
 const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
-const AMBER_MID = "#c79042";
-const AMBER_SOFT = "#f0d8a8";
+  "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
+const AMBER_MID = "#1D3FFF";
+const AMBER_SOFT = "#C7D2FF";
 
 /* ═══════════════════════════════════════════════════════════
    1 · HERO — MagicDinner-Pattern
@@ -205,7 +205,7 @@ const Hero = () => {
             ))}
             <br className="hidden sm:block" />
             {HEADLINE_ITALIC.map((w, i) => (
-              <span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#f3d9a8" }}>
+              <span key={`i-${i}`} className={`hero-word ${SERIF_ITALIC}`} style={{ animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`, paddingRight: "0.15em", color: "#AFC0FF" }}>
                 {w}
                 {" "}
               </span>

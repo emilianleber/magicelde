@@ -52,12 +52,12 @@ import emotionenImg from "@/assets/emotionen.jpg";
 
 /* ─── CI v3 Tokens ─────────────────────────────────────── */
 const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
-const AMBER_MID = "#c79042";
-const AMBER_SOFT = "#f0d8a8";
+  "not-italic";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
+const AMBER_MID = "#1D3FFF";
+const AMBER_SOFT = "#C7D2FF";
 
 /* ═══════════════════════════════════════════════════════════
    1 · HERO — MagicDinner-Pattern
@@ -236,7 +236,7 @@ const Hero = () => {
                 style={{
                   animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`,
                   paddingRight: "0.15em",
-                  color: "#f3d9a8",
+                  color: "#AFC0FF",
                 }}
               >
                 {w}
@@ -1041,7 +1041,7 @@ const GeburtstagAlterCard = () => {
             className="relative w-28 h-16 rounded-t-lg rounded-b-md"
             style={{
               background:
-                "linear-gradient(180deg, #f0d8a8 0%, #d4a875 70%, #b88955 100%)",
+                "linear-gradient(180deg, #C7D2FF 0%, #6E86FF 70%, #4D6BFF 100%)",
               boxShadow:
                 "0 12px 24px -8px rgba(0,0,0,0.040), inset 0 -3px 0 rgba(0,0,0,0.040)",
             }}
@@ -1051,7 +1051,7 @@ const GeburtstagAlterCard = () => {
               className="absolute -top-1.5 left-0 right-0 h-3 rounded-full"
               style={{
                 background:
-                  "repeating-linear-gradient(90deg, #fff 0 4px, transparent 4px 8px), #f0d8a8",
+                  "repeating-linear-gradient(90deg, #fff 0 4px, transparent 4px 8px), #C7D2FF",
               }}
             />
             {/* Kerzen */}
@@ -1064,7 +1064,7 @@ const GeburtstagAlterCard = () => {
                   width: "3px",
                   height: "14px",
                   background:
-                    "linear-gradient(180deg, #e4b8c0 0%, #9a2640 100%)",
+                    "linear-gradient(180deg, #C7D2FF 0%, #1D3FFF 100%)",
                   borderRadius: "1px",
                 }}
               >
@@ -1075,7 +1075,7 @@ const GeburtstagAlterCard = () => {
                     width: "5px",
                     height: "7px",
                     background:
-                      "radial-gradient(circle at 50% 70%, #fff7c7 0%, #f3d9a8 35%, transparent 75%)",
+                      "radial-gradient(circle at 50% 70%, #EEF1F6 0%, #AFC0FF 35%, transparent 75%)",
                     borderRadius: "50%",
                     animation: `fbCandleFlicker ${1.4 + i * 0.18}s ease-in-out infinite`,
                   }}
@@ -1876,11 +1876,11 @@ const Index = () => (
     <Helmet>
       <html lang="de" />
       <title>
-        Zauberkünstler Emilian Leber — Bühne, Close-Up & Magic Dinner | Bayern
+        Zauberer Regensburg — Emilian Leber · Bühne, Close-Up & Magic Dinner
       </title>
       <meta
         name="description"
-        content="Zauberkünstler aus Bayern, deutschlandweit buchbar — Bühnenshow, Close-Up am Tisch und Magic Dinner zwischen den Gängen. Über 200 Events, 5,0★ bei 30+ Bewertungen. Hochzeit, Firmenfeier, Geburtstag, Gala."
+        content="Zauberer aus Regensburg, deutschlandweit buchbar — Bühnenshow, Close-Up am Tisch und Magic Dinner zwischen den Gängen. Über 200 Events, 5,0★ bei 30+ Bewertungen. Hochzeit, Firmenfeier, Geburtstag, Gala."
       />
       <meta
         name="keywords"
@@ -1896,11 +1896,11 @@ const Index = () => (
       <meta property="og:url" content={SITE_URL} />
       <meta
         property="og:title"
-        content="Zauberkünstler Emilian Leber — Bühne, Close-Up & Magic Dinner | Bayern"
+        content="Zauberer Regensburg — Emilian Leber · Bühne, Close-Up & Magic Dinner"
       />
       <meta
         property="og:description"
-        content="Bühnenshow, Close-Up und Magic Dinner aus Bayern, deutschlandweit. 200+ Events, 5,0★."
+        content="Bühnenshow, Close-Up und Magic Dinner — Zauberer aus Regensburg, deutschlandweit. 200+ Events, 5,0★."
       />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
 

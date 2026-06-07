@@ -47,14 +47,14 @@ import buehneShowImg from "@/assets/hero-magic.jpg";
  * Smaragd · Amber · Burgunder · Cream — mono pro Gradient.
  * Burgunder ist die EINE Akzentfarbe.                                */
 const SERIF_ITALIC =
-  "font-['Instrument_Serif',ui-serif,Georgia,serif] italic font-normal";
+  "not-italic";
 
-const ACCENT = "#9a2640";
-const ACCENT_DEEP = "#5c1622";
-const ACCENT_SOFT = "#e4b8c0";
+const ACCENT = "#1D3FFF";
+const ACCENT_DEEP = "#1233CC";
+const ACCENT_SOFT = "#C7D2FF";
 const EMERALD_DEEP = "#0e3d2a";
-const AMBER_MID = "#c79042";
-const AMBER_SOFT = "#f0d8a8";
+const AMBER_MID = "#1D3FFF";
+const AMBER_SOFT = "#C7D2FF";
 const CREAM = "#fafafa";
 
 /* ═══════════════════════════════════════════════════════════
@@ -250,7 +250,7 @@ const Hero = () => {
                 style={{
                   animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`,
                   paddingRight: "0.15em",
-                  color: "#f3d9a8",
+                  color: "#AFC0FF",
                 }}
               >
                 {w}
@@ -1052,8 +1052,7 @@ const VertrauensSection = () => {
                   border: `2px solid ${ACCENT}`,
                   background: "rgba(255,255,255,0.85)",
                   color: ACCENT,
-                  fontFamily: "'Instrument Serif', serif",
-                  fontStyle: "italic",
+                  fontStyle: "normal",
                   fontSize: "11px",
                   lineHeight: 1.1,
                   textAlign: "center",
@@ -1343,7 +1342,7 @@ const PlanerQuoteSection = () => {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className="w-4 h-4 fill-[#e4b8c0] text-[#e4b8c0]"
+                    className="w-4 h-4 fill-[#C7D2FF] text-[#C7D2FF]"
                   />
                 ))}
               </div>
