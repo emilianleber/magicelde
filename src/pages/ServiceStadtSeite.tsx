@@ -9,8 +9,8 @@ import {
   ArrowUpRight,
   MapPin,
   Route,
-  Sparkles,
   CheckCircle2,
+  ChevronDown,
 } from "lucide-react";
 
 import VoltageShell from "@/components/voltage/VoltageShell";
@@ -23,17 +23,12 @@ import {
   FinalCTA,
   LogoMarquee,
 } from "@/components/voltage/sections";
-import {
-  SplitFeature,
-  WarumCarousel,
-} from "@/components/voltage/creative";
+import { WarumCarousel } from "@/components/voltage/creative";
 import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
 
 import audienceImg from "@/assets/audience-reactions.jpg";
 import stageImg from "@/assets/buehne-zuschauer.jpg";
-import staunenImg from "@/assets/staunen.jpg";
 import weddingImg from "@/assets/wedding-magic.jpg";
-import schneiderImg from "@/assets/schneider-weisse-closeup.jpg";
 import dinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
 import heroStageImg from "@/assets/hero-stage.jpg";
 import heroDinnerImg from "@/assets/hero-dinner.jpg";
@@ -183,18 +178,13 @@ const ServicePage = ({ service, city }: PageProps) => {
 
       <LogoMarquee label={`Auftritte für Konzerne und Marken — auch in ${city.name}.`} />
 
-      <IntroSection service={service} city={city} h1={h1} />
-      <HighlightsSection service={service} city={city} buchungHref={buchungHref} />
+      <HighlightsSection service={service} city={city} h1={h1} buchungHref={buchungHref} />
+      <WarumStadtCarousel service={service} city={city} />
       <TrustStripSection service={service} city={city} />
       <AblaufSection service={service} city={city} />
-      <WarumStadtCarousel service={service} city={city} />
-      {city.bekannteLocations && city.bekannteLocations.length > 0 && (
-        <LocationsSection city={city} buchungHref={buchungHref} />
-      )}
-      <InDerNaeheSection service={service} city={city} />
       <ReviewsBlock paper={false} />
       <FAQSection service={service} city={city} allFaqs={allFaqs} />
-      {city.langText && <LangTextSection city={city} />}
+      <MehrUeberStadtSection service={service} city={city} buchungHref={buchungHref} />
       <WeitereStaedteSection current={city.slug} />
 
       <FinalCTA
@@ -210,40 +200,36 @@ const ServicePage = ({ service, city }: PageProps) => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   INTRO — Format-Beschreibung (Split: intro + city.highlight)
+   ACCORDION — aufklappbares <details> im Voltage-Look (default zu).
+   Hält keyword-dichten SEO-Prosa-Text kompakt im DOM.
    ═══════════════════════════════════════════════════════════ */
-const IntroSection = ({ service, city, h1 }: { service: ServiceFormat; city: Stadt; h1: string }) => (
-  <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#fff" }}>
-    <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-x-12 gap-y-8">
-      <motion.div variants={up} className="lg:col-span-7">
-        <Eyebrow>{`Was ${service.shortName} in ${city.name} bedeutet`}</Eyebrow>
-        <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.75rem,4vw,3rem)", lineHeight: 1.06, color: INK }}>
-          {h1}
-        </h2>
-        <p className="mt-5 text-[16px] md:text-lg leading-[1.7]" style={{ color: L_DIM }}>
-          {service.intro}
-        </p>
-      </motion.div>
-      <motion.div variants={up} className="lg:col-span-5 lg:pt-14">
-        <p className="text-[16px] leading-[1.7]" style={{ color: L_DIM }}>
-          {city.highlight}
-        </p>
-      </motion.div>
+const Accordion = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <details className="group rounded-[18px] px-6 py-5" style={{ background: "#fff", border: `1px solid ${L_LINE}` }}>
+    <summary className="flex items-center justify-between gap-4 cursor-pointer list-none">
+      <span className="text-[16px] md:text-[17px] font-semibold" style={{ color: INK }}>{title}</span>
+      <ChevronDown className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180" style={{ color: COBALT }} />
+    </summary>
+    <div className="mt-4 space-y-4 text-[15px] md:text-[15.5px] leading-[1.75]" style={{ color: L_DIM }}>
+      {children}
     </div>
-  </motion.section>
+  </details>
 );
 
 /* ═══════════════════════════════════════════════════════════
-   HIGHLIGHTS — Format-USPs (Checkmark-Liste)
+   HIGHLIGHTS — kompakte Format-USP-Sektion (Checkmark-Liste) mit
+   kurzem h1-Headline-Text + Links zu detailHref und /buchung.
    ═══════════════════════════════════════════════════════════ */
-const HighlightsSection = ({ service, city, buchungHref }: { service: ServiceFormat; city: Stadt; buchungHref: string }) => (
-  <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#fff", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
+const HighlightsSection = ({ service, city, h1, buchungHref }: { service: ServiceFormat; city: Stadt; h1: string; buchungHref: string }) => (
+  <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#fff" }}>
     <div className="max-w-7xl mx-auto">
       <motion.div variants={up} className="max-w-3xl mb-10">
-        <Eyebrow>Was du bekommst</Eyebrow>
-        <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.75rem,4vw,3rem)", lineHeight: 1.06, color: INK }}>
-          {service.shortName}-Highlights<span style={{ color: COBALT }}>.</span>
-        </h2>
+        <Eyebrow>{`Was ${service.shortName} in ${city.name} bedeutet`}</Eyebrow>
+        <h1 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.75rem,4vw,3rem)", lineHeight: 1.06, color: INK }}>
+          {h1}
+        </h1>
+        <p className="mt-5 text-[16px] md:text-lg leading-[1.7]" style={{ color: L_DIM }}>
+          {service.intro}
+        </p>
       </motion.div>
       <ul className="grid md:grid-cols-2 gap-x-10 gap-y-5 max-w-5xl">
         {service.highlights.map((h) => (
@@ -263,36 +249,6 @@ const HighlightsSection = ({ service, city, buchungHref }: { service: ServiceFor
       </motion.div>
     </div>
   </motion.section>
-);
-
-/* ═══════════════════════════════════════════════════════════
-   TRUST — 200+ Events, TV, Bewertungen (Stats)
-   ═══════════════════════════════════════════════════════════ */
-const TrustStripSection = ({ service, city }: { service: ServiceFormat; city: Stadt }) => (
-  <Stats
-    items={[
-      { v: "200+", l: `Events seit 2016 — auch in ${city.name}` },
-      { v: "5,0★", l: "30+ Bewertungen · ProvenExpert" },
-      { v: "TV", l: "TVA-Auftritt 2025 · Greatest Talent 2023" },
-      { v: "24 h", l: `Antwort auf jede ${service.shortName}-Anfrage` },
-    ]}
-  />
-);
-
-/* ═══════════════════════════════════════════════════════════
-   ABLAUF — Format-Schritte (Steps)
-   ═══════════════════════════════════════════════════════════ */
-const AblaufSection = ({ service, city }: { service: ServiceFormat; city: Stadt }) => (
-  <Steps
-    eyebrow="Ablauf"
-    title={
-      <>
-        {service.ablauf.length} Schritte — <span style={{ color: COBALT }}>klar geplant.</span>
-      </>
-    }
-    sub={`So läuft ${service.shortName} bei deinem Event in ${city.name} — transparent, ohne Überraschungen.`}
-    items={service.ablauf.map((step) => ({ t: step.title, d: step.body }))}
-  />
 );
 
 /* ═══════════════════════════════════════════════════════════
@@ -343,60 +299,32 @@ const WarumStadtCarousel = ({ service, city }: { service: ServiceFormat; city: S
 );
 
 /* ═══════════════════════════════════════════════════════════
-   LOCATIONS — bekannte Venues der Stadt
+   TRUST — 200+ Events, TV, Bewertungen (Stats)
    ═══════════════════════════════════════════════════════════ */
-const LocationsSection = ({ city, buchungHref }: { city: Stadt; buchungHref: string }) => (
-  <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#fff", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
-    <div className="max-w-7xl mx-auto">
-      <motion.div variants={up} className="max-w-3xl mb-10">
-        <Eyebrow>{`Bekannte Locations in ${city.name}`}</Eyebrow>
-        <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.75rem,3.6vw,2.5rem)", lineHeight: 1.06, color: INK }}>
-          Häufige <span style={{ color: COBALT }}>Spielorte</span>.
-        </h2>
-      </motion.div>
-      <motion.div variants={up} className="flex flex-wrap gap-3">
-        {city.bekannteLocations!.map((loc) => (
-          <span
-            key={loc}
-            className="inline-flex items-center gap-2 text-sm px-5 py-3 rounded-full"
-            style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}
-          >
-            <Sparkles className="w-3.5 h-3.5" style={{ color: COBALT }} />
-            {loc}
-          </span>
-        ))}
-      </motion.div>
-      <motion.p variants={up} className="mt-10 text-[15px] md:text-base leading-relaxed max-w-2xl" style={{ color: L_DIM }}>
-        Deine Location ist nicht dabei? Kein Problem — ich komme zu jedem Veranstaltungsort in{" "}
-        {city.name} und Umgebung.{" "}
-        <a href={buchungHref} style={{ color: COBALT }} className="hover:underline font-semibold">
-          Jetzt anfragen →
-        </a>
-      </motion.p>
-    </div>
-  </motion.section>
+const TrustStripSection = ({ service, city }: { service: ServiceFormat; city: Stadt }) => (
+  <Stats
+    items={[
+      { v: "200+", l: `Events seit 2016 — auch in ${city.name}` },
+      { v: "5,0★", l: "30+ Bewertungen · ProvenExpert" },
+      { v: "TV", l: "TVA-Auftritt 2025 · Greatest Talent 2023" },
+      { v: "24 h", l: `Antwort auf jede ${service.shortName}-Anfrage` },
+    ]}
+  />
 );
 
 /* ═══════════════════════════════════════════════════════════
-   IN DER NÄHE — geo-search keyword coverage
+   ABLAUF — Format-Schritte (Steps)
    ═══════════════════════════════════════════════════════════ */
-const InDerNaeheSection = ({ service, city }: { service: ServiceFormat; city: Stadt }) => (
-  <SplitFeature
-    eyebrow="Zauberer in der Nähe gesucht?"
+const AblaufSection = ({ service, city }: { service: ServiceFormat; city: Stadt }) => (
+  <Steps
+    eyebrow="Ablauf"
     title={
       <>
-        Du bist in {city.name} oder Umgebung — <span style={{ color: COBALT }}>ich bin hier</span>.
+        {service.ablauf.length} Schritte — <span style={{ color: COBALT }}>klar geplant.</span>
       </>
     }
-    sub={`Wer Zauberer in der Nähe oder Magier in der Umgebung sucht und in ${city.name} oder dem Umkreis sitzt: Ich komme zu jedem Veranstaltungsort in ${city.name} und ${city.region}. Anfahrt im Angebot kalkuliert, keine versteckten Kosten, kurze Reaktionszeit auf Anfragen.`}
-    points={[
-      `${service.shortName} anfragen für ${city.name}`,
-      "Direkt anrufen — +49 155 63744696",
-      `Ich komme zu jedem Veranstaltungsort in ${city.name} und ${city.region}`,
-    ]}
-    image={schneiderImg}
-    imageAlt={`Zauberer in der Nähe von ${city.name}`}
-    imgPos="top"
+    sub={`So läuft ${service.shortName} bei deinem Event in ${city.name} — transparent, ohne Überraschungen.`}
+    items={service.ablauf.map((step) => ({ t: step.title, d: step.body }))}
   />
 );
 
@@ -412,30 +340,111 @@ const FAQSection = ({ service, city, allFaqs }: { service: ServiceFormat; city: 
 );
 
 /* ═══════════════════════════════════════════════════════════
-   LANG-TEXT — SEO-Text unten
+   MEHR ÜBER {FORMAT} IN {STADT} — Accordion-Block.
+   Der gesamte schwere SEO-Prosa-Text (langer city.intro-Teil,
+   In-der-Nähe-Text, Lang-Text, Locations) — wortwörtlich übernommen,
+   nur in aufklappbare <details> verlagert (default zu, bleibt im DOM).
    ═══════════════════════════════════════════════════════════ */
-const LangTextSection = ({ city }: { city: Stadt }) => {
-  const paragraphs = (city.langText ?? "").split("\n\n").filter(Boolean);
-  if (paragraphs.length === 0) return null;
+const MehrUeberStadtSection = ({ service, city, buchungHref }: { service: ServiceFormat; city: Stadt; buchungHref: string }) => {
+  const langParagraphs = (city.langText || "").split("\n\n").filter(Boolean);
   return (
-    <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
+    >
       <div className="max-w-3xl mx-auto">
-        <motion.div variants={up} className="text-center mb-10">
-          <p className="flex items-center justify-center gap-2 text-[12px] tracking-[0.16em] uppercase font-semibold mb-5" style={{ color: L_DIM }}>
-            <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: COBALT }} />
-            Alles, was du wissen musst
-          </p>
-          <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.4vw,3rem)", lineHeight: 1.05, color: INK }}>
-            Zauberer {city.name} — <span style={{ color: COBALT }}>ausführlich erklärt.</span>
+        <motion.div variants={up} className="mb-10">
+          <Eyebrow>Alles, was du wissen musst</Eyebrow>
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.4vw,3.2rem)", lineHeight: 1.05, color: INK }}>
+            Mehr über {service.shortName} in <span style={{ color: COBALT }}>{city.name}</span>.
           </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Alle Details zu {service.shortName}, Anreise und den Locations in {city.name} —
+            aufklappbar, falls du tiefer einsteigen willst.
+          </p>
         </motion.div>
-        <div className="space-y-6 md:space-y-7">
-          {paragraphs.map((p, i) => (
-            <motion.p key={i} variants={up} className="text-[16px] md:text-lg leading-[1.8]" style={{ color: "#3a3833" }}>
-              {p}
-            </motion.p>
-          ))}
-        </div>
+
+        <motion.div variants={up} className="space-y-3">
+          {/* INTRO-STADT + HIGHLIGHT — der ausführliche city.intro-Teil */}
+          <Accordion title={`Warum ${service.shortName} in ${city.name}?`}>
+            <p>{city.intro}</p>
+            <p>{city.highlight}</p>
+            {city.seoText && <p>{city.seoText}</p>}
+            <p>200+ Events seit 2016 — auch in {city.region}.</p>
+          </Accordion>
+
+          {/* IN DER NÄHE — geo-search keyword coverage (vom alten InDerNaeheSection) */}
+          <Accordion title={`Zauberer in der Nähe von ${city.name} gesucht?`}>
+            <p>
+              Wer Zauberer in der Nähe oder Magier in der Umgebung sucht und in {city.name} oder dem
+              Umkreis sitzt: Ich komme zu jedem Veranstaltungsort in {city.name} und {city.region}.
+              Anfahrt im Angebot kalkuliert, keine versteckten Kosten, kurze Reaktionszeit auf Anfragen.
+            </p>
+            <ul className="space-y-1.5 list-disc pl-5">
+              <li>{service.shortName} anfragen für {city.name}</li>
+              <li>Direkt anrufen — +49 155 63744696</li>
+              <li>Ich komme zu jedem Veranstaltungsort in {city.name} und {city.region}</li>
+            </ul>
+            <a href={buchungHref} className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
+              {service.ctaPrimary} <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          </Accordion>
+
+          {/* LOCATIONS — bekannte Venues der Stadt (vom alten LocationsSection) */}
+          {city.bekannteLocations && city.bekannteLocations.length > 0 && (
+            <Accordion title={`Event-Locations in ${city.name}`}>
+              <p>
+                Ich trete regelmäßig in Locations und Venues in {city.name} auf — und komme zu jeder
+                Wunsch-Location. Schlosssäle, Hotels, Restaurants, Eventhallen.
+              </p>
+              <div className="flex flex-wrap gap-2.5">
+                {city.bekannteLocations.map((loc) => (
+                  <span
+                    key={loc}
+                    className="inline-flex items-center gap-2 text-[13px] px-4 py-2 rounded-full"
+                    style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}
+                  >
+                    <MapPin className="w-3.5 h-3.5" style={{ color: COBALT }} />
+                    {loc}
+                  </span>
+                ))}
+              </div>
+              <p>
+                Deine Location ist nicht dabei? Kein Problem — ich komme zu jedem Veranstaltungsort in{" "}
+                {city.name} und Umgebung.{" "}
+                <a href={buchungHref} style={{ color: COBALT }} className="hover:underline font-semibold">
+                  Jetzt anfragen →
+                </a>
+              </p>
+            </Accordion>
+          )}
+
+          {/* LANG-TEXT — SEO-Text (vom alten LangTextSection) */}
+          {langParagraphs.length > 0 && (
+            <Accordion title={`Zauberer ${city.name} — ausführlich erklärt`}>
+              {langParagraphs.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </Accordion>
+          )}
+
+          {/* KOLLEGEN-EMPFEHLUNG */}
+          {city.kollegenEmpfehlung && (
+            <Accordion title="Empfehlung aus dem Kollegen-Netzwerk">
+              <p>
+                {city.kollegenEmpfehlung.prefix}
+                <a href={city.kollegenEmpfehlung.linkHref} target="_blank" rel="noopener" className="underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
+                  {city.kollegenEmpfehlung.linkText}
+                </a>
+                {city.kollegenEmpfehlung.suffix}
+              </p>
+            </Accordion>
+          )}
+        </motion.div>
       </div>
     </motion.section>
   );
