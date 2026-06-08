@@ -21,6 +21,8 @@ import { CSS } from "@dnd-kit/utilities";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
+const SERIF_ITALIC = "not-italic";
+
 const EFFEKT_TYP_LABELS: Record<string, string> = { closeup: "Close-Up", buehne: "Bühne", beides: "Beides" };
 const EFFEKT_TYP_COLORS: Record<string, string> = {
   closeup: "bg-blue-50 text-blue-600 border-blue-200",

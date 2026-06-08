@@ -9,6 +9,8 @@ import {
   Search, Trash2, Ban, ThumbsUp, ThumbsDown, MoreVertical, Eye, Mail, BellRing, CircleCheck, ArrowRight,
 } from "lucide-react";
 
+const SERIF_ITALIC = "not-italic";
+
 const STATUS_CONFIG: Record<DokumentStatus, { label: string; dot: string }> = {
   entwurf:      { label: "Entwurf",     dot: "bg-gray-300 border-2 border-gray-300" },
   gesendet:     { label: "Gesendet",    dot: "bg-blue-500" },
