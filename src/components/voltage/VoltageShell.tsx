@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { INK, WHITE, SANS, SITE_URL, VoltageGlobalStyle } from "./theme";
 import VoltageHeader from "./VoltageHeader";
 import VoltageFooter from "./VoltageFooter";
+import Chatbot from "@/components/landing/Chatbot";
 
 interface Props {
   title: string;
@@ -48,6 +49,7 @@ export default function VoltageShell({ title, description, path = "/demo", child
       <VoltageHeader scrolled={scrolled} />
       <main>{children}</main>
       <VoltageFooter />
+      <Chatbot />
     </div>
   );
 }

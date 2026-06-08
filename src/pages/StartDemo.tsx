@@ -18,6 +18,7 @@ import {
 import { TVA_VIDEO_ID } from "@/lib/videos";
 import VoltageHeader from "@/components/voltage/VoltageHeader";
 import VoltageFooter from "@/components/voltage/VoltageFooter";
+import Chatbot from "@/components/landing/Chatbot";
 
 import siteLogo from "@/assets/logo-clean.webp";
 import portraitImg from "@/assets/magician-portrait.jpg";
@@ -563,6 +564,7 @@ const StartDemo = () => {
 
       {/* ══ FOOTER ══ */}
       <VoltageFooter />
+      <Chatbot />
     </div>
   );
 };
