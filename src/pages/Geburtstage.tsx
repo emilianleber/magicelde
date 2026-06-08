@@ -1,9 +1,12 @@
 /** /geburtstage — Anlass (kreativ, eigene Komposition). Live-Voltage. */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, Stats, FactsGrid, PullQuote, ReviewsBlock, FAQ, FinalCTA, SectionHeader } from "@/components/voltage/sections";
 import { SplitFeature, WarumCarousel, InteractiveTabs, FormatCards } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Hand, Wand2, UtensilsCrossed, Heart, Smile } from "lucide-react";
+import {
+  Hand, Wand2, UtensilsCrossed, Heart, Smile,
+  MessageSquare, Car, Mic, ShieldCheck, Clock, Sparkles, Languages, Timer,
+} from "lucide-react";
 import heroImg from "@/assets/hero-birthday.jpg";
 import splitImg from "@/assets/emotionen.jpg";
 import carA from "@/assets/audience-reactions.jpg";
@@ -27,6 +30,27 @@ export default function Geburtstage() {
         image={heroImg}
         imageAlt="Zauberer bei einer Geburtstagsfeier"
         badge="Selbst die Skeptiker am Tisch sind am Ende am stärksten geflasht."
+      />
+
+      <section className="px-5 md:px-10 pt-2">
+        <div className="max-w-6xl mx-auto">
+          <SectionHeader
+            eyebrow="Auszeichnungen & Erfahrung"
+            title={<>Ein Profi, dem ihr den <span style={{ color: COBALT }}>besonderen</span> Tag anvertraut.</>}
+            sub="TV-Finalist, Wettbewerbs-Erfahrung und über 200 Events seit 2016 — Routine für jeden Anlass, vom runden 50er bis zum großen Jubiläum."
+            center
+          />
+        </div>
+      </section>
+      <Stats
+        items={[
+          { v: "200+", l: "Events seit 2016" },
+          { v: "3x", l: "TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 + Kreativpreis)" },
+          { v: "Top 30", l: "Dt. Jugendmeisterschaft der Zauberkunst 2024" },
+          { v: "TVA 2025", l: "TV-Auftritt im regionalen Fernsehen" },
+          { v: "5,0★", l: "30+ Bewertungen, Google & ProvenExpert" },
+          { v: "100+", l: "Hochzeiten & Feiern begleitet" },
+        ]}
       />
 
       <SplitFeature
@@ -84,6 +108,28 @@ export default function Geburtstage() {
 
       <ReviewsBlock paper={false} />
 
+      <section className="px-5 md:px-10 pt-10 md:pt-14">
+        <div className="max-w-6xl mx-auto">
+          <SectionHeader
+            eyebrow="Im Angebot enthalten · So unkompliziert"
+            title={<>Ein Preis, <span style={{ color: COBALT }}>keine</span> Überraschungen.</>}
+            sub="Was bei jeder Buchung dabei ist — transparent, planbar und ohne versteckte Posten."
+          />
+        </div>
+      </section>
+      <FactsGrid
+        items={[
+          { Icon: MessageSquare, k: "Vorab-Briefing", v: "Anlass, Tonalität & Insider-Gags zum Jubilar" },
+          { Icon: Car, k: "Anfahrt", v: "Transparent im Angebot, keine versteckten Kosten" },
+          { Icon: Mic, k: "Ton & Headset", v: "Bei Bühne inklusive, Tech-Rider auf Anfrage" },
+          { Icon: ShieldCheck, k: "Rechtssicher", v: "Berufshaftpflicht, DSGVO/AVV für Firmen" },
+          { Icon: Clock, k: "Schnelle Antwort", v: "Rückmeldung binnen 24 Stunden, verbindliche Zusage" },
+          { Icon: Sparkles, k: "Individuell", v: "Programm auf euren Anlass abgestimmt" },
+          { Icon: Languages, k: "Zweisprachig", v: "Show auf Deutsch & Englisch" },
+          { Icon: Timer, k: "Pünktlich", v: "Setup rund 30 Min vor Showbeginn" },
+        ]}
+      />
+
       <FAQ
         items={[
           { q: "Was kostet ein Zauberer für einen Geburtstag?", a: "Das haengt von Dauer, Anfahrt und Gaestezahl ab — ein Walk-Around-Auftritt ist guenstiger als eine kombinierte Bühnenshow ueber den ganzen Abend. Erzaehlt mir kurz von eurer Feier ueber /kontakt, dann bekommt ihr ein passendes Angebot." },
@@ -92,6 +138,8 @@ export default function Geburtstage() {
           { q: "Was braucht ihr an Platz und Technik?", a: "Fuer Tischmagie und Walk-Around reicht der vorhandene Raum, technisch brauche ich nichts. Fuer die Bühnenshow genuegt eine kleine freie Flaeche; bei groesseren Saelen klaeren wir Mikrofon und Musik vorab kurz ab." },
           { q: "Geht die Show auch auf Englisch?", a: "Ja, ich spiele auf Deutsch und Englisch. Bei internationalen Gaesten oder gemischten Familien passe ich die Show entsprechend an, ohne dass der Humor verloren geht." },
           { q: "Wie weit reist du an und wie individuell ist die Show?", a: "Basis ist Bayern rund um Regensburg, ich bin aber deutschlandweit unterwegs — seit 2016 mit ueber 200 Events. Ich arbeite persoenliche Insider zum Jubilar ein, sodass die Show genau auf eure Feier zugeschnitten ist." },
+          { q: "Eignet sich die Show auch fuer runde Geburtstage und eine Goldene Hochzeit?", a: "Ja, genau dafuer ist sie gemacht. Vom runden 50er und 60er bis zur Goldenen Hochzeit und zum grossen Familienjubilaeum binde ich Anekdoten zum Jubelpaar oder Jubilar ein. Ueber 100 Hochzeiten und Feiern habe ich seit 2016 begleitet, mit 5,0 Sternen aus ueber 30 Bewertungen." },
+          { q: "Was unterscheidet dich von anderen Geburtstags-Zauberern?", a: "Ich bin dreifacher TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inklusive Kreativpreis), stand 2024 bei der Deutschen Jugendmeisterschaft der Zauberkunst unter den Top 30 und war 2025 im TVA-Fernsehen zu sehen. Diese Buehnen-Routine fliesst direkt in eure Feier ein — comedy-lastig, herzlich und mit echten Insidern." },
         ]}
       />
 

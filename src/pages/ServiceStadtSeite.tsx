@@ -11,6 +11,14 @@ import {
   Route,
   CheckCircle2,
   ChevronDown,
+  ClipboardList,
+  Car,
+  Headphones,
+  ShieldCheck,
+  Clock,
+  Sparkles,
+  Languages,
+  CalendarCheck,
 } from "lucide-react";
 
 import VoltageShell from "@/components/voltage/VoltageShell";
@@ -18,6 +26,7 @@ import {
   SubHero,
   Stats,
   Steps,
+  GlassFeatures,
   ReviewsBlock,
   FAQ,
   FinalCTA,
@@ -182,6 +191,7 @@ const ServicePage = ({ service, city }: PageProps) => {
       <WarumStadtCarousel service={service} city={city} />
       <TrustStripSection service={service} city={city} />
       <AblaufSection service={service} city={city} />
+      <InklusiveSection service={service} city={city} />
       <ReviewsBlock paper={false} />
       <MehrUeberStadtSection service={service} city={city} buchungHref={buchungHref} />
       <FAQSection service={service} city={city} allFaqs={allFaqs} />
@@ -309,6 +319,33 @@ const AblaufSection = ({ service, city }: { service: ServiceFormat; city: Stadt 
     }
     sub={`So läuft ${service.shortName} bei deinem Event in ${city.name} — transparent, ohne Überraschungen.`}
     items={service.ablauf.map((step) => ({ t: step.title, d: step.body }))}
+  />
+);
+
+/* ═══════════════════════════════════════════════════════════
+   INKLUSIVE — Was im Preis steckt, wie unkompliziert die Buchung
+   ist (GlassFeatures: Icon + Titel + kurze Zeile). Scannbar,
+   keine Textwand. Stadt-/Format-Substitution wo sinnvoll.
+   ═══════════════════════════════════════════════════════════ */
+const InklusiveSection = ({ service, city }: { service: ServiceFormat; city: Stadt }) => (
+  <GlassFeatures
+    eyebrow={`${service.name} in ${city.name} buchen`}
+    title={
+      <>
+        Im Preis enthalten — <span style={{ color: COBALT }}>so unkompliziert</span>.
+      </>
+    }
+    sub={`Was bei ${service.shortName} in ${city.name} dabei ist — und warum die Buchung in Minuten erledigt ist.`}
+    items={[
+      { Icon: ClipboardList, t: "Persönliches Vorab-Briefing", d: "Anlass, Tonalität und Insider-Gags klären wir vorab — die Show passt auf euch." },
+      { Icon: Car, t: "Anfahrt transparent im Angebot", d: `Die Anreise nach ${city.name} ist kalkuliert — keine versteckten Kosten.` },
+      { Icon: Headphones, t: "Headset & Ton inklusive", d: "Bühnen-Ton ist dabei, Tech-Rider auf Anfrage — ihr müsst nichts organisieren." },
+      { Icon: ShieldCheck, t: "Berufshaftpflicht & rechtssicher", d: "Voll versichert, DSGVO- und AVV-konform für Firmenkunden." },
+      { Icon: Clock, t: "Antwort binnen 24 Stunden", d: "Schnelle Rückmeldung auf jede Anfrage, verbindliche Zusage zum Termin." },
+      { Icon: Sparkles, t: "Individuell abgestimmt", d: `Das Programm wird auf euren Anlass in ${city.name} zugeschnitten.` },
+      { Icon: Languages, t: "Auf Deutsch & Englisch", d: "Internationale Gäste? Die Show läuft zweisprachig." },
+      { Icon: CalendarCheck, t: "Pünktlich vor Ort", d: "Setup rund 30 Minuten vor Showbeginn — entspannter Start für alle." },
+    ]}
   />
 );
 

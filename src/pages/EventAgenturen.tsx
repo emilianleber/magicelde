@@ -1,9 +1,9 @@
 /** /event-agenturen — Buyer-Persona Event-Agenturen (kreativ, eigene Komposition). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, Stats, GlassFeatures, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, WarumCarousel, DarkShowcase, FormatCards } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Handshake, ShieldCheck, Hand, Wand2, UtensilsCrossed } from "lucide-react";
+import { Handshake, ShieldCheck, Hand, Wand2, UtensilsCrossed, MessageSquare, MapPin, Mic, Clock, Sparkles, Languages, Timer } from "lucide-react";
 import heroImg from "@/assets/emilian-portrait-cards.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
 import carA from "@/assets/hero-stage.jpg";
@@ -36,6 +36,15 @@ export default function EventAgenturen() {
         imageAlt="Emilian Leber auf der Bühne beim Magic Dinner"
         reverse
         stat={{ v: "200+", l: "Events" }}
+      />
+
+      <Stats
+        items={[
+          { v: "200+", l: "Events seit 2016" },
+          { v: "3x", l: "TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 + Kreativpreis)" },
+          { v: "Top 30", l: "Dt. Jugendmeisterschaft 2024 · TVA TV-Auftritt 2025" },
+          { v: "5,0", l: "Sterne aus 30+ Bewertungen · 100+ Hochzeiten begleitet" },
+        ]}
       />
 
       <FormatCards
@@ -76,6 +85,22 @@ export default function EventAgenturen() {
         badge="Kein einziger Ausfall in der Zusammenarbeit."
       />
 
+      <GlassFeatures
+        eyebrow="Im Preis enthalten"
+        title={<>So unkompliziert läuft die <span style={{ color: COBALT }}>Zusammenarbeit</span><span style={{ color: MAGENTA }}>.</span></>}
+        sub="Was im Angebot steckt — transparent, ohne Überraschungen für euch und euren Kunden."
+        items={[
+          { Icon: MessageSquare, t: "Persönliches Vorab-Briefing", d: "Wir klären Anlass, Tonalität und Insider-Gags vor dem Termin." },
+          { Icon: MapPin, t: "Anfahrt transparent im Angebot", d: "Klar ausgewiesen — keine versteckten Kosten im Nachgang." },
+          { Icon: Mic, t: "Headset & Ton inklusive", d: "Eigenes Funkmikrofon für die Bühne, Tech-Rider auf Anfrage." },
+          { Icon: ShieldCheck, t: "Versichert & rechtssicher", d: "Berufshaftpflicht plus DSGVO/AVV für Firmenkunden." },
+          { Icon: Clock, t: "Antwort binnen 24 Stunden", d: "Schnelle, verbindliche Zusage, mit der ihr beim Kunden planen könnt." },
+          { Icon: Sparkles, t: "Individuell abgestimmt", d: "Das Programm wird auf euren Anlass und eure Marke zugeschnitten." },
+          { Icon: Languages, t: "Auf Deutsch & Englisch", d: "Komplett zweisprachig — ideal für internationale Kunden." },
+          { Icon: Timer, t: "Pünktlich vor Ort", d: "Setup rund 30 Minuten vor Showbeginn, ohne euren Ablauf zu stören." },
+        ]}
+      />
+
       <PullQuote
         text="Wir buchen Emilian seit Jahren für unsere Kunden — verlässlich, professionell, immer im Timing. Genau der Act, den man bedenkenlos empfiehlt, ohne nachzuhaken."
         name="Jan von Lehmann"
@@ -109,6 +134,14 @@ export default function EventAgenturen() {
           {
             q: "Wie individuell lässt sich der Act an den Kunden anpassen?",
             a: "Inhalte, Länge und Tonalität stimme ich auf Anlass und Marke eures Kunden ab und spreche mich vorab mit Technik und Moderation ab. Aus 200+ Events seit 2016 und drei TV-Finals bringe ich die Routine mit, mich nahtlos in euren Ablauf einzufügen.",
+          },
+          {
+            q: "Was ist im Angebot enthalten und gibt es versteckte Kosten?",
+            a: "Im Angebot enthalten sind Vorab-Briefing, das individuell abgestimmte Programm, Funkmikrofon und Ton für die Bühne sowie das Setup rund 30 Minuten vor Showbeginn. Die Anfahrt ist transparent ausgewiesen — es gibt keine versteckten Kosten, die später beim Kunden auflaufen.",
+          },
+          {
+            q: "Welche Auszeichnungen und Referenzen bringt der Act mit?",
+            a: "Emilian Leber ist dreifacher TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inkl. Kreativpreis), war 2024 unter den Top 30 der Deutschen Jugendmeisterschaft der Zauberkunst und 2025 im TVA-Fernsehen zu sehen. Über 200 Events seit 2016, 100+ begleitete Hochzeiten und 5,0 Sterne aus 30+ Bewertungen geben euch und eurem Kunden Sicherheit.",
           },
         ]}
       />

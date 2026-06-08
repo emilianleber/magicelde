@@ -1,9 +1,9 @@
 /** /firmenfeiern — Anlass Firmenfeier (Voltage-Layout, live). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA, Stats, GlassFeatures } from "@/components/voltage/sections";
 import { InteractiveTabs, FormatCards, SplitFeature, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles } from "lucide-react";
+import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles, MessageSquare, Route, Headphones, ShieldCheck, Languages, Timer } from "lucide-react";
 import heroImg from "@/assets/schneider-weisse-closeup.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
 import carA from "@/assets/staunen.jpg";
@@ -27,6 +27,15 @@ export default function Firmenfeiern() {
         image={heroImg}
         imageAlt="Zauberer Close-Up bei einer Firmenfeier"
         badge="Der Eisbrecher, an dem auch der Vorstand stehen bleibt."
+      />
+
+      <Stats
+        items={[
+          { v: "200+", l: "Events seit 2016" },
+          { v: "3x", l: "TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 + Kreativpreis)" },
+          { v: "Top 30", l: "Dt. Jugendmeisterschaft 2024 · TVA TV-Auftritt 2025" },
+          { v: "5,0", l: "Sterne aus 30+ Bewertungen · 100+ Hochzeiten begleitet" },
+        ]}
       />
 
       <InteractiveTabs
@@ -86,6 +95,22 @@ export default function Firmenfeiern() {
         ]}
       />
 
+      <GlassFeatures
+        eyebrow="Im Preis enthalten"
+        title={<>Alles drin — <span style={{ color: COBALT }}>keine versteckten Kosten</span>.</>}
+        sub="Was bei einer Buchung für eure Firmenfeier selbstverständlich dabei ist."
+        items={[
+          { Icon: MessageSquare, t: "Persönliches Vorab-Briefing", d: "Anlass, Tonalität und Insider-Gags — abgestimmt vor dem Event." },
+          { Icon: Route, t: "Anfahrt transparent", d: "Im Angebot ausgewiesen — keine versteckten Kosten." },
+          { Icon: Headphones, t: "Headset & Ton inklusive", d: "Für die Bühne — Tech-Rider auf Anfrage." },
+          { Icon: ShieldCheck, t: "Rechtssicher für Firmen", d: "Berufshaftpflicht und DSGVO/AVV auf Wunsch." },
+          { Icon: Clock, t: "Antwort binnen 24 Stunden", d: "Mit verbindlicher Zusage — ohne langes Hin und Her." },
+          { Icon: Sparkles, t: "Programm individuell", d: "Auf euren Anlass und euer Team abgestimmt." },
+          { Icon: Languages, t: "Deutsch & Englisch", d: "Ideal für internationale Teams und Kundenabende." },
+          { Icon: Timer, t: "Pünktlich vor Ort", d: "Setup rund 30 Minuten vor Showbeginn." },
+        ]}
+      />
+
       <PullQuote
         text="Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega. Alle 200 Gäste begeistert."
         name="Jan von Lehmann"
@@ -119,6 +144,14 @@ export default function Firmenfeiern() {
           {
             q: "Wie individuell wird die Show auf unser Unternehmen angepasst?",
             a: "Vorab hole ich mir per Insider-Briefing eure Firmen-Stories, Namen und Running Gags aus dem Team und baue sie in die Show ein. Die Tonalität reicht von Premium bis Comedy — über 200 Events seit 2016 und drei TV-Finals geben euch die Sicherheit, dass es zu eurem Anlass passt.",
+          },
+          {
+            q: "Welche Erfahrung und Auszeichnungen bringt Emilian mit?",
+            a: "Über 200 Events seit 2016 und mehr als 100 begleitete Hochzeiten. Dreifacher TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 plus Kreativpreis), Top 30 bei der Deutschen Jugendmeisterschaft 2024 und TV-Auftritt bei TVA 2025. Bewertet mit 5,0 Sternen aus über 30 Bewertungen — Erfahrung, die euch Sicherheit für euren Firmenanlass gibt.",
+          },
+          {
+            q: "Was ist im Preis enthalten und gibt es versteckte Kosten?",
+            a: "Im Angebot enthalten sind persönliches Vorab-Briefing, die transparent ausgewiesene Anfahrt, Headset und Ton für die Bühne sowie das individuell abgestimmte Programm. Es gibt keine versteckten Kosten. Auf Wunsch stelle ich Berufshaftpflicht-Nachweis und DSGVO/AVV bereit; vor Ort bin ich rund 30 Minuten vor Showbeginn für den Aufbau da.",
           },
         ]}
       />

@@ -17,6 +17,14 @@ import {
   MapPin,
   Route,
   ChevronDown,
+  ClipboardList,
+  ShieldCheck,
+  Clock,
+  Sparkles,
+  Languages,
+  Timer,
+  Headphones,
+  CircleDollarSign,
 } from "lucide-react";
 
 import VoltageShell from "@/components/voltage/VoltageShell";
@@ -172,6 +180,61 @@ const TrustStripSection = ({ data }: { data: Stadt }) => (
 );
 
 /* ═══════════════════════════════════════════════════════════
+   AUSZEICHNUNGEN & ERFAHRUNG — E-E-A-T-Credentials front-loaden.
+   Echte Fakten, scannbar (Icon + Titel + kurze Zeile). Cobalt/Ink.
+   ═══════════════════════════════════════════════════════════ */
+const AuszeichnungenSection = ({ data }: { data: Stadt }) => {
+  const CREDS = [
+    { Icon: Sparkles, title: "200+ Events seit 2016", body: `Routine in ganz Bayern — auch in ${data.name} und ${data.region}.` },
+    { Icon: Wand2, title: "3x TV-Finalist", body: "Greatest Talent 2023, Talents of Magic 2024 + Kreativpreis." },
+    { Icon: GraduationCap, title: "Dt. Jugendmeisterschaft 2024", body: "Top 30 bundesweit — Auszeichnung im Wettbewerb." },
+    { Icon: Building2, title: "TVA TV-Auftritt 2025", body: "Im Fernsehen zu sehen — als Zauberer und Mentalist." },
+    { Icon: Heart, title: "5,0 Sterne · 30+ Bewertungen", body: "Google & ProvenExpert — durchweg Bestnoten." },
+    { Icon: PartyPopper, title: "100+ Hochzeiten begleitet", body: `Empfang, Dinner, vor dem Tanz — bayernweit, auch in ${data.name}.` },
+  ];
+  return (
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10">
+          <Eyebrow>Auszeichnungen & Erfahrung</Eyebrow>
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.4vw,3.4rem)", lineHeight: 1.04, color: INK }}>
+            Preisgekrönt. TV-erprobt. <span style={{ color: COBALT }}>Über 200 Mal live.</span>
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Wer einen Zauberer in {data.name} bucht, will Verlässlichkeit — hier sind die Fakten
+            hinter der Show, kurz und überprüfbar.
+          </p>
+        </motion.div>
+        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {CREDS.map((c) => (
+            <motion.li
+              key={c.title}
+              variants={up}
+              className="flex items-start gap-4 rounded-[18px] p-6"
+              style={{ background: "#fff", border: `1px solid ${L_LINE}` }}
+            >
+              <span className="w-11 h-11 shrink-0 rounded-[13px] flex items-center justify-center" style={{ background: `${COBALT}14`, color: COBALT }}>
+                <c.Icon className="w-5 h-5" />
+              </span>
+              <div className="min-w-0">
+                <h3 className="text-[16px] font-bold leading-tight" style={{ color: INK }}>{c.title}</h3>
+                <p className="text-[13.5px] leading-snug mt-1" style={{ color: L_DIM }}>{c.body}</p>
+              </div>
+            </motion.li>
+          ))}
+        </ul>
+      </div>
+    </motion.section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
    ANLÄSSE — kompakte Liste mit den Anlass-Keywords + Links
    ═══════════════════════════════════════════════════════════ */
 const AnlaesseSection = ({ data }: { data: Stadt }) => {
@@ -303,6 +366,62 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => (
     ]}
   />
 );
+
+/* ═══════════════════════════════════════════════════════════
+   IM PREIS ENTHALTEN — 8 Inklusive-/Transparenz-Punkte.
+   Scannbar (Icon + Titel + 1 Zeile), kein Textwall. Cobalt/Ink.
+   ═══════════════════════════════════════════════════════════ */
+const InklusiveSection = ({ data }: { data: Stadt }) => {
+  const INKLUSIVE = [
+    { Icon: ClipboardList, title: "Persönliches Vorab-Briefing", body: "Anlass, Tonalität und Insider-Gags klären wir gemeinsam." },
+    { Icon: CircleDollarSign, title: "Anfahrt transparent im Angebot", body: `Anfahrt nach ${data.name} fix kalkuliert — keine versteckten Kosten.` },
+    { Icon: Headphones, title: "Headset & Ton inklusive (Bühne)", body: "Eigene Technik dabei, Tech-Rider auf Anfrage." },
+    { Icon: ShieldCheck, title: "Berufshaftpflicht & rechtssicher", body: "DSGVO und AVV für Firmenkunden — sauber abgesichert." },
+    { Icon: Clock, title: "Antwort binnen 24 Stunden", body: "Verbindliche Zusage statt langem Warten." },
+    { Icon: Sparkles, title: "Programm individuell abgestimmt", body: `Auf euren Anlass in ${data.name} zugeschnitten — kein Standardprogramm.` },
+    { Icon: Languages, title: "Auf Deutsch & Englisch", body: "Internationale Gäste? Kein Problem." },
+    { Icon: Timer, title: "Pünktlich vor Ort", body: "Setup ca. 30 Min vor Showbeginn, Soundcheck inklusive." },
+  ];
+  return (
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10">
+          <Eyebrow>Im Preis enthalten · {data.name}</Eyebrow>
+          <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.4vw,3.4rem)", lineHeight: 1.04, color: INK }}>
+            Alles dabei. <span style={{ color: COBALT }}>Keine Überraschungen.</span>
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Was im Angebot für dein Event in {data.name} schon drin ist — transparent, fair
+            und ohne Kleingedrucktes.
+          </p>
+        </motion.div>
+        <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {INKLUSIVE.map((item) => (
+            <motion.li
+              key={item.title}
+              variants={up}
+              className="rounded-[18px] p-6 h-full"
+              style={{ background: "#fff", border: `1px solid ${L_LINE}` }}
+            >
+              <span className="w-11 h-11 rounded-[13px] flex items-center justify-center" style={{ background: `${COBALT}14`, color: COBALT }}>
+                <item.Icon className="w-5 h-5" />
+              </span>
+              <h3 className="text-[15.5px] font-bold leading-tight mt-4" style={{ color: INK }}>{item.title}</h3>
+              <p className="text-[13.5px] leading-snug mt-1.5" style={{ color: L_DIM }}>{item.body}</p>
+            </motion.li>
+          ))}
+        </ul>
+      </div>
+    </motion.section>
+  );
+};
 
 /* ═══════════════════════════════════════════════════════════
    MEHR ÜBER ZAUBERER IN [STADT] — EIN einziger Lesen-Toggle.
@@ -936,9 +1055,11 @@ const StadtSeite = () => {
       <FormateSection data={data} />
       <WarumStadtCarousel data={data} />
       <TrustStripSection data={data} />
+      <AuszeichnungenSection data={data} />
       <AnlaesseSection data={data} />
       <StimmenSection />
       <AblaufBuchungSection data={data} />
+      <InklusiveSection data={data} />
       <CustomQuizSection config={buildStadtQuizConfig(data)} />
       <MehrUeberStadtSection data={data} />
       <FAQSection data={data} />

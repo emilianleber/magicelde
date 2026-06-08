@@ -1,9 +1,9 @@
 /** /hochzeit — Anlass-Landingpage (groß): Akte + Formate + Gestaltung. */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FinalCTA, FactsGrid, Stats, FAQ, SectionHeader } from "@/components/voltage/sections";
 import { InteractiveTabs, FormatCards, SplitFeature, PolaroidWall, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Hand, Wand2, UtensilsCrossed, Check, Clock, CalendarCheck } from "lucide-react";
+import { Hand, Wand2, UtensilsCrossed, Check, Clock, CalendarCheck, MessageSquare, MapPin, Headphones, ShieldCheck, Timer, Sparkles, Languages } from "lucide-react";
 import heroImg from "@/assets/wedding-magic.jpg";
 import splitImg from "@/assets/emotionen.jpg";
 // InteractiveTabs (breite Container) — alle QUER, kein Kopf-Crop
@@ -34,6 +34,24 @@ export default function Hochzeit() {
         imageAlt="Zauberer bei einer Hochzeit"
         imgPos="center"
         badge="Brautmutter weint regelmäßig — vor Lachen oder vor Rührung."
+      />
+
+      <Stats
+        items={[
+          { v: "200+", l: "Events seit 2016" },
+          { v: "100+", l: "Hochzeiten begleitet" },
+          { v: "3x", l: "TV-Finalist (2023–2025)" },
+          { v: "5,0★", l: "30+ Bewertungen" },
+        ]}
+      />
+
+      <FactsGrid
+        items={[
+          { Icon: Sparkles, k: "Auszeichnungen", v: "Greatest Talent 2023 · Talents of Magic 2024 + Kreativpreis" },
+          { Icon: Wand2, k: "Meisterschaft", v: "Dt. Jugendmeisterschaft 2024 — Top 30" },
+          { Icon: Check, k: "TV-Auftritt", v: "TVA Fernsehauftritt 2025" },
+          { Icon: CalendarCheck, k: "Erfahrung", v: "200+ Events seit 2016, 100+ davon Hochzeiten" },
+        ]}
       />
 
       <InteractiveTabs
@@ -95,6 +113,28 @@ export default function Hochzeit() {
         ]}
       />
 
+      <section className="px-5 md:px-10 pt-16 md:pt-24">
+        <div className="max-w-6xl mx-auto">
+          <SectionHeader
+            eyebrow="Im Preis enthalten"
+            title={<>Alles dabei — <span style={{ color: COBALT }}>keine</span> versteckten Kosten.</>}
+            sub="Transparent kalkuliert und auf euren Tag abgestimmt. Das ist immer Teil des Angebots:"
+          />
+        </div>
+      </section>
+      <FactsGrid
+        items={[
+          { Icon: MessageSquare, k: "Vorab-Briefing", v: "Anlass, Tonalität und Insider-Gags persönlich besprochen" },
+          { Icon: MapPin, k: "Anfahrt", v: "Transparent im Angebot — keine versteckten Kosten" },
+          { Icon: Headphones, k: "Ton & Headset", v: "Inklusive bei der Bühnenshow, Tech-Rider auf Anfrage" },
+          { Icon: ShieldCheck, k: "Rechtssicher", v: "Berufshaftpflicht, DSGVO und AVV für Firmen" },
+          { Icon: Clock, k: "Schnelle Antwort", v: "Rückmeldung binnen 24 Stunden, verbindliche Zusage" },
+          { Icon: Sparkles, k: "Individuell", v: "Programm auf euren Anlass abgestimmt, nichts von der Stange" },
+          { Icon: Languages, k: "Zweisprachig", v: "Auf Deutsch und Englisch buchbar" },
+          { Icon: Timer, k: "Pünktlich", v: "Setup rund 30 Minuten vor Showbeginn" },
+        ]}
+      />
+
       <PullQuote
         text="Du warst der absolute Höhepunkt unserer Hochzeitsfeier. Was ich nicht erwartet hätte: dass die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter."
         name="Martina Senftl"
@@ -102,6 +142,17 @@ export default function Hochzeit() {
       />
 
       <ReviewsBlock paper={false} />
+
+      <FAQ
+        eyebrow="Häufige Fragen zur Hochzeit"
+        title="Gut zu wissen für euren Tag."
+        items={[
+          { q: "Wann am Hochzeitstag tritt der Zauberer auf?", a: "Klassisch in drei Akten: Close-Up beim Sektempfang, Tisch-zu-Tisch zwischen den Gängen des Hochzeitsdinners und eine 20–30-minütige Bühnenshow als Finale vor dem Tanz. Ihr wählt einzelne Akte oder das durchgängige Paket — eingetaktet in euren Ablauf mit Fotograf und DJ." },
+          { q: "Wie viele Gäste sind beim Sektempfang und Dinner möglich?", a: "Close-Up und Tisch-zu-Tisch funktionieren von der kleinen Feier mit 20 Gästen bis zur großen Hochzeit mit 150+ Personen. Beim Dinner bekommt jeder Tisch seinen eigenen Moment; die Bühnenshow erreicht den ganzen Saal." },
+          { q: "Was kostet ein Zauberer für die Hochzeit?", a: "Der Preis hängt von Akten, Dauer und Anfahrt ab und wird transparent im Angebot ausgewiesen — keine versteckten Kosten. Eine kurze Anfrage mit Datum, Ort und Ablauf genügt, die verbindliche Rückmeldung kommt binnen 24 Stunden." },
+          { q: "Wird die Show an unser Brautpaar angepasst?", a: "Ja. Vor der Hochzeit gibt es ein persönliches Briefing, in dem Namen, eure Geschichte und Insider in die Show einfließen — inklusive dem Ringtraum, einem Gänsehaut-Moment rund um eure Ringe. Buchbar auf Deutsch und Englisch." },
+        ]}
+      />
 
       <FinalCTA
         title={<>Macht euren Gästen den Abend unvergesslich<span style={{ color: MAGENTA }}>.</span></>}

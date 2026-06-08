@@ -1,9 +1,9 @@
 /** /messe-magier — Anlass (kreativ, eigene Komposition). LIVE (Voltage). */
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
+import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA, Stats, GlassFeatures } from "@/components/voltage/sections";
 import { SplitFeature, FormatCards, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
-import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Languages } from "lucide-react";
+import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Languages, MessagesSquare, Route, Headphones, ShieldCheck, Timer, SlidersHorizontal } from "lucide-react";
 import heroImg from "@/assets/audience-reactions.jpg";
 import splitImg from "@/assets/haende-interaktion.jpg";
 import carA from "@/assets/staunen.jpg";
@@ -24,6 +24,15 @@ export default function MesseMagier() {
         image={heroImg}
         imageAlt="Begeisterte Besucher reagieren auf Close-Up-Magie am Messestand"
         badge="50–80 echte Standkontakte pro Stunde — statt leerem Gang."
+      />
+
+      <Stats
+        items={[
+          { v: "200+", l: "Events seit 2016" },
+          { v: "3x", l: "TV-Finalist (2023 + 2024)" },
+          { v: "5,0", l: "Sterne · 30+ Bewertungen" },
+          { v: "100+", l: "Hochzeiten begleitet" },
+        ]}
       />
 
       <SplitFeature
@@ -81,6 +90,22 @@ export default function MesseMagier() {
 
       <ReviewsBlock paper={false} />
 
+      <GlassFeatures
+        eyebrow="Im Preis enthalten"
+        title={<>Planbar gebucht — <span style={{ color: COBALT }}>ohne versteckte Kosten</span>.</>}
+        sub="Ein Festpreis, ein Ansprechpartner, ein verlässlicher Ablauf. Das steckt drin."
+        items={[
+          { Icon: MessagesSquare, t: "Persönliches Vorab-Briefing", d: "Anlass, Tonalität und Insider-Gags vorab abgestimmt." },
+          { Icon: Route, t: "Anfahrt transparent im Angebot", d: "Im Festpreis enthalten — keine versteckten Kosten." },
+          { Icon: Headphones, t: "Headset & Ton inklusive", d: "Bei Bühnen-Slots dabei, Tech-Rider auf Anfrage." },
+          { Icon: ShieldCheck, t: "Berufshaftpflicht & rechtssicher", d: "DSGVO und AVV für Firmen sauber geregelt." },
+          { Icon: Clock, t: "Antwort binnen 24 Stunden", d: "Verbindliche Zusage, kein Nachhaken nötig." },
+          { Icon: SlidersHorizontal, t: "Programm individuell abgestimmt", d: "Passgenau auf Ihren Anlass und Ihre Botschaft." },
+          { Icon: Languages, t: "Auf Deutsch & Englisch", d: "Fließender Wechsel je nach Besucher am Stand." },
+          { Icon: Timer, t: "Pünktlich vor Ort", d: "Setup rund 30 Minuten vor Showbeginn." },
+        ]}
+      />
+
       <FAQ
         items={[
           {
@@ -106,6 +131,14 @@ export default function MesseMagier() {
           {
             q: "Reisen Sie auch ueberregional zu unserer Messe an?",
             a: "Ja, ich bin deutschlandweit unterwegs - Basis ist Bayern rund um Regensburg, mit ueber 200 Events seit 2016 und drei TV-Finals. Anfahrt und mehrtaegige Auftritte stimmen wir einfach in der Anfrage ab.",
+          },
+          {
+            q: "Welche Auszeichnungen und Erfahrung bringen Sie mit?",
+            a: "Ueber 200 Events seit 2016, darunter mehr als 100 Hochzeiten. Dreimal TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inkl. Kreativpreis), Top 30 der Deutschen Jugendmeisterschaft 2024 und ein TV-Auftritt bei TVA 2025. Bewertet mit 5,0 Sternen aus ueber 30 Bewertungen.",
+          },
+          {
+            q: "Ist das auch fuer Firmen und internationale Aussteller rechtssicher?",
+            a: "Ja. Ich habe eine Berufshaftpflicht, arbeite DSGVO-konform und stelle Firmen auf Wunsch eine Auftragsverarbeitungsvereinbarung (AVV) bereit. Headset und Ton sind bei Buehnen-Slots inklusive, einen Tech-Rider liefere ich auf Anfrage.",
           },
         ]}
       />
