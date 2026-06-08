@@ -13,6 +13,7 @@ import logo from "@/assets/logo-clean.webp";
 const NAV_FLAT = [
   { t: "Referenzen", h: "/referenzen" },
   { t: "Tickets", h: "/tickets" },
+  { t: "Magazin", h: "/blog" },
   { t: "Über mich", h: "/ueber-mich" },
   { t: "Kontakt", h: "/kontakt" },
 ];
@@ -81,6 +82,7 @@ export default function VoltageHeader({ scrolled }: { scrolled: boolean }) {
           </div>
           <Link to="/referenzen" className="pv-link py-2">Referenzen</Link>
           <Link to="/tickets" className="pv-link py-2">Tickets</Link>
+          <Link to="/blog" className="pv-link py-2">Magazin</Link>
           <Link to="/ueber-mich" className="pv-link py-2">Über mich</Link>
           <Link to="/kontakt" className="pv-link py-2">Kontakt</Link>
         </div>
