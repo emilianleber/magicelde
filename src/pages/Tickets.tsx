@@ -1,27 +1,48 @@
+/** /tickets — Tickets & Termine (Voltage-Layout): aktuelle Events, Tour-Daten, Kategorien, Abendablauf, Venues, Newsletter. */
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import PageLayout from "@/components/landing/PageLayout";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import VoltageShell from "@/components/voltage/VoltageShell";
+import {
+  SubHero,
+  Stats,
+  FactsGrid,
+  Steps,
+  ReviewsBlock,
+  FAQ,
+  FinalCTA,
+  SectionHeader,
+  PullQuote,
+} from "@/components/voltage/sections";
+import { SplitFeature, InteractiveTabs } from "@/components/voltage/creative";
+import {
+  COBALT,
+  MAGENTA,
+  INK,
+  WHITE,
+  PAPER,
+  L_LINE,
+  L_DIM,
+  CARD_LIGHT,
+  up,
+  stagger,
+  vp,
+} from "@/components/voltage/theme";
 import {
   CustomQuizSection,
   CustomQuizConfig,
 } from "@/components/landing/CustomQuiz";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { captureEmail } from "@/lib/emailCapture";
 import { subscribeNewsletter } from "@/lib/sendInquiry";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 import {
   ArrowRight,
-  ArrowUpRight,
-  Star,
   Ticket,
-  Calendar,
   Clock,
   MapPin,
   Tv,
-  Mic2,
   Sparkles,
-  Quote,
   CheckCircle2,
   AlertCircle,
   Mail,
@@ -29,7 +50,6 @@ import {
   Theater,
   Utensils,
   Users,
-  Music,
   Wine,
   Armchair,
 } from "lucide-react";
@@ -37,431 +57,309 @@ import {
 import heroStageImg from "@/assets/audience-reactions.jpg";
 import dinnerImg from "@/assets/magic-dinner-summer-poster.png";
 import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
-import stageShowImg from "@/assets/stage-show.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
-import portraitCardsImg from "@/assets/emilian-portrait-cards.jpg";
-
-const SERIF_ITALIC =
-  "not-italic";
-const ACCENT = "#1D3FFF";
-const ACCENT_DEEP = "#1233CC";
-const ACCENT_SOFT = "#C7D2FF";
+import tabCloseup from "@/assets/hero-closeup.jpg";
+import tabDinner from "@/assets/hero-dinner.jpg";
+import tabStage from "@/assets/hero-stage.jpg";
 
 const PREMIERE_LOCATION = "Alte Mälzerei Regensburg";
 const PREMIERE_DATE = "22. Februar 2026";
-const WALDWIESE_URL =
-  "https://services.gastronovi.com/restaurants/108071/reservation/widget?event=135047";
-const WALDWIESE_IMG =
-  "https://restaurant-waldwiese.de/wp-content/uploads/2026/03/WIESE.png";
 
 /* ═══════════════════════════════════════════════════════════
-   HERO — dark + photo-backdrop + bokeh + word-by-word
+   AKTUELLE EVENTS — Magic Dinner Summer Edition (Featured)
    ═══════════════════════════════════════════════════════════ */
-const HeroKeyframes = () => (
-  <style>{`
-    @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
-    @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroZoomIn { from { transform: scale(1.18); opacity: 0.35; filter: blur(8px); } to { transform: scale(1.02); opacity: 1; filter: blur(0); } }
-    @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
-    @keyframes heroOvershoot { 0% { opacity: 0; transform: translateY(60px) scale(0.88); } 55% { opacity: 1; transform: translateY(-10px) scale(1.04); } 80% { transform: translateY(2px) scale(0.99); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
-    .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
-    .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .hero-zoom { animation: heroZoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: center center; }
-    .hero-bokeh { opacity: 0; animation-name: heroBokehDrift; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); animation-iteration-count: infinite; will-change: transform, opacity; }
-    .hero-overshoot { opacity: 0; animation: heroOvershoot 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-    .hero-star { animation: heroStarPulse 2.4s ease-in-out infinite; }
-    .hero-cta { transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, background-color .3s, color .3s; }
-    .hero-cta:hover { transform: translateY(-2px) scale(1.035); }
-    .hero-cta:active { transform: translateY(0) scale(0.97); }
-    .hero-photo-wrap { transform: translateY(var(--hero-parallax, 0px)); transition: transform 0.05s linear; }
-  `}</style>
-);
-
-const HEADLINE_SANS = ["Tickets"];
-const HEADLINE_ITALIC = ["& Termine."];
-
-const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
-
-const Hero = () => {
-  const photoRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    let raf = 0;
-    let lastY = 0;
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (Math.abs(y - lastY) < 1) return;
-      lastY = y;
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        const el = photoRef.current;
-        if (el && y < window.innerHeight * 1.4)
-          el.style.setProperty(
-            "--hero-parallax",
-            `${Math.min(y * 0.18, 80)}px`,
-          );
-        raf = 0;
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-  return (
-    <section className="relative bg-[#08060c] text-white min-h-screen overflow-hidden">
-      <HeroKeyframes />
-      <div
-        ref={photoRef}
-        className="absolute inset-0 hero-photo-wrap hero-zoom"
-        style={{ willChange: "transform" }}
-      >
-        <img
-          src={heroStageImg}
-          alt="Tickets & Termine — anstehende Shows mit Emilian Leber"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{
-            objectPosition: "center 28%",
-            filter: "saturate(0.92) contrast(1.1) brightness(0.68)",
-          }}
-          loading="eager"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(95deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 30%, rgba(8,6,12,0.5) 60%, rgba(8,6,12,0.25) 100%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 65%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute -top-32 right-0 w-[680px] h-[680px] rounded-full blur-2xl pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
-          }}
-        />
-      </div>
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none overflow-hidden"
-      >
-        {BOKEH.map((b, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full hero-bokeh"
-            style={{
-              width: b.size,
-              height: b.size,
-              left: b.left,
-              top: b.top,
-              background: `radial-gradient(circle, rgba(255,210,140,${b.o * 0.5}) 0%, rgba(255,210,140,${b.o * 0.4}) 40%, rgba(255,210,140,0) 75%)`,
-              filter: "blur(2px)",
-              animationDuration: `${b.dur}s`,
-              animationDelay: `${b.delay}s`,
-            }}
-          />
-        ))}
-      </div>
-      <div className="relative z-10 min-h-screen container px-6 flex flex-col pt-28 md:pt-32 pb-10 md:pb-20">
-        <div className="flex-1 flex flex-col justify-center max-w-5xl">
-          <div
-            className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-5 gap-y-2 mb-8 hero-fade"
-            style={{ animationDelay: "0.05s" }}
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-4 h-4 fill-amber-300 text-amber-300 hero-star"
-                    style={{ animationDelay: `${i * 0.12}s` }}
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-white/85">
-                <strong className="font-semibold text-white">5,0</strong>
-                <span className="text-white/60"> · 30+ Bewertungen</span>
-              </span>
-            </div>
-            <span
-              aria-hidden
-              className="hidden md:block h-4 w-px bg-white/25"
-            />
-            <span className="text-sm text-white/80">
-              <strong className="font-semibold text-white">
-                Aktuell
-              </strong>
-              <span className="text-white/55"> · Summer Edition · 11.07.2026</span>
-            </span>
-          </div>
-          <h1 className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(3rem,9vw,9rem)] text-white max-w-5xl">
-            {HEADLINE_SANS.map((w, i) => (
-              <span
-                key={`s-${i}`}
-                className="hero-word"
-                style={{
-                  animationDelay: `${0.3 + i * 0.08}s`,
-                  marginRight: "0.22em",
-                }}
-              >
-                {w}
-              </span>
-            ))}
-            <br className="hidden sm:block" />
-            {HEADLINE_ITALIC.map((w, i) => (
-              <span
-                key={`i-${i}`}
-                className={`hero-word ${SERIF_ITALIC}`}
-                style={{
-                  animationDelay: `${0.3 + (HEADLINE_SANS.length + i) * 0.08}s`,
-                  marginRight: "0.22em",
-                  color: "#AFC0FF",
-                }}
-              >
-                {w}
-              </span>
-            ))}
-          </h1>
-          <p
-            className="mt-8 md:mt-10 max-w-xl text-base md:text-lg leading-[1.6] text-white/75 font-light hero-fade"
-            style={{ animationDelay: "1.05s" }}
-          >
-            Anstehende Veranstaltungen mit Reservierung oder Vorverkauf —
-            Magic Dinner, Theater-Shows und Specials. Aktuelle Liste unten.
-          </p>
-          <div
-            className="mt-10 inline-flex flex-col sm:flex-row items-start gap-4 hero-fade"
-            style={{ animationDelay: "1.2s" }}
-          >
-            <a
-              href="#events"
-              className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c] hover:bg-white/95"
-            >
-              Aktuelle Events
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <Link
-              to="/buchung"
-              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
-            >
-              Private Buchung
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+const SUMMER_EDITION = {
+  date: "11. Juli 2026",
+  label: "Magic Dinner — Summer Edition",
+  sub: "Terrasse + Innenbereich · Drei-Gänge optional",
+  status: "Vorverkauf",
 };
 
-/* ═══════════════════════════════════════════════════════════
-   AKTUELLE TOUR-SHOW — dark Editorial-Split Hero-Card
-   ═══════════════════════════════════════════════════════════ */
-const AktuelleTourShowSection = () => {
-  const { ref, isVisible } = useScrollReveal();
+const MagicDinnerAbendeSection = () => {
+  const SUMMER = SUMMER_EDITION;
   return (
-    <section
-      ref={ref}
-      className="relative bg-[#08060c] text-white py-24 md:py-36 border-y border-foreground/10 overflow-hidden"
+    <motion.section
+      id="events"
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
     >
-      <div
-        aria-hidden
-        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-2xl opacity-6"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
-        }}
-      />
-      <div className="relative container px-6">
-        <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-center`}
-        >
-          <div className="lg:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6"
-            >
-              Tour 2026 · Premiere.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] mb-7">
-              Plötzlich Magie —{" "}
-              <br />
-              <span style={{ color: "#AFC0FF" }}>
-                Magic Meets Comedy.
-              </span>
-            </h2>
-            <p className="text-base md:text-lg text-white/75 leading-[1.7] mb-8 max-w-xl">
-              Die erste abendfüllende Bühnenshow von Emilian Leber. 90 Minuten
-              Mentalmagie, Karten-Routinen, Comedy-Pointen. Geschrieben für
-              Theater- und Saalbühnen. Premiere am{" "}
-              <strong className="text-white">{PREMIERE_DATE}</strong> in der{" "}
-              <strong className="text-white">{PREMIERE_LOCATION}</strong> —
-              anschließend Tour durch bayerische Theater bis 2027.
-            </p>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-9 text-sm text-white/70">
-              <span className="inline-flex items-center gap-2">
-                <Clock className="w-4 h-4" style={{ color: "#AFC0FF" }} />
-                90 Min · 1 Pause
-              </span>
-              <span aria-hidden className="text-white/25">
-                ·
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <Users className="w-4 h-4" style={{ color: "#AFC0FF" }} />
-                ab 12 Jahren
-              </span>
-              <span aria-hidden className="text-white/25">
-                ·
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <Theater className="w-4 h-4" style={{ color: "#AFC0FF" }} />
-                Theater- und Saalbühnen
-              </span>
-            </div>
-            <div className="flex flex-wrap items-center gap-4">
-              <a
-                href="#tour-daten"
-                className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10">
+          <SectionHeader
+            eyebrow="Anstehende Events"
+            title={
+              <>
+                Aktuelle <span style={{ color: COBALT }}>Termine</span>
+                <span style={{ color: MAGENTA }}>.</span>
+              </>
+            }
+            sub="Anstehende Veranstaltungen mit Reservierung oder Vorverkauf — Magic Dinner, Theater-Shows und Specials."
+          />
+        </motion.div>
+
+        {/* XL Featured Card — Summer Edition */}
+        <motion.div variants={up}>
+          <Link
+            to="/tickets/magic-dinner-summer-edition"
+            className="group grid lg:grid-cols-12 gap-8 lg:gap-10 items-stretch rounded-[28px] p-5 md:p-7 transition-transform hover:scale-[1.005]"
+            style={{ background: CARD_LIGHT, border: `1px solid ${L_LINE}` }}
+          >
+            <div className="lg:col-span-7">
+              <div
+                className="relative overflow-hidden rounded-[22px]"
                 style={{
-                  background: "#AFC0FF",
-                  boxShadow: "0 18px 40px -14px rgba(0,0,0,0.024)",
+                  aspectRatio: "1/1",
+                  background: "#2e5f6e",
+                  maxHeight: "560px",
                 }}
+              >
+                <img
+                  src={dinnerImg}
+                  alt="Magic Dinner Summer Edition · 11. Juli 2026 · Restaurant Wald & Wiese Sinzing — Poster"
+                  className="absolute inset-0 w-full h-full object-contain transition-transform duration-[1200ms] ease-out group-hover:scale-[1.02]"
+                  loading="lazy"
+                />
+                <span
+                  className="absolute top-5 left-5 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[12px] font-semibold text-white"
+                  style={{ background: COBALT }}
+                >
+                  {SUMMER.status}
+                </span>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 flex flex-col py-2">
+              <p
+                className="text-[12px] tracking-[0.16em] uppercase font-semibold mb-3"
+                style={{ color: COBALT }}
+              >
+                11. Juli 2026 · ab 17:00 Uhr
+              </p>
+              <h3
+                className="font-extrabold tracking-[-0.02em] leading-tight mb-4"
+                style={{ fontSize: "clamp(1.6rem,2.4vw,2.2rem)", color: INK }}
+              >
+                Tisch reservieren.
+                <br />
+                <span style={{ color: COBALT }}>Magic Dinner erleben.</span>
+              </h3>
+              <p
+                className="text-[15px] md:text-base leading-[1.65] mb-5"
+                style={{ color: L_DIM }}
+              >
+                Sommerabend im Restaurant Wald & Wiese. Du reservierst deinen
+                Tisch wie sonst auch, isst à la carte aus der Sommerkarte — und
+                während des Abends besuche ich euch persönlich mit Close-Up-
+                Magie. Drei Sekunden Stille, dann lacht eure Tafel.
+              </p>
+              <ul className="space-y-2.5 mb-7 text-[15px]" style={{ color: L_DIM }}>
+                <li className="flex items-start gap-2.5">
+                  <Utensils
+                    className="w-4 h-4 mt-1 shrink-0"
+                    style={{ color: COBALT }}
+                  />
+                  À la carte aus der Sommerkarte
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <Armchair
+                    className="w-4 h-4 mt-1 shrink-0"
+                    style={{ color: COBALT }}
+                  />
+                  Max. 50 Plätze · 2–12 pro Tafel
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <Wine
+                    className="w-4 h-4 mt-1 shrink-0"
+                    style={{ color: COBALT }}
+                  />
+                  Weinbegleitung optional
+                </li>
+              </ul>
+              <span
+                className="inline-flex items-center gap-2 self-start rounded-full px-7 py-3.5 text-[14px] font-semibold text-white mt-auto"
+                style={{ background: COBALT }}
               >
                 <Ticket className="w-4 h-4" />
-                Tour-Termine
-              </a>
-              <Link
-                to="/buchung?format=Tour-Show&anlass=Premiere"
-                className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/75 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
-              >
-                Theater-Buchung anfragen
-                <ArrowUpRight className="w-4 h-4" />
-              </Link>
+                Details + Reservierung
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
             </div>
-            <p
-              className={`text-sm text-white/55 mt-7 max-w-md`}
-            >
-              Tour-Premiere — Theater-Veranstalter und Pressevertreter bitte über{" "}
-              <a
-                href="mailto:el@magicel.de"
-                className="underline decoration-white/30 hover:decoration-white"
-              >
-                el@magicel.de
-              </a>{" "}
-              direkt anfragen.
-            </p>
-          </div>
-
-          {/* Premiere-Ticket-Mockup */}
-          <div className="lg:col-span-5">
-            <div
-              className="group relative block aspect-[3/4] max-w-sm mx-auto overflow-hidden transition-transform duration-700 hover:-rotate-1 hover:scale-[1.02]"
-              style={{
-                borderRadius: "1.25rem",
-                background:
-                  "linear-gradient(160deg, #1a0e16 0%, #08060c 60%, #2a0d18 100%)",
-                boxShadow:
-                  "0 60px 120px -30px rgba(0,0,0,0.6), 0 25px 50px -20px rgba(0,0,0,0.040), inset 0 0 0 1px rgba(255,255,255,0.08)",
-              }}
-            >
-              <div className="absolute inset-x-0 top-0 p-6 flex items-center justify-between text-white/80">
-                <span className="text-[10px] tracking-[0.22em] uppercase font-bold">
-                  MagicEL · Premiere
-                </span>
-                <span
-                  className={`text-sm`}
-                  style={{ color: "#AFC0FF" }}
-                >
-                  N° 001
-                </span>
-              </div>
-
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                <p
-                  className="text-[10px] tracking-[0.22em] uppercase font-bold mb-4"
-                  style={{ color: "#AFC0FF" }}
-                >
-                  Plötzlich Magie · Magic Meets Comedy
-                </p>
-                <h3 className="font-display font-black text-3xl md:text-4xl text-white leading-[1.05] mb-3">
-                  22.02
-                  <br />
-                  <span style={{ color: "#AFC0FF" }}>
-                    2026.
-                  </span>
-                </h3>
-                <p className="text-sm text-white/65 max-w-[18ch] leading-snug mb-5">
-                  Alte Mälzerei Regensburg · Einlass 19:00
-                </p>
-                <span
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] tracking-[0.18em] uppercase font-bold"
-                  style={{
-                    background: "rgba(0,0,0,0.024)",
-                    color: "#AFC0FF",
-                    border: "1px solid rgba(0,0,0,0.024)",
-                  }}
-                >
-                  <Sparkles className="w-3 h-3" />
-                  Vorverkauf läuft
-                </span>
-              </div>
-
-              <div className="absolute inset-x-0 bottom-0 p-6 flex items-end justify-between text-white/55">
-                <span className="text-[10px] tracking-[0.18em] uppercase font-bold">
-                  Premiere · Tour 2026
-                </span>
-                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase font-bold text-white/80 group-hover:text-[#AFC0FF] transition-colors">
-                  <Ticket className="w-3.5 h-3.5" />
-                  N° 001
-                </span>
-              </div>
-
-              <div
-                aria-hidden
-                className="absolute inset-x-0 top-0 h-32 opacity-8"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(255,255,255,0.18), transparent)",
-                }}
-              />
-
-              {/* Perforations-Linie als Ticket-Detail */}
-              <div
-                aria-hidden
-                className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px"
-                style={{
-                  background:
-                    "repeating-linear-gradient(90deg, rgba(255,255,255,0.25) 0 6px, transparent 6px 12px)",
-                }}
-              />
-            </div>
-          </div>
-        </div>
+          </Link>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
-   TOUR-DATEN — Magazin-Liste mit Trennlinien (analog Pressemitteilungen)
+   AKTUELLE TOUR-SHOW — Premiere-Hinweis (Cobalt-Statement)
+   ═══════════════════════════════════════════════════════════ */
+const AktuelleTourShowSection = () => (
+  <motion.section
+    variants={stagger}
+    initial="hidden"
+    whileInView="show"
+    viewport={vp}
+    className="px-5 md:px-10 py-16 md:py-24"
+    style={{ background: INK, color: WHITE }}
+  >
+    <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-x-14 gap-y-10 items-center">
+      <motion.div variants={up} className="lg:col-span-7">
+        <p
+          className="text-[12px] tracking-[0.16em] uppercase font-semibold mb-5"
+          style={{ color: "#9db0ff" }}
+        >
+          Tour 2026 · Premiere
+        </p>
+        <h2
+          className="font-extrabold tracking-[-0.02em] leading-[1.05]"
+          style={{ fontSize: "clamp(2rem,4.4vw,3.4rem)", color: WHITE }}
+        >
+          Plötzlich Magie —{" "}
+          <span style={{ color: "#9db0ff" }}>Magic Meets Comedy.</span>
+        </h2>
+        <p
+          className="mt-6 text-[16px] md:text-lg leading-[1.7] max-w-xl"
+          style={{ color: "#d9d6e0" }}
+        >
+          Die erste abendfüllende Bühnenshow von Emilian Leber. 90 Minuten
+          Mentalmagie, Karten-Routinen, Comedy-Pointen. Geschrieben für Theater-
+          und Saalbühnen. Premiere am{" "}
+          <strong style={{ color: WHITE }}>{PREMIERE_DATE}</strong> in der{" "}
+          <strong style={{ color: WHITE }}>{PREMIERE_LOCATION}</strong> —
+          anschließend Tour durch bayerische Theater bis 2027.
+        </p>
+        <div
+          className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-7 text-[15px]"
+          style={{ color: "#d9d6e0" }}
+        >
+          <span className="inline-flex items-center gap-2">
+            <Clock className="w-4 h-4" style={{ color: "#9db0ff" }} />
+            90 Min · 1 Pause
+          </span>
+          <span aria-hidden style={{ color: "rgba(255,255,255,0.25)" }}>
+            ·
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <Users className="w-4 h-4" style={{ color: "#9db0ff" }} />
+            ab 12 Jahren
+          </span>
+          <span aria-hidden style={{ color: "rgba(255,255,255,0.25)" }}>
+            ·
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <Theater className="w-4 h-4" style={{ color: "#9db0ff" }} />
+            Theater- und Saalbühnen
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-4 mt-9">
+          <a
+            href="#tour-daten"
+            className="inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[14px] font-semibold transition-transform hover:scale-[1.02]"
+            style={{ background: COBALT, color: WHITE }}
+          >
+            <Ticket className="w-4 h-4" />
+            Tour-Termine
+          </a>
+          <Link
+            to="/buchung?format=Tour-Show&anlass=Premiere"
+            className="inline-flex items-center gap-1.5 text-[14px] font-semibold border-b pb-1 transition-colors"
+            style={{ color: WHITE, borderColor: "rgba(255,255,255,0.3)" }}
+          >
+            Theater-Buchung anfragen
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+        <p className="text-[14px] mt-7 max-w-md" style={{ color: "#a7a2b0" }}>
+          Tour-Premiere — Theater-Veranstalter und Pressevertreter bitte über{" "}
+          <a
+            href="mailto:el@magicel.de"
+            className="underline"
+            style={{ color: "#d9d6e0" }}
+          >
+            el@magicel.de
+          </a>{" "}
+          direkt anfragen.
+        </p>
+      </motion.div>
+
+      {/* Premiere-Ticket-Mockup */}
+      <motion.div variants={up} className="lg:col-span-5">
+        <div
+          className="group relative block aspect-[3/4] max-w-sm mx-auto overflow-hidden transition-transform duration-700 hover:-rotate-1 hover:scale-[1.02]"
+          style={{
+            borderRadius: "1.25rem",
+            background: COBALT,
+            boxShadow:
+              "0 60px 120px -30px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.12)",
+          }}
+        >
+          <div className="absolute inset-x-0 top-0 p-6 flex items-center justify-between text-white/85">
+            <span className="text-[10px] tracking-[0.22em] uppercase font-bold">
+              MagicEL · Premiere
+            </span>
+            <span className="text-[15px] font-bold" style={{ color: "#cdd6ff" }}>
+              N° 001
+            </span>
+          </div>
+
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+            <p
+              className="text-[10px] tracking-[0.22em] uppercase font-bold mb-4"
+              style={{ color: "#cdd6ff" }}
+            >
+              Plötzlich Magie · Magic Meets Comedy
+            </p>
+            <h3 className="font-extrabold text-3xl md:text-4xl text-white leading-[1.05] mb-3">
+              22.02
+              <br />
+              <span style={{ color: "#cdd6ff" }}>2026.</span>
+            </h3>
+            <p className="text-[14px] text-white/80 max-w-[18ch] leading-snug mb-5">
+              Alte Mälzerei Regensburg · Einlass 19:00
+            </p>
+            <span
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] tracking-[0.18em] uppercase font-bold"
+              style={{
+                background: "rgba(255,255,255,0.15)",
+                color: WHITE,
+                border: "1px solid rgba(255,255,255,0.25)",
+              }}
+            >
+              <Sparkles className="w-3 h-3" />
+              Vorverkauf läuft
+            </span>
+          </div>
+
+          <div className="absolute inset-x-0 bottom-0 p-6 flex items-end justify-between text-white/75">
+            <span className="text-[10px] tracking-[0.18em] uppercase font-bold">
+              Premiere · Tour 2026
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase font-bold text-white">
+              <Ticket className="w-3.5 h-3.5" />
+              N° 001
+            </span>
+          </div>
+
+          {/* Perforations-Linie als Ticket-Detail */}
+          <div
+            aria-hidden
+            className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px"
+            style={{
+              background:
+                "repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0 6px, transparent 6px 12px)",
+            }}
+          />
+        </div>
+      </motion.div>
+    </div>
+  </motion.section>
+);
+
+/* ═══════════════════════════════════════════════════════════
+   TOUR-DATEN — Magazin-Liste mit Status-Badges
    ═══════════════════════════════════════════════════════════ */
 type TourDate = {
   date: string;
@@ -545,285 +443,157 @@ const STATUS_STYLES: Record<
   { bg: string; color: string; border?: string }
 > = {
   Vorverkauf: {
-    bg: "linear-gradient(135deg, #1233CC, #1D3FFF)",
+    bg: COBALT,
     color: "#ffffff",
   },
   Restkarten: {
-    bg: "linear-gradient(135deg, #1233CC, #1D3FFF)",
+    bg: COBALT,
     color: "#ffffff",
   },
   Ausverkauft: {
     bg: "transparent",
-    color: "rgba(0,0,0,0.55)",
-    border: "1px solid rgba(0,0,0,0.18)",
+    color: "rgba(10,11,15,0.55)",
+    border: "1px solid rgba(10,11,15,0.18)",
   },
   Demnächst: {
     bg: "transparent",
-    color: "#1233CC",
-    border: "1px solid rgba(0,0,0,0.040)",
+    color: COBALT,
+    border: `1px solid ${COBALT}40`,
   },
 };
 
-const TourDatenSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      id="tour-daten"
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Tour-Plan · 2026/2027.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Bayern,{" "}
-              <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Stadt für Stadt.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Acht bestätigte Termine ab Februar 2026 — von der Premiere in
-              der Alten Mälzerei bis zum Jubiläum 2027. Frühbucher bekommen
-              die besten Plätze. Tickets pro Stadt direkt über die jeweilige
-              Spielstätte.
-            </p>
-          </div>
-        </div>
+const TourDatenSection = () => (
+  <motion.section
+    id="tour-daten"
+    variants={stagger}
+    initial="hidden"
+    whileInView="show"
+    viewport={vp}
+    className="px-5 md:px-10 py-16 md:py-24"
+    style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
+  >
+    <div className="max-w-7xl mx-auto">
+      <motion.div variants={up}>
+        <SectionHeader
+          eyebrow="Tour-Plan · 2026/2027"
+          title={
+            <>
+              Bayern, <span style={{ color: COBALT }}>Stadt für Stadt</span>.
+            </>
+          }
+          sub="Acht bestätigte Termine ab Februar 2026 — von der Premiere in der Alten Mälzerei bis zum Jubiläum 2027. Frühbucher bekommen die besten Plätze. Tickets pro Stadt direkt über die jeweilige Spielstätte."
+        />
+      </motion.div>
 
-        <div
-          className={`max-w-5xl border-t border-foreground/15`}
-        >
-          {TOUR_DATES.map((t) => {
-            const style = STATUS_STYLES[t.status];
-            const disabled =
-              t.status === "Ausverkauft" || t.status === "Demnächst";
-            return (
-              <article
-                key={`${t.city}-${t.date}`}
-                className="group grid md:grid-cols-[200px_1fr_auto] gap-x-8 gap-y-3 py-8 md:py-10 border-b border-foreground/15 items-baseline"
-              >
-                <div>
-                  <span
-                    className={`${SERIF_ITALIC} text-lg md:text-xl block leading-tight`}
-                    style={{ color: ACCENT }}
-                  >
-                    {t.date}
-                  </span>
-                  <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-foreground/45 mt-1.5 inline-block">
-                    {t.kicker}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-snug mb-2">
-                    {t.city}
-                    <span className="text-foreground/40"> · </span>
-                    <span className={`text-foreground/85`}>
-                      {t.venue}
-                    </span>
-                  </h3>
-                  <p className="text-base text-foreground/65 leading-[1.65] max-w-2xl mb-4">
-                    {t.body}
-                  </p>
-                  <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                    {!disabled ? (
-                      <Link
-                        to={`/buchung?format=Ticket&anlass=${encodeURIComponent(t.city)}&datum=${encodeURIComponent(t.date)}`}
-                        className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
-                        style={{
-                          color: ACCENT,
-                          borderColor: "rgba(0,0,0,0.040)",
-                        }}
-                      >
-                        <Ticket className="w-3.5 h-3.5" />
-                        Ticket sichern
-                      </Link>
-                    ) : (
-                      <span className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground/45 border-b border-foreground/15 pb-0.5">
-                        {t.status === "Demnächst"
-                          ? "Vorverkauf folgt"
-                          : "Ausverkauft"}
-                      </span>
-                    )}
-                    <span aria-hidden className="text-foreground/25">
-                      ·
-                    </span>
-                    <a
-                      href="#newsletter"
-                      className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground/55 hover:text-foreground border-b border-foreground/20 hover:border-foreground/45 pb-0.5 transition-colors"
+      <div className="mt-12 max-w-5xl border-t" style={{ borderColor: L_LINE }}>
+        {TOUR_DATES.map((t) => {
+          const style = STATUS_STYLES[t.status];
+          const disabled =
+            t.status === "Ausverkauft" || t.status === "Demnächst";
+          return (
+            <motion.article
+              variants={up}
+              key={`${t.city}-${t.date}`}
+              className="group grid md:grid-cols-[200px_1fr_auto] gap-x-8 gap-y-3 py-8 md:py-10 border-b items-baseline"
+              style={{ borderColor: L_LINE }}
+            >
+              <div>
+                <span
+                  className="text-lg md:text-xl font-bold block leading-tight"
+                  style={{ color: COBALT }}
+                >
+                  {t.date}
+                </span>
+                <span
+                  className="text-[10px] tracking-[0.18em] uppercase font-bold mt-1.5 inline-block"
+                  style={{ color: L_DIM }}
+                >
+                  {t.kicker}
+                </span>
+              </div>
+              <div>
+                <h3
+                  className="text-xl md:text-2xl font-bold leading-snug mb-2"
+                  style={{ color: INK }}
+                >
+                  {t.city}
+                  <span style={{ color: L_DIM }}> · </span>
+                  <span style={{ color: "#3a3833" }}>{t.venue}</span>
+                </h3>
+                <p
+                  className="text-[15px] leading-[1.65] max-w-2xl mb-4"
+                  style={{ color: L_DIM }}
+                >
+                  {t.body}
+                </p>
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                  {!disabled ? (
+                    <Link
+                      to={`/buchung?format=Ticket&anlass=${encodeURIComponent(t.city)}&datum=${encodeURIComponent(t.date)}`}
+                      className="inline-flex items-center gap-1.5 text-[13px] font-semibold border-b pb-0.5 transition-colors"
+                      style={{ color: COBALT, borderColor: `${COBALT}40` }}
                     >
-                      Termin merken
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                </div>
-                <div className="md:pl-4 md:text-right">
-                  <span
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-[10px] tracking-[0.14em] uppercase font-bold whitespace-nowrap"
-                    style={{
-                      background: style.bg,
-                      color: style.color,
-                      border: style.border,
-                    }}
-                  >
-                    {t.status}
+                      <Ticket className="w-3.5 h-3.5" />
+                      Ticket sichern
+                    </Link>
+                  ) : (
+                    <span
+                      className="inline-flex items-center gap-1.5 text-[13px] font-semibold border-b pb-0.5"
+                      style={{ color: L_DIM, borderColor: L_LINE }}
+                    >
+                      {t.status === "Demnächst"
+                        ? "Vorverkauf folgt"
+                        : "Ausverkauft"}
+                    </span>
+                  )}
+                  <span aria-hidden style={{ color: "rgba(10,11,15,0.25)" }}>
+                    ·
                   </span>
+                  <a
+                    href="#newsletter"
+                    className="inline-flex items-center gap-1.5 text-[13px] font-semibold border-b pb-0.5 transition-colors"
+                    style={{ color: L_DIM, borderColor: L_LINE }}
+                  >
+                    Termin merken
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
                 </div>
-              </article>
-            );
-          })}
-        </div>
-
-        <p
-          className={`text-sm text-foreground/55 mt-10 max-w-2xl`}
-        >
-          Stand {PREMIERE_DATE.split(".")[0]}. Mai 2026 · Termine ohne Gewähr ·
-          Vorverkaufs-Tickets über die jeweilige Spielstätte oder direkt über{" "}
-          <a
-            href="mailto:el@magicel.de"
-            className="underline decoration-foreground/30 hover:decoration-foreground"
-          >
-            el@magicel.de
-          </a>
-          .
-        </p>
+              </div>
+              <div className="md:pl-4 md:text-right">
+                <span
+                  className="inline-flex items-center px-3 py-1.5 rounded-full text-[10px] tracking-[0.14em] uppercase font-bold whitespace-nowrap"
+                  style={{
+                    background: style.bg,
+                    color: style.color,
+                    border: style.border,
+                  }}
+                >
+                  {t.status}
+                </span>
+              </div>
+            </motion.article>
+          );
+        })}
       </div>
-    </section>
-  );
-};
+
+      <p className="text-[14px] mt-10 max-w-2xl" style={{ color: L_DIM }}>
+        Stand {PREMIERE_DATE.split(".")[0]}. Mai 2026 · Termine ohne Gewähr ·
+        Vorverkaufs-Tickets über die jeweilige Spielstätte oder direkt über{" "}
+        <a
+          href="mailto:el@magicel.de"
+          className="underline"
+          style={{ color: INK }}
+        >
+          el@magicel.de
+        </a>
+        .
+      </p>
+    </div>
+  </motion.section>
+);
 
 /* ═══════════════════════════════════════════════════════════
-   MAGIC-DINNER-ABENDE — Editorial-Split mit Wald & Wiese
-   ═══════════════════════════════════════════════════════════ */
-const SUMMER_EDITION = {
-  date: "11. Juli 2026",
-  label: "Magic Dinner — Summer Edition",
-  sub: "Terrasse + Innenbereich · Drei-Gänge optional",
-  status: "Vorverkauf",
-};
-
-const MagicDinnerAbendeSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const SUMMER = SUMMER_EDITION;
-  return (
-    <section
-      id="events"
-      ref={ref}
-      className="bg-white py-20 md:py-28"
-    >
-      <div className="container px-6">
-        <div className="mb-10 md:mb-14 max-w-3xl">
-          <p
-            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4"
-          >
-            Anstehende Events.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground">
-            Aktuelle Termine.
-          </h2>
-        </div>
-
-        {/* XL Featured Card — Summer Edition */}
-        <Link
-          to="/tickets/magic-dinner-summer-edition"
-          className={`group grid lg:grid-cols-12 gap-x-10 gap-y-8 items-stretch`}
-        >
-          <div className="lg:col-span-7">
-            <div
-              className="relative overflow-hidden rounded-2xl"
-              style={{
-                aspectRatio: "1/1",
-                background: "#2e5f6e",
-                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.25)",
-                maxHeight: "560px",
-              }}
-            >
-              <img
-                src={dinnerImg}
-                alt="Magic Dinner Summer Edition · 11. Juli 2026 · Restaurant Wald & Wiese Sinzing — Poster"
-                className="absolute inset-0 w-full h-full object-contain transition-transform duration-[1200ms] ease-out group-hover:scale-[1.02]"
-                loading="lazy"
-              />
-              <span
-                className="absolute top-5 left-5 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                }}
-              >
-                {SUMMER.status}
-              </span>
-            </div>
-          </div>
-
-          <div className="lg:col-span-5 flex flex-col">
-            <p
-              className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3"
-              style={{ color: ACCENT }}
-            >
-              11. Juli 2026 · ab 17:00 Uhr
-            </p>
-            <h3 className="font-display text-2xl md:text-3xl font-black text-foreground leading-tight mb-4">
-              Tisch reservieren.
-              <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Magic Dinner erleben.
-              </span>
-            </h3>
-            <p className="text-base text-foreground/70 leading-[1.7] mb-5">
-              Sommerabend im Restaurant Wald & Wiese. Du reservierst deinen
-              Tisch wie sonst auch, isst à la carte aus der Sommerkarte — und
-              während des Abends besuche ich euch persönlich mit Close-Up-
-              Magie. Drei Sekunden Stille, dann lacht eure Tafel.
-            </p>
-            <ul className="space-y-2 mb-7 text-sm text-foreground/70">
-              <li className="flex items-start gap-2">
-                <Utensils
-                  className="w-4 h-4 mt-0.5 shrink-0"
-                  style={{ color: ACCENT }}
-                />
-                À la carte aus der Sommerkarte
-              </li>
-              <li className="flex items-start gap-2">
-                <Armchair
-                  className="w-4 h-4 mt-0.5 shrink-0"
-                  style={{ color: ACCENT }}
-                />
-                Max. 50 Plätze · 2–12 pro Tafel
-              </li>
-              <li className="flex items-start gap-2">
-                <Wine
-                  className="w-4 h-4 mt-0.5 shrink-0"
-                  style={{ color: ACCENT }}
-                />
-                Weinbegleitung optional
-              </li>
-            </ul>
-            <span
-              className="inline-flex items-center gap-2 self-start rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-white mt-auto"
-              style={{
-                background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-              }}
-            >
-              <Ticket className="w-4 h-4" />
-              Details + Reservierung
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </div>
-        </Link>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   TICKET-KATEGORIEN — asymmetrisches Bento, KEIN Bubble-Grid
+   TICKET-KATEGORIEN — drei Sitzplatz-Zonen
    ═══════════════════════════════════════════════════════════ */
 const CATEGORIES = [
   {
@@ -849,391 +619,216 @@ const CATEGORIES = [
   },
 ];
 
-const TicketKategorienSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Sitzplatz-Kategorien.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Drei Zonen.{" "}
-              <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Eine Show.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Jeder Tour-Stopp arbeitet mit eigenem Saal-Plan und eigener
-              Preisstruktur — die Kategorien selbst bleiben gleich. Konkrete
-              Preise pro Spielstätte direkt im Vorverkauf der jeweiligen
-              Bühne.
-            </p>
-          </div>
-        </div>
+const TicketKategorienSection = () => (
+  <motion.section
+    variants={stagger}
+    initial="hidden"
+    whileInView="show"
+    viewport={vp}
+    className="px-5 md:px-10 py-16 md:py-24"
+  >
+    <div className="max-w-7xl mx-auto">
+      <motion.div variants={up}>
+        <SectionHeader
+          eyebrow="Sitzplatz-Kategorien"
+          title={
+            <>
+              Drei Zonen. <span style={{ color: COBALT }}>Eine Show.</span>
+            </>
+          }
+          sub="Jeder Tour-Stopp arbeitet mit eigenem Saal-Plan und eigener Preisstruktur — die Kategorien selbst bleiben gleich. Konkrete Preise pro Spielstätte direkt im Vorverkauf der jeweiligen Bühne."
+        />
+      </motion.div>
 
-        {/* Bento-Layout: Card 02 ist breit (Mitte), 01 und 03 schmaler */}
-        <div
-          className={`grid lg:grid-cols-12 gap-5 md:gap-6`}
+      <div className="grid lg:grid-cols-3 gap-5 mt-10">
+        {/* Card 01 — Frühbucher */}
+        <motion.article
+          variants={up}
+          className="relative p-7 md:p-8 flex flex-col rounded-[24px]"
+          style={{ background: CARD_LIGHT, border: `1px solid ${L_LINE}` }}
         >
-          {/* Card 01 — Frühbucher (links, schmal) */}
-          <article
-            className="lg:col-span-4 relative bg-white p-7 md:p-9 flex flex-col h-[400px] md:h-[460px] transition-all duration-500 hover:-translate-y-1"
-            style={{
-              borderRadius: "1.25rem",
-              boxShadow:
-                "0 25px 50px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
-            }}
-          >
-            <div className="flex items-baseline gap-3 mb-7">
-              <span
-                className={`${SERIF_ITALIC} text-3xl leading-none`}
-                style={{ color: ACCENT }}
-              >
-                {CATEGORIES[0].no}
-              </span>
-              <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-foreground/45">
-                Last-Minute-Zone
-              </span>
-            </div>
-            <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground leading-snug mb-3">
-              {CATEGORIES[0].label}
-            </h3>
-            <p className="text-xs uppercase tracking-[0.18em] font-semibold text-foreground/55 mb-5">
-              {CATEGORIES[0].sub}
-            </p>
-            <p className="text-[15px] text-foreground/65 leading-[1.65] mb-auto">
-              {CATEGORIES[0].body}
-            </p>
-            <p className="text-[11px] tracking-[0.14em] uppercase font-bold text-foreground/40 mt-5 pt-5 border-t border-foreground/10">
-              {CATEGORIES[0].note}
-            </p>
-          </article>
-
-          {/* Card 02 — Standard (breit, dark) */}
-          <article
-            className="lg:col-span-5 relative p-7 md:p-9 flex flex-col h-[400px] md:h-[460px] text-white transition-all duration-500 hover:-translate-y-1 overflow-hidden"
-            style={{
-              borderRadius: "1.25rem",
-              background:
-                "linear-gradient(155deg, #1a0e16 0%, #08060c 60%, #2a0d18 100%)",
-              boxShadow:
-                "0 30px 60px -25px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.08)",
-            }}
-          >
-            <div
-              aria-hidden
-              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-2xl opacity-6"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(0,0,0,0.024), transparent 60%)",
-              }}
-            />
-            <div className="relative flex items-baseline gap-3 mb-7">
-              <span
-                className={`${SERIF_ITALIC} text-3xl leading-none`}
-                style={{ color: "#AFC0FF" }}
-              >
-                {CATEGORIES[1].no}
-              </span>
-              <span
-                className="text-[10px] tracking-[0.18em] uppercase font-bold"
-                style={{ color: "#AFC0FF" }}
-              >
-                Hauptkontingent
-              </span>
-            </div>
-            <h3 className="relative font-display text-2xl md:text-3xl font-bold leading-snug mb-3">
-              {CATEGORIES[1].label}
-            </h3>
-            <p
-              className={`relative text-base text-white/65 mb-5`}
+          <div className="flex items-baseline gap-3 mb-6">
+            <span
+              className="text-3xl font-extrabold leading-none"
+              style={{ color: COBALT }}
             >
-              {CATEGORIES[1].sub}
-            </p>
-            <p className="relative text-[15px] text-white/80 leading-[1.65] mb-auto">
-              {CATEGORIES[1].body}
-            </p>
-            <p
-              className="relative text-[11px] tracking-[0.14em] uppercase font-bold mt-5 pt-5 border-t border-white/15"
-              style={{ color: "#AFC0FF" }}
+              {CATEGORIES[0].no}
+            </span>
+            <span
+              className="text-[10px] tracking-[0.18em] uppercase font-bold"
+              style={{ color: L_DIM }}
             >
-              {CATEGORIES[1].note}
-            </p>
-          </article>
-
-          {/* Card 03 — Premium (rechts, schmal) */}
-          <article
-            className="lg:col-span-3 relative p-7 md:p-8 flex flex-col h-[400px] md:h-[460px] transition-all duration-500 hover:-translate-y-1 overflow-hidden"
-            style={{
-              borderRadius: "1.25rem",
-              background:
-                "linear-gradient(155deg, #1233CC 0%, #1D3FFF 100%)",
-              boxShadow:
-                "0 25px 50px -25px rgba(0,0,0,0.040), inset 0 0 0 1px rgba(255,255,255,0.12)",
-              color: "#fff",
-            }}
+              Last-Minute-Zone
+            </span>
+          </div>
+          <h3
+            className="text-2xl font-bold leading-snug mb-3"
+            style={{ color: INK }}
           >
-            <div className="flex items-baseline gap-3 mb-7">
-              <span
-                className={`${SERIF_ITALIC} text-3xl leading-none`}
-                style={{ color: "#AFC0FF" }}
-              >
-                {CATEGORIES[2].no}
-              </span>
-              <span
-                className="text-[10px] tracking-[0.18em] uppercase font-bold"
-                style={{ color: "#AFC0FF" }}
-              >
-                Front-Reihe
-              </span>
-            </div>
-            <h3 className="font-display text-xl md:text-2xl font-bold leading-snug mb-3">
-              {CATEGORIES[2].label}
-            </h3>
-            <p className={`text-sm text-white/75 mb-4`}>
-              {CATEGORIES[2].sub}
-            </p>
-            <p className="text-[14px] text-white/85 leading-[1.6] mb-auto">
-              {CATEGORIES[2].body}
-            </p>
-            <p
-              className="text-[10px] tracking-[0.14em] uppercase font-bold mt-5 pt-5 border-t border-white/20"
-              style={{ color: "#AFC0FF" }}
-            >
-              {CATEGORIES[2].note}
-            </p>
-          </article>
-        </div>
+            {CATEGORIES[0].label}
+          </h3>
+          <p
+            className="text-[12px] uppercase tracking-[0.14em] font-semibold mb-5"
+            style={{ color: L_DIM }}
+          >
+            {CATEGORIES[0].sub}
+          </p>
+          <p
+            className="text-[15px] leading-[1.65] mb-auto"
+            style={{ color: L_DIM }}
+          >
+            {CATEGORIES[0].body}
+          </p>
+          <p
+            className="text-[11px] tracking-[0.14em] uppercase font-bold mt-6 pt-5 border-t"
+            style={{ color: L_DIM, borderColor: L_LINE }}
+          >
+            {CATEGORIES[0].note}
+          </p>
+        </motion.article>
 
-        <p
-          className={`text-sm text-foreground/55 mt-10 max-w-2xl`}
+        {/* Card 02 — Standard (Cobalt-Highlight) */}
+        <motion.article
+          variants={up}
+          className="relative p-7 md:p-8 flex flex-col rounded-[24px] overflow-hidden"
+          style={{ background: COBALT, color: WHITE }}
         >
-          Preis je Tour-Stopp · jeweilige Spielstätte legt Kontingent und
-          Endpreis fest · Sammelbuchungen ab 8 Personen direkt anfragen.
-        </p>
+          <div className="flex items-baseline gap-3 mb-6">
+            <span
+              className="text-3xl font-extrabold leading-none"
+              style={{ color: "#cdd6ff" }}
+            >
+              {CATEGORIES[1].no}
+            </span>
+            <span
+              className="text-[10px] tracking-[0.18em] uppercase font-bold"
+              style={{ color: "#cdd6ff" }}
+            >
+              Hauptkontingent
+            </span>
+          </div>
+          <h3 className="text-2xl font-bold leading-snug mb-3">
+            {CATEGORIES[1].label}
+          </h3>
+          <p className="text-[15px] mb-5" style={{ color: "rgba(255,255,255,0.78)" }}>
+            {CATEGORIES[1].sub}
+          </p>
+          <p
+            className="text-[15px] leading-[1.65] mb-auto"
+            style={{ color: "rgba(255,255,255,0.9)" }}
+          >
+            {CATEGORIES[1].body}
+          </p>
+          <p
+            className="text-[11px] tracking-[0.14em] uppercase font-bold mt-6 pt-5 border-t"
+            style={{ color: "#cdd6ff", borderColor: "rgba(255,255,255,0.2)" }}
+          >
+            {CATEGORIES[1].note}
+          </p>
+        </motion.article>
+
+        {/* Card 03 — Premium */}
+        <motion.article
+          variants={up}
+          className="relative p-7 md:p-8 flex flex-col rounded-[24px]"
+          style={{ background: INK, color: WHITE }}
+        >
+          <div className="flex items-baseline gap-3 mb-6">
+            <span
+              className="text-3xl font-extrabold leading-none"
+              style={{ color: "#9db0ff" }}
+            >
+              {CATEGORIES[2].no}
+            </span>
+            <span
+              className="text-[10px] tracking-[0.18em] uppercase font-bold"
+              style={{ color: "#9db0ff" }}
+            >
+              Front-Reihe
+            </span>
+          </div>
+          <h3 className="text-2xl font-bold leading-snug mb-3">
+            {CATEGORIES[2].label}
+          </h3>
+          <p className="text-[15px] mb-4" style={{ color: "#d9d6e0" }}>
+            {CATEGORIES[2].sub}
+          </p>
+          <p
+            className="text-[15px] leading-[1.6] mb-auto"
+            style={{ color: "rgba(255,255,255,0.85)" }}
+          >
+            {CATEGORIES[2].body}
+          </p>
+          <p
+            className="text-[11px] tracking-[0.14em] uppercase font-bold mt-6 pt-5 border-t"
+            style={{ color: "#9db0ff", borderColor: "rgba(255,255,255,0.18)" }}
+          >
+            {CATEGORIES[2].note}
+          </p>
+        </motion.article>
       </div>
-    </section>
-  );
-};
+
+      <p className="text-[14px] mt-10 max-w-2xl" style={{ color: L_DIM }}>
+        Preis je Tour-Stopp · jeweilige Spielstätte legt Kontingent und Endpreis
+        fest · Sammelbuchungen ab 8 Personen direkt anfragen.
+      </p>
+    </div>
+  </motion.section>
+);
 
 /* ═══════════════════════════════════════════════════════════
-   WAS ERWARTET DICH — Editorial Magazin-Story, 4 narrative Akte
+   WAS ERWARTET DICH — 4 Akte über Steps + Sticky-Foto via SplitFeature
    ═══════════════════════════════════════════════════════════ */
 const ABENDABLAUF = [
   {
-    time: "19:00",
-    no: "01",
-    title: "Einlass und Aperitif.",
-    body: "Türen auf, freie Platzwahl in der gebuchten Kategorie. Ein Getränk an der Foyer-Bar, kurze Programm-Karte in der Hand. Im Saal läuft leise warmes Klavier — keine Lobby-Musik, sondern Vorbereitung.",
+    t: "19:00 · Einlass und Aperitif.",
+    d: "Türen auf, freie Platzwahl in der gebuchten Kategorie. Ein Getränk an der Foyer-Bar, kurze Programm-Karte in der Hand. Im Saal läuft leise warmes Klavier — keine Lobby-Musik, sondern Vorbereitung.",
   },
   {
-    time: "19:45",
-    no: "02",
-    title: "Block I — Hook und Mentalmagie.",
-    body: "Lichter runter, Spotlight auf. Erste 45 Minuten: drei Mentaleffekte mit Publikumsbeteiligung, eine längere Karten-Routine, mehrere Comedy-Pointen aus dem Stand. Pause mit drei Sekunden Stille nach dem ersten Wow.",
+    t: "19:45 · Block I — Hook und Mentalmagie.",
+    d: "Lichter runter, Spotlight auf. Erste 45 Minuten: drei Mentaleffekte mit Publikumsbeteiligung, eine längere Karten-Routine, mehrere Comedy-Pointen aus dem Stand. Pause mit drei Sekunden Stille nach dem ersten Wow.",
   },
   {
-    time: "20:35",
-    no: "03",
-    title: "Pause · 20 Minuten.",
-    body: "Foyer öffnet wieder, Getränke nachfüllen. Im Saal bleibt eine Karte auf der Bühne liegen — manche merken erst nach der Pause, dass das schon Teil des nächsten Tricks war.",
-  },
-  {
-    time: "20:55",
-    no: "04",
-    title: "Block II — Climax und Standing Ovation.",
-    body: "Zweite Hälfte ist die längste verknüpfte Routine des Abends — ein Mentaleffekt mit eingebauter Anekdote, gefolgt von einem Karten-Set das im Publikum endet. Standing-Ovation-Finale, Encore-Routine, Verbeugung.",
+    t: "20:35 · Pause · 20 Minuten.",
+    d: "Foyer öffnet wieder, Getränke nachfüllen. Im Saal bleibt eine Karte auf der Bühne liegen — manche merken erst nach der Pause, dass das schon Teil des nächsten Tricks war.",
   },
 ];
 
-const WasErwartetDichSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Der Abend · 90 Min in vier Akten.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Was dich{" "}
-              <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                erwartet.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Eine durchkomponierte Show — keine zusammengewürfelten Tricks,
-              sondern dramaturgisch verbundene Akte mit Aufbau, Pause und
-              Climax. So sieht ein Abend ungefähr aus.
-            </p>
-          </div>
-        </div>
-
-        <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10`}
-        >
-          {/* Linke Sticky-Photo */}
-          <div className="lg:col-span-5">
-            <div className="lg:sticky lg:top-24">
-              <div
-                className="relative overflow-hidden"
-                style={{
-                  borderRadius: "1.25rem",
-                  aspectRatio: "4/5",
-                  boxShadow:
-                    "0 50px 100px -30px rgba(0,0,0,0.35), 0 18px 40px -15px rgba(0,0,0,0.18)",
-                }}
-              >
-                <img
-                  src={buehneZuschauerImg}
-                  alt="Standing Ovation am Ende einer Bühnenshow von Emilian Leber"
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(8,6,12,0.55) 100%)",
-                  }}
-                />
-                <div className="absolute inset-x-6 bottom-6">
-                  <div
-                    className="rounded-2xl p-5 text-white"
-                    style={{
-                      background:
-                        "linear-gradient(155deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 100%)",
-                      backdropFilter:
-                        "blur(40px) saturate(200%) brightness(115%)",
-                      border: "1px solid rgba(255,255,255,0.35)",
-                      boxShadow:
-                        "0 20px 40px -15px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.5)",
-                    }}
-                  >
-                    <p
-                      className={`text-base mb-1`}
-                      style={{ color: "#AFC0FF" }}
-                    >
-                      Block II · Climax.
-                    </p>
-                    <p className="font-display font-bold text-base leading-snug">
-                      Standing Ovation bei 90 % der Shows
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Rechte Akt-Liste */}
-          <div className="lg:col-span-7">
-            <ol className="space-y-10 md:space-y-12">
-              {ABENDABLAUF.map((a) => (
-                <li
-                  key={a.no}
-                  className="grid grid-cols-[80px_1fr] gap-6 md:gap-8 items-start"
-                >
-                  <div>
-                    <span
-                      className={`${SERIF_ITALIC} text-3xl md:text-4xl leading-none block`}
-                      style={{ color: ACCENT }}
-                    >
-                      {a.no}
-                    </span>
-                    <span className="text-[11px] tracking-[0.18em] uppercase font-bold text-foreground/45 mt-2 inline-block tabular-nums">
-                      {a.time}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-snug mb-3">
-                      {a.title}
-                    </h3>
-                    <p className="text-base text-foreground/65 leading-[1.7]">
-                      {a.body}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+const WasErwartetDichSection = () => (
+  <>
+    <SplitFeature
+      eyebrow="Der Abend · 90 Min in vier Akten"
+      title={
+        <>
+          Was dich <span style={{ color: COBALT }}>erwartet</span>.
+        </>
+      }
+      sub="Eine durchkomponierte Show — keine zusammengewürfelten Tricks, sondern dramaturgisch verbundene Akte mit Aufbau, Pause und Climax. Standing Ovation bei 90 % der Shows."
+      points={[
+        "Block I — Hook, Mentalmagie und Karten-Routine (45 Min)",
+        "Pause mit drei Sekunden Stille nach dem ersten Wow",
+        "Block II — Climax, Encore-Routine und Standing-Ovation-Finale",
+      ]}
+      image={buehneZuschauerImg}
+      imageAlt="Standing Ovation am Ende einer Bühnenshow von Emilian Leber"
+      imgPos="top"
+      stat={{ v: "90 %", l: "Standing Ovation" }}
+    />
+    <Steps
+      eyebrow="So läuft der Abend"
+      title={
+        <>
+          90 Minuten in <span style={{ color: COBALT }}>vier Akten</span>.
+        </>
+      }
+      sub="Aufbau, Pause und Climax — durchkomponiert vom Einlass bis zur Verbeugung. So sieht ein Abend ungefähr aus."
+      items={ABENDABLAUF}
+    />
+  </>
+);
 
 /* ═══════════════════════════════════════════════════════════
-   PULLQUOTE schwarz full-bleed
-   ═══════════════════════════════════════════════════════════ */
-const PullQuoteSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="relative bg-[#08060c] text-white py-28 md:py-44 overflow-hidden"
-    >
-      <div
-        aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
-        }}
-      />
-      <div className="relative container px-6">
-        <div
-          className={`max-w-4xl mx-auto text-center`}
-        >
-          <Quote
-            className="w-10 h-10 mx-auto mb-8 opacity-50"
-            style={{ color: "#AFC0FF" }}
-          />
-          <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.875rem)]">
-            Drei Sekunden Stille.
-            <br />
-            <span style={{ color: "#AFC0FF" }}>
-              Dann lacht der ganze Saal.
-            </span>
-          </p>
-          <p
-            className={`text-base md:text-lg text-white/55 mt-8`}
-          >
-            — Was nach dem Climax-Effekt passiert · Tour-Premiere Plötzlich Magie
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   LOCATIONS — asymmetrisches Bento mit Venue-Beschreibungen
+   LOCATIONS — Spielstätten der Tour
    ═══════════════════════════════════════════════════════════ */
 const VENUES = [
   {
@@ -1275,292 +870,153 @@ const VENUES = [
   },
 ];
 
-const LocationsSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
+const LocationsSection = () => (
+  <motion.section
+    variants={stagger}
+    initial="hidden"
+    whileInView="show"
+    viewport={vp}
+    className="px-5 md:px-10 py-16 md:py-24"
+    style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
+  >
+    <div className="max-w-7xl mx-auto">
+      <motion.div variants={up}>
+        <SectionHeader
+          eyebrow="Spielstätten · Tour 2026"
+          title={
+            <>
+              Sechs Bühnen, <span style={{ color: COBALT }}>eine Show</span>.
+            </>
+          }
+          sub="Jede Spielstätte mit eigener Atmosphäre — Industriekulisse, Wirtshaus, Theater, Kabarett-Bühne. Die Show passt sich an, der Spannungsbogen bleibt."
+        />
+      </motion.div>
+
+      <div className="grid md:grid-cols-12 gap-5 mt-10">
+        {VENUES.map((v, i) => {
+          const isHero = v.accent;
+          return (
+            <motion.article
+              variants={up}
+              key={v.name}
+              className={`${isHero ? "md:col-span-8 lg:col-span-7" : "md:col-span-4"} ${i === 1 ? "lg:col-span-5" : ""} relative p-7 md:p-8 rounded-[24px]`}
+              style={{
+                background: isHero ? INK : WHITE,
+                color: isHero ? WHITE : undefined,
+                border: `1px solid ${isHero ? "rgba(255,255,255,0.1)" : L_LINE}`,
+                minHeight: isHero ? 280 : 220,
+              }}
             >
-              Spielstätten · Tour 2026.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Sechs Bühnen,{" "}
-              <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                eine Show.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Jede Spielstätte mit eigener Atmosphäre — Industriekulisse,
-              Wirtshaus, Theater, Kabarett-Bühne. Die Show passt sich an, der
-              Spannungsbogen bleibt.
-            </p>
-          </div>
-        </div>
-
-        <div
-          className={`grid md:grid-cols-12 gap-5 md:gap-6`}
-        >
-          {VENUES.map((v, i) => {
-            // Bento: Card 0 (Premiere) doppelt breit, alle anderen 4-cols
-            const isHero = v.accent;
-            return (
-              <article
-                key={v.name}
-                className={`${isHero ? "md:col-span-8 lg:col-span-7" : "md:col-span-4"} ${i === 1 ? "lg:col-span-5" : ""} relative p-7 md:p-8 transition-all duration-500 hover:-translate-y-1`}
-                style={{
-                  borderRadius: "1rem",
-                  background: isHero
-                    ? "linear-gradient(155deg, #1a0e16 0%, #08060c 60%, #2a0d18 100%)"
-                    : "#ffffff",
-                  color: isHero ? "#ffffff" : undefined,
-                  boxShadow: isHero
-                    ? "0 30px 60px -25px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.08)"
-                    : "0 15px 30px -20px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.05)",
-                  minHeight: isHero ? 280 : 220,
-                }}
+              <div className="flex items-baseline gap-3 mb-5">
+                <MapPin
+                  className="w-4 h-4"
+                  style={{ color: isHero ? "#9db0ff" : COBALT }}
+                />
+                <span
+                  className="text-[10px] tracking-[0.18em] uppercase font-bold"
+                  style={{ color: isHero ? "#9db0ff" : COBALT }}
+                >
+                  {v.city}
+                </span>
+              </div>
+              <h3
+                className={`${isHero ? "text-2xl md:text-3xl" : "text-xl"} font-bold leading-snug mb-2`}
+                style={{ color: isHero ? WHITE : INK }}
               >
-                {isHero && (
-                  <div
-                    aria-hidden
-                    className="absolute -top-16 -right-16 w-[240px] h-[240px] rounded-full blur-2xl opacity-6"
-                    style={{
-                      background:
-                        "radial-gradient(circle, rgba(0,0,0,0.024), transparent 60%)",
-                    }}
-                  />
-                )}
-                <div className="relative">
-                  <div className="flex items-baseline gap-3 mb-5">
-                    <MapPin
-                      className="w-4 h-4"
-                      style={{ color: isHero ? "#AFC0FF" : ACCENT }}
-                    />
-                    <span
-                      className="text-[10px] tracking-[0.18em] uppercase font-bold"
-                      style={{ color: isHero ? "#AFC0FF" : ACCENT }}
-                    >
-                      {v.city}
-                    </span>
-                  </div>
-                  <h3
-                    className={`${SERIF_ITALIC} font-display ${isHero ? "text-2xl md:text-3xl" : "text-xl"} font-bold leading-snug mb-2`}
-                  >
-                    {v.name}
-                  </h3>
-                  <p
-                    className={`text-sm ${isHero ? "text-white/65" : "text-foreground/55"} mb-4`}
-                  >
-                    {v.type}
-                  </p>
-                  <p
-                    className={`text-[14px] leading-[1.65] ${isHero ? "text-white/80" : "text-foreground/65"}`}
-                  >
-                    {v.body}
-                  </p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-
-        <p
-          className={`text-sm text-foreground/55 mt-10 max-w-2xl`}
-        >
-          Weitere Spielstätten für Herbst 2026 und 2027 in Planung — neue
-          Tour-Daten zuerst über den Newsletter.
-        </p>
+                {v.name}
+              </h3>
+              <p
+                className="text-[14px] mb-4"
+                style={{ color: isHero ? "rgba(255,255,255,0.65)" : L_DIM }}
+              >
+                {v.type}
+              </p>
+              <p
+                className="text-[14px] leading-[1.65]"
+                style={{ color: isHero ? "rgba(255,255,255,0.82)" : L_DIM }}
+              >
+                {v.body}
+              </p>
+            </motion.article>
+          );
+        })}
       </div>
-    </section>
-  );
-};
+
+      <p className="text-[14px] mt-10 max-w-2xl" style={{ color: L_DIM }}>
+        Weitere Spielstätten für Herbst 2026 und 2027 in Planung — neue
+        Tour-Daten zuerst über den Newsletter.
+      </p>
+    </div>
+  </motion.section>
+);
 
 /* ═══════════════════════════════════════════════════════════
    VIDEO-SECTION TVA
    ═══════════════════════════════════════════════════════════ */
-const VideoSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Showreel · TVA-Mitschnitt 2025.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
+const VideoSection = () => (
+  <motion.section
+    variants={stagger}
+    initial="hidden"
+    whileInView="show"
+    viewport={vp}
+    className="px-5 md:px-10 py-16 md:py-24"
+  >
+    <div className="max-w-7xl mx-auto">
+      <motion.div variants={up}>
+        <SectionHeader
+          eyebrow="Showreel · TVA-Mitschnitt 2025"
+          title={
+            <>
               Sieh dir an,{" "}
-              <br />
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                worauf du dich freust.
-              </span>
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              TVA Bayern hat 2025 eine komplette Show-Routine im Studio
-              aufgenommen — Live-Karten-Test mit dem Moderator, Mentaleffekt
-              mit Studio-Publikum. Der Mitschnitt zeigt, was bei einer
-              Bühnenshow auf dich zukommt.
-            </p>
-          </div>
-        </div>
+              <span style={{ color: COBALT }}>worauf du dich freust</span>.
+            </>
+          }
+          sub="TVA Bayern hat 2025 eine komplette Show-Routine im Studio aufgenommen — Live-Karten-Test mit dem Moderator, Mentaleffekt mit Studio-Publikum. Der Mitschnitt zeigt, was bei einer Bühnenshow auf dich zukommt."
+        />
+      </motion.div>
 
-        <div
-          className={`relative max-w-6xl mx-auto`}
-          style={{
-            borderRadius: "1.5rem",
-            overflow: "hidden",
-            boxShadow:
-              "0 50px 100px -30px rgba(0,0,0,0.225), 0 18px 40px -15px rgba(0,0,0,0.110)",
-          }}
-        >
-          <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
-            <iframe
-              src={`https://www.youtube.com/embed/${TVA_VIDEO_ID}?rel=0&modestbranding=1`}
-              title="TVA TV-Interview 2025 — Emilian Leber, Showreel-Einblick"
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full"
-              style={{ border: 0 }}
-            />
-          </div>
+      <motion.div
+        variants={up}
+        className="relative max-w-6xl mx-auto mt-10"
+        style={{
+          borderRadius: "1.5rem",
+          overflow: "hidden",
+          boxShadow: "0 40px 80px -34px rgba(10,11,15,0.4)",
+        }}
+      >
+        <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
+          <iframe
+            src={`https://www.youtube.com/embed/${TVA_VIDEO_ID}?rel=0&modestbranding=1`}
+            title="TVA TV-Interview 2025 — Emilian Leber, Showreel-Einblick"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 w-full h-full"
+            style={{ border: 0 }}
+          />
         </div>
+      </motion.div>
 
-        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-10 text-sm text-foreground/55">
-          <span className="inline-flex items-center gap-1.5">
-            <Tv className="w-3.5 h-3.5" style={{ color: ACCENT }} />
-            TVA Bayern
-          </span>
-          <span aria-hidden className="text-foreground/25">
-            ·
-          </span>
-          <span>2025 · mit 16 Jahren</span>
-          <span aria-hidden className="text-foreground/25">
-            ·
-          </span>
-          <span>Komplett-Mitschnitt</span>
-        </div>
+      <div
+        className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-10 text-[14px]"
+        style={{ color: L_DIM }}
+      >
+        <span className="inline-flex items-center gap-1.5">
+          <Tv className="w-3.5 h-3.5" style={{ color: COBALT }} />
+          TVA Bayern
+        </span>
+        <span aria-hidden style={{ color: "rgba(10,11,15,0.25)" }}>
+          ·
+        </span>
+        <span>2025 · mit 16 Jahren</span>
+        <span aria-hidden style={{ color: "rgba(10,11,15,0.25)" }}>
+          ·
+        </span>
+        <span>Komplett-Mitschnitt</span>
       </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   STIMMEN — Ticket-Käufer-Perspektive
-   ═══════════════════════════════════════════════════════════ */
-const REVIEWS = [
-  {
-    quote:
-      "Es war einfach Mega! 200 Gäste — Emilian hat mit seiner Bühnenshow alle begeistert. Eine Bühnenshow wie diese hätte ich gerne nochmal gesehen.",
-    author: "Jan von Lehmann",
-    role: "Bühnenshow-Gast · 200 Gäste",
-    initial: "J",
-  },
-  {
-    quote:
-      "Mit viel Charme und Witz hat er alle Gäste begeistert. Wer Tickets bekommt, soll sie nicht weggeben.",
-    author: "Katrin Raß",
-    role: "Hochzeitsplanerin · Saal-Besucherin",
-    initial: "K",
-  },
-  {
-    quote:
-      "Sympathischer junger Mann, der nicht sich, sondern seine Zauberkunst in den Mittelpunkt stellt. Ich hatte das Glück live dabei zu sein — geht hin.",
-    author: "Martina Senftl",
-    role: "Eventkundin · Show-Gast",
-    initial: "M",
-  },
-];
-
-const StimmenSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="max-w-2xl mb-14 md:mb-16">
-          <p
-            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-          >
-            Was Saal-Gäste sagen.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(2rem,4.25vw,3.75rem)] text-foreground">
-            5,0 Sterne.
-            <br />
-            <span>30+ Bewertungen.</span>
-          </h2>
-        </div>
-        <div
-          className={`grid md:grid-cols-3 gap-6 md:gap-8`}
-        >
-          {REVIEWS.map((r) => (
-            <article
-              key={r.author}
-              className="relative bg-white p-7 md:p-9 flex flex-col h-full"
-              style={{
-                borderRadius: "1rem",
-                boxShadow:
-                  "0 25px 50px -25px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04)",
-              }}
-            >
-              <div className="flex items-center gap-1 mb-5">
-                {[...Array(5)].map((_, j) => (
-                  <Star
-                    key={j}
-                    className="w-4 h-4 fill-amber-400 text-amber-400"
-                  />
-                ))}
-                <meta content="5" />
-              </div>
-              <p
-                className="text-[15px] md:text-base leading-[1.65] text-foreground/85 flex-1"
-              >
-                [{r.quote}]
-              </p>
-              <footer className="mt-7 pt-5 border-t border-foreground/10 flex items-center gap-4">
-                <div
-                  className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center font-display font-bold text-white text-base"
-                  style={{
-                    background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DEEP})`,
-                  }}
-                >
-                  {r.initial}
-                </div>
-                <div>
-                  <p
-                    className="font-display font-bold text-foreground text-sm"
-                  >
-                    {r.author}
-                  </p>
-                  <p
-                    className="text-xs font-medium text-foreground/55 mt-0.5"
-                  >
-                    {r.role}
-                  </p>
-                </div>
-              </footer>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+    </div>
+  </motion.section>
+);
 
 /* ═══════════════════════════════════════════════════════════
    FAQ — Ticket-spezifisch
@@ -1596,63 +1052,10 @@ const FAQS = [
   },
 ];
 
-const FAQSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="max-w-2xl mb-14 md:mb-16">
-          <p
-            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-          >
-            Bevor du buchst.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-            Häufige Ticket-
-            <br />
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-              Fragen.
-            </span>
-          </h2>
-        </div>
-        <div
-          className={`max-w-3xl border-t border-foreground/15`}
-        >
-          {FAQS.map((faq) => (
-            <details
-              key={faq.q}
-              className="group py-6 md:py-7 border-b border-foreground/15"
-            >
-              <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
-                <span className="font-display text-base md:text-lg font-bold text-foreground leading-snug pr-4">
-                  {faq.q}
-                </span>
-                <span
-                  aria-hidden
-                  className="shrink-0 mt-1 text-foreground/40 group-open:rotate-45 transition-transform duration-300 text-2xl leading-none"
-                >
-                  +
-                </span>
-              </summary>
-              <p className="mt-4 text-base text-foreground/70 leading-[1.7] max-w-2xl">
-                {faq.a}
-              </p>
-            </details>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
 /* ═══════════════════════════════════════════════════════════
-   NEWSLETTER-CTA — Email-Capture für neue Tour-Daten
+   NEWSLETTER-CTA — Email-Capture für neue Tour-Daten (Logik unverändert)
    ═══════════════════════════════════════════════════════════ */
 const NewsletterCTASection = () => {
-  const { ref, isVisible } = useScrollReveal();
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -1681,138 +1084,142 @@ const NewsletterCTASection = () => {
   };
 
   return (
-    <section
+    <motion.section
       id="newsletter"
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
+      variants={up}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
     >
-      <div className="container px-6">
+      <div className="max-w-5xl mx-auto">
         <div
-          className={`max-w-4xl mx-auto`}
+          className="relative grid md:grid-cols-[1.4fr_1fr] gap-x-12 gap-y-10 p-8 md:p-12 lg:p-14 overflow-hidden rounded-[28px]"
+          style={{ background: CARD_LIGHT, border: `1px solid ${L_LINE}`, boxShadow: "0 40px 80px -34px rgba(10,11,15,0.25)" }}
         >
           <div
-            className="relative grid md:grid-cols-[1.4fr_1fr] gap-x-12 gap-y-10 p-8 md:p-12 lg:p-14 overflow-hidden"
-            style={{
-              borderRadius: "1.5rem",
-              background:
-                "linear-gradient(155deg, #ffffff 0%, #EEF1F6 60%, #C7D2FF 100%)",
-              boxShadow:
-                "0 50px 100px -30px rgba(120,80,30,0.25), 0 18px 40px -15px rgba(120,80,30,0.15), inset 0 0 0 1px rgba(255,255,255,0.5)",
-            }}
-          >
-            <div
-              aria-hidden
-              className="absolute -top-20 -right-20 w-[280px] h-[280px] rounded-full blur-2xl opacity-8"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
-              }}
-            />
+            aria-hidden
+            className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full"
+            style={{ background: `radial-gradient(circle, ${COBALT}1f, transparent 62%)` }}
+          />
 
-            <div className="relative">
-              <p
-                className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4"
-              >
-                Event-Newsletter · alle 4–8 Wochen.
-              </p>
-              <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.75rem,3.8vw,3rem)] text-foreground mb-5">
-                Sei der erste bei{" "}
-                <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                  neuen Terminen.
-                </span>
-              </h2>
-              <p className="text-base md:text-lg text-foreground/65 leading-[1.7] max-w-md">
-                Neue Magic-Dinner-Abende und Specials — bevor sie öffentlich
-                angekündigt werden. Kurze Mails, kein Spam, jederzeit
-                abbestellbar.
-              </p>
-            </div>
+          <div className="relative">
+            <p
+              className="flex items-center gap-2 text-[12px] tracking-[0.16em] uppercase font-semibold mb-4"
+              style={{ color: L_DIM }}
+            >
+              <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: COBALT }} />
+              Event-Newsletter · alle 4–8 Wochen
+            </p>
+            <h2
+              className="font-extrabold tracking-[-0.02em] leading-[1.05] mb-5"
+              style={{ fontSize: "clamp(1.75rem,3.8vw,3rem)", color: INK }}
+            >
+              Sei der erste bei{" "}
+              <span style={{ color: COBALT }}>neuen Terminen.</span>
+            </h2>
+            <p
+              className="text-[16px] md:text-lg leading-[1.7] max-w-md"
+              style={{ color: L_DIM }}
+            >
+              Neue Magic-Dinner-Abende und Specials — bevor sie öffentlich
+              angekündigt werden. Kurze Mails, kein Spam, jederzeit
+              abbestellbar.
+            </p>
+          </div>
 
-            <div className="relative">
-              {!submitted ? (
-                <form onSubmit={onSubmit} className="space-y-4">
-                  <label className="block">
-                    <span className="text-[11px] tracking-[0.18em] uppercase font-bold text-foreground/45 mb-2 block">
-                      Deine E-Mail-Adresse
-                    </span>
-                    <div className="relative">
-                      <Mail
-                        className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40"
-                        aria-hidden
-                      />
-                      <input
-                        type="email"
-                        required
-                        autoComplete="email"
-                        value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                          setError(null);
-                        }}
-                        placeholder="vorname@beispiel.de"
-                        className="w-full pl-11 pr-4 py-4 text-base text-foreground bg-white rounded-full border border-foreground/15 focus:outline-none focus:border-[color:var(--accent)] transition-colors"
-                        style={{
-                          ["--accent" as never]: ACCENT,
-                        }}
-                      />
-                    </div>
-                  </label>
-                  {error && (
-                    <p className="text-sm text-[color:var(--accent)] flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4" />
-                      {error}
-                    </p>
-                  )}
-                  <button
-                    type="submit"
-                    className="hero-cta w-full inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
-                    style={{
-                      background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                      boxShadow: "0 18px 40px -14px rgba(0,0,0,0.040)",
-                    }}
+          <div className="relative">
+            {!submitted ? (
+              <form onSubmit={onSubmit} className="space-y-4">
+                <label className="block">
+                  <span
+                    className="text-[11px] tracking-[0.18em] uppercase font-bold mb-2 block"
+                    style={{ color: L_DIM }}
                   >
-                    <Send className="w-4 h-4" />
-                    Anmelden
-                  </button>
-                  <p className="text-[11px] text-foreground/45 leading-relaxed">
-                    Mit dem Anmelden bestätigst du, die Datenschutz-Hinweise
-                    gelesen zu haben. Abmeldung in jeder E-Mail per einem
-                    Klick.
-                  </p>
-                </form>
-              ) : (
-                <div
-                  className="p-6 rounded-2xl flex items-start gap-4"
-                  style={{
-                    background: "rgba(0,0,0,0.040)",
-                    border: "1px solid rgba(0,0,0,0.040)",
-                  }}
-                >
-                  <CheckCircle2
-                    className="w-6 h-6 shrink-0 mt-0.5"
-                    style={{ color: ACCENT }}
-                  />
-                  <div>
-                    <p className="font-display font-bold text-foreground text-base mb-1.5">
-                      Eingetragen. Danke.
-                    </p>
-                    <p className="text-sm text-foreground/65 leading-snug">
-                      Du bekommst die nächste Mail mit neuen Magic-Dinner-Terminen
-                      — meistens 4–8 Wochen Vorlauf.
-                    </p>
+                    Deine E-Mail-Adresse
+                  </span>
+                  <div className="relative">
+                    <Mail
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4"
+                      style={{ color: L_DIM }}
+                      aria-hidden
+                    />
+                    <input
+                      type="email"
+                      required
+                      autoComplete="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        setError(null);
+                      }}
+                      placeholder="vorname@beispiel.de"
+                      className="w-full pl-11 pr-4 py-4 text-base bg-white rounded-full border focus:outline-none focus:ring-2 transition-colors"
+                      style={{
+                        color: INK,
+                        borderColor: L_LINE,
+                        ["--tw-ring-color" as never]: `${COBALT}26`,
+                      }}
+                    />
                   </div>
+                </label>
+                {error && (
+                  <p
+                    className="text-sm flex items-center gap-2"
+                    style={{ color: COBALT }}
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    {error}
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-[14px] font-semibold text-white transition-transform hover:scale-[1.02]"
+                  style={{ background: COBALT }}
+                >
+                  <Send className="w-4 h-4" />
+                  Anmelden
+                </button>
+                <p className="text-[12px] leading-relaxed" style={{ color: L_DIM }}>
+                  Mit dem Anmelden bestätigst du, die Datenschutz-Hinweise
+                  gelesen zu haben. Abmeldung in jeder E-Mail per einem Klick.
+                </p>
+              </form>
+            ) : (
+              <div
+                className="p-6 rounded-2xl flex items-start gap-4"
+                style={{
+                  background: `${COBALT}0f`,
+                  border: `1px solid ${COBALT}30`,
+                }}
+              >
+                <CheckCircle2
+                  className="w-6 h-6 shrink-0 mt-0.5"
+                  style={{ color: COBALT }}
+                />
+                <div>
+                  <p
+                    className="font-bold text-base mb-1.5"
+                    style={{ color: INK }}
+                  >
+                    Eingetragen. Danke.
+                  </p>
+                  <p className="text-sm leading-snug" style={{ color: L_DIM }}>
+                    Du bekommst die nächste Mail mit neuen Magic-Dinner-Terminen
+                    — meistens 4–8 Wochen Vorlauf.
+                  </p>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
-   CUSTOM QUIZ — Ticket-Format-Finder
+   CUSTOM QUIZ — Ticket-Format-Finder (Config unverändert)
    ═══════════════════════════════════════════════════════════ */
 const ticketsQuizConfig: CustomQuizConfig = {
   anlass: "Ticket",
@@ -1820,9 +1227,7 @@ const ticketsQuizConfig: CustomQuizConfig = {
   sectionTitle: (
     <>
       Tour-Show oder{" "}
-      <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-        Magic Dinner?
-      </span>
+      <span style={{ color: COBALT }}>Magic Dinner?</span>
     </>
   ),
   sectionDesc:
@@ -1936,97 +1341,6 @@ const ticketsQuizConfig: CustomQuizConfig = {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   FINAL-CTA — Buchen oder Privat-Show
-   ═══════════════════════════════════════════════════════════ */
-const FinalCTA = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="relative text-white py-28 md:py-40 overflow-hidden"
-    >
-      <div className="absolute inset-0">
-        <img
-          src={heroStageImg}
-          alt=""
-          className="w-full h-full object-cover"
-          loading="lazy"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(120deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.78) 50%, rgba(8,6,12,0.58) 100%)",
-          }}
-        />
-      </div>
-      <div
-        aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
-        }}
-      />
-      <div className="relative container px-6">
-        <div
-          className={`max-w-3xl mx-auto text-center`}
-        >
-          <p
-            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6"
-          >
-            Buchen oder selber planen?
-          </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
-            Tour-Ticket{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
-              oder eigene Show.
-            </span>
-          </h2>
-          <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
-            Wenn keine Tour-Stadt in deiner Nähe ist oder du eine private
-            Show planst — schreib mir direkt. Antwort innerhalb von 24
-            Stunden, deutschlandweit verfügbar.
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="#tour-daten"
-              className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-black hover:bg-white/90"
-            >
-              <Ticket className="w-4 h-4" />
-              Ticket sichern
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <Link
-              to="/buchung?format=Privat-Show"
-              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-1 transition-colors"
-            >
-              <Mic2 className="w-4 h-4" />
-              Show-Planer öffnen
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <p
-            className={`text-sm text-white/55 mt-9 max-w-md mx-auto`}
-          >
-            el@magicel.de · +49 15563744696 · Bayern und deutschlandweit.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
    JSON-LD — BreadcrumbList + Person + Event (Magic Dinner Summer Edition)
    ═══════════════════════════════════════════════════════════ */
 const SITE_URL = "https://www.magicel.de/tickets";
@@ -2121,30 +1435,18 @@ const jsonLd = {
 
 /* ═══════════════════════════════════════════════════════════ */
 const Tickets = () => (
-  <>
+  <VoltageShell
+    title="Tickets & Termine — Magic Dinner Summer Edition | Emilian Leber"
+    description="Aktuelle Tickets & Termine — Magic Dinner Summer Edition am 11.07.2026 im Restaurant Wald & Wiese in Sinzing bei Regensburg. Reservierung beim Restaurant."
+    path="/tickets"
+    noindex={false}
+  >
     <Helmet>
-      <html lang="de" />
-      <title>Tickets & Termine — Magic Dinner Summer Edition | Emilian Leber</title>
-      <meta
-        name="description"
-        content="Aktuelle Tickets & Termine — Magic Dinner Summer Edition am 11.07.2026 im Restaurant Wald & Wiese in Sinzing bei Regensburg. Reservierung beim Restaurant."
-      />
       <meta
         name="keywords"
         content="Tickets Emilian Leber, Magic Dinner Tickets, Magic Dinner Summer Edition, Wald und Wiese Sinzing, Zaubershow Karten Bayern, Magier Tickets Regensburg"
       />
-      <meta name="robots" content="index,follow,max-image-preview:large" />
-      <link rel="canonical" href={SITE_URL} />
-      <meta property="og:type" content="website" />
       <meta property="og:url" content={SITE_URL} />
-      <meta
-        property="og:title"
-        content="Tickets & Termine — Magic Dinner Summer Edition | Emilian Leber"
-      />
-      <meta
-        property="og:description"
-        content="Magic Dinner Summer Edition am 11.07.2026 im Restaurant Wald & Wiese in Sinzing. Du reservierst den Tisch, isst à la carte — und ich besuche euch persönlich mit Close-Up-Magie."
-      />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
       <meta property="og:locale" content="de_DE" />
       <meta name="twitter:card" content="summary_large_image" />
@@ -2156,28 +1458,115 @@ const Tickets = () => (
         name="twitter:description"
         content="Magic Dinner Summer Edition 11.07.2026 · Wald & Wiese Sinzing. À la carte + Close-Up-Magie am Tisch."
       />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin="anonymous"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
-        rel="stylesheet"
-      />
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
     </Helmet>
-    <PageLayout>
-      <main>
-        <Hero />
-        <MagicDinnerAbendeSection />
-        <FAQSection />
-        <NewsletterCTASection />
-        <FinalCTA />
-      </main>
-    </PageLayout>
-  </>
+
+    <SubHero
+      eyebrow="Tickets & Termine"
+      title={
+        <>
+          Tickets <span style={{ color: COBALT }}>& Termine</span>
+          <span style={{ color: MAGENTA }}>.</span>
+        </>
+      }
+      sub="Anstehende Veranstaltungen mit Reservierung oder Vorverkauf — Magic Dinner, Theater-Shows und Specials. Aktuelle Liste unten."
+      image={heroStageImg}
+      imageAlt="Tickets & Termine — anstehende Shows mit Emilian Leber"
+      imgPos="top"
+      badge="Summer Edition · 11.07.2026 · Vorverkauf läuft"
+      primary={{ label: "Aktuelle Events", href: "#events" }}
+      secondary={{ label: "Private Buchung", href: "/buchung" }}
+    />
+
+    <Stats
+      items={[
+        { v: "5,0★", l: "30+ Bewertungen" },
+        { v: "8", l: "bestätigte Tour-Termine" },
+        { v: "90 Min", l: "abendfüllende Show" },
+        { v: "200+", l: "Events seit 2016" },
+      ]}
+    />
+
+    <MagicDinnerAbendeSection />
+
+    <AktuelleTourShowSection />
+
+    <TourDatenSection />
+
+    <TicketKategorienSection />
+
+    <FactsGrid
+      items={[
+        { Icon: Clock, k: "Dauer", v: "90 Min · 1 Pause" },
+        { Icon: Users, k: "Ab", v: "12 Jahren" },
+        { Icon: Theater, k: "Bühne", v: "Theater- und Saalbühnen" },
+        { Icon: Ticket, k: "Vorverkauf", v: "über die Spielstätte" },
+      ]}
+    />
+
+    <WasErwartetDichSection />
+
+    <InteractiveTabs
+      eyebrow="Drei Formate"
+      title={
+        <>
+          Worauf du dich <span style={{ color: COBALT }}>freuen</span> kannst.
+        </>
+      }
+      tabs={[
+        {
+          t: "Close-Up am Tisch",
+          d: "Beim Magic Dinner besuche ich euch persönlich am Tisch — Karten und kleine Wunder direkt in euren Händen, zwischen den Gängen.",
+          img: tabCloseup,
+          pos: "center",
+        },
+        {
+          t: "Magic Dinner",
+          d: "À la carte aus der Sommerkarte im Restaurant Wald & Wiese, dazu Close-Up-Magie an jeder Tafel. Max. 50 Plätze pro Abend.",
+          img: tabDinner,
+          pos: "center",
+        },
+        {
+          t: "Tour-Show auf der Bühne",
+          d: "90 Minuten Mentalmagie und Comedy als abendfüllende Bühnenshow — Premiere in der Alten Mälzerei, dann Tour durch bayerische Theater.",
+          img: tabStage,
+          pos: "center",
+        },
+      ]}
+    />
+
+    <PullQuote
+      text="Drei Sekunden Stille. Dann lacht der ganze Saal."
+      name="Tour-Premiere"
+      role="Plötzlich Magie · Magic Meets Comedy"
+    />
+
+    <LocationsSection />
+
+    <VideoSection />
+
+    <ReviewsBlock paper />
+
+    <NewsletterCTASection />
+
+    <CustomQuizSection config={ticketsQuizConfig} />
+
+    <FAQ
+      eyebrow="Bevor du buchst"
+      title="Häufige Ticket-Fragen."
+      items={FAQS.map((f) => ({ q: f.q, a: f.a }))}
+    />
+
+    <FinalCTA
+      title={
+        <>
+          Tour-Ticket oder eigene Show
+          <span style={{ color: MAGENTA }}>.</span>
+        </>
+      }
+      sub="Wenn keine Tour-Stadt in deiner Nähe ist oder du eine private Show planst — schreib mir direkt. Antwort innerhalb von 24 Stunden, deutschlandweit verfügbar."
+    />
+  </VoltageShell>
 );
 
 export default Tickets;

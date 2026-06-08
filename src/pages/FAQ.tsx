@@ -1,54 +1,26 @@
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-import PageLayout from "@/components/landing/PageLayout";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
+import VoltageShell from "@/components/voltage/VoltageShell";
+import { SubHero, Stats, FactsGrid, Statement, ReviewsBlock, LogoMarquee, FinalCTA, SectionHeader } from "@/components/voltage/sections";
+import { SplitFeature } from "@/components/voltage/creative";
+import { COBALT, MAGENTA, INK, WHITE, L_LINE, L_DIM, PAPER } from "@/components/voltage/theme";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import {
   Search,
-  Star,
-  ArrowRight,
-  ArrowUpRight,
   Send,
   CheckCircle2,
-  MessageCircle,
   Calendar,
   Sparkles,
   Wrench,
   Coins,
   Info,
-  HelpCircle,
+  ChevronDown,
 } from "lucide-react";
+import heroImg from "@/assets/emilian-portrait-cards.jpg";
+import splitImg from "@/assets/audience-reactions.jpg";
 
-/* ════════════════════════════════════════════════════════
-   DESIGN-TOKENS
-   ════════════════════════════════════════════════════════ */
-const SERIF_ITALIC =
-  "not-italic";
 const ACCENT = "#1D3FFF";
 const ACCENT_DEEP = "#1233CC";
-const ACCENT_SOFT = "#C7D2FF";
-const CREAM = "#fafafa";
-
-/* ════════════════════════════════════════════════════════
-   KEYFRAMES
-   ════════════════════════════════════════════════════════ */
-const PageKeyframes = () => (
-  <style>{`
-    @keyframes heroWordIn { from { opacity: 0; transform: translateY(56px) scale(0.96) rotate(-1.5deg); filter: blur(8px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
-    @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(0,0,0,0.024)); } }
-    @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-120px) translateX(18px) scale(1.15); opacity: 0; } }
-    @keyframes successPop { 0% { opacity: 0; transform: scale(0.85) translateY(20px); } 60% { opacity: 1; transform: scale(1.04) translateY(0); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-    @keyframes faqFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
-    .hero-fade { opacity: 0; animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .hero-star { animation: heroStarPulse 2.4s ease-in-out infinite; }
-    .hero-bokeh { opacity: 0; animation-name: heroBokehDrift; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); animation-iteration-count: infinite; will-change: transform, opacity; }
-    .success-pop { animation: successPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-    .faq-fade-in { animation: faqFadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-  `}</style>
-);
 
 /* ════════════════════════════════════════════════════════
    FAQ-DATEN — 25+ Fragen über 5 Kategorien
@@ -506,188 +478,9 @@ const TABS: { key: TabKey; label: string; icon: typeof Info }[] = [
 ];
 
 /* ════════════════════════════════════════════════════════
-   1 · HERO — kleiner cream
-   ════════════════════════════════════════════════════════ */
-const HEADLINE_SANS = ["FAQ", "—", "was"];
-const HEADLINE_SANS_2 = ["vorher"];
-const HEADLINE_ITALIC = ["gefragt wird."];
-
-const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
-
-const Hero = () => (
-  <section
-    className="relative overflow-hidden"
-    style={{
-      background: `linear-gradient(180deg, ${CREAM} 0%, #fafafa 55%, #ffffff 100%)`,
-    }}
-  >
-    <div
-      aria-hidden
-      className="absolute pointer-events-none"
-      style={{
-        right: "-10%",
-        top: "-20%",
-        width: "60%",
-        height: "70%",
-        background:
-          "radial-gradient(closest-side, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
-        filter: "blur(20px)",
-      }}
-    />
-    <div
-      aria-hidden
-      className="absolute pointer-events-none"
-      style={{
-        left: "-10%",
-        bottom: "-20%",
-        width: "55%",
-        height: "60%",
-        background:
-          "radial-gradient(closest-side, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
-        filter: "blur(20px)",
-      }}
-    />
-    {BOKEH.map((b, i) => (
-      <span
-        key={i}
-        aria-hidden
-        className="hero-bokeh absolute rounded-full pointer-events-none"
-        style={{
-          width: b.size,
-          height: b.size,
-          left: b.left,
-          top: b.top,
-          background:
-            "radial-gradient(closest-side, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
-          animationDuration: `${b.dur}s`,
-          animationDelay: `${b.delay}s`,
-          opacity: b.o,
-        }}
-      />
-    ))}
-
-    <div className="container relative z-10 px-6 pt-32 pb-20 md:pt-40 md:pb-28">
-      <div className="max-w-5xl mx-auto">
-        <div
-          className="hero-fade flex items-center gap-3 mb-7"
-          style={{ animationDelay: "0.05s" }}
-        >
-          <div className="flex items-center gap-0.5">
-            {[0, 1, 2, 3, 4].map((i) => (
-              <Star
-                key={i}
-                className="hero-star w-4 h-4"
-                style={{
-                  color: "#1D3FFF",
-                  fill: "#1D3FFF",
-                  animationDelay: `${i * 0.18}s`,
-                }}
-              />
-            ))}
-          </div>
-          <span
-            className="text-[11px] tracking-[0.18em] uppercase font-semibold"
-            style={{ color: ACCENT_DEEP }}
-          >
-            5,0 · 30+ Bewertungen · 200+ Events
-          </span>
-        </div>
-
-        <p
-          className={`${SERIF_ITALIC} hero-fade text-lg md:text-xl text-foreground/55 mb-6`}
-          style={{ animationDelay: "0.15s" }}
-        >
-          FAQ · Häufige Fragen.
-        </p>
-
-        <h1
-          className="font-display font-black tracking-[-0.035em] leading-[0.95] text-[clamp(2.75rem,8vw,7.5rem)] text-foreground mb-10"
-          aria-label="FAQ — was vorher gefragt wird."
-        >
-          {HEADLINE_SANS.map((w, i) => (
-            <span
-              key={`s1-${i}`}
-              className="hero-word"
-              style={{
-                animationDelay: `${0.25 + i * 0.08}s`,
-                marginRight: "0.22em",
-              }}
-            >
-              {w}
-            </span>
-          ))}
-          {HEADLINE_SANS_2.map((w, i) => (
-            <span
-              key={`s2-${i}`}
-              className="hero-word"
-              style={{
-                animationDelay: `${0.49 + i * 0.08}s`,
-                marginRight: "0.22em",
-              }}
-            >
-              {w}
-            </span>
-          ))}
-          <br />
-          {HEADLINE_ITALIC.map((w, i) => (
-            <span
-              key={`it-${i}`}
-              className={`hero-word ${SERIF_ITALIC}`}
-              style={{
-                animationDelay: `${0.6 + i * 0.08}s`,
-                color: ACCENT,
-                paddingRight: "0.18em",
-              }}
-            >
-              {w}
-            </span>
-          ))}
-        </h1>
-
-        <p
-          className="hero-fade text-base md:text-lg text-foreground/65 leading-[1.65] max-w-2xl mb-10"
-          style={{ animationDelay: "0.7s" }}
-        >
-          Hier sind die Antworten auf alles, was Brautpaare, Event-Manager und
-          Privatkund:innen vorher von mir wissen wollen — Buchung, Formate,
-          Technik, Honorar. Falls eine Frage fehlt: Mini-Formular unten, ich
-          antworte persönlich innerhalb von 24 Stunden.
-        </p>
-
-        <div
-          className="hero-fade flex flex-wrap items-center gap-6 text-[13px] tabular-nums text-foreground/65"
-          style={{ animationDelay: "0.8s" }}
-        >
-          <span>
-            <span className="font-bold text-foreground">
-              {FAQ_ITEMS.length}
-            </span>{" "}
-            Antworten
-          </span>
-          <span aria-hidden className="text-foreground/30">
-            ·
-          </span>
-          <span>
-            <span className="font-bold text-foreground">5</span> Kategorien
-          </span>
-          <span aria-hidden className="text-foreground/30">
-            ·
-          </span>
-          <span>
-            <span className="font-bold text-foreground">24h</span> persönliche
-            Antwort
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-/* ════════════════════════════════════════════════════════
-   2 · FAQ-CORE — Search + Tabs + Akkordion
+   FAQ-CORE — Search + Tabs + Akkordion (Voltage-Look)
    ════════════════════════════════════════════════════════ */
 const FAQCore = () => {
-  const { ref, isVisible } = useScrollReveal();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<TabKey>("allgemein");
 
@@ -718,38 +511,24 @@ const FAQCore = () => {
   }, [isSearching, filteredAll]);
 
   return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-32 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        {/* Section-Header */}
-        <div className={`max-w-3xl mb-12`}>
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
-            Such, klick, finde.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground">
-            Antworten nach{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-              Thema.
-            </span>
-          </h2>
-        </div>
+    <section className="px-5 md:px-10 py-16 md:py-24" style={{ background: WHITE }}>
+      <div className="max-w-3xl mx-auto">
+        <SectionHeader
+          eyebrow="Such, klick, finde"
+          title={<>Antworten nach <span style={{ color: COBALT }}>Thema</span>.</>}
+          sub="Stichwort eingeben oder Kategorie wählen — alle Antworten persönlich, klar und ohne Marketing-Sprech."
+        />
 
         {/* SEARCH-FIELD */}
-        <div className="max-w-3xl mb-10">
+        <div className="mt-10 mb-8">
           <label htmlFor="faq-search" className="sr-only">
             FAQs durchsuchen
           </label>
-          <div
-            className="relative group"
-            style={{
-              boxShadow: "0 2px 12px -2px rgba(0,0,0,0.08)",
-            }}
-          >
+          <div className="relative">
             <Search
               aria-hidden
-              className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 transition-colors group-focus-within:text-[#1D3FFF]"
+              className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5"
+              style={{ color: L_DIM }}
             />
             <input
               id="faq-search"
@@ -757,26 +536,32 @@ const FAQCore = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Stichwort eingeben — z. B. Honorar, Anfahrt, Close-Up..."
-              className="w-full pl-14 pr-6 py-5 md:py-6 rounded-2xl border-2 border-foreground/10 focus:border-[#1D3FFF] focus:outline-none bg-white text-base md:text-lg text-foreground placeholder:text-foreground/40 transition-all duration-200"
+              className="w-full pl-14 pr-6 py-4 md:py-5 rounded-[18px] focus:outline-none text-base md:text-lg transition-colors"
+              style={{
+                background: WHITE,
+                border: `1px solid ${L_LINE}`,
+                color: INK,
+              }}
               autoComplete="off"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch("")}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] tracking-[0.1em] uppercase font-semibold px-3 py-1.5 rounded-full bg-foreground/5 hover:bg-foreground/10 text-foreground/65 transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] tracking-[0.1em] uppercase font-semibold px-3 py-1.5 rounded-full transition-colors"
+                style={{ background: PAPER, color: L_DIM }}
               >
                 Zurücksetzen
               </button>
             )}
           </div>
           {isSearching && (
-            <p className="mt-3 text-sm text-foreground/55">
+            <p className="mt-3 text-sm" style={{ color: L_DIM }}>
               {filteredAll.length === 0 ? (
                 <>Keine Treffer für [{search}]. Frag unten direkt nach.</>
               ) : (
                 <>
-                  <span className="font-bold text-foreground tabular-nums">
+                  <span className="font-bold tabular-nums" style={{ color: INK }}>
                     {filteredAll.length}
                   </span>{" "}
                   Antwort{filteredAll.length === 1 ? "" : "en"} gefunden.
@@ -788,7 +573,7 @@ const FAQCore = () => {
 
         {/* TABS — nur sichtbar wenn nicht gesucht wird */}
         {!isSearching && (
-          <div className="mb-12">
+          <div className="mb-10">
             <div className="flex flex-wrap gap-2 md:gap-3">
               {TABS.map((tab) => {
                 const Icon = tab.icon;
@@ -800,33 +585,22 @@ const FAQCore = () => {
                     type="button"
                     onClick={() => setActiveTab(tab.key)}
                     aria-pressed={active}
-                    className={`group inline-flex items-center gap-2.5 px-5 py-3 rounded-full border-2 transition-all duration-300 ${
+                    className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full text-[13.5px] font-semibold transition-colors"
+                    style={
                       active
-                        ? "text-white"
-                        : "text-foreground/75 hover:text-foreground bg-[#fafafa]/60 hover:bg-[#fafafa]"
-                    }`}
-                    style={{
-                      borderColor: active ? ACCENT : "transparent",
-                      background: active
-                        ? `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`
-                        : undefined,
-                      boxShadow: active
-                        ? "0 8px 24px -8px rgba(0,0,0,0.040)"
-                        : undefined,
-                    }}
+                        ? { background: COBALT, color: WHITE }
+                        : { background: WHITE, color: INK, border: `1px solid ${L_LINE}` }
+                    }
                   >
-                    <Icon
-                      className={`w-4 h-4 ${active ? "" : "text-foreground/45"} transition-colors`}
-                    />
-                    <span className="text-[13px] tracking-[0.04em] font-semibold">
-                      {tab.label}
-                    </span>
+                    <Icon className="w-4 h-4" style={{ color: active ? WHITE : COBALT }} />
+                    <span>{tab.label}</span>
                     <span
-                      className={`text-[11px] tabular-nums px-2 py-0.5 rounded-full ${
+                      className="text-[11px] tabular-nums px-2 py-0.5 rounded-full"
+                      style={
                         active
-                          ? "bg-white/20 text-white"
-                          : "bg-foreground/10 text-foreground/65"
-                      }`}
+                          ? { background: "rgba(255,255,255,0.22)", color: WHITE }
+                          : { background: PAPER, color: L_DIM }
+                      }
                     >
                       {count}
                     </span>
@@ -838,10 +612,10 @@ const FAQCore = () => {
         )}
 
         {/* AKKORDION */}
-        <div className="max-w-3xl">
+        <div className="space-y-3">
           {visibleItems.length === 0 && (
-            <div className="py-10 text-center text-foreground/55">
-              <p className={`${SERIF_ITALIC} text-xl mb-2`}>Nichts gefunden.</p>
+            <div className="py-10 text-center" style={{ color: L_DIM }}>
+              <p className="text-xl font-semibold mb-2" style={{ color: INK }}>Nichts gefunden.</p>
               <p className="text-sm">
                 Frag unten direkt nach — Antwort innerhalb 24 Stunden.
               </p>
@@ -850,21 +624,19 @@ const FAQCore = () => {
           {visibleItems.map((item) => (
             <details
               key={item.id}
-              className="faq-fade-in group py-6 md:py-7 border-b border-foreground/15 first:border-t"
+              className="group rounded-[18px] px-6 py-5"
+              style={{ background: WHITE, border: `1px solid ${L_LINE}` }}
             >
-              <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
-                <span className="font-display text-base md:text-lg font-bold text-foreground leading-snug pr-4">
+              <summary className="flex items-center justify-between gap-4 cursor-pointer list-none">
+                <span className="text-[16px] font-semibold" style={{ color: INK }}>
                   {item.q}
                 </span>
-                <span
-                  aria-hidden
-                  className="shrink-0 mt-1 group-open:rotate-45 transition-transform duration-300 text-2xl leading-none font-light"
-                  style={{ color: ACCENT }}
-                >
-                  +
-                </span>
+                <ChevronDown
+                  className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180"
+                  style={{ color: COBALT }}
+                />
               </summary>
-              <p className="mt-4 text-base text-foreground/70 leading-[1.7] max-w-2xl">
+              <p className="mt-3 text-[15px] leading-[1.6]" style={{ color: L_DIM }}>
                 {item.a}
               </p>
             </details>
@@ -876,57 +648,9 @@ const FAQCore = () => {
 };
 
 /* ════════════════════════════════════════════════════════
-   3 · PULL-QUOTE BLACK FULL-BLEED
-   ════════════════════════════════════════════════════════ */
-const PullQuote = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="relative py-28 md:py-40 overflow-hidden"
-      style={{ background: "#08060c" }}
-    >
-      <div
-        aria-hidden
-        className="absolute -top-32 left-1/4 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
-        style={{
-          background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
-        style={{
-          background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
-        }}
-      />
-      <div className="relative container px-6">
-        <div className={`max-w-4xl mx-auto text-center`}>
-          <p className={`text-base md:text-lg text-white/55 mb-8 tracking-wide uppercase text-[11px]`}>
-            Kurz und ehrlich.
-          </p>
-          <p className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.5vw,2.875rem)] text-white">
-            Über dreißig Fragen.{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
-              Eine Antwort: ja, das geht.
-            </span>
-          </p>
-          <p className="mt-10 mx-auto max-w-xl text-base md:text-lg text-white/65 leading-[1.6]">
-            Hochzeit ohne Bühne? Vorstandsdinner mit Englisch? Magie für
-            70-Jahre-Geburtstag der Schwiegermutter? Stand-Up auf dem
-            Sommerfest? Ja, ja, ja, ja — alles besprochen, alles im Repertoire.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ════════════════════════════════════════════════════════
-   4 · FRAGE NICHT BEANTWORTET — Mini-Form
+   FRAGE NICHT BEANTWORTET — Mini-Form (Logik 1:1 erhalten)
    ════════════════════════════════════════════════════════ */
 const FrageNichtBeantwortet = () => {
-  const { ref, isVisible } = useScrollReveal();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [frage, setFrage] = useState("");
@@ -966,44 +690,37 @@ const FrageNichtBeantwortet = () => {
     }
   };
 
-  return (
-    <section
-      ref={ref}
-      className="py-24 md:py-32"
-      style={{
-        background: `linear-gradient(180deg, ${CREAM} 0%, #EEF1F6 100%)`,
-      }}
-    >
-      <div className="container px-6">
-        <div className={`max-w-3xl mx-auto`}>
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
-            Deine Frage fehlt?
-          </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground mb-6">
-            Stell sie{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-              direkt mir.
-            </span>
-          </h2>
-          <p className="text-base md:text-lg text-foreground/65 leading-[1.65] max-w-xl mb-10">
-            Drei Felder, 30 Sekunden — und du bekommst eine persönliche Antwort
-            per Email innerhalb von 24 Stunden. Kein Office-Team, kein Bot. Ich
-            schreibe direkt.
-          </p>
+  const inputCls =
+    "w-full rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 transition-colors";
+  const inputStyle = {
+    background: WHITE,
+    border: `1px solid ${L_LINE}`,
+    color: INK,
+    ["--tw-ring-color" as never]: `${ACCENT}26`,
+  } as React.CSSProperties;
 
+  return (
+    <section className="px-5 md:px-10 py-16 md:py-24" style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
+      <div className="max-w-3xl mx-auto">
+        <SectionHeader
+          eyebrow="Deine Frage fehlt?"
+          title={<>Stell sie <span style={{ color: COBALT }}>direkt mir</span>.</>}
+          sub="Drei Felder, 30 Sekunden — und du bekommst eine persönliche Antwort per Email innerhalb von 24 Stunden. Kein Office-Team, kein Bot. Ich schreibe direkt."
+        />
+
+        <div className="mt-10">
           {!submitted ? (
             <form
               onSubmit={onSubmit}
-              className="bg-white rounded-3xl p-6 md:p-10 border border-foreground/10"
-              style={{
-                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.15)",
-              }}
+              className="rounded-[24px] p-6 md:p-9"
+              style={{ background: WHITE, border: `1px solid ${L_LINE}`, boxShadow: "0 24px 60px -28px rgba(10,11,15,0.25)" }}
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label
                     htmlFor="faq-name"
-                    className="block text-[11px] tracking-[0.12em] uppercase font-semibold text-foreground/65 mb-2"
+                    className="block text-[11px] tracking-[0.12em] uppercase font-semibold mb-2"
+                    style={{ color: L_DIM }}
                   >
                     Dein Name
                   </label>
@@ -1014,13 +731,15 @@ const FrageNichtBeantwortet = () => {
                     onChange={(e) => setName(e.target.value)}
                     required
                     placeholder="Vor- und Nachname"
-                    className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[#1D3FFF] focus:outline-none bg-white text-base text-foreground placeholder:text-foreground/40 transition-all"
+                    className={inputCls}
+                    style={inputStyle}
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="faq-email"
-                    className="block text-[11px] tracking-[0.12em] uppercase font-semibold text-foreground/65 mb-2"
+                    className="block text-[11px] tracking-[0.12em] uppercase font-semibold mb-2"
+                    style={{ color: L_DIM }}
                   >
                     Deine Email
                   </label>
@@ -1031,14 +750,16 @@ const FrageNichtBeantwortet = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="name@firma.de"
-                    className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[#1D3FFF] focus:outline-none bg-white text-base text-foreground placeholder:text-foreground/40 transition-all"
+                    className={inputCls}
+                    style={inputStyle}
                   />
                 </div>
               </div>
-              <div className="mb-6">
+              <div className="mb-5">
                 <label
                   htmlFor="faq-frage"
-                  className="block text-[11px] tracking-[0.12em] uppercase font-semibold text-foreground/65 mb-2"
+                  className="block text-[11px] tracking-[0.12em] uppercase font-semibold mb-2"
+                  style={{ color: L_DIM }}
                 >
                   Deine Frage
                 </label>
@@ -1049,228 +770,55 @@ const FrageNichtBeantwortet = () => {
                   required
                   rows={5}
                   placeholder="Worum geht es? Datum, Anlass, Gästezahl helfen mir, präzise zu antworten."
-                  className="w-full px-4 py-3 rounded-xl border-2 border-foreground/10 focus:border-[#1D3FFF] focus:outline-none bg-white text-base text-foreground placeholder:text-foreground/40 transition-all resize-none"
+                  className={`${inputCls} resize-none`}
+                  style={inputStyle}
                 />
               </div>
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                 <button
                   type="submit"
-                  className="group inline-flex items-center justify-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
-                  style={{
-                    background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`,
-                    boxShadow: "0 12px 28px -8px rgba(0,0,0,0.040)",
-                  }}
+                  className="inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.04em] font-semibold uppercase text-white transition-transform hover:scale-[1.02]"
+                  style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})` }}
                 >
                   <Send className="w-4 h-4" />
                   Frage absenden
                 </button>
-                <p className="text-[12px] text-foreground/55 leading-[1.5]">
+                <p className="text-[12px] leading-[1.5]" style={{ color: L_DIM }}>
                   Mit dem Absenden bestätigst du, dass deine Email zur Beantwortung
                   gespeichert wird. Mehr unter{" "}
-                  <Link
-                    to="/datenschutz"
-                    className="underline hover:text-foreground"
+                  <a
+                    href="/datenschutz"
+                    className="underline decoration-foreground/30 hover:decoration-foreground"
                   >
                     Datenschutz
-                  </Link>
+                  </a>
                   .
                 </p>
               </div>
             </form>
           ) : (
             <div
-              className="success-pop bg-white rounded-3xl p-10 md:p-14 border border-foreground/10 text-center"
-              style={{
-                boxShadow: "0 30px 60px -25px rgba(0,0,0,0.15)",
-              }}
+              className="rounded-[24px] p-10 md:p-14 text-center"
+              style={{ background: WHITE, border: `1px solid ${L_LINE}`, boxShadow: "0 24px 60px -28px rgba(10,11,15,0.25)" }}
             >
               <div
                 className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-6"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`,
-                  boxShadow: "0 12px 28px -8px rgba(0,0,0,0.040)",
-                }}
+                style={{ background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})` }}
               >
                 <CheckCircle2 className="w-8 h-8 text-white" />
               </div>
-              <p className={`${SERIF_ITALIC} text-xl md:text-2xl text-foreground/60 mb-3`}>
+              <p className="text-lg md:text-xl mb-3" style={{ color: L_DIM }}>
                 Angekommen.
               </p>
-              <h3 className="font-display font-black text-2xl md:text-3xl text-foreground mb-4">
+              <h3 className="font-extrabold text-2xl md:text-3xl mb-4" style={{ color: INK }}>
                 Danke, {name || "du"}.
               </h3>
-              <p className="text-base md:text-lg text-foreground/65 leading-[1.6] max-w-md mx-auto">
+              <p className="text-base md:text-lg leading-[1.6] max-w-md mx-auto" style={{ color: L_DIM }}>
                 Ich antworte innerhalb von 24 Stunden persönlich an{" "}
-                <span className="font-bold text-foreground">{email}</span>.
+                <span className="font-bold" style={{ color: INK }}>{email}</span>.
               </p>
             </div>
           )}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ════════════════════════════════════════════════════════
-   5 · VERWANDTE RESSOURCEN
-   ════════════════════════════════════════════════════════ */
-const VerwandteRessourcen = () => {
-  const { ref, isVisible } = useScrollReveal();
-  const links = [
-    {
-      title: "Buchung",
-      eyebrow: "Direktes Anfrage-Formular",
-      desc: "Datum, Format, Gästezahl — Angebot innerhalb 24 Stunden.",
-      to: "/buchung",
-      icon: Send,
-    },
-    {
-      title: "Show-Planer",
-      eyebrow: "Interaktiv in 5 Schritten",
-      desc: "Lass dir eine Format-Empfehlung generieren — speicherbar.",
-      to: "/#planer",
-      icon: Sparkles,
-    },
-    {
-      title: "Kontakt",
-      eyebrow: "Email, Telefon, WhatsApp",
-      desc: "Alle Wege, mich zu erreichen — auf einer Seite.",
-      to: "/kontakt",
-      icon: MessageCircle,
-    },
-    {
-      title: "Pressebereich",
-      eyebrow: "Pressefotos, Vita, Pitch-Deck",
-      desc: "Für Journalist:innen und Event-Manager:innen — Direkt-Download.",
-      to: "/presse",
-      icon: HelpCircle,
-    },
-  ];
-  return (
-    <section ref={ref} className="bg-white py-24 md:py-32 border-y border-foreground/10">
-      <div className="container px-6">
-        <div className={`max-w-3xl mb-14`}>
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5">
-            Weitere Anlaufstellen.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,4vw,3.25rem)] text-foreground">
-            Falls du{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-              direkt weiter willst.
-            </span>
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {links.map((l) => {
-            const Icon = l.icon;
-            return (
-              <Link
-                key={l.title}
-                to={l.to}
-                className="group block rounded-3xl p-7 transition-all duration-500 hover:-translate-y-1 border border-foreground/10 bg-[#fafafa]/40 hover:bg-[#fafafa]/70"
-                style={{
-                  boxShadow: "0 4px 16px -4px rgba(0,0,0,0.04)",
-                }}
-              >
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 transition-transform duration-500 group-hover:scale-110"
-                  style={{
-                    background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_DEEP} 100%)`,
-                  }}
-                >
-                  <Icon className="w-5 h-5 text-white" />
-                </div>
-                <p className={`text-sm text-foreground/55 mb-2`}>
-                  {l.eyebrow}
-                </p>
-                <h3 className="font-display text-xl font-bold text-foreground mb-3 leading-snug">
-                  {l.title}
-                </h3>
-                <p className="text-sm text-foreground/65 leading-[1.6] mb-5">
-                  {l.desc}
-                </p>
-                <span
-                  className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] uppercase font-semibold transition-colors"
-                  style={{ color: ACCENT }}
-                >
-                  Öffnen
-                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ════════════════════════════════════════════════════════
-   6 · FINAL CTA — Black full-bleed
-   ════════════════════════════════════════════════════════ */
-const FinalCTA = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="relative text-white py-28 md:py-40 overflow-hidden"
-      style={{ background: "#08060c" }}
-    >
-      <div
-        aria-hidden
-        className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
-        style={{
-          background: "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-40 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
-        style={{
-          background: "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
-        }}
-      />
-      <div className="relative container px-6">
-        <div className={`max-w-3xl mx-auto text-center`}>
-          <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/60 mb-6">
-            Genug gelesen — jetzt reden.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.02] text-[clamp(1.75rem,3.25vw,2.625rem)]">
-            Lass uns{" "}
-            <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
-              dein Event planen.
-            </span>
-          </h2>
-          <p className="mt-8 mx-auto max-w-xl text-base md:text-lg text-white/70 leading-[1.6]">
-            Show planen, direkt anrufen, kurze Mail — wähle den Weg, der dir
-            am nächsten ist. Antwort innerhalb 24 Stunden persönlich von mir.
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/buchung"
-              className="hero-cta group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-black hover:bg-white/90 transition-all"
-            >
-              Show anfragen
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              to="/#planer"
-              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/70 hover:text-white transition-colors"
-            >
-              Show-Planer öffnen
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-            <a
-              href="tel:+4915563744696"
-              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white/70 hover:text-white transition-colors"
-            >
-              Direkt anrufen
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
-          </div>
-          <p className="mt-8 text-[11px] tracking-[0.1em] uppercase text-white/40">
-            5,0 · 30+ Bewertungen · 200+ Events · 24h Antwort
-          </p>
         </div>
       </div>
     </section>
@@ -1283,30 +831,18 @@ const FinalCTA = () => {
 const SITE_URL = "https://www.magicel.de/faq";
 
 const FAQPage = () => (
-  <>
+  <VoltageShell
+    title="FAQ — Häufige Fragen zum Zauberer | Emilian Leber Bayern"
+    description="Häufige Fragen zur Buchung eines Zauberers in Bayern — Ablauf, Pakete, Technik, Anfahrt, Honorar. 5,0 Sterne, 200+ Events seit 2015, persönliche Antwort innerhalb 24 Stunden."
+    path="/faq"
+    noindex={false}
+  >
     <Helmet>
-      <html lang="de" />
-      <title>FAQ — Häufige Fragen zum Zauberer | Emilian Leber Bayern</title>
-      <meta
-        name="description"
-        content="Häufige Fragen zur Buchung eines Zauberers in Bayern — Ablauf, Pakete, Technik, Anfahrt, Honorar. 5,0 Sterne, 200+ Events seit 2015, persönliche Antwort innerhalb 24 Stunden."
-      />
       <meta
         name="keywords"
         content="Zauberer FAQ, Magier Fragen, Zauberer buchen Bayern, Magier Hochzeit Fragen, Firmenfeier Zauberer Honorar, Magier Tech-Rider, Close-Up Magie FAQ, Magic Dinner FAQ, Zauberer Stornierung, Magier Vorlauf Buchung"
       />
-      <meta name="robots" content="index,follow,max-image-preview:large" />
-      <link rel="canonical" href={SITE_URL} />
-      <meta property="og:type" content="website" />
       <meta property="og:url" content={SITE_URL} />
-      <meta
-        property="og:title"
-        content="FAQ — Häufige Fragen zum Zauberer | Emilian Leber"
-      />
-      <meta
-        property="og:description"
-        content="30+ Antworten zu Buchung, Formaten, Technik und Honorar. Persönlich. Innerhalb 24 Stunden."
-      />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
       <meta property="og:locale" content="de_DE" />
       <meta name="twitter:card" content="summary_large_image" />
@@ -1319,16 +855,6 @@ const FAQPage = () => (
         content="30+ Antworten zu Buchung, Formaten, Technik und Honorar — persönlich beantwortet."
       />
       <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin="anonymous"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
-        rel="stylesheet"
-      />
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
@@ -1364,18 +890,73 @@ const FAQPage = () => (
         })}
       </script>
     </Helmet>
-    <PageLayout>
-      <PageKeyframes />
-      <main>
-        <Hero />
-        <FAQCore />
-        <PullQuote />
-        <FrageNichtBeantwortet />
-        <VerwandteRessourcen />
-        <FinalCTA />
-      </main>
-    </PageLayout>
-  </>
+
+    <SubHero
+      eyebrow="FAQ · Häufige Fragen"
+      title={<>Vorher <span style={{ color: COBALT }}>gefragt</span><span style={{ color: MAGENTA }}>.</span></>}
+      sub={`Hier sind die Antworten auf alles, was Brautpaare, Event-Manager und Privatkund:innen vorher wissen wollen — Buchung, Formate, Technik, Honorar. ${FAQ_ITEMS.length} Antworten über 5 Kategorien. Falls eine Frage fehlt: Mini-Formular weiter unten, ich antworte persönlich innerhalb von 24 Stunden.`}
+      image={heroImg}
+      imageAlt="Zauberer Emilian Leber mit Spielkarten"
+      imgPos="top"
+      primary={{ label: "Anfrage senden", href: "/buchung" }}
+      secondary={{ label: "Show-Planer öffnen", href: "/#planer" }}
+      badge="200+ Events · persönliche Antwort in 24 Stunden."
+    />
+
+    <Stats
+      items={[
+        { v: `${FAQ_ITEMS.length}`, l: "Antworten" },
+        { v: "5", l: "Kategorien" },
+        { v: "24h", l: "persönliche Antwort" },
+        { v: "5,0★", l: "30+ Bewertungen" },
+      ]}
+    />
+
+    <FactsGrid
+      items={[
+        { Icon: Info, k: "Allgemein", v: "Wer ist Emilian, Sprachen, Auszeichnungen, TV" },
+        { Icon: Calendar, k: "Buchung & Ablauf", v: "Vorlauf, Vertrag, Storno, Vorgespräch" },
+        { Icon: Sparkles, k: "Formate & Show", v: "Close-Up, Bühne, Magic Dinner, Moderation" },
+        { Icon: Coins, k: "Preise & Honorar", v: "Wovon es abhängt, Anzahlung, Rechnung" },
+      ]}
+    />
+
+    <FAQCore />
+
+    <Statement eyebrow="Kurz und ehrlich">
+      Über dreißig Fragen — eine Antwort:{" "}
+      <span style={{ color: COBALT }}>ja, das geht.</span> Hochzeit ohne Bühne,
+      Vorstandsdinner mit Englisch, Magie für den 70. Geburtstag der
+      Schwiegermutter — alles besprochen, alles im Repertoire.
+    </Statement>
+
+    <SplitFeature
+      eyebrow="So unkompliziert"
+      title={<>Erst <span style={{ color: COBALT }}>verstehen</span>, dann ein präzises Angebot.</>}
+      sub="Magie funktioniert nur, wenn ich euren Anlass kenne. Darum immer ein kurzes Briefing zuerst — persönlich, nicht über ein Office-Team. Antwort innerhalb von 24 Stunden, an Werktagen oft am selben Vormittag."
+      points={[
+        "Kostenloses 30-Minuten-Vorgespräch per Telefon oder Video",
+        "Schriftlicher Vertrag mit allen Details und ausgewiesener Umsatzsteuer",
+        "Transparente Anfahrt und Reisekosten — keine versteckten Posten",
+      ]}
+      image={splitImg}
+      imageAlt="Reaktionen des Publikums auf eine Zaubershow"
+      imgPos="top"
+      reverse
+      stat={{ v: "24h", l: "Antwortzeit" }}
+    />
+
+    <LogoMarquee />
+
+    <FrageNichtBeantwortet />
+
+    <ReviewsBlock paper={false} />
+
+    <FinalCTA
+      title={<>Genug gelesen — jetzt reden<span style={{ color: MAGENTA }}>.</span></>}
+      sub="Show planen, direkt anrufen oder kurze Mail — wähle den Weg, der dir am nächsten ist. Antwort innerhalb von 24 Stunden persönlich von mir."
+    />
+  </VoltageShell>
 );
 
 export default FAQPage;

@@ -1,17 +1,22 @@
+/** /presse — Pressebereich (Voltage-Layout): Pressestimmen, EPK, Fotos, TV-Auftritte. */
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import PageLayout from "@/components/landing/PageLayout";
-import LogoMarquee from "@/components/landing/LogoMarquee";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import VoltageShell from "@/components/voltage/VoltageShell";
+import { SubHero, Stats, FAQ, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
+import {
+  INK, WHITE, PAPER, COBALT, MAGENTA, L_LINE, L_DIM, CARD_LIGHT,
+  up, stagger, vp, Eyebrow,
+} from "@/components/voltage/theme";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 import {
   ArrowRight,
   ArrowUpRight,
-  Star,
   Trophy,
   Award,
   Medal,
+  Star,
   Tv,
   FileText,
   Download,
@@ -21,7 +26,6 @@ import {
   Image as ImageIcon,
   Copy,
   Check,
-  Newspaper,
   Calendar,
   Quote,
   X,
@@ -42,215 +46,11 @@ import stageShowImg from "@/assets/stage-show.jpg";
 import greatestTalentImg from "@/assets/greatest-talent-presse.jpg";
 import talentsTeamImg from "@/assets/talents-of-magic-team.jpg";
 
-const SERIF_ITALIC =
-  "not-italic";
-const ACCENT = "#1D3FFF";
-const ACCENT_DEEP = "#1233CC";
-const ACCENT_SOFT = "#C7D2FF";
-const CREAM = "#fafafa";
 const EPK_MAIL =
   "mailto:el@magicel.de?subject=EPK%20Anfrage%20Emilian%20Leber&body=Hallo%20Emilian%2C%20bitte%20schicken%20Sie%20mir%20das%20vollst%C3%A4ndige%20EPK%20%28Bio%2C%20Fotos%2C%20Logo%2C%20Tour-Daten%29.%20Danke%21";
 
 /* ═══════════════════════════════════════════════════════════
-   HERO — kleinerer Pressebereich-Hero, cream-Hintergrund,
-   text-driven, mit Hero-Animationen
-   ═══════════════════════════════════════════════════════════ */
-const HeroKeyframes = () => (
-  <style>{`
-    @keyframes heroWordIn { from { opacity: 0; transform: translateY(40px) scale(0.96) rotate(-1deg); filter: blur(6px); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); } }
-    @keyframes heroFadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroBokehDrift { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.1; } 30% { opacity: 0.9; } 70% { opacity: 0.9; } 100% { transform: translateY(-90px) translateX(14px) scale(1.15); opacity: 0; } }
-    @keyframes heroStarPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0.000)); } 50% { transform: scale(1.12); filter: drop-shadow(0 0 6px rgba(0,0,0,0.024)); } }
-    .hero-word { display: inline-block; opacity: 0; animation: heroWordIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity, filter; }
-    .hero-fade { opacity: 0; animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .hero-bokeh { opacity: 0; animation-name: heroBokehDrift; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); animation-iteration-count: infinite; will-change: transform, opacity; }
-    .hero-star { animation: heroStarPulse 2.4s ease-in-out infinite; }
-    .hero-cta { transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, background-color .3s, color .3s; }
-    .hero-cta:hover { transform: translateY(-2px) scale(1.035); }
-    .hero-cta:active { transform: translateY(0) scale(0.97); }
-  `}</style>
-);
-
-const HEAD_SANS = ["Pressebereich."];
-const HEAD_ITALIC = ["Material", "fertig", "geliefert."];
-
-const BOKEH: { size: number; left: string; top: string; dur: number; delay: number; o: number }[] = [];
-
-const Hero = () => {
-  return (
-    <section
-      className="relative overflow-hidden"
-      style={{
-        background: `linear-gradient(170deg, ${CREAM} 0%, #fbf6ec 60%, #ffffff 100%)`,
-      }}
-    >
-      <HeroKeyframes />
-      <div
-        aria-hidden
-        className="absolute -top-32 right-0 w-[520px] h-[520px] rounded-full blur-2xl pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.024) 0%, rgba(0,0,0,0.000) 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-32 -left-20 w-[420px] h-[420px] rounded-full blur-2xl pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040) 0%, rgba(0,0,0,0.000) 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none overflow-hidden"
-      >
-        {BOKEH.map((b, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full hero-bokeh"
-            style={{
-              width: b.size,
-              height: b.size,
-              left: b.left,
-              top: b.top,
-              background: `radial-gradient(circle, rgba(199,144,66,${b.o}) 0%, rgba(199,144,66,${b.o * 0.4}) 40%, rgba(0,0,0,0.000) 75%)`,
-              filter: "blur(2px)",
-              animationDuration: `${b.dur}s`,
-              animationDelay: `${b.delay}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="relative z-10 container px-6 pt-28 md:pt-36 pb-20 md:pb-28">
-        <div className="max-w-6xl">
-          <div
-            className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8 hero-fade"
-            style={{ animationDelay: "0.05s" }}
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-4 h-4 fill-amber-400 text-amber-400 hero-star"
-                    style={{ animationDelay: `${i * 0.12}s` }}
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-foreground/70">
-                <strong className="font-semibold text-foreground">5,0</strong>
-                <span className="text-foreground/55"> · 30+ Bewertungen</span>
-              </span>
-            </div>
-            <span aria-hidden className="hidden md:block h-4 w-px bg-foreground/20" />
-            <span className="text-sm text-foreground/65">
-              <strong className="font-semibold text-foreground">200+ Events</strong> seit 2016
-            </span>
-            <span aria-hidden className="hidden md:block h-4 w-px bg-foreground/20" />
-            <span className="text-sm text-foreground/65">Bayern · deutschlandweit</span>
-          </div>
-
-          <h1 className="font-display font-black tracking-[-0.03em] leading-[0.98] text-[clamp(2.75rem,8vw,7.5rem)] text-foreground max-w-5xl">
-            {HEAD_SANS.map((w, i) => (
-              <span
-                key={`s-${i}`}
-                className="hero-word"
-                style={{ animationDelay: `${0.3 + i * 0.08}s` }}
-              >
-                {w}
-                {" "}
-              </span>
-            ))}
-            <br className="hidden sm:block" />
-            {HEAD_ITALIC.map((w, i) => (
-              <span
-                key={`i-${i}`}
-                className={`hero-word ${SERIF_ITALIC}`}
-                style={{
-                  animationDelay: `${0.3 + (HEAD_SANS.length + i) * 0.08}s`,
-                  paddingRight: "0.12em",
-                  color: ACCENT,
-                }}
-              >
-                {w}
-                {" "}
-              </span>
-            ))}
-          </h1>
-
-          <p
-            className="mt-8 md:mt-10 max-w-2xl text-base md:text-lg leading-[1.65] text-foreground/65 hero-fade"
-            style={{ animationDelay: "1.1s" }}
-          >
-            Pressekit als ein PDF. Hi-Res-Pressefotos zum direkten Download.
-            Boilerplate in drei Längen — 50, 100, 250 Wörter, copy-paste-fertig.
-            Plus: aktuelle Pressemitteilungen, Tour-Daten zur Show 2026,
-            persönlicher Direkt-Kontakt mit 24-Stunden-Antwort.
-          </p>
-
-          <div
-            className="mt-10 inline-flex flex-col sm:flex-row items-start gap-4 hero-fade"
-            style={{ animationDelay: "1.25s" }}
-          >
-            <a
-              href={EPK_MAIL}
-              className="hero-cta group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
-              style={{
-                background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                boxShadow: "0 18px 36px -10px rgba(0,0,0,0.040)",
-              }}
-            >
-              <Download className="w-4 h-4" />
-              Pressekit anfordern
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a
-              href="#pressefotos"
-              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-foreground/65 hover:text-foreground border-b border-foreground/25 hover:border-foreground pb-1 transition-colors"
-            >
-              Direkt zu den Fotos
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
-          </div>
-
-          <div
-            className="mt-14 md:mt-20 hero-fade flex flex-wrap items-baseline gap-x-6 md:gap-x-9 gap-y-3 text-xs md:text-sm tracking-[0.04em] text-foreground/65"
-            style={{ animationDelay: "1.4s" }}
-          >
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-foreground text-base md:text-lg tabular-nums">
-                5
-              </strong>
-              <span>TV- und Award-Stationen</span>
-            </span>
-            <span aria-hidden className="text-foreground/25">·</span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-foreground text-base md:text-lg tabular-nums">
-                3
-              </strong>
-              <span>Boilerplate-Längen</span>
-            </span>
-            <span aria-hidden className="text-foreground/25">·</span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <strong className="font-display font-bold text-foreground text-base md:text-lg tabular-nums">
-                8+
-              </strong>
-              <span>Hi-Res-Pressefotos</span>
-            </span>
-            <span aria-hidden className="text-foreground/25">·</span>
-            <span>24h Antwort</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   BEKANNT-AUS — TV / Awards / Bühnen-Wettbewerbe XL
-   asymmetrische Editorial-Cards (5 Stationen)
+   BEKANNT-AUS — TV / Awards / Bühnen-Wettbewerbe (5 Stationen)
    ═══════════════════════════════════════════════════════════ */
 const STATIONS = [
   {
@@ -292,82 +92,66 @@ const STATIONS = [
 ];
 
 const BekanntAusSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   const spotlight = STATIONS[0];
   const rest = STATIONS.slice(1);
   return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Bekannt aus.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Fernsehen, Wettbewerbe{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                und 200+ Live-Bühnen
-              </span>
-              .
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Fünf Stationen, die euer Press-Briefing tragen: TV-Interview 2023,
-              Talents of Magic Finalist plus Kreativpreis, Greatest-Talent-Finale,
-              Deutsche Jugendmeisterschaft Top 30 — und 5,0 Sterne auf
-              ProvenExpert über mehrere Jahre.
-            </p>
-          </div>
-        </div>
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: WHITE }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10 md:mb-14">
+          <Eyebrow>Bekannt aus</Eyebrow>
+          <h2
+            className="font-extrabold tracking-[-0.02em]"
+            style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}
+          >
+            Fernsehen, Wettbewerbe{" "}
+            <span style={{ color: COBALT }}>und 200+ Live-Bühnen</span>.
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Fünf Stationen, die euer Press-Briefing tragen: TV-Interview 2025,
+            Talents of Magic Finalist plus Kreativpreis, Greatest-Talent-Finale,
+            Deutsche Jugendmeisterschaft Top 30 — und 5,0 Sterne auf ProvenExpert
+            über mehrere Jahre.
+          </p>
+        </motion.div>
 
-        <div
-          className={`grid lg:grid-cols-12 gap-5 md:gap-7`}
-        >
+        <div className="grid lg:grid-cols-12 gap-4 md:gap-5">
           {/* SPOTLIGHT — TVA 2025 */}
-          <article
-            className="lg:col-span-7 relative overflow-hidden p-7 md:p-10 flex flex-col justify-between min-h-[420px] md:min-h-[460px] text-white"
-            style={{
-              borderRadius: "1.25rem",
-              background: `linear-gradient(135deg, ${ACCENT_DEEP} 0%, ${ACCENT} 100%)`,
-              boxShadow:
-                "0 35px 70px -25px rgba(0,0,0,0.220), inset 0 0 0 1px rgba(255,255,255,0.08)",
-            }}
+          <motion.article
+            variants={up}
+            className="lg:col-span-7 relative overflow-hidden p-7 md:p-10 flex flex-col justify-between min-h-[420px] md:min-h-[460px]"
+            style={{ borderRadius: "24px", background: COBALT, color: WHITE }}
           >
             <div
               aria-hidden
-              className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full blur-2xl opacity-8"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(255,210,140,0.55), transparent 60%)",
-              }}
+              className="absolute -top-20 -right-16 w-[360px] h-[360px] rounded-full"
+              style={{ background: "radial-gradient(circle, rgba(255,255,255,0.12), transparent 62%)" }}
             />
             <div className="relative">
               <div className="flex items-center gap-3 mb-7">
                 <span
                   className="inline-flex items-center justify-center w-12 h-12 rounded-full"
-                  style={{
-                    background: "rgba(255,255,255,0.14)",
-                    border: "1px solid rgba(255,255,255,0.22)",
-                  }}
+                  style={{ background: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.24)" }}
                 >
-                  <spotlight.Icon className="w-5 h-5 text-white" strokeWidth={1.75} />
+                  <spotlight.Icon className="w-5 h-5 text-white" />
                 </span>
                 <span className="text-[11px] tracking-[0.18em] uppercase font-bold text-white/80">
                   Aktuelle Station · {spotlight.year}
                 </span>
               </div>
-              <h3 className="font-display text-3xl md:text-5xl font-black tracking-[-0.02em] leading-[1.0] mb-4">
+              <h3 className="font-extrabold tracking-[-0.02em] leading-[1.0] mb-4" style={{ fontSize: "clamp(1.9rem,3.4vw,3rem)" }}>
                 {spotlight.name}.
               </h3>
-              <p
-                className={`text-base md:text-lg text-white/75 mb-7`}
-              >
+              <p className="text-base md:text-lg mb-7" style={{ color: "rgba(255,255,255,0.78)" }}>
                 {spotlight.sub}
               </p>
-              <p className="text-sm md:text-base text-white/80 leading-[1.7] max-w-xl">
+              <p className="text-sm md:text-base leading-[1.7] max-w-xl" style={{ color: "rgba(255,255,255,0.85)" }}>
                 {spotlight.body}
               </p>
             </div>
@@ -376,163 +160,121 @@ const BekanntAusSection = () => {
                 <span
                   key={t}
                   className="inline-flex items-center px-3 py-1.5 rounded-full text-[11px] tracking-[0.06em] uppercase font-semibold text-white/85"
-                  style={{
-                    background: "rgba(255,255,255,0.10)",
-                    border: "1px solid rgba(255,255,255,0.18)",
-                  }}
+                  style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.2)" }}
                 >
                   {t}
                 </span>
               ))}
             </div>
-          </article>
+          </motion.article>
 
-          {/* RIGHT-COLUMN-Stack: 2 Stations */}
-          <div className="lg:col-span-5 grid gap-5 md:gap-7">
+          {/* RIGHT-COLUMN-Stack: 2 Stationen */}
+          <div className="lg:col-span-5 grid gap-4 md:gap-5">
             {rest.slice(0, 2).map((s) => (
-              <article
+              <motion.article
                 key={s.name}
-                className="relative bg-white p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
-                style={{
-                  borderRadius: "1.25rem",
-                  boxShadow:
-                    "0 25px 50px -25px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.05)",
-                }}
+                variants={up}
+                className="relative p-7 md:p-8 transition-transform duration-500 hover:-translate-y-1"
+                style={{ borderRadius: "24px", background: WHITE, border: `1px solid ${L_LINE}` }}
               >
                 <div className="flex items-start justify-between gap-5 mb-5">
                   <span
-                    className="inline-flex items-center justify-center w-11 h-11 rounded-full shrink-0"
-                    style={{
-                      background: "transparent",
-                    }}
+                    className="inline-flex items-center justify-center w-11 h-11 rounded-[14px] shrink-0"
+                    style={{ background: `${COBALT}14`, color: COBALT }}
                   >
-                    <s.Icon
-                      className="w-5 h-5"
-                      style={{ color: ACCENT }}
-                      strokeWidth={1.75}
-                    />
+                    <s.Icon className="w-5 h-5" />
                   </span>
-                  <span
-                    className={`${SERIF_ITALIC} text-2xl leading-none mt-1`}
-                    style={{ color: ACCENT }}
-                  >
+                  <span className="text-xl leading-none mt-1 font-extrabold" style={{ color: COBALT }}>
                     {s.year}
                   </span>
                 </div>
-                <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-2 leading-tight">
+                <h3 className="text-xl md:text-2xl font-bold mb-2 leading-tight" style={{ color: INK }}>
                   {s.name}.
                 </h3>
-                <p
-                  className={`text-[13px] text-foreground/55 mb-4`}
-                >
+                <p className="text-[13px] mb-4" style={{ color: L_DIM }}>
                   {s.sub}
                 </p>
-                <p className="text-sm text-foreground/65 leading-[1.6]">
+                <p className="text-sm leading-[1.6]" style={{ color: L_DIM }}>
                   {s.body}
                 </p>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>
 
         {/* BOTTOM-Row: 2 weitere Stationen */}
-        <div
-          className={`grid md:grid-cols-2 gap-5 md:gap-7 mt-5 md:mt-7`}
-        >
+        <div className="grid md:grid-cols-2 gap-4 md:gap-5 mt-4 md:mt-5">
           {rest.slice(2).map((s) => (
-            <article
+            <motion.article
               key={s.name}
-              className="relative bg-[hsl(0,0%,98%)] p-7 md:p-9 transition-all duration-500 hover:-translate-y-1 grid grid-cols-[auto_1fr] gap-6 items-start"
-              style={{
-                borderRadius: "1.25rem",
-                boxShadow:
-                  "0 20px 40px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
-              }}
+              variants={up}
+              className="relative p-7 md:p-9 transition-transform duration-500 hover:-translate-y-1 grid grid-cols-[auto_1fr] gap-6 items-start"
+              style={{ borderRadius: "24px", background: CARD_LIGHT, border: `1px solid ${L_LINE}` }}
             >
               <span
-                className="inline-flex items-center justify-center w-14 h-14 rounded-full shrink-0"
-                style={{
-                  background: "transparent",
-                }}
+                className="inline-flex items-center justify-center w-14 h-14 rounded-[16px] shrink-0"
+                style={{ background: `${COBALT}14`, color: COBALT }}
               >
-                <s.Icon
-                  className="w-6 h-6"
-                  style={{ color: ACCENT }}
-                  strokeWidth={1.75}
-                />
+                <s.Icon className="w-6 h-6" />
               </span>
               <div>
                 <div className="flex items-baseline justify-between gap-4 mb-1.5">
-                  <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-tight">
+                  <h3 className="text-xl md:text-2xl font-bold leading-tight" style={{ color: INK }}>
                     {s.name}.
                   </h3>
-                  <span
-                    className={`text-lg leading-none`}
-                    style={{ color: ACCENT }}
-                  >
+                  <span className="text-lg leading-none font-extrabold" style={{ color: COBALT }}>
                     {s.year}
                   </span>
                 </div>
-                <p
-                  className={`text-[13px] text-foreground/55 mb-4`}
-                >
+                <p className="text-[13px] mb-4" style={{ color: L_DIM }}>
                   {s.sub}
                 </p>
-                <p className="text-sm text-foreground/65 leading-[1.6]">
+                <p className="text-sm leading-[1.6]" style={{ color: L_DIM }}>
                   {s.body}
                 </p>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
-   PORTFOLIO-DOWNLOAD — direkter PDF-Download, prominent
+   PORTFOLIO-DOWNLOAD — direkter PDF-Download, Cobalt-Panel
    ═══════════════════════════════════════════════════════════ */
 const PortfolioDownloadSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   return (
-    <section
-      ref={ref}
-      className="bg-[#08060c] text-white py-24 md:py-36 border-y border-foreground/10 relative overflow-hidden"
-    >
+    <section className="px-4 md:px-8 py-14 md:py-20" style={{ background: WHITE }}>
       <div
-        aria-hidden
-        className="absolute -top-40 right-0 w-[640px] h-[640px] rounded-full blur-2xl opacity-6"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-40 -left-20 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
-        }}
-      />
-      <div className="relative container px-6">
+        className="max-w-[1364px] mx-auto rounded-[28px] md:rounded-[44px] overflow-hidden px-6 md:px-14 py-14 md:py-20 relative"
+        style={{ background: INK, color: WHITE }}
+      >
         <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-10 items-center`}
+          aria-hidden
+          className="absolute -top-32 right-0 w-[560px] h-[560px] rounded-full"
+          style={{ background: `radial-gradient(circle, ${COBALT}40, transparent 62%)`, filter: "blur(20px)" }}
+        />
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={vp}
+          className="relative grid lg:grid-cols-12 gap-x-14 gap-y-10 items-center"
         >
-          <div className="lg:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6"
-            >
-              Portfolio · PDF.
+          <motion.div variants={up} className="lg:col-span-7">
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6">
+              Portfolio · PDF
             </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] mb-7">
+            <h2
+              className="font-extrabold tracking-[-0.02em] leading-[1.05] mb-7"
+              style={{ fontSize: "clamp(1.9rem,3.6vw,2.9rem)", color: WHITE }}
+            >
               Komplettes Künstler-Portfolio.{" "}
-              <span style={{ color: "#AFC0FF" }}>
-                Direkt-Download.
-              </span>
+              <span style={{ color: "#9db0ff" }}>Direkt-Download.</span>
             </h2>
-            <p className="text-base md:text-lg text-white/75 leading-[1.7] mb-8 max-w-xl">
+            <p className="text-base md:text-lg leading-[1.7] mb-8 max-w-xl" style={{ color: "rgba(255,255,255,0.78)" }}>
               Das vollständige Portfolio als PDF — Bühnenfotos, Show-Beschreibungen,
               Werdegang, Auszeichnungen, Referenzen und Tech-Rider in einem
               Dokument. 800 KB, druckfähig, freigegeben für Press- und
@@ -543,11 +285,8 @@ const PortfolioDownloadSection = () => {
                 href="/portfolio/Emilian_Leber_Portfolio.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hero-cta inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase text-[#08060c]"
-                style={{
-                  background: "#AFC0FF",
-                  boxShadow: "0 18px 40px -14px rgba(0,0,0,0.024)",
-                }}
+                className="inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[13px] tracking-[0.08em] font-semibold uppercase transition-transform hover:scale-[1.02]"
+                style={{ background: WHITE, color: INK }}
               >
                 <Download className="w-4 h-4" />
                 Portfolio öffnen (PDF)
@@ -561,56 +300,40 @@ const PortfolioDownloadSection = () => {
                 <ArrowUpRight className="w-4 h-4" />
               </a>
             </div>
-            <p
-              className={`text-sm text-white/55 mt-7 max-w-md`}
-            >
+            <p className="text-sm text-white/55 mt-7 max-w-md">
               Stand März 2026 · 802 KB · keine Anmeldung, keine Email-Schranke.
               Englische Version auf Anfrage.
             </p>
-          </div>
+          </motion.div>
 
           {/* Mockup PDF-Cover */}
-          <div className="lg:col-span-5">
+          <motion.div variants={up} className="lg:col-span-5">
             <a
               href="/portfolio/Emilian_Leber_Portfolio.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative block aspect-[3/4] max-w-sm mx-auto overflow-hidden transition-transform duration-700 hover:-rotate-1 hover:scale-[1.02]"
               style={{
-                borderRadius: "1.25rem",
-                background:
-                  "linear-gradient(155deg, #1a0e16 0%, #08060c 100%)",
-                boxShadow:
-                  "0 60px 120px -30px rgba(0,0,0,0.6), 0 25px 50px -20px rgba(0,0,0,0.024), inset 0 0 0 1px rgba(255,255,255,0.08)",
+                borderRadius: "20px",
+                background: "linear-gradient(155deg, #15171f 0%, #0A0B0F 100%)",
+                boxShadow: "0 60px 120px -30px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.08)",
               }}
             >
               {/* Brand-Header */}
               <div className="absolute inset-x-0 top-0 p-6 flex items-center justify-between text-white/80">
-                <span className="text-[10px] tracking-[0.22em] uppercase font-bold">
-                  MagicEL
-                </span>
-                <span
-                  className={`text-sm`}
-                  style={{ color: "#AFC0FF" }}
-                >
-                  Portfolio 2026
-                </span>
+                <span className="text-[10px] tracking-[0.22em] uppercase font-bold">MagicEL</span>
+                <span className="text-sm" style={{ color: "#9db0ff" }}>Portfolio 2026</span>
               </div>
 
               {/* Center title */}
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                <p
-                  className="text-[10px] tracking-[0.22em] uppercase font-bold mb-4"
-                  style={{ color: "#AFC0FF" }}
-                >
+                <p className="text-[10px] tracking-[0.22em] uppercase font-bold mb-4" style={{ color: "#9db0ff" }}>
                   Zauberer · Mentalmagier · Comedy
                 </p>
-                <h3 className="font-display font-black text-3xl md:text-4xl text-white leading-[1.05] mb-3">
+                <h3 className="font-extrabold text-3xl md:text-4xl text-white leading-[1.05] mb-3">
                   Emilian
                   <br />
-                  <span style={{ color: "#AFC0FF" }}>
-                    Leber.
-                  </span>
+                  <span style={{ color: "#9db0ff" }}>Leber.</span>
                 </h3>
                 <p className="text-sm text-white/65 max-w-[16ch] leading-snug">
                   Künstler-Portfolio · Bayern und deutschlandweit
@@ -619,27 +342,15 @@ const PortfolioDownloadSection = () => {
 
               {/* Footer */}
               <div className="absolute inset-x-0 bottom-0 p-6 flex items-end justify-between text-white/55">
-                <span className="text-[10px] tracking-[0.18em] uppercase font-bold">
-                  PDF · 802 KB
-                </span>
-                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase font-bold text-white/80 group-hover:text-[#AFC0FF] transition-colors">
+                <span className="text-[10px] tracking-[0.18em] uppercase font-bold">PDF · 802 KB</span>
+                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase font-bold text-white/80 group-hover:text-[#9db0ff] transition-colors">
                   <Download className="w-3.5 h-3.5" />
                   Open
                 </span>
               </div>
-
-              {/* Glanz-Reflex */}
-              <div
-                aria-hidden
-                className="absolute inset-x-0 top-0 h-32 opacity-8"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(255,255,255,0.18), transparent)",
-                }}
-              />
             </a>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
@@ -711,61 +422,52 @@ const PMS: PressItem[] = [
 ];
 
 const PressemitteilungenSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: WHITE, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
     >
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Aktuelle Pressemitteilungen.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Was zuletzt{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                lief
-              </span>
-              .
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Fünf Pressemitteilungen aus den letzten drei Jahren — Tour-Premieren,
-              TV-Auftritte, Wettbewerbsergebnisse. Volltexte und Hi-Res-Begleitmaterial
-              jeweils auf Anfrage als PDF.
-            </p>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10 md:mb-14">
+          <Eyebrow>Aktuelle Pressemitteilungen</Eyebrow>
+          <h2
+            className="font-extrabold tracking-[-0.02em]"
+            style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}
+          >
+            Was zuletzt <span style={{ color: COBALT }}>lief</span>.
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Fünf Pressemitteilungen aus den letzten drei Jahren — Tour-Premieren,
+            TV-Auftritte, Wettbewerbsergebnisse. Volltexte und Hi-Res-Begleitmaterial
+            jeweils auf Anfrage als PDF.
+          </p>
+        </motion.div>
 
-        <div
-          className={`max-w-5xl border-t border-foreground/15`}
-        >
+        <div className="max-w-5xl" style={{ borderTop: `1px solid ${L_LINE}` }}>
           {PMS.map((pm) => (
-            <article
+            <motion.article
               key={pm.title}
-              className="group grid md:grid-cols-[180px_1fr_auto] gap-x-8 gap-y-3 py-8 md:py-10 border-b border-foreground/15 items-baseline"
+              variants={up}
+              className="group grid md:grid-cols-[180px_1fr_auto] gap-x-8 gap-y-3 py-8 md:py-10 items-baseline"
+              style={{ borderBottom: `1px solid ${L_LINE}` }}
             >
               <div>
-                <span
-                  className={`${SERIF_ITALIC} text-lg md:text-xl block leading-tight`}
-                  style={{ color: ACCENT }}
-                >
+                <span className="text-lg md:text-xl block leading-tight font-bold" style={{ color: COBALT }}>
                   {pm.date}
                 </span>
-                <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-foreground/45 mt-1.5 inline-block">
+                <span className="text-[10px] tracking-[0.18em] uppercase font-bold mt-1.5 inline-block" style={{ color: L_DIM }}>
                   {pm.kicker}
                 </span>
               </div>
               <div>
-                <h3 className="font-display text-xl md:text-2xl font-bold text-foreground leading-snug mb-3 group-hover:text-[color:var(--accent)] transition-colors" style={{ ["--accent" as any]: ACCENT }}>
+                <h3 className="text-xl md:text-2xl font-bold leading-snug mb-3" style={{ color: INK }}>
                   {pm.title}
                 </h3>
-                <p className="text-base text-foreground/65 leading-[1.65] max-w-2xl mb-4">
+                <p className="text-base leading-[1.65] max-w-2xl mb-4" style={{ color: L_DIM }}>
                   {pm.excerpt}
                 </p>
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -775,10 +477,7 @@ const PressemitteilungenSection = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
-                      style={{
-                        color: ACCENT,
-                        borderColor: "rgba(0,0,0,0.040)",
-                      }}
+                      style={{ color: COBALT, borderColor: `${COBALT}55` }}
                     >
                       <ArrowUpRight className="w-3.5 h-3.5" />
                       Artikel lesen (extern)
@@ -788,18 +487,16 @@ const PressemitteilungenSection = () => {
                       <a
                         href={EPK_MAIL}
                         className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
-                        style={{
-                          color: ACCENT,
-                          borderColor: "rgba(0,0,0,0.040)",
-                        }}
+                        style={{ color: COBALT, borderColor: `${COBALT}55` }}
                       >
                         <FileText className="w-3.5 h-3.5" />
                         PDF anfordern
                       </a>
-                      <span aria-hidden className="text-foreground/25">·</span>
+                      <span aria-hidden style={{ color: L_DIM }}>·</span>
                       <a
                         href={EPK_MAIL}
-                        className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-foreground/55 hover:text-foreground border-b border-foreground/20 hover:border-foreground/45 pb-0.5 transition-colors"
+                        className="inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] font-semibold uppercase border-b pb-0.5 transition-colors"
+                        style={{ color: L_DIM, borderColor: L_LINE }}
                       >
                         Volltext lesen
                         <ArrowUpRight className="w-3.5 h-3.5" />
@@ -811,23 +508,21 @@ const PressemitteilungenSection = () => {
               <div className="md:pl-4 md:text-right">
                 <span
                   className="inline-flex items-center px-3 py-1.5 rounded-full text-[10px] tracking-[0.14em] uppercase font-bold text-white whitespace-nowrap"
-                  style={{
-                    background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  }}
+                  style={{ background: COBALT }}
                 >
                   {pm.tag}
                 </span>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
-   EPK-DOWNLOAD — Mockup-Card mit Anhang-Liste (analog EventAgenturen)
+   EPK-DOWNLOAD — Mockup-Card mit Anhang-Liste
    ═══════════════════════════════════════════════════════════ */
 const EPK_ATTACHMENTS = [
   { name: "Bio_kurz_50_woerter.txt", size: "0,4 KB" },
@@ -841,78 +536,64 @@ const EPK_ATTACHMENTS = [
 ];
 
 const EPKDownloadSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Pressekit · Electronic Press Kit.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Ein EPK.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Alles drin
-              </span>
-              .
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Acht Assets in einem ZIP — Bio in drei Längen, Hi-Res-Fotos
-              freigegeben für Print und Online, Logo als SVG plus PNG, Q&A-Sheet
-              mit Standardfragen, aktuelle Tour-Daten und Tech-Rider.
-            </p>
-          </div>
-        </div>
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: PAPER, borderBottom: `1px solid ${L_LINE}` }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10 md:mb-14">
+          <Eyebrow>Pressekit · Electronic Press Kit</Eyebrow>
+          <h2
+            className="font-extrabold tracking-[-0.02em]"
+            style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}
+          >
+            Ein EPK. <span style={{ color: COBALT }}>Alles drin</span>.
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Acht Assets in einem ZIP — Bio in drei Längen, Hi-Res-Fotos
+            freigegeben für Print und Online, Logo als SVG plus PNG, Q&A-Sheet
+            mit Standardfragen, aktuelle Tour-Daten und Tech-Rider.
+          </p>
+        </motion.div>
 
-        <div
-          className={`grid lg:grid-cols-12 gap-8 lg:gap-12`}
-        >
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
           {/* LEFT — Mockup-Card */}
-          <div className="lg:col-span-7 lg:sticky lg:top-24 self-start">
+          <motion.div variants={up} className="lg:col-span-7 lg:sticky lg:top-24 self-start">
             <div
-              className="relative bg-white p-7 md:p-9 overflow-hidden"
+              className="relative p-7 md:p-9 overflow-hidden"
               style={{
-                borderRadius: "1.5rem",
-                boxShadow:
-                  "0 50px 100px -30px rgba(0,0,0,0.200), 0 15px 35px -15px rgba(0,0,0,0.100), inset 0 0 0 1px rgba(0,0,0,0.05)",
+                borderRadius: "24px",
+                background: WHITE,
+                border: `1px solid ${L_LINE}`,
+                boxShadow: "0 40px 90px -34px rgba(10,11,15,0.25)",
               }}
             >
               {/* Header — Datei-Vorschau-Style */}
-              <div className="flex items-center justify-between gap-4 pb-5 mb-6 border-b border-foreground/10">
+              <div className="flex items-center justify-between gap-4 pb-5 mb-6" style={{ borderBottom: `1px solid ${L_LINE}` }}>
                 <div className="flex items-center gap-3">
                   <span
                     className="inline-flex items-center justify-center w-11 h-11 rounded-xl"
-                    style={{
-                      background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                      boxShadow: "0 10px 24px -8px rgba(0,0,0,0.040)",
-                    }}
+                    style={{ background: COBALT, color: WHITE }}
                   >
-                    <Paperclip
-                      className="w-5 h-5 text-white"
-                      strokeWidth={1.75}
-                    />
+                    <Paperclip className="w-5 h-5" />
                   </span>
                   <div>
-                    <p className="font-display text-base font-bold text-foreground leading-tight">
+                    <p className="text-base font-bold leading-tight" style={{ color: INK }}>
                       Emilian_Leber_EPK_2026.zip
                     </p>
-                    <p
-                      className={`text-[12px] text-foreground/55 mt-0.5`}
-                    >
+                    <p className="text-[12px] mt-0.5" style={{ color: L_DIM }}>
                       8 Dateien · 52 MB · Stand März 2026
                     </p>
                   </div>
                 </div>
                 <span
                   className="inline-flex items-center px-3 py-1.5 rounded-full text-[10px] tracking-[0.14em] uppercase font-bold whitespace-nowrap text-white"
-                  style={{
-                    background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  }}
+                  style={{ background: COBALT }}
                 >
                   v3 · aktuell
                 </span>
@@ -923,19 +604,15 @@ const EPKDownloadSection = () => {
                 {EPK_ATTACHMENTS.map((a) => (
                   <li
                     key={a.name}
-                    className="flex items-center justify-between gap-3 py-2.5 px-3 rounded-lg hover:bg-foreground/[0.03] transition-colors min-w-0"
+                    className="flex items-center justify-between gap-3 py-2.5 px-3 rounded-lg transition-colors min-w-0 hover:bg-[#0A0B0F]/[0.03]"
                   >
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <FileText
-                        className="w-4 h-4 shrink-0"
-                        style={{ color: ACCENT }}
-                        strokeWidth={1.75}
-                      />
-                      <span className="text-xs md:text-sm text-foreground/80 truncate font-mono min-w-0">
+                      <FileText className="w-4 h-4 shrink-0" style={{ color: COBALT }} />
+                      <span className="text-xs md:text-sm truncate font-mono min-w-0" style={{ color: INK }}>
                         {a.name}
                       </span>
                     </div>
-                    <span className="text-[10px] md:text-[11px] tabular-nums text-foreground/45 shrink-0">
+                    <span className="text-[10px] md:text-[11px] tabular-nums shrink-0" style={{ color: L_DIM }}>
                       {a.size}
                     </span>
                   </li>
@@ -943,43 +620,35 @@ const EPKDownloadSection = () => {
               </ul>
 
               {/* Footer — Download-Status */}
-              <div className="pt-5 border-t border-foreground/10 flex items-center justify-between gap-4">
+              <div className="pt-5 flex items-center justify-between gap-4" style={{ borderTop: `1px solid ${L_LINE}` }}>
                 <div className="flex items-center gap-2">
                   <span
                     className="relative w-2 h-2 rounded-full"
-                    style={{
-                      background: "#1f8f5f",
-                      boxShadow: "0 0 0 4px rgba(31,143,95,0.15)",
-                    }}
+                    style={{ background: "#1f8f5f", boxShadow: "0 0 0 4px rgba(31,143,95,0.15)" }}
                   />
-                  <span className="text-[11px] tracking-[0.14em] uppercase font-bold text-foreground/55">
+                  <span className="text-[11px] tracking-[0.14em] uppercase font-bold" style={{ color: L_DIM }}>
                     Freigegeben für redaktionelle Nutzung
                   </span>
                 </div>
                 <a
                   href={EPK_MAIL}
-                  className="hero-cta inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white"
-                  style={{
-                    background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                    boxShadow: "0 10px 24px -8px rgba(0,0,0,0.040)",
-                  }}
+                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-transform hover:scale-[1.02]"
+                  style={{ background: COBALT }}
                 >
                   <Download className="w-3.5 h-3.5" />
                   ZIP anfordern
                 </a>
               </div>
 
-              <p
-                className={`text-xs text-foreground/45 mt-5 text-center`}
-              >
+              <p className="text-xs mt-5 text-center" style={{ color: L_DIM }}>
                 Bildnachweis: MagicEL / Emilian Leber. Keine Bearbeitung der
                 Logo-Datei ohne Rücksprache.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* RIGHT — Was im EPK ist */}
-          <div className="lg:col-span-5">
+          <motion.div variants={up} className="lg:col-span-5">
             <ol className="space-y-7">
               {[
                 {
@@ -1021,36 +690,30 @@ const EPKDownloadSection = () => {
               ].map((v) => (
                 <li
                   key={v.num}
-                  className="grid grid-cols-[44px_1fr] md:grid-cols-[56px_1fr] gap-5 md:gap-6 items-start pb-6 border-b border-foreground/10 last:border-b-0"
+                  className="grid grid-cols-[44px_1fr] md:grid-cols-[56px_1fr] gap-5 md:gap-6 items-start pb-6 last:border-b-0"
+                  style={{ borderBottom: `1px solid ${L_LINE}` }}
                 >
                   <div className="flex flex-col items-start gap-2">
-                    <span
-                      className={`${SERIF_ITALIC} text-3xl leading-none`}
-                      style={{ color: ACCENT }}
-                    >
+                    <span className="text-3xl leading-none font-extrabold" style={{ color: COBALT }}>
                       {v.num}
                     </span>
-                    <v.Icon
-                      className="w-4 h-4"
-                      style={{ color: ACCENT, opacity: 0.5 }}
-                      strokeWidth={1.75}
-                    />
+                    <v.Icon className="w-4 h-4" style={{ color: COBALT, opacity: 0.5 }} />
                   </div>
                   <div>
-                    <h3 className="font-display text-base md:text-lg font-bold text-foreground leading-tight mb-2">
+                    <h3 className="text-base md:text-lg font-bold leading-tight mb-2" style={{ color: INK }}>
                       {v.label}.
                     </h3>
-                    <p className="text-sm text-foreground/65 leading-[1.65]">
+                    <p className="text-sm leading-[1.65]" style={{ color: L_DIM }}>
                       {v.body}
                     </p>
                   </div>
                 </li>
               ))}
             </ol>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -1131,7 +794,6 @@ const PHOTOS = [
 ];
 
 const PressefotosSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
   useEffect(() => {
@@ -1150,84 +812,69 @@ const PressefotosSection = () => {
   const active = activeIdx !== null ? PHOTOS[activeIdx] : null;
 
   return (
-    <section
-      ref={ref}
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
       id="pressefotos"
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: WHITE, borderBottom: `1px solid ${L_LINE}` }}
     >
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Pressefotos · Hi-Res 300 dpi.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              Zehn Fotos.{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Print-ready
-              </span>
-              .
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Studio, Bühne, Magic Dinner, TV-Studio — alle Motive freigegeben
-              für redaktionelle Nutzung. Bildnachweis-Pflicht: MagicEL / Emilian
-              Leber. Klick auf ein Foto öffnet die Hi-Res-Vorschau.
-            </p>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10 md:mb-14">
+          <Eyebrow>Pressefotos · Hi-Res 300 dpi</Eyebrow>
+          <h2
+            className="font-extrabold tracking-[-0.02em]"
+            style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}
+          >
+            Zehn Fotos. <span style={{ color: COBALT }}>Print-ready</span>.
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Studio, Bühne, Magic Dinner, TV-Studio — alle Motive freigegeben
+            für redaktionelle Nutzung. Bildnachweis-Pflicht: MagicEL / Emilian
+            Leber. Klick auf ein Foto öffnet die Hi-Res-Vorschau.
+          </p>
+        </motion.div>
 
-        <div
-          className={`grid md:grid-cols-12 gap-3 md:gap-4 max-w-7xl mx-auto`}
-        >
+        <div className="grid md:grid-cols-12 gap-3 md:gap-4">
           {PHOTOS.map((p, i) => (
-            <button
+            <motion.button
               key={i}
+              variants={up}
               type="button"
               onClick={() => setActiveIdx(i)}
               className={`group relative overflow-hidden text-left ${p.span} ${p.h}`}
-              style={{
-                borderRadius: "1rem",
-                boxShadow: "0 18px 36px -20px rgba(0,0,0,0.18)",
-              }}
+              style={{ borderRadius: "20px", boxShadow: "0 24px 50px -28px rgba(10,11,15,0.3)" }}
             >
               <img
                 src={p.src}
                 alt={`Pressefoto Emilian Leber — ${p.label}`}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                style={{ objectPosition: "top" }}
                 loading="lazy"
               />
               <div
                 aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"
+                className="absolute inset-0"
+                style={{ background: "linear-gradient(180deg, rgba(10,11,15,0.05) 30%, rgba(10,11,15,0.82) 100%)" }}
               />
               <div className="absolute inset-0 flex flex-col justify-end p-5">
-                <p className="font-display text-white font-bold text-base md:text-lg leading-tight mb-1">
-                  {p.label}
-                </p>
-                <p className={`text-white/70 text-[12px]`}>
-                  {p.caption}
-                </p>
+                <p className="text-white font-bold text-base md:text-lg leading-tight mb-1">{p.label}</p>
+                <p className="text-white/70 text-[12px]">{p.caption}</p>
               </div>
               <span
                 className="absolute top-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] tracking-[0.12em] uppercase font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{
-                  background: "rgba(0,0,0,0.040)",
-                }}
+                style={{ background: "rgba(10,11,15,0.55)" }}
               >
                 <Download className="w-3 h-3" />
                 Hi-Res
               </span>
-            </button>
+            </motion.button>
           ))}
         </div>
 
-        <p
-          className={`text-sm text-foreground/55 mt-10 text-center max-w-2xl mx-auto`}
-        >
+        <p className="text-sm mt-10 text-center max-w-2xl mx-auto" style={{ color: L_DIM }}>
           Für Print-Auflösung 300 dpi bitte direkt anfragen — Hi-Res-Versionen
           liegen separat als ZIP bereit (siehe EPK oben).
         </p>
@@ -1251,10 +898,7 @@ const PressefotosSection = () => {
           >
             <X className="w-5 h-5" />
           </button>
-          <div
-            className="relative max-w-5xl w-full"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="relative max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
             <img
               src={active.src}
               alt={`Pressefoto Emilian Leber — ${active.label}`}
@@ -1262,20 +906,15 @@ const PressefotosSection = () => {
             />
             <div className="mt-5 flex flex-wrap items-center justify-between gap-4 text-white">
               <div>
-                <p className="font-display text-lg md:text-xl font-bold">
-                  {active.label}
-                </p>
-                <p className={`text-sm text-white/65 mt-1`}>
+                <p className="text-lg md:text-xl font-bold">{active.label}</p>
+                <p className="text-sm text-white/65 mt-1">
                   {active.caption} · Bildnachweis: MagicEL / Emilian Leber
                 </p>
               </div>
               <a
                 href={EPK_MAIL}
-                className="hero-cta inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
-                }}
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-transform hover:scale-[1.02]"
+                style={{ background: COBALT }}
               >
                 <Download className="w-4 h-4" />
                 Hi-Res anfragen
@@ -1284,7 +923,7 @@ const PressefotosSection = () => {
           </div>
         </div>
       )}
-    </section>
+    </motion.section>
   );
 };
 
@@ -1322,7 +961,6 @@ const BIOS = [
 ];
 
 const BoilerplateSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
 
   const copy = async (text: string, idx: number) => {
@@ -1348,72 +986,55 @@ const BoilerplateSection = () => {
   };
 
   return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Boilerplate · drei Längen.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              50, 100,{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                250 Wörter
-              </span>
-              .
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Drei Bio-Versionen für drei Use-Cases — Programmheft,
-              Vorbericht, Feature-Artikel. Copy-paste-fertig, keine Anpassungen
-              nötig. Bildnachweis bitte: MagicEL / Emilian Leber.
-            </p>
-          </div>
-        </div>
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: WHITE }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10 md:mb-14">
+          <Eyebrow>Boilerplate · drei Längen</Eyebrow>
+          <h2
+            className="font-extrabold tracking-[-0.02em]"
+            style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}
+          >
+            50, 100, <span style={{ color: COBALT }}>250 Wörter</span>.
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Drei Bio-Versionen für drei Use-Cases — Programmheft, Vorbericht,
+            Feature-Artikel. Copy-paste-fertig, keine Anpassungen nötig.
+            Bildnachweis bitte: MagicEL / Emilian Leber.
+          </p>
+        </motion.div>
 
-        <div
-          className={`grid lg:grid-cols-3 gap-6 md:gap-7`}
-        >
+        <div className="grid lg:grid-cols-3 gap-5 md:gap-6">
           {BIOS.map((b, i) => (
-            <article
+            <motion.article
               key={b.laenge}
-              className="relative flex flex-col bg-[hsl(0,0%,98%)] p-7 md:p-8 transition-all duration-500 hover:-translate-y-1"
-              style={{
-                borderRadius: "1.25rem",
-                boxShadow:
-                  "0 25px 50px -25px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05)",
-                animationDelay: `${0.1 + i * 0.08}s`,
-              }}
+              variants={up}
+              className="relative flex flex-col p-7 md:p-8 transition-transform duration-500 hover:-translate-y-1"
+              style={{ borderRadius: "24px", background: CARD_LIGHT, border: `1px solid ${L_LINE}` }}
             >
               <div className="flex items-baseline justify-between gap-3 mb-2">
-                <span
-                  className={`${SERIF_ITALIC} text-2xl md:text-3xl leading-none`}
-                  style={{ color: ACCENT }}
-                >
+                <span className="text-2xl md:text-3xl leading-none font-extrabold" style={{ color: COBALT }}>
                   {b.laenge}
                 </span>
-                <span className="text-[10px] tracking-[0.16em] uppercase font-bold text-foreground/45">
+                <span className="text-[10px] tracking-[0.16em] uppercase font-bold" style={{ color: L_DIM }}>
                   {b.woerter}
                 </span>
               </div>
-              <p
-                className={`text-[13px] text-foreground/55 mb-5`}
-              >
+              <p className="text-[13px] mb-5" style={{ color: L_DIM }}>
                 {b.desc}
               </p>
 
               <div
-                className="relative bg-white p-5 mb-5 flex-1 overflow-hidden"
-                style={{
-                  borderRadius: "0.9rem",
-                  border: "1px solid rgba(0,0,0,0.06)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.85)",
-                }}
+                className="relative p-5 mb-5 flex-1 overflow-hidden"
+                style={{ borderRadius: "16px", background: PAPER, border: `1px solid ${L_LINE}` }}
               >
-                <p className="text-[13px] md:text-sm leading-[1.7] text-foreground/80 font-mono">
+                <p className="text-[13px] md:text-sm leading-[1.7] font-mono" style={{ color: INK }}>
                   {b.text}
                 </p>
               </div>
@@ -1421,17 +1042,8 @@ const BoilerplateSection = () => {
               <button
                 type="button"
                 onClick={() => copy(b.text, i)}
-                className="hero-cta inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-white w-full"
-                style={{
-                  background:
-                    copiedIdx === i
-                      ? "linear-gradient(135deg, #1f8f5f, #3ab27c)"
-                      : `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow:
-                    copiedIdx === i
-                      ? "0 10px 24px -8px rgba(31,143,95,0.45)"
-                      : "0 10px 24px -8px rgba(0,0,0,0.040)",
-                }}
+                className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[12px] tracking-[0.08em] font-semibold uppercase text-white w-full transition-transform hover:scale-[1.02]"
+                style={{ background: copiedIdx === i ? "#1f8f5f" : COBALT }}
                 aria-label={
                   copiedIdx === i
                     ? "In Zwischenablage kopiert"
@@ -1450,19 +1062,16 @@ const BoilerplateSection = () => {
                   </>
                 )}
               </button>
-            </article>
+            </motion.article>
           ))}
         </div>
 
-        <p
-          className={`text-sm text-foreground/55 mt-12 text-center max-w-2xl mx-auto`}
-        >
-          Alle Boilerplates auf Stand März 2026. Anpassungen oder
-          Sonderversionen (englisch, fachspezifisch, mit Tour-Daten)
-          gerne auf Anfrage.
+        <p className="text-sm mt-12 text-center max-w-2xl mx-auto" style={{ color: L_DIM }}>
+          Alle Boilerplates auf Stand März 2026. Anpassungen oder Sonderversionen
+          (englisch, fachspezifisch, mit Tour-Daten) gerne auf Anfrage.
         </p>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -1470,143 +1079,112 @@ const BoilerplateSection = () => {
    AKTUELLE SHOW 2026 — Plötzlich Magie Editorial-Split
    ═══════════════════════════════════════════════════════════ */
 const PloetzlichMagieSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
     >
-      <div className="container px-6">
-        <div
-          className={`grid lg:grid-cols-12 gap-10 lg:gap-14 items-center`}
-        >
-          <div className="lg:col-span-6">
-            <span
-              className="inline-flex items-center px-3 py-1.5 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white mb-6"
-              style={{
-                background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-              }}
-            >
-              Aktuelle Show · 2026
-            </span>
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-5"
-            >
-              Erste abendfüllende Tour-Show.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3rem)] text-foreground mb-7">
-              Plötzlich{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                Magie
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <motion.div variants={up} className="lg:col-span-6">
+          <span
+            className="inline-flex items-center px-3 py-1.5 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white mb-6"
+            style={{ background: COBALT }}
+          >
+            Aktuelle Show · 2026
+          </span>
+          <Eyebrow>Erste abendfüllende Tour-Show</Eyebrow>
+          <h2
+            className="font-extrabold tracking-[-0.02em] mb-7"
+            style={{ fontSize: "clamp(1.9rem,3.6vw,3rem)", lineHeight: 1.02, color: INK }}
+          >
+            Plötzlich <span style={{ color: COBALT }}>Magie</span>.
+            <br />
+            Magic Meets Comedy.
+          </h2>
+          <p className="text-base md:text-lg leading-[1.7] mb-5 max-w-xl" style={{ color: L_DIM }}>
+            Neunzig Minuten Bühne — Mentalmagie, Karten-Routinen, Comedy-Storytelling.
+            Premiere am 22.02.2026 in der Alten Mälzerei Regensburg in Sinzing
+            bei Regensburg, anschließend Tour durch bayerische Theater und Saal-Bühnen.
+          </p>
+          <p className="text-base md:text-lg leading-[1.7] mb-8 max-w-xl" style={{ color: L_DIM }}>
+            Press-Anfragen für Premieren-Akkreditierung, Foto-Termine während
+            der Generalprobe und Interview-Slots vor und nach der Show:
+            gerne direkt — Slots sind begrenzt, frühe Anfragen bevorzugt.
+          </p>
+          <div className="flex flex-wrap gap-3 mb-8">
+            {["90 Minuten", "Mentalmagie · Comedy", "Premiere Frühjahr 2026", "Bayerische Tour"].map((t) => (
+              <span
+                key={t}
+                className="inline-flex items-center px-3 py-1.5 rounded-full text-xs"
+                style={{ color: L_DIM, background: WHITE, border: `1px solid ${L_LINE}` }}
+              >
+                {t}
               </span>
-              .
-              <br />
-              Magic Meets Comedy.
-            </h2>
-            <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-5 max-w-xl">
-              Neunzig Minuten Bühne — Mentalmagie, Karten-Routinen, Comedy-Storytelling.
-              Premiere am 22.02.2026 in der Alten Mälzerei Regensburg
-              in Sinzing bei Regensburg, anschließend Tour durch bayerische
-              Theater und Saal-Bühnen.
-            </p>
-            <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-8 max-w-xl">
-              Press-Anfragen für Premieren-Akkreditierung, Foto-Termine während
-              der Generalprobe und Interview-Slots vor und nach der Show:
-              gerne direkt — Slots sind begrenzt, frühe Anfragen bevorzugt.
-            </p>
-            <div className="flex flex-wrap gap-3 mb-8">
-              {[
-                "90 Minuten",
-                "Mentalmagie · Comedy",
-                "Premiere Frühjahr 2026",
-                "Bayerische Tour",
-              ].map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs text-foreground/70 bg-white border border-foreground/10"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a
-                href="mailto:el@magicel.de?subject=Tour-Anfrage%20Plötzlich%20Magie%202026"
-                className="hero-cta inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
-                }}
-              >
-                Tour-Anfrage senden
-                <ArrowRight className="w-4 h-4" />
-              </a>
-              <Link
-                to="/tickets"
-                className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-foreground/65 hover:text-foreground border-b border-foreground/25 hover:border-foreground pb-1 transition-colors"
-              >
-                Tour-Daten ansehen
-                <ArrowUpRight className="w-4 h-4" />
-              </Link>
-            </div>
+            ))}
           </div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <a
+              href="mailto:el@magicel.de?subject=Tour-Anfrage%20Plötzlich%20Magie%202026"
+              className="inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white transition-transform hover:scale-[1.02]"
+              style={{ background: COBALT }}
+            >
+              Tour-Anfrage senden
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <Link
+              to="/tickets"
+              className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase pb-1 transition-colors border-b"
+              style={{ color: INK, borderColor: L_LINE }}
+            >
+              Tour-Daten ansehen
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </motion.div>
 
-          <div className="lg:col-span-6">
+        <motion.div variants={up} className="lg:col-span-6">
+          <div className="relative overflow-hidden" style={{ borderRadius: "24px", boxShadow: "0 40px 80px -34px rgba(10,11,15,0.4)" }}>
+            <img
+              src={magicDinnerImg}
+              alt="Plötzlich Magie 2026 — Emilian Leber Tour-Show Premiere in der Alten Mälzerei Regensburg"
+              className="w-full h-[480px] md:h-[600px] object-cover"
+              style={{ objectPosition: "top" }}
+              loading="lazy"
+            />
             <div
-              className="relative overflow-hidden"
+              aria-hidden
+              className="absolute inset-0"
+              style={{ background: "linear-gradient(180deg, rgba(10,11,15,0) 50%, rgba(10,11,15,0.7) 100%)" }}
+            />
+            <div
+              className="absolute bottom-5 left-5 right-5 p-5 text-white"
               style={{
-                borderRadius: "1.5rem",
-                boxShadow:
-                  "0 50px 100px -30px rgba(0,0,0,0.225), 0 18px 40px -15px rgba(0,0,0,0.125)",
+                background: "rgba(10,11,15,0.42)",
+                backdropFilter: "blur(14px) saturate(1.3)",
+                WebkitBackdropFilter: "blur(14px) saturate(1.3)",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,0.18)",
               }}
             >
-              <img
-                src={magicDinnerImg}
-                alt="Plötzlich Magie 2026 — Emilian Leber Tour-Show Premiere in der Alten Mälzerei Regensburg"
-                className="w-full h-[480px] md:h-[600px] object-cover"
-                loading="lazy"
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(8,6,12,0) 50%, rgba(8,6,12,0.7) 100%)",
-                }}
-              />
-              <div
-                className="absolute bottom-5 left-5 right-5 p-5 text-white"
-                style={{
-                  background:
-                    "linear-gradient(155deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%)",
-                  backdropFilter: "blur(20px) saturate(180%)",
-                  borderRadius: "1rem",
-                  border: "1px solid rgba(255,255,255,0.22)",
-                  boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.6), 0 20px 40px -20px rgba(0,0,0,0.45)",
-                }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <MapPin
-                    className="w-3.5 h-3.5"
-                    style={{ color: "#AFC0FF" }}
-                  />
-                  <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-white/85">
-                    Premiere-Location
-                  </span>
-                </div>
-                <p className="font-display text-base md:text-lg font-bold leading-tight mb-1">
-                  Alte Mälzerei Regensburg
-                </p>
-                <p className={`text-sm text-white/70`}>
-                  22.02.2026 · Tour-Premiere
-                </p>
+              <div className="flex items-center gap-2 mb-2">
+                <MapPin className="w-3.5 h-3.5" style={{ color: "#9db0ff" }} />
+                <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-white/85">
+                  Premiere-Location
+                </span>
               </div>
+              <p className="text-base md:text-lg font-bold leading-tight mb-1">
+                Alte Mälzerei Regensburg
+              </p>
+              <p className="text-sm text-white/70">22.02.2026 · Tour-Premiere</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -1647,138 +1225,102 @@ const QUOTES = [
 ];
 
 const InterviewZitateSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-14 md:mb-20">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Interview-Zitate · zum Weiterverwenden.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              In{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                eigenen Worten
-              </span>
-              .
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Fünf O-Töne aus Interviews und Press-Statements — frei verwendbar
-              mit Quellenangabe. Für Headline-Pull-Quotes, Bildunterzeilen,
-              Vorbericht-Einleitungen.
-            </p>
-          </div>
-        </div>
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: WHITE }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10 md:mb-14">
+          <Eyebrow>Interview-Zitate · zum Weiterverwenden</Eyebrow>
+          <h2
+            className="font-extrabold tracking-[-0.02em]"
+            style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}
+          >
+            In <span style={{ color: COBALT }}>eigenen Worten</span>.
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Fünf O-Töne aus Interviews und Press-Statements — frei verwendbar
+            mit Quellenangabe. Für Headline-Pull-Quotes, Bildunterzeilen,
+            Vorbericht-Einleitungen.
+          </p>
+        </motion.div>
 
-        <div
-          className={`grid md:grid-cols-2 gap-x-10 gap-y-12 md:gap-y-14 max-w-6xl mx-auto`}
-        >
+        <div className="grid md:grid-cols-2 gap-x-10 gap-y-12 md:gap-y-14 max-w-6xl mx-auto">
           {QUOTES.map((q, i) => (
-            <figure
+            <motion.figure
               key={i}
+              variants={up}
               className={`relative ${i === 4 ? "md:col-span-2 max-w-3xl mx-auto" : ""}`}
             >
-              <Quote
-                className="w-9 h-9 md:w-10 md:h-10 mb-5 opacity-8"
-                style={{ color: ACCENT }}
-                strokeWidth={1.25}
-              />
+              <Quote className="w-9 h-9 md:w-10 md:h-10 mb-5" style={{ color: COBALT, opacity: 0.4 }} />
               <blockquote
-                className={`${SERIF_ITALIC} text-2xl md:text-3xl lg:text-[2.25rem] leading-[1.25] text-foreground mb-6`}
+                className="font-extrabold tracking-[-0.01em] text-2xl md:text-3xl lg:text-[2.25rem] leading-[1.25] mb-6"
+                style={{ color: INK }}
               >
                 {q.quote}
               </blockquote>
               <figcaption>
-                <p className="text-[11px] tracking-[0.16em] uppercase font-bold mb-1.5" style={{ color: ACCENT }}>
+                <p className="text-[11px] tracking-[0.16em] uppercase font-bold mb-1.5" style={{ color: COBALT }}>
                   {q.context}
                 </p>
-                <p className="text-sm text-foreground/55">{q.source}</p>
+                <p className="text-sm" style={{ color: L_DIM }}>{q.source}</p>
               </figcaption>
-            </figure>
+            </motion.figure>
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
-   PULL-QUOTE — Black Full-Bleed
+   PULL-QUOTE — Ink Full-Bleed
    ═══════════════════════════════════════════════════════════ */
 const PullQuoteSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   return (
-    <section
-      ref={ref}
-      className="relative bg-[#08060c] text-white py-28 md:py-40 overflow-hidden"
-    >
-      <div className="absolute inset-0 opacity-6">
-        <img
-          src={stageShowImg}
-          alt=""
-          className="w-full h-full object-cover"
-          loading="lazy"
-        />
+    <section className="relative py-24 md:py-36 overflow-hidden" style={{ background: INK, color: WHITE }}>
+      <div className="absolute inset-0" style={{ opacity: 0.18 }}>
+        <img src={stageShowImg} alt="" className="w-full h-full object-cover" loading="lazy" />
         <div
           aria-hidden
           className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 50%, rgba(8,6,12,0.6) 0%, rgba(8,6,12,0.95) 70%)",
-          }}
+          style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(10,11,15,0.6) 0%, rgba(10,11,15,0.95) 70%)" }}
         />
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
-        }}
+        className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full"
+        style={{ background: `radial-gradient(circle, ${COBALT}33, transparent 65%)`, filter: "blur(20px)" }}
       />
-      <div
-        aria-hidden
-        className="absolute -bottom-32 right-0 w-[420px] h-[420px] rounded-full blur-2xl opacity-20"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 65%)",
-        }}
-      />
-      <div
-        className={`relative container px-6`}
+      <motion.div
+        variants={up}
+        initial="hidden"
+        whileInView="show"
+        viewport={vp}
+        className="relative px-5 md:px-10"
       >
-        <Quote
-          className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto opacity-40"
-          style={{ color: "#AFC0FF" }}
-          strokeWidth={1.25}
-        />
+        <Quote className="w-14 h-14 md:w-16 md:h-16 mb-10 mx-auto" style={{ color: "#9db0ff", opacity: 0.6 }} />
         <blockquote className="max-w-5xl mx-auto text-center">
-          <p className="font-display font-black tracking-[-0.02em] leading-[1.08] text-[clamp(1.875rem,3.5vw,3rem)]">
-            Erstes TV-Interview{" "}
-            <span style={{ color: "#AFC0FF" }}>
-              mit 16
-            </span>
-            .<br />
-            Acht Jahre nach dem{" "}
-            <span style={{ color: "#AFC0FF" }}>
-              ersten Trick
-            </span>
-            .
+          <p
+            className="font-extrabold tracking-[-0.02em] leading-[1.08]"
+            style={{ fontSize: "clamp(1.9rem,3.5vw,3rem)" }}
+          >
+            Erstes TV-Interview <span style={{ color: "#9db0ff" }}>mit 16</span>.
+            <br />
+            Acht Jahre nach dem <span style={{ color: "#9db0ff" }}>ersten Trick</span>.
           </p>
           <footer className="mt-10 flex items-center justify-center gap-4">
             <span className="h-px w-12 bg-white/25" aria-hidden />
-            <span className="text-sm md:text-base text-white/65">
-              TVA Bayern · 2025
-            </span>
+            <span className="text-sm md:text-base text-white/65">TVA Bayern · 2025</span>
             <span className="h-px w-12 bg-white/25" aria-hidden />
           </footer>
         </blockquote>
-      </div>
+      </motion.div>
     </section>
   );
 };
@@ -1787,42 +1329,35 @@ const PullQuoteSection = () => {
    VIDEO-SECTION — TVA-Auftritt
    ═══════════════════════════════════════════════════════════ */
 const VideoSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="bg-white py-24 md:py-36">
-      <div className="container px-6">
-        <div className="grid md:grid-cols-12 gap-x-12 gap-y-6 mb-12 md:mb-16">
-          <div className="md:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-            >
-              Video-Mitschnitt · TVA 2025.
-            </p>
-            <h2 className="font-display font-black tracking-[-0.025em] leading-[1.0] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-              TV-Auftritt{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT }}>
-                im Mitschnitt
-              </span>
-              .
-            </h2>
-          </div>
-          <div className="md:col-span-5 md:pt-8">
-            <p className="text-base md:text-lg text-foreground/60 leading-[1.65] max-w-md">
-              Studio-Aufzeichnung bei TVA Bayern — Live-Routine vor der Kamera,
-              eingebauter Karten-Test mit dem Moderator, Mentaleffekt mit
-              Studio-Publikum. Voller Mitschnitt zum Einbetten freigegeben.
-            </p>
-          </div>
-        </div>
+    <motion.section
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{ background: WHITE }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10 md:mb-12">
+          <Eyebrow>Video-Mitschnitt · TVA 2025</Eyebrow>
+          <h2
+            className="font-extrabold tracking-[-0.02em]"
+            style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}
+          >
+            TV-Auftritt <span style={{ color: COBALT }}>im Mitschnitt</span>.
+          </h2>
+          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
+            Studio-Aufzeichnung bei TVA Bayern — Live-Routine vor der Kamera,
+            eingebauter Karten-Test mit dem Moderator, Mentaleffekt mit
+            Studio-Publikum. Voller Mitschnitt zum Einbetten freigegeben.
+          </p>
+        </motion.div>
 
-        <div
-          className={`relative max-w-6xl mx-auto`}
-          style={{
-            borderRadius: "1.5rem",
-            overflow: "hidden",
-            boxShadow:
-              "0 50px 100px -30px rgba(0,0,0,0.225), 0 18px 40px -15px rgba(0,0,0,0.110)",
-          }}
+        <motion.div
+          variants={up}
+          className="relative max-w-6xl mx-auto"
+          style={{ borderRadius: "24px", overflow: "hidden", boxShadow: "0 40px 80px -34px rgba(10,11,15,0.4)" }}
         >
           <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
             <iframe
@@ -1835,20 +1370,20 @@ const VideoSection = () => {
               style={{ border: 0 }}
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-10 text-sm text-foreground/55">
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-10 text-sm" style={{ color: L_DIM }}>
           <span className="inline-flex items-center gap-1.5">
-            <Tv className="w-3.5 h-3.5" style={{ color: ACCENT }} />
+            <Tv className="w-3.5 h-3.5" style={{ color: COBALT }} />
             TVA Bayern
           </span>
-          <span aria-hidden className="text-foreground/25">·</span>
+          <span aria-hidden style={{ color: L_LINE }}>·</span>
           <span>November 2025</span>
-          <span aria-hidden className="text-foreground/25">·</span>
+          <span aria-hidden style={{ color: L_LINE }}>·</span>
           <span>Embed-Code auf Anfrage</span>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -1882,66 +1417,12 @@ const FAQS = [
   },
 ];
 
-const PressFAQSection = () => {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section
-      ref={ref}
-      className="bg-white py-24 md:py-36 border-y border-foreground/10"
-    >
-      <div className="container px-6">
-        <div className="max-w-3xl mb-14 md:mb-16">
-          <p
-            className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-6"
-          >
-            Häufige Press-Fragen.
-          </p>
-          <h2 className="font-display font-black tracking-[-0.02em] leading-[1.05] text-[clamp(1.875rem,3.75vw,3.25rem)] text-foreground">
-            Was Redaktionen
-            <br />
-            <span>vorab fragen.</span>
-          </h2>
-        </div>
-        <div
-          className={`max-w-3xl border-t border-foreground/15`}
-        >
-          {FAQS.map((f) => (
-            <details
-              key={f.q}
-              className="group py-6 md:py-7 border-b border-foreground/15"
-            >
-              <summary className="flex items-start justify-between cursor-pointer gap-6 list-none">
-                <span className="font-display text-base md:text-lg font-bold text-foreground leading-snug pr-4">
-                  {f.q}
-                </span>
-                <span
-                  aria-hidden
-                  className="shrink-0 mt-1 text-foreground/40 group-open:rotate-45 transition-transform duration-300 text-2xl leading-none"
-                >
-                  +
-                </span>
-              </summary>
-              <p className="mt-4 text-base text-foreground/70 leading-[1.7] max-w-2xl">
-                {f.a}
-              </p>
-            </details>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
 /* ═══════════════════════════════════════════════════════════
-   PRESS-KONTAKT-DIREKT — eigene Sektion mit Foto + Kontaktkanäle
+   PRESS-KONTAKT-DIREKT — dunkle Sektion mit Foto + Kontaktkanäle
    ═══════════════════════════════════════════════════════════ */
 const PressKontaktDirektSection = () => {
-  const { ref, isVisible } = useScrollReveal();
   return (
-    <section
-      ref={ref}
-      className="relative text-white py-28 md:py-40 overflow-hidden"
-    >
+    <section className="relative text-white py-24 md:py-36 overflow-hidden" style={{ background: INK }}>
       <div className="absolute inset-0">
         <img
           src={portraitBuchImg}
@@ -1953,47 +1434,34 @@ const PressKontaktDirektSection = () => {
         <div
           aria-hidden
           className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(110deg, rgba(8,6,12,0.94) 0%, rgba(8,6,12,0.82) 45%, rgba(8,6,12,0.55) 100%)",
-          }}
+          style={{ background: "linear-gradient(110deg, rgba(10,11,15,0.96) 0%, rgba(10,11,15,0.85) 45%, rgba(10,11,15,0.6) 100%)" }}
         />
       </div>
       <div
         aria-hidden
-        className="absolute -top-32 right-1/4 w-[520px] h-[520px] rounded-full blur-2xl opacity-8"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.040), transparent 60%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-32 -right-20 w-[480px] h-[480px] rounded-full blur-2xl opacity-6"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,180,40,0.1), transparent 60%)",
-        }}
+        className="absolute -top-32 right-1/4 w-[520px] h-[520px] rounded-full"
+        style={{ background: `radial-gradient(circle, ${COBALT}30, transparent 60%)`, filter: "blur(20px)" }}
       />
 
-      <div className="relative container px-6">
-        <div
-          className={`grid lg:grid-cols-12 gap-x-14 gap-y-12 items-center`}
-        >
-          <div className="lg:col-span-7">
-            <p
-              className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6"
-            >
-              Direkter Press-Kontakt.
+      <motion.div
+        variants={stagger}
+        initial="hidden"
+        whileInView="show"
+        viewport={vp}
+        className="relative px-5 md:px-10"
+      >
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-x-14 gap-y-12 items-center">
+          <motion.div variants={up} className="lg:col-span-7">
+            <p className="text-[11px] md:text-xs tracking-[0.22em] uppercase font-semibold text-white/55 mb-6">
+              Direkter Press-Kontakt
             </p>
-            <h2 className="font-display font-black tracking-[-0.02em] leading-[1.0] text-[clamp(1.75rem,3.25vw,2.625rem)] mb-8">
-              Schreib mir{" "}
-              <span className={SERIF_ITALIC} style={{ color: ACCENT_SOFT }}>
-                direkt
-              </span>
-              .
+            <h2
+              className="font-extrabold tracking-[-0.02em] mb-8"
+              style={{ fontSize: "clamp(1.75rem,3.25vw,2.625rem)", lineHeight: 1.02, color: WHITE }}
+            >
+              Schreib mir <span style={{ color: "#9db0ff" }}>direkt</span>.
             </h2>
-            <p className="text-base md:text-lg text-white/75 leading-[1.7] mb-10 max-w-xl">
+            <p className="text-base md:text-lg leading-[1.7] mb-10 max-w-xl" style={{ color: "rgba(255,255,255,0.78)" }}>
               Kein Agent, kein Booker, keine Press-Office-Hürde dazwischen.
               Werktags binnen 24 Stunden zurück — bei Eilfällen schneller.
               Standort Bayern, deutschlandweit buchbar, TV-erfahren.
@@ -2028,76 +1496,62 @@ const PressKontaktDirektSection = () => {
                   href={c.href}
                   className="group flex items-center gap-5 p-5 rounded-2xl transition-all duration-300 hover:-translate-y-0.5"
                   style={{
-                    background:
-                      "linear-gradient(155deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%)",
-                    backdropFilter: "blur(24px) saturate(180%)",
-                    border: "1px solid rgba(255,255,255,0.22)",
-                    boxShadow:
-                      "inset 0 1px 0 rgba(255,255,255,0.4), 0 18px 36px -18px rgba(0,0,0,0.45)",
+                    background: "rgba(255,255,255,0.06)",
+                    backdropFilter: "blur(14px) saturate(1.3)",
+                    WebkitBackdropFilter: "blur(14px) saturate(1.3)",
+                    border: "1px solid rgba(255,255,255,0.18)",
                   }}
                 >
                   <span
                     className="inline-flex items-center justify-center w-12 h-12 rounded-xl shrink-0"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06))",
-                      border: "1px solid rgba(255,255,255,0.22)",
-                    }}
+                    style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.18)" }}
                   >
-                    <c.Icon className="w-5 h-5 text-white" strokeWidth={1.75} />
+                    <c.Icon className="w-5 h-5 text-white" />
                   </span>
                   <div className="flex-1 min-w-0">
                     <p className="text-[10px] tracking-[0.18em] uppercase font-bold text-white/55 mb-0.5">
                       {c.label}
                     </p>
-                    <p className="font-display text-lg md:text-xl font-bold text-white leading-tight">
+                    <p className="text-lg md:text-xl font-bold text-white leading-tight">
                       {c.value}
                     </p>
-                    <p className={`text-sm text-white/55 mt-0.5`}>
-                      {c.hint}
-                    </p>
+                    <p className="text-sm text-white/55 mt-0.5">{c.hint}</p>
                   </div>
-                  <ArrowUpRight
-                    className="w-5 h-5 text-white/55 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"
-                  />
+                  <ArrowUpRight className="w-5 h-5 text-white/55 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
                 </a>
               ))}
             </div>
 
             <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/60">
               <span className="inline-flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5" style={{ color: ACCENT_SOFT }} />
+                <Clock className="w-3.5 h-3.5" style={{ color: "#9db0ff" }} />
                 24h Antwort werktags
               </span>
               <span aria-hidden className="text-white/25">·</span>
               <span className="inline-flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT_SOFT }} />
+                <MapPin className="w-3.5 h-3.5" style={{ color: "#9db0ff" }} />
                 Standort Bayern
               </span>
               <span aria-hidden className="text-white/25">·</span>
               <span>Deutschlandweit buchbar</span>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="lg:col-span-5">
+          <motion.div variants={up} className="lg:col-span-5">
             <div
               className="p-7 md:p-9"
               style={{
-                background:
-                  "linear-gradient(155deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%)",
-                backdropFilter: "blur(32px) saturate(190%)",
-                border: "1px solid rgba(255,255,255,0.28)",
-                borderRadius: "1.5rem",
-                boxShadow:
-                  "inset 0 1px 0 rgba(255,255,255,0.5), 0 40px 80px -25px rgba(0,0,0,0.55)",
+                background: "rgba(255,255,255,0.08)",
+                backdropFilter: "blur(18px) saturate(1.5)",
+                WebkitBackdropFilter: "blur(18px) saturate(1.5)",
+                border: "1px solid rgba(255,255,255,0.22)",
+                borderRadius: "24px",
               }}
             >
-              <p
-                className={`text-base md:text-lg text-white/55 mb-3`}
-              >
+              <p className="text-base md:text-lg text-white/55 mb-3">
                 Eine kurze Selbst-Vorstellung —
               </p>
-              <p className="font-display text-xl md:text-2xl font-bold text-white leading-snug mb-5">
+              <p className="text-xl md:text-2xl font-bold text-white leading-snug mb-5">
                 Mit acht Jahren der erste Trick. Mit zwölf der erste bezahlte
                 Gig. Mit einundzwanzig der erste TV-Auftritt.
               </p>
@@ -2106,41 +1560,32 @@ const PressKontaktDirektSection = () => {
                 Wettbewerbe, Hauspartner-Restaurant für die Magic-Dinner-Reihe
                 in Sinzing. Im Frühjahr 2026 die erste eigene Tour-Show.
               </p>
-              <div className="pt-5 border-t border-white/15 grid grid-cols-3 gap-3">
+              <div className="pt-5 grid grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.15)" }}>
                 {[
                   { v: "200+", l: "Events" },
                   { v: "5,0", l: "Sterne" },
                   { v: "24h", l: "Antwort" },
                 ].map((s) => (
                   <div key={s.l}>
-                    <p className="font-display text-2xl font-black text-white tabular-nums leading-none">
-                      {s.v}
-                    </p>
-                    <p
-                      className={`text-xs text-white/55 mt-1.5`}
-                    >
-                      {s.l}
-                    </p>
+                    <p className="text-2xl font-extrabold text-white tabular-nums leading-none">{s.v}</p>
+                    <p className="text-xs text-white/55 mt-1.5">{s.l}</p>
                   </div>
                 ))}
               </div>
 
               <a
                 href={EPK_MAIL}
-                className="hero-cta mt-7 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white w-full"
-                style={{
-                  background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  boxShadow: "0 14px 30px -10px rgba(0,0,0,0.040)",
-                }}
+                className="mt-7 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white w-full transition-transform hover:scale-[1.02]"
+                style={{ background: COBALT }}
               >
                 <Download className="w-3.5 h-3.5" />
                 Komplettes EPK anfordern
                 <ArrowRight className="w-3.5 h-3.5" />
               </a>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
@@ -2148,33 +1593,21 @@ const PressKontaktDirektSection = () => {
 /* ═══════════════════════════════════════════════════════════
    PAGE
    ═══════════════════════════════════════════════════════════ */
-const SITE_URL = "https://www.magicel.de/presse";
+const PAGE_URL = "https://www.magicel.de/presse";
 
 const Presse = () => (
-  <>
+  <VoltageShell
+    title="Pressebereich — Pressekit, Fotos, Boilerplate | Emilian Leber Zauberer"
+    description="Pressebereich Emilian Leber Zauberer: Pressekit-Download, Hi-Res-Pressefotos, Boilerplate in 3 Längen, aktuelle Pressemitteilungen. Bekannt aus TVA, Greatest Talent, Talents of Magic."
+    path="/presse"
+    noindex={false}
+  >
     <Helmet>
-      <html lang="de" />
-      <title>Pressebereich — Pressekit, Fotos, Boilerplate | Emilian Leber Zauberer</title>
-      <meta
-        name="description"
-        content="Pressebereich Emilian Leber Zauberer: Pressekit-Download, Hi-Res-Pressefotos, Boilerplate in 3 Längen, aktuelle Pressemitteilungen. Bekannt aus TVA, Greatest Talent, Talents of Magic."
-      />
       <meta
         name="keywords"
         content="Emilian Leber Presse, Zauberer Pressekit, EPK Magier, Pressefotos Zauberkünstler, Pressekontakt Magier Bayern, Pressemitteilung Magier, Boilerplate Zauberkünstler"
       />
-      <meta name="robots" content="index,follow,max-image-preview:large" />
-      <link rel="canonical" href={SITE_URL} />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content={SITE_URL} />
-      <meta
-        property="og:title"
-        content="Pressebereich — Pressekit, Fotos, Boilerplate | Emilian Leber Zauberer"
-      />
-      <meta
-        property="og:description"
-        content="Pressekit-Download, Hi-Res-Pressefotos, Boilerplate in 3 Längen, aktuelle Pressemitteilungen. Bekannt aus TVA, Greatest Talent, Talents of Magic. 5,0 ★."
-      />
+      <meta property="og:url" content={PAGE_URL} />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
       <meta property="og:locale" content="de_DE" />
       <meta name="twitter:card" content="summary_large_image" />
@@ -2187,23 +1620,13 @@ const Presse = () => (
         content="EPK, Hi-Res-Fotos, Boilerplate in 3 Längen. Direkt-Kontakt mit 24h-Antwort."
       />
       <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin="anonymous"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
-        rel="stylesheet"
-      />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Person",
         name: "Emilian Leber",
         alternateName: "Magic EL",
         jobTitle: "Zauberkünstler · Mentalmagier · Comedy-Entertainer",
-        url: SITE_URL,
+        url: PAGE_URL,
         sameAs: [
           "https://www.magicel.de",
           "https://www.instagram.com/magicel.de",
@@ -2252,34 +1675,59 @@ const Presse = () => (
             "@type": "ListItem",
             position: 2,
             name: "Pressebereich",
-            item: SITE_URL,
+            item: PAGE_URL,
           },
         ],
       })}</script>
     </Helmet>
-    <PageLayout>
-      <main>
-        <Hero />
-        <LogoMarquee
-          eyebrow="TV-Stationen und Bühnen-Wettbewerbe."
-          variant="cream"
-          compact
-        />
-        <BekanntAusSection />
-        <PortfolioDownloadSection />
-        <PressemitteilungenSection />
-        <EPKDownloadSection />
-        <PressefotosSection />
-        <BoilerplateSection />
-        <PloetzlichMagieSection />
-        <InterviewZitateSection />
-        <PullQuoteSection />
-        <VideoSection />
-        <PressFAQSection />
-        <PressKontaktDirektSection />
-      </main>
-    </PageLayout>
-  </>
+
+    <SubHero
+      eyebrow="Pressebereich"
+      title={<>Pressebereich<span style={{ color: MAGENTA }}>.</span> Material <span style={{ color: COBALT }}>fertig geliefert</span>.</>}
+      sub="Pressekit als ein PDF. Hi-Res-Pressefotos zum direkten Download. Boilerplate in drei Längen — 50, 100, 250 Wörter, copy-paste-fertig. Plus aktuelle Pressemitteilungen, Tour-Daten zur Show 2026 und persönlicher Direkt-Kontakt mit 24-Stunden-Antwort."
+      image={portraitBuchImg}
+      imageAlt="Pressefoto Emilian Leber — Zauberer und Comedy-Magier aus Bayern"
+      imgPos="top"
+      badge="5 TV- und Award-Stationen · 8+ Hi-Res-Fotos · 24h Antwort"
+      primary={{ label: "Pressekit anfordern", href: "/buchung" }}
+      secondary={{ label: "Direkt zu den Fotos", href: "/presse#pressefotos" }}
+    />
+
+    <Stats
+      items={[
+        { v: "5", l: "TV- und Award-Stationen" },
+        { v: "3", l: "Boilerplate-Längen" },
+        { v: "8+", l: "Hi-Res-Pressefotos" },
+        { v: "24h", l: "Antwort werktags" },
+      ]}
+    />
+
+    <BekanntAusSection />
+    <PortfolioDownloadSection />
+    <PressemitteilungenSection />
+    <EPKDownloadSection />
+    <PressefotosSection />
+    <BoilerplateSection />
+    <PloetzlichMagieSection />
+    <InterviewZitateSection />
+    <PullQuoteSection />
+    <VideoSection />
+
+    <ReviewsBlock />
+
+    <FAQ
+      eyebrow="Häufige Press-Fragen"
+      title="Was Redaktionen vorab fragen."
+      items={FAQS}
+    />
+
+    <PressKontaktDirektSection />
+
+    <FinalCTA
+      title={<>Pressekit anfordern — in 24 Stunden zurück<span style={{ color: MAGENTA }}>.</span></>}
+      sub="Bio, Fotos, Logo und Tour-Daten als ein Paket. Kurze Mail genügt, ich melde mich werktags binnen 24 Stunden — bei Eilfällen schneller."
+    />
+  </VoltageShell>
 );
 
 export default Presse;
