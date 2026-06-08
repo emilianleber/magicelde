@@ -35,10 +35,87 @@ import {
 } from "@/lib/showPlaner";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import { sendInquiry } from "@/lib/sendInquiry";
+import staunenImg from "@/assets/staunen.jpg";
+import weddingImg from "@/assets/wedding-magic.jpg";
+import magicdinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
+import heroBirthdayImg from "@/assets/hero-birthday.jpg";
+import audienceImg from "@/assets/audience-reactions.jpg";
+import heroDinnerImg from "@/assets/hero-dinner.jpg";
+import heroCloseupImg from "@/assets/hero-closeup.jpg";
 
 const ACCENT = "#1D3FFF";
 const ACCENT_DEEP = "#1233CC";
 const AMBER = "#AFC0FF";
+
+/* Link-basierte Zusatz-Infos für die Empfehlungs-Karte (Bild + Highlights).
+   Lässt die recommendation-Berechnung unangetastet. */
+const RECO_EXTRA: Record<string, { img: string; highlights: string[] }> = {
+  "/buehnenshow": {
+    img: staunenImg,
+    highlights: [
+      "15-60 Min, 50-500 Gäste",
+      "Mentalmagie + Comedy + Standing-Ovation-Finale",
+      "Headset & Ton inklusive",
+    ],
+  },
+  "/hochzeit": {
+    img: weddingImg,
+    highlights: [
+      "Empfang · Dinner · vor dem Tanz",
+      "Brautpaar-Anekdoten eingebaut",
+      "100+ Hochzeiten begleitet",
+    ],
+  },
+  "/firmenfeiern": {
+    img: magicdinnerBuehneImg,
+    highlights: [
+      "Premium bis Comedy — eure Tonalität",
+      "Insider-Briefing vorab",
+      "100+ Firmen-Events",
+    ],
+  },
+  "/geburtstage": {
+    img: heroBirthdayImg,
+    highlights: [
+      "Memory-Lane mit Anekdoten",
+      "Close-Up an den Tafeln + Bühnen-Highlight",
+      "Von 30er bis Goldene Hochzeit",
+    ],
+  },
+  "/messe-magier": {
+    img: audienceImg,
+    highlights: [
+      "Besucher gezielt an den Stand ziehen",
+      "Leads spielerisch qualifizieren",
+      "Halbtag / Tag / Mehrtages",
+    ],
+  },
+  "/magic-dinner": {
+    img: heroDinnerImg,
+    highlights: [
+      "Über den ganzen Abend, 2,5-4 Std",
+      "Walk-Around · Tisch-zu-Tisch · Bühne",
+      "Abgestimmt auf euer Menü",
+    ],
+  },
+  "/close-up": {
+    img: heroCloseupImg,
+    highlights: [
+      "Tischmagie auf Augenhöhe",
+      "Karten & Münzen in den Händen der Gäste",
+      "Keine Bühne/Technik nötig",
+    ],
+  },
+};
+
+const RECO_FALLBACK = {
+  img: staunenImg,
+  highlights: [
+    "Auf euren Anlass zugeschnitten",
+    "200+ Events Routine seit 2016",
+    "Konzept + Antwort in 24 Stunden",
+  ],
+};
 
 /* ───────────────────────────────────────────────────────────
    STEP-DEFINITIONS
@@ -837,7 +914,7 @@ const SummaryView = ({
   }));
   return (
     <div className="sp-step">
-      <div className="grid lg:grid-cols-2 gap-x-12 gap-y-10 items-start mb-12">
+      <div className="grid lg:grid-cols-2 gap-x-12 gap-y-10 items-stretch mb-12">
         {/* LINKE Spalte — Kontaktformular, prominent oben */}
         <div>
           <div className="flex items-baseline gap-3 mb-5">
@@ -900,44 +977,82 @@ const SummaryView = ({
           </p>
         </div>
 
-        {/* RECHTE Spalte — Empfehlungs-Widget */}
+        {/* RECHTE Spalte — Empfehlungs-Widget (voll-höhe, mit Bild + Highlights) */}
         <aside
-          className="self-start p-7 rounded-2xl relative overflow-hidden text-white"
+          className="self-stretch h-full flex flex-col rounded-2xl relative overflow-hidden text-white"
           style={{
             background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, #08060c 100%)`,
             boxShadow: "0 30px 60px -25px rgba(0,0,0,0.225)",
           }}
         >
-          <div
-            aria-hidden
-            className="absolute -top-20 -right-10 w-[260px] h-[260px] rounded-full blur-2xl"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(175,192,255,0.18), transparent 65%)",
-            }}
-          />
-          <p
-            className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3"
-            style={{ color: AMBER }}
-          >
-            Meine Empfehlung
-          </p>
-          <h3 className="relative font-display text-xl md:text-2xl font-black leading-tight mb-3">
-            {recommendation.format}
-          </h3>
-          <p className="relative text-sm text-white/80 leading-[1.65] mb-5">
-            {recommendation.why}
-          </p>
-          <a
-            href={recommendation.link}
-            target="_blank"
-            rel="noopener"
-            className="relative inline-flex items-center gap-1.5 text-[11px] tracking-[0.14em] uppercase font-bold pb-0.5 border-b transition-colors"
-            style={{ color: "#FFFFFF", borderColor: "rgba(175,192,255,0.45)" }}
-          >
-            Mehr Infos zum Format
-            <ArrowRight className="w-3 h-3" />
-          </a>
+          {/* Bild oben */}
+          <div className="relative w-full h-44 md:h-52 shrink-0 overflow-hidden">
+            <img
+              src={(RECO_EXTRA[recommendation.link] || RECO_FALLBACK).img}
+              alt={recommendation.format}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ objectPosition: "center 30%" }}
+              loading="lazy"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                background: `linear-gradient(180deg, rgba(8,6,12,0.05) 0%, rgba(18,51,204,0.25) 55%, ${ACCENT_DEEP} 100%)`,
+              }}
+            />
+          </div>
+
+          {/* Textblock */}
+          <div className="relative flex-1 flex flex-col p-7">
+            <div
+              aria-hidden
+              className="absolute -top-16 -right-10 w-[260px] h-[260px] rounded-full blur-2xl pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(circle, rgba(175,192,255,0.18), transparent 65%)",
+              }}
+            />
+            <p
+              className="relative text-[10px] tracking-[0.18em] uppercase font-bold mb-3"
+              style={{ color: AMBER }}
+            >
+              Meine Empfehlung für dich
+            </p>
+            <h3 className="relative font-display text-2xl md:text-3xl font-black leading-tight mb-3">
+              {recommendation.format}
+            </h3>
+            <p className="relative text-sm md:text-[15px] text-white/80 leading-[1.65] mb-6">
+              {recommendation.why}
+            </p>
+
+            <ul className="relative space-y-3 mb-7">
+              {(RECO_EXTRA[recommendation.link] || RECO_FALLBACK).highlights.map(
+                (h, i) => (
+                  <li key={i} className="flex items-start gap-2.5">
+                    <Sparkle
+                      className="w-4 h-4 mt-0.5 shrink-0"
+                      style={{ color: AMBER }}
+                    />
+                    <span className="text-sm text-white/90 leading-[1.5]">
+                      {h}
+                    </span>
+                  </li>
+                ),
+              )}
+            </ul>
+
+            <a
+              href={recommendation.link}
+              target="_blank"
+              rel="noopener"
+              className="relative mt-auto inline-flex items-center gap-1.5 text-[11px] tracking-[0.14em] uppercase font-bold pb-0.5 border-b transition-colors self-start"
+              style={{ color: "#FFFFFF", borderColor: "rgba(175,192,255,0.45)" }}
+            >
+              Mehr Infos zum Format
+              <ArrowRight className="w-3 h-3" />
+            </a>
+          </div>
         </aside>
       </div>
 
