@@ -8,7 +8,7 @@ import { ArrowRight, ArrowLeft, X, Sparkles, Check } from "lucide-react";
  *   2. 2.5 minutes on site
  *   3. 3 or more pages viewed (tracked via sessionStorage)
  *
- * Stock-photo background (crowd / celebration) + dark overlay for legibility.
+ * Voltage design — clean light card, cobalt accents, no photo background.
  * 2-step form, submits to the same CRM endpoint as /buchung.
  */
 
@@ -40,9 +40,9 @@ const ANLAESSE = [
   "Sonstiges",
 ];
 
-// Stock photo: celebration / crowd with confetti & lights — fits "magic, event, unforgettable moment"
-const BG_IMAGE =
-  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1600&q=80";
+// Voltage palette
+const COBALT = "#1D3FFF";
+const INK = "#0A0B0F";
 
 const EngagementPopup = () => {
   const location = useLocation();
@@ -320,119 +320,92 @@ const EngagementPopup = () => {
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-[#0f0a19]/70 backdrop-blur-sm"
-        style={{ animation: "fadeIn 0.25s ease forwards" }}
+        className="absolute inset-0 backdrop-blur-sm"
+        style={{
+          background: "rgba(10,11,15,0.55)",
+          animation: "fadeIn 0.25s ease forwards",
+        }}
         onClick={close}
       />
 
       {/* Dialog */}
       <div
-        className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.6)]"
-        style={{ animation: "popupIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
+        className="relative w-full max-w-lg rounded-3xl overflow-hidden bg-white"
+        style={{
+          border: "1px solid rgba(10,11,15,0.10)",
+          boxShadow: "0 40px 100px -20px rgba(10,11,15,0.30)",
+          animation: "popupIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        }}
       >
-        {/* Background image + overlay */}
+        {/* Subtle cool background wash */}
         <div className="absolute inset-0">
-          <img
-            src={BG_IMAGE}
-            alt=""
-            className="h-full w-full object-cover"
-          />
           <div
             aria-hidden
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(160deg, rgba(15,10,25,0.88) 0%, rgba(30,15,45,0.85) 50%, rgba(50,20,55,0.82) 100%)",
-            }}
-          />
-          {/* Subtle gradient accent blob for magic feel */}
-          <div
-            aria-hidden
-            className="absolute top-[-80px] right-[-80px] w-[280px] h-[280px] rounded-full opacity-45"
-            style={{
-              background:
-                "radial-gradient(circle, hsl(340 85% 60% / 0.8) 0%, transparent 70%)",
-              filter: "blur(50px)",
-            }}
-          />
-          <div
-            aria-hidden
-            className="absolute bottom-[-60px] left-[-60px] w-[240px] h-[240px] rounded-full opacity-40"
-            style={{
-              background:
-                "radial-gradient(circle, hsl(225 85% 60% / 0.75) 0%, transparent 70%)",
-              filter: "blur(50px)",
+                "linear-gradient(180deg, #FFFFFF 0%, #F4F6F9 100%)",
             }}
           />
         </div>
 
-        {/* Gradient top accent line */}
+        {/* Cobalt top accent line */}
         <div
           aria-hidden
           className="relative h-1 w-full"
-          style={{
-            background:
-              "linear-gradient(90deg, hsl(225 85% 60%), hsl(275 75% 60%), hsl(345 85% 60%))",
-          }}
+          style={{ background: COBALT }}
         />
 
         {/* Close */}
         <button
           onClick={close}
           aria-label="Schließen"
-          className="absolute top-5 right-5 z-20 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white backdrop-blur-sm transition-colors"
+          className="absolute top-5 right-5 z-20 inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#EEF1F6] hover:bg-[#E2E7EF] text-[#0A0B0F]/60 hover:text-[#0A0B0F] transition-colors"
+          style={{ border: "1px solid rgba(10,11,15,0.10)" }}
         >
           <X className="w-4 h-4" />
         </button>
 
-        <div className="relative px-7 md:px-9 pt-9 pb-8 text-white">
+        <div className="relative px-7 md:px-9 pt-9 pb-8 text-[#0A0B0F]">
           {success ? (
             <div className="text-center py-8">
               <div
                 className="mx-auto mb-5 inline-flex items-center justify-center w-16 h-16 rounded-full"
                 style={{
-                  background:
-                    "linear-gradient(135deg, hsl(225 85% 55%), hsl(275 75% 55%), hsl(345 85% 55%))",
-                  boxShadow: "0 10px 40px hsl(275 75% 55% / 0.4)",
+                  background: COBALT,
+                  boxShadow: "0 10px 40px rgba(29,63,255,0.30)",
                 }}
               >
                 <Check className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-display text-2xl md:text-3xl font-black mb-3">
+              <h3 className="font-display text-2xl md:text-3xl font-black mb-3 text-[#0A0B0F]">
                 Danke!
               </h3>
-              <p className="text-white/75 text-[15px]">
+              <p className="text-[#0A0B0F]/60 text-[15px]">
                 Ich melde mich innerhalb von 24 Stunden persönlich bei dir.
               </p>
             </div>
           ) : (
             <>
               {/* Eyebrow */}
-              <div className="flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase text-white/70 mb-3">
+              <div
+                className="flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase mb-3"
+                style={{ color: COBALT }}
+              >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Magie erleben</span>
               </div>
 
               <h3
                 id="popup-title"
-                className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[1.75rem] md:text-[2.1rem]"
+                className="font-display font-black tracking-[-0.01em] leading-[1.08] text-[1.75rem] md:text-[2.1rem] text-[#0A0B0F]"
               >
                 Bevor du gehst —{" "}
-                <span
-                  style={{
-                    background:
-                      "linear-gradient(100deg, hsl(225 95% 75%) 0%, hsl(285 85% 75%) 50%, hsl(340 95% 75%) 100%)",
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  30 Sekunden
-                </span>{" "}
-                für deine Anfrage?
+                <span style={{ color: COBALT }}>30 Sekunden</span> für deine
+                Anfrage?
               </h3>
 
-              <p className="mt-3 text-[14px] md:text-[15px] leading-[1.55] text-white/70">
+              <p className="mt-3 text-[14px] md:text-[15px] leading-[1.55] text-[#0A0B0F]/60">
                 Erzähl mir kurz von deinem Event. Ich melde mich innerhalb 24h
                 mit einem Vorschlag — kostenlos und unverbindlich.
               </p>
@@ -445,10 +418,7 @@ const EngagementPopup = () => {
                       step === 1 ? "w-8 h-1.5" : "w-1.5 h-1.5"
                     }`}
                     style={{
-                      background:
-                        step >= 1
-                          ? "linear-gradient(90deg, hsl(225 90% 70%), hsl(285 85% 70%))"
-                          : "rgba(255,255,255,0.15)",
+                      background: step >= 1 ? COBALT : "rgba(10,11,15,0.12)",
                     }}
                   />
                   <div
@@ -456,14 +426,11 @@ const EngagementPopup = () => {
                       step === 2 ? "w-8 h-1.5" : "w-1.5 h-1.5"
                     }`}
                     style={{
-                      background:
-                        step === 2
-                          ? "linear-gradient(90deg, hsl(285 85% 70%), hsl(345 95% 72%))"
-                          : "rgba(255,255,255,0.15)",
+                      background: step === 2 ? COBALT : "rgba(10,11,15,0.12)",
                     }}
                   />
                 </div>
-                <span className="text-[11px] text-white/50 ml-2">
+                <span className="text-[11px] text-[#0A0B0F]/45 ml-2">
                   Schritt {step} von 2
                 </span>
               </div>
@@ -471,7 +438,7 @@ const EngagementPopup = () => {
               {step === 1 && (
                 <div className="mt-6 space-y-4">
                   <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-white/55 mb-2">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#0A0B0F]/50 mb-2">
                       Was ist dein Event?
                     </label>
                     <div className="grid grid-cols-2 gap-2">
@@ -480,11 +447,20 @@ const EngagementPopup = () => {
                           key={a}
                           type="button"
                           onClick={() => setAnlass(a)}
-                          className={`text-left px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                          className="text-left px-4 py-3 rounded-xl text-sm font-medium transition-all"
+                          style={
                             anlass === a
-                              ? "bg-white text-[#0f0a19] shadow-lg"
-                              : "bg-white/10 text-white/90 hover:bg-white/15 backdrop-blur-sm border border-white/10"
-                          }`}
+                              ? {
+                                  background: "rgba(29,63,255,0.08)",
+                                  color: COBALT,
+                                  border: `1px solid ${COBALT}`,
+                                }
+                              : {
+                                  background: "#FFFFFF",
+                                  color: INK,
+                                  border: "1px solid rgba(10,11,15,0.10)",
+                                }
+                          }
                         >
                           {a}
                         </button>
@@ -493,14 +469,14 @@ const EngagementPopup = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-white/55 mb-2">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#0A0B0F]/50 mb-2">
                       Datum (optional)
                     </label>
                     <input
                       type="date"
                       value={datum}
                       onChange={(e) => setDatum(e.target.value)}
-                      className="w-full rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/30 [color-scheme:dark]"
+                      className="w-full rounded-xl bg-white border border-[rgba(10,11,15,0.10)] px-4 py-3 text-sm text-[#0A0B0F] focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/30 focus:border-[#1D3FFF]"
                     />
                   </div>
 
@@ -510,10 +486,8 @@ const EngagementPopup = () => {
                     disabled={!canAdvance}
                     className="w-full inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-[15px] font-semibold text-white transition-all hover:scale-[1.01] disabled:opacity-40 disabled:cursor-not-allowed"
                     style={{
-                      background:
-                        "linear-gradient(135deg, hsl(225 85% 55%) 0%, hsl(275 75% 55%) 50%, hsl(345 85% 55%) 100%)",
-                      boxShadow:
-                        "0 10px 30px hsl(275 75% 55% / 0.4), 0 0 40px hsl(345 85% 55% / 0.15)",
+                      background: COBALT,
+                      boxShadow: "0 10px 30px rgba(29,63,255,0.25)",
                     }}
                   >
                     Weiter
@@ -525,7 +499,7 @@ const EngagementPopup = () => {
               {step === 2 && (
                 <div className="mt-6 space-y-4">
                   <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-white/55 mb-2">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#0A0B0F]/50 mb-2">
                       Name
                     </label>
                     <input
@@ -534,11 +508,11 @@ const EngagementPopup = () => {
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Dein Name"
                       required
-                      className="w-full rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+                      className="w-full rounded-xl bg-white border border-[rgba(10,11,15,0.10)] px-4 py-3 text-sm text-[#0A0B0F] placeholder:text-[#0A0B0F]/35 focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/30 focus:border-[#1D3FFF]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-white/55 mb-2">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#0A0B0F]/50 mb-2">
                       E-Mail
                     </label>
                     <input
@@ -547,12 +521,12 @@ const EngagementPopup = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@email.de"
                       required
-                      className="w-full rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+                      className="w-full rounded-xl bg-white border border-[rgba(10,11,15,0.10)] px-4 py-3 text-sm text-[#0A0B0F] placeholder:text-[#0A0B0F]/35 focus:outline-none focus:ring-2 focus:ring-[#1D3FFF]/30 focus:border-[#1D3FFF]"
                     />
                   </div>
 
                   {error && (
-                    <p className="text-sm text-red-300">{error}</p>
+                    <p className="text-sm text-red-600">{error}</p>
                   )}
 
                   <div className="flex items-center gap-3">
@@ -560,7 +534,7 @@ const EngagementPopup = () => {
                       type="button"
                       onClick={() => setStep(1)}
                       disabled={sending}
-                      className="inline-flex items-center gap-1.5 text-sm text-white/65 hover:text-white transition-colors"
+                      className="inline-flex items-center gap-1.5 text-sm text-[#0A0B0F]/55 hover:text-[#0A0B0F] transition-colors"
                     >
                       <ArrowLeft className="w-4 h-4" />
                       Zurück
@@ -571,10 +545,8 @@ const EngagementPopup = () => {
                       disabled={sending || !name || !email}
                       className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-[15px] font-semibold text-white transition-all hover:scale-[1.01] disabled:opacity-40 disabled:cursor-not-allowed"
                       style={{
-                        background:
-                          "linear-gradient(135deg, hsl(225 85% 55%) 0%, hsl(275 75% 55%) 50%, hsl(345 85% 55%) 100%)",
-                        boxShadow:
-                          "0 10px 30px hsl(275 75% 55% / 0.4), 0 0 40px hsl(345 85% 55% / 0.15)",
+                        background: COBALT,
+                        boxShadow: "0 10px 30px rgba(29,63,255,0.25)",
                       }}
                     >
                       {sending ? "Sende..." : "Anfrage senden"}
@@ -582,7 +554,7 @@ const EngagementPopup = () => {
                     </button>
                   </div>
 
-                  <p className="text-[11px] text-white/45 text-center">
+                  <p className="text-[11px] text-[#0A0B0F]/45 text-center">
                     Kostenlos · Unverbindlich · Antwort innerhalb 24h
                   </p>
                 </div>

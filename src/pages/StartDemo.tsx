@@ -137,7 +137,12 @@ const StartDemo = () => {
     el.scrollBy({ left: d * stride, behavior: "smooth" });
   };
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
+    const lenis = new Lenis({
+      duration: 1.05,
+      smoothWheel: true,
+      prevent: (node: Element) =>
+        !!(node as HTMLElement).closest?.('[role="dialog"], [data-lenis-prevent], [aria-modal="true"]'),
+    });
     (window as unknown as { __lenis?: unknown }).__lenis = lenis;
     lenis.on("scroll", (e: { scroll: number }) => setScrolled(e.scroll > 40));
     let raf = 0; const loop = (t: number) => { lenis.raf(t); raf = requestAnimationFrame(loop); };

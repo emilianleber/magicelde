@@ -18,7 +18,13 @@ interface Props {
 export default function VoltageShell({ title, description, path = "/demo", children, noindex = true }: Props) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
+    const lenis = new Lenis({
+      duration: 1.05,
+      smoothWheel: true,
+      // Overlays/Modals (Show-Planer, Chatbot, Popups) nativ scrollen lassen — Lenis nicht greifen lassen.
+      prevent: (node: Element) =>
+        !!(node as HTMLElement).closest?.('[role="dialog"], [data-lenis-prevent], [aria-modal="true"]'),
+    });
     (window as unknown as { __lenis?: unknown }).__lenis = lenis;
     lenis.on("scroll", (e: { scroll: number }) => setScrolled(e.scroll > 40));
     let raf = 0;

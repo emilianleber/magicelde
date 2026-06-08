@@ -456,6 +456,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
 
       {/* Modal panel */}
       <div
+        data-lenis-prevent
         className="absolute inset-0 md:inset-4 lg:inset-8 bg-white text-foreground overflow-y-auto md:rounded-3xl"
         style={{
           boxShadow:
