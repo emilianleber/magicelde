@@ -74,22 +74,6 @@ const keywordList = (name: string): string =>
   ].join(", ");
 
 /* ═══════════════════════════════════════════════════════════
-   ACCORDION — aufklappbares <details> im Voltage-Look (default zu).
-   Hält keyword-dichten SEO-Prosa-Text kompakt im DOM.
-   ═══════════════════════════════════════════════════════════ */
-const Accordion = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <details className="group rounded-[18px] px-6 py-5" style={{ background: "#fff", border: `1px solid ${L_LINE}` }}>
-    <summary className="flex items-center justify-between gap-4 cursor-pointer list-none">
-      <span className="text-[16px] md:text-[17px] font-semibold" style={{ color: INK }}>{title}</span>
-      <ChevronDown className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180" style={{ color: COBALT }} />
-    </summary>
-    <div className="mt-4 space-y-4 text-[15px] md:text-[15.5px] leading-[1.75]" style={{ color: L_DIM }}>
-      {children}
-    </div>
-  </details>
-);
-
-/* ═══════════════════════════════════════════════════════════
    FORMATE — 3 Showformate (Close-Up / Bühnenshow / Magic Dinner)
    Visuelle Bild-Karten mit kurzem Stadt-Text + Links.
    ═══════════════════════════════════════════════════════════ */
@@ -195,43 +179,43 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
     {
       Icon: Heart,
       keyword: `Hochzeitszauberer ${data.name}`,
-      label: `Zauberer für Hochzeit in ${data.name}`,
-      body: `Sektempfang, Dinner, Party — Tisch-zu-Tisch beim Dinner, Bühnenshow vor dem Tanz, eingebaute Brautpaar-Anekdoten.`,
+      label: "Hochzeit",
+      body: "Empfang, Dinner, vor dem Tanz.",
       link: "/hochzeit",
     },
     {
       Icon: Briefcase,
       keyword: `Firmenzauberer ${data.name}`,
-      label: `Zauberer für Firmenfeier in ${data.name}`,
-      body: `Weihnachtsfeier, Sommerfest, Jubiläum, Kick-off — moderner Firmenzauberer mit Insider-Pointen aus dem Briefing, Vorstand-tauglich.`,
+      label: "Firmenfeier",
+      body: "Weihnachtsfeier, Jubiläum, Kick-off.",
       link: "/firmenfeiern",
     },
     {
       Icon: Cake,
       keyword: `Geburtstagszauberer ${data.name}`,
-      label: `Zauberer für Geburtstag in ${data.name}`,
-      body: `Runder Geburtstag, Überraschungsparty, Familienfeier — Comedy-Zauberer mit Memory-Lane-Routinen. Von 30er bis Goldene Hochzeit.`,
+      label: "Geburtstag",
+      body: "Vom 30er bis zur Goldenen Hochzeit.",
       link: "/geburtstage",
     },
     {
       Icon: Building2,
       keyword: `Galazauberer ${data.name}`,
-      label: `Zauberer für Galas in ${data.name}`,
-      body: `Award-Show, Charity-Gala, Black-Tie-Event — Premium-Tonalität, Mentaleffekte mit Veranstalter-Bezug, Standing-Ovation-Finale.`,
+      label: "Gala & Bühne",
+      body: "Award-Show, Charity-Gala, Black-Tie.",
       link: "/buehnenshow",
     },
     {
       Icon: GraduationCap,
       keyword: `Messezauberer ${data.name}`,
-      label: `Zauberer für Messe in ${data.name}`,
-      body: `Messeauftritt, Stand-Aktivierung, Kongress-Entertainment — ich ziehe Besucher zum Stand und qualifiziere Leads spielerisch.`,
+      label: "Messe & Stand",
+      body: "Stand-Aktivierung, Leads spielerisch.",
       link: "/messe-magier",
     },
     {
       Icon: PartyPopper,
       keyword: `Zauberer buchen ${data.name}`,
-      label: `Private Feiern & Jubiläen in ${data.name}`,
-      body: `Jubiläum, Einweihung, Sommerfest oder besonderer Anlass — Zauberer buchen mit persönlicher Beratung und 24-Stunden-Antwort.`,
+      label: "Private Feier",
+      body: "Jubiläum, Einweihung, Sommerfest.",
       link: "/buchung",
     },
   ];
@@ -251,8 +235,8 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
             Hochzeit. Firma. <span style={{ color: COBALT }}>Geburtstag.</span>
           </h2>
           <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
-            Für jeden Anlass in {data.name} der passende Zauberer. Hochzeit, Firmenfeier, Geburtstag,
-            Gala, Messe oder private Feier — alle Formate, alle Tonalitäten.
+            Für jeden Anlass in {data.name} der passende Zauberer — Hochzeit, Firmenfeier, Gala,
+            Messe oder private Feier.
           </p>
         </motion.div>
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -260,23 +244,24 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
             <motion.li key={a.keyword} variants={up}>
               <a
                 href={a.link}
-                aria-label={`Mehr zu ${a.label}`}
-                className="group flex flex-col h-full rounded-[20px] p-6 transition-transform hover:scale-[1.02]"
+                aria-label={`Mehr zu ${a.keyword}`}
+                title={a.keyword}
+                className="group flex items-center gap-4 h-full rounded-[18px] p-5 transition-transform hover:scale-[1.02]"
                 style={{ background: "#fff", border: `1px solid ${L_LINE}` }}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="w-11 h-11 rounded-[12px] flex items-center justify-center" style={{ background: `${COBALT}14`, color: COBALT }}>
-                    <a.Icon className="w-5 h-5" />
-                  </span>
-                  <ArrowUpRight className="w-4 h-4 transition-colors" style={{ color: "rgba(10,11,15,0.3)" }} />
-                </div>
-                <span className="text-[10px] tracking-[0.16em] uppercase font-bold mb-1.5" style={{ color: COBALT }}>
-                  {a.keyword}
+                <span className="w-12 h-12 shrink-0 rounded-[13px] flex items-center justify-center" style={{ background: `${COBALT}14`, color: COBALT }}>
+                  <a.Icon className="w-5 h-5" />
                 </span>
-                <h3 className="text-[18px] font-bold leading-tight mb-2 transition-colors group-hover:text-[#1D3FFF]" style={{ color: INK }}>
-                  {a.label}
-                </h3>
-                <p className="text-[14.5px] leading-[1.6]" style={{ color: L_DIM }}>{a.body}</p>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-[17px] font-bold leading-tight transition-colors group-hover:text-[#1D3FFF]" style={{ color: INK }}>
+                    {a.label}
+                  </h3>
+                  <p className="text-[13.5px] leading-snug mt-0.5" style={{ color: L_DIM }}>{a.body}</p>
+                  <span className="block text-[10px] tracking-[0.14em] uppercase font-bold mt-1.5" style={{ color: COBALT }}>
+                    {a.keyword}
+                  </span>
+                </div>
+                <ArrowUpRight className="w-4 h-4 shrink-0 self-start transition-colors" style={{ color: "rgba(10,11,15,0.3)" }} />
               </a>
             </motion.li>
           ))}
@@ -320,9 +305,10 @@ const AblaufBuchungSection = ({ data }: { data: Stadt }) => (
 );
 
 /* ═══════════════════════════════════════════════════════════
-   MEHR ÜBER ZAUBERER IN [STADT] — Accordion-Block.
+   MEHR ÜBER ZAUBERER IN [STADT] — EIN einziger Lesen-Toggle.
    Der gesamte schwere SEO-Prosa-Text — wortwörtlich übernommen,
-   nur in aufklappbare <details> verlagert (default zu, bleibt im DOM).
+   als zusammenhängender Langform-Artikel in EINEM <details> (default zu,
+   bleibt im DOM). Bewusst KEIN zweites FAQ-Accordion.
    ═══════════════════════════════════════════════════════════ */
 const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
   const year = new Date().getFullYear();
@@ -348,197 +334,232 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
           </p>
         </motion.div>
 
-        <motion.div variants={up} className="space-y-3">
-          {/* WARUM-STADT — highlight + seoText */}
-          <Accordion title={`Warum einen Zauberer in ${data.name} buchen?`}>
-            <p>{data.highlight}</p>
-            {data.seoText && <p>{data.seoText}</p>}
-            <ul className="space-y-1.5 list-disc pl-5">
-              <li>Close-Up Magie &amp; Tischzauberei</li>
-              <li>Bühnenshow mit Comedy &amp; Mentalmagie</li>
-              <li>Magic Dinner — Magie zwischen den Gängen</li>
-              <li>Moderation mit eingebauter Magie</li>
-            </ul>
-            <p>200+ Events seit 2016 — auch in {data.region}.</p>
-          </Accordion>
+        {/* EIN einziger Lesen-Toggle — kein zweites FAQ-Accordion.
+            Aufgeklappt: zusammenhängender Langform-Artikel mit h3-Zwischen-
+            überschriften. Jeder Prosa-Text wortwörtlich übernommen. */}
+        <motion.div variants={up}>
+          <details className="group rounded-[18px] overflow-hidden" style={{ background: "#fff", border: `1px solid ${L_LINE}` }}>
+            <summary className="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5 md:px-8 md:py-6">
+              <span className="text-[16px] md:text-[18px] font-semibold" style={{ color: INK }}>
+                Ausführliche Infos zu Zauberer in {data.name} anzeigen
+              </span>
+              <ChevronDown className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180" style={{ color: COBALT }} />
+            </summary>
 
-          {/* HOCHZEITSMAGIER-STADT */}
-          <Accordion title={`Hochzeitszauberer ${data.name} — Magie beim Sektempfang, beim Dinner, vor dem Tanz`}>
-            <p>
-              Ein Hochzeitszauberer in {data.name} bringt drei Phasen zum Glänzen: Walk-Around beim
-              Sektempfang als Eisbrecher zwischen Familien, Tisch-zu-Tisch beim Hochzeitsdinner mit
-              eingebauten Brautpaar-Anekdoten und eine kompakte Bühnen-Highlightshow vor dem
-              Eröffnungstanz. 100+ Hochzeiten bayernweit — das Setup steht.
-            </p>
-            <p>
-              Egal ob klassische kirchliche Hochzeit, freie Trauung oder standesamtliche Feier in{" "}
-              {data.name} — eingebaute Magie ist die Pointe, die deine Gäste noch Jahre später erzählen
-              werden. Mit Brautpaar-Briefing vorab, damit eure Geschichte Teil der Show wird.
-            </p>
-            <ul className="space-y-1.5 list-disc pl-5">
-              <li>Empfang — Walk-Around · 30–60 Min · Eisbrecher zwischen Gästen in {data.name}.</li>
-              <li>Dinner — Tisch-zu-Tisch · 5–7 Min pro Tafel · eingebaute Brautpaar-Anekdoten.</li>
-              <li>Vor dem Tanz — Bühnen-Highlight · 15–20 Min · Standing-Ovation-Finale vor der Tanzeröffnung.</li>
-              <li>100+ Hochzeiten · auch in {data.name} und {data.region}</li>
-            </ul>
-            <div className="flex flex-wrap gap-3 pt-1">
-              <a href="/hochzeit" className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
-                Hochzeitszauberer-Konzept <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-              <a href={`/buchung?ort=${encodeURIComponent(data.name)}&format=Hochzeit`} className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase transition-colors hover:border-[#1D3FFF]" style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}>
-                Hochzeit in {data.name} anfragen <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </Accordion>
+            <article
+              className="px-6 pb-8 md:px-8 md:pb-10 text-[15px] md:text-[15.5px] leading-[1.75]"
+              style={{ color: L_DIM, borderTop: `1px solid ${L_LINE}` }}
+            >
+              {/* WARUM-STADT — highlight + seoText */}
+              <h3 className="text-[20px] md:text-[22px] font-bold mt-7 mb-3" style={{ color: INK }}>
+                Warum einen Zauberer in {data.name} buchen?
+              </h3>
+              <p className="mb-4">{data.highlight}</p>
+              {data.seoText && <p className="mb-4">{data.seoText}</p>}
+              <ul className="space-y-1.5 list-disc pl-5 mb-4">
+                <li>Close-Up Magie &amp; Tischzauberei</li>
+                <li>Bühnenshow mit Comedy &amp; Mentalmagie</li>
+                <li>Magic Dinner — Magie zwischen den Gängen</li>
+                <li>Moderation mit eingebauter Magie</li>
+              </ul>
+              <p className="mb-4">200+ Events seit 2016 — auch in {data.region}.</p>
 
-          {/* FIRMENZAUBERER-STADT */}
-          <Accordion title={`Firmenzauberer ${data.name} — Corporate-Entertainment, das der Vorstand zückt`}>
-            <p>
-              Ein Firmenzauberer in {data.name} braucht mehr als Tricks — er braucht Tonalitätsgefühl.
-              Vorstandsabend anders als Mitarbeiter-Weihnachtsfeier, Sales-Kickoff anders als Jubiläum.
-              Mit Briefing-Call der Geschäftsleitung baue ich Insider-Pointen ein, die nur in eurem Saal
-              funktionieren.
-            </p>
-            <p>
-              Premium-Beispiel: 200 Gäste, Versicherungs-Konzern in {data.region}, Vorstandsvorsitzender
-              zückte selbst drei Minuten nach Übergabe die Karten. Berufshaftpflicht, DSGVO + AVV
-              abgesichert, Tech-Rider auf Anfrage.
-            </p>
-            <ul className="space-y-1.5 list-disc pl-5">
-              <li>Weihnachtsfeier — Klassiker im Q4 · Mitarbeiter und Partner in {data.name}.</li>
-              <li>Vorstandsdinner — Premium-Tonalität, leise Mentaleffekte, drei Sekunden Stille.</li>
-              <li>Sales-Kickoff — energetisch, eingebaute Pointen aus dem Briefing der Geschäftsleitung.</li>
-              <li>Jubiläum / Firmenfest — Sommerfeste, Geburtstage des Unternehmens, Mitarbeiter-Events.</li>
-            </ul>
-            <div className="flex flex-wrap gap-3 pt-1">
-              <a href="/firmenfeiern" className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
-                Firmenfeier-Konzept <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-              <a href={`/buchung?ort=${encodeURIComponent(data.name)}&format=Firma`} className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase transition-colors hover:border-[#1D3FFF]" style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}>
-                Firmenfeier {data.name} anfragen <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </Accordion>
-
-          {/* MAGIC-DINNER-STADT */}
-          <Accordion title={`Magic Dinner ${data.name} — drei Gänge, drei Magie-Routinen`}>
-            <p>
-              Magic Dinner ist mein Spezialgebiet — Mehrgänge-Abend mit Close-Up zwischen den Gängen und
-              Bühnen-Höhepunkt zum Dessert. Funktioniert in Restaurants in {data.name} oder als
-              geschlossener Privatabend.
-            </p>
-            <ul className="space-y-1.5 list-disc pl-5">
-              <li><strong style={{ color: INK }}>Vorspeise · 20 Min pro Tisch — Eisbrecher:</strong> Walk-Around zwischen den Plätzen, Karten in die Hände der Gäste, kleine Wow-Effekte direkt am Tisch in {data.name}.</li>
-              <li><strong style={{ color: INK }}>Hauptgang · 5–7 Min pro Tisch — Tafel-Magie:</strong> Tisch-zu-Tisch-Routinen mit eingebauten Anekdoten der Gastgeber. Jeder Tisch bekommt seine eigene Mini-Show.</li>
-              <li><strong style={{ color: INK }}>Dessert · 15–20 Min zentral — Bühnen-Pointe:</strong> Eine zentrale Bühnen-Routine für die ganze Tafel gleichzeitig — Mentaleffekt mit drei Sekunden Stille danach.</li>
-            </ul>
-            <p>10+ Magic Dinners — auch in {data.name}.</p>
-            <a href="/magic-dinner" className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
-              Magic-Dinner-Konzept im Detail <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-          </Accordion>
-
-          {/* IN DER NÄHE */}
-          <Accordion title={`Zauberer in der Nähe von ${data.name} gesucht?`}>
-            <p>
-              Wer "Zauberer in der Nähe" oder "Magier in der Umgebung" sucht und in {data.name} oder dem
-              Umkreis sitzt: Ich komme zu jedem Veranstaltungsort in {data.name} und {data.region}.
-              Anfahrt im Angebot kalkuliert, keine versteckten Kosten, kurze Reaktionszeit auf Anfragen.
-            </p>
-            <ul className="space-y-1.5 list-disc pl-5">
-              <li>Anfrage starten für {data.name}</li>
-              <li>Direkt anrufen — +49 155 63744696</li>
-              <li>Ich komme zu jedem Veranstaltungsort in {data.name} und {data.region}</li>
-            </ul>
-          </Accordion>
-
-          {/* ANREISE / VERFÜGBARKEIT */}
-          <Accordion title={`Anfahrt nach ${data.name} & Verfügbarkeit`}>
-            <p>
-              Mein Standort ist Regensburg — von dort aus betreue ich Events in ganz Bayern und
-              deutschlandweit. Die Anfahrt nach {data.name} ist im Angebot transparent kalkuliert, keine
-              versteckten Kosten. Pünktliches Erscheinen vor Showbeginn garantiert.
-            </p>
-            <p>
-              Verfügbarkeit {year}–{year + 1}: Termine in {data.name} aktuell verfügbar. Q1 und Q2 sind
-              aktuell entspannt — Q4 (Weihnachtsfeier-Saison) füllt sich erfahrungsgemäß ab Juli.
-              Hochzeitstermine Mai–September am besten frühzeitig anfragen, gerade in {data.name}.
-            </p>
-            <ul className="space-y-1.5 list-disc pl-5">
-              <li>Anfahrt im Angebot</li>
-              <li>Kein Stau-Risiko (eigene Reserve)</li>
-              <li>Pünktlich vor Setup</li>
-              <li>Bayern flächendeckend</li>
-            </ul>
-            <p>≤ 24 h — Termin in {data.name} sichern.</p>
-          </Accordion>
-
-          {/* GARANTIEN */}
-          <Accordion title={`Sechs Garantien für dein Event in ${data.name}`}>
-            <p>
-              Einen Zauberer in {data.name} zu buchen ist Vertrauenssache. Sechs Versprechen, die das
-              Risiko für dich auf Null bringen — schriftlich im Angebot fixiert.
-            </p>
-            <ul className="space-y-1.5 list-disc pl-5">
-              <li><strong style={{ color: INK }}>Berufshaftpflicht:</strong> Standard-Berufshaftpflicht für Künstler greift bei jedem Auftritt in {data.name} — Sach- und Personenschäden abgesichert. Versicherungs-Nachweis auf Anfrage.</li>
-              <li><strong style={{ color: INK }}>30 Min Briefing-Call:</strong> Vorab-Call zur Klärung von Anlass, Tonalität, Tabus und Insider-Anekdoten — kostenlos, ohne Verpflichtung.</li>
-              <li><strong style={{ color: INK }}>24h-Antwort-Garantie:</strong> Anfragen aus {data.name} beantworte ich innerhalb 24 Stunden — meistens schneller, oft am selben Tag.</li>
-              <li><strong style={{ color: INK }}>DSGVO + AVV:</strong> Datenschutz, Auftragsverarbeitungsvertrag und alle rechtlichen Grundlagen — gerade für Firmenkunden in {data.name} wichtig.</li>
-              <li><strong style={{ color: INK }}>Pünktlichkeits-Versprechen:</strong> Setup 30 Min vor Showbeginn, Soundcheck inkludiert. Kein Stress vor eurer Veranstaltung in {data.name}.</li>
-              <li><strong style={{ color: INK }}>Krankheits-Ersatz:</strong> Im (sehr unwahrscheinlichen) Krankheitsfall bekomme ich einen geprüften Kollegen organisiert — kein Loch im Programm.</li>
-            </ul>
-          </Accordion>
-
-          {/* LOCATIONS */}
-          {data.bekannteLocations && data.bekannteLocations.length > 0 && (
-            <Accordion title={`Event-Locations in ${data.name}`}>
-              <p>
-                Ich trete regelmäßig in Locations und Venues in {data.name} auf — und komme zu jeder
-                Wunsch-Location. Schlosssäle, Hotels, Restaurants, Eventhallen.
+              {/* HOCHZEITSMAGIER-STADT */}
+              <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                Hochzeitszauberer {data.name} — Magie beim Sektempfang, beim Dinner, vor dem Tanz
+              </h3>
+              <p className="mb-4">
+                Ein Hochzeitszauberer in {data.name} bringt drei Phasen zum Glänzen: Walk-Around beim
+                Sektempfang als Eisbrecher zwischen Familien, Tisch-zu-Tisch beim Hochzeitsdinner mit
+                eingebauten Brautpaar-Anekdoten und eine kompakte Bühnen-Highlightshow vor dem
+                Eröffnungstanz. 100+ Hochzeiten bayernweit — das Setup steht.
               </p>
-              <div className="flex flex-wrap gap-2.5">
-                {data.bekannteLocations.map((loc) => (
-                  <span
-                    key={loc}
-                    className="inline-flex items-center gap-2 text-[13px] px-4 py-2 rounded-full"
-                    style={{ background: "#F4F6F9", border: `1px solid ${L_LINE}`, color: INK }}
-                  >
-                    <MapPin className="w-3.5 h-3.5" style={{ color: COBALT }} />
-                    {loc}
-                  </span>
-                ))}
+              <p className="mb-4">
+                Egal ob klassische kirchliche Hochzeit, freie Trauung oder standesamtliche Feier in{" "}
+                {data.name} — eingebaute Magie ist die Pointe, die deine Gäste noch Jahre später erzählen
+                werden. Mit Brautpaar-Briefing vorab, damit eure Geschichte Teil der Show wird.
+              </p>
+              <ul className="space-y-1.5 list-disc pl-5 mb-4">
+                <li>Empfang — Walk-Around · 30–60 Min · Eisbrecher zwischen Gästen in {data.name}.</li>
+                <li>Dinner — Tisch-zu-Tisch · 5–7 Min pro Tafel · eingebaute Brautpaar-Anekdoten.</li>
+                <li>Vor dem Tanz — Bühnen-Highlight · 15–20 Min · Standing-Ovation-Finale vor der Tanzeröffnung.</li>
+                <li>100+ Hochzeiten · auch in {data.name} und {data.region}</li>
+              </ul>
+              <div className="flex flex-wrap gap-3 mb-2">
+                <a href="/hochzeit" className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
+                  Hochzeitszauberer-Konzept <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+                <a href={`/buchung?ort=${encodeURIComponent(data.name)}&format=Hochzeit`} className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase transition-colors hover:border-[#1D3FFF]" style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}>
+                  Hochzeit in {data.name} anfragen <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
               </div>
-              <p>
-                Deine Location ist nicht dabei? Kein Problem — ich komme zu jedem Veranstaltungsort in{" "}
-                {data.name} und Umgebung.{" "}
-                <a href={`/buchung?ort=${encodeURIComponent(data.name)}`} style={{ color: COBALT }} className="hover:underline font-semibold">
-                  Jetzt anfragen →
-                </a>
-              </p>
-            </Accordion>
-          )}
 
-          {/* LANG-TEXT */}
-          {langParagraphs.length > 0 && (
-            <Accordion title={`Zauberer ${data.name} — ausführlich erklärt`}>
-              {langParagraphs.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </Accordion>
-          )}
-
-          {/* KOLLEGEN-EMPFEHLUNG */}
-          {data.kollegenEmpfehlung && (
-            <Accordion title="Empfehlung aus dem Kollegen-Netzwerk">
-              <p>
-                {data.kollegenEmpfehlung.prefix}
-                <a href={data.kollegenEmpfehlung.linkHref} target="_blank" rel="noopener" className="underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
-                  {data.kollegenEmpfehlung.linkText}
-                </a>
-                {data.kollegenEmpfehlung.suffix}
+              {/* FIRMENZAUBERER-STADT */}
+              <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                Firmenzauberer {data.name} — Corporate-Entertainment, das der Vorstand zückt
+              </h3>
+              <p className="mb-4">
+                Ein Firmenzauberer in {data.name} braucht mehr als Tricks — er braucht Tonalitätsgefühl.
+                Vorstandsabend anders als Mitarbeiter-Weihnachtsfeier, Sales-Kickoff anders als Jubiläum.
+                Mit Briefing-Call der Geschäftsleitung baue ich Insider-Pointen ein, die nur in eurem Saal
+                funktionieren.
               </p>
-            </Accordion>
-          )}
+              <p className="mb-4">
+                Premium-Beispiel: 200 Gäste, Versicherungs-Konzern in {data.region}, Vorstandsvorsitzender
+                zückte selbst drei Minuten nach Übergabe die Karten. Berufshaftpflicht, DSGVO + AVV
+                abgesichert, Tech-Rider auf Anfrage.
+              </p>
+              <ul className="space-y-1.5 list-disc pl-5 mb-4">
+                <li>Weihnachtsfeier — Klassiker im Q4 · Mitarbeiter und Partner in {data.name}.</li>
+                <li>Vorstandsdinner — Premium-Tonalität, leise Mentaleffekte, drei Sekunden Stille.</li>
+                <li>Sales-Kickoff — energetisch, eingebaute Pointen aus dem Briefing der Geschäftsleitung.</li>
+                <li>Jubiläum / Firmenfest — Sommerfeste, Geburtstage des Unternehmens, Mitarbeiter-Events.</li>
+              </ul>
+              <div className="flex flex-wrap gap-3 mb-2">
+                <a href="/firmenfeiern" className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
+                  Firmenfeier-Konzept <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+                <a href={`/buchung?ort=${encodeURIComponent(data.name)}&format=Firma`} className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase transition-colors hover:border-[#1D3FFF]" style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}>
+                  Firmenfeier {data.name} anfragen <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+
+              {/* MAGIC-DINNER-STADT */}
+              <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                Magic Dinner {data.name} — drei Gänge, drei Magie-Routinen
+              </h3>
+              <p className="mb-4">
+                Magic Dinner ist mein Spezialgebiet — Mehrgänge-Abend mit Close-Up zwischen den Gängen und
+                Bühnen-Höhepunkt zum Dessert. Funktioniert in Restaurants in {data.name} oder als
+                geschlossener Privatabend.
+              </p>
+              <ul className="space-y-1.5 list-disc pl-5 mb-4">
+                <li><strong style={{ color: INK }}>Vorspeise · 20 Min pro Tisch — Eisbrecher:</strong> Walk-Around zwischen den Plätzen, Karten in die Hände der Gäste, kleine Wow-Effekte direkt am Tisch in {data.name}.</li>
+                <li><strong style={{ color: INK }}>Hauptgang · 5–7 Min pro Tisch — Tafel-Magie:</strong> Tisch-zu-Tisch-Routinen mit eingebauten Anekdoten der Gastgeber. Jeder Tisch bekommt seine eigene Mini-Show.</li>
+                <li><strong style={{ color: INK }}>Dessert · 15–20 Min zentral — Bühnen-Pointe:</strong> Eine zentrale Bühnen-Routine für die ganze Tafel gleichzeitig — Mentaleffekt mit drei Sekunden Stille danach.</li>
+              </ul>
+              <p className="mb-4">10+ Magic Dinners — auch in {data.name}.</p>
+              <div className="mb-2">
+                <a href="/magic-dinner" className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
+                  Magic-Dinner-Konzept im Detail <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+
+              {/* IN DER NÄHE */}
+              <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                Zauberer in der Nähe von {data.name} gesucht?
+              </h3>
+              <p className="mb-4">
+                Wer "Zauberer in der Nähe" oder "Magier in der Umgebung" sucht und in {data.name} oder dem
+                Umkreis sitzt: Ich komme zu jedem Veranstaltungsort in {data.name} und {data.region}.
+                Anfahrt im Angebot kalkuliert, keine versteckten Kosten, kurze Reaktionszeit auf Anfragen.
+              </p>
+              <ul className="space-y-1.5 list-disc pl-5 mb-4">
+                <li>Anfrage starten für {data.name}</li>
+                <li>Direkt anrufen — +49 155 63744696</li>
+                <li>Ich komme zu jedem Veranstaltungsort in {data.name} und {data.region}</li>
+              </ul>
+
+              {/* ANREISE / VERFÜGBARKEIT */}
+              <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                Anfahrt nach {data.name} &amp; Verfügbarkeit
+              </h3>
+              <p className="mb-4">
+                Mein Standort ist Regensburg — von dort aus betreue ich Events in ganz Bayern und
+                deutschlandweit. Die Anfahrt nach {data.name} ist im Angebot transparent kalkuliert, keine
+                versteckten Kosten. Pünktliches Erscheinen vor Showbeginn garantiert.
+              </p>
+              <p className="mb-4">
+                Verfügbarkeit {year}–{year + 1}: Termine in {data.name} aktuell verfügbar. Q1 und Q2 sind
+                aktuell entspannt — Q4 (Weihnachtsfeier-Saison) füllt sich erfahrungsgemäß ab Juli.
+                Hochzeitstermine Mai–September am besten frühzeitig anfragen, gerade in {data.name}.
+              </p>
+              <ul className="space-y-1.5 list-disc pl-5 mb-4">
+                <li>Anfahrt im Angebot</li>
+                <li>Kein Stau-Risiko (eigene Reserve)</li>
+                <li>Pünktlich vor Setup</li>
+                <li>Bayern flächendeckend</li>
+              </ul>
+              <p className="mb-4">≤ 24 h — Termin in {data.name} sichern.</p>
+
+              {/* GARANTIEN */}
+              <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                Sechs Garantien für dein Event in {data.name}
+              </h3>
+              <p className="mb-4">
+                Einen Zauberer in {data.name} zu buchen ist Vertrauenssache. Sechs Versprechen, die das
+                Risiko für dich auf Null bringen — schriftlich im Angebot fixiert.
+              </p>
+              <ul className="space-y-1.5 list-disc pl-5 mb-4">
+                <li><strong style={{ color: INK }}>Berufshaftpflicht:</strong> Standard-Berufshaftpflicht für Künstler greift bei jedem Auftritt in {data.name} — Sach- und Personenschäden abgesichert. Versicherungs-Nachweis auf Anfrage.</li>
+                <li><strong style={{ color: INK }}>30 Min Briefing-Call:</strong> Vorab-Call zur Klärung von Anlass, Tonalität, Tabus und Insider-Anekdoten — kostenlos, ohne Verpflichtung.</li>
+                <li><strong style={{ color: INK }}>24h-Antwort-Garantie:</strong> Anfragen aus {data.name} beantworte ich innerhalb 24 Stunden — meistens schneller, oft am selben Tag.</li>
+                <li><strong style={{ color: INK }}>DSGVO + AVV:</strong> Datenschutz, Auftragsverarbeitungsvertrag und alle rechtlichen Grundlagen — gerade für Firmenkunden in {data.name} wichtig.</li>
+                <li><strong style={{ color: INK }}>Pünktlichkeits-Versprechen:</strong> Setup 30 Min vor Showbeginn, Soundcheck inkludiert. Kein Stress vor eurer Veranstaltung in {data.name}.</li>
+                <li><strong style={{ color: INK }}>Krankheits-Ersatz:</strong> Im (sehr unwahrscheinlichen) Krankheitsfall bekomme ich einen geprüften Kollegen organisiert — kein Loch im Programm.</li>
+              </ul>
+
+              {/* LOCATIONS */}
+              {data.bekannteLocations && data.bekannteLocations.length > 0 && (
+                <>
+                  <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                    Event-Locations in {data.name}
+                  </h3>
+                  <p className="mb-4">
+                    Ich trete regelmäßig in Locations und Venues in {data.name} auf — und komme zu jeder
+                    Wunsch-Location. Schlosssäle, Hotels, Restaurants, Eventhallen.
+                  </p>
+                  <div className="flex flex-wrap gap-2.5 mb-4">
+                    {data.bekannteLocations.map((loc) => (
+                      <span
+                        key={loc}
+                        className="inline-flex items-center gap-2 text-[13px] px-4 py-2 rounded-full"
+                        style={{ background: "#F4F6F9", border: `1px solid ${L_LINE}`, color: INK }}
+                      >
+                        <MapPin className="w-3.5 h-3.5" style={{ color: COBALT }} />
+                        {loc}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="mb-4">
+                    Deine Location ist nicht dabei? Kein Problem — ich komme zu jedem Veranstaltungsort in{" "}
+                    {data.name} und Umgebung.{" "}
+                    <a href={`/buchung?ort=${encodeURIComponent(data.name)}`} style={{ color: COBALT }} className="hover:underline font-semibold">
+                      Jetzt anfragen →
+                    </a>
+                  </p>
+                </>
+              )}
+
+              {/* LANG-TEXT */}
+              {langParagraphs.length > 0 && (
+                <>
+                  <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                    Zauberer {data.name} — ausführlich erklärt
+                  </h3>
+                  {langParagraphs.map((p, i) => (
+                    <p key={i} className="mb-4">{p}</p>
+                  ))}
+                </>
+              )}
+
+              {/* KOLLEGEN-EMPFEHLUNG */}
+              {data.kollegenEmpfehlung && (
+                <>
+                  <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                    Empfehlung aus dem Kollegen-Netzwerk
+                  </h3>
+                  <p className="mb-4">
+                    {data.kollegenEmpfehlung.prefix}
+                    <a href={data.kollegenEmpfehlung.linkHref} target="_blank" rel="noopener" className="underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
+                      {data.kollegenEmpfehlung.linkText}
+                    </a>
+                    {data.kollegenEmpfehlung.suffix}
+                  </p>
+                </>
+              )}
+            </article>
+          </details>
         </motion.div>
       </div>
     </motion.section>
@@ -919,8 +940,8 @@ const StadtSeite = () => {
       <StimmenSection />
       <AblaufBuchungSection data={data} />
       <CustomQuizSection config={buildStadtQuizConfig(data)} />
-      <FAQSection data={data} />
       <MehrUeberStadtSection data={data} />
+      <FAQSection data={data} />
       <WeitereStaedteSection current={data.slug} />
 
       <FinalCTA
