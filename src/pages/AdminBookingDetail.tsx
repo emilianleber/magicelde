@@ -121,6 +121,8 @@ interface PortalChangeRequest {
 
 type PipelineStep = "neu" | "in_bearbeitung" | "angebot_gesendet" | "gebucht" | "durchgefuehrt" | "abgeschlossen";
 
+const SERIF_ITALIC = "not-italic";
+
 const PIPELINE_STEPS: { key: PipelineStep; label: string; requestStatus: string[] }[] = [
   { key: "neu", label: "Neu", requestStatus: ["neu"] },
   { key: "in_bearbeitung", label: "In Bearbeitung", requestStatus: ["in_bearbeitung", "details_besprechen"] },

@@ -138,6 +138,8 @@ interface PortalChangeRequest {
 
 type Tab = "dashboard" | "meineshow" | "events" | "documents" | "requests" | "nachrichten" | "einstellungen" | "kontakt" | "feedback";
 
+const SERIF_ITALIC = "not-italic";
+
 const inputCls =
   "w-full rounded-xl bg-black/[0.02] border border-black/[0.1] px-4 py-3 text-sm text-foreground placeholder:text-black/25 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/30 transition-all";
 
