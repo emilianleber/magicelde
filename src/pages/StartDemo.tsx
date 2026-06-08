@@ -197,7 +197,6 @@ const StartDemo = () => {
         .pv-float { animation: pvFloat 5s ease-in-out infinite; }
         .no-bar::-webkit-scrollbar { display: none; }
         .no-bar { -ms-overflow-style: none; scrollbar-width: none; }
-        button[aria-label="Kontakt-Menü öffnen"], button[aria-label="Menü schließen"] { display:none !important; }
       `}</style>
 
       {/* ══ HEADER ══ */}
