@@ -183,8 +183,8 @@ const ServicePage = ({ service, city }: PageProps) => {
       <TrustStripSection service={service} city={city} />
       <AblaufSection service={service} city={city} />
       <ReviewsBlock paper={false} />
-      <FAQSection service={service} city={city} allFaqs={allFaqs} />
       <MehrUeberStadtSection service={service} city={city} buchungHref={buchungHref} />
+      <FAQSection service={service} city={city} allFaqs={allFaqs} />
       <WeitereStaedteSection current={city.slug} />
 
       <FinalCTA
@@ -198,22 +198,6 @@ const ServicePage = ({ service, city }: PageProps) => {
     </VoltageShell>
   );
 };
-
-/* ═══════════════════════════════════════════════════════════
-   ACCORDION — aufklappbares <details> im Voltage-Look (default zu).
-   Hält keyword-dichten SEO-Prosa-Text kompakt im DOM.
-   ═══════════════════════════════════════════════════════════ */
-const Accordion = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <details className="group rounded-[18px] px-6 py-5" style={{ background: "#fff", border: `1px solid ${L_LINE}` }}>
-    <summary className="flex items-center justify-between gap-4 cursor-pointer list-none">
-      <span className="text-[16px] md:text-[17px] font-semibold" style={{ color: INK }}>{title}</span>
-      <ChevronDown className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180" style={{ color: COBALT }} />
-    </summary>
-    <div className="mt-4 space-y-4 text-[15px] md:text-[15.5px] leading-[1.75]" style={{ color: L_DIM }}>
-      {children}
-    </div>
-  </details>
-);
 
 /* ═══════════════════════════════════════════════════════════
    HIGHLIGHTS — kompakte Format-USP-Sektion (Checkmark-Liste) mit
@@ -340,10 +324,11 @@ const FAQSection = ({ service, city, allFaqs }: { service: ServiceFormat; city: 
 );
 
 /* ═══════════════════════════════════════════════════════════
-   MEHR ÜBER {FORMAT} IN {STADT} — Accordion-Block.
-   Der gesamte schwere SEO-Prosa-Text (langer city.intro-Teil,
-   In-der-Nähe-Text, Lang-Text, Locations) — wortwörtlich übernommen,
-   nur in aufklappbare <details> verlagert (default zu, bleibt im DOM).
+   MEHR ÜBER {FORMAT} IN {STADT} — EIN einziger Lesen-Toggle.
+   Der gesamte schwere SEO-Prosa-Text (ausführlicher city.intro-Teil,
+   In-der-Nähe-Text, Locations, Lang-Text, Kollegen) — wortwörtlich
+   übernommen, als zusammenhängender Langform-Artikel in EINEM <details>
+   (default zu, bleibt im DOM). Bewusst KEIN zweites FAQ-Accordion.
    ═══════════════════════════════════════════════════════════ */
 const MehrUeberStadtSection = ({ service, city, buchungHref }: { service: ServiceFormat; city: Stadt; buchungHref: string }) => {
   const langParagraphs = (city.langText || "").split("\n\n").filter(Boolean);
@@ -368,82 +353,112 @@ const MehrUeberStadtSection = ({ service, city, buchungHref }: { service: Servic
           </p>
         </motion.div>
 
-        <motion.div variants={up} className="space-y-3">
-          {/* INTRO-STADT + HIGHLIGHT — der ausführliche city.intro-Teil */}
-          <Accordion title={`Warum ${service.shortName} in ${city.name}?`}>
-            <p>{city.intro}</p>
-            <p>{city.highlight}</p>
-            {city.seoText && <p>{city.seoText}</p>}
-            <p>200+ Events seit 2016 — auch in {city.region}.</p>
-          </Accordion>
+        {/* EIN einziger Lesen-Toggle — kein zweites FAQ-Accordion.
+            Aufgeklappt: zusammenhängender Langform-Artikel mit h3-Zwischen-
+            überschriften. Jeder Prosa-Text wortwörtlich übernommen. */}
+        <motion.div variants={up}>
+          <details className="group rounded-[18px] overflow-hidden" style={{ background: "#fff", border: `1px solid ${L_LINE}` }}>
+            <summary className="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5 md:px-8 md:py-6">
+              <span className="text-[16px] md:text-[18px] font-semibold" style={{ color: INK }}>
+                Ausführliche Infos zu {service.shortName} in {city.name} anzeigen
+              </span>
+              <ChevronDown className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180" style={{ color: COBALT }} />
+            </summary>
 
-          {/* IN DER NÄHE — geo-search keyword coverage (vom alten InDerNaeheSection) */}
-          <Accordion title={`Zauberer in der Nähe von ${city.name} gesucht?`}>
-            <p>
-              Wer Zauberer in der Nähe oder Magier in der Umgebung sucht und in {city.name} oder dem
-              Umkreis sitzt: Ich komme zu jedem Veranstaltungsort in {city.name} und {city.region}.
-              Anfahrt im Angebot kalkuliert, keine versteckten Kosten, kurze Reaktionszeit auf Anfragen.
-            </p>
-            <ul className="space-y-1.5 list-disc pl-5">
-              <li>{service.shortName} anfragen für {city.name}</li>
-              <li>Direkt anrufen — +49 155 63744696</li>
-              <li>Ich komme zu jedem Veranstaltungsort in {city.name} und {city.region}</li>
-            </ul>
-            <a href={buchungHref} className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
-              {service.ctaPrimary} <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-          </Accordion>
+            <article
+              className="px-6 pb-8 md:px-8 md:pb-10 text-[15px] md:text-[15.5px] leading-[1.75]"
+              style={{ color: L_DIM, borderTop: `1px solid ${L_LINE}` }}
+            >
+              {/* WARUM-STADT — intro + highlight + seoText */}
+              <h3 className="text-[20px] md:text-[22px] font-bold mt-7 mb-3" style={{ color: INK }}>
+                Warum {service.shortName} in {city.name}?
+              </h3>
+              <p className="mb-4">{city.intro}</p>
+              <p className="mb-4">{city.highlight}</p>
+              {city.seoText && <p className="mb-4">{city.seoText}</p>}
+              <p className="mb-4">200+ Events seit 2016 — auch in {city.region}.</p>
 
-          {/* LOCATIONS — bekannte Venues der Stadt (vom alten LocationsSection) */}
-          {city.bekannteLocations && city.bekannteLocations.length > 0 && (
-            <Accordion title={`Event-Locations in ${city.name}`}>
-              <p>
-                Ich trete regelmäßig in Locations und Venues in {city.name} auf — und komme zu jeder
-                Wunsch-Location. Schlosssäle, Hotels, Restaurants, Eventhallen.
+              {/* IN DER NÄHE — geo-search keyword coverage */}
+              <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                Zauberer in der Nähe von {city.name} gesucht?
+              </h3>
+              <p className="mb-4">
+                Wer Zauberer in der Nähe oder Magier in der Umgebung sucht und in {city.name} oder dem
+                Umkreis sitzt: Ich komme zu jedem Veranstaltungsort in {city.name} und {city.region}.
+                Anfahrt im Angebot kalkuliert, keine versteckten Kosten, kurze Reaktionszeit auf Anfragen.
               </p>
-              <div className="flex flex-wrap gap-2.5">
-                {city.bekannteLocations.map((loc) => (
-                  <span
-                    key={loc}
-                    className="inline-flex items-center gap-2 text-[13px] px-4 py-2 rounded-full"
-                    style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}
-                  >
-                    <MapPin className="w-3.5 h-3.5" style={{ color: COBALT }} />
-                    {loc}
-                  </span>
-                ))}
+              <ul className="space-y-1.5 list-disc pl-5 mb-4">
+                <li>{service.shortName} anfragen für {city.name}</li>
+                <li>Direkt anrufen — +49 155 63744696</li>
+                <li>Ich komme zu jedem Veranstaltungsort in {city.name} und {city.region}</li>
+              </ul>
+              <div className="mb-2">
+                <a href={buchungHref} className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
+                  {service.ctaPrimary} <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
               </div>
-              <p>
-                Deine Location ist nicht dabei? Kein Problem — ich komme zu jedem Veranstaltungsort in{" "}
-                {city.name} und Umgebung.{" "}
-                <a href={buchungHref} style={{ color: COBALT }} className="hover:underline font-semibold">
-                  Jetzt anfragen →
-                </a>
-              </p>
-            </Accordion>
-          )}
 
-          {/* LANG-TEXT — SEO-Text (vom alten LangTextSection) */}
-          {langParagraphs.length > 0 && (
-            <Accordion title={`Zauberer ${city.name} — ausführlich erklärt`}>
-              {langParagraphs.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </Accordion>
-          )}
+              {/* LOCATIONS — bekannte Venues der Stadt */}
+              {city.bekannteLocations && city.bekannteLocations.length > 0 && (
+                <>
+                  <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                    Event-Locations in {city.name}
+                  </h3>
+                  <p className="mb-4">
+                    Ich trete regelmäßig in Locations und Venues in {city.name} auf — und komme zu jeder
+                    Wunsch-Location. Schlosssäle, Hotels, Restaurants, Eventhallen.
+                  </p>
+                  <div className="flex flex-wrap gap-2.5 mb-4">
+                    {city.bekannteLocations.map((loc) => (
+                      <span
+                        key={loc}
+                        className="inline-flex items-center gap-2 text-[13px] px-4 py-2 rounded-full"
+                        style={{ background: "#F4F6F9", border: `1px solid ${L_LINE}`, color: INK }}
+                      >
+                        <MapPin className="w-3.5 h-3.5" style={{ color: COBALT }} />
+                        {loc}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="mb-4">
+                    Deine Location ist nicht dabei? Kein Problem — ich komme zu jedem Veranstaltungsort in{" "}
+                    {city.name} und Umgebung.{" "}
+                    <a href={buchungHref} style={{ color: COBALT }} className="hover:underline font-semibold">
+                      Jetzt anfragen →
+                    </a>
+                  </p>
+                </>
+              )}
 
-          {/* KOLLEGEN-EMPFEHLUNG */}
-          {city.kollegenEmpfehlung && (
-            <Accordion title="Empfehlung aus dem Kollegen-Netzwerk">
-              <p>
-                {city.kollegenEmpfehlung.prefix}
-                <a href={city.kollegenEmpfehlung.linkHref} target="_blank" rel="noopener" className="underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
-                  {city.kollegenEmpfehlung.linkText}
-                </a>
-                {city.kollegenEmpfehlung.suffix}
-              </p>
-            </Accordion>
-          )}
+              {/* LANG-TEXT — SEO-Text */}
+              {langParagraphs.length > 0 && (
+                <>
+                  <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                    Zauberer {city.name} — ausführlich erklärt
+                  </h3>
+                  {langParagraphs.map((p, i) => (
+                    <p key={i} className="mb-4">{p}</p>
+                  ))}
+                </>
+              )}
+
+              {/* KOLLEGEN-EMPFEHLUNG */}
+              {city.kollegenEmpfehlung && (
+                <>
+                  <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
+                    Empfehlung aus dem Kollegen-Netzwerk
+                  </h3>
+                  <p className="mb-4">
+                    {city.kollegenEmpfehlung.prefix}
+                    <a href={city.kollegenEmpfehlung.linkHref} target="_blank" rel="noopener" className="underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
+                      {city.kollegenEmpfehlung.linkText}
+                    </a>
+                    {city.kollegenEmpfehlung.suffix}
+                  </p>
+                </>
+              )}
+            </article>
+          </details>
         </motion.div>
       </div>
     </motion.section>
