@@ -6,9 +6,9 @@ import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Handshake, ShieldCheck, Hand, Wand2, UtensilsCrossed } from "lucide-react";
 import heroImg from "@/assets/emilian-portrait-cards.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
-import carA from "@/assets/buehne-zuschauer.jpg";
+import carA from "@/assets/hero-stage.jpg";
 import carB from "@/assets/audience-reactions.jpg";
-import darkImg from "@/assets/stage-show.jpg";
+import darkImg from "@/assets/moderator-hero.jpg";
 
 export default function EventAgenturen() {
   return (

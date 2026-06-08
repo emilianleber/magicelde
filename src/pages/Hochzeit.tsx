@@ -6,10 +6,17 @@ import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Hand, Wand2, UtensilsCrossed, Check, Clock, CalendarCheck } from "lucide-react";
 import heroImg from "@/assets/wedding-magic.jpg";
 import splitImg from "@/assets/emotionen.jpg";
-import bentoImg from "@/assets/audience-reactions.jpg";
-import actA from "@/assets/haende-interaktion.jpg";
-import actB from "@/assets/emilian-magic-dinner.jpg";
-import actC from "@/assets/stage-show.jpg";
+// InteractiveTabs (breite Container) — alle QUER, kein Kopf-Crop
+import tabCloseup from "@/assets/hero-closeup.jpg";
+import tabDinner from "@/assets/emilian-magic-dinner.jpg";
+import tabStage from "@/assets/hero-stage.jpg";
+// PolaroidWall — 6 eigene Bilder, keine Doppelung mit dem Rest der Seite
+import polReactions from "@/assets/audience-reactions.jpg";
+import polDinner from "@/assets/hero-dinner.jpg";
+import polStaunen from "@/assets/staunen.jpg";
+import polModerator from "@/assets/moderator-hero.jpg";
+import polBuehne from "@/assets/magicdinner-buehne.jpg";
+import polFinale from "@/assets/stage-show.jpg";
 
 export default function Hochzeit() {
   return (
@@ -33,9 +40,9 @@ export default function Hochzeit() {
         eyebrow="Der Aufbau"
         title={<>Magie über den ganzen Tag — <span style={{ color: COBALT }}>eingetaktet</span> in euren Ablauf.</>}
         tabs={[
-          { t: "Sektempfang", d: "Close-Up Walk-Around, während ihr Fotos macht — Magie direkt in den Händen eurer Gäste, als Eisbrecher zwischen den Tischkreisen.", img: actA, pos: "center" },
-          { t: "Hochzeitsdinner", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, ohne dass der Ablauf gestört wird.", img: actB, pos: "center" },
-          { t: "Vor dem Tanz", d: "20–30 Min Bühnenshow als emotionales Finale — Comedy, Mentalmagie und ein Moment, der Gänsehaut macht.", img: actC, pos: "top" },
+          { t: "Sektempfang", d: "Close-Up Walk-Around, während ihr Fotos macht — Magie direkt in den Händen eurer Gäste, als Eisbrecher zwischen den Tischkreisen.", img: tabCloseup, pos: "center" },
+          { t: "Hochzeitsdinner", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, ohne dass der Ablauf gestört wird.", img: tabDinner, pos: "center" },
+          { t: "Vor dem Tanz", d: "20–30 Min Bühnenshow als emotionales Finale — Comedy, Mentalmagie und ein Moment, der Gänsehaut macht.", img: tabStage, pos: "center" },
         ]}
       />
 
@@ -68,12 +75,12 @@ export default function Hochzeit() {
         title={<>Was an eurem Tag <span style={{ color: COBALT }}>passiert</span>.</>}
         sub="Kleine Augenblicke, über die eure Gäste noch Wochen später reden — verteilt über den ganzen Tag."
         items={[
-          { image: actA, caption: "Magie beim Sektempfang", pos: "center" },
-          { image: actB, caption: "Tisch-zu-Tisch beim Dinner", pos: "center" },
-          { image: actC, caption: "Die Show vor dem Tanz", pos: "top" },
-          { image: bentoImg, caption: "Gäste, die mitgehen", pos: "center" },
-          { image: splitImg, caption: "Sogar die Skeptiker", pos: "center" },
-          { image: heroImg, caption: "Gänsehaut, garantiert", pos: "center" },
+          { image: polReactions, caption: "Magie beim Sektempfang", pos: "center" },
+          { image: polDinner, caption: "Tisch-zu-Tisch beim Dinner", pos: "center" },
+          { image: polStaunen, caption: "Die Show vor dem Tanz", pos: "center" },
+          { image: polModerator, caption: "Gäste, die mitgehen", pos: "center" },
+          { image: polBuehne, caption: "Sogar die Skeptiker", pos: "center" },
+          { image: polFinale, caption: "Gänsehaut, garantiert", pos: "top" },
         ]}
       />
 

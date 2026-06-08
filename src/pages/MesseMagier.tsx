@@ -6,8 +6,8 @@ import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Languages } from "lucide-react";
 import heroImg from "@/assets/audience-reactions.jpg";
 import splitImg from "@/assets/haende-interaktion.jpg";
-import carA from "@/assets/buehne-zuschauer.jpg";
-import carB from "@/assets/stage-show.jpg";
+import carA from "@/assets/staunen.jpg";
+import carB from "@/assets/hero-stage.jpg";
 
 export default function MesseMagier() {
   return (
@@ -56,7 +56,7 @@ export default function MesseMagier() {
           { kind: "photo", image: carA, chip: "Voller Stand", title: "Die Traube bildet sich", text: "Eine Menschentraube entsteht ganz ohne aufdringliches Ansprechen — auch in den ruhigen Hallen-Phasen.", pos: "center" },
           { kind: "stat", v: "50–80", l: "Kontakte pro Stunde", text: "Echte Standkontakte statt leerem Gang — direkt am Lead-Zähler messbar." },
           { kind: "feature", Icon: Target, title: "Lead-Magnet", text: "Spürbar mehr qualifizierte Standkontakte — die Hemmschwelle für das Gespräch fällt." },
-          { kind: "photo", image: carB, chip: "Botschaft", title: "Ihr Claim im Aha-Moment", text: "Die Effekte transportieren Ihre Botschaft mitten ins Staunen — und bleiben hängen.", pos: "top" },
+          { kind: "photo", image: carB, chip: "Botschaft", title: "Ihr Claim im Aha-Moment", text: "Die Effekte transportieren Ihre Botschaft mitten ins Staunen — und bleiben hängen.", pos: "center" },
           { kind: "review", text: "Der Stand war den ganzen Tag voll — die Effekte mit unserer Botschaft sind bei den Besuchern hängengeblieben.", name: "Jan von Lehmann · Eventleitung" },
           { kind: "feature", Icon: Languages, title: "Mehrsprachig", text: "DE und EN fließend — internationale Besucher werden voll abgeholt." },
         ]}

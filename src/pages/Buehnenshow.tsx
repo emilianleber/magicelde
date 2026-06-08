@@ -6,12 +6,12 @@ import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Sparkles, Award, Clock, Gauge, Users, Languages } from "lucide-react";
 import heroImg from "@/assets/buehne-dpsg.jpg";
 import splitImg from "@/assets/stage-show.jpg";
-import carA from "@/assets/buehne-zuschauer.jpg";
+import carA from "@/assets/staunen.jpg";
 import carB from "@/assets/audience-reactions.jpg";
 import darkImg from "@/assets/moderator-hero.jpg";
 import tab1 from "@/assets/magicdinner-buehne.jpg";
 import tab2 from "@/assets/emilian-magic-dinner.jpg";
-import tab3 from "@/assets/haende-interaktion.jpg";
+import tab3 from "@/assets/hero-closeup.jpg";
 
 export default function Buehnenshow() {
   return (

@@ -8,9 +8,9 @@ import heroImg from "@/assets/hero-birthday.jpg";
 import splitImg from "@/assets/emotionen.jpg";
 import carA from "@/assets/audience-reactions.jpg";
 import carB from "@/assets/emilian-magic-dinner.jpg";
-import tabA from "@/assets/haende-interaktion.jpg";
+import tabA from "@/assets/hero-closeup.jpg";
 import tabB from "@/assets/zuschauer-blau.jpg";
-import tabC from "@/assets/stage-show.jpg";
+import tabC from "@/assets/hero-stage.jpg";
 
 export default function Geburtstage() {
   return (
@@ -36,6 +36,7 @@ export default function Geburtstage() {
         points={["Vom runden 50er und 60er bis zur großen Familienfeier", "Flexible Längen — vom Walk-Around bis zur kleinen Bühnenshow", "Staunen und lachen im Wechsel, der ganze Tisch geht mit"]}
         image={splitImg}
         imageAlt="Emilian Leber mit Gästen"
+        imgPos="top"
         reverse
         stat={{ v: "80+", l: "Geburtstage & Jubiläen" }}
       />
@@ -59,7 +60,7 @@ export default function Geburtstage() {
         tabs={[
           { t: "Walk-Around", d: "Close-Up direkt unter den Gästen — Magie in den Händen, von Grüppchen zu Grüppchen. Perfekt als Eisbrecher beim Sektempfang.", img: tabA, pos: "center" },
           { t: "Tisch-Highlights", d: "Tisch-zu-Tisch zwischen den Gängen — jeder Tisch bekommt seinen Moment, mit Insidern zum Jubilar und viel Lachen.", img: tabB, pos: "center" },
-          { t: "Kleine Bühnenshow", d: "15–25 Minuten als Höhepunkt des Abends — Comedy, Mentalmagie und ein Gänsehaut-Finale. Für 20 bis 200 Gäste.", img: tabC, pos: "top" },
+          { t: "Kleine Bühnenshow", d: "15–25 Minuten als Höhepunkt des Abends — Comedy, Mentalmagie und ein Gänsehaut-Finale. Für 20 bis 200 Gäste.", img: tabC, pos: "center" },
         ]}
       />
 

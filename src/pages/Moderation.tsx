@@ -6,9 +6,9 @@ import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Mic2, Clock, Languages, Sparkles, Users, Award } from "lucide-react";
 import heroImg from "@/assets/moderator-hero.jpg";
 import splitImg from "@/assets/buehne-zuschauer.jpg";
-import carA from "@/assets/haende-interaktion.jpg";
-import carB from "@/assets/buehne-dpsg.jpg";
-import darkImg from "@/assets/stage-show.jpg";
+import carA from "@/assets/staunen.jpg";
+import carB from "@/assets/magicdinner-buehne.jpg";
+import darkImg from "@/assets/hero-stage.jpg";
 
 export default function Moderation() {
   return (
@@ -62,7 +62,7 @@ export default function Moderation() {
           { kind: "photo", image: carA, chip: "Roter Faden", title: "Ein Abend, der sich rund anfühlt", text: "Programmpunkte verbunden, Energie und Tempo gehalten — kein Bruch zwischen den Punkten.", pos: "center" },
           { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine auf jeder Bühne — vom kurzen Übergang bis zur ganzen Gala." },
           { kind: "feature", Icon: Mic2, title: "Magische Akzente", text: "Kleine Momente Magie statt Lückenfüller — pointiert an den Übergängen gesetzt." },
-          { kind: "photo", image: carB, chip: "Souverän", title: "Sicher durch den ganzen Abend", text: "Auch wenn der Ablauf einmal kippt: ruhig, schlagfertig, mit Charme.", pos: "top" },
+          { kind: "photo", image: carB, chip: "Souverän", title: "Sicher durch den ganzen Abend", text: "Auch wenn der Ablauf einmal kippt: ruhig, schlagfertig, mit Charme.", pos: "center" },
           { kind: "review", text: "Hat den ganzen Abend zusammengehalten — souverän und mit Charme.", name: "Jan von Lehmann · Eventleitung" },
           { kind: "feature", Icon: Award, title: "Vorab abgestimmt", text: "Ablaufplan, Namen und Timing klären wir vor dem Event — am Abend läuft alles." },
         ]}

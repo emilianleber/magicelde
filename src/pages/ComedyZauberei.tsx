@@ -7,10 +7,10 @@ import { Mail, Clock, CalendarCheck, Gauge, Users, Sparkles, Mic } from "lucide-
 import heroImg from "@/assets/emotionen.jpg";
 import splitImg from "@/assets/audience-reactions.jpg";
 import carA from "@/assets/zuschauer-blau.jpg";
-import carB from "@/assets/buehne-zuschauer.jpg";
-import tab1 from "@/assets/buehne-dpsg.jpg";
+import carB from "@/assets/staunen.jpg";
+import tab1 from "@/assets/moderator-hero.jpg";
 import tab2 from "@/assets/emilian-magic-dinner.jpg";
-import tab3 from "@/assets/stage-show.jpg";
+import tab3 from "@/assets/hero-stage.jpg";
 
 export default function ComedyZauberei() {
   return (

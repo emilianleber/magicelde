@@ -6,7 +6,7 @@ import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Check, Clock, CalendarCheck, Users, Sparkles, Languages, Award } from "lucide-react";
 import heroImg from "@/assets/closeup.jpg";
 import splitImg from "@/assets/haende-interaktion.jpg";
-import carA from "@/assets/schneider-weisse-closeup.jpg";
+import carA from "@/assets/staunen.jpg";
 import carB from "@/assets/audience-reactions.jpg";
 import darkImg from "@/assets/hero-closeup.jpg";
 

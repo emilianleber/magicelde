@@ -6,11 +6,11 @@ import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles } from "lucide-react";
 import heroImg from "@/assets/schneider-weisse-closeup.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
-import carA from "@/assets/buehne-zuschauer.jpg";
+import carA from "@/assets/staunen.jpg";
 import carB from "@/assets/audience-reactions.jpg";
-import tab1 from "@/assets/closeup.jpg";
+import tab1 from "@/assets/hero-closeup.jpg";
 import tab2 from "@/assets/emilian-magic-dinner.jpg";
-import tab3 from "@/assets/stage-show.jpg";
+import tab3 from "@/assets/hero-stage.jpg";
 
 export default function Firmenfeiern() {
   return (
@@ -33,9 +33,9 @@ export default function Firmenfeiern() {
         eyebrow="Drei Formate"
         title={<>Vom Empfang bis zur <span style={{ color: COBALT }}>Bühne</span> — eingetaktet in euer Programm.</>}
         tabs={[
-          { t: "Empfang · Walk-Around", d: "Close-Up von Gruppe zu Gruppe während Sektempfang und Networking — der Eisbrecher, der Abteilungen ins Gespräch bringt, bevor das Programm überhaupt startet.", img: tab1, pos: "center 78%" },
+          { t: "Empfang · Walk-Around", d: "Close-Up von Gruppe zu Gruppe während Sektempfang und Networking — der Eisbrecher, der Abteilungen ins Gespräch bringt, bevor das Programm überhaupt startet.", img: tab1, pos: "top" },
           { t: "Dinner · Tisch-zu-Tisch", d: "Zwischen den Gängen bekommt jeder Tisch seinen eigenen Moment — Magie direkt in den Händen, ohne dass der Ablauf des Abends ins Stocken gerät.", img: tab2 },
-          { t: "Bühne als Finale", d: "20–30 Min Bühnenshow als Höhepunkt — Mentalmagie, Comedy und ein Finale, das den Abend für den ganzen Saal zusammenfasst.", img: tab3 },
+          { t: "Bühne als Finale", d: "20–30 Min Bühnenshow als Höhepunkt — Mentalmagie, Comedy und ein Finale, das den Abend für den ganzen Saal zusammenfasst.", img: tab3, pos: "top" },
         ]}
       />
 
@@ -66,7 +66,7 @@ export default function Firmenfeiern() {
         eyebrow="Warum Firmenfeier?"
         title={<>Sechs Gründe, warum Firmen mich <span style={{ color: COBALT }}>buchen</span>.</>}
         cards={[
-          { kind: "photo", image: carA, chip: "Echte Reaktionen", title: "Auch das Management ist geflasht", text: "Selbst die skeptischsten Gäste stehen am Ende am stärksten unter Strom.", pos: "center" },
+          { kind: "photo", image: carA, chip: "Echte Reaktionen", title: "Auch das Management ist geflasht", text: "Selbst die skeptischsten Gäste stehen am Ende am stärksten unter Strom.", pos: "top" },
           { kind: "stat", v: "100+", l: "Firmen-Events", text: "Routine vom Vorstandsdinner bis zur großen Mitarbeiterfeier." },
           { kind: "feature", Icon: Briefcase, title: "Premium bis Comedy", text: "Der Ton, der zu eurer Marke passt — seriöser Kundenabend oder lockere Feier." },
           { kind: "photo", image: carB, chip: "Eisbrecher", title: "Abteilungen kommen ins Gespräch", text: "Magie, die gemischte Teams aus allen Bereichen zusammenbringt.", pos: "center" },

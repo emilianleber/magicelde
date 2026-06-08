@@ -6,11 +6,11 @@ import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { UtensilsCrossed, Clock, MapPin, Sparkles } from "lucide-react";
 import heroImg from "@/assets/magicdinner-buehne.jpg";
 import splitImg from "@/assets/hero-dinner.jpg";
-import carA from "@/assets/emotionen.jpg";
+import carA from "@/assets/moderator-hero.jpg";
 import carB from "@/assets/audience-reactions.jpg";
 import tab1 from "@/assets/emilian-magic-dinner.jpg";
-import tab2 from "@/assets/magicdinner-book.jpg";
-import tab3 from "@/assets/stage-show.jpg";
+import tab2 from "@/assets/staunen.jpg";
+import tab3 from "@/assets/hero-stage.jpg";
 
 export default function MagicDinner() {
   return (
@@ -34,7 +34,7 @@ export default function MagicDinner() {
         title={<>Magie, eingetaktet in die <span style={{ color: COBALT }}>Menüfolge</span>.</>}
         tabs={[
           { t: "Aperitif · Walk-Around", d: "Beim Sektempfang gehe ich von Gruppe zu Gruppe — Close-Up direkt in den Händen, als Eisbrecher, bevor sich alle setzen.", img: tab1 },
-          { t: "Zwischen den Gängen · Tisch-zu-Tisch", d: "Während Teller getauscht werden, bekommt jeder Tisch seinen eigenen Moment — ohne dass der Service ins Stocken gerät.", img: tab2, pos: "center 60%" },
+          { t: "Zwischen den Gängen · Tisch-zu-Tisch", d: "Während Teller getauscht werden, bekommt jeder Tisch seinen eigenen Moment — ohne dass der Service ins Stocken gerät.", img: tab2 },
           { t: "Dessert · Bühnen-Finale", d: "Zum Abschluss die durchkomponierte Bühnenshow vor dem ganzen Saal — Mentalmagie, Comedy und ein großer Schluss.", img: tab3 },
         ]}
       />
