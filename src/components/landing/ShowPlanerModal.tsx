@@ -837,8 +837,9 @@ const SummaryView = ({
   }));
   return (
     <div className="sp-step">
-      <div className="grid lg:grid-cols-12 gap-x-14 gap-y-10 mb-12">
-        <div className="lg:col-span-7">
+      <div className="grid lg:grid-cols-2 gap-x-12 gap-y-10 items-start mb-12">
+        {/* LINKE Spalte — Kontaktformular, prominent oben */}
+        <div>
           <div className="flex items-baseline gap-3 mb-5">
             <span
               className={`text-4xl md:text-5xl tabular-nums leading-none`}
@@ -850,25 +851,58 @@ const SummaryView = ({
               className="text-[10px] tracking-[0.18em] uppercase font-bold"
               style={{ color: ACCENT }}
             >
-              Letzter Schritt · Übersicht & Absenden
+              Letzter Schritt · Absenden
             </span>
           </div>
-          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground mb-6">
+          <h2 className="font-display font-black tracking-[-0.025em] leading-[1.05] text-[clamp(1.75rem,3.25vw,2.75rem)] text-foreground mb-5">
             Bald{" "}
             <span style={{ color: ACCENT }}>
               geschafft
             </span>
             .
           </h2>
-          <p className="text-base md:text-lg text-foreground/65 leading-[1.7] max-w-xl">
-            Hier deine Antworten zusammengefasst — du kannst jeden Schritt
-            nochmal antippen und korrigieren. Wenn alles passt, schick mir Name
-            und Email — ich melde mich innerhalb 24 Stunden zurück mit konkretem
-            Vorschlag.
+          <p className="text-base md:text-lg text-foreground/65 leading-[1.7] mb-7">
+            Schick mir Name und Email — ich melde mich innerhalb 24 Stunden mit
+            einem konkreten Vorschlag.
+          </p>
+          <div className="space-y-3">
+            <input
+              type="text"
+              placeholder="Dein Name"
+              value={name}
+              onChange={(e) => onName(e.target.value)}
+              className="w-full px-5 py-3.5 rounded-xl border-2 border-foreground/10 focus:border-[color:var(--ac)] outline-none text-base transition-colors bg-white"
+              style={{ ["--ac" as any]: ACCENT }}
+            />
+            <input
+              type="email"
+              placeholder="Deine Email (Pflicht für Antwort)"
+              value={email}
+              onChange={(e) => onEmail(e.target.value)}
+              required
+              className="w-full px-5 py-3.5 rounded-xl border-2 border-foreground/10 focus:border-[color:var(--ac)] outline-none text-base transition-colors bg-white"
+              style={{ ["--ac" as any]: ACCENT }}
+            />
+            <input
+              type="tel"
+              placeholder="Telefon (optional, schnellere Antwort)"
+              value={phone}
+              onChange={(e) => onPhone(e.target.value)}
+              className="w-full px-5 py-3.5 rounded-xl border-2 border-foreground/10 focus:border-[color:var(--ac)] outline-none text-base transition-colors bg-white"
+              style={{ ["--ac" as any]: ACCENT }}
+            />
+          </div>
+          <p
+            className={`text-xs md:text-sm text-foreground/55 mt-4 flex items-center gap-2`}
+          >
+            <Sparkles className="w-3 h-3" style={{ color: ACCENT }} />
+            Deine Antwort kommt innerhalb 24 Stunden — meistens schneller.
           </p>
         </div>
+
+        {/* RECHTE Spalte — Empfehlungs-Widget */}
         <aside
-          className="lg:col-span-5 self-start p-7 rounded-2xl relative overflow-hidden text-white"
+          className="self-start p-7 rounded-2xl relative overflow-hidden text-white"
           style={{
             background: `linear-gradient(155deg, ${ACCENT_DEEP} 0%, #08060c 100%)`,
             boxShadow: "0 30px 60px -25px rgba(0,0,0,0.225)",
@@ -876,10 +910,10 @@ const SummaryView = ({
         >
           <div
             aria-hidden
-            className="absolute -top-20 -right-10 w-[260px] h-[260px] rounded-full blur-2xl opacity-8"
+            className="absolute -top-20 -right-10 w-[260px] h-[260px] rounded-full blur-2xl"
             style={{
               background:
-                "radial-gradient(circle, rgba(0,0,0,0.024), transparent 65%)",
+                "radial-gradient(circle, rgba(175,192,255,0.18), transparent 65%)",
             }}
           />
           <p
@@ -899,7 +933,7 @@ const SummaryView = ({
             target="_blank"
             rel="noopener"
             className="relative inline-flex items-center gap-1.5 text-[11px] tracking-[0.14em] uppercase font-bold pb-0.5 border-b transition-colors"
-            style={{ color: AMBER, borderColor: "rgba(243,217,168,0.4)" }}
+            style={{ color: "#FFFFFF", borderColor: "rgba(175,192,255,0.45)" }}
           >
             Mehr Infos zum Format
             <ArrowRight className="w-3 h-3" />
@@ -907,7 +941,11 @@ const SummaryView = ({
         </aside>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-x-10 gap-y-6 mb-10 max-w-5xl">
+      {/* Antworten-Übersicht — volle Breite */}
+      <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-5" style={{ color: ACCENT }}>
+        Deine Angaben · zum Ändern antippen
+      </p>
+      <div className="grid md:grid-cols-2 gap-x-10 gap-y-6 max-w-5xl">
         {summary.map((s) => {
           const opt = s.options?.find((o) => o.value === s.answer);
           const display = opt ? opt.label : s.answer;
@@ -939,52 +977,6 @@ const SummaryView = ({
             </button>
           );
         })}
-      </div>
-
-      {/* Email-Form */}
-      <div
-        className="max-w-2xl p-7 md:p-9 rounded-2xl bg-[hsl(0,0%,98%)]"
-        style={{ border: "1px solid rgba(0,0,0,0.06)" }}
-      >
-        <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-5">
-          Letzter Schritt —{" "}
-          <span style={{ color: ACCENT }}>
-            wie erreiche ich dich?
-          </span>
-        </h3>
-        <div className="space-y-3">
-          <input
-            type="text"
-            placeholder="Dein Name"
-            value={name}
-            onChange={(e) => onName(e.target.value)}
-            className="w-full px-5 py-3.5 rounded-xl border-2 border-foreground/10 focus:border-[color:var(--ac)] outline-none text-base transition-colors bg-white"
-            style={{ ["--ac" as any]: ACCENT }}
-          />
-          <input
-            type="email"
-            placeholder="Deine Email (Pflicht für Antwort)"
-            value={email}
-            onChange={(e) => onEmail(e.target.value)}
-            required
-            className="w-full px-5 py-3.5 rounded-xl border-2 border-foreground/10 focus:border-[color:var(--ac)] outline-none text-base transition-colors bg-white"
-            style={{ ["--ac" as any]: ACCENT }}
-          />
-          <input
-            type="tel"
-            placeholder="Telefon (optional, schnellere Antwort)"
-            value={phone}
-            onChange={(e) => onPhone(e.target.value)}
-            className="w-full px-5 py-3.5 rounded-xl border-2 border-foreground/10 focus:border-[color:var(--ac)] outline-none text-base transition-colors bg-white"
-            style={{ ["--ac" as any]: ACCENT }}
-          />
-        </div>
-        <p
-          className={`text-xs md:text-sm text-foreground/55 mt-4 flex items-center gap-2`}
-        >
-          <Sparkles className="w-3 h-3" style={{ color: ACCENT }} />
-          Deine Antwort kommt innerhalb 24 Stunden — meistens schneller.
-        </p>
       </div>
     </div>
   );
