@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight, Phone, Mail, MapPin, ChevronDown, Menu, X,
+  ArrowRight, Phone, Mail, MapPin, ChevronDown, Menu, X, LogIn,
 } from "lucide-react";
 import {
   INK, WHITE, COBALT, L_LINE, L_DIM, D_DIM,
@@ -88,6 +88,9 @@ export default function VoltageHeader({ scrolled }: { scrolled: boolean }) {
           <Link to="/kontakt" className="pv-link py-2">Kontakt</Link>
         </div>
         <div className="flex items-center gap-2">
+          <Link to="/kundenportal/login" aria-label="Kundenportal-Login" title="Kundenportal — anmelden" className="inline-flex items-center justify-center w-11 h-11 rounded-full transition-colors hover:border-[#1D3FFF]" style={{ border: `1px solid ${L_LINE}`, color: INK }}>
+            <LogIn className="w-[18px] h-[18px]" />
+          </Link>
           <Link to={ANFRAGE_HREF} className={`${cta} hidden sm:inline-flex`} style={{ background: COBALT, color: WHITE, padding: "10px 20px" }}>Anfragen <ArrowRight className="w-4 h-4" /></Link>
           <button className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-full" style={{ border: `1px solid ${L_LINE}`, color: INK }} aria-label="Menü öffnen" onClick={() => setMenuOpen((v) => !v)}>
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -123,6 +126,9 @@ export default function VoltageHeader({ scrolled }: { scrolled: boolean }) {
           </div>
           <div className="px-7 pb-10 pt-4 space-y-5">
             <Link to={ANFRAGE_HREF} onClick={closeMenu} className="flex items-center justify-center gap-2 rounded-full px-6 py-4 text-[16px] font-semibold" style={{ background: COBALT, color: WHITE }}>Termin anfragen <ArrowRight className="w-4 h-4" /></Link>
+            <Link to="/kundenportal/login" onClick={closeMenu} className="flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-semibold" style={{ border: `1px solid ${L_LINE}`, color: INK }}>
+              <LogIn className="w-4 h-4" style={{ color: COBALT }} /> Kundenportal-Login
+            </Link>
             <div className="flex items-center gap-6 text-[15px]" style={{ color: L_DIM }}>
               <a href={PHONE_HREF} className="inline-flex items-center gap-2"><Phone className="w-4 h-4" style={{ color: COBALT }} /> Anrufen</a>
               <a href={EMAIL_HREF} className="inline-flex items-center gap-2"><Mail className="w-4 h-4" style={{ color: COBALT }} /> E-Mail</a>
