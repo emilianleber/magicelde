@@ -195,6 +195,7 @@ const ServicePage = ({ service, city }: PageProps) => {
       <ReviewsBlock paper={false} />
       <MehrUeberStadtSection service={service} city={city} buchungHref={buchungHref} />
       <FAQSection service={service} city={city} allFaqs={allFaqs} />
+      <KollegenEmpfehlungSection city={city} />
       <WeitereStaedteSection current={city.slug} />
 
       <FinalCTA
@@ -478,24 +479,33 @@ const MehrUeberStadtSection = ({ service, city, buchungHref }: { service: Servic
                   ))}
                 </>
               )}
-
-              {/* KOLLEGEN-EMPFEHLUNG */}
-              {city.kollegenEmpfehlung && (
-                <>
-                  <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                    Empfehlung aus dem Kollegen-Netzwerk
-                  </h3>
-                  <p className="mb-4">
-                    {city.kollegenEmpfehlung.prefix}
-                    <a href={city.kollegenEmpfehlung.linkHref} target="_blank" rel="noopener" className="underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
-                      {city.kollegenEmpfehlung.linkText}
-                    </a>
-                    {city.kollegenEmpfehlung.suffix}
-                  </p>
-                </>
-              )}
             </article>
           </details>
+        </motion.div>
+      </div>
+    </motion.section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   KOLLEGEN-EMPFEHLUNG — sichtbarer externer Netzwerk-Link.
+   Bewusst als eigene Section (nicht im Accordion versteckt).
+   ═══════════════════════════════════════════════════════════ */
+const KollegenEmpfehlungSection = ({ city }: { city: Stadt }) => {
+  if (!city.kollegenEmpfehlung) return null;
+  const { prefix, linkText, linkHref, suffix } = city.kollegenEmpfehlung;
+  return (
+    <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-14 md:py-20">
+      <div className="max-w-3xl mx-auto">
+        <motion.div variants={up} className="rounded-[18px] p-7 md:p-9" style={{ background: "#fff", border: `1px solid ${L_LINE}` }}>
+          <Eyebrow>Empfehlung aus dem Kollegen-Netzwerk</Eyebrow>
+          <p className="text-[16px] md:text-[17px] leading-[1.7]" style={{ color: L_DIM }}>
+            {prefix}
+            <a href={linkHref} target="_blank" rel="noopener" className="font-semibold underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
+              {linkText}
+            </a>
+            {suffix}
+          </p>
         </motion.div>
       </div>
     </motion.section>

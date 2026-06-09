@@ -63,17 +63,17 @@ const SHOWS_MENU = [
 const SHOWS_NAV = SHOWS_MENU.map((s) => s.t);
 const STAEDTE = ["Regensburg", "München", "Nürnberg", "Ingolstadt", "Landshut", "Passau", "Augsburg", "Würzburg"];
 const FORMATE = [
-  { img: stageImg, title: "Bühnenshow", text: "Comedy, Mentalmagie und große Momente — die Show, bei der der ganze Saal mitgeht.", pos: "center" },
-  { img: closeupImg, title: "Close-Up", text: "Magie in den Händen eurer Gäste. Hautnah, interaktiv, zum Mitreden am nächsten Tag.", pos: "center" },
-  { img: dinnerBookImg, title: "Magic Dinner", text: "Walk-Around, Tisch-zu-Tisch und Bühnen-Finale — durchkomponiert zwischen den Gängen.", pos: "center" },
+  { img: stageImg, title: "Bühnenshow", text: "Comedy, Mentalmagie und große Momente — die Show, bei der der ganze Saal mitgeht.", pos: "center", href: "/buehnenshow" },
+  { img: closeupImg, title: "Close-Up", text: "Magie in den Händen eurer Gäste. Hautnah, interaktiv, zum Mitreden am nächsten Tag.", pos: "center", href: "/close-up" },
+  { img: dinnerBookImg, title: "Magic Dinner", text: "Walk-Around, Tisch-zu-Tisch und Bühnen-Finale — durchkomponiert zwischen den Gängen.", pos: "center", href: "/magic-dinner" },
 ];
 const ANLAESSE = [
-  { t: "Hochzeit", d: "Der Moment zwischen Trauung und Party — Magie, die Gänsehaut macht.", img: weddingImg, cls: "md:col-span-2 md:row-span-2", big: true },
-  { t: "Firmenfeier", d: "Eisbrecher für gemischte Teams — ohne Fremdscham, mit echtem Aha.", img: schneiderImg, cls: "md:col-span-2", big: false },
-  { t: "Geburtstag", d: "Die Show, über die man redet.", img: birthdayImg, cls: "md:col-span-1", big: false },
-  { t: "Gala & Award", d: "Unterhaltung zwischen den Programmpunkten.", img: greatestTalentImg, cls: "md:col-span-1", big: false },
-  { t: "Messe & Promotion", d: "Magie, die Menschen an den Stand zieht.", img: haendeImg, cls: "md:col-span-2", big: false },
-  { t: "Weihnachtsfeier", d: "Der Abend, der das Jahr im Team rund ausklingen lässt.", img: heroDinnerImg, cls: "md:col-span-2", big: false },
+  { t: "Hochzeit", d: "Der Moment zwischen Trauung und Party — Magie, die Gänsehaut macht.", img: weddingImg, cls: "md:col-span-2 md:row-span-2", big: true, href: "/hochzeit" },
+  { t: "Firmenfeier", d: "Eisbrecher für gemischte Teams — ohne Fremdscham, mit echtem Aha.", img: schneiderImg, cls: "md:col-span-2", big: false, href: "/firmenfeiern" },
+  { t: "Geburtstag", d: "Die Show, über die man redet.", img: birthdayImg, cls: "md:col-span-1", big: false, href: "/geburtstage" },
+  { t: "Gala & Award", d: "Unterhaltung zwischen den Programmpunkten.", img: greatestTalentImg, cls: "md:col-span-1", big: false, href: "/buehnenshow" },
+  { t: "Messe & Promotion", d: "Magie, die Menschen an den Stand zieht.", img: haendeImg, cls: "md:col-span-2", big: false, href: "/messe-magier" },
+  { t: "Weihnachtsfeier", d: "Der Abend, der das Jahr im Team rund ausklingen lässt.", img: heroDinnerImg, cls: "md:col-span-2", big: false, href: "/firmenfeiern" },
 ];
 const STATS = [
   { v: "200+", l: "Events seit 2016" }, { v: "5,0★", l: "30+ Google-Bewertungen" },
@@ -256,7 +256,7 @@ const StartDemo = () => {
           <motion.div variants={up} className="mb-10"><Eyebrow>Drei Formate</Eyebrow><h2 className="font-extrabold tracking-[-0.02em] max-w-3xl" style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02 }}>Close-Up, Bühne & Magic Dinner.</h2><p className="mt-4 max-w-xl text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>Einzeln oder kombiniert — passend zu eurem Abend.</p></motion.div>
           <div className="grid md:grid-cols-3 gap-5">
             {FORMATE.map((f) => (
-              <motion.a key={f.title} href="#kontakt" variants={up} className="group rounded-[20px] overflow-hidden flex flex-col" style={{ background: WHITE, border: `1px solid ${L_LINE}`, boxShadow: "0 20px 50px -36px rgba(10,11,15,0.5)" }}>
+              <motion.a key={f.title} href={f.href} variants={up} className="group rounded-[20px] overflow-hidden flex flex-col" style={{ background: WHITE, border: `1px solid ${L_LINE}`, boxShadow: "0 20px 50px -36px rgba(10,11,15,0.5)" }}>
                 <div className="relative h-[230px] overflow-hidden"><img src={f.img} alt={f.title} className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" style={{ objectPosition: f.pos }} loading="lazy" /></div>
                 <div className="p-6 flex-1">
                   <h3 className="text-2xl font-bold mb-2" style={{ color: INK }}>{f.title}</h3>
@@ -492,7 +492,10 @@ const StartDemo = () => {
                 <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-12 max-w-2xl">
                   <h3 className="font-extrabold text-white" style={{ fontSize: "clamp(1.75rem,3.5vw,3rem)", lineHeight: 1.04 }}>{ANLAESSE[anlassIdx].t}</h3>
                   <p className="mt-3 max-w-lg text-[15px] md:text-base" style={{ color: "rgba(255,255,255,0.85)" }}>{ANLAESSE[anlassIdx].d}</p>
-                  <a href="/buchung" className="mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold w-fit" style={{ background: WHITE, color: INK }}>{ANLAESSE[anlassIdx].t} anfragen <ArrowRight className="w-4 h-4" /></a>
+                  <div className="mt-6 flex flex-wrap items-center gap-3">
+                    <a href="/buchung" className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold" style={{ background: WHITE, color: INK }}>{ANLAESSE[anlassIdx].t} anfragen <ArrowRight className="w-4 h-4" /></a>
+                    <a href={ANLAESSE[anlassIdx].href} className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold" style={{ border: "1px solid rgba(255,255,255,0.45)", color: WHITE }}>Mehr erfahren <ArrowUpRight className="w-4 h-4" /></a>
+                  </div>
                 </div>
               </motion.div>
             </AnimatePresence>

@@ -15,6 +15,7 @@ const NAV_FLAT = [
   { t: "Tickets", h: "/tickets" },
   { t: "Magazin", h: "/blog" },
   { t: "Über mich", h: "/ueber-mich" },
+  { t: "FAQ", h: "/faq" },
   { t: "Kontakt", h: "/kontakt" },
 ];
 
@@ -101,7 +102,7 @@ export default function VoltageHeader({ scrolled }: { scrolled: boolean }) {
             <Logo />
             <button onClick={closeMenu} aria-label="Menü schließen" className="inline-flex items-center gap-2 justify-center h-11 px-4 rounded-full text-[14px] font-semibold" style={{ background: INK, color: WHITE }}>Schließen <X className="w-4 h-4" /></button>
           </div>
-          <div className="flex-1 overflow-y-auto px-7 py-4">
+          <div data-lenis-prevent className="flex-1 overflow-y-auto overscroll-contain px-7 py-4">
             {[{ key: "formate", t: "Formate", items: KONZEPTE }, { key: "anlaesse", t: "Anlässe", items: ANLAESSE_NAV }].map((g) => (
               <div key={g.key} style={{ borderBottom: `1px solid ${L_LINE}` }}>
                 <button onClick={() => setOpenGroup((v) => (v === g.key ? null : g.key))} className="w-full flex items-center justify-between py-4 font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.4rem,6vw,1.9rem)", color: INK }}>

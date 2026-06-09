@@ -1,6 +1,6 @@
-/** VOLTAGE Footer — Brand + Kontakt + Social + Spalten + Riesen-Wortmarke. */
+/** VOLTAGE Footer — Brand + Kontakt + Social + Spalten (Konzepte/Anlässe/Städte/Service) + Kundenportal + Riesen-Wortmarke. */
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Instagram, Youtube, Facebook, Linkedin } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Youtube, Facebook, Linkedin, ArrowRight } from "lucide-react";
 import {
   INK, WHITE, COBALT, D_LINE, D_DIM,
   PHONE_HREF, PHONE_DISPLAY, EMAIL_HREF, WHATSAPP, INSTAGRAM, YOUTUBE, FACEBOOK, LINKEDIN,
@@ -8,10 +8,27 @@ import {
 } from "./theme";
 import logo from "@/assets/logo-clean.webp";
 
+/* Städte deutschlandweit verteilt — interne SEO-Links zu den Stadt-Seiten. Slugs aus staedte.ts. */
 const STAEDTE: { name: string; slug: string }[] = [
-  { name: "Regensburg", slug: "regensburg" },
+  { name: "Berlin", slug: "berlin" },
+  { name: "Hamburg", slug: "hamburg" },
   { name: "München", slug: "muenchen" },
+  { name: "Köln", slug: "koeln" },
+  { name: "Frankfurt", slug: "frankfurt" },
+  { name: "Stuttgart", slug: "stuttgart" },
+  { name: "Düsseldorf", slug: "duesseldorf" },
+  { name: "Leipzig", slug: "leipzig" },
+  { name: "Dresden", slug: "dresden" },
+  { name: "Hannover", slug: "hannover" },
   { name: "Nürnberg", slug: "nuernberg" },
+  { name: "Regensburg", slug: "regensburg" },
+];
+const SERVICE: { t: string; h: string }[] = [
+  { t: "Magazin", h: "/blog" },
+  { t: "FAQ", h: "/faq" },
+  { t: "Referenzen", h: "/referenzen" },
+  { t: "Über mich", h: "/ueber-mich" },
+  { t: "Kontakt", h: "/kontakt" },
 ];
 const SOCIALS = [
   { Icon: Instagram, href: INSTAGRAM, label: "Instagram" },
@@ -20,11 +37,16 @@ const SOCIALS = [
   { Icon: Linkedin, href: LINKEDIN, label: "LinkedIn" },
 ];
 
+const ColHead = ({ children }: { children: React.ReactNode }) => (
+  <p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>{children}</p>
+);
+
 export default function VoltageFooter() {
   return (
     <footer className="relative overflow-hidden" style={{ background: INK, color: D_DIM }}>
       <div aria-hidden className="absolute -top-32 -right-24 w-[560px] h-[560px] rounded-full pointer-events-none" style={{ background: `radial-gradient(circle, ${COBALT}26, transparent 60%)` }} />
-      <div className="relative max-w-7xl mx-auto px-5 md:px-10 pt-20 md:pt-24 pb-10 grid grid-cols-2 md:grid-cols-12 gap-y-12 gap-x-8">
+      <div className="relative max-w-7xl mx-auto px-5 md:px-10 pt-20 md:pt-24 pb-12 grid grid-cols-2 md:grid-cols-12 gap-y-12 gap-x-8">
+        {/* Brand */}
         <div className="col-span-2 md:col-span-4">
           <div className="flex items-center gap-2.5">
             <img src={logo} alt="Emilian Leber" className="h-7 w-auto" style={{ filter: "brightness(0) invert(1)" }} />
@@ -34,14 +56,49 @@ export default function VoltageFooter() {
           <div className="mt-6 space-y-2.5 text-[14.5px]">
             <a href={PHONE_HREF} className="flex items-center gap-2.5 hover:text-white transition-colors"><Phone className="w-4 h-4" style={{ color: COBALT }} /> {PHONE_DISPLAY}</a>
             <a href={EMAIL_HREF} className="flex items-center gap-2.5 hover:text-white transition-colors"><Mail className="w-4 h-4" style={{ color: COBALT }} /> el@magicel.de</a>
+            <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 hover:text-white transition-colors"><Phone className="w-4 h-4" style={{ color: COBALT }} /> WhatsApp</a>
             <span className="flex items-center gap-2.5"><MapPin className="w-4 h-4" style={{ color: COBALT }} /> Regensburg & deutschlandweit</span>
           </div>
           <div className="flex items-center gap-3 mt-7">{SOCIALS.map(({ Icon, href, label }) => (<a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="w-11 h-11 rounded-full flex items-center justify-center transition-colors hover:text-white hover:border-white/40" style={{ border: `1px solid ${D_LINE}` }}><Icon className="w-[18px] h-[18px]" /></a>))}</div>
         </div>
-        <div className="md:col-span-2 md:col-start-7"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Konzepte</p><ul className="space-y-3 text-[14.5px]">{KONZEPTE.map((s) => <li key={s.t}><Link to={s.h} className="hover:text-white transition-colors">{s.t}</Link></li>)}</ul></div>
-        <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Anlässe</p><ul className="space-y-3 text-[14.5px]">{ANLAESSE_NAV.map((a) => <li key={a.t}><Link to={a.h} className="hover:text-white transition-colors">{a.t}</Link></li>)}</ul></div>
-        <div className="md:col-span-2"><p className="text-[12px] tracking-[0.1em] uppercase mb-4 font-semibold" style={{ color: WHITE }}>Kontakt</p><ul className="space-y-3 text-[14.5px]"><li><Link to="/kontakt" className="hover:text-white transition-colors">Termin anfragen</Link></li><li><a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a></li>{STAEDTE.map((c) => <li key={c.slug}><Link to={`/zauberer/${c.slug}`} className="hover:text-white transition-colors">Zauberer {c.name}</Link></li>)}</ul></div>
+
+        {/* Konzepte */}
+        <div className="md:col-span-2 md:col-start-5">
+          <ColHead>Konzepte</ColHead>
+          <ul className="space-y-3 text-[14.5px]">{KONZEPTE.map((s) => <li key={s.t}><Link to={s.h} className="hover:text-white transition-colors">{s.t}</Link></li>)}</ul>
+        </div>
+
+        {/* Anlässe */}
+        <div className="md:col-span-2">
+          <ColHead>Anlässe</ColHead>
+          <ul className="space-y-3 text-[14.5px]">{ANLAESSE_NAV.map((a) => <li key={a.t}><Link to={a.h} className="hover:text-white transition-colors">{a.t}</Link></li>)}</ul>
+        </div>
+
+        {/* Städte */}
+        <div className="md:col-span-2">
+          <ColHead>Städte</ColHead>
+          <ul className="space-y-3 text-[14.5px]">{STAEDTE.map((c) => <li key={c.slug}><Link to={`/zauberer/${c.slug}`} className="hover:text-white transition-colors">Zauberer {c.name}</Link></li>)}</ul>
+        </div>
+
+        {/* Service */}
+        <div className="md:col-span-2">
+          <ColHead>Service</ColHead>
+          <ul className="space-y-3 text-[14.5px]">{SERVICE.map((s) => <li key={s.t}><Link to={s.h} className="hover:text-white transition-colors">{s.t}</Link></li>)}</ul>
+        </div>
       </div>
+
+      {/* Kundenportal — eigener Login für bestehende Kunden */}
+      <div className="relative px-5 md:px-10">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-6" style={{ borderTop: `1px solid ${D_LINE}` }}>
+          <p className="text-[14px] leading-[1.55]" style={{ color: D_DIM }}>
+            <span className="font-semibold" style={{ color: WHITE }}>Kundenportal</span> — Angebote, Verträge & Dokumente einsehen.
+          </p>
+          <Link to="/kundenportal/login" className="inline-flex items-center gap-2 self-start rounded-full px-5 py-2.5 text-[13.5px] font-semibold transition-colors hover:border-white/40" style={{ border: `1px solid ${D_LINE}`, color: WHITE }}>
+            Zum Kundenportal-Login <ArrowRight className="w-4 h-4" style={{ color: COBALT }} />
+          </Link>
+        </div>
+      </div>
+
       <div className="relative px-5 md:px-10">
         <div className="max-w-7xl mx-auto" style={{ borderTop: `1px solid ${D_LINE}` }}>
           <p className="font-extrabold tracking-[-0.04em] leading-[0.82] py-9 md:py-12 select-none whitespace-nowrap" style={{ fontSize: "clamp(3rem,14vw,12rem)", color: "rgba(255,255,255,0.055)" }}>Erst staunen.</p>

@@ -661,24 +661,33 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
                   ))}
                 </>
               )}
-
-              {/* KOLLEGEN-EMPFEHLUNG */}
-              {data.kollegenEmpfehlung && (
-                <>
-                  <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                    Empfehlung aus dem Kollegen-Netzwerk
-                  </h3>
-                  <p className="mb-4">
-                    {data.kollegenEmpfehlung.prefix}
-                    <a href={data.kollegenEmpfehlung.linkHref} target="_blank" rel="noopener" className="underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
-                      {data.kollegenEmpfehlung.linkText}
-                    </a>
-                    {data.kollegenEmpfehlung.suffix}
-                  </p>
-                </>
-              )}
             </article>
           </details>
+        </motion.div>
+      </div>
+    </motion.section>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════
+   KOLLEGEN-EMPFEHLUNG — sichtbarer externer Netzwerk-Link.
+   Bewusst als eigene Section (nicht im Accordion versteckt).
+   ═══════════════════════════════════════════════════════════ */
+const KollegenEmpfehlungSection = ({ data }: { data: Stadt }) => {
+  if (!data.kollegenEmpfehlung) return null;
+  const { prefix, linkText, linkHref, suffix } = data.kollegenEmpfehlung;
+  return (
+    <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-14 md:py-20">
+      <div className="max-w-3xl mx-auto">
+        <motion.div variants={up} className="rounded-[18px] p-7 md:p-9" style={{ background: "#fff", border: `1px solid ${L_LINE}` }}>
+          <Eyebrow>Empfehlung aus dem Kollegen-Netzwerk</Eyebrow>
+          <p className="text-[16px] md:text-[17px] leading-[1.7]" style={{ color: L_DIM }}>
+            {prefix}
+            <a href={linkHref} target="_blank" rel="noopener" className="font-semibold underline underline-offset-4 transition-colors hover:decoration-[#1D3FFF]" style={{ color: INK }}>
+              {linkText}
+            </a>
+            {suffix}
+          </p>
         </motion.div>
       </div>
     </motion.section>
@@ -1063,6 +1072,7 @@ const StadtSeite = () => {
       <CustomQuizSection config={buildStadtQuizConfig(data)} />
       <MehrUeberStadtSection data={data} />
       <FAQSection data={data} />
+      <KollegenEmpfehlungSection data={data} />
       <WeitereStaedteSection current={data.slug} />
 
       <FinalCTA
