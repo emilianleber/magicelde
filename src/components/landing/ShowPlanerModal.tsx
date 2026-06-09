@@ -80,6 +80,7 @@ const ANLAESSE = [
   { value: "hochzeit", label: "Hochzeit", sub: "Brautpaar im Mittelpunkt", Icon: Heart },
   { value: "firma", label: "Firmenfeier", sub: "Vorstand · Team · Kunden", Icon: Briefcase },
   { value: "geburtstag", label: "Geburtstag", sub: "30er bis Goldene Hochzeit", Icon: Cake },
+  { value: "magic-dinner", label: "Magic Dinner", sub: "Dinner-Abend mit Magie", Icon: UtensilsCrossed },
   { value: "gala", label: "Gala / Award", sub: "Premium · Black-Tie", Icon: Trophy },
   { value: "messe", label: "Messe / Stand", sub: "Besucher anziehen", Icon: Building2 },
   { value: "privat", label: "Privat / Sonstiges", sub: "Jubiläum · Einweihung", Icon: PartyPopper },
@@ -117,8 +118,8 @@ const FORMAT_CARDS: FmtCard[] = [
     key: "dinner",
     label: "Magic Dinner",
     Icon: UtensilsCrossed,
-    was: "Magie über den ganzen Abend verteilt, eingetaktet zwischen die Gänge — Walk-Around, Tisch-zu-Tisch und Bühnen-Finale.",
-    passt: "Das Rundum-Erlebnis für besondere Abende. Preis individuell je nach Ablauf.",
+    was: "Magie über den ganzen Abend, eingetaktet zwischen die Gänge. Ob durchgehend Close-Up, mehrere Bühnen-Sets oder ein Mix — völlig individuell.",
+    passt: "Den Ablauf stellst du dir gleich selbst zusammen. Preis individuell je nach Abend.",
     combinable: false,
   },
   {
@@ -143,14 +144,15 @@ type Baustein = {
   fmt: "closeup" | "buehne" | "dinner" | "moderation";
 };
 const BAUSTEINE: Baustein[] = [
-  { id: "empfang", t: "Sektempfang · Walk-Around", d: "Close-Up von Gruppe zu Gruppe — der Eisbrecher.", Icon: Wine, fmt: "closeup" },
-  { id: "dinner-tisch", t: "Beim Dinner · Tisch-zu-Tisch", d: "Jeder Tisch bekommt seinen Moment zwischen den Gängen.", Icon: Utensils, fmt: "closeup" },
-  { id: "buehne", t: "Bühnenshow", d: "Durchkomponierte Show für den ganzen Saal.", Icon: Mic2, fmt: "buehne" },
-  { id: "mental", t: "Mentalmagie-Highlight", d: "Gedankenlesen mit drei Sekunden Stille danach.", Icon: Brain, fmt: "buehne" },
+  { id: "empfang", t: "Empfang · Close-Up Walk-Around", d: "Von Gruppe zu Gruppe — der Eisbrecher.", Icon: Wine, fmt: "closeup" },
+  { id: "dinner-tisch", t: "Tisch-zu-Tisch (zwischen den Gängen)", d: "Jeder Tisch bekommt seinen Moment.", Icon: Utensils, fmt: "closeup" },
+  { id: "buehne", t: "Bühnen-Set", d: "Show für den Saal — beliebig oft einsetzbar.", Icon: Mic2, fmt: "buehne" },
+  { id: "mental", t: "Mentalmagie-Highlight", d: "Gedankenlesen mit drei Sekunden Stille.", Icon: Brain, fmt: "buehne" },
   { id: "moderation", t: "Moderation mit Magie", d: "Roter Faden, der euer Programm zusammenhält.", Icon: Mic2, fmt: "moderation" },
-  { id: "magic-dinner", t: "Magic Dinner · ganzer Abend", d: "Magie über Vorspeise, Hauptgang & Dessert verteilt.", Icon: Sparkles, fmt: "dinner" },
 ];
 const BAUSTEIN_MAP: Record<string, Baustein> = Object.fromEntries(BAUSTEINE.map((b) => [b.id, b]));
+/** Baustein-Instanz-ID → Basis-ID (Instanzen sehen aus wie "buehne__2", Mehrfach-Einsatz erlaubt). */
+const baseOf = (uid: string): string => uid.split("__")[0];
 
 /** Vorauswahl für den Baukasten je nach gewähltem Format. */
 function seedAblauf(format?: string): string[] {
@@ -158,7 +160,7 @@ function seedAblauf(format?: string): string[] {
     case "closeup": return ["empfang", "dinner-tisch"];
     case "buehne": return ["buehne"];
     case "kombi": return ["empfang", "buehne"];
-    case "dinner": return ["magic-dinner"];
+    case "dinner": return ["empfang", "dinner-tisch", "buehne"]; // klassisch, frei editierbar
     default: return [];
   }
 }
@@ -172,7 +174,7 @@ const RECO_EXTRA: Record<string, { img: string; highlights: string[] }> = {
   "/firmenfeiern": { img: magicdinnerBuehneImg, highlights: ["Premium bis Comedy — eure Tonalität", "Insider-Briefing vorab", "100+ Firmen-Events"] },
   "/geburtstage": { img: heroBirthdayImg, highlights: ["Anekdoten vom Geburtstagskind", "Close-Up + Bühnen-Highlight", "Von 30er bis Goldene Hochzeit"] },
   "/messe-magier": { img: audienceImg, highlights: ["Besucher gezielt an den Stand ziehen", "Leads spielerisch qualifizieren", "Halbtag / Tag / Mehrtages"] },
-  "/magic-dinner": { img: heroDinnerImg, highlights: ["Über den ganzen Abend, 2,5–4 Std", "Walk-Around · Tisch-zu-Tisch · Bühne", "Abgestimmt auf euer Menü"] },
+  "/magic-dinner": { img: heroDinnerImg, highlights: ["Über den ganzen Abend, 2,5–4 Std", "Frei kombinierbar: Close-Up & Bühne", "Ablauf individuell auf euren Abend"] },
   "/close-up": { img: heroCloseupImg, highlights: ["Tischmagie auf Augenhöhe", "Karten & Münzen in den Händen der Gäste", "Keine Bühne / Technik nötig"] },
 };
 const RECO_FALLBACK = { img: staunenImg, highlights: ["Auf euren Anlass zugeschnitten", "200+ Events Routine seit 2016", "Konzept + Antwort in 24 Stunden"] };
@@ -182,7 +184,7 @@ const RECO_FALLBACK = { img: staunenImg, highlights: ["Auf euren Anlass zugeschn
    ─────────────────────────────────────────────────────────── */
 function recommend(a: ShowPlanerAnswers): { format: string; why: string; link: string } {
   const { anlass, format } = a;
-  if (format === "dinner") return { format: "Magic Dinner", why: "Magie über den ganzen Abend verteilt — Walk-Around, Tisch-zu-Tisch und Bühnen-Finale zum Dessert.", link: "/magic-dinner" };
+  if (anlass === "magic-dinner" || format === "dinner") return { format: "Magic Dinner · individuell gestaltet", why: "Magie über den ganzen Abend, eingetaktet zwischen die Gänge — ob durchgehend Close-Up, mehrere Bühnen-Sets oder ein Mix: den Ablauf gestalten wir ganz nach deinem Abend.", link: "/magic-dinner" };
   if (anlass === "hochzeit") return { format: "Hochzeits-Mix · Close-Up + Bühne", why: "Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner mit Brautpaar-Anekdoten, Bühnen-Highlight vor dem ersten Tanz.", link: "/hochzeit" };
   if (anlass === "firma") return { format: "Firmen-Event · angepasst", why: "Tonalität auf euer Publikum abgestimmt, Insider-Anekdoten aus dem Briefing eingebaut.", link: "/firmenfeiern" };
   if (anlass === "geburtstag") return { format: "Geburtstags-Mix", why: "Anekdoten vom Geburtstagskind eingebaut, Close-Up an den Tafeln, kompakte Bühnenshow als Höhepunkt.", link: "/geburtstage" };
@@ -267,11 +269,14 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
   const isSummary = step >= TOTAL_STEPS;
   const progressPct = ((step + (isSummary ? 1 : 0)) / TOTAL_TABS) * 100;
   const price = useMemo(
-    () => estimatePrice({ format: answers.format as FormatKey | undefined, cuMin: answers.cuMin, buehneMin: answers.buehneMin, gaeste: answers.gaeste }),
-    [answers.format, answers.cuMin, answers.buehneMin, answers.gaeste],
+    (): ReturnType<typeof estimatePrice> =>
+      answers.anlass === "magic-dinner"
+        ? { kind: "anfrage" } // Magic Dinner = individuell zusammengestellt → kein Fixpreis
+        : estimatePrice({ format: answers.format as FormatKey | undefined, cuMin: answers.cuMin, buehneMin: answers.buehneMin, gaeste: answers.gaeste }),
+    [answers.anlass, answers.format, answers.cuMin, answers.buehneMin, answers.gaeste],
   );
   const reco = useMemo(() => recommend(answers), [answers]);
-  const showPrice = !!answers.format && answers.format !== "beratung";
+  const showPrice = answers.anlass === "magic-dinner" || (!!answers.format && answers.format !== "beratung");
 
   const canProceed = useMemo(() => {
     if (step === 0) return !!answers.anlass;
@@ -298,7 +303,7 @@ const ShowPlanerModal = ({ open, onClose }: ShowPlanerModalProps) => {
     markCompleted();
     setSubmitted(true);
 
-    const ablaufNamen = (answers.ablauf || []).map((id) => BAUSTEIN_MAP[id]?.t).filter(Boolean).join(" → ");
+    const ablaufNamen = (answers.ablauf || []).map((id) => BAUSTEIN_MAP[baseOf(id)]?.t).filter(Boolean).join(" → ");
     const dauerText = [
       answers.cuMin ? `Close-Up ~${answers.cuMin <= 30 ? "20–30" : answers.cuMin <= 45 ? "30–45" : answers.cuMin <= 60 ? "45–60" : "60+"} Min` : null,
       answers.buehneMin ? `Bühne ~${answers.buehneMin <= 30 ? "20–30" : answers.buehneMin <= 45 ? "30–45" : "45+"} Min` : null,
@@ -676,16 +681,17 @@ const FormatStep = ({ answers, setA, price }: { answers: ShowPlanerAnswers; setA
 /* ───────────────────────────────────────────────────────────
    STEP 3 — Abend-Baukasten (Drag & Drop)
    ─────────────────────────────────────────────────────────── */
-const SortableBaustein = ({ id, onRemove }: { id: string; onRemove: (id: string) => void }) => {
-  const b = BAUSTEIN_MAP[id];
+const SortableBaustein = ({ id, pos, onRemove }: { id: string; pos: number; onRemove: (id: string) => void }) => {
+  const b = BAUSTEIN_MAP[baseOf(id)];
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.55 : 1, zIndex: isDragging ? 50 : undefined };
   if (!b) return null;
   return (
-    <div ref={setNodeRef} style={style} className="flex items-center gap-3 p-3.5 rounded-xl bg-white" {...attributes}>
+    <div ref={setNodeRef} style={style} className="flex items-center gap-2.5 p-3.5 rounded-xl bg-white" {...attributes}>
       <button type="button" className="shrink-0 touch-none cursor-grab active:cursor-grabbing text-foreground/35 hover:text-foreground/70 transition-colors" aria-label="Baustein verschieben" {...listeners}>
         <GripVertical className="w-5 h-5" />
       </button>
+      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full shrink-0 text-[12px] font-bold tabular-nums" style={{ background: ACCENT, color: "white" }}>{pos}</span>
       <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg shrink-0" style={{ background: "rgba(29,63,255,0.1)" }}><b.Icon className="w-4 h-4" style={{ color: ACCENT }} /></span>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-bold text-foreground leading-tight truncate">{b.t}</p>
@@ -709,13 +715,20 @@ const AblaufStep = ({ answers, setA }: { answers: ShowPlanerAnswers; setA: (p: P
     if (oldI < 0 || newI < 0) return;
     setA({ ablauf: arrayMove(ablauf, oldI, newI) });
   };
-  const add = (id: string) => { if (!ablauf.includes(id)) setA({ ablauf: [...ablauf, id] }); };
-  const remove = (id: string) => setA({ ablauf: ablauf.filter((x) => x !== id) });
-  const palette = BAUSTEINE.filter((b) => !ablauf.includes(b.id));
+  const add = (baseId: string) => {
+    let n = 0;
+    ablauf.forEach((u) => {
+      if (baseOf(u) !== baseId) return;
+      const k = u.includes("__") ? Number(u.split("__")[1]) : 0;
+      if (k >= n) n = k + 1;
+    });
+    setA({ ablauf: [...ablauf, `${baseId}__${n}`] });
+  };
+  const remove = (uid: string) => setA({ ablauf: ablauf.filter((x) => x !== uid) });
 
   return (
     <div className="sp-step">
-      <StepHead n="04" eyebrow="Frage 04 · Dein Ablauf" title="Bau dir deinen Abend." sub="Tipp die Bausteine an, um sie hinzuzufügen — und zieh sie in die richtige Reihenfolge. Du kannst das auch überspringen." />
+      <StepHead n="04" eyebrow="Frage 04 · Dein Ablauf" title="Bau dir deinen Abend." sub="Füg Bausteine hinzu — auch mehrfach — und zieh sie in deine Wunsch-Reihenfolge. Beim Magic Dinner gestaltest du so den ganzen Abend. Überspringen geht auch." />
       <div className="grid lg:grid-cols-2 gap-x-10 gap-y-8">
         {/* Mein Ablauf */}
         <div>
@@ -726,7 +739,7 @@ const AblaufStep = ({ answers, setA }: { answers: ShowPlanerAnswers; setA: (p: P
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
               <SortableContext items={ablauf} strategy={verticalListSortingStrategy}>
                 <div className="space-y-2.5 p-3 rounded-2xl" style={{ background: "hsl(0,0%,97.5%)", border: "1px solid rgba(0,0,0,0.06)" }}>
-                  {ablauf.map((id) => <SortableBaustein key={id} id={id} onRemove={remove} />)}
+                  {ablauf.map((uid, i) => <SortableBaustein key={uid} id={uid} pos={i + 1} onRemove={remove} />)}
                 </div>
               </SortableContext>
             </DndContext>
@@ -734,11 +747,9 @@ const AblaufStep = ({ answers, setA }: { answers: ShowPlanerAnswers; setA: (p: P
         </div>
         {/* Palette */}
         <div>
-          <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3 text-foreground/50">Bausteine · antippen zum Hinzufügen</p>
+          <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-3 text-foreground/50">Bausteine · antippen zum Hinzufügen (mehrfach möglich)</p>
           <div className="space-y-2.5">
-            {palette.length === 0 ? (
-              <p className="text-sm text-foreground/45 p-4">Alle Bausteine sind in deinem Ablauf.</p>
-            ) : palette.map((b) => (
+            {BAUSTEINE.map((b) => (
               <button key={b.id} type="button" onClick={() => add(b.id)} className="w-full flex items-center gap-3 p-3.5 rounded-xl bg-white hover:shadow-md transition-all text-left" style={{ border: "1px solid rgba(0,0,0,0.07)" }}>
                 <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg shrink-0" style={{ background: "rgba(0,0,0,0.04)" }}><b.Icon className="w-4 h-4" style={{ color: ACCENT }} /></span>
                 <div className="min-w-0 flex-1">
@@ -769,7 +780,7 @@ const SummaryView = ({ answers, reco, price, showPrice, name, email, phone, onNa
     { i: 0, label: "Anlass", value: ANLASS_LABEL[answers.anlass || ""] || "—" },
     { i: 1, label: "Rahmen", value: [answers.gaeste ? `${answers.gaeste} Gäste` : null, answers.ort || null, answers.zeitraum ? ZEITRAEUME.find((z) => z.value === answers.zeitraum)?.label : null].filter(Boolean).join(" · ") || "—" },
     { i: 2, label: "Format", value: FORMAT_LABEL[answers.format || ""] || "—" },
-    { i: 3, label: "Ablauf", value: (answers.ablauf || []).map((id) => BAUSTEIN_MAP[id]?.t).filter(Boolean).join(" → ") || "—" },
+    { i: 3, label: "Ablauf", value: (answers.ablauf || []).map((id) => BAUSTEIN_MAP[baseOf(id)]?.t).filter(Boolean).join(" → ") || "—" },
   ];
   return (
     <div className="sp-step">
