@@ -28,13 +28,11 @@ const ShowPlanerTrigger = () => {
   const [open, setOpen] = useState(false);
   const [showResume, setShowResume] = useState(false);
   const [showExitIntent, setShowExitIntent] = useState(false);
-  const [draftStep, setDraftStep] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const draft = loadDraft();
     if (draft && !isCompleted() && draft.step > 0) {
-      setDraftStep(draft.step);
       const t = window.setTimeout(() => setShowResume(true), 1200);
       const t2 = window.setTimeout(() => setShowResume(false), 16000);
       return () => {
@@ -194,7 +192,7 @@ const ShowPlanerTrigger = () => {
             </span>
             <div className="flex-1 min-w-0">
               <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-1 text-white/65">
-                Show-Planer · {draftStep}/9
+                Show-Planer · angefangen
               </p>
               <p className="text-sm leading-snug mb-3">
                 Du hast eine Show begonnen — magst weitermachen?

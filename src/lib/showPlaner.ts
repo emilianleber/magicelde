@@ -9,15 +9,26 @@ const COMPLETED_KEY = "magicel_showplaner_completed";
 
 export type ShowPlanerAnswers = {
   anlass?: string;
+  ort?: string;
+  zeitraum?: string;
+  /** echte Gästezahl aus dem Slider */
+  gaeste?: number;
+  /** "closeup" | "buehne" | "kombi" | "dinner" | "beratung" */
+  format?: string;
+  /** Close-Up-Dauer in Min (Slider-Repräsentant) */
+  cuMin?: number;
+  /** Bühnen-Dauer in Min (Slider-Repräsentant) */
+  buehneMin?: number;
+  /** Baustein-IDs in gewählter Reihenfolge (Abend-Baukasten) */
+  ablauf?: string[];
+  notizen?: string;
+  // Legacy-Felder (alte Drafts) — bleiben optional, werden nicht mehr gesetzt
   saison?: string;
   monat?: string;
-  ort?: string;
   gaesteCount?: string;
-  format?: string;
   dauer?: string;
   tonalitaet?: string;
   budget?: string;
-  notizen?: string;
 };
 
 export type ShowPlanerDraft = {
