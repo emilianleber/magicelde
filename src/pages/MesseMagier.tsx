@@ -109,36 +109,36 @@ export default function MesseMagier() {
       <FAQ
         items={[
           {
-            q: "Was kostet ein Messe-Magier ungefaehr?",
-            a: "Der Preis haengt von Einsatzdauer, Anfahrt und Umfang ab - ein Stand-Slot fuer ein paar Stunden ist anders kalkuliert als der ganze Messetag. Nach einer kurzen Anfrage ueber /kontakt bekommen Sie ein konkretes Angebot, in der Regel binnen 24 Stunden.",
+            q: "Was kostet ein Messe-Magier ungefähr?",
+            a: "Der Preis hängt von Einsatzdauer, Anfahrt und Umfang ab - ein Stand-Slot für ein paar Stunden ist anders kalkuliert als der ganze Messetag. Nach einer kurzen Anfrage über /kontakt bekommen Sie ein konkretes Angebot, in der Regel binnen 24 Stunden.",
           },
           {
-            q: "Wie laeuft die Anfrage ab und wie schnell kommt eine Antwort?",
-            a: "Eine kurze Nachricht zu Messe, Standgroesse, Termin und Ziel reicht voellig. Ich melde mich innerhalb von 24 Stunden persoenlich mit Konzept und Angebot zurueck.",
+            q: "Wie läuft die Anfrage ab und wie schnell kommt eine Antwort?",
+            a: "Eine kurze Nachricht zu Messe, Standgröße, Termin und Ziel reicht völlig. Ich melde mich innerhalb von 24 Stunden persönlich mit Konzept und Angebot zurück.",
           },
           {
             q: "Wie viel Platz braucht die Magie am Stand?",
-            a: "Close-Up funktioniert direkt in den Haenden der Besucher und braucht praktisch keinen Aufbau - ein paar Quadratmeter freie Standflaeche genuegen. Fuer einen Buehnen-Slot auf der Aktionsflaeche klaeren wir Buehne und Technik vorab im Briefing.",
+            a: "Close-Up funktioniert direkt in den Händen der Besucher und braucht praktisch keinen Aufbau - ein paar Quadratmeter freie Standfläche genügen. Für einen Bühnen-Slot auf der Aktionsfläche klären wir Bühne und Technik vorab im Briefing.",
           },
           {
             q: "Lassen sich Effekte und Botschaft auf unser Produkt anpassen?",
-            a: "Ja, das ist der Kern der Sache: Ihr Claim oder Produkt wird in die Effekte eingebaut und sitzt mitten im Aha-Moment. Sie schildern mir kurz Ihre Botschaft, ich entwickle daraus passende Routinen fuer den Stand.",
+            a: "Ja, das ist der Kern der Sache: Ihr Claim oder Produkt wird in die Effekte eingebaut und sitzt mitten im Aha-Moment. Sie schildern mir kurz Ihre Botschaft, ich entwickle daraus passende Routinen für den Stand.",
           },
           {
-            q: "Geht das auch auf Englisch fuer internationale Besucher?",
-            a: "Ja, ich arbeite fliessend in Deutsch und Englisch und wechsle je nach Besucher direkt. So holen Sie auch internationales Messepublikum voll ab.",
+            q: "Geht das auch auf Englisch für internationale Besucher?",
+            a: "Ja, ich arbeite fließend in Deutsch und Englisch und wechsle je nach Besucher direkt. So holen Sie auch internationales Messepublikum voll ab.",
           },
           {
-            q: "Reisen Sie auch ueberregional zu unserer Messe an?",
-            a: "Ja, ich bin deutschlandweit unterwegs - Basis ist Bayern rund um Regensburg, mit ueber 200 Events seit 2016 und drei TV-Finals. Anfahrt und mehrtaegige Auftritte stimmen wir einfach in der Anfrage ab.",
+            q: "Reisen Sie auch überregional zu unserer Messe an?",
+            a: "Ja, ich bin deutschlandweit unterwegs - Basis ist Bayern rund um Regensburg, mit über 200 Events seit 2016 und drei TV-Finals. Anfahrt und mehrtägige Auftritte stimmen wir einfach in der Anfrage ab.",
           },
           {
             q: "Welche Auszeichnungen und Erfahrung bringen Sie mit?",
-            a: "Ueber 200 Events seit 2016, darunter mehr als 100 Hochzeiten. Dreimal TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inkl. Kreativpreis), Top 30 der Deutschen Jugendmeisterschaft 2024 und ein TV-Auftritt bei TVA 2025. Bewertet mit 5,0 Sternen aus ueber 30 Bewertungen.",
+            a: "Über 200 Events seit 2016, darunter mehr als 100 Hochzeiten. Dreimal TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inkl. Kreativpreis), Top 30 der Deutschen Jugendmeisterschaft 2024 und ein TV-Auftritt bei TVA 2025. Bewertet mit 5,0 Sternen aus über 30 Bewertungen.",
           },
           {
-            q: "Ist das auch fuer Firmen und internationale Aussteller rechtssicher?",
-            a: "Ja. Ich habe eine Berufshaftpflicht, arbeite DSGVO-konform und stelle Firmen auf Wunsch eine Auftragsverarbeitungsvereinbarung (AVV) bereit. Headset und Ton sind bei Buehnen-Slots inklusive, einen Tech-Rider liefere ich auf Anfrage.",
+            q: "Ist das auch für Firmen und internationale Aussteller rechtssicher?",
+            a: "Ja. Ich habe eine Berufshaftpflicht, arbeite DSGVO-konform und stelle Firmen auf Wunsch eine Auftragsverarbeitungsvereinbarung (AVV) bereit. Headset und Ton sind bei Bühnen-Slots inklusive, einen Tech-Rider liefere ich auf Anfrage.",
           },
         ]}
       />

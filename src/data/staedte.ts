@@ -85,7 +85,7 @@ Ruf mich an oder schreib mir — als lokaler Zauberer in Regensburg bin ich schn
       },
       {
         q: "Wird das Münchner Umland abgedeckt (Starnberg, Tegernsee, Garmisch, Ingolstadt)?",
-        a: "Ja — gesamter Großraum München im Tagessatz ohne Aufpreis: Starnberg, Tutzing, Tegernsee, Bad Tölz, Bad Wiessee, Bachmair Weissach, Wolfratshausen, Geretsried, Erding, Freising, Dachau, Garching. Ingolstadt (zwischen München und Regensburg) ist im Tagessatz inklusive. Garmisch-Partenkirchen mit moderatem Reisezuschlag.",
+        a: "Ja — gesamter Großraum München im Tagessatz ohne Aufpreis: Starnberg, Tutzing, Tegernsee, Bad Tölz, Bad Wießee, Bachmair Weissach, Wolfratshausen, Geretsried, Erding, Freising, Dachau, Garching. Ingolstadt (zwischen München und Regensburg) ist im Tagessatz inklusive. Garmisch-Partenkirchen mit moderatem Reisezuschlag.",
       },
       {
         q: "Wie schnell könnt ihr für ein Münchner Event kommen (Kurzfristanfrage)?",
@@ -211,7 +211,7 @@ Anreise und Logistik. Augsburg liegt 220 km vom Heimatstandort Regensburg — 1,
     slug: "wuerzburg",
     name: "Würzburg",
     region: "Bayern",
-    intro: "Als Zauberer für Würzburg arbeite ich in einer der schönsten Barock-Städte Deutschlands — UNESCO-Weltkulturerbe-Residenz, Wein-Region (Frankenweine), Universitätsstadt und wirtschaftliches Zentrum Unterfrankens mit Konzernen wie Koenig & Bauer, Brose, Vogel Communications, Bosch Rexroth. Ich biete Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und exklusive Events in Würzburg und ganz Unterfranken.",
+    intro: "Als Zauberer für Würzburg arbeite ich in einer der schönsten Barock-Städte Deutschlands — UNESCO-Weltkulturerbe-Residenz, Wein-Region (Frankenweine), Universitätsstadt und wirtschaftliches Zentrum Unterfrankens mit Konzernen wie König & Bauer, Brose, Vogel Communications, Bosch Rexroth. Ich biete Close-Up Magie, Comedy-Bühnenshow und Magic Dinner für Firmenfeiern, Hochzeiten und exklusive Events in Würzburg und ganz Unterfranken.",
     highlight: "Würzburg-Publikum schätzt zwei Dinge: Eleganz (Residenz-Niveau) und fränkische Echtheit (keine Show-Posen). Mentalmagie funktioniert hier perfekt — präzise, intim, ohne Bauchredner-Lautstärke.",
     einwohner: "130.000",
     bekannteLocations: [
@@ -246,10 +246,10 @@ Anreise und Logistik. Augsburg liegt 220 km vom Heimatstandort Regensburg — 1,
         a: "Ja — ganz Unterfranken im Tagessatz ohne Aufpreis: Würzburg, Kitzingen, Ochsenfurt, Veitshöchheim. Schweinfurt (35 km), Aschaffenburg (75 km), Bad Kissingen (60 km) liegen weiter — möglich im Tagessatz bei Verfügbarkeit, sonst moderater Reisezuschlag.",
       },
     ],
-    seoText: "Zauberer Würzburg Emilian Leber: Close-Up Magie, Comedy-Bühnenshow, Magic Dinner und Weinprobe-Magie in der Residenz, im Bürgerspital und in unterfränkischen Locations. Für Hochzeit, Firmenfeier (Koenig & Bauer, Brose, Vogel) und Privatfeier. 5,0 Sterne bei 30+ Bewertungen.",
-    langText: `Würzburg verbindet zwei Welten: UNESCO-Weltkulturerbe-Eleganz (Residenz, Hofgarten, Festung Marienberg) und solide unterfränkische Wirtschaftskraft (Koenig & Bauer, Brose, Vogel Communications, Bosch Rexroth). Das Würzburger Publikum will Premium-Entertainment, das beides ehrt: stilvolle Tonalität, aber keine Show-Pose. Mentalmagie und präzise Karten-Magie funktionieren hier perfekt.
+    seoText: "Zauberer Würzburg Emilian Leber: Close-Up Magie, Comedy-Bühnenshow, Magic Dinner und Weinprobe-Magie in der Residenz, im Bürgerspital und in unterfränkischen Locations. Für Hochzeit, Firmenfeier (König & Bauer, Brose, Vogel) und Privatfeier. 5,0 Sterne bei 30+ Bewertungen.",
+    langText: `Würzburg verbindet zwei Welten: UNESCO-Weltkulturerbe-Eleganz (Residenz, Hofgarten, Festung Marienberg) und solide unterfränkische Wirtschaftskraft (König & Bauer, Brose, Vogel Communications, Bosch Rexroth). Das Würzburger Publikum will Premium-Entertainment, das beides ehrt: stilvolle Tonalität, aber keine Show-Pose. Mentalmagie und präzise Karten-Magie funktionieren hier perfekt.
 
-Drei Anlässe, drei Würzburger Settings. Für Hochzeiten in der Residenz, im Hofgarten Veitshöchheim, in Schloss Steinburg oder Festung Marienberg das Drei-Akt-Modell: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Für Firmenfeiern (Koenig & Bauer-Mitarbeiter-Events, Vogel-Verlag-Jubiläen, Bosch-Rexroth-Standort-Feiern, Brose-Tagungen) der Mix aus Walk-Around plus 25–35-Min-Bühne. Für Privatanlässe in Würzburg-Mitte, Sanderau oder Grombühl reines Close-Up reicht meist.
+Drei Anlässe, drei Würzburger Settings. Für Hochzeiten in der Residenz, im Hofgarten Veitshöchheim, in Schloss Steinburg oder Festung Marienberg das Drei-Akt-Modell: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. Für Firmenfeiern (König & Bauer-Mitarbeiter-Events, Vogel-Verlag-Jubiläen, Bosch-Rexroth-Standort-Feiern, Brose-Tagungen) der Mix aus Walk-Around plus 25–35-Min-Bühne. Für Privatanlässe in Würzburg-Mitte, Sanderau oder Grombühl reines Close-Up reicht meist.
 
 Wein-Region als eigener Markt. Würzburg ist das Zentrum des Frankenweins — Bürgerspital, Juliusspital, Staatlicher Hofkeller sind Top-Adressen. Wein-Verkostungs-Events mit eingebauter Close-Up-Magie sind ein eigener Markt: Wein und Magie teilen denselben Pace (langsam, präzise, geteilter Moment), und der Wechsel zwischen Verkostungs-Sequenz und Tischmagie-Routine hält die Aufmerksamkeit hoch. Habe ich mehrfach gemacht, würde ich jederzeit wieder empfehlen.
 
@@ -675,7 +675,7 @@ Kosten Zauberer Deggendorf: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.
     intro: "Garmisch-Partenkirchen — Alpenresort am Fuße der Zugspitze, weltbekannt für Wintersport und Premium-Tourismus. Als Zauberer für Garmisch bringe ich Close-Up Magie, Bühnenshow und Magic Dinner zu Hochzeiten in Alpenhotels und Galas mit Bergpanorama.",
     highlight: "Garmisch-Partenkirchen ist Premium-Destination für Hochzeiten und Corporate Retreats — Alpenkulisse trifft Top-Hotels. Entertainment muss mithalten.",
     einwohner: "26.000",
-    bekannteLocations: ["Kongresshaus Garmisch-Partenkirchen", "Hotel Riessersee", "Edelweiss Lodge & Resort", "Olympia-Skistadion (Eventbereich)", "Atlas Grand Hotel"],
+    bekannteLocations: ["Kongresshaus Garmisch-Partenkirchen", "Hotel Rießersee", "Edelweiss Lodge & Resort", "Olympia-Skistadion (Eventbereich)", "Atlas Grand Hotel"],
     faq: [
       { q: "Was kostet ein Zauberer in Garmisch-Partenkirchen?", a: "Die Preise hängen vom Format und der Übernachtungs-Logistik ab. Bei mehrtägigen Events oder Übernachtung kalkuliere ich transparent. Kostenloses Angebot auf Anfrage." },
       { q: "Tritt der Zauberer in Alpenhotels in Garmisch auf?", a: "Ja, Premium-Hotels in Garmisch-Partenkirchen und der gesamten Zugspitz-Region sind ein häufiger Einsatzort für Hochzeiten, Corporate Retreats und Galas." },
@@ -683,7 +683,7 @@ Kosten Zauberer Deggendorf: Pakete ab 395 €, Anfahrt aus Regensburg inklusive.
     seoText: "Zauberer Garmisch-Partenkirchen: Emilian Leber bringt Premium-Entertainment zu Hochzeiten, Firmen-Retreats und Galas in der Zugspitz-Region — Close-Up, Bühnenshow, Magic Dinner.",
     langText: `Garmisch-Partenkirchen ist Premium-Destination für Hochzeiten, Corporate Retreats und exklusive Events — die Kombination aus Alpenkulisse und Top-Hotels macht jede Veranstaltung besonders. Als Zauberer für Garmisch liefere ich Entertainment auf entsprechendem Niveau: ruhig-elegant beim Sektempfang, dramaturgisch beim Dinner, mit Standing-Ovation-Finale vor dem Tanz.
 
-Vom Hotel Riessersee mit Seeblick über das Edelweiss Lodge & Resort bis zum Atlas Grand Hotel — Garmisch bietet außergewöhnliche Locations für besondere Anlässe. Ich bringe das passende Showkonzept mit.
+Vom Hotel Rießersee mit Seeblick über das Edelweiss Lodge & Resort bis zum Atlas Grand Hotel — Garmisch bietet außergewöhnliche Locations für besondere Anlässe. Ich bringe das passende Showkonzept mit.
 
 Kosten Zauberer Garmisch-Partenkirchen: Pakete ab 395 €, Anfahrt aus Regensburg bzw. München im Angebot kalkuliert.`,
   },

@@ -48,6 +48,7 @@ import {
   Copy,
 } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
+import { QRCodeSVG } from "qrcode.react";
 
 interface PortalCustomer {
   id: string;
@@ -3105,14 +3106,14 @@ const Kundenportal = () => {
                     <p className="font-sans text-sm font-bold text-foreground">QR-Code für Banküberweisung</p>
                   </div>
                   <div className="flex items-center justify-center p-6 rounded-xl bg-black/[0.02] border border-black/[0.05]">
-                    {/* EPC QR Code placeholder - in production, use a QR library */}
+                    {/* EPC-QR-Code (SEPA-Überweisung), lokal erzeugt via qrcode.react – kein externer Dienst */}
                     <div className="text-center">
                       <div className="w-32 h-32 mx-auto mb-3 bg-white border-2 border-black/[0.1] rounded-xl flex items-center justify-center">
-                        <img
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(betrag ? generateEpcQrData(betrag, rechnungsNr) : rechnungsNr)}`}
-                          alt="QR Code"
-                          className="w-28 h-28 rounded-lg"
-                          crossOrigin="anonymous"
+                        <QRCodeSVG
+                          value={betrag ? generateEpcQrData(betrag, rechnungsNr) : rechnungsNr}
+                          size={112}
+                          level="M"
+                          className="rounded-lg"
                         />
                       </div>
                       <p className="font-sans text-xs text-muted-foreground">QR-Code mit Banking-App scannen</p>

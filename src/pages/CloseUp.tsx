@@ -108,28 +108,28 @@ export default function CloseUp() {
       <FAQ
         items={[
           {
-            q: "Was kostet Close-Up Tischmagie ungefaehr?",
-            a: "Der Preis haengt von Dauer, Anfahrt und Gaestezahl ab, daher gibt es kein Pauschalpaket von der Stange. Schreib mir kurz Datum, Ort und die ungefaehre Gaestezahl ueber /kontakt, dann bekommst du binnen 24 Stunden ein konkretes Angebot.",
+            q: "Was kostet Close-Up Tischmagie ungefähr?",
+            a: "Der Preis hängt von Dauer, Anfahrt und Gästezahl ab, daher gibt es kein Pauschalpaket von der Stange. Schreib mir kurz Datum, Ort und die ungefähre Gästezahl über /kontakt, dann bekommst du binnen 24 Stunden ein konkretes Angebot.",
           },
           {
-            q: "Wie laeuft die Anfrage ab und wie schnell bekomme ich Antwort?",
-            a: "Du schickst mir ueber /kontakt Datum, Ort und die ungefaehre Gaestezahl. Ich melde mich innerhalb von 24 Stunden persoenlich mit Verfuegbarkeit und Angebot zurueck.",
+            q: "Wie läuft die Anfrage ab und wie schnell bekomme ich Antwort?",
+            a: "Du schickst mir über /kontakt Datum, Ort und die ungefähre Gästezahl. Ich melde mich innerhalb von 24 Stunden persönlich mit Verfügbarkeit und Angebot zurück.",
           },
           {
-            q: "Wie lange dauert Close-Up und fuer wie viele Gaeste lohnt es sich?",
-            a: "Pro Tisch oder Gruppe sind es etwa 5 bis 7 Minuten, in rund 90 Minuten erreiche ich so 50 bis 80 Gaeste. Die Gesamtdauer ist flexibel und richtet sich nach eurem Ablauf, etwa beim Sektempfang, zwischen den Gaengen oder in den Pausen.",
+            q: "Wie lange dauert Close-Up und für wie viele Gäste lohnt es sich?",
+            a: "Pro Tisch oder Gruppe sind es etwa 5 bis 7 Minuten, in rund 90 Minuten erreiche ich so 50 bis 80 Gäste. Die Gesamtdauer ist flexibel und richtet sich nach eurem Ablauf, etwa beim Sektempfang, zwischen den Gängen oder in den Pausen.",
           },
           {
             q: "Was wird vor Ort gebraucht, also Platz und Technik?",
-            a: "Im Grunde nichts: keine Buehne, kein Strom, kein Mikro und kein Aufbau. Ein paar Karten und Muenzen genuegen, und ich gehe direkt zu den Gaesten an Tisch oder Stehtisch.",
+            a: "Im Grunde nichts: keine Bühne, kein Strom, kein Mikro und kein Aufbau. Ein paar Karten und Münzen genügen, und ich gehe direkt zu den Gästen an Tisch oder Stehtisch.",
           },
           {
             q: "Geht das auch auf Englisch?",
-            a: "Ja, ich spiele Close-Up auf Deutsch und auf Englisch. Bei internationalen Gaesten oder gemischten Gruppen wechsle ich problemlos die Sprache.",
+            a: "Ja, ich spiele Close-Up auf Deutsch und auf Englisch. Bei internationalen Gästen oder gemischten Gruppen wechsle ich problemlos die Sprache.",
           },
           {
             q: "Wie weit reist du und wie individuell ist das Programm?",
-            a: "Ich bin in Bayern rund um Regensburg zuhause und deutschlandweit unterwegs, mit ueber 200 Events seit 2016 und drei TV-Finalteilnahmen im Gepaeck. Die Effekte und der Ablauf werden auf euren Anlass abgestimmt, von der Hochzeit bis zur Firmenfeier.",
+            a: "Ich bin in Bayern rund um Regensburg zuhause und deutschlandweit unterwegs, mit über 200 Events seit 2016 und drei TV-Finalteilnahmen im Gepäck. Die Effekte und der Ablauf werden auf euren Anlass abgestimmt, von der Hochzeit bis zur Firmenfeier.",
           },
         ]}
       />

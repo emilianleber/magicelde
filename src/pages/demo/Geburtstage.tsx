@@ -84,12 +84,12 @@ export default function DemoGeburtstage() {
 
       <FAQ
         items={[
-          { q: "Was kostet ein Zauberer für einen Geburtstag?", a: "Das haengt von Dauer, Anfahrt und Gaestezahl ab — ein Walk-Around-Auftritt ist guenstiger als eine kombinierte Bühnenshow ueber den ganzen Abend. Erzaehlt mir kurz von eurer Feier ueber /demo/kontakt, dann bekommt ihr ein passendes Angebot." },
-          { q: "Wie laeuft die Anfrage ab?", a: "Schreibt mir ueber /demo/kontakt kurz Anlass, Datum, Ort und ungefaehre Gaestezahl. Ich melde mich innerhalb von 24 Stunden persoenlich mit Verfuegbarkeit und einem konkreten Vorschlag." },
-          { q: "Fuer wie viele Gaeste und welche Raumgroesse passt das?", a: "Vom intimen Geburtstag im Wohnzimmer mit einer Handvoll Leuten bis zum runden Jubilaeum im Saal mit 200 Gaesten. Beim Close-Up gehe ich von Grueppchen zu Grueppchen, die kleine Bühnenshow passt fuer etwa 20 bis 200 Gaeste." },
-          { q: "Was braucht ihr an Platz und Technik?", a: "Fuer Tischmagie und Walk-Around reicht der vorhandene Raum, technisch brauche ich nichts. Fuer die Bühnenshow genuegt eine kleine freie Flaeche; bei groesseren Saelen klaeren wir Mikrofon und Musik vorab kurz ab." },
-          { q: "Geht die Show auch auf Englisch?", a: "Ja, ich spiele auf Deutsch und Englisch. Bei internationalen Gaesten oder gemischten Familien passe ich die Show entsprechend an, ohne dass der Humor verloren geht." },
-          { q: "Wie weit reist du an und wie individuell ist die Show?", a: "Basis ist Bayern rund um Regensburg, ich bin aber deutschlandweit unterwegs — seit 2016 mit ueber 200 Events. Ich arbeite persoenliche Insider zum Jubilar ein, sodass die Show genau auf eure Feier zugeschnitten ist." },
+          { q: "Was kostet ein Zauberer für einen Geburtstag?", a: "Das hängt von Dauer, Anfahrt und Gästezahl ab — ein Walk-Around-Auftritt ist günstiger als eine kombinierte Bühnenshow über den ganzen Abend. Erzählt mir kurz von eurer Feier über /demo/kontakt, dann bekommt ihr ein passendes Angebot." },
+          { q: "Wie läuft die Anfrage ab?", a: "Schreibt mir über /demo/kontakt kurz Anlass, Datum, Ort und ungefähre Gästezahl. Ich melde mich innerhalb von 24 Stunden persönlich mit Verfügbarkeit und einem konkreten Vorschlag." },
+          { q: "Für wie viele Gäste und welche Raumgröße passt das?", a: "Vom intimen Geburtstag im Wohnzimmer mit einer Handvoll Leuten bis zum runden Jubiläum im Saal mit 200 Gästen. Beim Close-Up gehe ich von Grüppchen zu Grüppchen, die kleine Bühnenshow passt für etwa 20 bis 200 Gäste." },
+          { q: "Was braucht ihr an Platz und Technik?", a: "Für Tischmagie und Walk-Around reicht der vorhandene Raum, technisch brauche ich nichts. Für die Bühnenshow genügt eine kleine freie Fläche; bei größeren Sälen klären wir Mikrofon und Musik vorab kurz ab." },
+          { q: "Geht die Show auch auf Englisch?", a: "Ja, ich spiele auf Deutsch und Englisch. Bei internationalen Gästen oder gemischten Familien passe ich die Show entsprechend an, ohne dass der Humor verloren geht." },
+          { q: "Wie weit reist du an und wie individuell ist die Show?", a: "Basis ist Bayern rund um Regensburg, ich bin aber deutschlandweit unterwegs — seit 2016 mit über 200 Events. Ich arbeite persönliche Insider zum Jubilar ein, sodass die Show genau auf eure Feier zugeschnitten ist." },
         ]}
       />
 

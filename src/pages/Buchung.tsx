@@ -74,7 +74,7 @@ function buildInquiryMailto(p: {
     p.anlass ? `Anlass: ${p.anlass}` : "",
     p.datum ? `Datum: ${p.datum}` : "",
     p.ort ? `Ort: ${p.ort}` : "",
-    p.gaeste ? `Gaeste: ${p.gaeste}` : "",
+    p.gaeste ? `Gäste: ${p.gaeste}` : "",
     p.format ? `Format: ${p.format}` : "",
   ].filter(Boolean);
   const body = [...rows, "", p.nachricht || "(keine Nachricht)"].join("\n");

@@ -667,7 +667,7 @@ const AdminEffekteBibliothek = () => {
               onChange={(e) =>
                 setForm((f) => ({ ...f, name: e.target.value }))
               }
-              placeholder="z.B. Verschwindende Muenze"
+              placeholder="z.B. Verschwindende Münze"
               className={inputCls}
             />
           </div>
@@ -802,7 +802,7 @@ const AdminEffekteBibliothek = () => {
                     addReq();
                   }
                 }}
-                placeholder="Eingeben, Enter zum Hinzufuegen"
+                placeholder="Eingeben, Enter zum Hinzufügen"
                 className="flex-1 rounded-xl bg-muted/40 border border-border/30 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20"
               />
               <button

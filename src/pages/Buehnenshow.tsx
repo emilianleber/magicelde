@@ -108,27 +108,27 @@ export default function Buehnenshow() {
         items={[
           {
             q: "Was kostet eine Bühnenshow?",
-            a: "Das haengt von Dauer, Anfahrt und Gaestezahl ab - eine 15-Minuten-Gala kostet weniger als ein 60-Minuten-Headliner-Slot. Schick mir kurz Datum, Ort und gewuenschte Laenge ueber das Kontaktformular, dann bekommst du ein konkretes Angebot.",
+            a: "Das hängt von Dauer, Anfahrt und Gästezahl ab - eine 15-Minuten-Gala kostet weniger als ein 60-Minuten-Headliner-Slot. Schick mir kurz Datum, Ort und gewünschte Länge über das Kontaktformular, dann bekommst du ein konkretes Angebot.",
           },
           {
-            q: "Wie laeuft die Anfrage ab und wie schnell kommt eine Antwort?",
-            a: "Du schreibst mir ueber /kontakt ein paar Eckdaten zu eurem Event, und ich melde mich innerhalb von 24 Stunden persoenlich zurueck. Danach klaeren wir Ablauf, Laenge und Buehne in einem kurzen Gespraech.",
+            q: "Wie läuft die Anfrage ab und wie schnell kommt eine Antwort?",
+            a: "Du schreibst mir über /kontakt ein paar Eckdaten zu eurem Event, und ich melde mich innerhalb von 24 Stunden persönlich zurück. Danach klären wir Ablauf, Länge und Bühne in einem kurzen Gespräch.",
           },
           {
-            q: "Wie lange dauert die Show und wie viele Gaeste passen?",
-            a: "Die Show laesst sich von 15 bis 60 Minuten takten - vom pointierten Gala-Slot bis zum Headliner-Act. Sie funktioniert fuer 50 bis 500 Gaeste, weil Headset, Ton und Buehnen-Aufbau auf die Saalgroesse abgestimmt werden.",
+            q: "Wie lange dauert die Show und wie viele Gäste passen?",
+            a: "Die Show lässt sich von 15 bis 60 Minuten takten - vom pointierten Gala-Slot bis zum Headliner-Act. Sie funktioniert für 50 bis 500 Gäste, weil Headset, Ton und Bühnen-Aufbau auf die Saalgröße abgestimmt werden.",
           },
           {
             q: "Was braucht ihr an Platz und Technik?",
-            a: "Die Buehne braucht nur etwa 2 x 1,5 m, Headset und Ton bringe ich selbst mit. Einen Tech-Rider gibt es auf Anfrage - ihr muesst euch um nichts kuemmern.",
+            a: "Die Bühne braucht nur etwa 2 x 1,5 m, Headset und Ton bringe ich selbst mit. Einen Tech-Rider gibt es auf Anfrage - ihr müsst euch um nichts kümmern.",
           },
           {
             q: "Geht die Show auch auf Englisch und wie weit reist du an?",
-            a: "Die komplette Show gibt es auf Deutsch und Englisch, ideal fuer internationale Gaeste oder gemischtes Publikum. Basis ist Bayern rund um Regensburg, gespielt wird aber deutschlandweit.",
+            a: "Die komplette Show gibt es auf Deutsch und Englisch, ideal für internationale Gäste oder gemischtes Publikum. Basis ist Bayern rund um Regensburg, gespielt wird aber deutschlandweit.",
           },
           {
-            q: "Wie individuell laesst sich die Show anpassen?",
-            a: "Jeder Auftritt wird auf euren Anlass abgestimmt - Laenge, Tonalitaet von Premium bis Comedy und der Einbau ins Programm. Mit ueber 200 Events seit 2016 und 3x TV-Finalist-Erfahrung passt die Drama-Kurve auf Hochzeit, Firmenfeier oder Gala.",
+            q: "Wie individuell lässt sich die Show anpassen?",
+            a: "Jeder Auftritt wird auf euren Anlass abgestimmt - Länge, Tonalität von Premium bis Comedy und der Einbau ins Programm. Mit über 200 Events seit 2016 und 3x TV-Finalist-Erfahrung passt die Drama-Kurve auf Hochzeit, Firmenfeier oder Gala.",
           },
         ]}
       />

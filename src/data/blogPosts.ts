@@ -1247,7 +1247,7 @@ export const blogPosts: BlogPost[] = [
       {
         type: "paragraph",
         text:
-          "Bei jedem ersten Gespräch zum Hochzeitszauber kommt die Frage zwischen \"Wie lange dauert das?\" und \"Welche Tricks machen Sie?\": Was kostet das? Hier die ehrliche Antwort — ohne Geheimnistuerei, mit echten Preisspannen.",
+          "Bei jedem ersten Gespräch zum Hochzeitszauber kommt die Frage zwischen \"Wie lange dauert das?\" und \"Welche Tricks machen Sie?\": Was kostet das? Hier die ehrliche Antwort — ohne Geheimnistürei, mit echten Preisspannen.",
       },
       {
         type: "heading",
