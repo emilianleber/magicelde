@@ -2071,7 +2071,7 @@ body > div {
           {/* ════ FUSS-TEXT ════ */}
           <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600 mb-4">Fuss-Text</p>
           <RichTextEditor
-            key={`fuss-${id ?? "new"}`}
+            key={`fuß-${id ?? "new"}`}
             value={fusstext}
             onChange={setFusstext}
             placeholder="Bankdaten, Zahlungshinweise, Grüße…"

@@ -103,27 +103,27 @@ export default function ComedyZauberei() {
         items={[
           {
             q: "Was kostet eine Comedy-Zaubershow?",
-            a: "Preislich abhaengig von Dauer, Anfahrt und Gaestezahl - vom 15-Minuten-Slot bis zum 45-Minuten-Headliner. Schildert mir kurz euer Event ueber /kontakt, dann bekommt ihr ein passendes Angebot.",
+            a: "Preislich abhängig von Dauer, Anfahrt und Gästezahl - vom 15-Minuten-Slot bis zum 45-Minuten-Headliner. Schildert mir kurz euer Event über /kontakt, dann bekommt ihr ein passendes Angebot.",
           },
           {
-            q: "Wie laeuft die Anfrage ab und wie schnell kommt eine Antwort?",
-            a: "Erzaehlt mir kurz von Anlass, Datum und Gaestezahl ueber /kontakt. Ich melde mich innerhalb von 24 Stunden persoenlich zurueck - danach folgen Briefing, Vertrag und Technik aus einer Hand.",
+            q: "Wie läuft die Anfrage ab und wie schnell kommt eine Antwort?",
+            a: "Erzählt mir kurz von Anlass, Datum und Gästezahl über /kontakt. Ich melde mich innerhalb von 24 Stunden persönlich zurück - danach folgen Briefing, Vertrag und Technik aus einer Hand.",
           },
           {
             q: "Wie lange dauert das Comedy-Set?",
-            a: "Zwischen 15 und 45 Minuten - vom pointierten Slot zwischen zwei Programmpunkten bis zum Hauptact des Abends. Die Laenge richtet sich nach eurem Ablauf, die Comedy-Dosis nach dem Anlass.",
+            a: "Zwischen 15 und 45 Minuten - vom pointierten Slot zwischen zwei Programmpunkten bis zum Hauptact des Abends. Die Länge richtet sich nach eurem Ablauf, die Comedy-Dosis nach dem Anlass.",
           },
           {
-            q: "Fuer wie viele Gaeste und welche Raumgroesse eignet sich das?",
-            a: "Von der intimen Runde bis zum vollen Saal: 30 bis 500 Gaeste funktionieren bestens. Wichtiger als die Raumgroesse ist gute Sicht auf die Buehne - bei groesseren Gruppen sorgt eine Mikrofonanlage dafuer, dass jede Pointe ankommt.",
+            q: "Für wie viele Gäste und welche Raumgröße eignet sich das?",
+            a: "Von der intimen Runde bis zum vollen Saal: 30 bis 500 Gäste funktionieren bestens. Wichtiger als die Raumgröße ist gute Sicht auf die Bühne - bei größeren Gruppen sorgt eine Mikrofonanlage dafür, dass jede Pointe ankommt.",
           },
           {
             q: "Was wird an Platz und Technik gebraucht?",
-            a: "Ein freier Buehnen- oder Auftrittsbereich und bei groesseren Gruppen ein Mikrofon plus Saallicht reichen meist aus. Ich klaere die Technik vorab mit eurem Location-Team, sodass am Eventtag nichts dem Zufall ueberlassen bleibt.",
+            a: "Ein freier Bühnen- oder Auftrittsbereich und bei größeren Gruppen ein Mikrofon plus Saallicht reichen meist aus. Ich kläre die Technik vorab mit eurem Location-Team, sodass am Eventtag nichts dem Zufall überlassen bleibt.",
           },
           {
             q: "Geht die Show auch auf Englisch und wie weit reist Emilian?",
-            a: "Die Show gibt es auf Deutsch und Englisch - ideal fuer internationale Gaeste und Firmen-Events. Basis ist Bayern/Regensburg, gebucht und gespielt wird deutschlandweit; die Anfahrt fliesst einfach ins Angebot ein.",
+            a: "Die Show gibt es auf Deutsch und Englisch - ideal für internationale Gäste und Firmen-Events. Basis ist Bayern/Regensburg, gebucht und gespielt wird deutschlandweit; die Anfahrt fließt einfach ins Angebot ein.",
           },
         ]}
       />

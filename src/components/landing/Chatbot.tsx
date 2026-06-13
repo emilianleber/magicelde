@@ -81,7 +81,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "rechnung",
     ],
     response:
-      "Preise sind format- und reichweiten-abhaengig. Ein kompakter Close-Up-Slot startet im mittleren dreistelligen Bereich, Magic-Dinner-Abende oder Premium-Buehnenshows liegen darueber. Sag mir Anlass, Datum und Gaestezahl im Show-Planer, ich schicke ein konkretes Angebot innerhalb 24h.",
+      "Preise sind format- und reichweiten-abhängig. Ein kompakter Close-Up-Slot startet im mittleren dreistelligen Bereich, Magic-Dinner-Abende oder Premium-Bühnenshows liegen darüber. Sag mir Anlass, Datum und Gästezahl im Show-Planer, ich schicke ein konkretes Angebot innerhalb 24h.",
     actions: [
       { label: "Show-Planer starten", icon: Wand2, kind: "open-planer" },
       { label: "Direkt anfragen", icon: Mail, kind: "show-form" },
@@ -100,7 +100,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "standesamt",
     ],
     response:
-      "Hochzeitszauber war ueber 100 Mal. Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, ein Buehnen-Highlight vor dem Tanz. Eure Geschichte fliesst in die Show ein - Datum, Anekdote, Trauring-Effekt.",
+      "Hochzeitszauber war über 100 Mal. Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, ein Bühnen-Highlight vor dem Tanz. Eure Geschichte fließt in die Show ein - Datum, Anekdote, Trauring-Effekt.",
     actions: [
       { label: "Hochzeit-Seite", icon: Heart, kind: "navigate", target: "/hochzeit" },
       { label: "Show-Planer", icon: Wand2, kind: "open-planer" },
@@ -124,7 +124,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "messe",
     ],
     response:
-      "Firmenfeiern ueber 200 Mal - DAX-Konzerne, Mittelstand, Start-ups. Tonalitaet ans Unternehmen angepasst, Insider-Pointen aus dem Briefing, Magie-Bridges in der Moderation, Standing-Ovation-Finale. Kunden: Sixt, STRABAG, Sparkasse, VKB, XXXLutz.",
+      "Firmenfeiern über 200 Mal - DAX-Konzerne, Mittelstand, Start-ups. Tonalität ans Unternehmen angepasst, Insider-Pointen aus dem Briefing, Magie-Bridges in der Moderation, Standing-Ovation-Finale. Kunden: Sixt, STRABAG, Sparkasse, VKB, XXXLutz.",
     actions: [
       {
         label: "Firmenfeier-Seite",
@@ -150,7 +150,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "tisch",
     ],
     response:
-      "Close-Up direkt am Tisch - Karten in eure Hand, Muenzen die wandern, drei Sekunden Stille danach. Ueber 100 Auftritte, von intimen Tafeln bis 300+ Gaeste-Empfaenge. Kein Technik-Setup, flexible Dauer.",
+      "Close-Up direkt am Tisch - Karten in eure Hand, Münzen die wandern, drei Sekunden Stille danach. Über 100 Auftritte, von intimen Tafeln bis 300+ Gäste-Empfänge. Kein Technik-Setup, flexible Dauer.",
     actions: [
       {
         label: "Close-Up-Seite",
@@ -175,7 +175,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "galashow",
     ],
     response:
-      "Durchkomponierte Buehnenshow 15-60 Min - Hook, Aufbau, Peaks, Climax, Uebergabe. Mentaleffekte, Comedy-Pointen, Standing-Ovation-Finale. Greatest-Talent-Finalist und Kreativpreistraeger.",
+      "Durchkomponierte Bühnenshow 15-60 Min - Hook, Aufbau, Peaks, Climax, Übergabe. Mentaleffekte, Comedy-Pointen, Standing-Ovation-Finale. Greatest-Talent-Finalist und Kreativpreisträger.",
     actions: [
       {
         label: "Buehnenshow-Seite",
@@ -200,7 +200,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "dinner show",
     ],
     response:
-      "Magic Dinner ist mein Spezialgebiet - Mehrgaenge-Abend mit Magie zwischen den Gaengen. Close-Up am Tisch, Buehnenshow als Finale, 20-120 Gaeste. Hauspartner: Wald & Wiese in Sinzing bei Regensburg.",
+      "Magic Dinner ist mein Spezialgebiet - Mehrgänge-Abend mit Magie zwischen den Gängen. Close-Up am Tisch, Bühnenshow als Finale, 20-120 Gäste. Hauspartner: Wald & Wiese in Sinzing bei Regensburg.",
     actions: [
       {
         label: "Magic Dinner-Seite",
@@ -215,7 +215,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
     id: "geburtstag",
     keywords: ["geburtstag", "jubilaeum", "jubiläum", "geburtstagsfeier", "runder"],
     response:
-      "Von 30er-Geburtstag bis Goldene Hochzeit - Memory-Lane mit Anekdoten vom Geburtstagskind, Close-Up und Buehnen-Highlight, personalisiertes Finale. Funktioniert am besten als Ueberraschung.",
+      "Von 30er-Geburtstag bis Goldene Hochzeit - Memory-Lane mit Anekdoten vom Geburtstagskind, Close-Up und Bühnen-Highlight, personalisiertes Finale. Funktioniert am besten als Überraschung.",
     actions: [
       {
         label: "Geburtstage-Seite",
@@ -230,7 +230,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
     id: "moderation",
     keywords: ["moderation", "moderator", "moderieren", "moderiert", "durch den abend"],
     response:
-      "Moderation mit magischem Twist - charmant, witzig, souveraen. Magische Einlagen zwischen den Programmpunkten. Statt einem Moderator UND einem Kuenstler beides in einer Person.",
+      "Moderation mit magischem Twist - charmant, witzig, souverän. Magische Einlagen zwischen den Programmpunkten. Statt einem Moderator UND einem Künstler beides in einer Person.",
     actions: [
       {
         label: "Moderation-Seite",
@@ -245,7 +245,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
     id: "comedy",
     keywords: ["comedy", "comedyzauberei", "lachen", "humor", "witz"],
     response:
-      "Comedy-Zauberei - Magie mit Pointen-Dichte. Im Schnitt 17 Lacher in 20 Minuten. Funktioniert auf Buehne und Close-Up gleichermassen.",
+      "Comedy-Zauberei - Magie mit Pointen-Dichte. Im Schnitt 17 Lacher in 20 Minuten. Funktioniert auf Bühne und Close-Up gleichermassen.",
     actions: [
       {
         label: "Comedy-Seite",
@@ -267,7 +267,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "nürnberg",
       "augsburg",
       "anfahrt",
-      "in der naehe",
+      "in der nähe",
       "in der nähe",
       "region",
       "bayern",
@@ -276,7 +276,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "reise",
     ],
     response:
-      "Basis Regensburg, Bayern primaer, deutschlandweit und international buchbar. Anfahrt wird transparent im Angebot kalkuliert. Sag mir deine Stadt, ich pruefe Termin und Logistik.",
+      "Basis Regensburg, Bayern primär, deutschlandweit und international buchbar. Anfahrt wird transparent im Angebot kalkuliert. Sag mir deine Stadt, ich prüfe Termin und Logistik.",
     actions: [
       { label: "Show-Planer", icon: Wand2, kind: "open-planer" },
       { label: "Anfragen", icon: Mail, kind: "show-form" },
@@ -295,7 +295,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "frei",
     ],
     response:
-      "Q1-Q2 entspannt, Q3 mittel, Q4 (Weihnachten) eng - bitte frueh anfragen. Hochzeits-Samstage Mai-September gehen schnell weg. Sag mir Datum und Anlass im Show-Planer, ich antworte in 24h.",
+      "Q1-Q2 entspannt, Q3 mittel, Q4 (Weihnachten) eng - bitte früh anfragen. Hochzeits-Samstage Mai-September gehen schnell weg. Sag mir Datum und Anlass im Show-Planer, ich antworte in 24h.",
     actions: [
       { label: "Show-Planer starten", icon: Wand2, kind: "open-planer" },
       { label: "Direkt anfragen", icon: Mail, kind: "show-form" },
@@ -305,7 +305,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
     id: "dauer",
     keywords: ["dauer", "wie lang", "lange", "minuten", "stunden"],
     response:
-      "Dauer wird ans Event angepasst: Close-Up 30-90 Min, Buehnenshow 15-60 Min, Magic Dinner 3-4 Stunden, Moderation nach Bedarf. Bei Empfaengen reichen oft 45-60 Min Close-Up.",
+      "Dauer wird ans Event angepasst: Close-Up 30-90 Min, Bühnenshow 15-60 Min, Magic Dinner 3-4 Stunden, Moderation nach Bedarf. Bei Empfängen reichen oft 45-60 Min Close-Up.",
   },
   {
     id: "technik",
@@ -317,17 +317,17 @@ const KNOWLEDGE: KnowledgeEntry[] = [
       "aufbau",
       "vorbereitung",
       "rider",
-      "buehne aufbau",
+      "bühne aufbau",
       "soundcheck",
     ],
     response:
-      "Close-Up braucht nichts - ich bringe alles mit. Buehnenshow idealerweise Mikrofon und Licht, ich stimme mit eurer Location ab und liefere einen Technik-Rider. Keine Sorgen.",
+      "Close-Up braucht nichts - ich bringe alles mit. Bühnenshow idealerweise Mikrofon und Licht, ich stimme mit eurer Location ab und liefere einen Technik-Rider. Keine Sorgen.",
   },
   {
     id: "anfrage",
     keywords: ["anfrage", "buchen", "buchung", "show planen", "anlass", "anfragen", "reservieren"],
     response:
-      "Am schnellsten geht der Show-Planer in 90 Sekunden - Format, Datum, Gaestezahl. Oder direkt das Mini-Formular hier im Chat. Antwort innerhalb 24h, oft schneller.",
+      "Am schnellsten geht der Show-Planer in 90 Sekunden - Format, Datum, Gästezahl. Oder direkt das Mini-Formular hier im Chat. Antwort innerhalb 24h, oft schneller.",
     actions: [
       { label: "Show-Planer starten", icon: Wand2, kind: "open-planer" },
       { label: "Direkt anfragen", icon: Mail, kind: "show-form" },
@@ -348,7 +348,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
     id: "referenzen",
     keywords: ["referenz", "bewertung", "rezension", "erfahrung", "kunde", "logo"],
     response:
-      "5,0 Sterne auf Google und ProvenExpert, 30+ Bewertungen, 200+ Events. Kunden: Sixt, STRABAG, Sparkasse, VKB, XXXLutz, Schneider Weisse, Stadt Regensburg. Greatest Talent Finalist, Kreativpreistraeger.",
+      "5,0 Sterne auf Google und ProvenExpert, 30+ Bewertungen, 200+ Events. Kunden: Sixt, STRABAG, Sparkasse, VKB, XXXLutz, Schneider Weisse, Stadt Regensburg. Greatest Talent Finalist, Kreativpreisträger.",
     actions: [
       {
         label: "Referenzen-Seite",
@@ -371,16 +371,16 @@ const KNOWLEDGE: KnowledgeEntry[] = [
     id: "stornierung",
     keywords: ["storno", "stornierung", "absage", "absagen", "abbrechen", "verschieben"],
     response:
-      "Stornogebuehren: bis 30 Tage 55%, bis 20 Tage 75%, unter 14 Tage 100%. Bei hoeherer Gewalt finden wir eine faire Loesung - am besten Termin verschieben statt absagen.",
+      "Stornogebühren: bis 30 Tage 55%, bis 20 Tage 75%, unter 14 Tage 100%. Bei höherer Gewalt finden wir eine faire Lösung - am besten Termin verschieben statt absagen.",
   },
   {
     id: "ueber-mich",
-    keywords: ["ueber dich", "über dich", "wer bist", "emilian", "leber", "magier"],
+    keywords: ["über dich", "über dich", "wer bist", "emilian", "leber", "magier"],
     response:
-      "Emilian Leber - Magier seit dem 8. Lebensjahr, vollberuflich seit 2025. Greatest Talent Finalist 2023, Talents of Magic Finalist + Kreativpreis 2024, TVA TV-Auftritt 2025. Spezialitaet: Magic Dinner und Bayern-weite Privatfeiern.",
+      "Emilian Leber - Magier seit dem 8. Lebensjahr, vollberuflich seit 2025. Greatest Talent Finalist 2023, Talents of Magic Finalist + Kreativpreis 2024, TVA TV-Auftritt 2025. Spezialität: Magic Dinner und Bayern-weite Privatfeiern.",
     actions: [
       {
-        label: "Ueber mich",
+        label: "Über mich",
         icon: ArrowRight,
         kind: "navigate",
         target: "/ueber-mich",
@@ -391,7 +391,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
     id: "kindergeburtstag",
     keywords: ["kindergeburtstag", "kinder", "kindergarten"],
     response:
-      "Aktuell konzentriere ich mich auf Erwachsenen-Entertainment - Hochzeiten, Firmenfeiern, private Feiern. Bei Familienfeiern beziehe ich juengere Gaeste ein, reine Kindergeburtstage vermittle ich gerne weiter.",
+      "Aktuell konzentriere ich mich auf Erwachsenen-Entertainment - Hochzeiten, Firmenfeiern, private Feiern. Bei Familienfeiern beziehe ich jüngere Gäste ein, reine Kindergeburtstage vermittle ich gerne weiter.",
   },
 ];
 
@@ -468,7 +468,7 @@ function buildResponse(input: string): { text: string; actions?: ChatAction[] } 
   if (YES_RE.test(norm)) {
     return {
       text:
-        "Super. Am schnellsten geht der Show-Planer - 90 Sekunden, dann habe ich Anlass, Datum und Gaestezahl und antworte innerhalb 24h.",
+        "Super. Am schnellsten geht der Show-Planer - 90 Sekunden, dann habe ich Anlass, Datum und Gästezahl und antworte innerhalb 24h.",
       actions: [
         { label: "Show-Planer starten", icon: Wand2, kind: "open-planer" },
         { label: "Direkt anfragen", icon: Mail, kind: "show-form" },
@@ -488,7 +488,7 @@ function buildResponse(input: string): { text: string; actions?: ChatAction[] } 
 
   return {
     text:
-      "Das beantworte ich am besten persoenlich. Starte den Show-Planer (90 Sek) oder schicke mir kurz Name + Email hier im Chat - Antwort innerhalb 24h.",
+      "Das beantworte ich am besten persönlich. Starte den Show-Planer (90 Sek) oder schicke mir kurz Name + Email hier im Chat - Antwort innerhalb 24h.",
     actions: [
       { label: "Show-Planer starten", icon: Wand2, kind: "open-planer" },
       { label: "Direkt anfragen", icon: Mail, kind: "show-form" },
@@ -511,7 +511,7 @@ const WELCOME_QUICK: ChatAction[] = [
   },
   { label: "Preise", icon: Coins, kind: "send-message", target: "Was kostet eine Buchung?" },
   { label: "Termin", icon: Calendar, kind: "send-message", target: "Habt ihr einen Termin frei?" },
-  { label: "Show-Planer oeffnen", icon: Wand2, kind: "open-planer" },
+  { label: "Show-Planer öffnen", icon: Wand2, kind: "open-planer" },
 ];
 
 // ──────────────────────────────────────────────────────────────────────────
@@ -552,7 +552,7 @@ const Chatbot = () => {
       id: newId(),
       role: "bot",
       text:
-        "Hi, ich bin Karta - dein Show-Helfer fuer magicel.de. Frag mich zu Hochzeit, Firmenfeier, Magic Dinner, Preisen oder Terminen. Oder starte direkt den Show-Planer.",
+        "Hi, ich bin Karta - dein Show-Helfer für magicel.de. Frag mich zu Hochzeit, Firmenfeier, Magic Dinner, Preisen oder Terminen. Oder starte direkt den Show-Planer.",
       actions: WELCOME_QUICK,
     },
   ]);
@@ -643,7 +643,7 @@ const Chatbot = () => {
           id: newId(),
           role: "bot",
           text:
-            "Klar. Name, Email und eine kurze Nachricht reichen - ich melde mich innerhalb 24h zurueck.",
+            "Klar. Name, Email und eine kurze Nachricht reichen - ich melde mich innerhalb 24h zurück.",
           showForm: true,
         },
       ];
@@ -843,7 +843,7 @@ const Chatbot = () => {
             <button
               onClick={() => setOpen(false)}
               className="relative w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
-              aria-label="Chat schliessen"
+              aria-label="Chat schließen"
             >
               <X className="w-4 h-4 text-white" aria-hidden="true" />
             </button>
@@ -1065,7 +1065,7 @@ const MessageBubble = ({
             label="Nachricht"
             value={form.message}
             onChange={(v) => setForm({ ...form, message: v })}
-            placeholder="Datum, Gaestezahl, Wunsch"
+            placeholder="Datum, Gästezahl, Wunsch"
             multiline
           />
           <button

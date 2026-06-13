@@ -597,7 +597,7 @@ const AdminTeam = () => {
                 setForm((f) => ({ ...f, notizen: e.target.value }))
               }
               rows={4}
-              placeholder="Verfuegbarkeit, Besonderheiten..."
+              placeholder="Verfügbarkeit, Besonderheiten..."
               className="w-full rounded-xl bg-muted/40 border border-border/30 px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/20 resize-none"
             />
           </div>

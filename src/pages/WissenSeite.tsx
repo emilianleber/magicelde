@@ -206,7 +206,7 @@ const Inner = ({ topic }: { topic: WissenTopic }) => {
               Brauchst du eine konkrete Antwort?
             </h3>
             <p className="leading-[1.6] mb-6 max-w-xl" style={{ color: "rgba(255,255,255,0.85)" }}>
-              Schick mir kurz Anlass, Datum, Ort und Gaestezahl — ich antworte innerhalb 24 Stunden mit Konzept-Vorschlag.
+              Schick mir kurz Anlass, Datum, Ort und Gästezahl — ich antworte innerhalb 24 Stunden mit Konzept-Vorschlag.
             </p>
             <Link
               to="/buchung"
@@ -227,7 +227,7 @@ const Inner = ({ topic }: { topic: WissenTopic }) => {
             Bereit fuer dein Event? <span style={{ color: MAGENTA }}>Magisch.</span>
           </>
         }
-        sub="Schick mir Datum, Anlass, Gaestezahl und Location — Antwort innerhalb 24 Stunden mit Konzept-Vorschlag und Angebot."
+        sub="Schick mir Datum, Anlass, Gästezahl und Location — Antwort innerhalb 24 Stunden mit Konzept-Vorschlag und Angebot."
       />
     </VoltageShell>
   );

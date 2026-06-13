@@ -90,28 +90,28 @@ export default function DemoMagicDinner() {
       <FAQ
         items={[
           {
-            q: "Was kostet ein Magic Dinner ungefaehr?",
-            a: "Das haengt von Dauer, Gaestezahl und Anfahrt ab — ein Drei-Gang-Abend ist anders kalkuliert als das grosse Fuenf-Gang-Menue mit Buehnen-Finale. Schreibt mir kurz Datum, Location und Menue, dann bekommt ihr ein konkretes Angebot.",
+            q: "Was kostet ein Magic Dinner ungefähr?",
+            a: "Das hängt von Dauer, Gästezahl und Anfahrt ab — ein Drei-Gang-Abend ist anders kalkuliert als das große Fünf-Gang-Menü mit Bühnen-Finale. Schreibt mir kurz Datum, Location und Menü, dann bekommt ihr ein konkretes Angebot.",
           },
           {
-            q: "Wie laeuft die Anfrage ab und wie schnell hoere ich von dir?",
-            a: "Ihr schreibt mir ueber das Kontaktformular unter /demo/kontakt mit Datum, Location und ungefaehrer Gaestezahl. Ich melde mich innerhalb von 24 Stunden persoenlich mit Rueckfragen und einem passenden Vorschlag zurueck.",
+            q: "Wie läuft die Anfrage ab und wie schnell höre ich von dir?",
+            a: "Ihr schreibt mir über das Kontaktformular unter /demo/kontakt mit Datum, Location und ungefährer Gästezahl. Ich melde mich innerhalb von 24 Stunden persönlich mit Rückfragen und einem passenden Vorschlag zurück.",
           },
           {
             q: "Wie lange dauert ein Magic Dinner?",
-            a: "Ein Magic Dinner ist ueber 2,5 bis 4 Stunden durchkomponiert — vom Walk-Around beim Aperitif ueber Tisch-zu-Tisch zwischen den Gaengen bis zum Buehnen-Finale zum Dessert. Die genaue Taktung stimme ich vorab mit Kueche und Service ab.",
+            a: "Ein Magic Dinner ist über 2,5 bis 4 Stunden durchkomponiert — vom Walk-Around beim Aperitif über Tisch-zu-Tisch zwischen den Gängen bis zum Bühnen-Finale zum Dessert. Die genaue Taktung stimme ich vorab mit Küche und Service ab.",
           },
           {
-            q: "Fuer wie viele Gaeste und welche Raumgroesse eignet sich das Format?",
-            a: "Magic Dinner funktioniert von der intimen Tafel mit 20 Gaesten bis zum grossen Saal mit mehreren hundert Personen. Das Tisch-zu-Tisch skaliert ueber die Gangpausen, das Buehnen-Finale braucht je nach Gruppe nur einen freien Bereich vorne.",
+            q: "Für wie viele Gäste und welche Raumgröße eignet sich das Format?",
+            a: "Magic Dinner funktioniert von der intimen Tafel mit 20 Gästen bis zum großen Saal mit mehreren hundert Personen. Das Tisch-zu-Tisch skaliert über die Gangpausen, das Bühnen-Finale braucht je nach Gruppe nur einen freien Bereich vorne.",
           },
           {
             q: "Was wird an Platz und Technik gebraucht?",
-            a: "Fuers Tisch-zu-Tisch reicht der gedeckte Tisch — da brauche ich nichts ausser etwas Bewegungsraum. Fuer das Buehnen-Finale genuegt eine freie Flaeche vorne sowie ein Mikrofon und etwas Licht; das klaere ich vorab mit eurer Location oder Technik.",
+            a: "Fürs Tisch-zu-Tisch reicht der gedeckte Tisch — da brauche ich nichts ausser etwas Bewegungsraum. Für das Bühnen-Finale genügt eine freie Fläche vorne sowie ein Mikrofon und etwas Licht; das kläre ich vorab mit eurer Location oder Technik.",
           },
           {
             q: "Auf Deutsch oder Englisch, und wie weit reist du an?",
-            a: "Ich moderiere das Magic Dinner auf Deutsch oder Englisch — ideal fuer internationale Tische. Basis ist Regensburg in Bayern, gebucht werde ich aber deutschlandweit; ueber 200 Events seit 2016 und drei TV-Finals stehen hinter dem Format.",
+            a: "Ich moderiere das Magic Dinner auf Deutsch oder Englisch — ideal für internationale Tische. Basis ist Regensburg in Bayern, gebucht werde ich aber deutschlandweit; über 200 Events seit 2016 und drei TV-Finals stehen hinter dem Format.",
           },
         ]}
       />
