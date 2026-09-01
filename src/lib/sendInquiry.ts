@@ -4,8 +4,7 @@
  * sendInquiry → create-portal-request (DB + Admin-Mail + Kunden-Bestätigung)
  * subscribeNewsletter → newsletter-subscribe (Subscriber-Liste + Welcome-Mail)
  *
- * Used by: Buchung, Newsletter (Tickets/Blog), Chatbot, ShowPlanerModal,
- * MagicDinnerSummerEdition.
+ * Used by: Buchung, Newsletter (Tickets/Blog), Chatbot, ShowPlanerModal.
  */
 
 const SUPABASE_URL = "https://rjhvqctjtgfpxzhnrozt.supabase.co";

@@ -393,7 +393,7 @@ const AdminNewsletter = () => {
                 <input
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  placeholder="z.B. Magic Dinner Summer Edition — Vorverkauf gestartet"
+                  placeholder="z.B. Neuer Magic-Dinner-Termin steht fest"
                   className="w-full px-4 py-3 rounded-xl border border-border/40 bg-background focus:outline-none focus:border-foreground/30"
                 />
               </label>

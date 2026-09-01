@@ -34,6 +34,8 @@
     { "source": "/ploetzlich-magie/", "destination": "/", "permanent": true },
     { "source": "/showformate", "destination": "/", "permanent": true },
     { "source": "/showformate/", "destination": "/", "permanent": true },
+    { "source": "/tickets/magic-dinner-summer-edition", "destination": "/tickets", "permanent": true },
+    { "source": "/tickets/magic-dinner-summer-edition/", "destination": "/tickets", "permanent": true },
 
     { "source": "/zauberer-magic-dinner/:city", "destination": "/magic-dinner-:city", "permanent": true },
     { "source": "/zauberer-magic-dinner/:city/", "destination": "/magic-dinner-:city", "permanent": true },

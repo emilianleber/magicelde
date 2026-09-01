@@ -596,23 +596,12 @@ const STATIC_CONTENT = {
     faqs: GENERIC_FAQ,
   },
   "/tickets": {
-    h1: "Tickets — Magic Dinner Summer Edition",
-    lead: "Magic Dinner Summer Edition am 11. Juli 2026 im Restaurant Wald & Wiese in Sinzing bei Regensburg: à la carte essen und Close-Up-Magie direkt am Tisch von Emilian Leber.",
+    h1: "Tickets & Termine — aktuell keine Events",
+    lead: "Aktuell sind keine öffentlichen Veranstaltungen geplant — kein Vorverkauf, keine Reservierung. Neue Termine von Emilian Leber erscheinen zuerst hier und im Newsletter.",
     sections: [
       {
-        h2: "Der Abend",
-        body: "Ein Mehrgänge-Abend, bei dem ich von Tafel zu Tafel gehe und Karten, Münzen und Mentaleffekte direkt in eure Hände bringe. Reserviert wird beim Restaurant; gegessen wird aus der regulären Karte, in eurem Tempo.",
-      },
-    ],
-    faqs: GENERIC_FAQ,
-  },
-  "/tickets/magic-dinner-summer-edition": {
-    h1: "Magic Dinner Summer Edition — 11. Juli 2026",
-    lead: "Am 11. Juli 2026 ab 17:00 Uhr im Restaurant Wald & Wiese in Sinzing bei Regensburg: Tisch reservieren, à la carte essen und Close-Up-Magie am Tisch erleben.",
-    sections: [
-      {
-        h2: "Ablauf des Abends",
-        body: "Reservierung direkt beim Restaurant, à la carte aus der regulären Karte. Während des Abends besuche ich jede Tafel persönlich mit Close-Up-Magie — keine Bühne, keine festen Programmzeiten, die Magie kommt zu dir.",
+        h2: "Aktuelle Termine",
+        body: "Derzeit steht kein öffentlicher Termin an. Sobald wieder ein Abend feststeht, wird er auf dieser Seite veröffentlicht und vorab über den Newsletter angekündigt. Private und geschäftliche Buchungen sind davon unabhängig jederzeit möglich.",
       },
     ],
     faqs: GENERIC_FAQ,

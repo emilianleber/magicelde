@@ -468,7 +468,6 @@ export const blogPosts: BlogPost[] = [
       "Behind the Scenes",
       "Show-Aufbau",
       "Theater",
-      "Tour 2026",
     ],
     date: "2026-04-15",
     readTime: "6 Min.",
@@ -958,7 +957,7 @@ export const blogPosts: BlogPost[] = [
         type: "callout",
         eyebrow: "Praktisch.",
         text:
-          "Reservierung lieber früher als später — Sommer-Termine im Wald & Wiese sind 6–8 Wochen vorher meist weg. Wer die Summer Edition verpasst, kann sich für den Newsletter eintragen, dann bekommt er die nächsten Termine vorab.",
+          "Reservierung lieber früher als später — Sommer-Termine im Wald & Wiese sind erfahrungsgemäß 6–8 Wochen vorher weg. Aktuell steht kein öffentlicher Abend an; wer den nächsten mitnehmen will, trägt sich in den Newsletter ein.",
       },
     ],
   },

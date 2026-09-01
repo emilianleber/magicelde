@@ -197,7 +197,7 @@ const CASE_STUDIES: CaseStudy[] = [
     anlass: "Wiederkehrendes Magic Dinner Format",
     format: "Magic Dinner (4-Gang)",
     intro:
-      "Hauspartner-Restaurant für das Magic Dinner Summer Edition Format. Vier Gänge à la carte aus der Restaurantkarte, Close-Up-Magie an jedem Tisch zwischen den Gängen — der Restaurant-Rhythmus trägt die Show.",
+      "Hauspartner-Restaurant für das Magic-Dinner-Format. Vier Gänge à la carte aus der Restaurantkarte, Close-Up-Magie an jedem Tisch zwischen den Gängen — der Restaurant-Rhythmus trägt die Show.",
     tags: ["Hauspartner", "Wiederkehrendes Format", "Vier-Gänge", "Close-Up am Tisch"],
   },
   {
@@ -807,7 +807,7 @@ const ZEITLEISTE = [
   {
     zeit: "2026",
     titel: "Plötzlich Magie · Magic Meets Comedy.",
-    body: "Eigene Bühnenshow, die Comedy und Magie verbindet — als Headliner, abendfüllend, getourt durch Bayern. Magic Dinner als zweites eigenes Format etabliert.",
+    body: "Eigene Bühnenshow, die Comedy und Magie verbindet — als Headliner, abendfüllend, für Theater- und Saalbühnen. Magic Dinner als zweites eigenes Format etabliert.",
     aside: "Aktueller Stand.",
   },
 ];
