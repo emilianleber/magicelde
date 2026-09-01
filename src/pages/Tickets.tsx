@@ -7,14 +7,12 @@ import VoltageShell from "@/components/voltage/VoltageShell";
 import {
   SubHero,
   Stats,
-  FactsGrid,
-  Steps,
   ReviewsBlock,
   FAQ,
   FinalCTA,
   SectionHeader,
 } from "@/components/voltage/sections";
-import { SplitFeature, InteractiveTabs } from "@/components/voltage/creative";
+import { InteractiveTabs } from "@/components/voltage/creative";
 import {
   COBALT,
   MAGENTA,
@@ -33,19 +31,14 @@ import { subscribeNewsletter } from "@/lib/sendInquiry";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 import {
   ArrowRight,
-  Ticket,
-  Clock,
   Tv,
   CheckCircle2,
   AlertCircle,
   Mail,
   Send,
-  Theater,
-  Users,
 } from "lucide-react";
 
 import heroStageImg from "@/assets/audience-reactions.jpg";
-import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 import tabCloseup from "@/assets/hero-closeup.jpg";
 import tabDinner from "@/assets/hero-dinner.jpg";
 import tabStage from "@/assets/hero-stage.jpg";
@@ -129,57 +122,6 @@ const KeineTermineSection = () => (
       </motion.div>
     </div>
   </motion.section>
-);
-
-/* ═══════════════════════════════════════════════════════════
-   WAS ERWARTET DICH — 4 Akte über Steps + Sticky-Foto via SplitFeature
-   ═══════════════════════════════════════════════════════════ */
-const ABENDABLAUF = [
-  {
-    t: "19:00 · Einlass und Aperitif.",
-    d: "Türen auf, freie Platzwahl in der gebuchten Kategorie. Ein Getränk an der Foyer-Bar, kurze Programm-Karte in der Hand. Im Saal läuft leise warmes Klavier — keine Lobby-Musik, sondern Vorbereitung.",
-  },
-  {
-    t: "19:45 · Block I — Hook und Mentalmagie.",
-    d: "Lichter runter, Spotlight auf. Erste 45 Minuten: drei Mentaleffekte mit Publikumsbeteiligung, eine längere Karten-Routine, mehrere Comedy-Pointen aus dem Stand. Pause mit drei Sekunden Stille nach dem ersten Wow.",
-  },
-  {
-    t: "20:35 · Pause · 20 Minuten.",
-    d: "Foyer öffnet wieder, Getränke nachfüllen. Im Saal bleibt eine Karte auf der Bühne liegen — manche merken erst nach der Pause, dass das schon Teil des nächsten Tricks war.",
-  },
-];
-
-const WasErwartetDichSection = () => (
-  <>
-    <SplitFeature
-      eyebrow="Der Abend · 90 Min in vier Akten"
-      title={
-        <>
-          Was dich <span style={{ color: COBALT }}>erwartet</span>.
-        </>
-      }
-      sub="Eine durchkomponierte Show — keine zusammengewürfelten Tricks, sondern dramaturgisch verbundene Akte mit Aufbau, Pause und Climax. Standing Ovation bei 90 % der Shows."
-      points={[
-        "Block I — Hook, Mentalmagie und Karten-Routine (45 Min)",
-        "Pause mit drei Sekunden Stille nach dem ersten Wow",
-        "Block II — Climax, Encore-Routine und Standing-Ovation-Finale",
-      ]}
-      image={buehneZuschauerImg}
-      imageAlt="Standing Ovation am Ende einer Bühnenshow von Emilian Leber"
-      imgPos="top"
-      stat={{ v: "90 %", l: "Standing Ovation" }}
-    />
-    <Steps
-      eyebrow="So läuft der Abend"
-      title={
-        <>
-          90 Minuten in <span style={{ color: COBALT }}>vier Akten</span>.
-        </>
-      }
-      sub="Aufbau, Pause und Climax — durchkomponiert vom Einlass bis zur Verbeugung. So sieht ein Abend ungefähr aus."
-      items={ABENDABLAUF}
-    />
-  </>
 );
 
 /* ═══════════════════════════════════════════════════════════
@@ -277,7 +219,7 @@ const FAQS = [
   },
   {
     q: "Wie lange dauert eine Show?",
-    a: "Je nach Format: Close-Up-Magie läuft über den Abend verteilt, eine Bühnenshow dauert rund 90 Minuten mit einer Pause. Der genaue Ablauf wird bei der Buchung gemeinsam festgelegt.",
+    a: "Je nach Format: Close-Up-Magie läuft über den Abend verteilt, eine abendfüllende Bühnenshow dauert rund 90 Minuten. Der genaue Ablauf wird bei der Buchung gemeinsam festgelegt.",
   },
 ];
 
@@ -545,23 +487,11 @@ const Tickets = () => (
 
     <KeineTermineSection />
 
-    <FactsGrid
-      items={[
-        { Icon: Clock, k: "Dauer", v: "90 Min · 1 Pause" },
-        { Icon: Users, k: "Ab", v: "12 Jahren" },
-        { Icon: Theater, k: "Bühne", v: "Theater- und Saalbühnen" },
-        { Icon: Ticket, k: "Termine", v: "aktuell keine" },
-      ]}
-    />
-
-    <WasErwartetDichSection />
-
     <InteractiveTabs
-      eyebrow="Drei Formate"
+      eyebrow="Formate"
       title={
         <>
-          Worauf du dich <span style={{ color: COBALT }}>freuen</span> kannst,
-          sobald es weitergeht.
+          Diese <span style={{ color: COBALT }}>Formate</span> gibt es.
         </>
       }
       tabs={[
