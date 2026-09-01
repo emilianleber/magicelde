@@ -87,9 +87,6 @@ const Danke = lazy(() => import("./pages/Danke.tsx"));
 const Blog = lazy(() => import("./pages/Blog.tsx"));
 const BlogPost = lazy(() => import("./pages/BlogPost.tsx"));
 const Tickets = lazy(() => import("./pages/Tickets.tsx"));
-const MagicDinnerSummerEdition = lazy(
-  () => import("./pages/MagicDinnerSummerEdition.tsx"),
-);
 const Datenschutz = lazy(() => import("./pages/Datenschutz.tsx"));
 const Impressum = lazy(() => import("./pages/Impressum.tsx"));
 const AGB = lazy(() => import("./pages/AGB.tsx"));
@@ -277,7 +274,6 @@ const PublicRoutes = () => (
     <Route path="/blog" element={<Blog />} />
     <Route path="/blog/:slug" element={<BlogPost />} />
     <Route path="/tickets" element={<Tickets />} />
-    <Route path="/tickets/magic-dinner-summer-edition" element={<MagicDinnerSummerEdition />} />
     <Route path="/datenschutz" element={<Datenschutz />} />
     <Route path="/impressum" element={<Impressum />} />
     <Route path="/agb" element={<AGB />} />
@@ -361,7 +357,6 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/tickets" element={<Tickets />} />
-              <Route path="/tickets/magic-dinner-summer-edition" element={<MagicDinnerSummerEdition />} />
               <Route path="/datenschutz" element={<Datenschutz />} />
               <Route path="/impressum" element={<Impressum />} />
               <Route path="/agb" element={<AGB />} />

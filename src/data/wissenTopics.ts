@@ -87,7 +87,6 @@ export const wissenTopics: WissenTopic[] = [
     relatedTopics: ["close-up-magie", "mentalmagie"],
     relatedPages: [
       { title: "Magic Dinner Format-Seite", href: "/magic-dinner" },
-      { title: "Magic Dinner Summer Edition", href: "/tickets/magic-dinner-summer-edition" },
     ],
   },
   {

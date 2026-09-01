@@ -26,7 +26,6 @@ const HAUPTSEITEN = [
   { path: "/firmenfeiern", changefreq: "monthly", priority: 0.95 },
   { path: "/magic-dinner", changefreq: "monthly", priority: 0.95 },
   { path: "/tickets", changefreq: "weekly", priority: 0.9 },
-  { path: "/tickets/magic-dinner-summer-edition", changefreq: "weekly", priority: 0.9 },
   { path: "/buchung", changefreq: "monthly", priority: 0.9 },
   { path: "/event-agenturen", changefreq: "monthly", priority: 0.85 },
   { path: "/messe-magier", changefreq: "monthly", priority: 0.85 },

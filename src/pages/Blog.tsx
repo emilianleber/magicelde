@@ -897,15 +897,15 @@ const AutorVorstellung = () => (
               <span className="tabular-nums">8</span> und seit acht Jahren
               Magier. 2024 stand ich bei Talents of Magic als Finalist auf der
               Bühne, im selben Jahr beim Greatest Talent. 2025 begann mein
-              erstes komplettes Berufsjahr. 2026 startet die erste eigene Tour
-              [Plötzlich Magie — Magic Meets Comedy].
+              erstes komplettes Berufsjahr. Dazu die erste eigene abendfüllende
+              Show [Plötzlich Magie — Magic Meets Comedy].
             </p>
             <p>
               Dieses Magazin entstand, weil viele Geschichten zwischen Saal
               und Probe nicht in einen Buchungs-Brief passen. Hier landen die
               Beobachtungen aus dem Backstage, die Antworten auf
-              Buchungsfragen, die Hintergründe zu Tour-Stops und gelegentlich
-              ein Ausblick auf das, was als nächstes kommt.
+              Buchungsfragen, die Hintergründe zu einzelnen Abenden und
+              gelegentlich ein Ausblick auf das, was als nächstes kommt.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-4 mb-8">
@@ -1194,7 +1194,7 @@ const Blog = () => {
       <Helmet>
         <meta
           name="keywords"
-          content="Magier Magazin, Zauberer Blog, Magic Dinner Geschichten, Hochzeitszauberer Tipps, Firmenfeier Entertainment, Emilian Leber Blog, Bayern Magier Magazin, Comedy-Magie Hintergrund, Plötzlich Magie Tour, Bühnenshow Behind the Scenes"
+          content="Magier Magazin, Zauberer Blog, Magic Dinner Geschichten, Hochzeitszauberer Tipps, Firmenfeier Entertainment, Emilian Leber Blog, Bayern Magier Magazin, Comedy-Magie Hintergrund, Plötzlich Magie, Bühnenshow Behind the Scenes"
         />
         <meta property="og:url" content="https://www.magicel.de/blog" />
         <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />

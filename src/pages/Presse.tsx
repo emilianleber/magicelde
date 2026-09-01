@@ -26,7 +26,6 @@ import {
   Image as ImageIcon,
   Copy,
   Check,
-  Calendar,
   Quote,
   X,
   Paperclip,
@@ -47,7 +46,7 @@ import greatestTalentImg from "@/assets/greatest-talent-presse.jpg";
 import talentsTeamImg from "@/assets/talents-of-magic-team.jpg";
 
 const EPK_MAIL =
-  "mailto:el@magicel.de?subject=EPK%20Anfrage%20Emilian%20Leber&body=Hallo%20Emilian%2C%20bitte%20schicken%20Sie%20mir%20das%20vollst%C3%A4ndige%20EPK%20%28Bio%2C%20Fotos%2C%20Logo%2C%20Tour-Daten%29.%20Danke%21";
+  "mailto:el@magicel.de?subject=EPK%20Anfrage%20Emilian%20Leber&body=Hallo%20Emilian%2C%20bitte%20schicken%20Sie%20mir%20das%20vollst%C3%A4ndige%20EPK%20%28Bio%2C%20Fotos%2C%20Logo%29.%20Danke%21";
 
 /* ═══════════════════════════════════════════════════════════
    BEKANNT-AUS — TV / Awards / Bühnen-Wettbewerbe (5 Stationen)
@@ -371,14 +370,6 @@ type PressItem = {
 
 const PMS: PressItem[] = [
   {
-    date: "12. Februar 2026",
-    kicker: "Premiere · Tour 2026",
-    title: "Plötzlich Magie — Magic Meets Comedy.",
-    excerpt:
-      "Emilian Leber präsentiert ab Frühjahr 2026 seine erste abendfüllende Tour-Show: 90 Minuten Mentalmagie, Karten-Routinen und Comedy-Pointen. Premiere am 22.02.2026 in der Alten Mälzerei Regensburg, anschließend Tour durch bayerische Theater und Saalbühnen.",
-    tag: "Show-Premiere",
-  },
-  {
     date: "28. November 2024",
     kicker: "Fernsehen · TVA Bayern",
     title: "TV-Interview mit 16 Jahren auf TVA.",
@@ -441,8 +432,8 @@ const PressemitteilungenSection = () => {
             Was zuletzt <span style={{ color: COBALT }}>lief</span>.
           </h2>
           <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
-            Fünf Pressemitteilungen aus den letzten drei Jahren — Tour-Premieren,
-            TV-Auftritte, Wettbewerbsergebnisse. Volltexte und Hi-Res-Begleitmaterial
+            Vier Pressemitteilungen aus den letzten drei Jahren — TV-Auftritte
+            und Wettbewerbsergebnisse. Volltexte und Hi-Res-Begleitmaterial
             jeweils auf Anfrage als PDF.
           </p>
         </motion.div>
@@ -531,7 +522,6 @@ const EPK_ATTACHMENTS = [
   { name: "Pressefotos_HighRes_300dpi.zip", size: "48 MB" },
   { name: "Logo_SVG_und_PNG.zip", size: "1,2 MB" },
   { name: "QA_Sheet_Interview_Standardfragen.pdf", size: "112 KB" },
-  { name: "Tour_2026_Tourdaten_Plötzlich_Magie.pdf", size: "78 KB" },
   { name: "Tech-Rider_Bühne_und_TV.pdf", size: "94 KB" },
 ];
 
@@ -555,9 +545,9 @@ const EPKDownloadSection = () => {
             Ein EPK. <span style={{ color: COBALT }}>Alles drin</span>.
           </h2>
           <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
-            Acht Assets in einem ZIP — Bio in drei Längen, Hi-Res-Fotos
+            Sieben Assets in einem ZIP — Bio in drei Längen, Hi-Res-Fotos
             freigegeben für Print und Online, Logo als SVG plus PNG, Q&A-Sheet
-            mit Standardfragen, aktuelle Tour-Daten und Tech-Rider.
+            mit Standardfragen und Tech-Rider.
           </p>
         </motion.div>
 
@@ -677,12 +667,6 @@ const EPKDownloadSection = () => {
                 },
                 {
                   num: "05",
-                  Icon: Calendar,
-                  label: "Tour-Daten Plötzlich Magie 2026",
-                  body: "Aktuelle Termine, Locations, Ticket-Links. Komplett-Liste plus Einzelansichten pro Tour-Stopp.",
-                },
-                {
-                  num: "06",
                   Icon: Tv,
                   label: "Tech-Rider Bühne und TV",
                   body: "Was es vor Ort braucht — Mikrofon, Sound, Licht, Bühnenmaße. Plus TV-spezifischer Rider mit Kamera-Setup.",
@@ -731,7 +715,7 @@ const PHOTOS = [
   {
     src: magicDinnerImg,
     label: "Magic Dinner",
-    caption: "Alte Mälzerei Regensburg · 22.02.2026",
+    caption: "Live · Magic Dinner",
     span: "md:col-span-4",
     h: "h-[300px] md:h-[310px]",
   },
@@ -934,10 +918,10 @@ const BIO_KURZ =
   "Emilian Leber ist Zauberkünstler und Comedy-Magier aus Bayern. Mit über 200 Live-Auftritten seit 2016, TV-Interview bei TVA und Greatest Talent sowie dem Kreativpreis bei Talents of Magic 2024 zählt er zu den profiliertesten jungen Magiern Deutschlands. 5,0 Sterne bei ProvenExpert.";
 
 const BIO_MITTEL =
-  "Emilian Leber (geb. 2008) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Über 200 Live-Auftritte seit 2016 — vom privaten Magic Dinner über Galaabende bis zu Versicherungs-Konzern-Events mit 200 Gästen. 2023 Finalist bei Greatest Talent, 2024 Finalist und Kreativpreisträger bei Talents of Magic, 2024 Top 30 bei der Deutschen Jugendmeisterschaft, 2024 TV-Interview im Bayerischen Regional-TV (TVA). Hauspartner-Restaurant für die Magic-Dinner-Reihe: Wald & Wiese in Sinzing bei Regensburg. 2026 Tour-Premiere der abendfüllenden Show Plötzlich Magie — Magic Meets Comedy.";
+  "Emilian Leber (geb. 2008) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Über 200 Live-Auftritte seit 2016 — vom privaten Magic Dinner über Galaabende bis zu Versicherungs-Konzern-Events mit 200 Gästen. 2023 Finalist bei Greatest Talent, 2024 Finalist und Kreativpreisträger bei Talents of Magic, 2024 Top 30 bei der Deutschen Jugendmeisterschaft, 2024 TV-Interview im Bayerischen Regional-TV (TVA). Hauspartner-Restaurant für die Magic-Dinner-Reihe: Wald & Wiese in Sinzing bei Regensburg. Abendfüllende Bühnenshow Plötzlich Magie — Magic Meets Comedy.";
 
 const BIO_LANG =
-  "Emilian Leber (geb. 2008) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Erste Tricks mit acht Jahren am heimischen Wohnzimmertisch, erster bezahlter Auftritt mit zwölf, erste abendfüllende Show 2023 — kurz darauf das Finale bei Greatest Talent (TV-Wettbewerb mit über 400 Bewerbungen). 2024 folgte das Finale bei Talents of Magic mit zusätzlichem Kreativpreis für eine eigens konzipierte Routine aus Mentalmagie und Comedy-Storytelling. Im selben Jahr Top 30 bei der Deutschen Jugendmeisterschaft der Zauberkunst des Magischen Zirkels Deutschland. 2024 TV-Interview im Bayerischen Regional-TV (TVA) als 16-Jähriger, Karten-Test mit dem Moderator und Mentaleffekt mit dem Studio-Publikum. Seit 2016 über 200 Live-Auftritte — Spannbreite von privaten Hochzeiten und Magic-Dinner-Abenden im Hauspartner-Restaurant Wald & Wiese (Sinzing bei Regensburg) bis zu DAX-Konzern-Galas für Versicherungskammer Bayern, STRABAG, Sixt und Sparkasse. 5,0 Sterne auf ProvenExpert und Google über mehr als dreißig verifizierte Bewertungen. Im Frühjahr 2026 Premiere der abendfüllenden Tour-Show Plötzlich Magie — Magic Meets Comedy mit anschließender Tour durch bayerische Theater. Bayern primär, deutschlandweit buchbar.";
+  "Emilian Leber (geb. 2008) ist Zauberkünstler, Mentalmagier und Comedy-Entertainer aus Bayern. Erste Tricks mit acht Jahren am heimischen Wohnzimmertisch, erster bezahlter Auftritt mit zwölf, erste abendfüllende Show 2023 — kurz darauf das Finale bei Greatest Talent (TV-Wettbewerb mit über 400 Bewerbungen). 2024 folgte das Finale bei Talents of Magic mit zusätzlichem Kreativpreis für eine eigens konzipierte Routine aus Mentalmagie und Comedy-Storytelling. Im selben Jahr Top 30 bei der Deutschen Jugendmeisterschaft der Zauberkunst des Magischen Zirkels Deutschland. 2024 TV-Interview im Bayerischen Regional-TV (TVA) als 16-Jähriger, Karten-Test mit dem Moderator und Mentaleffekt mit dem Studio-Publikum. Seit 2016 über 200 Live-Auftritte — Spannbreite von privaten Hochzeiten und Magic-Dinner-Abenden im Hauspartner-Restaurant Wald & Wiese (Sinzing bei Regensburg) bis zu DAX-Konzern-Galas für Versicherungskammer Bayern, STRABAG, Sixt und Sparkasse. 5,0 Sterne auf ProvenExpert und Google über mehr als dreißig verifizierte Bewertungen. Mit Plötzlich Magie — Magic Meets Comedy steht eine abendfüllende Bühnenshow für Theater- und Saalbühnen im Programm. Bayern primär, deutschlandweit buchbar.";
 
 const BIOS = [
   {
@@ -1068,7 +1052,7 @@ const BoilerplateSection = () => {
 
         <p className="text-sm mt-12 text-center max-w-2xl mx-auto" style={{ color: L_DIM }}>
           Alle Boilerplates auf Stand März 2026. Anpassungen oder Sonderversionen
-          (englisch, fachspezifisch, mit Tour-Daten) gerne auf Anfrage.
+          (englisch, fachspezifisch) gerne auf Anfrage.
         </p>
       </div>
     </motion.section>
@@ -1076,7 +1060,7 @@ const BoilerplateSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   AKTUELLE SHOW 2026 — Plötzlich Magie Editorial-Split
+   ABENDFÜLLENDE SHOW — Plötzlich Magie Editorial-Split
    ═══════════════════════════════════════════════════════════ */
 const PloetzlichMagieSection = () => {
   return (
@@ -1094,9 +1078,9 @@ const PloetzlichMagieSection = () => {
             className="inline-flex items-center px-3 py-1.5 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white mb-6"
             style={{ background: COBALT }}
           >
-            Aktuelle Show · 2026
+            Abendfüllende Show
           </span>
-          <Eyebrow>Erste abendfüllende Tour-Show</Eyebrow>
+          <Eyebrow>Bühnenprogramm im Portfolio</Eyebrow>
           <h2
             className="font-extrabold tracking-[-0.02em] mb-7"
             style={{ fontSize: "clamp(1.9rem,3.6vw,3rem)", lineHeight: 1.02, color: INK }}
@@ -1107,16 +1091,15 @@ const PloetzlichMagieSection = () => {
           </h2>
           <p className="text-base md:text-lg leading-[1.7] mb-5 max-w-xl" style={{ color: L_DIM }}>
             Neunzig Minuten Bühne — Mentalmagie, Karten-Routinen, Comedy-Storytelling.
-            Premiere am 22.02.2026 in der Alten Mälzerei Regensburg in Sinzing
-            bei Regensburg, anschließend Tour durch bayerische Theater und Saal-Bühnen.
+            Geschrieben für Theater- und Saalbühnen, als Solo-Programm buchbar.
           </p>
           <p className="text-base md:text-lg leading-[1.7] mb-8 max-w-xl" style={{ color: L_DIM }}>
-            Press-Anfragen für Premieren-Akkreditierung, Foto-Termine während
-            der Generalprobe und Interview-Slots vor und nach der Show:
-            gerne direkt — Slots sind begrenzt, frühe Anfragen bevorzugt.
+            Öffentliche Termine stehen derzeit keine an. Für Akkreditierung,
+            Foto-Termine oder Interview-Slots zu einem geplanten Auftritt gerne
+            direkt melden — ich sage vorab Bescheid, sobald etwas ansteht.
           </p>
           <div className="flex flex-wrap gap-3 mb-8">
-            {["90 Minuten", "Mentalmagie · Comedy", "Premiere Frühjahr 2026", "Bayerische Tour"].map((t) => (
+            {["90 Minuten", "Mentalmagie · Comedy", "Solo-Programm", "Theater- und Saalbühnen"].map((t) => (
               <span
                 key={t}
                 className="inline-flex items-center px-3 py-1.5 rounded-full text-xs"
@@ -1128,11 +1111,11 @@ const PloetzlichMagieSection = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
-              href="mailto:el@magicel.de?subject=Tour-Anfrage%20Plötzlich%20Magie%202026"
+              href="mailto:el@magicel.de?subject=Presseanfrage%20Plötzlich%20Magie"
               className="inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[13px] tracking-[0.08em] font-semibold uppercase text-white transition-transform hover:scale-[1.02]"
               style={{ background: COBALT }}
             >
-              Tour-Anfrage senden
+              Presseanfrage senden
               <ArrowRight className="w-4 h-4" />
             </a>
             <Link
@@ -1140,7 +1123,7 @@ const PloetzlichMagieSection = () => {
               className="inline-flex items-center gap-1.5 text-[13px] tracking-[0.08em] font-semibold uppercase pb-1 transition-colors border-b"
               style={{ color: INK, borderColor: L_LINE }}
             >
-              Tour-Daten ansehen
+              Termine ansehen
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
@@ -1150,7 +1133,7 @@ const PloetzlichMagieSection = () => {
           <div className="relative overflow-hidden" style={{ borderRadius: "24px", boxShadow: "0 40px 80px -34px rgba(10,11,15,0.4)" }}>
             <img
               src={magicDinnerImg}
-              alt="Plötzlich Magie 2026 — Emilian Leber Tour-Show Premiere in der Alten Mälzerei Regensburg"
+              alt="Plötzlich Magie — abendfüllende Bühnenshow von Emilian Leber"
               className="w-full h-[480px] md:h-[600px] object-cover"
               style={{ objectPosition: "top" }}
               loading="lazy"
@@ -1173,13 +1156,13 @@ const PloetzlichMagieSection = () => {
               <div className="flex items-center gap-2 mb-2">
                 <MapPin className="w-3.5 h-3.5" style={{ color: "#9db0ff" }} />
                 <span className="text-[10px] tracking-[0.18em] uppercase font-bold text-white/85">
-                  Premiere-Location
+                  Spielstätten
                 </span>
               </div>
               <p className="text-base md:text-lg font-bold leading-tight mb-1">
-                Alte Mälzerei Regensburg
+                Theater- und Saalbühnen
               </p>
-              <p className="text-sm text-white/70">22.02.2026 · Tour-Premiere</p>
+              <p className="text-sm text-white/70">90 Minuten · Solo-Programm</p>
             </div>
           </div>
         </motion.div>
@@ -1558,7 +1541,7 @@ const PressKontaktDirektSection = () => {
               <p className="text-sm md:text-base text-white/70 leading-[1.7] mb-6">
                 Über zweihundert Live-Auftritte, fünf TV-Stationen und
                 Wettbewerbe, Hauspartner-Restaurant für die Magic-Dinner-Reihe
-                in Sinzing. Im Frühjahr 2026 die erste eigene Tour-Show.
+                in Sinzing. Dazu eine eigene abendfüllende Bühnenshow.
               </p>
               <div className="pt-5 grid grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.15)" }}>
                 {[
@@ -1684,7 +1667,7 @@ const Presse = () => (
     <SubHero
       eyebrow="Pressebereich"
       title={<>Pressebereich<span style={{ color: MAGENTA }}>.</span> Material <span style={{ color: COBALT }}>fertig geliefert</span>.</>}
-      sub="Pressekit als ein PDF. Hi-Res-Pressefotos zum direkten Download. Boilerplate in drei Längen — 50, 100, 250 Wörter, copy-paste-fertig. Plus aktuelle Pressemitteilungen, Tour-Daten zur Show 2026 und persönlicher Direkt-Kontakt mit 24-Stunden-Antwort."
+      sub="Pressekit als ein PDF. Hi-Res-Pressefotos zum direkten Download. Boilerplate in drei Längen — 50, 100, 250 Wörter, copy-paste-fertig. Plus aktuelle Pressemitteilungen, Show-Infos und persönlicher Direkt-Kontakt mit 24-Stunden-Antwort."
       image={portraitBuchImg}
       imageAlt="Pressefoto Emilian Leber — Zauberer und Comedy-Magier aus Bayern"
       imgPos="top"
@@ -1725,7 +1708,7 @@ const Presse = () => (
 
     <FinalCTA
       title={<>Pressekit anfordern — in 24 Stunden zurück<span style={{ color: MAGENTA }}>.</span></>}
-      sub="Bio, Fotos, Logo und Tour-Daten als ein Paket. Kurze Mail genügt, ich melde mich werktags binnen 24 Stunden — bei Eilfällen schneller."
+      sub="Bio, Fotos, Logo und Show-Infos als ein Paket. Kurze Mail genügt, ich melde mich werktags binnen 24 Stunden — bei Eilfällen schneller."
     />
   </VoltageShell>
 );

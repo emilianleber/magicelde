@@ -468,9 +468,8 @@ const AutorBox = ({ post }: { post: BlogPost }) => (
         </h3>
         <p className="mt-5 text-base md:text-lg leading-[1.65] max-w-xl" style={{ color: L_DIM }}>
           Seit acht Jahren Magier, seit 2024 Finalist bei Talents of Magic und
-          Greatest Talent, 2025 erstes vollberufliches Jahr. 2026 Tour [Plötzlich
-          Magie — Magic Meets Comedy], Premiere am 22. Februar in der Alten
-          Mälzerei Regensburg.
+          Greatest Talent, 2025 erstes vollberufliches Jahr. Dazu die
+          abendfüllende Bühnenshow [Plötzlich Magie — Magic Meets Comedy].
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-4">
           <Link
@@ -715,10 +714,10 @@ const CTAImEvent = ({ post }: { post: BlogPost }) => {
       cta: "Zur Magic-Dinner-Seite",
     },
     "/tickets": {
-      eyebrow: "Plötzlich Magie — die Tour.",
-      title: "Tickets für die Tour 2026",
-      body: "Premiere am 22. Februar 2026 in der Alten Mälzerei Regensburg. Weitere Stops in Bayern folgen.",
-      cta: "Tour-Termine ansehen",
+      eyebrow: "Tickets & Termine.",
+      title: "Aktuell keine Termine",
+      body: "Derzeit steht kein öffentlicher Termin an. Neue Termine kommen zuerst auf die Ticketseite und in den Newsletter.",
+      cta: "Zur Ticketseite",
     },
     "/buchung": {
       eyebrow: "Direktanfrage.",
@@ -729,7 +728,7 @@ const CTAImEvent = ({ post }: { post: BlogPost }) => {
     "/ueber-mich": {
       eyebrow: "Mehr zur Person.",
       title: "Werdegang und Vita",
-      body: "Von der ersten Karte mit acht über Greatest Talent und Talents of Magic bis zur eigenen Tour 2026.",
+      body: "Von der ersten Karte mit acht über Greatest Talent und Talents of Magic bis zur eigenen abendfüllenden Show.",
       cta: "Zur Vita",
     },
     "/buehnenshow": {

@@ -343,7 +343,7 @@ const UeberMich = () => (
         { t: "2016 · Vom Hobby zum Beruf", d: "Erste Firmenfeiern, erste Hochzeiten, erste eigene Website. Vom Wohnzimmer in die echten Säle Bayerns — mein offizieller Bühnenstart." },
         { t: "Sep 2023 · Greatest Talent", d: "Casting in München, drei Vorrunden, Live-Finale im Fernsehen. Wer einmal vor TV-Kameras stand, hat keine Bühnenangst mehr." },
         { t: "2024 · Talents of Magic", d: "Einer der härtesten Magie-Wettbewerbe Deutschlands. Finalist plus Kreativpreis für eine selbst entwickelte Mentalmagic-Routine." },
-        { t: "2026 · Plötzlich Magie", d: "Die neue abendfüllende Show, mit der ich gerade auf Tour gehe. Magie trifft Comedy. Premiere im Sommer in Bayern, danach deutschlandweit." },
+        { t: "2026 · Plötzlich Magie", d: "Die neue abendfüllende Show: Magie trifft Comedy. Neunzig Minuten Solo für Theater- und Saalbühnen, deutschlandweit buchbar." },
       ]}
     />
 
@@ -360,7 +360,7 @@ const UeberMich = () => (
         { Icon: Medal, k: "Dt. Jugendmeisterschaft · 2024", v: "Top 30 von 150+" },
         { Icon: Tv, k: "TVA TV-Auftritt · 2025", v: "Live-Studio-Auftritt" },
         { Icon: Star, k: "ProvenExpert · Aktuell", v: "5,0★ · 30+ verifizierte Reviews" },
-        { Icon: Award, k: "Plötzlich Magie · 2026", v: "Tour · Magic Meets Comedy" },
+        { Icon: Award, k: "Plötzlich Magie · 2026", v: "Abendfüllend · Magic Meets Comedy" },
       ]}
     />
 
@@ -408,18 +408,18 @@ const UeberMich = () => (
       ]}
     />
 
-    {/* Aktuelle Show — Plötzlich Magie 2026 */}
+    {/* Abendfüllende Show — Plötzlich Magie */}
     <SplitFeature
-      eyebrow="Aktuelle Show · Premiere 2026"
+      eyebrow="Abendfüllende Show"
       title={<>Plötzlich Magie. <span style={{ color: COBALT }}>Magic Meets Comedy.</span></>}
-      sub="Die neue abendfüllende Show, mit der ich gerade auf Tour gehe. Magie trifft Comedy, Mentalmagie trifft Stand-Up, Tisch-Magic trifft Bühnen-Wunder. Neunzig Minuten Solo, kein Sicherheitsnetz. Premiere im Sommer in Bayern, danach deutschlandweit."
+      sub="Die neue abendfüllende Show. Magie trifft Comedy, Mentalmagie trifft Stand-Up, Tisch-Magic trifft Bühnen-Wunder. Neunzig Minuten Solo, kein Sicherheitsnetz — für Theater- und Saalbühnen, deutschlandweit buchbar."
       points={[
         "Akt I — Mentalmagie-Block mit Publikums-Interaktion",
         "Akt II — Comedy-Block mit Stand-Up-Anteilen",
         "Akt III — Großes Finale mit Standing-Ovation-Effekt",
       ]}
       image={buehneZuschauerImg}
-      imageAlt="Bühnenshow Plötzlich Magie — Magic Meets Comedy 2026"
+      imageAlt="Bühnenshow Plötzlich Magie — Magic Meets Comedy"
       imgPos="center 30%"
       stat={{ v: "90", l: "Min Solo-Show" }}
     />

@@ -128,7 +128,7 @@ export const serviceSchema = (opts: {
   aggregateRating: AGGREGATE_RATING,
 });
 
-/** Event-Schema (z.B. Magic Dinner Summer Edition). */
+/** Event-Schema (z.B. für einen Magic-Dinner-Abend). */
 export const eventSchema = (opts: {
   name: string;
   description: string;
