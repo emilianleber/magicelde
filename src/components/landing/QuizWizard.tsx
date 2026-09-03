@@ -1,4 +1,5 @@
 import { useState, useEffect, ReactNode } from "react";
+import { ANFRAGE_ENDPUNKT } from "@/lib/bookartist";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -335,19 +336,11 @@ const WizardBody = ({
     };
 
     try {
-      const publishableKey = (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      const res = await fetch(
-        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/create-portal-request",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: publishableKey,
-            Authorization: `Bearer ${publishableKey}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(ANFRAGE_ENDPUNKT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       if (!res.ok) {
         const txt = await res.text();
         throw new Error(txt || `Fehler ${res.status}`);

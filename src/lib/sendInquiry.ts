@@ -7,6 +7,10 @@
  * Used by: Buchung, Newsletter (Tickets/Blog), Chatbot, ShowPlanerModal.
  */
 
+import { ANFRAGE_ENDPUNKT } from "./bookartist";
+
+// Newsletter/Tickets liegen weiterhin im alten Projekt — nur die ANFRAGE
+// wandert nach bookartist (siehe bookartist.ts).
 const SUPABASE_URL = "https://rjhvqctjtgfpxzhnrozt.supabase.co";
 
 export type InquiryPayload = {
@@ -36,13 +40,9 @@ export async function sendInquiry(payload: InquiryPayload): Promise<void> {
     name: payload.name || `${payload.vorname ?? ""} ${payload.nachname ?? ""}`.trim(),
   };
 
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/create-portal-request`, {
+  const res = await fetch(ANFRAGE_ENDPUNKT, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: publishableKey(),
-      Authorization: `Bearer ${publishableKey()}`,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
 

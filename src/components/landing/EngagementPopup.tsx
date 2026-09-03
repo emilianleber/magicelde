@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ANFRAGE_ENDPUNKT } from "@/lib/bookartist";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowRight, ArrowLeft, X, Sparkles, Check } from "lucide-react";
 
@@ -277,19 +278,11 @@ const EngagementPopup = () => {
     };
 
     try {
-      const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      const res = await fetch(
-        "https://rjhvqctjtgfpxzhnrozt.supabase.co/functions/v1/create-portal-request",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: publishableKey,
-            Authorization: `Bearer ${publishableKey}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(ANFRAGE_ENDPUNKT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       if (!res.ok) {
         const t = await res.text();
         throw new Error(t || `HTTP ${res.status}`);
