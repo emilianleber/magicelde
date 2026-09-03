@@ -1,4 +1,4 @@
-// Anfragen von magicel.de zustellen — Mail an Emilian, Bestaetigung an den Kunden.
+// Anfragen von magicel.de als Mail zustellen.
 //
 // Warum (03.09.2026): Das CRM auf magicel.de wird stillgelegt; Emilian
 // arbeitet ab sofort in bookartist. Bisher ging das Formular an die Funktion
@@ -13,15 +13,18 @@
 // als Mail in Emilians Postfach, und der Posteingangs-Abgleich macht daraus
 // eine Anfrage. Kein neuer oeffentlicher Schreibzugang, keine Spam-Flaeche.
 //
-// Beide Mails bleiben, wie sie waren: Der Versand laeuft weiter ueber Resend
-// mit dem verifizierten Absender el@magicel.de, und die Bestaetigung an den
-// Kunden ist wortgleich uebernommen (_kundenmail.ts).
+// Es geht genau EINE Mail raus: die an Emilian. Die frueher automatisch
+// versendete Bestaetigung an den Interessenten faellt weg (Entscheidung
+// Emilian, 03.09.2026) — er antwortet ohnehin selbst, und eine automatische
+// Bestaetigung davor nimmt der eigenen Antwort die Wirkung.
+//
+// Der Versand laeuft weiter ueber Resend mit dem verifizierten Absender
+// el@magicel.de — magicel hat dort ein eigenes Konto.
 //
 // Braucht RESEND_API_KEY in den Umgebungsvariablen dieses Vercel-Projekts —
 // denselben Schluessel, den das alte Supabase-Projekt benutzt. Fehlt er,
 // antwortet die Funktion mit 503 und sagt was fehlt, statt still zu scheitern.
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { KUNDENMAIL_BETREFF, kundenmailHtml } from "./_kundenmail";
 
 const AN = process.env.ANFRAGE_AN || "el@magicel.de";
 const VON = process.env.ANFRAGE_VON || "Emilian Leber <el@magicel.de>";
@@ -109,8 +112,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
     : null;
 
-  const anrufName = anrede && nachname ? `${anrede} ${nachname}` : name || "Hallo";
-
   async function senden(body: Record<string, unknown>) {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -120,7 +121,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!r.ok) throw new Error((await r.text()).slice(0, 200));
   }
 
-  // ── 1. Mail an Emilian ────────────────────────────────────────────────
+  // ── Mail an Emilian ───────────────────────────────────────────────────
   // Reply-To auf den Interessenten: Damit sieht sie im Posteingang aus wie
   // eine normale Anfrage, "Antworten" geht direkt an ihn — und der
   // Posteingangs-Abgleich in bookartist ordnet sie dem richtigen Kunden zu.
@@ -168,28 +169,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Diese Mail ist die eigentliche Zustellung — schlaegt sie fehl, ist die
     // Anfrage weg. Deshalb Fehler melden statt "ok" zu antworten.
     return res.status(502).json({ error: `Zustellung fehlgeschlagen: ${(e as Error).message}` });
-  }
-
-  // ── 2. Bestaetigung an den Kunden ─────────────────────────────────────
-  // Nachrangig: Kommt die nicht an, ist die Anfrage trotzdem angekommen.
-  // Deshalb wird hier NICHT mit einem Fehler geantwortet.
-  try {
-    await senden({
-      from: VON,
-      to: email,
-      subject: KUNDENMAIL_BETREFF,
-      html: kundenmailHtml({
-        displayGreeting: anrufName,
-        safeEmail: email,
-        safeFirma: firma,
-        safeAnlass: anlass,
-        fmtDatum: datum,
-        safeOrt: ort,
-        safeFormat: format,
-      }),
-    });
-  } catch (e) {
-    console.error("Bestätigungsmail fehlgeschlagen:", (e as Error).message);
   }
 
   return res.status(200).json({ ok: true });
