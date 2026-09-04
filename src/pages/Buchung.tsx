@@ -191,7 +191,7 @@ const Buchung = () => {
       });
       markEmailSubmitted();
       setSuccess(
-        "Anfrage ist raus. Eine Bestätigung kommt gleich per Email, ich melde mich innerhalb 24 Stunden persönlich zurück.",
+        "Anfrage ist angekommen. Ich melde mich innerhalb von 24 Stunden persönlich bei dir — eine automatische Bestätigungsmail gibt es nicht.",
       );
     } catch {
       setError(

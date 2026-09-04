@@ -957,7 +957,7 @@ export const blogPosts: BlogPost[] = [
         type: "callout",
         eyebrow: "Praktisch.",
         text:
-          "Reservierung lieber früher als später — Sommer-Termine im Wald & Wiese sind erfahrungsgemäß 6–8 Wochen vorher weg. Aktuell steht kein öffentlicher Abend an; wer den nächsten mitnehmen will, trägt sich in den Newsletter ein.",
+          "Reservierung lieber früher als später — Sommer-Termine im Wald & Wiese sind erfahrungsgemäß 6–8 Wochen vorher weg. Aktuell steht kein öffentlicher Abend an; neue Termine stehen zuerst auf der Ticketseite.",
       },
     ],
   },

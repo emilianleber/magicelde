@@ -1,4 +1,4 @@
-/** /tickets — Tickets & Termine (Voltage-Layout): aktuell keine Termine, Show-Formate, Abendablauf, Newsletter. */
+/** /tickets — Tickets & Termine (Voltage-Layout): aktuell keine Termine, Show-Formate, Abendablauf. */
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -27,7 +27,6 @@ import {
   vp,
 } from "@/components/voltage/theme";
 import { captureEmail } from "@/lib/emailCapture";
-import { subscribeNewsletter } from "@/lib/sendInquiry";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 import {
   ArrowRight,
@@ -97,19 +96,10 @@ const KeineTermineSection = () => (
           style={{ color: L_DIM }}
         >
           Es sind aktuell keine öffentlichen Termine geplant. Sobald wieder ein
-          Abend feststeht, steht er hier zuerst — und geht davor an den
-          Newsletter. Für eine eigene Show zu deinem Anlass kannst du mich
-          jederzeit direkt anfragen.
+          Abend feststeht, steht er hier. Für eine eigene Show zu deinem Anlass
+          kannst du mich jederzeit direkt anfragen.
         </p>
         <div className="flex flex-wrap items-center gap-4">
-          <a
-            href="#newsletter"
-            className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[14px] font-semibold transition-transform hover:scale-[1.02]"
-            style={{ background: COBALT, color: WHITE }}
-          >
-            <Mail className="w-4 h-4" />
-            Bei neuen Terminen benachrichtigen
-          </a>
           <Link
             to="/buchung"
             className="inline-flex items-center gap-1.5 text-[14px] font-semibold border-b pb-1 transition-colors"
@@ -199,7 +189,7 @@ const VideoSection = () => (
 const FAQS = [
   {
     q: "Wann gibt es wieder Termine?",
-    a: "Aktuell sind keine öffentlichen Veranstaltungen geplant. Neue Termine werden hier auf dieser Seite veröffentlicht — und vorab über den Newsletter angekündigt.",
+    a: "Aktuell sind keine öffentlichen Veranstaltungen geplant. Neue Termine werden hier auf dieser Seite veröffentlicht.",
   },
   {
     q: "Kann ich schon Tickets kaufen oder reservieren?",
@@ -207,7 +197,7 @@ const FAQS = [
   },
   {
     q: "Wie erfahre ich von neuen Terminen?",
-    a: "Am schnellsten über den Newsletter auf dieser Seite. Die Mails kommen nur, wenn es tatsächlich etwas Neues gibt — meistens mit einigen Wochen Vorlauf vor der öffentlichen Ankündigung.",
+    a: "Neue Termine stehen zuerst auf dieser Seite. Wer nicht warten möchte, schreibt mir kurz — dann melde ich mich, sobald ein Abend feststeht.",
   },
   {
     q: "Kann ich Emilian trotzdem buchen?",
@@ -226,168 +216,6 @@ const FAQS = [
 /* ═══════════════════════════════════════════════════════════
    NEWSLETTER-CTA — Email-Capture für neue Termine (Logik unverändert)
    ═══════════════════════════════════════════════════════════ */
-const NewsletterCTASection = () => {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    if (!email || !email.includes("@") || email.length < 5) {
-      setError("Bitte gib eine gültige E-Mail-Adresse ein.");
-      return;
-    }
-    captureEmail(email, "tickets-newsletter");
-    try {
-      await subscribeNewsletter({
-        email,
-        source: "tickets-newsletter",
-      });
-      setSubmitted(true);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? `Anmeldung fehlgeschlagen: ${err.message}`
-          : "Anmeldung fehlgeschlagen. Bitte später erneut versuchen.",
-      );
-    }
-  };
-
-  return (
-    <motion.section
-      id="newsletter"
-      variants={up}
-      initial="hidden"
-      whileInView="show"
-      viewport={vp}
-      className="px-5 md:px-10 py-16 md:py-24"
-    >
-      <div className="max-w-5xl mx-auto">
-        <div
-          className="relative grid md:grid-cols-[1.4fr_1fr] gap-x-12 gap-y-10 p-8 md:p-12 lg:p-14 overflow-hidden rounded-[28px]"
-          style={{ background: CARD_LIGHT, border: `1px solid ${L_LINE}`, boxShadow: "0 40px 80px -34px rgba(10,11,15,0.25)" }}
-        >
-          <div
-            aria-hidden
-            className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full"
-            style={{ background: `radial-gradient(circle, ${COBALT}1f, transparent 62%)` }}
-          />
-
-          <div className="relative">
-            <p
-              className="flex items-center gap-2 text-[12px] tracking-[0.16em] uppercase font-semibold mb-4"
-              style={{ color: L_DIM }}
-            >
-              <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: COBALT }} />
-              Event-Newsletter · alle 4–8 Wochen
-            </p>
-            <h2
-              className="font-extrabold tracking-[-0.02em] leading-[1.05] mb-5"
-              style={{ fontSize: "clamp(1.75rem,3.8vw,3rem)", color: INK }}
-            >
-              Sei der erste bei{" "}
-              <span style={{ color: COBALT }}>neuen Terminen.</span>
-            </h2>
-            <p
-              className="text-[16px] md:text-lg leading-[1.7] max-w-md"
-              style={{ color: L_DIM }}
-            >
-              Aktuell steht kein Termin an — sobald sich das ändert, geht die
-              Info zuerst hier raus, bevor sie öffentlich angekündigt wird.
-              Kurze Mails, kein Spam, jederzeit abbestellbar.
-            </p>
-          </div>
-
-          <div className="relative">
-            {!submitted ? (
-              <form onSubmit={onSubmit} className="space-y-4">
-                <label className="block">
-                  <span
-                    className="text-[11px] tracking-[0.18em] uppercase font-bold mb-2 block"
-                    style={{ color: L_DIM }}
-                  >
-                    Deine E-Mail-Adresse
-                  </span>
-                  <div className="relative">
-                    <Mail
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4"
-                      style={{ color: L_DIM }}
-                      aria-hidden
-                    />
-                    <input
-                      type="email"
-                      required
-                      autoComplete="email"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        setError(null);
-                      }}
-                      placeholder="vorname@beispiel.de"
-                      className="w-full pl-11 pr-4 py-4 text-base bg-white rounded-full border focus:outline-none focus:ring-2 transition-colors"
-                      style={{
-                        color: INK,
-                        borderColor: L_LINE,
-                        ["--tw-ring-color" as never]: `${COBALT}26`,
-                      }}
-                    />
-                  </div>
-                </label>
-                {error && (
-                  <p
-                    className="text-sm flex items-center gap-2"
-                    style={{ color: COBALT }}
-                  >
-                    <AlertCircle className="w-4 h-4" />
-                    {error}
-                  </p>
-                )}
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-[14px] font-semibold text-white transition-transform hover:scale-[1.02]"
-                  style={{ background: COBALT }}
-                >
-                  <Send className="w-4 h-4" />
-                  Anmelden
-                </button>
-                <p className="text-[12px] leading-relaxed" style={{ color: L_DIM }}>
-                  Mit dem Anmelden bestätigst du, die Datenschutz-Hinweise
-                  gelesen zu haben. Abmeldung in jeder E-Mail per einem Klick.
-                </p>
-              </form>
-            ) : (
-              <div
-                className="p-6 rounded-2xl flex items-start gap-4"
-                style={{
-                  background: `${COBALT}0f`,
-                  border: `1px solid ${COBALT}30`,
-                }}
-              >
-                <CheckCircle2
-                  className="w-6 h-6 shrink-0 mt-0.5"
-                  style={{ color: COBALT }}
-                />
-                <div>
-                  <p
-                    className="font-bold text-base mb-1.5"
-                    style={{ color: INK }}
-                  >
-                    Eingetragen. Danke.
-                  </p>
-                  <p className="text-sm leading-snug" style={{ color: L_DIM }}>
-                    Du bekommst die nächste Mail, sobald es wieder einen
-                    Termin gibt — meistens 4–8 Wochen Vorlauf.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </motion.section>
-  );
-};
 
 
 /* ═══════════════════════════════════════════════════════════
@@ -435,7 +263,7 @@ const jsonLd = {
 const Tickets = () => (
   <VoltageShell
     title="Tickets & Termine — aktuell keine Events | Emilian Leber"
-    description="Aktuell sind keine öffentlichen Termine geplant — kein Vorverkauf, kein Magic Dinner. Neue Termine zuerst über den Newsletter. Private Buchungen jederzeit möglich."
+    description="Aktuell sind keine öffentlichen Termine geplant — kein Vorverkauf, kein Magic Dinner. Neue Termine stehen zuerst auf dieser Seite. Private Buchungen jederzeit möglich."
     path="/tickets"
     noindex={false}
   >
@@ -454,7 +282,7 @@ const Tickets = () => (
       />
       <meta
         name="twitter:description"
-        content="Derzeit keine öffentlichen Termine. Neue Termine zuerst über den Newsletter — private Buchungen jederzeit möglich."
+        content="Derzeit keine öffentlichen Termine. Neue Termine stehen zuerst auf dieser Seite — private Buchungen jederzeit möglich."
       />
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
     </Helmet>
@@ -519,8 +347,6 @@ const Tickets = () => (
     <VideoSection />
 
     <ReviewsBlock paper />
-
-    <NewsletterCTASection />
 
     <FAQ
       eyebrow="Bevor du fragst"

@@ -598,94 +598,6 @@ const WeitereAnsichten = ({ slug }: { slug: string }) => {
 /* ═══════════════════════════════════════════════════════════
    NEWSLETTER (Variante für Post)
    ═══════════════════════════════════════════════════════════ */
-const NewsletterInline = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
-
-  useEffect(() => {
-    if (email.includes("@") && email.length > 5) {
-      captureEmail(email, "blog-post-newsletter", { name });
-    }
-  }, [email, name]);
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.includes("@")) return;
-    markEmailSubmitted();
-    setSent(true);
-  };
-
-  return (
-    <motion.section
-      variants={stagger}
-      initial="hidden"
-      whileInView="show"
-      viewport={vp}
-      className="px-5 md:px-10 py-16 md:py-24"
-      style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
-    >
-      <div className="max-w-4xl mx-auto grid md:grid-cols-12 gap-8 items-center">
-        <motion.div variants={up} className="md:col-span-6">
-          <Eyebrow>Magazin-Update</Eyebrow>
-          <h3 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.5rem,3vw,2.25rem)", lineHeight: 1.1, color: INK }}>
-            Beim nächsten Beitrag{" "}
-            <span style={{ color: COBALT }}>eine Mail.</span>
-          </h3>
-          <p className="mt-4 text-base leading-[1.6]" style={{ color: L_DIM }}>
-            Einmal im Quartal. Keine Werbung, kein Funnel, keine Verkaufstaktik.
-            Abmelden jederzeit per Klick.
-          </p>
-        </motion.div>
-        <motion.div variants={up} className="md:col-span-6">
-          {sent ? (
-            <div className="rounded-[22px] p-7 text-center" style={{ background: WHITE, border: `1px solid ${L_LINE}` }}>
-              <Sparkles className="w-8 h-8 mx-auto mb-3" style={{ color: COBALT }} />
-              <p className="text-base" style={{ color: INK }}>
-                Eingetragen. Du hörst beim nächsten Beitrag von mir.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={onSubmit} className="rounded-[22px] p-6" style={{ background: WHITE, border: `1px solid ${L_LINE}` }}>
-              <div className="flex items-center gap-2 mb-4">
-                <Mail className="w-4 h-4" style={{ color: COBALT }} />
-                <span className="text-[11px] tracking-[0.14em] uppercase font-bold" style={{ color: L_DIM }}>
-                  Abonnieren
-                </span>
-              </div>
-              <div className="space-y-3">
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Dein Name"
-                  className="w-full rounded-2xl px-4 py-3 text-sm focus:outline-none"
-                  style={{ background: PAPER, border: `1px solid ${L_LINE}`, color: INK }}
-                />
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="dein.name@beispiel.de"
-                  className="w-full rounded-2xl px-4 py-3 text-sm focus:outline-none"
-                  style={{ background: PAPER, border: `1px solid ${L_LINE}`, color: INK }}
-                />
-              </div>
-              <button
-                type="submit"
-                className="mt-4 w-full inline-flex items-center justify-center gap-2 text-[12px] tracking-[0.08em] uppercase font-semibold px-5 py-3 rounded-full"
-                style={{ background: COBALT, color: WHITE }}
-              >
-                Magazin abonnieren
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </form>
-          )}
-        </motion.div>
-      </div>
-    </motion.section>
-  );
-};
 
 /* ═══════════════════════════════════════════════════════════
    CTA IM EVENT (Format-bezogener Cross-Link)
@@ -716,7 +628,7 @@ const CTAImEvent = ({ post }: { post: BlogPost }) => {
     "/tickets": {
       eyebrow: "Tickets & Termine.",
       title: "Aktuell keine Termine",
-      body: "Derzeit steht kein öffentlicher Termin an. Neue Termine kommen zuerst auf die Ticketseite und in den Newsletter.",
+      body: "Derzeit steht kein öffentlicher Termin an. Neue Termine stehen zuerst auf der Ticketseite.",
       cta: "Zur Ticketseite",
     },
     "/buchung": {
@@ -917,7 +829,6 @@ const BlogPostPage = () => {
       <AutorBox post={post} />
       <WeitereAnsichten slug={post.slug} />
       <ReviewsBlock paper={false} />
-      <NewsletterInline />
       <CTAImEvent post={post} />
 
       <FinalCTA

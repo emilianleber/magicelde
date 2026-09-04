@@ -2,16 +2,14 @@
  * Zentraler Helper für alle Lead-Capturing-Formulare.
  *
  * sendInquiry → create-portal-request (DB + Admin-Mail + Kunden-Bestätigung)
- * subscribeNewsletter → newsletter-subscribe (Subscriber-Liste + Welcome-Mail)
  *
- * Used by: Buchung, Newsletter (Tickets/Blog), Chatbot, ShowPlanerModal.
+ * Used by: Buchung, Chatbot, ShowPlanerModal.
  */
 
 import { ANFRAGE_ENDPUNKT } from "./bookartist";
 
-// Newsletter/Tickets liegen weiterhin im alten Projekt — nur die ANFRAGE
+// Das alte Projekt ist stillgelegt (03.09.2026). Die ANFRAGE
 // wandert nach bookartist (siehe bookartist.ts).
-const SUPABASE_URL = "https://rjhvqctjtgfpxzhnrozt.supabase.co";
 
 export type InquiryPayload = {
   anrede?: string;
@@ -59,19 +57,3 @@ export type SubscribePayload = {
   metadata?: Record<string, unknown>;
 };
 
-/** Newsletter-Subscribe via Edge-Function. Idempotent. */
-export async function subscribeNewsletter(payload: SubscribePayload): Promise<void> {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-subscribe`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: publishableKey(),
-      Authorization: `Bearer ${publishableKey()}`,
-    },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `Newsletter-Anmeldung fehlgeschlagen (${res.status})`);
-  }
-}

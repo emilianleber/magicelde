@@ -27,7 +27,6 @@ const DEBUG =
 const SUPPRESS_PATHS = [
   "/buchung",
   "/danke",
-  "/kundenportal",
   "/admin",
   "/kontakt",
 ];

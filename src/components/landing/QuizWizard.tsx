@@ -629,8 +629,8 @@ const WizardBody = ({
               Danke — eure Anfrage ist da.
             </h3>
             <p className="text-base md:text-lg text-foreground/65 mb-7 leading-[1.6]">
-              Ihr bekommt gleich eine Bestätigungs-E-Mail. Ich melde mich innerhalb
-              24h persönlich mit einem konkreten Vorschlag für eure Empfehlung „
+              Ich melde mich innerhalb von 24 Stunden persönlich mit einem
+              konkreten Vorschlag für eure Empfehlung „
               {empfehlung.format}".
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">

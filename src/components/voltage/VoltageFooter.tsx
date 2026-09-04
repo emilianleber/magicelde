@@ -1,4 +1,4 @@
-/** VOLTAGE Footer — Brand + Kontakt + Social + Spalten (Konzepte/Anlässe/Städte/Service) + Kundenportal + Riesen-Wortmarke. */
+/** VOLTAGE Footer — Brand + Kontakt + Social + Spalten (Konzepte/Anlässe/Städte/Service) + Riesen-Wortmarke. */
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Instagram, Youtube, Facebook, Linkedin, ArrowRight } from "lucide-react";
 import {

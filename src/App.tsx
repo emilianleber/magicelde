@@ -4,7 +4,6 @@ import { BrowserRouter, Navigate, Route, Routes, useNavigate, useParams, useLoca
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { supabase } from "@/integrations/supabase/client";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 import EngagementPopup from "./components/landing/EngagementPopup.tsx";
 import TabTitleSwitcher from "./components/TabTitleSwitcher.tsx";
@@ -56,7 +55,6 @@ const AGB = lazy(() => import("./pages/AGB.tsx"));
 const StadtSeite = lazy(() => import("./pages/StadtSeite.tsx"));
 const ServiceStadtSeite = lazy(() => import("./pages/ServiceStadtSeite.tsx"));
 const WissenSeite = lazy(() => import("./pages/WissenSeite.tsx"));
-const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
@@ -66,19 +64,6 @@ const queryClient = new QueryClient();
 const hostname = window.location.hostname;
 const IS_DEV = hostname === "localhost" || hostname === "127.0.0.1";
 
-// Catches PASSWORD_RECOVERY event fired from any page
-const AuthEventHandler = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY") {
-        navigate("/admin/passwort-setzen");
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-  return null;
-};
 
 // Globales Public-Chrome (Popup, ShowPlaner, Mail-Banner) — NICHT im Voltage-Prototyp /demo/*
 const PublicChrome = () => {
@@ -147,7 +132,6 @@ const PublicRoutes = () => (
     {/* Neu-Form für Bühnenshow (SEO: "zaubershow-{stadt}" matched GSC-Queries). */}
     <Route path="/zaubershow-:stadt" element={<ServiceStadtSeite />} />
     <Route path="/wissen/:slug" element={<WissenSeite />} />
-    <Route path="/unsubscribe" element={<Unsubscribe />} />
     {/* Block admin on public domain */}
     <Route path="/admin/*" element={<Navigate to="/" replace />} />
     <Route path="*" element={<NotFound />} />
@@ -161,7 +145,6 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
-        <AuthEventHandler />
         <TabTitleSwitcher />
         <Suspense
           fallback={
@@ -226,7 +209,6 @@ const App = () => (
               <Route path="/zauberer-close-up/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-buehnenshow/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/wissen/:slug" element={<WissenSeite />} />
-              <Route path="/unsubscribe" element={<Unsubscribe />} />
 
             </Routes>
           ) : <PublicRoutes />}

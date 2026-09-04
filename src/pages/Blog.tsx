@@ -9,7 +9,6 @@ import {
   type BlogPost,
 } from "@/data/blogPosts";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
-import { subscribeNewsletter } from "@/lib/sendInquiry";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -700,159 +699,6 @@ const StatementBlock = () => (
 /* ═══════════════════════════════════════════════════════════
    NEWSLETTER
    ═══════════════════════════════════════════════════════════ */
-const NewsletterSignup = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
-
-  useEffect(() => {
-    if (email.includes("@") && email.length > 5) {
-      captureEmail(email, "blog-newsletter", { name });
-    }
-  }, [email, name]);
-
-  const [error, setError] = useState<string | null>(null);
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    if (!email.includes("@")) return;
-    try {
-      await subscribeNewsletter({
-        email,
-        name: name.trim() || undefined,
-        source: "blog-newsletter",
-      });
-      markEmailSubmitted();
-      setSent(true);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? `Anmeldung fehlgeschlagen: ${err.message}`
-          : "Anmeldung fehlgeschlagen. Bitte später erneut versuchen.",
-      );
-    }
-  };
-
-  return (
-    <section
-      className="px-5 md:px-10 py-16 md:py-24"
-      style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          <div className="lg:col-span-6">
-            <Eyebrow>Magazin-Update</Eyebrow>
-            <h2
-              className="font-extrabold tracking-[-0.02em] mb-6"
-              style={{ fontSize: "clamp(1.75rem,4.4vw,3.4rem)", lineHeight: 1.04, color: INK }}
-            >
-              Einmal im Quartal.{" "}
-              <span style={{ color: COBALT }}>Kein Spam.</span>
-            </h2>
-            <p className="text-base md:text-lg leading-[1.6] mb-8 max-w-lg" style={{ color: L_DIM }}>
-              Eine kompakte Nachricht in dein Postfach — wenn ein neuer
-              Schwung Artikel erscheint. Kein Funnel, keine Tracking-Werbung,
-              keine sechs E-Mails pro Woche. Vier Mails im Jahr, das war's.
-            </p>
-            <ul className="space-y-3 text-sm" style={{ color: L_DIM }}>
-              {[
-                "Vorabblick auf neue Beiträge.",
-                "Backstage-Ausschnitte von Bühnenauftritten.",
-                "Termine für offene Magic-Dinner-Abende.",
-                "Abmelden jederzeit per Klick.",
-              ].map((t) => (
-                <li key={t} className="flex items-start gap-3">
-                  <span
-                    className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                    style={{ background: COBALT }}
-                  />
-                  <span>{t}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-6">
-            <form
-              onSubmit={onSubmit}
-              className="rounded-[24px] p-8 md:p-10"
-              style={{ background: WHITE, border: `1px solid ${L_LINE}`, boxShadow: "0 30px 80px -30px rgba(10,11,15,0.25)" }}
-            >
-              <div className="flex items-center gap-3 mb-7">
-                <Mail className="w-5 h-5" style={{ color: COBALT }} />
-                <span className="text-[12px] tracking-[0.16em] uppercase font-bold" style={{ color: L_DIM }}>
-                  Abonnieren
-                </span>
-              </div>
-
-              {sent ? (
-                <div className="text-center py-10">
-                  <Sparkles className="w-10 h-10 mx-auto mb-4" style={{ color: COBALT }} />
-                  <h3 className="text-2xl font-bold mb-3" style={{ color: INK }}>
-                    Eingetragen.
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: L_DIM }}>
-                    Du bekommst eine Bestätigung an{" "}
-                    <strong style={{ color: INK }}>{email}</strong>. Beim nächsten Beitrag melde ich
-                    mich.
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-[11px] tracking-[0.1em] uppercase font-semibold mb-2" style={{ color: L_DIM }}>
-                        Name
-                      </label>
-                      <input
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Wie heißt du?"
-                        className="w-full rounded-2xl px-5 py-3.5 text-base focus:outline-none transition-colors"
-                        style={{ background: PAPER, border: `1px solid ${L_LINE}`, color: INK }}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] tracking-[0.1em] uppercase font-semibold mb-2" style={{ color: L_DIM }}>
-                        E-Mail
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="dein.name@beispiel.de"
-                        className="w-full rounded-2xl px-5 py-3.5 text-base focus:outline-none transition-colors"
-                        style={{ background: PAPER, border: `1px solid ${L_LINE}`, color: INK }}
-                      />
-                    </div>
-                  </div>
-                  {error && (
-                    <p className="mt-4 text-sm" style={{ color: MAGENTA }}>
-                      {error}
-                    </p>
-                  )}
-                  <button
-                    type="submit"
-                    className="mt-7 w-full inline-flex items-center justify-center gap-2 text-[13px] tracking-[0.08em] uppercase font-semibold px-6 py-4 rounded-full text-white transition-transform duration-300 hover:scale-[1.015]"
-                    style={{ background: COBALT }}
-                  >
-                    Eintragen
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                  <p className="mt-4 text-[11px] text-center" style={{ color: L_DIM }}>
-                    Mit dem Eintragen stimmst du dem Versand des Magazins zu.
-                    Abmelden geht jederzeit per Klick in jeder Mail.
-                  </p>
-                </>
-              )}
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
 
 /* ═══════════════════════════════════════════════════════════
    AUTOR VORSTELLUNG
@@ -1249,7 +1095,6 @@ const Blog = () => {
       <RedaktionsSchaufenster posts={editorsPick} />
       <TopPosts posts={published} />
       <ThemenWolke posts={published} />
-      <NewsletterSignup />
       <AutorVorstellung />
       <ReviewsBlock paper />
       <VerwandteRessourcen />

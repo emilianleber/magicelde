@@ -738,7 +738,7 @@ const Chatbot = () => {
       setSubmitting(false);
       setSubmitted(true);
       pushBot({
-        text: `Danke ${form.name.split(" ")[0]}. Anfrage ist raus — Bestätigung kommt gleich an ${form.email}. Ich melde mich innerhalb 24h persönlich.`,
+        text: `Danke ${form.name.split(" ")[0]}. Deine Anfrage ist angekommen. Ich melde mich innerhalb von 24 Stunden persönlich bei dir unter ${form.email} — eine automatische Bestätigung gibt es nicht.`,
         actions: [
           { label: "Show-Planer starten", icon: Wand2, kind: "open-planer" },
           {
