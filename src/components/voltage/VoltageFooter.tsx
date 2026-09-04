@@ -87,18 +87,6 @@ export default function VoltageFooter() {
         </div>
       </div>
 
-      {/* Kundenportal — eigener Login für bestehende Kunden */}
-      <div className="relative px-5 md:px-10">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-6" style={{ borderTop: `1px solid ${D_LINE}` }}>
-          <p className="text-[14px] leading-[1.55]" style={{ color: D_DIM }}>
-            <span className="font-semibold" style={{ color: WHITE }}>Kundenportal</span> — Angebote, Verträge & Dokumente einsehen.
-          </p>
-          <Link to="/kundenportal/login" className="inline-flex items-center gap-2 self-start rounded-full px-5 py-2.5 text-[13.5px] font-semibold transition-colors hover:border-white/40" style={{ border: `1px solid ${D_LINE}`, color: WHITE }}>
-            Zum Kundenportal-Login <ArrowRight className="w-4 h-4" style={{ color: COBALT }} />
-          </Link>
-        </div>
-      </div>
-
       <div className="relative px-5 md:px-10">
         <div className="max-w-7xl mx-auto" style={{ borderTop: `1px solid ${D_LINE}` }}>
           <p className="font-extrabold tracking-[-0.04em] leading-[0.82] py-9 md:py-12 select-none whitespace-nowrap" style={{ fontSize: "clamp(3rem,14vw,12rem)", color: "rgba(255,255,255,0.055)" }}>Erst staunen.</p>

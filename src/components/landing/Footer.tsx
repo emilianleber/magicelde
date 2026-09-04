@@ -42,7 +42,6 @@ const FOOTER_COLS = [
       { to: "/kontakt", label: "Kontakt" },
       { to: "/buchung", label: "Anfragen" },
       { to: "/presse", label: "Presse" },
-      { to: "/kundenportal/login", label: "Kundenportal" },
     ],
   },
 ];

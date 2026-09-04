@@ -137,6 +137,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ["Format", format],
   ];
   const gefuellt = felder.filter(([, v]) => v);
+
+  /*
+   * Der Textteil ist das, was Luminus liest (03.09.2026).
+   *
+   * Die Anfrage-Erkennung in bookartist arbeitet auf body_text, nicht auf dem
+   * HTML. Deshalb steht dort jedes Feld auf einer eigenen Zeile mit einem
+   * unmissverstaendlichen Namen — und das Datum ZUSAETZLICH in ISO-Form.
+   * "26. September 2026" muss ein Modell erst uebersetzen; "2026-09-26" nicht.
+   *
+   * Die Nachricht kommt zuletzt und klar abgetrennt: Sonst liest ein Modell
+   * einen Satz aus dem Fliesstext ("waere auch der 5. moeglich") als das
+   * Datum der Anfrage.
+   */
+  const textTeil = [
+    "Neue Anfrage über das Formular auf magicel.de",
+    "",
+    ...gefuellt.map(([k, v]) => `${k}: ${v}`),
+    ...(rohDatum ? [`Datum (ISO): ${rohDatum}`] : []),
+    ...(nachricht ? ["", "Nachricht des Interessenten:", nachricht] : []),
+  ].join("\n");
   const tabelle = gefuellt
     .map(
       ([k, v]) =>
@@ -159,11 +179,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           ? `<p style="margin:0 0 6px 0;color:#666">Nachricht</p>` +
             `<p style="margin:0;white-space:pre-wrap">${esc(nachricht)}</p>`
           : "") +
+        // Ein Knopf, und zwar zum Posteingang in bookartist — dorthin holt
+        // der Abgleich diese Mail ohnehin. Das alte CRM wird nicht mehr
+        // verlinkt; es ist stillgelegt.
+        `<p style="margin:22px 0 0 0">` +
+        `<a href="https://app.bookartist.de/admin/mails" ` +
+        `style="display:inline-block;background:#17181c;color:#fff;text-decoration:none;` +
+        `padding:11px 18px;border-radius:10px;font-weight:600;font-size:14px">` +
+        `In bookartist öffnen</a></p>` +
         `</div>`,
-      text:
-        "Neue Anfrage über magicel.de\n\n" +
-        gefuellt.map(([k, v]) => `${k}: ${v}`).join("\n") +
-        (nachricht ? `\n\nNachricht:\n${nachricht}` : ""),
+      text: textTeil,
     });
   } catch (e) {
     // Diese Mail ist die eigentliche Zustellung — schlaegt sie fehl, ist die
