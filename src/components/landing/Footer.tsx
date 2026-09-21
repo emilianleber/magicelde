@@ -141,7 +141,8 @@ const Footer = () => (
       {/* Bottom */}
       <div className="border-t border-foreground/10 pt-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <p className="text-xs text-foreground/45">
-          © {new Date().getFullYear()} Emilian Leber. Alle Rechte vorbehalten.
+          © {new Date().getFullYear()} Emilian Leber. Alle Rechte vorbehalten. · Website von{" "}
+          <a href="https://kursivstudio.de" target="_blank" rel="noopener" className="underline underline-offset-2">kursiv</a>
         </p>
         <div className="flex flex-wrap gap-6">
           <Link

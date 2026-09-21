@@ -94,7 +94,7 @@ export default function VoltageFooter() {
       </div>
       <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[12.5px]" style={{ borderTop: `1px solid ${D_LINE}` }}>
         <div className="flex items-center gap-6"><a href="/impressum" className="hover:text-white transition-colors">Impressum</a><a href="/datenschutz" className="hover:text-white transition-colors">Datenschutz</a><a href="/agb" className="hover:text-white transition-colors">AGB</a></div>
-        <span>© 2026 Emilian Leber · MagicEL Entertainment</span>
+        <span>© 2026 Emilian Leber · MagicEL Entertainment · Website von <a href="https://kursivstudio.de" target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-white transition-colors">kursiv</a></span>
       </div>
     </footer>
   );
