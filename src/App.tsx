@@ -12,7 +12,6 @@ import EmailReminderBanner from "./components/landing/EmailReminderBanner.tsx";
 
 
 // Public pages — only loaded on www.magicel.de
-const Index = lazy(() => import("./pages/Index.tsx"));
 const StartDemo = lazy(() => import("./pages/StartDemo.tsx"));
 // Voltage-Prototyp Unterseiten (/demo/*) — noindex
 const DemoBuehnenshow = lazy(() => import("./pages/demo/Buehnenshow.tsx"));

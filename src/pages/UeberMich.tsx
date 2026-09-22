@@ -1,42 +1,20 @@
-/** /ueber-mich — Über mich (Voltage-Layout): Story, Werdegang, Awards, Foto. */
+/**
+ * /ueber-mich — Über mich (Voltage-Layout): Person, Stil, Werdegang, Auszeichnungen.
+ * 22.09.2026 entschlackt: Logos/Reviews/Zahlen stehen auf /referenzen, die
+ * abendfüllende Show (keine öffentlichen Termine) und Verkaufs-Sektionen raus.
+ */
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import VoltageShell from "@/components/voltage/VoltageShell";
-import {
-  SubHero,
-  Stats,
-  FactsGrid,
-  Steps,
-  GlassFeatures,
-  Statement,
-  PullQuote,
-  ReviewsBlock,
-  LogoMarquee,
-  FinalCTA,
-  SectionHeader,
-} from "@/components/voltage/sections";
+import { SubHero, Stats, FactsGrid, Steps, FinalCTA, SectionHeader } from "@/components/voltage/sections";
 import { SplitFeature, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA, WHITE } from "@/components/voltage/theme";
-import {
-  Tv,
-  Trophy,
-  Award,
-  Medal,
-  Star,
-  Sparkles,
-  MessageSquare,
-  Quote,
-  Layers,
-  HandMetal,
-  BookOpen,
-  Coins,
-} from "lucide-react";
+import { Tv, Trophy, Medal } from "lucide-react";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 
 import portraitBuchImg from "@/assets/emilian-portrait-buch.jpg";
 import magicianPortraitImg from "@/assets/magician-portrait.jpg";
 import staunenImg from "@/assets/staunen.jpg";
-import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 
 /* ═══════════════════════════════════════════════════════════
    VIDEO — TVA TV-Auftritt (Logik 1:1 erhalten: playing-State + iframe)
@@ -108,41 +86,6 @@ const VideoSection = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   ZAHLEN-STRIP — Zehn Jahre in Zahlen (Inline-Stats)
-   ═══════════════════════════════════════════════════════════ */
-const ZahlenStrip = () => (
-  <section className="px-5 md:px-10 py-16 md:py-24" style={{ background: WHITE }}>
-    <div className="max-w-5xl mx-auto">
-      <p className="text-center text-[12px] tracking-[0.16em] uppercase font-semibold mb-10" style={{ color: "#5f5a54" }}>
-        Zehn Jahre in Zahlen
-      </p>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10">
-        {[
-          { v: "200+", k: "Events" },
-          { v: "100+", k: "Hochzeiten" },
-          { v: "100+", k: "Firmen" },
-          { v: "80+", k: "Geburtstage" },
-          { v: "10+", k: "Magic Dinners" },
-        ].map((s, i) => (
-          <div
-            key={s.k}
-            className="text-center px-2"
-            style={{ borderLeft: i === 0 ? "none" : "1px solid rgba(10,11,15,0.10)" }}
-          >
-            <p className="font-extrabold tabular-nums leading-none mb-2" style={{ fontSize: "clamp(2rem,4vw,3rem)", color: COBALT }}>
-              {s.v}
-            </p>
-            <p className="text-[11px] md:text-xs tracking-[0.14em] uppercase font-semibold" style={{ color: "#5f5a54" }}>
-              {s.k}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-/* ═══════════════════════════════════════════════════════════
    PAGE-EXPORT — UeberMich (Voltage)
    ═══════════════════════════════════════════════════════════ */
 const UeberMich = () => (
@@ -156,24 +99,13 @@ const UeberMich = () => (
     <Helmet>
       <meta
         name="keywords"
-        content="Emilian Leber, Zauberer Bayern, junger Magier, Mentalist, Greatest Talent Finalist, Talents of Magic, Comedy Zauberer Bayern, Zauberkünstler Werdegang, Magier Studio, Plötzlich Magie"
-      />
-      {/* OG */}
-      <meta property="og:title" content="Über Emilian Leber — Zauberer aus Bayern, seit 2016 auf der Bühne" />
-      <meta
-        property="og:description"
-        content="Junger Zauberer aus Bayern: Finalist bei Greatest Talent und Talents of Magic, TVA TV-Auftritt 2025. Comedy + Mentalmagie + Premium-Stil."
+        content="Emilian Leber, Zauberer Bayern, junger Magier, Mentalist, Greatest Talent Finalist, Talents of Magic, Comedy Zauberer Bayern, Zauberkünstler Werdegang, Magier Regensburg"
       />
       <meta property="og:url" content="https://www.magicel.de/ueber-mich" />
       <meta property="og:type" content="profile" />
       <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
       <meta property="og:locale" content="de_DE" />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Über Emilian Leber — Zauberer aus Bayern" />
-      <meta
-        name="twitter:description"
-        content="Junger Zauberer aus Bayern: Finalist bei Greatest Talent und Talents of Magic, TVA 2025. Comedy + Mentalmagie."
-      />
       <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
 
       {/* JSON-LD: Person */}
@@ -209,6 +141,7 @@ const UeberMich = () => (
           ],
           address: {
             "@type": "PostalAddress",
+            addressLocality: "Regensburg",
             addressRegion: "Bayern",
             addressCountry: "DE",
           },
@@ -224,10 +157,11 @@ const UeberMich = () => (
           description:
             "Zauberer und Comedy-Magier aus Bayern. Mentalmagie, Close-Up, Bühnenshow, Magic Dinner.",
           url: "https://www.magicel.de/ueber-mich",
-          telephone: "+49",
-          areaServed: { "@type": "Country", name: "Deutschland" },
+          telephone: "+4915563744696",
+          areaServed: { "@type": "State", name: "Bayern" },
           address: {
             "@type": "PostalAddress",
+            addressLocality: "Regensburg",
             addressRegion: "Bayern",
             addressCountry: "DE",
           },
@@ -271,7 +205,7 @@ const UeberMich = () => (
     <SubHero
       eyebrow="Über mich"
       title={<>Emilian <span style={{ color: COBALT }}>Leber</span><span style={{ color: MAGENTA }}>.</span></>}
-      sub="Zauberer aus Bayern, mit Acht angefangen, mit Zwölf den ersten bezahlten Gig. Seit 2016 auf der Bühne. Heute: TV-Finalist, Magic Meets Comedy, deutschlandweit gebucht. Hier erzähle ich, wie das passiert ist."
+      sub="Zauberer aus Regensburg, mit Acht angefangen, mit Zwölf den ersten bezahlten Gig. Seit 2016 auf der Bühne. Heute: TV-Finalist, Comedy-Zauberer und Mentalist — in ganz Bayern unterwegs. Hier erzähle ich, wie das passiert ist."
       image={portraitBuchImg}
       imageAlt="Emilian Leber — Zauberer aus Bayern, Studio-Portrait mit Buch"
       imgPos="center 28%"
@@ -286,32 +220,6 @@ const UeberMich = () => (
         { v: "10", l: "Jahre Bühne" },
         { v: "3x", l: "TV-Finalist (2023–2025)" },
         { v: "5,0★", l: "30+ Bewertungen" },
-      ]}
-    />
-
-    <LogoMarquee label="Auftritte bei über 200 Auftraggebern" />
-
-    {/* Drei Werkzeuge — Karte / Münze / Buch */}
-    <GlassFeatures
-      eyebrow="Drei Werkzeuge. Eine Bühne."
-      title={<>Karte. Münze. <span style={{ color: COBALT }}>Buch.</span></>}
-      sub="Kein Zylinder, kein Kaninchen, keine Klappboxen. Drei Gegenstände, die jeder Gast aus der eigenen Tasche kennt — und genau das macht sie verstörend. Wenn etwas Unmögliches mit einer 2-Euro-Münze passiert, gibt es keine Ausreden."
-      items={[
-        {
-          Icon: HandMetal,
-          t: "Die Karte.",
-          d: "Mit acht der erste Trick, mit zwölf der erste bezahlte Gig. Ein klassisches Pokerdeck, 52 Möglichkeiten, eine Geschichte pro Karte — klein genug für Close-Up, groß genug für Mentaleffekte.",
-        },
-        {
-          Icon: Coins,
-          t: "Die Münze.",
-          d: "Eine 2-Euro-Münze, mehr braucht es nicht. Münzmagie ist die strengste Disziplin: keine Verstecke, keine Ablenkung. Drei Jahre täglich vor dem Spiegel, bis eine Münze unsichtbar zwischen den Fingern wandert.",
-        },
-        {
-          Icon: BookOpen,
-          t: "Das Buch.",
-          d: "Mentalmagie braucht keine Karten — sie braucht Sprache. Ein zufälliges Wort auf Seite hundertdreiundzwanzig landet drei Minuten später als handschriftliche Vorhersage im versiegelten Umschlag.",
-        },
       ]}
     />
 
@@ -336,21 +244,16 @@ const UeberMich = () => (
     <Steps
       eyebrow="Werdegang · Echte Stationen"
       title={<>Von Acht <span style={{ color: COBALT }}>bis Heute.</span></>}
-      sub="Neun Stationen in achtzehn Jahren — vom ersten Zauberkasten zum TV-Studio. Hier die Momente, die mich geprägt haben."
+      sub="Vom ersten Zauberkasten zum TV-Studio — die Momente, die mich geprägt haben."
       items={[
-        { t: "2008 · Der erste Trick", d: "Zauberkasten zum Geburtstag, die seidene Karte verschwindet. Eine Stunde später sitzt die ganze Familie im Wohnzimmer, ich stehe auf dem Couchtisch." },
-        { t: "2012 · Erster bezahlter Gig", d: "Drei Karten-Tricks, fünfzehn Minuten, dreißig Euro im Umschlag auf einem Kindergeburtstag. Aus dem Hobby wird ein Handwerk." },
-        { t: "2016 · Vom Hobby zum Beruf", d: "Erste Firmenfeiern, erste Hochzeiten, erste eigene Website. Vom Wohnzimmer in die echten Säle Bayerns — mein offizieller Bühnenstart." },
+        { t: "Mit acht · Der erste Trick", d: "Zauberkasten zum Geburtstag, die seidene Karte verschwindet. Eine Stunde später sitzt die ganze Familie im Wohnzimmer, ich stehe auf dem Couchtisch." },
+        { t: "Mit zwölf · Erster bezahlter Gig", d: "Drei Karten-Tricks, fünfzehn Minuten, dreißig Euro im Umschlag auf einem Kindergeburtstag. Aus dem Hobby wird ein Handwerk." },
+        { t: "Vom Hobby zum Beruf", d: "Erste Firmenfeiern, erste Hochzeiten, erste eigene Website. Vom Wohnzimmer in die echten Säle Bayerns — mein offizieller Bühnenstart." },
         { t: "Sep 2023 · Greatest Talent", d: "Casting in München, drei Vorrunden, Live-Finale im Fernsehen. Wer einmal vor TV-Kameras stand, hat keine Bühnenangst mehr." },
         { t: "2024 · Talents of Magic", d: "Einer der härtesten Magie-Wettbewerbe Deutschlands. Finalist plus Kreativpreis für eine selbst entwickelte Mentalmagic-Routine." },
-        { t: "2026 · Plötzlich Magie", d: "Die neue abendfüllende Show: Magie trifft Comedy. Neunzig Minuten Solo für Theater- und Saalbühnen, deutschlandweit buchbar." },
+        { t: "2025 · TVA", d: "Live-Studio-Auftritt beim TVA (TV Aktuell): drei Minuten Mentalmagie vor laufender Kamera, mit dem Moderator als Versuchsperson." },
       ]}
     />
-
-    {/* Ruhige Statement-Section */}
-    <Statement eyebrow="Die Haltung">
-      Zehn Jahre. Dreitausend Stunden im Spiegel. Für sechs Minuten Magie, in denen niemand atmet.
-    </Statement>
 
     {/* Auszeichnungen */}
     <FactsGrid
@@ -359,8 +262,6 @@ const UeberMich = () => (
         { Icon: Trophy, k: "Talents of Magic · 2024", v: "Finalist + Kreativpreis" },
         { Icon: Medal, k: "Dt. Jugendmeisterschaft · 2024", v: "Top 30 von 150+" },
         { Icon: Tv, k: "TVA TV-Auftritt · 2025", v: "Live-Studio-Auftritt" },
-        { Icon: Star, k: "ProvenExpert · Aktuell", v: "5,0★ · 30+ verifizierte Reviews" },
-        { Icon: Award, k: "Plötzlich Magie · 2026", v: "Abendfüllend · Magic Meets Comedy" },
       ]}
     />
 
@@ -379,63 +280,7 @@ const UeberMich = () => (
       badge="Probenraum · 06:30"
     />
 
-    {/* Warum persönlich funktioniert — vier Säulen */}
-    <GlassFeatures
-      eyebrow="Warum persönlich funktioniert"
-      title={<>Vier Säulen. <span style={{ color: COBALT }}>Kein Programm von der Stange.</span></>}
-      sub="Was unterscheidet einen geübten Magier von einem persönlichen Entertainer? Vier konkrete Dinge, die ich vor, während und nach jeder Show mache."
-      items={[
-        {
-          Icon: MessageSquare,
-          t: "Briefing-Call vorab.",
-          d: "Dreißig Minuten am Telefon, drei Tage vor dem Event. Wer feiert, wie ist die Stimmung, welche Anekdoten dürfen rein. Daraus baue ich die persönliche Tonalität — kein Standardprogramm.",
-        },
-        {
-          Icon: Sparkles,
-          t: "Eingebaute Anekdoten.",
-          d: "Mindestens drei Geschichten aus dem Vorabgespräch landen in der Show — als Karten-Wahl, als Mentaleffekt, als versteckte Pointe, die nur die Familie versteht.",
-        },
-        {
-          Icon: Layers,
-          t: "Tonalität ans Publikum.",
-          d: "Eine 30er-Geburtstagsfeier klingt anders als ein Versicherungs-Vorstand. Premium ohne Schlips, persönlich ohne Vereinnahmung — angepasst an Anlass und Saal.",
-        },
-        {
-          Icon: Quote,
-          t: "Drei Sekunden Stille.",
-          d: "Mein Markenzeichen: nach jedem großen Effekt drei Sekunden Stille. Keine Erklärung, kein Move. Das Publikum verarbeitet — und reagiert dann mit dem ehrlichsten Lachen.",
-        },
-      ]}
-    />
-
-    {/* Abendfüllende Show — Plötzlich Magie */}
-    <SplitFeature
-      eyebrow="Abendfüllende Show"
-      title={<>Plötzlich Magie. <span style={{ color: COBALT }}>Magic Meets Comedy.</span></>}
-      sub="Die neue abendfüllende Show. Magie trifft Comedy, Mentalmagie trifft Stand-Up, Tisch-Magic trifft Bühnen-Wunder. Neunzig Minuten Solo, kein Sicherheitsnetz — für Theater- und Saalbühnen, deutschlandweit buchbar."
-      points={[
-        "Akt I — Mentalmagie-Block mit Publikums-Interaktion",
-        "Akt II — Comedy-Block mit Stand-Up-Anteilen",
-        "Akt III — Großes Finale mit Standing-Ovation-Effekt",
-      ]}
-      image={buehneZuschauerImg}
-      imageAlt="Bühnenshow Plötzlich Magie — Magic Meets Comedy"
-      imgPos="center 30%"
-      stat={{ v: "90", l: "Min Solo-Show" }}
-    />
-
     <VideoSection />
-
-    {/* Stimmen über mich — echte Reviews */}
-    <PullQuote
-      text="Was uns bei Emilian aufgefallen ist: das Briefing war besser als bei manchen Top-Speakern. Er hat unsere Firmen-Anekdoten so eingebaut, dass selbst der Vorstand nicht wusste, wo Show endet und Wirklichkeit anfängt."
-      name="Jan von Lehmann"
-      role="Firmenfeier · 200 Gäste · Bayern"
-    />
-
-    <ReviewsBlock paper={false} />
-
-    <ZahlenStrip />
 
     {/* Persönlicher Brief / Final-CTA */}
     <FinalCTA

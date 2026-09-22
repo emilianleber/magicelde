@@ -1,56 +1,21 @@
-/** /referenzen — Referenzen, Case-Studies, Stimmen & Awards im Voltage-Layout. */
+/**
+ * /referenzen — Beweis-Seite (Voltage-Layout): Kunden-Logos mit Case-Studies,
+ * Kundenstimmen, FAQ. 22.09.2026 entschlackt: Werdegang/Zeitleiste und
+ * TV-Video gehoeren auf /ueber-mich bzw. /presse; doppelte Logo-Marquee,
+ * Branchenliste und doppelte Stimmen (= ReviewsBlock) entfernt.
+ */
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import VoltageShell from "@/components/voltage/VoltageShell";
-import {
-  SubHero,
-  Stats,
-  FactsGrid,
-  ReviewsBlock,
-  LogoMarquee,
-  FAQ,
-  FinalCTA,
-  PullQuote,
-  SectionHeader,
-} from "@/components/voltage/sections";
-import { SplitFeature } from "@/components/voltage/creative";
-import {
-  INK,
-  WHITE,
-  PAPER,
-  COBALT,
-  MAGENTA,
-  L_LINE,
-  L_DIM,
-  up,
-  stagger,
-  vp,
-  Eyebrow,
-  Stars,
-} from "@/components/voltage/theme";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { TVA_VIDEO_ID } from "@/lib/videos";
-import {
-  ArrowRight,
-  Quote,
-  Tv,
-  Building2,
-  Sparkles,
-  Trophy,
-  Award,
-  CalendarCheck,
-} from "lucide-react";
+import { SubHero, Stats, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
+import { INK, WHITE, PAPER, COBALT, MAGENTA, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { ArrowRight } from "lucide-react";
 
 import buehneZuschauerImg from "@/assets/buehne-zuschauer.jpg";
 import emotionenImg from "@/assets/emotionen.jpg";
-import heroMagicImg from "@/assets/hero-magic.jpg";
 import stageShowImg from "@/assets/stage-show.jpg";
 
 /* ═══════════════════════════════════════════════════════════
@@ -239,7 +204,7 @@ const CASE_STUDIES: CaseStudy[] = [
     anlass: "Privater Festzelt-Auftritt",
     format: "Walk-Around",
     intro:
-      "Privater Buchung in einem Festzelt — lauter Hintergrund, dichte Tischbelegung, alle leicht angeheitert. Walk-Around-Magie funktioniert genau da: kleine Effekte, große Reaktionen, kein Mikrofon nötig.",
+      "Private Buchung in einem Festzelt — lauter Hintergrund, dichte Tischbelegung, alle leicht angeheitert. Walk-Around-Magie funktioniert genau da: kleine Effekte, große Reaktionen, kein Mikrofon nötig.",
   },
   {
     name: "Turmtheater",
@@ -522,336 +487,6 @@ const CaseStudyCloud = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   Branchen-Liste — Editorial-Liste, jede Branche mit Kunden-Beispiel
-   ═══════════════════════════════════════════════════════════ */
-const BRANCHEN = [
-  { name: "Versicherung", beispiel: "VKB · 200-Personen-Magic-Camp" },
-  { name: "Bau", beispiel: "STRABAG · Weihnachtsfeier" },
-  { name: "Möbel", beispiel: "XXXLutz · Konzern-Event" },
-  { name: "Mobilität", beispiel: "Sixt · Kundenabend München" },
-  { name: "Banking", beispiel: "Sparkasse · Mitarbeiterfeier" },
-  { name: "Brauerei", beispiel: "Schneider Weisse · Tisch-zu-Tisch" },
-  { name: "Restaurant", beispiel: "Wald & Wiese · Magic Dinner Reihe" },
-  { name: "Hospitality", beispiel: "Hotel-Galas · diverse" },
-  { name: "Öffentliche Hand", beispiel: "Stadt Regensburg · Empfang" },
-  { name: "TV", beispiel: "TVA · Greatest Talent · ARD-Vorabend" },
-  { name: "Theater", beispiel: "Turmtheater · Variety-Abend" },
-  { name: "Charity", beispiel: "Drying Little Tears · Spendengala" },
-  { name: "Event-Location", beispiel: "Alte Mälzerei · Gala-Abend" },
-  { name: "Mittelstand", beispiel: "Steinhofer Ingenieure · Jubiläum" },
-  { name: "Hochzeit", beispiel: "Tegernsee, München, Regensburg — 100+ Paare" },
-  { name: "Familie", beispiel: "Geburtstage 30 – 80 · diverse" },
-];
-
-const BranchenListeSection = () => (
-  <motion.section
-    variants={stagger}
-    initial="hidden"
-    whileInView="show"
-    viewport={vp}
-    className="px-5 md:px-10 py-16 md:py-24"
-    style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}
-  >
-    <div className="max-w-7xl mx-auto">
-      <motion.div variants={up} className="max-w-3xl mb-10 md:mb-14">
-        <Eyebrow>Sechzehn Branchen, ein Ansprechpartner</Eyebrow>
-        <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}>
-          Quer durch <span style={{ color: COBALT }}>die Branchen</span>.
-        </h2>
-        <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
-          Pro Branche habe ich mindestens drei Buchungen. Heißt: ich kenne die
-          Tonalität, die typischen Risiken, die Fettnäpfchen. Für jede Branche
-          gibt es Ansprechpartner auf Anfrage.
-        </p>
-      </motion.div>
-
-      <ul style={{ borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
-        {BRANCHEN.map((b, i) => (
-          <motion.li
-            key={b.name}
-            variants={up}
-            className="grid grid-cols-[46px_1fr] md:grid-cols-[80px_2fr_3fr] items-baseline gap-4 md:gap-10 py-6 md:py-7"
-            style={{ borderTop: i === 0 ? "none" : `1px solid ${L_LINE}` }}
-          >
-            <span className="tabular-nums" style={{ fontSize: "clamp(1.5rem,3vw,2.25rem)", lineHeight: 1, color: "rgba(10,11,15,0.25)" }}>
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight" style={{ color: INK }}>
-              {b.name}
-            </h3>
-            <p className="text-[15px] md:text-lg md:text-right col-span-2 md:col-span-1" style={{ color: L_DIM }}>
-              {b.beispiel}
-            </p>
-          </motion.li>
-        ))}
-      </ul>
-
-      <motion.p variants={up} className="mt-10 max-w-2xl text-[15px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
-        Deine Branche fehlt? Wahrscheinlich nicht — frag direkt an. Auch Pharma,
-        Recht, IT, Beratung, Gesundheit war schon dabei (NDA-bedingt nicht
-        öffentlich).
-      </motion.p>
-    </div>
-  </motion.section>
-);
-
-/* ═══════════════════════════════════════════════════════════
-   Stimmen — 3 echte Reviews mit voller Story
-   ═══════════════════════════════════════════════════════════ */
-const STIMMEN = [
-  {
-    initial: "J",
-    name: "Jan von Lehmann",
-    role: "Eventleitung · 200 Gäste · Firmenfeier",
-    quote:
-      "Wir haben ein Magic Camp komplett neu aufgestellt — mit 200 Gästen nahe Ingolstadt, mit Workshop-Stationen, mit Bühnenshow als Finale. Emilian hat Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach Mega. Alle Gäste begeistert.",
-    detail: "Versicherungs-Konzern · Bayern · 2024",
-    rating: 5,
-  },
-  {
-    initial: "K",
-    name: "Katrin Raß",
-    role: "Hochzeitsplanerin",
-    quote:
-      "Als Hochzeitsplanerin buche ich Künstler für ein Dutzend Hochzeiten pro Jahr. Emilian ist der einzige, dem ich seit Jahren blind vertraue: er checkt das Brautpaar vorab, baut Insider ein, hält Zeitplan und bringt Ruhe in den Ablauf. Brautmutter weint regelmäßig — vor Lachen oder vor Rührung. Beides Erfolg.",
-    detail: "Hochzeitsplanung · Bayern + DE · seit 2022",
-    rating: 5,
-  },
-  {
-    initial: "M",
-    name: "Martina Senftl",
-    role: "Eventkundin · Geburtstag + Hochzeit",
-    quote:
-      "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon. Was ich nicht erwartet hätte: dass die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter — und das soll was heißen.",
-    detail: "Private Kundin · zwei Buchungen",
-    rating: 5,
-  },
-];
-
-const StimmenSection = () => (
-  <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: WHITE }}>
-    <div className="max-w-7xl mx-auto">
-      <motion.div variants={up} className="max-w-3xl mb-12 md:mb-16">
-        <Eyebrow>Drei Stimmen, ungekürzt</Eyebrow>
-        <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}>
-          Was Kunden <span style={{ color: COBALT }}>sagen</span>.
-        </h2>
-        <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
-          Drei Reviews aus drei verschiedenen Welten — Firmen-Event,
-          Hochzeitsplanung, Privatkundin. Originalzitat, voller Kontext.
-          Weitere 30+ auf ProvenExpert und Google.
-        </p>
-      </motion.div>
-
-      <div className="space-y-12 md:space-y-16">
-        {STIMMEN.map((s) => (
-          <motion.article key={s.name} variants={up} className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-start">
-            {/* Initial + Meta */}
-            <div className="lg:col-span-3 flex lg:flex-col items-start gap-4 lg:gap-6">
-              <span
-                className="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full text-2xl md:text-3xl font-extrabold shrink-0"
-                style={{ background: COBALT, color: WHITE }}
-                aria-hidden
-              >
-                {s.initial}
-              </span>
-              <div>
-                <p className="text-base md:text-lg font-bold" style={{ color: INK }}>
-                  <span>{s.name}</span>
-                </p>
-                <p className="text-sm md:text-base mt-1" style={{ color: L_DIM }}>
-                  {s.role}
-                </p>
-                <div className="flex items-center gap-0.5 mt-3">
-                  <Stars s={16} />
-                  <meta content={String(s.rating)} />
-                  <meta content="5" />
-                </div>
-                <p className="text-xs mt-3 tracking-[0.05em]" style={{ color: L_DIM }}>
-                  {s.detail}
-                </p>
-              </div>
-            </div>
-
-            {/* Quote */}
-            <div className="lg:col-span-9">
-              <Quote className="w-10 h-10 mb-4" style={{ color: COBALT, opacity: 0.5 }} strokeWidth={1.25} />
-              <blockquote className="leading-[1.35]" style={{ fontSize: "clamp(1.35rem,2.5vw,2.1rem)", color: INK }}>
-                „{s.quote}"
-              </blockquote>
-            </div>
-          </motion.article>
-        ))}
-      </div>
-
-      <motion.div variants={up} className="mt-16 pt-8 flex flex-wrap items-baseline justify-between gap-4" style={{ borderTop: `1px solid ${L_LINE}` }}>
-        <p className="text-sm" style={{ color: L_DIM }}>
-          <strong className="tabular-nums" style={{ color: INK }}>30+</strong>{" "}
-          weitere Bewertungen auf{" "}
-          <span className="font-semibold" style={{ color: INK }}>ProvenExpert</span>
-          {" und "}
-          <span className="font-semibold" style={{ color: INK }}>Google</span>.
-        </p>
-        <Link
-          to="/buchung"
-          className="text-[12px] uppercase tracking-[0.1em] font-semibold pb-1 transition-colors inline-flex items-center gap-1.5"
-          style={{ color: L_DIM, borderBottom: `1px solid ${L_LINE}` }}
-        >
-          Eigene Bewertung schreiben <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
-      </motion.div>
-    </div>
-  </motion.section>
-);
-
-/* ═══════════════════════════════════════════════════════════
-   Video — TVA-Auftritt
-   ═══════════════════════════════════════════════════════════ */
-const VideoSection = () => {
-  const [playing, setPlaying] = useState(false);
-  return (
-    <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: PAPER, borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
-      <div className="max-w-7xl mx-auto">
-        <motion.div variants={up} className="max-w-3xl mb-10 md:mb-14">
-          <Eyebrow>TVA · TV-Auftritt 2025</Eyebrow>
-          <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}>
-            Live im <span style={{ color: COBALT }}>Fernsehen</span>.
-          </h2>
-          <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
-            Drei Minuten Live-Magie aus dem TVA-Studio, mit Moderator-Reaktion.
-            Ein direkter Eindruck, wie Routinen vor laufender Kamera laufen.
-          </p>
-        </motion.div>
-        <motion.div variants={up} className="max-w-5xl mx-auto">
-          <div className="relative aspect-video overflow-hidden" style={{ borderRadius: "1.5rem", background: WHITE, boxShadow: "0 50px 100px -30px rgba(10,11,15,0.35)" }}>
-            {playing ? (
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube.com/embed/${TVA_VIDEO_ID}?rel=0&modestbranding=1&controls=1&playsinline=1&autoplay=1`}
-                title="TVA TV-Auftritt — Emilian Leber"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            ) : (
-              <>
-                <img
-                  src={`https://img.youtube.com/vi/${TVA_VIDEO_ID}/maxresdefault.jpg`}
-                  alt="TVA TV-Auftritt — Emilian Leber Showreel"
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <button
-                    onClick={() => setPlaying(true)}
-                    className="w-20 h-20 md:w-24 md:h-24 rounded-full hover:scale-110 transition-transform flex items-center justify-center shadow-2xl"
-                    style={{ background: COBALT }}
-                    aria-label="TVA TV-Auftritt abspielen"
-                  >
-                    <svg className="w-9 h-9 text-white ml-1" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </button>
-                </div>
-                <span className="absolute top-5 left-5 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[10px] tracking-[0.16em] uppercase font-bold text-white" style={{ background: "rgba(10,11,15,0.6)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)" }}>
-                  <Tv className="w-3 h-3" /> TVA · 2025
-                </span>
-              </>
-            )}
-          </div>
-        </motion.div>
-      </div>
-    </motion.section>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════
-   Zeitleiste 2016 → Heute — narrative Magazin-Liste
-   ═══════════════════════════════════════════════════════════ */
-const ZEITLEISTE = [
-  {
-    zeit: "2016",
-    titel: "Erste bezahlte Gigs.",
-    body: "Mit zwölf der erste Auftritt gegen Honorar. Familie + Freunde, Kindergeburtstage, Schulfeste. Das Karten-Repertoire wird zur Sucht.",
-    aside: "12 Jahre alt.",
-  },
-  {
-    zeit: "2019 – 2022",
-    titel: "Die ersten Hochzeiten.",
-    body: "Empfehlung führt zur Empfehlung. Plötzlich stehen drei Wochenenden pro Sommer auf Hochzeiten — Tisch-zu-Tisch, Walk-Around, später erste Bühnen-Slots vor dem Tanz.",
-    aside: "~40 Hochzeiten in 3 Jahren.",
-  },
-  {
-    zeit: "2023",
-    titel: "Erste abendfüllende Bühnenshow.",
-    body: "Ein eigenes 60-Minuten-Programm im Theater, vollkommen durchkomponiert. Standing Ovation am Ende — und das Gefühl, dass aus dem Hobby ein Beruf wird.",
-    aside: "Frühjahr 2023.",
-  },
-  {
-    zeit: "Sep 2023",
-    titel: "Greatest Talent · TV-Finalist.",
-    body: "Castingshow, mehrere Auftritte vor Jury und Publikum, schließlich ins Finale. Plötzlich ruft die Branche zurück — Agenturen, Veranstalter, Brautpaare.",
-    aside: "TV-Premiere.",
-  },
-  {
-    zeit: "2024",
-    titel: "Talents of Magic · Finalist + Kreativpreis.",
-    body: "Internationaler Magie-Wettbewerb, Finale, Kreativpreis für ein eigenes Mentalstück. Parallel: erstes Magic Camp für 200 Gäste, erste reine B2B-Saison.",
-    aside: "Plus Top-30 Deutsche Jugendmeisterschaft.",
-  },
-  {
-    zeit: "2025",
-    titel: "Vollberuflich + TVA-TV-Auftritt.",
-    body: "Aus dem Nebenberuf wird der Hauptberuf. Drei Auftritte pro Woche, Tournee-Slots, der TVA-TV-Auftritt mit drei Minuten Live-Magie aus dem Studio.",
-    aside: "Voll im Geschäft.",
-  },
-  {
-    zeit: "2026",
-    titel: "Plötzlich Magie · Magic Meets Comedy.",
-    body: "Eigene Bühnenshow, die Comedy und Magie verbindet — als Headliner, abendfüllend, für Theater- und Saalbühnen. Magic Dinner als zweites eigenes Format etabliert.",
-    aside: "Aktueller Stand.",
-  },
-];
-
-const ZeitleisteSection = () => (
-  <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: WHITE }}>
-    <div className="max-w-7xl mx-auto">
-      <motion.div variants={up} className="max-w-3xl mb-12 md:mb-16">
-        <Eyebrow>Zehn Jahre, in sieben Stationen</Eyebrow>
-        <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(2rem,4.5vw,3.5rem)", lineHeight: 1.02, color: INK }}>
-          2016 — <span style={{ color: COBALT }}>Heute</span>.
-        </h2>
-        <p className="mt-4 text-[16px] md:text-lg leading-[1.6]" style={{ color: L_DIM }}>
-          Vom ersten bezahlten Auftritt mit zwölf bis zur eigenen Bühnenshow und
-          zum TV-Studio — wie aus einem Hobby ein Beruf wurde, in sieben
-          Stationen erzählt.
-        </p>
-      </motion.div>
-
-      <ul className="space-y-12 md:space-y-16">
-        {ZEITLEISTE.map((z) => (
-          <motion.li key={z.zeit} variants={up} className="grid md:grid-cols-12 gap-x-10 gap-y-3">
-            <div className="md:col-span-3">
-              <p className="font-extrabold tabular-nums tracking-[-0.015em]" style={{ fontSize: "clamp(1.4rem, 2.5vw, 2rem)", lineHeight: 1, color: INK }}>
-                {z.zeit}
-              </p>
-              <p className="text-sm mt-2" style={{ color: L_DIM }}>{z.aside}</p>
-            </div>
-            <div className="md:col-span-9 md:pl-6" style={{ borderLeft: `1px solid ${L_LINE}` }}>
-              <h3 className="text-xl md:text-2xl font-bold leading-tight mb-3" style={{ color: INK }}>
-                {z.titel}
-              </h3>
-              <p className="text-base md:text-lg leading-[1.7] max-w-2xl" style={{ color: L_DIM }}>
-                {z.body}
-              </p>
-            </div>
-          </motion.li>
-        ))}
-      </ul>
-    </div>
-  </motion.section>
-);
-
-/* ═══════════════════════════════════════════════════════════
    FAQ — Referenzen-spezifisch (Daten auch für JSON-LD)
    ═══════════════════════════════════════════════════════════ */
 const FAQS = [
@@ -873,11 +508,7 @@ const FAQS = [
   },
   {
     q: "Habt ihr Referenzen in meiner Region und meiner Branche?",
-    a: "Wahrscheinlich ja. Der Schwerpunkt ist Bayern (Regensburg, München, Ingolstadt, Würzburg, Passau), aber auch in NRW, Hessen und Baden-Württemberg habe ich gearbeitet. Branchen-Erfahrung: 16 verschiedene Branchen, von Versicherung bis Charity. Frag konkret an, ich nenne zwei bis drei passende Beispiele.",
-  },
-  {
-    q: "Kann ich euren Kunden-Newsletter abonnieren?",
-    a: "Nein, es gibt keinen Marketing-Newsletter. Wer auf der Page bleiben möchte, schaut alle paar Monate vorbei — die Referenzliste hier wird zwei- bis dreimal pro Jahr aktualisiert. Direkter Kanal ist immer Mail oder Telefon.",
+    a: "Wahrscheinlich ja. Der Schwerpunkt ist Bayern (Regensburg, München, Ingolstadt, Würzburg, Passau). Branchen-Erfahrung: 16 verschiedene Branchen, von Versicherung bis Charity. Frag konkret an, ich nenne zwei bis drei passende Beispiele.",
   },
 ];
 
@@ -889,7 +520,7 @@ const SITE_URL = "https://www.magicel.de/referenzen";
 const Referenzen = () => (
   <VoltageShell
     title="Referenzen — 200+ Events seit 2016 | Zauberer Emilian Leber"
-    description="Zauberer-Referenzen: VKB, STRABAG, XXXLutz, Sixt, Sparkasse, Schneider Weisse u.v.m. 200+ Events, 5,0★ und 30+ Bewertungen. Premium-Entertainment in Bayern und deutschlandweit."
+    description="Zauberer-Referenzen: VKB, STRABAG, XXXLutz, Sixt, Sparkasse, Schneider Weisse u.v.m. 200+ Events, 5,0★ und 30+ Bewertungen. Aus Regensburg für ganz Bayern."
     path="/referenzen"
     noindex={false}
   >
@@ -1020,7 +651,7 @@ const Referenzen = () => (
       imgPos="center 25%"
       badge="200+ Events · 5,0★ · 30+ Bewertungen"
       primary={{ label: "Referenzen anfragen", href: "/buchung" }}
-      secondary={{ label: "Kunden filtern", href: "#logos" }}
+      secondary={{ label: "Kunden ansehen", href: "/referenzen#logos" }}
     />
 
     <Stats
@@ -1032,63 +663,10 @@ const Referenzen = () => (
       ]}
     />
 
-    <LogoMarquee label="200+ Auftritte · für diese Auftraggeber" />
-
     <CaseStudyCloud />
 
-    {/* Stats-Detail: was zehn Jahre zusammenrechnen */}
-    <section className="px-5 md:px-10 pt-16 md:pt-24" style={{ background: WHITE }}>
-      <div className="max-w-6xl mx-auto">
-        <SectionHeader
-          eyebrow="Was zehn Jahre auf der Bühne zusammenrechnen"
-          title={<>Was ich seit 2016 <span style={{ color: COBALT }}>gebaut habe</span>.</>}
-          sub="Keine Marketing-Zahlen — gepflegte interne Liste. Stand Mai 2026. Mehrfach-Buchungen zählen als ein Event pro Termin."
-        />
-      </div>
-    </section>
-    <FactsGrid
-      items={[
-        { Icon: CalendarCheck, k: "Seit 2016 · Hauptzahl", v: "200+ Events · vom Sektempfang bis zur Gala" },
-        { Icon: Sparkles, k: "Hochzeiten", v: "100+ · Empfang, Dinner, vor dem Tanz" },
-        { Icon: Building2, k: "Firmen-Engagements", v: "100+ · Vorstand bis Mitarbeiterfeier" },
-        { Icon: Trophy, k: "Geburtstage", v: "80+ · 30er bis Goldene Hochzeit" },
-        { Icon: Sparkles, k: "Close-Up-Auftritte", v: "100+ · Walk-Around + Tisch-zu-Tisch" },
-        { Icon: Award, k: "Magic Dinners", v: "10+ · Vier-Gänge-Format mit Wald & Wiese" },
-        { Icon: Building2, k: "Echte Logos", v: "17 freigegeben · plus 180 anonym" },
-        { Icon: Trophy, k: "Bewertung", v: "5,0★ · 30+ auf Google & ProvenExpert" },
-      ]}
-    />
-
-    <BranchenListeSection />
-
-    <StimmenSection />
-
-    <VideoSection />
-
-    <ZeitleisteSection />
-
-    <PullQuote
-      text="Zweihundert Abende. Eine Stille immer — drei Sekunden, nach jeder großen Pointe. Jedes Mal."
-      name="Emilian Leber"
-      role="200+ Events seit 2016"
-    />
-
-    <ReviewsBlock paper={false} />
-
-    <SplitFeature
-      eyebrow="Aus 16+ Branchen"
-      title={<>Premium-Gala oder Comedy-Abend — <span style={{ color: COBALT }}>eine</span> Künstlerpersönlichkeit.</>}
-      sub="Versicherung, Bau, Banking, Brauerei, Theater, öffentliche Hand — die Tonalität passt sich an, die Verlässlichkeit bleibt gleich. Konzept, Vertrag und Briefing aus einer Hand."
-      points={[
-        "Pro Branche mindestens drei Buchungen — ich kenne die Tonalität und die Fettnäpfchen",
-        "Ansprechpartner aus deiner Branche auf Anfrage, mit Telefon oder Mail",
-        "Diskretion auf Wunsch — viele Auftraggeber werden nicht öffentlich genannt",
-      ]}
-      image={heroMagicImg}
-      imageAlt="Emilian Leber bei einem Firmenevent"
-      imgPos="center 25%"
-      stat={{ v: "16+", l: "Branchen" }}
-    />
+    {/* Kundenstimmen — die drei freigegebenen Bewertungen (auch im JSON-LD). */}
+    <ReviewsBlock />
 
     <FAQ
       eyebrow="Häufige Fragen zu Referenzen"
@@ -1098,7 +676,7 @@ const Referenzen = () => (
 
     <FinalCTA
       title={<>Referenzen aus deiner Branche<span style={{ color: MAGENTA }}>.</span></>}
-      sub="Sag mir Datum, Anlass, Branche und Stadt — du bekommst zwei bis drei Kontakte mit Telefon oder Mail, die mich gebucht haben und die Erfahrung weitergeben. Antwort innerhalb 24 Stunden. Vertraulich, keine Newsletter, kein Weiterverkauf von Daten."
+      sub="Sag mir Datum, Anlass, Branche und Stadt — du bekommst zwei bis drei Kontakte mit Telefon oder Mail, die mich gebucht haben und die Erfahrung weitergeben. Antwort innerhalb 24 Stunden. Vertraulich, kein Weiterverkauf von Daten."
     />
   </VoltageShell>
 );
