@@ -69,8 +69,12 @@ function parseServiceFromPath(pathname: string): string | undefined {
 }
 
 const ServiceStadtSeite = () => {
-  const { stadt } = useParams<{ stadt: string }>();
+  const params = useParams<{ stadt: string }>();
   const { pathname } = useLocation();
+  // Neu-Form (/magic-dinner-<stadt>, /zaubershow-<stadt>) kommt ueber den
+  // Catch-all in App.tsx — dort gibt es kein :stadt, also aus dem Pfad lesen.
+  const stadt =
+    params.stadt ?? pathname.match(/^\/(?:magic-dinner|zaubershow)-([^/]+)\/?$/)?.[1];
   const serviceSlug = parseServiceFromPath(pathname);
 
   const serviceFormat = useMemo(
