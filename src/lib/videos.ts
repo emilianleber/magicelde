@@ -2,8 +2,8 @@
 //
 // Wo wird das gebraucht:
 // - src/pages/StadtSeite.tsx → "Sieh dir den Zauberer an"
-// - src/pages/Index.tsx → Startseite VideoSection
-// - src/pages/Presse.tsx → TVA-Spotlight + VideoSection
+// - src/pages/UeberMich.tsx → TVA-Video
+// - src/pages/Presse.tsx → Link zum TVA-Mitschnitt
 // - src/pages/Buehnenshow.tsx, MagicDinner.tsx etc.
 
 /** Aktuelles Standard-Showreel (Default vor TVA-Update). */

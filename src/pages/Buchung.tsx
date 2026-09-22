@@ -29,6 +29,7 @@ const ANLASS_MAP: Record<string, string> = {
   messe: "messe",
   privat: "sonstiges",
   sonstiges: "sonstiges",
+  andere: "sonstiges", // /kontakt-Formular
   "magic-dinner": "magic-dinner",
   magicdinner: "magic-dinner",
 };
@@ -120,13 +121,14 @@ const Buchung = () => {
       vorname: vorname || "",
       nachname: nachname || "",
       email: searchParams.get("email") || "",
-      phone: searchParams.get("phone") || "",
+      // /kontakt leitet mit "telefon"/"nachricht" weiter, der Show-Planer mit "phone"/"notizen".
+      phone: searchParams.get("phone") || searchParams.get("telefon") || "",
       ort: searchParams.get("ort") || "",
       anlass: ANLASS_MAP[anlassRaw] || "",
       format: FORMAT_MAP[formatRaw] || "",
       gaeste: gaesteNum ? String(gaesteNum) : "",
       datum: searchParams.get("datum") || "",
-      nachricht: buildPrefillNotes(searchParams, searchParams.get("notizen") || ""),
+      nachricht: buildPrefillNotes(searchParams, searchParams.get("notizen") || searchParams.get("nachricht") || ""),
     };
   }, [searchParams]);
 

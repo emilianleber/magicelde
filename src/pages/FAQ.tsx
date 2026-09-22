@@ -1,8 +1,13 @@
+/**
+ * /faq — gruppierte Antworten (Voltage-Layout, live). 22.09.2026 entschlackt:
+ * doppelte/widerspruechliche Fragen zusammengefuehrt, Deko-Sektionen
+ * (Stats, Statement, Split, Logos, Reviews) entfernt — die Seite beantwortet
+ * Fragen, Beweise stehen auf /referenzen.
+ */
 import { Helmet } from "react-helmet-async";
 import { useEffect, useMemo, useRef, useState } from "react";
 import VoltageShell from "@/components/voltage/VoltageShell";
-import { SubHero, Stats, FactsGrid, Statement, ReviewsBlock, LogoMarquee, FinalCTA, SectionHeader } from "@/components/voltage/sections";
-import { SplitFeature } from "@/components/voltage/creative";
+import { SubHero, FinalCTA, SectionHeader } from "@/components/voltage/sections";
 import { COBALT, MAGENTA, INK, WHITE, L_LINE, L_DIM, PAPER } from "@/components/voltage/theme";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import {
@@ -17,7 +22,6 @@ import {
   ChevronDown,
 } from "lucide-react";
 import heroImg from "@/assets/emilian-portrait-cards.jpg";
-import splitImg from "@/assets/audience-reactions.jpg";
 
 const ACCENT = "#1D3FFF";
 const ACCENT_DEEP = "#1233CC";
@@ -45,13 +49,13 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "wer-ist-emilian",
     category: "allgemein",
     q: "Wer ist Emilian Leber?",
-    a: "Geboren 2008, Magier seit dem 8. Lebensjahr, erster bezahlter Gig mit 12. Heute hauptberuflich als Bühnen-, Close-Up- und Magic-Dinner-Künstler — Schwerpunkt Bayern, deutschlandweit buchbar. 5,0 Sterne bei 30+ verifizierten Bewertungen, über 200 gespielte Events seit 2015.",
+    a: "Geboren 2008, Magier seit dem 8. Lebensjahr, erster bezahlter Gig mit 12. Heute hauptberuflich als Bühnen-, Close-Up- und Magic-Dinner-Künstler — zuhause in Regensburg, unterwegs in ganz Bayern. 5,0 Sterne bei 30+ verifizierten Bewertungen, über 200 gespielte Events seit 2016.",
   },
   {
     id: "wo-trete-ich-auf",
     category: "allgemein",
     q: "Wo trete ich auf?",
-    a: "Schwerpunkt Bayern — Regensburg, München, Nürnberg, Augsburg, Ingolstadt, Passau, Landshut. Deutschlandweit gerne mit transparent kalkulierter Anfahrt. Österreich und Schweiz auf Anfrage, ggf. mit Übernachtung.",
+    a: "Zuhause in Regensburg, unterwegs in ganz Bayern — München, Nürnberg, Augsburg, Ingolstadt, Passau, Landshut und alles dazwischen. Weiter entfernte Orte auf Anfrage, mit transparent kalkulierter Anfahrt und ggf. Übernachtung.",
   },
   {
     id: "sprachen",
@@ -69,13 +73,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "auszeichnungen",
     category: "allgemein",
     q: "Welche Auszeichnungen habe ich?",
-    a: "Greatest Talent 2023 — Finalist (TV-Show, SAT.1). Talents of Magic 2024 — Finalist + Kreativpreis. Deutsche Jugendmeisterschaft der Magie — Top 30. TVA-TV-Interview 2025. 5,0 Sterne auf ProvenExpert und Google.",
-  },
-  {
-    id: "seit-wann",
-    category: "allgemein",
-    q: "Seit wann mache ich Zauberei?",
-    a: "Erster Trick mit 8 Jahren — Münzen verschwinden lassen am Esstisch. Mit 12 erster bezahlter Auftritt (Kindergeburtstag), mit 16 das erste TVA-Interview. Heute hauptberuflich, mit eigener abendfüllender Show seit 2023.",
+    a: "Greatest Talent 2023 — Finalist (TV-Show, SAT.1). Talents of Magic 2024 — Finalist + Kreativpreis. Deutsche Jugendmeisterschaft der Magie — Top 30. TVA-TV-Interview 2025 mit 16 Jahren, Live-Studio mit Karten-Routine. 5,0 Sterne auf ProvenExpert und Google. Mitschnitte auf YouTube und im Pressebereich.",
   },
 
   /* ───────── Buchung & Ablauf ───────── */
@@ -83,7 +81,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "wie-buchen",
     category: "buchung",
     q: "Wie buche ich?",
-    a: "Drei Wege: (1) Anfrage über das Buchungsformular auf /buchung, (2) Show-Planer-Modal (am unteren Bildschirmrand, oder mit Anker #planer), (3) direkt per Email an el@magicel.de oder Telefon. Antwort kommt persönlich innerhalb von 24 Stunden.",
+    a: "Drei Wege: (1) Anfrage über das Buchungsformular auf /buchung, (2) Show-Planer (am unteren Bildschirmrand, oder mit Anker #planer), (3) direkt per Email an el@magicel.de oder Telefon. Eine direkte Online-Buchung ohne Briefing gibt es bewusst nicht — Antwort kommt persönlich innerhalb von 24 Stunden.",
   },
   {
     id: "vorlauf",
@@ -101,7 +99,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "stornierung",
     category: "buchung",
     q: "Wie ist die Stornierungsregel?",
-    a: "Die Staffel ist in den AGB festgehalten: bis 30 Tage vorher 55 % Gage, bis 20 Tage 75 %, bis 14 Tage 100 %. Bei höherer Gewalt (Pandemie, behördliche Anordnung) wird die Anzahlung vollständig erstattet. Details unter /agb § 5.",
+    a: "Die Staffel ist in den AGB festgehalten: bis 30 Tage vorher 55 % Gage, bis 20 Tage 75 %, bis 14 Tage 100 %. Hintergrund: ein geblocktes Datum schließt andere Buchungen aus. Bei höherer Gewalt (Pandemie, behördliche Anordnung) wird die Anzahlung vollständig erstattet, bei Verschiebung auf den neuen Termin übertragen. Details unter /agb § 5.",
   },
   {
     id: "vorgespraech",
@@ -201,7 +199,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "anfahrt",
     category: "technik",
     q: "Wie wird die Anfahrt berechnet?",
-    a: "In Bayern transparent kalkuliert nach Entfernung (km-Pauschale), deutschlandweit inkl. Fahrzeit-Aufschlag falls über 3 Stunden. Bei Übernachtungs-Pflicht (späte Show / weite Anreise) kommt Hotel + Spesen — wird im Angebot ausgewiesen, keine Überraschungen.",
+    a: "In Bayern transparent kalkuliert nach Entfernung (km-Pauschale). Bei Übernachtungs-Pflicht (späte Show / weite Anreise) kommt Hotel + Spesen dazu — wird im Angebot ausgewiesen, keine Überraschungen.",
   },
   {
     id: "versicherung",
@@ -227,7 +225,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "anfahrt-inkl",
     category: "preise",
     q: "Ist Anfahrt im Honorar enthalten?",
-    a: "In der Region Regensburg / Oberpfalz oft pauschal inklusive. Über Bayern hinaus wird die Anfahrt transparent als separate Position im Angebot kalkuliert — ihr seht genau, was wofür anfällt.",
+    a: "In der Region Regensburg / Oberpfalz oft pauschal inklusive. Bei weiteren Strecken wird die Anfahrt transparent als separate Position im Angebot kalkuliert — ihr seht genau, was wofür anfällt.",
   },
   {
     id: "reisekosten",
@@ -239,39 +237,21 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "rechnung-ust",
     category: "preise",
     q: "Bekomme ich eine Rechnung mit ausgewiesener Umsatzsteuer?",
-    a: "Ja — GoBD-konforme Geschäftsrechnung mit ausgewiesener gesetzlicher Umsatzsteuer, Zahlungsziel standardmäßig 14 Tage nach Veranstaltung. Anzahlung 30 % zur Terminreservierung üblich, der Rest zur oder nach der Show.",
-  },
-  {
-    id: "anzahlung",
-    category: "preise",
-    q: "Muss ich eine Anzahlung leisten?",
-    a: "Ja — eine Anzahlung sichert den Termin. Höhe meist 30 % der Gesamt-Gage, fällig nach Vertragsschluss. Erst dann blockiere ich das Datum komplett. Restzahlung 14 Tage nach Veranstaltung gegen Rechnung.",
+    a: "Ja — GoBD-konforme Geschäftsrechnung mit ausgewiesener gesetzlicher Umsatzsteuer und allen Pflichtangaben, auch auf Firmen-Rechnung (USt-IdNr bitte vorab schicken). Eine Anzahlung von meist 30 % sichert den Termin nach Vertragsschluss, der Rest ist 14 Tage nach Veranstaltung fällig. Bei größeren Buchungen sind 3 Raten auf Anfrage möglich.",
   },
 
   /* ───────── Allgemein · Erweitert ───────── */
   {
-    id: "deutschlandweit",
-    category: "allgemein",
-    q: "Trete ich auch außerhalb Bayerns auf?",
-    a: "Ja, deutschlandweit. Schwerpunkt Bayern (Regensburg, München, Nürnberg, Augsburg, Ingolstadt), aber Hamburg bis Stuttgart, Berlin bis Köln sind alles regelmäßige Anfragen. Bei längerer Anreise plane ich Übernachtung ein — alles transparent im Angebot.",
-  },
-  {
     id: "alter-erfahrung",
     category: "allgemein",
     q: "Bin ich nicht zu jung für professionelle Magie?",
-    a: "Berechtigte Frage. Antwort: 17 Jahre Bühnen-Erfahrung mit 18. Erster Trick mit 8, erster bezahlter Gig mit 12. Heute über 200 gespielte Events. Alter ist Erfahrung minus Anfangsjahre — bei mir 10+ Jahre Profi-Übung.",
+    a: "Berechtigte Frage. Erster Trick mit 8, erster bezahlter Gig mit 12, seit 2016 über 200 gespielte Events — dazu TV-Finale und Wettbewerbe. Das sind mehr als zehn Jahre Bühnenpraxis.",
   },
   {
     id: "kindergeburtstag",
     category: "allgemein",
     q: "Mache ich auch Kindergeburtstage?",
     a: "Im Moment Fokus auf Erwachsenen-Entertainment — Hochzeiten, Firmenfeiern, private Feiern ab 12 Jahren. Bei Familienfeiern beziehe ich jüngere Gäste gerne ein, aber reine Kindergeburtstage (3-12 Jahre) vermittle ich an Kollegen weiter.",
-  },
-  {
-    id: "tv-auftritte",
-    category: "allgemein",
-    q: "War ich im Fernsehen?",
-    a: "Ja — TVA-Interview 2025 (Bayerisches Regional-TV) mit 16 Jahren, Live-Studio mit Karten-Routine. Davor 2023 Greatest Talent auf SAT.1 als Finalist. Mitschnitte auf YouTube und im Presse-Bereich verfügbar.",
   },
   {
     id: "ausbildung",
@@ -281,12 +261,6 @@ const FAQ_ITEMS: FAQItemT[] = [
   },
 
   /* ───────── Buchung · Erweitert ───────── */
-  {
-    id: "online-buchung",
-    category: "buchung",
-    q: "Kann ich direkt online buchen?",
-    a: "Nein, eine direkte Online-Buchung ohne Briefing gibt es bewusst nicht. Magie funktioniert nur wenn ich euren Anlass kenne — daher immer kurzes Telefonat oder Anfrage zuerst. Antwort kommt innerhalb 24h.",
-  },
   {
     id: "datum-fest",
     category: "buchung",
@@ -300,28 +274,10 @@ const FAQ_ITEMS: FAQItemT[] = [
     a: "Klar, völlig legitim. Wenn du parallel andere Künstler anfragst, sag es mir einfach — ich passe das Angebot dann gegebenenfalls nach.",
   },
   {
-    id: "buchungs-zeitpunkt",
-    category: "buchung",
-    q: "Wann ist der beste Zeitpunkt für die Buchung?",
-    a: "Für Hochsaison-Wochenenden (Mai-September, Dezember): 3-6 Monate vorab. Werktage oder Nebensaison: 4-8 Wochen reichen meist. Last-Minute (1-2 Wochen) möglich wenn Glück + freier Slot — einfach anrufen.",
-  },
-  {
-    id: "verfuegbarkeit-pruefen",
-    category: "buchung",
-    q: "Wie kann ich die Verfügbarkeit prüfen?",
-    a: "Anfrage über Formular oder Mail mit Datum, Ort und ungefährer Gästezahl — ich antworte mit Verfügbarkeits-Status + ersten Konzept-Vorschlag innerhalb 24h.",
-  },
-  {
     id: "umbuchung",
     category: "buchung",
     q: "Kann ich den Termin verschieben?",
     a: "Bei höherer Gewalt (Krankheit, Behörden-Anordnung) unkompliziert möglich. Bei freier Wahl: je früher angekündigt, desto eher klappt's. Anzahlung wird auf den neuen Termin übertragen.",
-  },
-  {
-    id: "anrede-form",
-    category: "buchung",
-    q: "Welche Anrede soll ich beim Briefing verwenden?",
-    a: "Du oder Sie — beides ok. Bei B2B-Vorstands-Events schreibe ich automatisch Sie, bei Hochzeiten/privaten Anfragen Du. Du kannst es jederzeit umstellen — keine Eitelkeit von meiner Seite.",
   },
 
   /* ───────── Formate · Erweitert ───────── */
@@ -371,7 +327,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "magic-dinner-buchbar",
     category: "formate",
     q: "Kann ich ein Magic Dinner privat buchen?",
-    a: "Ja, auf zwei Wegen: (1) Tafel beim öffentlichen Magic-Dinner-Abend im Wald & Wiese reservieren, (2) komplett privater Magic-Dinner-Abend für deine geschlossene Gesellschaft in eurem Restaurant oder Wald & Wiese. Beides über Kontaktformular anfragen.",
+    a: "Ja — als privater Magic-Dinner-Abend für deine geschlossene Gesellschaft, in eurem Restaurant oder im Wald & Wiese in Sinzing. Einfach über das Anfrageformular melden.",
   },
 
   /* ───────── Technik · Erweitert ───────── */
@@ -398,12 +354,6 @@ const FAQ_ITEMS: FAQItemT[] = [
     category: "technik",
     q: "Dürft ihr Fotos und Videos machen?",
     a: "Vom Publikum aus: gerne, schickt mir die schönsten Fotos zu. Eigenes Filmen meiner Show zur Verbreitung: bitte vorab abklären (Effekte sind teilweise nicht für Detailaufnahmen gedacht).",
-  },
-  {
-    id: "spielort-anforderung",
-    category: "technik",
-    q: "Welche Anforderungen an die Location?",
-    a: "Für Close-Up: keine. Für Bühne: Mindestens 2x1,5 m freie Fläche, Stromanschluss, gute Sicht für alle Gäste. Tagsüber draußen: Sonnenschutz für meine Hände + Karten. Akustik nicht kritisch — Mikrofon kompensiert.",
   },
   {
     id: "barrierefrei",
@@ -442,30 +392,6 @@ const FAQ_ITEMS: FAQItemT[] = [
     category: "preise",
     q: "Sind die Preise verhandelbar?",
     a: "Bei mehrtägigen Engagements, Wiederholungs-Kunden oder Charity-Anlässen: ja. Bei Standard-Buchungen sind die Preise transparent kalkuliert und entsprechen dem Aufwand — Spielraum eher klein.",
-  },
-  {
-    id: "ratenzahlung",
-    category: "preise",
-    q: "Kann ich in Raten zahlen?",
-    a: "Standard ist 30% Anzahlung bei Vertragsschluss, Rest 14 Tage nach Veranstaltung. Bei größeren Buchungen sind 3 Raten (Anzahlung / vor Termin / nach Termin) möglich — auf Anfrage.",
-  },
-  {
-    id: "stornogebuehren-recht",
-    category: "preise",
-    q: "Warum gibt es Stornogebühren?",
-    a: "Weil ein geblocktes Datum andere Buchungen ausschließt. Bei Storno 4 Wochen vorher ist es schwer, einen Ersatz-Auftrag zu finden. Staffel gilt für beide Seiten — bei Verschiebung wird Anzahlung übertragen.",
-  },
-  {
-    id: "rechnung-firma",
-    category: "preise",
-    q: "Kann ich auf Firmen-Rechnung buchen?",
-    a: "Ja, alle Rechnungen sind GoBD-konform mit ausgewiesener USt und allen Pflichtangaben. Wenn deine Firma USt-IdNr hat, bitte vorab schicken — kommt auf die Rechnung.",
-  },
-  {
-    id: "trinkgeld",
-    category: "preise",
-    q: "Erwarte ich Trinkgeld?",
-    a: "Nein, das Honorar deckt alles ab. Wer freiwillig was geben möchte: schöne Geste, aber niemals erwartet oder eingefordert.",
   },
 ];
 
@@ -833,7 +759,7 @@ const SITE_URL = "https://www.magicel.de/faq";
 const FAQPage = () => (
   <VoltageShell
     title="FAQ — Häufige Fragen zum Zauberer | Emilian Leber Bayern"
-    description="Häufige Fragen zur Buchung eines Zauberers in Bayern — Ablauf, Pakete, Technik, Anfahrt, Honorar. 5,0 Sterne, 200+ Events seit 2015, persönliche Antwort innerhalb 24 Stunden."
+    description="Häufige Fragen zur Buchung eines Zauberers in Bayern — Ablauf, Pakete, Technik, Anfahrt, Honorar. 5,0 Sterne, 200+ Events seit 2016, persönliche Antwort innerhalb 24 Stunden."
     path="/faq"
     noindex={false}
   >
@@ -852,7 +778,7 @@ const FAQPage = () => (
       />
       <meta
         name="twitter:description"
-        content="30+ Antworten zu Buchung, Formaten, Technik und Honorar — persönlich beantwortet."
+        content="Antworten zu Buchung, Formaten, Technik und Honorar — persönlich beantwortet."
       />
       <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
       <script type="application/ld+json">
@@ -903,54 +829,9 @@ const FAQPage = () => (
       badge="200+ Events · persönliche Antwort in 24 Stunden."
     />
 
-    <Stats
-      items={[
-        { v: `${FAQ_ITEMS.length}`, l: "Antworten" },
-        { v: "5", l: "Kategorien" },
-        { v: "24h", l: "persönliche Antwort" },
-        { v: "5,0★", l: "30+ Bewertungen" },
-      ]}
-    />
-
-    <FactsGrid
-      items={[
-        { Icon: Info, k: "Allgemein", v: "Wer ist Emilian, Sprachen, Auszeichnungen, TV" },
-        { Icon: Calendar, k: "Buchung & Ablauf", v: "Vorlauf, Vertrag, Storno, Vorgespräch" },
-        { Icon: Sparkles, k: "Formate & Show", v: "Close-Up, Bühne, Magic Dinner, Moderation" },
-        { Icon: Coins, k: "Preise & Honorar", v: "Wovon es abhängt, Anzahlung, Rechnung" },
-      ]}
-    />
-
     <FAQCore />
 
-    <Statement eyebrow="Kurz und ehrlich">
-      Über dreißig Fragen — eine Antwort:{" "}
-      <span style={{ color: COBALT }}>ja, das geht.</span> Hochzeit ohne Bühne,
-      Vorstandsdinner mit Englisch, Magie für den 70. Geburtstag der
-      Schwiegermutter — alles besprochen, alles im Repertoire.
-    </Statement>
-
-    <SplitFeature
-      eyebrow="So unkompliziert"
-      title={<>Erst <span style={{ color: COBALT }}>verstehen</span>, dann ein präzises Angebot.</>}
-      sub="Magie funktioniert nur, wenn ich euren Anlass kenne. Darum immer ein kurzes Briefing zuerst — persönlich, nicht über ein Office-Team. Antwort innerhalb von 24 Stunden, an Werktagen oft am selben Vormittag."
-      points={[
-        "Kostenloses 30-Minuten-Vorgespräch per Telefon oder Video",
-        "Schriftlicher Vertrag mit allen Details und ausgewiesener Umsatzsteuer",
-        "Transparente Anfahrt und Reisekosten — keine versteckten Posten",
-      ]}
-      image={splitImg}
-      imageAlt="Reaktionen des Publikums auf eine Zaubershow"
-      imgPos="top"
-      reverse
-      stat={{ v: "24h", l: "Antwortzeit" }}
-    />
-
-    <LogoMarquee />
-
     <FrageNichtBeantwortet />
-
-    <ReviewsBlock paper={false} />
 
     <FinalCTA
       title={<>Genug gelesen — jetzt reden<span style={{ color: MAGENTA }}>.</span></>}

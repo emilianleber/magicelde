@@ -1,33 +1,23 @@
-/** /kontakt — Direkt-Kontakt: Kontaktwege + Formular (leitet vorbefüllt auf /buchung). */
+/**
+ * /kontakt — Direkt-Kontakt: Kontaktwege + Formular (leitet vorbefüllt auf
+ * /buchung). 22.09.2026 entschlackt: Stats, Fakten-Kacheln, Reviews und
+ * doppelte CTA raus — die Seite soll nur schnell zum Kontakt fuehren.
+ */
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import VoltageShell from "@/components/voltage/VoltageShell";
-import {
-  SubHero,
-  Stats,
-  FactsGrid,
-  Steps,
-  ReviewsBlock,
-  FAQ,
-  FinalCTA,
-  SectionHeader,
-} from "@/components/voltage/sections";
+import { SubHero, Steps, FAQ, SectionHeader } from "@/components/voltage/sections";
 import { COBALT, MAGENTA, L_LINE, L_DIM, INK, WHITE, CARD_LIGHT } from "@/components/voltage/theme";
 import {
   Mail,
   Phone,
   MessageCircle,
-  ArrowRight,
   ArrowUpRight,
   Clock,
   Sparkles,
   CheckCircle2,
   Send,
-  Shield,
-  CalendarCheck,
-  MapPin,
-  Wand2,
 } from "lucide-react";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import heroImg from "@/assets/emilian-magic-dinner.jpg";
@@ -474,7 +464,7 @@ const KontaktformularSection = () => {
                 <Link to="/datenschutz" className="underline hover:opacity-70">
                   Datenschutzerklärung
                 </Link>{" "}
-                an. Keine Newsletter, keine Weitergabe.
+                an. Keine Weitergabe an Dritte.
               </p>
             </form>
           ) : (
@@ -516,7 +506,7 @@ const KontaktformularSection = () => {
 const Kontakt = () => (
   <VoltageShell
     title="Kontakt — Schreibe mir | Emilian Leber Zauberer Bayern"
-    description="Direkt-Kontakt zum Zauberer Emilian Leber. Email, Telefon, WhatsApp. Antwort in unter 24 Stunden. Bayern primär, deutschlandweit buchbar. 5,0★ — 30+ Bewertungen, 200+ Events."
+    description="Direkt-Kontakt zum Zauberer Emilian Leber. Email, Telefon, WhatsApp. Antwort in unter 24 Stunden. Aus Regensburg, in ganz Bayern unterwegs. 5,0★ — 30+ Bewertungen, 200+ Events."
     path="/kontakt"
     noindex={false}
   >
@@ -535,7 +525,7 @@ const Kontakt = () => (
       />
       <meta
         name="twitter:description"
-        content="Direkt-Kontakt zum Zauberer Emilian Leber. Antwort binnen 24 Stunden. Bayern primär, deutschlandweit."
+        content="Direkt-Kontakt zum Zauberer Emilian Leber. Antwort binnen 24 Stunden. Regensburg & ganz Bayern."
       />
       <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
       <script type="application/ld+json">
@@ -569,21 +559,12 @@ const Kontakt = () => (
     <SubHero
       eyebrow="Direkt-Kontakt"
       title={<>Schreibe <span style={{ color: COBALT }}>mir</span><span style={{ color: MAGENTA }}>.</span></>}
-      sub="Eine kurze Nachricht reicht. Datum, Anlass, Ort — und ich melde mich persönlich. Antwortzeit unter 24 Stunden, sieben Tage die Woche. Bayern primär, deutschlandweit unterwegs."
+      sub="Eine kurze Nachricht reicht. Datum, Anlass, Ort — und ich melde mich persönlich. Antwortzeit unter 24 Stunden, sieben Tage die Woche. Aus Regensburg, in ganz Bayern unterwegs."
       image={heroImg}
       imageAlt="Zauberer Emilian Leber beim Magic Dinner"
       imgPos="top"
       primary={{ label: "Formular ausfüllen", href: "#kontaktformular" }}
       badge="Persönliche Antwort in unter 24 Stunden — kein Bot, kein Verteiler."
-    />
-
-    <Stats
-      items={[
-        { v: "24h", l: "Antwortzeit, sieben Tage die Woche" },
-        { v: "200+", l: "Events seit 2016" },
-        { v: "5,0★", l: "30+ Bewertungen" },
-        { v: "DE", l: "Bayern primär, deutschlandweit" },
-      ]}
     />
 
     <DreiKontaktwege />
@@ -601,35 +582,6 @@ const Kontakt = () => (
       ]}
     />
 
-    <FactsGrid
-      items={[
-        { Icon: Clock, k: "Antwortzeit", v: "Unter 24 Stunden — meist binnen Stunden" },
-        { Icon: Shield, k: "Unverbindlich", v: "Kostenlos & ohne Verkaufsdruck" },
-        { Icon: MapPin, k: "Region", v: "Bayern primär, deutschlandweit unterwegs" },
-        { Icon: CalendarCheck, k: "Verfügbarkeit", v: "Sieben Tage die Woche erreichbar" },
-      ]}
-    />
-
-    <section className="px-5 md:px-10 pt-16 md:pt-24">
-      <div className="max-w-7xl mx-auto">
-        <SectionHeader
-          eyebrow="Häufige Anliegen"
-          title={<>Vielleicht ist es <span style={{ color: COBALT }}>eines davon</span>.</>}
-          sub="Wenn dein Thema gleich klar ist, geht es direkt weiter — sonst nimm das Formular oben. Beides okay."
-        />
-      </div>
-    </section>
-    <FactsGrid
-      items={[
-        { Icon: Sparkles, k: "Hochzeit anfragen", v: "Sektempfang, Dinner, Hochzeitstanz — drei Akte Magie" },
-        { Icon: Wand2, k: "Firmenfeier-Konzept", v: "Vorstandsdinner bis Mitarbeiterfeier, auf eure Branche zugeschnitten" },
-        { Icon: CalendarCheck, k: "Magic Dinner", v: "Wald & Wiese in Sinzing — vier Termine pro Saison" },
-        { Icon: MessageCircle, k: "Moderation buchen", v: "Galas, Award-Shows, Firmenpräsentationen mit Magie als Bonus" },
-      ]}
-    />
-
-    <ReviewsBlock paper />
-
     <FAQ
       eyebrow="Häufige Fragen zum Kontakt"
       title="Gut zu wissen."
@@ -637,14 +589,10 @@ const Kontakt = () => (
         { q: "Wie schnell bekomme ich eine Antwort?", a: "In unter 24 Stunden, sieben Tage die Woche — meist sogar binnen weniger Stunden. Die Antwort kommt persönlich von mir, kein Bot und kein Verteiler." },
         { q: "Ist die Anfrage verbindlich oder kostet sie etwas?", a: "Beides nein. Die Anfrage ist kostenlos und völlig unverbindlich. Du beschreibst kurz deinen Abend, ich melde mich mit einem Vorschlag — und du entscheidest in Ruhe." },
         { q: "Welcher Kontaktweg ist der beste?", a: "Such dir aus, was dir liegt: Email, wenn du ausführlich beschreiben magst, Telefon für ein kurzes Gespräch oder WhatsApp, wenn es schnell gehen soll. Alle drei führen zur selben Person." },
-        { q: "Wo bist du buchbar?", a: "Regensburg ist Heimat, Bayern die Hauptregion — von dort fahre ich nach München, Nürnberg, Augsburg und alles dazwischen. Deutschlandweit sowie Wien und Zürich auf Anfrage." },
+        { q: "Wo bist du buchbar?", a: "Regensburg ist Heimat, Bayern die Hauptregion — von dort fahre ich nach München, Nürnberg, Augsburg und alles dazwischen. Weiter entfernte Orte gerne auf Anfrage." },
       ]}
     />
 
-    <FinalCTA
-      title={<>Lass uns loslegen — schreib mir<span style={{ color: MAGENTA }}>.</span></>}
-      sub="Erzähl mir kurz von deinem Abend — Datum, Anlass, Ort. Ich melde mich innerhalb von 24 Stunden persönlich zurück. Antwort binnen 24 Stunden, kein Verteiler."
-    />
   </VoltageShell>
 );
 
