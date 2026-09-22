@@ -391,6 +391,27 @@ const PostBody = ({ post }: { post: BlogPost }) => {
     <article>
       {post.sections.map(renderSection)}
 
+      {post.relatedPages && post.relatedPages.length > 0 && (
+        <nav aria-label="Weiterlesen" className="mt-12">
+          <div className="text-[11px] tracking-[0.14em] uppercase font-bold mb-4" style={{ color: L_DIM }}>
+            Weiterlesen
+          </div>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {post.relatedPages.map((p) => (
+              <Link
+                key={p.href}
+                to={p.href}
+                className="group flex items-center justify-between gap-3 p-4 rounded-[16px] transition-colors hover:border-[#1D3FFF]"
+                style={{ background: WHITE, border: `1px solid ${L_LINE}` }}
+              >
+                <span className="text-[15px] font-bold" style={{ color: INK }}>{p.title}</span>
+                <ArrowRight className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(10,11,15,0.35)" }} />
+              </Link>
+            ))}
+          </div>
+        </nav>
+      )}
+
       <div className="mt-16 pt-10" style={{ borderTop: `1px solid ${L_LINE}` }}>
         <div className="flex items-center gap-2 mb-4">
           <Tag className="w-4 h-4" style={{ color: COBALT }} />

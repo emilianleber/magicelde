@@ -1021,6 +1021,7 @@ function renderBlog(post) {
     `<p style="${S.lead}">${esc(post.excerpt)}</p>`,
     renderBlogSections(post.sections),
     internalLinksBlock([
+      ...(post.relatedPages || []).map((r) => [r.href, r.title]),
       ["/blog", "Mehr im Magazin"],
       ...FORMAT_LINKS,
       ...OCCASION_LINKS,
