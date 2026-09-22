@@ -13,7 +13,7 @@
  * #root beim Mount restlos:
  *   - No-JS-Crawler (AEO-Scanner) lesen den vollen statischen Inhalt.
  *   - Googlebot (führt JS aus) verwirft ihn und nutzt die per react-helmet
- *     injizierte Version → kein doppeltes aggregateRating (vgl. index.html).
+ *     injizierte Version → kein doppeltes Markup (vgl. index.html).
  *
  * Single Source of Truth = die .ts-Datendateien. Sie werden hier via esbuild
  * transpiliert und per data:-URL importiert (kein TS-Compile-Step, keine
@@ -63,6 +63,8 @@ export async function loadSeoData() {
   const blog = b.blogPosts;
   return {
     cities,
+    /** Format×Stadt-Seiten nur fuer diese Staedte (staedte.ts). */
+    serviceCitySlugs: st.SERVICE_STADT_SLUGS,
     citiesBySlug: Object.fromEntries(cities.map((c) => [c.slug, c])),
     formats,
     formatsBySlug: Object.fromEntries(formats.map((f) => [f.slug, f])),
@@ -151,13 +153,12 @@ function faqSection(faqs) {
    JSON-LD-Builder (spiegelt src/lib/schemaHelpers.ts)
    ───────────────────────────────────────────────────────────── */
 
-const AGGREGATE_RATING = {
-  "@type": "AggregateRating",
-  ratingValue: "5.0",
-  bestRating: "5",
-  worstRating: "1",
-  reviewCount: "30",
-};
+/* Bewusst KEIN AggregateRating/Review-Markup: Bewertungen, die das Unternehmen
+   selbst auf der eigenen Seite einbindet (bzw. von Google/ProvenExpert
+   übernimmt), sind laut Google-Richtlinien für Review-Snippets nicht
+   zulässig ("self-serving reviews"). Die echten Werte (Stand 22.09.2026:
+   Google 4,8★ bei 16 Rezensionen, ProvenExpert 4,97/5 bei 7) stehen nur im
+   sichtbaren Text. */
 
 function personSchema() {
   return {
@@ -196,6 +197,8 @@ function personSchema() {
     ],
     address: {
       "@type": "PostalAddress",
+      streetAddress: "Reichsstiftstraße 18",
+      postalCode: "93055",
       addressLocality: "Regensburg",
       addressRegion: "Bayern",
       addressCountry: "DE",
@@ -225,6 +228,8 @@ function localBusinessSchema(areaServed) {
     priceRange: "€€-€€€",
     address: {
       "@type": "PostalAddress",
+      streetAddress: "Reichsstiftstraße 18",
+      postalCode: "93055",
       addressLocality: "Regensburg",
       addressRegion: "Bayern",
       addressCountry: "DE",
@@ -233,7 +238,6 @@ function localBusinessSchema(areaServed) {
       "@type": "AdministrativeArea",
       name,
     })),
-    aggregateRating: AGGREGATE_RATING,
   };
 }
 
@@ -250,10 +254,7 @@ function webSiteSchema() {
 }
 
 function serviceSchema({ name, description, url, serviceType, areaServed }) {
-  // KEIN aggregateRating hier! Es lebt ausschließlich auf LocalBusiness.
-  // Damit hat jede Seite genau EINE AggregateRating-Node — sonst meldet GSC
-  // "Review hat mehrere zusammengefasste Bewertungen" (das JSON-LD steht jetzt
-  // persistent im <head> und wird auch von Googlebot gesehen).
+  // Kein Rating-/Review-Markup (siehe Hinweis oben bei personSchema).
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -336,6 +337,7 @@ const FORMAT_LINKS = [
 const OCCASION_LINKS = [
   ["/hochzeit", "Hochzeit"],
   ["/firmenfeiern", "Firmenfeier"],
+  ["/zauberer-weihnachtsfeier", "Weihnachtsfeier"],
   ["/geburtstage", "Geburtstag & Jubiläum"],
 ];
 const TRUST_LINKS = [
@@ -346,7 +348,7 @@ const TRUST_LINKS = [
 ];
 
 const BIO_TEXT =
-  "Emilian Leber ist seit 2016 als Zauberkünstler und Mentalist aus Regensburg deutschlandweit im Einsatz — über zweihundert Events, Finalist bei Greatest Talent und Talents of Magic, 5,0 Sterne bei mehr als 30 Bewertungen auf ProvenExpert. Ob Bühnenshow, Close-Up am Tisch oder Magic Dinner im Restaurant: jedes Format wird auf den Anlass und die Gäste abgestimmt.";
+  "Emilian Leber ist seit 2016 als Zauberkünstler und Mentalist aus Regensburg in ganz Bayern im Einsatz — über zweihundert Events, Finalist bei Greatest Talent und Talents of Magic, 4,8 Sterne bei 16 Google-Rezensionen und 4,97 von 5 auf ProvenExpert. Ob Bühnenshow, Close-Up am Tisch oder Magic Dinner im Restaurant: jedes Format wird auf den Anlass und die Gäste abgestimmt.";
 const bioSection = () => h2("Über Emilian Leber") + p(BIO_TEXT);
 
 const GENERIC_FAQ = [
@@ -360,7 +362,7 @@ const GENERIC_FAQ = [
   },
   {
     q: "In welchem Umkreis bist du buchbar?",
-    a: "Ich komme aus Regensburg in Bayern und bin deutschlandweit buchbar — von München und Nürnberg bis Berlin, Hamburg, Köln und Frankfurt. Anfahrt und Übernachtung werden im Angebot transparent ausgewiesen.",
+    a: "Ich komme aus Regensburg und bin in ganz Bayern buchbar — von Regensburg selbst über Landshut, Ingolstadt und Nürnberg bis München und Würzburg. Die Anfahrt wird nach Entfernung berechnet und im Angebot transparent ausgewiesen, eine eventuelle Übernachtung ebenso.",
   },
 ];
 
@@ -369,6 +371,52 @@ const GENERIC_FAQ = [
    ───────────────────────────────────────────────────────────── */
 
 const STATIC_CONTENT = {
+  "/zauberer-weihnachtsfeier": {
+    h1: "Zauberer für eure Weihnachtsfeier",
+    lead: "Der Abend, der das Jahr im Team rund ausklingen lässt: Close-Up beim Glühwein-Empfang, Magie zwischen den Gängen und eine Comedy-Show als Höhepunkt. Zauberer aus Regensburg für Weihnachtsfeiern in ganz Bayern — Pakete ab 395 €.",
+    sections: [
+      {
+        h2: "So läuft die Weihnachtsfeier mit Zauberer ab",
+        bullets: [
+          "Empfang: Walk-Around-Magie von Gruppe zu Gruppe — der Eisbrecher zwischen Abteilungen",
+          "Dinner: Close-Up von Tisch zu Tisch zwischen den Gängen, ohne den Service zu stören",
+          "Höhepunkt: 20–30 Minuten Comedy- und Mentalmagie-Show für alle gleichzeitig",
+        ],
+      },
+      {
+        h2: "Welches Format passt?",
+        body: "Beim Team-Essen mit 20 bis 50 Kollegen passt Close-Up am Tisch. Ab etwa 50 Gästen lohnt sich die Kombination aus Empfang und Bühnenshow. Für Restaurant-Feiern gibt es das Magic Dinner, durchkomponiert über das ganze Weihnachtsmenü.",
+      },
+      {
+        h2: "Rechtzeitig buchen",
+        body: "Für Weihnachtsfeiern am besten 8–12 Wochen Vorlauf einplanen — die Freitage und Samstage im Dezember sind zuerst vergeben. Anfrage mit Datum, Ort und Gästezahl genügt, das Angebot kommt innerhalb von 24 Stunden.",
+      },
+      {
+        h2: "Einsatzgebiet: Regensburg und ganz Bayern",
+        body: "Zuhause in Regensburg, unterwegs für Weihnachtsfeiern in München, Nürnberg, Ingolstadt, Landshut, Straubing, Passau, Deggendorf, Amberg, Weiden, Augsburg, Erlangen, Freising und Bamberg. Die Anfahrt steht transparent im Angebot.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Was kostet ein Zauberer für die Weihnachtsfeier?",
+        a: "Pakete starten ab 395 €. Der genaue Preis hängt von Format, Dauer und Anfahrt ab. Nach einer kurzen Anfrage kommt innerhalb von 24 Stunden ein verbindliches Angebot ohne versteckte Kosten.",
+      },
+      {
+        q: "Wie früh sollten wir für die Weihnachtsfeier buchen?",
+        a: "Am besten 8–12 Wochen vorher. Die Freitage und Samstage im Dezember sind zuerst vergeben; kurzfristige Anfragen klappen trotzdem oft, wenn der Termin frei ist.",
+      },
+      {
+        q: "Kommt der Zauberer auch außerhalb von Regensburg?",
+        a: "Ja — in ganz Bayern, zum Beispiel München, Nürnberg, Ingolstadt, Landshut, Passau, Straubing, Amberg und Weiden. Die Anfahrt steht transparent im Angebot.",
+      },
+    ],
+    schema: {
+      service: {
+        name: "Zauberer für Weihnachtsfeiern",
+        serviceType: "Event-Entertainment",
+      },
+    },
+  },
   "/geburtstage": {
     h1: "Zauberer für Geburtstag & Jubiläum",
     lead: "Ein runder Geburtstag oder ein Jubiläum lebt von Momenten, über die am nächsten Tag noch geredet wird. Als Zauberkünstler aus Bayern bringe ich Close-Up-Magie an die Tische und eine Comedy-Bühnenshow zwischen die Reden — abgestimmt auf eure Familie und euren Anlass.",
@@ -475,7 +523,7 @@ const STATIC_CONTENT = {
   },
   "/referenzen": {
     h1: "Referenzen & Kundenstimmen",
-    lead: "Vom Vorstandsdinner über den Galaabend bis zur Hochzeit: eine Auswahl der Unternehmen, Veranstalter und Locations aus über zweihundert Engagements — mit 5,0 Sternen bei mehr als 30 Bewertungen.",
+    lead: "Vom Vorstandsdinner über den Galaabend bis zur Hochzeit: eine Auswahl der Unternehmen, Veranstalter und Locations aus über zweihundert Engagements — mit 4,8 Sternen bei 16 Google-Rezensionen.",
     sections: [
       {
         h2: "Wer mich gebucht hat",
@@ -483,7 +531,7 @@ const STATIC_CONTENT = {
       },
       {
         h2: "Echte Bewertungen",
-        body: "Auf ProvenExpert sammeln sich über 30 verifizierte Bewertungen mit einem Schnitt von 5,0 Sternen. Die Reviews stammen von Brautpaaren, Eventverantwortlichen und Gastgebern privater Feiern.",
+        body: "Auf Google stehen 4,8 Sterne bei 16 Rezensionen, auf ProvenExpert 4,97 von 5 bei 7 Bewertungen. Die Rezensionen stammen unter anderem von Hochzeitsplanerinnen, einer Eventagentur und Gastgebern privater Feiern.",
       },
     ],
     faqs: GENERIC_FAQ,
@@ -574,7 +622,7 @@ const STATIC_CONTENT = {
           "Aktiv seit 2016, über zweihundert Events deutschlandweit",
           "Auszeichnungen: Greatest Talent (Finalist), Talents of Magic (Finalist + Kreativpreis), TV-Auftritt im TVA",
           "Formate: Bühnenshow, Close-Up, Magic Dinner, Comedy-Zauberei, Moderation",
-          "Bewertung: 5,0 Sterne bei mehr als 30 Bewertungen auf ProvenExpert",
+          "Bewertung: 4,8 Sterne bei 16 Google-Rezensionen und 4,97 von 5 auf ProvenExpert",
         ],
       },
       {
@@ -686,7 +734,7 @@ function renderHome() {
   const { html: faqHtml, schema: faqSchema } = faqSection(faqs);
   const inner = [
     `<h1 style="${S.h1}">Zauberer für Hochzeit, Firmenfeier & Magic Dinner — Emilian Leber</h1>`,
-    `<p style="${S.lead}">Emilian Leber ist Zauberkünstler und Mentalist aus Regensburg. Seit 2016 bundesweit auf der Bühne, am Tisch und im Restaurant — über zweihundert Events, 5,0 Sterne bei mehr als 30 Bewertungen.</p>`,
+    `<p style="${S.lead}">Emilian Leber ist Zauberkünstler und Mentalist aus Regensburg. Seit 2016 bundesweit auf der Bühne, am Tisch und im Restaurant — über zweihundert Events, 4,8 Sterne bei 16 Google-Rezensionen.</p>`,
     h2("Drei Formate, ein Künstler"),
     `<p style="${S.p}">Magie, die sich in euren Abend einfügt: eine ${ilink(
       "/buehnenshow",
@@ -830,7 +878,7 @@ function renderServiceCity(format, city, urlPath) {
         serviceType: format.name,
         areaServed: [city.name, city.region],
       }),
-      localBusinessSchema([city.name, city.region, "Bayern", "Deutschland"]),
+      localBusinessSchema([city.name, "Bayern"]),
       faqSchema,
       breadcrumbSchema([
         { name: "Start", url: SITE_URL + "/" },
@@ -841,8 +889,11 @@ function renderServiceCity(format, city, urlPath) {
   });
 }
 
-function renderCity(city) {
+function renderCity(city, serviceCitySlugs = []) {
   const url = `${SITE_URL}/zauberer/${city.slug}`;
+  // Format×Stadt-Seiten gibt es nur fuer SERVICE_STADT_SLUGS — sonst auf die
+  // allgemeinen Format-/Anlass-Seiten verlinken (keine Links auf Redirects).
+  const hasServicePages = serviceCitySlugs.includes(city.slug);
   const faqs = city.faq && city.faq.length ? city.faq : GENERIC_FAQ;
   const { html: faqHtml, schema: faqSchema } = faqSection(faqs);
 
@@ -852,30 +903,48 @@ function renderCity(city) {
   ];
   if (city.highlight) parts.push(p(city.highlight));
   parts.push(h2(`Formate für dein Event in ${city.name}`));
+  const L = hasServicePages
+    ? {
+        dinner: `/magic-dinner-${city.slug}`,
+        show: `/zaubershow-${city.slug}`,
+        closeup: `/zauberer-close-up/${city.slug}`,
+        hochzeit: `/zauberer-hochzeit/${city.slug}`,
+        firma: `/zauberer-firmenfeier/${city.slug}`,
+      }
+    : {
+        dinner: "/magic-dinner",
+        show: "/buehnenshow",
+        closeup: "/close-up",
+        hochzeit: "/hochzeit",
+        firma: "/firmenfeiern",
+      };
   parts.push(
-    `<p style="${S.p}">Drei Wege, deinen Abend in ${esc(
-      city.name
-    )} unvergesslich zu machen: ${ilink(
-      `/magic-dinner-${city.slug}`,
-      `Magic Dinner in ${city.name}`
-    )}, eine ${ilink(
-      `/zaubershow-${city.slug}`,
-      `Zaubershow in ${city.name}`
-    )} oder ${ilink(
-      `/zauberer-close-up/${city.slug}`,
+    `<p style="${S.p}">Drei Formate, einzeln oder kombiniert: ${ilink(
+      L.closeup,
       "Close-Up am Tisch"
-    )}. Für Anlässe: ${ilink(
-      `/zauberer-hochzeit/${city.slug}`,
-      "Hochzeitszauberer"
-    )} und ${ilink(
-      `/zauberer-firmenfeier/${city.slug}`,
-      "Firmenfeier-Zauberer"
-    )}.</p>`
+    )} (Pakete ab 395 €), eine ${ilink(L.show, "Bühnenshow")} von 15 bis 60 Minuten oder ein ${ilink(
+      L.dinner,
+      "Magic Dinner"
+    )} mit Magie zwischen den Gängen. Mehr zu den Anlässen: ${ilink(
+      L.hochzeit,
+      "Zauberer für die Hochzeit"
+    )} und ${ilink(L.firma, "Zauberer für die Firmenfeier")}.</p>`
   );
   if (city.seoText) parts.push(p(city.seoText));
-  if (city.langText) parts.push(p(city.langText));
+  if (city.langText) {
+    parts.push(h2(`${city.name}: Anlässe, Formate und Kosten`));
+    city.langText
+      .split("\n\n")
+      .filter(Boolean)
+      .forEach((para) => parts.push(p(para)));
+  }
   if (city.bekannteLocations && city.bekannteLocations.length) {
-    parts.push(h3(`Beliebte Event-Locations in ${city.name}`));
+    parts.push(h3(`Bekannte Veranstaltungsorte in ${city.name}`));
+    parts.push(
+      p(
+        `Zur Orientierung — ich komme zu jeder Location in ${city.name} und Umgebung.`
+      )
+    );
     parts.push(ul(city.bekannteLocations));
   }
   parts.push(faqHtml);
@@ -887,7 +956,7 @@ function renderCity(city) {
   return assemble({
     inner: parts.join(""),
     schemas: [
-      localBusinessSchema([city.name, city.region, "Bayern", "Deutschland"]),
+      localBusinessSchema([city.name, "Bayern"]),
       serviceSchema({
         name: `Zauberer in ${city.name}`,
         description: city.intro,
@@ -972,6 +1041,7 @@ function renderBlog(post) {
     `<p style="${S.lead}">${esc(post.excerpt)}</p>`,
     renderBlogSections(post.sections),
     internalLinksBlock([
+      ...(post.relatedPages || []).map((r) => [r.href, r.title]),
       ["/blog", "Mehr im Magazin"],
       ...FORMAT_LINKS,
       ...OCCASION_LINKS,
@@ -1003,13 +1073,12 @@ function renderStatic(path, route) {
   // Fallback für nicht gepflegte statische Routen: Titel/Description nutzen.
   if (!c) {
     const cleanTitle = (route.ogTitle || route.title || "Emilian Leber")
-      .replace(/^★\s*/, "")
-      .replace(/\s*·\s*5,0\/5$/, "");
+      .replace(/^★\s*/, "");
     const inner = [
       `<h1 style="${S.h1}">${esc(cleanTitle)}</h1>`,
       `<p style="${S.lead}">${esc(route.description || "")}</p>`,
       h2("Mehr von Emilian Leber"),
-      `<p style="${S.p}">Zauberkünstler und Mentalist aus Regensburg — Bühnenshow, Close-Up und Magic Dinner für Hochzeiten, Firmenfeiern und Events. Über 200 Events seit 2016, 5,0 Sterne bei mehr als 30 Bewertungen.</p>`,
+      `<p style="${S.p}">Zauberkünstler und Mentalist aus Regensburg — Bühnenshow, Close-Up und Magic Dinner für Hochzeiten, Firmenfeiern und Events. Über 200 Events seit 2016, 4,8 Sterne bei 16 Google-Rezensionen.</p>`,
       internalLinksBlock([...FORMAT_LINKS, ...OCCASION_LINKS, ...TRUST_LINKS]),
       externalLinksBlock(),
     ].join("");
@@ -1087,7 +1156,7 @@ export async function createRenderer() {
           }
           case "city": {
             const city = data.citiesBySlug[descriptor.citySlug];
-            return city ? renderCity(city) : EMPTY;
+            return city ? renderCity(city, data.serviceCitySlugs || []) : EMPTY;
           }
           case "serviceCity": {
             const format = data.formatsBySlug[descriptor.formatSlug];

@@ -8,7 +8,7 @@ import {
   INK, WHITE, COBALT, L_LINE, L_DIM, D_DIM,
   PHONE_HREF, PHONE_DISPLAY, EMAIL_HREF, ANFRAGE_HREF, KONZEPTE, ANLAESSE_NAV, cta, panel,
 } from "./theme";
-import logo from "@/assets/logo-clean.webp";
+import logo from "@/assets/logo-clean-128.webp";
 
 const NAV_FLAT = [
   { t: "Referenzen", h: "/referenzen" },

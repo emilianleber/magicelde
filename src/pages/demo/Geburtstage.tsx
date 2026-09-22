@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, WarumCarousel, InteractiveTabs, FormatCards } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Hand, Wand2, UtensilsCrossed, Heart, Smile } from "lucide-react";
 import heroImg from "@/assets/hero-birthday.jpg";
 import splitImg from "@/assets/emotionen.jpg";
@@ -25,7 +25,7 @@ export default function DemoGeburtstage() {
         sub="Die Show, über die man noch redet — comedy-lastig, herzlich und mit persönlichen Insidern zum Jubilar. Vom runden 50er bis zur großen Familienfeier."
         image={heroImg}
         imageAlt="Zauberer bei einer Geburtstagsfeier"
-        badge="Selbst die Skeptiker am Tisch sind am Ende am stärksten geflasht."
+        badge="Close-Up am Tisch oder Bühnenshow — passend zu eurer Feier."
       />
 
       <SplitFeature
@@ -47,7 +47,7 @@ export default function DemoGeburtstage() {
           { kind: "stat", v: "80+", l: "Geburtstage & Jubiläen", text: "Vom runden 50er bis zur großen Familienfeier — Routine für jeden Anlass." },
           { kind: "feature", Icon: Heart, title: "Persönliche Insider", text: "Ich arbeite kleine Geschichten zum Jubilar in die Show ein — Magie, die berührt." },
           { kind: "photo", image: carB, chip: "Comedy & Herz", title: "Staunen und lachen", text: "Comedy-lastig und herzlich — der ganze Tisch geht mit, im Wechsel aus Lachen und Gänsehaut.", pos: "center" },
-          { kind: "review", text: "Du warst der absolute Höhepunkt unserer Feier — sogar meine Mutter war komplett geflasht.", name: "Martina Senftl · Geburtstagsfeier" },
+          { kind: "review", review: REAL_REVIEWS.christina },
           { kind: "feature", Icon: Smile, title: "Jeder ist dabei", text: "Ich binde alle ein, auch die Schüchternen — niemand wird vorgeführt, alle haben Spaß." },
         ]}
       />
@@ -74,11 +74,7 @@ export default function DemoGeburtstage() {
         ]}
       />
 
-      <PullQuote
-        text="Du warst der absolute Höhepunkt unserer Feier. Was ich nicht erwartet hätte: dass ausgerechnet die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter."
-        name="Martina Senftl"
-        role="Geburtstagsfeier · Bayern"
-      />
+      <PullQuote review={REAL_REVIEWS.pruitti} />
 
       <ReviewsBlock paper={false} />
 

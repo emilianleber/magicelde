@@ -63,7 +63,7 @@ export const RatingBadges = ({ className = "", dark = false }: { className?: str
           ))}
         </div>
         <span className={`font-display text-sm font-bold ${dark ? "text-white" : "text-foreground"}`}>
-          5.0
+          4,8
         </span>
       </div>
     </div>
@@ -81,7 +81,7 @@ export const RatingBadges = ({ className = "", dark = false }: { className?: str
           ))}
         </div>
         <span className={`font-display text-sm font-bold ${dark ? "text-white" : "text-foreground"}`}>
-          5.0
+          4,97
         </span>
       </div>
       <span className={`text-[10px] hidden sm:inline ${dark ? "text-white/60" : "text-muted-foreground"}`}>

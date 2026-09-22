@@ -6,6 +6,9 @@ import { INK, WHITE, SANS, SITE_URL, VoltageGlobalStyle } from "./theme";
 import VoltageHeader from "./VoltageHeader";
 import VoltageFooter from "./VoltageFooter";
 import Chatbot from "@/components/landing/Chatbot";
+import SEO_META from "@/data/seoMeta.json";
+
+type SeoPages = Record<string, { title: string; description: string } | undefined>;
 
 interface Props {
   title: string;
@@ -15,7 +18,12 @@ interface Props {
   noindex?: boolean;      // Prototyp: default noindex
 }
 
-export default function VoltageShell({ title, description, path = "/demo", children, noindex = true }: Props) {
+export default function VoltageShell({ title: titleProp, description: descriptionProp, path = "/demo", children, noindex = true }: Props) {
+  // Single Source: Titel/Beschreibung aus seoMeta.json — dieselben Texte
+  // schreibt scripts/inject-meta.mjs ins vorgerenderte HTML.
+  const meta = (SEO_META.pages as SeoPages)[path];
+  const title = meta?.title ?? titleProp;
+  const description = meta?.description ?? descriptionProp;
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const lenis = new Lenis({

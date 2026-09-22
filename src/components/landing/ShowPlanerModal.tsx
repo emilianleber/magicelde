@@ -61,13 +61,13 @@ import {
 } from "@/lib/showPlanerPricing";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import { sendInquiry } from "@/lib/sendInquiry";
-import staunenImg from "@/assets/staunen.jpg";
-import weddingImg from "@/assets/wedding-magic.jpg";
-import magicdinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
-import heroBirthdayImg from "@/assets/hero-birthday.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
-import heroDinnerImg from "@/assets/hero-dinner.jpg";
-import heroCloseupImg from "@/assets/hero-closeup.jpg";
+import staunenImg from "@/assets/staunen-1200.webp";
+import weddingImg from "@/assets/wedding-magic-1200.webp";
+import magicdinnerBuehneImg from "@/assets/magicdinner-buehne-1200.webp";
+import heroBirthdayImg from "@/assets/hero-birthday-1200.webp";
+import audienceImg from "@/assets/audience-reactions-1200.webp";
+import heroDinnerImg from "@/assets/hero-dinner-1200.webp";
+import heroCloseupImg from "@/assets/hero-closeup-1200.webp";
 
 const ACCENT = "#1D3FFF";
 const ACCENT_DEEP = "#1233CC";

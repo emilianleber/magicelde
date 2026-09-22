@@ -19,21 +19,22 @@ import { TVA_VIDEO_ID } from "@/lib/videos";
 import VoltageHeader from "@/components/voltage/VoltageHeader";
 import VoltageFooter from "@/components/voltage/VoltageFooter";
 import Chatbot from "@/components/landing/Chatbot";
+import { REAL_REVIEWS, RATING, RATING_COUNT } from "@/components/voltage/theme";
 
-import siteLogo from "@/assets/logo-clean.webp";
-import portraitImg from "@/assets/magician-portrait.jpg";
-import stageImg from "@/assets/staunen.jpg";
-import closeupImg from "@/assets/hero-closeup.jpg";
-import dinnerImg from "@/assets/emilian-magic-dinner.jpg";
-import dinnerBookImg from "@/assets/hero-stage.jpg";
-import weddingImg from "@/assets/wedding-magic.jpg";
-import audienceImg from "@/assets/audience-reactions.jpg";
-import magicdinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
-import greatestTalentImg from "@/assets/moderator-hero.jpg";
-import birthdayImg from "@/assets/hero-birthday.jpg";
-import schneiderImg from "@/assets/schneider-weisse-closeup.jpg";
-import haendeImg from "@/assets/haende-interaktion.jpg";
-import heroDinnerImg from "@/assets/hero-dinner.jpg";
+import siteLogo from "@/assets/logo-clean-128.webp";
+import portraitImg from "@/assets/magician-portrait-1200.webp";
+import stageImg from "@/assets/staunen-1200.webp";
+import closeupImg from "@/assets/hero-closeup-1200.webp";
+import dinnerImg from "@/assets/emilian-magic-dinner-1200.webp";
+import dinnerBookImg from "@/assets/hero-stage-1200.webp";
+import weddingImg from "@/assets/wedding-magic-1200.webp";
+import audienceImg from "@/assets/audience-reactions-1200.webp";
+import magicdinnerBuehneImg from "@/assets/magicdinner-buehne-1200.webp";
+import greatestTalentImg from "@/assets/moderator-hero-1200.webp";
+import birthdayImg from "@/assets/hero-birthday-1200.webp";
+import schneiderImg from "@/assets/schneider-weisse-closeup-1200.webp";
+import haendeImg from "@/assets/haende-interaktion-1200.webp";
+import heroDinnerImg from "@/assets/hero-dinner-1200.webp";
 
 const INK = "#0A0B0F", PAPER = "#F4F6F9", WHITE = "#FFFFFF";
 const COBALT = "#1D3FFF", MAGENTA = "#FF2D7A", GSTAR = "#FBBC04";
@@ -48,7 +49,7 @@ const GRUENDE = [
   { Icon: Smile, t: "Staunen UND lachen", d: "Comedy ist kein Beiwerk — Magie und Humor gehören bei mir untrennbar zusammen." },
   { Icon: Wand2, t: "Maßgeschneidert", d: "Programm, Tonalität und Ablauf passen sich eurem Anlass an — nicht umgekehrt." },
   { Icon: Award, t: "200+ Events Routine", d: "Seit 2016 auf Bühnen — von der Hochzeit bis zum Vorstands-Dinner. Kein Risiko." },
-  { Icon: Star, t: "5,0★ top bewertet", d: "30+ Google-Bewertungen. Was Gäste erleben, lest ihr in den Stimmen." },
+  { Icon: Star, t: "4,8★ bei Google", d: "16 Google-Rezensionen. Was Gäste erleben, lest ihr in den Stimmen." },
   { Icon: Clock, t: "Antwort in 24 Stunden", d: "Unkomplizierte Buchung, verbindliche Zusagen, null Stress in der Planung." },
   { Icon: Layers, t: "Für jeden Rahmen", d: "Close-Up, Bühne oder Magic Dinner — einzeln oder kombiniert, passend zur Location." },
 ];
@@ -73,20 +74,14 @@ const ANLAESSE = [
   { t: "Geburtstag", d: "Die Show, über die man redet.", img: birthdayImg, cls: "md:col-span-1", big: false, href: "/geburtstage" },
   { t: "Gala & Award", d: "Unterhaltung zwischen den Programmpunkten.", img: greatestTalentImg, cls: "md:col-span-1", big: false, href: "/buehnenshow" },
   { t: "Messe & Promotion", d: "Magie, die Menschen an den Stand zieht.", img: haendeImg, cls: "md:col-span-2", big: false, href: "/messe-magier" },
-  { t: "Weihnachtsfeier", d: "Der Abend, der das Jahr im Team rund ausklingen lässt.", img: heroDinnerImg, cls: "md:col-span-2", big: false, href: "/firmenfeiern" },
+  { t: "Weihnachtsfeier", d: "Der Abend, der das Jahr im Team rund ausklingen lässt.", img: heroDinnerImg, cls: "md:col-span-2", big: false, href: "/zauberer-weihnachtsfeier" },
 ];
 const STATS = [
-  { v: "200+", l: "Events seit 2016" }, { v: "5,0★", l: "30+ Google-Bewertungen" },
+  { v: "200+", l: "Events seit 2016" }, { v: "4,8★", l: "16 Google-Rezensionen" },
   { v: "100+", l: "Hochzeiten begleitet" }, { v: "TV", l: "TVA-Auftritt 2025" },
 ];
-const REVIEWS = [
-  { name: "Laura M.", init: "L", when: "vor 2 Wochen", text: "Emilian war das Highlight unserer Hochzeit. Die Gäste reden heute noch davon — und gelacht haben wirklich alle." },
-  { name: "Stefan K.", init: "S", when: "vor 1 Monat", text: "Perfekt getimt zwischen den Gängen bei unserem Firmenabend. Absolut professionell, super sympathisch." },
-  { name: "Eventagentur HOBA", init: "H", when: "vor 1 Monat", text: "Zuverlässig, flexibel, und das Publikum ist jedes Mal begeistert. Klare Empfehlung." },
-  { name: "Julia & Tom", init: "J", when: "vor 2 Monaten", text: "Close-Up direkt am Tisch — unsere Gäste waren sprachlos und kurz darauf am Lachen. Magisch." },
-  { name: "Markus R.", init: "M", when: "vor 3 Monaten", text: "Buchung unkompliziert, Show erstklassig. Genau die Mischung aus Staunen und Humor." },
-  { name: "Sandra P.", init: "S", when: "vor 4 Monaten", text: "Hat unseren 50. Geburtstag unvergesslich gemacht. Jeder im Raum war eingebunden — großartig." },
-];
+// Nur echte, wörtliche Google-Rezensionen (Quelle: REAL_REVIEWS in voltage/theme).
+const REVIEWS = [REAL_REVIEWS.rass, REAL_REVIEWS.lehmann, REAL_REVIEWS.senftl, REAL_REVIEWS.poellinger, REAL_REVIEWS.schuermann, REAL_REVIEWS.pruitti];
 const ABLAUF = [
   { Icon: Mail, t: "Anfrage", d: "Ihr schreibt mir kurz Datum, Ort und Anlass — per Formular, Mail oder WhatsApp." },
   { Icon: Phone, t: "Kennenlernen", d: "In einem kurzen Gespräch klären wir, was zu eurem Abend passt: Format, Tonalität, Ablauf." },
@@ -170,7 +165,7 @@ const StartDemo = () => {
       <Helmet>
         <html lang="de" />
         <title>Emilian Leber — Comedy-Zauberer aus Regensburg | Bühnenshow, Close-Up & Magic Dinner</title>
-        <meta name="description" content="Comedy-Zauberer Emilian Leber aus Regensburg — Bühnenshow, Close-Up und Magic Dinner für Hochzeiten, Firmenfeiern und Events. Deutschlandweit, 200+ Events, 5,0★." />
+        <meta name="description" content="Comedy-Zauberer Emilian Leber aus Regensburg — Bühnenshow, Close-Up und Magic Dinner für Hochzeiten, Firmenfeiern und Events. Deutschlandweit, 200+ Events, 4,8★ bei Google." />
         <meta name="robots" content="index,follow,max-image-preview:large" />
         <link rel="canonical" href="https://www.magicel.de/" />
         <meta property="og:type" content="website" />
@@ -222,7 +217,7 @@ const StartDemo = () => {
               <a href="#show" className={ghost} style={{ border: `1px solid ${L_LINE}`, color: INK }}><Play className="w-4 h-4" /> Show ansehen</a>
             </motion.div>
             <motion.div variants={up} className="mt-9 inline-flex items-center gap-3 text-[13px]" style={{ color: L_DIM }}>
-              <Stars s={15} /> <span style={{ color: INK, fontWeight: 600 }}>5,0</span> · 30+ Google-Bewertungen <GoogleG s={15} />
+              <Stars s={15} /> <span style={{ color: INK, fontWeight: 600 }}>4,8</span> · 16 Google-Rezensionen <GoogleG s={15} />
             </motion.div>
           </div>
           {/* Foto-Komposition (warm, menschlich) */}
@@ -232,9 +227,9 @@ const StartDemo = () => {
             </div>
             {/* Review-Karte — dezentes Glas, unten links (nicht übers Gesicht) */}
             <div className="hidden sm:block absolute -left-5 bottom-8 w-[262px] rounded-[22px] p-5" style={glass}>
-              <div className="flex items-center gap-2 mb-2.5"><GoogleG s={18} /><Stars s={13} /></div>
-              <p className="text-[13.5px] leading-snug" style={{ color: INK }}>„Das Highlight unserer Hochzeit — alle haben gestaunt und gelacht."</p>
-              <p className="text-[11.5px] mt-2" style={{ color: L_DIM }}>Laura M. · Brautpaar</p>
+              <div className="flex items-center gap-2 mb-2.5"><GoogleG s={18} /></div>
+              <p className="text-[13.5px] leading-snug" style={{ color: INK }}>„{REAL_REVIEWS.roehrl.short}"</p>
+              <p className="text-[11.5px] mt-2" style={{ color: L_DIM }}>{REAL_REVIEWS.roehrl.name} · {REAL_REVIEWS.roehrl.role}</p>
             </div>
           </motion.div>
         </motion.div>
@@ -372,17 +367,17 @@ const StartDemo = () => {
             {/* 4 — Grafik: Bewertung — Glas-Rezension über Glow */}
             <div className={cardSize} style={{ background: cardLight }}>
               <div aria-hidden className="absolute -bottom-24 -left-16 w-[520px] h-[520px] rounded-full" style={{ background: `radial-gradient(circle, ${COBALT}1a, transparent 62%)` }} />
-              <span aria-hidden className="absolute font-extrabold select-none" style={{ top: 24, right: 36, fontSize: "6rem", lineHeight: 0.8, color: "rgba(29,63,255,0.10)" }}>5,0</span>
+              <span aria-hidden className="absolute font-extrabold select-none" style={{ top: 24, right: 36, fontSize: "6rem", lineHeight: 0.8, color: "rgba(29,63,255,0.10)" }}>{RATING}</span>
               <div className="absolute left-7 right-7" style={{ top: 150 }}>
                 <div className="rounded-[24px] p-6" style={{ ...glass, color: INK }}>
-                  <div className="flex items-center gap-2 mb-3"><GoogleG s={22} /><Stars s={16} /></div>
-                  <p className="text-[16px] leading-snug">„Das Highlight unserer Hochzeit — alle haben gestaunt und gelacht."</p>
-                  <p className="text-[12.5px] mt-3" style={{ color: L_DIM }}>Laura M. · Brautpaar · vor 2 Wochen</p>
+                  <div className="flex items-center gap-2 mb-3"><GoogleG s={22} /></div>
+                  <p className="text-[16px] leading-snug">„{REAL_REVIEWS.christina.short}"</p>
+                  <p className="text-[12.5px] mt-3" style={{ color: L_DIM }}>{REAL_REVIEWS.christina.name} · {REAL_REVIEWS.christina.role}</p>
                 </div>
               </div>
               <div className="absolute inset-x-0 bottom-0 p-8 lg:p-10">
-                <h3 className={cardH3} style={{ fontSize: "clamp(1.75rem,2.4vw,2.4rem)", lineHeight: 1.06, color: INK }}>5,0★ top bewertet</h3>
-                <p className={cardP} style={{ color: L_DIM }}>30+ Google-Bewertungen. Was Gäste erleben, lest ihr selbst.</p>
+                <h3 className={cardH3} style={{ fontSize: "clamp(1.75rem,2.4vw,2.4rem)", lineHeight: 1.06, color: INK }}>4,8★ bei Google</h3>
+                <p className={cardP} style={{ color: L_DIM }}>16 Google-Rezensionen. Was Gäste erleben, lest ihr selbst.</p>
               </div>
             </div>
             {/* 5 — Grafik: Antwort 24h — gestapelte Glas-Notifications + App-Icon */}
@@ -452,8 +447,8 @@ const StartDemo = () => {
             <div className="flex items-center gap-4">
               <GoogleG s={42} />
               <div>
-                <div className="flex items-center gap-2"><span className="text-3xl font-extrabold" style={{ color: INK }}>5,0</span><Stars s={18} /></div>
-                <p className="text-[13.5px] mt-1" style={{ color: L_DIM }}>basierend auf <strong style={{ color: INK }}>30+</strong> Google-Rezensionen</p>
+                <div className="flex items-center gap-2"><span className="text-3xl font-extrabold" style={{ color: INK }}>{RATING}</span><Stars s={18} /></div>
+                <p className="text-[13.5px] mt-1" style={{ color: L_DIM }}>basierend auf <strong style={{ color: INK }}>{RATING_COUNT}</strong> Google-Rezensionen</p>
               </div>
             </div>
             <a href="#" className="inline-flex items-center gap-2 text-[13.5px] font-semibold pv-link self-start md:self-auto" style={{ color: INK }}>Alle Rezensionen <ArrowUpRight className="w-4 h-4" style={{ color: COBALT }} /></a>
@@ -462,16 +457,15 @@ const StartDemo = () => {
             {REVIEWS.map((r) => (
               <motion.div key={r.name} variants={up} className="rounded-[18px] p-6" style={{ background: WHITE, border: `1px solid ${L_LINE}` }}>
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="w-10 h-10 rounded-full flex items-center justify-center text-[15px] font-bold" style={{ background: COBALT, color: WHITE }}>{r.init}</span>
-                  <div className="flex-1 min-w-0"><p className="text-[14px] font-semibold leading-tight truncate" style={{ color: INK }}>{r.name}</p><p className="text-[11.5px]" style={{ color: L_DIM }}>{r.when}</p></div>
+                  <span className="w-10 h-10 rounded-full flex items-center justify-center text-[15px] font-bold" style={{ background: COBALT, color: WHITE }}>{r.name[0]}</span>
+                  <div className="flex-1 min-w-0"><p className="text-[14px] font-semibold leading-tight truncate" style={{ color: INK }}>{r.name}</p><p className="text-[11.5px]" style={{ color: L_DIM }}>{r.role}</p></div>
                   <GoogleG s={18} />
                 </div>
-                <Stars s={14} />
-                <p className="text-[14.5px] leading-[1.55] mt-3" style={{ color: "#3a3833" }}>{r.text}</p>
+                <p className="text-[14.5px] leading-[1.55] mt-1" style={{ color: "#3a3833" }}>„{r.text}"</p>
               </motion.div>
             ))}
           </div>
-          <p className="text-[11px] mt-6" style={{ color: L_DIM }}>* Beispiel-Rezensionen für diesen Demo-Entwurf.</p>
+          <p className="text-[11px] mt-6" style={{ color: L_DIM }}>Wörtliche Auszüge aus Google-Rezensionen; Kürzungen mit „…" markiert.</p>
         </div>
       </motion.section>
 
@@ -529,9 +523,8 @@ const StartDemo = () => {
       {/* ══ PULL-QUOTE (ruhig) ══ */}
       <motion.section variants={up} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-20 md:py-28" style={{ background: PAPER }}>
         <div className="max-w-4xl mx-auto text-center">
-          <div className="flex justify-center mb-6"><Stars s={20} /></div>
-          <blockquote className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.5rem,3.4vw,2.6rem)", lineHeight: 1.2, color: INK }}>„Close-Up direkt am Tisch — unsere Gäste waren sprachlos und kurz darauf am Lachen. Magisch."</blockquote>
-          <p className="mt-7 text-[14px] inline-flex items-center gap-2" style={{ color: L_DIM }}><GoogleG s={16} /> Julia & Tom · Brautpaar</p>
+          <blockquote className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.5rem,3.4vw,2.6rem)", lineHeight: 1.2, color: INK }}>„{REAL_REVIEWS.waldwiese.short}"</blockquote>
+          <p className="mt-7 text-[14px] inline-flex items-center gap-2" style={{ color: L_DIM }}>{REAL_REVIEWS.waldwiese.name} · {REAL_REVIEWS.waldwiese.role}</p>
         </div>
       </motion.section>
 

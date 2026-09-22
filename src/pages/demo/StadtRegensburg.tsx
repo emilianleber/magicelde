@@ -3,7 +3,7 @@ import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA, FAQ } from "@/components/voltage/sections";
 import { SplitFeature, FormatCards, InteractiveTabs, WarumCarousel } from "@/components/voltage/creative";
 import { motion } from "framer-motion";
-import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Hand, Wand2, UtensilsCrossed, MapPin, Route, ArrowUpRight } from "lucide-react";
 import heroImg from "@/assets/stage-show.jpg";
 import splitImg from "@/assets/moderator-hero.jpg";
@@ -17,7 +17,7 @@ export default function DemoStadtRegensburg() {
   return (
     <VoltageShell
       title="DEMO · Zauberer Regensburg — Comedy-Zauberei für eure Feier | Emilian Leber"
-      description="Zauberer in Regensburg buchen — Comedy-Zauberei für Hochzeit, Firmenfeier & Event. Aus Regensburg, kurze Wege in der Region, deutschlandweit unterwegs. 200+ Events, 5,0★."
+      description="Zauberer in Regensburg buchen — Comedy-Zauberei für Hochzeit, Firmenfeier & Event. Aus Regensburg, kurze Wege in der Region, deutschlandweit unterwegs. 200+ Events, 4,8★ bei Google."
       path="/demo/zauberer-regensburg"
     >
       <SubHero
@@ -71,16 +71,12 @@ export default function DemoStadtRegensburg() {
           { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine in ganz Bayern — viele davon in Regensburg und der Region." },
           { kind: "feature", Icon: MapPin, title: "Heimat Regensburg", text: "Zuhause in der Stadt: kurze Wege, transparente Anfahrt, keine teuren Übernachtungen." },
           { kind: "photo", image: carB, chip: "Voller Saal", title: "Der ganze Saal geht mit", text: "Comedy & Mentalmagie für jeden Rahmen — Close-Up am Tisch oder große Bühnenshow.", pos: "center" },
-          { kind: "review", text: "Alle sprechen noch Wochen danach davon. Sogar meine Mutter war geflasht.", name: "Martina Senftl · Regensburg" },
+          { kind: "review", review: REAL_REVIEWS.senftl },
           { kind: "feature", Icon: Route, title: "Deutschlandweit dabei", text: "Regensburg ist die Basis — wenn ihr woanders feiert, bin ich trotzdem zur Stelle." },
         ]}
       />
 
-      <PullQuote
-        text="Emilian ist der einzige, dem ich seit Jahren blind vertraue — er hält Zeitplan und bringt Ruhe in den Ablauf."
-        name="Katrin Raß"
-        role="Hochzeitsplanerin · Bayern"
-      />
+      <PullQuote review={REAL_REVIEWS.rass} />
 
       <ReviewsBlock paper={false} />
 

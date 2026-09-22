@@ -4,7 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import NotFound from "./NotFound";
 import { getServiceFormat, type ServiceFormat } from "@/data/serviceFormats";
-import { staedte, type Stadt } from "@/data/staedte";
+import { staedte, SERVICE_STADT_SLUGS, type Stadt } from "@/data/staedte";
 import {
   ArrowUpRight,
   MapPin,
@@ -33,7 +33,7 @@ import {
   LogoMarquee,
 } from "@/components/voltage/sections";
 import { WarumCarousel } from "@/components/voltage/creative";
-import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow, REAL_REVIEWS } from "@/components/voltage/theme";
 
 import audienceImg from "@/assets/audience-reactions.jpg";
 import stageImg from "@/assets/buehne-zuschauer.jpg";
@@ -69,16 +69,22 @@ function parseServiceFromPath(pathname: string): string | undefined {
 }
 
 const ServiceStadtSeite = () => {
-  const { stadt } = useParams<{ stadt: string }>();
+  const params = useParams<{ stadt: string }>();
   const { pathname } = useLocation();
+  // Neu-Form (/magic-dinner-<stadt>, /zaubershow-<stadt>) kommt ueber den
+  // Catch-all in App.tsx — dort gibt es kein :stadt, also aus dem Pfad lesen.
+  const stadt =
+    params.stadt ?? pathname.match(/^\/(?:magic-dinner|zaubershow)-([^/]+)\/?$/)?.[1];
   const serviceSlug = parseServiceFromPath(pathname);
 
   const serviceFormat = useMemo(
     () => (serviceSlug ? getServiceFormat(serviceSlug) : undefined),
     [serviceSlug],
   );
+  // Format×Stadt-Seiten gibt es nur fuer SERVICE_STADT_SLUGS — andere
+  // Kombis leitet vercel.json auf die Stadtseite um.
   const city = useMemo(
-    () => staedte.find((s) => s.slug === stadt),
+    () => (stadt && SERVICE_STADT_SLUGS.includes(stadt) ? staedte.find((s) => s.slug === stadt) : undefined),
     [stadt],
   );
 
@@ -185,7 +191,7 @@ const ServicePage = ({ service, city }: PageProps) => {
         secondary={{ label: `Mehr zum ${service.shortName}-Format`, href: service.detailHref }}
       />
 
-      <LogoMarquee label={`Auftritte für Konzerne und Marken — auch in ${city.name}.`} />
+      <LogoMarquee label="Auftritte für Konzerne und Marken." />
 
       <HighlightsSection service={service} city={city} h1={h1} buchungHref={buchungHref} />
       <WarumStadtCarousel service={service} city={city} />
@@ -282,12 +288,12 @@ const WarumStadtCarousel = ({ service, city }: { service: ServiceFormat; city: S
         text: "Comedy & Mentalmagie für jeden Rahmen — Close-Up am Tisch oder große Bühnenshow.",
         pos: "top",
       },
-      { kind: "review", text: "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt.", name: "Martina Senftl · Eventkundin" },
+      { kind: "review", review: REAL_REVIEWS.senftl },
       {
         kind: "feature",
         Icon: Route,
-        title: "Deutschlandweit dabei",
-        text: `Regensburg ist die Basis — für ${service.shortName} in ${city.name} und ${city.region} bin ich zur Stelle, deutschlandweit unterwegs.`,
+        title: "In ganz Bayern unterwegs",
+        text: `Regensburg ist die Basis — für ${service.shortName} in ${city.name} und ${city.region} bin ich schnell vor Ort — die Anfahrt steht transparent im Angebot.`,
       },
     ]}
   />
@@ -299,8 +305,8 @@ const WarumStadtCarousel = ({ service, city }: { service: ServiceFormat; city: S
 const TrustStripSection = ({ service, city }: { service: ServiceFormat; city: Stadt }) => (
   <Stats
     items={[
-      { v: "200+", l: `Events seit 2016 — auch in ${city.name}` },
-      { v: "5,0★", l: "30+ Bewertungen · ProvenExpert" },
+      { v: "200+", l: "Events seit 2016 · Regensburg & ganz Bayern" },
+      { v: "4,8★", l: "16 Google-Rezensionen" },
       { v: "TV", l: "TVA-Auftritt 2025 · Greatest Talent 2023" },
       { v: "24 h", l: `Antwort auf jede ${service.shortName}-Anfrage` },
     ]}
@@ -414,7 +420,7 @@ const MehrUeberStadtSection = ({ service, city, buchungHref }: { service: Servic
               <p className="mb-4">{city.intro}</p>
               <p className="mb-4">{city.highlight}</p>
               {city.seoText && <p className="mb-4">{city.seoText}</p>}
-              <p className="mb-4">200+ Events seit 2016 — auch in {city.region}.</p>
+              <p className="mb-4">200+ Events seit 2016 — aus Regensburg in ganz Bayern.</p>
 
               {/* IN DER NÄHE — geo-search keyword coverage */}
               <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
@@ -440,11 +446,11 @@ const MehrUeberStadtSection = ({ service, city, buchungHref }: { service: Servic
               {city.bekannteLocations && city.bekannteLocations.length > 0 && (
                 <>
                   <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                    Event-Locations in {city.name}
+                    Bekannte Veranstaltungsorte in {city.name}
                   </h3>
                   <p className="mb-4">
-                    Ich trete regelmäßig in Locations und Venues in {city.name} auf — und komme zu jeder
-                    Wunsch-Location. Schlosssäle, Hotels, Restaurants, Eventhallen.
+                    Zur Orientierung einige bekannte Veranstaltungsorte in {city.name}. Ich komme zu jeder
+                    Location — Saal, Hotel, Restaurant, Gasthof oder Firmengelände.
                   </p>
                   <div className="flex flex-wrap gap-2.5 mb-4">
                     {city.bekannteLocations.map((loc) => (
@@ -517,15 +523,16 @@ const KollegenEmpfehlungSection = ({ city }: { city: Stadt }) => {
    ═══════════════════════════════════════════════════════════ */
 const WeitereStaedteSection = ({ current }: { current: string }) => {
   const currentData = staedte.find((s) => s.slug === current);
-  const sameRegion = staedte.filter((s) => s.slug !== current && s.region === currentData?.region).slice(0, 12);
-  const others = staedte.filter((s) => s.slug !== current && s.region !== currentData?.region).slice(0, 6);
+  // Alle Staedte sind im Einsatzgebiet (Bayern) — deshalb alle zeigen.
+  const sameRegion = staedte.filter((s) => s.slug !== current);
+  const others: typeof staedte = [];
   return (
     <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
       <div className="max-w-7xl mx-auto">
         <motion.div variants={up} className="max-w-3xl mb-10">
           <Eyebrow>Zauberer auch in deiner Stadt</Eyebrow>
           <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.75rem,4vw,3.25rem)", lineHeight: 1.05, color: INK }}>
-            Über {staedte.length}+ Städte in <span style={{ color: COBALT }}>Deutschland und Österreich</span>.
+            Aus Regensburg — in <span style={{ color: COBALT }}>ganz Bayern</span>.
           </h2>
         </motion.div>
         {sameRegion.length > 0 && (

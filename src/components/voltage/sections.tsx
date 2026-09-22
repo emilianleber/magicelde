@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Play, ChevronDown } from "lucide-react";
 import {
   INK, WHITE, PAPER, COBALT, MAGENTA, L_LINE, L_DIM, D_DIM, PANEL_BG, CARD_LIGHT,
-  RATING, RATING_COUNT, REVIEWS, CLIENT_LOGOS, ANFRAGE_HREF, PHONE_HREF, PHONE_DISPLAY,
+  RATING, RATING_COUNT, REVIEWS, type RealReview, CLIENT_LOGOS, ANFRAGE_HREF, PHONE_HREF, PHONE_DISPLAY,
   cta, ghost, glass, up, stagger, vp, Eyebrow, Stars, GoogleG,
 } from "./theme";
 
@@ -48,7 +48,7 @@ export function SubHero({ eyebrow, title, sub, image, imageAlt, badge, primary =
             {secondary && <Link to={secondary.href} className={ghost} style={{ border: `1px solid ${L_LINE}`, color: INK }}><Play className="w-4 h-4" /> {secondary.label}</Link>}
           </motion.div>
           <motion.div variants={up} className="mt-8 inline-flex items-center gap-3 text-[13px]" style={{ color: L_DIM }}>
-            <Stars s={15} /> <span style={{ color: INK, fontWeight: 600 }}>{RATING}</span> · {RATING_COUNT} Google-Bewertungen <GoogleG s={15} />
+            <Stars s={15} /> <span style={{ color: INK, fontWeight: 600 }}>{RATING}</span> · {RATING_COUNT} Google-Rezensionen <GoogleG s={15} />
           </motion.div>
         </div>
         <motion.div variants={up} className="relative mx-auto w-full max-w-[420px] lg:max-w-none">
@@ -57,7 +57,6 @@ export function SubHero({ eyebrow, title, sub, image, imageAlt, badge, primary =
           </div>
           {badge && (
             <div className="hidden sm:block absolute -left-5 bottom-8 rounded-[22px] px-5 py-4" style={glass}>
-              <div className="flex items-center gap-2 mb-1.5"><GoogleG s={18} /><Stars s={13} /></div>
               <p className="text-[13.5px] font-semibold leading-snug" style={{ color: INK }}>{badge}</p>
             </div>
           )}
@@ -152,14 +151,13 @@ export function Statement({ eyebrow = "Die Idee", children }: { eyebrow?: string
   );
 }
 
-/* ── Pull-Quote (beige, ruhig) ── */
-export function PullQuote({ text, name, role }: { text: string; name: string; role: string }) {
+/* ── Pull-Quote (beige, ruhig) — nur echte, wörtliche Bewertungen aus REAL_REVIEWS ── */
+export function PullQuote({ review, full = false }: { review: RealReview; full?: boolean }) {
   return (
     <motion.section variants={up} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-20 md:py-28" style={{ background: PAPER }}>
       <div className="max-w-4xl mx-auto text-center">
-        <div className="flex justify-center mb-6"><Stars s={20} /></div>
-        <blockquote className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.5rem,3.2vw,2.5rem)", lineHeight: 1.22, color: INK }}>„{text}"</blockquote>
-        <p className="mt-7 text-[14px] inline-flex items-center gap-2" style={{ color: L_DIM }}><GoogleG s={16} /> {name} · {role}</p>
+        <blockquote className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.5rem,3.2vw,2.5rem)", lineHeight: 1.22, color: INK }}>„{full ? review.text : review.short}"</blockquote>
+        <p className="mt-7 text-[14px] inline-flex items-center gap-2" style={{ color: L_DIM }}>{review.source === "google" && <GoogleG s={16} />} {review.name} · {review.role}</p>
       </div>
     </motion.section>
   );
@@ -175,7 +173,7 @@ export function ReviewsBlock({ paper = true }: { paper?: boolean }) {
             <GoogleG s={42} />
             <div>
               <div className="flex items-center gap-2"><span className="text-3xl font-extrabold" style={{ color: INK }}>{RATING}</span><Stars s={18} /></div>
-              <p className="text-[13.5px] mt-1" style={{ color: L_DIM }}>basierend auf <strong style={{ color: INK }}>{RATING_COUNT}</strong> Bewertungen · Google & ProvenExpert</p>
+              <p className="text-[13.5px] mt-1" style={{ color: L_DIM }}>basierend auf <strong style={{ color: INK }}>{RATING_COUNT}</strong> Google-Rezensionen</p>
             </div>
           </div>
         </motion.div>
@@ -187,8 +185,7 @@ export function ReviewsBlock({ paper = true }: { paper?: boolean }) {
                 <div className="flex-1 min-w-0"><p className="text-[14px] font-semibold leading-tight" style={{ color: INK }}>{r.name}</p><p className="text-[11.5px]" style={{ color: L_DIM }}>{r.role}</p></div>
                 <GoogleG s={18} />
               </div>
-              <Stars s={14} />
-              <p className="text-[14.5px] leading-[1.6] mt-3" style={{ color: "#3a3833" }}>„{r.text}"</p>
+              <p className="text-[14.5px] leading-[1.6] mt-1" style={{ color: "#3a3833" }}>„{r.text}"</p>
             </motion.div>
           ))}
         </div>

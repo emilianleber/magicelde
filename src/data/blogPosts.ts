@@ -34,6 +34,8 @@ export interface BlogPost {
   cover: string;
   featured?: boolean;
   sections: BlogSection[];
+  /** Interne Weiterführungs-Links (gleiche Form wie relatedPages in wissenTopics.ts). */
+  relatedPages?: { title: string; href: string }[];
 }
 
 const EMILIAN = {
@@ -96,8 +98,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Mutter hat geweint. Mehr Erfolg geht nicht.",
-        attribution: "Bräutigam, Hochzeit in Sinzing 2025",
+          "Emilian hat das Publikum mit Witz und Charme gut unterhalten und konnte dabei die Gäste für sich gewinnen. Ein wirklich schöner Programmpunkt für eine Hochzeitsfeier.",
+        attribution: "Daniela Pöllinger, Hochzeitsplanerin (Google-Rezension)",
       },
       {
         type: "heading",
@@ -201,8 +203,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Drei Minuten am Vorstandstisch — und der Aufsichtsratsvorsitzende hat zum ersten Mal an dem Abend gelächelt.",
-        attribution: "Eventmanagerin, DAX-Konzern 2024",
+          "Die Agenturgruppe Wächter aus München bedankt sich vielmals bei Emilian, der rund 200 geladene Gäste eines Bayerischen Versicherungsunternehmens mit einer eigens entwickelten Zaubertrickshow in einem inszenierten Magic Camp begeistert hat - es war einfach Mega!",
+        attribution: "Jan von Lehmann, Agenturgruppe Wächter, München (Google-Rezension)",
       },
       {
         type: "heading",
@@ -305,8 +307,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Wir saßen drei Stunden in dem Restaurant. Es fühlte sich wie zwanzig Minuten an.",
-        attribution: "Magic-Dinner-Gast, Wald und Wiese 2025",
+          "vielen Dank für den gelungenen Abend bei unserem Magic Dinner im Wald & Wiese. Die Show war professionell, unterhaltsam und bei unseren Gästen durchweg sehr gut angekommen.",
+        attribution: "Restaurant-Partner, Magic Dinner (ProvenExpert)",
       },
       {
         type: "heading",
@@ -446,8 +448,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Wir hatten einen anderen Zauberer kurz vor der Hochzeit. Er hat zwei Tage vorher abgesagt. Emilian hat eingesprungen — und es war besser als geplant.",
-        attribution: "Hochzeitsplanerin Katrin Raß",
+          "Ich durfte eine Hochzeit planen, bei der Emilian als Zauberer aufgetreten ist – und es war wirklich großartig! Er hat sich auf unsere Idee eingelassen, den Bräutigam zu überraschen, und mit viel Charme und Witz mitgespielt.",
+        attribution: "Katrin Raß, Hochzeitsplanerin (Google-Rezension)",
       },
       {
         type: "paragraph",
@@ -602,8 +604,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Wir haben den Trick zwei Stunden lang nachgesprochen. Wir konnten ihn nicht erklären.",
-        attribution: "Gast nach Show in Regensburg 2024",
+          "Besonders der Wikipedia-Trick war einfach unglaublich – so etwas haben wir noch nie gesehen!",
+        attribution: "Claudi Roehrl, Magic Dinner (Google-Rezension)",
       },
       {
         type: "heading",
@@ -782,8 +784,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Wir haben drei Sekunden lang vergessen, was logisch ist. Das war das Schönste am Abend.",
-        attribution: "Gast nach einem Magic-Dinner-Abend, Sinzing 2025",
+          "Wir hatten Vergnügen, Emilian bei einem Magic Dinner live zu erleben, und waren sehr beeindruckt.",
+        attribution: "Claudi Roehrl (Google-Rezension)",
       },
       {
         type: "heading",
@@ -859,12 +861,6 @@ export const blogPosts: BlogPost[] = [
           "Jeder gute Magier hat einen Satz, mit dem er einen Fehler in ein Programm rettet. Bei mir ist es meistens [Genau das wollte ich nicht — und genau deshalb passt es jetzt]. Es funktioniert, weil es ehrlich ist.",
       },
       {
-        type: "quote",
-        text:
-          "Du bist der Erste, bei dem ich vergessen habe, dass das überhaupt ein Trick war — auch als die Karte fiel.",
-        attribution: "Brautmutter, Tegernsee 2025",
-      },
-      {
         type: "heading",
         text: "Was hilft, wenn es passiert",
         id: "umgang",
@@ -910,7 +906,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "4 Min.",
     words: 360,
     author: EMILIAN,
-    cover: "magicdinner-buehne",
+    cover: "dinner-buehne",
     featured: false,
     sections: [
       {
@@ -932,12 +928,6 @@ export const blogPosts: BlogPost[] = [
         type: "paragraph",
         text:
           "Das Licht spielt mit. Bis 21:30 Uhr ist es im Juli draußen noch hell — ein anderes Setting als das Kerzen-Innenlicht im November. Man sieht mehr Finger, mehr Bewegung, mehr Detail. Ich passe das Repertoire darauf an: weniger Karten-Sequenzen die auf Schatten setzen, mehr Münzen, mehr Mentaleffekte mit blossen Händen.",
-      },
-      {
-        type: "quote",
-        text:
-          "Die Magie wirkt anders bei Sonnenuntergang. Ehrlicher irgendwie. Weniger Tricks, mehr Augen.",
-        attribution: "Tisch-Notiz nach einem Sommer-Dinner, Sinzing 2025",
       },
       {
         type: "heading",
@@ -1005,8 +995,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Meine Tante redet immer noch von der Karte, die in ihrer Handtasche war. Sie sagt, sie hat seit Wochen nicht reingeschaut. Das war drei Monate vor der Hochzeit. Ich glaube ihr das.",
-        attribution: "Braut, Hochzeit Tegernsee 2025",
+          "Mit seinen beeindruckenden Kartentricks und anderen kleinen Zaubereien hat er die Gäste an den Tischen immer wieder überrascht und begeistert.",
+        attribution: "Christian Schürmann, 20er-Jahre-Party auf der Donau (Google-Rezension)",
       },
       {
         type: "heading",
@@ -1286,16 +1276,10 @@ export const blogPosts: BlogPost[] = [
         type: "list",
         items: [
           "MwSt (19%) — bei gewerblichen Anbietern selbstverständlich",
-          "Anfahrt: km-Pauschale oder Inklusiv bis X km",
+          "Anfahrt: im Angebot transparent ausgewiesen",
           "Übernachtung: 3-4-Sterne, üblicherweise Veranstalter-Buchung",
           "Optional: Soundtechnik wenn Location keine hat (selten)",
         ],
-      },
-      {
-        type: "quote",
-        text:
-          "Drei Zauberer angefragt — alle drei zwischen 1.800 und 2.500 €. Der teuerste war nicht automatisch der beste, der billigste hatte keine Versicherung. Mitte hat gewonnen.",
-        attribution: "Brautmutter, Hochzeit Tegernsee 2025",
       },
       {
         type: "heading",
@@ -1327,7 +1311,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "5 Min.",
     words: 460,
     author: EMILIAN,
-    cover: "magicdinner-buehne",
+    cover: "dinner-buehne",
     featured: false,
     sections: [
       {
@@ -1364,12 +1348,6 @@ export const blogPosts: BlogPost[] = [
         type: "paragraph",
         text:
           "Bühnen-Slot am Ende der Feier mit Mentaleffekt, in dem der Geschäftsführer eine Wahl trifft die der Magier vorhergesagt hat. Vorstand wird zum Mit-Akteur, das Publikum klatscht stehend. Das hat etwas mit Hierarchie zu tun: jemand vom oberen Management wird sympathisch vorgeführt — ohne lächerlich zu werden.",
-      },
-      {
-        type: "quote",
-        text:
-          "Ich habe drei Jahre lang gedacht, die Feier müsste größer werden. War falsch. Sie musste anders werden. Magie war der Hebel.",
-        attribution: "HR-Leiterin, 250-Personen-Konzern, Bayern 2025",
       },
       {
         type: "heading",
@@ -1443,12 +1421,6 @@ export const blogPosts: BlogPost[] = [
           "Stärker wirkt das, was zur Veranstaltung passt. Vorstandsdinner mit 12 Personen: Close-Up. Hochzeitsfeier mit 100 Gästen: beides, in unterschiedlichen Slots. Galaabend mit Award-Verleihung: Bühnen-Show als Übergang. Magic Dinner: nur Close-Up — die Bühne fehlt bewusst.",
       },
       {
-        type: "quote",
-        text:
-          "Die beste Hochzeit hatte beides: Close-Up beim Sektempfang als Eisbrecher, Bühnenshow vor dem Tanz als emotionaler Höhepunkt. Beide Slots zusammen waren mehr als die Summe.",
-        attribution: "Hochzeitsplanerin, Tegernsee 2024",
-      },
-      {
         type: "heading",
         text: "Wann beide kombinieren?",
         id: "kombinieren",
@@ -1464,6 +1436,503 @@ export const blogPosts: BlogPost[] = [
         text:
           "Unter 30 Gäste: Close-Up. Über 80 Gäste mit sitzendem Programm: Bühne. Zwischen 30 und 80 oder mit gemischtem Programm: beides kombinieren.",
       },
+    ],
+  },
+  {
+    slug: "weihnachtsfeier-ideen-firma",
+    title: "Weihnachtsfeier-Ideen für Firmen",
+    titleAccent: "Was in Bayern wirklich trägt.",
+    excerpt:
+      "Weihnachtsfeier-Ideen für die Firma: sieben Formate von Team-Essen bis Gala, wo Unterhaltung passt und wann ihr in Regensburg und Bayern planen solltet.",
+    category: "Firmenfeiern",
+    tags: [
+      "Weihnachtsfeier",
+      "Weihnachtsfeier Ideen",
+      "Firmenfeier",
+      "Regensburg",
+      "Event-Planung",
+    ],
+    date: "2026-09-22",
+    readTime: "6 Min.",
+    words: 598,
+    author: EMILIAN,
+    cover: "firmenfeier",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Ab September beginnt bei vielen Teams dieselbe Suche: Weihnachtsfeier-Ideen für die Firma, die nicht nach [Pflichttermin mit Buffet] aussehen. Ich zaubere seit 2016 auf Firmenfeiern — über 100 Firmen-Events waren es bisher, vom Team-Abend bis zur Gala. Hier ist, was ich dabei über gute Weihnachtsfeiern gelernt habe.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Vorweg: Die beste Idee ist selten die ausgefallenste. Es ist die, die zu eurem Team passt — zur Größe, zur Stimmung und zu dem, was das Jahr für euch war.",
+      },
+      {
+        type: "heading",
+        text: "Weihnachtsfeier-Ideen für die Firma: sieben Formate",
+        id: "ideen",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Das klassische Weihnachtsessen im Restaurant. Funktioniert für fast jede Teamgröße und ist schnell organisiert. Die Schwachstelle: die Wartezeit zwischen den Gängen, in der jeder Tisch für sich bleibt.",
+          "Weihnachtsmarkt und Abendessen. In Regensburg und vielen bayerischen Städten naheliegend: erst Glühwein unter freiem Himmel, dann gemeinsam an den Tisch. Unkompliziert, aber wetterabhängig.",
+          "Gemeinsam etwas tun. Kochkurs, Workshop oder Eisstockschießen — aktiv und gut für kleinere Teams, die sich ohnehin schon kennen.",
+          "Feier in den eigenen Räumen mit Catering. Persönlich und ohne Locationmiete. Braucht aber ein Programm, sonst bleibt es Büro mit Häppchen.",
+          "Weihnachtsgala im Hotel oder in einer Eventlocation. Für große Belegschaften, mit Bühne, Reden und Ehrungen. Steht und fällt mit einem klaren Ablauf.",
+          "Magic Dinner. Das Weihnachtsmenü bekommt eine Dramaturgie: Zwischen den Gängen passiert Magie direkt am Tisch, die Wartezeit wird zum Programm.",
+          "Walk-Around beim Empfang. Magie mitten unter den Gästen, während Glühwein oder Aperitif laufen — der schnellste Weg, dass Abteilungen ins Gespräch kommen.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Wo Unterhaltung auf der Weihnachtsfeier wirklich passt",
+        id: "unterhaltung",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Jede Weihnachtsfeier hat drei Momente, in denen die Energie kippen kann: das Ankommen, wenn Gruppen noch unter sich bleiben. Die Zeit zwischen den Gängen. Und die Phase nach den Reden, in der der Abend entweder Fahrt aufnimmt oder langsam ausläuft. Genau dort gehört Unterhaltung hin — nicht irgendwo dazwischen.",
+      },
+      {
+        type: "list",
+        items: [
+          "Empfang: Close-Up als Walk-Around. Ich gehe von Gruppe zu Gruppe, Kollegen aus Abteilungen, die sonst nie zusammenstehen, lachen über denselben Moment.",
+          "Dinner: Tisch-zu-Tisch. Zwischen den Gängen bekommt jeder Tisch seinen eigenen Moment, ohne dass Service oder Reden ins Stocken geraten.",
+          "Nach den Reden: Bühnenshow als Höhepunkt. 20 bis 30 Minuten Comedy und Mentalmagie für alle gleichzeitig, mit Kollegen auf der Bühne.",
+        ],
+      },
+      {
+        type: "callout",
+        eyebrow: "Faustregel.",
+        text:
+          "Bei einem Essen mit Kollegen passt Close-Up von Tisch zu Tisch. Ab etwa 50 Gästen lohnt sich die Kombination: Close-Up beim Empfang, Bühnenshow als Höhepunkt.",
+      },
+      {
+        type: "heading",
+        text: "Was eine gute Weihnachtsfeier von einer netten unterscheidet",
+        id: "unterschied",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Der Unterschied liegt fast nie im Budget, sondern im Zuschnitt. Eine Weihnachtsfeier ist der eine Abend, an dem das Team auf sein Jahr zurückschaut. Deshalb frage ich vorab nach Stories, Namen und Running Gags aus eurem Jahr und baue sie in die Show ein. Wenn in der Pointe plötzlich das Projekt vorkommt, über das alle seit Monaten reden, ist das mehr wert als jeder Standard-Trick.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Genauso wichtig: niemand wird vorgeführt. Wer auf die Bühne kommt, soll dort gut aussehen — auch die Geschäftsführung. Und wenn euer Team international ist, läuft das Programm auf Deutsch, auf Englisch oder zweisprachig.",
+      },
+      {
+        type: "heading",
+        text: "Wann ihr mit der Planung anfangen solltet",
+        id: "zeitplan",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Für Weihnachtsfeiern plant ihr am besten 8 bis 12 Wochen Vorlauf ein. Die Freitage und Samstage im Dezember sind in der Regel zuerst vergeben — bei Locations genauso wie bei Künstlern. Wer im September oder Anfang Oktober anfragt, hat noch echte Auswahl. Kurzfristig klappt es trotzdem oft, wenn der Termin frei ist.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Wenn ihr noch zwischen zwei Ideen schwankt: Schreibt mir Datum, Ort und ungefähre Gästezahl. Ihr bekommt innerhalb von 24 Stunden eine Antwort mit einem konkreten Vorschlag, welches Format zu eurer Feier passt — unverbindlich.",
+      },
+    ],
+    relatedPages: [
+      { title: "Zauberer für die Weihnachtsfeier", href: "/zauberer-weihnachtsfeier" },
+      { title: "Zauberer für Firmenfeiern", href: "/firmenfeiern" },
+      { title: "Magic Dinner", href: "/magic-dinner" },
+      { title: "Checkliste: Weihnachtsfeier planen", href: "/blog/weihnachtsfeier-planen-checkliste" },
+    ],
+  },
+  {
+    slug: "zauberer-weihnachtsfeier-kosten",
+    title: "Weihnachtsfeier-Zauberer: Kosten",
+    titleAccent: "Ehrliche Preisspannen 2026.",
+    excerpt:
+      "Was kostet ein Zauberer für die Weihnachtsfeier? Pakete ab 395 €, realistische Spannen je Format und die Faktoren, die den Preis wirklich bestimmen.",
+    category: "Buchung",
+    tags: ["Weihnachtsfeier", "Preise", "Zauberer Kosten", "Firmenfeier", "Buchung"],
+    date: "2026-09-22",
+    readTime: "5 Min.",
+    words: 482,
+    author: EMILIAN,
+    cover: "buehne-zuschauer",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Was kostet ein Zauberer für die Weihnachtsfeier? Die Frage gehört zu den ersten, die Firmen stellen — und sie verdient eine ehrliche Antwort statt [Preis auf Anfrage]. Hier steht, wie sich der Preis zusammensetzt, welche Spannen realistisch sind und was bei mir schon enthalten ist.",
+      },
+      {
+        type: "heading",
+        text: "Was kostet ein Zauberer für die Weihnachtsfeier?",
+        id: "kosten",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Kurz gesagt: Meine Pakete starten ab 395 €. Wo eure Weihnachtsfeier genau landet, hängt vom Format, der Dauer und der Anfahrt ab. Nach einer kurzen Anfrage bekommt ihr innerhalb von 24 Stunden ein verbindliches Angebot ohne versteckte Kosten.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Die 395 € sind der Einstieg für das kleinste Paket. Je mehr Zeit und je mehr Formate ihr kombiniert, desto eher landet ihr in den Spannen, die ich weiter unten aufliste.",
+      },
+      {
+        type: "heading",
+        text: "Realistische Preisspannen nach Format",
+        id: "spannen",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Als Orientierung — dieselben Richtwerte, die ich auch im Wissensbereich zu den Kosten eines Zauberers nenne:",
+      },
+      {
+        type: "list",
+        items: [
+          "60 Minuten Close-Up bei einem lokalen Event: 500–900 €",
+          "30 Minuten Bühnenshow in Bayern: 800–1.500 €",
+          "60 Minuten abendfüllende Show: 1.500–3.500 €",
+          "Magic Dinner (3–4 Stunden, 30–50 Gäste): 1.500–4.000 € plus Anfahrt",
+          "Magie auf einer Firmenfeier mit rund 100 Gästen: 1.500–3.000 €, also etwa 15–30 € pro Gast",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Die vier Faktoren, die den Preis bestimmen",
+        id: "faktoren",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Format: Close-Up am Tisch, Bühnenshow für den ganzen Saal, Magic Dinner über das ganze Menü — oder eine Kombination aus Empfang und Show.",
+          "Dauer: Ein kurzer Bühnen-Slot nach dem Hauptgang ist etwas anderes als Magie über den ganzen Abend.",
+          "Gästezahl: Sie entscheidet vor allem, welches Format sinnvoll ist. Bei vielen Tischen braucht Close-Up mehr Zeit, damit jeder Tisch seinen Moment bekommt.",
+          "Anfahrt: In Regensburg fällt keine Anfahrtspauschale an. Für alle anderen Orte wird die Anfahrt aus Regensburg im Angebot ausgewiesen.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Was im Preis schon enthalten ist",
+        id: "enthalten",
+      },
+      {
+        type: "list",
+        items: [
+          "Vorab-Briefing: Stories, Namen und Insider-Gags aus eurem Jahr, eingebaut in die Show.",
+          "Headset und Ton für die Bühnenshow, Tech-Rider auf Anfrage.",
+          "Berufshaftpflicht und auf Wunsch DSGVO/AVV.",
+          "Programm auf Deutsch, Englisch oder zweisprachig für internationale Teams.",
+          "Pünktlicher Aufbau, rund 30 Minuten vor Beginn.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Worauf ihr beim Vergleichen achten solltet",
+        id: "vergleich",
+      },
+      {
+        type: "list",
+        items: [
+          "Vergleicht dasselbe Format und dieselbe Dauer — 30 Minuten Bühne und drei Stunden Close-Up sind zwei verschiedene Leistungen.",
+          "Achtet darauf, ob die Anfahrt im Angebot steht oder erst auf der Rechnung auftaucht.",
+          "Fragt nach der Berufshaftpflicht. Seriöse Anbieter haben sie und können sie nachweisen.",
+          "Lasst euch Referenzen von Firmen-Events zeigen, nicht nur ein Bühnen-Showreel.",
+          "Show-Länge, Ablauf und Aufbauzeit gehören schriftlich ins Angebot.",
+        ],
+      },
+      {
+        type: "callout",
+        eyebrow: "Tipp.",
+        text:
+          "Schickt bei der Anfrage gleich Datum, Ort, Gästezahl und den groben Ablauf mit. Dann ist das Angebot sofort belastbar — und ihr vergleicht verschiedene Anbieter auf derselben Grundlage.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Zur Einordnung: Ich habe seit 2016 über 200 Events gespielt, bin TV-Finalist bei Greatest Talent 2023 und Talents of Magic 2024 und stehe bei 4,8 Sternen bei 16 Google-Rezensionen. Das ist kein Preisargument — aber es erklärt, wofür ihr bezahlt.",
+      },
+    ],
+    relatedPages: [
+      { title: "Zauberer für die Weihnachtsfeier", href: "/zauberer-weihnachtsfeier" },
+      { title: "Was kostet ein Zauberer? (Wissen)", href: "/wissen/zauberer-buchen" },
+      { title: "Zauberer für Firmenfeiern", href: "/firmenfeiern" },
+      { title: "Anfrage & Buchung", href: "/buchung" },
+    ],
+  },
+  {
+    slug: "weihnachtsfeier-planen-checkliste",
+    title: "Weihnachtsfeier planen: Checkliste",
+    titleAccent: "Mit Zeitplan ab zwölf Wochen.",
+    excerpt:
+      "Weihnachtsfeier planen ohne Stress: Checkliste mit Zeitplan von 12 Wochen vorher bis zum Abend — Budget, Location, Programm, Einladung und Ablauf.",
+    category: "Firmenfeiern",
+    tags: ["Weihnachtsfeier", "Checkliste", "Event-Planung", "Firmenfeier", "Zeitplan"],
+    date: "2026-09-22",
+    readTime: "6 Min.",
+    words: 565,
+    author: EMILIAN,
+    cover: "dinner",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Eine Weihnachtsfeier planen klingt nach einem Nachmittag Arbeit — bis man merkt, dass die Wunschlocation am Dezember-Freitag schon vergeben ist. Diese Checkliste mit Zeitplan schreibe ich aus der Perspektive von jemandem, der bei über 100 Firmen-Events als Programmpunkt mitgeplant wurde. Sie hilft euch, nichts zu vergessen und rechtzeitig zu entscheiden.",
+      },
+      {
+        type: "heading",
+        text: "Weihnachtsfeier planen: der Zeitplan auf einen Blick",
+        id: "zeitplan",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "12 Wochen vorher: Budget, Wunschtermin, grobe Gästezahl und Art der Feier festlegen.",
+          "12 bis 8 Wochen vorher: Location und Programm anfragen und fest buchen.",
+          "8 Wochen vorher: Save the Date an alle verschicken.",
+          "6 Wochen vorher: Einladung mit Anmeldeschluss, Menü und Essenswünschen.",
+          "4 Wochen vorher: Ablaufplan erstellen, Technik mit der Location klären.",
+          "2 Wochen vorher: finale Gästezahl melden, Sitzplan festlegen.",
+          "1 Woche vorher: Briefing mit allen Dienstleistern, Ansprechperson für den Abend benennen.",
+          "Am Abend: früh vor Ort sein, Ablauf im Blick behalten — und selbst mitfeiern.",
+        ],
+      },
+      {
+        type: "callout",
+        eyebrow: "Warum so früh?",
+        text:
+          "Für Weihnachtsfeiern sind 8 bis 12 Wochen Vorlauf ideal. Die Freitage und Samstage im Dezember sind in der Regel zuerst vergeben. Kurzfristig klappt es trotzdem oft — dann entscheidet aber der Kalender, nicht ihr.",
+      },
+      {
+        type: "heading",
+        text: "12 bis 8 Wochen vorher: die Grundentscheidungen",
+        id: "grundlagen",
+      },
+      {
+        type: "list",
+        items: [
+          "Budget klären: Gesamtbetrag oder Betrag pro Kopf, inklusive Essen, Getränke, Location und Programm.",
+          "Termin wählen: Wenn Freitag und Samstag knapp sind, sind Donnerstage eine gute Alternative.",
+          "Gästezahl schätzen: Sie entscheidet über Location und Format — Team-Essen mit 20 Leuten oder Gala mit mehreren hundert.",
+          "Art der Feier festlegen: Restaurant, eigene Räume mit Catering, Eventlocation oder ein Format wie Magic Dinner.",
+          "Programm anfragen: Unterhaltung, Musik oder Moderation zusammen mit der Location buchen, nicht erst danach.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "8 bis 4 Wochen vorher: Einladung und Ablauf",
+        id: "einladung",
+      },
+      {
+        type: "list",
+        items: [
+          "Save the Date verschicken, danach die Einladung mit klarem Anmeldeschluss.",
+          "Essenswünsche abfragen: vegetarisch, vegan, Allergien.",
+          "Anreise klären: Parkplätze, öffentliche Verkehrsmittel, bei Bedarf ein Shuttle für den Heimweg.",
+          "Ablaufplan schreiben: Empfang, Begrüßung, Essen, Programm, offener Teil.",
+          "Technik mit der Location abstimmen: Mikrofon für Reden, Tonanlage, freie Fläche für eine Bühnenshow.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "4 bis 1 Woche vorher: der Feinschliff",
+        id: "feinschliff",
+      },
+      {
+        type: "list",
+        items: [
+          "Finale Teilnehmerzahl an Location und Catering melden.",
+          "Sitzplan mit gemischten Tischen — damit nicht jede Abteilung unter sich bleibt.",
+          "Briefing an die Künstler: Namen, Stories und Running Gags aus eurem Jahr. Daraus wird der persönliche Teil des Programms.",
+          "Reden kurz halten und die Reihenfolge festlegen.",
+          "Eine Ansprechperson benennen, die am Abend für Dienstleister erreichbar ist.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Am Abend selbst",
+        id: "abend",
+      },
+      {
+        type: "list",
+        items: [
+          "Dienstleister rechtzeitig da: Ich baue zum Beispiel rund 30 Minuten vor Beginn auf.",
+          "Empfang nicht leer laufen lassen: Das Ankommen ist der Moment, in dem sich die Stimmung für den Abend entscheidet.",
+          "Den Höhepunkt nach dem Hauptgang oder nach den Reden setzen, wenn alle sitzen und satt sind.",
+          "Jemanden fürs Fotografieren bestimmen — die Bilder braucht ihr später für Intranet und Jahresrückblick.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Die häufigsten Planungsfehler",
+        id: "fehler",
+      },
+      {
+        type: "list",
+        items: [
+          "Zu spät anfragen und dann nehmen müssen, was noch frei ist.",
+          "Das Programm als Lückenfüller einplanen statt als festen Programmpunkt.",
+          "Zu viele Reden vor dem Essen — hungrige Gäste hören nicht zu.",
+          "Den Ablauf nicht mit der Location abstimmen, sodass Service und Programm sich gegenseitig stören.",
+          "Keine Ansprechperson vor Ort, weil die Organisatorin selbst mitfeiern will. Beides geht — mit klarer Übergabe.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text:
+          "Wenn ihr beim Punkt [Programm anfragen] seid: Schreibt mir Datum, Ort und Gästezahl. Ihr bekommt innerhalb von 24 Stunden eine Antwort und ein konkretes Angebot — dann ist dieser Punkt auf der Checkliste erledigt.",
+      },
+    ],
+    relatedPages: [
+      { title: "Zauberer für die Weihnachtsfeier", href: "/zauberer-weihnachtsfeier" },
+      { title: "Weihnachtsfeier-Ideen für Firmen", href: "/blog/weihnachtsfeier-ideen-firma" },
+      { title: "Weihnachtsfeier-Zauberer: Kosten", href: "/blog/zauberer-weihnachtsfeier-kosten" },
+      { title: "Zauberer für Firmenfeiern", href: "/firmenfeiern" },
+    ],
+  },
+  {
+    slug: "zauberer-firmenfeier-bayern",
+    title: "Firmenfeier-Zauberer in Bayern",
+    titleAccent: "Regensburg, München, Nürnberg.",
+    excerpt:
+      "Zauberer für Firmenfeiern in Bayern: wie Buchungen von Regensburg aus nach München, Nürnberg und in die Region laufen — mit Anfahrt transparent im Angebot.",
+    category: "Firmenfeiern",
+    tags: ["Firmenfeier", "Bayern", "Regensburg", "München", "Nürnberg"],
+    date: "2026-09-22",
+    readTime: "5 Min.",
+    words: 475,
+    author: EMILIAN,
+    cover: "audience",
+    featured: false,
+    sections: [
+      {
+        type: "paragraph",
+        text:
+          "Ich bin in Regensburg zuhause, und von hier aus bin ich als Zauberer für Firmenfeiern in Bayern unterwegs — in der Oberpfalz, in Niederbayern, Oberbayern und Franken. Wie eine Buchung konkret abläuft, was die Anfahrt kostet und welche Städte in Reichweite liegen, steht hier.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Seit 2016 habe ich über 200 Events gespielt, davon über 100 Firmen-Events. Zu meinen Kunden gehören unter anderem VKB, STRABAG, XXXLutz, Sixt, die Sparkasse und die Stadt Regensburg.",
+      },
+      {
+        type: "heading",
+        text: "Zauberer für Firmenfeiern in Bayern: so läuft die Buchung",
+        id: "buchung",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Anfrage mit Datum, Ort, Anlass und ungefährer Gästezahl — das dauert zwei Minuten und ist unverbindlich.",
+          "Antwort und Angebot innerhalb von 24 Stunden, inklusive ausgewiesener Anfahrt.",
+          "Vorab-Briefing: Was für eine Feier ist es, wer ist dabei, welche Geschichten aus eurem Jahr gehören in die Show?",
+          "Abstimmung mit der Location: Ablauf, Ton, Platz für die Bühnenshow.",
+          "Am Abend: Aufbau rund 30 Minuten vor Beginn, danach läuft alles nach dem vereinbarten Ablauf.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Anfahrt aus Regensburg: transparent im Angebot",
+        id: "anfahrt",
+      },
+      {
+        type: "paragraph",
+        text:
+          "In Regensburg selbst fällt keine Anfahrtspauschale an. Für alle anderen Orte steht die Anfahrt aus Regensburg im Angebot — ihr seht also vorher, was ihr bezahlt, und nichts kommt nachträglich dazu.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Mein Einsatzgebiet sind Regensburg und die Städte bis etwa zwei Stunden Anfahrt. Zur Orientierung: Kelheim liegt rund 30 Minuten entfernt, Deggendorf rund 40, Neumarkt in der Oberpfalz rund 45 Minuten, Amberg etwa eine Stunde, München und Erding rund anderthalb Stunden.",
+      },
+      {
+        type: "heading",
+        text: "Regensburg und die Oberpfalz",
+        id: "oberpfalz",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Hier sind die Wege am kürzesten. Neben Regensburg selbst gehören Amberg, Weiden, Neumarkt in der Oberpfalz und Cham zum Einsatzgebiet.",
+      },
+      {
+        type: "heading",
+        text: "München und Oberbayern",
+        id: "muenchen",
+      },
+      {
+        type: "paragraph",
+        text:
+          "München ist von Regensburg aus in rund anderthalb Stunden erreichbar. Dazu kommen Ingolstadt, Freising, Erding und Rosenheim. Für internationale Teams läuft das Programm auf Wunsch komplett auf Englisch oder zweisprachig.",
+      },
+      {
+        type: "heading",
+        text: "Nürnberg und Franken",
+        id: "franken",
+      },
+      {
+        type: "paragraph",
+        text:
+          "In Franken bin ich in Nürnberg, Fürth und Erlangen unterwegs, außerdem in Bamberg, Bayreuth und Würzburg. Das Format ist überall dasselbe: Close-Up, Bühnenshow oder Magic Dinner — zugeschnitten auf eure Firma.",
+      },
+      {
+        type: "heading",
+        text: "Niederbayern und Schwaben",
+        id: "niederbayern",
+      },
+      {
+        type: "paragraph",
+        text:
+          "In Niederbayern gehören Landshut, Straubing, Deggendorf, Passau und Kelheim zum Einsatzgebiet, in Schwaben Augsburg.",
+      },
+      {
+        type: "heading",
+        text: "Welche Formate überall funktionieren",
+        id: "formate",
+      },
+      {
+        type: "list",
+        items: [
+          "Close-Up und Walk-Around: Magie am Tisch und beim Empfang, ohne Bühne und ohne Technik.",
+          "Bühnenshow: Comedy und Mentalmagie für den ganzen Saal, 15, 30 oder 60 Minuten. Headset bringe ich mit.",
+          "Magic Dinner: Magie über das ganze Menü verteilt, in eurem Restaurant oder eurer Location.",
+          "Sprache: Deutsch, Englisch oder zweisprachig.",
+        ],
+      },
+      {
+        type: "callout",
+        eyebrow: "Gut zu wissen.",
+        text:
+          "Für Weihnachtsfeiern gilt in ganz Bayern derselbe Vorlauf: 8 bis 12 Wochen. Die Freitage und Samstage im Dezember sind zuerst vergeben — egal ob in Regensburg, München oder Nürnberg.",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Ihr plant eine Firmenfeier irgendwo in Bayern? Schreibt mir Datum und Ort — ihr bekommt innerhalb von 24 Stunden ein Angebot, in dem die Anfahrt schon drinsteht.",
+      },
+    ],
+    relatedPages: [
+      { title: "Zauberer Regensburg", href: "/zauberer/regensburg" },
+      { title: "Zauberer München", href: "/zauberer/muenchen" },
+      { title: "Zauberer Nürnberg", href: "/zauberer/nuernberg" },
+      { title: "Zauberer Augsburg", href: "/zauberer/augsburg" },
+      { title: "Zauberer Ingolstadt", href: "/zauberer/ingolstadt" },
+      { title: "Zauberer Landshut", href: "/zauberer/landshut" },
+      { title: "Zauberer Passau", href: "/zauberer/passau" },
+      { title: "Zauberer Würzburg", href: "/zauberer/wuerzburg" },
+      { title: "Zauberer für Firmenfeiern", href: "/firmenfeiern" },
+      { title: "Zauberer für die Weihnachtsfeier", href: "/zauberer-weihnachtsfeier" },
     ],
   },
 ];

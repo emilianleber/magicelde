@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, FormatCards, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Languages } from "lucide-react";
 import heroImg from "@/assets/audience-reactions.jpg";
 import splitImg from "@/assets/haende-interaktion.jpg";
@@ -56,7 +56,6 @@ export default function DemoMesse() {
           { kind: "stat", v: "50–80", l: "Kontakte pro Stunde", text: "Echte Standkontakte statt leerem Gang — direkt am Lead-Zähler messbar." },
           { kind: "feature", Icon: Target, title: "Lead-Magnet", text: "Spürbar mehr qualifizierte Standkontakte — die Hemmschwelle für das Gespräch fällt." },
           { kind: "photo", image: carB, chip: "Botschaft", title: "Ihr Claim im Aha-Moment", text: "Die Effekte transportieren Ihre Botschaft mitten ins Staunen — und bleiben hängen.", pos: "top" },
-          { kind: "review", text: "Der Stand war den ganzen Tag voll — die Effekte mit unserer Botschaft sind bei den Besuchern hängengeblieben.", name: "Jan von Lehmann · Eventleitung" },
           { kind: "feature", Icon: Languages, title: "Mehrsprachig", text: "DE und EN fließend — internationale Besucher werden voll abgeholt." },
         ]}
       />
@@ -72,11 +71,7 @@ export default function DemoMesse() {
         ]}
       />
 
-      <PullQuote
-        text="Emilian hat Konzept, Pitch und Briefing in einem Stück geliefert. Der Stand war den ganzen Tag voll — die Effekte mit unserer Botschaft sind bei den Besuchern hängengeblieben."
-        name="Jan von Lehmann"
-        role="Eventleitung · Messeauftritt"
-      />
+      <PullQuote review={REAL_REVIEWS.lehmann} />
 
       <ReviewsBlock paper={false} />
 

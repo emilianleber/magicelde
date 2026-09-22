@@ -12,7 +12,6 @@ import EmailReminderBanner from "./components/landing/EmailReminderBanner.tsx";
 
 
 // Public pages — only loaded on www.magicel.de
-const Index = lazy(() => import("./pages/Index.tsx"));
 const StartDemo = lazy(() => import("./pages/StartDemo.tsx"));
 // Voltage-Prototyp Unterseiten (/demo/*) — noindex
 const DemoBuehnenshow = lazy(() => import("./pages/demo/Buehnenshow.tsx"));
@@ -31,6 +30,7 @@ const DemoMesse = lazy(() => import("./pages/demo/Messe.tsx"));
 const DemoStadtRegensburg = lazy(() => import("./pages/demo/StadtRegensburg.tsx"));
 const Hochzeit = lazy(() => import("./pages/Hochzeit.tsx"));
 const Firmenfeiern = lazy(() => import("./pages/Firmenfeiern.tsx"));
+const Weihnachtsfeier = lazy(() => import("./pages/Weihnachtsfeier.tsx"));
 const EventAgenturen = lazy(() => import("./pages/EventAgenturen.tsx"));
 const MesseMagier = lazy(() => import("./pages/MesseMagier.tsx"));
 const Geburtstage = lazy(() => import("./pages/Geburtstage.tsx"));
@@ -79,6 +79,18 @@ const PublicChrome = () => {
 };
 
 
+// Stadt-Seiten mit Praefix im selben Segment (/magic-dinner-regensburg,
+// /zaubershow-regensburg). React Router v6 unterstuetzt "/zaubershow-:stadt"
+// NICHT — solche Routen matchen nie. Bis 22.09.2026 landeten deshalb alle
+// ~220 Seiten auf NotFound (noindex) — Google meldete sie als "Durch
+// noindex ausgeschlossen". Deshalb hier im Catch-all per Pfad auswerten.
+const SERVICE_STADT_NEUFORM = /^\/(magic-dinner|zaubershow)-[^/]+\/?$/;
+const FallbackRoute = () => {
+  const { pathname } = useLocation();
+  return SERVICE_STADT_NEUFORM.test(pathname) ? <ServiceStadtSeite /> : <NotFound />;
+};
+
+
 // ── Oeffentliche Website (magicel.de) ────────────────────────────────────────
 const PublicRoutes = () => (
   <Routes>
@@ -100,6 +112,7 @@ const PublicRoutes = () => (
     <Route path="/demo/kontakt" element={<DemoKontakt />} />
     <Route path="/hochzeit" element={<Hochzeit />} />
     <Route path="/firmenfeiern" element={<Firmenfeiern />} />
+    <Route path="/zauberer-weihnachtsfeier" element={<Weihnachtsfeier />} />
     <Route path="/event-agenturen" element={<EventAgenturen />} />
     <Route path="/messe-magier" element={<MesseMagier />} />
     <Route path="/geburtstage" element={<Geburtstage />} />
@@ -127,14 +140,13 @@ const PublicRoutes = () => (
     <Route path="/zauberer-magic-dinner/:stadt" element={<ServiceStadtSeite />} />
     <Route path="/zauberer-close-up/:stadt" element={<ServiceStadtSeite />} />
     <Route path="/zauberer-buehnenshow/:stadt" element={<ServiceStadtSeite />} />
-    {/* Neu-Form für Magic Dinner (SEO: keyword-tighter URL "magic-dinner-{stadt}"). */}
-    <Route path="/magic-dinner-:stadt" element={<ServiceStadtSeite />} />
-    {/* Neu-Form für Bühnenshow (SEO: "zaubershow-{stadt}" matched GSC-Queries). */}
-    <Route path="/zaubershow-:stadt" element={<ServiceStadtSeite />} />
+    {/* /magic-dinner-{stadt} und /zaubershow-{stadt} laufen ueber den Catch-all
+        (FallbackRoute) — React Router v6 kennt keine Teil-Segmente wie
+        "/zaubershow-:stadt". */}
     <Route path="/wissen/:slug" element={<WissenSeite />} />
     {/* Block admin on public domain */}
     <Route path="/admin/*" element={<Navigate to="/" replace />} />
-    <Route path="*" element={<NotFound />} />
+    <Route path="*" element={<FallbackRoute />} />
   </Routes>
 );
 
@@ -179,6 +191,7 @@ const App = () => (
               <Route path="/demo/kontakt" element={<DemoKontakt />} />
               <Route path="/hochzeit" element={<Hochzeit />} />
               <Route path="/firmenfeiern" element={<Firmenfeiern />} />
+              <Route path="/zauberer-weihnachtsfeier" element={<Weihnachtsfeier />} />
               <Route path="/event-agenturen" element={<EventAgenturen />} />
               <Route path="/messe-magier" element={<MesseMagier />} />
               <Route path="/geburtstage" element={<Geburtstage />} />
@@ -204,12 +217,10 @@ const App = () => (
               <Route path="/zauberer-hochzeit/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-firmenfeier/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-magic-dinner/:stadt" element={<ServiceStadtSeite />} />
-              <Route path="/magic-dinner-:stadt" element={<ServiceStadtSeite />} />
-              <Route path="/zaubershow-:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-close-up/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/zauberer-buehnenshow/:stadt" element={<ServiceStadtSeite />} />
               <Route path="/wissen/:slug" element={<WissenSeite />} />
-
+              <Route path="*" element={<FallbackRoute />} />
             </Routes>
           ) : <PublicRoutes />}
         </Suspense>

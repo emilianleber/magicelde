@@ -41,28 +41,83 @@ export const KONZEPTE = [
 export const ANLAESSE_NAV = [
   { t: "Hochzeit", h: "/hochzeit", d: "Magie zwischen Ja-Wort und Mitternacht" },
   { t: "Firmenfeier", h: "/firmenfeiern", d: "Eisbrecher für gemischte Teams" },
+  { t: "Weihnachtsfeier", h: "/zauberer-weihnachtsfeier", d: "Der Jahresabschluss, über den man redet" },
   { t: "Geburtstag · Jubiläum", h: "/geburtstage", d: "Die Show, über die man noch redet" },
   { t: "Event-Agenturen", h: "/event-agenturen", d: "Verlässlicher Act für eure Kunden" },
   { t: "Messe · Roadshow", h: "/messe-magier", d: "Magie, die Menschen an den Stand zieht" },
 ];
 
-/* ── Echte Bewertungen (verifiziert aus dem Bestand) ── */
-export const RATING = "5,0";
-export const RATING_COUNT = "30+";
-export const REVIEWS = [
-  {
-    name: "Katrin Raß", role: "Hochzeitsplanerin · Bayern + DE",
-    text: "Als Hochzeitsplanerin buche ich Künstler für ein Dutzend Hochzeiten pro Jahr. Emilian ist der einzige, dem ich seit Jahren blind vertraue: er checkt das Brautpaar vorab, baut Insider ein, hält Zeitplan und bringt Ruhe in den Ablauf. Brautmutter weint regelmäßig — vor Lachen oder vor Rührung. Beides Erfolg.",
+/* ── Echte Bewertungen ──
+ * Stand 22.09.2026, im Browser geprüft:
+ *   Google-Unternehmensprofil: 4,8 Sterne bei 16 Rezensionen.
+ *   ProvenExpert: 4,97 von 5 bei 7 (anonymen) Bewertungen.
+ * Alle Zitate unten sind wörtlich aus diesen Profilen übernommen (Kürzungen
+ * mit „…" markiert). KEINE Texte erfinden, umformulieren oder Rollen ergänzen,
+ * die nicht in der Bewertung selbst stehen (UWG). */
+export const RATING = "4,8";
+export const RATING_COUNT = "16";
+export const PROVENEXPERT_RATING = "4,97";
+
+export type RealReview = {
+  name: string;
+  role: string;
+  /** vollständiger (bzw. wörtlich gekürzter) Bewertungstext */
+  text: string;
+  /** wörtlicher Auszug für Karussell & Pull-Quote */
+  short: string;
+  source: "google" | "provenexpert";
+};
+
+export const REAL_REVIEWS = {
+  rass: {
+    name: "Katrin Raß", role: "Hochzeitsplanerin", source: "google",
+    text: "Ich durfte eine Hochzeit planen, bei der Emilian als Zauberer aufgetreten ist – und es war wirklich großartig! Er hat sich auf unsere Idee eingelassen, den Bräutigam zu überraschen, und mit viel Charme und Witz mitgespielt. Es war unterhaltsam, sympathisch und Emilian hat alle Gäste begeistert. Eine tolle Ergänzung für jeden besonderen Anlass!",
+    short: "Er hat sich auf unsere Idee eingelassen, den Bräutigam zu überraschen, und mit viel Charme und Witz mitgespielt. Es war unterhaltsam, sympathisch und Emilian hat alle Gäste begeistert.",
   },
-  {
-    name: "Jan von Lehmann", role: "Eventleitung · 200 Gäste · Firmenfeier",
-    text: "Wir haben ein Magic Camp komplett neu aufgestellt — 200 Gäste nahe Ingolstadt, Workshop-Stationen, Bühnenshow als Finale. Emilian hat Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega. Alle Gäste begeistert.",
+  lehmann: {
+    name: "Jan von Lehmann", role: "Agenturgruppe Wächter, München", source: "google",
+    text: "Die Agenturgruppe Wächter aus München bedankt sich vielmals bei Emilian, der rund 200 geladene Gäste eines Bayerischen Versicherungsunternehmens mit einer eigens entwickelten Zaubertrickshow in einem inszenierten Magic Camp begeistert hat - es war einfach Mega!",
+    short: "… rund 200 geladene Gäste eines Bayerischen Versicherungsunternehmens mit einer eigens entwickelten Zaubertrickshow in einem inszenierten Magic Camp begeistert hat - es war einfach Mega!",
   },
-  {
-    name: "Martina Senftl", role: "Eventkundin · Geburtstag + Hochzeit",
-    text: "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon. Was ich nicht erwartet hätte: dass die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter — und das soll was heißen.",
+  senftl: {
+    name: "Martina Senftl", role: "Google-Rezension", source: "google",
+    text: "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt. Abwicklung des Auftrages sehr professionell. Gerne wieder!",
+    short: "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt. Abwicklung des Auftrages sehr professionell. Gerne wieder!",
   },
-];
+  poellinger: {
+    name: "Daniela Pöllinger", role: "Hochzeitsplanerin", source: "google",
+    text: "Als Hochzeitsplanerin habe ich Emilian Leber auf einer meiner Hochzeiten erleben dürfen. Die Zusammenarbeit im Vorfeld und am Tag selbst war sehr angenehm und entspannt. Emilian hat das Publikum mit Witz und Charme gut unterhalten und konnte dabei die Gäste für sich gewinnen. Ein wirklich schöner Programmpunkt für eine Hochzeitsfeier.",
+    short: "Emilian hat das Publikum mit Witz und Charme gut unterhalten und konnte dabei die Gäste für sich gewinnen. Ein wirklich schöner Programmpunkt für eine Hochzeitsfeier.",
+  },
+  schuermann: {
+    name: "Christian Schürmann", role: "20er-Jahre-Party auf der Donau", source: "google",
+    text: "Wir hatten Emilian - den jungen Magier - für unsere 20er-Jahre-Party auf der Donau gebucht, und er war einfach großartig! Mit seinen beeindruckenden Kartentricks und anderen kleinen Zaubereien hat er die Gäste an den Tischen immer wieder überrascht und begeistert. Besonders schön war, wie er alle aktiv in seine Tricks eingebunden hat – das hat für eine tolle Atmosphäre gesorgt.",
+    short: "Mit seinen beeindruckenden Kartentricks und anderen kleinen Zaubereien hat er die Gäste an den Tischen immer wieder überrascht und begeistert.",
+  },
+  roehrl: {
+    name: "Claudi Roehrl", role: "Magic Dinner", source: "google",
+    text: "Wir hatten Vergnügen, Emilian bei einem Magic Dinner live zu erleben, und waren sehr beeindruckt. … Besonders der Wikipedia-Trick war einfach unglaublich – so etwas haben wir noch nie gesehen! … Mit seinem sympathischen Auftreten und seiner humorvollen Art hat Emilian für eine lockere und unterhaltsame Atmosphäre gesorgt.",
+    short: "Besonders der Wikipedia-Trick war einfach unglaublich – so etwas haben wir noch nie gesehen!",
+  },
+  pruitti: {
+    name: "Pruitti", role: "Bühnenshow · großer Geburtstag", source: "google",
+    text: "Ich habe bei Emilian die Bühnenmagie Show für einen großen Geburtstag gebucht. Sein Auftreten war der Wahnsinn. Er hat mit seiner Lustigen art die Gäste direkt in der ersten Minute begeistert. Die leute waren fasziniert von der Show und kann ich ihn nur empfehlen.",
+    short: "Sein Auftreten war der Wahnsinn. Er hat mit seiner Lustigen art die Gäste direkt in der ersten Minute begeistert.",
+  },
+  christina: {
+    name: "Christina", role: "Familienfeier", source: "google",
+    text: "Emilian ist auf unsere Wünsche eingegangen und hat diese toll umgesetzt. Sein Auftreten war sehr professionell und er konnte alle Gäste sofort in seinen Bann ziehen. … Wir können Emilian auf jeden Fall auch für kleinere Familienfeiern empfehlen.",
+    short: "Sein Auftreten war sehr professionell und er konnte alle Gäste sofort in seinen Bann ziehen.",
+  },
+  waldwiese: {
+    name: "Restaurant-Partner", role: "Magic Dinner (ProvenExpert)", source: "provenexpert",
+    text: "vielen Dank für den gelungenen Abend bei unserem Magic Dinner im Wald & Wiese. Die Show war professionell, unterhaltsam und bei unseren Gästen durchweg sehr gut angekommen.",
+    short: "Die Show war professionell, unterhaltsam und bei unseren Gästen durchweg sehr gut angekommen.",
+  },
+} satisfies Record<string, RealReview>;
+
+/** Auswahl für den ReviewsBlock (Google-Rezensionen, wörtlich). */
+export const REVIEWS: RealReview[] = [REAL_REVIEWS.rass, REAL_REVIEWS.lehmann, REAL_REVIEWS.senftl];
 
 /* ── Kunden-Logos (public/logos) ── */
 export const CLIENT_LOGOS = [

@@ -11,12 +11,16 @@
  * Daten (Single Source of Truth = .ts-Files) werden via esbuild voll geladen
  * (createRenderer().data, siehe seo-content.mjs) — kein fragiles Regex.
  *
- * Output: 23 Hauptseiten + 109 Städte + 545 Service-Stadt-Kombis + 16 Blog
- *   + 6 Wissen = 699 prerendered HTML-Files (deckungsgleich mit sitemap.xml).
+ * Output: Hauptseiten + Region-Staedte (staedte.ts) + Format×Stadt nur fuer
+ *   SERVICE_STADT_SLUGS + Blog + Wissen (deckungsgleich mit sitemap.xml).
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createRenderer } from './seo-content.mjs';
+
+// Single Source fuer Titel/Beschreibung — dieselbe Datei liest VoltageShell im
+// Browser. Vorher gab es pro Seite zwei verschiedene Titel (22.09.2026).
+const SEO_META = JSON.parse(readFileSync(join(process.cwd(), 'src/data/seoMeta.json'), 'utf8'));
 
 const BASE = 'https://www.magicel.de';
 const ROOT = process.cwd();
@@ -39,27 +43,33 @@ const DIST = join(ROOT, 'dist');
 const staticRoutes = [
   {
     path: '/',
-    title: '★ Emilian Leber · Zauberer für Hochzeit + Firmenfeier · 5,0/5',
-    description: 'Emilian Leber — Zauberer für Hochzeiten, Firmenfeiern und Events. Comedy, Mentalmagie, Magic Dinner. 200+ Events seit 2016. 5,0★ bei 30+ Bewertungen. Jetzt unverbindlich anfragen.',
-    ogTitle: 'Emilian Leber — Zauberer · 5,0★ bei 30+ Bewertungen',
+    title: '★ Emilian Leber · Zauberer für Hochzeit + Firmenfeier',
+    description: 'Emilian Leber — Zauberer für Hochzeiten, Firmenfeiern und Events. Comedy, Mentalmagie, Magic Dinner. 200+ Events seit 2016. 4,8★ bei Google. Jetzt unverbindlich anfragen.',
+    ogTitle: 'Emilian Leber — Zauberer · 4,8★ bei Google',
   },
   {
     path: '/hochzeit',
-    title: '★ Hochzeitszauberer — Emilian Leber · Sektempfang + Show · 5,0/5',
-    description: 'Hochzeitszauberer Emilian Leber: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. 100+ Hochzeiten begleitet. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Hochzeitszauberer — 100+ Hochzeiten · 5,0★',
+    title: '★ Hochzeitszauberer — Emilian Leber · Sektempfang + Show',
+    description: 'Hochzeitszauberer Emilian Leber: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. 100+ Hochzeiten begleitet. 4,8★ bei Google.',
+    ogTitle: 'Hochzeitszauberer — 100+ Hochzeiten · 4,8★ bei Google',
   },
   {
     path: '/firmenfeiern',
-    title: '★ Zauberer Firmenfeier — Emilian Leber · Premium-Entertainment · 5,0/5',
-    description: 'Zauberer für Firmenfeiern: Vorstandsdinner, Weihnachtsfeier, Gala. DAX-Konzerne bis Mittelstand. Insider-Pointen aus dem Briefing. 200+ Events. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Zauberer Firmenfeier — 200+ Events · 5,0★',
+    title: '★ Zauberer Firmenfeier — Emilian Leber · Premium-Entertainment',
+    description: 'Zauberer für Firmenfeiern: Vorstandsdinner, Weihnachtsfeier, Gala. DAX-Konzerne bis Mittelstand. Insider-Pointen aus dem Briefing. 200+ Events. 4,8★ bei Google.',
+    ogTitle: 'Zauberer Firmenfeier — 200+ Events · 4,8★ bei Google',
+  },
+  {
+    path: '/zauberer-weihnachtsfeier',
+    title: 'Zauberer Weihnachtsfeier — Regensburg & Bayern | Emilian Leber',
+    description: '',
+    ogTitle: '',
   },
   {
     path: '/magic-dinner',
-    title: '★ Magic Dinner — Emilian Leber · Close-Up am Tisch · 5,0/5',
-    description: 'Magic Dinner mit Emilian Leber: Mehrgänge-Abend mit Close-Up-Magie direkt am Tisch. Spezialgebiet seit 2023. Hauspartner Wald & Wiese in Sinzing. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Magic Dinner — Spezialgebiet seit 2023 · 5,0★',
+    title: '★ Magic Dinner — Emilian Leber · Close-Up am Tisch',
+    description: 'Magic Dinner mit Emilian Leber: Mehrgänge-Abend mit Close-Up-Magie direkt am Tisch. Spezialgebiet seit 2023. Hauspartner Wald & Wiese in Sinzing. 4,8★ bei Google.',
+    ogTitle: 'Magic Dinner — Spezialgebiet seit 2023 · 4,8★ bei Google',
   },
   {
     path: '/tickets',
@@ -87,21 +97,21 @@ const staticRoutes = [
   },
   {
     path: '/buehnenshow',
-    title: '★ Zaubershow — Emilian Leber · Comedy + Mental · 5,0/5',
-    description: 'Bühnenshow von Emilian Leber: 30-60 Min Comedy-Zaubershow mit Mentalmagie und Standing-Ovation-Finale. Greatest-Talent-Finalist. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Bühnenshow — Greatest-Talent-Finalist · 5,0★',
+    title: '★ Zaubershow — Emilian Leber · Comedy + Mental',
+    description: 'Bühnenshow von Emilian Leber: 30-60 Min Comedy-Zaubershow mit Mentalmagie und Standing-Ovation-Finale. Greatest-Talent-Finalist. 4,8★ bei Google.',
+    ogTitle: 'Bühnenshow — Greatest-Talent-Finalist · 4,8★ bei Google',
   },
   {
     path: '/close-up',
-    title: '★ Close-Up Magie — Emilian Leber · Tischzauberei · 5,0/5',
-    description: 'Close-Up Magie von Emilian Leber: Karten in eurer Hand, Münzen, Mentaleffekte. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner. 100+ Close-Up-Auftritte. 5,0★.',
-    ogTitle: 'Close-Up Magie — 100+ Auftritte · 5,0★',
+    title: '★ Close-Up Magie — Emilian Leber · Tischzauberei',
+    description: 'Close-Up Magie von Emilian Leber: Karten in eurer Hand, Münzen, Mentaleffekte. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner. 100+ Close-Up-Auftritte. 4,8★ bei Google.',
+    ogTitle: 'Close-Up Magie — 100+ Auftritte · 4,8★ bei Google',
   },
   {
     path: '/geburtstage',
-    title: '★ Zauberer Geburtstag — Emilian Leber · Runder Tag · 5,0/5',
-    description: 'Zauberer für runde Geburtstage: Close-Up am Tisch + Comedy-Bühnenshow für Erwachsene. 80+ Geburtstage von 30er bis Goldene. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Zauberer für Geburtstage — 80+ Feiern · 5,0★',
+    title: '★ Zauberer Geburtstag — Emilian Leber · Runder Tag',
+    description: 'Zauberer für runde Geburtstage: Close-Up am Tisch + Comedy-Bühnenshow für Erwachsene. 80+ Geburtstage von 30er bis Goldene. 4,8★ bei Google.',
+    ogTitle: 'Zauberer für Geburtstage — 80+ Feiern · 4,8★ bei Google',
   },
   {
     path: '/comedy-zauberei',
@@ -117,9 +127,9 @@ const staticRoutes = [
   },
   {
     path: '/referenzen',
-    title: '★ Referenzen — Emilian Leber · 18 Kunden-Cases · 5,0/5',
-    description: 'Referenzen Emilian Leber: VKB, STRABAG, XXXLutz, Sparkasse, Stadt Regensburg, Stadt Deggendorf u.v.m. Jeder Case mit Anlass, Konzept und Story. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Referenzen — 18 Kunden-Cases · 5,0★',
+    title: '★ Referenzen — Emilian Leber · 18 Kunden-Cases',
+    description: 'Referenzen Emilian Leber: VKB, STRABAG, XXXLutz, Sparkasse, Stadt Regensburg, Stadt Deggendorf u.v.m. Jeder Case mit Anlass, Konzept und Story. 4,8★ bei Google.',
+    ogTitle: 'Referenzen — 18 Kunden-Cases · 4,8★ bei Google',
   },
   {
     path: '/ueber-mich',
@@ -205,8 +215,8 @@ function injectMeta(html, { title, description, canonical, ogTitle }) {
  *   - parts.jsonLd → vor </head> (persistent; sichtbar für No-JS-Crawler
  *     UND Googlebot). react-helmet-async@3 rendert <script>-Tags nicht,
  *     deshalb ist dieses Build-time-JSON-LD die Single Source of Truth.
- *     aggregateRating steht nur EINMAL pro Seite (auf LocalBusiness) → kein
- *     GSC-"mehrere Bewertungen"-Fehler.
+ *     Kein Rating-/Review-Markup (selbst eingebundene Bewertungen
+ *     sind für Google nicht zulässig, siehe seo-content.mjs).
  *   - parts.body → INNERHALB #root. React (createRoot, kein hydrateRoot)
  *     leert #root beim Mount → kein doppelter sichtbarer Inhalt für JS-User.
  * Replacement-Funktion statt String, damit '$' im Content nicht als
@@ -246,7 +256,9 @@ const renderer = await createRenderer();
 let count = 0;
 
 // 1) Statische Hauptseiten (23)
-for (const r of staticRoutes) {
+for (const route of staticRoutes) {
+  const m = SEO_META.pages[route.path];
+  const r = m ? { ...route, title: m.title, description: m.description, ogTitle: m.title } : route;
   const canonical = `${BASE}${r.path}`;
   const html = injectMeta(baseHtml, { ...r, canonical });
   const injection =
@@ -257,28 +269,29 @@ for (const r of staticRoutes) {
   count++;
 }
 
-// 2) Stadt-Pages /zauberer/:stadt (109)
+// 2) Stadt-Pages /zauberer/:stadt (Einsatzgebiet, staedte.ts)
 const cities = renderer.data.cities;
 if (cities.length === 0) throw new Error('inject-meta: keine Städte aus staedte.ts geladen');
 for (const c of cities) {
   const canonical = `${BASE}/zauberer/${c.slug}`;
-  const title = `★ Zauberer ${c.name} · Close-Up + Bühne + Magic Dinner · 5,0/5`;
-  const description = `Zauberer in ${c.name}: Close-Up Magie, Comedy-Bühnenshow & Magic Dinner für Hochzeit, Firmenfeier und Geburtstag. 200+ Events seit 2016. 5,0★ bei 30+ Bewertungen. Jetzt anfragen.`;
-  const ogTitle = `Zauberer ${c.name} — 5,0★ bei 30+ Bewertungen`;
+  const title = SEO_META.city.title.replace(/\{stadt\}/g, c.name);
+  const description = SEO_META.city.description.replace(/\{stadt\}/g, c.name);
+  const ogTitle = title;
   const html = injectMeta(baseHtml, { title, description, canonical, ogTitle });
   const injection = renderer.render({ kind: 'city', citySlug: c.slug });
   writeRoute(`/zauberer/${c.slug}`, injectStatic(html, injection));
   count++;
 }
 
-// 3) Service-Stadt-Kombis /zauberer-{service}/{stadt} (5 × 109 = 545)
+const serviceCities = cities.filter((c) => renderer.data.serviceCitySlugs.includes(c.slug));
+// 3) Service-Stadt-Kombis /zauberer-{service}/{stadt} — nur SERVICE_STADT_SLUGS
 // Ausnahme: Formate mit canonicalPrefix (z.B. magic-dinner) werden unter
 // /magic-dinner-{stadt} prerendert statt unter /zauberer-magic-dinner/{stadt}.
 // Die Alt-URL wird per Vercel-301 auf die Neu-URL weitergeleitet (vercel.json).
 const formats = renderer.data.formats;
 if (formats.length === 0) throw new Error('inject-meta: keine Service-Formate aus serviceFormats.ts geladen');
 for (const f of formats) {
-  for (const c of cities) {
+  for (const c of serviceCities) {
     const urlPath = f.canonicalPrefix
       ? `${f.canonicalPrefix}-${c.slug}`
       : `${f.routePrefix}/${c.slug}`;
@@ -326,4 +339,4 @@ for (const w of topics) {
   count++;
 }
 
-console.log(`✓ Prerendered ${count} routes (${staticRoutes.length} static + ${cities.length} cities + ${formats.length * cities.length} service-cities + ${posts.length} blog + ${topics.length} wissen)`);
+console.log(`✓ Prerendered ${count} routes (${staticRoutes.length} static + ${cities.length} cities + ${formats.length * serviceCities.length} service-cities + ${posts.length} blog + ${topics.length} wissen)`);

@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { InteractiveTabs, FormatCards, SplitFeature, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles } from "lucide-react";
 import heroImg from "@/assets/schneider-weisse-closeup.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
@@ -69,7 +69,7 @@ export default function DemoFirmenfeiern() {
           { kind: "stat", v: "100+", l: "Firmen-Events", text: "Routine vom Vorstandsdinner bis zur großen Mitarbeiterfeier." },
           { kind: "feature", Icon: Briefcase, title: "Premium bis Comedy", text: "Der Ton, der zu eurer Marke passt — seriöser Kundenabend oder lockere Feier." },
           { kind: "photo", image: carB, chip: "Eisbrecher", title: "Abteilungen kommen ins Gespräch", text: "Magie, die gemischte Teams aus allen Bereichen zusammenbringt.", pos: "center" },
-          { kind: "review", text: "Bühnenshow als Finale — alle 200 Gäste begeistert.", name: "Jan von Lehmann · Eventleitung" },
+          { kind: "review", review: REAL_REVIEWS.senftl },
           { kind: "feature", Icon: Sparkles, title: "Insider-Briefing vorab", text: "Firmen-Stories, Namen und Running Gags aus dem Team — eingebaut in die Show." },
         ]}
       />
@@ -85,11 +85,7 @@ export default function DemoFirmenfeiern() {
         ]}
       />
 
-      <PullQuote
-        text="Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega. Alle 200 Gäste begeistert."
-        name="Jan von Lehmann"
-        role="Eventleitung · Magic Camp, 200 Gäste"
-      />
+      <PullQuote review={REAL_REVIEWS.lehmann} />
 
       <ReviewsBlock paper={false} />
 

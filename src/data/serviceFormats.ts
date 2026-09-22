@@ -47,9 +47,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Hochzeitszauberer für deinen Tag",
       titlePrefix: "Zauberer für Hochzeit in",
       metaTitle:
-        "★ Hochzeitszauberer {stadt} · Empfang + Show · 5,0/5",
+        "Hochzeitszauberer {stadt} — Emilian Leber",
       metaDescription:
-        "Hochzeitszauberer für {stadt} — Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. 100+ Hochzeiten begleitet. 5,0★ bei 30+ Bewertungen. Jetzt unverbindlich anfragen.",
+        "Hochzeitszauberer für {stadt}: Close-Up beim Sektempfang, Magie am Tisch, Show vor dem Tanz. 100+ Hochzeiten, 4,8★ bei Google. Jetzt anfragen.",
     },
     intro:
       "Drei Akte über euren Tag: Sektempfang, Dinner, Show vor dem Tanz. Close-Up am Tisch und Bühne — einzeln oder als roter Faden über den ganzen Abend.",
@@ -106,9 +106,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Firmenfeier-Zauberer · Premium-Entertainment",
       titlePrefix: "Zauberer für Firmenfeier in",
       metaTitle:
-        "★ Zauberer Firmenfeier {stadt} · Premium · 5,0/5",
+        "Zauberer Firmenfeier {stadt} — Emilian Leber",
       metaDescription:
-        "Firmenfeier-Zauberer für {stadt} — Vorstandsdinner, Weihnachtsfeier, Gala. DAX-Konzerne und Mittelstand. Insider-Pointen aus dem Briefing. 200+ Events. 5,0★ bei 30+ Bewertungen.",
+        "Zauberer für Firmenfeier & Weihnachtsfeier in {stadt}: Close-Up beim Empfang, Comedy-Show als Höhepunkt. 200+ Events, 4,8★ bei Google.",
     },
     intro:
       "Vorstandsdinner, Kundenabend, Galaabend, Mitarbeiterfeier. Tonalität ans Unternehmen angepasst, Insider-Pointen aus dem Briefing, Magie-Bridges in der Moderation, Standing-Ovation-Finale.",
@@ -170,9 +170,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Magic Dinner — Restaurant-Erlebnis mit Tisch-Magie",
       titlePrefix: "Magic Dinner in",
       metaTitle:
-        "★ Magic Dinner {stadt} · Close-Up am Tisch · 5,0/5",
+        "Magic Dinner {stadt} — Zauberer Emilian Leber",
       metaDescription:
-        "Magic Dinner in {stadt}: Mehrgänge-Abend mit Close-Up-Magie direkt am Tisch. Spezialgebiet seit 2023. Hauspartner Wald & Wiese in Sinzing. 5,0★ bei 30+ Bewertungen. Jetzt anfragen.",
+        "Magic Dinner in {stadt}: Mehrgänge-Menü mit Zauberei am Tisch und Show zwischen den Gängen. Für Firmen & Privat. 4,8★ bei Google.",
     },
     intro:
       "Mehrgänge-Abend mit Magie zwischen den Gängen. Close-Up direkt am Tisch, Mentalmagie zwischen den Tafeln, alles eingebettet in den Service-Rhythmus. Mein Spezialgebiet seit 2023.",
@@ -230,9 +230,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Close-Up Magie · direkt am Tisch und in deinen Händen",
       titlePrefix: "Close-Up Zauberer für",
       metaTitle:
-        "★ Close-Up Zauberer {stadt} · Karten + Mental · 5,0/5",
+        "Close-Up Zauberer {stadt} — Emilian Leber",
       metaDescription:
-        "Close-Up Zauberkünstler für {stadt}: Karten in eurer Hand, Münzen aus dem Nichts, Mentaleffekte. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner. 5,0★ bei 30+ Bewertungen.",
+        "Close-Up Zauberer für {stadt}: Karten, Münzen & Mentaleffekte beim Empfang und am Tisch. Für Firmenfeier & Hochzeit. Jetzt anfragen.",
     },
     intro:
       "Karten in eurer Hand, Münzen die wandern, ein Ring der durch den Tisch fällt. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner — intim, persönlich, ohne Technik.",
@@ -294,9 +294,9 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       eyebrow: "Bühnenshow · 15-60 Minuten durchkomponiert",
       titlePrefix: "Bühnen-Zauberer für",
       metaTitle:
-        "★ Zaubershow {stadt} · Comedy + Mentalmagie · 5,0/5",
+        "Zaubershow {stadt} — Comedy & Mentalmagie",
       metaDescription:
-        "Zaubershow für {stadt}: 15-60 Min durchkomponierte Bühnenshow — Mentaleffekte, Comedy, Standing-Ovation-Finale. Greatest-Talent-Finalist. 5,0★ bei 30+ Bewertungen.",
+        "Zaubershow für {stadt}: 15–60 Min Comedy und Mentalmagie für Firmenfeier, Gala & Weihnachtsfeier. Greatest-Talent-Finalist. Jetzt anfragen.",
     },
     intro:
       "15-60 Minuten durchkomponierte Bühnenshow — Hook, Aufbau, Peaks, Climax, Übergabe. Mentaleffekte, Comedy-Pointen, Standing-Ovation-Finale. Greatest-Talent-Finalist und Kreativpreisträger.",

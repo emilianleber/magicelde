@@ -49,8 +49,8 @@ const LandingHero = () => {
                 ))}
               </div>
               <span className="text-sm text-white/90">
-                <strong className="font-semibold text-white">5,0</strong>
-                <span className="text-white/60"> · 30+ Bewertungen</span>
+                <strong className="font-semibold text-white">4,8</strong>
+                <span className="text-white/60"> · 16 Google-Rezensionen</span>
               </span>
             </div>
 

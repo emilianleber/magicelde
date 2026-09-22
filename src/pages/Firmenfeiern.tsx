@@ -2,21 +2,21 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA, Stats, GlassFeatures } from "@/components/voltage/sections";
 import { InteractiveTabs, FormatCards, SplitFeature, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles, MessageSquare, Route, Headphones, ShieldCheck, Languages, Timer } from "lucide-react";
-import heroImg from "@/assets/schneider-weisse-closeup.jpg";
-import splitImg from "@/assets/magicdinner-buehne.jpg";
-import carA from "@/assets/staunen.jpg";
-import carB from "@/assets/audience-reactions.jpg";
-import tab1 from "@/assets/hero-closeup.jpg";
-import tab2 from "@/assets/emilian-magic-dinner.jpg";
-import tab3 from "@/assets/hero-stage.jpg";
+import heroImg from "@/assets/schneider-weisse-closeup-1200.webp";
+import splitImg from "@/assets/magicdinner-buehne-1200.webp";
+import carA from "@/assets/staunen-1200.webp";
+import carB from "@/assets/audience-reactions-1200.webp";
+import tab1 from "@/assets/hero-closeup-1200.webp";
+import tab2 from "@/assets/emilian-magic-dinner-1200.webp";
+import tab3 from "@/assets/hero-stage-1200.webp";
 
 export default function Firmenfeiern() {
   return (
     <VoltageShell
       title="Zauberer für Firmenfeier — Vorstand, Kunden, Team | Emilian Leber"
-      description="Zauberkünstler für Firmenfeiern in Bayern und deutschlandweit — Vorstandsdinner, Kundenabend, Galaabend, Mitarbeiterfeier. Bühnenshow und Close-Up, einzeln oder kombiniert. 100+ Firmen-Engagements, 5,0★."
+      description="Zauberkünstler für Firmenfeiern in Bayern und deutschlandweit — Vorstandsdinner, Kundenabend, Galaabend, Mitarbeiterfeier. Bühnenshow und Close-Up, einzeln oder kombiniert. 100+ Firmen-Engagements, 4,8★ bei Google."
       path="/firmenfeiern"
       noindex={false}
     >
@@ -34,7 +34,7 @@ export default function Firmenfeiern() {
           { v: "200+", l: "Events seit 2016" },
           { v: "3x", l: "TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 + Kreativpreis)" },
           { v: "Top 30", l: "Dt. Jugendmeisterschaft 2024 · TVA TV-Auftritt 2025" },
-          { v: "5,0", l: "Sterne aus 30+ Bewertungen · 100+ Hochzeiten begleitet" },
+          { v: "4,8★", l: "16 Google-Rezensionen · 100+ Hochzeiten begleitet" },
         ]}
       />
 
@@ -79,7 +79,7 @@ export default function Firmenfeiern() {
           { kind: "stat", v: "100+", l: "Firmen-Events", text: "Routine vom Vorstandsdinner bis zur großen Mitarbeiterfeier." },
           { kind: "feature", Icon: Briefcase, title: "Premium bis Comedy", text: "Der Ton, der zu eurer Marke passt — seriöser Kundenabend oder lockere Feier." },
           { kind: "photo", image: carB, chip: "Eisbrecher", title: "Abteilungen kommen ins Gespräch", text: "Magie, die gemischte Teams aus allen Bereichen zusammenbringt.", pos: "center" },
-          { kind: "review", text: "Bühnenshow als Finale — alle 200 Gäste begeistert.", name: "Jan von Lehmann · Eventleitung" },
+          { kind: "review", review: REAL_REVIEWS.senftl },
           { kind: "feature", Icon: Sparkles, title: "Insider-Briefing vorab", text: "Firmen-Stories, Namen und Running Gags aus dem Team — eingebaut in die Show." },
         ]}
       />
@@ -111,11 +111,7 @@ export default function Firmenfeiern() {
         ]}
       />
 
-      <PullQuote
-        text="Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega. Alle 200 Gäste begeistert."
-        name="Jan von Lehmann"
-        role="Eventleitung · Magic Camp, 200 Gäste"
-      />
+      <PullQuote review={REAL_REVIEWS.lehmann} />
 
       <ReviewsBlock paper={false} />
 
@@ -147,7 +143,7 @@ export default function Firmenfeiern() {
           },
           {
             q: "Welche Erfahrung und Auszeichnungen bringt Emilian mit?",
-            a: "Über 200 Events seit 2016 und mehr als 100 begleitete Hochzeiten. Dreifacher TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 plus Kreativpreis), Top 30 bei der Deutschen Jugendmeisterschaft 2024 und TV-Auftritt bei TVA 2025. Bewertet mit 5,0 Sternen aus über 30 Bewertungen — Erfahrung, die euch Sicherheit für euren Firmenanlass gibt.",
+            a: "Über 200 Events seit 2016 und mehr als 100 begleitete Hochzeiten. Dreifacher TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 plus Kreativpreis), Top 30 bei der Deutschen Jugendmeisterschaft 2024 und TV-Auftritt bei TVA 2025. Bewertet mit 4,8 Sternen bei 16 Google-Rezensionen — Erfahrung, die euch Sicherheit für euren Firmenanlass gibt.",
           },
           {
             q: "Was ist im Preis enthalten und gibt es versteckte Kosten?",

@@ -37,10 +37,10 @@ import {
   Send,
 } from "lucide-react";
 
-import heroStageImg from "@/assets/audience-reactions.jpg";
-import tabCloseup from "@/assets/hero-closeup.jpg";
-import tabDinner from "@/assets/hero-dinner.jpg";
-import tabStage from "@/assets/hero-stage.jpg";
+import heroStageImg from "@/assets/audience-reactions-1200.webp";
+import tabCloseup from "@/assets/hero-closeup-1200.webp";
+import tabDinner from "@/assets/hero-dinner-1200.webp";
+import tabStage from "@/assets/hero-stage-1200.webp";
 
 /* ═══════════════════════════════════════════════════════════
    AKTUELLE TERMINE — Leer-Zustand (aktuell keine Events)
@@ -248,13 +248,6 @@ const jsonLd = {
       name: "Emilian Leber",
       url: "https://www.magicel.de",
       jobTitle: "Zauberkünstler · Mentalmagier · Comedy-Magier",
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "5.0",
-        reviewCount: "30",
-        bestRating: "5",
-        worstRating: "1",
-      },
     },
   ],
 };
@@ -306,7 +299,7 @@ const Tickets = () => (
 
     <Stats
       items={[
-        { v: "5,0★", l: "30+ Bewertungen" },
+        { v: "4,8★", l: "16 Google-Rezensionen" },
         { v: "0", l: "Termine im Vorverkauf" },
         { v: "200+", l: "Events seit 2016" },
         { v: "24 h", l: "Antwort auf Anfragen" },

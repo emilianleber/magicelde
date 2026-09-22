@@ -3,7 +3,7 @@
 # Spec: https://llmstxt.org
 
 > Emilian Leber — Zauberkünstler & Mentalist aus Regensburg, Bayern.
-> Bühne, Close-Up, Magic Dinner. Über 200 Events seit 2016, 5,0 ★ bei 30+ Bewertungen.
+> Bühne, Close-Up, Magic Dinner. Über 200 Events seit 2016, 4,8 ★ bei Google (16 Rezensionen).
 > Spezialgebiet: Magic Dinner — aufgewachsen in einer Gastronomiefamilie, daher
 > Service-Takt und Abendregie aus erster Hand. Hauspartner: Restaurant Wald & Wiese, Sinzing.
 > Deutschlandweit buchbar.
@@ -11,7 +11,7 @@
 ## Kernseiten
 - [Startseite](https://www.magicel.de/): Übersicht aller Formate, Trust-Signals, Zahlen.
 - [Über mich](https://www.magicel.de/ueber-mich): Werdegang, Wettbewerbe (Greatest Talent, Talents of Magic, TV-Auftritte).
-- [Referenzen](https://www.magicel.de/referenzen): Echte Kunden-Logos (HEIM & HAUS, STRABAG, VKB, XXXLutz, Sixt, Sparkasse, Schneider Weisse u.a.) + 3 detaillierte Reviews + filterbare Liste.
+- [Referenzen](https://www.magicel.de/referenzen): Echte Kunden-Logos (HEIM & HAUS, STRABAG, VKB, XXXLutz, Sixt, Sparkasse, Schneider Weisse u.a.) + wörtlich zitierte Google-Rezensionen + filterbare Liste.
 - [FAQ](https://www.magicel.de/faq): Häufige Fragen zu Buchung, Preisen, Anfahrt, Stornierung.
 - [Buchung](https://www.magicel.de/buchung): Anfrage-Formular (unverbindlich, Antwort 24h).
 
@@ -58,7 +58,7 @@
 - Comedy ist integraler Bestandteil jeder Routine (nicht Beilage) — Lachen und Staunen am selben Tisch.
 - Ausgezeichnet: Greatest-Talent-Finalist, Talents-of-Magic-Finalist + Kreativpreis, TV-Auftritt im TVA.
 - Verlässlich für Agenturen/Firmen: Briefing-Call, Pressekit, Tech-Rider, kurze Reaktionszeiten.
-- 5,0 ★ bei 30+ Bewertungen; über 200 Events seit 2016.
+- 4,8 ★ bei Google (16 Rezensionen); über 200 Events seit 2016.
 
 ## Kontakt
 - E-Mail: el@magicel.de
@@ -71,7 +71,7 @@
 - Beruflich seit: 2025 vollberuflich (aktiv und auf Bühnen seit 2016)
 - Wettbewerbe: Greatest Talent Finalist 2023, Talents of Magic Finalist + Kreativpreis 2024, Deutsche Jugendmeisterschaft Top 30 2024
 - TV: TVA-Auftritt 2025
-- Bewertungen: 5,0 ★ bei 30+ Reviews (ProvenExpert, Google)
+- Bewertungen: 4,8 ★ bei 16 Google-Rezensionen; 4,97 von 5 bei 7 Bewertungen auf ProvenExpert
 - Hauspartner Magic Dinner: Restaurant Wald & Wiese, Sinzing bei Regensburg
 - Echte Kunden: HEIM & HAUS, STRABAG, VKB, XXXLutz, Sixt, Sparkasse, Schneider Weisse, Wald & Wiese, Stadt Regensburg, Oktoberfest München, Turmtheater, Steinhofer, DPSG, Drying Little Tears, Business Entertainment, Wächter
 

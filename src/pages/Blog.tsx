@@ -775,7 +775,7 @@ const AutorVorstellung = () => (
           <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm" style={{ color: L_DIM }}>
             <span className="inline-flex items-center gap-2">
               <Star className="w-4 h-4" style={{ color: COBALT }} />
-              <span className="tabular-nums">5,0</span> · 30+ Bewertungen
+              <span className="tabular-nums">4,8</span> · 16 Google-Rezensionen
             </span>
             <span>·</span>
             <span className="tabular-nums">200+ Events</span>
@@ -1002,7 +1002,7 @@ const FinalCTA = () => (
         </Link>
       </div>
       <p className="relative mt-10 text-[11px] tracking-[0.1em] uppercase" style={{ color: "rgba(255,255,255,0.55)" }}>
-        Antwort innerhalb 24 Stunden · el@magicel.de · 5,0★ · 30+ Bewertungen
+        Antwort innerhalb 24 Stunden · el@magicel.de · 4,8★ bei Google
       </p>
     </div>
   </section>
@@ -1033,7 +1033,7 @@ const Blog = () => {
   const title =
     "Magazin — Geschichten zwischen Tisch und Bühne | Emilian Leber";
   const description =
-    "Magazin von Magier Emilian Leber: Beobachtungen aus dem Magic Dinner, Hochzeit, Firmenfeier, Bühne. Quartalsweise neue Beiträge, 5,0★ aus 30+ Bewertungen.";
+    "Magazin von Magier Emilian Leber: Beobachtungen aus dem Magic Dinner, Hochzeit, Firmenfeier, Bühne. Quartalsweise neue Beiträge, 4,8★ bei Google.";
 
   return (
     <VoltageShell title={title} description={description} path="/blog" noindex={false}>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, ArrowRight, ArrowUpRight, Star, Clock } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import logoImg from "@/assets/logo-clean.webp";
+import logoImg from "@/assets/logo-clean-128.webp";
 
 const ACCENT = "#1D3FFF";
 const ACCENT_DEEP = "#1233CC";

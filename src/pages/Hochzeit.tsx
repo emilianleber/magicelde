@@ -2,27 +2,27 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA, FactsGrid, Stats, FAQ, SectionHeader } from "@/components/voltage/sections";
 import { InteractiveTabs, FormatCards, SplitFeature, PolaroidWall, NotificationFlow } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Hand, Wand2, UtensilsCrossed, Check, Clock, CalendarCheck, MessageSquare, MapPin, Headphones, ShieldCheck, Timer, Sparkles, Languages } from "lucide-react";
-import heroImg from "@/assets/wedding-magic.jpg";
-import splitImg from "@/assets/emotionen.jpg";
+import heroImg from "@/assets/wedding-magic-1200.webp";
+import splitImg from "@/assets/emotionen-1200.webp";
 // InteractiveTabs (breite Container) — alle QUER, kein Kopf-Crop
-import tabCloseup from "@/assets/hero-closeup.jpg";
-import tabDinner from "@/assets/emilian-magic-dinner.jpg";
-import tabStage from "@/assets/hero-stage.jpg";
+import tabCloseup from "@/assets/hero-closeup-1200.webp";
+import tabDinner from "@/assets/emilian-magic-dinner-1200.webp";
+import tabStage from "@/assets/hero-stage-1200.webp";
 // PolaroidWall — 6 eigene Bilder, keine Doppelung mit dem Rest der Seite
-import polReactions from "@/assets/audience-reactions.jpg";
-import polDinner from "@/assets/hero-dinner.jpg";
-import polStaunen from "@/assets/staunen.jpg";
-import polModerator from "@/assets/moderator-hero.jpg";
-import polBuehne from "@/assets/magicdinner-buehne.jpg";
-import polFinale from "@/assets/stage-show.jpg";
+import polReactions from "@/assets/audience-reactions-1200.webp";
+import polDinner from "@/assets/hero-dinner-1200.webp";
+import polStaunen from "@/assets/staunen-1200.webp";
+import polModerator from "@/assets/moderator-hero-1200.webp";
+import polBuehne from "@/assets/magicdinner-buehne-1200.webp";
+import polFinale from "@/assets/stage-show-1200.webp";
 
 export default function Hochzeit() {
   return (
     <VoltageShell
       title="Zauberer für Hochzeit buchen — Drei Akte Magie | Emilian Leber"
-      description="Zauberer für Hochzeit in Bayern und deutschlandweit. Drei Akte Magie zwischen Ja-Wort und Mitternacht — Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnenshow vor dem Tanz. 100+ Hochzeiten, 5,0★. Kostenlos & unverbindlich anfragen."
+      description="Zauberer für Hochzeit in Bayern und deutschlandweit. Drei Akte Magie zwischen Ja-Wort und Mitternacht — Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnenshow vor dem Tanz. 100+ Hochzeiten, 4,8★ bei Google. Kostenlos & unverbindlich anfragen."
       path="/hochzeit"
       noindex={false}
     >
@@ -33,7 +33,7 @@ export default function Hochzeit() {
         image={heroImg}
         imageAlt="Zauberer bei einer Hochzeit"
         imgPos="center"
-        badge="Brautmutter weint regelmäßig — vor Lachen oder vor Rührung."
+        badge="100+ Hochzeiten begleitet — vom Sektempfang bis zum Tanz."
       />
 
       <Stats
@@ -41,7 +41,7 @@ export default function Hochzeit() {
           { v: "200+", l: "Events seit 2016" },
           { v: "100+", l: "Hochzeiten begleitet" },
           { v: "3x", l: "TV-Finalist (2023–2025)" },
-          { v: "5,0★", l: "30+ Bewertungen" },
+          { v: "4,8★", l: "16 Google-Rezensionen" },
         ]}
       />
 
@@ -135,11 +135,7 @@ export default function Hochzeit() {
         ]}
       />
 
-      <PullQuote
-        text="Du warst der absolute Höhepunkt unserer Hochzeitsfeier. Was ich nicht erwartet hätte: dass die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter."
-        name="Martina Senftl"
-        role="Brautpaar · Bayern"
-      />
+      <PullQuote review={REAL_REVIEWS.poellinger} />
 
       <ReviewsBlock paper={false} />
 

@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, WarumCarousel, DarkShowcase, FormatCards } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Handshake, ShieldCheck, Hand, Wand2, UtensilsCrossed } from "lucide-react";
 import heroImg from "@/assets/emilian-portrait-cards.jpg";
 import splitImg from "@/assets/magicdinner-buehne.jpg";
@@ -14,7 +14,7 @@ export default function DemoEventAgenturen() {
   return (
     <VoltageShell
       title="DEMO · Act für Event-Agenturen — verlässlich & white-label | Emilian Leber"
-      description="Verlässlicher Act für Event-Agenturen — Konzept, Pitch, Vertrag und Briefing aus einer Hand, white-label-tauglich. Flexibel von Close-Up bis Bühne. Seit Jahren Stamm-Act für Agenturen."
+      description="Verlässlicher Act für Event-Agenturen — Konzept, Pitch-Material, Vertrag und Briefing aus einer Hand, white-label-tauglich. Flexibel von Close-Up bis Bühne. Seit Jahren Stamm-Act für Agenturen."
       path="/demo/event-agenturen"
     >
       <SubHero
@@ -28,7 +28,7 @@ export default function DemoEventAgenturen() {
 
       <SplitFeature
         eyebrow="Aus einer Hand"
-        title={<>Konzept, Pitch, Vertrag und Briefing — <span style={{ color: COBALT }}>komplett.</span></>}
+        title={<>Konzept, Pitch-Material, Vertrag, Briefing — <span style={{ color: COBALT }}>komplett.</span></>}
         sub="Ihr bekommt einen Act, der mitdenkt: Ich liefere euch Konzept und Pitch-Material, kümmere mich um Vertrag und Briefing und füge mich white-label-tauglich in euer Programm ein. Euer Kunde sieht ein rundes Event — nicht zehn Einzelteile."
         points={["Verlässliche Kommunikation und sauberes Timing — ihr müsst nicht nachhaken", "Tech-Rider und Versicherungsnachweis auf Anfrage", "Flexibel skalierbar von Close-Up bis große Bühne"]}
         image={splitImg}
@@ -56,7 +56,7 @@ export default function DemoEventAgenturen() {
           { kind: "photo", image: carA, chip: "Bühnenerprobt", title: "Auch unter Live-Druck sicher", text: "Vor großem Publikum erprobt — der Act sitzt, auch wenn euer Kunde zuschaut.", pos: "center" },
           { kind: "feature", Icon: Handshake, title: "White-Label", text: "Fügt sich nahtlos in euer Programm ein — euer Kunde sieht ein rundes Event, nicht zehn Einzelteile." },
           { kind: "stat", v: "200+", l: "Events für Agenturen & Direktkunden", text: "Routine in jedem Rahmen — vom Empfang bis zur großen Gala." },
-          { kind: "review", text: "Wir buchen Emilian seit Jahren — verlässlich, professionell, nie ein Problem. Genau der Act, den man Kunden bedenkenlos empfiehlt.", name: "Jan von Lehmann · Event-Agentur" },
+          { kind: "review", review: REAL_REVIEWS.poellinger },
           { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Der Saal geht mit", text: "Comedy, über die mitgelacht wird — eine Show, die euren Programmpunkt zum Highlight macht.", pos: "center" },
           { kind: "feature", Icon: ShieldCheck, title: "Kein Risiko", text: "Tech-Rider, Versicherung, Vertrag und Briefing kommen sauber und rechtzeitig — kein einziger Ausfall." },
         ]}
@@ -75,11 +75,7 @@ export default function DemoEventAgenturen() {
         badge="Kein einziger Ausfall in der Zusammenarbeit."
       />
 
-      <PullQuote
-        text="Wir buchen Emilian seit Jahren für unsere Kunden — verlässlich, professionell, immer im Timing. Genau der Act, den man bedenkenlos empfiehlt, ohne nachzuhaken."
-        name="Jan von Lehmann"
-        role="Event-Agentur · München"
-      />
+      <PullQuote review={REAL_REVIEWS.lehmann} />
 
       <ReviewsBlock paper={false} />
 
