@@ -11,8 +11,8 @@
  * Daten (Single Source of Truth = .ts-Files) werden via esbuild voll geladen
  * (createRenderer().data, siehe seo-content.mjs) — kein fragiles Regex.
  *
- * Output: 23 Hauptseiten + 109 Städte + 545 Service-Stadt-Kombis + 16 Blog
- *   + 6 Wissen = 699 prerendered HTML-Files (deckungsgleich mit sitemap.xml).
+ * Output: Hauptseiten + Region-Staedte (staedte.ts) + Format×Stadt nur fuer
+ *   SERVICE_STADT_SLUGS + Blog + Wissen (deckungsgleich mit sitemap.xml).
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
@@ -269,7 +269,7 @@ for (const route of staticRoutes) {
   count++;
 }
 
-// 2) Stadt-Pages /zauberer/:stadt (109)
+// 2) Stadt-Pages /zauberer/:stadt (Einsatzgebiet, staedte.ts)
 const cities = renderer.data.cities;
 if (cities.length === 0) throw new Error('inject-meta: keine Städte aus staedte.ts geladen');
 for (const c of cities) {
@@ -283,14 +283,15 @@ for (const c of cities) {
   count++;
 }
 
-// 3) Service-Stadt-Kombis /zauberer-{service}/{stadt} (5 × 109 = 545)
+const serviceCities = cities.filter((c) => renderer.data.serviceCitySlugs.includes(c.slug));
+// 3) Service-Stadt-Kombis /zauberer-{service}/{stadt} — nur SERVICE_STADT_SLUGS
 // Ausnahme: Formate mit canonicalPrefix (z.B. magic-dinner) werden unter
 // /magic-dinner-{stadt} prerendert statt unter /zauberer-magic-dinner/{stadt}.
 // Die Alt-URL wird per Vercel-301 auf die Neu-URL weitergeleitet (vercel.json).
 const formats = renderer.data.formats;
 if (formats.length === 0) throw new Error('inject-meta: keine Service-Formate aus serviceFormats.ts geladen');
 for (const f of formats) {
-  for (const c of cities) {
+  for (const c of serviceCities) {
     const urlPath = f.canonicalPrefix
       ? `${f.canonicalPrefix}-${c.slug}`
       : `${f.routePrefix}/${c.slug}`;
@@ -338,4 +339,4 @@ for (const w of topics) {
   count++;
 }
 
-console.log(`✓ Prerendered ${count} routes (${staticRoutes.length} static + ${cities.length} cities + ${formats.length * cities.length} service-cities + ${posts.length} blog + ${topics.length} wissen)`);
+console.log(`✓ Prerendered ${count} routes (${staticRoutes.length} static + ${cities.length} cities + ${formats.length * serviceCities.length} service-cities + ${posts.length} blog + ${topics.length} wissen)`);

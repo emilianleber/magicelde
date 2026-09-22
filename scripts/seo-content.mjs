@@ -63,6 +63,8 @@ export async function loadSeoData() {
   const blog = b.blogPosts;
   return {
     cities,
+    /** Format×Stadt-Seiten nur fuer diese Staedte (staedte.ts). */
+    serviceCitySlugs: st.SERVICE_STADT_SLUGS,
     citiesBySlug: Object.fromEntries(cities.map((c) => [c.slug, c])),
     formats,
     formatsBySlug: Object.fromEntries(formats.map((f) => [f.slug, f])),

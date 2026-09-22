@@ -159,8 +159,8 @@ const WarumStadtCarousel = ({ data }: { data: Stadt }) => (
       {
         kind: "feature",
         Icon: Route,
-        title: "Deutschlandweit dabei",
-        text: `Regensburg ist die Basis — für Events in ${data.name} und ${data.region} bin ich zur Stelle, deutschlandweit unterwegs.`,
+        title: "In ganz Bayern unterwegs",
+        text: `Regensburg ist die Basis — für Events in ${data.name} und ${data.region} bin ich schnell vor Ort — die Anfahrt steht transparent im Angebot.`,
       },
     ]}
   />
@@ -733,15 +733,16 @@ const FAQSection = ({ data }: { data: Stadt }) => {
    ═══════════════════════════════════════════════════════════ */
 const WeitereStaedteSection = ({ current }: { current: string }) => {
   const currentData = staedte.find((s) => s.slug === current);
-  const sameRegion = staedte.filter((s) => s.slug !== current && s.region === currentData?.region).slice(0, 12);
-  const others = staedte.filter((s) => s.slug !== current && s.region !== currentData?.region).slice(0, 6);
+  // Alle Staedte sind im Einsatzgebiet (Bayern) — deshalb alle zeigen.
+  const sameRegion = staedte.filter((s) => s.slug !== current);
+  const others: typeof staedte = [];
   return (
     <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
       <div className="max-w-7xl mx-auto">
         <motion.div variants={up} className="max-w-3xl mb-10">
           <Eyebrow>Zauberer auch in deiner Stadt</Eyebrow>
           <h2 className="font-extrabold tracking-[-0.02em]" style={{ fontSize: "clamp(1.75rem,4vw,3.25rem)", lineHeight: 1.05, color: INK }}>
-            Über {staedte.length}+ Städte in <span style={{ color: COBALT }}>Deutschland und Österreich</span>.
+            Aus Regensburg — in <span style={{ color: COBALT }}>ganz Bayern</span>.
           </h2>
         </motion.div>
         {sameRegion.length > 0 && (

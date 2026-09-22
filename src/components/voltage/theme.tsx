@@ -41,6 +41,7 @@ export const KONZEPTE = [
 export const ANLAESSE_NAV = [
   { t: "Hochzeit", h: "/hochzeit", d: "Magie zwischen Ja-Wort und Mitternacht" },
   { t: "Firmenfeier", h: "/firmenfeiern", d: "Eisbrecher für gemischte Teams" },
+  { t: "Weihnachtsfeier", h: "/zauberer-weihnachtsfeier", d: "Der Jahresabschluss, über den man redet" },
   { t: "Geburtstag · Jubiläum", h: "/geburtstage", d: "Die Show, über die man noch redet" },
   { t: "Event-Agenturen", h: "/event-agenturen", d: "Verlässlicher Act für eure Kunden" },
   { t: "Messe · Roadshow", h: "/messe-magier", d: "Magie, die Menschen an den Stand zieht" },

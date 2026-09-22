@@ -3,14 +3,15 @@
  *
  * Quellen:
  *   - Statische Routen (Hauptseiten, Legal, Format-Pages)
- *   - Stadt-Pages aus src/data/staedte.ts (109)
- *   - Service-Stadt-Kombis: 5 Formate × 109 Städte = 545 (Phase 2)
+ *   - Stadt-Pages aus src/data/staedte.ts (nur Einsatzgebiet)
+ *   - Service-Stadt-Kombis: 5 Formate × SERVICE_STADT_SLUGS
  *   - Blog-Posts aus src/data/blogPosts.ts
  *
  * Wird via "npm run build" vor Vite ausgeführt.
  */
 
 import { writeFileSync } from "node:fs";
+import { loadSeoData } from "./seo-content.mjs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -56,19 +57,6 @@ const SERVICE_SLUGS = [
   { slug: "buehnenshow", label: "Bühnenshow", priority: 0.65 },
 ];
 
-// Cities laden (via dynamic import, weil .ts → .mjs nicht direkt geht)
-async function loadCities() {
-  const { staedte } = await import(join(ROOT, "src/data/staedte.ts").replace(/\\/g, "/"))
-    .catch(async () => {
-      // Fallback: file lesen + regex slugs extrahieren
-      const fs = await import("node:fs");
-      const content = fs.readFileSync(join(ROOT, "src/data/staedte.ts"), "utf-8");
-      const slugs = [...content.matchAll(/slug:\s*"([^"]+)"/g)].map((m) => m[1]);
-      return { staedte: slugs.map((slug) => ({ slug })) };
-    });
-  return staedte;
-}
-
 // Wissen-Topics laden
 async function loadWissenTopics() {
   const fs = await import("node:fs");
@@ -106,7 +94,10 @@ async function main() {
 
   // Stadt-Seiten /zauberer/:stadt
   lines.push("  <!-- Stadt-Seiten -->");
-  const cities = await loadCities();
+  // Gleiche Quelle wie inject-meta: nur das Einsatzgebiet aus staedte.ts.
+  const seo = await loadSeoData();
+  const cities = seo.cities;
+  const serviceCities = cities.filter((c) => seo.serviceCitySlugs.includes(c.slug));
   for (const c of cities) {
     const slug = c.slug || c;
     lines.push(urlEntry({ path: `/zauberer/${slug}`, changefreq: "monthly", priority: 0.6 }));
@@ -116,7 +107,7 @@ async function main() {
   // Ausnahme: magic-dinner nutzt die neue keyword-tighter URL /magic-dinner-[stadt].
   lines.push("  <!-- Service-Stadt-Kombinationen (Long-Tail) -->");
   for (const service of SERVICE_SLUGS) {
-    for (const c of cities) {
+    for (const c of serviceCities) {
       const slug = c.slug || c;
       const path =
         service.slug === "magic-dinner"
