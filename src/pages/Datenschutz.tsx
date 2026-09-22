@@ -56,7 +56,9 @@ const Datenschutz = () => (
                 <br />
                 MagicEL Entertainment
                 <br />
-                93047 Regensburg, Bayern
+                Reichsstiftstraße 18
+                <br />
+                93055 Regensburg, Bayern
                 <br />
                 E-Mail:{" "}
                 <a

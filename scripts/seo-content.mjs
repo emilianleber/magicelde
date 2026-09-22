@@ -198,6 +198,8 @@ function personSchema() {
     ],
     address: {
       "@type": "PostalAddress",
+      streetAddress: "Reichsstiftstraße 18",
+      postalCode: "93055",
       addressLocality: "Regensburg",
       addressRegion: "Bayern",
       addressCountry: "DE",
@@ -227,6 +229,8 @@ function localBusinessSchema(areaServed) {
     priceRange: "€€-€€€",
     address: {
       "@type": "PostalAddress",
+      streetAddress: "Reichsstiftstraße 18",
+      postalCode: "93055",
       addressLocality: "Regensburg",
       addressRegion: "Bayern",
       addressCountry: "DE",

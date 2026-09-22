@@ -52,12 +52,12 @@ export default function VoltageFooter() {
             <img src={logo} alt="Emilian Leber" className="h-7 w-auto" style={{ filter: "brightness(0) invert(1)" }} />
             <span className="text-[20px] font-extrabold tracking-tight" style={{ color: WHITE }}>Emilian Leber</span>
           </div>
-          <p className="text-[15px] leading-[1.65] mt-4 max-w-xs" style={{ color: D_DIM }}>Comedy-Zauberer aus Regensburg. Bühnenshow, Close-Up und Magic Dinner für Firmenfeiern, Weihnachtsfeiern & Hochzeiten — in ganz Bayern.</p>
+          <p className="text-[15px] leading-[1.65] mt-4 max-w-xs" style={{ color: D_DIM }}>Comedy-Zauberer aus Regensburg. Bühnenshow, Close-Up und Magic Dinner für Firmenfeiern, Weihnachtsfeiern & Hochzeiten — in Bayern und deutschlandweit.</p>
           <div className="mt-6 space-y-2.5 text-[14.5px]">
             <a href={PHONE_HREF} className="flex items-center gap-2.5 hover:text-white transition-colors"><Phone className="w-4 h-4" style={{ color: COBALT }} /> {PHONE_DISPLAY}</a>
             <a href={EMAIL_HREF} className="flex items-center gap-2.5 hover:text-white transition-colors"><Mail className="w-4 h-4" style={{ color: COBALT }} /> el@magicel.de</a>
             <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 hover:text-white transition-colors"><Phone className="w-4 h-4" style={{ color: COBALT }} /> WhatsApp</a>
-            <span className="flex items-center gap-2.5"><MapPin className="w-4 h-4" style={{ color: COBALT }} /> Regensburg · ganz Bayern</span>
+            <span className="flex items-start gap-2.5"><MapPin className="w-4 h-4 mt-0.5 shrink-0" style={{ color: COBALT }} /> <span>Reichsstiftstraße 18<br />93055 Regensburg</span></span>
           </div>
           <div className="flex items-center gap-3 mt-7">{SOCIALS.map(({ Icon, href, label }) => (<a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="w-11 h-11 rounded-full flex items-center justify-center transition-colors hover:text-white hover:border-white/40" style={{ border: `1px solid ${D_LINE}` }}><Icon className="w-[18px] h-[18px]" /></a>))}</div>
         </div>

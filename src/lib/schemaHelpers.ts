@@ -49,6 +49,8 @@ export const personSchema = () => ({
   ],
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Reichsstiftstraße 18",
+    postalCode: "93055",
     addressLocality: "Regensburg",
     addressRegion: "Bayern",
     addressCountry: "DE",
@@ -70,6 +72,8 @@ export const localBusinessSchema = () => ({
   priceRange: "€€-€€€",
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Reichsstiftstraße 18",
+    postalCode: "93055",
     addressLocality: "Regensburg",
     addressRegion: "Bayern",
     addressCountry: "DE",
