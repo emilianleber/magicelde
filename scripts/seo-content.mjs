@@ -336,6 +336,7 @@ const FORMAT_LINKS = [
 const OCCASION_LINKS = [
   ["/hochzeit", "Hochzeit"],
   ["/firmenfeiern", "Firmenfeier"],
+  ["/zauberer-weihnachtsfeier", "Weihnachtsfeier"],
   ["/geburtstage", "Geburtstag & Jubiläum"],
 ];
 const TRUST_LINKS = [
@@ -369,6 +370,52 @@ const GENERIC_FAQ = [
    ───────────────────────────────────────────────────────────── */
 
 const STATIC_CONTENT = {
+  "/zauberer-weihnachtsfeier": {
+    h1: "Zauberer für eure Weihnachtsfeier",
+    lead: "Der Abend, der das Jahr im Team rund ausklingen lässt: Close-Up beim Glühwein-Empfang, Magie zwischen den Gängen und eine Comedy-Show als Höhepunkt. Zauberer aus Regensburg für Weihnachtsfeiern in ganz Bayern — Pakete ab 395 €.",
+    sections: [
+      {
+        h2: "So läuft die Weihnachtsfeier mit Zauberer ab",
+        bullets: [
+          "Empfang: Walk-Around-Magie von Gruppe zu Gruppe — der Eisbrecher zwischen Abteilungen",
+          "Dinner: Close-Up von Tisch zu Tisch zwischen den Gängen, ohne den Service zu stören",
+          "Höhepunkt: 20–30 Minuten Comedy- und Mentalmagie-Show für alle gleichzeitig",
+        ],
+      },
+      {
+        h2: "Welches Format passt?",
+        body: "Beim Team-Essen mit 20 bis 50 Kollegen passt Close-Up am Tisch. Ab etwa 50 Gästen lohnt sich die Kombination aus Empfang und Bühnenshow. Für Restaurant-Feiern gibt es das Magic Dinner, durchkomponiert über das ganze Weihnachtsmenü.",
+      },
+      {
+        h2: "Rechtzeitig buchen",
+        body: "Für Weihnachtsfeiern am besten 8–12 Wochen Vorlauf einplanen — die Freitage und Samstage im Dezember sind zuerst vergeben. Anfrage mit Datum, Ort und Gästezahl genügt, das Angebot kommt innerhalb von 24 Stunden.",
+      },
+      {
+        h2: "Einsatzgebiet: Regensburg und ganz Bayern",
+        body: "Zuhause in Regensburg, unterwegs für Weihnachtsfeiern in München, Nürnberg, Ingolstadt, Landshut, Straubing, Passau, Deggendorf, Amberg, Weiden, Augsburg, Erlangen, Freising und Bamberg. Die Anfahrt steht transparent im Angebot.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Was kostet ein Zauberer für die Weihnachtsfeier?",
+        a: "Pakete starten ab 395 €. Der genaue Preis hängt von Format, Dauer und Anfahrt ab. Nach einer kurzen Anfrage kommt innerhalb von 24 Stunden ein verbindliches Angebot ohne versteckte Kosten.",
+      },
+      {
+        q: "Wie früh sollten wir für die Weihnachtsfeier buchen?",
+        a: "Am besten 8–12 Wochen vorher. Die Freitage und Samstage im Dezember sind zuerst vergeben; kurzfristige Anfragen klappen trotzdem oft, wenn der Termin frei ist.",
+      },
+      {
+        q: "Kommt der Zauberer auch außerhalb von Regensburg?",
+        a: "Ja — in ganz Bayern, zum Beispiel München, Nürnberg, Ingolstadt, Landshut, Passau, Straubing, Amberg und Weiden. Die Anfahrt steht transparent im Angebot.",
+      },
+    ],
+    schema: {
+      service: {
+        name: "Zauberer für Weihnachtsfeiern",
+        serviceType: "Event-Entertainment",
+      },
+    },
+  },
   "/geburtstage": {
     h1: "Zauberer für Geburtstag & Jubiläum",
     lead: "Ein runder Geburtstag oder ein Jubiläum lebt von Momenten, über die am nächsten Tag noch geredet wird. Als Zauberkünstler aus Bayern bringe ich Close-Up-Magie an die Tische und eine Comedy-Bühnenshow zwischen die Reden — abgestimmt auf eure Familie und euren Anlass.",

@@ -24,6 +24,7 @@ const HAUPTSEITEN = [
   { path: "/", changefreq: "weekly", priority: 1.0 },
   { path: "/hochzeit", changefreq: "monthly", priority: 0.95 },
   { path: "/firmenfeiern", changefreq: "monthly", priority: 0.95 },
+  { path: "/zauberer-weihnachtsfeier", changefreq: "weekly", priority: 0.95 },
   { path: "/magic-dinner", changefreq: "monthly", priority: 0.95 },
   { path: "/tickets", changefreq: "weekly", priority: 0.9 },
   { path: "/buchung", changefreq: "monthly", priority: 0.9 },

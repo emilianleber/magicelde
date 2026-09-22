@@ -73,7 +73,7 @@ const ANLAESSE = [
   { t: "Geburtstag", d: "Die Show, über die man redet.", img: birthdayImg, cls: "md:col-span-1", big: false, href: "/geburtstage" },
   { t: "Gala & Award", d: "Unterhaltung zwischen den Programmpunkten.", img: greatestTalentImg, cls: "md:col-span-1", big: false, href: "/buehnenshow" },
   { t: "Messe & Promotion", d: "Magie, die Menschen an den Stand zieht.", img: haendeImg, cls: "md:col-span-2", big: false, href: "/messe-magier" },
-  { t: "Weihnachtsfeier", d: "Der Abend, der das Jahr im Team rund ausklingen lässt.", img: heroDinnerImg, cls: "md:col-span-2", big: false, href: "/firmenfeiern" },
+  { t: "Weihnachtsfeier", d: "Der Abend, der das Jahr im Team rund ausklingen lässt.", img: heroDinnerImg, cls: "md:col-span-2", big: false, href: "/zauberer-weihnachtsfeier" },
 ];
 const STATS = [
   { v: "200+", l: "Events seit 2016" }, { v: "5,0★", l: "30+ Google-Bewertungen" },

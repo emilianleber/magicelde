@@ -1,0 +1,81 @@
+{
+  "_hinweis": "Single Source fuer <title> + meta description. Gelesen von VoltageShell (Browser) UND scripts/inject-meta.mjs (vorgerendertes HTML fuer Google). Vorher standen dort zwei verschiedene Titel pro Seite. Regeln: Titel max. 60 Zeichen, Beschreibung 120-155 Zeichen (mit laengstem Stadtnamen), Keyword + Region vorne, Aufruf am Ende. Pruefung: node scripts/check-seo-meta.mjs",
+  "pages": {
+    "/": {
+      "title": "Zauberer Regensburg & Bayern — Emilian Leber | Comedy-Magie",
+      "description": "Emilian Leber, Zauberer aus Regensburg: Close-Up, Comedy-Show & Magic Dinner für Firmenfeier, Weihnachtsfeier & Hochzeit in Bayern. Jetzt anfragen."
+    },
+    "/hochzeit": {
+      "title": "Zauberer für Hochzeit in Bayern — Emilian Leber",
+      "description": "Hochzeitszauberer aus Regensburg: Close-Up beim Sektempfang, Magie am Tisch, Show vor dem Tanz. 100+ Hochzeiten, 5,0★. Jetzt Wunschtermin anfragen."
+    },
+    "/firmenfeiern": {
+      "title": "Zauberer für Firmenfeier in Bayern — Emilian Leber",
+      "description": "Zauberer für Firmenfeier, Weihnachtsfeier & Gala in Regensburg, München, Nürnberg: Close-Up & Comedy-Show, auf eure Firma zugeschnitten. Jetzt anfragen."
+    },
+    "/zauberer-weihnachtsfeier": {
+      "title": "Zauberer Weihnachtsfeier — Regensburg & Bayern | Emilian Leber",
+      "description": "Zauberer für eure Weihnachtsfeier in Regensburg, München & Nürnberg: Close-Up, Bühnenshow oder Magic Dinner. Ab 395 €. Jetzt Dezember-Termin sichern."
+    },
+    "/magic-dinner": {
+      "title": "Magic Dinner Regensburg & Bayern — Zauberer Emilian Leber",
+      "description": "Magic Dinner: Mehrgänge-Menü mit Zauberei direkt am Tisch und Show zwischen den Gängen. Für Firmen & private Feiern in Bayern. 5,0★. Jetzt anfragen."
+    },
+    "/buehnenshow": {
+      "title": "Zaubershow buchen — Comedy & Mentalmagie | Emilian Leber",
+      "description": "Zaubershow für Firmenfeier, Gala & Weihnachtsfeier: 15–60 Min Comedy und Mentalmagie vom Greatest-Talent-Finalisten. Aus Regensburg. Jetzt anfragen."
+    },
+    "/close-up": {
+      "title": "Close-Up Zauberer — Tischzauberei & Walk-Around | Emilian Leber",
+      "description": "Close-Up Magie direkt am Tisch: Karten, Münzen und Mentaleffekte beim Empfang und zwischen den Gängen. Zauberer aus Regensburg, 5,0★. Jetzt anfragen."
+    },
+    "/geburtstage": {
+      "title": "Zauberer für Geburtstag & Jubiläum — Emilian Leber",
+      "description": "Zauberer für runde Geburtstage & Jubiläen: Close-Up am Tisch und Comedy-Show für Erwachsene. 80+ Feiern begleitet, aus Regensburg. Jetzt anfragen."
+    },
+    "/comedy-zauberei": {
+      "title": "Comedy-Zauberer buchen — Emilian Leber | Magie mit Pointe",
+      "description": "Comedy-Zauberei, bei der gestaunt und gelacht wird: für Firmenfeier, Gala & Weihnachtsfeier in Bayern. Zauberer aus Regensburg. Jetzt anfragen."
+    },
+    "/moderation": {
+      "title": "Moderator & Zauberer für Events — Emilian Leber",
+      "description": "Event-Moderation mit magischen Elementen: Emilian Leber führt durch Firmenfeier, Gala und Preisverleihung — mit Magie zwischen den Programmpunkten."
+    },
+    "/event-agenturen": {
+      "title": "Zauberer für Event-Agenturen — Emilian Leber | Showact",
+      "description": "Verlässlicher Showact für Event-Agenturen: Pressekit, Tech-Rider, Antwort in 24 Stunden. Über 100 Firmen-Events, aus Regensburg bayernweit buchbar."
+    },
+    "/messe-magier": {
+      "title": "Messe-Zauberer — Standmagie & Leads | Emilian Leber",
+      "description": "Messe-Zauberer Emilian Leber: Standmagie, die Besucher anzieht und Gespräche eröffnet. Routinen mit eurem Produkt, professioneller Auftritt."
+    },
+    "/referenzen": {
+      "title": "Referenzen & Bewertungen — Zauberer Emilian Leber",
+      "description": "VKB, STRABAG, XXXLutz, Sparkasse, Stadt Regensburg und mehr: Referenzen mit Anlass, Konzept und Kundenstimmen. 5,0★ bei 30+ Bewertungen."
+    },
+    "/ueber-mich": {
+      "title": "Über Emilian Leber — Zauberer & Mentalist aus Regensburg",
+      "description": "Emilian Leber, Zauberer & Mentalist aus Regensburg: seit 2016 über 200 Events, dreifacher TV-Finalist. Comedy-Magie für Firmen, Hochzeiten & Feiern."
+    },
+    "/kontakt": {
+      "title": "Kontakt — Zauberer Emilian Leber anfragen",
+      "description": "Zauberer Emilian Leber unverbindlich anfragen: Datum, Ort und Anlass genügen. Antwort mit Angebot innerhalb von 24 Stunden. Aus Regensburg, bayernweit."
+    },
+    "/buchung": {
+      "title": "Zauberer buchen — unverbindlich anfragen | Emilian Leber",
+      "description": "Zauberer buchen für Firmenfeier, Weihnachtsfeier, Hochzeit oder Geburtstag: kurz anfragen, Angebot binnen 24 Stunden. Emilian Leber aus Regensburg."
+    },
+    "/faq": {
+      "title": "FAQ — Zauberer buchen: Kosten & Ablauf | Emilian Leber",
+      "description": "Was kostet ein Zauberer, wie läuft der Abend ab, welches Format passt? Antworten zu Close-Up, Bühnenshow und Magic Dinner von Emilian Leber."
+    },
+    "/tickets": {
+      "title": "Tickets & Termine — aktuell keine Events | Emilian Leber",
+      "description": "Aktuell sind keine öffentlichen Termine geplant — kein Vorverkauf. Private Buchungen für Firmen- und Weihnachtsfeiern sind jederzeit möglich."
+    }
+  },
+  "city": {
+    "title": "Zauberer {stadt} buchen — Emilian Leber",
+    "description": "Zauberer für {stadt}: Close-Up, Comedy-Show & Magic Dinner für Firmenfeier, Weihnachtsfeier und Hochzeit. 200+ Events, 5,0★. Jetzt anfragen."
+  }
+}

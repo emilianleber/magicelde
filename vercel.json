@@ -15,6 +15,9 @@
 
     { "source": "/firmenfeier", "destination": "/firmenfeiern", "permanent": true },
     { "source": "/firmenfeier/", "destination": "/firmenfeiern", "permanent": true },
+    { "source": "/weihnachtsfeier", "destination": "/zauberer-weihnachtsfeier", "permanent": true },
+    { "source": "/weihnachtsfeier/", "destination": "/zauberer-weihnachtsfeier", "permanent": true },
+    { "source": "/zauberer-weihnachtsfeier/", "destination": "/zauberer-weihnachtsfeier", "permanent": true },
     { "source": "/sommerfeste", "destination": "/firmenfeiern", "permanent": true },
     { "source": "/sommerfeste/", "destination": "/firmenfeiern", "permanent": true },
     { "source": "/zauberer-fuer-hochzeit", "destination": "/hochzeit", "permanent": true },

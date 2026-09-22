@@ -45,6 +45,7 @@ import { TVA_VIDEO_ID } from "@/lib/videos";
 import heroStartImg from "@/assets/hero-start.jpg";
 import stageImg from "@/assets/buehne-zuschauer.jpg";
 import dinnerBuehneImg from "@/assets/magicdinner-buehne.jpg";
+import SEO_META from "@/data/seoMeta.json";
 
 /* Voltage: Cobalt-Akzent inline, kein Serif/Italic, kein Gold/Burgunder. */
 const ACCENT = "#1D3FFF";
@@ -949,8 +950,9 @@ const StadtSeite = () => {
   if (!data) return <NotFound />;
 
   const siteUrl = `https://www.magicel.de/zauberer/${data.slug}`;
-  const title = `Zauberer ${data.name} — Hochzeit, Firmenfeier, Magic Dinner | Emilian Leber`;
-  const description = `Zauberer in ${data.name} buchen: Close-Up Magie, Bühnenshow, Magic Dinner für Hochzeit, Firmenfeier, Geburtstag und Galas. 5,0★ · 30+ Bewertungen · 200+ Events · 24 h Antwort.`;
+  // Vorlage aus seoMeta.json — identisch mit dem vorgerenderten HTML (inject-meta.mjs).
+  const title = SEO_META.city.title.replace(/\{stadt\}/g, data.name);
+  const description = SEO_META.city.description.replace(/\{stadt\}/g, data.name);
   const keywords = keywordList(data.name);
 
   const faqSchema =

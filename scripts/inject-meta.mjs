@@ -18,6 +18,10 @@ import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createRenderer } from './seo-content.mjs';
 
+// Single Source fuer Titel/Beschreibung — dieselbe Datei liest VoltageShell im
+// Browser. Vorher gab es pro Seite zwei verschiedene Titel (22.09.2026).
+const SEO_META = JSON.parse(readFileSync(join(process.cwd(), 'src/data/seoMeta.json'), 'utf8'));
+
 const BASE = 'https://www.magicel.de';
 const ROOT = process.cwd();
 const DIST = join(ROOT, 'dist');
@@ -54,6 +58,12 @@ const staticRoutes = [
     title: '★ Zauberer Firmenfeier — Emilian Leber · Premium-Entertainment · 5,0/5',
     description: 'Zauberer für Firmenfeiern: Vorstandsdinner, Weihnachtsfeier, Gala. DAX-Konzerne bis Mittelstand. Insider-Pointen aus dem Briefing. 200+ Events. 5,0★ bei 30+ Bewertungen.',
     ogTitle: 'Zauberer Firmenfeier — 200+ Events · 5,0★',
+  },
+  {
+    path: '/zauberer-weihnachtsfeier',
+    title: 'Zauberer Weihnachtsfeier — Regensburg & Bayern | Emilian Leber',
+    description: '',
+    ogTitle: '',
   },
   {
     path: '/magic-dinner',
@@ -246,7 +256,9 @@ const renderer = await createRenderer();
 let count = 0;
 
 // 1) Statische Hauptseiten (23)
-for (const r of staticRoutes) {
+for (const route of staticRoutes) {
+  const m = SEO_META.pages[route.path];
+  const r = m ? { ...route, title: m.title, description: m.description, ogTitle: m.title } : route;
   const canonical = `${BASE}${r.path}`;
   const html = injectMeta(baseHtml, { ...r, canonical });
   const injection =
@@ -262,9 +274,9 @@ const cities = renderer.data.cities;
 if (cities.length === 0) throw new Error('inject-meta: keine Städte aus staedte.ts geladen');
 for (const c of cities) {
   const canonical = `${BASE}/zauberer/${c.slug}`;
-  const title = `★ Zauberer ${c.name} · Close-Up + Bühne + Magic Dinner · 5,0/5`;
-  const description = `Zauberer in ${c.name}: Close-Up Magie, Comedy-Bühnenshow & Magic Dinner für Hochzeit, Firmenfeier und Geburtstag. 200+ Events seit 2016. 5,0★ bei 30+ Bewertungen. Jetzt anfragen.`;
-  const ogTitle = `Zauberer ${c.name} — 5,0★ bei 30+ Bewertungen`;
+  const title = SEO_META.city.title.replace(/\{stadt\}/g, c.name);
+  const description = SEO_META.city.description.replace(/\{stadt\}/g, c.name);
+  const ogTitle = title;
   const html = injectMeta(baseHtml, { title, description, canonical, ogTitle });
   const injection = renderer.render({ kind: 'city', citySlug: c.slug });
   writeRoute(`/zauberer/${c.slug}`, injectStatic(html, injection));
