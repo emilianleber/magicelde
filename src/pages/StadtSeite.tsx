@@ -50,6 +50,12 @@ import SEO_META from "@/data/seoMeta.json";
 /* Voltage: Cobalt-Akzent inline, kein Serif/Italic, kein Gold/Burgunder. */
 const ACCENT = "#1D3FFF";
 
+/** Ein Satz zur Anfahrt ab Regensburg — Fahrzeit aus staedte.ts, sonst Heimatstadt. */
+const anfahrtSatz = (data: Stadt): string =>
+  data.anfahrt
+    ? `Von Regensburg nach ${data.name} sind es mit dem Auto ${data.anfahrt}.`
+    : `${data.name} ist mein Standort — kurze Wege, geringe Anfahrt.`;
+
 /* ═══════════════════════════════════════════════════════════
    SEO Keywords — pro Stadt durchsubstituiert
    ═══════════════════════════════════════════════════════════ */
@@ -98,19 +104,19 @@ const FormateSection = ({ data }: { data: Stadt }) => (
     note="Frei kombinierbar — von der Tischmagie bis zur großen Bühnenshow."
     formats={[
       {
-        t: `Close-Up Zauberer ${data.name}`,
+        t: "Close-Up Magie",
         d: `Interaktive Tischzauberei und Walk-Around-Magie direkt bei euren Gästen in ${data.name}. Karten, Münzen, Mentalmagie — der Eisbrecher bei Sektempfang, Dinner und Networking-Events.`,
         h: "/close-up",
         Icon: Hand,
       },
       {
-        t: `Bühnenshow ${data.name}`,
+        t: "Bühnenshow",
         d: `Durchkomponierte Comedy-Zaubershow mit Mentaleffekten, Comedy-Pointen und Standing-Ovation-Finale. Für Galas, Firmenfeiern und Hochzeiten in ${data.name} — 15 bis 60 Min, ab 50 Gästen.`,
         h: "/buehnenshow",
         Icon: Wand2,
       },
       {
-        t: `Magic Dinner ${data.name}`,
+        t: "Magic Dinner",
         d: `Dinner und Magie kombiniert — Close-Up und Bühnenshow eingebettet in einen Mehrgänge-Abend. Exklusives Erlebnis-Format für besondere Anlässe in ${data.name} und Umgebung.`,
         h: "/magic-dinner",
         Icon: UtensilsCrossed,
@@ -137,15 +143,15 @@ const WarumStadtCarousel = ({ data }: { data: Stadt }) => (
         image: dinnerBuehneImg,
         chip: `${data.name} & Umland`,
         title: "Vom Vorstands-Dinner bis zur Gala",
-        text: `Vertraut mit Sälen, Caterern und dem Ablauf vor Ort — von der intimen Feier bis zur großen Bühne in ${data.name}.`,
+        text: `Ablauf, Technik und Zeiten stimme ich vorab mit Location und Catering ab — von der intimen Feier bis zur großen Bühne in ${data.name}.`,
         pos: "center",
       },
-      { kind: "stat", v: "200+", l: "Events seit 2016", text: `Routine in ganz Bayern — viele davon in ${data.region}.` },
+      { kind: "stat", v: "200+", l: "Events seit 2016", text: "Hochzeiten, Firmenfeiern und Galas — aus Regensburg in ganz Bayern." },
       {
         kind: "feature",
         Icon: MapPin,
-        title: `Schnell in ${data.name}`,
-        text: `Anfahrt nach ${data.name} im Angebot transparent kalkuliert — keine versteckten Kosten, kurze Reaktionszeit.`,
+        title: `Anfahrt nach ${data.name}`,
+        text: `${anfahrtSatz(data)} Die Anfahrt wird nach Entfernung berechnet und steht transparent im Angebot.`,
       },
       {
         kind: "photo",
@@ -160,7 +166,7 @@ const WarumStadtCarousel = ({ data }: { data: Stadt }) => (
         kind: "feature",
         Icon: Route,
         title: "In ganz Bayern unterwegs",
-        text: `Regensburg ist die Basis — für Events in ${data.name} und ${data.region} bin ich schnell vor Ort — die Anfahrt steht transparent im Angebot.`,
+        text: `Regensburg ist die Basis — von dort komme ich zu Events in ${data.name} und ganz Bayern. Die Anfahrt steht transparent im Angebot.`,
       },
     ]}
   />
@@ -172,7 +178,7 @@ const WarumStadtCarousel = ({ data }: { data: Stadt }) => (
 const TrustStripSection = ({ data }: { data: Stadt }) => (
   <Stats
     items={[
-      { v: "200+", l: `Events seit 2016 — auch in ${data.name}` },
+      { v: "200+", l: "Events seit 2016 · Regensburg & ganz Bayern" },
       { v: "5,0★", l: "30+ Bewertungen · ProvenExpert" },
       { v: "TV", l: "TVA-Auftritt 2025 · Greatest Talent 2023" },
       { v: "24 h", l: "Antwort auf jede Anfrage" },
@@ -186,12 +192,12 @@ const TrustStripSection = ({ data }: { data: Stadt }) => (
    ═══════════════════════════════════════════════════════════ */
 const AuszeichnungenSection = ({ data }: { data: Stadt }) => {
   const CREDS = [
-    { Icon: Sparkles, title: "200+ Events seit 2016", body: `Routine in ganz Bayern — auch in ${data.name} und ${data.region}.` },
+    { Icon: Sparkles, title: "200+ Events seit 2016", body: "Hochzeiten, Firmenfeiern und Galas in Regensburg & ganz Bayern." },
     { Icon: Wand2, title: "3x TV-Finalist", body: "Greatest Talent 2023, Talents of Magic 2024 + Kreativpreis." },
     { Icon: GraduationCap, title: "Dt. Jugendmeisterschaft 2024", body: "Top 30 bundesweit — Auszeichnung im Wettbewerb." },
     { Icon: Building2, title: "TVA TV-Auftritt 2025", body: "Im Fernsehen zu sehen — als Zauberer und Mentalist." },
     { Icon: Heart, title: "5,0 Sterne · 30+ Bewertungen", body: "Google & ProvenExpert — durchweg Bestnoten." },
-    { Icon: PartyPopper, title: "100+ Hochzeiten begleitet", body: `Empfang, Dinner, vor dem Tanz — bayernweit, auch in ${data.name}.` },
+    { Icon: PartyPopper, title: "100+ Hochzeiten begleitet", body: "Empfang, Dinner, vor dem Tanz." },
   ];
   return (
     <motion.section
@@ -321,9 +327,6 @@ const AnlaesseSection = ({ data }: { data: Stadt }) => {
                     {a.label}
                   </h3>
                   <p className="text-[13.5px] leading-snug mt-0.5" style={{ color: L_DIM }}>{a.body}</p>
-                  <span className="block text-[10px] tracking-[0.14em] uppercase font-bold mt-1.5" style={{ color: COBALT }}>
-                    {a.keyword}
-                  </span>
                 </div>
                 <ArrowUpRight className="w-4 h-4 shrink-0 self-start transition-colors" style={{ color: "rgba(10,11,15,0.3)" }} />
               </a>
@@ -482,17 +485,17 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
                 <li>Magic Dinner — Magie zwischen den Gängen</li>
                 <li>Moderation mit eingebauter Magie</li>
               </ul>
-              <p className="mb-4">200+ Events seit 2016 — auch in {data.region}.</p>
+              <p className="mb-4">200+ Events seit 2016 — aus Regensburg in ganz Bayern.</p>
 
               {/* HOCHZEITSMAGIER-STADT */}
               <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                Hochzeitszauberer {data.name} — Magie beim Sektempfang, beim Dinner, vor dem Tanz
+                Hochzeit in {data.name} — Magie beim Sektempfang, beim Dinner, vor dem Tanz
               </h3>
               <p className="mb-4">
                 Ein Hochzeitszauberer in {data.name} bringt drei Phasen zum Glänzen: Walk-Around beim
                 Sektempfang als Eisbrecher zwischen Familien, Tisch-zu-Tisch beim Hochzeitsdinner mit
                 eingebauten Brautpaar-Anekdoten und eine kompakte Bühnen-Highlightshow vor dem
-                Eröffnungstanz. 100+ Hochzeiten bayernweit — das Setup steht.
+                Eröffnungstanz. 100+ Hochzeiten begleitet — der Ablauf ist erprobt.
               </p>
               <p className="mb-4">
                 Egal ob klassische kirchliche Hochzeit, freie Trauung oder standesamtliche Feier in{" "}
@@ -503,7 +506,6 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
                 <li>Empfang — Walk-Around · 30–60 Min · Eisbrecher zwischen Gästen in {data.name}.</li>
                 <li>Dinner — Tisch-zu-Tisch · 5–7 Min pro Tafel · eingebaute Brautpaar-Anekdoten.</li>
                 <li>Vor dem Tanz — Bühnen-Highlight · 15–20 Min · Standing-Ovation-Finale vor der Tanzeröffnung.</li>
-                <li>100+ Hochzeiten · auch in {data.name} und {data.region}</li>
               </ul>
               <div className="flex flex-wrap gap-3 mb-2">
                 <a href="/hochzeit" className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
@@ -516,7 +518,7 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
 
               {/* FIRMENZAUBERER-STADT */}
               <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                Firmenzauberer {data.name} — Corporate-Entertainment, das der Vorstand zückt
+                Firmenfeier in {data.name} — abgestimmt auf euer Team
               </h3>
               <p className="mb-4">
                 Ein Firmenzauberer in {data.name} braucht mehr als Tricks — er braucht Tonalitätsgefühl.
@@ -525,9 +527,9 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
                 funktionieren.
               </p>
               <p className="mb-4">
-                Premium-Beispiel: 200 Gäste, Versicherungs-Konzern in {data.region}, Vorstandsvorsitzender
-                zückte selbst drei Minuten nach Übergabe die Karten. Berufshaftpflicht, DSGVO + AVV
-                abgesichert, Tech-Rider auf Anfrage.
+                Beispiel aus den Referenzen: Firmenfeier eines Versicherungs-Konzerns mit 200 Gästen nahe
+                Ingolstadt, Bühnenshow als Finale. Berufshaftpflicht, DSGVO + AVV abgesichert, Tech-Rider
+                auf Anfrage.
               </p>
               <ul className="space-y-1.5 list-disc pl-5 mb-4">
                 <li>Weihnachtsfeier — Klassiker im Q4 · Mitarbeiter und Partner in {data.name}.</li>
@@ -546,7 +548,7 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
 
               {/* MAGIC-DINNER-STADT */}
               <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                Magic Dinner {data.name} — drei Gänge, drei Magie-Routinen
+                Magic Dinner — Magie zwischen den Gängen
               </h3>
               <p className="mb-4">
                 Magic Dinner ist mein Spezialgebiet — Mehrgänge-Abend mit Close-Up zwischen den Gängen und
@@ -558,7 +560,10 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
                 <li><strong style={{ color: INK }}>Hauptgang · 5–7 Min pro Tisch — Tafel-Magie:</strong> Tisch-zu-Tisch-Routinen mit eingebauten Anekdoten der Gastgeber. Jeder Tisch bekommt seine eigene Mini-Show.</li>
                 <li><strong style={{ color: INK }}>Dessert · 15–20 Min zentral — Bühnen-Pointe:</strong> Eine zentrale Bühnen-Routine für die ganze Tafel gleichzeitig — Mentaleffekt mit drei Sekunden Stille danach.</li>
               </ul>
-              <p className="mb-4">10+ Magic Dinners — auch in {data.name}.</p>
+              <p className="mb-4">
+                Partner-Location für das Magic Dinner ist das Restaurant Wald &amp; Wiese in Sinzing bei
+                Regensburg — alternativ komme ich mit dem Format in eure Location.
+              </p>
               <div className="mb-2">
                 <a href="/magic-dinner" className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase" style={{ background: COBALT, color: "#fff" }}>
                   Magic-Dinner-Konzept im Detail <ArrowUpRight className="w-3.5 h-3.5" />
@@ -567,36 +572,33 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
 
               {/* IN DER NÄHE */}
               <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                Zauberer in der Nähe von {data.name} gesucht?
+                Feier im Umland von {data.name}?
               </h3>
               <p className="mb-4">
-                Wer "Zauberer in der Nähe" oder "Magier in der Umgebung" sucht und in {data.name} oder dem
-                Umkreis sitzt: Ich komme zu jedem Veranstaltungsort in {data.name} und {data.region}.
-                Anfahrt im Angebot kalkuliert, keine versteckten Kosten, kurze Reaktionszeit auf Anfragen.
+                Auch Veranstaltungsorte außerhalb der Stadt sind kein Problem — Hochzeits-Locations auf dem
+                Land, Gasthöfe oder Firmengelände. Die Anfahrt wird für den konkreten Ort berechnet und steht
+                vorab im Angebot. Anfragen beantworte ich innerhalb von 24 Stunden, direkt erreichbar unter
+                +49 155 63744696.
               </p>
-              <ul className="space-y-1.5 list-disc pl-5 mb-4">
-                <li>Anfrage starten für {data.name}</li>
-                <li>Direkt anrufen — +49 155 63744696</li>
-                <li>Ich komme zu jedem Veranstaltungsort in {data.name} und {data.region}</li>
-              </ul>
 
               {/* ANREISE / VERFÜGBARKEIT */}
               <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
                 Anfahrt nach {data.name} &amp; Verfügbarkeit
               </h3>
               <p className="mb-4">
-                Mein Standort ist Regensburg — von dort aus betreue ich Events in ganz Bayern und
-                deutschlandweit. Die Anfahrt nach {data.name} ist im Angebot transparent kalkuliert, keine
-                versteckten Kosten. Pünktliches Erscheinen vor Showbeginn garantiert.
+                Mein Standort ist Regensburg — von dort aus komme ich zu Events in ganz Bayern.{" "}
+                {anfahrtSatz(data)} Die Anfahrt wird nach Entfernung berechnet und steht transparent im
+                Angebot, keine versteckten Kosten. Endet ein Event sehr spät und ist der Weg weit, klären
+                wir vorab, ob eine Übernachtung sinnvoll ist — auch die steht dann im Angebot.
               </p>
               <p className="mb-4">
-                Verfügbarkeit {year}–{year + 1}: Termine in {data.name} aktuell verfügbar. Q1 und Q2 sind
-                aktuell entspannt — Q4 (Weihnachtsfeier-Saison) füllt sich erfahrungsgemäß ab Juli.
-                Hochzeitstermine Mai–September am besten frühzeitig anfragen, gerade in {data.name}.
+                Verfügbarkeit {year}–{year + 1}: Ob dein Wunschtermin in {data.name} frei ist, prüfe ich
+                direkt bei deiner Anfrage. Für Weihnachtsfeiern (Dezember) und Hochzeiten von Mai bis
+                September am besten 8–12 Wochen vorher anfragen, sonst reichen meist 4–6 Wochen.
               </p>
               <ul className="space-y-1.5 list-disc pl-5 mb-4">
                 <li>Anfahrt im Angebot</li>
-                <li>Kein Stau-Risiko (eigene Reserve)</li>
+                <li>Zeitpuffer für die Anreise</li>
                 <li>Pünktlich vor Setup</li>
                 <li>Bayern flächendeckend</li>
               </ul>
@@ -607,8 +609,8 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
                 Sechs Garantien für dein Event in {data.name}
               </h3>
               <p className="mb-4">
-                Einen Zauberer in {data.name} zu buchen ist Vertrauenssache. Sechs Versprechen, die das
-                Risiko für dich auf Null bringen — schriftlich im Angebot fixiert.
+                Einen Zauberer in {data.name} zu buchen ist Vertrauenssache. Sechs Punkte, auf die du dich
+                verlassen kannst.
               </p>
               <ul className="space-y-1.5 list-disc pl-5 mb-4">
                 <li><strong style={{ color: INK }}>Berufshaftpflicht:</strong> Standard-Berufshaftpflicht für Künstler greift bei jedem Auftritt in {data.name} — Sach- und Personenschäden abgesichert. Versicherungs-Nachweis auf Anfrage.</li>
@@ -616,18 +618,18 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
                 <li><strong style={{ color: INK }}>24h-Antwort-Garantie:</strong> Anfragen aus {data.name} beantworte ich innerhalb 24 Stunden — meistens schneller, oft am selben Tag.</li>
                 <li><strong style={{ color: INK }}>DSGVO + AVV:</strong> Datenschutz, Auftragsverarbeitungsvertrag und alle rechtlichen Grundlagen — gerade für Firmenkunden in {data.name} wichtig.</li>
                 <li><strong style={{ color: INK }}>Pünktlichkeits-Versprechen:</strong> Setup 30 Min vor Showbeginn, Soundcheck inkludiert. Kein Stress vor eurer Veranstaltung in {data.name}.</li>
-                <li><strong style={{ color: INK }}>Krankheits-Ersatz:</strong> Im (sehr unwahrscheinlichen) Krankheitsfall bekomme ich einen geprüften Kollegen organisiert — kein Loch im Programm.</li>
+                <li><strong style={{ color: INK }}>Krankheitsfall:</strong> Bei kurzfristiger Erkrankung wird nach Möglichkeit ein qualifizierter Ersatz organisiert — so steht es auch in den AGB.</li>
               </ul>
 
               {/* LOCATIONS */}
               {data.bekannteLocations && data.bekannteLocations.length > 0 && (
                 <>
                   <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                    Event-Locations in {data.name}
+                    Bekannte Veranstaltungsorte in {data.name}
                   </h3>
                   <p className="mb-4">
-                    Ich trete regelmäßig in Locations und Venues in {data.name} auf — und komme zu jeder
-                    Wunsch-Location. Schlosssäle, Hotels, Restaurants, Eventhallen.
+                    Zur Orientierung einige bekannte Veranstaltungsorte in {data.name}. Ich komme zu jeder
+                    Location — Saal, Hotel, Restaurant, Gasthof oder Firmengelände.
                   </p>
                   <div className="flex flex-wrap gap-2.5 mb-4">
                     {data.bekannteLocations.map((loc) => (
@@ -655,7 +657,7 @@ const MehrUeberStadtSection = ({ data }: { data: Stadt }) => {
               {langParagraphs.length > 0 && (
                 <>
                   <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                    Zauberer {data.name} — ausführlich erklärt
+                    {data.name}: Anlässe, Formate und Anfahrt
                   </h3>
                   {langParagraphs.map((p, i) => (
                     <p key={i} className="mb-4">{p}</p>
@@ -704,19 +706,29 @@ const StimmenSection = () => <ReviewsBlock paper />;
    FAQ — Stadt-spezifisch + Allgemein
    ═══════════════════════════════════════════════════════════ */
 const FAQSection = ({ data }: { data: Stadt }) => {
+  const stadtFragen = (data.faq || []).map((f) => f.q).join(" ");
   const allgemein = [
-    {
-      q: `Wie weit im Voraus muss ich den Zauberer in ${data.name} buchen?`,
-      a: `Wochenend-Termine in ${data.name} sind 4–8 Wochen vorher meist noch frei. Kurzfristige Anfragen (1–2 Wochen) gehen je nach Auslastung — am besten direkt anfragen, ich antworte innerhalb 24 Stunden.`,
-    },
+    // Nur ergaenzen, wenn die Stadt die Frage nicht schon selbst beantwortet.
+    ...(/im Voraus|Wie früh/.test(stadtFragen)
+      ? []
+      : [
+          {
+            q: `Wie weit im Voraus sollte ich für ${data.name} buchen?`,
+            a: "Für Weihnachtsfeiern im Dezember und Hochzeiten von Mai bis September am besten 8–12 Wochen vorher, sonst reichen meist 4–6 Wochen. Kurzfristige Anfragen prüfe ich gern — Antwort innerhalb von 24 Stunden.",
+          },
+        ]),
     {
       q: `Welche Formate kann ich für mein Event in ${data.name} buchen?`,
-      a: `Close-Up Zauberei (Tisch-zu-Tisch + Walk-Around), Bühnenshow (15–60 Min, durchkomponiert mit Comedy + Mental), Magic Dinner (Mehrgänge-Abend mit Magie zwischen den Gängen) und Moderation mit eingebauter Magie. Auch kombinierbar.`,
+      a: "Close-Up Zauberei (Tisch-zu-Tisch und Walk-Around, Pakete ab 395 €), Bühnenshow (15–60 Min mit Comedy und Mentalmagie), Magic Dinner (Mehrgänge-Abend mit Magie zwischen den Gängen) und Moderation mit eingebauter Magie — auch kombinierbar, auf Deutsch oder Englisch.",
     },
-    {
-      q: `Komme ich mit dem Zauberer auch in kleinere Orte um ${data.name}?`,
-      a: `Ja — ich komme zu jedem Veranstaltungsort in ${data.name} und ${data.region}. Hochzeits-Locations am Land, Restaurants im Umkreis, Firmen-Standorte außerhalb der Stadt — die Anfahrt ist im Angebot kalkuliert.`,
-    },
+    ...(/Kommst du auch/.test(stadtFragen)
+      ? []
+      : [
+          {
+            q: `Kommst du auch in kleinere Orte um ${data.name}?`,
+            a: "Ja — Hochzeits-Locations auf dem Land, Restaurants im Umkreis, Firmenstandorte außerhalb der Stadt. Die Anfahrt wird nach Entfernung berechnet und steht transparent im Angebot.",
+          },
+        ]),
   ];
   const items = [...(data.faq || []), ...allgemein];
   return (
@@ -735,7 +747,6 @@ const WeitereStaedteSection = ({ current }: { current: string }) => {
   const currentData = staedte.find((s) => s.slug === current);
   // Alle Staedte sind im Einsatzgebiet (Bayern) — deshalb alle zeigen.
   const sameRegion = staedte.filter((s) => s.slug !== current);
-  const others: typeof staedte = [];
   return (
     <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24" style={{ background: "#F4F6F9", borderTop: `1px solid ${L_LINE}`, borderBottom: `1px solid ${L_LINE}` }}>
       <div className="max-w-7xl mx-auto">
@@ -752,26 +763,6 @@ const WeitereStaedteSection = ({ current }: { current: string }) => {
             </p>
             <div className="flex flex-wrap gap-2.5">
               {sameRegion.map((s) => (
-                <motion.a
-                  key={s.slug}
-                  variants={up}
-                  href={`/zauberer/${s.slug}`}
-                  className="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-full transition-colors hover:border-[#1D3FFF]"
-                  style={{ background: "#fff", border: `1px solid ${L_LINE}`, color: INK }}
-                >
-                  Zauberer {s.name}
-                </motion.a>
-              ))}
-            </div>
-          </div>
-        )}
-        {others.length > 0 && (
-          <div>
-            <p className="text-[10px] tracking-[0.18em] uppercase font-bold mb-5" style={{ color: COBALT }}>
-              Deutschlandweit
-            </p>
-            <div className="flex flex-wrap gap-2.5">
-              {others.map((s) => (
                 <motion.a
                   key={s.slug}
                   variants={up}
@@ -987,11 +978,12 @@ const StadtSeite = () => {
             name: `Emilian Leber — Zauberer ${data.name}`,
             url: siteUrl,
             description: `Zauberer in ${data.name}: Close-Up Magie, Bühnenshow und Magic Dinner für Hochzeit, Firmenfeier und Geburtstag.`,
+            // Sitz ist Regensburg — die Stadt ist Einsatzgebiet, nicht Adresse.
             address: {
               "@type": "PostalAddress",
-              addressLocality: data.name,
-              addressRegion: data.region,
-              addressCountry: data.region === "Österreich" ? "AT" : "DE",
+              addressLocality: "Regensburg",
+              addressRegion: "Bayern",
+              addressCountry: "DE",
             },
             telephone: "+4915563744696",
             email: "el@magicel.de",
@@ -1003,7 +995,7 @@ const StadtSeite = () => {
               ratingValue: "5.0",
               bestRating: "5",
               worstRating: "1",
-              reviewCount: "34",
+              reviewCount: "30",
             },
             serviceType: [
               `Zauberer ${data.name}`,
@@ -1034,8 +1026,8 @@ const StadtSeite = () => {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "VideoObject",
-            name: `Zauberer ${data.name} – Emilian Leber Showreel`,
-            description: `Emilian Leber als Zauberer in ${data.name} — Close-Up Magie, Bühnenshow und Magic Dinner.`,
+            name: "Emilian Leber – TV-Auftritt bei TVA",
+            description: "TV-Auftritt von Zauberer und Mentalist Emilian Leber aus Regensburg.",
             thumbnailUrl: `https://img.youtube.com/vi/${TVA_VIDEO_ID}/maxresdefault.jpg`,
             uploadDate: "2024-06-01",
             embedUrl: `https://www.youtube.com/embed/${TVA_VIDEO_ID}`,
@@ -1055,14 +1047,14 @@ const StadtSeite = () => {
         }
         sub={data.intro}
         image={heroStartImg}
-        imageAlt={`Zauberer ${data.name} — Emilian Leber auf Events in ${data.name}`}
+        imageAlt="Zauberer und Mentalist Emilian Leber"
         imgPos="top"
-        badge={`${data.name} · 200+ Events · Termine 2026 frei`}
+        badge={`${data.name} · 200+ Events · Antwort in 24 h`}
         primary={{ label: `Zauberer ${data.name} anfragen`, href: `/buchung?ort=${encodeURIComponent(data.name)}` }}
         secondary={{ label: "Showkonzepte ansehen", href: "/close-up" }}
       />
 
-      <LogoMarquee label={`Auftritte für Konzerne und Marken — auch in ${data.name}.`} />
+      <LogoMarquee label="Auftritte für Konzerne und Marken." />
 
       <FormateSection data={data} />
       <WarumStadtCarousel data={data} />
