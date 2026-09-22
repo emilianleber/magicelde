@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, ExampleSets, WarumCarousel, NotificationFlow, DarkShowcase } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Check, Clock, CalendarCheck, Users, Sparkles, Languages, Award } from "lucide-react";
 import heroImg from "@/assets/closeup.jpg";
 import splitImg from "@/assets/haende-interaktion.jpg";
@@ -68,7 +68,7 @@ export default function DemoCloseUp() {
           { kind: "stat", v: "100+", l: "Close-Up-Auftritte", text: "Routine an jedem Tisch — vom Sektempfang bis ins volle Restaurant." },
           { kind: "feature", Icon: Sparkles, title: "In ihrer eigenen Hand", text: "Karten und Münzen passieren direkt auf der Handfläche der Gäste — so nah, dass sie es selbst gemacht zu haben glauben." },
           { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Selbst die Skeptiker staunen", text: "Nichts ist versteckt, alles direkt vor den Augen — genau das macht es unwiderstehlich.", pos: "center" },
-          { kind: "review", text: "Selbst die skeptischen Gäste haben am Ende nur noch gestaunt.", name: "Martina Senftl · Gastgeberin" },
+          { kind: "review", review: REAL_REVIEWS.roehrl },
           { kind: "feature", Icon: Award, title: "Keine Technik nötig", text: "Kein Aufbau, kein Strom, kein Mikro — ein paar Karten genügen, und ich passe mich an euren Ablauf an." },
         ]}
       />
@@ -96,11 +96,7 @@ export default function DemoCloseUp() {
         badge="Keine Technik nötig"
       />
 
-      <PullQuote
-        text="Er ging von Tisch zu Tisch, und nach jedem Trick wurde es lauter im Raum. Selbst die skeptischen Gäste haben am Ende nur noch gestaunt."
-        name="Martina Senftl"
-        role="Gastgeberin · 70 Gäste"
-      />
+      <PullQuote review={REAL_REVIEWS.schuermann} />
 
       <ReviewsBlock paper={false} />
 

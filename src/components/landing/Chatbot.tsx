@@ -348,7 +348,7 @@ const KNOWLEDGE: KnowledgeEntry[] = [
     id: "referenzen",
     keywords: ["referenz", "bewertung", "rezension", "erfahrung", "kunde", "logo"],
     response:
-      "5,0 Sterne auf Google und ProvenExpert, 30+ Bewertungen, 200+ Events. Kunden: Sixt, STRABAG, Sparkasse, VKB, XXXLutz, Schneider Weisse, Stadt Regensburg. Greatest Talent Finalist, Kreativpreisträger.",
+      "4,8 Sterne bei 16 Google-Rezensionen, 4,97 von 5 auf ProvenExpert, 200+ Events. Kunden: Sixt, STRABAG, Sparkasse, VKB, XXXLutz, Schneider Weisse, Stadt Regensburg. Greatest Talent Finalist, Kreativpreisträger.",
     actions: [
       {
         label: "Referenzen-Seite",

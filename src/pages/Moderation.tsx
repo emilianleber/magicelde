@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, ExampleSets, WarumCarousel, DarkShowcase } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Mic2, Clock, Languages, Sparkles, Users, Award } from "lucide-react";
 import heroImg from "@/assets/moderator-hero-1200.webp";
 import splitImg from "@/assets/buehne-zuschauer-1200.webp";
@@ -63,7 +63,7 @@ export default function Moderation() {
           { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine auf jeder Bühne — vom kurzen Übergang bis zur ganzen Gala." },
           { kind: "feature", Icon: Mic2, title: "Magische Akzente", text: "Kleine Momente Magie statt Lückenfüller — pointiert an den Übergängen gesetzt." },
           { kind: "photo", image: carB, chip: "Souverän", title: "Sicher durch den ganzen Abend", text: "Auch wenn der Ablauf einmal kippt: ruhig, schlagfertig, mit Charme.", pos: "center" },
-          { kind: "review", text: "Hat den ganzen Abend zusammengehalten — souverän und mit Charme.", name: "Jan von Lehmann · Eventleitung" },
+          { kind: "review", review: REAL_REVIEWS.christina },
           { kind: "feature", Icon: Award, title: "Vorab abgestimmt", text: "Ablaufplan, Namen und Timing klären wir vor dem Event — am Abend läuft alles." },
         ]}
       />
@@ -81,11 +81,7 @@ export default function Moderation() {
         reverse
       />
 
-      <PullQuote
-        text="Hat unsere Gala souverän durch den Abend geführt, jeden Programmpunkt verbunden und mit den magischen Akzenten richtig Energie reingebracht."
-        name="Jan von Lehmann"
-        role="Eventleitung"
-      />
+      <PullQuote review={REAL_REVIEWS.pruitti} />
 
       <ReviewsBlock paper={false} />
 

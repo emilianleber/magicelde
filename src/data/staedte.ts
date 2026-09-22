@@ -44,7 +44,7 @@ export interface Stadt {
  *
  * Texte (22.09.2026 ueberarbeitet): Nur was Emilian ANBIETET und was
  * seitenweit belegt ist (ab 395 €, Antwort in 24 h, Deutsch/Englisch,
- * 200+ Events seit 2016, 5,0 Sterne bei 30+ Bewertungen, Anfahrt nach
+ * 200+ Events seit 2016, 4,8 Sterne bei 16 Google-Rezensionen, Anfahrt nach
  * Entfernung transparent im Angebot, Q4-Vorlauf 8–12 Wochen). KEINE
  * erfundenen Auftritte, Kunden, Stueckzahlen pro Stadt oder
  * "Anfahrt inklusive" — die Anfahrt wird laut FAQ nach Entfernung berechnet.
@@ -66,7 +66,7 @@ export const staedte: Stadt[] = [
       { q: "Wo findet das Magic Dinner in Regensburg statt?", a: "Entweder im Restaurant Wald & Wiese in Sinzing, direkt vor den Toren Regensburgs — meiner Partner-Location für das Magic Dinner — oder in eurer eigenen Location. Der Abend dauert je nach Menü 2,5 bis 4 Stunden, mit Magie zwischen den Gängen." },
       { q: "Wie weit im Voraus sollte ich in Regensburg buchen?", a: "Für Weihnachtsfeiern im Dezember und Hochzeiten von Mai bis September am besten 8–12 Wochen vorher, sonst reichen meist 4–6 Wochen. Kurzfristige Anfragen prüfe ich trotzdem gern." },
     ],
-    seoText: "Emilian Leber ist Zauberkünstler und Mentalist aus Regensburg. Seit 2016 über 200 Events, 5,0 Sterne bei mehr als 30 Bewertungen — auf Deutsch oder Englisch, für Firmenfeier, Hochzeit, Geburtstag oder ein Magic Dinner vor den Toren der Stadt.",
+    seoText: "Emilian Leber ist Zauberkünstler und Mentalist aus Regensburg. Seit 2016 über 200 Events, 4,8 Sterne bei 16 Google-Rezensionen — auf Deutsch oder Englisch, für Firmenfeier, Hochzeit, Geburtstag oder ein Magic Dinner vor den Toren der Stadt.",
     langText: `Regensburg ist mein Ausgangspunkt für jedes Event. Für Feiern in der Stadt heißt das: kurze Anfahrt, entsprechend geringe Anfahrtskosten und schnelle Absprachen zu Ablauf und Technik.
 
 Welche Formate in Regensburg gut funktionieren: Für Firmenfeiern und Weihnachtsfeiern — in Regensburg mit Universität, OTH und vielen Unternehmen eine große Saison — eignet sich die Kombination aus Close-Up beim Empfang und einer kurzen Bühnenshow. Bei Hochzeiten begleite ich Sektempfang, Dinner und den Moment vor dem Eröffnungstanz. Für kleinere Runden bis etwa 30 Gäste reicht oft reines Close-Up am Tisch.

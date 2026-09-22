@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, Stats, GlassFeatures, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, WarumCarousel, DarkShowcase, FormatCards } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Handshake, ShieldCheck, Hand, Wand2, UtensilsCrossed, MessageSquare, MapPin, Mic, Clock, Sparkles, Languages, Timer } from "lucide-react";
 import heroImg from "@/assets/emilian-portrait-cards-1200.webp";
 import splitImg from "@/assets/magicdinner-buehne-1200.webp";
@@ -29,7 +29,7 @@ export default function EventAgenturen() {
 
       <SplitFeature
         eyebrow="Aus einer Hand"
-        title={<>Konzept, Pitch, Vertrag und Briefing — <span style={{ color: COBALT }}>komplett.</span></>}
+        title={<>Konzept, Pitch-Material, Vertrag, Briefing — <span style={{ color: COBALT }}>komplett.</span></>}
         sub="Ihr bekommt einen Act, der mitdenkt: Ich liefere euch Konzept und Pitch-Material, kümmere mich um Vertrag und Briefing und füge mich white-label-tauglich in euer Programm ein. Euer Kunde sieht ein rundes Event — nicht zehn Einzelteile."
         points={["Verlässliche Kommunikation und sauberes Timing — ihr müsst nicht nachhaken", "Tech-Rider und Versicherungsnachweis auf Anfrage", "Flexibel skalierbar von Close-Up bis große Bühne"]}
         image={splitImg}
@@ -43,7 +43,7 @@ export default function EventAgenturen() {
           { v: "200+", l: "Events seit 2016" },
           { v: "3x", l: "TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 + Kreativpreis)" },
           { v: "Top 30", l: "Dt. Jugendmeisterschaft 2024 · TVA TV-Auftritt 2025" },
-          { v: "5,0", l: "Sterne aus 30+ Bewertungen · 100+ Hochzeiten begleitet" },
+          { v: "4,8★", l: "16 Google-Rezensionen · 100+ Hochzeiten begleitet" },
         ]}
       />
 
@@ -66,7 +66,7 @@ export default function EventAgenturen() {
           { kind: "photo", image: carA, chip: "Bühnenerprobt", title: "Auch unter Live-Druck sicher", text: "Vor großem Publikum erprobt — der Act sitzt, auch wenn euer Kunde zuschaut.", pos: "center" },
           { kind: "feature", Icon: Handshake, title: "White-Label", text: "Fügt sich nahtlos in euer Programm ein — euer Kunde sieht ein rundes Event, nicht zehn Einzelteile." },
           { kind: "stat", v: "200+", l: "Events für Agenturen & Direktkunden", text: "Routine in jedem Rahmen — vom Empfang bis zur großen Gala." },
-          { kind: "review", text: "Wir buchen Emilian seit Jahren — verlässlich, professionell, nie ein Problem. Genau der Act, den man Kunden bedenkenlos empfiehlt.", name: "Jan von Lehmann · Event-Agentur" },
+          { kind: "review", review: REAL_REVIEWS.poellinger },
           { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Der Saal geht mit", text: "Comedy, über die mitgelacht wird — eine Show, die euren Programmpunkt zum Highlight macht.", pos: "center" },
           { kind: "feature", Icon: ShieldCheck, title: "Kein Risiko", text: "Tech-Rider, Versicherung, Vertrag und Briefing kommen sauber und rechtzeitig — kein einziger Ausfall." },
         ]}
@@ -101,11 +101,7 @@ export default function EventAgenturen() {
         ]}
       />
 
-      <PullQuote
-        text="Wir buchen Emilian seit Jahren für unsere Kunden — verlässlich, professionell, immer im Timing. Genau der Act, den man bedenkenlos empfiehlt, ohne nachzuhaken."
-        name="Jan von Lehmann"
-        role="Event-Agentur · München"
-      />
+      <PullQuote review={REAL_REVIEWS.lehmann} />
 
       <ReviewsBlock paper={false} />
 
@@ -141,7 +137,7 @@ export default function EventAgenturen() {
           },
           {
             q: "Welche Auszeichnungen und Referenzen bringt der Act mit?",
-            a: "Emilian Leber ist dreifacher TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inkl. Kreativpreis), war 2024 unter den Top 30 der Deutschen Jugendmeisterschaft der Zauberkunst und 2025 im TVA-Fernsehen zu sehen. Über 200 Events seit 2016, 100+ begleitete Hochzeiten und 5,0 Sterne aus 30+ Bewertungen geben euch und eurem Kunden Sicherheit.",
+            a: "Emilian Leber ist dreifacher TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inkl. Kreativpreis), war 2024 unter den Top 30 der Deutschen Jugendmeisterschaft der Zauberkunst und 2025 im TVA-Fernsehen zu sehen. Über 200 Events seit 2016, 100+ begleitete Hochzeiten und 4,8 Sterne bei 16 Google-Rezensionen geben euch und eurem Kunden Sicherheit.",
           },
         ]}
       />

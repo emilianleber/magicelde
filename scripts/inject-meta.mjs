@@ -43,21 +43,21 @@ const DIST = join(ROOT, 'dist');
 const staticRoutes = [
   {
     path: '/',
-    title: '★ Emilian Leber · Zauberer für Hochzeit + Firmenfeier · 5,0/5',
-    description: 'Emilian Leber — Zauberer für Hochzeiten, Firmenfeiern und Events. Comedy, Mentalmagie, Magic Dinner. 200+ Events seit 2016. 5,0★ bei 30+ Bewertungen. Jetzt unverbindlich anfragen.',
-    ogTitle: 'Emilian Leber — Zauberer · 5,0★ bei 30+ Bewertungen',
+    title: '★ Emilian Leber · Zauberer für Hochzeit + Firmenfeier',
+    description: 'Emilian Leber — Zauberer für Hochzeiten, Firmenfeiern und Events. Comedy, Mentalmagie, Magic Dinner. 200+ Events seit 2016. 4,8★ bei Google. Jetzt unverbindlich anfragen.',
+    ogTitle: 'Emilian Leber — Zauberer · 4,8★ bei Google',
   },
   {
     path: '/hochzeit',
-    title: '★ Hochzeitszauberer — Emilian Leber · Sektempfang + Show · 5,0/5',
-    description: 'Hochzeitszauberer Emilian Leber: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. 100+ Hochzeiten begleitet. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Hochzeitszauberer — 100+ Hochzeiten · 5,0★',
+    title: '★ Hochzeitszauberer — Emilian Leber · Sektempfang + Show',
+    description: 'Hochzeitszauberer Emilian Leber: Close-Up beim Sektempfang, Tisch-zu-Tisch beim Dinner, Bühnen-Highlight vor dem Tanz. 100+ Hochzeiten begleitet. 4,8★ bei Google.',
+    ogTitle: 'Hochzeitszauberer — 100+ Hochzeiten · 4,8★ bei Google',
   },
   {
     path: '/firmenfeiern',
-    title: '★ Zauberer Firmenfeier — Emilian Leber · Premium-Entertainment · 5,0/5',
-    description: 'Zauberer für Firmenfeiern: Vorstandsdinner, Weihnachtsfeier, Gala. DAX-Konzerne bis Mittelstand. Insider-Pointen aus dem Briefing. 200+ Events. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Zauberer Firmenfeier — 200+ Events · 5,0★',
+    title: '★ Zauberer Firmenfeier — Emilian Leber · Premium-Entertainment',
+    description: 'Zauberer für Firmenfeiern: Vorstandsdinner, Weihnachtsfeier, Gala. DAX-Konzerne bis Mittelstand. Insider-Pointen aus dem Briefing. 200+ Events. 4,8★ bei Google.',
+    ogTitle: 'Zauberer Firmenfeier — 200+ Events · 4,8★ bei Google',
   },
   {
     path: '/zauberer-weihnachtsfeier',
@@ -67,9 +67,9 @@ const staticRoutes = [
   },
   {
     path: '/magic-dinner',
-    title: '★ Magic Dinner — Emilian Leber · Close-Up am Tisch · 5,0/5',
-    description: 'Magic Dinner mit Emilian Leber: Mehrgänge-Abend mit Close-Up-Magie direkt am Tisch. Spezialgebiet seit 2023. Hauspartner Wald & Wiese in Sinzing. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Magic Dinner — Spezialgebiet seit 2023 · 5,0★',
+    title: '★ Magic Dinner — Emilian Leber · Close-Up am Tisch',
+    description: 'Magic Dinner mit Emilian Leber: Mehrgänge-Abend mit Close-Up-Magie direkt am Tisch. Spezialgebiet seit 2023. Hauspartner Wald & Wiese in Sinzing. 4,8★ bei Google.',
+    ogTitle: 'Magic Dinner — Spezialgebiet seit 2023 · 4,8★ bei Google',
   },
   {
     path: '/tickets',
@@ -97,21 +97,21 @@ const staticRoutes = [
   },
   {
     path: '/buehnenshow',
-    title: '★ Zaubershow — Emilian Leber · Comedy + Mental · 5,0/5',
-    description: 'Bühnenshow von Emilian Leber: 30-60 Min Comedy-Zaubershow mit Mentalmagie und Standing-Ovation-Finale. Greatest-Talent-Finalist. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Bühnenshow — Greatest-Talent-Finalist · 5,0★',
+    title: '★ Zaubershow — Emilian Leber · Comedy + Mental',
+    description: 'Bühnenshow von Emilian Leber: 30-60 Min Comedy-Zaubershow mit Mentalmagie und Standing-Ovation-Finale. Greatest-Talent-Finalist. 4,8★ bei Google.',
+    ogTitle: 'Bühnenshow — Greatest-Talent-Finalist · 4,8★ bei Google',
   },
   {
     path: '/close-up',
-    title: '★ Close-Up Magie — Emilian Leber · Tischzauberei · 5,0/5',
-    description: 'Close-Up Magie von Emilian Leber: Karten in eurer Hand, Münzen, Mentaleffekte. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner. 100+ Close-Up-Auftritte. 5,0★.',
-    ogTitle: 'Close-Up Magie — 100+ Auftritte · 5,0★',
+    title: '★ Close-Up Magie — Emilian Leber · Tischzauberei',
+    description: 'Close-Up Magie von Emilian Leber: Karten in eurer Hand, Münzen, Mentaleffekte. Walk-Around beim Empfang, Tisch-zu-Tisch beim Dinner. 100+ Close-Up-Auftritte. 4,8★ bei Google.',
+    ogTitle: 'Close-Up Magie — 100+ Auftritte · 4,8★ bei Google',
   },
   {
     path: '/geburtstage',
-    title: '★ Zauberer Geburtstag — Emilian Leber · Runder Tag · 5,0/5',
-    description: 'Zauberer für runde Geburtstage: Close-Up am Tisch + Comedy-Bühnenshow für Erwachsene. 80+ Geburtstage von 30er bis Goldene. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Zauberer für Geburtstage — 80+ Feiern · 5,0★',
+    title: '★ Zauberer Geburtstag — Emilian Leber · Runder Tag',
+    description: 'Zauberer für runde Geburtstage: Close-Up am Tisch + Comedy-Bühnenshow für Erwachsene. 80+ Geburtstage von 30er bis Goldene. 4,8★ bei Google.',
+    ogTitle: 'Zauberer für Geburtstage — 80+ Feiern · 4,8★ bei Google',
   },
   {
     path: '/comedy-zauberei',
@@ -127,9 +127,9 @@ const staticRoutes = [
   },
   {
     path: '/referenzen',
-    title: '★ Referenzen — Emilian Leber · 18 Kunden-Cases · 5,0/5',
-    description: 'Referenzen Emilian Leber: VKB, STRABAG, XXXLutz, Sparkasse, Stadt Regensburg, Stadt Deggendorf u.v.m. Jeder Case mit Anlass, Konzept und Story. 5,0★ bei 30+ Bewertungen.',
-    ogTitle: 'Referenzen — 18 Kunden-Cases · 5,0★',
+    title: '★ Referenzen — Emilian Leber · 18 Kunden-Cases',
+    description: 'Referenzen Emilian Leber: VKB, STRABAG, XXXLutz, Sparkasse, Stadt Regensburg, Stadt Deggendorf u.v.m. Jeder Case mit Anlass, Konzept und Story. 4,8★ bei Google.',
+    ogTitle: 'Referenzen — 18 Kunden-Cases · 4,8★ bei Google',
   },
   {
     path: '/ueber-mich',
@@ -215,8 +215,8 @@ function injectMeta(html, { title, description, canonical, ogTitle }) {
  *   - parts.jsonLd → vor </head> (persistent; sichtbar für No-JS-Crawler
  *     UND Googlebot). react-helmet-async@3 rendert <script>-Tags nicht,
  *     deshalb ist dieses Build-time-JSON-LD die Single Source of Truth.
- *     aggregateRating steht nur EINMAL pro Seite (auf LocalBusiness) → kein
- *     GSC-"mehrere Bewertungen"-Fehler.
+ *     Kein Rating-/Review-Markup (selbst eingebundene Bewertungen
+ *     sind für Google nicht zulässig, siehe seo-content.mjs).
  *   - parts.body → INNERHALB #root. React (createRoot, kein hydrateRoot)
  *     leert #root beim Mount → kein doppelter sichtbarer Inhalt für JS-User.
  * Replacement-Funktion statt String, damit '$' im Content nicht als

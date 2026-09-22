@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { InteractiveTabs, SplitFeature, WarumCarousel, ExampleSets } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { UtensilsCrossed, Clock, MapPin, Sparkles } from "lucide-react";
 import heroImg from "@/assets/magicdinner-buehne-1200.webp";
 import splitImg from "@/assets/hero-dinner-1200.webp";
@@ -16,7 +16,7 @@ export default function MagicDinner() {
   return (
     <VoltageShell
       title="Magic Dinner buchen — Tisch und Bühne zwischen den Gängen | Emilian Leber"
-      description="Magic Dinner mit Zauberkünstler Emilian Leber: Tisch-zu-Tisch und Bühnenshow zwischen den Gängen — einzeln oder kombiniert. Bayern & deutschlandweit. 5,0★ bei 30+ Bewertungen. Kostenlos & unverbindlich anfragen."
+      description="Magic Dinner mit Zauberkünstler Emilian Leber: Tisch-zu-Tisch und Bühnenshow zwischen den Gängen — einzeln oder kombiniert. Bayern & deutschlandweit. 4,8★ bei Google. Kostenlos & unverbindlich anfragen."
       path="/magic-dinner"
       noindex={false}
     >
@@ -75,16 +75,12 @@ export default function MagicDinner() {
           { kind: "stat", v: "seit 2023", l: "mein Signature-Format", text: "Durchkomponiert über 2,5–4 Stunden, im Takt mit dem Service." },
           { kind: "feature", Icon: UtensilsCrossed, title: "3–5 Gänge", text: "Walk-Around zum Aperitif, Tisch-zu-Tisch zwischen den Gängen, Bühnen-Finale zum Dessert." },
           { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Jeder Tisch sein Moment", text: "Während Teller getauscht werden, bekommt jede Gruppe einen eigenen Höhepunkt.", pos: "center" },
-          { kind: "review", text: "Magic Dinner war das Highlight — die Gäste reden heute noch davon.", name: "Katrin Raß · Hochzeitsplanerin" },
+          { kind: "review", review: REAL_REVIEWS.waldwiese },
           { kind: "feature", Icon: Sparkles, title: "Abgestimmt aufs Menü", text: "Ich plane jede Phase vorab mit Küche, Service und Musik — Gänge und Magie im selben Takt." },
         ]}
       />
 
-      <PullQuote
-        text="Magic Dinner war das Highlight unserer Feier. Emilian hat sich perfekt in den Ablauf eingefügt — vom Aperitif bis zum Finale. Die Gäste reden heute noch davon."
-        name="Katrin Raß"
-        role="Hochzeitsplanerin"
-      />
+      <PullQuote review={REAL_REVIEWS.roehrl} />
 
       <ReviewsBlock paper={false} />
 

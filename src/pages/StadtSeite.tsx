@@ -38,7 +38,7 @@ import {
   LogoMarquee,
 } from "@/components/voltage/sections";
 import { FormatCards, WarumCarousel } from "@/components/voltage/creative";
-import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow, REAL_REVIEWS } from "@/components/voltage/theme";
 import { CustomQuizSection, CustomQuizConfig } from "@/components/landing/CustomQuiz";
 import { TVA_VIDEO_ID } from "@/lib/videos";
 
@@ -161,7 +161,7 @@ const WarumStadtCarousel = ({ data }: { data: Stadt }) => (
         text: "Comedy & Mentalmagie für jeden Rahmen — Close-Up am Tisch oder große Bühnenshow.",
         pos: "top",
       },
-      { kind: "review", text: "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt.", name: "Martina Senftl · Eventkundin" },
+      { kind: "review", review: REAL_REVIEWS.senftl },
       {
         kind: "feature",
         Icon: Route,
@@ -179,7 +179,7 @@ const TrustStripSection = ({ data }: { data: Stadt }) => (
   <Stats
     items={[
       { v: "200+", l: "Events seit 2016 · Regensburg & ganz Bayern" },
-      { v: "5,0★", l: "30+ Bewertungen · ProvenExpert" },
+      { v: "4,8★", l: "16 Google-Rezensionen" },
       { v: "TV", l: "TVA-Auftritt 2025 · Greatest Talent 2023" },
       { v: "24 h", l: "Antwort auf jede Anfrage" },
     ]}
@@ -196,7 +196,7 @@ const AuszeichnungenSection = ({ data }: { data: Stadt }) => {
     { Icon: Wand2, title: "3x TV-Finalist", body: "Greatest Talent 2023, Talents of Magic 2024 + Kreativpreis." },
     { Icon: GraduationCap, title: "Dt. Jugendmeisterschaft 2024", body: "Top 30 bundesweit — Auszeichnung im Wettbewerb." },
     { Icon: Building2, title: "TVA TV-Auftritt 2025", body: "Im Fernsehen zu sehen — als Zauberer und Mentalist." },
-    { Icon: Heart, title: "5,0 Sterne · 30+ Bewertungen", body: "Google & ProvenExpert — durchweg Bestnoten." },
+    { Icon: Heart, title: "4,8★ bei Google", body: "16 Google-Rezensionen, dazu 4,97 von 5 auf ProvenExpert." },
     { Icon: PartyPopper, title: "100+ Hochzeiten begleitet", body: "Empfang, Dinner, vor dem Tanz." },
   ];
   return (
@@ -990,13 +990,6 @@ const StadtSeite = () => {
             image: "https://www.magicel.de/og-image.jpg",
             sameAs: ["https://www.instagram.com/emilian.leber"],
             areaServed: { "@type": "City", name: data.name },
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "5.0",
-              bestRating: "5",
-              worstRating: "1",
-              reviewCount: "30",
-            },
             serviceType: [
               `Zauberer ${data.name}`,
               `Hochzeitszauberer ${data.name}`,

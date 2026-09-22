@@ -210,7 +210,7 @@ const Buchung = () => {
   return (
     <VoltageShell
       title="Anfrage senden — Zauberer Emilian Leber | Bayern"
-      description="Anfrage für Hochzeit, Firmenfeier, Geburtstag oder Magic Dinner — unverbindlich und kostenlos. Antwort innerhalb 24 Stunden. 5,0★ · 200+ Events."
+      description="Anfrage für Hochzeit, Firmenfeier, Geburtstag oder Magic Dinner — unverbindlich und kostenlos. Antwort innerhalb 24 Stunden. 4,8★ bei Google · 200+ Events."
       path="/buchung"
       noindex={false}
     >

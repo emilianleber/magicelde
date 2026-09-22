@@ -98,8 +98,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Mutter hat geweint. Mehr Erfolg geht nicht.",
-        attribution: "Bräutigam, Hochzeit in Sinzing 2025",
+          "Emilian hat das Publikum mit Witz und Charme gut unterhalten und konnte dabei die Gäste für sich gewinnen. Ein wirklich schöner Programmpunkt für eine Hochzeitsfeier.",
+        attribution: "Daniela Pöllinger, Hochzeitsplanerin (Google-Rezension)",
       },
       {
         type: "heading",
@@ -203,8 +203,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Drei Minuten am Vorstandstisch — und der Aufsichtsratsvorsitzende hat zum ersten Mal an dem Abend gelächelt.",
-        attribution: "Eventmanagerin, DAX-Konzern 2024",
+          "Die Agenturgruppe Wächter aus München bedankt sich vielmals bei Emilian, der rund 200 geladene Gäste eines Bayerischen Versicherungsunternehmens mit einer eigens entwickelten Zaubertrickshow in einem inszenierten Magic Camp begeistert hat - es war einfach Mega!",
+        attribution: "Jan von Lehmann, Agenturgruppe Wächter, München (Google-Rezension)",
       },
       {
         type: "heading",
@@ -307,8 +307,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Wir saßen drei Stunden in dem Restaurant. Es fühlte sich wie zwanzig Minuten an.",
-        attribution: "Magic-Dinner-Gast, Wald und Wiese 2025",
+          "vielen Dank für den gelungenen Abend bei unserem Magic Dinner im Wald & Wiese. Die Show war professionell, unterhaltsam und bei unseren Gästen durchweg sehr gut angekommen.",
+        attribution: "Restaurant-Partner, Magic Dinner (ProvenExpert)",
       },
       {
         type: "heading",
@@ -448,8 +448,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Wir hatten einen anderen Zauberer kurz vor der Hochzeit. Er hat zwei Tage vorher abgesagt. Emilian hat eingesprungen — und es war besser als geplant.",
-        attribution: "Hochzeitsplanerin Katrin Raß",
+          "Ich durfte eine Hochzeit planen, bei der Emilian als Zauberer aufgetreten ist – und es war wirklich großartig! Er hat sich auf unsere Idee eingelassen, den Bräutigam zu überraschen, und mit viel Charme und Witz mitgespielt.",
+        attribution: "Katrin Raß, Hochzeitsplanerin (Google-Rezension)",
       },
       {
         type: "paragraph",
@@ -604,8 +604,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Wir haben den Trick zwei Stunden lang nachgesprochen. Wir konnten ihn nicht erklären.",
-        attribution: "Gast nach Show in Regensburg 2024",
+          "Besonders der Wikipedia-Trick war einfach unglaublich – so etwas haben wir noch nie gesehen!",
+        attribution: "Claudi Roehrl, Magic Dinner (Google-Rezension)",
       },
       {
         type: "heading",
@@ -784,8 +784,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Wir haben drei Sekunden lang vergessen, was logisch ist. Das war das Schönste am Abend.",
-        attribution: "Gast nach einem Magic-Dinner-Abend, Sinzing 2025",
+          "Wir hatten Vergnügen, Emilian bei einem Magic Dinner live zu erleben, und waren sehr beeindruckt.",
+        attribution: "Claudi Roehrl (Google-Rezension)",
       },
       {
         type: "heading",
@@ -861,12 +861,6 @@ export const blogPosts: BlogPost[] = [
           "Jeder gute Magier hat einen Satz, mit dem er einen Fehler in ein Programm rettet. Bei mir ist es meistens [Genau das wollte ich nicht — und genau deshalb passt es jetzt]. Es funktioniert, weil es ehrlich ist.",
       },
       {
-        type: "quote",
-        text:
-          "Du bist der Erste, bei dem ich vergessen habe, dass das überhaupt ein Trick war — auch als die Karte fiel.",
-        attribution: "Brautmutter, Tegernsee 2025",
-      },
-      {
         type: "heading",
         text: "Was hilft, wenn es passiert",
         id: "umgang",
@@ -936,12 +930,6 @@ export const blogPosts: BlogPost[] = [
           "Das Licht spielt mit. Bis 21:30 Uhr ist es im Juli draußen noch hell — ein anderes Setting als das Kerzen-Innenlicht im November. Man sieht mehr Finger, mehr Bewegung, mehr Detail. Ich passe das Repertoire darauf an: weniger Karten-Sequenzen die auf Schatten setzen, mehr Münzen, mehr Mentaleffekte mit blossen Händen.",
       },
       {
-        type: "quote",
-        text:
-          "Die Magie wirkt anders bei Sonnenuntergang. Ehrlicher irgendwie. Weniger Tricks, mehr Augen.",
-        attribution: "Tisch-Notiz nach einem Sommer-Dinner, Sinzing 2025",
-      },
-      {
         type: "heading",
         text: "Was bleibt gleich",
         id: "konstanten",
@@ -1007,8 +995,8 @@ export const blogPosts: BlogPost[] = [
       {
         type: "quote",
         text:
-          "Meine Tante redet immer noch von der Karte, die in ihrer Handtasche war. Sie sagt, sie hat seit Wochen nicht reingeschaut. Das war drei Monate vor der Hochzeit. Ich glaube ihr das.",
-        attribution: "Braut, Hochzeit Tegernsee 2025",
+          "Mit seinen beeindruckenden Kartentricks und anderen kleinen Zaubereien hat er die Gäste an den Tischen immer wieder überrascht und begeistert.",
+        attribution: "Christian Schürmann, 20er-Jahre-Party auf der Donau (Google-Rezension)",
       },
       {
         type: "heading",
@@ -1294,12 +1282,6 @@ export const blogPosts: BlogPost[] = [
         ],
       },
       {
-        type: "quote",
-        text:
-          "Drei Zauberer angefragt — alle drei zwischen 1.800 und 2.500 €. Der teuerste war nicht automatisch der beste, der billigste hatte keine Versicherung. Mitte hat gewonnen.",
-        attribution: "Brautmutter, Hochzeit Tegernsee 2025",
-      },
-      {
         type: "heading",
         text: "Warum gibt es keine Listenpreise auf den meisten Webseiten?",
         id: "warum",
@@ -1366,12 +1348,6 @@ export const blogPosts: BlogPost[] = [
         type: "paragraph",
         text:
           "Bühnen-Slot am Ende der Feier mit Mentaleffekt, in dem der Geschäftsführer eine Wahl trifft die der Magier vorhergesagt hat. Vorstand wird zum Mit-Akteur, das Publikum klatscht stehend. Das hat etwas mit Hierarchie zu tun: jemand vom oberen Management wird sympathisch vorgeführt — ohne lächerlich zu werden.",
-      },
-      {
-        type: "quote",
-        text:
-          "Ich habe drei Jahre lang gedacht, die Feier müsste größer werden. War falsch. Sie musste anders werden. Magie war der Hebel.",
-        attribution: "HR-Leiterin, 250-Personen-Konzern, Bayern 2025",
       },
       {
         type: "heading",
@@ -1443,12 +1419,6 @@ export const blogPosts: BlogPost[] = [
         type: "paragraph",
         text:
           "Stärker wirkt das, was zur Veranstaltung passt. Vorstandsdinner mit 12 Personen: Close-Up. Hochzeitsfeier mit 100 Gästen: beides, in unterschiedlichen Slots. Galaabend mit Award-Verleihung: Bühnen-Show als Übergang. Magic Dinner: nur Close-Up — die Bühne fehlt bewusst.",
-      },
-      {
-        type: "quote",
-        text:
-          "Die beste Hochzeit hatte beides: Close-Up beim Sektempfang als Eisbrecher, Bühnenshow vor dem Tanz als emotionaler Höhepunkt. Beide Slots zusammen waren mehr als die Summe.",
-        attribution: "Hochzeitsplanerin, Tegernsee 2024",
       },
       {
         type: "heading",
@@ -1688,7 +1658,7 @@ export const blogPosts: BlogPost[] = [
       {
         type: "paragraph",
         text:
-          "Zur Einordnung: Ich habe seit 2016 über 200 Events gespielt, bin TV-Finalist bei Greatest Talent 2023 und Talents of Magic 2024 und stehe bei 5,0 Sternen aus über 30 Bewertungen. Das ist kein Preisargument — aber es erklärt, wofür ihr bezahlt.",
+          "Zur Einordnung: Ich habe seit 2016 über 200 Events gespielt, bin TV-Finalist bei Greatest Talent 2023 und Talents of Magic 2024 und stehe bei 4,8 Sternen bei 16 Google-Rezensionen. Das ist kein Preisargument — aber es erklärt, wofür ihr bezahlt.",
       },
     ],
     relatedPages: [

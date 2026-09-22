@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Check, Layers, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   INK, WHITE, PAPER, COBALT, MAGENTA, L_LINE, L_DIM, D_DIM, PANEL_BG, CARD_LIGHT,
-  ANFRAGE_HREF, up, stagger, vp, glass, glassDark, Eyebrow, Stars, GoogleG,
+  ANFRAGE_HREF, up, stagger, vp, glass, glassDark, Eyebrow, GoogleG, type RealReview,
 } from "./theme";
 
 type Icon = ComponentType<{ className?: string; style?: React.CSSProperties }>;
@@ -60,7 +60,7 @@ type BentoItem =
   | { kind: "photo"; span?: string; image: string; chip?: string; title: string; pos?: string }
   | { kind: "cobalt"; span?: string; v: string; l: string; note?: string }
   | { kind: "glass"; span?: string; Icon: Icon; t: string; d: string }
-  | { kind: "quote"; span?: string; text: string; name: string };
+  | { kind: "quote"; span?: string; review: RealReview };
 
 export function Bento({ eyebrow, title, sub, items }: { eyebrow: string; title: ReactNode; sub?: ReactNode; items: BentoItem[] }) {
   return (
@@ -91,9 +91,9 @@ export function Bento({ eyebrow, title, sub, items }: { eyebrow: string; title: 
             );
             if (it.kind === "quote") return (
               <motion.div key={i} variants={up} className={`rounded-[24px] p-7 flex flex-col justify-between ${span}`} style={{ background: CARD_LIGHT, border: `1px solid ${L_LINE}` }}>
-                <div className="flex items-center gap-2"><GoogleG s={20} /><Stars s={14} /></div>
-                <p className="text-[15px] leading-snug mt-3" style={{ color: INK }}>„{it.text}"</p>
-                <p className="text-[12.5px] mt-3" style={{ color: L_DIM }}>{it.name}</p>
+                <div className="flex items-center gap-2">{it.review.source === "google" && <GoogleG s={20} />}</div>
+                <p className="text-[15px] leading-snug mt-3" style={{ color: INK }}>„{it.review.short}"</p>
+                <p className="text-[12.5px] mt-3" style={{ color: L_DIM }}>{it.review.name} · {it.review.role}</p>
               </motion.div>
             );
             return (
@@ -206,7 +206,7 @@ export function InteractiveTabs({ eyebrow, title, tabs }: { eyebrow: string; tit
 type CarouselCard =
   | { kind: "photo"; image: string; chip?: string; title: string; text: string; pos?: string }
   | { kind: "stat"; v: string; l: string; text?: string }
-  | { kind: "review"; text: string; name: string }
+  | { kind: "review"; review: RealReview }
   | { kind: "feature"; Icon: Icon; title: string; text: string };
 
 export function WarumCarousel({ eyebrow, title, cards }: { eyebrow: string; title: ReactNode; cards: CarouselCard[] }) {
@@ -253,9 +253,9 @@ export function WarumCarousel({ eyebrow, title, cards }: { eyebrow: string; titl
             );
             if (c.kind === "review") return (
               <div key={i} className={`${size} flex flex-col justify-between p-9`} style={{ background: WHITE, border: `1px solid ${L_LINE}` }}>
-                <div className="flex items-center gap-2"><GoogleG s={24} /><Stars s={16} /></div>
-                <p className="text-[19px] leading-snug font-semibold" style={{ color: INK }}>„{c.text}"</p>
-                <p className="text-[13.5px]" style={{ color: L_DIM }}>{c.name}</p>
+                <div className="flex items-center gap-2">{c.review.source === "google" ? <GoogleG s={24} /> : <span className="text-[13px] font-semibold" style={{ color: L_DIM }}>ProvenExpert</span>}</div>
+                <p className="text-[19px] leading-snug font-semibold" style={{ color: INK }}>„{c.review.short}"</p>
+                <p className="text-[13.5px]" style={{ color: L_DIM }}>{c.review.name} · {c.review.role}</p>
               </div>
             );
             return (

@@ -57,8 +57,9 @@ const CASE_STUDIES: CaseStudy[] = [
       "Konzept-Pitch im Haus der Firma. Schriftlicher Vertrag. Gemeinsames Briefing aller Mitarbeiter und externen Trainer. Beim Event selbst: jeder Gast geht mit einem Trick nach Hause, das Finale auf der Bühne wird zum Wow-Moment, der noch wochenlang im Pausenraum erzählt wird.",
     ],
     tags: ["Magic Camp", "Workshop-Stationen", "Konzept + Pitch", "Bühne als Finale"],
-    pull: "Es war einfach Mega. Alle Gäste begeistert.",
-    pullAuthor: "Jan von Lehmann · Eventleitung VKB",
+    // Wörtlicher Auszug aus der Google-Rezension der beauftragenden Agentur.
+    pull: "… rund 200 geladene Gäste eines Bayerischen Versicherungsunternehmens mit einer eigens entwickelten Zaubertrickshow in einem inszenierten Magic Camp begeistert hat - es war einfach Mega!",
+    pullAuthor: "Jan von Lehmann · Agenturgruppe Wächter, München · Google-Rezension",
     photo: buehneZuschauerImg,
     photoPosition: "center 25%",
   },
@@ -78,8 +79,6 @@ const CASE_STUDIES: CaseStudy[] = [
       "Detailabsprache per E-Mail (Ablauf, Service-Takt), Telefonate (Parken, Technik), vor Ort Bühne mit dem Restaurant-Chef final geplant. Beim Event: vom Empfang bis zur Tanzfläche durchgehend Magie, kein Bruch. Aus 25 Minuten Bühne wurde ein 3-Stunden-Programm.",
     ],
     tags: ["Combo-Programm", "Empfang + Tisch + Bühne", "Format-Anpassung", "Restaurant-Setting"],
-    pull: "Alles wurde angepasst — von der Bühnenshow zum vollen Abend-Programm.",
-    pullAuthor: "STRABAG · Weihnachtsfeier 2024",
     photo: emotionenImg,
     photoPosition: "center 30%",
   },
@@ -99,8 +98,6 @@ const CASE_STUDIES: CaseStudy[] = [
       "Ablauf: Tisch-zu-Tisch beim Empfang, danach 25-Minuten-Bühne als Highlight-Slot zwischen Vorstandsrede und Buffet. Premium-Look, kein Glitzer, Pointen die nur im Saal funktionieren — und genau deshalb hängen bleiben.",
     ],
     tags: ["Konzern-Event", "Insider-Briefing", "Tisch + Bühne", "Premium-Tonalität"],
-    pull: "Eine Show, die sich nicht wie eine Show angefühlt hat.",
-    pullAuthor: "Möbelhandels-Konzern · Konzern-Event",
     photo: stageShowImg,
     photoPosition: "center 30%",
   },
@@ -504,7 +501,7 @@ const FAQS = [
   },
   {
     q: "Wie geht ihr mit DSGVO bei Bewertungen um?",
-    a: "Alle hier zitierten Reviews sind mit voller Einwilligung der Person veröffentlicht. Die drei Vollnamen (Jan von Lehmann, Katrin Raß, Martina Senftl) haben das schriftlich bestätigt. Weitere 30+ Bewertungen liegen verifiziert auf ProvenExpert und Google. Wer eine Bewertung zurückziehen möchte, kann das jederzeit per Mail an el@magicel.de.",
+    a: "Zitiert werden ausschließlich öffentlich einsehbare Google-Rezensionen — wörtlich und unter dem Namen, unter dem sie auf Google veröffentlicht wurden; Kürzungen sind mit „…“ markiert. Insgesamt stehen auf Google 16 Rezensionen (4,8 Sterne) und auf ProvenExpert 7 Bewertungen (4,97 von 5). Wer nicht mehr zitiert werden möchte, schreibt einfach eine Mail an el@magicel.de.",
   },
   {
     q: "Habt ihr Referenzen in meiner Region und meiner Branche?",
@@ -520,7 +517,7 @@ const SITE_URL = "https://www.magicel.de/referenzen";
 const Referenzen = () => (
   <VoltageShell
     title="Referenzen — 200+ Events seit 2016 | Zauberer Emilian Leber"
-    description="Zauberer-Referenzen: VKB, STRABAG, XXXLutz, Sixt, Sparkasse, Schneider Weisse u.v.m. 200+ Events, 5,0★ und 30+ Bewertungen. Aus Regensburg für ganz Bayern."
+    description="Zauberer-Referenzen: VKB, STRABAG, XXXLutz, Sixt, Sparkasse, Schneider Weisse u.v.m. 200+ Events, 4,8★ bei Google. Aus Regensburg für ganz Bayern."
     path="/referenzen"
     noindex={false}
   >
@@ -539,11 +536,11 @@ const Referenzen = () => (
       />
       <meta
         name="twitter:description"
-        content="VKB, STRABAG, XXXLutz — Case-Studies + 30+ Reviews + 200+ Events."
+        content="VKB, STRABAG, XXXLutz — Case-Studies, 4,8★ bei Google, 200+ Events."
       />
       <meta name="twitter:image" content="https://www.magicel.de/og-image.jpg" />
 
-      {/* JSON-LD: LocalBusiness + AggregateRating + valide Reviews mit itemReviewed */}
+      {/* JSON-LD: LocalBusiness — bewusst ohne Rating-/Review-Markup (self-serving reviews). */}
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
@@ -561,36 +558,6 @@ const Referenzen = () => (
           "addressCountry": "DE",
         },
         "areaServed": ["DE", "Bayern", "Regensburg", "München", "Ingolstadt", "Würzburg"],
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5.0",
-          "bestRating": "5",
-          "worstRating": "1",
-          "reviewCount": "30",
-        },
-        "review": [
-          {
-            "@type": "Review",
-            "itemReviewed": { "@id": "https://www.magicel.de/#business" },
-            "author": { "@type": "Person", "name": "Jan von Lehmann" },
-            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" },
-            "reviewBody": "Es war einfach Mega. Alle Gäste begeistert.",
-          },
-          {
-            "@type": "Review",
-            "itemReviewed": { "@id": "https://www.magicel.de/#business" },
-            "author": { "@type": "Person", "name": "Katrin Raß" },
-            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" },
-            "reviewBody": "Emilian ist der einzige Künstler, dem ich seit Jahren blind vertraue.",
-          },
-          {
-            "@type": "Review",
-            "itemReviewed": { "@id": "https://www.magicel.de/#business" },
-            "author": { "@type": "Person", "name": "Martina Senftl" },
-            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" },
-            "reviewBody": "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier.",
-          },
-        ],
       })}</script>
 
       {/* JSON-LD: BreadcrumbList */}
@@ -649,7 +616,7 @@ const Referenzen = () => (
       image={buehneZuschauerImg}
       imageAlt="Emilian Leber auf der Bühne vor Publikum"
       imgPos="center 25%"
-      badge="200+ Events · 5,0★ · 30+ Bewertungen"
+      badge="200+ Events · 4,8★ bei Google"
       primary={{ label: "Referenzen anfragen", href: "/buchung" }}
       secondary={{ label: "Kunden ansehen", href: "/referenzen#logos" }}
     />
@@ -659,13 +626,13 @@ const Referenzen = () => (
         { v: "200+", l: "Events seit 2016" },
         { v: "100+", l: "Hochzeiten" },
         { v: "100+", l: "Firmen-Engagements" },
-        { v: "5,0★", l: "30+ Bewertungen" },
+        { v: "4,8★", l: "16 Google-Rezensionen" },
       ]}
     />
 
     <CaseStudyCloud />
 
-    {/* Kundenstimmen — die drei freigegebenen Bewertungen (auch im JSON-LD). */}
+    {/* Kundenstimmen — wörtliche Google-Rezensionen (REAL_REVIEWS in voltage/theme). */}
     <ReviewsBlock />
 
     <FAQ

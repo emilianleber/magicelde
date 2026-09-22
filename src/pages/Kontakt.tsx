@@ -506,7 +506,7 @@ const KontaktformularSection = () => {
 const Kontakt = () => (
   <VoltageShell
     title="Kontakt — Schreibe mir | Emilian Leber Zauberer Bayern"
-    description="Direkt-Kontakt zum Zauberer Emilian Leber. Email, Telefon, WhatsApp. Antwort in unter 24 Stunden. Aus Regensburg, in ganz Bayern unterwegs. 5,0★ — 30+ Bewertungen, 200+ Events."
+    description="Direkt-Kontakt zum Zauberer Emilian Leber. Email, Telefon, WhatsApp. Antwort in unter 24 Stunden. Aus Regensburg, in ganz Bayern unterwegs. 4,8★ bei Google, 200+ Events."
     path="/kontakt"
     noindex={false}
   >

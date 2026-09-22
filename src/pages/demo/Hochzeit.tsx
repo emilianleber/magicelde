@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
 import { InteractiveTabs, FormatCards, SplitFeature, PolaroidWall, NotificationFlow } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Hand, Wand2, UtensilsCrossed, Check, Clock, CalendarCheck } from "lucide-react";
 import heroImg from "@/assets/wedding-magic.jpg";
 import splitImg from "@/assets/emotionen.jpg";
@@ -25,7 +25,7 @@ export default function DemoHochzeit() {
         image={heroImg}
         imageAlt="Zauberer bei einer Hochzeit"
         imgPos="center"
-        badge="Brautmutter weint regelmäßig — vor Lachen oder vor Rührung."
+        badge="100+ Hochzeiten begleitet — vom Sektempfang bis zum Tanz."
       />
 
       <InteractiveTabs
@@ -87,11 +87,7 @@ export default function DemoHochzeit() {
         ]}
       />
 
-      <PullQuote
-        text="Du warst der absolute Höhepunkt unserer Hochzeitsfeier. Was ich nicht erwartet hätte: dass die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter."
-        name="Martina Senftl"
-        role="Brautpaar · Bayern"
-      />
+      <PullQuote review={REAL_REVIEWS.poellinger} />
 
       <ReviewsBlock paper={false} />
 

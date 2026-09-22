@@ -71,7 +71,7 @@ const Footer = () => (
             Bühne, Close-Up und Magic Dinner — aus Bayern, deutschlandweit.
           </p>
           <p className="text-sm text-foreground/55 leading-[1.65] mb-7 max-w-xs">
-            Über 200 Events, 100+ Hochzeiten, 5,0 Sterne bei 30+ Bewertungen.
+            Über 200 Events, 100+ Hochzeiten, 4,8★ bei Google.
             Persönliche Antwort innerhalb 24 Stunden.
           </p>
           <div className="flex flex-wrap gap-x-5 gap-y-3">

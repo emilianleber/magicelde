@@ -49,7 +49,7 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       metaTitle:
         "Hochzeitszauberer {stadt} — Emilian Leber",
       metaDescription:
-        "Hochzeitszauberer für {stadt}: Close-Up beim Sektempfang, Magie am Tisch, Show vor dem Tanz. 100+ Hochzeiten, 5,0★. Jetzt Termin anfragen.",
+        "Hochzeitszauberer für {stadt}: Close-Up beim Sektempfang, Magie am Tisch, Show vor dem Tanz. 100+ Hochzeiten, 4,8★ bei Google. Jetzt anfragen.",
     },
     intro:
       "Drei Akte über euren Tag: Sektempfang, Dinner, Show vor dem Tanz. Close-Up am Tisch und Bühne — einzeln oder als roter Faden über den ganzen Abend.",
@@ -108,7 +108,7 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       metaTitle:
         "Zauberer Firmenfeier {stadt} — Emilian Leber",
       metaDescription:
-        "Zauberer für Firmenfeier & Weihnachtsfeier in {stadt}: Close-Up beim Empfang, Comedy-Show als Höhepunkt. 200+ Events, 5,0★. Jetzt anfragen.",
+        "Zauberer für Firmenfeier & Weihnachtsfeier in {stadt}: Close-Up beim Empfang, Comedy-Show als Höhepunkt. 200+ Events, 4,8★ bei Google.",
     },
     intro:
       "Vorstandsdinner, Kundenabend, Galaabend, Mitarbeiterfeier. Tonalität ans Unternehmen angepasst, Insider-Pointen aus dem Briefing, Magie-Bridges in der Moderation, Standing-Ovation-Finale.",
@@ -172,7 +172,7 @@ export const SERVICE_FORMATS: ServiceFormat[] = [
       metaTitle:
         "Magic Dinner {stadt} — Zauberer Emilian Leber",
       metaDescription:
-        "Magic Dinner in {stadt}: Mehrgänge-Menü mit Zauberei am Tisch und Show zwischen den Gängen. Für Firmen & private Feiern. 5,0★. Jetzt anfragen.",
+        "Magic Dinner in {stadt}: Mehrgänge-Menü mit Zauberei am Tisch und Show zwischen den Gängen. Für Firmen & Privat. 4,8★ bei Google.",
     },
     intro:
       "Mehrgänge-Abend mit Magie zwischen den Gängen. Close-Up direkt am Tisch, Mentalmagie zwischen den Tafeln, alles eingebettet in den Service-Rhythmus. Mein Spezialgebiet seit 2023.",

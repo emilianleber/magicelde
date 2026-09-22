@@ -248,13 +248,6 @@ const jsonLd = {
       name: "Emilian Leber",
       url: "https://www.magicel.de",
       jobTitle: "Zauberkünstler · Mentalmagier · Comedy-Magier",
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "5.0",
-        reviewCount: "30",
-        bestRating: "5",
-        worstRating: "1",
-      },
     },
   ],
 };
@@ -306,7 +299,7 @@ const Tickets = () => (
 
     <Stats
       items={[
-        { v: "5,0★", l: "30+ Bewertungen" },
+        { v: "4,8★", l: "16 Google-Rezensionen" },
         { v: "0", l: "Termine im Vorverkauf" },
         { v: "200+", l: "Events seit 2016" },
         { v: "24 h", l: "Antwort auf Anfragen" },

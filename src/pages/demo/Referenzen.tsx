@@ -4,7 +4,7 @@ import { SubHero, LogoMarquee, ReviewsBlock, PullQuote, FinalCTA } from "@/compo
 import { WarumCarousel, SplitFeature } from "@/components/voltage/creative";
 import { motion } from "framer-motion";
 import { Building2, Star } from "lucide-react";
-import { INK, WHITE, COBALT, MAGENTA, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
+import { INK, WHITE, COBALT, MAGENTA, L_LINE, L_DIM, up, stagger, vp, Eyebrow, REAL_REVIEWS } from "@/components/voltage/theme";
 import refImg from "@/assets/magicdinner-buehne.jpg";
 import carA from "@/assets/audience-reactions.jpg";
 import carB from "@/assets/buehne-zuschauer.jpg";
@@ -29,7 +29,7 @@ export default function DemoReferenzen() {
   return (
     <VoltageShell
       title="DEMO · Referenzen — 200+ Events seit 2016 | Emilian Leber"
-      description="200+ Events seit 2016, quer durch Bayern: Hochzeiten, Firmenfeiern, Galas und Messen. Echte Kunden, echte 5,0★-Bewertungen von Google & ProvenExpert."
+      description="200+ Events seit 2016, quer durch Bayern: Hochzeiten, Firmenfeiern, Galas und Messen. Echte Kunden, 4,8★ bei Google und 4,97 auf ProvenExpert."
       path="/demo/referenzen"
     >
       <SubHero
@@ -38,7 +38,7 @@ export default function DemoReferenzen() {
         sub="Von der Hochzeit über das Vorstands-Dinner bis zur Messe — dokumentiert, mit echten Stimmen und benannten Auftraggebern."
         image={refImg}
         imageAlt="Emilian Leber auf der Bühne"
-        badge="5,0★ · 30+ verifizierte Bewertungen"
+        badge="4,8★ bei 16 Google-Rezensionen"
         primary={{ label: "Selbst anfragen", href: "/demo/kontakt" }}
       />
 
@@ -50,8 +50,8 @@ export default function DemoReferenzen() {
           { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine quer durch Bayern und deutschlandweit." },
           { kind: "feature", Icon: Building2, title: "16+ Branchen", text: "Versicherung bis Theater — die Tonalität passt sich an, die Verlässlichkeit bleibt gleich." },
           { kind: "photo", image: carB, chip: "Bühne & Saal", title: "Vom Gala-Slot bis zum Headliner", text: "Jeder Auftritt vorbereitet und exakt auf den Anlass abgestimmt.", pos: "center" },
-          { kind: "review", text: "Zuverlässig, flexibel — das Publikum ist jedes Mal begeistert.", name: "Eventagentur · Bayern" },
-          { kind: "feature", Icon: Star, title: "5,0★ verifiziert", text: "30+ echte Bewertungen auf Google und ProvenExpert — mit benannten Auftraggebern." },
+          { kind: "review", review: REAL_REVIEWS.schuermann },
+          { kind: "feature", Icon: Star, title: "4,8★ bei Google", text: "16 Google-Rezensionen, dazu 4,97 von 5 bei 7 Bewertungen auf ProvenExpert." },
         ]}
       />
 
@@ -87,11 +87,7 @@ export default function DemoReferenzen() {
 
       <ReviewsBlock paper={false} />
 
-      <PullQuote
-        text="Wir haben ein Magic Camp komplett neu aufgestellt — 200 Gäste, Workshop-Stationen, Bühnenshow als Finale. Emilian hat Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega."
-        name="Jan von Lehmann"
-        role="Eventleitung · Versicherungs-Konzern"
-      />
+      <PullQuote review={REAL_REVIEWS.lehmann} />
 
       <FinalCTA
         title={<>Werdet die nächste Referenz<span style={{ color: MAGENTA }}>.</span></>}

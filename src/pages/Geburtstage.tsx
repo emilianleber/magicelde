@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, Stats, FactsGrid, PullQuote, ReviewsBlock, FAQ, FinalCTA, SectionHeader } from "@/components/voltage/sections";
 import { SplitFeature, WarumCarousel, InteractiveTabs, FormatCards } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import {
   Hand, Wand2, UtensilsCrossed, Heart, Smile,
   MessageSquare, Car, Mic, ShieldCheck, Clock, Sparkles, Languages, Timer,
@@ -19,7 +19,7 @@ export default function Geburtstage() {
   return (
     <VoltageShell
       title="Zauberer für Geburtstag — Runde Geburtstage, Goldene Hochzeit | Emilian Leber"
-      description="Zauberkünstler für Geburtstagsfeier in Bayern und deutschlandweit — runde Geburtstage, Goldene Hochzeit, Jubiläum. Close-Up am Tisch, Bühnen-Show, mit Familien-Anekdoten eingebaut. 80+ Geburtstage, 5,0★."
+      description="Zauberkünstler für Geburtstagsfeier in Bayern und deutschlandweit — runde Geburtstage, Goldene Hochzeit, Jubiläum. Close-Up am Tisch, Bühnen-Show, mit Familien-Anekdoten eingebaut. 80+ Geburtstage, 4,8★ bei Google."
       path="/geburtstage"
       noindex={false}
     >
@@ -29,7 +29,7 @@ export default function Geburtstage() {
         sub="Die Show, über die man noch redet — comedy-lastig, herzlich und mit persönlichen Insidern zum Jubilar. Vom runden 50er bis zur großen Familienfeier."
         image={heroImg}
         imageAlt="Zauberer bei einer Geburtstagsfeier"
-        badge="Selbst die Skeptiker am Tisch sind am Ende am stärksten geflasht."
+        badge="Close-Up am Tisch oder Bühnenshow — passend zu eurer Feier."
       />
 
       <section className="px-5 md:px-10 pt-2">
@@ -48,7 +48,7 @@ export default function Geburtstage() {
           { v: "3x", l: "TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 + Kreativpreis)" },
           { v: "Top 30", l: "Dt. Jugendmeisterschaft der Zauberkunst 2024" },
           { v: "TVA 2025", l: "TV-Auftritt im regionalen Fernsehen" },
-          { v: "5,0★", l: "30+ Bewertungen, Google & ProvenExpert" },
+          { v: "4,8★", l: "16 Google-Rezensionen" },
           { v: "100+", l: "Hochzeiten & Feiern begleitet" },
         ]}
       />
@@ -73,7 +73,7 @@ export default function Geburtstage() {
           { kind: "stat", v: "80+", l: "Geburtstage & Jubiläen", text: "Vom runden 50er bis zur großen Familienfeier — Routine für jeden Anlass." },
           { kind: "feature", Icon: Heart, title: "Persönliche Insider", text: "Ich arbeite kleine Geschichten zum Jubilar in die Show ein — Magie, die berührt." },
           { kind: "photo", image: carB, chip: "Comedy & Herz", title: "Staunen und lachen", text: "Comedy-lastig und herzlich — der ganze Tisch geht mit, im Wechsel aus Lachen und Gänsehaut.", pos: "center" },
-          { kind: "review", text: "Du warst der absolute Höhepunkt unserer Feier — sogar meine Mutter war komplett geflasht.", name: "Martina Senftl · Geburtstagsfeier" },
+          { kind: "review", review: REAL_REVIEWS.christina },
           { kind: "feature", Icon: Smile, title: "Jeder ist dabei", text: "Ich binde alle ein, auch die Schüchternen — niemand wird vorgeführt, alle haben Spaß." },
         ]}
       />
@@ -100,11 +100,7 @@ export default function Geburtstage() {
         ]}
       />
 
-      <PullQuote
-        text="Du warst der absolute Höhepunkt unserer Feier. Was ich nicht erwartet hätte: dass ausgerechnet die Gäste, die ich am wenigsten für Magie offen hielt, am Ende am stärksten geflasht waren. Sogar meine Mutter."
-        name="Martina Senftl"
-        role="Geburtstagsfeier · Bayern"
-      />
+      <PullQuote review={REAL_REVIEWS.pruitti} />
 
       <ReviewsBlock paper={false} />
 
@@ -138,7 +134,7 @@ export default function Geburtstage() {
           { q: "Was braucht ihr an Platz und Technik?", a: "Für Tischmagie und Walk-Around reicht der vorhandene Raum, technisch brauche ich nichts. Für die Bühnenshow genügt eine kleine freie Fläche; bei größeren Sälen klären wir Mikrofon und Musik vorab kurz ab." },
           { q: "Geht die Show auch auf Englisch?", a: "Ja, ich spiele auf Deutsch und Englisch. Bei internationalen Gästen oder gemischten Familien passe ich die Show entsprechend an, ohne dass der Humor verloren geht." },
           { q: "Wie weit reist du an und wie individuell ist die Show?", a: "Basis ist Bayern rund um Regensburg, ich bin aber deutschlandweit unterwegs — seit 2016 mit über 200 Events. Ich arbeite persönliche Insider zum Jubilar ein, sodass die Show genau auf eure Feier zugeschnitten ist." },
-          { q: "Eignet sich die Show auch für runde Geburtstage und eine Goldene Hochzeit?", a: "Ja, genau dafür ist sie gemacht. Vom runden 50er und 60er bis zur Goldenen Hochzeit und zum großen Familienjubiläum binde ich Anekdoten zum Jubelpaar oder Jubilar ein. Über 100 Hochzeiten und Feiern habe ich seit 2016 begleitet, mit 5,0 Sternen aus über 30 Bewertungen." },
+          { q: "Eignet sich die Show auch für runde Geburtstage und eine Goldene Hochzeit?", a: "Ja, genau dafür ist sie gemacht. Vom runden 50er und 60er bis zur Goldenen Hochzeit und zum großen Familienjubiläum binde ich Anekdoten zum Jubelpaar oder Jubilar ein. Über 100 Hochzeiten und Feiern habe ich seit 2016 begleitet, mit 4,8 Sternen bei 16 Google-Rezensionen." },
           { q: "Was unterscheidet dich von anderen Geburtstags-Zauberern?", a: "Ich bin dreifacher TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inklusive Kreativpreis), stand 2024 bei der Deutschen Jugendmeisterschaft der Zauberkunst unter den Top 30 und war 2025 im TVA-Fernsehen zu sehen. Diese Bühnen-Routine fließt direkt in eure Feier ein — comedy-lastig, herzlich und mit echten Insidern." },
         ]}
       />

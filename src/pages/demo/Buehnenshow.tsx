@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, ExampleSets, WarumCarousel, InteractiveTabs, DarkShowcase } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Sparkles, Award, Clock, Gauge, Users, Languages } from "lucide-react";
 import heroImg from "@/assets/buehne-dpsg.jpg";
 import splitImg from "@/assets/stage-show.jpg";
@@ -67,7 +67,7 @@ export default function DemoBuehnenshow() {
           { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine auf jeder Bühne — von der Hochzeit bis zur TV-Show." },
           { kind: "feature", Icon: Sparkles, title: "Mentalmagie", text: "Gedanken, Vorhersagen, Unmögliches — sauber gebaut, live gespielt." },
           { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Der ganze Saal geht mit", text: "Comedy, über die mitgelacht wird — nie über jemanden.", pos: "center" },
-          { kind: "review", text: "Bühnenshow als Finale — alle Gäste begeistert.", name: "Jan von Lehmann · Eventleitung" },
+          { kind: "review", review: REAL_REVIEWS.pruitti },
           { kind: "feature", Icon: Award, title: "Standing-Ovation-Finale", text: "Jeder Slot endet auf einem Höhepunkt — der Moment, über den man redet." },
         ]}
       />
@@ -95,11 +95,7 @@ export default function DemoBuehnenshow() {
         badge="3× TV-Finalist"
       />
 
-      <PullQuote
-        text="Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega. Alle Gäste begeistert."
-        name="Jan von Lehmann"
-        role="Eventleitung · 200 Gäste"
-      />
+      <PullQuote review={REAL_REVIEWS.lehmann} />
 
       <ReviewsBlock paper={false} />
 

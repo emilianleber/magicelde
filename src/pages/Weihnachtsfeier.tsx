@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA, Stats, GlassFeatures, SectionHeader } from "@/components/voltage/sections";
 import { InteractiveTabs, FormatCards, NotificationFlow } from "@/components/voltage/creative";
-import { COBALT, MAGENTA, INK, L_LINE, L_DIM, CARD_LIGHT, stagger, up, vp } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, INK, L_LINE, L_DIM, CARD_LIGHT, stagger, up, vp, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles, MessageSquare, Route, Headphones, ShieldCheck, Languages, Timer, Snowflake } from "lucide-react";
 import heroImg from "@/assets/emilian-magic-dinner-1200.webp";
 import tab1 from "@/assets/hero-closeup-1200.webp";
@@ -129,11 +129,7 @@ export default function Weihnachtsfeier() {
         </div>
       </motion.section>
 
-      <PullQuote
-        text="Konzept, Pitch, Vertrag und Briefing in einem Stück geliefert. Es war einfach mega. Alle 200 Gäste begeistert."
-        name="Jan von Lehmann"
-        role="Eventleitung · Magic Camp, 200 Gäste"
-      />
+      <PullQuote review={REAL_REVIEWS.lehmann} />
 
       <ReviewsBlock paper={false} />
 

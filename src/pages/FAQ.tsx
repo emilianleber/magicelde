@@ -49,7 +49,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "wer-ist-emilian",
     category: "allgemein",
     q: "Wer ist Emilian Leber?",
-    a: "Geboren 2008, Magier seit dem 8. Lebensjahr, erster bezahlter Gig mit 12. Heute hauptberuflich als Bühnen-, Close-Up- und Magic-Dinner-Künstler — zuhause in Regensburg, unterwegs in ganz Bayern. 5,0 Sterne bei 30+ verifizierten Bewertungen, über 200 gespielte Events seit 2016.",
+    a: "Geboren 2008, Magier seit dem 8. Lebensjahr, erster bezahlter Gig mit 12. Heute hauptberuflich als Bühnen-, Close-Up- und Magic-Dinner-Künstler — zuhause in Regensburg, unterwegs in ganz Bayern. 4,8 Sterne bei 16 Google-Rezensionen, über 200 gespielte Events seit 2016.",
   },
   {
     id: "wo-trete-ich-auf",
@@ -73,7 +73,7 @@ const FAQ_ITEMS: FAQItemT[] = [
     id: "auszeichnungen",
     category: "allgemein",
     q: "Welche Auszeichnungen habe ich?",
-    a: "Greatest Talent 2023 — Finalist (TV-Show, SAT.1). Talents of Magic 2024 — Finalist + Kreativpreis. Deutsche Jugendmeisterschaft der Magie — Top 30. TVA-TV-Interview 2025 mit 16 Jahren, Live-Studio mit Karten-Routine. 5,0 Sterne auf ProvenExpert und Google. Mitschnitte auf YouTube und im Pressebereich.",
+    a: "Greatest Talent 2023 — Finalist (TV-Show, SAT.1). Talents of Magic 2024 — Finalist + Kreativpreis. Deutsche Jugendmeisterschaft der Magie — Top 30. TVA-TV-Interview 2025 mit 16 Jahren, Live-Studio mit Karten-Routine. 4,8 Sterne bei Google und 4,97 von 5 auf ProvenExpert. Mitschnitte auf YouTube und im Pressebereich.",
   },
 
   /* ───────── Buchung & Ablauf ───────── */
@@ -759,7 +759,7 @@ const SITE_URL = "https://www.magicel.de/faq";
 const FAQPage = () => (
   <VoltageShell
     title="FAQ — Häufige Fragen zum Zauberer | Emilian Leber Bayern"
-    description="Häufige Fragen zur Buchung eines Zauberers in Bayern — Ablauf, Pakete, Technik, Anfahrt, Honorar. 5,0 Sterne, 200+ Events seit 2016, persönliche Antwort innerhalb 24 Stunden."
+    description="Häufige Fragen zur Buchung eines Zauberers in Bayern — Ablauf, Pakete, Technik, Anfahrt, Honorar. 4,8★ bei Google, 200+ Events seit 2016, persönliche Antwort innerhalb 24 Stunden."
     path="/faq"
     noindex={false}
   >

@@ -33,7 +33,7 @@ import {
   LogoMarquee,
 } from "@/components/voltage/sections";
 import { WarumCarousel } from "@/components/voltage/creative";
-import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, INK, L_LINE, L_DIM, up, stagger, vp, Eyebrow, REAL_REVIEWS } from "@/components/voltage/theme";
 
 import audienceImg from "@/assets/audience-reactions.jpg";
 import stageImg from "@/assets/buehne-zuschauer.jpg";
@@ -288,7 +288,7 @@ const WarumStadtCarousel = ({ service, city }: { service: ServiceFormat; city: S
         text: "Comedy & Mentalmagie für jeden Rahmen — Close-Up am Tisch oder große Bühnenshow.",
         pos: "top",
       },
-      { kind: "review", text: "Sympathischer junger Mann, der sich nicht selbst, sondern seine Zauberkunst in den Mittelpunkt stellt.", name: "Martina Senftl · Eventkundin" },
+      { kind: "review", review: REAL_REVIEWS.senftl },
       {
         kind: "feature",
         Icon: Route,
@@ -306,7 +306,7 @@ const TrustStripSection = ({ service, city }: { service: ServiceFormat; city: St
   <Stats
     items={[
       { v: "200+", l: "Events seit 2016 · Regensburg & ganz Bayern" },
-      { v: "5,0★", l: "30+ Bewertungen · ProvenExpert" },
+      { v: "4,8★", l: "16 Google-Rezensionen" },
       { v: "TV", l: "TVA-Auftritt 2025 · Greatest Talent 2023" },
       { v: "24 h", l: `Antwort auf jede ${service.shortName}-Anfrage` },
     ]}

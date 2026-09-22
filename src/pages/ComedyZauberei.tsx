@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/voltage/sections";
 import { SplitFeature, ExampleSets, WarumCarousel, InteractiveTabs, NotificationFlow } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Mail, Clock, CalendarCheck, Gauge, Users, Sparkles, Mic } from "lucide-react";
 import heroImg from "@/assets/emotionen-1200.webp";
 import splitImg from "@/assets/audience-reactions-1200.webp";
@@ -16,7 +16,7 @@ export default function ComedyZauberei() {
   return (
     <VoltageShell
       title="Comedy-Zauberer — Magie mit Pointe & Lacher | Emilian Leber"
-      description="Comedy-Zauberer in Bayern und deutschlandweit — Mentalmagie mit Comedy-Anteil, Pointen-Sets, Comedy-Magic-Routinen. Für Comedy-Shows, Variety, Firmenfeiern. 5,0 Sterne."
+      description="Comedy-Zauberer in Bayern und deutschlandweit — Mentalmagie mit Comedy-Anteil, Pointen-Sets, Comedy-Magic-Routinen. Für Comedy-Shows, Variety, Firmenfeiern. 4,8★ bei Google."
       path="/comedy-zauberei"
       noindex={false}
     >
@@ -65,7 +65,7 @@ export default function ComedyZauberei() {
           { kind: "stat", v: "200+", l: "Events seit 2016", text: "Routine, die Pointen sitzen lässt — von der Firmenfeier bis zur Gala." },
           { kind: "feature", Icon: Sparkles, title: "Magie als Setup", text: "Erst der Wow-Moment, dann die Pointe — Mentalmagie baut den Lacher auf." },
           { kind: "photo", image: carB, chip: "Comedy-Dosis nach Anlass", title: "Von pointiert bis durchgängig lustig", text: "Passend zu euren Gästen getaktet — wie ein guter Stand-Up-Set.", pos: "center" },
-          { kind: "review", text: "Alle haben gestaunt und Tränen gelacht — genau die Mischung, die wir wollten.", name: "Martina Senftl · Eventkundin" },
+          { kind: "review", review: REAL_REVIEWS.poellinger },
           { kind: "feature", Icon: Mic, title: "Pointen die sitzen", text: "Kein Brüllen ins Mikro, kein Trick-Marathon — getaktet wie ein guter Set." },
         ]}
       />
@@ -91,11 +91,7 @@ export default function ComedyZauberei() {
         ]}
       />
 
-      <PullQuote
-        text="Alle haben gestaunt und Tränen gelacht. Comedy ohne Fremdscham — genau die Mischung, die wir uns gewünscht haben."
-        name="Martina Senftl"
-        role="Eventkundin"
-      />
+      <PullQuote review={REAL_REVIEWS.pruitti} />
 
       <ReviewsBlock paper={false} />
 

@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FinalCTA } from "@/components/voltage/sections";
 import { DarkShowcase, SplitFeature, WarumCarousel } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Tv, Award } from "lucide-react";
 import heroImg from "@/assets/magician-portrait.jpg";
 import storyImg from "@/assets/emilian-portrait-cards.jpg";
@@ -14,7 +14,7 @@ export default function DemoUeber() {
   return (
     <VoltageShell
       title="DEMO · Über Emilian Leber — Comedy-Zauberer aus Regensburg"
-      description="Comedy-Zauberer aus Regensburg, aufgewachsen am Pass eines bayerischen Gasthauses. Stand-Up trifft Mentalmagie. 3× TV-Finalist, 200+ Events seit 2016, 5,0★."
+      description="Comedy-Zauberer aus Regensburg, aufgewachsen am Pass eines bayerischen Gasthauses. Stand-Up trifft Mentalmagie. 3× TV-Finalist, 200+ Events seit 2016, 4,8★ bei Google."
       path="/demo/ueber"
     >
       <SubHero
@@ -57,16 +57,12 @@ export default function DemoUeber() {
           { kind: "stat", v: "3×", l: "TV-Finalist", text: "Greatest Talent 2023, Talents of Magic 2024, TVA-Porträt 2025." },
           { kind: "feature", Icon: Tv, title: "Im Fernsehen erprobt", text: "Was vor Kameras und Live-Publikum funktioniert, funktioniert auch bei euch." },
           { kind: "photo", image: carB, chip: "Echte Reaktionen", title: "Staunen und Lachen", text: "Comedy gehört zur Magie — die Gäste lachen mit, nie über jemanden.", pos: "center" },
-          { kind: "review", text: "Emilian ist der einzige, dem ich seit Jahren blind vertraue.", name: "Katrin Raß · Hochzeitsplanerin" },
+          { kind: "review", review: REAL_REVIEWS.rass },
           { kind: "feature", Icon: Award, title: "200+ Events seit 2016", text: "Routine aus über 200 gespielten Abenden — von der Hochzeit bis zum Vorstands-Dinner." },
         ]}
       />
 
-      <PullQuote
-        text="Er checkt das Brautpaar vorab, baut Insider ein, hält Zeitplan und bringt Ruhe in den Ablauf. Brautmutter weint regelmäßig — vor Lachen oder vor Rührung."
-        name="Katrin Raß"
-        role="Hochzeitsplanerin"
-      />
+      <PullQuote review={REAL_REVIEWS.senftl} />
 
       <ReviewsBlock paper={false} />
 

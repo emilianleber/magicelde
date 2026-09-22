@@ -2,7 +2,7 @@
 import VoltageShell from "@/components/voltage/VoltageShell";
 import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA, Stats, GlassFeatures } from "@/components/voltage/sections";
 import { SplitFeature, FormatCards, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
-import { COBALT, MAGENTA } from "@/components/voltage/theme";
+import { COBALT, MAGENTA, REAL_REVIEWS } from "@/components/voltage/theme";
 import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Languages, MessagesSquare, Route, Headphones, ShieldCheck, Timer, SlidersHorizontal } from "lucide-react";
 import heroImg from "@/assets/audience-reactions-1200.webp";
 import splitImg from "@/assets/haende-interaktion-1200.webp";
@@ -30,7 +30,7 @@ export default function MesseMagier() {
         items={[
           { v: "200+", l: "Events seit 2016" },
           { v: "3x", l: "TV-Finalist (2023 + 2024)" },
-          { v: "5,0", l: "Sterne · 30+ Bewertungen" },
+          { v: "4,8★", l: "16 Google-Rezensionen" },
           { v: "100+", l: "Hochzeiten begleitet" },
         ]}
       />
@@ -66,7 +66,6 @@ export default function MesseMagier() {
           { kind: "stat", v: "50–80", l: "Kontakte pro Stunde", text: "Echte Standkontakte statt leerem Gang — direkt am Lead-Zähler messbar." },
           { kind: "feature", Icon: Target, title: "Lead-Magnet", text: "Spürbar mehr qualifizierte Standkontakte — die Hemmschwelle für das Gespräch fällt." },
           { kind: "photo", image: carB, chip: "Botschaft", title: "Ihr Claim im Aha-Moment", text: "Die Effekte transportieren Ihre Botschaft mitten ins Staunen — und bleiben hängen.", pos: "center" },
-          { kind: "review", text: "Der Stand war den ganzen Tag voll — die Effekte mit unserer Botschaft sind bei den Besuchern hängengeblieben.", name: "Jan von Lehmann · Eventleitung" },
           { kind: "feature", Icon: Languages, title: "Mehrsprachig", text: "DE und EN fließend — internationale Besucher werden voll abgeholt." },
         ]}
       />
@@ -82,11 +81,7 @@ export default function MesseMagier() {
         ]}
       />
 
-      <PullQuote
-        text="Emilian hat Konzept, Pitch und Briefing in einem Stück geliefert. Der Stand war den ganzen Tag voll — die Effekte mit unserer Botschaft sind bei den Besuchern hängengeblieben."
-        name="Jan von Lehmann"
-        role="Eventleitung · Messeauftritt"
-      />
+      <PullQuote review={REAL_REVIEWS.lehmann} />
 
       <ReviewsBlock paper={false} />
 
@@ -134,7 +129,7 @@ export default function MesseMagier() {
           },
           {
             q: "Welche Auszeichnungen und Erfahrung bringen Sie mit?",
-            a: "Über 200 Events seit 2016, darunter mehr als 100 Hochzeiten. Dreimal TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inkl. Kreativpreis), Top 30 der Deutschen Jugendmeisterschaft 2024 und ein TV-Auftritt bei TVA 2025. Bewertet mit 5,0 Sternen aus über 30 Bewertungen.",
+            a: "Über 200 Events seit 2016, darunter mehr als 100 Hochzeiten. Dreimal TV-Finalist (Greatest Talent 2023, Talents of Magic 2024 inkl. Kreativpreis), Top 30 der Deutschen Jugendmeisterschaft 2024 und ein TV-Auftritt bei TVA 2025. Bewertet mit 4,8 Sternen bei 16 Google-Rezensionen.",
           },
           {
             q: "Ist das auch für Firmen und internationale Aussteller rechtssicher?",

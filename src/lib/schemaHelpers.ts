@@ -15,13 +15,9 @@ export const BUSINESS_ID = `${SITE_URL}/#business`;
 export const PERSON_ID = `${SITE_URL}/#person`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 
-export const AGGREGATE_RATING = {
-  "@type": "AggregateRating",
-  ratingValue: "5.0",
-  bestRating: "5",
-  worstRating: "1",
-  reviewCount: "30",
-};
+/* Bewusst KEIN AggregateRating/Review-Markup: selbst eingebundene Bewertungen
+   ("self-serving reviews") sind für Google-Review-Snippets nicht zulässig.
+   Die echten Werte (Google 4,8★/16, ProvenExpert 4,97/7) stehen nur im Text. */
 
 /** Zentrale Person-Definition für Emilian Leber. */
 export const personSchema = () => ({
@@ -88,7 +84,6 @@ export const localBusinessSchema = () => ({
     { "@type": "City", name: "Würzburg" },
     { "@type": "City", name: "Ingolstadt" },
   ],
-  aggregateRating: AGGREGATE_RATING,
 });
 
 /** WebSite-Schema mit SearchAction für Google Sitelinks-Searchbox. */
@@ -129,7 +124,6 @@ export const serviceSchema = (opts: {
     "@type": "AdministrativeArea",
     name: a,
   })),
-  aggregateRating: AGGREGATE_RATING,
 });
 
 /** Event-Schema (z.B. für einen Magic-Dinner-Abend). */

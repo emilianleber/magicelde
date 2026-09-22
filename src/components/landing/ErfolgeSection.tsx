@@ -1,24 +1,13 @@
-import { Star } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCounter } from "@/hooks/useCounter";
+import { REAL_REVIEWS } from "@/components/voltage/theme";
 
-const testimonials = [
-  {
-    quote: "Emilian, du warst der absolute Höhepunkt unserer Hochzeitsfeier. Alle sprechen noch Wochen danach davon!",
-    author: "Martina Senftl",
-    role: "Hochzeit · ProvenExpert",
-  },
-  {
-    quote: "Es war genial, perfekt und mega gut!!! Die Gäste waren begeistert, die Kinder fanden es toll und wir auch!",
-    author: "Petra Zeitler",
-    role: "Firmenfeier · ProvenExpert",
-  },
-  {
-    quote: "Emilian hat unseren 50. Geburtstag unvergesslich gemacht. Die Mischung aus Close-Up und Bühnenshow war perfekt.",
-    author: "Christina",
-    role: "Geburtstagsfeier · ProvenExpert",
-  },
-];
+// Nur echte, wörtliche Google-Rezensionen (Quelle: REAL_REVIEWS in voltage/theme).
+const testimonials = [REAL_REVIEWS.rass, REAL_REVIEWS.senftl, REAL_REVIEWS.christina].map((r) => ({
+  quote: r.short,
+  author: r.name,
+  role: `${r.role} · Google`,
+}));
 
 const StatItem = ({ end, suffix, label }: { end: number; suffix: string; label: string }) => {
   const { count, ref } = useCounter(end, 2000);
@@ -62,11 +51,6 @@ const ErfolgeSection = () => {
               className={`p-8 rounded-3xl bg-background ${isVisible ? "animate-fade-up" : "opacity-0"}`}
               style={{ animationDelay: `${0.3 + i * 0.1}s` }}
             >
-              <div className="flex gap-0.5 mb-5">
-                {[...Array(5)].map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-accent/70 text-accent/70" />
-                ))}
-              </div>
               <p className="font-sans text-base text-foreground leading-relaxed mb-6">„{t.quote}"</p>
               <footer>
                 <p className="font-sans text-sm font-semibold text-foreground">{t.author}</p>

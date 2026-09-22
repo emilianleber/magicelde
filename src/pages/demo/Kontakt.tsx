@@ -25,7 +25,7 @@ export default function DemoKontakt() {
           <motion.h1 variants={up} className="font-extrabold tracking-[-0.03em]" style={{ fontSize: "clamp(2.5rem,6vw,5rem)", lineHeight: 0.98, color: INK }}>Schreib mir<span style={{ color: MAGENTA }}>.</span></motion.h1>
           <motion.p variants={up} className="mt-6 text-[16px] md:text-lg leading-[1.6] max-w-xl mx-auto" style={{ color: L_DIM }}>Eine kurze Nachricht reicht: Datum, Anlass, Ort — und ich melde mich persönlich. Antwort in unter 24 Stunden, sieben Tage die Woche.</motion.p>
           <motion.div variants={up} className="mt-7 inline-flex items-center gap-3 text-[13px]" style={{ color: L_DIM }}>
-            <Stars s={15} /> <span style={{ color: INK, fontWeight: 600 }}>5,0</span> · 30+ Bewertungen <GoogleG s={15} />
+            <Stars s={15} /> <span style={{ color: INK, fontWeight: 600 }}>4,8</span> · 16 Google-Rezensionen <GoogleG s={15} />
           </motion.div>
         </motion.div>
       </header>

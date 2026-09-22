@@ -148,7 +148,7 @@ const UeberMich = () => (
         })}
       </script>
 
-      {/* JSON-LD: EntertainmentBusiness mit AggregateRating */}
+      {/* JSON-LD: EntertainmentBusiness (ohne Rating-/Review-Markup) */}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
@@ -164,13 +164,6 @@ const UeberMich = () => (
             addressLocality: "Regensburg",
             addressRegion: "Bayern",
             addressCountry: "DE",
-          },
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: "5.0",
-            reviewCount: "30",
-            bestRating: "5",
-            worstRating: "1",
           },
           founder: {
             "@type": "Person",
@@ -209,7 +202,7 @@ const UeberMich = () => (
       image={portraitBuchImg}
       imageAlt="Emilian Leber — Zauberer aus Bayern, Studio-Portrait mit Buch"
       imgPos="center 28%"
-      badge="Magie seit 2016 · zehn Jahre Bühne · 5,0★ aus 30+ Bewertungen"
+      badge="Magie seit 2016 · zehn Jahre Bühne · 4,8★ bei Google"
       primary={{ label: "Termin anfragen", href: "/buchung" }}
       secondary={{ label: "Aktuelle Show ansehen", href: "/buehnenshow" }}
     />
@@ -219,7 +212,7 @@ const UeberMich = () => (
         { v: "200+", l: "Events seit 2016" },
         { v: "10", l: "Jahre Bühne" },
         { v: "3x", l: "TV-Finalist (2023–2025)" },
-        { v: "5,0★", l: "30+ Bewertungen" },
+        { v: "4,8★", l: "16 Google-Rezensionen" },
       ]}
     />
 
