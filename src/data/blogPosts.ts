@@ -912,7 +912,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "4 Min.",
     words: 360,
     author: EMILIAN,
-    cover: "magicdinner-buehne",
+    cover: "dinner-buehne",
     featured: false,
     sections: [
       {
@@ -1288,7 +1288,7 @@ export const blogPosts: BlogPost[] = [
         type: "list",
         items: [
           "MwSt (19%) — bei gewerblichen Anbietern selbstverständlich",
-          "Anfahrt: km-Pauschale oder Inklusiv bis X km",
+          "Anfahrt: im Angebot transparent ausgewiesen",
           "Übernachtung: 3-4-Sterne, üblicherweise Veranstalter-Buchung",
           "Optional: Soundtechnik wenn Location keine hat (selten)",
         ],
@@ -1329,7 +1329,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "5 Min.",
     words: 460,
     author: EMILIAN,
-    cover: "magicdinner-buehne",
+    cover: "dinner-buehne",
     featured: false,
     sections: [
       {
