@@ -353,7 +353,7 @@ const TRUST_LINKS = [
 ];
 
 const BIO_TEXT =
-  "Emilian Leber ist seit 2016 als Zauberkünstler und Mentalist aus Regensburg deutschlandweit im Einsatz — über zweihundert Events, Finalist bei Greatest Talent und Talents of Magic, 5,0 Sterne bei mehr als 30 Bewertungen auf ProvenExpert. Ob Bühnenshow, Close-Up am Tisch oder Magic Dinner im Restaurant: jedes Format wird auf den Anlass und die Gäste abgestimmt.";
+  "Emilian Leber ist seit 2016 als Zauberkünstler und Mentalist aus Regensburg in ganz Bayern im Einsatz — über zweihundert Events, Finalist bei Greatest Talent und Talents of Magic, 5,0 Sterne bei mehr als 30 Bewertungen auf ProvenExpert. Ob Bühnenshow, Close-Up am Tisch oder Magic Dinner im Restaurant: jedes Format wird auf den Anlass und die Gäste abgestimmt.";
 const bioSection = () => h2("Über Emilian Leber") + p(BIO_TEXT);
 
 const GENERIC_FAQ = [
@@ -367,7 +367,7 @@ const GENERIC_FAQ = [
   },
   {
     q: "In welchem Umkreis bist du buchbar?",
-    a: "Ich komme aus Regensburg in Bayern und bin deutschlandweit buchbar — von München und Nürnberg bis Berlin, Hamburg, Köln und Frankfurt. Anfahrt und Übernachtung werden im Angebot transparent ausgewiesen.",
+    a: "Ich komme aus Regensburg und bin in ganz Bayern buchbar — von Regensburg selbst über Landshut, Ingolstadt und Nürnberg bis München und Würzburg. Die Anfahrt wird nach Entfernung berechnet und im Angebot transparent ausgewiesen, eine eventuelle Übernachtung ebenso.",
   },
 ];
 
@@ -883,7 +883,7 @@ function renderServiceCity(format, city, urlPath) {
         serviceType: format.name,
         areaServed: [city.name, city.region],
       }),
-      localBusinessSchema([city.name, city.region, "Bayern", "Deutschland"]),
+      localBusinessSchema([city.name, "Bayern"]),
       faqSchema,
       breadcrumbSchema([
         { name: "Start", url: SITE_URL + "/" },
@@ -894,8 +894,11 @@ function renderServiceCity(format, city, urlPath) {
   });
 }
 
-function renderCity(city) {
+function renderCity(city, serviceCitySlugs = []) {
   const url = `${SITE_URL}/zauberer/${city.slug}`;
+  // Format×Stadt-Seiten gibt es nur fuer SERVICE_STADT_SLUGS — sonst auf die
+  // allgemeinen Format-/Anlass-Seiten verlinken (keine Links auf Redirects).
+  const hasServicePages = serviceCitySlugs.includes(city.slug);
   const faqs = city.faq && city.faq.length ? city.faq : GENERIC_FAQ;
   const { html: faqHtml, schema: faqSchema } = faqSection(faqs);
 
@@ -905,30 +908,48 @@ function renderCity(city) {
   ];
   if (city.highlight) parts.push(p(city.highlight));
   parts.push(h2(`Formate für dein Event in ${city.name}`));
+  const L = hasServicePages
+    ? {
+        dinner: `/magic-dinner-${city.slug}`,
+        show: `/zaubershow-${city.slug}`,
+        closeup: `/zauberer-close-up/${city.slug}`,
+        hochzeit: `/zauberer-hochzeit/${city.slug}`,
+        firma: `/zauberer-firmenfeier/${city.slug}`,
+      }
+    : {
+        dinner: "/magic-dinner",
+        show: "/buehnenshow",
+        closeup: "/close-up",
+        hochzeit: "/hochzeit",
+        firma: "/firmenfeiern",
+      };
   parts.push(
-    `<p style="${S.p}">Drei Wege, deinen Abend in ${esc(
-      city.name
-    )} unvergesslich zu machen: ${ilink(
-      `/magic-dinner-${city.slug}`,
-      `Magic Dinner in ${city.name}`
-    )}, eine ${ilink(
-      `/zaubershow-${city.slug}`,
-      `Zaubershow in ${city.name}`
-    )} oder ${ilink(
-      `/zauberer-close-up/${city.slug}`,
+    `<p style="${S.p}">Drei Formate, einzeln oder kombiniert: ${ilink(
+      L.closeup,
       "Close-Up am Tisch"
-    )}. Für Anlässe: ${ilink(
-      `/zauberer-hochzeit/${city.slug}`,
-      "Hochzeitszauberer"
-    )} und ${ilink(
-      `/zauberer-firmenfeier/${city.slug}`,
-      "Firmenfeier-Zauberer"
-    )}.</p>`
+    )} (Pakete ab 395 €), eine ${ilink(L.show, "Bühnenshow")} von 15 bis 60 Minuten oder ein ${ilink(
+      L.dinner,
+      "Magic Dinner"
+    )} mit Magie zwischen den Gängen. Mehr zu den Anlässen: ${ilink(
+      L.hochzeit,
+      "Zauberer für die Hochzeit"
+    )} und ${ilink(L.firma, "Zauberer für die Firmenfeier")}.</p>`
   );
   if (city.seoText) parts.push(p(city.seoText));
-  if (city.langText) parts.push(p(city.langText));
+  if (city.langText) {
+    parts.push(h2(`${city.name}: Anlässe, Formate und Kosten`));
+    city.langText
+      .split("\n\n")
+      .filter(Boolean)
+      .forEach((para) => parts.push(p(para)));
+  }
   if (city.bekannteLocations && city.bekannteLocations.length) {
-    parts.push(h3(`Beliebte Event-Locations in ${city.name}`));
+    parts.push(h3(`Bekannte Veranstaltungsorte in ${city.name}`));
+    parts.push(
+      p(
+        `Zur Orientierung — ich komme zu jeder Location in ${city.name} und Umgebung.`
+      )
+    );
     parts.push(ul(city.bekannteLocations));
   }
   parts.push(faqHtml);
@@ -940,7 +961,7 @@ function renderCity(city) {
   return assemble({
     inner: parts.join(""),
     schemas: [
-      localBusinessSchema([city.name, city.region, "Bayern", "Deutschland"]),
+      localBusinessSchema([city.name, "Bayern"]),
       serviceSchema({
         name: `Zauberer in ${city.name}`,
         description: city.intro,
@@ -1141,7 +1162,7 @@ export async function createRenderer() {
           }
           case "city": {
             const city = data.citiesBySlug[descriptor.citySlug];
-            return city ? renderCity(city) : EMPTY;
+            return city ? renderCity(city, data.serviceCitySlugs || []) : EMPTY;
           }
           case "serviceCity": {
             const format = data.formatsBySlug[descriptor.formatSlug];

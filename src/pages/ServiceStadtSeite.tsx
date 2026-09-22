@@ -191,7 +191,7 @@ const ServicePage = ({ service, city }: PageProps) => {
         secondary={{ label: `Mehr zum ${service.shortName}-Format`, href: service.detailHref }}
       />
 
-      <LogoMarquee label={`Auftritte für Konzerne und Marken — auch in ${city.name}.`} />
+      <LogoMarquee label="Auftritte für Konzerne und Marken." />
 
       <HighlightsSection service={service} city={city} h1={h1} buchungHref={buchungHref} />
       <WarumStadtCarousel service={service} city={city} />
@@ -305,7 +305,7 @@ const WarumStadtCarousel = ({ service, city }: { service: ServiceFormat; city: S
 const TrustStripSection = ({ service, city }: { service: ServiceFormat; city: Stadt }) => (
   <Stats
     items={[
-      { v: "200+", l: `Events seit 2016 — auch in ${city.name}` },
+      { v: "200+", l: "Events seit 2016 · Regensburg & ganz Bayern" },
       { v: "5,0★", l: "30+ Bewertungen · ProvenExpert" },
       { v: "TV", l: "TVA-Auftritt 2025 · Greatest Talent 2023" },
       { v: "24 h", l: `Antwort auf jede ${service.shortName}-Anfrage` },
@@ -420,7 +420,7 @@ const MehrUeberStadtSection = ({ service, city, buchungHref }: { service: Servic
               <p className="mb-4">{city.intro}</p>
               <p className="mb-4">{city.highlight}</p>
               {city.seoText && <p className="mb-4">{city.seoText}</p>}
-              <p className="mb-4">200+ Events seit 2016 — auch in {city.region}.</p>
+              <p className="mb-4">200+ Events seit 2016 — aus Regensburg in ganz Bayern.</p>
 
               {/* IN DER NÄHE — geo-search keyword coverage */}
               <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
@@ -446,11 +446,11 @@ const MehrUeberStadtSection = ({ service, city, buchungHref }: { service: Servic
               {city.bekannteLocations && city.bekannteLocations.length > 0 && (
                 <>
                   <h3 className="text-[20px] md:text-[22px] font-bold mt-9 mb-3" style={{ color: INK }}>
-                    Event-Locations in {city.name}
+                    Bekannte Veranstaltungsorte in {city.name}
                   </h3>
                   <p className="mb-4">
-                    Ich trete regelmäßig in Locations und Venues in {city.name} auf — und komme zu jeder
-                    Wunsch-Location. Schlosssäle, Hotels, Restaurants, Eventhallen.
+                    Zur Orientierung einige bekannte Veranstaltungsorte in {city.name}. Ich komme zu jeder
+                    Location — Saal, Hotel, Restaurant, Gasthof oder Firmengelände.
                   </p>
                   <div className="flex flex-wrap gap-2.5 mb-4">
                     {city.bekannteLocations.map((loc) => (
