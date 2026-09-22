@@ -4,10 +4,10 @@ import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA, Stats, GlassFeatures }
 import { SplitFeature, FormatCards, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Target, Megaphone, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Languages, MessagesSquare, Route, Headphones, ShieldCheck, Timer, SlidersHorizontal } from "lucide-react";
-import heroImg from "@/assets/audience-reactions.jpg";
-import splitImg from "@/assets/haende-interaktion.jpg";
-import carA from "@/assets/staunen.jpg";
-import carB from "@/assets/hero-stage.jpg";
+import heroImg from "@/assets/audience-reactions-1200.webp";
+import splitImg from "@/assets/haende-interaktion-1200.webp";
+import carA from "@/assets/staunen-1200.webp";
+import carB from "@/assets/hero-stage-1200.webp";
 
 export default function MesseMagier() {
   return (

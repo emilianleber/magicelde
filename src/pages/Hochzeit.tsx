@@ -4,19 +4,19 @@ import { SubHero, PullQuote, ReviewsBlock, FinalCTA, FactsGrid, Stats, FAQ, Sect
 import { InteractiveTabs, FormatCards, SplitFeature, PolaroidWall, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Hand, Wand2, UtensilsCrossed, Check, Clock, CalendarCheck, MessageSquare, MapPin, Headphones, ShieldCheck, Timer, Sparkles, Languages } from "lucide-react";
-import heroImg from "@/assets/wedding-magic.jpg";
-import splitImg from "@/assets/emotionen.jpg";
+import heroImg from "@/assets/wedding-magic-1200.webp";
+import splitImg from "@/assets/emotionen-1200.webp";
 // InteractiveTabs (breite Container) — alle QUER, kein Kopf-Crop
-import tabCloseup from "@/assets/hero-closeup.jpg";
-import tabDinner from "@/assets/emilian-magic-dinner.jpg";
-import tabStage from "@/assets/hero-stage.jpg";
+import tabCloseup from "@/assets/hero-closeup-1200.webp";
+import tabDinner from "@/assets/emilian-magic-dinner-1200.webp";
+import tabStage from "@/assets/hero-stage-1200.webp";
 // PolaroidWall — 6 eigene Bilder, keine Doppelung mit dem Rest der Seite
-import polReactions from "@/assets/audience-reactions.jpg";
-import polDinner from "@/assets/hero-dinner.jpg";
-import polStaunen from "@/assets/staunen.jpg";
-import polModerator from "@/assets/moderator-hero.jpg";
-import polBuehne from "@/assets/magicdinner-buehne.jpg";
-import polFinale from "@/assets/stage-show.jpg";
+import polReactions from "@/assets/audience-reactions-1200.webp";
+import polDinner from "@/assets/hero-dinner-1200.webp";
+import polStaunen from "@/assets/staunen-1200.webp";
+import polModerator from "@/assets/moderator-hero-1200.webp";
+import polBuehne from "@/assets/magicdinner-buehne-1200.webp";
+import polFinale from "@/assets/stage-show-1200.webp";
 
 export default function Hochzeit() {
   return (

@@ -4,11 +4,11 @@ import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/vo
 import { SplitFeature, ExampleSets, WarumCarousel, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Mic2, Clock, Languages, Sparkles, Users, Award } from "lucide-react";
-import heroImg from "@/assets/moderator-hero.jpg";
-import splitImg from "@/assets/buehne-zuschauer.jpg";
-import carA from "@/assets/staunen.jpg";
-import carB from "@/assets/magicdinner-buehne.jpg";
-import darkImg from "@/assets/hero-stage.jpg";
+import heroImg from "@/assets/moderator-hero-1200.webp";
+import splitImg from "@/assets/buehne-zuschauer-1200.webp";
+import carA from "@/assets/staunen-1200.webp";
+import carB from "@/assets/magicdinner-buehne-1200.webp";
+import darkImg from "@/assets/hero-stage-1200.webp";
 
 export default function Moderation() {
   return (

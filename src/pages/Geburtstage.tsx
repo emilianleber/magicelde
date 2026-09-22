@@ -7,13 +7,13 @@ import {
   Hand, Wand2, UtensilsCrossed, Heart, Smile,
   MessageSquare, Car, Mic, ShieldCheck, Clock, Sparkles, Languages, Timer,
 } from "lucide-react";
-import heroImg from "@/assets/hero-birthday.jpg";
-import splitImg from "@/assets/emotionen.jpg";
-import carA from "@/assets/audience-reactions.jpg";
-import carB from "@/assets/emilian-magic-dinner.jpg";
-import tabA from "@/assets/hero-closeup.jpg";
-import tabB from "@/assets/zuschauer-blau.jpg";
-import tabC from "@/assets/hero-stage.jpg";
+import heroImg from "@/assets/hero-birthday-1200.webp";
+import splitImg from "@/assets/emotionen-1200.webp";
+import carA from "@/assets/audience-reactions-1200.webp";
+import carB from "@/assets/emilian-magic-dinner-1200.webp";
+import tabA from "@/assets/hero-closeup-1200.webp";
+import tabB from "@/assets/zuschauer-blau-1200.webp";
+import tabC from "@/assets/hero-stage-1200.webp";
 
 export default function Geburtstage() {
   return (

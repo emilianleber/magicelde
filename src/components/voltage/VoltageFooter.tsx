@@ -6,7 +6,7 @@ import {
   PHONE_HREF, PHONE_DISPLAY, EMAIL_HREF, WHATSAPP, INSTAGRAM, YOUTUBE, FACEBOOK, LINKEDIN,
   KONZEPTE, ANLAESSE_NAV,
 } from "./theme";
-import logo from "@/assets/logo-clean.webp";
+import logo from "@/assets/logo-clean-128.webp";
 
 /* Einsatzgebiet Bayern — interne Links zu den Stadt-Seiten. Slugs aus staedte.ts. */
 const STAEDTE: { name: string; slug: string }[] = [

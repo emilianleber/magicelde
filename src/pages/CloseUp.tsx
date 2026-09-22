@@ -4,11 +4,11 @@ import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/vo
 import { SplitFeature, ExampleSets, WarumCarousel, NotificationFlow, DarkShowcase } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Check, Clock, CalendarCheck, Users, Sparkles, Languages, Award } from "lucide-react";
-import heroImg from "@/assets/closeup.jpg";
-import splitImg from "@/assets/haende-interaktion.jpg";
-import carA from "@/assets/staunen.jpg";
-import carB from "@/assets/audience-reactions.jpg";
-import darkImg from "@/assets/hero-closeup.jpg";
+import heroImg from "@/assets/closeup-1200.webp";
+import splitImg from "@/assets/haende-interaktion-1200.webp";
+import carA from "@/assets/staunen-1200.webp";
+import carB from "@/assets/audience-reactions-1200.webp";
+import darkImg from "@/assets/hero-closeup-1200.webp";
 
 export default function CloseUp() {
   return (

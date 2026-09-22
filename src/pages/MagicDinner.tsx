@@ -4,13 +4,13 @@ import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/vo
 import { InteractiveTabs, SplitFeature, WarumCarousel, ExampleSets } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { UtensilsCrossed, Clock, MapPin, Sparkles } from "lucide-react";
-import heroImg from "@/assets/magicdinner-buehne.jpg";
-import splitImg from "@/assets/hero-dinner.jpg";
-import carA from "@/assets/moderator-hero.jpg";
-import carB from "@/assets/audience-reactions.jpg";
-import tab1 from "@/assets/emilian-magic-dinner.jpg";
-import tab2 from "@/assets/staunen.jpg";
-import tab3 from "@/assets/hero-stage.jpg";
+import heroImg from "@/assets/magicdinner-buehne-1200.webp";
+import splitImg from "@/assets/hero-dinner-1200.webp";
+import carA from "@/assets/moderator-hero-1200.webp";
+import carB from "@/assets/audience-reactions-1200.webp";
+import tab1 from "@/assets/emilian-magic-dinner-1200.webp";
+import tab2 from "@/assets/staunen-1200.webp";
+import tab3 from "@/assets/hero-stage-1200.webp";
 
 export default function MagicDinner() {
   return (

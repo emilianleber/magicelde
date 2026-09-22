@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { staedte } from "@/data/staedte";
-import logoImg from "@/assets/logo-clean.webp";
+import logoImg from "@/assets/logo-clean-128.webp";
 
 const ACCENT = "#1D3FFF";
 

@@ -4,11 +4,11 @@ import { SubHero, Stats, GlassFeatures, PullQuote, ReviewsBlock, FAQ, FinalCTA }
 import { SplitFeature, WarumCarousel, DarkShowcase, FormatCards } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Handshake, ShieldCheck, Hand, Wand2, UtensilsCrossed, MessageSquare, MapPin, Mic, Clock, Sparkles, Languages, Timer } from "lucide-react";
-import heroImg from "@/assets/emilian-portrait-cards.jpg";
-import splitImg from "@/assets/magicdinner-buehne.jpg";
-import carA from "@/assets/hero-stage.jpg";
-import carB from "@/assets/audience-reactions.jpg";
-import darkImg from "@/assets/moderator-hero.jpg";
+import heroImg from "@/assets/emilian-portrait-cards-1200.webp";
+import splitImg from "@/assets/magicdinner-buehne-1200.webp";
+import carA from "@/assets/hero-stage-1200.webp";
+import carB from "@/assets/audience-reactions-1200.webp";
+import darkImg from "@/assets/moderator-hero-1200.webp";
 
 export default function EventAgenturen() {
   return (

@@ -16,10 +16,10 @@ import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA, Stats, GlassFeatures, 
 import { InteractiveTabs, FormatCards, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA, INK, L_LINE, L_DIM, CARD_LIGHT, stagger, up, vp } from "@/components/voltage/theme";
 import { Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles, MessageSquare, Route, Headphones, ShieldCheck, Languages, Timer, Snowflake } from "lucide-react";
-import heroImg from "@/assets/emilian-magic-dinner.jpg";
-import tab1 from "@/assets/hero-closeup.jpg";
-import tab2 from "@/assets/schneider-weisse-closeup.jpg";
-import tab3 from "@/assets/hero-stage.jpg";
+import heroImg from "@/assets/emilian-magic-dinner-1200.webp";
+import tab1 from "@/assets/hero-closeup-1200.webp";
+import tab2 from "@/assets/schneider-weisse-closeup-1200.webp";
+import tab3 from "@/assets/hero-stage-1200.webp";
 
 /** Regensburg + Staedte bis ca. zwei Stunden Anfahrt — verlinkt auf die Stadtseiten. */
 const REGION = [

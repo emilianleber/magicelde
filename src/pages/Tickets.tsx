@@ -37,10 +37,10 @@ import {
   Send,
 } from "lucide-react";
 
-import heroStageImg from "@/assets/audience-reactions.jpg";
-import tabCloseup from "@/assets/hero-closeup.jpg";
-import tabDinner from "@/assets/hero-dinner.jpg";
-import tabStage from "@/assets/hero-stage.jpg";
+import heroStageImg from "@/assets/audience-reactions-1200.webp";
+import tabCloseup from "@/assets/hero-closeup-1200.webp";
+import tabDinner from "@/assets/hero-dinner-1200.webp";
+import tabStage from "@/assets/hero-stage-1200.webp";
 
 /* ═══════════════════════════════════════════════════════════
    AKTUELLE TERMINE — Leer-Zustand (aktuell keine Events)

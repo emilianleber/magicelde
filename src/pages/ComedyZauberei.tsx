@@ -4,13 +4,13 @@ import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA } from "@/components/vo
 import { SplitFeature, ExampleSets, WarumCarousel, InteractiveTabs, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Mail, Clock, CalendarCheck, Gauge, Users, Sparkles, Mic } from "lucide-react";
-import heroImg from "@/assets/emotionen.jpg";
-import splitImg from "@/assets/audience-reactions.jpg";
-import carA from "@/assets/zuschauer-blau.jpg";
-import carB from "@/assets/staunen.jpg";
-import tab1 from "@/assets/moderator-hero.jpg";
-import tab2 from "@/assets/emilian-magic-dinner.jpg";
-import tab3 from "@/assets/hero-stage.jpg";
+import heroImg from "@/assets/emotionen-1200.webp";
+import splitImg from "@/assets/audience-reactions-1200.webp";
+import carA from "@/assets/zuschauer-blau-1200.webp";
+import carB from "@/assets/staunen-1200.webp";
+import tab1 from "@/assets/moderator-hero-1200.webp";
+import tab2 from "@/assets/emilian-magic-dinner-1200.webp";
+import tab3 from "@/assets/hero-stage-1200.webp";
 
 export default function ComedyZauberei() {
   return (

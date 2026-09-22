@@ -4,13 +4,13 @@ import { SubHero, PullQuote, ReviewsBlock, FAQ, FinalCTA, Stats, GlassFeatures }
 import { InteractiveTabs, FormatCards, SplitFeature, WarumCarousel, NotificationFlow } from "@/components/voltage/creative";
 import { COBALT, MAGENTA } from "@/components/voltage/theme";
 import { Briefcase, Check, Clock, CalendarCheck, Hand, Wand2, UtensilsCrossed, Sparkles, MessageSquare, Route, Headphones, ShieldCheck, Languages, Timer } from "lucide-react";
-import heroImg from "@/assets/schneider-weisse-closeup.jpg";
-import splitImg from "@/assets/magicdinner-buehne.jpg";
-import carA from "@/assets/staunen.jpg";
-import carB from "@/assets/audience-reactions.jpg";
-import tab1 from "@/assets/hero-closeup.jpg";
-import tab2 from "@/assets/emilian-magic-dinner.jpg";
-import tab3 from "@/assets/hero-stage.jpg";
+import heroImg from "@/assets/schneider-weisse-closeup-1200.webp";
+import splitImg from "@/assets/magicdinner-buehne-1200.webp";
+import carA from "@/assets/staunen-1200.webp";
+import carB from "@/assets/audience-reactions-1200.webp";
+import tab1 from "@/assets/hero-closeup-1200.webp";
+import tab2 from "@/assets/emilian-magic-dinner-1200.webp";
+import tab3 from "@/assets/hero-stage-1200.webp";
 
 export default function Firmenfeiern() {
   return (
