@@ -24,6 +24,7 @@
 // Braucht RESEND_API_KEY in den Umgebungsvariablen dieses Vercel-Projekts —
 // denselben Schluessel, den das alte Supabase-Projekt benutzt. Fehlt er,
 // antwortet die Funktion mit 503 und sagt was fehlt, statt still zu scheitern.
+import { createHash } from "node:crypto";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const AN = process.env.ANFRAGE_AN || "el@magicel.de";
@@ -112,10 +113,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
     : null;
 
+  /*
+   * Dieselbe Anfrage nur EINMAL zustellen (28.09.2026).
+   *
+   * Die Hochzeitsanfrage Allgayer kam zweimal an, 5 Sekunden nacheinander —
+   * das Formular wurde doppelt abgeschickt (Doppeltipp / Neuversuch am Handy).
+   * Resend nimmt einen Idempotency-Key: Gleicher Schluessel innerhalb von
+   * 24 Stunden = keine zweite Mail. Der Schluessel ist ein Fingerabdruck des
+   * Inhalts; wer bewusst etwas aendert (anderes Datum, andere Nachricht),
+   * bekommt einen neuen und wird normal zugestellt.
+   */
+  const fingerabdruck = createHash("sha256")
+    .update(JSON.stringify([
+      email.toLowerCase(), a.name, a.vorname, a.nachname, a.firma, a.phone,
+      a.anlass, a.datum, a.ort, a.gaeste, a.format, a.nachricht,
+    ].map((v) => String(v ?? "").trim())))
+    .digest("hex")
+    .slice(0, 48);
+
   async function senden(body: Record<string, unknown>) {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `anfrage-${fingerabdruck}`,
+      },
       body: JSON.stringify(body),
     });
     if (!r.ok) throw new Error((await r.text()).slice(0, 200));
