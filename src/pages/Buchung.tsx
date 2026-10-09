@@ -219,66 +219,27 @@ const Buchung = () => {
         className="container px-6 pt-12 md:pt-16 pb-20"
         style={{ ["--ac" as never]: ACCENT }}
       >
-          <div className="max-w-3xl mx-auto">
-            {/* Header */}
-            <div className="mb-10 md:mb-12">
-              <p className="text-[11px] tracking-[0.22em] uppercase font-semibold text-foreground/55 mb-4">
-                Anfrage
-              </p>
-              <h1 className="font-display font-black text-3xl md:text-5xl text-foreground leading-[1.05] mb-5">
-                Erzähl mir von deinem Event.
-              </h1>
-              <p className="text-base md:text-lg text-foreground/65 leading-[1.65] max-w-xl">
-                Unverbindlich, kostenlos, persönlich. Ich melde mich
-                innerhalb von 24 Stunden zurück — meistens schneller.
-              </p>
-
-              <ul className="flex flex-col sm:flex-row sm:flex-wrap gap-x-5 gap-y-1.5 mt-6 text-sm text-foreground/65">
-                <li className="inline-flex items-center gap-1.5">
-                  <Shield className="w-3.5 h-3.5 shrink-0" style={{ color: ACCENT }} />
-                  100 % unverbindlich
-                </li>
-                <li className="inline-flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 shrink-0" style={{ color: ACCENT }} />
-                  Antwort in 24h
-                </li>
-                <li className="inline-flex items-center gap-1.5">
-                  <Star className="w-3.5 h-3.5 shrink-0" style={{ color: ACCENT }} />
-                  Kostenlose Beratung
-                </li>
-              </ul>
-            </div>
-
-            {/* Alternative Kontaktwege */}
-            <div className="grid sm:grid-cols-3 gap-3 mb-8">
-              <a
-                href="mailto:el@magicel.de"
-                className="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-foreground/15 bg-white hover:border-[color:var(--ac)] transition-colors text-sm"
-              >
-                <Mail className="w-4 h-4" style={{ color: ACCENT }} />
-                <span className="text-foreground">el@magicel.de</span>
-              </a>
-              <a
-                href="tel:+4915563744696"
-                className="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-foreground/15 bg-white hover:border-[color:var(--ac)] transition-colors text-sm"
-              >
-                <Phone className="w-4 h-4" style={{ color: ACCENT }} />
-                <span className="text-foreground">+49 15563744696</span>
-              </a>
-              <a
-                href="/#planer"
-                className="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-foreground/15 bg-white hover:border-[color:var(--ac)] transition-colors text-sm"
-              >
-                <Wand2 className="w-4 h-4" style={{ color: ACCENT }} />
-                <span className="text-foreground">Show-Planer</span>
-              </a>
-            </div>
-
+          {/* Kopf kurz — die Seite IST die Buchung (Gründer 09.10.: „oben nicht mehr so viel“) */}
+          <div className="max-w-6xl mx-auto mb-8 md:mb-10">
+            <h1 className="font-display font-black text-3xl md:text-5xl text-foreground leading-[1.05] mb-3">
+              Erzähl mir von deinem Event.
+            </h1>
+            <p className="text-base md:text-lg text-foreground/65 leading-[1.65] max-w-xl">
+              Unverbindlich und kostenlos — ich melde mich innerhalb von 24 Stunden.
+            </p>
           </div>
 
           {/* Buchung direkt in bookartist (09.10.2026) — volle Breite, wächst mit (kein Scrollen im Fenster) */}
           <div className="max-w-6xl mx-auto mt-2">
             <BookartistBuchung />
+            <p className="mt-10 text-sm text-foreground/60">
+              Lieber direkt?{" "}
+              <a href="mailto:el@magicel.de" className="text-foreground underline underline-offset-4">el@magicel.de</a>
+              {" · "}
+              <a href="tel:+4915563744696" className="text-foreground underline underline-offset-4">+49 155 63744696</a>
+              {" · "}
+              <a href="/#planer" className="text-foreground underline underline-offset-4">Show-Planer</a>
+            </p>
           </div>
         </div>
     </VoltageShell>

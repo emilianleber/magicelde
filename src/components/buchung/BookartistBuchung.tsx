@@ -24,6 +24,13 @@ export default function BookartistBuchung() {
   // kein weißes Loch (Gründer 09.10.: „erstmal lang weiß … graue Kästen zum Sehen“)
   const [bereit, setBereit] = useState(false);
 
+  // Falls die Höhenmeldung ausbleibt (Browser blockt Nachrichten, langsames Netz): nach dem Laden
+  // des Fensters bzw. spätestens nach 4 s trotzdem zeigen — nie „lädt ewig“ (Gründer 09.10.)
+  useEffect(() => {
+    const t = window.setTimeout(() => setBereit(true), 4000);
+    return () => window.clearTimeout(t);
+  }, []);
+
   useEffect(() => {
     const hoeren = (e: MessageEvent) => {
       if (e.origin !== HERKUNFT || e.source !== ref.current?.contentWindow) return;
@@ -57,6 +64,7 @@ export default function BookartistBuchung() {
         ref={ref}
         src={ADRESSE}
         title="Anfrage senden"
+        onLoad={() => window.setTimeout(() => setBereit(true), 600)}
         allow="clipboard-write"
         className="block w-full border-0 transition-opacity duration-300"
         style={{ height: hoehe, background: "transparent", colorScheme: "light", opacity: bereit ? 1 : 0 }}
