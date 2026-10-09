@@ -58,6 +58,8 @@ const ShowPlanerTrigger = () => {
   useEffect(() => {
     if (sessionStorage.getItem(EXIT_INTENT_SHOWN_KEY) === "true") return;
     if (isCompleted()) return;
+    // Wer gerade anfragt, wird nicht zum Show-Planer umgelenkt (09.10.2026)
+    if (["/buchung", "/danke"].some((p) => window.location.pathname.startsWith(p))) return;
     const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!isDesktop) return;
 
@@ -230,7 +232,7 @@ const ShowPlanerTrigger = () => {
       {/* Exit-Intent Toast — nur Desktop */}
       {showExitIntent && !open && (
         <div
-          className="hidden md:block fixed top-5 left-1/2 -translate-x-1/2 z-40 max-w-md rounded-2xl p-5 bg-white"
+          className="hidden md:block fixed top-5 left-1/2 -translate-x-1/2 z-[70] max-w-md rounded-2xl p-5 bg-white"
           style={{
             boxShadow: "0 18px 36px -16px rgba(0,0,0,0.25)",
             border: "1px solid rgba(0,0,0,0.08)",
