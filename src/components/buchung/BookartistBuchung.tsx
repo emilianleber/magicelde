@@ -8,21 +8,40 @@
  * Spam-Schutz). Inhalt, Programme und Preise pflegt Emilian in bookartist
  * (Einstellungen → Buchungsseite) — hier ändert sich dafür nichts.
  *
- * Feste Höhe statt Mitwachsen: Die Seite im Fenster hat am Handy eine Leiste
- * unten (Weiter/Anfragen), die muss im sichtbaren Bereich bleiben.
+ * Im magicel-Design: magicel-Blau, ohne Name/Bild (stehen auf der Seite schon),
+ * ohne eigenen Rahmen. Das Fenster wächst mit dem Inhalt — die Buchung meldet
+ * ihre Höhe (postMessage), beim Schrittwechsel scrollt die Seite zum Anfang.
  */
-const ADRESSE = "https://app.bookartist.de/buchen/emilian-leber?eingebettet=1";
+import { useEffect, useRef, useState } from "react";
+
+const HERKUNFT = "https://app.bookartist.de";
+const ADRESSE = `${HERKUNFT}/buchen/emilian-leber?eingebettet=1&farbe=1D3FFF&kopf=0&rahmen=0`;
 
 export default function BookartistBuchung() {
+  const ref = useRef<HTMLIFrameElement>(null);
+  const [hoehe, setHoehe] = useState(620);
+
+  useEffect(() => {
+    const hoeren = (e: MessageEvent) => {
+      if (e.origin !== HERKUNFT || e.source !== ref.current?.contentWindow) return;
+      const d = e.data as { typ?: string; h?: number } | null;
+      if (d?.typ === "bookartist-hoehe" && typeof d.h === "number" && d.h > 200 && d.h < 6000) setHoehe(d.h);
+      if (d?.typ === "bookartist-schritt" && ref.current && ref.current.getBoundingClientRect().top < 80) {
+        window.scrollTo({ top: ref.current.getBoundingClientRect().top + window.scrollY - 96, behavior: "smooth" });
+      }
+    };
+    window.addEventListener("message", hoeren);
+    return () => window.removeEventListener("message", hoeren);
+  }, []);
+
   return (
-    <div className="rounded-2xl overflow-hidden border border-foreground/10 bg-white shadow-sm">
-      <iframe
-        src={ADRESSE}
-        title="Anfrage senden"
-        loading="lazy"
-        allow="clipboard-write"
-        className="block w-full border-0 h-[min(880px,calc(100dvh-96px))] min-h-[620px]"
-      />
-    </div>
+    <iframe
+      ref={ref}
+      src={ADRESSE}
+      title="Anfrage senden"
+      allow="clipboard-write"
+      className="block w-full border-0 -mx-1"
+      style={{ height: hoehe, background: "transparent", colorScheme: "light" }}
+    />
   );
 }

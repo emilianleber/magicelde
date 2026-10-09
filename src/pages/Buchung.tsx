@@ -274,7 +274,10 @@ const Buchung = () => {
               </a>
             </div>
 
-            {/* Buchung direkt in bookartist (09.10.2026) — Auswahl, freie Tage, Angaben */}
+          </div>
+
+          {/* Buchung direkt in bookartist (09.10.2026) — volle Breite, wächst mit (kein Scrollen im Fenster) */}
+          <div className="max-w-6xl mx-auto mt-2">
             <BookartistBuchung />
           </div>
         </div>
