@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { captureEmail, markEmailSubmitted } from "@/lib/emailCapture";
 import { sendInquiry } from "@/lib/sendInquiry";
+import BookartistBuchung from "@/components/buchung/BookartistBuchung";
 
 const ACCENT = "#1D3FFF";
 const ACCENT_DEEP = "#1233CC";
@@ -248,26 +249,6 @@ const Buchung = () => {
               </ul>
             </div>
 
-            {/* Prefill-Banner */}
-            {(prefill.email || prefill.anlass || prefill.format) && (
-              <div
-                className="mb-8 px-5 py-3.5 rounded-xl text-sm text-foreground/80 flex items-start gap-3"
-                style={{
-                  background: `${ACCENT}10`,
-                  border: `1px solid ${ACCENT}30`,
-                }}
-              >
-                <Sparkles
-                  className="w-4 h-4 mt-0.5 shrink-0"
-                  style={{ color: ACCENT }}
-                />
-                <span>
-                  Deine Show-Planer-Antworten sind unten schon vorbefüllt —
-                  schau kurz drüber, ergänze fehlende Felder und schick los.
-                </span>
-              </div>
-            )}
-
             {/* Alternative Kontaktwege */}
             <div className="grid sm:grid-cols-3 gap-3 mb-8">
               <a
@@ -293,198 +274,8 @@ const Buchung = () => {
               </a>
             </div>
 
-            {/* Formular */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name */}
-              <div className="grid grid-cols-[110px_1fr] sm:grid-cols-[120px_1fr_1fr] gap-3">
-                <select
-                  name="anrede"
-                  className={inputCls}
-                  defaultValue=""
-                >
-                  <option value="">Anrede</option>
-                  <option value="Herr">Herr</option>
-                  <option value="Frau">Frau</option>
-                  <option value="Divers">Divers</option>
-                </select>
-                <input
-                  type="text"
-                  name="vorname"
-                  placeholder="Vorname *"
-                  required
-                  defaultValue={prefill.vorname}
-                  className={inputCls}
-                />
-                <input
-                  type="text"
-                  name="nachname"
-                  placeholder="Nachname *"
-                  required
-                  defaultValue={prefill.nachname}
-                  className="col-span-2 sm:col-span-1 w-full rounded-xl border border-foreground/15 bg-white px-4 py-3 text-base text-foreground placeholder:text-foreground/40 focus:border-[color:var(--ac)] focus:outline-none focus:ring-2 focus:ring-[color:var(--ac)]/15 transition-colors"
-                />
-              </div>
-              <input
-                type="email"
-                name="email"
-                placeholder="E-Mail *"
-                required
-                defaultValue={prefill.email}
-                className={inputCls}
-              />
-
-              {/* Firma + Telefon */}
-              <div className="grid sm:grid-cols-2 gap-3">
-                <div className="relative">
-                  <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40 pointer-events-none" />
-                  <input
-                    type="text"
-                    name="firma"
-                    placeholder="Firma (optional)"
-                    className={`${inputCls} pl-10`}
-                  />
-                </div>
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Telefon (optional)"
-                  defaultValue={prefill.phone}
-                  className={inputCls}
-                />
-              </div>
-
-              {/* Anlass + Datum */}
-              <div className="grid sm:grid-cols-2 gap-3">
-                <select
-                  name="anlass"
-                  required
-                  defaultValue={prefill.anlass}
-                  className={inputCls}
-                >
-                  <option value="" disabled>
-                    Anlass wählen *
-                  </option>
-                  <option value="hochzeit">Hochzeit</option>
-                  <option value="firmenfeier">Firmenfeier</option>
-                  <option value="geburtstag">Geburtstag / Privatfeier</option>
-                  <option value="gala">Gala / Award-Show</option>
-                  <option value="messe">Messe / Promotion</option>
-                  <option value="magic-dinner">Magic Dinner</option>
-                  <option value="teamevent">Teamevent / Incentive</option>
-                  <option value="sonstiges">Sonstiges</option>
-                </select>
-                <input
-                  type="date"
-                  name="datum"
-                  defaultValue={prefill.datum}
-                  className={inputCls}
-                  onFocus={(e) => {
-                    try {
-                      (e.target as HTMLInputElement).showPicker?.();
-                    } catch {
-                      /* noop */
-                    }
-                  }}
-                />
-              </div>
-
-              {/* Ort + Gäste */}
-              <div className="grid sm:grid-cols-2 gap-3">
-                <input
-                  type="text"
-                  name="ort"
-                  placeholder="Ort / Location"
-                  defaultValue={prefill.ort}
-                  className={inputCls}
-                />
-                <input
-                  type="number"
-                  name="gaeste"
-                  placeholder="Anzahl Gäste (ca.)"
-                  min="1"
-                  defaultValue={prefill.gaeste}
-                  className={inputCls}
-                />
-              </div>
-
-              {/* Format */}
-              <select
-                name="format"
-                defaultValue={prefill.format}
-                className={inputCls}
-              >
-                <option value="" disabled>
-                  Gewünschtes Format (optional)
-                </option>
-                <option value="closeup">Close-Up Magie</option>
-                <option value="buehnenshow">Bühnenshow</option>
-                <option value="magic_dinner">Magic Dinner</option>
-                <option value="kombination">Kombination</option>
-                <option value="moderation">Moderation</option>
-                <option value="unsicher">Noch unsicher — berate mich</option>
-              </select>
-
-              {/* Nachricht */}
-              <textarea
-                name="nachricht"
-                rows={5}
-                placeholder="Erzähl mir von deinem Event — Anlass, Vorstellungen, Anekdoten, besondere Wünsche…"
-                defaultValue={prefill.nachricht}
-                className={`${inputCls} resize-none`}
-              />
-
-              {error && (
-                <div className="text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-3 rounded-lg space-y-3">
-                  <p>{error}</p>
-                  {mailtoHref && (
-                    <a
-                      href={mailtoHref}
-                      className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-transform hover:scale-[1.02]"
-                      style={{
-                        background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                      }}
-                    >
-                      <Mail className="w-4 h-4" />
-                      Anfrage per E-Mail senden
-                    </a>
-                  )}
-                </div>
-              )}
-              {success && (
-                <p className="text-sm text-green-700 bg-green-50 border border-green-200 px-4 py-2.5 rounded-lg flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  {success}
-                </p>
-              )}
-
-              <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-2">
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className="inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[12px] tracking-[0.08em] font-semibold uppercase text-white transition-transform hover:scale-[1.02] disabled:opacity-50"
-                  style={{
-                    background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                  }}
-                >
-                  {sending ? "Wird gesendet…" : "Anfrage senden"}
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <span className="text-xs text-foreground/55">
-                  Antwort innerhalb 24 Stunden · keine Werbung, kein Spam.
-                </span>
-              </div>
-
-              <p className="text-xs text-foreground/45 pt-2">
-                Mit dem Absenden bestätigst du, dass du die{" "}
-                <a
-                  href="/datenschutz"
-                  className="underline decoration-foreground/30 hover:decoration-foreground"
-                >
-                  Datenschutzerklärung
-                </a>{" "}
-                gelesen hast.
-              </p>
-            </form>
+            {/* Buchung direkt in bookartist (09.10.2026) — Auswahl, freie Tage, Angaben */}
+            <BookartistBuchung />
           </div>
         </div>
     </VoltageShell>
