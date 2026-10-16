@@ -16,9 +16,10 @@ interface Props {
   path?: string;          // z.B. "/demo/buehnenshow" → canonical
   children: ReactNode;
   noindex?: boolean;      // Prototyp: default noindex
+  image?: string;         // og:image (Pfad unter /public oder absolute URL)
 }
 
-export default function VoltageShell({ title: titleProp, description: descriptionProp, path = "/demo", children, noindex = true }: Props) {
+export default function VoltageShell({ title: titleProp, description: descriptionProp, path = "/demo", children, noindex = true, image }: Props) {
   // Single Source: Titel/Beschreibung aus seoMeta.json — dieselben Texte
   // schreibt scripts/inject-meta.mjs ins vorgerenderte HTML.
   const meta = (SEO_META.pages as SeoPages)[path];
@@ -52,6 +53,8 @@ export default function VoltageShell({ title: titleProp, description: descriptio
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        {image && <meta property="og:image" content={image.startsWith("http") ? image : `${SITE_URL}${image}`} />}
+        {image && <meta name="twitter:image" content={image.startsWith("http") ? image : `${SITE_URL}${image}`} />}
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" />
       </Helmet>
       <VoltageGlobalStyle />

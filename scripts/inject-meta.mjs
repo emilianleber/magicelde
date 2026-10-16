@@ -73,9 +73,18 @@ const staticRoutes = [
   },
   {
     path: '/tickets',
-    title: 'Tickets & Termine — aktuell keine Events | Emilian Leber',
-    description: 'Aktuell sind keine öffentlichen Termine geplant — kein Vorverkauf, keine Reservierung. Neue Termine zuerst über den Newsletter. Private Buchungen jederzeit möglich.',
-    ogTitle: 'Tickets & Termine — aktuell keine Events',
+    title: 'Tickets & Termine | Emilian Leber',
+    description: 'Öffentliche Termine von Zauberkünstler Emilian Leber — Tickets direkt online.',
+    ogTitle: 'Tickets & Termine — Emilian Leber',
+    ogImage: '/events/magic-dinner-2027-02-20-16x9.jpg',
+  },
+  // Event-Detailseiten (src/data/events.ts) — Titel/Beschreibung aus seoMeta.json
+  {
+    path: '/tickets/magic-dinner-regensburg-sinzing-2027',
+    title: 'Magic Dinner bei Regensburg: 20.02.2027 – Tickets',
+    description: 'Magic Dinner am 20.02.2027 im Wald & Wiese, Sinzing bei Regensburg.',
+    ogTitle: 'Magic Dinner · Eine Show in 3 Gängen — Sa 20.02.2027',
+    ogImage: '/events/magic-dinner-2027-02-20-16x9.jpg',
   },
   {
     path: '/buchung',
@@ -193,8 +202,15 @@ function esc(s) {
     .replace(/"/g, '&quot;');
 }
 
-function injectMeta(html, { title, description, canonical, ogTitle }) {
-  return html
+function injectMeta(html, { title, description, canonical, ogTitle, ogImage }) {
+  const img = ogImage ? (ogImage.startsWith('http') ? ogImage : `${BASE}${ogImage}`) : null;
+  const withImg = (h) =>
+    img
+      ? h
+          .replace(/(<meta\s+property="og:image"\s+content=")[^"]*(")/, `$1${esc(img)}$2`)
+          .replace(/(<meta\s+name="twitter:image"\s+content=")[^"]*(")/, `$1${esc(img)}$2`)
+      : h;
+  return withImg(html)
     .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
     .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/,
       `$1${esc(description)}$2`)
@@ -258,7 +274,7 @@ let count = 0;
 // 1) Statische Hauptseiten (23)
 for (const route of staticRoutes) {
   const m = SEO_META.pages[route.path];
-  const r = m ? { ...route, title: m.title, description: m.description, ogTitle: m.title } : route;
+  const r = m ? { ...route, title: m.title, description: m.description, ogTitle: route.ogTitle || m.title } : route;
   const canonical = `${BASE}${r.path}`;
   const html = injectMeta(baseHtml, { ...r, canonical });
   const injection =

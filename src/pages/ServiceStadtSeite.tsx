@@ -1,3 +1,5 @@
+import { EventTeaser } from "@/components/events/EventBits";
+import { upcomingEvents } from "@/data/events";
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation, useParams } from "react-router-dom";
@@ -190,6 +192,8 @@ const ServicePage = ({ service, city }: PageProps) => {
         primary={{ label: service.ctaPrimary, href: buchungHref }}
         secondary={{ label: `Mehr zum ${service.shortName}-Format`, href: service.detailHref }}
       />
+
+      {service.slug === "magic-dinner" && upcomingEvents()[0] && <EventTeaser event={upcomingEvents()[0]} />}
 
       <LogoMarquee label="Auftritte für Konzerne und Marken." />
 

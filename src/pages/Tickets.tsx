@@ -1,7 +1,5 @@
-/** /tickets — Tickets & Termine (Voltage-Layout): aktuell keine Termine, Show-Formate, Abendablauf. */
-import { Helmet } from "react-helmet-async";
+/** /tickets — Tickets & Termine (Voltage-Layout): anstehende Events aus src/data/events.ts, Formate, Showreel. */
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { motion } from "framer-motion";
 import VoltageShell from "@/components/voltage/VoltageShell";
 import {
@@ -17,7 +15,6 @@ import {
   COBALT,
   MAGENTA,
   INK,
-  WHITE,
   PAPER,
   L_LINE,
   L_DIM,
@@ -26,93 +23,101 @@ import {
   stagger,
   vp,
 } from "@/components/voltage/theme";
-import { captureEmail } from "@/lib/emailCapture";
 import { TVA_VIDEO_ID } from "@/lib/videos";
-import {
-  ArrowRight,
-  Tv,
-  CheckCircle2,
-  AlertCircle,
-  Mail,
-  Send,
-} from "lucide-react";
+import { ArrowRight, Tv } from "lucide-react";
+import { EventCard, EventVideo } from "@/components/events/EventBits";
+import { upcomingEvents } from "@/data/events";
 
+import plakatImg from "@/assets/magic-dinner-2027-plakat.webp";
+import plakatHochImg from "@/assets/magic-dinner-2027-plakat-hoch.webp";
 import heroStageImg from "@/assets/audience-reactions-1200.webp";
 import tabCloseup from "@/assets/hero-closeup-1200.webp";
 import tabDinner from "@/assets/hero-dinner-1200.webp";
 import tabStage from "@/assets/hero-stage-1200.webp";
 
 /* ═══════════════════════════════════════════════════════════
-   AKTUELLE TERMINE — Leer-Zustand (aktuell keine Events)
+   ANSTEHENDE EVENTS — aus src/data/events.ts; leer → Leer-Zustand
    ═══════════════════════════════════════════════════════════ */
-const KeineTermineSection = () => (
-  <motion.section
-    id="events"
-    variants={stagger}
-    initial="hidden"
-    whileInView="show"
-    viewport={vp}
-    className="px-5 md:px-10 py-16 md:py-24"
-    style={{
-      background: PAPER,
-      borderTop: `1px solid ${L_LINE}`,
-      borderBottom: `1px solid ${L_LINE}`,
-    }}
-  >
-    <div className="max-w-7xl mx-auto">
-      <motion.div variants={up} className="max-w-3xl mb-10">
-        <SectionHeader
-          eyebrow="Anstehende Events"
-          title={
-            <>
-              Aktuell <span style={{ color: COBALT }}>keine Termine</span>
-              <span style={{ color: MAGENTA }}>.</span>
-            </>
-          }
-          sub="Es stehen derzeit keine öffentlichen Veranstaltungen an — keine Shows, kein Magic Dinner, kein Vorverkauf."
-        />
-      </motion.div>
+const EventsSection = () => {
+  const events = upcomingEvents();
+  return (
+    <motion.section
+      id="events"
+      variants={stagger}
+      initial="hidden"
+      whileInView="show"
+      viewport={vp}
+      className="px-5 md:px-10 py-16 md:py-24"
+      style={{
+        background: PAPER,
+        borderTop: `1px solid ${L_LINE}`,
+        borderBottom: `1px solid ${L_LINE}`,
+      }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div variants={up} className="max-w-3xl mb-10">
+          <SectionHeader
+            eyebrow="Anstehende Events"
+            title={
+              events.length ? (
+                <>
+                  Nächster <span style={{ color: COBALT }}>Termin</span>
+                  <span style={{ color: MAGENTA }}>.</span>
+                </>
+              ) : (
+                <>
+                  Aktuell <span style={{ color: COBALT }}>keine Termine</span>
+                  <span style={{ color: MAGENTA }}>.</span>
+                </>
+              )
+            }
+            sub={
+              events.length
+                ? "Öffentliche Abende mit Emilian Leber — Tickets direkt online."
+                : "Es stehen derzeit keine öffentlichen Veranstaltungen an. Sobald wieder ein Abend feststeht, steht er hier."
+            }
+          />
+        </motion.div>
 
-      <motion.div
-        variants={up}
-        className="rounded-[28px] p-8 md:p-12 lg:p-14 max-w-4xl"
-        style={{ background: CARD_LIGHT, border: `1px solid ${L_LINE}` }}
-      >
-        <span
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[12px] font-semibold mb-6"
-          style={{ background: `${COBALT}14`, color: COBALT }}
-        >
-          <AlertCircle className="w-4 h-4" />
-          Keine Events im Vorverkauf
-        </span>
-        <h3
-          className="font-extrabold tracking-[-0.02em] leading-tight mb-5"
-          style={{ fontSize: "clamp(1.6rem,2.4vw,2.2rem)", color: INK }}
-        >
-          Gerade gibt es nichts zu buchen.
-        </h3>
-        <p
-          className="text-[16px] md:text-lg leading-[1.7] max-w-2xl mb-8"
-          style={{ color: L_DIM }}
-        >
-          Es sind aktuell keine öffentlichen Termine geplant. Sobald wieder ein
-          Abend feststeht, steht er hier. Für eine eigene Show zu deinem Anlass
-          kannst du mich jederzeit direkt anfragen.
-        </p>
-        <div className="flex flex-wrap items-center gap-4">
-          <Link
-            to="/buchung"
-            className="inline-flex items-center gap-1.5 text-[14px] font-semibold border-b pb-1 transition-colors"
-            style={{ color: INK, borderColor: L_LINE }}
+        {events.length ? (
+          <div className="space-y-8">
+            {events.map((e) => (
+              <EventCard key={e.slug} event={e} image={plakatImg} />
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            variants={up}
+            className="rounded-[28px] p-8 md:p-12 lg:p-14 max-w-4xl"
+            style={{ background: CARD_LIGHT, border: `1px solid ${L_LINE}` }}
           >
-            Private Show anfragen
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </motion.div>
-    </div>
-  </motion.section>
-);
+            <h3
+              className="font-extrabold tracking-[-0.02em] leading-tight mb-5"
+              style={{ fontSize: "clamp(1.6rem,2.4vw,2.2rem)", color: INK }}
+            >
+              Gerade gibt es nichts zu buchen.
+            </h3>
+            <p
+              className="text-[16px] md:text-lg leading-[1.7] max-w-2xl mb-8"
+              style={{ color: L_DIM }}
+            >
+              Für eine eigene Show zu deinem Anlass kannst du mich jederzeit
+              direkt anfragen.
+            </p>
+            <Link
+              to="/buchung"
+              className="inline-flex items-center gap-1.5 text-[14px] font-semibold border-b pb-1 transition-colors"
+              style={{ color: INK, borderColor: L_LINE }}
+            >
+              Private Show anfragen
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
+        )}
+      </div>
+    </motion.section>
+  );
+};
 
 /* ═══════════════════════════════════════════════════════════
    VIDEO-SECTION TVA
@@ -184,179 +189,155 @@ const VideoSection = () => (
 
 
 /* ═══════════════════════════════════════════════════════════
-   FAQ — Ticket-spezifisch
+   FAQ — Ticket-spezifisch. Event-Fakten kommen aus events.ts.
+   JSON-LD (Event, FAQPage) schreibt der Prerender (seo-content.mjs).
    ═══════════════════════════════════════════════════════════ */
-const FAQS = [
+const baseFaqs = [
   {
-    q: "Wann gibt es wieder Termine?",
-    a: "Aktuell sind keine öffentlichen Veranstaltungen geplant. Neue Termine werden hier auf dieser Seite veröffentlicht.",
-  },
-  {
-    q: "Kann ich schon Tickets kaufen oder reservieren?",
-    a: "Nein. Es läuft kein Vorverkauf und es gibt keine Reservierungsliste, weil derzeit kein Termin feststeht.",
-  },
-  {
-    q: "Wie erfahre ich von neuen Terminen?",
-    a: "Neue Termine stehen zuerst auf dieser Seite. Wer nicht warten möchte, schreibt mir kurz — dann melde ich mich, sobald ein Abend feststeht.",
-  },
-  {
-    q: "Kann ich Emilian trotzdem buchen?",
+    q: "Kann ich Emilian trotzdem privat buchen?",
     a: "Ja. Private und geschäftliche Buchungen sind unabhängig von öffentlichen Terminen jederzeit möglich — Hochzeit, Firmenfeier, Geburtstag oder eigener Show-Abend. Anfrage über das Buchungsformular oder direkt an el@magicel.de.",
   },
   {
     q: "Wie schnell kommt eine Antwort auf eine Anfrage?",
     a: "In der Regel innerhalb von 24 Stunden — mit Rückfragen zum Anlass, zur Location und zum Ablauf, danach ein konkretes Angebot.",
   },
-  {
-    q: "Wie lange dauert eine Show?",
-    a: "Je nach Format: Close-Up-Magie läuft über den Abend verteilt, eine abendfüllende Bühnenshow dauert rund 90 Minuten. Der genaue Ablauf wird bei der Buchung gemeinsam festgelegt.",
-  },
 ];
 
-/* ═══════════════════════════════════════════════════════════
-   NEWSLETTER-CTA — Email-Capture für neue Termine (Logik unverändert)
-   ═══════════════════════════════════════════════════════════ */
-
-
-/* ═══════════════════════════════════════════════════════════
-   JSON-LD — BreadcrumbList + Person (aktuell keine Events)
-   ═══════════════════════════════════════════════════════════ */
-const SITE_URL = "https://www.magicel.de/tickets";
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
+const ticketFaqs = () => {
+  const next = upcomingEvents()[0];
+  if (!next) {
+    return [
+      {
+        q: "Wann gibt es wieder Termine?",
+        a: "Aktuell sind keine öffentlichen Veranstaltungen geplant. Neue Termine werden hier auf dieser Seite veröffentlicht.",
+      },
+      ...baseFaqs,
+    ];
+  }
+  return [
     {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Start",
-          item: "https://www.magicel.de",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Tickets",
-          item: SITE_URL,
-        },
-      ],
+      q: "Wann ist der nächste öffentliche Termin?",
+      a: `${next.name}: ${next.dateLabel} im ${next.venue.name}, ${next.venue.street}, ${next.venue.postalCode} ${next.venue.city}. Einlass ${next.doorLabel}, Beginn ${next.startLabel}.`,
     },
     {
-      "@type": "Person",
-      name: "Emilian Leber",
-      url: "https://www.magicel.de",
-      jobTitle: "Zauberkünstler · Mentalmagier · Comedy-Magier",
+      q: "Was kostet ein Ticket?",
+      a: `${next.priceLabel} pro Person — ${next.priceIncludes}.`,
     },
-  ],
+    {
+      q: "Wo und ab wann gibt es Tickets?",
+      a: `Online bei ${next.ticketProvider}. Der Vorverkauf startet am ${next.salesStartLabel}.`,
+    },
+    ...baseFaqs,
+  ];
 };
 
 /* ═══════════════════════════════════════════════════════════ */
-const Tickets = () => (
-  <VoltageShell
-    title="Tickets & Termine — aktuell keine Events | Emilian Leber"
-    description="Aktuell sind keine öffentlichen Termine geplant — kein Vorverkauf, kein Magic Dinner. Neue Termine stehen zuerst auf dieser Seite. Private Buchungen jederzeit möglich."
-    path="/tickets"
-    noindex={false}
-  >
-    <Helmet>
-      <meta
-        name="keywords"
-        content="Tickets Emilian Leber, Termine Emilian Leber, Zaubershow Karten Bayern, Magier Tickets Regensburg, Zauberer buchen"
+const Tickets = () => {
+  const next = upcomingEvents()[0];
+  return (
+    <VoltageShell
+      title="Tickets & Termine | Emilian Leber"
+      description="Öffentliche Termine von Zauberkünstler Emilian Leber — Tickets direkt online."
+      path="/tickets"
+      image={next ? next.images.wide : undefined}
+      noindex={false}
+    >
+      <SubHero
+        eyebrow="Tickets & Termine"
+        title={
+          <>
+            Tickets <span style={{ color: COBALT }}>& Termine</span>
+            <span style={{ color: MAGENTA }}>.</span>
+          </>
+        }
+        sub={
+          next
+            ? `Nächster Abend: Magic Dinner am ${next.dateLabel} im ${next.venue.name}, ${next.venue.regionHint} — ${next.priceIncludes} für ${next.priceLabel} pro Person.`
+            : "Aktuell stehen keine öffentlichen Veranstaltungen an. Neue Termine erscheinen zuerst hier."
+        }
+        image={next ? plakatHochImg : heroStageImg}
+        imageAlt={next ? `Plakat Magic Dinner ${next.weekdayShort}, Wald & Wiese Sinzing` : "Tickets & Termine — Shows mit Emilian Leber"}
+        imgPos={next ? "center" : "top"}
+        badge={next ? `${next.weekdayShort} · Einlass ${next.doorLabel}` : "Aktuell keine Termine · neue Daten folgen"}
+        primary={next ? { label: "Zum Magic Dinner", href: next.path } : { label: "Private Buchung", href: "/buchung" }}
+        secondary={next ? { label: "Private Buchung", href: "/buchung" } : undefined}
       />
-      <meta property="og:url" content={SITE_URL} />
-      <meta property="og:image" content="https://www.magicel.de/og-image.jpg" />
-      <meta property="og:locale" content="de_DE" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta
-        name="twitter:title"
-        content="Tickets & Termine — aktuell keine Events | Emilian Leber"
+
+      <Stats
+        items={[
+          { v: "4,8★", l: "16 Google-Rezensionen" },
+          next ? { v: next.weekdayShort.replace(/^Sa (\d\d\.\d\d\.)\d{4}$/, "$1"), l: `Magic Dinner ${new Date(next.startDate).getFullYear()}` } : { v: "0", l: "Termine im Vorverkauf" },
+          { v: "200+", l: "Events seit 2016" },
+          { v: "24 h", l: "Antwort auf Anfragen" },
+        ]}
       />
-      <meta
-        name="twitter:description"
-        content="Derzeit keine öffentlichen Termine. Neue Termine stehen zuerst auf dieser Seite — private Buchungen jederzeit möglich."
+
+      <EventsSection />
+
+      {next && (
+        <motion.section variants={stagger} initial="hidden" whileInView="show" viewport={vp} className="px-5 md:px-10 py-16 md:py-24">
+          <div className="max-w-7xl mx-auto">
+            <motion.div variants={up} className="max-w-3xl">
+              <SectionHeader
+                eyebrow="Trailer · Magic Dinner"
+                title={<>42 Sekunden <span style={{ color: COBALT }}>Vorgeschmack</span>.</>}
+                sub="Live. Hautnah. Unvergesslich. — so fühlt sich ein Abend im Wald & Wiese an."
+              />
+            </motion.div>
+            <motion.div variants={up} className="mt-10 max-w-6xl mx-auto">
+              <EventVideo event={next} />
+            </motion.div>
+          </div>
+        </motion.section>
+      )}
+
+      <InteractiveTabs
+        eyebrow="Formate"
+        title={
+          <>
+            Diese <span style={{ color: COBALT }}>Formate</span> gibt es.
+          </>
+        }
+        tabs={[
+          {
+            t: "Close-Up am Tisch",
+            d: "Magie direkt in euren Händen — Karten und kleine Wunder am Tisch, mitten in der Runde.",
+            img: tabCloseup,
+            pos: "center",
+          },
+          {
+            t: "Dinner-Format",
+            d: next
+              ? `Ein Restaurant-Abend mit Close-Up-Magie zwischen den Gängen — öffentlich am ${next.weekdayShort} im Wald & Wiese, privat jederzeit buchbar.`
+              : "Ein Restaurant-Abend mit Close-Up-Magie an jeder Tafel — als Format buchbar, derzeit ohne öffentlichen Termin.",
+            img: tabDinner,
+            pos: "center",
+          },
+          {
+            t: "Show auf der Bühne",
+            d: "90 Minuten Mentalmagie und Comedy als abendfüllende Bühnenshow für Theater- und Saalbühnen.",
+            img: tabStage,
+            pos: "center",
+          },
+        ]}
       />
-      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-    </Helmet>
 
-    <SubHero
-      eyebrow="Tickets & Termine"
-      title={
-        <>
-          Tickets <span style={{ color: COBALT }}>& Termine</span>
-          <span style={{ color: MAGENTA }}>.</span>
-        </>
-      }
-      sub="Aktuell stehen keine öffentlichen Veranstaltungen an — kein Vorverkauf, keine Reservierung. Neue Termine erscheinen hier und zuerst im Newsletter."
-      image={heroStageImg}
-      imageAlt="Tickets & Termine — Shows mit Emilian Leber"
-      imgPos="top"
-      badge="Aktuell keine Termine · neue Daten folgen"
-      primary={{ label: "Newsletter abonnieren", href: "#newsletter" }}
-      secondary={{ label: "Private Buchung", href: "/buchung" }}
-    />
+      <VideoSection />
 
-    <Stats
-      items={[
-        { v: "4,8★", l: "16 Google-Rezensionen" },
-        { v: "0", l: "Termine im Vorverkauf" },
-        { v: "200+", l: "Events seit 2016" },
-        { v: "24 h", l: "Antwort auf Anfragen" },
-      ]}
-    />
+      <ReviewsBlock paper />
 
-    <KeineTermineSection />
+      <FAQ eyebrow="Bevor du fragst" title="Häufige Ticket-Fragen." items={ticketFaqs()} />
 
-    <InteractiveTabs
-      eyebrow="Formate"
-      title={
-        <>
-          Diese <span style={{ color: COBALT }}>Formate</span> gibt es.
-        </>
-      }
-      tabs={[
-        {
-          t: "Close-Up am Tisch",
-          d: "Magie direkt in euren Händen — Karten und kleine Wunder am Tisch, mitten in der Runde.",
-          img: tabCloseup,
-          pos: "center",
-        },
-        {
-          t: "Dinner-Format",
-          d: "Ein Restaurant-Abend mit Close-Up-Magie an jeder Tafel — als Format buchbar, derzeit ohne öffentlichen Termin.",
-          img: tabDinner,
-          pos: "center",
-        },
-        {
-          t: "Show auf der Bühne",
-          d: "90 Minuten Mentalmagie und Comedy als abendfüllende Bühnenshow für Theater- und Saalbühnen.",
-          img: tabStage,
-          pos: "center",
-        },
-      ]}
-    />
-
-    <VideoSection />
-
-    <ReviewsBlock paper />
-
-    <FAQ
-      eyebrow="Bevor du fragst"
-      title="Häufige Ticket-Fragen."
-      items={FAQS.map((f) => ({ q: f.q, a: f.a }))}
-    />
-
-    <FinalCTA
-      title={
-        <>
-          Kein Termin dabei? Dann eigene Show
-          <span style={{ color: MAGENTA }}>.</span>
-        </>
-      }
-      sub="Solange keine öffentlichen Termine anstehen: private und geschäftliche Buchungen sind jederzeit möglich. Schreib mir direkt — Antwort innerhalb von 24 Stunden, deutschlandweit verfügbar."
-    />
-  </VoltageShell>
-);
+      <FinalCTA
+        title={
+          <>
+            Lieber eine eigene Show<span style={{ color: MAGENTA }}>?</span>
+          </>
+        }
+        sub="Private und geschäftliche Buchungen sind jederzeit möglich. Schreib mir direkt — Antwort innerhalb von 24 Stunden, deutschlandweit verfügbar."
+      />
+    </VoltageShell>
+  );
+};
 
 export default Tickets;

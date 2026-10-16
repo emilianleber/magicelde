@@ -51,11 +51,12 @@ async function loadTs(rel) {
 }
 
 export async function loadSeoData() {
-  const [st, sf, w, b] = await Promise.all([
+  const [st, sf, w, b, ev] = await Promise.all([
     loadTs("src/data/staedte.ts"),
     loadTs("src/data/serviceFormats.ts"),
     loadTs("src/data/wissenTopics.ts"),
     loadTs("src/data/blogPosts.ts"),
+    loadTs("src/data/events.ts"),
   ]);
   const cities = st.staedte;
   const formats = sf.SERVICE_FORMATS;
@@ -72,6 +73,11 @@ export async function loadSeoData() {
     wissenBySlug: Object.fromEntries(wissen.map((t) => [t.slug, t])),
     blog,
     blogBySlug: Object.fromEntries(blog.map((p) => [p.slug, p])),
+    /** Öffentliche Termine (src/data/events.ts) — alle, auch vergangene. */
+    events: ev.EVENTS,
+    eventsByPath: Object.fromEntries(ev.EVENTS.map((e) => [e.path, e])),
+    /** Zum Build-Zeitpunkt noch anstehend, nach Datum sortiert. */
+    upcomingEvents: ev.upcomingEvents(),
   };
 }
 
@@ -309,6 +315,72 @@ function articleSchema({ headline, description, url, datePublished, wordCount })
   if (datePublished) obj.datePublished = datePublished;
   if (wordCount) obj.wordCount = wordCount;
   return obj;
+}
+
+/** Event-Schema (FoodEvent = Dinner mit Programm). Nur Fakten aus events.ts. */
+function eventSchema(e) {
+  const url = `${SITE_URL}${e.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FoodEvent",
+    "@id": `${url}#event`,
+    name: e.name,
+    description: e.summary,
+    url,
+    inLanguage: "de-DE",
+    startDate: e.startDate,
+    doorTime: e.doorTime,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    isAccessibleForFree: false,
+    image: [e.images.wide, e.images.plakat, e.images.tall].map((i) => `${SITE_URL}${i}`),
+    location: {
+      "@type": "Restaurant",
+      name: e.venue.name,
+      url: e.venue.url,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: e.venue.street,
+        postalCode: e.venue.postalCode,
+        addressLocality: e.venue.city,
+        addressRegion: e.venue.region,
+        addressCountry: "DE",
+      },
+    },
+    performer: { "@type": "Person", "@id": PERSON_ID, name: "Emilian Leber", url: SITE_URL },
+    organizer: [
+      { "@type": "Organization", name: "magicEL — Emilian Leber", url: SITE_URL },
+      { "@type": "Restaurant", name: e.venue.name, url: e.venue.url },
+    ],
+    offers: {
+      "@type": "Offer",
+      url: e.ticketUrl,
+      price: e.price.toFixed(2),
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
+      validFrom: e.salesStart,
+      description: e.priceIncludes,
+    },
+    subjectOf: { "@id": `${url}#video` },
+  };
+}
+
+/** VideoObject für den Trailer (Video-Rich-Results + KI-Zitate). */
+function eventVideoSchema(e) {
+  const url = `${SITE_URL}${e.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "@id": `${url}#video`,
+    name: e.video.name,
+    description: e.video.description,
+    thumbnailUrl: [`${SITE_URL}${e.video.posterWide}`, `${SITE_URL}${e.video.posterTall}`],
+    uploadDate: e.video.uploadDate,
+    duration: e.video.durationIso,
+    contentUrl: `${SITE_URL}${e.video.wide}`,
+    inLanguage: "de-DE",
+    publisher: { "@id": BUSINESS_ID },
+  };
 }
 
 /** Serialisiert Schema-Objekte zu sicheren <script>-Tags (< → <). */
@@ -643,17 +715,6 @@ const STATIC_CONTENT = {
     ],
     faqs: GENERIC_FAQ,
   },
-  "/tickets": {
-    h1: "Tickets & Termine — aktuell keine Events",
-    lead: "Aktuell sind keine öffentlichen Veranstaltungen geplant — kein Vorverkauf, keine Reservierung. Neue Termine von Emilian Leber erscheinen zuerst hier und im Newsletter.",
-    sections: [
-      {
-        h2: "Aktuelle Termine",
-        body: "Derzeit steht kein öffentlicher Termin an. Sobald wieder ein Abend feststeht, wird er auf dieser Seite veröffentlicht und vorab über den Newsletter angekündigt. Private und geschäftliche Buchungen sind davon unabhängig jederzeit möglich.",
-      },
-    ],
-    faqs: GENERIC_FAQ,
-  },
   "/datenschutz": {
     h1: "Datenschutzerklärung",
     lead: "Datenschutzerklärung von Emilian Leber — Zauberer & Showkünstler aus Regensburg. Informationen zur Verarbeitung personenbezogener Daten auf dieser Website.",
@@ -787,8 +848,9 @@ const DETAIL_H1 = {
   "close-up": "Close-Up Magie — Tischzauberei",
 };
 
-function renderServiceDetail(format, path) {
+function renderServiceDetail(format, path, upcoming = []) {
   const url = `${SITE_URL}${path}`;
+  const nextDinner = format.slug === "magic-dinner" ? upcoming[0] : null;
   const { html: faqHtml, schema: faqSchema } = faqSection(format.faqGlobal);
   const ablaufHtml = (format.ablauf || [])
     .map((s) => `${h3(s.title)}${p(s.body)}`)
@@ -797,6 +859,11 @@ function renderServiceDetail(format, path) {
   const inner = [
     `<h1 style="${S.h1}">${esc(DETAIL_H1[format.slug] || format.name)}</h1>`,
     `<p style="${S.lead}">${esc(format.intro)}</p>`,
+    nextDinner
+      ? h2(`Nächster öffentlicher Termin: ${nextDinner.weekdayShort}`) +
+        p(nextDinner.summary) +
+        `<p style="${S.p}">${ilink(nextDinner.path, "Alle Infos zum Magic Dinner")} &middot; ${xlink(nextDinner.ticketUrl, `Tickets bei ${nextDinner.ticketProvider}`)}</p>`
+      : "",
     h2("Ablauf"),
     ablaufHtml,
     h2("Das macht das Format aus"),
@@ -825,6 +892,7 @@ function renderServiceDetail(format, path) {
         serviceType: format.name,
       }),
       localBusinessSchema(),
+      nextDinner ? eventSchema(nextDinner) : null,
       faqSchema,
       breadcrumbSchema([
         { name: "Start", url: SITE_URL + "/" },
@@ -834,8 +902,9 @@ function renderServiceDetail(format, path) {
   });
 }
 
-function renderServiceCity(format, city, urlPath) {
+function renderServiceCity(format, city, urlPath, upcoming = []) {
   const url = `${SITE_URL}${urlPath}`;
+  const nextDinner = format.slug === "magic-dinner" ? upcoming[0] : null;
   const h1 = `${format.hero.titlePrefix} ${city.name}`;
   const faqs = [...(format.faqGlobal || [])];
   if (city.faq && city.faq.length) faqs.push(city.faq[0]);
@@ -851,6 +920,11 @@ function renderServiceCity(format, city, urlPath) {
     )} (${esc(
       city.region
     )}) und Umgebung buchbar — für Hochzeiten, Firmenfeiern, Geburtstage und private Anlässe.</p>`,
+    nextDinner
+      ? h2(`Öffentliches Magic Dinner: ${nextDinner.weekdayShort}`) +
+        p(nextDinner.summary) +
+        `<p style="${S.p}">${ilink(nextDinner.path, "Alle Infos zum Abend")} &middot; ${xlink(nextDinner.ticketUrl, `Tickets bei ${nextDinner.ticketProvider}`)}</p>`
+      : "",
     h2("Ablauf"),
     ablaufHtml,
     h2("Das macht das Format aus"),
@@ -879,6 +953,7 @@ function renderServiceCity(format, city, urlPath) {
         areaServed: [city.name, city.region],
       }),
       localBusinessSchema([city.name, "Bayern"]),
+      nextDinner ? eventSchema(nextDinner) : null,
       faqSchema,
       breadcrumbSchema([
         { name: "Start", url: SITE_URL + "/" },
@@ -1068,6 +1143,109 @@ function renderBlog(post) {
   });
 }
 
+/** Fakten-Liste eines Termins (Text, zitierfähig). */
+const eventFacts = (e) => [
+  `Datum: ${e.dateLabel}`,
+  `Einlass: ${e.doorLabel} · Beginn: ${e.startLabel}`,
+  `Ort: ${e.venue.name}, ${e.venue.street}, ${e.venue.postalCode} ${e.venue.city} (${e.venue.regionHint})`,
+  `Preis: ${e.priceLabel} pro Person — ${e.priceIncludes}`,
+  `Vorverkauf: ab ${e.salesStartLabel} online bei ${e.ticketProvider}`,
+  "Künstler: Emilian Leber — Zauberkünstler & Mentalist aus Regensburg",
+];
+
+function renderTickets(upcoming) {
+  const next = upcoming[0];
+  const faqs = next
+    ? [
+        { q: "Wann ist der nächste öffentliche Termin?", a: `${next.name}: ${next.dateLabel} im ${next.venue.name}, ${next.venue.street}, ${next.venue.postalCode} ${next.venue.city}. Einlass ${next.doorLabel}, Beginn ${next.startLabel}.` },
+        { q: "Was kostet ein Ticket?", a: `${next.priceLabel} pro Person — ${next.priceIncludes}.` },
+        { q: "Wo und ab wann gibt es Tickets?", a: `Online bei ${next.ticketProvider}. Der Vorverkauf startet am ${next.salesStartLabel}.` },
+        GENERIC_FAQ[0],
+      ]
+    : GENERIC_FAQ;
+  const { html: faqHtml, schema: faqSchema } = faqSection(faqs);
+  const eventsHtml = next
+    ? upcoming
+        .map(
+          (e) =>
+            h3(`${e.name} — ${e.weekdayShort}, ${e.venue.regionHint}`) +
+            p(e.summary) +
+            ul(eventFacts(e)) +
+            `<p style="${S.p}">${ilink(e.path, "Alle Infos zum Magic Dinner")} &middot; ${xlink(e.ticketUrl, `Tickets bei ${e.ticketProvider}`)}</p>`
+        )
+        .join("")
+    : p("Derzeit steht kein öffentlicher Termin an. Sobald wieder ein Abend feststeht, wird er auf dieser Seite veröffentlicht. Private und geschäftliche Buchungen sind davon unabhängig jederzeit möglich.");
+  const inner = [
+    `<h1 style="${S.h1}">${esc(next ? "Tickets & Termine — Magic Dinner bei Regensburg" : "Tickets & Termine — aktuell keine Events")}</h1>`,
+    `<p style="${S.lead}">${esc(
+      next
+        ? `Nächster öffentlicher Abend mit Zauberkünstler Emilian Leber: ${next.summary}`
+        : "Aktuell sind keine öffentlichen Veranstaltungen geplant. Neue Termine von Emilian Leber erscheinen zuerst hier."
+    )}</p>`,
+    h2("Anstehende Events"),
+    eventsHtml,
+    bioSection(),
+    faqHtml,
+    internalLinksBlock([...FORMAT_LINKS, ...OCCASION_LINKS, ...TRUST_LINKS]),
+    externalLinksBlock(next ? [[RESTAURANT_WALDWIESE, "Restaurant Wald & Wiese"]] : []),
+  ].join("");
+  return assemble({
+    inner,
+    schemas: [
+      localBusinessSchema(),
+      ...upcoming.map(eventSchema),
+      faqSchema,
+      breadcrumbSchema([
+        { name: "Start", url: SITE_URL + "/" },
+        { name: "Tickets", url: `${SITE_URL}/tickets` },
+      ]),
+    ],
+  });
+}
+
+function renderEvent(e) {
+  const url = `${SITE_URL}${e.path}`;
+  const { html: faqHtml, schema: faqSchema } = faqSection(e.faqs);
+  const inner = [
+    `<p style="${S.p}">${ilink("/", "Start")} › ${ilink("/tickets", "Tickets")} › Magic Dinner ${esc(e.weekdayShort)}</p>`,
+    `<h1 style="${S.h1}">${esc(`Magic Dinner — Eine Show in 3 Gängen · ${e.weekdayShort}, ${e.venue.regionHint}`)}</h1>`,
+    `<p style="${S.lead}">${esc(e.summary)}</p>`,
+    `<p style="${S.p}"><strong>${xlink(e.ticketUrl, `Tickets bei ${e.ticketProvider} — ${e.priceLabel} pro Person`)}</strong></p>`,
+    h2("Alle Fakten auf einen Blick"),
+    ul(eventFacts(e)),
+    h2("Der Abend"),
+    ...e.description.map(p),
+    h2("Das erwartet euch"),
+    ul(e.highlights),
+    h2(`Location: ${e.venue.name}`),
+    `<p style="${S.p}">${esc(`${e.venue.street}, ${e.venue.postalCode} ${e.venue.city} — im Landkreis Regensburg, direkt vor den Toren der Stadt. Das Wald & Wiese ist Emilian Lebers Hauspartner für das Magic Dinner.`)} ${xlink(e.venue.url, "Website des Restaurants")}</p>`,
+    h2("Trailer"),
+    p(e.video.description),
+    `<p style="${S.p}">${xlink(`${SITE_URL}${e.video.wide}`, "Trailer ansehen (MP4, 42 Sekunden)")}</p>`,
+    h2("Was Gastgeber sagen"),
+    `<blockquote style="${S.quote}">„Die Show war professionell, unterhaltsam und bei unseren Gästen durchweg sehr gut angekommen." — Restaurant-Partner, Magic Dinner im Wald & Wiese (ProvenExpert)</blockquote>`,
+    bioSection(),
+    faqHtml,
+    h2("Magic Dinner privat buchen"),
+    `<p style="${S.p}">Das Format gibt es auch für eure eigene Feier — ${ilink("/firmenfeiern", "Firmenfeier")}, ${ilink("/zauberer-weihnachtsfeier", "Weihnachtsfeier")}, ${ilink("/geburtstage", "Geburtstag")} oder ${ilink("/hochzeit", "Hochzeit")}. Mehr unter ${ilink("/magic-dinner", "Magic Dinner")} und ${ilink("/magic-dinner-regensburg", "Magic Dinner in Regensburg")}, Anfrage über ${ilink("/buchung", "Buchung")}.</p>`,
+    internalLinksBlock([["/tickets", "Alle Termine"], ...FORMAT_LINKS, ...TRUST_LINKS]),
+    externalLinksBlock([[RESTAURANT_WALDWIESE, "Restaurant Wald & Wiese"], [e.ticketUrl, `Tickets bei ${e.ticketProvider}`]]),
+  ].join("");
+  return assemble({
+    inner,
+    schemas: [
+      eventSchema(e),
+      eventVideoSchema(e),
+      faqSchema,
+      breadcrumbSchema([
+        { name: "Start", url: SITE_URL + "/" },
+        { name: "Tickets", url: `${SITE_URL}/tickets` },
+        { name: `Magic Dinner ${e.weekdayShort}`, url },
+      ]),
+    ],
+  });
+}
+
 function renderStatic(path, route) {
   const c = STATIC_CONTENT[path];
   // Fallback für nicht gepflegte statische Routen: Titel/Description nutzen.
@@ -1145,11 +1323,17 @@ export async function createRenderer() {
           case "home":
             return renderHome();
           case "static": {
+            if (descriptor.path === "/tickets") {
+              return renderTickets(data.upcomingEvents);
+            }
+            const ev = data.eventsByPath[descriptor.path];
+            if (ev) return renderEvent(ev);
             const fmtSlug = SERVICE_DETAIL_PATHS[descriptor.path];
             if (fmtSlug && data.formatsBySlug[fmtSlug]) {
               return renderServiceDetail(
                 data.formatsBySlug[fmtSlug],
-                descriptor.path
+                descriptor.path,
+                data.upcomingEvents
               );
             }
             return renderStatic(descriptor.path, descriptor.route || {});
@@ -1162,7 +1346,7 @@ export async function createRenderer() {
             const format = data.formatsBySlug[descriptor.formatSlug];
             const city = data.citiesBySlug[descriptor.citySlug];
             return format && city
-              ? renderServiceCity(format, city, descriptor.urlPath)
+              ? renderServiceCity(format, city, descriptor.urlPath, data.upcomingEvents)
               : EMPTY;
           }
           case "wissen": {

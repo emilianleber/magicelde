@@ -70,8 +70,12 @@
       "description": "Was kostet ein Zauberer, wie läuft der Abend ab, welches Format passt? Antworten zu Close-Up, Bühnenshow und Magic Dinner von Emilian Leber."
     },
     "/tickets": {
-      "title": "Tickets & Termine — aktuell keine Events | Emilian Leber",
-      "description": "Aktuell sind keine öffentlichen Termine geplant — kein Vorverkauf. Private Buchungen für Firmen- und Weihnachtsfeiern sind jederzeit möglich."
+      "title": "Tickets & Termine 2027: Magic Dinner | Emilian Leber",
+      "description": "Nächster Termin: Magic Dinner am Sa 20.02.2027 im Wald & Wiese, Sinzing bei Regensburg — 3-Gänge-Menü + Zaubershow für 89,90 €. Tickets online."
+    },
+    "/tickets/magic-dinner-regensburg-sinzing-2027": {
+      "title": "Magic Dinner bei Regensburg: 20.02.2027 – Tickets",
+      "description": "Dinnershow im Wald & Wiese, Sinzing bei Regensburg: 3-Gänge-Menü + Zauberei mit Emilian Leber am Tisch. Sa 20.02.2027, 89,90 € p. P. Tickets sichern."
     }
   },
   "city": {

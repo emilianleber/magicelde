@@ -283,6 +283,27 @@ const KNOWLEDGE: KnowledgeEntry[] = [
     ],
   },
   {
+    id: "tickets",
+    keywords: [
+      "ticket",
+      "tickets",
+      "karten",
+      "öffentlich",
+      "oeffentlich",
+      "veranstaltung",
+      "sinzing",
+      "wald & wiese",
+      "wald und wiese",
+      "dinnershow",
+    ],
+    response:
+      "Nächster öffentlicher Abend: Magic Dinner am Samstag, 20.02.2027 im Wald & Wiese in Sinzing bei Regensburg. Einlass 17 Uhr, Beginn 18 Uhr, 89,90 € pro Person inkl. 3-Gänge-Menü und Show. Tickets ab 18.10.2026 bei okticket.",
+    actions: [
+      { label: "Zum Magic Dinner", icon: Calendar, kind: "navigate", target: "/tickets/magic-dinner-regensburg-sinzing-2027" },
+      { label: "Alle Termine", icon: Calendar, kind: "navigate", target: "/tickets" },
+    ],
+  },
+  {
     id: "termin",
     keywords: [
       "termin",

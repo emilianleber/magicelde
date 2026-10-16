@@ -648,8 +648,8 @@ const CTAImEvent = ({ post }: { post: BlogPost }) => {
     },
     "/tickets": {
       eyebrow: "Tickets & Termine.",
-      title: "Aktuell keine Termine",
-      body: "Derzeit steht kein öffentlicher Termin an. Neue Termine stehen zuerst auf der Ticketseite.",
+      title: "Magic Dinner am 20.02.2027",
+      body: "Nächster öffentlicher Abend: 3-Gänge-Menü + Show im Wald & Wiese, Sinzing bei Regensburg — 89,90 € pro Person.",
       cta: "Zur Ticketseite",
     },
     "/buchung": {

@@ -11,8 +11,11 @@ import carB from "@/assets/audience-reactions-1200.webp";
 import tab1 from "@/assets/emilian-magic-dinner-1200.webp";
 import tab2 from "@/assets/staunen-1200.webp";
 import tab3 from "@/assets/hero-stage-1200.webp";
+import { EventTeaser } from "@/components/events/EventBits";
+import { upcomingEvents } from "@/data/events";
 
 export default function MagicDinner() {
+  const nextEvent = upcomingEvents()[0];
   return (
     <VoltageShell
       title="Magic Dinner buchen — Tisch und Bühne zwischen den Gängen | Emilian Leber"
@@ -28,6 +31,8 @@ export default function MagicDinner() {
         imageAlt="Magic Dinner mit Emilian Leber"
         badge="Seit 2023 mein Signature-Format — Gänge und Magie im selben Takt."
       />
+
+      {nextEvent && <EventTeaser event={nextEvent} />}
 
       <InteractiveTabs
         eyebrow="Drei Phasen"
