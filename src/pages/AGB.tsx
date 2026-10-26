@@ -69,10 +69,10 @@ const AGB = () => (
               </h2>
               <p>
                 Das vereinbarte Honorar versteht sich zzgl. der gesetzlichen
-                Umsatzsteuer (sofern anwendbar). Anfahrt innerhalb Bayerns
-                ist im Honorar enthalten, soweit nicht anders vereinbart;
-                Anfahrt und Übernachtung außerhalb werden gesondert
-                ausgewiesen. Die Rechnung ist innerhalb von 14 Tagen nach
+                Umsatzsteuer (sofern anwendbar). Anfahrt innerhalb des Stadtgebiets
+                Regensburg ist im Honorar enthalten, soweit nicht anders
+                vereinbart; darüber hinaus werden Anfahrt und gegebenenfalls
+                Übernachtung im Angebot gesondert ausgewiesen. Die Rechnung ist innerhalb von 14 Tagen nach
                 Auftritt ohne Abzug fällig.
               </p>
             </div>
@@ -193,7 +193,7 @@ const AGB = () => (
             </div>
           </section>
 
-          <p className="text-sm text-foreground/55 mt-12">Stand: Mai 2026</p>
+          <p className="text-sm text-foreground/55 mt-12">Stand: Oktober 2026</p>
         </article>
       </main>
     </PageLayout>
