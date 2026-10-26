@@ -87,12 +87,14 @@ const AGB = () => (
                 Regelung getroffen wurde:
               </p>
               <ul className="list-disc list-inside mt-2 space-y-1 marker:text-foreground/40">
-                <li>Bis 6 Wochen vor Termin: kostenlos</li>
-                <li>6–4 Wochen vor Termin: 25 % des Honorars</li>
-                <li>4–2 Wochen vor Termin: 50 % des Honorars</li>
-                <li>Weniger als 2 Wochen vor Termin: 80 % des Honorars</li>
+                <li>Ab Buchung bis 2 Wochen vor Termin: 50 % des Honorars</li>
+                <li>Ab 2 Wochen vor Termin: 75 % des Honorars</li>
                 <li>Am Tag des Auftritts: 100 % des Honorars</li>
               </ul>
+              <p className="mt-3">
+                Dem Kunden bleibt der Nachweis gestattet, dass dem Künstler
+                kein oder ein wesentlich geringerer Schaden entstanden ist.
+              </p>
               <p className="mt-3">
                 Bei Stornierung durch den Künstler aus von ihm zu
                 vertretenden Gründen wird ein bereits gezahltes Honorar
