@@ -40,10 +40,11 @@ const AGB = () => (
                 § 2 Vertragsschluss
               </h2>
               <p>
-                Der Vertrag kommt durch schriftliche Auftragsbestätigung des
-                Künstlers per E-Mail oder unterzeichnetem Auftragsformular
-                zustande. Mündliche Absprachen oder Angebote stellen kein
-                bindendes Angebot dar. Der Vertrag enthält die genauen
+                Angebote des Künstlers sind freibleibend. Der Vertrag kommt
+                durch Bestätigung des Künstlers in Textform zustande, etwa
+                per E-Mail, Auftragsbestätigung, Abschlagsrechnung oder
+                unterzeichnetem Auftragsformular. Mündliche Absprachen sind
+                erst mit dieser Bestätigung verbindlich. Der Vertrag enthält die genauen
                 Konditionen (Termin, Ort, Format, Dauer, Honorar, Anfahrt,
                 Technik).
               </p>
@@ -72,8 +73,11 @@ const AGB = () => (
                 Umsatzsteuer (sofern anwendbar). Anfahrt innerhalb des Stadtgebiets
                 Regensburg ist im Honorar enthalten, soweit nicht anders
                 vereinbart; darüber hinaus werden Anfahrt und gegebenenfalls
-                Übernachtung im Angebot gesondert ausgewiesen. Die Rechnung ist innerhalb von 14 Tagen nach
-                Auftritt ohne Abzug fällig.
+                Übernachtung im Angebot gesondert ausgewiesen. Zur verbindlichen
+                Reservierung des Termins kann eine Anzahlung vereinbart werden.
+                Rechnungen und Anzahlungen sind innerhalb der darauf
+                angegebenen Frist ohne Abzug fällig; ist keine Frist
+                angegeben, innerhalb von 14 Tagen nach Rechnungsdatum.
               </p>
             </div>
 
