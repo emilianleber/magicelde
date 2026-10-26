@@ -74,7 +74,8 @@ const AGB = () => (
                 Regensburg ist im Honorar enthalten, soweit nicht anders
                 vereinbart; darüber hinaus werden Anfahrt und gegebenenfalls
                 Übernachtung im Angebot gesondert ausgewiesen. Zur verbindlichen
-                Reservierung des Termins kann eine Anzahlung vereinbart werden.
+                Reservierung des Termins kann eine Anzahlung von bis zu 50 % des Honorars
+                vereinbart werden.
                 Rechnungen und Anzahlungen sind innerhalb der darauf
                 angegebenen Frist ohne Abzug fällig; ist keine Frist
                 angegeben, innerhalb von 14 Tagen nach Rechnungsdatum.
